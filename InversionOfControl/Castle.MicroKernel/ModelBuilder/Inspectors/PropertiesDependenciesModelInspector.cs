@@ -62,10 +62,17 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	
 			foreach(PropertyInfo property in properties)
 			{
-				if (!property.CanWrite)
+                if (!property.CanWrite)
 				{
 					continue;
 				}
+
+                ParameterInfo[] indexerParams = property.GetIndexParameters();
+
+                if (indexerParams != null && indexerParams.Length != 0)
+                {
+                    continue;
+                }
 
 				DependencyModel dependency = null;
 

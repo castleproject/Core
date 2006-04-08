@@ -126,7 +126,7 @@ namespace Castle.MicroKernel
 		/// </summary>
 		object this[Type key] { get; }
 
-		/// <summary>
+        /// <summary>
 		/// Releases a component instance. This allows
 		/// the kernel to execute the proper decomission 
 		/// lifecycles on the component instance.

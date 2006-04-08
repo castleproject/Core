@@ -1,0 +1,238 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6F052973-C8E0-41EB-BAAF-B052509B5597}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.Model</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.Model</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\CastleComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\InterceptorAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\LifestyleAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interceptor\IMethodInterceptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interceptor\IMethodInvocation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Interceptor\IOnBehalfAware.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\GraphNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\GraphSets.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\IVertex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\LinkedList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\TopologicalSortAlgo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifecycle\IInitializable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifecycle\IRecyclable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifecycle\IStartable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\ComponentModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Configuration\AbstractConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Configuration\ConfigurationCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Configuration\IConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Configuration\MutableConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\ConstructorCandidate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\ConstructorCandidateCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\DependencyModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\DependencyModelCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\InterceptorReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\InterceptorReferenceCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\LifecycleStepCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\MethodMetaModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\MethodMetaModelCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\ParameterModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\ParameterModelCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\PropertySet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\PropertySetCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\AbstractResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\AbstractStreamResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\AssemblyResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\AssemblyResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\ConfigResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\ConfigResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\FileResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\FileResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\IResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\IResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\ResourceException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\StaticContentResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\UncResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resource\UncResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="model.build" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

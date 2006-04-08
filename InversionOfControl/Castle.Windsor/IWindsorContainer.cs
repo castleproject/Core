@@ -110,6 +110,12 @@ namespace Castle.Windsor
 		/// </summary>
 		object this [Type service] { get; }
 
+		#if DOTNET2
+
+		// T this[T service] { get; }
+
+		#endif
+
 		/// <summary>
 		/// Returns the inner instance of the MicroKernel
 		/// </summary>

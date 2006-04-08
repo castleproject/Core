@@ -229,6 +229,15 @@ namespace Castle.Windsor
 			get { return Resolve(service); }
 		}
 
+		#if DOTNET2
+
+		// public virtual T this[T service]
+		// {
+		// 	get { return (T) Resolve(service); }
+		// }
+
+		#endif
+
 		/// <summary>
 		/// Releases a component instance
 		/// </summary>

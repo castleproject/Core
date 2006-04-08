@@ -1,0 +1,420 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.MicroKernel</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.MicroKernel</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\bin\temp\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Castle.Model\Castle.Model-2-0.csproj">
+      <Name>Castle.Model</Name>
+      <Project>{6F052973-C8E0-41EB-BAAF-B052509B5597}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComponentActivator\AbstractComponentActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComponentActivator\ComponentActivatorException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComponentActivator\DefaultComponentActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComponentActivator\ExternalInstanceActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComponentActivator\IComponentActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DefaultKernel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\ComponentNotFoundException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\ComponentRegistrationException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\KernelException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\AbstractFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\EventWiringException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\EventWiringFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\FacilityException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\FactorySupport\AccessorActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\FactorySupport\FactoryActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\FactorySupport\FactorySupportFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\IFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Remoting\CustomActivators\RemoteActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Remoting\CustomActivators\RemoteActivatorThroughRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Remoting\CustomActivators\RemoteClientActivatedActivator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Remoting\RemotingFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Remoting\RemotingInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Remoting\RemotingRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Startable\StartableFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Startable\StartConcern.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\Startable\StopConcern.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\TypedFactory\Empty.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\TypedFactory\FactoryEntry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\TypedFactory\FactoryInterceptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\TypedFactory\TypedFactoryFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\AbstractHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\DefaultHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\DefaultHandlerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\HandlerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\IExposeDependencyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\IHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\IHandlerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IKernel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IKernelEvents.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="KernelEventSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LifecycleConcerns\DisposalConcern.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LifecycleConcerns\ILifecycleConcern.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LifecycleConcerns\InitializationConcern.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LifecycleConcerns\SupportInitializeConcern.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\AbstractLifestyleManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\ILifestyleManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\PerThreadLifestyleManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\PoolableLifestyleManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\Pool\DefaultPool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\Pool\DefaultPoolFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\Pool\IPool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\Pool\IPoolFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\Pool\PoolException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\SingletonLifestyleManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lifestyle\TransientLifestyleManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\DefaultComponentModelBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\IComponentModelBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\IContributeComponentModelConstruction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\ConfigurationModelInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\ConfigurationParametersInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\ConstructorDependenciesModelInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\ExtendedPropertiesConstants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\InterceptorInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\LifecycleModelInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\LifestyleModelInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\MethodMetaInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelBuilder\Inspectors\PropertiesDependenciesModelInspector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\IProxyFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\NotSupportedProxyFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Releasers\AllComponentsReleasePolicy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Releasers\IReleasePolicy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Releasers\LifecycledComponentsReleasePolicy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Releasers\NoTrackingReleasePolicy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resolvers\DefaultDependencyResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resolvers\DependencyResolverException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resolvers\IDependencyResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resolvers\ISubDependencyResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\AbstractSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Configuration\DefaultConfigurationStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Configuration\IConfigurationStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\AbstractTypeConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\ConverterException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\ArrayConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\ComponentConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\DictionaryConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\EnumConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\ListConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\PrimitiveConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\TypeNameConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\DefaultConversionManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\IConversionManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\IKernelDependentConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\ITypeConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Conversion\ITypeConverterContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\ISubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Naming\BinaryTreeComponentName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Naming\ComponentName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Naming\DefaultNamingSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Naming\INamingSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Naming\NamingPartsSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Resource\DefaultResourceSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\Resource\IResourceSubSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SubSystems\SubSystemConstants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ReferenceComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ReferenceExpressionUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="microkernel.build" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
