@@ -125,6 +125,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		protected override bool ShouldRecreateInstance(object value, Type type, string prefix, IBindingDataSourceNode node)
 		{
+			// See http://support.castleproject.org/jira//browse/AR-41
+			if (value == null) return true;
+
 			ActiveRecordModel model = ActiveRecordModel.GetModel(type);
 
 			if (AutoLoad == AutoLoadBehavior.Never || model == null)
