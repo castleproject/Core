@@ -334,6 +334,7 @@
 				<include name="AspectSharp/bin"/>
 				<include name="Monorail/lib"/>
 				<include name="Tools/DynamicProxy/bin"/>
+				<include name="Tools/NVelocity/bin"/>
 				
 				<!-- Components -->
 				<include name="SharedLibs/Prevalence"/>
