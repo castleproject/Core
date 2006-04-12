@@ -1,0 +1,87 @@
+Interface proxy and properties only available on the implementation type
+========================================================================
+
+Reported by: hammett (April 12th, 2006)
+
+This is easy to reproduce. 
+
+public interface IMyService
+{
+  void DoSomething();
+}
+
+[Transactional]
+public class MyServiceImplementation : IMyService
+{
+  public int SomeParam
+  { get and set implementation here }
+
+  [Transaction]
+  public void DoSomething()
+  {
+  }
+}
+
+And on the configuration
+
+<component 
+  id="my.service" 
+  service="IMyService, MyAssembly" 
+  type="MyServiceImplementation, MyAssembly">
+
+  <parameters>
+    <SomeParam>100</SomeParam>
+  </parameters>
+
+</component>
+
+The Transactional/Transaction will force the container to create a proxy for the component. As the component was registered with a service contract (interface) dynamic proxy will generate an interface proxy. The container will try to set the propertu SomeParam on the proxy and boom, you have a nice exception.
+
+Possible solution: New version of DynamicProxy can make all proxies implement an interface ITargetAccessor. The container can check for this interface before trying to set anything on the component and voila!
+
+
+Transaction management: cannot suspend current transaction
+==========================================================
+
+Reported by: hammett (April 12th, 2006)
+
+The transaction management that Castle is able to do is very limited compared to what DTC can offer (through COM+). In order to achieve the same level of features we would need to decide which path to take
+
+- Integrate with DTC
+
+  Pros: fine-grained control of integration, support to 2PC, a possible lightweight way of handling transactions without involving COM+
+  Cons: Few or non-existent documentation. MS really don't want developers 'messing' with their DTC otherwise they would have published its API documentation. It's Windows only.
+
+- Figure out a way of handling suspension or simulate a physical transaction suspension
+
+  Pros: simpler solution
+  Cons: might require lots of hacks
+
+- Integrate with COM+
+
+  Pros: standard MS-way of dealing with transaction in an 'enterprise' fashion
+  Cons: heavyweight, make deployments harder and more subject to 'strange' errors
+
+
+
+Windsor component proxies, when accessed through remote, methods are not intercepted
+====================================================================================
+
+Reported by: hammett (April 12th, 2006)
+
+Windsor proxy factory choses between two approaches to generate proxies:
+
+- If the type extends MarshalByRef it uses the standard .net infrastructure to construct a proxy
+- If the type does not extends MarshalByRef it uses DynamicProxy
+
+However there's an issue with .net proxies, when used in a remote context the calls are not intercepted. A possible solution would be to register a custom sink on the transportation channel being used. There's no easy way of doing this non-intrusively, so it would be up to the user to add a custom sink through the configuration file that configures the remoting infrastructure. The sink, though, need to be coded.
+
+
+
+Dynamic proxies cannot be used in a remoting context
+====================================================
+
+Reported by: hammett (April 12th, 2006)
+
+Is there a way to transient types cross boundaries?
+
