@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Builder
 {
 	using System;
+
 	using Castle.DynamicProxy.Builder.CodeGenerators;
 
 	/// <summary>

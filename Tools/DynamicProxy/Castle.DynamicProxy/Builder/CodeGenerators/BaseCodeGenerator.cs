@@ -145,8 +145,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
         protected virtual EasyType CreateTypeBuilder(String typeName, Type baseType, Type[] interfaces)
         {
-            //			String typeName = GenerateTypeName(baseType, interfaces);
-
             _baseType = baseType;
             _typeBuilder = new EasyType(ModuleScope, typeName, baseType, interfaces, true);
 

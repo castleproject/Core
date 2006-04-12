@@ -15,12 +15,12 @@
 namespace Castle.DynamicProxy.Builder.CodeBuilder
 {
 	using System;
+	using System.Collections;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Builder.CodeGenerators;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
-using System.Collections;
 
 	/// <summary>
 	/// Summary description for EasyType.
@@ -28,7 +28,7 @@ using System.Collections;
 	[CLSCompliant(false)]
 	public class EasyType : AbstractEasyType
 	{
-        static IDictionary assemblySigning = new Hashtable();
+        static IDictionary signedAssemblyCache = new Hashtable();
 
 		protected EasyType() : base()
 		{
@@ -48,22 +48,24 @@ using System.Collections;
 			{
 				flags |= TypeAttributes.Serializable;
 			}
+
             bool isAssemblySigned = IsAssemblySigned(baseType);
-            _typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType( 
+            
+			_typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType( 
 				name, flags, baseType, interfaces );
 		}
 
         private bool IsAssemblySigned(Type baseType)
         {
-            lock(assemblySigning)
+            lock(signedAssemblyCache)
             {
-                if(assemblySigning.Contains(baseType.Assembly)==false)
+                if (signedAssemblyCache.Contains(baseType.Assembly)==false)
                 {
 					byte[] key = baseType.Assembly.GetName().GetPublicKey();
                     bool isSigned = key !=null  && key.Length != 0;
-                    assemblySigning.Add(baseType.Assembly, isSigned );
+                    signedAssemblyCache.Add(baseType.Assembly, isSigned );
                 }
-                return (bool)assemblySigning[baseType.Assembly];
+                return (bool) signedAssemblyCache[baseType.Assembly];
             }
         }
 

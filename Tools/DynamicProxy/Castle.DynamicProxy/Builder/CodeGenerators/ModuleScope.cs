@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.IO;
-
 namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
+	using System.IO;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Collections;
@@ -81,17 +80,17 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	            assemblyName.KeyPair = new StrongNameKeyPair(GetKeyPair());
 	        }
 #if ( PHYSICALASSEMBLY )
-    _assemblyBuilder =
-						AppDomain.CurrentDomain.DefineDynamicAssembly(
-							assemblyName,
-							AssemblyBuilderAccess.RunAndSave);
-					_moduleBuilder = _assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME);
+			_assemblyBuilder =
+				AppDomain.CurrentDomain.DefineDynamicAssembly(
+					assemblyName,
+					AssemblyBuilderAccess.RunAndSave);
+			_moduleBuilder = _assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME);
 #else
-	        _assemblyBuilder =
-	            AppDomain.CurrentDomain.DefineDynamicAssembly(
-	                assemblyName,
-	                AssemblyBuilderAccess.Run);
-	        return _assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
+			_assemblyBuilder =
+				AppDomain.CurrentDomain.DefineDynamicAssembly(
+					assemblyName,
+					AssemblyBuilderAccess.Run);
+			return _assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
 #endif
 	    }
 
@@ -100,13 +99,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get { return readerWriterLock; }
 		}
 
-		public bool SaveAssembly()
+		public void SaveAssembly()
 		{
 #if ( PHYSICALASSEMBLY )
 			_assemblyBuilder.Save(FILE_NAME);
-			return true;
-#else
-			return false;
 #endif
 		}
 
