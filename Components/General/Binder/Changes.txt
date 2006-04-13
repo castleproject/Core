@@ -1,3 +1,74 @@
+Beta 2
+======
+
+- Introduced DataReaderAdapter which can be used to populate an object based
+  on an IDataReader. The adapter does not take ownership of the reader
+
+  Example:
+  
+    DataBinder binder = new DataBinder();
+
+    SqlConnection conn = new SqlConnection("Server=(local);initial catalog=mydatabase;Integrated Security=SSPI");
+
+    conn.Open();
+
+    SqlCommand cmd = new SqlCommand("select * from products", conn);
+
+    using(IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+    {
+        Product[] products = (Product[])
+            binder.BindObject(typeof(Product[]), "ignored", 
+                new DataReaderAdapter(reader));
+    }
+
+
+  Limitations: only simple properties can be bound. Nested properties are ignored.
+
+
+- IBinderTranslator: after introducing the DataReaderAdapter, it was necessary 
+  create the notion of translation. A translator takes the a property name and
+  returns the key that the binder should look up in order to get the value to fill
+  the property. The translator can also return null. In this case the binder will skip
+  the property
+  
+  A translator is associated with a Binder instance (which I'm not quite sure is a good thing)
+  
+  Example:
+
+    DataBinder binder = new DataBinder(new ProductTranslator());
+
+    SqlConnection conn = new SqlConnection("Server=(local);initial catalog=mydatabase;Integrated Security=SSPI");
+
+    conn.Open();
+
+    SqlCommand cmd = new SqlCommand("select nome, descricao from produtos", conn);
+
+    using(IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+    {
+        Product[] products = (Product[])
+            binder.BindObject(typeof(Product[]), "ignored", 
+                new DataReaderAdapter(reader));
+    }
+    
+  ...
+    
+    public class ProductTranslator : IBinderTranslator
+    {
+        public String Translate(String paramName)
+        {
+            if (paramName == "Name")
+            {
+              return "nome"; // this is the db column name
+            }
+            else if (paramName == "Address")
+            {
+              return "address"; // this is the db column name
+            }
+            
+            return null;
+        }
+    }
+
 
 Beta 1
 ======

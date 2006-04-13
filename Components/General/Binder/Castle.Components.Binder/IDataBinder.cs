@@ -74,5 +74,7 @@ namespace Castle.Components.Binder
 		/// Holds a reference to a hash of string to <c>HttpPostedFiles</c>
 		/// </summary>
 		IDictionary Files { get; set; }
+
+		IBinderTranslator Translator { get; set; }
 	}
 }

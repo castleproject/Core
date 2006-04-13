@@ -20,6 +20,8 @@ namespace Castle.Components.Binder
 	public abstract class AbstractBindingDataSource : IBindingDataSourceNode
 	{
 		public abstract String GetEntryValue(String name);
+		
+		public abstract Object GetEntryValue(String name, Type desiredType, out bool conversionSucceeded);
 
 		public abstract String GetMetaEntryValue(String name);
 
@@ -89,6 +91,16 @@ namespace Castle.Components.Binder
 		public virtual bool IsIndexed
 		{
 			get { throw new NotImplementedException(); }
+		}
+
+		public bool CanConvert
+		{
+			get { return false; }
+		}
+
+		public bool CanHandleNested
+		{
+			get { return true; }
 		}
 
 		public virtual IBindingDataSourceNode[] IndexedNodes

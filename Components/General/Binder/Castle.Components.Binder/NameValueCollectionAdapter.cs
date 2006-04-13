@@ -20,7 +20,12 @@ namespace Castle.Components.Binder
 
 	public class NameValueCollectionAdapter : AbstractBindingDataSource
 	{
-		private readonly NameValueCollection inner;
+		protected readonly NameValueCollection inner;
+
+		protected NameValueCollectionAdapter()
+		{
+			this.inner = new NameValueCollection();
+		}
 
 		public NameValueCollectionAdapter(NameValueCollection inner)
 		{
@@ -37,6 +42,11 @@ namespace Castle.Components.Binder
 		public override String GetEntryValue(String name)
 		{
 			return inner[name];
+		}
+
+		public override Object GetEntryValue(String name, Type desiredType, out bool conversionSucceeded)
+		{
+			throw new NotImplementedException();
 		}
 
 		public override String GetMetaEntryValue(String name)

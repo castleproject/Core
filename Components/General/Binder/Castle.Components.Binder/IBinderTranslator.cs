@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,26 +15,24 @@
 namespace Castle.Components.Binder
 {
 	using System;
-	using System.Collections;
 
-	public interface IBindingDataSourceNode : IDictionary
+	/// <summary>
+	/// Provides a way to properties on the binder target
+	/// be bound to a different key in the data source.
+	/// </summary>
+	public interface IBinderTranslator
 	{
-		IBindingDataSourceNode ObtainNode(String name);
-
-		String GetEntryValue(String name);
-
-		Object GetEntryValue(String name, Type desiredType, out bool conversionSucceeded);
-
-		String GetMetaEntryValue(String name);
-
-		IBindingDataSourceNode[] IndexedNodes { get; }
-
-		bool IsIndexed { get; }
-
-		bool CanConvert { get; }
-
-		bool CanHandleNested { get; }
-
-		bool ShouldIgnore { get; }
+		/// <summary>
+		/// Should return the key that gathers the value 
+		/// to fill the property.
+		/// </summary>
+		/// <param name="paramName">The property name in 
+		/// the target type
+		/// </param>
+		/// <returns>
+		/// A name of the source data that should 
+		/// be used to populate the property
+		/// </returns>
+		String Translate(String paramName);
 	}
 }

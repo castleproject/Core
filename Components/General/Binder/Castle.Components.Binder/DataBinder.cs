@@ -44,6 +44,8 @@ namespace Castle.Components.Binder
 
 		private Stack instanceStack;
 
+		private IBinderTranslator translator;
+
 		#endregion
 
 		#region Constructors
@@ -62,6 +64,11 @@ namespace Castle.Components.Binder
 		public DataBinder(IDictionary files)
 		{
 			this.files = files;
+		}
+
+		public DataBinder(IBinderTranslator translator) : this()
+		{
+			this.translator = translator;
 		}
 
 		#endregion
@@ -160,6 +167,12 @@ namespace Castle.Components.Binder
 			set { files = value; }
 		}
 
+		public IBinderTranslator Translator
+		{
+			get { return translator; }
+			set { translator = value; }
+		}
+
 		#endregion
 
 		#region Overridables
@@ -244,14 +257,31 @@ namespace Castle.Components.Binder
 
 					if (IsSimpleProperty(propType))
 					{
-						object value = ConvertUtils.Convert(prop.PropertyType, paramName, node, files, out conversionSucceeded);
+						String translatedParamName = Translate(paramName);
 
-						if (conversionSucceeded && value != null)
+						if (translatedParamName == null) continue;
+
+						if (node.CanConvert)
 						{
-							prop.SetValue(instance, value, null);
+							object value = node.GetEntryValue(translatedParamName, prop.PropertyType, out conversionSucceeded);
+
+							if (conversionSucceeded)
+							{
+								prop.SetValue(instance, value, null);
+							}
+						}
+						else
+						{
+							object value = ConvertUtils.Convert(prop.PropertyType, 
+								translatedParamName, node, files, out conversionSucceeded);
+
+							if (conversionSucceeded && value != null)
+							{
+								prop.SetValue(instance, value, null);
+							}
 						}
 					}
-					else
+					else if (node.CanHandleNested)
 					{
 						IBindingDataSourceNode nestedNode = node.ObtainNode(paramName);
 
@@ -285,6 +315,16 @@ namespace Castle.Components.Binder
 			PopInstance(instance);
 
 			AfterBinding(instance, prefix, node);
+		}
+
+		private string Translate(string paramName)
+		{
+			if (translator != null)
+			{
+				return translator.Translate(paramName);
+			}
+
+			return paramName;
 		}
 
 		private object[] InternalBindObjectArray(Type instanceType, String paramPrefix, IBindingDataSourceNode node, out bool succeeded)

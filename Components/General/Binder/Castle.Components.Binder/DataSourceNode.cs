@@ -21,7 +21,6 @@ namespace Castle.Components.Binder
 	public class DataSourceNode : AbstractBindingDataSource
 	{
 		private readonly string name;
-		// private readonly IBindingDataSourceNode parent;
 		private bool isIndexed;
 		private NameValueCollection entries = new NameValueCollection(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 		private SortedList indexedEntries = new SortedList(IndexComparer.Instance);
@@ -29,7 +28,6 @@ namespace Castle.Components.Binder
 
 		public DataSourceNode(String name)
 		{
-//			this.dataSource = dataSource;
 			this.name = name;
 		}
 
@@ -62,6 +60,11 @@ namespace Castle.Components.Binder
 			if (metaEntries == null) return null;
 
 			return (String) metaEntries[name];
+		}
+
+		public override Object GetEntryValue(String name, Type desiredType, out bool conversionSucceeded)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void ProcessEntry(string key, string value)
