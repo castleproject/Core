@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Some optimization on Redirect* methods on Controller class. Now they accept
+  an IDictionary as a parameter specifier (in addition to NameValueCollection).
+  
 - Refactored ControllerDescriptorBuilder (renamed to ControllerDescriptorProvider)
   to use child providers to obtain descriptor. Attributes are now descriptors builders
   and that allows one to come up with custom attributes like

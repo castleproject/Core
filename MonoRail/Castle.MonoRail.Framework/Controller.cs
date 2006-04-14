@@ -457,19 +457,14 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected void RedirectToAction(String action, IDictionary queryStringParameters)
 		{
-			NameValueCollection copy = null;
-			
-			if (queryStringParameters != null && queryStringParameters.Count > 0) 
+			if (queryStringParameters != null)
 			{
-				copy = new NameValueCollection(queryStringParameters.Count);
-				
-				foreach (Object key in queryStringParameters.Keys)
-				{
-					copy.Add(Convert.ToString(key), Convert.ToString(queryStringParameters[key]));
-				}
+				Redirect(AreaName, Name, action, queryStringParameters);
 			}
-
-			RedirectToAction(action, copy);
+			else
+			{
+				Redirect(AreaName, Name, action);
+			}
 		}
 
 		/// <summary> 
@@ -547,7 +542,7 @@ namespace Castle.MonoRail.Framework
 			String querystring = ToQueryString(parameters);
 			String url = CreateAbsoluteRailsUrl(controller, action);
 
-			Redirect(String.Format("{0}?{1}", url, querystring));
+			Redirect(url + '?' + querystring);
 		}
 
 		/// <summary>
@@ -562,25 +557,74 @@ namespace Castle.MonoRail.Framework
 			String querystring = ToQueryString(parameters);
 			String url = CreateAbsoluteRailsUrl(area, controller, action);
 
-			Redirect(String.Format("{0}?{1}", url, querystring));
+			Redirect(url + '?' + querystring);
 		}
 		
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(String controller, String action, IDictionary parameters)
+		{
+			String querystring = ToQueryString(parameters);
+			String url = CreateAbsoluteRailsUrl(controller, action);
+
+			Redirect(url + '?' + querystring);
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="area">Area name</param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(String area, String controller, String action, IDictionary parameters)
+		{
+			String querystring = ToQueryString(parameters);
+			String url = CreateAbsoluteRailsUrl(area, controller, action);
+
+			Redirect(url + '?' + querystring);
+		}
+
 		protected String ToQueryString(NameValueCollection parameters)
 		{
 			StringBuilder buffer = new StringBuilder();
-			HttpServerUtility serverUtility = HttpContext.Server;
+			IServerUtility srv = Context.Server;
 	
 			foreach (String key in parameters.Keys)
 			{
-				buffer.Append( serverUtility.HtmlEncode(key) )
+				buffer.Append( srv.UrlEncode(key) )
 					  .Append('=')
-					  .Append( serverUtility.HtmlEncode(parameters[key]) )
+					  .Append( srv.UrlEncode(parameters[key]) )
 					  .Append('&');
 			}
 
-			return buffer.Length == 0 ? 
-						String.Empty : 
-						buffer.Remove(buffer.Length -1, 1).ToString(); // removing extra &
+			if (buffer.Length > 0)
+				buffer.Length -= 1; // removing extra &
+
+			return buffer.ToString();
+		}
+
+		protected String ToQueryString(IDictionary parameters)
+		{
+			StringBuilder buffer = new StringBuilder();
+			IServerUtility srv = Context.Server;
+	
+			foreach (DictionaryEntry entry in parameters)
+			{
+				buffer.Append( srv.UrlEncode(Convert.ToString(entry.Key)) )
+					  .Append('=')
+					  .Append( srv.UrlEncode(Convert.ToString(entry.Value)) )
+					  .Append('&');
+			}
+			
+			if (buffer.Length > 0)
+				buffer.Length -= 1; // removing extra &
+
+			return buffer.ToString();
 		}
 
 		#endregion
