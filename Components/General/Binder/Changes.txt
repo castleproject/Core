@@ -54,7 +54,7 @@ Beta 2
     
     public class ProductTranslator : IBinderTranslator
     {
-        public String Translate(String paramName)
+        public String Translate(Type instanceType, String paramName)
         {
             if (paramName == "Name")
             {

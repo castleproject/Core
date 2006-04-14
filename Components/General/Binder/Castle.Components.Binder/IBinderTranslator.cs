@@ -26,13 +26,15 @@ namespace Castle.Components.Binder
 		/// Should return the key that gathers the value 
 		/// to fill the property.
 		/// </summary>
-		/// <param name="paramName">The property name in 
-		/// the target type
+		/// <param name="instanceType">
+		/// The type which is the target of the binder
+		/// </param>
+		/// <param name="paramName">
+		/// The property name in  the target type
 		/// </param>
 		/// <returns>
-		/// A name of the source data that should 
-		/// be used to populate the property
+		/// A name of the source data that should be used to populate the property
 		/// </returns>
-		String Translate(String paramName);
+		String Translate(Type instanceType, String paramName);
 	}
 }

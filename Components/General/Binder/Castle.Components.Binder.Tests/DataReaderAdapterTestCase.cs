@@ -122,7 +122,7 @@ namespace Castle.Components.Binder.Tests
 	{
 		/// <param name="paramName">The property name in the target type</param>
 		/// <returns>A name of the source data that should be used to populate the property</returns>
-		public String Translate(String paramName)
+		public String Translate(Type instanceType, String paramName)
 		{
 			if (paramName == "Age")
 			{

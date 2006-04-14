@@ -242,7 +242,9 @@ namespace Castle.Components.Binder
 
 			PushInstance(instance);
 
-			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
+			Type instanceType = instance.GetType();
+
+			PropertyInfo[] props = instanceType.GetProperties(PropertiesBindingFlags);
 
 			foreach(PropertyInfo prop in props)
 			{
@@ -257,7 +259,7 @@ namespace Castle.Components.Binder
 
 					if (IsSimpleProperty(propType))
 					{
-						String translatedParamName = Translate(paramName);
+						String translatedParamName = Translate(instanceType, paramName);
 
 						if (translatedParamName == null) continue;
 
@@ -317,11 +319,11 @@ namespace Castle.Components.Binder
 			AfterBinding(instance, prefix, node);
 		}
 
-		private string Translate(string paramName)
+		private string Translate(Type instanceType, string paramName)
 		{
 			if (translator != null)
 			{
-				return translator.Translate(paramName);
+				return translator.Translate(instanceType, paramName);
 			}
 
 			return paramName;
