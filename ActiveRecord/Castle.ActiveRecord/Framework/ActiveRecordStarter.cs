@@ -12,21 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using NHibernate.Tool.hbm2ddl;
-
 namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
 	using System.Data;
 	using System.Reflection;
-	using System.ComponentModel;
 				
 #if !dotNet2
 	using System.Configuration;
 #endif
 
 	using NHibernate.Cfg;
+	using NHibernate.Tool.hbm2ddl;
 
 	using Castle.Model.Configuration;
 
@@ -42,20 +40,15 @@ namespace Castle.ActiveRecord
 	/// <remarks>
 	/// This class is not thread safe.
 	/// </remarks>
-	public class ActiveRecordStarter
+	public sealed class ActiveRecordStarter
 	{
-		private static readonly EventHandlerList events = new EventHandlerList();
-		private static readonly object SessionFactoryHolderCreatedEvent = new object();
+		private static readonly Object lockConfig = new object();
 
 		/// <summary>
 		/// So others frameworks can intercept the 
 		/// creation and act on the holder instance
 		/// </summary>
-		public static event SessionFactoryHolderDelegate SessionFactoryHolderCreated
-		{
-			add { events.AddHandler(SessionFactoryHolderCreatedEvent, value); }
-			remove { events.RemoveHandler(SessionFactoryHolderCreatedEvent, value); }
-		}
+		public static event SessionFactoryHolderDelegate SessionFactoryHolderCreated;
 
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
@@ -63,69 +56,74 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize( IConfigurationSource source, params Type[] types )
 		{
-			if (source == null) throw new ArgumentNullException("source");
-			if (types == null) throw new ArgumentNullException("types");
+			lock (lockConfig)
+			{
+				if (source == null) throw new ArgumentNullException("source");
+				if (types == null) throw new ArgumentNullException("types");
 
-			// First initialization
-			ISessionFactoryHolder holder = CreateSessionFactoryHolderImplementation(source);
+				// First initialization
+				ISessionFactoryHolder holder = CreateSessionFactoryHolderImplementation(source);
 
-			holder.ThreadScopeInfo = CreateThreadScopeInfoImplementation(source);
+				holder.ThreadScopeInfo = CreateThreadScopeInfoImplementation(source);
 
-			RaiseSessionFactoryHolderCreated(holder);
+				RaiseSessionFactoryHolderCreated(holder);
 
-			ActiveRecordModel.type2Model.Clear();
-			ActiveRecordBase.holder = holder;
+				ActiveRecordModel.type2Model.Clear();
+				ActiveRecordBase.holder = holder;
             ActiveRecordModel.isDebug = source.Debug;
 
-			// Base configuration
-			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
+				// Base configuration
+				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
-			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+				ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
 
-			ActiveRecordModelCollection models = builder.Models;
+				ActiveRecordModelCollection models = builder.Models;
 
-			foreach( Type type in types )
-			{
-				if ( models.Contains(type) || 
-					type == typeof(ActiveRecordBase) || type == typeof(ActiveRecordValidationBase) )
+				foreach (Type type in types)
 				{
-					continue;
-				}
-				else if (type.IsAbstract && typeof(ActiveRecordBase).IsAssignableFrom(type))
-				{
-					SetUpConfiguration(source, type, holder);
-
-					continue;
-				}
-				else if (!IsActiveRecordType(type))
-				{
-					continue;
-				}
-
-				builder.Create( type );
-			}
-
-			GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
-			connectorVisitor.VisitNodes( models );
-
-			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
-			semanticVisitor.VisitNodes( models );
-
-			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
-
-			foreach(ActiveRecordModel model in models)
-			{
-				Configuration cfg = holder.GetConfiguration( holder.GetRootType(model.Type) );
-
-				if (!model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
-				{
-					xmlVisitor.Reset(); xmlVisitor.CreateXml(model);
-
-					String xml = xmlVisitor.Xml;
-					
-					if (xml != String.Empty)
+					if (models.Contains(type) ||
+						type == typeof(ActiveRecordBase) || 
+						type == typeof(ActiveRecordValidationBase) ||
+						type == typeof(ActiveRecordHooksBase))
 					{
-						cfg.AddXmlString(xml);
+						continue;
+					}
+					else if (type.IsAbstract && typeof(ActiveRecordBase).IsAssignableFrom(type))
+					{
+						SetUpConfiguration(source, type, holder);
+
+						continue;
+					}
+					else if (!IsActiveRecordType(type))
+					{
+						continue;
+					}
+
+					builder.Create(type);
+				}
+
+				GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
+				connectorVisitor.VisitNodes(models);
+
+				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
+				semanticVisitor.VisitNodes(models);
+
+				XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+
+				foreach (ActiveRecordModel model in models)
+				{
+					Configuration cfg = holder.GetConfiguration(holder.GetRootType(model.Type));
+
+					if (!model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
+					{
+						xmlVisitor.Reset(); xmlVisitor.CreateXml(model);
+
+						String xml = xmlVisitor.Xml;
+
+						if (xml != String.Empty)
+						{
+							cfg.AddXmlString(xml);
+						}
 					}
 				}
 			}
@@ -188,9 +186,9 @@ namespace Castle.ActiveRecord
 		{
 			
 #if dotNet2
-            IConfigurationSource source = System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
+			IConfigurationSource source = System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
 #else
-            IConfigurationSource source =  System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
+			IConfigurationSource source = System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
 #endif
             if (source == null)
 			{
@@ -198,9 +196,9 @@ namespace Castle.ActiveRecord
 					" Sorry, but you have to fill the configuration or provide a " + 
 					"IConfigurationSource instance yourself.";
 #if dotNet2
-                throw new System.Configuration.ConfigurationErrorsException(message);
+				throw new System.Configuration.ConfigurationErrorsException(message);
 #else
-                     throw new System.Configuration.ConfigurationException(message);
+				throw new System.Configuration.ConfigurationException(message);
 #endif
 			}
 			
@@ -371,13 +369,8 @@ namespace Castle.ActiveRecord
 
 		private static void RaiseSessionFactoryHolderCreated(ISessionFactoryHolder holder)
 		{
-			SessionFactoryHolderDelegate evtDelegate = 
-				(SessionFactoryHolderDelegate) events[SessionFactoryHolderCreatedEvent];
-
-			if (evtDelegate != null)
-			{
-				evtDelegate(holder);
-			}
+			if (SessionFactoryHolderCreated != null)
+				SessionFactoryHolderCreated(holder);
 		}
 
 		private static ISessionFactoryHolder CreateSessionFactoryHolderImplementation(IConfigurationSource source)
