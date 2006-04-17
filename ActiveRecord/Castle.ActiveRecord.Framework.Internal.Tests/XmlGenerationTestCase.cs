@@ -222,6 +222,32 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			Assert.AreEqual(expected, xml);
 		}
 
+        [Test]
+        public void SimpleClassWithElementList()
+        {
+            ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+            ActiveRecordModel model = builder.Create(typeof(ClassWithElementList));
+            Assert.IsNotNull(model);
+
+            String xml = Process(builder, model);
+            String expected =
+                "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+                "<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+                "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithElementList, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithElementList\" lazy=\"false\">\r\n" +
+                "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+                "      <generator class=\"native\">\r\n" +
+                "      </generator>\r\n" +
+                "    </id>\r\n" +
+                "    <bag name=\"Elements\" access=\"property\" table=\"Elements\" lazy=\"false\">\r\n" +
+                "      <key column=\"ClassId\" />\r\n" +
+                "      <element  column=\"Name\"  type=\"System.String, mscorlib\"/>\r\n" +
+                "    </bag>\r\n" +
+                "  </class>\r\n" +
+                "</hibernate-mapping>\r\n";
+            
+            Assert.AreEqual(expected, xml);
+        }
+
 		[Test]
 		public void DiscriminatorUse()
 		{

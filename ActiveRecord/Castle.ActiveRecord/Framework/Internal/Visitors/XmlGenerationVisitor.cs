@@ -371,7 +371,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name,
 			                model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
-			                att.Where, att.Sort, att.ColumnKey, null, null, null, model.Configuration, att.Index, att.IndexType,
+			                att.Where, att.Sort, att.ColumnKey,null, null, null, null, model.Configuration, att.Index, att.IndexType,
 			                att.Cache);
 		}
 
@@ -488,7 +488,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name,
 			                model.HasManyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
-			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, null, null, att.Index, att.IndexType,
+			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, null, null, null, att.Index, att.IndexType,
 			                att.Cache);
 		}
 
@@ -498,7 +498,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name,
 			                att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
-			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.ColumnRef, 
+			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, att.ColumnRef, 
 			                att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache);
 		}
 
@@ -541,7 +541,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                             Type targetType, RelationType type, string name, 
 		                             string accessString, string table, string schema, bool lazy, 
 		                             bool inverse, string orderBy, string where, string sort, 
-		                             string columnKey, string[] compositeKeyColumnKeys, 
+		                             string columnKey, string[] compositeKeyColumnKeys, string element, 
 		                             string columnRef, string[] compositeKeyColumnRefs, 
 		                             IModelNode extraModel, string index, string indexType, CacheEnum cache)
 		{
@@ -634,7 +634,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 				WriteIndex(index, indexType);
 			}
 
-			if (columnRef == null && compositeKeyColumnRefs == null)
+		    if(element != null)
+		    {
+                WriteElement(element, targetType);
+		    }
+			else if (columnRef == null && compositeKeyColumnRefs == null)
 			{
 				if (extraModel == null)
 				{
@@ -662,7 +666,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Append(closingTag);
 		}
 
-		private static string TranslateCascadeEnum(CascadeEnum cascadeEnum)
+	    private static string TranslateCascadeEnum(CascadeEnum cascadeEnum)
 		{
 			String cascade = null;
 
@@ -793,7 +797,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-        private void WriteOneToMany(Type type)
+        private void WriteElement(string element, Type targetType)
+        {
+            AppendF("<element {0} {1}/>",
+                MakeAtt("column", element),
+                MakeAtt("type", MakeTypeName(targetType)));
+        }
+        
+	    private void WriteOneToMany(Type type)
         {
             AppendF("<one-to-many{0} />", MakeAtt("class", MakeTypeName(type)));
         }

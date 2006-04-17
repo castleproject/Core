@@ -37,7 +37,8 @@ namespace Castle.ActiveRecord
 		internal String sort;
 		internal String index;
 		internal String indexType;
-		internal bool lazy;
+        internal String element;
+	    internal bool lazy;
 		internal bool inverse;
 		internal ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
 		internal RelationType relType = RelationType.Guess;
@@ -122,5 +123,14 @@ namespace Castle.ActiveRecord
 			get { return indexType; }
 			set { indexType = value; }
 		}
+
+	    /// <summary>
+	    /// Use for simple types.
+	    /// </summary>
+        public string Element
+        {
+            get { return element; }
+            set { element = value; }
+        }
 	}
 }

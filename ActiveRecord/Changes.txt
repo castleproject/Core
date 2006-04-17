@@ -1,6 +1,10 @@
 beta 4
 ======
 
+- Added Element to RelationAttribute, now can map relations of simple types
+   Usage:
+	 [HasMany(typeof(string), "ItemId", "Elements", Element = "Name")]
+
 - Applied Antonio`s patches 
   See http://forum.castleproject.org/posts/list/457.page and 
       http://forum.castleproject.org/posts/list/566.page

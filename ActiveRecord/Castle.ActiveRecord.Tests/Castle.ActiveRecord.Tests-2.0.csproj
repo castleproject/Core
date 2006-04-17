@@ -136,6 +136,10 @@
     <Compile Include="ActiveRecordBaseGenericsTestCase.cs" />
     <Compile Include="Config\AspNet2.0ConfigurationIntegration.cs" />
     <Compile Include="Config\ConfigurationSource.cs" />
+    <Compile Include="Model\CompositeModel\Agent.cs" />
+    <Compile Include="Model\CompositeModel\AgentKey.cs" />
+    <Compile Include="Model\CompositeModel\Group.cs" />
+    <Compile Include="Model\CompositeModel\Org.cs" />
     <Compile Include="NullablesGenericsTestCase.cs" />
     <Compile Include="JoinedSubClassTestCase.cs">
       <SubType>Code</SubType>
