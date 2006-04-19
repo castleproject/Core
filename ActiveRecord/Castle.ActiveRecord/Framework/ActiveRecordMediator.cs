@@ -69,13 +69,38 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Returns all instances found for the specified type.
+		/// Searches and returns the first row.
 		/// </summary>
-		/// <param name="targetType"></param>
-		/// <returns></returns>
-		public static Array FindAll(Type targetType)
+		/// <param name="targetType">The target type</param>
+		/// <param name="orders">The sort order - used to determine which record is the first one</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		public static object FindFirst(Type targetType, Order[] orders, params ICriterion[] criterias)
 		{
-			return FindAll(targetType, (Order[]) null);
+			return ActiveRecordBase.FindFirst(targetType, orders, criterias);
+		}
+
+		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		public static object FindFirst(Type targetType, params ICriterion[] criterias)
+		{
+			return FindFirst(targetType, null, criterias);
+		}
+
+		/// <summary>
+		/// Searches and returns the a row. If more than one is found, 
+		/// throws <see cref="ActiveRecordException"/>
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		public static object FindOne(Type targetType, params ICriterion[] criterias)
+		{
+			return ActiveRecordBase.FindOne(targetType, criterias);
 		}
 
 		/// <summary>
@@ -94,6 +119,16 @@ namespace Castle.ActiveRecord
 		public static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
 		{
 			return SlicedFindAll(targetType, firstResult, maxresults, null, criterias);
+		}
+
+		/// <summary>
+		/// Returns all instances found for the specified type.
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <returns></returns>
+		public static Array FindAll(Type targetType)
+		{
+			return FindAll(targetType, (Order[]) null);
 		}
 
 		/// <summary>
