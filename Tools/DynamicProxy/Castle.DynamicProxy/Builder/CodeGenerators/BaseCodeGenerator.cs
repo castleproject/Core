@@ -450,6 +450,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         protected String GetTypeName(Type type)
         {
             System.Text.StringBuilder nameBuilder = new System.Text.StringBuilder();
+            if(type.Namespace!=null)
+                nameBuilder.Append(type.Namespace.Replace('.','_'));
             if (type.DeclaringType != null)
                 nameBuilder.Append(type.DeclaringType.Name).Append("_");
 #if dotNet2
