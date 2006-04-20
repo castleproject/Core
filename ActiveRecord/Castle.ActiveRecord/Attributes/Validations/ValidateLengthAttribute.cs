@@ -33,6 +33,7 @@ namespace Castle.ActiveRecord
 		/// Initializes a new exact length validator.
 		/// </summary>
 		/// <param name="exactLength">The exact length required.</param>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
 		public ValidateLengthAttribute(int exactLength, String errorMessage) : base(new LengthValidator(exactLength), errorMessage)
 		{
 		}
@@ -51,6 +52,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="minLength">The minimum length, or <c>int.MinValue</c> if this should not be tested.</param>
 		/// <param name="maxLength">The maximum length, or <c>int.MaxValue</c> if this should not be tested.</param>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
 		public ValidateLengthAttribute(int minLength, int maxLength, String errorMessage) : base(new LengthValidator(minLength, maxLength), errorMessage)
 		{
 		}

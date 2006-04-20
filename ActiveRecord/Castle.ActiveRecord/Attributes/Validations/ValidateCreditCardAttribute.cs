@@ -50,6 +50,7 @@ namespace Castle.ActiveRecord
 		/// Initializes a new credit card validator.
 		/// </summary>
 		/// <param name="allowedTypes">The card types to accept.</param>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
 		public ValidateCreditCardAttribute(CreditCardValidator.CardType allowedTypes, String errorMessage)
 			: base(new CreditCardValidator(allowedTypes), errorMessage)
 		{
@@ -68,6 +69,7 @@ namespace Castle.ActiveRecord
 		/// Initializes a new credit card validator.
 		/// </summary>
 		/// <param name="exceptions">An array of card numbers to skip checking for (eg. gateway test numbers). Only digits should be provided for the exceptions.</param>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
 		public ValidateCreditCardAttribute(string[] exceptions, String errorMessage)
 			: base(new CreditCardValidator(exceptions), errorMessage)
 		{
@@ -88,6 +90,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="allowedTypes">The card types to accept.</param>
 		/// <param name="exceptions">An array of card numbers to skip checking for (eg. gateway test numbers). Only digits should be provided for the exceptions.</param>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
 		public ValidateCreditCardAttribute(CreditCardValidator.CardType allowedTypes, string[] exceptions, String errorMessage)
 			: base(new CreditCardValidator(allowedTypes, exceptions), errorMessage)
 		{

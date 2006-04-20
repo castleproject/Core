@@ -33,6 +33,7 @@ namespace Castle.ActiveRecord.Queries
 		/// using the specified positional <paramref name="parameters"/> and
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
+		/// <param name="targetType">The target ActiveRecord type</param>
 		/// <param name="hql">The HQL</param>
 		/// <param name="parameters">The positional parameters</param>
 		public ScalarQuery(Type targetType, String hql, params Object[] parameters)

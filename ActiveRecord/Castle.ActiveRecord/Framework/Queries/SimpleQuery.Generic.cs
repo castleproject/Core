@@ -82,8 +82,8 @@ namespace Castle.ActiveRecord.Queries
 		/// <see cref="InternalEnumerate"/>, which will call our 
 		/// <see cref="GenericEnumerate"/>, which will convert
 		/// the <c>NHibernate</c>'s <see cref="IQuery.Enumerable"/> result
-		/// returned by <see cref="HqlBasedQuery.InternalEnumerate"/>
-		/// into a generic <see cref="System.Collections.Generic.IEnumerable"/>.
+		/// returned by <see cref="ActiveRecordBaseQuery.InternalEnumerate"/>
+		/// into a generic <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/>.
 		/// So, all we need to do is to cast it back to <c>IEnumerable&lt;T&gt;</c>.
 		/// </remarks>
 		public IEnumerable<T> Enumerate()

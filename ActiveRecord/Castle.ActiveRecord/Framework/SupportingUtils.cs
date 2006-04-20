@@ -178,7 +178,7 @@ namespace Castle.ActiveRecord.Framework
 		/// <typeparam name="T">
 		/// The class of the object which will be created for each row contained in
 		/// the supplied <paramref name="list" />.
-		/// </param>
+		/// </typeparam>
 		/// <remarks>A good alternative is to use the new <see cref="ImportAttribute"/></remarks>
 		public static T[] BuildObjectArray<T>(IEnumerable list, bool distinct)
 		{
