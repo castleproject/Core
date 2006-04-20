@@ -11,7 +11,8 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Castle.ActiveRecord</AssemblyName>
-    <AssemblyOriginatorKeyFile>CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -405,9 +406,6 @@
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
     <Compile Include="Framework\Validators\CreditCardValidator.cs" />
     <Compile Include="Framework\Validators\LengthValidator.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CastleKey.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.ActiveRecord.Framework.Scopes;
+
 namespace Castle.ActiveRecord.Tests
 {
 	using System;
@@ -23,11 +25,29 @@ namespace Castle.ActiveRecord.Tests
     using Castle.ActiveRecord.Tests.Model;
 
 	using Castle.ActiveRecord.Tests.Model.LazyModel;
+    using Castle.ActiveRecord.Framework;
 
 
 	[TestFixture]
 	public class SessionScopeTestCase : AbstractActiveRecordTest
 	{
+        [Test]
+        [ExpectedException(typeof(ActiveRecordException), "A scope tried to registered itself within the framework, but the Active Record was not initialized")]
+        public void GoodErrorMessageIfTryingToUseScopeWithoutInitializingFramework()
+        {
+            //Need to do this because other tests may have already initialized the framework.
+            IThreadScopeInfo scope = ThreadScopeAccessor.Instance.ScopeInfo;
+            ThreadScopeAccessor.Instance.ScopeInfo = null;
+            try
+            {
+                new SessionScope();
+            }
+            finally
+            {
+                ThreadScopeAccessor.Instance.ScopeInfo = scope;
+            }
+        }
+	    
 		[Test]
 		public void OneDatabaseSameSession()
 		{

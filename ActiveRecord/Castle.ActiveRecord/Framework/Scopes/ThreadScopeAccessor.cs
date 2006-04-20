@@ -35,7 +35,10 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public IThreadScopeInfo ScopeInfo
 		{
-			get { return scopeInfo; }
+			get
+			{
+                return scopeInfo;
+			}
 			set { scopeInfo = value; }
 		}
 
@@ -48,11 +51,16 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public ISessionScope GetRegisteredScope()
 		{
+            if (scopeInfo == null)
+                throw new ActiveRecordException("Can't get registered scope because the Active Record framework was not initialized.");
 			return scopeInfo.GetRegisteredScope();
 		}
 
 		public void RegisterScope(ISessionScope scope)
 		{
+            if (scopeInfo == null)
+                throw new ActiveRecordException("A scope tried to registered itself within the framework, " +
+                                                "but the Active Record was not initialized");
 			scopeInfo.RegisterScope(scope);
 		}
 
