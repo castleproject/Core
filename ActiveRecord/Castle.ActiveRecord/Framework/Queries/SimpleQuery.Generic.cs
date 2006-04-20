@@ -99,10 +99,15 @@ namespace Castle.ActiveRecord.Queries
 
 		private IEnumerable<T> GenericEnumerate(ISession session)
 		{
-			IEnumerable en = base.InternalEnumerate(session);
+            IEnumerable en = BaseInternalEnumerateHelper(session);
 			foreach (T item in en)
 				yield return item;
 		}
+	    
+	    private IEnumerable BaseInternalEnumerateHelper(ISession session)
+	    {
+            return base.InternalEnumerate(session);
+	    }
 
 		/// <summary>
 		/// Executes the query and converts the results into a strongly-typed
