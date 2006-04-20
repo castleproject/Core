@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (type == null) throw new ArgumentNullException("type");
 
-			if (type.IsDefined(typeof(ActiveRecordSkip), false)) return null;
+			if (type.IsDefined(typeof(ActiveRecordSkipAttribute), false)) return null;
 
 			ActiveRecordModel model = new ActiveRecordModel(type);
 

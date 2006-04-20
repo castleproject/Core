@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord
 	/// should not be processed by the framework
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=false), Serializable]
-	public class ActiveRecordSkip : Attribute
+	public class ActiveRecordSkipAttribute : Attribute
 	{
 	}
 }
