@@ -48,14 +48,14 @@ namespace Castle.MonoRail.WindsorExtension
 
 			kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 
-			AddBuitInControllers(kernel);
+			AddBuiltInControllers(kernel);
 		}
 
 		public void Terminate()
 		{
 		}
 
-		protected virtual void AddBuitInControllers(IKernel kernel)
+		protected virtual void AddBuiltInControllers(IKernel kernel)
 		{
 			kernel.AddComponent("files", typeof(FilesController), typeof(FilesController));
 		}

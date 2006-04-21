@@ -82,11 +82,13 @@
                type="Castle.MonoRail.Framework.MonoRailHttpHandlerFactory, Castle.MonoRail.Framework" />
         </httpHandlers>
 
-	    <!-- If'd like to enable Routing...
 		<httpModules>
+			<!-- If'd like to enable Routing...
 			<add name="routing" type="Castle.MonoRail.Framework.RoutingModule, Castle.MonoRail.Framework" /> 
+			-->
+			<add name="monorail" type="Castle.MonoRail.Framework.EngineContextModule,Castle.MonoRail.Framework" />
 		</httpModules> 
-		-->
+		
     </system.web>
 
 </configuration>
