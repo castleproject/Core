@@ -124,6 +124,7 @@
     <Compile Include="WindsorFilterFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WindsorMonoRailSectionHandler.cs" />
     <Compile Include="WindsorViewComponentFactory.cs">
       <SubType>Code</SubType>
     </Compile>

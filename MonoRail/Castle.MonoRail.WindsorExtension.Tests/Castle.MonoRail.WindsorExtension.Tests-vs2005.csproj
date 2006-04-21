@@ -103,6 +103,10 @@
       <Project>{E572DC59-2A96-482F-BE39-E938AB47EA9D}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
+    <ProjectReference Include="..\Castle.MonoRail.WindsorExtension\Castle.MonoRail.WindsorExtension-vs2005.csproj">
+      <Project>{6C51A1E3-7F20-4696-BFD6-829134678341}</Project>
+      <Name>Castle.MonoRail.WindsorExtension-vs2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestSiteWindsor\TestSiteWindsor-vs2005.csproj">
       <Name>TestSiteWindsor-vs2005</Name>
       <Project>{22432F75-FD21-474A-AB8F-43100DE79FDB}</Project>
@@ -117,6 +121,7 @@
     <Compile Include="BasicFunctionalityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WindsorMonoRailSectionHandlerTestCase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

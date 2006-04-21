@@ -138,15 +138,7 @@
     <Compile Include="Attributes\HelperAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\Interfaces\IHelpersAttribute.cs" />
-    <Compile Include="Attributes\Interfaces\IFiltersAttribute.cs" />
-    <Compile Include="Attributes\Interfaces\ISkipFilterAttribute.cs" />
-    <Compile Include="Attributes\Interfaces\ILayoutAttribute.cs" />
-    <Compile Include="Attributes\Interfaces\IRescuesAttribute.cs" />
-    <Compile Include="Attributes\Interfaces\IResourcesAttribute.cs" />
-    <Compile Include="Attributes\Layout.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Attributes\LayoutAttribute.cs" />
     <Compile Include="Attributes\LocalizationFilterAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -159,6 +151,8 @@
     <Compile Include="Attributes\ScaffoldingAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\SkipFilterAttribute.cs" />
+    <Compile Include="Attributes\SkipRescueAttribute.cs" />
     <Compile Include="Configuration\MonoRailConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -280,16 +274,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\AssemblySourceInfo.cs" />
-    <Compile Include="Internal\ControllerDescriptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\ControllerDescriptorBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Internal\ControllerInspectionUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\ControllerMetaDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\DefaultCacheProvider.cs" />
@@ -305,16 +290,26 @@
     <Compile Include="Internal\DefaultViewComponentFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\FilterDescriptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Internal\Descriptors\ActionMetaDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\BaseMetaDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\ControllerDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\ControllerMetaDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\FilterDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\HelperDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\IFilterDescriptorBuilder.cs" />
+    <Compile Include="Internal\Descriptors\IHelperDescriptorBuilder.cs" />
+    <Compile Include="Internal\Descriptors\ILayoutDescriptorBuilder.cs" />
+    <Compile Include="Internal\Descriptors\IRescueDescriptorBuilder.cs" />
+    <Compile Include="Internal\Descriptors\IResourceDescriptorBuilder.cs" />
+    <Compile Include="Internal\Descriptors\LayoutDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\RescueDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\ResourceDescriptor.cs" />
     <Compile Include="Internal\Flash.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\Graph\ControllerTree.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ICacheProvider.cs" />
     <Compile Include="Internal\IControllerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -335,6 +330,20 @@
     </Compile>
     <Compile Include="Internal\IViewSource.cs" />
     <Compile Include="Internal\IViewSourceLoader.cs" />
+    <Compile Include="Internal\Providers\ControllerDescriptorBuilder.cs" />
+    <Compile Include="Internal\Providers\DefaultFilterDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\DefaultHelperDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\DefaultLayoutDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\DefaultRescueDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\DefaultResourceDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\ICacheProvider.cs" />
+    <Compile Include="Internal\Providers\IControllerDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\IFilterDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\IHelperDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\ILayoutDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\IProvider.cs" />
+    <Compile Include="Internal\Providers\IRescueDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\IResourceDescriptorProvider.cs" />
     <Compile Include="Internal\ResourceDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
