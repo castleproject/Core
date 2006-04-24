@@ -231,10 +231,16 @@ namespace Castle.Windsor
 
 		#if DOTNET2
 
-		// public virtual T this[T service]
-		// {
-		// 	get { return (T) Resolve(service); }
-		// }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		public T Resolve<T>(T service)
+		{
+			return (T) Resolve(service);
+		}
 
 		#endif
 

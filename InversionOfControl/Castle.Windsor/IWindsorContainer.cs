@@ -112,7 +112,13 @@ namespace Castle.Windsor
 
 		#if DOTNET2
 
-		// T this[T service] { get; }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		T Resolve<T>(T service);
 
 		#endif
 
