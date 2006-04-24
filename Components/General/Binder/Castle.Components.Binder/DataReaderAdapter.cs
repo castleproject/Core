@@ -98,6 +98,39 @@ namespace Castle.Components.Binder
 			{
 				return reader.GetFloat(ordinal);
 			}
+			else if (desiredType.IsEnum)
+			{
+				Type underlyingType = Enum.GetUnderlyingType(desiredType);
+
+				if (underlyingType == typeof(byte))
+				{
+					byte val = reader.GetByte(ordinal);
+
+					return Enum.ToObject(desiredType, val);
+				}
+				else if (underlyingType == typeof(Int16))
+				{
+					short val = reader.GetInt16(ordinal);
+
+					return Enum.ToObject(desiredType, val);
+				}
+				else if (underlyingType == typeof(Int32))
+				{
+					int val = reader.GetInt32(ordinal);
+
+					return Enum.ToObject(desiredType, val);
+				}
+				else if (underlyingType == typeof(Int64))
+				{
+					long val = reader.GetInt64(ordinal);
+				
+					return Enum.ToObject(desiredType, val);
+				}
+				else
+				{
+					throw new NotImplementedException("Only Int16, Int32 and Int64 enums types are supported");
+				}
+			}
 			else if (desiredType == typeof(Guid))
 			{
 				return reader.GetGuid(ordinal);
