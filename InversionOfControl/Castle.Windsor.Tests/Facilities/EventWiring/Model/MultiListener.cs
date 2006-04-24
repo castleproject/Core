@@ -17,7 +17,7 @@ namespace Castle.Facilities.EventWiring.Tests.Model
 	using System;
 	using Castle.Model;
 
-	[Transient]
+	// [Transient]
 	public class MultiListener
 	{
 		private object _sender;

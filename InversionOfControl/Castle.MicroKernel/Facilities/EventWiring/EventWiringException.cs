@@ -16,14 +16,12 @@ namespace Castle.Facilities.EventWiring
 {
 	using System;
 	using System.Runtime.Serialization;
+	
+	using Castle.MicroKernel.Facilities;
 
 	[Serializable]
-	public class EventWiringException : ApplicationException
+	public class EventWiringException : FacilityException
 	{
-		public EventWiringException()
-		{
-		}
-
 		public EventWiringException(string message) : base(message)
 		{
 		}

@@ -14,6 +14,8 @@
 
 namespace Castle.Facilities.EventWiring.Tests
 {
+	using System;
+	using System.IO;
 	using NUnit.Framework;
 	
 	using Castle.Windsor;
@@ -28,25 +30,17 @@ namespace Castle.Facilities.EventWiring.Tests
 		{
 		}
 
-		[SetUp]
-		public void Init()
+		[TearDown]
+		public void Dispose()
 		{
-			_container = new WindsorContainer("../Castle.Windsor.Tests/Facilities/EventWiring/config.xml");
-
-			_container.AddFacility("eventwiring", new EventWiringFacility());
-
-			_container.AddComponent("SimpleListener", typeof(SimpleListener));
-			_container.AddComponent("SimpleListener2", typeof(SimpleListener));
-			_container.AddComponent("SimplePublisher", typeof(SimplePublisher));
-			_container.AddComponent("MultiPublisher", typeof(MultiPublisher));
-			_container.AddComponent("MultiListener", typeof(MultiListener));
-			_container.AddComponent("PublisherListener", typeof(PublisherListener), typeof(PublisherListener));
-			_container.AddComponent("BadConfig", typeof(SimpleListener));
+			_container.Dispose();
 		}
 
 		[Test]
-		public void TriggerSimple()
+		public void TriggerStaticEvent()
 		{
+			CreateContainer("simple.xml");
+
 			SimplePublisher publisher = (SimplePublisher)_container["SimplePublisher"];
 			SimpleListener listener = (SimpleListener)_container["SimpleListener2"];
 
@@ -60,8 +54,10 @@ namespace Castle.Facilities.EventWiring.Tests
 		}
 
 		[Test]
-		public void TriggerStaticEvent()
+		public void TriggerEvent()
 		{
+			CreateContainer("simple.xml");
+
 			SimplePublisher publisher = (SimplePublisher)_container["SimplePublisher"];
 			SimpleListener listener = (SimpleListener)_container["SimpleListener"];
 
@@ -77,12 +73,16 @@ namespace Castle.Facilities.EventWiring.Tests
 		[Test, ExpectedException(typeof(EventWiringException))]
 		public void EventNotFound()
 		{
-			object badConfigured = _container["BadConfig"];
+			CreateContainer("badconfig.xml");
+
+			SimplePublisher publisher = (SimplePublisher)_container["SimplePublisher"];
 		}
 
 		[Test]
 		public void MultiEvents()
 		{
+			CreateContainer("multi.xml");
+
 			MultiListener listener = (MultiListener)_container["MultiListener"];
 			MultiPublisher publisher = (MultiPublisher)_container["MultiPublisher"];
 			PublisherListener publisherThatListens = (PublisherListener)_container["PublisherListener"];
@@ -118,6 +118,26 @@ namespace Castle.Facilities.EventWiring.Tests
 
 			Assert.IsTrue(publisherThatListens.Listened);
 			Assert.AreSame(anotherPublisher, publisherThatListens.Sender);
+		}
+
+		private void RegisterComponents()
+		{
+			_container.AddComponent("SimpleListener", typeof(SimpleListener));
+			_container.AddComponent("SimpleListener2", typeof(SimpleListener));
+			_container.AddComponent("SimplePublisher", typeof(SimplePublisher));
+			_container.AddComponent("MultiPublisher", typeof(MultiPublisher));
+			_container.AddComponent("MultiListener", typeof(MultiListener));
+			_container.AddComponent("PublisherListener", typeof(PublisherListener), typeof(PublisherListener));
+			_container.AddComponent("BadConfig", typeof(SimpleListener));
+		}
+
+		private void CreateContainer(String config)
+		{
+			_container = new WindsorContainer(Path.Combine("../Castle.Windsor.Tests/Facilities/EventWiring/", config));
+	
+			_container.AddFacility("eventwiring", new EventWiringFacility());
+	
+			RegisterComponents();
 		}
 	}
 }

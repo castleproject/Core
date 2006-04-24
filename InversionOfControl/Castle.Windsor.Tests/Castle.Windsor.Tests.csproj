@@ -369,13 +369,21 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Facilities\EventWiring\config.xml"
+                    RelPath = "Facilities\EventWiring\badconfig.xml"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "Facilities\EventWiring\EventWiringTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\multi.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\simple.xml"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Facilities\EventWiring\Model\Handlers.cs"

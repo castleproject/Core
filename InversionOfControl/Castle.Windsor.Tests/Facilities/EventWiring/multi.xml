@@ -36,12 +36,6 @@
 				<subscribe-to handler="OnPublish" publisher="SimplePublisher" event="Event" />
 			</subscribes>
 		</component>
-		
-		<component id="BadConfig">
-			<subscribes>
-				<subscribe-to handler="OnPublish" publisher="SimplePublisher" event="EventIahhh" />
-			</subscribes>
-		</component>
 	</components>
 	
 </configuration>

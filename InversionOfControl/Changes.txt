@@ -1,6 +1,18 @@
 RC 3
 ====
 
+- EventWiring Facility: now when a publisher is requested, the subscribers
+  are automatically started. 
+  
+  The side effects are: 
+  
+  - when a subscriber is requested it won't be wired automatically. 
+  - There no much sense in having a subscriber with a lifestyle other than singleton
+  
+  I'm still evaluating this idea. Sometimes wiring only when the subscriber is requested
+  might make sense, but supporting both approaches is kinda hard.
+  
+
 - Applied patch by Alex Henderson <webmaster@bittercoder.com> adding
     IWindsorContainer.RemoveChildContainer(IWindsorContainer childContainer)
     and IKernel.RemoveChildKernel(IKernel kernel)
