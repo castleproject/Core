@@ -189,7 +189,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				throw new RailsException("No next step available");
+				throw new RailsException("There is no next step available");
 			}
 		}
 
@@ -216,7 +216,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				throw new RailsException("No previous step available");
+				throw new RailsException("There is no previous step available");
 			}
 		}
 
