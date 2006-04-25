@@ -14,19 +14,13 @@
 
 namespace Castle.MonoRail.WindsorExtension
 {
-	using System;
-
 	using Castle.Model;
-
 	using Castle.MicroKernel;
-
 	using Castle.Model.Configuration;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Internal.Graph;
 	using Castle.MonoRail.Framework.Controllers;
-
 
 	/// <summary>
 	/// Facility responsible for registering the controllers in
@@ -34,7 +28,7 @@ namespace Castle.MonoRail.WindsorExtension
 	/// </summary>
 	public class RailsFacility : IFacility
 	{
-		private ControllerTree _tree;
+		private ControllerTree tree;
 
 		public RailsFacility()
 		{
@@ -42,9 +36,10 @@ namespace Castle.MonoRail.WindsorExtension
 
 		public void Init(IKernel kernel, IConfiguration facilityConfig)
 		{
-			kernel.AddComponent( "rails.controllertree", typeof(ControllerTree) );
+			kernel.AddComponent("rails.controllertree", typeof(ControllerTree));
+			kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
 
-			_tree = (ControllerTree) kernel["rails.controllertree"];
+			tree = (ControllerTree) kernel["rails.controllertree"];
 
 			kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 
@@ -64,7 +59,7 @@ namespace Castle.MonoRail.WindsorExtension
 		{
 			bool isController = typeof(Controller).IsAssignableFrom(model.Implementation);
 
-			if ( !isController && !typeof(ViewComponent).IsAssignableFrom(model.Implementation) )
+			if (!isController && !typeof(ViewComponent).IsAssignableFrom(model.Implementation))
 			{
 				return;
 			}
@@ -76,7 +71,7 @@ namespace Castle.MonoRail.WindsorExtension
 			{
 				ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(model.Implementation);
 			
-				_tree.AddController( descriptor.Area, descriptor.Name, model.Name );
+				tree.AddController( descriptor.Area, descriptor.Name, model.Name );
 			}
 		}
 	}

@@ -128,6 +128,16 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "DefaultWizardPageFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IWizardPageFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RailsFacility.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
