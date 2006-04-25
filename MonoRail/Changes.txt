@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Changed SmartDispatcherController.BuildMethodArguments. Now it tests if the conversion 
+  succeeded before setting the value on the array.
+
 - Introduced IWizardPageFactory on WindsorExtension, so a Wizard controller doesn't
   need to reference the IKernel directly
 

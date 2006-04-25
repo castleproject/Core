@@ -151,7 +151,7 @@ namespace Castle.MonoRail.Framework
 		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams)
 		{
 			int points = 0;
-			int paramsMatched = 0;
+			int matchCount = 0;
 
 			ParameterInfo[] parameters = candidate.GetParameters();
 
@@ -183,14 +183,14 @@ namespace Castle.MonoRail.Framework
 				if (value != null)
 				{
 					points += 10;
-					paramsMatched++;
+					matchCount++;
 				}
 			}
 
 			// the bonus should be nice only for disambiguation.
 			// otherwise, unmatched-parameterless-actions will always have
 			// the same weight as matched-single-parameter-actions.
-			if (paramsMatched == parameters.Length)
+			if (matchCount == parameters.Length)
 			{
 				points += 5;
 			}
@@ -203,12 +203,23 @@ namespace Castle.MonoRail.Framework
 			return param.Name;
 		}
 
+		/// <summary>
+		/// Returns an array that hopefully fills the arguments of the selected action.
+		/// </summary>
+		/// <remarks>
+		/// Each parameter is inspected and we try to obtain an implementation of
+		/// <see cref="IParameterBinder"/> from the attributes the parameter have (if any).
+		/// If an implementation is found, it's used to fill the value for that parameter.
+		/// Otherwise we use simple conversion to obtain the value.
+		/// </remarks>
+		/// <param name="parameters">Parameters to obtain the values to</param>
+		/// <param name="request">The current request, which is the source to obtain the data</param>
+		/// <returns>An array with the arguments values</returns>
 		protected virtual object[] BuildMethodArguments(ParameterInfo[] parameters, IRequest request)
 		{
 			object[] args = new object[parameters.Length];
 			String paramName = String.Empty;
 			String value = String.Empty;
-			Type paramType;
 
 			CreateParamCollections(request);
 
@@ -220,7 +231,6 @@ namespace Castle.MonoRail.Framework
 				{
 					ParameterInfo param = parameters[argIndex];
 					paramName = param.Name;
-					paramType = param.ParameterType;
 
 					bool handled = false;
 
@@ -241,7 +251,19 @@ namespace Castle.MonoRail.Framework
 
 					if (!handled)
 					{
-						args[argIndex] = ConvertUtils.Convert(param.ParameterType, paramName, allParams, files);
+						bool conversionSucceeded;
+
+						object convertedVal = ConvertUtils.Convert(
+							param.ParameterType, paramName, allParams, files, out conversionSucceeded);
+
+						if (conversionSucceeded)
+						{
+							args[argIndex] = convertedVal;
+						}
+						else
+						{
+							// Should we log, cry out loud, throw exception or what?
+						}
 					}
 				}
 			}
@@ -255,7 +277,7 @@ namespace Castle.MonoRail.Framework
 			{
 				throw new RailsException(
 					String.Format("Error building method arguments. " +
-						"Last param analized was {0} with value '{1}'", paramName, value), ex);
+						"Last param analyzed was {0} with value '{1}'", paramName, value), ex);
 			}
 
 			return args;
