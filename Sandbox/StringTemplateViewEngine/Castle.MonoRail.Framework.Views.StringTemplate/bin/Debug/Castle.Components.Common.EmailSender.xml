@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Castle.Components.Common.EmailSender</name>
+    </assembly>
+    <members>
+        <member name="T:Castle.Components.Common.EmailSender.IEmailSender">
+            <summary>
+            Abstracts an approach to send e-mails
+            </summary>
+        </member>
+        <member name="M:Castle.Components.Common.EmailSender.IEmailSender.Send(System.String,System.String,System.String,System.String)">
+            <summary>
+            Sends a message. 
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="messageText"></param>
+        </member>
+        <member name="M:Castle.Components.Common.EmailSender.IEmailSender.Send(Castle.Components.Common.EmailSender.Message)">
+            <summary>
+            Sends a message. 
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Castle.Components.Common.EmailSender.IEmailSender.Send(Castle.Components.Common.EmailSender.Message[])">
+            <summary>
+            Sends multiple messages. 
+            </summary>
+            <param name="messages"></param>
+        </member>
+        <member name="T:Castle.Components.Common.EmailSender.Format">
+            <summary>
+            Message formats
+            </summary>
+        </member>
+        <member name="T:Castle.Components.Common.EmailSender.MessageAttachment">
+            <summary>
+            Represents a file attachment
+            </summary>
+        </member>
+    </members>
+</doc>

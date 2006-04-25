@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplate", "Castle.MonoRail.Framework.Views.StringTemplate\Castle.MonoRail.Framework.Views.StringTemplate.csproj", "{D8046510-D0CC-40BB-AED4-556AB9EC4B41}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STMono", "http://localhost/STMono/STMono.csproj", "{EC880A90-FDC6-498D-8E5F-0A905EF7EDC9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D8046510-D0CC-40BB-AED4-556AB9EC4B41}.Debug.ActiveCfg = Debug|.NET
+		{D8046510-D0CC-40BB-AED4-556AB9EC4B41}.Debug.Build.0 = Debug|.NET
+		{D8046510-D0CC-40BB-AED4-556AB9EC4B41}.Release.ActiveCfg = Release|.NET
+		{D8046510-D0CC-40BB-AED4-556AB9EC4B41}.Release.Build.0 = Release|.NET
+		{EC880A90-FDC6-498D-8E5F-0A905EF7EDC9}.Debug.ActiveCfg = Debug|.NET
+		{EC880A90-FDC6-498D-8E5F-0A905EF7EDC9}.Debug.Build.0 = Debug|.NET
+		{EC880A90-FDC6-498D-8E5F-0A905EF7EDC9}.Release.ActiveCfg = Release|.NET
+		{EC880A90-FDC6-498D-8E5F-0A905EF7EDC9}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

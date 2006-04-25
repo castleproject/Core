@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Castle.Components.Common.EmailSender.SmtpEmailSender</name>
+    </assembly>
+    <members>
+        <member name="T:Castle.Components.Common.EmailSender.SmtpEmailSender.SmtpSender">
+            <summary>
+            Uses Smtp to send emails.
+            </summary>
+        </member>
+        <member name="M:Castle.Components.Common.EmailSender.SmtpEmailSender.SmtpSender.#ctor(System.String)">
+            <summary>
+            This service implementation requires a host name (valid one, if possible)
+            in order to work
+            </summary>
+            <param name="hostname">The smtp server name</param>
+        </member>
+    </members>
+</doc>

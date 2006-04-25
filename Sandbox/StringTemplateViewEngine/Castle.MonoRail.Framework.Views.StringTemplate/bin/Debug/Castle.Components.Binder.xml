@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Castle.Components.Binder</name>
+    </assembly>
+    <members>
+        <member name="T:Castle.Components.Binder.ConvertUtils">
+            <summary>
+            Handles only simple conversion of well-known types (primitives, DateTime)
+            as well as type that have a <see cref="T:System.ComponentModel.TypeConverter"/> associated
+            </summary>
+        </member>
+        <member name="M:Castle.Components.Binder.ConvertUtils.Convert(System.Type,System.String,System.Object,System.Boolean@)">
+            <summary>
+            Convert the input param into the desired type
+            </summary>
+            <param name="desiredType">Type of the desired</param>
+            <param name="input">The input</param>
+            <param name="conversionSucceeded">if <c>false</c> the return value must be ignored</param>
+            <param name="paramName">Parameter name</param>
+            <remarks>
+            There are 3 possible cases when trying to convert:
+            1) Input data for conversion missing (input is null or an empty String)
+            	Returns default conversion value (based on desired type) and set <c>conversionSucceeded = false</c>
+            2) Has input data but cannot convert to particular type
+            	Throw exception and set <c>conversionSucceeded = false</c>
+            3) Has input data and can convert to particular type
+            	 Return input converted to desired type and set <c>conversionSucceeded = true</c>
+            </remarks>
+        </member>
+        <member name="M:Castle.Components.Binder.ConvertUtils.ConvertUsingTypeConverter(System.Type,System.String,System.Object,System.Boolean@)">
+            <summary>
+            Support for types that specify a TypeConverter, 
+            i.e.: NullableTypes
+            </summary>
+        </member>
+        <member name="T:Castle.Components.Binder.DataBinder">
+            <summary>
+            A DataBinder can be used to map properties from 
+            a <see cref="T:Castle.Components.Binder.IBindingDataSourceNode"/> to one or more instance types.
+            </summary>
+        </member>
+        <member name="T:Castle.Components.Binder.IDataBinder">
+            <summary>
+            Defines the contract for a data binder implementation approach.
+            </summary>
+        </member>
+        <member name="M:Castle.Components.Binder.IDataBinder.BindObject(System.Type,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Create an instance of the specified type and binds the properties that
+            are available on the datasource.
+            </summary>
+            <param name="targetType">The target type. Can be an array</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="M:Castle.Components.Binder.IDataBinder.BindObject(System.Type,System.String,System.String,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Create an instance of the specified type and binds the properties that
+            are available on the datasource respecting the white and black list
+            </summary>
+            <param name="targetType">The target type. Can be an array</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
+            <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="M:Castle.Components.Binder.IDataBinder.BindObjectInstance(System.Object,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Binds the properties that are available on the datasource to the specified object instance.
+            </summary>
+            <param name="instance">The target instance.</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="M:Castle.Components.Binder.IDataBinder.BindObjectInstance(System.Object,System.String,System.String,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Binds the properties that
+            are available on the datasource respecting the white and black list
+            </summary>
+            <param name="instance">The target type.</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
+            <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="P:Castle.Components.Binder.IDataBinder.ErrorList">
+            <summary>
+            Represents the databind errors
+            </summary>
+        </member>
+        <member name="P:Castle.Components.Binder.IDataBinder.Files">
+            <summary>
+            Holds a reference to a hash of string to <c>HttpPostedFiles</c>
+            </summary>
+        </member>
+        <member name="F:Castle.Components.Binder.DataBinder.errors">
+            <summary>Collect the databind errors</summary>
+        </member>
+        <member name="F:Castle.Components.Binder.DataBinder.files">
+            <summary>Holds a reference to a hash of string to <c>HttpPostedFiles</c></summary>
+        </member>
+        <member name="F:Castle.Components.Binder.DataBinder.excludedPropertyList">
+            <summary>Holds a sorted array of properties names that should be ignored</summary>
+        </member>
+        <member name="F:Castle.Components.Binder.DataBinder.allowedPropertyList">
+            <summary>Holds a sorted array of properties names that are on the white list</summary>
+        </member>
+        <member name="M:Castle.Components.Binder.DataBinder.#ctor">
+            <summary>
+            Constructs a <c>DataBinder</c>
+            </summary>
+        </member>
+        <member name="M:Castle.Components.Binder.DataBinder.#ctor(System.Collections.IDictionary)">
+            <summary>
+            Constructs a <c>DataBinder</c> 
+            with a hash of string to <c>HttpPostedFiles</c>
+            </summary>
+        </member>
+        <member name="M:Castle.Components.Binder.DataBinder.BindObject(System.Type,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Create an instance of the specified type and binds the properties that
+            are available on the datasource.
+            </summary>
+            <param name="targetType">The target type. Can be an array</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="M:Castle.Components.Binder.DataBinder.BindObject(System.Type,System.String,System.String,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Create an instance of the specified type and binds the properties that
+            are available on the datasource respecting the white and black list
+            </summary>
+            <param name="targetType">The target type. Can be an array</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
+            <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="M:Castle.Components.Binder.DataBinder.BindObjectInstance(System.Object,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Binds the properties that are available on the datasource to the specified object instance.
+            </summary>
+            <param name="instance">The target instance.</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="M:Castle.Components.Binder.DataBinder.BindObjectInstance(System.Object,System.String,System.String,System.String,Castle.Components.Binder.IBindingDataSourceNode)">
+            <summary>
+            Binds the properties that
+            are available on the datasource respecting the white and black list
+            </summary>
+            <param name="instance">The target type.</param>
+            <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+            <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
+            <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
+            <param name="dataSource">A hierarchycal representation of flat data</param>
+            <returns>an instance of the specified target type</returns>
+        </member>
+        <member name="P:Castle.Components.Binder.DataBinder.ErrorList">
+            <summary>
+            Represents the databind errors
+            </summary>
+        </member>
+        <member name="P:Castle.Components.Binder.DataBinder.Files">
+            <summary>
+            Holds a reference to a hash of string to <c>HttpPostedFiles</c>
+            </summary>
+        </member>
+        <member name="T:Castle.Components.Binder.DataBindError">
+            <summary>
+            Represents an error that occurred when trying to 
+            databind a property of an instance.
+            </summary>
+        </member>
+        <member name="T:Castle.Components.Binder.ErrorList">
+            <summary>
+            A useful representation of a set of IPropertyError instances.
+            </summary>
+        </member>
+        <member name="T:Castle.Components.Binder.IBinderTranslator">
+            <summary>
+            Provides a way to properties on the binder target
+            be bound to a different key in the data source.
+            </summary>
+        </member>
+        <member name="M:Castle.Components.Binder.IBinderTranslator.Translate(System.Type,System.String)">
+            <summary>
+            Should return the key that gathers the value 
+            to fill the property.
+            </summary>
+            <param name="instanceType">
+            The type which is the target of the binder
+            </param>
+            <param name="paramName">
+            The property name in  the target type
+            </param>
+            <returns>
+            A name of the source data that should be used to populate the property
+            </returns>
+        </member>
+    </members>
+</doc>
