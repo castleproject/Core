@@ -17,9 +17,9 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.Reflection;
+
 	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework.Internal;
-
 
 	/// <summary>
 	/// Represents a wizard step. 
@@ -41,6 +41,8 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
+		#region Constructors
+
 		public WizardStepPage()
 		{			
 		}
@@ -48,6 +50,8 @@ namespace Castle.MonoRail.Framework
 		public WizardStepPage(DataBinder binder) : base(binder)
 		{			
 		}
+
+		#endregion
 
 		#region Useful Properties
 
@@ -121,8 +125,11 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
+		#region DoNavigate and Redirects
+
 		/// <summary>
-		/// Navigates within the wizard steps.
+		/// Navigates within the wizard steps using optionally a form parameter 
+		/// to dictate to where it should go.
 		/// </summary>
 		/// <remarks>
 		/// By default this will invoke <see cref="RedirectToNextStep"/>
@@ -161,7 +168,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				InternalRedirectToStep(navigateTo);
+				RedirectToStep(navigateTo);
 			}
 		}
 
@@ -235,7 +242,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Sends a redirect to a custom step (that must exists)
 		/// </summary>
-		protected bool InternalRedirectToStep(String stepName)
+		protected bool RedirectToStep(String stepName)
 		{
 			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
 
@@ -271,5 +278,7 @@ namespace Castle.MonoRail.Framework
 				Context.Response.Redirect(_wizardcontroller.Name, step);
 			}
 		}
+
+		#endregion
 	}
 }
