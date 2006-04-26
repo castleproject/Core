@@ -18,6 +18,8 @@ namespace Castle.Facilities.Logging
 	using System.Configuration;
 
 	using Castle.Services.Logging;
+	using Castle.Services.Logging.Log4netIntegration;
+	using Castle.Services.Logging.NLogIntegration;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
@@ -44,10 +46,6 @@ namespace Castle.Facilities.Logging
 	/// </summary>
 	public class LoggingFacility : AbstractFacility
 	{
-		private static readonly String Log4NetLoggerFactoryTypeName = "Castle.Services.Logging.Log4netIntegration.Log4netFactory, Castle.Services.Logging.Log4netIntegration";
-		private static readonly String NLogLoggerFactoryTypeName = "Castle.Services.Logging.NLogIntegration.NLogFactory, Castle.Services.Logging.NLogIntegration";
-		private static readonly String WebLoggerFactoryTypeName = "Castle.Services.Logging.Web.WebLoggerFactory, Castle.Services.Logging.Web";
-
 		private ITypeConverter converter;
 		private ILoggerFactory factory;
 
@@ -113,13 +111,11 @@ namespace Castle.Facilities.Logging
 			}
 			else if(logApi == LoggerImplementation.Log4net)
 			{
-				loggerFactoryType = (Type) 
-					converter.PerformConversion(Log4NetLoggerFactoryTypeName, typeof(Type));
+				loggerFactoryType = typeof(Log4netFactory);
 			}
 			else if(logApi == LoggerImplementation.NLog)
 			{
-				loggerFactoryType = (Type) 
-					converter.PerformConversion(NLogLoggerFactoryTypeName, typeof(Type));
+				loggerFactoryType = typeof(NLogFactory);
 			}
 			else if(logApi == LoggerImplementation.Diagnostics)
 			{
@@ -131,8 +127,7 @@ namespace Castle.Facilities.Logging
 			}
 			else if(logApi == LoggerImplementation.Web)
 			{
-				loggerFactoryType = (Type) 
-					converter.PerformConversion(WebLoggerFactoryTypeName, typeof(Type));
+				loggerFactoryType = typeof(WebLoggerFactory);
 			}
 			else if(logApi == LoggerImplementation.Custom)
 			{
