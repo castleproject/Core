@@ -18,8 +18,6 @@ namespace Castle.Facilities.Logging
 	using System.Configuration;
 
 	using Castle.Services.Logging;
-	using Castle.Services.Logging.Log4netIntegration;
-	using Castle.Services.Logging.NLogIntegration;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
@@ -48,6 +46,15 @@ namespace Castle.Facilities.Logging
 	{
 		private ITypeConverter converter;
 		private ILoggerFactory factory;
+
+		private static readonly String Log4NetLoggerFactoryTypeName =  
+			"Castle.Services.Logging.Log4netIntegration.Log4netFactory," +
+			"Castle.Services.Logging.Log4netIntegration,Version=1.0.0.0, Culture=neutral," +
+			"PublicKeyToken=407dd0808d44fbdc";
+		private static readonly String NLogLoggerFactoryTypeName =  
+			"Castle.Services.Logging.NLogIntegration.NLogFactory," +
+			"Castle.Services.Logging.NLogIntegration,Version=1.0.0.0, Culture=neutral," +
+			"PublicKeyToken=407dd0808d44fbdc";
 
 		public LoggingFacility()
 		{
@@ -111,11 +118,15 @@ namespace Castle.Facilities.Logging
 			}
 			else if(logApi == LoggerImplementation.Log4net)
 			{
-				loggerFactoryType = typeof(Log4netFactory);
+				loggerFactoryType = (Type)
+					converter.PerformConversion(Log4NetLoggerFactoryTypeName, typeof(Type));
+
 			}
 			else if(logApi == LoggerImplementation.NLog)
 			{
-				loggerFactoryType = typeof(NLogFactory);
+					 loggerFactoryType = (Type)
+						 converter.PerformConversion(NLogLoggerFactoryTypeName, typeof(Type));
+
 			}
 			else if(logApi == LoggerImplementation.Diagnostics)
 			{
