@@ -459,11 +459,11 @@ namespace Castle.MonoRail.Framework
 		{
 			if (queryStringParameters != null)
 			{
-				Redirect(AreaName, Name, action, queryStringParameters);
+				Redirect(AreaName, Name, TransformActionName(action), queryStringParameters);
 			}
 			else
 			{
-				Redirect(AreaName, Name, action);
+				Redirect(AreaName, Name, TransformActionName(action));
 			}
 		}
 
@@ -474,12 +474,23 @@ namespace Castle.MonoRail.Framework
 		{
 			if (queryStringParameters != null)
 			{
-				Redirect(AreaName, Name, action, queryStringParameters);
+				Redirect(AreaName, Name, TransformActionName(action), queryStringParameters);
 			}
 			else
 			{
-				Redirect(AreaName, Name, action);
+				Redirect(AreaName, Name, TransformActionName(action));
 			}
+		}
+
+		/// <summary>
+		/// Gives a chance to subclasses to format the action name properly
+		/// <seealso cref="WizardStepPage"/>
+		/// </summary>
+		/// <param name="action">Raw action name</param>
+		/// <returns>Properly formatted action name</returns>
+		internal virtual String TransformActionName(String action)
+		{
+			return action;
 		}
 
 		#endregion

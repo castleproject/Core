@@ -32,6 +32,27 @@ namespace Castle.MonoRail.Framework
 	/// to customize the accessible action name and 
 	/// <see cref="WizardStepPage.RenderWizardView"/> in order to define which view 
 	/// should be used (defaults to the step name)
+	/// <para>
+	/// Please note that an step might have actions as well, but it follows a different 
+	/// convention to be accessed. You must use the wizard controller name, slash, the
+	/// step name, hifen, the action name. For example <c>/MyWizard/AddressInformation-GetCountries.rails</c>
+	/// Which would access the following action
+	/// </para>
+	/// <code>
+	/// public class AddressInformation : WizardStepPage
+	/// {
+	///		public void GetCountries()
+	///		{
+	///		  ...
+	///		}
+	/// }
+	/// </code>
+	/// <para>Note that the RedirectToAction will always send to an internal action, so you should
+	/// omit the controller name for that.</para>
+	/// <para>
+	/// You can use a family of redirect methods to go back and forward on the wizard's 
+	/// steps.
+	/// </para>
 	/// </remarks>
 	public abstract class WizardStepPage : SmartDispatcherController
 	{
@@ -258,6 +279,18 @@ namespace Castle.MonoRail.Framework
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// For a wizard step, an internal action will always be named
+		/// with the controller name as a prefix , plus an hifen and finally
+		/// the action name. This implementation does exactly that.
+		/// </summary>
+		/// <param name="action">Raw action name</param>
+		/// <returns>Properly formatted action name</returns>
+		internal override String TransformActionName(String action)
+		{
+			return base.TransformActionName(ActionName + "-" + action);
 		}
 
 		private void InternalRedirectToStep(int stepIndex, String step)
