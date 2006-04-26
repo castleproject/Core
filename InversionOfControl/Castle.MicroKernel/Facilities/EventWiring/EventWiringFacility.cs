@@ -192,7 +192,8 @@ namespace Castle.Facilities.EventWiring
 						eventName + " Publisher " + publisherType.FullName);
 				}
 
-				MethodInfo handlerMethod = subscriberInstance.GetType().GetMethod(wireInfo.handler);
+				MethodInfo handlerMethod = subscriberInstance.GetType().GetMethod(wireInfo.handler,
+					BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
 
 				if (handlerMethod == null)
 				{
