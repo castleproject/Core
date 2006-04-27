@@ -17,12 +17,14 @@ namespace Castle.Facilities.Logging
 	using System;
 	
 	using Castle.Model;
-
 	using Castle.MicroKernel;
-
 	using Castle.Services.Logging;
 
-
+	/// <summary>
+	/// Custom resolver used by the MicroKernel. It gives
+	/// us some contextual information that we use to set up a logging
+	/// before satisfying the dependency
+	/// </summary>
 	public class LoggerResolver : ISubDependencyResolver
 	{
 		public ILoggerFactory loggerFactory;

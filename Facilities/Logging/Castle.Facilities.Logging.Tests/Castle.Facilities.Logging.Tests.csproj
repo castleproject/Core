@@ -116,11 +116,6 @@
                     HintPath = "..\..\..\Services\bin\Castle.Services.Logging.dll"
                 />
                 <Reference
-                    Name = "Castle.Services.Logging.Web"
-                    AssemblyName = "Castle.Services.Logging.Web"
-                    HintPath = "..\..\..\Services\bin\Castle.Services.Logging.Web.dll"
-                />
-                <Reference
                     Name = "Castle.Services.Logging.Log4netIntegration"
                     AssemblyName = "Castle.Services.Logging.Log4netIntegration"
                     HintPath = "..\..\..\Services\bin\Castle.Services.Logging.Log4netIntegration.dll"
