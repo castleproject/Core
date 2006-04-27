@@ -610,7 +610,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (options.Contains("position"))
 			{
-				options["insertion"] = String.Format("Insertion.{0}", options["position"]);
+				jsOptions["insertion"] = String.Format("Insertion.{0}", options["position"]);
 			}
 
 			if (options.Contains("form"))
