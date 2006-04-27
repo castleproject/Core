@@ -50,7 +50,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 				controller.PropertyBag["instance"] = instance;
 
-				(instance as ActiveRecordBase).Delete();
+				ActiveRecordMediator.Delete(instance);
 			}
 			catch(Exception ex)
 			{
