@@ -82,17 +82,27 @@
                 <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
-                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Model"
-                    Project = "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Model.dll"
                 />
             </References>
         </Build>

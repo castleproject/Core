@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +46,18 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		{
 			TransactionMetaInfo metaInfo = new TransactionMetaInfo();
 
-			MethodInfo[] methods = implementation.GetMethods(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
+			PopulateMetaInfoFromType(metaInfo, implementation);
+
+			Register(implementation, metaInfo);
+
+			return metaInfo;
+		}
+
+		private void PopulateMetaInfoFromType(TransactionMetaInfo metaInfo, Type implementation)
+		{
+			if (implementation == typeof(object) || implementation == typeof(MarshalByRefObject)) return;
+
+			MethodInfo[] methods = implementation.GetMethods(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.DeclaredOnly);
 
 			foreach(MethodInfo method in methods)
 			{
@@ -58,9 +69,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 				}
 			}
 
-			Register(implementation, metaInfo);
-
-			return metaInfo;
+			PopulateMetaInfoFromType(metaInfo, implementation.BaseType);
 		}
 
 		public TransactionMetaInfo CreateMetaFromConfig(Type implementation, MethodInfo[] methods, IConfiguration config)

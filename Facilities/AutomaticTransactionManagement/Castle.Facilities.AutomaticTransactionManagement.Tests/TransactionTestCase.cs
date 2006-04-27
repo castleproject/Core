@@ -31,6 +31,30 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 	public class FacilityBasicTestCase
 	{
 		[Test]
+		public void TestReportedBug()
+		{
+			WindsorContainer container = new WindsorContainer( new DefaultConfigurationStore() );
+
+			container.AddFacility( "transactionmanagement", new TransactionFacility() );
+
+			container.AddComponent( "transactionmanager", 
+				typeof(ITransactionManager), typeof(MockTransactionManager) );
+
+			container.AddComponent( "comp", typeof(SubTransactionalComp) );
+
+			SubTransactionalComp service = (SubTransactionalComp) container["comp"];
+
+			service.BaseMethod();
+
+			MockTransactionManager transactionManager = (MockTransactionManager) 
+				container["transactionmanager"];
+
+			Assert.AreEqual(1, transactionManager.TransactionCount);
+			Assert.AreEqual(1, transactionManager.CommittedCount);
+			Assert.AreEqual(0, transactionManager.RolledBackCount);
+		}
+
+		[Test]
 		public void TestBasicOperations()
 		{
 			WindsorContainer container = new WindsorContainer( new DefaultConfigurationStore() );
