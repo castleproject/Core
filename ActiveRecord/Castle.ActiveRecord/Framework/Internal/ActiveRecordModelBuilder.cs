@@ -304,10 +304,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private static bool ShouldCheckBase(Type type)
 		{
-			return type.BaseType != typeof(object) &&
+			// Changed as suggested http://support.castleproject.org/jira/browse/AR-40
+
+			bool shouldCheck = type.BaseType != typeof(object) &&
 				type.BaseType != typeof(ActiveRecordBase) &&
-				type.BaseType != typeof(ActiveRecordValidationBase) &&
-				!type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
+				type.BaseType != typeof(ActiveRecordValidationBase); 
+				// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
+
+			if (shouldCheck) // Perform more checks 
+			{
+				Type basetype = type.BaseType;
+				
+				while(basetype != typeof(object))
+				{
+					if (basetype.IsDefined(typeof(JoinedBaseAttribute), false)) return false;
+
+					object[] attrs = basetype.GetCustomAttributes(typeof(ActiveRecordAttribute), false);
+
+					if (attrs.Length != 0)
+					{
+						ActiveRecordAttribute arAttribute = attrs[0] as ActiveRecordAttribute;
+						if (arAttribute.DiscriminatorColumn != null)
+							return false;
+					}
+					else
+					{
+						return true;
+					}
+
+					basetype = basetype.BaseType;
+				}
+			}
+
+			return shouldCheck;
 		}
 
 		private void ProcessActiveRecordAttribute(Type type, ActiveRecordModel model)
