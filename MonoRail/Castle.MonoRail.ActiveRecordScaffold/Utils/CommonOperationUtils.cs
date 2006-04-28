@@ -72,9 +72,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 			else
 			{
-				ActiveRecordBase instanceBase = instance as ActiveRecordBase;
-
-				instanceBase.Save();
+				ActiveRecordMediator.Save( instance );
 			}
 		}
 
