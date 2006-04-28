@@ -404,6 +404,7 @@
     <Compile Include="Framework\Queries\SimpleQuery.Generic.cs" />
     <Compile Include="Framework\Scopes\DifferentDatabaseScope.cs" />
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
+    <Compile Include="Framework\SessionScopeWebModule.cs" />
     <Compile Include="Framework\Validators\CreditCardValidator.cs" />
     <Compile Include="Framework\Validators\LengthValidator.cs" />
   </ItemGroup>
