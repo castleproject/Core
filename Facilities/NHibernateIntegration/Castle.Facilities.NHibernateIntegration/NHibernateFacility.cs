@@ -143,6 +143,8 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			ISessionManager sessionManager = (ISessionManager) Kernel[ typeof(ISessionManager) ];
 
+			ConfigureReflectionOptimizer(FacilityConfig);
+
 			bool firstFactory = true;
 
 			foreach(IConfiguration factoryConfig in FacilityConfig.Children)
@@ -156,6 +158,35 @@ namespace Castle.Facilities.NHibernateIntegration
 
 				firstFactory = false;
 			}
+		}
+
+		/// <summary>
+		/// Reads the attribute <c>useReflectionOptimizer</c> and configure
+		/// the reflection optimizer accordingly.
+		/// </summary>
+		/// <remarks>
+		/// As reported on Jira (FACILITIES-39) the reflection optimizer
+		/// slow things down. So by default it will be disabled. You
+		/// can use the attribute <c>useReflectionOptimizer</c> to turn it
+		/// on. 
+		/// </remarks>
+		/// <param name="config"></param>
+		private void ConfigureReflectionOptimizer(IConfiguration config)
+		{
+			ITypeConverter converter = (ITypeConverter) 
+				Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+
+			String useReflOptAtt = config.Attributes["useReflectionOptimizer"];
+
+			bool useReflectionOptimizer = false;
+
+			if (useReflOptAtt != null)
+			{
+				useReflectionOptimizer = (bool) 
+					converter.PerformConversion(useReflOptAtt, typeof(bool));
+			}
+
+			NHibernate.Cfg.Environment.UseReflectionOptimizer = useReflectionOptimizer;
 		}
 
 		private void ConfigureFactories(IConfiguration config, 
@@ -182,6 +213,8 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				alias = Constants.DefaultAlias;
 			}
+
+			// NHibernate.Cfg.Environment.
 
 			Configuration cfg = new Configuration();
 

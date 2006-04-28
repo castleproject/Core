@@ -1,5 +1,7 @@
 Version beta 3
 
+- You can now control the NH's ReflectionOptimizer through the attribute useReflectionOptimizer which goes on the facility node.
+
 - The DefaultSessionManager will always look up for a component "nhibernate.session.interceptor" to use as
   a NH Interceptor
   
