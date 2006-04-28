@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Fixed AR-45: Add BindingFlags.NonPublic to DefaultBindingFlags on ActiveRecordModelBuilder
+
 - Added Element to RelationAttribute, now can map relations of simple types
    Usage:
 	 [HasMany(typeof(string), "ItemId", "Elements", Element = "Name")]

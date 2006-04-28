@@ -68,9 +68,9 @@ namespace Castle.ActiveRecord
 
 				RaiseSessionFactoryHolderCreated(holder);
 
-				ActiveRecordModel.type2Model.Clear();
 				ActiveRecordBase.holder = holder;
-            ActiveRecordModel.isDebug = source.Debug;
+				ActiveRecordModel.type2Model.Clear();
+				ActiveRecordModel.isDebug = source.Debug;
 
 				// Base configuration
 				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
@@ -346,6 +346,9 @@ namespace Castle.ActiveRecord
 
 		private static Configuration CreateConfiguration(IConfiguration config)
 		{
+			// hammett comments: I'm gonna test this off for a while
+			NHibernate.Cfg.Environment.UseReflectionOptimizer = false;
+
 			Configuration cfg = new Configuration();
 
 			foreach(IConfiguration childConfig in config.Children)
