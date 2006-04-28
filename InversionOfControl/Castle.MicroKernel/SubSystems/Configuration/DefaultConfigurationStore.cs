@@ -17,10 +17,10 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Runtime.CompilerServices;
 
 	using Castle.Model.Configuration;
 	using Castle.Model.Resource;
-
 	using Castle.MicroKernel.SubSystems.Resource;
 
 	/// <summary>
@@ -32,51 +32,53 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 	[Serializable]
 	public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	{
-		private IDictionary facilities;
-		private IDictionary components;
+		private readonly IDictionary facilities = new HybridDictionary();
+		private readonly IDictionary components = new HybridDictionary();
+		private readonly ArrayList facilitiesList = new ArrayList();
+		private readonly ArrayList componentsList = new ArrayList();
 
 		public DefaultConfigurationStore()
 		{
-			facilities = new HybridDictionary();
-			components = new HybridDictionary();
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void AddFacilityConfiguration(String key, IConfiguration config)
 		{
+			facilitiesList.Add(config);
+
 			facilities[key] = config;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public void AddComponentConfiguration(String key, IConfiguration config)
 		{
+			componentsList.Add(config);
+
 			components[key] = config;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration GetFacilityConfiguration(String key)
 		{
 			return facilities[key] as IConfiguration;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration GetComponentConfiguration(String key)
 		{
 			return components[key] as IConfiguration;
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration[] GetFacilities()
 		{
-			IConfiguration[] array = new IConfiguration[facilities.Count];
-			
-			facilities.Values.CopyTo(array, 0);
-
-			return array;
+			return (IConfiguration[]) facilitiesList.ToArray(typeof(IConfiguration));
 		}
 
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration[] GetComponents()
 		{
-			IConfiguration[] array = new IConfiguration[components.Count];
-			
-			components.Values.CopyTo(array, 0);
-
-			return array;
+			return (IConfiguration[]) componentsList.ToArray(typeof(IConfiguration));
 		}
 
 		public IResource GetResource(String resourceUri, IResource resource)
