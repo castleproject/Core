@@ -1196,7 +1196,7 @@ namespace Castle.MonoRail.Framework
 				
 			try
 			{
-				_selectedViewName = String.Format("rescues\\{0}", att.ViewName);
+				_selectedViewName = Path.Combine("rescues", att.ViewName);
 				ProcessView();
 				return true;
 			}
