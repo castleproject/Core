@@ -100,7 +100,7 @@ namespace Castle.ActiveRecord
 		/// validation error was found.
 		/// </summary>
 		/// <returns></returns>
-		public bool IsValid()
+		public virtual bool IsValid()
 		{
 			ArrayList errorlist = new ArrayList();
 			__failedProperties = new Hashtable();

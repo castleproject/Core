@@ -1,7 +1,9 @@
 beta 4
 ======
 
-- Fixed AR-45: Add BindingFlags.NonPublic to DefaultBindingFlags on ActiveRecordModelBuilder
+- Fixed AR-39: Added virtual to IsValid on ActiveRecordValidationBase/<T>
+
+- Fixed AR-45: Added BindingFlags.NonPublic to DefaultBindingFlags on ActiveRecordModelBuilder
 
 - Added Element to RelationAttribute, now can map relations of simple types
    Usage:
