@@ -194,6 +194,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\ISessionFactoryResolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\ISessionManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -220,6 +225,11 @@
                 />
                 <File
                     RelPath = "Internal\SessionDisposeSynchronization.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\SessionFactoryResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

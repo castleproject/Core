@@ -80,16 +80,26 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			AssertHasAtLeastOneFactoryConfigured();
 
-			RegisterSessionStore();
-
-			RegisterSessionManager();
-
-			RegisterTransactionManager();
+			RegisterComponents();
 
 			ConfigureFacility();
 		}
 
 		#region Set up of components
+
+		protected virtual void RegisterComponents()
+		{
+			RegisterSessionFactoryResolver();
+			RegisterSessionStore();
+			RegisterSessionManager();
+			RegisterTransactionManager();
+		}
+
+		protected void RegisterSessionFactoryResolver()
+		{
+			Kernel.AddComponent( "nhfacility.sessionfactory.resolver", 
+				typeof(ISessionFactoryResolver), typeof(SessionFactoryResolver) );
+		}
 
 		protected void RegisterSessionStore()
 		{
@@ -141,7 +151,8 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		protected void ConfigureFacility()
 		{
-			ISessionManager sessionManager = (ISessionManager) Kernel[ typeof(ISessionManager) ];
+			ISessionFactoryResolver sessionFactoryResolver = (ISessionFactoryResolver) 
+				Kernel[typeof(ISessionFactoryResolver)];
 
 			ConfigureReflectionOptimizer(FacilityConfig);
 
@@ -154,7 +165,7 @@ namespace Castle.Facilities.NHibernateIntegration
 					throw new ConfigurationException("Unexpected node " + factoryConfig.Name);
 				}
 
-				ConfigureFactories(factoryConfig, sessionManager, firstFactory);
+				ConfigureFactories(factoryConfig, sessionFactoryResolver, firstFactory);
 
 				firstFactory = false;
 			}
@@ -190,7 +201,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		}
 
 		private void ConfigureFactories(IConfiguration config, 
-			ISessionManager sessionManager, bool firstFactory)
+			ISessionFactoryResolver sessionFactoryResolver, bool firstFactory)
 		{
 			String id = config.Attributes["id"];
 
@@ -213,8 +224,6 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				alias = Constants.DefaultAlias;
 			}
-
-			// NHibernate.Cfg.Environment.
 
 			Configuration cfg = new Configuration();
 
@@ -239,9 +248,9 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			Kernel.AddComponentInstance( id, typeof(ISessionFactory), sessionFactory );
 
-			// Registers the ISessionFactory within the ISessionManager
+			// Registers the ISessionFactory within the ISessionFactoryResolver
 
-			sessionManager.RegisterSessionFactory(alias, sessionFactory);
+			sessionFactoryResolver.RegisterAliasComponentIdMapping(alias, id);
 		}
 
 		protected void ApplyConfigurationSettings(Configuration cfg, IConfiguration facilityConfig)

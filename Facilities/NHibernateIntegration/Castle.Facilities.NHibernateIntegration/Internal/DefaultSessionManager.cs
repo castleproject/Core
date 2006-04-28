@@ -33,26 +33,28 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	{
 		private readonly IKernel kernel;
 		private readonly ISessionStore sessionStore;
+		private readonly ISessionFactoryResolver factoryResolver;
 		private readonly IDictionary alias2SessionFactory = new HybridDictionary(true);
 
-		public DefaultSessionManager(ISessionStore sessionStore, IKernel kernel)
+		public DefaultSessionManager(ISessionStore sessionStore, IKernel kernel, ISessionFactoryResolver factoryResolver)
 		{
-			this.sessionStore = sessionStore;
 			this.kernel = kernel;
+			this.sessionStore = sessionStore;
+			this.factoryResolver = factoryResolver;
 		}
 
-		public void RegisterSessionFactory(String alias, ISessionFactory sessionFactory)
-		{
-			if (alias == null) throw new ArgumentNullException("alias");
-			if (sessionFactory == null) throw new ArgumentNullException("sessionFactory");
-
-			if (alias2SessionFactory.Contains(alias))
-			{
-				throw new FacilityException("Duplicated alias: " + alias);
-			}
-
-			alias2SessionFactory.Add(alias, sessionFactory);
-		}
+//		public void RegisterSessionFactory(String alias, ISessionFactory sessionFactory)
+//		{
+//			if (alias == null) throw new ArgumentNullException("alias");
+//			if (sessionFactory == null) throw new ArgumentNullException("sessionFactory");
+//
+//			if (alias2SessionFactory.Contains(alias))
+//			{
+//				throw new FacilityException("Duplicated alias: " + alias);
+//			}
+//
+//			alias2SessionFactory.Add(alias, sessionFactory);
+//		}
 
 		public ISession OpenSession()
 		{
@@ -151,9 +153,9 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			return new SessionDelegate( !hasTransaction, session, sessionStore );
 		}
 
-		private ISession CreateSession(string alias)
+		private ISession CreateSession(String alias)
 		{
-			ISessionFactory sessionFactory = alias2SessionFactory[alias] as ISessionFactory;
+			ISessionFactory sessionFactory = factoryResolver.GetSessionFactory(alias);
 
 			if (sessionFactory == null)
 			{

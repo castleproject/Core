@@ -26,16 +26,6 @@ namespace Castle.Facilities.NHibernateIntegration
 	public interface ISessionManager
 	{
 		/// <summary>
-		/// Implementors should associate the specified 
-		/// alias to the ISessionFactory instance
-		/// </summary>
-		/// <param name="alias">The alias that will be used to retrieve 
-		/// the ISession instance</param>
-		/// <param name="sessionFactory">The implementation of ISessionFactory 
-		/// capable of creation ISession instances</param>
-		void RegisterSessionFactory(String alias, ISessionFactory sessionFactory);
-
-		/// <summary>
 		/// Returns a valid opened and connected ISession instance
 		/// </summary>
 		/// <returns></returns>

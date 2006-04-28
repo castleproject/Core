@@ -1,4 +1,9 @@
 Version beta 3
+
+- Removed RegisterSessionFactory from ISessionManager
+
+- Used https://svn.sourceforge.net/svnroot/cuyahoga/trunk/Core/Facilities/ as inspiration
+  to add support for rebuildable session factories
  
 - You can now control the NH's ReflectionOptimizer through the attribute useReflectionOptimizer which goes on the facility node.
 
