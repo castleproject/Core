@@ -285,7 +285,7 @@ namespace Castle.MonoRail.Framework
 
 		protected object BindObject(ParamStore from, Type targetType, String prefix)
 		{
-			return BindObject(from, targetType, prefix);
+			return BindObject(from, targetType, prefix, null, null);
 		}
 
 		protected object BindObject(ParamStore from, Type targetType, String prefix, String excludedProperties, String allowedProperties)
