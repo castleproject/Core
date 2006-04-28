@@ -81,7 +81,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			get { return HttpContext.Current; }
 		}
 
-		#region helper methods
+		#region Helper methods
 
 		/// <summary>
 		/// Generates HTML element attributes string from <paramref name="attributes"/>.
