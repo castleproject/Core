@@ -109,12 +109,14 @@
     <Compile Include="DataBindError.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataReaderAdapter.cs" />
     <Compile Include="DataSourceNode.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ErrorList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IBinderTranslator.cs" />
     <Compile Include="IBindingDataSourceNode.cs">
       <SubType>Code</SubType>
     </Compile>
