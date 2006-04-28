@@ -283,6 +283,8 @@
 				<include name="**/*.txt" />
 				<include name="**/*.inc" />
 				<include name="**/*.vm" />
+				<include name="**/*.gif" />
+				<include name="**/*.resx" />
 				<include name="*.snk" />
 				<include name="SharedLibs/**/*.dll" />
 				<include name="SharedLibs/**/*.rtf" />
