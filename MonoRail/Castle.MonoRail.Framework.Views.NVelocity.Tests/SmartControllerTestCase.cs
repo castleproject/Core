@@ -108,6 +108,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void FillingBehavior1()
 		{
+
+			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 			DoGet("smart/FillingBehavior.rails", "abc.name=someone", "abc.date1day=11", "abc.date1month=10", "abc.date1year=2005");
 			String expected = "incoming someone " + new DateTime( 2005, 10, 11 ).ToShortDateString() + " " + 
 				DateTime.Now.AddDays(1).ToShortDateString();
@@ -118,6 +120,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void FillingBehavior2()
 		{
+			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 			DoGet("smart/FillingBehavior.rails");
 			String expected = "incoming hammett " + 
 				DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();

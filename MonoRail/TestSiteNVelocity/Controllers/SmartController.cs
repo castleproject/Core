@@ -58,6 +58,7 @@ namespace TestSiteNVelocity.Controllers
 
 		public void FillingBehavior([DataBind("abc")] ClassWithInitializers clazz)
 		{
+			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 			RenderText(String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString()));
 		}
 
