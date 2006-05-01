@@ -465,7 +465,6 @@ namespace Castle.ActiveRecord.Tests
 			n1.Save();
 		}
 
-
 		[Test]
 		public void TestTimestampedClass()
 		{

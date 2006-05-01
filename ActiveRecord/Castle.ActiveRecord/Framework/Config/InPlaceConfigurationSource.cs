@@ -28,11 +28,37 @@ namespace Castle.ActiveRecord.Framework.Config
 		private readonly IDictionary _type2Config = new Hashtable();
 		private Type threadScopeInfoImplementation;
 		private Type sessionFactoryHolderImplementation;
-        private bool _debug = false;
+        private bool debug = false;
 
 		public InPlaceConfigurationSource()
 		{
 		}
+
+		#region IConfigurationSource Members
+
+		public Type ThreadScopeInfoImplementation
+		{
+			get { return threadScopeInfoImplementation; }
+			set { threadScopeInfoImplementation = value; }
+		}
+
+		public Type SessionFactoryHolderImplementation
+		{
+			get { return sessionFactoryHolderImplementation; }
+			set { sessionFactoryHolderImplementation = value; }
+		}
+
+		public IConfiguration GetConfiguration(Type type)
+		{
+			return _type2Config[type] as IConfiguration;
+		}
+
+		public bool Debug 
+		{
+			get { return debug; }
+		}
+
+		#endregion
 
 		public void Add(Type type, IDictionary properties)
 		{
@@ -66,6 +92,7 @@ namespace Castle.ActiveRecord.Framework.Config
 					throw new ActiveRecordException(message);
 				}
 			}
+
             ThreadScopeInfoImplementation = threadInfoType;
 		}
 
@@ -86,39 +113,14 @@ namespace Castle.ActiveRecord.Framework.Config
 					throw new ActiveRecordException(message);
 				}
 			}
+
             SessionFactoryHolderImplementation = sessionFactoryHolderType;
 		}
 
-        protected void SetDebug(bool isDebug) 
+        protected void SetDebugFlag(bool isDebug) 
         {
-            _debug = isDebug;
+            debug = isDebug;
         }
-
-		#region IConfigurationSource Members
-
-		public Type ThreadScopeInfoImplementation
-		{
-			get { return threadScopeInfoImplementation; }
-			set { threadScopeInfoImplementation = value; }
-		}
-
-		public Type SessionFactoryHolderImplementation
-		{
-			get { return sessionFactoryHolderImplementation; }
-			set { sessionFactoryHolderImplementation = value; }
-		}
-
-		public IConfiguration GetConfiguration(Type type)
-		{
-			return _type2Config[type] as IConfiguration;
-		}
-
-        public bool Debug 
-        {
-            get { return _debug; }
-        }
-
-		#endregion
 
 		private IConfiguration ConvertToConfiguration(IDictionary properties)
 		{

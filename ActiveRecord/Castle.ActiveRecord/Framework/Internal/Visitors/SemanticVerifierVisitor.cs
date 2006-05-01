@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 
 	using Iesi.Collections;
-
+	
 	using Nullables;
 	
 	using Castle.ActiveRecord;
@@ -49,42 +49,42 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				if (model.IsDiscriminatorBase && model.IsJoinedSubClassBase)
 				{
-					throw new ActiveRecordException( String.Format(
-						"Unfortunatelly you can't have a discriminator class " + 
-						"and a joined subclass at the same time - check type {0}", model.Type.FullName) );
+					throw new ActiveRecordException(String.Format(
+						"Unfortunatelly you can't have a discriminator class " +
+							"and a joined subclass at the same time - check type {0}", model.Type.FullName));
 				}
 
 				if (model.Version != null && model.Timestamp != null)
 				{
-					throw new ActiveRecordException( String.Format(
-						"You can't specify a version and a timestamp properties, only one of them " + 
-						"- check type {0}", model.Type.FullName) );
+					throw new ActiveRecordException(String.Format(
+						"You can't specify a version and a timestamp properties, only one of them " +
+							"- check type {0}", model.Type.FullName));
 				}
 
 				if (model.IsDiscriminatorSubClass || model.IsJoinedSubClass)
 				{
 					if (model.Version != null || model.Timestamp != null)
 					{
-						throw new ActiveRecordException( String.Format(
-							"A joined subclass or discriminator subclass can't specify a version or timestamp " + 
-							"- check type {0}", model.Type.FullName) );
+						throw new ActiveRecordException(String.Format(
+							"A joined subclass or discriminator subclass can't specify a version or timestamp " +
+								"- check type {0}", model.Type.FullName));
 					}
 				}
 
 				if (model.IsJoinedSubClass && model.Key == null)
 				{
-					throw new ActiveRecordException( String.Format(
-						"A joined subclass must specify a key property. Use the JoinedKeyAttribute to denote the shared key. " + 
-						"- check type {0}", model.Type.FullName) );
+					throw new ActiveRecordException(String.Format(
+						"A joined subclass must specify a key property. Use the JoinedKeyAttribute to denote the shared key. " +
+							"- check type {0}", model.Type.FullName));
 				}
 
 				if (model.IsNestedType)
 				{
 					if (model.Version != null || model.Timestamp != null)
 					{
-						throw new ActiveRecordException( String.Format(
-							"A nested type is not allowed to have version or timestamped fields " + 
-							"- check type {0}", model.Type.FullName) );
+						throw new ActiveRecordException(String.Format(
+							"A nested type is not allowed to have version or timestamped fields " +
+								"- check type {0}", model.Type.FullName));
 					}
 				}
 
@@ -98,53 +98,41 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private static void ThrowIfDoesntHavePrimaryKey(ActiveRecordModel model)
-		{
-			if (model.IsNestedType)//nested types do not have primary keys
-				return;
-			//Need to make the check this way because of inheritance, where the current class doesn't have
-			//a primary key but the base class does
-			ActiveRecordModel tmpModel = model;
-			while(tmpModel!=null && tmpModel.Ids.Count==0)
-				tmpModel = tmpModel.Parent;
-			if(tmpModel==null || tmpModel.Ids.Count==0)
-			{
-				throw new ActiveRecordException( String.Format(
-					"A type must declare a primary key. " + 
-						"Check type {0}", model.Type.FullName) );
-			}
-		}
-
 		public override void VisitPrimaryKey(PrimaryKeyModel model)
 		{
 			// check for composite key first
-			if( model.Property.PropertyType.GetCustomAttributes( typeof( CompositeKeyAttribute ), false ).Length > 0 )
+			if (model.Property.PropertyType.GetCustomAttributes(typeof(CompositeKeyAttribute), false).Length > 0)
 			{
-				MethodInfo eq = model.Property.PropertyType.GetMethod( "Equals", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly );
-				MethodInfo hc = model.Property.PropertyType.GetMethod( "GetHashCode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly );
-				
-				if( eq == null || hc == null )
+				BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
+
+				MethodInfo eq = model.Property.PropertyType.GetMethod("Equals", flags);
+				MethodInfo hc = model.Property.PropertyType.GetMethod("GetHashCode", flags);
+
+				if (eq == null || hc == null)
 				{
-					throw new ActiveRecordException( string.Format( "To use type '{0}' as a composite id, you must implement Equals and GetHashCode.", model.Property.PropertyType.Name ) );
+					throw new ActiveRecordException(string.Format("To use type '{0}' as a composite id, " + 
+						"you must implement Equals and GetHashCode.", model.Property.PropertyType.Name));
 				}
-				
-				if( model.Property.PropertyType.IsSerializable == false )
+
+				if (model.Property.PropertyType.IsSerializable == false)
 				{
-					throw new ActiveRecordException( string.Format( "To use type '{0}' as a composite id it must be Serializable.", model.Property.PropertyType.Name ) );
+					throw new ActiveRecordException(string.Format("To use type '{0}' as a composite id " + 
+						"it must be marked as Serializable.", model.Property.PropertyType.Name));
 				}
 
 				int keyPropAttrCount = 0;
 				PropertyInfo[] compositeKeyProps = model.Property.PropertyType.GetProperties();
-				foreach( PropertyInfo keyProp in compositeKeyProps )
+				foreach(PropertyInfo keyProp in compositeKeyProps)
 				{
-					if( keyProp.GetCustomAttributes( typeof( KeyPropertyAttribute ), false ).Length > 0 )
+					if (keyProp.GetCustomAttributes(typeof(KeyPropertyAttribute), false).Length > 0)
 					{
 						keyPropAttrCount++;
 					}
 				}
-				if( keyPropAttrCount < 2 )
+
+				if (keyPropAttrCount < 2)
 				{
-					throw new ActiveRecordException( string.Format( "To use type '{0}' as a composite id it must have two or more properties marked with the [KeyProperty] attribute.", model.Property.PropertyType.Name ) );
+					throw new ActiveRecordException(string.Format("To use type '{0}' as a composite id it must have two or more properties marked with the [KeyProperty] attribute.", model.Property.PropertyType.Name));
 				}
 			}
 			else
@@ -190,58 +178,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.PropertyAtt.NotNull = false;
 
-				if (model.Property.PropertyType == typeof(NullableBoolean))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableBooleanType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableByte))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableByteType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableChar))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableCharType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableDateTime))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableDateTimeType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableDecimal))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableDecimalType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableDouble))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableDoubleType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableGuid))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableGuidType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableInt16))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableInt16Type, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableInt32))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableInt32Type, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableInt64))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableInt64Type, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableSByte))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableSByteType, Nullables.NHibernate";
-				}
-				else if (model.Property.PropertyType == typeof(NullableSingle))
-				{
-					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
-				}
+				model.PropertyAtt.ColumnType = ObtainNullableTypeName(model.Property.PropertyType);
 			}
+
 			if (ActiveRecordModel.GetModel(model.Property.PropertyType) != null)
 			{
-				throw new ActiveRecordException( String.Format(
+				throw new ActiveRecordException(String.Format(
 					"You can't use [Property] on {0}.{1} because {2} is an active record class, did you mean to use BelongTo?",
 					model.Property.DeclaringType.Name, model.Property.Name, model.Property.PropertyType.FullName));
 			}
@@ -258,54 +200,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.FieldAtt.NotNull = false;
 
-				if (model.Field.FieldType== typeof(NullableBoolean))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableBooleanType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableByte))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableByteType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableChar))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableCharType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableDateTime))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableDateTimeType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableDecimal))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableDecimalType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableDouble))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableDoubleType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableGuid))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableGuidType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableInt16))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableInt16Type, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableInt32))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableInt32Type, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableInt64))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableInt64Type, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableSByte))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableSByteType, Nullables.NHibernate";
-				}
-				else if (model.Field.FieldType == typeof(NullableSingle))
-				{
-					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
-				}
+				model.FieldAtt.ColumnType = ObtainNullableTypeName(model.Field.FieldType);
 			}
 		}
 
@@ -345,13 +240,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 					{
 						throw new ActiveRecordException(
 							string.Format("Property {0} must be virtual because " +
-							"class {1} support lazy loading [ActiveRecord(Lazy=true)]", 
-							model.Property.Name,
-							model.Property.DeclaringType.Name));
+								"class {1} support lazy loading [ActiveRecord(Lazy=true)]",
+							              model.Property.Name,
+							              model.Property.DeclaringType.Name));
 					}
 				}
 			}
-            
+
 			if (model.BelongsToAtt.Column == null && model.BelongsToAtt.CompositeKeyColumns == null)
 			{
 				model.BelongsToAtt.Column = model.Property.Name;
@@ -368,16 +263,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			if (model.HasManyAtt.RelationType == RelationType.IdBag)
 			{
-				throw new ActiveRecordException( String.Format(
-					"You can't use idbags in a many to one association (HasMany) {0}.{1}  ", 
-					model.Property.DeclaringType.Name, model.Property.Name) );
+				throw new ActiveRecordException(String.Format(
+					"You can't use idbags in a many to one association (HasMany) {0}.{1}  ",
+					model.Property.DeclaringType.Name, model.Property.Name));
 			}
 
 			if (model.HasManyAtt.RelationType == RelationType.Map && model.HasManyAtt.Index == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"A HasMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ", 
-					model.Property.DeclaringType.Name, model.Property.Name) );
+				throw new ActiveRecordException(String.Format(
+					"A HasMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ",
+					model.Property.DeclaringType.Name, model.Property.Name));
 			}
 
 			// Infer table and column based on possible belongs to 
@@ -387,14 +282,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			String keyColumn = model.HasManyAtt.ColumnKey;
 			String[] compositeKeyColumnKeys = model.HasManyAtt.CompositeKeyColumnKeys;
 
-			ActiveRecordModel target = arCollection[ model.HasManyAtt.MapType ];
+			ActiveRecordModel target = arCollection[model.HasManyAtt.MapType];
 
 			if ((table == null || (keyColumn == null && compositeKeyColumnKeys == null)) && target == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"ActiveRecord tried to infer details about the relation {0}.{1} but " + 
-					"it could not find information about the specified target type {2}", 
-					model.Property.DeclaringType.Name, model.Property.Name, model.HasManyAtt.MapType) );
+				throw new ActiveRecordException(String.Format(
+					"ActiveRecord tried to infer details about the relation {0}.{1} but " +
+						"it could not find information about the specified target type {2}",
+					model.Property.DeclaringType.Name, model.Property.Name, model.HasManyAtt.MapType));
 			}
 
 			BelongsToModel targetBtModel = null;
@@ -406,17 +301,18 @@ namespace Castle.ActiveRecord.Framework.Internal
 					if (btModel.BelongsToAtt.Type == model.Property.DeclaringType ||
 						btModel.Property.PropertyType == model.Property.DeclaringType)
 					{
-						targetBtModel = btModel; break;
+						targetBtModel = btModel;
+						break;
 					}
 				}
 			}
 
 			if ((table == null || (keyColumn == null && compositeKeyColumnKeys == null)) && targetBtModel == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"ActiveRecord tried to infer details about the relation {0}.{1} but " + 
-					"it could not find a 'BelongsTo' mapped property in the target type {2}", 
-					model.Property.DeclaringType.Name, model.Property.Name, model.HasManyAtt.MapType) );
+				throw new ActiveRecordException(String.Format(
+					"ActiveRecord tried to infer details about the relation {0}.{1} but " +
+						"it could not find a 'BelongsTo' mapped property in the target type {2}",
+					model.Property.DeclaringType.Name, model.Property.Name, model.HasManyAtt.MapType));
 			}
 
 			if (target != null) VisitModel(target);
@@ -458,76 +354,76 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			if (model.HasManyAtt.Table == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"For a many to many association (HasAndBelongsToMany) we need that you " + 
-					"specify the association table - {0}.{1} " + 
-					currentModel.Type.Name, model.Property.Name) );
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) we need that you " +
+						"specify the association table - {0}.{1} " +
+						currentModel.Type.Name, model.Property.Name));
 			}
 
 			if (model.HasManyAtt.ColumnKey == null && model.HasManyAtt.CompositeKeyColumnKeys == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"For a many to many association (HasAndBelongsToMany) we need that you " + 
-					"specify the ColumnKey or CompositeKeyColumnKeys - which is the column(s) that represents the type {0} " + 
-					"on the association table - {0}.{1} " + 
-					currentModel.Type.Name, model.Property.Name) );
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) we need that you " +
+						"specify the ColumnKey or CompositeKeyColumnKeys - which is the column(s) that represents the type {0} " +
+						"on the association table - {0}.{1} " +
+						currentModel.Type.Name, model.Property.Name));
 			}
-		    
+
 			if (model.HasManyAtt.ColumnKey != null && model.HasManyAtt.CompositeKeyColumnKeys != null)
 			{
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) there should only be " +
-					"a ColumnKey or an array of CompositeKeyColumnKeys, not both."));
+						"a ColumnKey or an array of CompositeKeyColumnKeys, not both."));
 			}
 
 			if (model.HasManyAtt.CompositeKeyColumnKeys != null && model.HasManyAtt.CompositeKeyColumnKeys.Length < 2)
 			{
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) with a CompositeKey, " +
-					"there must be at least two CompositeKeyColumnKeys  - which are the columns that represent the type {0} " +
-					"on the association table - {0}.{1} " +
-					currentModel.Type.Name, model.Property.Name));
+						"there must be at least two CompositeKeyColumnKeys  - which are the columns that represent the type {0} " +
+						"on the association table - {0}.{1} " +
+						currentModel.Type.Name, model.Property.Name));
 			}
 
 			if (model.HasManyAtt.ColumnRef == null && model.HasManyAtt.CompositeKeyColumnRefs == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"For a many to many association (HasAndBelongsToMany) we need that you " + 
-					"specify the ColumnRef or CompositeKeyColumnRefs - which is the column(s) that represents the other end '{2}' " + 
-					"on the association table - {0}.{1} " + 
-					currentModel.Type.Name, model.Property.Name, otherend.Name) );
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) we need that you " +
+						"specify the ColumnRef or CompositeKeyColumnRefs - which is the column(s) that represents the other end '{2}' " +
+						"on the association table - {0}.{1} " +
+						currentModel.Type.Name, model.Property.Name, otherend.Name));
 			}
 
 			if (model.HasManyAtt.ColumnRef != null && model.HasManyAtt.CompositeKeyColumnRefs != null)
 			{
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) there should only be " +
-					"a ColumnRef or an array of CompositeKeyColumnRefs, not both."));
+						"a ColumnRef or an array of CompositeKeyColumnRefs, not both."));
 			}
 
 			if (model.HasManyAtt.CompositeKeyColumnRefs != null && model.HasManyAtt.CompositeKeyColumnRefs.Length < 2)
 			{
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) with a CompositeKey, " +
-					"there must be at least two CompositeKeyColumnRefs - which are the columns that represent the other end '{2}' " +
-					"on the association table - {0}.{1} " +
-					currentModel.Type.Name, model.Property.Name, otherend.Name));
+						"there must be at least two CompositeKeyColumnRefs - which are the columns that represent the other end '{2}' " +
+						"on the association table - {0}.{1} " +
+						currentModel.Type.Name, model.Property.Name, otherend.Name));
 			}
 
 			if (model.HasManyAtt.RelationType == RelationType.IdBag && model.CollectionID == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"For a many to many association (HasAndBelongsToMany) using IDBag, you need " + 
-					"to specify a CollectionIDAttribute giving us more details. " + 
-					"{0}.{1} " + 
-					currentModel.Type.Name, model.Property.Name, otherend.Name) );
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) using IDBag, you need " +
+						"to specify a CollectionIDAttribute giving us more details. " +
+						"{0}.{1} " +
+						currentModel.Type.Name, model.Property.Name, otherend.Name));
 			}
 
 			if (model.HasManyAtt.RelationType == RelationType.Map && model.HasManyAtt.Index == null)
 			{
-				throw new ActiveRecordException( String.Format(
-					"A HasAndBelongsToMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ", 
-					model.Property.DeclaringType.Name, model.Property.Name) );
+				throw new ActiveRecordException(String.Format(
+					"A HasAndBelongsToMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ",
+					model.Property.DeclaringType.Name, model.Property.Name));
 			}
 
 			base.VisitHasAndBelongsToMany(model);
@@ -551,15 +447,94 @@ namespace Castle.ActiveRecord.Framework.Internal
 				}
 				else
 				{
-					throw new ActiveRecordException( String.Format(
-						"Could not guess relation type for property {0}.{1}  ", 
-						property.DeclaringType.Name, property.Name) );
+					throw new ActiveRecordException(String.Format(
+						"Could not guess relation type for property {0}.{1}  ",
+						property.DeclaringType.Name, property.Name));
 				}
 			}
 			else
 			{
 				return type;
 			}
+		}
+
+		private static void ThrowIfDoesntHavePrimaryKey(ActiveRecordModel model)
+		{
+			// Nested types do not have primary keys
+			if (model.IsNestedType) return;
+
+			// Need to make the check this way because of inheritance, 
+			// where the current class doesn't have
+			// a primary key but the base class does
+			ActiveRecordModel tmpModel = model;
+
+			while(tmpModel != null && tmpModel.Ids.Count == 0)
+			{
+				tmpModel = tmpModel.Parent;
+			}
+
+			if (tmpModel == null || tmpModel.Ids.Count == 0)
+			{
+				throw new ActiveRecordException(String.Format(
+					"A type must declare a primary key. " +
+						"Check type {0}", model.Type.FullName));
+			}
+		}
+
+		private static String ObtainNullableTypeName(Type type)
+		{
+			String typeName = null;
+
+			if (type == typeof(NullableBoolean))
+			{
+				typeName = "Nullables.NHibernate.NullableBooleanType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableByte))
+			{
+				typeName = "Nullables.NHibernate.NullableByteType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableChar))
+			{
+				typeName = "Nullables.NHibernate.NullableCharType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableDateTime))
+			{
+				typeName = "Nullables.NHibernate.NullableDateTimeType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableDecimal))
+			{
+				typeName = "Nullables.NHibernate.NullableDecimalType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableDouble))
+			{
+				typeName = "Nullables.NHibernate.NullableDoubleType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableGuid))
+			{
+				typeName = "Nullables.NHibernate.NullableGuidType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableInt16))
+			{
+				typeName = "Nullables.NHibernate.NullableInt16Type, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableInt32))
+			{
+				typeName = "Nullables.NHibernate.NullableInt32Type, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableInt64))
+			{
+				typeName = "Nullables.NHibernate.NullableInt64Type, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableSByte))
+			{
+				typeName = "Nullables.NHibernate.NullableSByteType, Nullables.NHibernate";
+			}
+			else if (type == typeof(NullableSingle))
+			{
+				typeName = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
+			}
+
+			return typeName;
 		}
 	}
 }

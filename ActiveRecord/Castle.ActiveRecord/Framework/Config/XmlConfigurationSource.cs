@@ -67,7 +67,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			SetUpSessionFactoryHolderType( sessionfactoryholdertypeAtt != null ? 
 				sessionfactoryholdertypeAtt.Value : String.Empty );
 
-            SetDebug(isDebug != null && "true" == isDebug.Value);
+            SetDebugFlag(isDebug != null && "true" == isDebug.Value);
 
 			PopulateConfigNodes(section);
 		}

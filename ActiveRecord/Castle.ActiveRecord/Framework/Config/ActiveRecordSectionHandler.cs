@@ -29,7 +29,8 @@ namespace Castle.ActiveRecord.Framework.Config
 
 		public object Create(object parent, object configContext, XmlNode section)
 		{
-			PopulateSource( section );
+			PopulateSource(section);
+			
 			return this;
 		}
 	}

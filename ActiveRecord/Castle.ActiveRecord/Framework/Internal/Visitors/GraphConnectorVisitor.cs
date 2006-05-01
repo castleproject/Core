@@ -96,25 +96,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 			base.VisitNested(model);
 		}
 
-		private static bool IsChildClass(ActiveRecordModel model, ActiveRecordModel child)
-        {
-            // Direct decendant
-            if (child.Type.BaseType == model.Type) return true;
-
-            // Not related to each other
-            if (!model.Type.IsAssignableFrom(child.Type)) return false;
-            
-			// The model is the ancestor of the child, but is it the direct AR ancsetor?
-            Type arAncestor = child.Type.BaseType;
-
-            while (arAncestor != typeof(object) && ActiveRecordModel.GetModel(arAncestor) == null)
-            {
-                arAncestor = arAncestor.BaseType;
-            }
-
-            return arAncestor == model.Type;
-        }
-
 		public override void VisitCollectionID(CollectionIDModel model)
 		{
 			// Attempt to find HasAndBelongsToMany for the property
@@ -171,6 +152,25 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 
 			return null;
+		}
+
+		private static bool IsChildClass(ActiveRecordModel model, ActiveRecordModel child)
+		{
+			// Direct decendant
+			if (child.Type.BaseType == model.Type) return true;
+
+			// Not related to each other
+			if (!model.Type.IsAssignableFrom(child.Type)) return false;
+            
+			// The model is the ancestor of the child, but is it the direct AR ancsetor?
+			Type arAncestor = child.Type.BaseType;
+
+			while (arAncestor != typeof(object) && ActiveRecordModel.GetModel(arAncestor) == null)
+			{
+				arAncestor = arAncestor.BaseType;
+			}
+
+			return arAncestor == model.Type;
 		}
 	}
 }

@@ -23,8 +23,16 @@ namespace Castle.ActiveRecord.Framework
 	/// </summary>
 	public interface IConfigurationSource
 	{
+		/// <summary>
+		/// Implementors should return the type that implements
+		/// the interface <see cref="IThreadScopeInfo"/>
+		/// </summary>
 		Type ThreadScopeInfoImplementation { get; }
 		
+		/// <summary>
+		/// Implementors should return the type that implements 
+		/// the interface <see cref="ISessionFactoryHolder"/>
+		/// </summary>
 		Type SessionFactoryHolderImplementation { get; }
 
 		/// <summary>
