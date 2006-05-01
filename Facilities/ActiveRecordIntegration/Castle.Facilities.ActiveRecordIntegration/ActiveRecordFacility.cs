@@ -185,10 +185,13 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			String isWeb = facilityConfig.Attributes["isWeb"];
 			String threadinfotype = facilityConfig.Attributes["threadinfotype"];
+			string isDebug = facilityConfig.Attributes["isDebug"];
 
 			SetUpThreadInfoType("true" == isWeb, threadinfotype);
 
-			foreach(IConfiguration config in facilityConfig.Children)
+			SetDebugFlag("true" == isDebug);
+
+			foreach (IConfiguration config in facilityConfig.Children)
 			{
 				if (!"config".Equals(config.Name)) continue;
 
