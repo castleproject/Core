@@ -137,7 +137,15 @@ leq
 			sw = new StringWriter();
 			Assert.IsTrue( ve.Evaluate( ctx, sw, string.Empty, eqTest ) );
 			Assert.AreEqual( "right\r\nright\r\nright\r\nright\r\nright\r\nright\r\nright\r\nright\r\nright\r\n", sw.ToString() );
+		}
 
+		[Test]
+		public void CompareEnums()
+		{
+			Assert.AreEqual( ObjectComparer.Equal, ObjectComparer.CompareObjects( FileAccess.Read, FileAccess.Read ) );
+			Assert.AreEqual( ObjectComparer.Equal, ObjectComparer.CompareObjects( FileAccess.Read, "Read" ) );
+			Assert.AreEqual( ObjectComparer.Equal, ObjectComparer.CompareObjects( "Read", FileAccess.Read ) );
+			Assert.AreEqual( ObjectComparer.Greater, ObjectComparer.CompareObjects( "Reader", FileAccess.Read ) );
 		}
 
 		[Test]
