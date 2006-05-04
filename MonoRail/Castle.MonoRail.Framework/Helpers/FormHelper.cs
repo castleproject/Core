@@ -209,6 +209,20 @@ namespace Castle.MonoRail.Framework.Helpers
 		    return Select(target, selectedValue, dataSource, attributes);		    
 		}
 		
+		/// <summary>
+		/// Creates a <c>select</c> elements and its <c>option</c>s. If the <c>dataSource</c>
+		/// elements are complex objects, use the params <c>value</c> and <c>text</c> to make
+		/// the helper use the specified properties to extract the <c>option</c> value and text.
+		/// <para>
+		/// You can also specify the attribute <c>firstoption</c> to force the first option be
+		/// something like 'please select'
+		/// </para>
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="selectedValue"></param>
+		/// <param name="dataSource"></param>
+		/// <param name="attributes"></param>
+		/// <returns></returns>
 		public String Select(String target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
 		{
 			String id = target.Replace('.', '_');
@@ -237,6 +251,12 @@ namespace Castle.MonoRail.Framework.Helpers
 				{
 					name = (String) attributes["name"];
 					attributes.Remove("name");
+				}
+
+				if (attributes.Contains("id"))
+				{
+					id = (String) attributes["id"];
+					attributes.Remove("id");
 				}
 			}
 
@@ -276,8 +296,13 @@ namespace Castle.MonoRail.Framework.Helpers
 					bool isMultiple = (selectedType != null && 
 						(selectedType.IsArray || typeof(ICollection).IsAssignableFrom(selectedType)));
 				
-					PropertyInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
+					PropertyInfo valueMethodInfo = null;
 					PropertyInfo textMethodInfo = null;
+					
+					if (valueProperty != null)
+					{
+						valueMethodInfo = GetMethod(guidanceElem, valueProperty);
+					}
 				
 					if (textProperty != null)
 					{
@@ -306,7 +331,6 @@ namespace Castle.MonoRail.Framework.Helpers
 							{
 								selected = IsSelected(value, selectedValue, selectedType, valueMethodInfo, isMultiple);
 							}
-
 						}
 						else
 						{
@@ -342,7 +366,18 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			value = value == null ? "" : value;
 
-			String id = target.Replace('.', '_');
+			String id = null;
+
+			if (attributes != null && attributes.Contains("id"))
+			{
+				id = (String) attributes["id"];
+
+				attributes.Remove("id");
+			}
+			else
+			{
+				id = target.Replace('.', '_');
+			}
 
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
 				type, id, target, value, GetAttributes(attributes));

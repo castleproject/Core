@@ -160,6 +160,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		}
 
 		[Test]
+		public void SelectOnPrimitiveArrayWithoutValueAndText()
+		{
+			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
+				"<option>1</option>\r\n<option>2</option>\r\n<option>3</option>\r\n<option>4</option>\r\n<option selected>5</option>\r\n</select>",
+				helper.Select("product.category.id", 5, new int[] { 1, 2, 3, 4, 5}, DictHelper.Create() ));
+		}
+
+		[Test]
 		public void SelectWithValueAndTextAndSelect()
 		{
 			ArrayList list = new ArrayList();
