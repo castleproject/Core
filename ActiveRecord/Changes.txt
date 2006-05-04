@@ -50,7 +50,7 @@ beta 4
     </httpModules>
   </system.web>
 
-- Added lyfecycle methods that can be overriden:
+- Added lifecycle methods that can be overriden:
 
   . OnSave
   . OnUpdate
