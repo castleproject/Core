@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <summary>
 	/// Currently being evaluated
 	/// </summary>
+	/// <remarks>Make sure it generates XHTML compliant content</remarks>
 	public class FormHelper : AbstractHelper
 	{
 		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
@@ -84,7 +85,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			value = value == null ? "" : HtmlEncode(value.ToString());
 
-			String id = target.Replace('.', '_');
+			String id = CreateHtmlId(target);
 
 			return String.Format("<textarea id=\"{0}\" name=\"{1}\" {2}>{3}</textarea>", 
 				id, target, GetAttributes(attributes), value);
@@ -138,7 +139,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String LabelFor(String target, String label)
 		{
-			String id = target.Replace('.', '_');
+			String id = CreateHtmlId(target);
 
 			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
@@ -187,10 +188,38 @@ namespace Castle.MonoRail.Framework.Helpers
 					attributes = new HybridDictionary(true);
 				}
 
-				attributes["checked"] = String.Empty;
+				AddChecked(attributes);
 			}
 
 			return CreateInputElement("checkbox", target, "true", attributes);
+		}
+
+		#endregion
+
+		#region RadioField
+
+		public String RadioField(String target, object valueToSend)
+		{
+			return RadioField(target, valueToSend, null);
+		}
+
+		public String RadioField(String target, object valueToSend, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+
+			bool isChecked = AreEqual(valueToSend, value);
+
+			if (isChecked)
+			{
+				if (attributes == null)
+				{
+					attributes = new HybridDictionary(true);
+				}
+
+				AddChecked(attributes);
+			}
+
+			return CreateInputElement("radio", target, valueToSend, attributes);
 		}
 
 		#endregion
@@ -225,7 +254,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String Select(String target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
 		{
-			String id = target.Replace('.', '_');
+			String id = CreateHtmlId(target);
 
 			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
@@ -340,7 +369,7 @@ namespace Castle.MonoRail.Framework.Helpers
 							}
 						}
 
-						if (selected) writer.Write(" selected");
+						if (selected) writer.Write(" selected=\"selected\"");
 						
 						if (value != null)
 						{
@@ -362,6 +391,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region protected members
+
 		protected String CreateInputElement(String type, String target, Object value, IDictionary attributes)
 		{
 			value = value == null ? "" : value;
@@ -376,23 +407,27 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else
 			{
-				id = target.Replace('.', '_');
+				id = CreateHtmlId(target);
 			}
 
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
 				type, id, target, value, GetAttributes(attributes));
 		}
 
-		private object ObtainValue(String target)
+		protected object ObtainValue(String target)
 		{
 			return ObtainValue(RequestContext.All, target);
 		}
 
-		private object ObtainValue(RequestContext context, String target)
+		protected object ObtainValue(RequestContext context, String target)
 		{
-			String[] pieces = target.Split(new char[] {'.'}, 2);
+			String[] pieces = target.Split(new char[] {'.'});
 
 			String root = pieces[0];
+
+			int index;
+
+			bool isIndexed = CheckForExistenceAndExtractIndex(ref root, out index);
 
 			Object rootInstance = ObtainRootInstance(context, root);
 
@@ -400,58 +435,78 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				return null;
 			}
-			else if (pieces.Length == 1)
+
+			if (isIndexed)
+			{
+				AssertIsValidArray(rootInstance, root, index);
+			}
+	
+			if (!isIndexed && pieces.Length == 1)
 			{
 				return rootInstance;
 			}
-
-			return QueryProperty(rootInstance, pieces[1]);
-		}
-
-		private object QueryProperty(object rootInstance, string path)
-		{
-			String[] properties = path.Split('.');
-
-			object instance = rootInstance;
-
-			foreach(String property in properties)
+			else if (isIndexed)
 			{
-				if (instance == null) break;
-
-				Type instanceType = instance.GetType();
-
-				PropertyInfo propertyInfo = instanceType.GetProperty(property, PropertyFlags);
-
-				if (propertyInfo == null)
-				{
-					FieldInfo fieldInfo = instanceType.GetField(property, FieldFlags);
-
-					if (fieldInfo == null)
-					{
-						throw new BindingException("No public property or field '{0}' found on type '{1}'", 
-							property, instanceType.FullName);
-					}
-
-					instance = fieldInfo.GetValue(instance);
-				}
-				else
-				{
-					if (!propertyInfo.CanRead)
-					{
-						throw new BindingException("Property '{0}' for type '{1}' can not be read", 
-							propertyInfo.Name, instanceType.FullName);
-					}
-					if (propertyInfo.GetIndexParameters().Length != 0)
-					{
-						throw new BindingException("Property '{0}' for type '{1}' has indexes, which is not supported", 
-							propertyInfo.Name, instanceType.FullName);
-					}
-
-					instance = propertyInfo.GetValue(instance, null);
-				}
+				rootInstance = GetArrayElement(rootInstance, index);
 			}
 
-			return instance;
+			return QueryPropertyRecursive(rootInstance, pieces, 1);
+		}
+
+		protected object QueryPropertyRecursive(object rootInstance, string[] propertyPath, int piece)
+		{
+			String property = propertyPath[piece]; int index;
+
+			Type instanceType = rootInstance.GetType();
+
+			bool isIndexed = CheckForExistenceAndExtractIndex(ref property, out index);
+
+			PropertyInfo propertyInfo = instanceType.GetProperty(property, PropertyFlags);
+
+			object instance = null;
+
+			if (propertyInfo == null)
+			{
+				FieldInfo fieldInfo = instanceType.GetField(property, FieldFlags);
+
+				if (fieldInfo == null)
+				{
+					throw new BindingException("No public property or field '{0}' found on type '{1}'", 
+						property, instanceType.FullName);
+				}
+
+				instance = fieldInfo.GetValue(rootInstance);
+			}
+			else
+			{
+				if (!propertyInfo.CanRead)
+				{
+					throw new BindingException("Property '{0}' for type '{1}' can not be read", 
+						propertyInfo.Name, instanceType.FullName);
+				}
+				
+				if (propertyInfo.GetIndexParameters().Length != 0)
+				{
+					throw new BindingException("Property '{0}' for type '{1}' has indexes, which is not supported", 
+						propertyInfo.Name, instanceType.FullName);
+				}
+
+				instance = propertyInfo.GetValue(rootInstance, null);
+			}
+
+			if (isIndexed)
+			{
+				AssertIsValidArray(instance, property, index);
+
+				instance = GetArrayElement(instance, index);
+			}
+
+			if (piece + 1 == propertyPath.Length)
+			{
+				return instance;
+			}
+
+			return QueryPropertyRecursive(instance, propertyPath, piece + 1);
 		}
 
 		protected object ObtainRootInstance(RequestContext context, String target)
@@ -478,6 +533,86 @@ namespace Castle.MonoRail.Framework.Helpers
 			return rootInstance;
 		}
 
+		#endregion
+
+		#region Private helpers
+
+		private void AssertIsValidArray(object instance, string property, int index)
+		{
+			Type instanceType = instance.GetType();
+
+			IList list = instance as IList;
+
+			if (list == null)
+			{
+				throw new RailsException("The property {0} is being accessed as " + 
+					"an indexed property but does not seem to implement IList. " + 
+					"In fact the type is {1}", property, instanceType.FullName);
+			}
+
+			if (list.Count == 0)
+			{
+				throw new RailsException("The array is empty. Property {1}", property);
+			}
+
+			if (index + 1 > list.Count || index < 0)
+			{
+				throw new RailsException("The specified index '{0}' is outside the bounds " + 
+					"of the array. Property {1}", index, property);
+			}
+		}
+
+		private object GetArrayElement(object instance, int index)
+		{
+			// We don't need to check array boundary here
+			// It was checked previously
+
+			IList list = (IList) instance;
+
+			return list[index];
+		}
+
+		private static bool CheckForExistenceAndExtractIndex(ref String property, out int index)
+		{
+			bool isIndexed = property.IndexOf('[') != -1;
+
+			index = -1;
+
+			if (isIndexed)
+			{
+				int start = property.IndexOf('[') + 1;
+				int len = property.IndexOf(']', start) - start;
+
+				String indexStr = property.Substring(start, len);
+
+				try
+				{
+					index = Convert.ToInt32(indexStr);
+				}
+				catch(Exception)
+				{
+					throw new RailsException("Could not convert (param {0}) index to Int32. Value is {1}", 
+						property, indexStr);
+				}
+
+				property = property.Substring(0, start - 1);
+			}
+
+			return isIndexed;
+		}
+
+		private static bool AreEqual(object left, object right)
+		{
+			if (left == null || right == null) return false;
+
+			if (left is String || right is String)
+			{
+				return String.Compare(left.ToString(), right.ToString()) == 0;
+			}
+
+			return right.Equals(left);
+		}
+
 		/// <summary>
 		/// Determines whether the specified value is selected.
 		/// </summary>
@@ -501,7 +636,7 @@ namespace Castle.MonoRail.Framework.Helpers
 					value = property.GetValue(value, null);
 				}
 
-				return value != null ? value.Equals(selectedValue) : false;
+				return AreEqual(value, selectedValue);
 			}
 			else 
 			{
@@ -514,7 +649,7 @@ namespace Castle.MonoRail.Framework.Helpers
 						newValue = property.GetValue(item, null);
 					}
 
-					if (newValue != null && newValue.Equals(value))
+					if (AreEqual(newValue, value))
 					{
 						return true;
 					}
@@ -541,5 +676,42 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return elem.GetType().GetProperty(property, PropertyFlags);
 		}
+
+		private static void AddChecked(IDictionary attributes)
+		{
+			attributes["checked"] = "checked";
+		}
+
+		private static String CreateHtmlId(String name)
+		{
+			StringBuilder sb = new StringBuilder(name.Length);
+
+			bool canUseUnderline = false;
+
+			foreach(char c in name.ToCharArray())
+			{
+				switch(c)
+				{
+					case '.':
+					case '[':
+					case ']':
+						if (canUseUnderline)
+						{
+							sb.Append('_');
+							canUseUnderline = false;
+						}
+						break;
+					default:
+						canUseUnderline = true;
+						sb.Append(c);
+						break;
+				}
+				
+			}
+
+			return sb.ToString();
+		}
+
+		#endregion
 	}
 }

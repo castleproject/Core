@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using System;
 	using System.Collections;
 	using System.Globalization;
+	using System.IO;
 	using System.Threading;
 
 	using Castle.MonoRail.Framework.Helpers;
@@ -48,8 +49,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			controller.PropertyBag.Add("product", product);
 			controller.PropertyBag.Add("user", user);
+			controller.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
 			controller.PropertyBag.Add("sendemail", true);
 			controller.PropertyBag.Add("confirmation", "abc");
+			controller.PropertyBag.Add("fileaccess", FileAccess.Read);
 
 			helper.SetController(controller);
 		}
@@ -107,11 +110,41 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			product.IsAvailable = true;
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" checked />", 
+			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" checked=\"checked\" />", 
 				helper.CheckboxField("product.isavailable"));
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked />", 
+			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />", 
 				helper.CheckboxField("sendemail"));
+		}
+
+		[Test]
+		public void RadioField()
+		{
+			user.IsActive = true;
+
+			Assert.AreEqual("<input type=\"radio\" id=\"user_isactive\" name=\"user.isactive\" value=\"True\" checked=\"checked\" />", 
+				helper.RadioField("user.isactive", true));
+
+			user.IsActive = false;
+
+			Assert.AreEqual("<input type=\"radio\" id=\"user_isactive\" name=\"user.isactive\" value=\"True\" />", 
+				helper.RadioField("user.isactive", true));
+		}
+
+		[Test]
+		public void RadioFieldWithEnums()
+		{
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Read\" checked=\"checked\" />", 
+				helper.RadioField("fileaccess", FileAccess.Read));
+
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Read\" checked=\"checked\" />", 
+				helper.RadioField("fileaccess", "Read"));
+
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Write\" />", 
+				helper.RadioField("fileaccess", FileAccess.Write));
+
+			Assert.AreEqual("<input type=\"radio\" id=\"fileaccess\" name=\"fileaccess\" value=\"Write\" />", 
+				helper.RadioField("fileaccess", "Write"));
 		}
 
 		[Test]
@@ -163,7 +196,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void SelectOnPrimitiveArrayWithoutValueAndText()
 		{
 			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option>1</option>\r\n<option>2</option>\r\n<option>3</option>\r\n<option>4</option>\r\n<option selected>5</option>\r\n</select>",
+				"<option>1</option>\r\n<option>2</option>\r\n<option>3</option>\r\n<option>4</option>\r\n<option selected=\"selected\">5</option>\r\n</select>",
 				helper.Select("product.category.id", 5, new int[] { 1, 2, 3, 4, 5}, DictHelper.Create() ));
 		}
 
@@ -177,7 +210,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			product.Category.Id = 2;
 
 			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"1\">cat1</option>\r\n<option selected value=\"2\">cat2</option>\r\n</select>",
+				"<option value=\"1\">cat1</option>\r\n<option selected=\"selected\" value=\"2\">cat2</option>\r\n</select>",
 				helper.Select("product.category.id", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -204,7 +237,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, "role2"));
 
 			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
-				"<option selected value=\"1\">role1</option>\r\n<option selected value=\"2\">role2</option>\r\n</select>",
+				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option selected=\"selected\" value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -218,7 +251,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(1, "role1"));
 
 			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
-				"<option selected value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
+				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -233,7 +266,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, "role2"));
 
 			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option selected value=\"1\">role1</option>\r\n<option selected value=\"2\">role2</option>\r\n</select>",
+				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option selected=\"selected\" value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -247,7 +280,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(1, "role1"));
 
 			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option selected value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
+				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -262,8 +295,52 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, "role2"));
 
 			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option selected>role1</option>\r\n<option selected>role2</option>\r\n</select>",
+				"<option selected=\"selected\">role1</option>\r\n<option selected=\"selected\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list));
+		}
+
+		[Test]
+		public void TextFieldWithIndex()
+		{
+			Assert.AreEqual("<input type=\"text\" id=\"roles_0_Id\" name=\"roles[0].Id\" value=\"1\" />",
+				helper.TextField("roles[0].Id"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"roles_1_Name\" name=\"roles[1].Name\" value=\"b\" />",
+				helper.TextField("roles[1].Name"));
+		}
+
+		[Test]
+		public void TextFieldWithNestedIndex()
+		{
+			user.Roles.Add(new Role(1, "role1"));
+			user.Roles.Add(new Role(2, "role2"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Id\" name=\"user.roles[0].Id\" value=\"1\" />",
+				helper.TextField("user.roles[0].Id"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Name\" name=\"user.roles[0].Name\" value=\"role1\" />",
+				helper.TextField("user.roles[0].Name"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_1_Name\" name=\"user.roles[1].Name\" value=\"role2\" />",
+				helper.TextField("user.roles[1].Name"));
+		}
+
+		[Test, ExpectedException(typeof(RailsException))]
+		public void InvalidIndex1()
+		{
+			helper.TextField("roles[a].Id");
+		}
+
+		[Test, ExpectedException(typeof(RailsException))]
+		public void InvalidIndex2()
+		{
+			helper.TextField("roles[1a].Id");
+		}
+
+		[Test, ExpectedException(typeof(RailsException))]
+		public void InvalidIndex3()
+		{
+			helper.TextField("roles[10].Id");
 		}
 	}
 
@@ -394,11 +471,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private int id;
 		private String name;
 		private ArrayList roles = new ArrayList();
+		private bool isActive;
 
 		public int Id
 		{
 			get { return id; }
 			set { id = value; }
+		}
+
+		public bool IsActive
+		{
+			get { return isActive; }
+			set { isActive = value; }
 		}
 
 		public string Name

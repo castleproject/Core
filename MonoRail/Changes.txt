@@ -4,6 +4,31 @@ Change history
 Release Candidate 1
 ===================
 
+- Added supported for indexed properties to FormHelper
+
+  When the target is an array you can
+  
+    PropertyBag.Add("roles", Roles.FindAll());
+    --
+    FormHelper.TextField("roles[0].Id")
+  
+  Which will output
+  
+    <input type="text" id="roles_0_Id" name="roles[0].Id" value="1" />
+
+  The indexed property can be nested
+
+    PropertyBag.Add("user", User.Find(1));
+    --
+    FormHelper.TextField("user.roles[0].Id")
+
+    <input type="text" id="user_roles_0_Id" name="user.roles[0].Id" value="1" />
+
+- Added RadioField(String target, object valueToSend, [IDictionary attributes]) to FormHelper
+
+  The radio will be marked with checked="checked" if the value collected 
+  from the target matches the valueToSend parameter
+
 - Fixed RedirectToAction on WizardStepPage. Now it produces a correct action url.
 
 - Changed WizardStepPage.InternalRedirectToStep to simply RedirectToStep
