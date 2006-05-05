@@ -4,7 +4,10 @@ Change history
 Release Candidate 1
 ===================
 
-- Added supported for indexed properties to FormHelper
+- Added support for defaultValue attribute to FormHelper, which specificy
+  what the value should be if the target evaluates to null.
+
+- Added indexed properties support to FormHelper
 
   When the target is an array you can
   

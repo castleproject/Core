@@ -325,6 +325,34 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.TextField("user.roles[1].Name"));
 		}
 
+		[Test]
+		public void TextFieldWithNestedIndexAndNullValues1()
+		{
+			user.Roles = null;
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Id\" name=\"user.roles[0].Id\" value=\"\" />",
+				helper.TextField("user.roles[0].Id"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Name\" name=\"user.roles[0].Name\" value=\"\" />",
+				helper.TextField("user.roles[0].Name"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_1_Name\" name=\"user.roles[1].Name\" value=\"\" />",
+				helper.TextField("user.roles[1].Name"));
+		}
+
+		[Test]
+		public void TextFieldWithNestedIndexAndNullValues2()
+		{
+			user.Roles.Add(new Role(1, null));
+			user.Roles.Add(new Role(2, null));
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_0_Name\" name=\"user.roles[0].Name\" value=\"\" />",
+				helper.TextField("user.roles[0].Name"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"user_roles_1_Name\" name=\"user.roles[1].Name\" value=\"\" />",
+				helper.TextField("user.roles[1].Name"));
+		}
+
 		[Test, ExpectedException(typeof(RailsException))]
 		public void InvalidIndex1()
 		{
@@ -496,9 +524,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			get { return (Role[]) roles.ToArray(typeof(Role)); }
 		}
 
-		public IList Roles
+		public ArrayList Roles
 		{
 			get { return roles; }
+			set { roles = value; }
 		}
 	}
 

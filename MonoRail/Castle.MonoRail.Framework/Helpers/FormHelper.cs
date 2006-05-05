@@ -395,6 +395,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		protected String CreateInputElement(String type, String target, Object value, IDictionary attributes)
 		{
+			if (value == null && attributes != null)
+			{
+				value = attributes["defaultValue"];
+
+				attributes.Remove("defaultValue");
+			}
+
 			value = value == null ? "" : value;
 
 			String id = null;
@@ -494,14 +501,14 @@ namespace Castle.MonoRail.Framework.Helpers
 				instance = propertyInfo.GetValue(rootInstance, null);
 			}
 
-			if (isIndexed)
+			if (isIndexed && instance != null)
 			{
 				AssertIsValidArray(instance, property, index);
 
 				instance = GetArrayElement(instance, index);
 			}
 
-			if (piece + 1 == propertyPath.Length)
+			if (instance == null || piece + 1 == propertyPath.Length)
 			{
 				return instance;
 			}
