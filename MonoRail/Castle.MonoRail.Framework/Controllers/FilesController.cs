@@ -49,25 +49,6 @@ namespace Castle.MonoRail.Framework.Controllers
 			set { _jsCacheControl = value; }
 		}
 
-		private String GetResourceValue( String resName, String resKey )
-		{
-			return (String)(Resources[resName])[resKey];
-		}
-
-		private void RenderJavascriptFile( String resourceName, String resourceKey )
-		{
-			Response.ContentType = JavascriptContentType;
-			Response.AppendHeader("Cache-Control", JavascriptCacheControl);
-			//Response.CacheControlHeader = JavascriptCacheControl;
-			RenderFile( resourceName, resourceKey );
-		}
-
-		private void RenderFile( String resourceName, String resourceKey )
-		{
-			String fileContent = GetResourceValue( resourceName, resourceKey );
-			RenderText( fileContent );
-		}
-
 		/// <summary>
 		/// Script used by <see cref="AjaxHelper"/>.
 		/// </summary>
@@ -130,6 +111,25 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateLang()
 		{
 			RenderJavascriptFile( "Validation", "fValidateLang" );
+		}
+
+		private String GetResourceValue( String resName, String resKey )
+		{
+			return (String)(Resources[resName])[resKey];
+		}
+
+		private void RenderJavascriptFile( String resourceName, String resourceKey )
+		{
+			Response.ContentType = JavascriptContentType;
+			Response.AppendHeader("Cache-Control", JavascriptCacheControl);
+			// Response.CacheControlHeader = JavascriptCacheControl;
+			RenderFile( resourceName, resourceKey );
+		}
+
+		private void RenderFile( String resourceName, String resourceKey )
+		{
+			String fileContent = GetResourceValue( resourceName, resourceKey );
+			RenderText( fileContent );
 		}
 	}
 }
