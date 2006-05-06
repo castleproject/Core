@@ -17,6 +17,8 @@ namespace Castle.ActiveRecord.Queries
 	using System;
 	using System.Collections;
 
+	using Castle.ActiveRecord.Queries.Modifiers;
+
 	using NHibernate;
 	using NHibernate.Type;
 
