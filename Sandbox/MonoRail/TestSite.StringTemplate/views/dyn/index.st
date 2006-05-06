@@ -1,0 +1,1 @@
+Rendered from the view: $message$

@@ -260,7 +260,7 @@ namespace Castle.MonoRail.TestSupport
 		protected void AssertReplyContains(String contents)
 		{
 			Assert.IsTrue( Output.IndexOf(contents) != -1, 
-				"AssertReplyContains did not find the content '{0}'. Raw content {1}", contents, Output );
+				"AssertReplyContains did not find the content '{0}'. Raw content '{1}'", contents, Output );
 		}
 
 		/// <summary>
@@ -271,7 +271,7 @@ namespace Castle.MonoRail.TestSupport
 			string contents = Output.Trim();
 
 			Assert.IsTrue( contents == String.Empty, 
-				"AssertReplyIsBlank found not whitespace characters '{0'}", contents);
+				"AssertReplyIsBlank found not whitespace characters '{0}'", contents);
 		}
 
 		/// <summary>

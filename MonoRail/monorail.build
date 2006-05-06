@@ -18,7 +18,7 @@
 	
 	<property name="version" value="beta-5" />
 
-	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arsupport, arscaffold, brail, testsupport, samples, tests, generator, copytobuilddir" /> 
+	<target name="build" depends="clean, init, framework, integration, stringtemplate, nvelocity, composite, arsupport, arscaffold, brail, testsupport, samples, tests, generator, copytobuilddir" /> 
 	
 	<target name="clean">
 		<delete>
@@ -38,6 +38,7 @@
 			<fileset basedir="${bin.dir}">
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
+				<include name="Castle.MonoRail.Framework.Views.StringTemplate.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="Castle.MonoRail.TestSupport.dll" />
 				<include name="Castle.MonoRail.Views.Brail.dll" />
@@ -47,6 +48,7 @@
 
 				<include name="Castle.MonoRail.Framework.xml" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView.xml" />
+				<include name="Castle.MonoRail.Framework.Views.StringTemplate.xml" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.xml" />
 				<include name="Castle.MonoRail.TestSupport.xml" />
 				<include name="Castle.MonoRail.Views.Brail.xml" />
@@ -56,13 +58,13 @@
 				
 				<include name="Castle.MonoRail.Framework.pdb" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView.pdb" />
+				<include name="Castle.MonoRail.Framework.Views.StringTemplate.pdb" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.pdb" />
 				<include name="Castle.MonoRail.TestSupport.pdb" />
 				<include name="Castle.MonoRail.Views.Brail.pdb" />
 				<include name="Castle.MonoRail.WindsorExtension.pdb" />
 				<include name="Castle.MonoRail.ActiveRecordScaffold.pdb" />
 				<include name="Castle.MonoRail.ActiveRecordSupport.pdb" />
-			
 			</fileset>
 		</copy>
 	</target>
@@ -74,6 +76,9 @@
 
 		<!-- Windsor integration dependencies -->
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-container" inheritall="true" />
+
+		<!-- StringTemplate view engine dependencies -->
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-stringtemplate" inheritall="true" />
 
 		<!-- NVelocity view engine dependencies -->
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-nvelocity" inheritall="true" />
@@ -108,6 +113,10 @@
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="compile" />
 	</target>
 
+	<target name="stringtemplate" depends="init">
+		<nant buildfile="../Sandbox/MonoRail/Castle.MonoRail.Framework.Views.StringTemplateView/default.build" inheritall="true" target="compile" />
+	</target>
+
 	<target name="composite" depends="init">
 		<nant buildfile="Castle.MonoRail.Framework.Views.CompositeView/default.build" inheritall="true" target="compile" />
 	</target>
@@ -138,6 +147,7 @@
 	<target name="samples" depends="init">
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
+		<nant buildfile="../Sandbox/MonoRail/TestSite.StringTemplate/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
 		<!--
 		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" /> 
@@ -147,6 +157,7 @@
 	
 	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
+		<nant buildfile="../Sandbox/MonoRail/Castle.MonoRail.Framework.Views.StringTemplateView/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
 		<!--
@@ -165,6 +176,7 @@
 			<assemblies basedir="${bin.dir}">
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
+				<include name="Castle.MonoRail.Framework.Views.StringTemplate.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="Castle.MonoRail.WindsorExtension.dll" />
 				<include name="Castle.MonoRail.TestSupport.dll" />
@@ -243,6 +255,8 @@
 				<include name="Castle.MonoRail.Framework.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Views.Brail/**/*.*" />
 				<include name="Castle.MonoRail.Views.Brail.Tests/**/*.*" />
+				<include name="Castle.MonoRail.Framework.Views.StringTemplateView/**/*.*" />
+				<include name="Castle.MonoRail.Framework.Views.StringTemplateView.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView/**/*.*" />

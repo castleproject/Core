@@ -125,6 +125,14 @@
 		</copy>
 	</target>
 
+	<target name="copy-stringtemplate">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/stringtemplate/${framework::get-target-framework()}">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
 	<target name="copy-nvelocity">
 		<copy todir="${bin.dir}">
 			<fileset basedir="${base.dir}/Tools/NVelocity/bin">

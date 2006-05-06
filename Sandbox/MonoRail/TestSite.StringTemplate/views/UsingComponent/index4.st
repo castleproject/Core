@@ -1,0 +1,1 @@
+$component/InlineComponentWithParam1(arg1="1")$

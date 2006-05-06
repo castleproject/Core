@@ -1,0 +1,1 @@
+$resx.testKey$

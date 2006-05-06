@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="rails-testsite.stringtemplate" default="build">
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="bin2.dir" value="${base.dir}/bin" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="name" value="TestSite.StringTemplate" />
+	<property name="assembly.name" value="${name}.dll" />
+
+	<property name="version" value="1.0.0.0" />
+	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
+
+	<target name="clean">
+		<delete dir="${bin2.dir}" failonerror="false" />
+		<mkdir dir="${bin2.dir}"/>
+	</target>
+
+	<target name="init" depends="clean">
+		<copy todir="${bin2.dir}">
+			<fileset basedir="${base.dir}/../../../MonoRail/bin">
+				<include name="Castle.MonoRail.Framework.dll" />
+				<include name="Castle.MonoRail.Framework.Views.StringTemplate.dll" />
+				<include name="Castle.Components.Binder.dll" />
+				<include name="Castle.Components.Common.EmailSender.dll" />
+				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+				<include name="Nullables.dll" />
+				<include name="Commons.dll" />
+				<include name="log4net.dll" />
+				<include name="StringTemplate.dll" />
+				<include name="antlr.runtime.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build" depends="init,compile" />
+	
+	<target name="compile" depends="init">
+		<csc 
+			define="${strong}"
+			target="library" 
+			output="${bin2.dir}/${assembly.name}">
+			
+			<sources basedir="${src.dir}">
+				<include name="**/*.cs" />
+			</sources>
+
+			<resources basedir="${src.dir}" prefix="TestSite.StringTemplate" dynamicprefix="true">
+				<include name="**/*.resx" />
+			</resources>
+
+			<references>
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.StringTemplate.dll" />
+				<include name="${bin2.dir}/Nullables.dll" />
+				<include name="${bin2.dir}/Commons.dll" />
+				<include name="${bin2.dir}/log4net.dll" />
+				<include name="${bin2.dir}/StringTemplate.dll" />
+				<include name="${bin2.dir}/antlr.runtime.dll" />
+				<include name="${bin2.dir}/Castle.Components.Binder.dll" />
+				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.dll" />
+				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+			</references>
+		</csc>
+	</target>
+
+</project>

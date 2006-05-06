@@ -1,0 +1,518 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{824EC872-2992-4518-8C41-4F87640D752A}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "TestSite.StringTemplate"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "TestSite.StringTemplate"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "Nullables"
+                    AssemblyName = "Nullables"
+                    HintPath = "..\..\ActiveRecord\bin\Nullables.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.StringTemplateView"
+                    Project = "{AECBD3E5-110C-4602-B74A-444A61350983}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "StringTemplate"
+                    AssemblyName = "StringTemplate"
+                    HintPath = "..\..\..\SharedLibs\stringtemplate\net-1.1\StringTemplate.dll"
+                />
+                <Reference
+                    Name = "antlr.runtime"
+                    AssemblyName = "antlr.runtime"
+                    HintPath = "..\..\..\SharedLibs\stringtemplate\net-1.1\antlr.runtime.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sample.build"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Components\BlockComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\BlockViewComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\BlockViewComponent2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\InlineComponentWithParam1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent3.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\TemplatedInlineViewComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AjaxController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AppPath.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\BlogController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\CookiesController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\DynController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ExceptionController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\FilterController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\FlashController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HelperController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\LayoutController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\NewsController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\PaginatedController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\PerfController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Registration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\RescueController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ResourcedController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ResourceFile.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controllers\SmartController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\TestWizardController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\UsingComponentController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ValidatedController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ActionProviders\DynamicActionProvider1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\SubArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\userlist.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ajax\autocom.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ajax\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ajax\periodinvocation.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\apppath\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\components\SimpleInlineViewComponent2\mycompview1.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\components\SimpleInlineViewComponent3\default.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\components\TemplatedInlineViewComponent\templatedview.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\cookies\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\dyn\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\filter\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\flash\flashContents.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\flash\flashIt.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\flash\validateRequest.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\helper\DictHelperUsage.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\helper\InheritedHelpers.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\helper\MyDeclaredHelpers.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\home\bag.st"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\home\bag2.st"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\home\display.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\home\heyhello.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\home\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layoutable\changelayout.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layoutable\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\master.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\master2.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\paginated\list1.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\appException.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\argException.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\general.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\methodDefaultException.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\saveerror.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\updateerror.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\updateerrormsg.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\resourced\getresources.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\SubArea\home\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\InnerAction2.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\page1.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\page3.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\page4.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\CaptureFor.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\CaptureForAppend.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\CaptureForAppendBefore.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\CaptureForDirective.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index1.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index3.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index4.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index5.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index6.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index8.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index9.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\InlineComponentUsingTemplatedRender.st"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\validated\default.st"
+                    BuildAction = "None"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

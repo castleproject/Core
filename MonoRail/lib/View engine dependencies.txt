@@ -10,3 +10,7 @@ Brail View engine requires
 * Boo.Lang.Parser.dll
 * WSABoo.Parser.dll
 
+StringTemplate View engine requires
+
+* StringTemplate.dll
+* antlr.runtime.dll

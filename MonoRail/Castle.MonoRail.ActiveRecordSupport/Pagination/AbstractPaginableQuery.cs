@@ -44,11 +44,11 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		public virtual int ObtainCount()
 		{
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
-			ISession session = holder.CreateSession(targetType);
+			ISession session = holder.CreateSession(Target);
 
 			try
 			{
-				IQuery query = session.CreateQuery("select count(a) from " + targetType.Name + " a");
+				IQuery query = session.CreateQuery("select count(a) from " + Target.Name + " a");
 
 				return (int) query.UniqueResult();
 			}
@@ -75,7 +75,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			this.currentPage = currentPage;
 
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
-			ISession session = holder.CreateSession(targetType);
+			ISession session = holder.CreateSession(Target);
 
 			try
 			{

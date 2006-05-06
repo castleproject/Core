@@ -1,0 +1,1 @@
+$elementId:{new Effect.Shake('$it$');}:AbstractHelper/ScriptBlock()$

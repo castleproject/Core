@@ -1,0 +1,4 @@
+
+<script>
+$scriptContents$
+</script>

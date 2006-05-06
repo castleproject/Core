@@ -75,6 +75,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor", "TestSite
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView", "..\Sandbox\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView\Castle.MonoRail.Framework.Views.StringTemplateView.csproj", "{AECBD3E5-110C-4602-B74A-444A61350983}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView.Tests", "..\Sandbox\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView.Tests\Castle.MonoRail.Framework.Views.StringTemplateView.Tests.csproj", "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite.StringTemplate", "..\Sandbox\MonoRail\TestSite.StringTemplate\TestSite.StringTemplate.csproj", "{824EC872-2992-4518-8C41-4F87640D752A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -98,7 +110,6 @@ Global
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.ActiveCfg = Release|.NET
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.Build.0 = Release|.NET
 		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}.Debug.ActiveCfg = Debug|.NET
-		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}.Debug.Build.0 = Debug|.NET
 		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}.Release.ActiveCfg = Release|.NET
 		{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}.Release.Build.0 = Release|.NET
 		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.ActiveCfg = Debug|.NET
@@ -106,7 +117,6 @@ Global
 		{824EC872-2992-4518-8C41-4F87640D752A}.Release.ActiveCfg = Release|.NET
 		{824EC872-2992-4518-8C41-4F87640D752A}.Release.Build.0 = Release|.NET
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.ActiveCfg = Debug|.NET
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.Build.0 = Debug|.NET
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.ActiveCfg = Release|.NET
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.Build.0 = Release|.NET
 		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Debug.ActiveCfg = Debug|.NET
@@ -114,7 +124,6 @@ Global
 		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Release.ActiveCfg = Release|.NET
 		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Release.Build.0 = Release|.NET
 		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Debug.ActiveCfg = Debug|.NET
-		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Debug.Build.0 = Debug|.NET
 		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Release.ActiveCfg = Release|.NET
 		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Release.Build.0 = Release|.NET
 		{2409063E-BE05-4596-A677-758096D1C759}.Debug.ActiveCfg = Debug|.NET
@@ -138,7 +147,6 @@ Global
 		{C4107B52-109E-4629-A202-58E93917C80B}.Release.ActiveCfg = Release|.NET
 		{C4107B52-109E-4629-A202-58E93917C80B}.Release.Build.0 = Release|.NET
 		{30F513CB-9520-4E43-A845-3185D76F38B9}.Debug.ActiveCfg = Debug|.NET
-		{30F513CB-9520-4E43-A845-3185D76F38B9}.Debug.Build.0 = Debug|.NET
 		{30F513CB-9520-4E43-A845-3185D76F38B9}.Release.ActiveCfg = Release|.NET
 		{30F513CB-9520-4E43-A845-3185D76F38B9}.Release.Build.0 = Release|.NET
 		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.ActiveCfg = Debug|.NET
@@ -150,13 +158,24 @@ Global
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.ActiveCfg = Release|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.Build.0 = Release|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug.ActiveCfg = Debug|.NET
-		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug.Build.0 = Debug|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release.ActiveCfg = Release|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release.Build.0 = Release|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.ActiveCfg = Debug|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.Build.0 = Debug|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.ActiveCfg = Release|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.Build.0 = Release|.NET
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Debug.ActiveCfg = Debug|.NET
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Debug.Build.0 = Debug|.NET
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Release.ActiveCfg = Release|.NET
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Release.Build.0 = Release|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.ActiveCfg = Debug|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.Build.0 = Debug|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.ActiveCfg = Release|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.Build.0 = Release|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.ActiveCfg = Debug|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.Build.0 = Debug|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Release.ActiveCfg = Release|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt

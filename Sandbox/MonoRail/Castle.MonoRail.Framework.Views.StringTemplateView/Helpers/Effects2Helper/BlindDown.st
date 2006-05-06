@@ -1,0 +1,1 @@
+$elementId:{new Effect.BlindDown('$it$');}:AbstractHelper/ScriptBlock()$
