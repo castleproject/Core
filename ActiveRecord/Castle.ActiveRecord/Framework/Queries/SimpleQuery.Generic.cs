@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if dotNet2
 
 namespace Castle.ActiveRecord.Queries
@@ -20,7 +21,6 @@ namespace Castle.ActiveRecord.Queries
 	using System.Collections;
 	using System.Collections.Generic;
 
-	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 
 	using NHibernate;
@@ -35,24 +35,28 @@ namespace Castle.ActiveRecord.Queries
 		#region Constructors
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
-		/// using the specified positional <paramref name="parameters"/>.
+		/// using the specified positional <paramref name="positionalParameters"/>.
 		/// The target ActiveRecord type is <typeparamref name="T"/>.
 		/// </summary>
 		/// <param name="hql">The HQL</param>
-		/// <param name="parameters">The positional parameters</param>
-		public SimpleQuery(String hql, params Object[] parameters)
-			: base(typeof(T), hql, parameters) { }
+		/// <param name="positionalParameters">The positional positionalParameters</param>
+		public SimpleQuery(String hql, params Object[] positionalParameters)
+			: base(typeof (T), hql, positionalParameters)
+		{
+		}
 
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
-		/// using the specified positional <paramref name="parameters"/> and
+		/// using the specified positional <paramref name="positionalParameters"/> and
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecord type</param>
 		/// <param name="hql">The HQL</param>
-		/// <param name="parameters">The positional parameters</param>
-		public SimpleQuery(Type targetType, String hql, params Object[] parameters)
-			: base(targetType, hql, parameters) { }
+		/// <param name="positionalParameters">The positional positionalParameters</param>
+		public SimpleQuery(Type targetType, String hql, params Object[] positionalParameters)
+			: base(targetType, hql, positionalParameters)
+		{
+		}
 		#endregion
 
 		#region IActiveRecordQuery<T[]> implementation
@@ -83,8 +87,8 @@ namespace Castle.ActiveRecord.Queries
 		/// <see cref="GenericEnumerate"/>, which will convert
 		/// the <c>NHibernate</c>'s <see cref="IQuery.Enumerable"/> result
 		/// returned by <see cref="ActiveRecordBaseQuery.InternalEnumerate"/>
-		/// into a generic <see cref="System.Collections.Generic.IEnumerable&lt;T&gt;"/>.
-		/// So, all we need to do is to cast it back to <c>IEnumerable&lt;T&gt;</c>.
+		/// into a generic <see cref="IEnumerable{T}"/>.
+		/// So, all we need to do is to cast it back to <see cref="IEnumerable{T}"/>.
 		/// </remarks>
 		public IEnumerable<T> Enumerate()
 		{
@@ -99,15 +103,18 @@ namespace Castle.ActiveRecord.Queries
 
 		private IEnumerable<T> GenericEnumerate(ISession session)
 		{
-            IEnumerable en = BaseInternalEnumerateHelper(session);
+			IEnumerable en = InternalEnumerateFromBase(session);
 			foreach (T item in en)
 				yield return item;
 		}
-	    
-	    private IEnumerable BaseInternalEnumerateHelper(ISession session)
-	    {
-            return base.InternalEnumerate(session);
-	    }
+
+		/// <summary>
+		/// Needed to avoid <c>CS1911</c>.
+		/// </summary>
+		private IEnumerable InternalEnumerateFromBase(ISession session)
+		{
+			return base.InternalEnumerate(session);
+		}
 
 		/// <summary>
 		/// Executes the query and converts the results into a strongly-typed

@@ -15,8 +15,10 @@
 namespace Castle.ActiveRecord.Queries
 {
 	using System;
+	using System.Collections;
 
 	using NHibernate;
+	using NHibernate.Type;
 
 	/// <summary>
 	/// Base class for all HQL-based queries.
@@ -24,12 +26,22 @@ namespace Castle.ActiveRecord.Queries
 	public class HqlBasedQuery : ActiveRecordBaseQuery
 	{
 		private String hql;
-		private Object[] positionalParameters;
 
-		public HqlBasedQuery(Type targetType, string hql, params object[] parameters) : base(targetType)
+		public HqlBasedQuery(Type targetType, string hql)
+			: base(targetType)
 		{
 			this.hql = hql;
-			this.positionalParameters = parameters;
+		}
+
+		public HqlBasedQuery(Type targetType, string hql, params object[] positionalParameters)
+			: this(targetType, hql)
+		{
+			if (positionalParameters != null && positionalParameters.Length > 0)
+			{
+				int i = 0;
+				foreach (object value in positionalParameters)
+					AddModifier(new QueryParameter(i++, value));
+			}
 		}
 
 		/// <summary>
@@ -38,27 +50,48 @@ namespace Castle.ActiveRecord.Queries
 		public string Query
 		{
 			get { return hql; }
+			set { hql = value; }
 		}
 
-		/// <summary>
-		/// The positional parameters used.
-		/// </summary>
-		public Object[] PositionalParameters
+		#region SetParameter and SetParameterList
+		public void SetParameter(string parameterName, object value)
 		{
-			get { return positionalParameters; }
+			AddModifier(new QueryParameter(parameterName, value));
 		}
+
+		public void SetParameter(string parameterName, object value, IType type)
+		{
+			AddModifier(new QueryParameter(parameterName, value, type));
+		}
+
+		public void SetParameterList(string parameterName, ICollection list)
+		{
+			AddModifier(new QueryParameter(parameterName, list));
+		}
+
+		public void SetParameterList(string parameterName, ICollection list, IType type)
+		{
+			AddModifier(new QueryParameter(parameterName, list, type));
+		}
+		#endregion
+
+		#region SetQueryRange
+		public void SetQueryRange(int firstResult, int maxResults)
+		{
+			AddModifier(new QueryRange(firstResult, maxResults));
+		}
+
+		public void SetQueryRange(int maxResults)
+		{
+			AddModifier(new QueryRange(maxResults));
+		}
+		#endregion
 
 		protected override IQuery CreateQuery(ISession session)
 		{
 			IQuery query = session.CreateQuery(hql);
 
-			if (positionalParameters != null)
-			{
-				for (int i = 0; i < positionalParameters.Length; i++)
-				{
-					query.SetParameter(i, positionalParameters[i]);
-				}
-			}
+			ApplyModifiers(query);
 
 			return query;
 		}

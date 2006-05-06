@@ -40,8 +40,8 @@ namespace Castle.ActiveRecord.Queries
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c>.
 		/// </summary>
-		public SimpleQuery(Type returnType, string hql, params object[] parameters)
-			: this(returnType, returnType, hql, parameters)
+		public SimpleQuery(Type returnType, string hql, params object[] positionalParameters)
+			: this(returnType, returnType, hql, positionalParameters)
 		{
 		}
 

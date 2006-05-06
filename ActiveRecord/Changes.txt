@@ -1,6 +1,15 @@
 beta 4
 ======
 
+- Added some flexibility into ActiveRecord Queries. They are now mutable,
+  which means we now have methods like 'SetParameter', 'SetParameterList' and
+  'SetRange'; and the 'Query' property is now read-write.
+
+- Added support for query modifiers in ActiveRecord Queries. Any object implementing
+  IQueryModifier can be added to an ActiveRecordBaseQuery, using the 
+  (protected) 'AddModifier' method. Parameters and query ranges 
+  are implemented as query modifiers.
+
 - Fixed AR-39: Added virtual to IsValid on ActiveRecordValidationBase/<T>
 
 - Fixed AR-45: Added BindingFlags.NonPublic to DefaultBindingFlags on ActiveRecordModelBuilder

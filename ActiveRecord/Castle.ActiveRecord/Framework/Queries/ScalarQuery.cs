@@ -21,10 +21,17 @@ namespace Castle.ActiveRecord.Queries
 
 	public class ScalarQuery : HqlBasedQuery
 	{
-		public ScalarQuery(Type targetType, string hql, params object[] parameters)
-			: base(targetType, hql, parameters)
+		#region Constructors
+		public ScalarQuery(Type targetType, string hql, params Object[] positionalParameters)
+			: base(targetType, hql, positionalParameters)
 		{
 		}
+
+		public ScalarQuery(Type targetType, string hql)
+			: base(targetType, hql)
+		{
+		}
+		#endregion
 
 		/// <summary>
 		/// Executes the query and returns its scalar result.
@@ -44,7 +51,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <returns>An <c>object[1]</c> containing the query's scalar result.</returns>
 		protected override IEnumerable InternalEnumerate(ISession session)
 		{
-			return new object[] { InternalExecute(session) };
+			return new Object[] { InternalExecute(session) };
 		}
 	}
 }

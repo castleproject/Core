@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if dotNet2
 
 namespace Castle.ActiveRecord.Queries
@@ -30,14 +31,27 @@ namespace Castle.ActiveRecord.Queries
 		#region Constructors
 		/// <summary>
 		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="hql"/>,
-		/// using the specified positional <paramref name="parameters"/> and
+		/// using the specified positional <paramref name="positionalParameters"/> and
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecord type</param>
 		/// <param name="hql">The HQL</param>
-		/// <param name="parameters">The positional parameters</param>
-		public ScalarQuery(Type targetType, String hql, params Object[] parameters)
-			: base(targetType, hql, parameters) { }
+		/// <param name="positionalParameters">The positional positionalParameters</param>
+		public ScalarQuery(Type targetType, String hql, params Object[] positionalParameters)
+			: base(targetType, hql, positionalParameters)
+		{
+		}
+
+		/// <summary>
+		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="hql"/> and
+		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
+		/// </summary>
+		/// <param name="targetType">The target ActiveRecord type</param>
+		/// <param name="hql">The HQL</param>
+		public ScalarQuery(Type targetType, String hql)
+			: base(targetType, hql)
+		{
+		}
 		#endregion
 
 		#region IActiveRecordQuery<T> implementation
@@ -46,7 +60,7 @@ namespace Castle.ActiveRecord.Queries
 			return (T) InternalExecute(session);
 		}
 		#endregion
-		
+
 		/// <summary>
 		/// Executes the query and gets the result.
 		/// </summary>
