@@ -400,11 +400,15 @@
     <Compile Include="Framework\Queries\CountQuery.cs" />
     <Compile Include="Framework\Queries\HqlBasedQuery.cs" />
     <Compile Include="Framework\Queries\IActiveRecordQuery.Generic.cs" />
+    <Compile Include="Framework\Queries\Modifiers\IQueryModifier.cs" />
+    <Compile Include="Framework\Queries\Modifiers\QueryRange.cs" />
+    <Compile Include="Framework\Queries\Modifiers\QueryParameter.cs" />
     <Compile Include="Framework\Queries\ScalarQuery.Generic.cs" />
     <Compile Include="Framework\Queries\SimpleQuery.Generic.cs" />
     <Compile Include="Framework\Scopes\DifferentDatabaseScope.cs" />
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
     <Compile Include="Framework\SessionScopeWebModule.cs" />
+    <Compile Include="Framework\Validators\AustralianBusinessNumberValidator.cs" />
     <Compile Include="Framework\Validators\CreditCardValidator.cs" />
     <Compile Include="Framework\Validators\LengthValidator.cs" />
   </ItemGroup>

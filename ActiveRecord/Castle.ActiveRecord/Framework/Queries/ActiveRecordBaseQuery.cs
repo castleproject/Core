@@ -17,6 +17,8 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 
+	using Castle.ActiveRecord.Queries;
+
 	using NHibernate;
 	using Nullables;
 
@@ -25,9 +27,11 @@ namespace Castle.ActiveRecord
 	/// <summary>
 	/// Base class for all ActiveRecord queries.
 	/// </summary>
-	public abstract class ActiveRecordBaseQuery : IActiveRecordQuery
+	public abstract class ActiveRecordBaseQuery : IActiveRecordQuery, ICloneable
 	{
-		protected Type targetType;
+		private readonly Type targetType;
+		
+		private IList modifiers;
 
 		public ActiveRecordBaseQuery(Type type)
 		{
@@ -82,6 +86,34 @@ namespace Castle.ActiveRecord
 			return this.MemberwiseClone();
 		}
 
+		/// <summary>
+		/// Adds a query modifier, to be applied with <see cref="ApplyModifiers"/>.
+		/// </summary>
+		/// <param name="modifier">The modifier</param>
+		protected void AddModifier(IQueryModifier modifier)
+		{
+			if (modifiers == null)
+				modifiers = new ArrayList();
+
+			modifiers.Add(modifier);
+		}
+		
+		/// <summary>
+		/// Applies the modifiers added with <see cref="AddModifier"/>.
+		/// </summary>
+		/// <param name="query">The query in which to apply the modifiers</param>
+		/// <remarks>
+		/// This method is not called automatically 
+		/// by <see cref="ActiveRecordBaseQuery"/>, but is called from
+		/// <see cref="HqlBasedQuery"/>.
+		/// </remarks>
+		protected void ApplyModifiers(IQuery query)
+		{
+			if (modifiers != null)
+				foreach (IQueryModifier modifier in modifiers)
+					modifier.Apply(query);
+		}
+		
 		/// <summary>
 		/// Converts the results stored in an <see cref="IList"/> to an
 		/// strongly-typed array.
