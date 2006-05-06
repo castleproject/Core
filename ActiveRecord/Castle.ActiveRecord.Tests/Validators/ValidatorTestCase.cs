@@ -143,27 +143,5 @@ namespace Castle.ActiveRecord.Tests.Validators
 		}
 		
 		#endregion
-
-		#region AustralianBusinessNumber  Test
-
-		[Test]
-		public void AustralianBusinessNumberTest()
-		{
-			Assert.IsTrue(AustralianBusinessNumberTest("67 505 337 385"));
-			Assert.IsTrue(AustralianBusinessNumberTest("67-505 337 385"));
-			Assert.IsTrue(AustralianBusinessNumberTest("67505337385"));
-			Assert.IsFalse(AustralianBusinessNumberTest("67 505 337 384"));
-			Assert.IsFalse(AustralianBusinessNumberTest("67 505 337 384 123"));
-			Assert.IsFalse(AustralianBusinessNumberTest("67a505 337 384 123"));
-			Assert.IsFalse(AustralianBusinessNumberTest("abcd"));
-		}
-
-		private bool AustralianBusinessNumberTest(string input)
-		{
-			AustralianBusinessNumberValidator validator = new AustralianBusinessNumberValidator();
-			return validator.Perform(this, input);
-		}
-
-		#endregion
 	}
 }

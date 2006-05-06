@@ -88,8 +88,6 @@ beta 4
 
 - Added ValidateLength validation attribute.
 
-- Added ValidateAustralianBusinessNumber validation attribute.
-
 - Added support for .Net 2.0 Connection Strings in the config file, using this method:
 
 <activerecord>
