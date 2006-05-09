@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework
 		public const String Cc                 = "cc";
 		public const String Bcc                = "bcc";
 
-		public static readonly String TemplatePath       = "mail";
+		public static readonly String EmailTemplatePath  = "mail";
 		public static readonly String ToAddressPattern   = @"[ \t]*(?<header>(to|cc|bcc)):[ \t]*(?<value>([\w-\.]+@([\w\.]){1,}\w+[ \t]*;?[ \t]*)+)[ \t]*(\r*\n*)?";
 		public static readonly String FromAddressPattern = @"[ \t]*from:[ \t]*(?<value>(\w+[ \t]*)*<*[ \t]*[\w-\.]+@([\w\.]){1,}[\w][ \t]*>*)[ \t]*(\r*\n*)?";
 		public static readonly String HeaderPattern      = @"[ \t]*(?<header>(subject|X-\w+)):[ \t]*(?<value>(\w+[ \t]*)+)(\r*\n*)?";

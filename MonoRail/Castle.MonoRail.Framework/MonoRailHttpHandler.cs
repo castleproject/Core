@@ -30,7 +30,9 @@ namespace Castle.MonoRail.Framework
 		{
 			if (!EngineContextModule.Initialized)
 			{
-				throw new RailsException("Looks like you forgot to register the http module " + typeof(EngineContextModule).FullName);
+				throw new RailsException("Looks like you forgot to register the http module " + 
+					typeof(EngineContextModule).FullName + "\r\nAdd '<add name=\"monorail\" type=\"Castle.MonoRail.Framework.EngineContextModule, Castle.MonoRail.Framework\" />' " + 
+					"to the <httpModules> section on your web.config");
 			}
 
 			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
@@ -56,7 +58,7 @@ namespace Castle.MonoRail.Framework
 
 			IControllerFactory controllerFactory = (IControllerFactory) context.GetService(typeof(IControllerFactory));
 
-			Controller controller = controllerFactory.CreateController( info );
+			Controller controller = controllerFactory.CreateController(info);
 
 			if (controller == null)
 			{
@@ -67,7 +69,7 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				controller.Process( context, info.Area, info.Controller, info.Action );
+				controller.Process(context, info.Area, info.Controller, info.Action);
 			}
 			finally
 			{

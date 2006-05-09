@@ -138,6 +138,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "EmailTemplateService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "EngineContextModule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -154,6 +159,11 @@
                 />
                 <File
                     RelPath = "IDynamicActionProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IEmailTemplateService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

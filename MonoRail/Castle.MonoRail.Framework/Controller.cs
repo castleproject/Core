@@ -642,6 +642,18 @@ namespace Castle.MonoRail.Framework
 
 		#region Core members
 
+		/// <summary>
+		/// Returns the current controller instance
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="Controller.Process"/> is responsible
+		/// for adding the controller instance.
+		/// </remarks>
+		internal static Controller CurrentController
+		{
+			get { return (Controller) HttpContext.Current.Items["mr.controller"] ; }
+		}
+
 		internal bool ShouldCheckWhetherClientHasDisconnected
 		{
 			get 
@@ -697,6 +709,8 @@ namespace Castle.MonoRail.Framework
 
 			InitializeControllerState(areaName, controllerName, actionName);
 			
+			HttpContext.Items["mr.controller"] = this;
+
 #if ALLOWTEST
 			HttpContext.Items["mr.flash"] = Flash;
 			HttpContext.Items["mr.session"] = Session;
@@ -1283,71 +1297,10 @@ namespace Castle.MonoRail.Framework
 		/// <returns>An instance of <see cref="Message"/></returns>
 		public Message RenderMailMessage(String templateName)
 		{
-			// create a message object
-			Message message = new Message();
+			IEmailTemplateService templateService = (IEmailTemplateService) 
+				ServiceProvider.GetService(typeof(IEmailTemplateService));
 
-			// use the template engine to generate the body of the message
-			StringWriter writer = new StringWriter();
-			InPlaceRenderSharedView(writer, Path.Combine(Constants.TemplatePath, templateName));
-			String body = writer.ToString();
-			
-			// process delivery addresses from template.
-			MatchCollection matches1 = Constants.readdress.Matches(body);
-			for(int i=0; i< matches1.Count; i++)
-			{
-				String header  = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
-				String address = matches1[i].Groups[Constants.ValueKey].ToString();
-
-				switch(header)
-				{
-					case Constants.To :
-						message.To = address;
-						break;
-					case Constants.Cc :
-						message.Cc = address;
-						break;
-					case Constants.Bcc :
-						message.Bcc = address;
-						break;
-				}
-			}
-			body = Constants.readdress.Replace(body, String.Empty);
-
-			// process from address from template
-			Match match = Constants.refrom.Match(body);
-			if(match.Success)
-			{
-				message.From = match.Groups[Constants.ValueKey].ToString();
-				body = Constants.refrom.Replace(body, String.Empty);
-			}
-
-			// process subject and X headers from template
-			MatchCollection matches2 = Constants.reheader.Matches(body);
-			for(int i=0; i< matches2.Count; i++)
-			{
-				String header	= matches2[i].Groups[Constants.HeaderKey].ToString();
-				String strval	= matches2[i].Groups[Constants.ValueKey].ToString();
-
-				if(header.ToLower() == Constants.Subject)
-				{
-					message.Subject = strval;
-				}
-				else
-				{
-					message.Headers.Add(header, strval);
-				}
-			}
-			body = Constants.reheader.Replace(body, String.Empty);
-
-			message.Body = body;
-
-			// a little magic to see if the body is html
-			if(message.Body.ToLower().IndexOf(Constants.HtmlTag) > -1)
-			{
-				message.Format = Format.Html;
-			}
-			
-			return message;
+			return templateService.RenderMailMessage(templateName, Context, this);
 		}
 
 		/// <summary>
@@ -1382,7 +1335,7 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		#region Extension 
+		#region Extension
 
 		protected void RaiseOnActionExceptionOnExtension()
 		{

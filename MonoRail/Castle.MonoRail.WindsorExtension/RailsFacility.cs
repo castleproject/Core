@@ -14,9 +14,12 @@
 
 namespace Castle.MonoRail.WindsorExtension
 {
+	using System;
+	using System.Web;
+
 	using Castle.Model;
 	using Castle.MicroKernel;
-	using Castle.Model.Configuration;
+	using Castle.MicroKernel.Facilities;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Internal.Graph;
@@ -26,7 +29,7 @@ namespace Castle.MonoRail.WindsorExtension
 	/// Facility responsible for registering the controllers in
 	/// the tree.
 	/// </summary>
-	public class RailsFacility : IFacility
+	public class RailsFacility : AbstractFacility
 	{
 		private ControllerTree tree;
 
@@ -34,25 +37,51 @@ namespace Castle.MonoRail.WindsorExtension
 		{
 		}
 
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
+		protected override void Init()
 		{
-			kernel.AddComponent("rails.controllertree", typeof(ControllerTree));
-			kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
+			Kernel.AddComponent("rails.controllertree", typeof(ControllerTree));
+			Kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
 
-			tree = (ControllerTree) kernel["rails.controllertree"];
+			tree = (ControllerTree) Kernel["rails.controllertree"];
 
-			kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
+			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 
-			AddBuiltInControllers(kernel);
+			AddBuiltInControllers();
+
+//			ExtractServicesFromModule();
 		}
 
-		public void Terminate()
-		{
-		}
+//		protected void ExtractServicesFromModule()
+//		{
+//			if (HttpContext.Current == null)
+//			{
+//				throw new FacilityException("No Http Context available while executing RailsFacility start up");
+//			}
+//
+//			HttpModuleCollection modules = HttpContext.Current.ApplicationInstance.Modules;
+//
+//			foreach(String key in HttpContext.Current.ApplicationInstance.Modules.AllKeys)
+//			{
+//				object module = modules.Get(key);
+//
+//				EngineContextModule engineModule = module as EngineContextModule;
+//
+//				if (engineModule == null) continue;
+//
+//				ExtractServices(engineModule);
+//
+//				break;
+//			}
+//		}
 
-		protected virtual void AddBuiltInControllers(IKernel kernel)
+//		protected void ExtractServices(IServiceProvider provider)
+//		{
+//			Kernel.Resolver.AddSubResolver(new SubDependencyResolverAdapter(provider));
+//		}
+
+		protected virtual void AddBuiltInControllers()
 		{
-			kernel.AddComponent("files", typeof(FilesController), typeof(FilesController));
+			Kernel.AddComponent("files", typeof(FilesController), typeof(FilesController));
 		}
 
 		private void OnComponentModelCreated(ComponentModel model)
@@ -75,4 +104,28 @@ namespace Castle.MonoRail.WindsorExtension
 			}
 		}
 	}
+
+//	internal class SubDependencyResolverAdapter : ISubDependencyResolver
+//	{
+//		private readonly IServiceProvider provider;
+//
+//		public SubDependencyResolverAdapter(IServiceProvider provider)
+//		{
+//			this.provider = provider;
+//		}
+//
+//		public object Resolve(ComponentModel model, DependencyModel dependency)
+//		{
+//			if (dependency.DependencyType == DependencyType.Parameter) return null;
+//
+//			return provider.GetService(dependency.TargetType);
+//		}
+//
+//		public bool CanResolve(ComponentModel model, DependencyModel dependency)
+//		{
+//			if (dependency.DependencyType == DependencyType.Parameter) return false;
+//
+//			return provider.GetService(dependency.TargetType) != null;
+//		}
+//	}
 }

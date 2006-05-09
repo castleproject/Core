@@ -41,6 +41,7 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>Keeps extensions. Just prevents them from being collected.</summary>
 		private ArrayList extensions = new ArrayList();
+
 		private MonoRailConfiguration monoRailConfiguration;
 		private IViewEngine viewEngine;
 		private IViewSourceLoader viewSourceLoader;
@@ -57,6 +58,7 @@ namespace Castle.MonoRail.Framework
 		private ILayoutDescriptorProvider layoutDescriptorProvider;
 		private IHelperDescriptorProvider helperDescriptorProvider;
 		private IFilterDescriptorProvider filterDescriptorProvider;
+		private IEmailTemplateService emailTemplateService;
 
 		public void Init(HttpApplication context)
 		{
@@ -251,6 +253,8 @@ namespace Castle.MonoRail.Framework
 				initializer.BeginInit();
 				initializer.EndInit();
 			}
+
+			emailTemplateService = new EmailTemplateService(viewEngine);
 		}
 
 		private void InitializeCacheProvider()
@@ -377,6 +381,7 @@ namespace Castle.MonoRail.Framework
 			context.AddService(typeof(IViewComponentFactory), viewCompFactory);
 			context.AddService(typeof(IControllerDescriptorProvider), controllerDescriptorProvider);
 			context.AddService(typeof(IEmailSender), emailSender);
+			context.AddService(typeof(IEmailTemplateService), emailTemplateService);
 			context.AddService(typeof(ICacheProvider), cacheProvider);
 			context.AddService(typeof(MonoRailConfiguration), monoRailConfiguration);
 			context.AddService(typeof(IResourceDescriptorProvider), resourceDescriptorProvider);
