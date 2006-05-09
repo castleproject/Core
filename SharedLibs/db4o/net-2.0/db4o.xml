@@ -4,6 +4,34 @@
         <name>db4o</name>
     </assembly>
     <members>
+        <member name="T:com.db4o.QQueryBase">
+            <summary>QQuery is the users hook on our graph.</summary>
+            <remarks>
+            QQuery is the users hook on our graph.
+            A QQuery is defined by it's constraints.
+            NOTE: This is just a 'partial' base class to allow for variant implementations
+            in db4oj and db4ojdk1.2. It assumes that itself is an instance of QQuery
+            and should never be used explicitly.
+            </remarks>
+            <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.types.Unversioned">
+            <summary>
+            marker interface to denote that version numbers and UUIDs should
+            not be generated for a class that implements this interface
+            </summary>
+            <exclude></exclude>
+        </member>
+        <member name="M:com.db4o.QQueryBase.Constrain(System.Object)">
+            <summary>Search for slot that corresponds to class.</summary>
+            <remarks>
+            Search for slot that corresponds to class. <br />If not found add it.
+            <br />Constrain it. <br />
+            </remarks>
+        </member>
+        <member name="T:com.db4o.foundation.Visitor4">
+            <exclude></exclude>
+        </member>
         <member name="T:com.db4o.MsgD">
             <summary>Messages with Data for Client/Server Communication</summary>
         </member>
@@ -186,9 +214,6 @@
             <br /><br />
             </remarks>
             <param name="userName">the name of the user</param>
-        </member>
-        <member name="T:com.db4o.foundation.Visitor4">
-            <exclude></exclude>
         </member>
         <member name="T:com.db4o.YapField">
             <exclude></exclude>
@@ -416,12 +441,15 @@
             object to allow the chaining of method calls.
             </returns>
         </member>
-        <member name="M:com.db4o.QQuery.Constrain(System.Object)">
-            <summary>Search for slot that corresponds to class.</summary>
-            <remarks>
-            Search for slot that corresponds to class. <br />If not found add it.
-            <br />Constrain it. <br />
-            </remarks>
+        <member name="M:com.db4o.query.Query.SortBy(com.db4o.query.QueryComparator)">
+            <summary>Sort the resulting ObjectSet by the given comparator.</summary>
+            <remarks>Sort the resulting ObjectSet by the given comparator.</remarks>
+            <param name="comparator">The comparator to apply.</param>
+            <returns>
+            this
+            <see cref="T:com.db4o.query.Query">com.db4o.query.Query</see>
+            object to allow the chaining of method calls.
+            </returns>
         </member>
         <member name="T:com.db4o.inside.ix.QxProcessor">
             <exclude></exclude>
@@ -468,6 +496,11 @@
         </member>
         <member name="T:com.db4o.reflect.generic.GenericConverter">
             <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.inside.query.SingleItemCachingStrategy">
+            <summary>
+            A very simple caching strategy that caches only the last added item.
+            </summary>
         </member>
         <member name="T:com.db4o.inside.cluster.ClusterQueryResult">
             <exclude></exclude>
@@ -516,6 +549,21 @@
         </member>
         <member name="T:com.db4o.Readable">
             <exclude></exclude>
+        </member>
+        <member name="M:com.db4o.Tree.DuplicateOrThis">
+            <summary>
+            On adding a node to a tree, if it already exists,
+            #isDuplicateOf() will be called and the added node
+            can be asked for the node that prevails in the
+            tree.
+            </summary>
+            <remarks>
+            On adding a node to a tree, if it already exists,
+            #isDuplicateOf() will be called and the added node
+            can be asked for the node that prevails in the
+            tree. This mechanism allows doing find() and add()
+            in one run.
+            </remarks>
         </member>
         <member name="M:com.db4o.Tree.Compare(com.db4o.Tree)">
             <summary>
@@ -879,6 +927,11 @@
             <summary>returns the MessageSender for this Configuration context.</summary>
             <remarks>returns the MessageSender for this Configuration context.</remarks>
             <returns>MessageSender</returns>
+        </member>
+        <member name="M:com.db4o.config.Configuration.InternStrings(System.Boolean)">
+            <summary>Configures db4o to call intern() on strings upon retrieval.</summary>
+            <remarks>Configures db4o to call intern() on strings upon retrieval.</remarks>
+            <param name="doIntern">intern strings on retrieval if true, don't otherwise</param>
         </member>
         <member name="M:com.db4o.config.Configuration.Io(com.db4o.io.IoAdapter)">
             <summary>allows to configure db4o to use a customized byte IO adapter.</summary>
@@ -1470,14 +1523,6 @@
             </returns>
             <seealso cref="T:com.db4o.types.Db4oMap">com.db4o.types.Db4oMap</seealso>
         </member>
-        <member name="T:com.db4o.reflect.ReflectMethod">
-            <summary>representation for java.lang.reflect.Method.</summary>
-            <remarks>
-            representation for java.lang.reflect.Method.
-            <br/><br/>See the respective documentation in the JDK API.
-            </remarks>
-            <seealso cref="T:com.db4o.reflect.Reflector">com.db4o.reflect.Reflector</seealso>
-        </member>
         <member name="T:com.db4o.config.ObjectAttribute">
             <summary>generic interface to allow returning an attribute of an object.</summary>
             <remarks>generic interface to allow returning an attribute of an object.</remarks>
@@ -1498,6 +1543,9 @@
             <br/><br/>See the respective documentation in the JDK API.
             </remarks>
             <seealso cref="T:com.db4o.reflect.Reflector">com.db4o.reflect.Reflector</seealso>
+        </member>
+        <member name="T:com.db4o.VirtualAttributes">
+            <exclude></exclude>
         </member>
         <member name="T:com.db4o.query.Evaluation">
             <summary>for implementation of callback evaluations.</summary>
@@ -1747,6 +1795,28 @@
             to allow the chaining of method calls.
             </returns>
         </member>
+        <member name="M:com.db4o.query.Constraint.StartsWith(System.Boolean)">
+            <summary>sets the evaluation mode to string startsWith comparison.</summary>
+            <remarks>sets the evaluation mode to string startsWith comparison.</remarks>
+            <param name="caseSensitive">comparison will be case sensitive if true, case insensitive otherwise
+            	</param>
+            <returns>
+            this
+            <see cref="T:com.db4o.query.Constraint">com.db4o.query.Constraint</see>
+            to allow the chaining of method calls.
+            </returns>
+        </member>
+        <member name="M:com.db4o.query.Constraint.EndsWith(System.Boolean)">
+            <summary>sets the evaluation mode to string endsWith comparison.</summary>
+            <remarks>sets the evaluation mode to string endsWith comparison.</remarks>
+            <param name="caseSensitive">comparison will be case sensitive if true, case insensitive otherwise
+            	</param>
+            <returns>
+            this
+            <see cref="T:com.db4o.query.Constraint">com.db4o.query.Constraint</see>
+            to allow the chaining of method calls.
+            </returns>
+        </member>
         <member name="M:com.db4o.query.Constraint.Not">
             <summary>turns on not() comparison.</summary>
             <remarks>turns on not() comparison.</remarks>
@@ -1765,8 +1835,246 @@
             </summary>
             <returns>Object the constraining object.</returns>
         </member>
-        <member name="T:com.db4o.YapStream">
+        <member name="M:com.db4o.nativequery.expr.Expression.Accept(com.db4o.nativequery.expr.ExpressionVisitor)">
+            <summary><a href='http://c2.com/cgi/wiki?AcyclicVisitor'>Acyclic Visitor</a></summary>
+            <param name="visitor">
+            must implement the visitor interface required
+            by the concrete Expression implementation.
+            </param>
+        </member>
+        <member name="T:com.db4o.Unobfuscated">
             <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.inside.ix.IxRemove">
+            <summary>A node to represent an entry removed from an Index</summary>
+        </member>
+        <member name="T:com.db4o.foundation.SimpleTimer">
+            <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.ext.ObjectCallbacks">
+            <summary>callback methods.</summary>
+            <remarks>
+            callback methods.
+            <br /><br /><b>Examples: ../com/db4o/samples/callbacks.</b><br /><br />
+            This interface only serves as a lists of all available callback methods.
+            Every method is called individually, independant of implementing this interface.<br /><br />
+            <b>Using callbacks</b><br />
+            Simply implement one or more of the listed methods in your application classes to
+            do tasks before activation, deactivation, delete, new or update, to cancel the
+            action about to be performed and to respond to the performed task.
+            <br /><br />Callback methods are typically used for:
+            <br />- cascaded delete
+            <br />- cascaded update
+            <br />- cascaded activation
+            <br />- restoring transient members on instantiation
+            <br /><br />Callback methods follow regular calling conventions. Methods in superclasses
+            need to be called explicitely.
+            <br /><br />All method calls are implemented to occur only once, upon one event.
+            </remarks>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanActivate(com.db4o.ObjectContainer)">
+            <summary>called before an Object is activated.</summary>
+            <remarks>called before an Object is activated.</remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored in.
+            	</param>
+            <returns>false to prevent activation.</returns>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanDeactivate(com.db4o.ObjectContainer)">
+            <summary>called before an Object is deactivated.</summary>
+            <remarks>called before an Object is deactivated.</remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored in.
+            	</param>
+            <returns>false to prevent deactivation.</returns>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanDelete(com.db4o.ObjectContainer)">
+            <summary>called before an Object is deleted.</summary>
+            <remarks>
+            called before an Object is deleted.
+            <br /><br />In a client/server setup this callback method will be executed on
+            the server.
+            </remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored in.
+            	</param>
+            <returns>false to prevent the object from being deleted.</returns>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanNew(com.db4o.ObjectContainer)">
+            <summary>called before an Object is stored the first time.</summary>
+            <remarks>called before an Object is stored the first time.</remarks>
+            <param name="container">the <code>ObjectContainer</code> is about to be stored to.
+            	</param>
+            <returns>false to prevent the object from being stored.</returns>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanUpdate(com.db4o.ObjectContainer)">
+            <summary>called before a persisted Object is updated.</summary>
+            <remarks>called before a persisted Object is updated.</remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored in.
+            	</param>
+            <returns>false to prevent the object from being updated.</returns>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnActivate(com.db4o.ObjectContainer)">
+            <summary>called upon activation of an object.</summary>
+            <remarks>called upon activation of an object.</remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored in.
+            	</param>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnDeactivate(com.db4o.ObjectContainer)">
+            <summary>called upon deactivation of an object.</summary>
+            <remarks>called upon deactivation of an object.</remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored in.
+            	</param>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnDelete(com.db4o.ObjectContainer)">
+            <summary>called after an object was deleted.</summary>
+            <remarks>
+            called after an object was deleted.
+            <br /><br />In a client/server setup this callback method will be executed on
+            the server.
+            </remarks>
+            <param name="container">the <code>ObjectContainer</code> the object was stored in.
+            	</param>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnNew(com.db4o.ObjectContainer)">
+            <summary>called after a new object was stored.</summary>
+            <remarks>called after a new object was stored.</remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored to.
+            	</param>
+        </member>
+        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnUpdate(com.db4o.ObjectContainer)">
+            <summary>called after an object was updated.</summary>
+            <remarks>called after an object was updated.</remarks>
+            <param name="container">the <code>ObjectContainer</code> the object is stored in.
+            	</param>
+        </member>
+        <member name="T:com.db4o.inside.query.GenericObjectSetFacade`1">
+            <summary>
+            List based objectSet implementation
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:com.db4o.MetaIndex">
+            <summary>The index record that is written to the database file.</summary>
+            <remarks>
+            The index record that is written to the database file.
+            Don't obfuscate.
+            </remarks>
+            <exclude></exclude>
+            <persistent></persistent>
+        </member>
+        <member name="P:Cecil.FlowAnalysis.ControlFlow.IInstructionData.StackBefore">
+            <summary>
+            Stack height before the execution of the related instruction.
+            </summary>
+        </member>
+        <member name="P:Cecil.FlowAnalysis.ControlFlow.IInstructionData.StackAfter">
+            <summary>
+            Stack height after the execution of the related instruction.
+            </summary>
+        </member>
+        <member name="T:com.db4o.YapMemoryFile">
+            <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.YapFile">
+            <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.YapStream">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:com.db4o.YapStreamBase">
+            <summary>
+            NOTE: This is just a 'partial' base class to allow for variant implementations
+            in db4oj and db4ojdk1.2.
+            </summary>
+            <remarks>
+            NOTE: This is just a 'partial' base class to allow for variant implementations
+            in db4oj and db4ojdk1.2. It assumes that itself is an instance of YapStream
+            and should never be used explicitly.
+            </remarks>
+            <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.YapStreamSpec">
+            <summary>Workaround to provide the Java 5 version with a hook to add ExtObjectContainer.
+            	</summary>
+            <remarks>
+            Workaround to provide the Java 5 version with a hook to add ExtObjectContainer.
+            (Generic method declarations won't match ungenerified YapStreamBase implementations
+            otherwise and implementing it directly kills .NET conversion.)
+            </remarks>
+            <exclude></exclude>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.Activate2(com.db4o.Transaction,System.Object,System.Int32)">
+            <summary>internal call interface, does not reset i_justActivated</summary>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.Bind1(com.db4o.Transaction,System.Object,System.Int64)">
+            <summary>TODO: This is not transactional yet.</summary>
+            <remarks>TODO: This is not transactional yet.</remarks>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.Db4oTypeStored(com.db4o.Transaction,System.Object)">
+            <summary>allows special handling for all Db4oType objects.</summary>
+            <remarks>
+            allows special handling for all Db4oType objects.
+            Redirected here from #set() so only instanceof check is necessary
+            in the #set() method.
+            </remarks>
+            <returns>object if handled here and #set() should not continue processing</returns>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.GetActiveYapClass(com.db4o.reflect.ReflectClass)">
+            <summary>
+            Differentiating getActiveYapClass from getYapClass is a tuning
+            optimization: If we initialize a YapClass, #set3() has to check for
+            the possibility that class initialization associates the currently
+            stored object with a previously stored static object, causing the
+            object to be known afterwards.
+            </summary>
+            <remarks>
+            Differentiating getActiveYapClass from getYapClass is a tuning
+            optimization: If we initialize a YapClass, #set3() has to check for
+            the possibility that class initialization associates the currently
+            stored object with a previously stored static object, causing the
+            object to be known afterwards.
+            In this call we only return active YapClasses, initialization
+            is not done on purpose
+            </remarks>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.Initialize2">
+            <summary>before file is open</summary>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.Initialize2NObjectCarrier">
+            <summary>overridden in YapObjectCarrier</summary>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.IsClient">
+            <summary>
+            overridden in YapClient
+            This method will make it easier to refactor than
+            an "instanceof YapClient" check.
+            </summary>
+            <remarks>
+            overridden in YapClient
+            This method will make it easier to refactor than
+            an "instanceof YapClient" check.
+            </remarks>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.ShowInternalClasses(System.Boolean)">
+            <summary>
+            Objects implementing the "Internal4" marker interface are
+            not visible to queries, unless this flag is set to true.
+            </summary>
+            <remarks>
+            Objects implementing the "Internal4" marker interface are
+            not visible to queries, unless this flag is set to true.
+            The caller should reset the flag after the call.
+            </remarks>
+        </member>
+        <member name="M:com.db4o.YapStreamBase.StillTo1(com.db4o.foundation.List4,com.db4o.Tree[],System.Object,System.Int32,System.Boolean)">
+            <summary>
+            returns true in case an unknown single object is passed
+            This allows deactivating objects before queries are called.
+            </summary>
+            <remarks>
+            returns true in case an unknown single object is passed
+            This allows deactivating objects before queries are called.
+            </remarks>
         </member>
         <member name="T:com.db4o.ObjectContainer">
             <summary>the interface to a db4o database, stand-alone or client/server.</summary>
@@ -1777,116 +2085,25 @@
             transactions.<br/><br/>
             An ObjectContainer can either represent a stand-alone database
             or a connection to a
-            <see cref="M:com.db4o.Db4o.OpenServer(System.String,System.Int32)">db4o server</see>
+            <see cref="!:com.db4o.Db4o.openServer">db4o server</see>
             .
             <br/><br/>An ObjectContainer also represents a transaction. All work
             with db4o always is transactional. Both
-            <see cref="M:com.db4o.ObjectContainer.Commit">com.db4o.ObjectContainer.Commit</see>
+            <see cref="!:com.db4o.ObjectContainer.commit">com.db4o.ObjectContainer.commit</see>
             and
-            <see cref="M:com.db4o.ObjectContainer.Rollback">com.db4o.ObjectContainer.Rollback</see>
+            <see cref="!:com.db4o.ObjectContainer.rollback">com.db4o.ObjectContainer.rollback</see>
             start new transactions immediately. For working
             against the same database with multiple transactions, open a db4o server
             with
-            <see cref="M:com.db4o.Db4o.OpenServer(System.String,System.Int32)">com.db4o.Db4o.OpenServer</see>
+            <see cref="!:com.db4o.Db4o.openServer">com.db4o.Db4o.openServer</see>
             and
-            <see cref="M:com.db4o.ObjectServer.OpenClient">connect locally</see>
+            <see cref="!:com.db4o.ObjectServer.openClient">connect locally</see>
             or
-            <see cref="M:com.db4o.Db4o.OpenClient(System.String,System.Int32,System.String,System.String)">over TCP</see>
+            <see cref="!:com.db4o.Db4o.openClient">over TCP</see>
             .
             </remarks>
             <seealso cref="T:com.db4o.ext.ExtObjectContainer">ExtObjectContainer for extended functionality.
             	</seealso>
-        </member>
-        <member name="M:com.db4o.ObjectContainer.Query``1(com.db4o.Predicate{``0})">
-            <summary>.NET 2.0 Native Query interface.</summary>
-            <remarks>
-            Native Query Interface.
-            <br/><br/>Native Queries allow typesafe, compile-time checked and refactorable
-            querying, following object-oriented principles. Native Queries expressions
-            are written as if one or more lines of code would be run against all
-            instances of a class. A Native Query expression should return true to mark
-            specific instances as part of the result set.
-            db4o will  attempt to optimize native query expressions and execute them
-            against indexes and without instantiating actual objects, where this is
-            possible.<br/><br/>
-            The syntax of the enclosing object for the native query expression varies,
-            depending on the language version used. Here are some examples,
-            how a simple native query will look like in some of the programming languages
-            and dialects that db4o supports:<br/><br/>
-            <code>
-            <b>// C# .NET 2.0</b><br/>
-            IList &lt;Cat&gt; cats = db.Query &lt;Cat&gt; (delegate(Cat cat) {<br/>
-               return cat.Name == "Occam";<br/>
-            });<br/>
-            <br/>
-            <br/>
-            <b>// Java JDK 5</b><br/>
-            List &lt;Cat&gt; cats = db.query(new Predicate&lt;Cat&gt;() {<br/>
-               public boolean match(Cat cat) {<br/>
-                  return cat.getName().equals("Occam");<br/>
-               }<br/>
-            });<br/>
-            <br/>
-            <br/>
-            <b>// Java JDK 1.2 to 1.4</b><br/>
-            List cats = db.query(new Predicate() {<br/>
-               public boolean match(Cat cat) {<br/>
-                  return cat.getName().equals("Occam");<br/>
-               }<br/>
-            });<br/>
-            <br/>
-            <br/>
-            <b>// Java JDK 1.1</b><br/>
-            ObjectSet cats = db.query(new CatOccam());<br/>
-            <br/>
-            public static class CatOccam extends Predicate {<br/>
-               public boolean match(Cat cat) {<br/>
-                  return cat.getName().equals("Occam");<br/>
-               }<br/>
-            });<br/>
-            <br/>
-            <br/>
-            <b>// C# .NET 1.1</b><br/>
-            IList cats = db.Query(new CatOccam());<br/>
-            <br/>
-            public class CatOccam : Predicate {<br/>
-               public boolean Match(Cat cat) {<br/>
-                  return cat.Name == "Occam";<br/>
-               }<br/>
-            });<br/>
-            </code>
-            <br/>
-            Summing up the above:<br/>
-            In order to run a Native Query, you can<br/>
-            - use the delegate notation for .NET 2.0.<br/>
-            - extend the Predicate class for all other language dialects<br/><br/>
-            A class that extends Predicate is required to
-            implement the #match() / #Match() method, following the native query
-            conventions:<br/>
-            - The name of the method is "#match()" (Java) / "#Match()" (.NET).<br/>
-            - The method must be public public.<br/>
-            - The method returns a boolean.<br/>
-            - The method takes one parameter.<br/>
-            - The Type (.NET) / Class (Java) of the parameter specifies the extent.<br/>
-            - For all instances of the extent that are to be included into the
-            resultset of the query, the match method should return true. For all
-            instances that are not to be included, the match method should return
-            false.<br/><br/>
-            </remarks>
-            <param name="match">
-            use an anonymous delegate that takes a single paramter and returns
-            a bool value, see the syntax example above
-            </param>
-            <returns>
-            the
-            <see cref="T:com.db4o.ObjectSet">com.db4o.ObjectSet</see>
-            returned by the query.
-            </returns>
-        </member>
-        <member name="M:com.db4o.ObjectContainer.Query``1(System.Type)">
-            <summary>
-            queries for all instances of a class.
-            </summary>
         </member>
         <member name="M:com.db4o.ObjectContainer.Activate(System.Object,System.Int32)">
             <summary>activates all members on a stored object to the specified depth.</summary>
@@ -1894,7 +2111,7 @@
             activates all members on a stored object to the specified depth.
             <br/><br/>
             See
-            <see cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">"Why activation"</see>
+            <see cref="!:com.db4o.config.Configuration.activationDepth">"Why activation"</see>
             for an explanation why activation is necessary.<br/><br/>
             The activate method activates a graph of persistent objects in memory.
             Only deactivated objects in the graph will be touched: their
@@ -1907,24 +2124,24 @@
             but deactivated, their fields will be null.
             The activation depth of individual classes can be overruled
             with the methods
-            <see cref="M:com.db4o.config.ObjectClass.MaximumActivationDepth(System.Int32)">maximumActivationDepth()
+            <see cref="!:com.db4o.config.ObjectClass.maximumActivationDepth">maximumActivationDepth()
             	</see>
             and
-            <see cref="M:com.db4o.config.ObjectClass.MinimumActivationDepth(System.Int32)">minimumActivationDepth()
+            <see cref="!:com.db4o.config.ObjectClass.minimumActivationDepth">minimumActivationDepth()
             	</see>
             in the
             <see cref="T:com.db4o.config.ObjectClass">ObjectClass interface</see>
             .<br/><br/>
             A successful call to activate triggers the callback method
-            <see cref="M:com.db4o.ext.ObjectCallbacks.ObjectOnActivate(com.db4o.ObjectContainer)">objectOnActivate</see>
+            <see cref="!:com.db4o.ext.ObjectCallbacks.objectOnActivate">objectOnActivate</see>
             which can be used for cascaded activation.<br/><br/>
             </remarks>
-            <seealso cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">Why activation?</seealso>
+            <seealso cref="!:com.db4o.config.Configuration.activationDepth">Why activation?</seealso>
             <seealso cref="T:com.db4o.ext.ObjectCallbacks">Using callbacks</seealso>
             <param name="obj">the object to be activated.</param>
             <param name="depth">
             the member
-            <see cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">depth</see>
+            <see cref="!:com.db4o.config.Configuration.activationDepth">depth</see>
             to which activate is to cascade.
             </param>
         </member>
@@ -1933,7 +2150,7 @@
             <remarks>
             closes this ObjectContainer.
             <br/><br/>A call to close() automatically performs a
-            <see cref="M:com.db4o.ObjectContainer.Commit">commit()</see>
+            <see cref="!:com.db4o.ObjectContainer.commit">commit()</see>
             .
             <br/><br/>Note that every session opened with Db4o.openFile() requires one
             close()call, even if the same filename was used multiple times.<br/><br/>
@@ -1963,7 +2180,7 @@
             The method has no effect, if the passed object is not stored in the
             <code>ObjectContainer</code>.<br/><br/>
             <code>deactivate()</code> triggers the callback method
-            <see cref="M:com.db4o.ext.ObjectCallbacks.ObjectOnDeactivate(com.db4o.ObjectContainer)">objectOnDeactivate</see>
+            <see cref="!:com.db4o.ext.ObjectCallbacks.objectOnDeactivate">objectOnDeactivate</see>
             .
             <br/><br/>
             Be aware that calling this method with a depth parameter greater than
@@ -1971,11 +2188,11 @@
             in other places of the application.<br/><br/>
             </remarks>
             <seealso cref="T:com.db4o.ext.ObjectCallbacks">Using callbacks</seealso>
-            <seealso cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">Why activation?</seealso>
+            <seealso cref="!:com.db4o.config.Configuration.activationDepth">Why activation?</seealso>
             <param name="obj">the object to be deactivated.</param>
             <param name="depth">
             the member
-            <see cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">depth</see>
+            <see cref="!:com.db4o.config.Configuration.activationDepth">depth</see>
             
             to which deactivate is to cascade.
             </param>
@@ -1989,9 +2206,9 @@
             and array member types are destroyed.
             <br/><br/>Object members of the passed object remain untouched, unless
             cascaded deletes are
-            <see cref="M:com.db4o.config.ObjectClass.CascadeOnDelete(System.Boolean)">configured for the class</see>
+            <see cref="!:com.db4o.config.ObjectClass.cascadeOnDelete">configured for the class</see>
             or for
-            <see cref="M:com.db4o.config.ObjectField.CascadeOnDelete(System.Boolean)">one of the member fields</see>
+            <see cref="!:com.db4o.config.ObjectField.cascadeOnDelete">one of the member fields</see>
             .
             <br/><br/>The method has no effect, if
             the passed object is not stored in the <code>ObjectContainer</code>.
@@ -1999,12 +2216,12 @@
             <code>set()</code> with the same object newly stores the object
             to the <code>ObjectContainer</code>.<br/><br/>
             <code>delete()</code> triggers the callback method
-            <see cref="M:com.db4o.ext.ObjectCallbacks.ObjectOnDelete(com.db4o.ObjectContainer)">objectOnDelete</see>
+            <see cref="!:com.db4o.ext.ObjectCallbacks.objectOnDelete">objectOnDelete</see>
             which can be also used for cascaded deletes.<br/><br/>
             </remarks>
-            <seealso cref="M:com.db4o.config.ObjectClass.CascadeOnDelete(System.Boolean)">com.db4o.config.ObjectClass.CascadeOnDelete
+            <seealso cref="!:com.db4o.config.ObjectClass.cascadeOnDelete">com.db4o.config.ObjectClass.cascadeOnDelete
             	</seealso>
-            <seealso cref="M:com.db4o.config.ObjectField.CascadeOnDelete(System.Boolean)">com.db4o.config.ObjectField.CascadeOnDelete
+            <seealso cref="!:com.db4o.config.ObjectField.cascadeOnDelete">com.db4o.config.ObjectField.cascadeOnDelete
             	</seealso>
             <seealso cref="T:com.db4o.ext.ObjectCallbacks">Using callbacks</seealso>
             <param name="obj">
@@ -2049,9 +2266,9 @@
             <see cref="T:com.db4o.ObjectSet">ObjectSet</see>
             are instantiated
             and activated to the preconfigured depth of 5. The
-            <see cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">activation depth</see>
+            <see cref="!:com.db4o.config.Configuration.activationDepth">activation depth</see>
             may be configured
-            <see cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">globally</see>
+            <see cref="!:com.db4o.config.Configuration.activationDepth">globally</see>
             or
             <see cref="T:com.db4o.config.ObjectClass">individually for classes</see>
             .
@@ -2061,7 +2278,7 @@
             <br/><br/>
             Objects newly activated by <code>get()</code> can respond to the callback
             method
-            <see cref="M:com.db4o.ext.ObjectCallbacks.ObjectOnActivate(com.db4o.ObjectContainer)">objectOnActivate</see>
+            <see cref="!:com.db4o.ext.ObjectCallbacks.objectOnActivate">objectOnActivate</see>
             .
             <br/><br/>
             </remarks>
@@ -2072,7 +2289,7 @@
             <see cref="T:com.db4o.ObjectSet">ObjectSet</see>
             containing all found objects.<br/><br/>
             </returns>
-            <seealso cref="M:com.db4o.config.Configuration.ActivationDepth(System.Int32)">Why activation?</seealso>
+            <seealso cref="!:com.db4o.config.Configuration.activationDepth">Why activation?</seealso>
             <seealso cref="T:com.db4o.ext.ObjectCallbacks">Using callbacks</seealso>
         </member>
         <member name="M:com.db4o.ObjectContainer.Query">
@@ -2082,9 +2299,9 @@
             .
             <br/><br/>
             Use
-            <see cref="M:com.db4o.ObjectContainer.Get(System.Object)">get(Object template)</see>
+            <see cref="!:com.db4o.ObjectContainer.get">get(Object template)</see>
             for simple Query-By-Example.<br/><br/>
-            <see cref="M:com.db4o.ObjectContainer.Query">Native queries</see>
+            <see cref="!:com.db4o.ObjectContainer.query">Native queries</see>
             are the recommended main db4o query
             interface.
             <br/><br/>
@@ -2196,7 +2413,7 @@
             a new transaction immedidately.
             <br/><br/>rollback will not restore modified objects in memory. They
             can be refreshed from the database by calling
-            <see cref="M:com.db4o.ext.ExtObjectContainer.Refresh(System.Object,System.Int32)">com.db4o.ext.ExtObjectContainer.Refresh
+            <see cref="!:com.db4o.ext.ExtObjectContainer.refresh">com.db4o.ext.ExtObjectContainer.refresh
             	</see>
             .
             </remarks>
@@ -2216,36 +2433,139 @@
             - object members that are already stored will <b>not</b> be updated
             themselves.<br/>Every object member needs to be updated individually with a
             call to <code>set()</code> unless a deep
-            <see cref="M:com.db4o.config.Configuration.UpdateDepth(System.Int32)">global</see>
+            <see cref="!:com.db4o.config.Configuration.updateDepth">global</see>
             or
-            <see cref="M:com.db4o.config.ObjectClass.UpdateDepth(System.Int32)">class-specific</see>
+            <see cref="!:com.db4o.config.ObjectClass.updateDepth">class-specific</see>
             update depth was configured or cascaded updates were
-            <see cref="M:com.db4o.config.ObjectClass.CascadeOnUpdate(System.Boolean)">defined in the class</see>
+            <see cref="!:com.db4o.config.ObjectClass.cascadeOnUpdate">defined in the class</see>
             or in
-            <see cref="M:com.db4o.config.ObjectField.CascadeOnUpdate(System.Boolean)">one of the member fields</see>
+            <see cref="!:com.db4o.config.ObjectField.cascadeOnUpdate">one of the member fields</see>
             .
             <br/><br/><b>Examples: ../com/db4o/samples/update.</b><br/><br/>
             Depending if the passed object is newly stored or updated, the
             callback method
-            <see cref="M:com.db4o.ext.ObjectCallbacks.ObjectOnNew(com.db4o.ObjectContainer)">objectOnNew</see>
+            <see cref="!:com.db4o.ext.ObjectCallbacks.objectOnNew">objectOnNew</see>
             or
-            <see cref="M:com.db4o.ext.ObjectCallbacks.ObjectOnUpdate(com.db4o.ObjectContainer)">objectOnUpdate</see>
+            <see cref="!:com.db4o.ext.ObjectCallbacks.objectOnUpdate">objectOnUpdate</see>
             is triggered.
-            <see cref="M:com.db4o.ext.ObjectCallbacks.ObjectOnUpdate(com.db4o.ObjectContainer)">objectOnUpdate</see>
+            <see cref="!:com.db4o.ext.ObjectCallbacks.objectOnUpdate">objectOnUpdate</see>
             might also be used for cascaded updates.<br/><br/>
             </remarks>
             <param name="obj">the object to be stored or updated.</param>
-            <seealso cref="M:com.db4o.ext.ExtObjectContainer.Set(System.Object,System.Int32)">ExtObjectContainer#set(object, depth)
+            <seealso cref="!:com.db4o.ext.ExtObjectContainer.set">ExtObjectContainer#set(object, depth)
             	</seealso>
-            <seealso cref="M:com.db4o.config.Configuration.UpdateDepth(System.Int32)">com.db4o.config.Configuration.UpdateDepth
+            <seealso cref="!:com.db4o.config.Configuration.updateDepth">com.db4o.config.Configuration.updateDepth
             	</seealso>
-            <seealso cref="M:com.db4o.config.ObjectClass.UpdateDepth(System.Int32)">com.db4o.config.ObjectClass.UpdateDepth
+            <seealso cref="!:com.db4o.config.ObjectClass.updateDepth">com.db4o.config.ObjectClass.updateDepth
             	</seealso>
-            <seealso cref="M:com.db4o.config.ObjectClass.CascadeOnUpdate(System.Boolean)">com.db4o.config.ObjectClass.CascadeOnUpdate
+            <seealso cref="!:com.db4o.config.ObjectClass.cascadeOnUpdate">com.db4o.config.ObjectClass.cascadeOnUpdate
             	</seealso>
-            <seealso cref="M:com.db4o.config.ObjectField.CascadeOnUpdate(System.Boolean)">com.db4o.config.ObjectField.CascadeOnUpdate
+            <seealso cref="!:com.db4o.config.ObjectField.cascadeOnUpdate">com.db4o.config.ObjectField.cascadeOnUpdate
             	</seealso>
             <seealso cref="T:com.db4o.ext.ObjectCallbacks">Using callbacks</seealso>
+        </member>
+        <member name="M:com.db4o.ObjectContainer.Query``1(System.Predicate{``0})">
+            <summary>.NET 2.0 Native Query interface.</summary>
+            <remarks>
+            Native Query Interface.
+            <br/><br/>Native Queries allow typesafe, compile-time checked and refactorable
+            querying, following object-oriented principles. Native Queries expressions
+            are written as if one or more lines of code would be run against all
+            instances of a class. A Native Query expression should return true to mark
+            specific instances as part of the result set.
+            db4o will  attempt to optimize native query expressions and execute them
+            against indexes and without instantiating actual objects, where this is
+            possible.<br/><br/>
+            The syntax of the enclosing object for the native query expression varies,
+            depending on the language version used. Here are some examples,
+            how a simple native query will look like in some of the programming languages
+            and dialects that db4o supports:<br/><br/>
+            <code>
+            <b>// C# .NET 2.0</b><br/>
+            IList &lt;Cat&gt; cats = db.Query &lt;Cat&gt; (delegate(Cat cat) {<br/>
+               return cat.Name == "Occam";<br/>
+            });<br/>
+            <br/>
+            <br/>
+            <b>// Java JDK 5</b><br/>
+            List &lt;Cat&gt; cats = db.query(new Predicate&lt;Cat&gt;() {<br/>
+               public boolean match(Cat cat) {<br/>
+                  return cat.getName().equals("Occam");<br/>
+               }<br/>
+            });<br/>
+            <br/>
+            <br/>
+            <b>// Java JDK 1.2 to 1.4</b><br/>
+            List cats = db.query(new Predicate() {<br/>
+               public boolean match(Cat cat) {<br/>
+                  return cat.getName().equals("Occam");<br/>
+               }<br/>
+            });<br/>
+            <br/>
+            <br/>
+            <b>// Java JDK 1.1</b><br/>
+            ObjectSet cats = db.query(new CatOccam());<br/>
+            <br/>
+            public static class CatOccam extends Predicate {<br/>
+               public boolean match(Cat cat) {<br/>
+                  return cat.getName().equals("Occam");<br/>
+               }<br/>
+            });<br/>
+            <br/>
+            <br/>
+            <b>// C# .NET 1.1</b><br/>
+            IList cats = db.Query(new CatOccam());<br/>
+            <br/>
+            public class CatOccam : Predicate {<br/>
+               public boolean Match(Cat cat) {<br/>
+                  return cat.Name == "Occam";<br/>
+               }<br/>
+            });<br/>
+            </code>
+            <br/>
+            Summing up the above:<br/>
+            In order to run a Native Query, you can<br/>
+            - use the delegate notation for .NET 2.0.<br/>
+            - extend the Predicate class for all other language dialects<br/><br/>
+            A class that extends Predicate is required to
+            implement the #match() / #Match() method, following the native query
+            conventions:<br/>
+            - The name of the method is "#match()" (Java) / "#Match()" (.NET).<br/>
+            - The method must be public public.<br/>
+            - The method returns a boolean.<br/>
+            - The method takes one parameter.<br/>
+            - The Type (.NET) / Class (Java) of the parameter specifies the extent.<br/>
+            - For all instances of the extent that are to be included into the
+            resultset of the query, the match method should return true. For all
+            instances that are not to be included, the match method should return
+            false.<br/><br/>
+            </remarks>
+            <param name="match">
+            use an anonymous delegate that takes a single paramter and returns
+            a bool value, see the syntax example above
+            </param>
+            <returns>
+            the
+            <see cref="T:com.db4o.ObjectSet">com.db4o.ObjectSet</see>
+            returned by the query.
+            </returns>
+        </member>
+        <member name="M:com.db4o.ObjectContainer.Query``1(System.Type)">
+            <summary>
+            queries for all instances of the type extent, returning
+            a IList of ElementType which must be assignable from
+            extent.
+            </summary>
+        </member>
+        <member name="M:com.db4o.ObjectContainer.Query``1">
+            <summary>
+            queries for all instances of the type extent.
+            </summary>
+        </member>
+        <member name="M:com.db4o.ObjectContainer.Query``1(System.Collections.Generic.IComparer{``0})">
+            <summary>
+            queries for all instances of the type extent sorting with the specified comparer.
+            </summary>
         </member>
         <member name="T:com.db4o.ext.ExtObjectContainer">
             <summary>
@@ -2420,12 +2740,9 @@
             </returns>
         </member>
         <member name="M:com.db4o.ext.ExtObjectContainer.Identity">
-            <summary>
-            returns the
-            <see cref="T:com.db4o.ext.Db4oDatabase">com.db4o.ext.Db4oDatabase</see>
-            object for this ObjectContainer.
-            </summary>
-            <returns></returns>
+            <summary>returns the Db4oDatabase identity object for this ObjectContainer.</summary>
+            <remarks>returns the Db4oDatabase identity object for this ObjectContainer.</remarks>
+            <returns>the Db4oDatabase identity object for this ObjectContainer.</returns>
         </member>
         <member name="M:com.db4o.ext.ExtObjectContainer.IsActive(System.Object)">
             <summary>tests if an object is activated.</summary>
@@ -2734,201 +3051,49 @@
             </remarks>
             <returns>the current transaction serial number.</returns>
         </member>
-        <member name="M:com.db4o.YapStream.Activate2(com.db4o.Transaction,System.Object,System.Int32)">
-            <summary>internal call interface, does not reset i_justActivated</summary>
-        </member>
-        <member name="M:com.db4o.YapStream.Bind1(com.db4o.Transaction,System.Object,System.Int64)">
-            <summary>TODO: This is not transactional yet.</summary>
-            <remarks>TODO: This is not transactional yet.</remarks>
-        </member>
-        <member name="M:com.db4o.YapStream.Db4oTypeStored(com.db4o.Transaction,System.Object)">
-            <summary>allows special handling for all Db4oType objects.</summary>
-            <remarks>
-            allows special handling for all Db4oType objects.
-            Redirected here from #set() so only instanceof check is necessary
-            in the #set() method.
-            </remarks>
-            <returns>object if handled here and #set() should not continue processing</returns>
-        </member>
-        <member name="M:com.db4o.YapStream.Initialize2">
-            <summary>before file is open</summary>
-        </member>
-        <member name="M:com.db4o.YapStream.Initialize2NObjectCarrier">
-            <summary>overridden in YapObjectCarrier</summary>
-        </member>
-        <member name="M:com.db4o.YapStream.IsClient">
+        <member name="T:com.db4o.query.QueryComparator">
             <summary>
-            overridden in YapClient
-            This method will make it easier to refactor than
-            an "instanceof YapClient" check.
+            Comparator for sorting queries on JDKs where
+            java.util.Comparator is not available.
             </summary>
             <remarks>
-            overridden in YapClient
-            This method will make it easier to refactor than
-            an "instanceof YapClient" check.
+            Comparator for sorting queries on JDKs where
+            java.util.Comparator is not available.
             </remarks>
         </member>
-        <member name="M:com.db4o.YapStream.ShowInternalClasses(System.Boolean)">
-            <summary>
-            Objects implementing the "Internal" marker interface are
-            not visible to queries, unless this flag is set to true.
-            </summary>
+        <member name="M:com.db4o.query.QueryComparator.Compare(System.Object,System.Object)">
+            <summary>Implement to compare two arguments for sorting.</summary>
             <remarks>
-            Objects implementing the "Internal" marker interface are
-            not visible to queries, unless this flag is set to true.
-            The caller should reset the flag after the call.
+            Implement to compare two arguments for sorting.
+            Return a negative value, zero, or a positive value if
+            the first argument is smaller, equal or greater than
+            the second.
             </remarks>
         </member>
-        <member name="M:com.db4o.YapStream.StillTo1(com.db4o.foundation.List4,com.db4o.Tree[],System.Object,System.Int32,System.Boolean)">
-            <summary>
-            returns true in case an unknown single object is passed
-            This allows deactivating objects before queries are called.
-            </summary>
-            <remarks>
-            returns true in case an unknown single object is passed
-            This allows deactivating objects before queries are called.
-            </remarks>
-        </member>
-        <member name="M:com.db4o.nativequery.expr.Expression.Accept(com.db4o.nativequery.expr.ExpressionVisitor)">
-            <summary><a href='http://c2.com/cgi/wiki?AcyclicVisitor'>Acyclic Visitor</a></summary>
-            <param name="visitor">
-            must implement the visitor interface required
-            by the concrete Expression implementation.
-            </param>
-        </member>
-        <member name="T:com.db4o.Unobfuscated">
+        <member name="T:com.db4o.QEStringCmp">
             <exclude></exclude>
         </member>
-        <member name="T:com.db4o.inside.ix.IxRemove">
-            <summary>A node to represent an entry removed from an Index</summary>
-        </member>
-        <member name="T:com.db4o.foundation.SimpleTimer">
+        <member name="T:com.db4o.QEAbstract">
             <exclude></exclude>
         </member>
-        <member name="T:com.db4o.ext.ObjectCallbacks">
-            <summary>callback methods.</summary>
-            <remarks>
-            callback methods.
-            <br /><br /><b>Examples: ../com/db4o/samples/callbacks.</b><br /><br />
-            This interface only serves as a lists of all available callback methods.
-            Every method is called individually, independant of implementing this interface.<br /><br />
-            <b>Using callbacks</b><br />
-            Simply implement one or more of the listed methods in your application classes to
-            do tasks before activation, deactivation, delete, new or update, to cancel the
-            action about to be performed and to respond to the performed task.
-            <br /><br />Callback methods are typically used for:
-            <br />- cascaded delete
-            <br />- cascaded update
-            <br />- cascaded activation
-            <br />- restoring transient members on instantiation
-            <br /><br />Callback methods follow regular calling conventions. Methods in superclasses
-            need to be called explicitely.
-            <br /><br />All method calls are implemented to occur only once, upon one event.
-            </remarks>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanActivate(com.db4o.ObjectContainer)">
-            <summary>called before an Object is activated.</summary>
-            <remarks>called before an Object is activated.</remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored in.
-            	</param>
-            <returns>false to prevent activation.</returns>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanDeactivate(com.db4o.ObjectContainer)">
-            <summary>called before an Object is deactivated.</summary>
-            <remarks>called before an Object is deactivated.</remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored in.
-            	</param>
-            <returns>false to prevent deactivation.</returns>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanDelete(com.db4o.ObjectContainer)">
-            <summary>called before an Object is deleted.</summary>
-            <remarks>
-            called before an Object is deleted.
-            <br /><br />In a client/server setup this callback method will be executed on
-            the server.
-            </remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored in.
-            	</param>
-            <returns>false to prevent the object from being deleted.</returns>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanNew(com.db4o.ObjectContainer)">
-            <summary>called before an Object is stored the first time.</summary>
-            <remarks>called before an Object is stored the first time.</remarks>
-            <param name="container">the <code>ObjectContainer</code> is about to be stored to.
-            	</param>
-            <returns>false to prevent the object from being stored.</returns>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectCanUpdate(com.db4o.ObjectContainer)">
-            <summary>called before a persisted Object is updated.</summary>
-            <remarks>called before a persisted Object is updated.</remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored in.
-            	</param>
-            <returns>false to prevent the object from being updated.</returns>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnActivate(com.db4o.ObjectContainer)">
-            <summary>called upon activation of an object.</summary>
-            <remarks>called upon activation of an object.</remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored in.
-            	</param>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnDeactivate(com.db4o.ObjectContainer)">
-            <summary>called upon deactivation of an object.</summary>
-            <remarks>called upon deactivation of an object.</remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored in.
-            	</param>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnDelete(com.db4o.ObjectContainer)">
-            <summary>called after an object was deleted.</summary>
-            <remarks>
-            called after an object was deleted.
-            <br /><br />In a client/server setup this callback method will be executed on
-            the server.
-            </remarks>
-            <param name="container">the <code>ObjectContainer</code> the object was stored in.
-            	</param>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnNew(com.db4o.ObjectContainer)">
-            <summary>called after a new object was stored.</summary>
-            <remarks>called after a new object was stored.</remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored to.
-            	</param>
-        </member>
-        <member name="M:com.db4o.ext.ObjectCallbacks.ObjectOnUpdate(com.db4o.ObjectContainer)">
-            <summary>called after an object was updated.</summary>
-            <remarks>called after an object was updated.</remarks>
-            <param name="container">the <code>ObjectContainer</code> the object is stored in.
-            	</param>
-        </member>
-        <member name="T:com.db4o.inside.query.GenericObjectSetFacade`1">
-            <summary>
-            List based objectSet implementation
-            </summary>
-            <exclude />
-        </member>
-        <member name="T:com.db4o.MetaIndex">
-            <summary>The index record that is written to the database file.</summary>
-            <remarks>
-            The index record that is written to the database file.
-            Don't obfuscate.
-            </remarks>
-            <exclude></exclude>
-            <persistent></persistent>
-        </member>
-        <member name="P:Cecil.FlowAnalysis.ControlFlow.IInstructionData.StackBefore">
-            <summary>
-            Stack height before the execution of the related instruction.
-            </summary>
-        </member>
-        <member name="P:Cecil.FlowAnalysis.ControlFlow.IInstructionData.StackAfter">
-            <summary>
-            Stack height after the execution of the related instruction.
-            </summary>
-        </member>
-        <member name="T:com.db4o.YapMemoryFile">
+        <member name="T:com.db4o.QE">
+            <summary>Query Evaluator - Represents such things as &gt;, &gt;=, &lt;, &lt;=, EQUAL, LIKE, etc.
+            	</summary>
+            <remarks>Query Evaluator - Represents such things as &gt;, &gt;=, &lt;, &lt;=, EQUAL, LIKE, etc.
+            	</remarks>
             <exclude></exclude>
         </member>
-        <member name="T:com.db4o.YapFile">
-            <exclude></exclude>
+        <member name="M:com.db4o.QE.IndexBitMap(System.Boolean[])">
+            <summary>Specifies which part of the index to take.</summary>
+            <remarks>
+            Specifies which part of the index to take.
+            Array elements:
+            [0] - smaller
+            [1] - equal
+            [2] - greater
+            [3] - nulls
+            </remarks>
+            <param name="bits"></param>
         </member>
         <member name="T:com.db4o.foundation.Cool">
             <summary>A collection of cool static methods that should be part of the runtime environment but are not.
@@ -2938,9 +3103,6 @@
             <exclude></exclude>
         </member>
         <member name="T:com.db4o.SerializedRoot">
-            <exclude></exclude>
-        </member>
-        <member name="T:com.db4o.Predicate`1">
             <exclude></exclude>
         </member>
         <member name="T:com.db4o.ReplicationRecord">
@@ -3401,28 +3563,6 @@
         <member name="T:com.db4o.QEEqual">
             <exclude></exclude>
         </member>
-        <member name="T:com.db4o.QEAbstract">
-            <exclude></exclude>
-        </member>
-        <member name="T:com.db4o.QE">
-            <summary>Query Evaluator - Represents such things as &gt;, &gt;=, &lt;, &lt;=, EQUAL, LIKE, etc.
-            	</summary>
-            <remarks>Query Evaluator - Represents such things as &gt;, &gt;=, &lt;, &lt;=, EQUAL, LIKE, etc.
-            	</remarks>
-            <exclude></exclude>
-        </member>
-        <member name="M:com.db4o.QE.IndexBitMap(System.Boolean[])">
-            <summary>Specifies which part of the index to take.</summary>
-            <remarks>
-            Specifies which part of the index to take.
-            Array elements:
-            [0] - smaller
-            [1] - equal
-            [2] - greater
-            [3] - nulls
-            </remarks>
-            <param name="bits"></param>
-        </member>
         <member name="T:com.db4o.inside.freespace.FreeSlotNode">
             <exclude></exclude>
         </member>
@@ -3468,6 +3608,9 @@
         <member name="T:com.db4o.YapClassAny">
             <summary>Undefined YapClass used for members of type Object.</summary>
             <remarks>Undefined YapClass used for members of type Object.</remarks>
+        </member>
+        <member name="T:com.db4o.QEStartsWith">
+            <exclude></exclude>
         </member>
         <member name="T:com.db4o.types.Blob">
             <summary>
@@ -3574,75 +3717,6 @@
             </exception>
             <param name="file">the file the blob is to be written to.</param>
         </member>
-        <member name="T:com.db4o.io.SafeSyncIoAdapter">
-            <summary>Debug IoAdapter syncing to drive after every write call.</summary>
-            <remarks>Debug IoAdapter syncing to drive after every write call.</remarks>
-        </member>
-        <member name="T:com.db4o.io.VanillaIoAdapter">
-            <summary>base class for IoAdapters that delegate to other IoAdapters (decorator pattern)
-            	</summary>
-        </member>
-        <member name="T:com.db4o.io.IoAdapter">
-            <summary>
-            Base class for database file adapters, both for file and memory
-            databases.
-            </summary>
-            <remarks>
-            Base class for database file adapters, both for file and memory
-            databases.
-            </remarks>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.RegularAddress(System.Int32,System.Int32)">
-            <summary>converts address and address offset to an absolute address</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.BlockCopy(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary>copies a block within a file in block mode</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.BlockSeek(System.Int32)">
-            <summary>sets the read/write pointer in the file using block mode</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.BlockSeek(System.Int32,System.Int32)">
-            <summary>sets the read/write pointer in the file using block mode</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.BlockSize(System.Int32)">
-            <summary>outside call to set the block size of this adapter</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Close">
-            <summary>implement to close the adapter</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Copy(System.Int64,System.Int64,System.Int32)">
-            <summary>copies a block within a file in absolute mode</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Exists(System.String)">
-            <summary>checks whether a file exists</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.GetLength">
-            <summary>implement to return the absolute length of the file</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Open(System.String,System.Boolean,System.Int64)">
-            <summary>implement to open the file</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Read(System.Byte[])">
-            <summary>reads a buffer at the seeked address</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Read(System.Byte[],System.Int32)">
-            <summary>implement to read a buffer at the seeked address</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Seek(System.Int64)">
-            <summary>implement to set the read/write pointer in the file, absolute mode</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Sync">
-            <summary>implement to flush the file contents to storage</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Write(System.Byte[])">
-            <summary>writes a buffer to the seeked address</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.Write(System.Byte[],System.Int32)">
-            <summary>implement to write a buffer at the seeked address</summary>
-        </member>
-        <member name="M:com.db4o.io.IoAdapter.BlockSize">
-            <summary>returns the block size currently used</summary>
-        </member>
         <member name="T:com.db4o.reflect.net.NetArray">
             <remarks>Reflection implementation for Array to map to .NET reflection.</remarks>
         </member>
@@ -3653,9 +3727,6 @@
             <br/><br/>See the respective documentation in the JDK API.
             </remarks>
             <seealso cref="T:com.db4o.reflect.Reflector">com.db4o.reflect.Reflector</seealso>
-        </member>
-        <member name="T:com.db4o.QELike">
-            <exclude></exclude>
         </member>
         <member name="T:com.db4o.Db4o">
             <summary>factory class to start db4o database engines.</summary>
@@ -3938,6 +4009,67 @@
         <member name="T:com.db4o.YInt">
             <exclude></exclude>
         </member>
+        <member name="T:com.db4o.io.IoAdapter">
+            <summary>
+            Base class for database file adapters, both for file and memory
+            databases.
+            </summary>
+            <remarks>
+            Base class for database file adapters, both for file and memory
+            databases.
+            </remarks>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.RegularAddress(System.Int32,System.Int32)">
+            <summary>converts address and address offset to an absolute address</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.BlockCopy(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>copies a block within a file in block mode</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.BlockSeek(System.Int32)">
+            <summary>sets the read/write pointer in the file using block mode</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.BlockSeek(System.Int32,System.Int32)">
+            <summary>sets the read/write pointer in the file using block mode</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.BlockSize(System.Int32)">
+            <summary>outside call to set the block size of this adapter</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Close">
+            <summary>implement to close the adapter</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Copy(System.Int64,System.Int64,System.Int32)">
+            <summary>copies a block within a file in absolute mode</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Exists(System.String)">
+            <summary>checks whether a file exists</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.GetLength">
+            <summary>implement to return the absolute length of the file</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Open(System.String,System.Boolean,System.Int64)">
+            <summary>implement to open the file</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Read(System.Byte[])">
+            <summary>reads a buffer at the seeked address</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Read(System.Byte[],System.Int32)">
+            <summary>implement to read a buffer at the seeked address</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Seek(System.Int64)">
+            <summary>implement to set the read/write pointer in the file, absolute mode</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Sync">
+            <summary>implement to flush the file contents to storage</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Write(System.Byte[])">
+            <summary>writes a buffer to the seeked address</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.Write(System.Byte[],System.Int32)">
+            <summary>implement to write a buffer at the seeked address</summary>
+        </member>
+        <member name="M:com.db4o.io.IoAdapter.BlockSize">
+            <summary>returns the block size currently used</summary>
+        </member>
         <member name="T:com.db4o.reflect.generic.GenericArrayReflector">
             <exclude></exclude>
         </member>
@@ -3963,18 +4095,6 @@
             used by IxTraverser
             </summary>
         </member>
-        <member name="T:com.db4o.reflect.self.SelfReflectionRegistry">
-            <summary>
-            Contains the application-specific reflection information (that would
-            be generated by a bytecode enhancer), as opposed to the 'generic'
-            functionality contained in SelfReflector.
-            </summary>
-            <remarks>
-            Contains the application-specific reflection information (that would
-            be generated by a bytecode enhancer), as opposed to the 'generic'
-            functionality contained in SelfReflector.
-            </remarks>
-        </member>
         <member name="T:com.db4o.reflect.ReflectClass">
             <summary>representation for java.lang.Class.</summary>
             <remarks>
@@ -3995,6 +4115,9 @@
             </param>
             <returns>true if the special constructor is in place after the call</returns>
         </member>
+        <member name="T:com.db4o.inside.slots.ReferencedSlot">
+            <exclude></exclude>
+        </member>
         <member name="T:com.db4o.YapRandomAccessFile">
             <exclude></exclude>
         </member>
@@ -4012,6 +4135,14 @@
             so we have to do this all sequentially in the right way, working
             with with both indexes at the same time.
             </remarks>
+        </member>
+        <member name="T:com.db4o.reflect.ReflectMethod">
+            <summary>representation for java.lang.reflect.Method.</summary>
+            <remarks>
+            representation for java.lang.reflect.Method.
+            <br/><br/>See the respective documentation in the JDK API.
+            </remarks>
+            <seealso cref="T:com.db4o.reflect.Reflector">com.db4o.reflect.Reflector</seealso>
         </member>
         <member name="T:com.db4o.foundation.Hashtable4">
             <exclude></exclude>
@@ -4135,7 +4266,7 @@
         </member>
         <member name="T:com.db4o.Transient">
             <summary>
-            Marks a field as transient.
+            Marks a field or event as transient.
             </summary>
             <remarks>
             Transient fields are not stored by db4o.
@@ -4144,6 +4275,10 @@
             simply mark it with this attribute.
             </remarks>
             <exclude />
+        </member>
+        <member name="T:com.db4o.io.VanillaIoAdapter">
+            <summary>base class for IoAdapters that delegate to other IoAdapters (decorator pattern)
+            	</summary>
         </member>
         <member name="T:com.db4o.foundation.network.ByteBuffer4">
             <summary>
@@ -4370,7 +4505,29 @@
             translators built into the architecture.
             </remarks>
         </member>
+        <member name="T:com.db4o.io.SymbianIoAdapter">
+            <summary>
+            Workaround for two I/O bugs in Symbian JDK versions:<br />
+            - seek() cannot move beyond the current file length.<br />
+            Fix: Write padding bytes up to the seek target if necessary<br />
+            - Under certain (rare) conditions, calls to RAF.length() seems
+            to garble up following reads.<br />
+            Fix: Use a second RAF handle to the file for length() calls
+            only.<br /><br />
+            <b>Usage:</b><br />
+            Db4o.configure().io(new com.db4o.io.SymbianIoAdapter())<br /><br />
+            TODO:<br />
+            - BasicClusterTest C/S fails (in AllTests context only)
+            </summary>
+        </member>
+        <member name="T:com.db4o.io.RandomAccessFileAdapter">
+            <summary>IO adapter for random access files.</summary>
+            <remarks>IO adapter for random access files.</remarks>
+        </member>
         <member name="T:com.db4o.reflect.generic.GenericObject">
+            <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.inside.replication.Db4oReplicationReference">
             <exclude></exclude>
         </member>
         <member name="T:com.db4o.YapObject">
@@ -4435,8 +4592,14 @@
             objects.
             </returns>
         </member>
+        <member name="T:com.db4o.inside.slots.SlotChange">
+            <exclude></exclude>
+        </member>
         <member name="T:com.db4o.config.TClass">
             <exclude />
+        </member>
+        <member name="T:com.db4o.inside.replication.Db4oReplicationReferenceProvider">
+            <exclude></exclude>
         </member>
         <member name="T:com.db4o.inside.query.ObjectSetFacade">
             <summary>
@@ -4600,6 +4763,13 @@
             a predicate method definition.
             </summary>
         </member>
+        <member name="M:com.db4o.inside.query.QueryExpressionBuilder.Visitor.RegisterAssembly(Mono.Cecil.IAssemblyDefinition)">
+            <summary>
+            Registers an assembly so it can be looked up by its assembly name
+            string later.
+            </summary>
+            <param name="assembly"></param>
+        </member>
         <member name="T:com.db4o.inside.query.PredicateEvaluation">
             <exclude></exclude>
         </member>
@@ -4621,9 +4791,6 @@
         <member name="T:com.db4o.StaticField">
             <exclude></exclude>
             <persistent></persistent>
-        </member>
-        <member name="T:com.db4o.MigrationConnection">
-            <exclude></exclude>
         </member>
         <member name="T:com.db4o.YapClassCollection">
             <exclude></exclude>
@@ -4748,6 +4915,9 @@
             integer values.<br />
             (An Integer is represented in memory as four bytes.)
             </summary>
+            <param name="bytes">Incoming byte array of length eight to be converted<br /></param>
+            <param name="offset">Offset from which to start converting bytes<br /></param>
+            <param name="res">Int array of length two which contains converted array bytes.</param>
         </member>
         <member name="M:com.db4o.io.crypt.XTEA.Int2byte(System.Int32[],System.Int32,System.Byte[])">
             <summary>
@@ -4755,22 +4925,35 @@
             bytes.<br />
             (An Integer is represented in memory as four bytes.)
             </summary>
+            <param name="i">Incoming integer array of two to be converted<br /></param>
+            <param name="offset">Offset from which to start converting integer values<br /></param>
+            <param name="res">
+            byte array of length eight which contains converted integer
+            array i.
+            </param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:com.db4o.io.crypt.XTEA.Encipher(System.Int32[])" -->
-        <!-- Badly formed XML comment ignored for member "M:com.db4o.io.crypt.XTEA.Decipher(System.Int32[])" -->
+        <member name="M:com.db4o.io.crypt.XTEA.Encipher(System.Int32[])">
+            <summary>enciphers two int values</summary>
+            <param name="block">
+            
+            int array to be encipher according to the XTEA encryption
+            algorithm<br />
+            </param>
+        </member>
+        <member name="M:com.db4o.io.crypt.XTEA.Decipher(System.Int32[])">
+            <summary>deciphers two int values</summary>
+            <param name="e_block">
+            int array to be decipher according to the XTEA encryption
+            algorithm<br />
+            </param>
+        </member>
         <member name="M:com.db4o.io.crypt.XTEA.Encrypt(System.Byte[])">
             <summary>encrypts incoming byte array according XTEA</summary>
-            <param name="buffer">
-            -
-            incoming byte array to be encrypted
-            </param>
+            <param name="buffer">incoming byte array to be encrypted</param>
         </member>
         <member name="M:com.db4o.io.crypt.XTEA.Decrypt(System.Byte[])">
             <summary>decrypts incoming byte array according XTEA</summary>
-            <param name="buffer">
-            -
-            incoming byte array to be decrypted
-            </param>
+            <param name="buffer">incoming byte array to be decrypted</param>
         </member>
         <member name="T:com.db4o.io.crypt.XTEA.IterationSpec">
             <exclude></exclude>
@@ -4820,41 +5003,33 @@
         <member name="T:com.db4o.ext.Db4oUUID">
             <summary>a unique universal identify for an object.</summary>
             <remarks>
-            a unique universal identify for an object.
-            <br/><br/>The db4o UUID consists of two parts:<br/>
-            - an indexed long for fast access,<br/>
-            - the signature of the
+            a unique universal identify for an object. <br/><br/>The db4o UUID consists of
+            two parts:<br/> - an indexed long for fast access,<br/> - the signature of the
             <see cref="T:com.db4o.ObjectContainer">ObjectContainer</see>
-            the object
-            was created with.
-            <br/><br/>Db4oUUIDs are valid representations of objects
-            over multiple ObjectContainers
+            the object was created with.
+            <br/><br/>Db4oUUIDs are valid representations of objects over multiple
+            ObjectContainers
             </remarks>
         </member>
         <member name="M:com.db4o.ext.Db4oUUID.GetLongPart">
             <summary>returns the long part of this UUID.</summary>
             <remarks>
-            returns the long part of this UUID.
-            <br/><br/>To uniquely identify an object universally, db4o
-            uses an indexed long and a reference to the
-            <see cref="T:com.db4o.ext.Db4oDatabase">com.db4o.ext.Db4oDatabase</see>
-            object it was created on.
+            returns the long part of this UUID. <br /><br />To uniquely identify an object
+            universally, db4o uses an indexed long and a reference to the
+            Db4oDatabase object it was created on.
             </remarks>
             <returns>the long part of this UUID.</returns>
         </member>
         <member name="M:com.db4o.ext.Db4oUUID.GetSignaturePart">
             <summary>returns the signature part of this UUID.</summary>
             <remarks>
-            returns the signature part of this UUID.
-            <br/><br/>
-            <br/><br/>To uniquely identify an object universally, db4o
-            uses an indexed long and a reference to the
-            <see cref="T:com.db4o.ext.Db4oDatabase">com.db4o.ext.Db4oDatabase</see>
-            singleton object of the
+            returns the signature part of this UUID. <br/><br/> <br/><br/>To uniquely
+            identify an object universally, db4o uses an indexed long and a reference to
+            the Db4oDatabase singleton object of the
             <see cref="T:com.db4o.ObjectContainer">ObjectContainer</see>
-            it was created on.
-            This method returns the signature of the Db4oDatabase object of
-            the ObjectContainer: the signature of the origin ObjectContainer.
+            it was created on. This method
+            returns the signature of the Db4oDatabase object of the ObjectContainer: the
+            signature of the origin ObjectContainer.
             </remarks>
             <returns>the signature of the Db4oDatabase for this UUID.</returns>
         </member>
@@ -4961,6 +5136,9 @@
         <member name="T:com.db4o.YapStringIO">
             <exclude></exclude>
         </member>
+        <member name="T:com.db4o.config.TTransient">
+            <exclude />
+        </member>
         <member name="T:com.db4o.config.TQueue">
             <exclude />
         </member>
@@ -4984,6 +5162,9 @@
             </summary>
         </member>
         <member name="T:com.db4o.QEGreater">
+            <exclude></exclude>
+        </member>
+        <member name="T:com.db4o.ReplicationImpl">
             <exclude></exclude>
         </member>
         <member name="T:com.db4o.replication.ReplicationProcess">
@@ -5138,6 +5319,9 @@
         <member name="T:com.db4o.reflect.net.NetClass">
             <summary>Reflection implementation for Class to map to .NET reflection.</summary>
             <remarks>Reflection implementation for Class to map to .NET reflection.</remarks>
+        </member>
+        <member name="T:com.db4o.inside.replication.MigrationConnection">
+            <exclude></exclude>
         </member>
         <member name="T:com.db4o.ext.ExtDb4o">
             <summary>extended factory class with static methods to open special db4o sessions.
@@ -5320,10 +5504,6 @@
             during a license check to bypass hacks.
             </remarks>
         </member>
-        <member name="T:com.db4o.io.RandomAccessFileAdapter">
-            <summary>IO adapter for random access files.</summary>
-            <remarks>IO adapter for random access files.</remarks>
-        </member>
         <member name="T:com.db4o.ext.VirtualField">
             <summary>intended for future virtual fields on classes.</summary>
             <remarks>
@@ -5341,6 +5521,9 @@
             the field name of the virtual version field, to be used
             for querying.
             </remarks>
+        </member>
+        <member name="T:com.db4o.inside.slots.Slot">
+            <exclude></exclude>
         </member>
         <member name="T:com.db4o.foundation.Collection4">
             <summary>Fast linked list for all usecases.</summary>
@@ -5448,7 +5631,14 @@
             <summary>Field is public for implementation reasons, DO NOT TOUCH!</summary>
         </member>
         <member name="F:com.db4o.ext.Db4oDatabase.i_uuid">
-            <summary>Field is public for implementation reasons, DO NOT TOUCH!</summary>
+            <summary>
+            Field is public for implementation reasons, DO NOT TOUCH!
+            This field is badly named, it really is the creation time.
+            </summary>
+            <remarks>
+            Field is public for implementation reasons, DO NOT TOUCH!
+            This field is badly named, it really is the creation time.
+            </remarks>
         </member>
         <member name="F:com.db4o.ext.Db4oDatabase.i_stream">
             <summary>cached ObjectContainer for getting the own ID.</summary>
@@ -5468,8 +5658,26 @@
         <member name="M:com.db4o.ext.Db4oDatabase.GetID(com.db4o.Transaction)">
             <summary>gets the db4o ID, and may cache it for performance reasons.</summary>
             <remarks>gets the db4o ID, and may cache it for performance reasons.</remarks>
-            <param name="a_oc">the ObjectContainer</param>
             <returns>the db4o ID for the ObjectContainer</returns>
+        </member>
+        <member name="M:com.db4o.ext.Db4oDatabase.GetSignature">
+            <summary>returns the unique signature</summary>
+        </member>
+        <member name="M:com.db4o.ext.Db4oDatabase.Bind(com.db4o.Transaction)">
+            <summary>make sure this Db4oDatabase is stored.</summary>
+            <remarks>make sure this Db4oDatabase is stored. Return the ID.</remarks>
+        </member>
+        <member name="M:com.db4o.ext.Db4oDatabase.Query(com.db4o.Transaction)">
+            <summary>find a Db4oDatabase with the same signature as this one</summary>
+        </member>
+        <member name="T:com.db4o.Db4oFactory">
+            <summary>Same as <see cref="T:com.db4o.Db4o">com.db4o.Db4o</see> but
+            with a better name.</summary>
+            <remarks>
+            Db4oFactory is a better name than Db4o. It does not clash with the namespace name
+            for case insensitive languages such as VB.NET.
+            </remarks>
+            <seealso cref="T:com.db4o.Db4o">com.db4o.Db4o class</seealso>
         </member>
         <member name="T:com.db4o.inside.ix.IxTraverser">
             <exclude></exclude>
@@ -5545,10 +5753,16 @@
             (connection dead) on the client.
             </remarks>
         </member>
+        <member name="T:com.db4o.QEEndsWith">
+            <exclude></exclude>
+        </member>
         <member name="T:com.db4o.Tuning">
             <summary>Tuning switches for customized versions.</summary>
             <remarks>Tuning switches for customized versions.</remarks>
             <exclude></exclude>
+        </member>
+        <member name="F:com.db4o.Tuning.symbianSeek">
+            <deprecated>Use Db4o.configure().io(new com.db4o.io.SymbianIoAdapter()) instead</deprecated>
         </member>
         <member name="T:Cecil.FlowAnalysis.Impl.ControlFlow.FlowGraphBuilder">
             <summary>
@@ -5590,8 +5804,6 @@
             file names that will no longer be used call
             <see cref="M:com.db4o.io.MemoryIoAdapter.Put(System.String,System.Byte[])">com.db4o.io.MemoryIoAdapter.Put</see>
             and pass an empty byte array.
-            <seealso>com.db4o.io.IoAdapter</seealso>
-            for a documentation of the methods
             </remarks>
         </member>
         <member name="M:com.db4o.io.MemoryIoAdapter.Put(System.String,System.Byte[])">

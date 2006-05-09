@@ -1,3 +1,6 @@
+05.08.2006
+- update db4o to 5.2.2
+
 12.22.2005
 - change build script to properly build for 1.1 and 2.0
 - update db4o to 5.0.18
