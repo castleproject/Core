@@ -19,13 +19,15 @@ namespace Castle.MicroKernel.SubSystems.Resource
 	using Castle.Model.Resource;
 
 	/// <summary>
-	/// 
+	/// An implementation of <c>a</c> should 
+	/// be able to return instances of <see cref="IResource"/>
+	/// for a given resource identifier.
 	/// </summary>
 	public interface IResourceSubSystem : ISubSystem
 	{
-		IResource CreateResource(Uri uri);
+		IResource CreateResource(CustomUri uri);
 
-		IResource CreateResource(Uri uri, String basePath);
+		IResource CreateResource(CustomUri uri, String basePath);
 
 		IResource CreateResource(String resource);
 

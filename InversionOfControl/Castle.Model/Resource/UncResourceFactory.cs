@@ -23,17 +23,17 @@ namespace Castle.Model.Resource
 		{
 		}
 
-		public bool Accept(Uri uri)
+		public bool Accept(CustomUri uri)
 		{
 			return uri.IsUnc;
 		}
 
-		public IResource Create(Uri uri)
+		public IResource Create(CustomUri uri)
 		{
 			return new UncResource(uri);
 		}
 
-		public IResource Create(Uri uri, String basePath)
+		public IResource Create(CustomUri uri, String basePath)
 		{
 			return new UncResource(uri, basePath);
 		}

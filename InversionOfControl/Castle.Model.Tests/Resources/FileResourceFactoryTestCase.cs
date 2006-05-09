@@ -37,8 +37,8 @@ namespace Castle.Model.Tests.Resources
 		[Test]
 		public void Accept()
 		{
-			Assert.IsTrue( resFactory.Accept( new Uri("file://something") ) );
-			Assert.IsFalse( resFactory.Accept( new Uri("http://www.castleproject.org") ) );
+			Assert.IsTrue( resFactory.Accept( new CustomUri("file://something") ) );
+			Assert.IsFalse( resFactory.Accept( new CustomUri("http://www.castleproject.org") ) );
 		}
 
 		[Test]
@@ -48,9 +48,9 @@ namespace Castle.Model.Tests.Resources
 
 			FileInfo fileInfo = new FileInfo(file);
 
-			Uri uri = new Uri(fileInfo.FullName);
+			CustomUri uri = new CustomUri(fileInfo.FullName);
 
-			IResource resource = resFactory.Create( uri, null );
+			IResource resource = resFactory.Create(uri, null);
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
@@ -60,7 +60,7 @@ namespace Castle.Model.Tests.Resources
 		[Test]
 		public void CreateWithRelativePath()
 		{
-			IResource resource = resFactory.Create( new Uri(basePath + "/file1.txt") );
+			IResource resource = resFactory.Create( new CustomUri(basePath + "/file1.txt") );
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
@@ -70,7 +70,7 @@ namespace Castle.Model.Tests.Resources
 		[Test]
 		public void CreateWithRelativePathAndContext()
 		{
-			Uri uri = new Uri("file://file1.txt");
+			CustomUri uri = new CustomUri("file://file1.txt");
 
 			IResource resource = resFactory.Create( uri, basePath );
 
@@ -83,7 +83,7 @@ namespace Castle.Model.Tests.Resources
 		[ExpectedException(typeof(ResourceException))]
 		public void NonExistingResource()
 		{
-			resFactory.Create( new Uri(basePath + "/Something/file1.txt") );
+			resFactory.Create( new CustomUri(basePath + "/Something/file1.txt") );
 		}
 	}
 }

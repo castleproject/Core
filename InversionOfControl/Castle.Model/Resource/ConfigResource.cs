@@ -29,7 +29,7 @@ namespace Castle.Model.Resource
 		{
 		}
 
-		public ConfigResource(Uri uri) : this(uri.Host)
+		public ConfigResource(CustomUri uri) : this(uri.Host)
 		{
 		}
 
@@ -44,7 +44,7 @@ namespace Castle.Model.Resource
 				throw new ConfigurationException(message);
 			}
 
-			// TODO: Check whether its CData section
+			// TODO: Check whether it's CData section
 			configSectionNode = node;
 		}
 

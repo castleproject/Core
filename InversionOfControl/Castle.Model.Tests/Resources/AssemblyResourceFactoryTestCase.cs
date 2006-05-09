@@ -32,15 +32,15 @@ namespace Castle.Model.Tests.Resources
 		[Test]
 		public void Accept()
 		{
-			Assert.IsTrue(  resFactory.Accept( new Uri("assembly://something/") ) );
-			Assert.IsFalse( resFactory.Accept( new Uri("file://something") ) );
-			Assert.IsFalse( resFactory.Accept( new Uri("http://www.castleproject.org") ) );
+			Assert.IsTrue(  resFactory.Accept( new CustomUri("assembly://something/") ) );
+			Assert.IsFalse( resFactory.Accept( new CustomUri("file://something") ) );
+			Assert.IsFalse( resFactory.Accept( new CustomUri("http://www.castleproject.org") ) );
 		}
 
 		[Test]
 		public void CreateWithAbsolutePath()
 		{
-			IResource resource = resFactory.Create( new Uri("assembly://" + AssemblyName + "/" + ResPath + "/file1.txt") );
+			IResource resource = resFactory.Create( new CustomUri("assembly://" + AssemblyName + "/" + ResPath + "/file1.txt") );
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();

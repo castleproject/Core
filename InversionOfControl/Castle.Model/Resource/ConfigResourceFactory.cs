@@ -22,17 +22,17 @@ namespace Castle.Model.Resource
 		{
 		}
 
-		public bool Accept(Uri uri)
+		public bool Accept(CustomUri uri)
 		{
 			return "config".Equals(uri.Scheme);
 		}
 
-		public IResource Create(Uri uri)
+		public IResource Create(CustomUri uri)
 		{
 			return new ConfigResource(uri);
 		}
 
-		public IResource Create(Uri uri, String basePath)
+		public IResource Create(CustomUri uri, String basePath)
 		{
 			return Create(uri);
 		}

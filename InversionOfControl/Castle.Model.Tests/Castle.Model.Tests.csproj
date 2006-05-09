@@ -115,6 +115,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Resources\CustomUriTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Resources\file1.txt"
                     BuildAction = "EmbeddedResource"
                 />

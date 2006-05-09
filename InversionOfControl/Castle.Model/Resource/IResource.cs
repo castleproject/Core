@@ -19,16 +19,46 @@ namespace Castle.Model.Resource
 	using System.Text;
 
 	/// <summary>
-	/// 
+	/// Represents a 'streamable' resource. Can
+	/// be a file, a resource in an assembly.
 	/// </summary>
 	public interface IResource : IDisposable
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <remarks>
+		/// Only valid for resources that
+		/// can be obtained through relative paths
+		/// </remarks>
 		String FileBasePath { get; }
 
+		/// <summary>
+		/// Returns a reader for the stream
+		/// </summary>
+		/// <remarks>
+		/// It's up to the caller to dispose the reader.
+		/// </remarks>
+		/// <returns></returns>
 		TextReader GetStreamReader();
 
+		/// <summary>
+		/// Returns a reader for the stream
+		/// </summary>
+		/// <remarks>
+		/// It's up to the caller to dispose the reader.
+		/// </remarks>
+		/// <param name="encoding"></param>
+		/// <returns></returns>
 		TextReader GetStreamReader(Encoding encoding);
 
+		/// <summary>
+		/// Returns an instance of <see cref="IResource"/>
+		/// created according to the <c>relativePath</c>
+		/// using itself as the root.
+		/// </summary>
+		/// <param name="relativePath"></param>
+		/// <returns></returns>
 		IResource CreateRelative(String relativePath);
 	}
 }

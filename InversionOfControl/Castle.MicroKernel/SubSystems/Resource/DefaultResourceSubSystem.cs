@@ -50,17 +50,17 @@ namespace Castle.MicroKernel.SubSystems.Resource
 		{
 			if (resource == null) throw new ArgumentNullException("resource");
 
-			return CreateResource(new Uri(resource));
+			return CreateResource(new CustomUri(resource));
 		}
 
 		public IResource CreateResource(String resource, String basePath)
 		{
 			if (resource == null) throw new ArgumentNullException("resource");
 
-			return CreateResource(new Uri(resource), basePath);
+			return CreateResource(new CustomUri(resource), basePath);
 		}
 
-		public IResource CreateResource(Uri uri)
+		public IResource CreateResource(CustomUri uri)
 		{
 			if (uri == null) throw new ArgumentNullException("uri");
 
@@ -76,7 +76,7 @@ namespace Castle.MicroKernel.SubSystems.Resource
 				"deal with Uri " + uri.ToString());
 		}
 
-		public IResource CreateResource(Uri uri, String basePath)
+		public IResource CreateResource(CustomUri uri, String basePath)
 		{
 			if (uri == null) throw new ArgumentNullException("uri");
 			if (basePath == null) throw new ArgumentNullException("basePath");

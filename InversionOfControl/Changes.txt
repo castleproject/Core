@@ -1,6 +1,9 @@
 RC 3
 ====
 
+- Uri usage replaced by CustomUri which, differently than MS' Uri class, has the same
+  behavior on net-1.1, net-2.0 and mono
+
 - EventWiring Facility: now when a publisher is requested, the subscribers
   are automatically started. 
   

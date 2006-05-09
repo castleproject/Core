@@ -26,17 +26,17 @@ namespace Castle.Model.Resource
 		{
 		}
 
-		public bool Accept(Uri uri)
+		public bool Accept(CustomUri uri)
 		{
 			return "file".Equals(uri.Scheme);
 		}
 
-		public IResource Create(Uri uri)
+		public IResource Create(CustomUri uri)
 		{
 			return Create(uri, null);
 		}
 
-		public IResource Create(Uri uri, String basePath)
+		public IResource Create(CustomUri uri, String basePath)
 		{
 			if (basePath != null)
 				return new FileResource(uri, basePath);

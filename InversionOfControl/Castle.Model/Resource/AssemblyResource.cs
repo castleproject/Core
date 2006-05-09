@@ -23,12 +23,12 @@ namespace Castle.Model.Resource
 		private readonly Stream stream;
 		private String basePath;
 
-		public AssemblyResource(Uri resource)
+		public AssemblyResource(CustomUri resource)
 		{
 			stream = CreateResourceFromUri(resource, null);
 		}
 
-		public AssemblyResource(Uri resource, String basePath)
+		public AssemblyResource(CustomUri resource, String basePath)
 		{
 			stream = CreateResourceFromUri(resource, basePath);
 		}
@@ -50,20 +50,20 @@ namespace Castle.Model.Resource
 
 		private Stream CreateResourceFromPath(String resource, String path)
 		{
-			if (!resource.StartsWith("assembly" + Uri.SchemeDelimiter))
+			if (!resource.StartsWith("assembly" + CustomUri.SchemeDelimiter))
 			{
-				resource = "assembly" + Uri.SchemeDelimiter + resource;
+				resource = "assembly" + CustomUri.SchemeDelimiter + resource;
 			}
 
-			return CreateResourceFromUri(new Uri(resource), path);
+			return CreateResourceFromUri(new CustomUri(resource), path);
 		}
 
-		private Stream CreateResourceFromUri(Uri resourcex, String basePath)
+		private Stream CreateResourceFromUri(CustomUri resourcex, String basePath)
 		{
 			if (resourcex == null) throw new ArgumentNullException("resourcex");
 
 			String assemblyName = resourcex.Host;
-			String resourcePath = ConvertToResourceName(assemblyName, resourcex.LocalPath, basePath);
+			String resourcePath = ConvertToResourceName(assemblyName, resourcex.Path, basePath);
 
 			Assembly assembly = ObtainAssembly(assemblyName);
 

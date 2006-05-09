@@ -283,6 +283,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Resource\CustomUri.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Resource\FileResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

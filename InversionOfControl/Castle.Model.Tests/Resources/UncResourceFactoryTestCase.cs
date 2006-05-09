@@ -29,16 +29,16 @@ namespace Castle.Model.Tests.Resources
 		[Test]
 		public void Accept()
 		{
-			Assert.IsTrue( resFactory.Accept( new Uri(@"\\server\something") ) );
-			Assert.IsFalse( resFactory.Accept( new Uri("http://www.castleproject.org") ) );
+			Assert.IsTrue( resFactory.Accept( new CustomUri(@"\\server\something") ) );
+			Assert.IsFalse( resFactory.Accept( new CustomUri("http://www.castleproject.org") ) );
 		}
 
 		[Test, Ignore("Requires network share")]
 		public void CreateWithAbsolutePath()
 		{
-			Uri uri = new Uri(@"\\hammet\C$\file1.txt");
+			CustomUri uri = new CustomUri(@"\\hammet\C$\file.txt");
 
-			IResource resource = resFactory.Create( uri, null );
+			IResource resource = resFactory.Create(uri, null);
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
@@ -48,7 +48,7 @@ namespace Castle.Model.Tests.Resources
 		[Test, Ignore("Requires network share")]
 		public void CreateRelative()
 		{
-			Uri uri = new Uri(@"\\hammet\C$\file1.txt");
+			CustomUri uri = new CustomUri(@"\\hammet\C$\file.txt");
 
 			IResource resource = resFactory.Create( uri, null );
 
@@ -59,11 +59,11 @@ namespace Castle.Model.Tests.Resources
 			Assert.AreEqual("Something", line);
 		}
 
-		[Test]
+		[Test, Ignore("Takes too long")]
 		[ExpectedException(typeof(ResourceException))]
 		public void NonExistingResource()
 		{
-			resFactory.Create( new Uri(@"\\hammettz\C$\file1.txt") );
+			resFactory.Create( new CustomUri(@"\\hammettz\C$\file1.txt") );
 		}
 	}
 }

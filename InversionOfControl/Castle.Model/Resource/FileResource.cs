@@ -25,12 +25,12 @@ namespace Castle.Model.Resource
 		private readonly Stream stream;
 		private String basePath;
 
-		public FileResource(Uri resource)
+		public FileResource(CustomUri resource)
 		{
 			stream = CreateStreamFromUri(resource, DefaultBasePath);
 		}
 
-		public FileResource(Uri resource, String basePath)
+		public FileResource(CustomUri resource, String basePath)
 		{
 			stream = CreateStreamFromUri(resource, basePath);
 		}
@@ -60,7 +60,7 @@ namespace Castle.Model.Resource
 			return new FileResource(resourceName, basePath);
 		}
 
-		private Stream CreateStreamFromUri(Uri resource, String basePath)
+		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
 		{
 			if (resource == null) throw new ArgumentNullException("resource");
 			if (basePath == null) throw new ArgumentNullException("basePath");
@@ -68,20 +68,7 @@ namespace Castle.Model.Resource
 			if (!resource.IsFile) 
 				throw new ArgumentException("The specified resource is not a file", "resource");
 
-			int index = resource.Scheme.Length + Uri.SchemeDelimiter.Length;
-			
-			String filePath = resource.AbsoluteUri.Substring(index);
-
-			if (filePath[0] == '/')
-			{
-				filePath = filePath.Substring(1);
-			}
-			if (filePath[ filePath.Length - 1 ] == '/')
-			{
-				filePath = filePath.Substring(0, filePath.Length - 1);
-			}
-
-			return CreateStreamFromPath(filePath, basePath);
+			return CreateStreamFromPath(resource.Path, basePath);
 		}
 
 		private Stream CreateStreamFromPath(String filePath, String basePath)

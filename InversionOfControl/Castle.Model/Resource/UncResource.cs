@@ -18,28 +18,28 @@ namespace Castle.Model.Resource
 	using System.IO;
 
 	/// <summary>
-	/// TODO: Find out how to open a file through UNC
+	/// Enable access to files on network shares
 	/// </summary>
 	public class UncResource : AbstractStreamResource
 	{
 		private readonly Stream stream;
 		private String basePath;
 
-		public UncResource(Uri resource)
+		public UncResource(CustomUri resource)
 		{
 			stream = CreateStreamFromUri(resource, DefaultBasePath);
 		}
 
-		public UncResource(Uri resource, String basePath)
+		public UncResource(CustomUri resource, String basePath)
 		{
 			stream = CreateStreamFromUri(resource, basePath);
 		}
 
-		public UncResource(String resourceName) : this(new Uri(resourceName))
+		public UncResource(String resourceName) : this(new CustomUri(resourceName))
 		{
 		}
 
-		public UncResource(String resourceName, String basePath) : this(new Uri(resourceName), basePath)
+		public UncResource(String resourceName, String basePath) : this(new CustomUri(resourceName), basePath)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace Castle.Model.Resource
 			return new UncResource( Path.Combine(basePath, resourceName) );
 		}
 
-		private Stream CreateStreamFromUri(Uri resource, String basePath)
+		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
 		{
 			if (resource == null) 
 				throw new ArgumentNullException("resource");
@@ -67,9 +67,7 @@ namespace Castle.Model.Resource
 			if (!resource.IsFile) 
 				throw new ArgumentException("The specified resource is not a file", "resource");
 
-			int count = Uri.UriSchemeFile.Length + Uri.SchemeDelimiter.Length;
-
-			String filePath = @"\\" + resource.AbsoluteUri.Substring(count);
+			String filePath = resource.Path;
 
 			if (!File.Exists(filePath) && basePath != null)
 			{
