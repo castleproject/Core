@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <summary>
 	/// Currently being evaluated
 	/// </summary>
-	/// <remarks>Make sure it generates XHTML compliant content</remarks>
+	/// <remarks>TODO: Make sure it generates XHTML compliant content</remarks>
 	public class FormHelper : AbstractHelper
 	{
 		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
@@ -617,7 +617,27 @@ namespace Castle.MonoRail.Framework.Helpers
 				return String.Compare(left.ToString(), right.ToString()) == 0;
 			}
 
-			return right.Equals(left);
+			if (left.GetType() == right.GetType())
+			{
+				return right.Equals(left);
+			}
+
+			IConvertible convertible = left as IConvertible;
+
+			if (convertible != null)
+			{
+				try
+				{
+					object newleft = convertible.ToType(right.GetType(), null);
+					return (newleft.Equals(right));
+				}
+				catch(Exception)
+				{
+					// Do nothing
+				}
+			}
+
+			return left.ToString().Equals(right.ToString());
 		}
 
 		/// <summary>
