@@ -16,11 +16,13 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.IO;
-	
-	using Antlr.StringTemplate;
 
-	using Castle.MonoRail.Framework.Views.StringTemplateView.Configuration;
+	using IViewComponentContext		= Castle.MonoRail.Framework.IViewComponentContext;
+	using RailsException			= Castle.MonoRail.Framework.RailsException;
+	using StringTemplate			= Antlr.StringTemplate.StringTemplate;
+	using ConfigConstants			= Castle.MonoRail.Framework.Views.StringTemplateView.Configuration.ConfigConstants;
 
 	public class StringTemplateViewContextAdapter : IViewComponentContext
 	{
@@ -89,7 +91,6 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 		public void RenderBody(TextWriter writer)
 		{
 			object body = st.ArgumentContext[ConfigConstants.COMPONENT_BODY_KEY];
-			
 			if (body == null)
 			{
 				throw new RailsException("This component does not have a body content to be rendered");

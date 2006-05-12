@@ -15,9 +15,20 @@
 namespace Castle.MonoRail.Framework.Views.StringTemplateView
 {
 	using System;
-
-	using Antlr.StringTemplate;
-
+	using System.IO;
+	using System.Collections;
+	using System.Reflection;
+	using StringBuilder					= System.Text.StringBuilder;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
+	using StringTemplate				= Antlr.StringTemplate.StringTemplate;
+	using StringTemplateGroup			= Antlr.StringTemplate.StringTemplateGroup;
+	using StringTemplateGroupInterface	= Antlr.StringTemplate.StringTemplateGroupInterface;
+	using StringTemplateLoader			= Antlr.StringTemplate.StringTemplateLoader;
+	using StringTemplateException		= Antlr.StringTemplate.StringTemplateException;
+	using TemplateLoadException			= Antlr.StringTemplate.TemplateLoadException;
+	using HashList						= Antlr.StringTemplate.Collections.HashList;
+	using ConfigConstants				= Castle.MonoRail.Framework.Views.StringTemplateView.Configuration.ConfigConstants;
 
 	/// <summary>
 	/// A StringTemplateGroup that does not cache templates return by
@@ -51,11 +62,16 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 				}
 				throw new StringTemplateException(Name + " has no super group; invalid template: " + name);
 			}
-			if (templateLoader.HasChanged(name))
-			{
-				templates.Remove(name);
-			}
 			StringTemplate st = (StringTemplate) templates[name];
+			if (st != null)
+			{
+				if (st.NativeGroup.TemplateHasChanged(name))
+				{
+					templates.Remove(name);
+					st = null;
+				}
+			}
+
 			if (st == null)
 			{
 				if (!templatesDefinedInGroupFile)
@@ -81,12 +97,6 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 				if (st == null)
 				{
 					templates[name] = NOT_FOUND_ST;
-					string context = "";
-					if ( enclosingInstance != null ) 
-					{
-						context = "; context is "+ enclosingInstance.GetEnclosingInstanceStackString();
-					}
-					throw new TemplateLoadException(this, "Can't load template '"+ GetLocationFromTemplateName(name) + "'" + context);
 				}
 			}
 			else if (st == NOT_FOUND_ST)

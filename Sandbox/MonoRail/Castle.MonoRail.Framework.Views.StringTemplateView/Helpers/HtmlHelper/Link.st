@@ -1,0 +1,1 @@
+$if(attrib)$<a href="$target$" $AbstractHelper/GetAttributes(attrib=attrib)$>$linkText$</a>$else$$HtmlHelper/LinkTo(name=target, action=linkText)$$endif$

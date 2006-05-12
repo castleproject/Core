@@ -47,5 +47,6 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView.Configuration
 		public static readonly string ATTR_renderer_area			= "area";
 		public static readonly string ATTR_renderer_type			= "renderer-type";
 		public static readonly string ATTR_renderer_target_type		= "attribute-type";
+
 	}
 }

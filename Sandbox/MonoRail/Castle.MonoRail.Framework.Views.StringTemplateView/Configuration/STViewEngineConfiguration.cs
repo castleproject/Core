@@ -34,6 +34,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView.Configuration
 
 		private XmlNode _section;
 
+
 		internal class RendererInfo
 		{
 			protected string rendererTypeName;

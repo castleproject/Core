@@ -15,8 +15,12 @@
 namespace Castle.MonoRail.Framework.Views.StringTemplateView.Configuration
 {
 	using System;
+	using System.Collections;
 	using System.Configuration;
+	using System.IO;
 	using System.Xml;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Parses the Xml element that represents the STViewEngine 

@@ -1,0 +1,1 @@
+<input type="text" name="$name$" id="$if(id)$$id$$else$$name$$endif$" value="$value$" $if(size)$$if(maxlength)$size="$size$" maxlength="$maxlength$" $endif$$endif$ $if(attrib)$$AbstractHelper/GetAttributes(attrib=attrib)$$endif$ />

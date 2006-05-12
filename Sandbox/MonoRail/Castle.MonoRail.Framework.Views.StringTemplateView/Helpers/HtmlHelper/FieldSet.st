@@ -1,0 +1,2 @@
+<fieldset>
+	<legend>$legend$</legend>

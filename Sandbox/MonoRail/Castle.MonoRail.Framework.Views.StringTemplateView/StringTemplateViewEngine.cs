@@ -17,11 +17,23 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 	using System;
 	using System.IO;
 	using System.Collections;
-	using System.Text;
-
-	using Antlr.StringTemplate;
-	
-	using Castle.MonoRail.Framework.Views.StringTemplateView.Configuration;
+	using Encoding							= System.Text.Encoding;
+	using StringBuilder						= System.Text.StringBuilder;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
+	using StringTemplate					= Antlr.StringTemplate.StringTemplate;
+	using StringTemplateGroup				= Antlr.StringTemplate.StringTemplateGroup;
+	using IStringTemplateErrorListener		= Antlr.StringTemplate.IStringTemplateErrorListener;
+	using StringTemplateLoader				= Antlr.StringTemplate.StringTemplateLoader;
+	using FileSystemTemplateLoader			= Antlr.StringTemplate.FileSystemTemplateLoader;
+	using EmbeddedResourceTemplateLoader	= Antlr.StringTemplate.EmbeddedResourceTemplateLoader;
+	using IStringTemplateGroupLoader		= Antlr.StringTemplate.IStringTemplateGroupLoader;
+	using CommonGroupLoader					= Antlr.StringTemplate.CommonGroupLoader;
+	using CompositeGroupLoader				= Antlr.StringTemplate.CompositeGroupLoader;
+	using EmbeddedResourceGroupLoader		= Antlr.StringTemplate.EmbeddedResourceGroupLoader;
+	using ConfigConstants					= Castle.MonoRail.Framework.Views.StringTemplateView.Configuration.ConfigConstants;
+	using STViewEngineConfiguration			= Castle.MonoRail.Framework.Views.StringTemplateView.Configuration.STViewEngineConfiguration;
+	using RendererInfo						= Castle.MonoRail.Framework.Views.StringTemplateView.Configuration.STViewEngineConfiguration.RendererInfo;
 
 	/// <summary>
 	/// A MonoRail IViewEngine implementation that uses the StringTemplate 
@@ -30,7 +42,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 	public class StringTemplateViewEngine : ViewEngineBase
 	{
 		/// <summary>Maps controllers to [cached] ST groups for locating views templates</summary>
-		protected Hashtable area2group;
+		protected Hashtable area2templateManager;
 		protected StringTemplateGroup templateGroup;
 		protected STViewEngineConfiguration config;
 
@@ -76,7 +88,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 			IEnumerator globalRenderersEnumerator = config.GetGlobalAttributeRenderers();
 			while (globalRenderersEnumerator.MoveNext())
 			{
-				STViewEngineConfiguration.RendererInfo renderInfo = (STViewEngineConfiguration.RendererInfo)globalRenderersEnumerator.Current;
+				RendererInfo renderInfo = (RendererInfo)globalRenderersEnumerator.Current;
 				componentGroup.RegisterAttributeRenderer(renderInfo.AttributeType, renderInfo.GetRendererInstance());
 				helpersSTGroup.RegisterAttributeRenderer(renderInfo.AttributeType, renderInfo.GetRendererInstance());
 				templateGroup.RegisterAttributeRenderer(renderInfo.AttributeType, renderInfo.GetRendererInstance());
@@ -166,14 +178,22 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 			if (viewName.IndexOfAny(ConfigConstants.PATH_SEPARATOR_CHARS) == -1)
 			{
 				// try locations in order
+				bool controllerHasArea = ((controller.AreaName != null) && (controller.AreaName.Trim().Length > 0));
+				string templateName;
 				// <area>/<controller>/<view>
-				string templateName = string.Format("{0}/{1}/{2}", controller.AreaName, controller.Name, viewName);
-				st = templateManager.GetInstanceOf(templateName);
+				if (controllerHasArea)
+				{
+					templateName = string.Format("{0}/{1}/{2}", controller.AreaName, controller.Name, viewName);
+					st = templateManager.GetInstanceOf(templateName);
+				}
 				if (st == null)
 				{
 					// <area>/shared/<view>
-					templateName = string.Format("{0}/{1}/{2}", controller.AreaName, ConfigConstants.SHARED_DIR, viewName);
-					st = templateManager.GetInstanceOf(templateName);
+					if (controllerHasArea)
+					{
+						templateName = string.Format("{0}/{1}/{2}", controller.AreaName, ConfigConstants.SHARED_DIR, viewName);
+						st = templateManager.GetInstanceOf(templateName);
+					}
 					if (st == null)
 					{
 						// <controller>/<view>
@@ -213,12 +233,12 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 			if ((controller.AreaName == null) || (controller.AreaName.Trim().Length == 0))
 				return templateGroup;
 
-			StringTemplateGroup group = (StringTemplateGroup)area2group[controller.AreaName];
+			StringTemplateGroup group = (StringTemplateGroup)area2templateManager[controller.AreaName];
 			if (group == null)
 			{
 				group = new BasicStringTemplateGroup(
 					ConfigConstants.STGROUP_NAME_PREFIX + "_area_" + controller.AreaName, 
-					new FileSystemTemplateLoader(ViewSourceLoader.ViewRootDir, false),
+					(StringTemplateLoader)null,
 					config.TemplateLexerType);
 				group.SuperGroup = templateGroup;
 
@@ -230,10 +250,10 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 				IEnumerator renderersEnumerator = config.GetAttributeRenderersForArea(controller.AreaName);
 				while (renderersEnumerator.MoveNext())
 				{
-					STViewEngineConfiguration.RendererInfo renderInfo = (STViewEngineConfiguration.RendererInfo)renderersEnumerator.Current;
-					group.RegisterAttributeRenderer(renderInfo.AttributeType, renderInfo.GetRendererInstance());
+					RendererInfo rendererInfo = (RendererInfo)renderersEnumerator.Current;
+					group.RegisterAttributeRenderer(rendererInfo.AttributeType, rendererInfo.GetRendererInstance());
 				}
-				area2group[controller.AreaName] = group;
+				area2templateManager[controller.AreaName] = group;
 			}
 			return group;
 		}

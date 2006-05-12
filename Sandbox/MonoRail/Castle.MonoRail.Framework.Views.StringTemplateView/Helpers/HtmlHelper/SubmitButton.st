@@ -1,0 +1,1 @@
+<input type="submit" value="$value$" $if(attrib)$$AbstractHelper/GetAttributes(attrib=attrib)$$endif$ />

@@ -1,0 +1,1 @@
+<textarea id="$if(id)$$id$$else$$name$$endif$" name="$name$" cols="$cols$" rows="$rows$">$value$</textarea>

@@ -1,0 +1,1 @@
+<a href="$controller.Context.ApplicationPath$/$controller.Name$/$action$.$controller.Context.UrlInfo.Extension$$if(id)$?id=$id$$endif$" $if(attrib)$$AbstractHelper/GetAttributes(attrib=attrib)$$endif$>$name$</a>

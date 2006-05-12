@@ -14,9 +14,19 @@
 
 namespace Castle.MonoRail.Framework.Views.StringTemplateView
 {
+	using System;
 	using System.IO;
-
-	using Antlr.StringTemplate;
+	using System.Collections;
+	using MethodInfo			= System.Reflection.MethodInfo;
+	using ParameterInfo			= System.Reflection.ParameterInfo;
+	using StringBuilder			= System.Text.StringBuilder;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
+	using StringTemplateGroup	= Antlr.StringTemplate.StringTemplateGroup;
+	using StringTemplate		= Antlr.StringTemplate.StringTemplate;
+	using IStringTemplateWriter	= Antlr.StringTemplate.IStringTemplateWriter;
+	using FormalArgument		= Antlr.StringTemplate.Language.FormalArgument;
+	using ConfigConstants		= Castle.MonoRail.Framework.Views.StringTemplateView.Configuration.ConfigConstants;
 
 	public class ViewComponentStringTemplate : StringTemplate
 	{

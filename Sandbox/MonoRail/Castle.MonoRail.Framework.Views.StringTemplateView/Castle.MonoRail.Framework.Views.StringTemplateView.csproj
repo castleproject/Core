@@ -92,12 +92,12 @@
                 <Reference
                     Name = "StringTemplate"
                     AssemblyName = "StringTemplate"
-                    HintPath = "..\..\..\SharedLibs\stringtemplate\net-1.1\StringTemplate.dll"
+                    HintPath = "..\..\SharedLibs\stringtemplate\net-1.1\StringTemplate.dll"
                 />
                 <Reference
                     Name = "antlr.runtime"
                     AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\SharedLibs\stringtemplate\net-1.1\antlr.runtime.dll"
+                    HintPath = "..\..\SharedLibs\stringtemplate\net-1.1\antlr.runtime.dll"
                 />
             </References>
         </Build>
