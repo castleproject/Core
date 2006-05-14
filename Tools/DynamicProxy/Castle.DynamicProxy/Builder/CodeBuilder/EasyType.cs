@@ -55,20 +55,6 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				name, flags, baseType, interfaces );
 		}
 
-        private bool IsAssemblySigned(Type baseType)
-        {
-            lock(signedAssemblyCache)
-            {
-                if (signedAssemblyCache.Contains(baseType.Assembly)==false)
-                {
-					byte[] key = baseType.Assembly.GetName().GetPublicKey();
-                    bool isSigned = key !=null  && key.Length != 0;
-                    signedAssemblyCache.Add(baseType.Assembly, isSigned );
-                }
-                return (bool) signedAssemblyCache[baseType.Assembly];
-            }
-        }
-
 		public EasyType( ModuleScope modulescope, String name ) : this(modulescope, name, typeof(object), new Type[0])
 		{
 		}
@@ -88,6 +74,20 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				new ReturnReferenceExpression(returnType), ArgumentsUtil.ConvertToArgumentReference(args) );
 			_nested.Add( nested );
 			return nested;
+		}
+
+		private bool IsAssemblySigned(Type baseType)
+		{
+			lock(signedAssemblyCache)
+			{
+				if (signedAssemblyCache.Contains(baseType.Assembly)==false)
+				{
+					byte[] key = baseType.Assembly.GetName().GetPublicKey();
+					bool isSigned = key !=null  && key.Length != 0;
+					signedAssemblyCache.Add(baseType.Assembly, isSigned );
+				}
+				return (bool) signedAssemblyCache[baseType.Assembly];
+			}
 		}
 	}
 }

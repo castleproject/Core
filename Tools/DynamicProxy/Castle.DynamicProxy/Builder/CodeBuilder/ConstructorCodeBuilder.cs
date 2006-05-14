@@ -29,36 +29,36 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	{
 		private Type _baseType;
 
-		public ConstructorCodeBuilder( Type baseType, ILGenerator generator ) : base(generator)
+		public ConstructorCodeBuilder(Type baseType, ILGenerator generator) : base(generator)
 		{
 			_baseType = baseType;
 		}
 
 		public void InvokeBaseConstructor()
 		{
-			InvokeBaseConstructor( ObtainAvailableConstructor() );
+			InvokeBaseConstructor(ObtainAvailableConstructor());
 		}
 
-		internal void InvokeBaseConstructor( ConstructorInfo constructor )
+		internal void InvokeBaseConstructor(ConstructorInfo constructor)
 		{
-			AddStatement( 
-				new ExpressionStatement( 
-					new ConstructorInvocationExpression(constructor) ) );
+			AddStatement(
+				new ExpressionStatement(
+					new ConstructorInvocationExpression(constructor)));
 		}
 
-		internal void InvokeBaseConstructor( ConstructorInfo constructor, params ArgumentReference[] arguments )
+		internal void InvokeBaseConstructor(ConstructorInfo constructor, params ArgumentReference[] arguments)
 		{
-			AddStatement( 
-				new ExpressionStatement( 
-				new ConstructorInvocationExpression(constructor, 
-				ArgumentsUtil.ConvertArgumentReferenceToExpression(arguments) ) ) );
+			AddStatement(
+				new ExpressionStatement(
+					new ConstructorInvocationExpression(constructor,
+					                                    ArgumentsUtil.ConvertArgumentReferenceToExpression(arguments))));
 		}
 
 		internal ConstructorInfo ObtainAvailableConstructor()
 		{
 			return _baseType.GetConstructor(
-				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, 
-				null, new Type[0], null);
+				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+					null, new Type[0], null);
 		}
 	}
 }

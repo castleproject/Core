@@ -65,7 +65,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	}
 
 	/// <summary>
-	/// Provides appropriate Ldind.X opcode for the type of primitive value to be loaded indirectly.
+	/// Provides appropriate Ldind.X opcode for 
+	/// the type of primitive value to be loaded indirectly.
 	/// </summary>
 	public sealed class LdindOpCodesDictionary : DictionaryBase
 	{
@@ -111,7 +112,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	}
 
 	/// <summary>
-	/// Provides appropriate Stind.X opcode for the type of primitive value to be stored indirectly.
+	/// Provides appropriate Stind.X opcode 
+	/// for the type of primitive value to be stored indirectly.
 	/// </summary>
 	public sealed class StindOpCodesDictionary : DictionaryBase
 	{

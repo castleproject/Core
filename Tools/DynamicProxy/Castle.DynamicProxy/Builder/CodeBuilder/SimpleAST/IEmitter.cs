@@ -22,6 +22,6 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public interface IEmitter
 	{
-		void Emit( IEasyMember member, ILGenerator gen );
+		void Emit(IEasyMember member, ILGenerator gen);
 	}
 }

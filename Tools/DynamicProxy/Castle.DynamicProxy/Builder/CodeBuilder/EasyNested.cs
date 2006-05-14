@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 {
 	using System;
 	using System.Reflection;
-	using System.Reflection.Emit;
 	
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 
@@ -30,12 +29,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			String name,
 			Type baseType, Type[] interfaces, 
 			ReturnReferenceExpression returnType, 
-			params ArgumentReference[] args )
+			params ArgumentReference[] args)
 		{
-			_typebuilder = maintype.TypeBuilder.DefineNestedType( 
+			_typebuilder = maintype.TypeBuilder.DefineNestedType(
 				name, 
 				TypeAttributes.Sealed|TypeAttributes.NestedPublic|TypeAttributes.Class, 
-				baseType, interfaces );
+				baseType, interfaces);
 		}
 	}
 }
