@@ -202,6 +202,7 @@
     <Compile Include="Resource\ConfigResourceFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Resource\CustomUri.cs" />
     <Compile Include="Resource\FileResource.cs">
       <SubType>Code</SubType>
     </Compile>
