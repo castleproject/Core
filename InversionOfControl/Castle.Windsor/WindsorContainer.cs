@@ -232,15 +232,26 @@ namespace Castle.Windsor
 		#if DOTNET2
 
 		/// <summary>
-		/// 
+        /// Returns a component instance by the service 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="service"></param>
 		/// <returns></returns>
-		public T Resolve<T>(T service)
+		public T Resolve<T>()
 		{
-			return (T) Resolve(service);
+			return (T) Resolve(typeof(T));
 		}
+
+        /// <summary>
+        /// Returns a component instance by the key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public virtual T Resolve<T>(String key)
+        {
+            return (T) _kernel[key];
+        }
+
 
 		#endif
 

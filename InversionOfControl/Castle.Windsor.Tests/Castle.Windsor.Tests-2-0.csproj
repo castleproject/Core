@@ -49,6 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -224,6 +225,7 @@
     <Compile Include="SmartProxyTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WindsorDotNet2Tests.cs" />
     <Compile Include="XmlProcessor\XmlProcessorTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
