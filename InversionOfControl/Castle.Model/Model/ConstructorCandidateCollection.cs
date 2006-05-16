@@ -16,6 +16,7 @@ namespace Castle.Model
 {
 	using System;
 	using System.Collections;
+    using System.Reflection;
 
 	/// <summary>
 	/// Collection of <see cref="ConstructorCandidate"/>

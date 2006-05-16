@@ -1,18 +1,33 @@
-#if DOTNET2
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Castle.Windsor.Tests.Configuration2;
-using NUnit.Framework;
-using Castle.Windsor.Tests.Components;
-using Castle.Windsor.Configuration.Interpreters;
-using Castle.Model.Resource;
-using Castle.MicroKernel.Handlers;
+#if DOTNET2
 
 namespace Castle.Windsor.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using Castle.Windsor.Tests.Configuration2;
+    using NUnit.Framework;
+    using Castle.Windsor.Tests.Components;
+    using Castle.Windsor.Configuration.Interpreters;
+    using Castle.Model.Resource;
+    using Castle.MicroKernel.Handlers;
+    using Castle.MicroKernel.Resolvers;
+
     [TestFixture]
     public class WindsorDotNet2Tests
     {
@@ -60,14 +75,8 @@ namespace Castle.Windsor.Tests
             Assert.IsInstanceOfType(typeof(DemoRepository<int>), ((LoggingRepositoryDecorator<int>)repos).inner);
         }
 
-        const string ExpectedExceptionMessage = @"Can't create component 'int.repos' as it has dependencies to be satisfied. 
-int.repos is waiting for the following dependencies: 
-
-Services: 
-- Castle.Windsor.Tests.IRepository`1[[System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]. A dependency cannot be satisfied by itself, did you forget to add a parameter name to differentiate between the two dependencies? 
-";
         [Test]
-        [ExpectedException(typeof(HandlerException),ExpectedExceptionMessage)]
+        [ExpectedException(typeof(DependencyResolverException), "Type Castle.Windsor.Tests.IRepository`1[System.Int32] has a mandatory dependency on itself. Can't satisfy the dependency!")]
         public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
         {
                 container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
@@ -75,11 +84,19 @@ Services:
         }
 
         [Test]
-        [Ignore("Doesn't work, find out why")]
         public void GetGenericServiceWithDecorator_GenericDecoratorOnTop()
         {
             container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
-            container.Resolve<IRepository<int>>();
+            IRepository<int> repos = container.Resolve<IRepository<int>>();
+            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<int>),
+                repos);
+
+            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<int>), repos);
+            Assert.IsInstanceOfType(typeof(DemoRepository<int>), ((LoggingRepositoryDecorator<int>)repos).inner);
+
+            DemoRepository<int> inner = ((LoggingRepositoryDecorator<int>)repos).inner as DemoRepository<int>;
+
+            Assert.AreEqual("second", inner.Name);
         }
     }
 
@@ -90,6 +107,13 @@ Services:
 
     public class DemoRepository<T> : IRepository<T>
     {
+        string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
         public T Get(int id)
         {
             return Activator.CreateInstance<T>();
@@ -100,6 +124,9 @@ Services:
     {
         public IRepository<T> inner;
 
+        public LoggingRepositoryDecorator()
+        { }
+        
         public LoggingRepositoryDecorator(IRepository<T> inner)
         {
             this.inner = inner;

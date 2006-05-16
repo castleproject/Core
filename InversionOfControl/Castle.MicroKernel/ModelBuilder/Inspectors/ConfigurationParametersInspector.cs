@@ -18,6 +18,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 	using Castle.Model;
 	using Castle.Model.Configuration;
+    using Castle.MicroKernel.Util;
 
 	/// <summary>
 	/// Check for a node 'parameters' within the component 
@@ -39,9 +40,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 			IConfiguration parameters = model.Configuration.Children["parameters"];
 
-			if (parameters == null) return;
+            if (parameters == null) return;
 
-			foreach(IConfiguration parameter in parameters.Children)
+            foreach (IConfiguration parameter in parameters.Children)
 			{
 				String name = parameter.Name;
 				String value = parameter.Value;

@@ -470,7 +470,10 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		public virtual IHandler[] GetHandlers(Type service)
 		{
-			return NamingSubSystem.GetHandlers(service);
+			IHandler[] result = NamingSubSystem.GetHandlers(service);
+            if (result.Length == 0 && Parent != null)
+                return Parent.GetHandlers(service);
+            return result;
 		}
 
 		/// <summary>

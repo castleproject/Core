@@ -270,7 +270,12 @@ namespace Castle.MicroKernel.Handlers
 
 		private bool HasValidComponent(Type service)
 		{
-			return IsValidHandlerState( kernel.GetHandler(service) );
+            foreach (IHandler handler in kernel.GetHandlers(service))
+            {
+                if (IsValidHandlerState(handler))
+                    return true;
+            }
+            return false;
 		}
 
 		private bool HasValidComponent(String key)
@@ -350,7 +355,7 @@ namespace Castle.MicroKernel.Handlers
 					}
 				    else if (handler == this)
 				    {
-                        sb.AppendFormat("- {0}. A dependency cannot be satisfied by itself, did you forget to add a parameter name to differentiate between the two dependencies? \r\n", 
+                        sb.AppendFormat("- {0}. \r\n  A dependency cannot be satisfied by itself, did you forget to add a parameter name to differentiate between the two dependencies? \r\n", 
                                         type.FullName);
 				    }
 					else

@@ -206,9 +206,14 @@ namespace Castle.MicroKernel.Resolvers
 				else
 				{
 					// Default behaviour
-
-					handler = kernel.GetHandler( dependency.TargetType );
+                    handler = kernel.GetHandler( dependency.TargetType );
 				}
+                if (handler != null && handler.ComponentModel == model)
+                {
+                    throw new Resolvers.DependencyResolverException(
+                        String.Format("Type {0} has a mandatory dependency on itself. Can't satisfy the dependency!",
+                            dependency.TargetType));
+                }
 			}
 
 			if (handler == null) return null;
