@@ -68,6 +68,38 @@ namespace Castle.ActiveRecord
 			return FindByPrimaryKey(id, true);
 		}
 
+        /// <summary>
+        /// Searches and returns the first row.
+        /// </summary>
+        /// <param name="orders">The sort order - used to determine which record is the first one</param>
+        /// <param name="criterias">The criteria expression</param>
+        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+        public static T FindFirst(Order[] orders, params ICriterion[] criterias)
+        {
+            return (T)ActiveRecordBase.FindFirst(typeof(T), orders, criterias);
+        }
+
+        /// <summary>
+        /// Searches and returns the first row.
+        /// </summary>
+        /// <param name="criterias">The criteria expression</param>
+        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+        public static T FindFirst(params ICriterion[] criterias)
+        {
+            return FindFirst(null, criterias);
+        }
+
+
+        /// <summary>
+        /// Searches and returns the first row.
+        /// </summary>
+        /// <param name="criterias">The criterias.</param>
+        /// <returns>A instance the targetType or <c>null</c></returns>
+        public static T FindOne(params ICriterion[] criterias)
+        {
+            return (T)ActiveRecordBase.FindOne(typeof(T), criterias);
+        }
+
 		/// <summary>
 		/// Returns all instances found for the specified type.
 		/// </summary>

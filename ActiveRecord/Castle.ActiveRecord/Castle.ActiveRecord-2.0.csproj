@@ -408,7 +408,6 @@
     <Compile Include="Framework\Scopes\DifferentDatabaseScope.cs" />
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
     <Compile Include="Framework\SessionScopeWebModule.cs" />
-    <Compile Include="Framework\Validators\AustralianBusinessNumberValidator.cs" />
     <Compile Include="Framework\Validators\CreditCardValidator.cs" />
     <Compile Include="Framework\Validators\LengthValidator.cs" />
   </ItemGroup>
