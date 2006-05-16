@@ -20,7 +20,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 	using Castle.MonoRail.TestSupport;
 
-
 	[TestFixture]
 	public class RoutingTestCase : AbstractMRTestCase
 	{		

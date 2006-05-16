@@ -108,7 +108,7 @@ namespace Castle.MonoRail.Framework
 			// use the template engine to generate the body of the message
 			StringWriter writer = new StringWriter();
 
-			controller.InPlaceRenderSharedView(writer, templateName);
+			controller.InPlaceRenderSharedView(writer, Path.Combine(Constants.EmailTemplatePath, templateName));
 
 			String body = writer.ToString();
 			

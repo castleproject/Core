@@ -22,7 +22,6 @@ namespace Castle.MonoRail.Framework
 	using System.Threading;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using System.Text.RegularExpressions;
 
 	using Castle.Components.Common.EmailSender;
 	using Castle.MonoRail.Framework.Configuration;

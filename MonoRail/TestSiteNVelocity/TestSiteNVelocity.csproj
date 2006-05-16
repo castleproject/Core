@@ -114,6 +114,11 @@
                     Project = "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -203,6 +208,11 @@
                 />
                 <File
                     RelPath = "Controllers\DynController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\EmailController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -346,6 +356,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\email\SendEmail.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\filter\index.vm"
                     BuildAction = "Content"
                 />
@@ -407,6 +421,14 @@
                 />
                 <File
                     RelPath = "views\layouts\master2.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\mail\myemail1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\mail\myemail2.vm"
                     BuildAction = "None"
                 />
                 <File
