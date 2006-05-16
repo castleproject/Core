@@ -100,13 +100,13 @@ namespace Castle.DynamicProxy.Generators
 					}
 				}
 
+				GenerateConstructor();
+
 //				if (theClass.IsSerializable)
 //				{
 //					ImplementGetObjectData( interfaces );
 //				}
 //
-//				ImplementCacheInvocationCache();
-//				GenerateTypeImplementation( theClass, true );
 //				GenerateInterfaceImplementation(interfaces);
 //				GenerateConstructors(theClass);
 //
@@ -123,6 +123,17 @@ namespace Castle.DynamicProxy.Generators
 
 				scope.SaveAssembly();
 			}
+		}
+
+		private void GenerateConstructor()
+		{
+			ArgumentReference cArg0 = new ArgumentReference(typeof(IInterceptor[]));
+
+			ConstructorEmitter constructor = emitter.CreateConstructor(cArg0);
+
+			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorsField, cArg0.ToExpression()));
+			constructor.CodeBuilder.InvokeBaseConstructor();
+			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		private MethodInfo[] ComputeTargetMembers(IProxyGenerationHook hook)
@@ -207,6 +218,7 @@ namespace Castle.DynamicProxy.Generators
 
 			method.CodeBuilder.AddStatement(new ExpressionStatement(
 				new MethodInvocationExpression(targetField, methodInfo)));
+			method.CodeBuilder.AddStatement(new ReturnStatement());
 
 			return nested;
 		}

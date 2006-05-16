@@ -42,10 +42,12 @@ namespace Castle.DynamicProxy
 
 		public object CreateClassProxy(Type baseClass, IInterceptor[] interceptors)
 		{
-			return CreateClassProxy(baseClass, interceptors, ProxyGenerationOptions.Default);
+			Type type = CreateClassProxy(baseClass, interceptors, ProxyGenerationOptions.Default);
+
+			return Activator.CreateInstance(type, new object[] { interceptors });
 		}
 
-		public object CreateClassProxy(Type baseClass, IInterceptor[] interceptors, ProxyGenerationOptions options)
+		protected Type CreateClassProxy(Type baseClass, IInterceptor[] interceptors, ProxyGenerationOptions options)
 		{
 			return ProxyBuilder.CreateClassProxy(baseClass, options);
 		}
