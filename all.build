@@ -350,6 +350,7 @@
 				<include name="SharedLibs/Nlog"/>
 				<include name="SharedLibs/log4net"/>
 				<include name="SharedLibs/Nvelocity"/>
+			    <include name="SharedLibs/stringtemplate/net-1.1"/> 
 			</referencepaths>
 			<documenters>
 				<documenter name="MSDN">
