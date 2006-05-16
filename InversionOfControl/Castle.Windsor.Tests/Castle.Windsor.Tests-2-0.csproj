@@ -183,6 +183,7 @@
     <Compile Include="DependencyProblem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="DotNet2Config\GenericDecoratorConfig.xml" />
     <Content Include="DotNet2Config\MissingDecoratorConfig.xml" />
     <Content Include="DotNet2Config\RecursiveDecoratorConfig.xml" />
     <Content Include="DotNet2Config\DecoratorConfig.xml">

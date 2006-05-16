@@ -80,6 +80,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			return instance;
 		}
 
+
 		public virtual void Destroy(object instance)
 		{
 			InternalDestroy(instance);

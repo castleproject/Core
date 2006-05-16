@@ -47,9 +47,9 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			object instance = Instantiate();
 
-			SetUpProperties(instance);
+            SetUpProperties(instance);
 
-			ApplyCommissionConcerns( instance );
+            ApplyCommissionConcerns(instance);
 
 			return instance;
 		}

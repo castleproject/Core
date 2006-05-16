@@ -31,22 +31,16 @@ namespace Castle.Windsor.Tests
     [TestFixture]
     public class WindsorDotNet2Tests
     {
-        private IWindsorContainer container;
         public string GetFilePath(string fileName)
         {
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                                "../Castle.Windsor.Tests/DotNet2Config/" + fileName);
         }
 
-        [SetUp]
-        public void Init()
-        {
-            container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
-        }
-
         [Test]
         public void ResovleGeneric()
         {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             ICalcService svr = container.Resolve<ICalcService>();
             Assert.IsAssignableFrom(typeof(CalculatorService), svr);
         }
@@ -54,6 +48,7 @@ namespace Castle.Windsor.Tests
         [Test]
         public void ResovleGenericWithId()
         {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             ICalcService svr = container.Resolve<ICalcService>("calc");
             Assert.IsAssignableFrom(typeof(CalculatorService), svr);
         }
@@ -61,6 +56,7 @@ namespace Castle.Windsor.Tests
         [Test]
         public void GetGenericService()
         {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos.generic");
             Assert.IsNotNull(repos);
             Assert.IsInstanceOfType(typeof(DemoRepository<int>),repos);
@@ -69,6 +65,7 @@ namespace Castle.Windsor.Tests
         [Test]
         public void GetGenericServiceWithDecorator()
         {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos");
             Assert.IsNotNull(repos);
             Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<int>), repos);
@@ -79,14 +76,14 @@ namespace Castle.Windsor.Tests
         [ExpectedException(typeof(DependencyResolverException), "Type Castle.Windsor.Tests.IRepository`1[System.Int32] has a mandatory dependency on itself. Can't satisfy the dependency!")]
         public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
         {
-                container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
+                IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
                 container.Resolve<IRepository<int>>();
         }
 
         [Test]
         public void GetGenericServiceWithDecorator_GenericDecoratorOnTop()
         {
-            container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
             IRepository<int> repos = container.Resolve<IRepository<int>>();
             Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<int>),
                 repos);
@@ -95,6 +92,19 @@ namespace Castle.Windsor.Tests
             Assert.IsInstanceOfType(typeof(DemoRepository<int>), ((LoggingRepositoryDecorator<int>)repos).inner);
 
             DemoRepository<int> inner = ((LoggingRepositoryDecorator<int>)repos).inner as DemoRepository<int>;
+
+            Assert.AreEqual("second", inner.Name);
+        }
+
+        [Test]
+        [Ignore("Need to change IHandler to recognize the current generic types from the types that were passed to us.")]
+        public void InferGenericArgumentForComponentFromPassedType()
+        {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
+            IRepository<string> repos = container.Resolve<IRepository<string>>();
+            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<string>), repos);
+
+            DemoRepository<string> inner = ((LoggingRepositoryDecorator<string>)repos).inner as DemoRepository<string>;
 
             Assert.AreEqual("second", inner.Name);
         }

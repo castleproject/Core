@@ -30,17 +30,22 @@ namespace Castle.MicroKernel.Handlers
 
 		public override object Resolve()
 		{
-			if (CurrentState == HandlerState.WaitingDependency)
-			{
-				String message = 
-					String.Format("Can't create component '{1}' as it has dependencies to be satisfied. {0}", 
-						ObtainDependencyDetails(), ComponentModel.Name );
-
-				throw new HandlerException(message);
-			}
+            AssertNotWaitingForDependency();
 			
 			return lifestyleManager.Resolve();
 		}
+
+        private void AssertNotWaitingForDependency()
+        {
+            if (CurrentState == HandlerState.WaitingDependency)
+            {
+                String message =
+                    String.Format("Can't create component '{1}' as it has dependencies to be satisfied. {0}",
+                        ObtainDependencyDetails(), ComponentModel.Name);
+
+                throw new HandlerException(message);
+            }
+        }
 
 		public override void Release(object instance)
 		{
