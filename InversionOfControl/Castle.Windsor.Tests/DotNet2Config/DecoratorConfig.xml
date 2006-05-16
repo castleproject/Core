@@ -1,0 +1,14 @@
+<configuration>
+  <components>
+    <component id='int.repos' 
+      service='Castle.Windsor.Tests.IRepository`1[[System.Int32]], Castle.Windsor.Tests' 
+      type='Castle.Windsor.Tests.LoggingRepositoryDecorator`1[[System.Int32]], Castle.Windsor.Tests'>
+      <parameters>
+        <inner>${int.repos.generic}</inner>
+      </parameters>
+    </component>
+    <component id='int.repos.generic' 
+       service='Castle.Windsor.Tests.IRepository`1[[System.Int32]], Castle.Windsor.Tests' 
+       type='Castle.Windsor.Tests.DemoRepository`1[[System.Int32]], Castle.Windsor.Tests' />
+  </components>
+</configuration>

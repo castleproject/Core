@@ -2,11 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using Castle.Windsor.Tests.Configuration2;
 using NUnit.Framework;
 using Castle.Windsor.Tests.Components;
 using Castle.Windsor.Configuration.Interpreters;
 using Castle.Model.Resource;
+using Castle.MicroKernel.Handlers;
 
 namespace Castle.Windsor.Tests
 {
@@ -14,30 +17,16 @@ namespace Castle.Windsor.Tests
     public class WindsorDotNet2Tests
     {
         private IWindsorContainer container;
-        private const string TestConfig = @"
-<configuration>
-    <components>
-      <component id='calc'
-           service='Castle.Windsor.Tests.Components.ICalcService, Castle.Windsor.Tests' 
-           type='Castle.Windsor.Tests.Components.CalculatorService, Castle.Windsor.Tests' />
-        
-        <component id='int.repos.generic' 
-           service='Castle.Windsor.Tests.IRepository`1[[System.Int32]], Castle.Windsor.Tests' 
-           type='Castle.Windsor.Tests.DemoRepository`1[[System.Int32]], Castle.Windsor.Tests' />
-    <component id='int.repos' 
-           service='Castle.Windsor.Tests.IRepository`1[[System.Int32]], Castle.Windsor.Tests' 
-           type='Castle.Windsor.Tests.LoggingRepositoryDecorator`1[[System.Int32]], Castle.Windsor.Tests'>
-                <parameters>
-                    <inner>${int.repos.generic}</inner>
-                </parameters>
-        </component>
-    </components>
-</configuration>";
+        public string GetFilePath(string fileName)
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                               "../Castle.Windsor.Tests/DotNet2Config/" + fileName);
+        }
 
         [SetUp]
         public void Init()
         {
-            container = new WindsorContainer(new XmlInterpreter(new StaticContentResource(TestConfig)));
+            container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
         }
 
         [Test]
@@ -71,25 +60,25 @@ namespace Castle.Windsor.Tests
             Assert.IsInstanceOfType(typeof(DemoRepository<int>), ((LoggingRepositoryDecorator<int>)repos).inner);
         }
 
+        const string ExpectedExceptionMessage = @"Can't create component 'int.repos' as it has dependencies to be satisfied. 
+int.repos is waiting for the following dependencies: 
+
+Services: 
+- Castle.Windsor.Tests.IRepository`1[[System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]. A dependency cannot be satisfied by itself, did you forget to add a parameter name to differentiate between the two dependencies? 
+";
         [Test]
-        [Ignore("Cause StackOverFlow because it trys to match int.repos to itself because it is on the top.")]
+        [ExpectedException(typeof(HandlerException),ExpectedExceptionMessage)]
+        public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
+        {
+                container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
+                container.Resolve<IRepository<int>>();
+        }
+
+        [Test]
+        [Ignore("Doesn't work, find out why")]
         public void GetGenericServiceWithDecorator_GenericDecoratorOnTop()
         {
-            string Bad_TestConfig = @"
-<configuration>
-    <components>
-         <component id='int.repos' 
-           service='Castle.Windsor.Tests.IRepository`1[[System.Int32]], Castle.Windsor.Tests' 
-           type='Castle.Windsor.Tests.LoggingRepositoryDecorator`1[[System.Int32]], Castle.Windsor.Tests'>
-                <inner>${int.repos.generic}</inner>
-        </component>
-        <component id='int.repos.generic' 
-           service='Castle.Windsor.Tests.IRepository`1[[System.Int32]], Castle.Windsor.Tests' 
-           type='Castle.Windsor.Tests.DemoRepository`1[[System.Int32]], Castle.Windsor.Tests' />
-    </components>
-</configuration>";
-
-            container = new WindsorContainer(new XmlInterpreter(new StaticContentResource(Bad_TestConfig)));
+            container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
             container.Resolve<IRepository<int>>();
         }
     }

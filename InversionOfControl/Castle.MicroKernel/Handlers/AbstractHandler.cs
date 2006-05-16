@@ -348,6 +348,11 @@ namespace Castle.MicroKernel.Handlers
 					{
 						sb.AppendFormat( "- {0} which was not registered. \r\n", type.FullName );
 					}
+				    else if (handler == this)
+				    {
+                        sb.AppendFormat("- {0}. A dependency cannot be satisfied by itself, did you forget to add a parameter name to differentiate between the two dependencies? \r\n", 
+                                        type.FullName);
+				    }
 					else
 					{
 						sb.AppendFormat( "- {0} which was registered but is also waiting for dependencies. \r\n", type.FullName );

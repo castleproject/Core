@@ -183,6 +183,11 @@
     <Compile Include="DependencyProblem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="DotNet2Config\RecursiveDecoratorConfig.xml" />
+    <Content Include="DotNet2Config\DecoratorConfig.xml">
+      <SubType>
+      </SubType>
+    </Content>
     <Compile Include="Facilities\EventWiring\EventWiringTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -238,6 +243,7 @@
     <Content Include="Configuration2\Properties\config_with_silent_properties.xml" />
     <Content Include="Configuration2\Properties\properties.xml" />
     <Content Include="Configuration2\Properties\properties_using_properties.xml" />
+    <Content Include="DotNet2Config\GenericsConfig.xml" />
     <Content Include="Facilities\EventWiring\config.xml" />
     <Content Include="installerconfig.xml" />
     <Content Include="robotwireconfig.xml" />
