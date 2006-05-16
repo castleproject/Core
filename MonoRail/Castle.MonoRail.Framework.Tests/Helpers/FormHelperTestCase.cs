@@ -163,7 +163,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			list.Add("cat2");
 
 			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option>cat1</option>\r\n<option>cat2</option>\r\n</select>",
+				"<option value=\"cat1\">cat1</option>\r\n<option value=\"cat2\">cat2</option>\r\n</select>",
 				helper.Select("product.category.id", list));
 		}
 
@@ -176,7 +176,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
 				"<option value=\"0\">Please select</option>\r\n" + 
-				"<option>cat1</option>\r\n<option>cat2</option>\r\n</select>",
+				"<option value=\"cat1\">cat1</option>\r\n<option value=\"cat2\">cat2</option>\r\n</select>",
 				helper.Select("product.category.id", list, DictHelper.Create("firstoption=Please select") ));
 		}
 
@@ -196,7 +196,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void SelectOnPrimitiveArrayWithoutValueAndText()
 		{
 			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option>1</option>\r\n<option>2</option>\r\n<option>3</option>\r\n<option>4</option>\r\n<option selected=\"selected\">5</option>\r\n</select>",
+				"<option value=\"1\">1</option>\r\n<option value=\"2\">2</option>\r\n<option value=\"3\">3</option>\r\n<option value=\"4\">4</option>\r\n<option selected=\"selected\" value=\"5\">5</option>\r\n</select>",
 				helper.Select("product.category.id", 5, new int[] { 1, 2, 3, 4, 5}, DictHelper.Create() ));
 		}
 
@@ -295,7 +295,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, "role2"));
 
 			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option selected=\"selected\">role1</option>\r\n<option selected=\"selected\">role2</option>\r\n</select>",
+				"<option selected=\"selected\" value=\"role1\">role1</option>\r\n<option selected=\"selected\" value=\"role2\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list));
 		}
 

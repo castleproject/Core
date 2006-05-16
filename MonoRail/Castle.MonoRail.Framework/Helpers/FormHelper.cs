@@ -371,6 +371,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 						if (selected) writer.Write(" selected=\"selected\"");
 						
+						if (value == null)
+						{
+							value = text;
+						}
+
 						if (value != null)
 						{
 							writer.WriteAttribute("value", value.ToString());
