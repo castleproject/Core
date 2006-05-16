@@ -15,22 +15,28 @@
 namespace BlogSample
 {
 	using System;
-
+	using System.Collections;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Config;
 
 
 	public class App
 	{
-		public App()
-		{
-		}
-
 		public static void Main()
 		{
-			ActiveRecordStarter.Initialize( 
-				new XmlConfigurationSource("../appconfig.xml"), 
-				typeof(Blog), typeof(Post) );
+			Hashtable properties = new Hashtable();
+
+			properties.Add("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver");
+			properties.Add("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect");
+			properties.Add("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider");
+			properties.Add("hibernate.connection.connection_string", "Data Source=.;Initial Catalog=test;Integrated Security=SSPI");
+
+			InPlaceConfigurationSource source = new InPlaceConfigurationSource();
+			source.Add(typeof(ActiveRecordBase), properties);
+
+			// XmlConfigurationSource source = new XmlConfigurationSource("../appconfig.xml");
+
+			ActiveRecordStarter.Initialize( source, typeof(Blog), typeof(Post) );
 
 			// If you want to let AR to create the schema
 
@@ -79,7 +85,7 @@ namespace BlogSample
 				post = new Post(blog, "title", "contents", "castle");
 				post.Save();
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				transaction.VoteRollBack();
 			}

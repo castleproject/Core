@@ -89,6 +89,21 @@
                     AssemblyName = "Castle.MonoRail.Framework"
                     HintPath = "..\..\..\..\MonoRail\bin\Castle.MonoRail.Framework.dll"
                 />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    HintPath = "..\..\..\..\build\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    AssemblyName = "Castle.Components.Binder"
+                    HintPath = "..\..\..\..\build\net-1.1\Castle.Components.Binder.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\..\..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
+                />
             </References>
         </Build>
         <Files>

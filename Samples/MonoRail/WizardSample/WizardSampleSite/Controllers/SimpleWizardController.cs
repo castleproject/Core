@@ -17,8 +17,8 @@ namespace WizardSampleSite.Controllers
 	using System;
 	using System.Collections;
 
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
 
 	using WizardSampleSite.Model;
 
@@ -92,7 +92,7 @@ namespace WizardSampleSite.Controllers
 
 				// User can't go to the next step yet
 
-				RedirectToAction( ActionName );
+				RedirectToStep("MainInfoStep");
 			}
 			else
 			{
@@ -159,7 +159,7 @@ namespace WizardSampleSite.Controllers
 			Account account = MainInfoStep.GetAccountFromSession(Session);
 
 			String[] interests = (String[]) ConvertUtils.Convert( 
-				typeof(String[]), Params["interests"], "interests", null, Params );
+				typeof(String[]), Params["interests"]);
 
 			account.Interests = interests;
 

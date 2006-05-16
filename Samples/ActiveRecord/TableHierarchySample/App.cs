@@ -22,10 +22,6 @@ namespace TableHierarchySample
 
 	public class App
 	{
-		public App()
-		{
-		}
-
 		public static void Main()
 		{
 			ActiveRecordStarter.Initialize( 
