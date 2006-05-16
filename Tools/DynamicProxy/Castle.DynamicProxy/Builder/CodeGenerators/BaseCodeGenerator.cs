@@ -20,11 +20,12 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
     using System.Reflection;
     using System.Reflection.Emit;
     using System.Runtime.Serialization;
-	using System.Threading;
-	
-	using Castle.DynamicProxy.Builder.CodeBuilder;
+    using System.Threading;	
+    using Castle.DynamicProxy.Builder.CodeBuilder;
     using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
-
+    #if dotNet2
+    using System.Runtime.CompilerServices;
+    #endif
     /// <summary>
     /// Summary description for BaseCodeGenerator.
     /// </summary>
