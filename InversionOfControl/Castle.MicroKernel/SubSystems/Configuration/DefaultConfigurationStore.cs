@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MicroKernel.Util;
+
 namespace Castle.MicroKernel.SubSystems.Configuration
 {
 	using System;
@@ -66,10 +68,15 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration GetComponentConfiguration(String key)
 		{
-			return components[key] as IConfiguration;
+#if DOTNET2
+            key = GenericTypeNameProvider.StripGenericTypeName(key);
+#endif
+		    return components[key] as IConfiguration;
 		}
 
-		[MethodImpl(MethodImplOptions.Synchronized)]
+	    
+
+	    [MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration[] GetFacilities()
 		{
 			return (IConfiguration[]) facilitiesList.ToArray(typeof(IConfiguration));

@@ -111,6 +111,37 @@ namespace Castle.Windsor.Tests
 
         }
 
+        [Test]
+        public void GetSameInstanceFromGenericType()
+        {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
+
+            IRepository<string> repos1 = container.Resolve<IRepository<string>>();
+            IRepository<string> repos2 = container.Resolve<IRepository<string>>();
+            
+            Assert.AreSame(repos1, repos2);
+         
+        }
+
+        [Test]
+        [Ignore("Doesn't work because it doesn't understand that constructor parameters can be typed as well.")]
+        public void GetSameInstanceOfGenericFromTwoDifferentGenericTypes()
+        {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
+
+            IRepository<string> repos1 = container.Resolve<IRepository<string>>();
+            IRepository<string> repos2 = container.Resolve<IRepository<string>>();
+
+            Assert.AreSame(repos1, repos2);
+
+
+            IRepository<int> repos3 = container.Resolve<IRepository<int>>();
+            IRepository<int> repos4 = container.Resolve<IRepository<int>>();
+
+            Assert.AreSame(repos3, repos4);
+
+        }
+
         //cache generic types
         //cache properties of generic types
         //cache ctors of generic types

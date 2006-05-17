@@ -402,6 +402,7 @@
     <Compile Include="SubSystems\SubSystemConstants.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\GenericTypeNameProvider.cs" />
     <Compile Include="Util\ReferenceComparer.cs">
       <SubType>Code</SubType>
     </Compile>

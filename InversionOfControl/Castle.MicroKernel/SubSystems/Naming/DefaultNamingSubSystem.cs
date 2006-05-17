@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MicroKernel.Util;
+
 namespace Castle.MicroKernel.SubSystems.Naming
 {
     using System;
@@ -117,7 +119,12 @@ namespace Castle.MicroKernel.SubSystems.Naming
                 return handler;
 #if DOTNET2
             if (service.IsGenericType)
+            {
                 handler = service2Handler[service.GetGenericTypeDefinition()] as IHandler;
+                //Registers a concrete implementation of the generic type in the kernel
+                CloneGenericHandlerForSpesificType(handler, service);
+                return GetHandler(service);
+            }
 #endif
             return handler;
         }
@@ -133,7 +140,10 @@ namespace Castle.MicroKernel.SubSystems.Naming
                 bool match = service == handler.ComponentModel.Service;
 #if DOTNET2
                 if (service.IsGenericType && !service.IsGenericTypeDefinition)
+                {
                     match = match || service.GetGenericTypeDefinition() == handler.ComponentModel.Service;
+                    
+                }
 #endif
                 if (match)
                 {
@@ -196,5 +206,17 @@ namespace Castle.MicroKernel.SubSystems.Naming
         }
 
         #endregion
+        
+#if DOTNET2
+        private void CloneGenericHandlerForSpesificType(IHandler handler, Type genericService)
+        {
+            String key = GenericTypeNameProvider.AppendGenericTypeName(key2Handler, handler, genericService);
+            //Get the correct type from the context...
+            Type genericClass = handler.ComponentModel.Implementation;
+            Kernel.AddComponent(key, genericService, genericClass);
+        }
+
+      
+#endif
     }
 }
