@@ -12,260 +12,265 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Model.Internal;
+
 namespace Castle.Model
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
+    using System;
+    using System.Collections;
+    using System.Collections.Specialized;
 
-	using Castle.Model.Configuration;
+    using Castle.Model.Configuration;
 
-	/// <summary>
-	/// Enumeration used to mark the component's lifestyle.
-	/// </summary>
-	public enum LifestyleType
-	{
-		/// <summary>
-		/// No lifestyle specified.
-		/// </summary>
-		Undefined,
-		/// <summary>
-		/// Singleton components are instantiated once, and shared
-		/// between all clients.
-		/// </summary>
-		Singleton,
-		/// <summary>
-		/// Thread components have a unique instance per thread.
-		/// </summary>
-		Thread,
-		/// <summary>
-		/// Transient components are created on demand.
-		/// </summary>
-		Transient,
-		/// <summary>
-		/// Optimization of transient components that keeps
-		/// instance in a pool instead of always creating them.
-		/// </summary>
-		Pooled,
-		/// <summary>
-		/// Any other logic to create/release components.
-		/// </summary>
-		Custom
-	}
+    /// <summary>
+    /// Enumeration used to mark the component's lifestyle.
+    /// </summary>
+    public enum LifestyleType
+    {
+        /// <summary>
+        /// No lifestyle specified.
+        /// </summary>
+        Undefined,
+        /// <summary>
+        /// Singleton components are instantiated once, and shared
+        /// between all clients.
+        /// </summary>
+        Singleton,
+        /// <summary>
+        /// Thread components have a unique instance per thread.
+        /// </summary>
+        Thread,
+        /// <summary>
+        /// Transient components are created on demand.
+        /// </summary>
+        Transient,
+        /// <summary>
+        /// Optimization of transient components that keeps
+        /// instance in a pool instead of always creating them.
+        /// </summary>
+        Pooled,
+        /// <summary>
+        /// Any other logic to create/release components.
+        /// </summary>
+        Custom
+    }
 
-	/// <summary>
-	/// Represents the collection of information and
-	/// meta information collected about a component.
-	/// </summary>
-	[Serializable]
-	public sealed class ComponentModel : GraphNode
-	{
-		#region Fields
+    /// <summary>
+    /// Represents the collection of information and
+    /// meta information collected about a component.
+    /// </summary>
+    [Serializable]
+    public sealed class ComponentModel : GraphNode
+    {
+        #region Fields
 
-		/// <summary>Name (key) of the component</summary>
-		private String name;
+        /// <summary>Name (key) of the component</summary>
+        private String name;
 
-		/// <summary>Service exposed</summary>
-		private Type service;
+        /// <summary>Service exposed</summary>
+        private Type service;
 
-		/// <summary>Implementation for the service</summary>
-		private Type implementation;
+        /// <summary>Implementation for the service</summary>
+        private Type implementation;
 
-		/// <summary>Extended properties</summary>
-		[NonSerialized]
-		private IDictionary extended;
+        /// <summary>Extended properties</summary>
+        [NonSerialized]
+        private IDictionary extended;
 
-		/// <summary>Lifestyle for the component</summary>
-		private LifestyleType lifestyleType;
+        /// <summary>Lifestyle for the component</summary>
+        private LifestyleType lifestyleType;
 
-		/// <summary>Custom lifestyle, if any</summary>
-		private Type customLifestyle;
+        /// <summary>Custom lifestyle, if any</summary>
+        private Type customLifestyle;
 
-		/// <summary>Custom activator, if any</summary>
-		private Type customComponentActivator;
+        /// <summary>Custom activator, if any</summary>
+        private Type customComponentActivator;
 
-		/// <summary>Dependencies the kernel must resolve</summary>
-		private DependencyModelCollection dependencies;
-		
-		/// <summary>All available constructors</summary>
-		private ConstructorCandidateCollection constructors;
-		
-		/// <summary>All potential properties that can be setted by the kernel</summary>
-		private PropertySetCollection properties;
+        /// <summary>Dependencies the kernel must resolve</summary>
+        private DependencyModelCollection dependencies;
 
-		//private MethodMetaModelCollection methodMetaModels;
-		
-		/// <summary>Steps of lifecycle</summary>
-		private LifecycleStepCollection lifecycleSteps;
-		
-		/// <summary>External parameters</summary>
-		private ParameterModelCollection parameters;
-		
-		/// <summary>Configuration node associated</summary>
-		private IConfiguration configuration;
-		
-		/// <summary>Interceptors associated</summary>
-		private InterceptorReferenceCollection interceptors;
+        /// <summary>All available constructors</summary>
+        private ConstructorCandidateCollection constructors;
 
-		#endregion
+        /// <summary>All potential properties that can be setted by the kernel</summary>
+        private PropertySetCollection properties;
 
-		/// <summary>
-		/// Constructs a ComponentModel
-		/// </summary>
-		public ComponentModel(String name, Type service, Type implementation)
-		{
-			this.name = name;
-			this.service = service;
-			this.implementation = implementation;
-			this.lifestyleType = LifestyleType.Undefined;
-		}
+        //private MethodMetaModelCollection methodMetaModels;
 
-		/// <summary>
-		/// Sets or returns the component key
-		/// </summary>
-		public String Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
+        /// <summary>Steps of lifecycle</summary>
+        private LifecycleStepCollection lifecycleSteps;
 
-		public Type Service
-		{
-			get { return service; }
-			set { service = value; }
-		}
+        /// <summary>External parameters</summary>
+        private ParameterModelCollection parameters;
 
-		public Type Implementation
-		{
-			get { return implementation; }
-			set { implementation = value; }
-		}
+        /// <summary>Configuration node associated</summary>
+        private IConfiguration configuration;
 
-		public IDictionary ExtendedProperties
-		{
-			get
-			{
-				lock(this)
-				{
-					if (extended == null) extended = new HybridDictionary();
-				}
-				return extended;
-			}
-			set { extended = value; }
-		}
+        /// <summary>Interceptors associated</summary>
+        private InterceptorReferenceCollection interceptors;
 
-		public ConstructorCandidateCollection Constructors
-		{
-			get
-			{
-				lock(this)
-				{
-					if (constructors == null) constructors = new ConstructorCandidateCollection();
-				}
-				return constructors;
-			}
-		}
+        #endregion
 
-		public PropertySetCollection Properties
-		{
-			get
-			{
-				lock(this)
-				{
-					if (properties == null) properties = new PropertySetCollection();
-				}
-				return properties;
-			}
-		}
+        /// <summary>
+        /// Constructs a ComponentModel
+        /// </summary>
+        public ComponentModel(String name, Type service, Type implementation)
+        {
+            this.name = name;
+            this.service = service;
+            this.implementation = implementation;
+            this.lifestyleType = LifestyleType.Undefined;
+        }
 
-		// TODO: Consider not supporting this 
-//		public MethodMetaModelCollection MethodMetaModels
-//		{
-//			get
-//			{
-//				lock(this)
-//				{
-//					if (methodMetaModels == null) methodMetaModels = new MethodMetaModelCollection();
-//				}
-//				return methodMetaModels;
-//			}
-//		}
+        /// <summary>
+        /// Sets or returns the component key
+        /// </summary>
+        public String Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
 
-		public IConfiguration Configuration
-		{
-			get { return configuration; }
-			set { configuration = value; }
-		}
+        public Type Service
+        {
+            get { return service; }
+            set { service = value; }
+        }
 
-		public LifecycleStepCollection LifecycleSteps
-		{
-			get
-			{
-				lock(this)
-				{
-					if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
-				}
-				return lifecycleSteps;
-			}
-		}
+        public Type Implementation
+        {
+            get
+            {
+                return CurrentContext.GetImplementationType(implementation);
+            }
+            set { implementation = value; }
+        }
 
-		public LifestyleType LifestyleType
-		{
-			get { return lifestyleType; }
-			set { lifestyleType = value; }
-		}
+        public IDictionary ExtendedProperties
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (extended == null) extended = new HybridDictionary();
+                }
+                return extended;
+            }
+            set { extended = value; }
+        }
 
-		public Type CustomLifestyle
-		{
-			get { return customLifestyle; }
-			set { customLifestyle = value; }
-		}
+        public ConstructorCandidateCollection Constructors
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (constructors == null) constructors = new ConstructorCandidateCollection();
+                }
+                return constructors;
+            }
+        }
 
-		public Type CustomComponentActivator
-		{
-			get { return customComponentActivator; }
-			set { customComponentActivator = value; }
-		}
+        public PropertySetCollection Properties
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (properties == null) properties = new PropertySetCollection();
+                }
+                return properties;
+            }
+        }
 
-		public InterceptorReferenceCollection Interceptors
-		{
-			get
-			{
-				lock(this)
-				{
-					if (interceptors == null) interceptors = new InterceptorReferenceCollection();
-				}
-				return interceptors;
-			}
-		}
+        // TODO: Consider not supporting this 
+        //		public MethodMetaModelCollection MethodMetaModels
+        //		{
+        //			get
+        //			{
+        //				lock(this)
+        //				{
+        //					if (methodMetaModels == null) methodMetaModels = new MethodMetaModelCollection();
+        //				}
+        //				return methodMetaModels;
+        //			}
+        //		}
 
-		public ParameterModelCollection Parameters
-		{
-			get
-			{
-				lock(this)
-				{
-					if (parameters == null) parameters = new ParameterModelCollection();
-				}
-				return parameters;
-			}
-		}
+        public IConfiguration Configuration
+        {
+            get { return configuration; }
+            set { configuration = value; }
+        }
 
-		/// <summary>
-		/// Dependencies are kept within constructors and
-		/// properties. Others dependencies must be 
-		/// registered here, so the kernel can check them
-		/// </summary>
-		public DependencyModelCollection Dependencies
-		{
-			get
-			{
-				lock(this)
-				{
-					if (dependencies == null) dependencies = new DependencyModelCollection();
-				}
-				return dependencies;
-			}
-		}
-	}
+        public LifecycleStepCollection LifecycleSteps
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
+                }
+                return lifecycleSteps;
+            }
+        }
+
+        public LifestyleType LifestyleType
+        {
+            get { return lifestyleType; }
+            set { lifestyleType = value; }
+        }
+
+        public Type CustomLifestyle
+        {
+            get { return customLifestyle; }
+            set { customLifestyle = value; }
+        }
+
+        public Type CustomComponentActivator
+        {
+            get { return customComponentActivator; }
+            set { customComponentActivator = value; }
+        }
+
+        public InterceptorReferenceCollection Interceptors
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (interceptors == null) interceptors = new InterceptorReferenceCollection();
+                }
+                return interceptors;
+            }
+        }
+
+        public ParameterModelCollection Parameters
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (parameters == null) parameters = new ParameterModelCollection();
+                }
+                return parameters;
+            }
+        }
+
+        /// <summary>
+        /// Dependencies are kept within constructors and
+        /// properties. Others dependencies must be 
+        /// registered here, so the kernel can check them
+        /// </summary>
+        public DependencyModelCollection Dependencies
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (dependencies == null) dependencies = new DependencyModelCollection();
+                }
+                return dependencies;
+            }
+        }
+    }
 }

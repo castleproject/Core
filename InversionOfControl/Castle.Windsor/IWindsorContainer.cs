@@ -116,7 +116,6 @@ namespace Castle.Windsor
         /// Returns a component instance by the service
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="service"></param>
 		/// <returns></returns>
 		T Resolve<T>();
 

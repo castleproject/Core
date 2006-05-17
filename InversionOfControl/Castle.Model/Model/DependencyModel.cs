@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Model.Internal;
+
 namespace Castle.Model
 {
 	using System;
@@ -59,7 +61,13 @@ namespace Castle.Model
 
 		public Type TargetType
 		{
-			get { return targetType; }
+			get
+			{  
+#if DOTNET2
+              
+#endif
+                return CurrentContext.GetImplementationType(targetType);
+			}
 		}
 
 		public bool IsOptional

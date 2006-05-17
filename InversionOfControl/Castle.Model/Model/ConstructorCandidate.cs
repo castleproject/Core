@@ -12,42 +12,69 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.Model
 {
-	using System;
-	using System.Reflection;
+    using System;
+    using System.Reflection;
+    using Castle.Model.Internal;
+    
 
-	/// <summary>
-	/// Represents a constructor of the component 
-	/// that the container can use to initialize it properly.
-	/// </summary>
-	[Serializable]
-	public class ConstructorCandidate
-	{
-		private ConstructorInfo constructorInfo;
-		private DependencyModel[] dependencies;
-		private int points;
+    /// <summary>
+    /// Represents a constructor of the component 
+    /// that the container can use to initialize it properly.
+    /// </summary>
+    [Serializable]
+    public class ConstructorCandidate
+    {
+        private ConstructorInfo constructorInfo;
+        private DependencyModel[] dependencies;
+        private int points;
+#if DOTNET2
+        private bool containsGenericTypes;
+#endif
 
-		public ConstructorCandidate( ConstructorInfo constructorInfo, params DependencyModel[] dependencies )
-		{
-			this.constructorInfo = constructorInfo;
-			this.dependencies = dependencies;
-		}
+        public ConstructorCandidate(ConstructorInfo constructorInfo, params DependencyModel[] dependencies)
+        {
+            this.constructorInfo = constructorInfo;
+            this.dependencies = dependencies;
+#if DOTNET2
+            this.containsGenericTypes = constructorInfo.DeclaringType.ContainsGenericParameters;
+#endif
 
-		public ConstructorInfo Constructor
-		{
-			get { return constructorInfo; }
-		}
+        }
 
-		public DependencyModel[] Dependencies
-		{
-			get { return dependencies; }
-		}
+        public ConstructorInfo Constructor
+        {
+            get
+            {
+#if DOTNET2
+                if (containsGenericTypes)
+                {
+                    Type type = CurrentContext.MakeGenericType(constructorInfo.DeclaringType);
+                    System.Collections.Generic.List<Type> types = new System.Collections.Generic.List<Type>();
+                    foreach (ParameterInfo info in constructorInfo.GetParameters())
+                    {
+                        types.Add(
+                            CurrentContext.MakeGenericType(info.ParameterType));
+                    }
 
-		public int Points
-		{
-			get { return points; }
-			set { points = value; }
-		}
-	}
+                    return type.GetConstructor(types.ToArray());
+                }
+#endif
+                return constructorInfo;
+            }
+        }
+
+        public DependencyModel[] Dependencies
+        {
+            get { return dependencies; }
+        }
+
+        public int Points
+        {
+            get { return points; }
+            set { points = value; }
+        }
+    }
 }

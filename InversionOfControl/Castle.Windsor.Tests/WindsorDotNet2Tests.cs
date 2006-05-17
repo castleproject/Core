@@ -17,6 +17,7 @@
 namespace Castle.Windsor.Tests
 {
     using System;
+    using Castle.Model.Internal;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
@@ -59,7 +60,7 @@ namespace Castle.Windsor.Tests
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos.generic");
             Assert.IsNotNull(repos);
-            Assert.IsInstanceOfType(typeof(DemoRepository<int>),repos);
+            Assert.IsInstanceOfType(typeof(DemoRepository<int>), repos);
         }
 
         [Test]
@@ -76,8 +77,8 @@ namespace Castle.Windsor.Tests
         [ExpectedException(typeof(DependencyResolverException), "Type Castle.Windsor.Tests.IRepository`1[System.Int32] has a mandatory dependency on itself. Can't satisfy the dependency!")]
         public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
         {
-                IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
-                container.Resolve<IRepository<int>>();
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
+            container.Resolve<IRepository<int>>();
         }
 
         [Test]
@@ -97,17 +98,22 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        [Ignore("Need to change IHandler to recognize the current generic types from the types that were passed to us.")]
         public void InferGenericArgumentForComponentFromPassedType()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
+
             IRepository<string> repos = container.Resolve<IRepository<string>>();
             Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<string>), repos);
 
             DemoRepository<string> inner = ((LoggingRepositoryDecorator<string>)repos).inner as DemoRepository<string>;
 
             Assert.AreEqual("second", inner.Name);
+
         }
+
+        //cache generic types
+        //cache properties of generic types
+        //cache ctors of generic types
     }
 
     public interface IRepository<T>
@@ -136,7 +142,7 @@ namespace Castle.Windsor.Tests
 
         public LoggingRepositoryDecorator()
         { }
-        
+
         public LoggingRepositoryDecorator(IRepository<T> inner)
         {
             this.inner = inner;
