@@ -85,6 +85,12 @@ namespace TestSiteNVelocity.Controllers
 				RenderText(" " + id);
 			}
 		}
+
+		public void CalculateUtilizationByDay([DataBind("tp1")] TimePoint tp1, [DataBind("tp2")] TimePoint tp2)
+		{
+			RenderText(tp1.ToString());
+			RenderText(tp2.ToString());
+		}
 	}
 
 	public class ClassWithInitializers
@@ -246,6 +252,53 @@ namespace TestSiteNVelocity.Controllers
 		public override string ToString()
 		{
 			return String.Format("User {0} {1} {2}", name, roles.Length, permissions.Length);
+		}
+	}
+
+	public class TimePoint : IComparable
+	{
+		private int _hour;
+		private int _minute;
+		private int _second;
+      
+		public TimePoint()
+		{
+			
+		}
+
+		public TimePoint(int hour, int minute, int second)
+		{
+			_hour = hour;
+			_minute = minute;
+			_second = second;
+		}
+
+		public int Hour
+		{
+			get { return _hour; }
+			set { _hour = value; }
+		}
+
+		public int Minute
+		{
+			get { return _minute; }
+			set { _minute = value; }
+		}
+
+		public int Second
+		{
+			get { return _second; }
+			set { _second = value; }
+		}
+
+		public override string ToString()
+		{
+			return String.Format(" {0}:{1}:{2} ", _hour, _minute, _second);
+		}
+
+		public int CompareTo(object obj)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

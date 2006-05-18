@@ -181,5 +181,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertReplyEqualTo(expected);
 		}
+
+		[Test]
+		public void BugReportedOnForum1()
+		{
+			DoGet("smart/CalculateUtilizationByDay.rails", "tp1.Hour=1", "tp1.Minute=2", "tp1.Second=3", "tp2.Hour=10", "tp2.Minute=20", "tp2.Second=30");
+			String expected = " 1:2:3  10:20:30 ";
+
+			AssertReplyEqualTo(expected);
+		}
 	}
 }
