@@ -20,7 +20,7 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 	
 	using Castle.MicroKernel;
 	using Castle.Model.Configuration;
-	
+	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -67,20 +67,13 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 			Assert.AreEqual("prop1 value", childItem.Attributes["attr"]);
 		}
 
-		[Test]
+		[Test, ExpectedException(typeof(ConfigurationProcessingException))]
 		public void MissingProperties()
 		{
 			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
 				"config_with_missing_properties.xml");
 
-			try
-			{
-				container = new WindsorContainer(file);	
-				Assert.Fail("MissingProperties should had throw config exception");
-			}
-			catch(ConfigurationException c)
-			{				
-			}
+			container = new WindsorContainer(file);	
 		}
 
 		[Test]

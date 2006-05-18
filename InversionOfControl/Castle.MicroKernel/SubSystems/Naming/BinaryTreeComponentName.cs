@@ -17,7 +17,6 @@ namespace Castle.MicroKernel.SubSystems.Naming
 	using System;
 	using System.Collections;
 
-
 	[Serializable]
 	public class BinaryTreeComponentName
 	{

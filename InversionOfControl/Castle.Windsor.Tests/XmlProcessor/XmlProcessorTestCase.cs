@@ -48,7 +48,7 @@ namespace Castle.Windsor.Tests.XmlProcessor
 
 					Assert.Fail(fileName + " should throw an exception");
 				}
-				catch(XmlProcessorException e)
+				catch(ConfigurationProcessingException e)
 				{
 					Debug.WriteLine("Expected exception:" + e.Message);
 				}

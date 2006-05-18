@@ -63,31 +63,57 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 
 		public XmlNode Process(XmlNode node)
 		{
-			if (node.NodeType == XmlNodeType.Document)
+			try
 			{
-				node = (node as XmlDocument).DocumentElement;
+				if (node.NodeType == XmlNodeType.Document)
+				{
+					node = (node as XmlDocument).DocumentElement;
+				}
+
+				engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
+
+				return node;
 			}
+			catch(ConfigurationProcessingException)
+			{
+				throw;
+			}
+			catch(Exception ex)
+			{
+				String message = String.Format("Error processing node {0}, inner content {1}", node.Name, node.InnerXml);
 
-			engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(node));
-
-			return node;
+				throw new ConfigurationProcessingException(message, ex);
+			}
 		}
 
 		public XmlNode Process(IResource resource)
 		{
-			using(resource)
+			try
 			{
-				XmlDocument doc = new XmlDocument();
+				using(resource)
+				{
+					XmlDocument doc = new XmlDocument();
 
-				doc.Load(resource.GetStreamReader());
+					doc.Load(resource.GetStreamReader());
 
-				engine.PushResource(resource);
+					engine.PushResource(resource);
 
-				XmlNode element = Process(doc.DocumentElement);
+					XmlNode element = Process(doc.DocumentElement);
 
-				engine.PopResource();
+					engine.PopResource();
 
-				return element;
+					return element;
+				}
+			}
+			catch(ConfigurationProcessingException)
+			{
+				throw;
+			}
+			catch(Exception ex)
+			{
+				String message = String.Format("Error processing node resource {0}", resource);
+
+				throw new ConfigurationProcessingException(message, ex);
 			}
 		}
 	}

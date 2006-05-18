@@ -49,14 +49,14 @@ namespace Castle.MicroKernel
 		/// <param name="kernel"></param>
 		void Init(IKernel kernel);
 
-        /// <summary>
-        /// Implementors should return a valid instance 
-        /// for the component the handler is responsible.
-        /// It should throw an exception in the case the component
-        /// can't be created for some reason
-        /// </summary>
-        /// <returns></returns>
-        object Resolve();
+		/// <summary>
+		/// Implementors should return a valid instance 
+		/// for the component the handler is responsible.
+		/// It should throw an exception in the case the component
+		/// can't be created for some reason
+		/// </summary>
+		/// <returns></returns>
+		object Resolve();
 
 		/// <summary>
 		/// Implementors should dispose the component instance

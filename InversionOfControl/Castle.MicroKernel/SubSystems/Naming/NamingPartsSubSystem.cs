@@ -57,22 +57,22 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public override bool Contains(String key)
 		{
-			return tree.Contains( ToComponentName(key) );
+			return tree.Contains(ToComponentName(key));
 		}
 
 		public override void UnRegister(String key)
 		{
-			tree.Remove( ToComponentName(key) );
+			tree.Remove(ToComponentName(key));
 		}
 
 		public override IHandler GetHandler(String key)
 		{
-			return tree.GetHandler( ToComponentName(key) );
+			return tree.GetHandler(ToComponentName(key));
 		}
 
 		public override IHandler[] GetHandlers(String query)
 		{
-			return tree.GetHandlers( ToComponentName(query) );
+			return tree.GetHandlers(ToComponentName(query));
 		}
 
 		public override IHandler[] GetHandlers()
@@ -82,7 +82,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public override IHandler this[String key]
 		{
-			set { tree.Add( ToComponentName(key), value ); }
+			set { tree.Add(ToComponentName(key), value); }
 		}
 
 		public override int ComponentCount

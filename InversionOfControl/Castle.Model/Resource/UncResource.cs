@@ -24,6 +24,7 @@ namespace Castle.Model.Resource
 	{
 		private readonly Stream stream;
 		private String basePath;
+		private string filePath;
 
 		public UncResource(CustomUri resource)
 		{
@@ -43,11 +44,6 @@ namespace Castle.Model.Resource
 		{
 		}
 
-		protected override Stream Stream
-		{
-			get { return stream; }
-		}
-
 		public override String FileBasePath
 		{
 			get { return basePath; }
@@ -56,6 +52,16 @@ namespace Castle.Model.Resource
 		public override IResource CreateRelative(String resourceName)
 		{
 			return new UncResource( Path.Combine(basePath, resourceName) );
+		}
+
+		public override string ToString()
+		{
+			return String.Format("UncResource: [{0}] [{1}]", filePath, basePath);
+		}
+
+		protected override Stream Stream
+		{
+			get { return stream; }
 		}
 
 		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
@@ -74,6 +80,7 @@ namespace Castle.Model.Resource
 				filePath = Path.Combine( basePath, filePath );
 			}
 
+			this.filePath = Path.GetFileName(filePath);
 			this.basePath = Path.GetDirectoryName(filePath);
 			
 			CheckFileExists(filePath);

@@ -21,6 +21,8 @@ namespace Castle.Model.Resource
 	public class AssemblyResource : AbstractStreamResource
 	{
 		private readonly Stream stream;
+		private string assemblyName;
+		private string resourcePath;
 		private String basePath;
 
 		public AssemblyResource(CustomUri resource)
@@ -48,6 +50,11 @@ namespace Castle.Model.Resource
 			throw new NotImplementedException();
 		}
 
+		public override string ToString()
+		{
+			return String.Format("AssemblyResource: [{0}] [{1}]", assemblyName, resourcePath);
+		}
+
 		private Stream CreateResourceFromPath(String resource, String path)
 		{
 			if (!resource.StartsWith("assembly" + CustomUri.SchemeDelimiter))
@@ -62,8 +69,8 @@ namespace Castle.Model.Resource
 		{
 			if (resourcex == null) throw new ArgumentNullException("resourcex");
 
-			String assemblyName = resourcex.Host;
-			String resourcePath = ConvertToResourceName(assemblyName, resourcex.Path, basePath);
+			assemblyName = resourcex.Host;
+			resourcePath = ConvertToResourceName(assemblyName, resourcex.Path, basePath);
 
 			Assembly assembly = ObtainAssembly(assemblyName);
 

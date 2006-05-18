@@ -24,6 +24,7 @@ namespace Castle.Model.Resource
 	public class ConfigResource : AbstractResource
 	{
 		private readonly XmlNode configSectionNode;
+		private string sectionName;
 
 		public ConfigResource() : this("castle")
 		{
@@ -35,6 +36,8 @@ namespace Castle.Model.Resource
 
 		public ConfigResource(String sectionName)
 		{
+			this.sectionName = sectionName;
+
 			XmlNode node = (XmlNode) ConfigurationSettings.GetConfig(sectionName);
 
 			if (node == null)
@@ -64,8 +67,12 @@ namespace Castle.Model.Resource
 		}
 
 		public override void Dispose()
+		{			
+		}
+
+		public override string ToString()
 		{
-			
+			return String.Format("ConfigResource: [{0}]", sectionName);
 		}
 	}
 }

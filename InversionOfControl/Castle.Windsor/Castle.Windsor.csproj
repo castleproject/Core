@@ -198,6 +198,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\Interpreters\XmlProcessor\ConfigurationProcessingException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\Interpreters\XmlProcessor\DefaultXmlProcessorEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

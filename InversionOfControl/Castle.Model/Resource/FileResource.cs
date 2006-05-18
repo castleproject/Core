@@ -23,6 +23,7 @@ namespace Castle.Model.Resource
 	public class FileResource : AbstractStreamResource
 	{
 		private readonly Stream stream;
+		private string filePath;
 		private String basePath;
 
 		public FileResource(CustomUri resource)
@@ -45,9 +46,9 @@ namespace Castle.Model.Resource
 			stream = CreateStreamFromPath(resourceName, basePath);
 		}
 
-		protected override Stream Stream
+		public override string ToString()
 		{
-			get { return stream; }
+			return String.Format("FileResource: [{0}] [{1}]", filePath, basePath);
 		}
 
 		public override String FileBasePath
@@ -58,6 +59,11 @@ namespace Castle.Model.Resource
 		public override IResource CreateRelative(String resourceName)
 		{
 			return new FileResource(resourceName, basePath);
+		}
+
+		protected override Stream Stream
+		{
+			get { return stream; }
 		}
 
 		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
@@ -88,6 +94,7 @@ namespace Castle.Model.Resource
 
 			CheckFileExists(filePath);
 
+			this.filePath = Path.GetFileName(filePath);
 			this.basePath = Path.GetDirectoryName(filePath);
 
 			return File.OpenRead(filePath);
@@ -97,7 +104,7 @@ namespace Castle.Model.Resource
 		{
 			if (!File.Exists(path))
 			{
-				String message = String.Format("File {0} could not be found", path);
+				String message = String.Format("File {0} could not be found", new FileInfo(path).FullName);
 				throw new ResourceException(message);
 			}
 		}

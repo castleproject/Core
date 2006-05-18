@@ -21,13 +21,15 @@ namespace Castle.Windsor.Tests
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using Castle.Windsor.Tests.Configuration2;
-    using NUnit.Framework;
-    using Castle.Windsor.Tests.Components;
+    
+	using Castle.Windsor.Tests.Configuration2;
+	using Castle.Windsor.Tests.Components;
     using Castle.Windsor.Configuration.Interpreters;
     using Castle.Model.Resource;
     using Castle.MicroKernel.Handlers;
     using Castle.MicroKernel.Resolvers;
+
+	using NUnit.Framework;
 
     [TestFixture]
     public class WindsorDotNet2Tests

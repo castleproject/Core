@@ -58,33 +58,44 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 		{
 			XmlDocumentFragment frag = null;
 
-			if (includeUri != null)
+			if (includeUri == null)
 			{
-				String[] uriList = includeUri.Split(',');
-				frag = CreateFragment(element);
+				throw new ConfigurationProcessingException(
+					String.Format("Found an include node without an 'uri' attribute: {0}", element.BaseURI));
+			}
 
-				foreach(String uri in uriList)
+			String[] uriList = includeUri.Split(',');
+			frag = CreateFragment(element);
+
+			foreach(String uri in uriList)
+			{
+				using(IResource resource = engine.GetResource(uri))
 				{
-					using(IResource resource = engine.GetResource(uri))
+					XmlDocument doc = new XmlDocument();
+
+					try
 					{
-						XmlDocument doc = new XmlDocument();
-
 						doc.Load(resource.GetStreamReader());
+					}
+					catch(Exception ex)
+					{
+						throw new ConfigurationProcessingException(
+							String.Format("Error processing include node: {0}", includeUri), ex);
+					}
 
-						engine.PushResource(resource);
+					engine.PushResource(resource);
 
-						engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(doc.DocumentElement));
+					engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(doc.DocumentElement));
 
-						engine.PopResource();
+					engine.PopResource();
 
-						if (element.GetAttribute("preserve-wrapper") == "yes")
-						{
-							AppendChild(frag, doc.DocumentElement);
-						}
-						else
-						{
-							AppendChild(frag, doc.DocumentElement.ChildNodes);
-						}
+					if (element.GetAttribute("preserve-wrapper") == "yes")
+					{
+						AppendChild(frag, doc.DocumentElement);
+					}
+					else
+					{
+						AppendChild(frag, doc.DocumentElement.ChildNodes);
 					}
 				}
 			}

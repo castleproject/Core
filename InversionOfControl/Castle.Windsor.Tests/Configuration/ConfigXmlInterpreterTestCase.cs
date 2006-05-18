@@ -14,22 +14,14 @@
 
 namespace Castle.Windsor.Tests.Configuration
 {
-	using System;
-	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-	using NUnit.Framework;
-
 	using Castle.Model.Resource;
 	using Castle.Model.Configuration;
-
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.SubSystems.Configuration;
-
 	using Castle.Windsor.Configuration.Interpreters;
 
+	using NUnit.Framework;
 
-	/// <summary>
-	/// Summary description for XmlInterpreterTestCase.
-	/// </summary>
 	[TestFixture]
 	public class ConfigXmlInterpreterTestCase
 	{
@@ -38,7 +30,7 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 
-			XmlInterpreter interpreter = new XmlInterpreter("sample_config.xml");
+			XmlInterpreter interpreter = new XmlInterpreter("../Castle.Windsor.Tests/sample_config.xml");
 			interpreter.ProcessResource(interpreter.Source, store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
@@ -68,7 +60,7 @@ namespace Castle.Windsor.Tests.Configuration
 		public void CorrectConfigurationMapping()
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
-			XmlInterpreter interpreter = new XmlInterpreter("sample_config.xml");
+			XmlInterpreter interpreter = new XmlInterpreter("../Castle.Windsor.Tests/sample_config.xml");
 			interpreter.ProcessResource(interpreter.Source, store);
 
 			WindsorContainer container = new WindsorContainer(store);			

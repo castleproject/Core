@@ -63,12 +63,13 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 		}
 
+		#endregion
+
 		public IKernel Kernel
 		{
 			get { return kernel ; }
 			set { kernel = value; }
 		}
-		#endregion
 
 		public override void ProcessResource(IResource source, IConfigurationStore store)
 		{
