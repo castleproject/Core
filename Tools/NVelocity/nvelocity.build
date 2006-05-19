@@ -65,6 +65,10 @@
 				<include name="**/*.properties" />
 			</resources>
 			
+			<references basedir="${bin.dir}">
+				<include name="System.Data.dll" />
+			</references>
+
 			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
