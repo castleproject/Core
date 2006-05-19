@@ -76,7 +76,9 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(DependencyResolverException), "Could not resolve non-optional dependency for 'int.repos' (Castle.Windsor.Tests.LoggingRepositoryDecorator`1[[System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]). Parameter 'inner' type 'Castle.Windsor.Tests.IRepository`1[[System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]'")]
+        [ExpectedException(typeof(DependencyResolverException), @"Cycle detected in cofiguration.
+Component int.repos has a dependency Castle.Windsor.Tests.IRepository`1[System.Int32], but it doesn't provide an override.
+You must provide an override if a component has a dependency on a service that it registers.")]
         public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
@@ -142,7 +144,6 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        [Ignore("Some sort of config mismatch here ?")]
         public void ComplexGenericConfiguration_GetGenericRepostiory()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
@@ -173,7 +174,6 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        [Ignore("Some sort of config mismatch here ?")]
         public void ComplexGenericConfiguration_GetReviewableRepostiory_ShouldResolveToDemoRepostiroyInsideLoggingRepositoryWithNoCaching()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));

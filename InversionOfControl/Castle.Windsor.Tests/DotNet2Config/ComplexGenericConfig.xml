@@ -3,6 +3,9 @@
     <component id='logging.repository' 
       service='Castle.Windsor.Tests.IRepository`1, Castle.Windsor.Tests' 
       type='Castle.Windsor.Tests.LoggingRepositoryDecorator`1, Castle.Windsor.Tests'>
+      <parameters>
+        <inner>${generic.repository}</inner>
+      </parameters>
     </component>
     <component id='caching' 
       service='Castle.Windsor.Tests.ICache`1, Castle.Windsor.Tests' 
@@ -31,7 +34,9 @@
     <component id='reviewer.logging.repository' 
         service='Castle.Windsor.Tests.IRepository`1[[Castle.Windsor.Tests.Components.IReviewableEmployee, Castle.Windsor.Tests]], Castle.Windsor.Tests' 
         type='Castle.Windsor.Tests.LoggingRepositoryDecorator`1[[Castle.Windsor.Tests.Components.IReviewableEmployee, Castle.Windsor.Tests]], Castle.Windsor.Tests'>
-      <inner>${generic.repository.no-cache}</inner>
+      <parameters>
+        <inner>${generic.repository.no-cache}</inner>
+      </parameters>
     </component>
     <component id='generic.repository.no-cache' 
         service='Castle.Windsor.Tests.DemoRepository`1[[Castle.Windsor.Tests.Components.IReviewableEmployee, Castle.Windsor.Tests]], Castle.Windsor.Tests'

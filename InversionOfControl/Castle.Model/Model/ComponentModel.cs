@@ -59,6 +59,9 @@ namespace Castle.Model
     /// Represents the collection of information and
     /// meta information collected about a component.
     /// </summary>
+#if DOTNET2
+    [System.Diagnostics.DebuggerDisplay("{Implementation} / {implementation}")]
+#endif
     [Serializable]
     public sealed class ComponentModel : GraphNode
     {

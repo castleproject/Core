@@ -206,9 +206,18 @@ namespace Castle.MicroKernel.Resolvers
 				}
 				else
 				{
+                    if (dependency.TargetType == model.Service)
+                        throw new DependencyResolverException(
+                            "Cycle detected in cofiguration.\r\n"+
+                            "Component "+model.Name+" has a dependency "+dependency.TargetType+
+                            ", but it doesn't provide an override.\r\n"+
+                            "You must provide an override if a component"+
+                            " has a dependency on a service that it registers.");
 					// Default behaviour
 				    // Find all handlers that can match this dependency, so we will not
 				    // get locked on the first one if it is the same as we are currently searching
+				    // and it is the same model as the one that we are search the dependency on.
+				    // This can happen in decorators scenarios.wl
 				    foreach (IHandler possibleHandler in kernel.GetHandlers(dependency.TargetType))
 				    {
 				        if(possibleHandler.ComponentModel != model)
@@ -218,12 +227,6 @@ namespace Castle.MicroKernel.Resolvers
 				        }
 				    }
 				}
-                if (handler != null && handler.ComponentModel == model)
-                {
-                    throw new Resolvers.DependencyResolverException(
-                        String.Format("Type {0} has a mandatory dependency on itself. Can't satisfy the dependency!",
-                            dependency.TargetType));
-                }
 			}
 
 			if (handler == null) return null;

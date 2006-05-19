@@ -155,24 +155,32 @@ namespace Castle.MicroKernel.SubSystems.Naming
         {
             if (service == null) throw new ArgumentNullException("service");
 
-			ArrayList list = new ArrayList();
-
+            Hashtable set = new Hashtable();// using only the key collection to avoid duplicates
 			foreach(IHandler handler in this.GetHandlers())
 			{
-				bool match = service == handler.ComponentModel.Service;
+			    //Consider types derived from service as well
+                if (service.IsAssignableFrom(handler.ComponentModel.Service))
+                {
+                    set[handler] = null;
+                    continue;
+                }
 #if DOTNET2
                 if (service.IsGenericType && !service.IsGenericTypeDefinition)
                 {
-                    match = match || service.GetGenericTypeDefinition() == handler.ComponentModel.Service;
+                    Type genericType = service.GetGenericTypeDefinition();
+                    //Consider types derived from service as well
+                    if(genericType .IsAssignableFrom  (handler.ComponentModel.Service))
+                    {
+                        //this will create the handler or retrieve the generic version
+                        IHandler genericHandler = GetHandler(genericType);
+                        if(genericHandler!=null)
+                            set[genericHandler] = null;
+                    }
                 }
 #endif
-                if (match)
-                {
-                    list.Add(handler);
-                }
             }
-
-			return (IHandler[]) list.ToArray(typeof(IHandler));
+            
+			return (IHandler[]) new ArrayList(set.Keys).ToArray(typeof(IHandler));
 		}
 
 		public virtual IHandler[] GetAssignableHandlers(Type service)

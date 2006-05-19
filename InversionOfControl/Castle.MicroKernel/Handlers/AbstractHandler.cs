@@ -23,8 +23,11 @@ namespace Castle.MicroKernel.Handlers
 
 	/// <summary>
 	/// Implements the basis of <see cref="IHandler"/>
-	/// </summary>
-	[Serializable]
+    /// </summary>
+#if DOTNET2
+    [System.Diagnostics.DebuggerDisplay("Model: {ComponentModel.Service} / {ComponentModel.Implementation} ")]
+#endif
+    [Serializable]
 	public abstract class AbstractHandler : MarshalByRefObject, IHandler, IExposeDependencyInfo, IDisposable
 	{
 		private IKernel kernel;

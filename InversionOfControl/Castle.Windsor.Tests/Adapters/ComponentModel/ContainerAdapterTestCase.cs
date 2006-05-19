@@ -27,6 +27,7 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 	using Castle.Windsor.Adapters.ComponentModel;
 
 	using Castle.Windsor.Tests.Components;
+    using System.Collections;
 
 	[TestFixture]
 	public class ContainerAdapterTestCase
@@ -182,9 +183,13 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 
 			container.Add( component );
 
-			IHandler[] handlers = container.Container.Kernel.GetHandlers( typeof(IComponent) );
-			Assert.AreEqual( 1, handlers.Length );
-			Assert.AreEqual( handlers[0].Resolve(), component );
+            IHandler[] handlers = container.Container.Kernel.GetHandlers(typeof(IComponent));
+			// two handlers are returned, one for the component and one for the container, which 
+		    // also implements IComponent
+		    Assert.AreEqual( 2, handlers.Length );
+		    IList resolved = new object[]{handlers[0].Resolve(), handlers[1].Resolve()};
+		    Assert.IsTrue( resolved.Contains( component ));
+            Assert.IsTrue(resolved.Contains(container));
 		}
 
 		[Test]
