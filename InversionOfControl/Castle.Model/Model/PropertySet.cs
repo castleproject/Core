@@ -58,8 +58,10 @@ namespace Castle.Model
 #if DOTNET2
                 if (containsGenericTypes)
                 {
-                    Type type = CurrentContext.MakeGenericType(propertyInfo.DeclaringType);
-                    return type.GetProperty(propertyInfo.Name, propertyInfo.PropertyType,indexTypes);
+                    Type type = CurrentContext.GetImplementationType(propertyInfo.DeclaringType);
+                    Type returnType = CurrentContext.GetImplementationType(propertyInfo.PropertyType);
+                    Type[] genericIndexTypes  = CurrentContext.GetImplementationTypes(indexTypes);
+                    return type.GetProperty(propertyInfo.Name, returnType,genericIndexTypes);
                 }
 #endif
                 return propertyInfo;

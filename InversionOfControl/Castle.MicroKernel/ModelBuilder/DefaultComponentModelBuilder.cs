@@ -41,13 +41,14 @@ namespace Castle.MicroKernel.ModelBuilder
 
 		protected virtual void InitializeContributors()
 		{
-			AddContributor( new ConfigurationModelInspector() );
+		    AddContributor( new ConfigurationModelInspector() );
 			AddContributor( new LifestyleModelInspector() );
 			AddContributor( new ConstructorDependenciesModelInspector() );
 			AddContributor( new PropertiesDependenciesModelInspector() );
 			AddContributor( new LifecycleModelInspector() );
 			AddContributor( new ConfigurationParametersInspector() );
 			AddContributor( new InterceptorInspector() );
+
 		}
 
 		public ComponentModel BuildModel(String key, Type service, 

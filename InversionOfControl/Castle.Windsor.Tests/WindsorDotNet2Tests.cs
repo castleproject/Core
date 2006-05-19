@@ -76,7 +76,7 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(DependencyResolverException), "Type Castle.Windsor.Tests.IRepository`1[System.Int32] has a mandatory dependency on itself. Can't satisfy the dependency!")]
+        [ExpectedException(typeof(DependencyResolverException), "Could not resolve non-optional dependency for 'int.repos' (Castle.Windsor.Tests.LoggingRepositoryDecorator`1[[System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]). Parameter 'inner' type 'Castle.Windsor.Tests.IRepository`1[[System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]'")]
         public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
@@ -126,7 +126,6 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        [Ignore("Doesn't work because it doesn't understand that constructor parameters can be typed as well.")]
         public void GetSameInstanceOfGenericFromTwoDifferentGenericTypes()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
@@ -136,56 +135,64 @@ namespace Castle.Windsor.Tests
 
             Assert.AreSame(repos1, repos2);
 
-
             IRepository<int> repos3 = container.Resolve<IRepository<int>>();
             IRepository<int> repos4 = container.Resolve<IRepository<int>>();
 
             Assert.AreSame(repos3, repos4);
-
         }
 
-        //cache generic types
-        //cache properties of generic types
-        //cache ctors of generic types
-    }
-
-    public interface IRepository<T>
-    {
-        T Get(int id);
-    }
-
-    public class DemoRepository<T> : IRepository<T>
-    {
-        string name;
-
-        public string Name
+        [Test]
+        [Ignore("Some sort of config mismatch here ?")]
+        public void ComplexGenericConfiguration_GetGenericRepostiory()
         {
-            get { return name; }
-            set { name = value; }
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+            IRepository<IEmployee> empRepost = container[typeof (IRepository<IEmployee>)] as IRepository<IEmployee>;
+            Assert.IsNotNull(empRepost);
+            Assert.IsInstanceOfType(typeof (LoggingRepositoryDecorator<IEmployee>), empRepost);
+            LoggingRepositoryDecorator<IEmployee> log = empRepost as LoggingRepositoryDecorator<IEmployee>;
+            IRepository<IEmployee> inner = log.inner;
+            Assert.IsNotNull(inner);
+            Assert.IsInstanceOfType(typeof (DemoRepository<IEmployee>), inner);
+            DemoRepository<IEmployee> demoEmpRepost = inner as DemoRepository<IEmployee>;
+            Assert.AreEqual("Generic Repostiory", demoEmpRepost.Name);
+            Assert.IsNotNull(demoEmpRepost.Cache);
+            Assert.IsInstanceOfType(typeof (HashTableCache<IEmployee>), demoEmpRepost.Cache);
         }
-        public T Get(int id)
+
+        [Test]
+        public void ComplexGenericConfiguration_GetReviewRepository_BoundAtConfiguration()
         {
-            return Activator.CreateInstance<T>();
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+            IRepository<IReviewer> rev = container.Resolve<IRepository<IReviewer>>();
+
+            Assert.IsInstanceOfType(typeof(ReviewerRepository), rev);
+            ReviewerRepository repos = rev as  ReviewerRepository;
+            Assert.AreEqual("Reviewer Repository", repos.Name);
+            Assert.IsNotNull(repos.Cache);
+            Assert.IsInstanceOfType(typeof(HashTableCache<IReviewer>), repos.Cache);
         }
-    }
 
-    public class LoggingRepositoryDecorator<T> : IRepository<T>
-    {
-        public IRepository<T> inner;
-
-        public LoggingRepositoryDecorator()
-        { }
-
-        public LoggingRepositoryDecorator(IRepository<T> inner)
+        [Test]
+        [Ignore("Some sort of config mismatch here ?")]
+        public void ComplexGenericConfiguration_GetReviewableRepostiory_ShouldResolveToDemoRepostiroyInsideLoggingRepositoryWithNoCaching()
         {
-            this.inner = inner;
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+            IRepository<IReviewableEmployee> empRepost = container.Resolve<IRepository<IReviewableEmployee>>();
+            Assert.IsNotNull(empRepost);
+            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<IReviewableEmployee>), empRepost);
+            LoggingRepositoryDecorator<IReviewableEmployee> log = empRepost as LoggingRepositoryDecorator<IReviewableEmployee>;
+            IRepository<IReviewableEmployee> inner = log.inner;
+            Assert.IsNotNull(inner);
+            Assert.IsInstanceOfType(typeof(DemoRepository<IReviewableEmployee>), inner);
+            DemoRepository<IReviewableEmployee> demoEmpRepost = inner as DemoRepository<IReviewableEmployee>;
+            Assert.AreEqual("Generic Repostiory With No Cache", demoEmpRepost.Name);                
+            Assert.IsNotNull(demoEmpRepost.Cache);
+            Assert.IsInstanceOfType(typeof(NullCache<IReviewableEmployee>), demoEmpRepost.Cache);
         }
-
-        public T Get(int id)
-        {
-            Console.WriteLine("Getting {0}", id);
-            return inner.Get(id);
-        }
+        //more tests:
+        //  cache generic types
+        //  cache properties of generic types
+        //  cache ctors of generic typesd
     }
 }
 #endif

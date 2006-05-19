@@ -201,12 +201,22 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				if (dependency.DependencyType == DependencyType.ServiceOverride)
 				{
-					handler = kernel.GetHandler( dependency.DependencyKey );
+
+                    handler = kernel.GetHandler(dependency.DependencyKey, dependency.TargetType);
 				}
 				else
 				{
 					// Default behaviour
-                    handler = kernel.GetHandler( dependency.TargetType );
+				    // Find all handlers that can match this dependency, so we will not
+				    // get locked on the first one if it is the same as we are currently searching
+				    foreach (IHandler possibleHandler in kernel.GetHandlers(dependency.TargetType))
+				    {
+				        if(possibleHandler.ComponentModel != model)
+				        {
+                            handler = possibleHandler;
+				            break;
+				        }
+				    }
 				}
                 if (handler != null && handler.ComponentModel == model)
                 {

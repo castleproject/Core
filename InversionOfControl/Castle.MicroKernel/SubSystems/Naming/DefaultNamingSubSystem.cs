@@ -121,17 +121,39 @@ namespace Castle.MicroKernel.SubSystems.Naming
             if (service.IsGenericType)
             {
                 handler = service2Handler[service.GetGenericTypeDefinition()] as IHandler;
+                if (handler==null) return null;
                 //Registers a concrete implementation of the generic type in the kernel
-                CloneGenericHandlerForSpesificType(handler, service);
+                CloneGenericHandlerForSpesificType(handler, service,null);
                 return GetHandler(service);
             }
 #endif
 			return handler;
 		}
 
-		public virtual IHandler[] GetHandlers(Type service)
-		{
-			if (service == null) throw new ArgumentNullException("service");
+        public virtual IHandler GetHandler(String key, Type service)
+        {
+            if (key == null) throw new ArgumentNullException("key");
+            if (service == null) throw new ArgumentNullException("service");
+
+            IHandler handler = key2Handler[key] as IHandler;
+            if (handler == null)
+                return null;
+#if DOTNET2
+            if (handler.ComponentModel.Service == service)
+                return handler;
+            if (service.IsGenericType)
+            {
+                //Registers a concrete implementation of the generic type in the kernel
+                string genericKey = CloneGenericHandlerForSpesificType(handler, service, key);
+                return GetHandler(genericKey, service);
+            }
+#endif
+            return handler;
+        }
+
+        public virtual IHandler[] GetHandlers(Type service)
+        {
+            if (service == null) throw new ArgumentNullException("service");
 
 			ArrayList list = new ArrayList();
 
@@ -142,14 +164,13 @@ namespace Castle.MicroKernel.SubSystems.Naming
                 if (service.IsGenericType && !service.IsGenericTypeDefinition)
                 {
                     match = match || service.GetGenericTypeDefinition() == handler.ComponentModel.Service;
-                    
                 }
 #endif
-				if (match)
-				{
-					list.Add(handler);
-				}
-			}
+                if (match)
+                {
+                    list.Add(handler);
+                }
+            }
 
 			return (IHandler[]) list.ToArray(typeof(IHandler));
 		}
@@ -206,17 +227,31 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		}
 
         #endregion
-        
+
 #if DOTNET2
-        private void CloneGenericHandlerForSpesificType(IHandler handler, Type genericService)
+        private string CloneGenericHandlerForSpesificType(IHandler handler, Type genericService, String key)
         {
-            String key = GenericTypeNameProvider.AppendGenericTypeName(key2Handler, handler, genericService);
+            string guessedKey = key ?? GetKeyByHandler(handler);
+            String genericKey = GenericTypeNameProvider.AppendGenericTypeName(handler, genericService, guessedKey);
             //Get the correct type from the context...
             Type genericClass = handler.ComponentModel.Implementation;
-            Kernel.AddComponent(key, genericService, genericClass);
+            Kernel.AddComponent(genericKey, genericService, genericClass);
+            return genericKey;
         }
 
-      
+        private String GetKeyByHandler(IHandler handler)
+        {
+            String key = null;
+            foreach (DictionaryEntry entry in key2Handler)
+            {
+                if (entry.Value == handler)
+                {
+                    key = entry.Key.ToString();
+                    break;
+                }
+            }
+            return key;
+        }
 #endif
     }
 }

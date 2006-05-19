@@ -138,6 +138,7 @@
     <Compile Include="Configuration\Interpreters\XmlInterpreter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\Interpreters\XmlProcessor\ConfigurationProcessingException.cs" />
     <Compile Include="Configuration\Interpreters\XmlProcessor\DefaultXmlProcessorEngine.cs">
       <SubType>Code</SubType>
     </Compile>

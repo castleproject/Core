@@ -21,18 +21,9 @@ namespace Castle.MicroKernel.Util
 {
     public static class GenericTypeNameProvider
     {
-        public static String AppendGenericTypeName(IDictionary key2Handler, IHandler handler, Type genericService)
+        public static string AppendGenericTypeName(IHandler handler, Type genericService, string key)
         {
-            String key=null;
-            foreach (DictionaryEntry entry in key2Handler)
-            {
-                if (entry.Value == handler)
-                {
-                    key = entry.Key.ToString() + "-->" + genericService.FullName;
-                    break;
-                }
-            }
-            return key;
+            return key + "-->" + genericService.FullName;
         }
 
         public static string StripGenericTypeName(string key)

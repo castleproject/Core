@@ -12,14 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Web;
+
 
 namespace Castle.Model.Internal
 {
     using System;
     using System.Text;
     using System.Collections;
-
+    using System.Web;
+#if DOTNET2
+    using System.Collections.Generic;
+#endif
+    
+    
     public sealed class CurrentContext
     {
         private static IContextAccessor accessor;
@@ -113,6 +118,20 @@ namespace Castle.Model.Internal
                 return CurrentContext.MakeGenericType(targetType);
 #endif
             return targetType;
+        }
+
+        public static Type[] GetImplementationTypes(Type[] types)
+        {
+#if DOTNET2
+            List<Type> implTypes = new List<Type>();
+            foreach (Type type in types)
+            {
+                implTypes.Add(GetImplementationType(type));
+            }
+            return implTypes.ToArray();
+#else
+            return types;
+#endif
         }
     }
 }

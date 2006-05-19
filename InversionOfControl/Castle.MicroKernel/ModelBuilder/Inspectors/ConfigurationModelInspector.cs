@@ -14,27 +14,36 @@
 
 namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
-	using System;
+    using System;
 
-	using Castle.Model.Configuration;
+    using Castle.Model.Configuration;
 
-	/// <summary>
-	/// Uses the ConfigurationStore registered in the kernel to obtain
-	/// an <see cref="IConfiguration"/> associated with the component.
-	/// </summary>
-	[Serializable]
-	public class ConfigurationModelInspector : IContributeComponentModelConstruction
-	{
-		/// <summary>
-		/// Queries the kernel's ConfigurationStore for a configuration
-		/// associated with the component name.
-		/// </summary>
-		/// <param name="kernel"></param>
-		/// <param name="model"></param>
-		public virtual void ProcessModel(IKernel kernel, Castle.Model.ComponentModel model)
-		{
-			model.Configuration = 
-				kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
-		}
-	}
+    /// <summary>
+    /// Uses the ConfigurationStore registered in the kernel to obtain
+    /// an <see cref="IConfiguration"/> associated with the component.
+    /// </summary>
+    [Serializable]
+    public class ConfigurationModelInspector : IContributeComponentModelConstruction
+    {
+        /// <summary>
+        /// Queries the kernel's ConfigurationStore for a configuration
+        /// associated with the component name.
+        /// </summary>
+        /// <param name="kernel"></param>
+        /// <param name="model"></param>
+        public virtual void ProcessModel(IKernel kernel, Castle.Model.ComponentModel model)
+        {
+            model.Configuration = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
+#if DOTNET2
+            //there is no config for this, try to see if the service is a generic type
+            //that has a registered handler
+            if (model.Configuration != null || !model.Service.IsGenericType) return;
+            Type definition = model.Service.GetGenericTypeDefinition();
+            if (definition == null) return;
+            IHandler handler = kernel.GetHandler(definition);
+            if (handler == null) return;
+            model.Configuration = handler.ComponentModel.Configuration;
+#endif
+        }
+    }
 }
