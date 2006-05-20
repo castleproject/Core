@@ -30,7 +30,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="${strong}"
+			define="${define}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
@@ -63,6 +63,7 @@
 
 	<target name="tests.compile" depends="compile">
 		<csc 
+			define="${define}"
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${test.assembly.name}">
