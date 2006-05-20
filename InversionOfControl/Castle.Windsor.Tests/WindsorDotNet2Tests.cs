@@ -45,7 +45,7 @@ namespace Castle.Windsor.Tests
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             ICalcService svr = container.Resolve<ICalcService>();
-            Assert.IsAssignableFrom(typeof(CalculatorService), svr);
+            Assert.IsTrue(typeof(CalculatorService).IsInstanceOfType(svr));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Castle.Windsor.Tests
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             ICalcService svr = container.Resolve<ICalcService>("calc");
-            Assert.IsAssignableFrom(typeof(CalculatorService), svr);
+            Assert.IsTrue(typeof(CalculatorService).IsInstanceOfType(svr));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Castle.Windsor.Tests
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos.generic");
             Assert.IsNotNull(repos);
-            Assert.IsInstanceOfType(typeof(DemoRepository<int>), repos);
+            Assert.IsTrue(typeof(DemoRepository<int>).IsInstanceOfType(repos ));
         }
 
         [Test]
@@ -71,8 +71,8 @@ namespace Castle.Windsor.Tests
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             IRepository<int> repos = container.Resolve<IRepository<int>>("int.repos");
             Assert.IsNotNull(repos);
-            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<int>), repos);
-            Assert.IsInstanceOfType(typeof(DemoRepository<int>), ((LoggingRepositoryDecorator<int>)repos).inner);
+            Assert.IsTrue(typeof(LoggingRepositoryDecorator<int>).IsInstanceOfType(repos));
+            Assert.IsTrue(typeof(DemoRepository<int>).IsInstanceOfType( ((LoggingRepositoryDecorator<int>)repos).inner) );
         }
 
         [Test]
@@ -90,11 +90,10 @@ You must provide an override if a component has a dependency on a service that i
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("DecoratorConfig.xml")));
             IRepository<int> repos = container.Resolve<IRepository<int>>();
-            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<int>),
-                repos);
+            Assert.IsTrue(typeof(LoggingRepositoryDecorator<int>). IsInstanceOfType(repos) );
 
-            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<int>), repos);
-            Assert.IsInstanceOfType(typeof(DemoRepository<int>), ((LoggingRepositoryDecorator<int>)repos).inner);
+            Assert.IsTrue(typeof(LoggingRepositoryDecorator<int>).IsInstanceOfType( repos));
+            Assert.IsTrue(typeof(DemoRepository<int>).IsInstanceOfType(  ((LoggingRepositoryDecorator<int>)repos).inner) );
 
             DemoRepository<int> inner = ((LoggingRepositoryDecorator<int>)repos).inner as DemoRepository<int>;
 
@@ -107,7 +106,7 @@ You must provide an override if a component has a dependency on a service that i
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericDecoratorConfig.xml")));
 
             IRepository<string> repos = container.Resolve<IRepository<string>>();
-            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<string>), repos);
+            Assert.IsTrue(typeof(LoggingRepositoryDecorator<string>).IsInstanceOfType(repos));
 
             DemoRepository<string> inner = ((LoggingRepositoryDecorator<string>)repos).inner as DemoRepository<string>;
 
@@ -149,15 +148,15 @@ You must provide an override if a component has a dependency on a service that i
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
             IRepository<IEmployee> empRepost = container[typeof (IRepository<IEmployee>)] as IRepository<IEmployee>;
             Assert.IsNotNull(empRepost);
-            Assert.IsInstanceOfType(typeof (LoggingRepositoryDecorator<IEmployee>), empRepost);
+            Assert.IsTrue(typeof (LoggingRepositoryDecorator<IEmployee>).IsInstanceOfType( empRepost) );
             LoggingRepositoryDecorator<IEmployee> log = empRepost as LoggingRepositoryDecorator<IEmployee>;
             IRepository<IEmployee> inner = log.inner;
             Assert.IsNotNull(inner);
-            Assert.IsInstanceOfType(typeof (DemoRepository<IEmployee>), inner);
+            Assert.IsTrue(typeof (DemoRepository<IEmployee>).IsInstanceOfType( inner) );
             DemoRepository<IEmployee> demoEmpRepost = inner as DemoRepository<IEmployee>;
             Assert.AreEqual("Generic Repostiory", demoEmpRepost.Name);
             Assert.IsNotNull(demoEmpRepost.Cache);
-            Assert.IsInstanceOfType(typeof (HashTableCache<IEmployee>), demoEmpRepost.Cache);
+            Assert.IsTrue(typeof (HashTableCache<IEmployee>).IsInstanceOfType(demoEmpRepost.Cache));
         }
 
         [Test]
@@ -166,11 +165,11 @@ You must provide an override if a component has a dependency on a service that i
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
             IRepository<IReviewer> rev = container.Resolve<IRepository<IReviewer>>();
 
-            Assert.IsInstanceOfType(typeof(ReviewerRepository), rev);
+            Assert.IsTrue(typeof(ReviewerRepository).IsInstanceOfType(rev));
             ReviewerRepository repos = rev as  ReviewerRepository;
             Assert.AreEqual("Reviewer Repository", repos.Name);
             Assert.IsNotNull(repos.Cache);
-            Assert.IsInstanceOfType(typeof(HashTableCache<IReviewer>), repos.Cache);
+            Assert.IsTrue(typeof(HashTableCache<IReviewer>).IsInstanceOfType( repos.Cache) );
         }
 
         [Test]
@@ -179,15 +178,15 @@ You must provide an override if a component has a dependency on a service that i
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
             IRepository<IReviewableEmployee> empRepost = container.Resolve<IRepository<IReviewableEmployee>>();
             Assert.IsNotNull(empRepost);
-            Assert.IsInstanceOfType(typeof(LoggingRepositoryDecorator<IReviewableEmployee>), empRepost);
+            Assert.IsTrue(typeof(LoggingRepositoryDecorator<IReviewableEmployee>).IsInstanceOfType( empRepost));
             LoggingRepositoryDecorator<IReviewableEmployee> log = empRepost as LoggingRepositoryDecorator<IReviewableEmployee>;
             IRepository<IReviewableEmployee> inner = log.inner;
             Assert.IsNotNull(inner);
-            Assert.IsInstanceOfType(typeof(DemoRepository<IReviewableEmployee>), inner);
+            Assert.IsTrue(typeof(DemoRepository<IReviewableEmployee>).IsInstanceOfType(inner));
             DemoRepository<IReviewableEmployee> demoEmpRepost = inner as DemoRepository<IReviewableEmployee>;
             Assert.AreEqual("Generic Repostiory With No Cache", demoEmpRepost.Name);                
             Assert.IsNotNull(demoEmpRepost.Cache);
-            Assert.IsInstanceOfType(typeof(NullCache<IReviewableEmployee>), demoEmpRepost.Cache);
+            Assert.IsTrue(typeof(NullCache<IReviewableEmployee>).IsInstanceOfType( demoEmpRepost.Cache) );
         }
         //more tests:
         //  cache generic types

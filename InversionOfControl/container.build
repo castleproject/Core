@@ -15,7 +15,7 @@
 	<target name="init">
 		<property name="define" value="TRACE;${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
-		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
+		<property name="define" value="${define};DOTNET2" if="${framework::get-target-framework()=='net-2.0'}"/>
 		
 		<delete dir="${bin.dir}" failonerror="false" />
 		<mkdir dir="${bin.dir}" />
