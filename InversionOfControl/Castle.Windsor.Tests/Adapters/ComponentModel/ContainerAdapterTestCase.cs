@@ -184,12 +184,7 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 			container.Add( component );
 
             IHandler[] handlers = container.Container.Kernel.GetHandlers(typeof(IComponent));
-			// two handlers are returned, one for the component and one for the container, which 
-		    // also implements IComponent
-		    Assert.AreEqual( 2, handlers.Length );
-		    IList resolved = new object[]{handlers[0].Resolve(), handlers[1].Resolve()};
-		    Assert.IsTrue( resolved.Contains( component ));
-            Assert.IsTrue(resolved.Contains(container));
+            Assert.AreEqual(component, handlers[0].Resolve());
 		}
 
 		[Test]

@@ -158,8 +158,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
             Hashtable set = new Hashtable();// using only the key collection to avoid duplicates
 			foreach(IHandler handler in this.GetHandlers())
 			{
-			    //Consider types derived from service as well
-                if (service.IsAssignableFrom(handler.ComponentModel.Service))
+                if (service == (handler.ComponentModel.Service))
                 {
                     set[handler] = null;
                     continue;
@@ -168,8 +167,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
                 if (service.IsGenericType && !service.IsGenericTypeDefinition)
                 {
                     Type genericType = service.GetGenericTypeDefinition();
-                    //Consider types derived from service as well
-                    if(genericType .IsAssignableFrom  (handler.ComponentModel.Service))
+                    if(genericType == (handler.ComponentModel.Service))
                     {
                         //this will create the handler or retrieve the generic version
                         IHandler genericHandler = GetHandler(genericType);
