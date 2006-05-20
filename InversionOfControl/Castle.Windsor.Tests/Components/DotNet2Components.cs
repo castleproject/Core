@@ -48,7 +48,7 @@ namespace Castle.Windsor.Tests
         }
     }
 
-    public class ReviewerRepository : IRepository<IReviewer>
+    public class ReviewerRepository : DemoRepository<IReviewer>
     {
         string name;
         ICache<IReviewer> cache;
