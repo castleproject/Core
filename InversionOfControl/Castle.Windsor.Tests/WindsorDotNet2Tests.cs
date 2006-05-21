@@ -212,6 +212,19 @@ You must provide an override if a component has a dependency on a service that i
 			Assert.IsFalse( Object.ReferenceEquals(o1, o3) );
 			Assert.IsFalse( Object.ReferenceEquals(o1, o4) );
 		}
+
+    	[Test]
+    	public void CanCreateANormalTypeWithCtorDependencyOnGenericType()
+    	{
+			IWindsorContainer container = new WindsorContainer();
+
+			container.AddComponent("comp", typeof(NeedsGenericType));
+			container.AddComponent("cache", typeof(ICache<>),typeof(NullCache<>));
+
+    		NeedsGenericType needsGenericType = container.Resolve<NeedsGenericType>();
+    		
+			Assert.IsNotNull(needsGenericType);
+    	}
     }
 }
 

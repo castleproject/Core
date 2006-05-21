@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Resolvers
 {
 	using System;
 	using System.Collections;
-	
+
 	using Castle.Model;
 
 	using Castle.MicroKernel.Util;
@@ -39,8 +39,8 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			this.kernel = kernel;
 
-			this.converter = (ITypeConverter) 
-				kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+			this.converter = (ITypeConverter)
+				kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 		}
 
 		public void Initialize(DependencyDelegate dependencyDelegate)
@@ -75,19 +75,19 @@ namespace Castle.MicroKernel.Resolvers
 
 			bool resolved = false;
 
-			foreach(ISubDependencyResolver subResolver in subResolvers)
+			foreach (ISubDependencyResolver subResolver in subResolvers)
 			{
 				if (subResolver.CanResolve(context, model, dependency))
 				{
 					value = subResolver.Resolve(context, model, dependency);
 					resolved = true;
-					break; 
+					break;
 				}
 			}
 
 			if (!resolved)
 			{
-				if(dependency.DependencyType == DependencyType.Service || 
+				if (dependency.DependencyType == DependencyType.Service ||
 					dependency.DependencyType == DependencyType.ServiceOverride)
 				{
 					value = ResolveServiceDependency(context, model, dependency);
@@ -108,10 +108,10 @@ namespace Castle.MicroKernel.Resolvers
 				}
 
 				String message = String.Format(
-					"Could not resolve non-optional dependency for '{0}' ({1}). Parameter '{2}' type '{3}'", 
+					"Could not resolve non-optional dependency for '{0}' ({1}). Parameter '{2}' type '{3}'",
 					model.Name, implementation, dependency.DependencyKey, dependency.TargetType.FullName);
 
-				throw new DependencyResolverException(message);	
+				throw new DependencyResolverException(message);
 			}
 
 			RaiseDependencyResolving(model, dependency, value);
@@ -127,7 +127,7 @@ namespace Castle.MicroKernel.Resolvers
 		/// <returns></returns>
 		public bool CanResolve(CreationContext context, ComponentModel model, DependencyModel dependency)
 		{
-			foreach(ISubDependencyResolver subResolver in subResolvers)
+			foreach (ISubDependencyResolver subResolver in subResolvers)
 			{
 				if (subResolver.CanResolve(context, model, dependency))
 				{
@@ -137,11 +137,11 @@ namespace Castle.MicroKernel.Resolvers
 
 			if (dependency.DependencyType == DependencyType.Service)
 			{
-				return CanResolveServiceDependency( model, dependency );
+				return CanResolveServiceDependency(model, dependency);
 			}
 			else
 			{
-				return CanResolveParameterDependency( model, dependency );
+				return CanResolveParameterDependency(model, dependency);
 			}
 		}
 
@@ -153,9 +153,9 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				// User wants to override
 
-				String value = ExtractComponentKey( parameter.Value, parameter.Name );
+				String value = ExtractComponentKey(parameter.Value, parameter.Name);
 
-				return kernel.HasComponent( value );
+				return kernel.HasComponent(value);
 			}
 			else if (dependency.TargetType == typeof(IKernel))
 			{
@@ -165,7 +165,7 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				// Default behaviour
 
-				return kernel.HasComponent( dependency.TargetType );
+				return kernel.HasComponent(dependency.TargetType);
 			}
 		}
 
@@ -189,7 +189,7 @@ namespace Castle.MicroKernel.Resolvers
 					// User wants to override, we then 
 					// change the type to ServiceOverride
 
-					dependency.DependencyKey = ExtractComponentKey( parameter.Value, parameter.Name );
+					dependency.DependencyKey = ExtractComponentKey(parameter.Value, parameter.Name);
 					dependency.DependencyType = DependencyType.ServiceOverride;
 				}
 			}
@@ -210,7 +210,7 @@ namespace Castle.MicroKernel.Resolvers
 					{
 						throw new DependencyResolverException(
 							"Cycle detected in configuration.\r\n" +
-							"Component " + model.Name + " has a dependency on " + 
+							"Component " + model.Name + " has a dependency on " +
 							dependency.TargetType + ", but it doesn't provide an override.\r\n" +
 							"You must provide an override if a component " +
 							"has a dependency on a service that it - itself - provides");
@@ -235,7 +235,9 @@ namespace Castle.MicroKernel.Resolvers
 			}
 
 			if (handler == null) return null;
-
+#if DOTNET2
+			context = RebuildContextForParameter(context, dependency.TargetType);
+#endif
 			return handler.Resolve(context);
 		}
 
@@ -284,9 +286,9 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			if (!ReferenceExpressionUtil.IsReference(keyValue))
 			{
-				throw new DependencyResolverException( 
-					String.Format("Key invalid for parameter {0}. " + 
-					"Thus the kernel was unable to override the service dependency", name) );
+				throw new DependencyResolverException(
+					String.Format("Key invalid for parameter {0}. " +
+					"Thus the kernel was unable to override the service dependency", name));
 			}
 
 			return ReferenceExpressionUtil.ExtractComponentKey(keyValue);
@@ -296,5 +298,18 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			dependencyResolvingDelegate(model, dependency, value);
 		}
+#if DOTNET2
+		/// <summary>
+		/// This method rebuild the context for the parameter type.
+		/// Naive implementation.
+		/// </summary>
+		private CreationContext RebuildContextForParameter(CreationContext context, Type parameterType)
+		{
+			if(parameterType.ContainsGenericParameters)
+				return context;
+			else
+				return new CreationContext(parameterType);
+		}
+#endif
 	}
 }

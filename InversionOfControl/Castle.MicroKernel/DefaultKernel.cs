@@ -522,7 +522,16 @@ namespace Castle.MicroKernel
 		public virtual IHandler[] GetHandlers(Type service)
 		{
 			IHandler[] result = NamingSubSystem.GetHandlers(service);
-
+#if DOTNET2
+			// a complete generic type, Foo<Bar>, need to check if Foo<T> is registered
+			if(result.Length == 0 && 
+			   service.IsGenericType &&
+			   !service.IsGenericTypeDefinition) 
+			{
+				Type definition = service.GetGenericTypeDefinition();
+				result = NamingSubSystem.GetHandlers(definition);
+			}
+#endif	
 			// If a parent kernel exists, we merge both results
 
 			if (Parent != null) 

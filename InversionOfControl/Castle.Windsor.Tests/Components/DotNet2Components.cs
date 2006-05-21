@@ -132,5 +132,15 @@ namespace Castle.Windsor.Tests
 			return new T();
 		}
 	}
+	
+	public class NeedsGenericType
+	{
+		ICache<string> cache;
+
+		public NeedsGenericType(ICache<string> cache)
+		{
+			this.cache = cache;
+		}
+	}
 }
 #endif
