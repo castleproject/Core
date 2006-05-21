@@ -14,10 +14,6 @@
 
 namespace Castle.MicroKernel
 {
-	using System;
-
-	using Castle.Model;
-
 	/// <summary>
 	/// Implementors should use a strategy to obtain 
 	/// valid references to properties and/or services 

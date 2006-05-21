@@ -65,21 +65,16 @@ namespace Castle.MicroKernel.ComponentActivator
 			get { return onDestruction; }
 		}
 
-		protected abstract object InternalCreate();
-
-		protected abstract void InternalDestroy(object instance);
-
 		#region IComponentActivator Members
 
-		public virtual object Create()
+		public virtual object Create(CreationContext context)
 		{
-			object instance = InternalCreate();
+			object instance = InternalCreate(context);
 
 			onCreation(model, instance);
 
 			return instance;
 		}
-
 
 		public virtual void Destroy(object instance)
 		{
@@ -89,5 +84,9 @@ namespace Castle.MicroKernel.ComponentActivator
 		}
 
 		#endregion
+
+		protected abstract object InternalCreate(CreationContext context);
+
+		protected abstract void InternalDestroy(object instance);
 	}
 }

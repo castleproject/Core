@@ -12,65 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.Model
 {
-    using System;
-    using System.Reflection;
-    using Castle.Model.Internal;
+	using System;
+	using System.Reflection;
 
-    /// <summary>
-    /// Represents a property and the respective optional 
-    /// dependency.
-    /// </summary>
-    [Serializable]
-    public class PropertySet
-    {
-        private PropertyInfo propertyInfo;
-        private DependencyModel dependency;
-#if DOTNET2
-        private bool containsGenericTypes;
-        private Type[] indexTypes;
-#endif
+	/// <summary>
+	/// Represents a property and the respective optional 
+	/// dependency.
+	/// </summary>
+	[Serializable]
+	public class PropertySet
+	{
+		private readonly PropertyInfo propertyInfo;
+		private readonly DependencyModel dependency;
 
-        public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
-        {
-            this.propertyInfo = propertyInfo;
-            this.dependency = dependency;
-#if DOTNET2
-            this.containsGenericTypes = propertyInfo.DeclaringType.ContainsGenericParameters;
-            System.Collections.Generic.List<Type> types = new System.Collections.Generic.List<Type>();
-            if(containsGenericTypes )
-            {
-		        foreach (ParameterInfo info in propertyInfo.GetIndexParameters())
-		        {
-		            types.Add(info.ParameterType);
-		        }
-            }
-            this.indexTypes = types.ToArray();
-#endif
-        }
+		public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
+		{
+			this.propertyInfo = propertyInfo;
+			this.dependency = dependency;
+		}
 
-        public PropertyInfo Property
-        {
-            get
-            {
-#if DOTNET2
-                if (containsGenericTypes)
-                {
-                    Type type = CurrentContext.GetImplementationType(propertyInfo.DeclaringType);
-                    Type returnType = CurrentContext.GetImplementationType(propertyInfo.PropertyType);
-                    Type[] genericIndexTypes  = CurrentContext.GetImplementationTypes(indexTypes);
-                    return type.GetProperty(propertyInfo.Name, returnType,genericIndexTypes);
-                }
-#endif
-                return propertyInfo;
-            }
-        }
+		public PropertyInfo Property
+		{
+			get { return propertyInfo; }
+		}
 
-        public DependencyModel Dependency
-        {
-            get { return dependency; }
-        }
-    }
+		public DependencyModel Dependency
+		{
+			get { return dependency; }
+		}
+	}
 }

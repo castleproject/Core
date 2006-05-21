@@ -14,21 +14,22 @@
 
 #if DOTNET2
 
-using System;
-using System.Collections;
-using Castle.Windsor.Tests.Components;
-
 namespace Castle.Windsor.Tests
 {
-    public interface IRepository<T>
+	using System;
+	using System.Collections;
+
+	using Castle.Windsor.Tests.Components;
+
+	public interface IRepository<T>
     {
         T Get(int id);
     }
 
     public class DemoRepository<T> : IRepository<T>
     {
-        string name;
-        ICache<T> cache;
+        private string name;
+        private ICache<T> cache;
 
         public ICache<T> Cache
         {
@@ -93,10 +94,10 @@ namespace Castle.Windsor.Tests
 
     public class NullCache<T> : ICache<T>
     {
-
         public void Put(string key, T item)
         {
         }
+
         public T Get(string key)
         {
             return default(T);
@@ -122,5 +123,14 @@ namespace Castle.Windsor.Tests
             return inner.Get(id);
         }
     }
+
+	[Castle.Model.Transient]
+	public class TransientRepository<T> : IRepository<T> where T: new()
+	{
+		public T Get(int id)
+		{
+			return new T();
+		}
+	}
 }
 #endif

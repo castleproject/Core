@@ -34,16 +34,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
         public virtual void ProcessModel(IKernel kernel, Castle.Model.ComponentModel model)
         {
             model.Configuration = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
-#if DOTNET2
-            //there is no config for this, try to see if the service is a generic type
-            //that has a registered handler
-            if (model.Configuration != null || !model.Service.IsGenericType) return;
-            Type definition = model.Service.GetGenericTypeDefinition();
-            if (definition == null) return;
-            IHandler handler = kernel.GetHandler(definition);
-            if (handler == null) return;
-            model.Configuration = handler.ComponentModel.Configuration;
-#endif
         }
     }
 }

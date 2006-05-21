@@ -17,7 +17,6 @@
 namespace Castle.Windsor.Tests
 {
     using System;
-    using Castle.Model.Internal;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
@@ -41,7 +40,7 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        public void ResovleGeneric()
+        public void ResolveGeneric()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             ICalcService svr = container.Resolve<ICalcService>();
@@ -49,7 +48,7 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        public void ResovleGenericWithId()
+        public void ResolveGenericWithId()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             ICalcService svr = container.Resolve<ICalcService>("calc");
@@ -76,9 +75,9 @@ namespace Castle.Windsor.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(DependencyResolverException), @"Cycle detected in cofiguration.
-Component int.repos has a dependency Castle.Windsor.Tests.IRepository`1[System.Int32], but it doesn't provide an override.
-You must provide an override if a component has a dependency on a service that it registers.")]
+		[ExpectedException(typeof(DependencyResolverException), @"Cycle detected in configuration.
+Component int.repos has a dependency on Castle.Windsor.Tests.IRepository`1[System.Int32], but it doesn't provide an override.
+You must provide an override if a component has a dependency on a service that it - itself - provides")]
         public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
@@ -194,12 +193,26 @@ You must provide an override if a component has a dependency on a service that i
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
             IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>();
-            Assert.IsTrue(typeof(ReviewerRepository).IsInstanceOfType(repository), "Not RevieweRepository!");
+            Assert.IsTrue(typeof(ReviewerRepository).IsInstanceOfType(repository), "Not ReviewerRepository!");
         }
-        //more tests:
-        //  cache generic types
-        //  cache properties of generic types
-        //  cache ctors of generic typesd
+
+		[Test]
+		public void TestComponentLifestylePerGenericType()
+		{
+			IWindsorContainer container = new WindsorContainer();
+
+			container.AddComponent("comp", typeof(IRepository<>), typeof(TransientRepository<>));
+
+			object o1 = container.Resolve<IRepository<Employee>>();
+			object o2 = container.Resolve<IRepository<Employee>>();
+			object o3 = container.Resolve<IRepository<Reviewer>>();
+			object o4 = container.Resolve<IRepository<Reviewer>>();
+
+			Assert.IsFalse( Object.ReferenceEquals(o1, o2) );
+			Assert.IsFalse( Object.ReferenceEquals(o1, o3) );
+			Assert.IsFalse( Object.ReferenceEquals(o1, o4) );
+		}
     }
 }
+
 #endif

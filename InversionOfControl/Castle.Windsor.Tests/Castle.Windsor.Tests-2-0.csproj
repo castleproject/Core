@@ -324,7 +324,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)\Castle.Windsor.Tests.dll.config $(TargetPath).config</PostBuildEvent>
   </PropertyGroup>
 </Project>

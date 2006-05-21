@@ -35,7 +35,7 @@ namespace Castle.Facilities.FactorySupport
 		{
 		}
 
-		protected override object Instantiate()
+		protected override object Instantiate(CreationContext context)
 		{
 			String factoryId = (String) Model.ExtendedProperties["factoryId"];
 			String factoryCreate = (String) Model.ExtendedProperties["factoryCreate"];
@@ -113,7 +113,7 @@ namespace Castle.Facilities.FactorySupport
 							DependencyType.Service, parameter.Name, paramType, false );
 					}
 
-					if (!Kernel.Resolver.CanResolve(Model, depModel))
+					if (!Kernel.Resolver.CanResolve(CreationContext.Empty, Model, depModel))
 					{
 						String message = String.Format(
 							"Factory Method {0}.{1} requires an argument '{2}' that could not be resolved", 
@@ -121,7 +121,7 @@ namespace Castle.Facilities.FactorySupport
 						throw new FacilityException(message);
 					}
 
-					object arg = Kernel.Resolver.Resolve(Model, depModel );
+					object arg = Kernel.Resolver.Resolve(CreationContext.Empty, Model, depModel );
 
 					methodArgs.Add(arg);
 				}

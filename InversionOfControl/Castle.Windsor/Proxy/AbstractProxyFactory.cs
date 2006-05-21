@@ -65,7 +65,7 @@ namespace Castle.Windsor.Proxy
 
 				try
 				{
-					IMethodInterceptor interceptor = (IMethodInterceptor) handler.Resolve();
+					IMethodInterceptor interceptor = (IMethodInterceptor) handler.Resolve(CreationContext.Empty);
 					
 					interceptors[index++] = interceptor;
 

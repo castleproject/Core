@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Model.Internal;
-
 namespace Castle.Windsor
 {
     using System;
     using System.Collections;
-    using Castle.MicroKernel;
 
-    using Castle.Windsor.Configuration;
+	using Castle.MicroKernel;
+	using Castle.Windsor.Configuration;
     using Castle.Windsor.Configuration.Interpreters;
 
     /// <summary>
@@ -208,10 +206,7 @@ namespace Castle.Windsor
         /// <returns></returns>
         public virtual object Resolve(String key)
         {
-            using (CurrentContext.EnterContext(new Type[0]))
-            {
-                return _kernel[key];
-            }
+            return _kernel[key];
         }
 
         /// <summary>
@@ -221,10 +216,7 @@ namespace Castle.Windsor
         /// <returns></returns>
         public virtual object Resolve(Type service)
         {
-            using (CurrentContext.EnterContext(GetArguments(service)))
-            {
-                return _kernel[service];
-            }
+            return _kernel[service];
         }
 
         /// <summary>
@@ -232,14 +224,7 @@ namespace Castle.Windsor
         /// </summary>
         public virtual object this[String key]
         {
-            get
-            {
-                using (CurrentContext.EnterContext(new Type[0]))
-                {
-                    return Resolve(key);
-                }
-
-            }
+            get { return Resolve(key); }
         }
 
         /// <summary>
@@ -247,54 +232,42 @@ namespace Castle.Windsor
         /// </summary>
         public virtual object this[Type service]
         {
-            get
-            {
-                using (CurrentContext.EnterContext(GetArguments(service)))
-                {
-                    return Resolve(service);
-                }
-            }
+            get { return Resolve(service); }
         }
 
-        private static Type[] GetArguments(Type service)
-        {
-#if DOTNET2
-            return service.GetGenericArguments();
-#else
-            return new Type[0];
-#endif
-        }
+		#if DOTNET2
 
-#if DOTNET2
-
-        /// <summary>
-        /// Returns a component instance by the service 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public T Resolve<T>()
-        {
-            using (CurrentContext.EnterContext(GetArguments(typeof(T))))
-            {
-                return (T)Resolve(typeof(T));
-            }
-        }
-
-        /// <summary>
+		/// <summary>
         /// Returns a component instance by the key
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public virtual T Resolve<T>(String key)
+        public virtual object Resolve(String key, Type service)
         {
-            using (CurrentContext.EnterContext(GetArguments(typeof(T))))
-            {
-                return (T)_kernel[key];
-            }
+            return _kernel[key];
         }
 
+		/// <summary>
+		/// Returns a component instance by the service 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public T Resolve<T>()
+		{
+			return (T) Resolve(typeof(T));
+		}
 
-#endif
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public virtual T Resolve<T>(String key)
+		{
+			return (T) Resolve(key, typeof(T));
+		}
+
+		#endif
 
         /// <summary>
         /// Releases a component instance

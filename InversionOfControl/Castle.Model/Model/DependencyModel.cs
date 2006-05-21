@@ -12,64 +12,59 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Model.Internal;
-
 namespace Castle.Model
 {
-    using System;
+	using System;
 
-    public enum DependencyType
-    {
-        Service,
-        Parameter,
-        ServiceOverride
-    }
+	public enum DependencyType
+	{
+		Service,
+		Parameter,
+		ServiceOverride
+	}
 
-    /// <summary>
-    /// Represents a dependency (other component or a fixed value available through external
-    /// configuration).
-    /// </summary>
-    [Serializable]
-    public class DependencyModel
-    {
-        private String dependencyKey;
-        private Type targetType;
-        private bool isOptional;
-        private DependencyType dependencyType;
+	/// <summary>
+	/// Represents a dependency (other component or a 
+	/// fixed value available through external configuration).
+	/// </summary>
+	[Serializable]
+	public class DependencyModel
+	{
+		private String dependencyKey;
+		private Type targetType;
+		private bool isOptional;
+		private DependencyType dependencyType;
 
-        public DependencyModel(
-            DependencyType type, String dependencyKey,
-            Type targetType, bool isOptional)
-        {
-            this.dependencyType = type;
-            this.dependencyKey = dependencyKey;
-            this.targetType = targetType;
-            this.isOptional = isOptional;
-        }
+		public DependencyModel(
+			DependencyType type, String dependencyKey,
+			Type targetType, bool isOptional)
+		{
+			this.dependencyType = type;
+			this.dependencyKey = dependencyKey;
+			this.targetType = targetType;
+			this.isOptional = isOptional;
+		}
 
-        public DependencyType DependencyType
-        {
-            get { return dependencyType; }
-            set { dependencyType = value; }
-        }
+		public DependencyType DependencyType
+		{
+			get { return dependencyType; }
+			set { dependencyType = value; }
+		}
 
-        public String DependencyKey
-        {
-            get { return dependencyKey; }
-            set { dependencyKey = value; }
-        }
+		public String DependencyKey
+		{
+			get { return dependencyKey; }
+			set { dependencyKey = value; }
+		}
 
-        public Type TargetType
-        {
-            get
-            {
-                return CurrentContext.GetImplementationType(targetType);
-            }
-        }
+		public Type TargetType
+		{
+			get { return targetType; }
+		}
 
-        public bool IsOptional
-        {
-            get { return isOptional; }
-        }
-    }
+		public bool IsOptional
+		{
+			get { return isOptional; }
+		}
+	}
 }

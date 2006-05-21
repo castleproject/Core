@@ -107,25 +107,21 @@
     <Compile Include="Interceptor\IOnBehalfAware.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\CurrentContext.cs" />
     <Compile Include="Internal\GraphNode.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\GraphSets.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\IContextAccessor.cs" />
     <Compile Include="Internal\IVertex.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\LinkedList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\LocalThreadContextAccessor.cs" />
     <Compile Include="Internal\TopologicalSortAlgo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\WebContextAccessor.cs" />
     <Compile Include="Lifecycle\IInitializable.cs">
       <SubType>Code</SubType>
     </Compile>

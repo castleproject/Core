@@ -40,9 +40,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 			IConfiguration parameters = model.Configuration.Children["parameters"];
 
-            if (parameters == null) return;
+			if (parameters == null) return;
 
-            foreach (IConfiguration parameter in parameters.Children)
+			foreach (IConfiguration parameter in parameters.Children)
 			{
 				String name = parameter.Name;
 				String value = parameter.Value;
@@ -50,11 +50,11 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				if (value == null && parameter.Children.Count != 0)
 				{
 					IConfiguration parameterValue = parameter.Children[0];
-					model.Parameters.Add( name, parameterValue );
+					model.Parameters.Add(name, parameterValue);
 				}
 				else
 				{
-					model.Parameters.Add( name, value );
+					model.Parameters.Add(name, value);
 				}
 			}
 		}

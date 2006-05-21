@@ -18,9 +18,7 @@ namespace Castle.MicroKernel.ModelBuilder
 	using System.Collections;
 
 	using Castle.Model;
-
 	using Castle.MicroKernel.ModelBuilder.Inspectors;
-
 
 	/// <summary>
 	/// Summary description for DefaultComponentModelBuilder.
@@ -29,7 +27,7 @@ namespace Castle.MicroKernel.ModelBuilder
 	public class DefaultComponentModelBuilder : IComponentModelBuilder
 	{
 		private readonly IKernel kernel;
-		private readonly IList contributors;
+		private readonly ArrayList contributors;
 
 		public DefaultComponentModelBuilder(IKernel kernel)
 		{
@@ -39,20 +37,7 @@ namespace Castle.MicroKernel.ModelBuilder
 			InitializeContributors();
 		}
 
-		protected virtual void InitializeContributors()
-		{
-		    AddContributor( new ConfigurationModelInspector() );
-			AddContributor( new LifestyleModelInspector() );
-			AddContributor( new ConstructorDependenciesModelInspector() );
-			AddContributor( new PropertiesDependenciesModelInspector() );
-			AddContributor( new LifecycleModelInspector() );
-			AddContributor( new ConfigurationParametersInspector() );
-			AddContributor( new InterceptorInspector() );
-
-		}
-
-		public ComponentModel BuildModel(String key, Type service, 
-			Type classType, IDictionary extendedProperties)
+		public ComponentModel BuildModel(String key, Type service, Type classType, IDictionary extendedProperties)
 		{
 			ComponentModel model = new ComponentModel(key, service, classType);
 			
@@ -69,6 +54,15 @@ namespace Castle.MicroKernel.ModelBuilder
 			return model;
 		}
 
+		public IContributeComponentModelConstruction[] Contributors
+		{
+			get
+			{
+				return (IContributeComponentModelConstruction[])
+					contributors.ToArray(typeof(IContributeComponentModelConstruction));
+			}
+		}
+
 		public void AddContributor(IContributeComponentModelConstruction contributor)
 		{
 			contributors.Add(contributor);
@@ -77,6 +71,20 @@ namespace Castle.MicroKernel.ModelBuilder
 		public void RemoveContributor(IContributeComponentModelConstruction contributor)
 		{
 			contributors.Remove(contributor);
+		}
+
+		protected virtual void InitializeContributors()
+		{
+#if DOTNET2
+			AddContributor(new GenericInspector());
+#endif
+			AddContributor(new ConfigurationModelInspector());
+			AddContributor(new LifestyleModelInspector());
+			AddContributor(new ConstructorDependenciesModelInspector());
+			AddContributor(new PropertiesDependenciesModelInspector());
+			AddContributor(new LifecycleModelInspector());
+			AddContributor(new ConfigurationParametersInspector());
+			AddContributor(new InterceptorInspector());
 		}
 	}
 }

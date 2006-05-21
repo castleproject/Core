@@ -48,7 +48,7 @@ namespace Castle.MicroKernel.Lifestyle
 
 		#region IResolver Members
 
-		public override object Resolve()
+		public override object Resolve(CreationContext context)
 		{
 			lock(slot)
 			{
@@ -65,7 +65,7 @@ namespace Castle.MicroKernel.Lifestyle
 
 				if ( instance == null )
 				{
-					instance = base.Resolve();
+					instance = base.Resolve(context);
 					map.Add( ComponentActivator, instance );
 					instances.Add( instance );
 				}
@@ -74,7 +74,7 @@ namespace Castle.MicroKernel.Lifestyle
 			}
 		}
 
-		public override void Release( object instance )
+		public override void Release(object instance)
 		{
 			// Do nothing.
 		}

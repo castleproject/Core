@@ -29,13 +29,13 @@ namespace Castle.MicroKernel.Lifestyle
 			if (instance != null) base.Release( instance );
 		}
 
-		public override object Resolve()
+		public override object Resolve(CreationContext context)
 		{
 			lock(ComponentActivator)
 			{
 				if (instance == null)
 				{
-					instance = base.Resolve();
+					instance = base.Resolve(context);
 				}
 			}
 

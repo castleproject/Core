@@ -108,6 +108,7 @@
     <Compile Include="ComponentActivator\IComponentActivator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\CreationContext.cs" />
     <Compile Include="DefaultKernel.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +187,7 @@
     <Compile Include="Handlers\AbstractHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Handlers\DefaultGenericHandler.cs" />
     <Compile Include="Handlers\DefaultHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -279,6 +281,7 @@
     <Compile Include="ModelBuilder\Inspectors\ExtendedPropertiesConstants.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ModelBuilder\Inspectors\GenericInspector.cs" />
     <Compile Include="ModelBuilder\Inspectors\InterceptorInspector.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -402,7 +405,6 @@
     <Compile Include="SubSystems\SubSystemConstants.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\GenericTypeNameProvider.cs" />
     <Compile Include="Util\ReferenceComparer.cs">
       <SubType>Code</SubType>
     </Compile>

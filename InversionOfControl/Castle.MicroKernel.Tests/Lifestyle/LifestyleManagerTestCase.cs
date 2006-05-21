@@ -52,8 +52,8 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 
 			IHandler handler = kernel.GetHandler("a");
 			
-			IComponent instance1 = handler.Resolve() as IComponent;
-			IComponent instance2 = handler.Resolve() as IComponent;
+			IComponent instance1 = handler.Resolve(CreationContext.Empty) as IComponent;
+			IComponent instance2 = handler.Resolve(CreationContext.Empty) as IComponent;
 
 			Assert.IsNotNull( instance1 );
 			Assert.IsNotNull( instance2 );
@@ -113,8 +113,8 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 
 			IHandler handler = kernel.GetHandler("a");
 			
-			IComponent instance1 = handler.Resolve() as IComponent;
-			IComponent instance2 = handler.Resolve() as IComponent;
+			IComponent instance1 = handler.Resolve(CreationContext.Empty) as IComponent;
+			IComponent instance2 = handler.Resolve(CreationContext.Empty) as IComponent;
 
 			Assert.IsNotNull( instance1 );
 			Assert.IsNotNull( instance2 );
@@ -133,7 +133,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 
 			IHandler handler = kernel.GetHandler("a");
 			
-			IComponent instance1 = handler.Resolve() as IComponent;
+			IComponent instance1 = handler.Resolve(CreationContext.Empty) as IComponent;
 
 			Assert.IsNotNull( instance1 );
 		}
@@ -145,8 +145,8 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 
 			IHandler handler = kernel.GetHandler("a");
 			
-			IComponent instance1 = handler.Resolve() as IComponent;
-			IComponent instance2 = handler.Resolve() as IComponent;
+			IComponent instance1 = handler.Resolve(CreationContext.Empty) as IComponent;
+			IComponent instance2 = handler.Resolve(CreationContext.Empty) as IComponent;
 
 			Assert.IsNotNull( instance1 );
 			Assert.IsNotNull( instance2 );
@@ -169,7 +169,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 		private void OtherThread()
 		{
 			IHandler handler = kernel.GetHandler( "a" );
-			this.instance3 = handler.Resolve() as IComponent;
+			this.instance3 = handler.Resolve(CreationContext.Empty) as IComponent;
 		}
 	}
 }

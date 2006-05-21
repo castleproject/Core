@@ -18,7 +18,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System.Configuration;
 
 	using Castle.MicroKernel.Util;
-
 	using Castle.Model;
 	using Castle.Model.Configuration;
 
@@ -29,10 +28,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	[Serializable]
 	public class InterceptorInspector : IContributeComponentModelConstruction
 	{
-		/// <summary>
-		/// </summary>
-		/// <param name="kernel"></param>
-		/// <param name="model"></param>
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			CollectFromAttributes(model);

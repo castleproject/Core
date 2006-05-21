@@ -126,6 +126,17 @@ namespace Castle.MicroKernel
 		/// </summary>
 		object this[Type key] { get; }
 
+		#if DOTNET2
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		object Resolve(String key, Type service);
+
+		#endif
+
         /// <summary>
 		/// Releases a component instance. This allows
 		/// the kernel to execute the proper decomission 
@@ -173,20 +184,18 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		IHandler GetHandler(Type service);
 
-
-        /// <summary>
-        /// Returns the <see cref="IHandler"/>
-        /// for the specified service.
-        /// This overload is intended for use mainly to resolve
-        /// the key handler by the generic type as well.
-        /// It is expected that it will be mainly called by <see cref="IDependencyResolver"/>
-        /// implementations.
-        /// </summary>
-        /// <param name="key">the key to match by</param>
-        /// <param name="service">The type to match</param>
-        /// <returns></returns>
-        IHandler GetHandler(string key, Type service);
-	    
+		// <summary>
+		// Returns the <see cref="IHandler"/>
+		// for the specified service.
+		// This overload is intended for use mainly to resolve
+		// the key handler by the generic type as well.
+		// It is expected that it will be mainly called by <see cref="IDependencyResolver"/>
+		// implementations.
+		// </summary>
+		// <param name="key">the key to match by</param>
+		// <param name="service">The type to match</param>
+		// <returns></returns>
+		// IHandler GetHandler(string key, Type service);
 
 		/// <summary>
 		/// Return handlers for components that 
@@ -271,6 +280,5 @@ namespace Castle.MicroKernel
 		/// Graph of components and iteractions.
 		/// </summary>
 		GraphNode[] GraphNodes { get; }
-
 	}
 }

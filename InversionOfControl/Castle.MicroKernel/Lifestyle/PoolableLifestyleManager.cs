@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel.Lifestyle
 {
 	using System;
-	using System.Collections;
 
 	using Castle.MicroKernel.Lifestyle.Pool;
 
@@ -39,25 +38,12 @@ namespace Castle.MicroKernel.Lifestyle
 		{
 			base.Init(componentActivator, kernel);
 
-			pool = InitPool(initialSize, maxSize);
+			pool = CreatePool(initialSize, maxSize);
 		}
 
-		protected IPool InitPool(int initialSize, int maxSize)
+		public override object Resolve(CreationContext context)
 		{
-			if (!Kernel.HasComponent( typeof(IPoolFactory) ))
-			{
-				Kernel.AddComponent("castle.internal.poolfactory", 
-					typeof(IPoolFactory), typeof(DefaultPoolFactory));
-			}
-
-			IPoolFactory factory = Kernel[ typeof(IPoolFactory) ] as IPoolFactory;
-
-			return factory.Create( initialSize, maxSize, ComponentActivator );
-		}
-
-		public override object Resolve()
-		{
-			return pool.Request();
+			return pool.Request(context);
 		}
 
 		public override void Release(object instance)
@@ -68,6 +54,19 @@ namespace Castle.MicroKernel.Lifestyle
 		public override void Dispose()
 		{
 			pool.Dispose();
+		}
+
+		protected IPool CreatePool(int initialSize, int maxSize)
+		{
+			if (!Kernel.HasComponent( typeof(IPoolFactory) ))
+			{
+				Kernel.AddComponent("castle.internal.poolfactory", 
+					typeof(IPoolFactory), typeof(DefaultPoolFactory));
+			}
+
+			IPoolFactory factory = Kernel[ typeof(IPoolFactory) ] as IPoolFactory;
+
+			return factory.Create( initialSize, maxSize, ComponentActivator );
 		}
 	}
 }

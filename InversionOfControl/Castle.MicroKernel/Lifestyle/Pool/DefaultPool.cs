@@ -45,7 +45,7 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 
 		#region IPool Members
 
-		public virtual object Request()
+		public virtual object Request(CreationContext context)
 		{
 			rwlock.AcquireWriterLock(-1);
 
@@ -65,7 +65,7 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 				}
 				else
 				{
-					instance = componentActivator.Create();
+					instance = componentActivator.Create(context);
 
 					if (instance == null)
 					{
@@ -143,12 +143,12 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 
 			for(int i=0; i < initialsize; i++)
 			{
-				tempInstance.Add( Request() );
+				tempInstance.Add(Request(CreationContext.Empty));
 			}
 
 			for(int i=0; i < initialsize; i++)
 			{
-				Release( tempInstance[i] );
+				Release(tempInstance[i]);
 			}
 		}
 	}

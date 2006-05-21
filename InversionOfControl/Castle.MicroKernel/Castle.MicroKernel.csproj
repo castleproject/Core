@@ -143,6 +143,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Context\CreationContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Exceptions\ComponentNotFoundException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -264,6 +269,11 @@
                 />
                 <File
                     RelPath = "Handlers\AbstractHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Handlers\DefaultGenericHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

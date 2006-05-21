@@ -86,16 +86,15 @@ namespace Castle.MicroKernel
 		/// </summary>
 		IHandler GetHandler(Type service);
 
-        /// <summary>
-        /// Returns the <see cref="IHandler"/> associated with
-        /// the specified key with the service type.
-        /// <remarks>
-        /// It is expected that this will be used mainly to resolve a generic service
-        /// by its key.
-        /// </remarks>
-        /// </summary>
-        IHandler GetHandler(string key, Type service);
-	    
+		/// <summary>
+		/// Returns the <see cref="IHandler"/> associated with
+		/// the specified key with the service type.
+		/// <remarks>
+		/// It is expected that this will be used mainly to resolve a generic service
+		/// by its key.
+		/// </remarks>
+		/// </summary>
+		IHandler GetHandler(string key, Type service);
 	    
 		/// <summary>
 		/// Returns an array of <see cref="IHandler"/> associated with

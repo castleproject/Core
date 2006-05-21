@@ -12,29 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Remoting
+namespace Castle.MicroKernel
 {
 	using System;
-	using System.Runtime.Remoting;
 
-	using Castle.Model;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.ComponentActivator;
-
-	public class RemoteActivator : DefaultComponentActivator
+	[Serializable]
+	public sealed class CreationContext
 	{
-		public RemoteActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
+		public readonly static CreationContext Empty = new CreationContext();
+
+		#if DOTNET2
+		private readonly Type[] arguments;
+		#endif
+
+		public CreationContext()
 		{
 		}
 
-		protected override object Instantiate(CreationContext context)
+		#if DOTNET2
+		
+		public CreationContext(Type target)
 		{
-			String url = (String) Model.ExtendedProperties["remoting.uri"];
-
-			// return Activator.GetObject(Model.Service, url);
-
-			return RemotingServices.Connect( Model.Service, url );
+			arguments = ExtractGenericArguments(target);
 		}
+
+		public Type[] GenericArguments
+		{
+			get { return arguments; }
+		}
+
+		private static Type[] ExtractGenericArguments(Type target)
+		{
+			return target.GetGenericArguments();
+		}
+		
+		#endif
 	}
 }

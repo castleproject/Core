@@ -37,7 +37,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 			// Nothing to do
 		}
 
-		protected override object InternalCreate()
+		protected override object InternalCreate(CreationContext context)
 		{
 			IServiceContainer container = (IServiceContainer)
 				Model.ExtendedProperties[ServiceContainerKey];

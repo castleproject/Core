@@ -169,7 +169,7 @@ namespace Castle.Facilities.EventWiring
 						// meaning that the subscriber can be collected anytime and we need to
 						// prevent it
 
-						subscriberInstance = handler.Resolve();
+						subscriberInstance = handler.Resolve(CreationContext.Empty);
 
 						createdInstances[handler] = subscriberInstance;
 					}

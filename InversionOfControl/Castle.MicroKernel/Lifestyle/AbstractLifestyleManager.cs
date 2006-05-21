@@ -31,9 +31,9 @@ namespace Castle.MicroKernel.Lifestyle
 			this.kernel = kernel;
 		}
 
-		public virtual object Resolve()
+		public virtual object Resolve(CreationContext context)
 		{
-			return componentActivator.Create();
+			return componentActivator.Create(context);
 		}
 
 		public virtual void Release(object instance)

@@ -12,59 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Model.Internal;
-
 namespace Castle.Model
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Specialized;
+	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
 
-    using Castle.Model.Configuration;
+	using Castle.Model.Configuration;
 
-    /// <summary>
-    /// Enumeration used to mark the component's lifestyle.
-    /// </summary>
-    public enum LifestyleType
-    {
-        /// <summary>
-        /// No lifestyle specified.
-        /// </summary>
-        Undefined,
-        /// <summary>
-        /// Singleton components are instantiated once, and shared
-        /// between all clients.
-        /// </summary>
-        Singleton,
-        /// <summary>
-        /// Thread components have a unique instance per thread.
-        /// </summary>
-        Thread,
-        /// <summary>
-        /// Transient components are created on demand.
-        /// </summary>
-        Transient,
-        /// <summary>
-        /// Optimization of transient components that keeps
-        /// instance in a pool instead of always creating them.
-        /// </summary>
-        Pooled,
-        /// <summary>
-        /// Any other logic to create/release components.
-        /// </summary>
-        Custom
-    }
+	/// <summary>
+	/// Enumeration used to mark the component's lifestyle.
+	/// </summary>
+	public enum LifestyleType
+	{
+		/// <summary>
+		/// No lifestyle specified.
+		/// </summary>
+		Undefined,
+		/// <summary>
+		/// Singleton components are instantiated once, and shared
+		/// between all clients.
+		/// </summary>
+		Singleton,
+		/// <summary>
+		/// Thread components have a unique instance per thread.
+		/// </summary>
+		Thread,
+		/// <summary>
+		/// Transient components are created on demand.
+		/// </summary>
+		Transient,
+		/// <summary>
+		/// Optimization of transient components that keeps
+		/// instance in a pool instead of always creating them.
+		/// </summary>
+		Pooled,
+		/// <summary>
+		/// Any other logic to create/release components.
+		/// </summary>
+		Custom
+	}
 
-    /// <summary>
-    /// Represents the collection of information and
-    /// meta information collected about a component.
-    /// </summary>
+	/// <summary>
+	/// Represents the collection of information and
+	/// meta information collected about a component.
+	/// </summary>
 #if DOTNET2
-    [System.Diagnostics.DebuggerDisplay("{Implementation} / {implementation}")]
+	[System.Diagnostics.DebuggerDisplay("{Implementation} / {Service}")]
 #endif
-    [Serializable]
-    public sealed class ComponentModel : GraphNode
-    {
+	[Serializable]
+	public sealed class ComponentModel : GraphNode
+	{
         #region Fields
 
         /// <summary>Name (key) of the component</summary>
@@ -112,6 +110,8 @@ namespace Castle.Model
         /// <summary>Interceptors associated</summary>
         private InterceptorReferenceCollection interceptors;
 
+		private bool requiresGenericArguments;
+
         #endregion
 
         /// <summary>
@@ -142,12 +142,15 @@ namespace Castle.Model
 
         public Type Implementation
         {
-            get
-            {
-                return CurrentContext.GetImplementationType(implementation);
-            }
+            get { return implementation; }
             set { implementation = value; }
         }
+
+		public bool RequiresGenericArguments
+		{
+			get { return requiresGenericArguments; }
+			set { requiresGenericArguments = value; }
+		}
 
         public IDictionary ExtendedProperties
         {
@@ -186,7 +189,7 @@ namespace Castle.Model
             }
         }
 
-        // TODO: Consider not supporting this 
+        // TODO: Considering not supporting this 
         //		public MethodMetaModelCollection MethodMetaModels
         //		{
         //			get
@@ -274,6 +277,6 @@ namespace Castle.Model
                 }
                 return dependencies;
             }
-        }
-    }
+		}
+	}
 }

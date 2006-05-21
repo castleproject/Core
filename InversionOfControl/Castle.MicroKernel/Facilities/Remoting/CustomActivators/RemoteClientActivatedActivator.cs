@@ -28,7 +28,7 @@ namespace Castle.Facilities.Remoting
 		{
 		}
 
-		protected override object Instantiate()
+		protected override object Instantiate(CreationContext context)
 		{
 			String url = (String) Model.ExtendedProperties["remoting.appuri"];
 

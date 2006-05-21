@@ -353,6 +353,12 @@ namespace Castle.MicroKernel
 			{
 				return true;
 			}
+#if DOTNET2
+			if (serviceType.IsGenericType && NamingSubSystem.Contains(serviceType.GetGenericTypeDefinition()))
+			{
+				return true;
+			}
+#endif
 
 			if (Parent != null)
 			{
@@ -392,9 +398,33 @@ namespace Castle.MicroKernel
 
 				IHandler handler = GetHandler(service);
 
-				return ResolveComponent(handler);
+				return ResolveComponent(handler, service);
 			}
 		}
+
+		#if DOTNET2
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public virtual object Resolve(String key, Type service)
+		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (service == null) throw new ArgumentNullException("service");
+
+			if (!HasComponent(key))
+			{
+				throw new ComponentNotFoundException(key);
+			}
+	
+			IHandler handler = GetHandler(key);
+
+			return ResolveComponent(handler, service);
+		}
+
+		#endif
 
 		public virtual void ReleaseComponent(object instance)
 		{
@@ -454,6 +484,12 @@ namespace Castle.MicroKernel
 
 			IHandler handler = NamingSubSystem.GetHandler(service);
 
+#if DOTNET2
+			if (handler == null && service.IsGenericType)
+			{
+				handler = NamingSubSystem.GetHandler(service.GetGenericTypeDefinition());
+			}
+#endif
 			if (handler == null && Parent != null)
 			{
 				handler = Parent.GetHandler(service);
@@ -462,20 +498,20 @@ namespace Castle.MicroKernel
 			return handler;
 		}
 
-        public virtual IHandler GetHandler(String key, Type service)
-        {
-            if (key == null) throw new ArgumentNullException("key"); 
-            if (service == null) throw new ArgumentNullException("service");
-
-            IHandler handler = NamingSubSystem.GetHandler(key, service);
-
-            if (handler == null && Parent != null)
-            {
-                handler = Parent.GetHandler(key, service);
-            }
-
-            return handler;
-        }
+//        public virtual IHandler GetHandler(String key, Type service)
+//        {
+//            if (key == null) throw new ArgumentNullException("key"); 
+//            if (service == null) throw new ArgumentNullException("service");
+//
+//            IHandler handler = NamingSubSystem.GetHandler(key, service);
+//
+//            if (handler == null && Parent != null)
+//            {
+//                handler = Parent.GetHandler(key, service);
+//            }
+//
+//            return handler;
+//        }
 
 		/// <summary>
 		/// Return handlers for components that 
@@ -486,9 +522,25 @@ namespace Castle.MicroKernel
 		public virtual IHandler[] GetHandlers(Type service)
 		{
 			IHandler[] result = NamingSubSystem.GetHandlers(service);
-            if (result.Length == 0 && Parent != null)
-                return Parent.GetHandlers(service);
-            return result;
+
+			// If a parent kernel exists, we merge both results
+
+			if (Parent != null) 
+			{
+				IHandler[] parentResult = Parent.GetHandlers(service);
+
+				if (parentResult.Length != 0)
+				{
+					IHandler[] newResult = new IHandler[result.Length + parentResult.Length];
+					
+					Array.Copy(result, newResult, result.Length);
+					Array.Copy(parentResult, 0, newResult, result.Length, parentResult.Length);
+
+					result = newResult;
+				}
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -752,11 +804,27 @@ namespace Castle.MicroKernel
 
 		protected object ResolveComponent(IHandler handler)
 		{
-			object instance = handler.Resolve();
+			return ResolveComponent(handler, handler.ComponentModel.Service);
+		}
+
+		protected object ResolveComponent(IHandler handler, Type service)
+		{
+			CreationContext context = CreateCreationContext(service);
+
+			object instance = handler.Resolve(context);
 
 			ReleasePolicy.Track(instance, handler);
 
 			return instance;
+		}
+
+		protected CreationContext CreateCreationContext(Type typeToExtractArguments)
+		{
+#if DOTNET2
+			return new CreationContext(typeToExtractArguments);
+#else
+			return new CreationContext();
+#endif
 		}
 
 		#endregion

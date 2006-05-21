@@ -553,7 +553,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 		private void OnComponentUnregistered(String key, IHandler handler)
 		{
-			IComponent component = handler.Resolve() as IComponent;
+			IComponent component = handler.Resolve(CreationContext.Empty) as IComponent;
 
 			if (component == this)
 			{

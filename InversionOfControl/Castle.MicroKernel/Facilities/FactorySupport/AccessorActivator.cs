@@ -29,7 +29,7 @@ namespace Castle.Facilities.FactorySupport
 		{
 		}
 
-		protected override object Instantiate()
+		protected override object Instantiate(CreationContext context)
 		{
 			String accessor = (String) Model.ExtendedProperties["instance.accessor"];
 

@@ -33,8 +33,21 @@ namespace Castle.MicroKernel.Handlers
 
 		public virtual IHandler Create(ComponentModel model)
 		{
-			IHandler handler = new DefaultHandler(model);
+			IHandler handler;
+
+#if DOTNET2
+			if (model.RequiresGenericArguments)
+			{
+				handler = new DefaultGenericHandler(model);
+			}
+			else
+#endif
+			{
+				handler = new DefaultHandler(model);
+			}
+
 			handler.Init(kernel);
+			
 			return handler;
 		}
 	}

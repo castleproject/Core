@@ -41,7 +41,7 @@ namespace Castle.MicroKernel
 		/// on the lifestyle semantic.
 		/// </summary>
 		/// <returns></returns>
-		object Resolve();
+		object Resolve(CreationContext context);
 
 		/// <summary>
 		/// Implementors should release the component instance based

@@ -35,7 +35,7 @@ namespace Castle.MicroKernel
 		/// <param name="model"></param>
 		/// <param name="dependency"></param>
 		/// <returns></returns>
-		object Resolve(ComponentModel model, DependencyModel dependency);
+		object Resolve(CreationContext context, ComponentModel model, DependencyModel dependency);
 
 		/// <summary>
 		/// Returns true if the resolver is able to satisfy this dependency.
@@ -43,6 +43,6 @@ namespace Castle.MicroKernel
 		/// <param name="model"></param>
 		/// <param name="dependency"></param>
 		/// <returns></returns>
-		bool CanResolve(ComponentModel model, DependencyModel dependency);
+		bool CanResolve(CreationContext context, ComponentModel model, DependencyModel dependency);
 	}
 }

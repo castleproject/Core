@@ -26,7 +26,7 @@ namespace Castle.Facilities.Remoting
 		{
 		}
 
-		protected override object Instantiate()
+		protected override object Instantiate(CreationContext context)
 		{
 			RemotingRegistry registry = (RemotingRegistry) 
 				Model.ExtendedProperties["remoting.remoteregistry"];

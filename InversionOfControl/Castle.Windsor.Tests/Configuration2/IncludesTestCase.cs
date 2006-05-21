@@ -56,7 +56,7 @@ namespace Castle.Windsor.Tests.Configuration2
 			AssertConfiguration();
 		}
 
-		[Test, Ignore(".net 2.0 problems")]
+		[Test]
 		public void FileResourceAndRelativeIncludes2()
 		{
 			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 

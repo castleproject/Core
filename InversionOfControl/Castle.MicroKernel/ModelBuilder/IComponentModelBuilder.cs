@@ -37,7 +37,7 @@ namespace Castle.MicroKernel
 		/// <param name="classType"></param>
 		/// <param name="extendedProperties"></param>
 		/// <returns></returns>
-		ComponentModel BuildModel( String key, Type service, Type classType, IDictionary extendedProperties );
+		ComponentModel BuildModel(String key, Type service, Type classType, IDictionary extendedProperties);
 
 		/// <summary>
 		/// "To give or supply in common with others; give to a 
@@ -46,12 +46,14 @@ namespace Castle.MicroKernel
 		/// associated with the component, to add or change information
 		/// in the model that can be used later.
 		/// </summary>
-		void AddContributor( IContributeComponentModelConstruction contributor );
+		void AddContributor(IContributeComponentModelConstruction contributor);
 
 		/// <summary>
 		/// Removes the specified contributor
 		/// </summary>
 		/// <param name="contributor"></param>
-		void RemoveContributor( IContributeComponentModelConstruction contributor );
+		void RemoveContributor(IContributeComponentModelConstruction contributor);
+
+		IContributeComponentModelConstruction[] Contributors { get; }
 	}
 }

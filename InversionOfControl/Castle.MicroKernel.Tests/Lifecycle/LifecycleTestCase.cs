@@ -54,7 +54,7 @@ namespace Castle.MicroKernel.Tests.Lifecycle
 		{
 			kernel.AddComponent( "a", typeof(HttpFakeServer) );
 			IHandler handler = kernel.GetHandler("a");
-			HttpFakeServer server = (HttpFakeServer) handler.Resolve();
+			HttpFakeServer server = (HttpFakeServer) handler.Resolve(CreationContext.Empty);
 
 			handler.Release( server );
 

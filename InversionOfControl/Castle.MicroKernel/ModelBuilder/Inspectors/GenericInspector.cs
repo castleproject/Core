@@ -12,29 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Remoting
+#if DOTNET2
+
+namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
-	using System.Runtime.Remoting;
 
 	using Castle.Model;
+	using Castle.Model.Configuration;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.ComponentActivator;
-
-	public class RemoteActivator : DefaultComponentActivator
+	/// <summary>
+	/// 
+	/// </summary>
+	[Serializable]
+	public class GenericInspector : IContributeComponentModelConstruction
 	{
-		public RemoteActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
+		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-		}
-
-		protected override object Instantiate(CreationContext context)
-		{
-			String url = (String) Model.ExtendedProperties["remoting.uri"];
-
-			// return Activator.GetObject(Model.Service, url);
-
-			return RemotingServices.Connect( Model.Service, url );
+			model.RequiresGenericArguments = model.Service.IsGenericTypeDefinition;
 		}
 	}
 }
+
+#endif

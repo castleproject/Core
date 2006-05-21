@@ -27,7 +27,7 @@ namespace Castle.Windsor.Tests.Installer
 		[Test]
 		public void InstallCalcService()
 		{
-			WindsorContainer container = new WindsorContainer( "installerconfig.xml" );
+			WindsorContainer container = new WindsorContainer("../Castle.Windsor.Tests/installerconfig.xml");
 
 			Assert.IsTrue( container.Kernel.HasComponent( typeof(ICalcService) ) );
 			Assert.IsTrue( container.Kernel.HasComponent( "calcservice" ) );

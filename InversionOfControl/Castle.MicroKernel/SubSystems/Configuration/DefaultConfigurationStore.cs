@@ -68,15 +68,10 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration GetComponentConfiguration(String key)
 		{
-#if DOTNET2
-            key = GenericTypeNameProvider.StripGenericTypeName(key);
-#endif
 		    return components[key] as IConfiguration;
 		}
 
-	    
-
-	    [MethodImpl(MethodImplOptions.Synchronized)]
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public IConfiguration[] GetFacilities()
 		{
 			return (IConfiguration[]) facilitiesList.ToArray(typeof(IConfiguration));
@@ -96,7 +91,7 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 			}
 
 			IResourceSubSystem subSystem = (IResourceSubSystem)
-				Kernel.GetSubSystem( SubSystemConstants.ResourceKey );
+				Kernel.GetSubSystem(SubSystemConstants.ResourceKey);
 
 			return subSystem.CreateResource(resourceUri, resource.FileBasePath);
 		}

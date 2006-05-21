@@ -18,7 +18,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System.Reflection;
 
 	using Castle.Model;
-
 	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
@@ -42,7 +41,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			if (converter == null)
 			{
 				converter = (IConversionManager) 
-					kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+					kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 			}
 
 			Type targetType = model.Implementation;
@@ -56,7 +55,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				// and let the ComponentFactory select an 
 				// eligible amongst the candidates later
 
-				model.Constructors.Add( CreateConstructorCandidate(constructor) );
+				model.Constructors.Add(CreateConstructorCandidate(constructor));
 			}
 		}
 

@@ -25,7 +25,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 		}
 
-		protected override object InternalCreate()
+		protected override object InternalCreate(CreationContext context)
 		{
 			return base.Model.ExtendedProperties["instance"];
 		}

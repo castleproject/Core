@@ -58,7 +58,7 @@ namespace Castle.MicroKernel.Handlers
 			EnsureDependenciesCanBeSatisfied();
 		}
 
-		public abstract object Resolve();
+		public abstract object Resolve(CreationContext context);
 
 		public abstract void Release(object instance);
 
@@ -121,25 +121,26 @@ namespace Castle.MicroKernel.Handlers
 		{
 			ILifestyleManager manager = null;
 
-			if (ComponentModel.LifestyleType == LifestyleType.Undefined
-				|| ComponentModel.LifestyleType == LifestyleType.Singleton)
+			LifestyleType type = ComponentModel.LifestyleType;
+
+			if (type == LifestyleType.Undefined	|| type == LifestyleType.Singleton)
 			{
 				manager = new Lifestyle.SingletonLifestyleManager();
 			}
-			else if (ComponentModel.LifestyleType == LifestyleType.Thread)
+			else if (type == LifestyleType.Thread)
 			{
 				manager = new Lifestyle.PerThreadLifestyleManager();
 			}
-			else if (ComponentModel.LifestyleType == LifestyleType.Transient)
+			else if (type == LifestyleType.Transient)
 			{
 				manager = new Lifestyle.TransientLifestyleManager();
 			}
-			else if (ComponentModel.LifestyleType == LifestyleType.Custom)
+			else if (type == LifestyleType.Custom)
 			{
 				manager = (ILifestyleManager) 
 					Activator.CreateInstance( ComponentModel.CustomLifestyle );
 			}
-			else if (ComponentModel.LifestyleType == LifestyleType.Pooled)
+			else if (type == LifestyleType.Pooled)
 			{
 				int initial = ExtendedPropertiesConstants.Pool_Default_InitialPoolSize;
 				int maxSize = ExtendedPropertiesConstants.Pool_Default_MaxPoolSize;
@@ -156,7 +157,7 @@ namespace Castle.MicroKernel.Handlers
 				manager = new Lifestyle.PoolableLifestyleManager(initial, maxSize);
 			}
 
-			manager.Init( activator, Kernel );
+			manager.Init(activator, Kernel);
 
 			return manager;
 		}
@@ -243,6 +244,7 @@ namespace Castle.MicroKernel.Handlers
 			if (dependency.TargetType != null)
 			{
 				if (dependency.TargetType == typeof(IKernel)) return;
+
 				if (HasValidComponent(dependency.TargetType))
 				{
 					AddGraphDependency(Kernel.GetHandler(dependency.TargetType).ComponentModel);
@@ -273,12 +275,14 @@ namespace Castle.MicroKernel.Handlers
 
 		private bool HasValidComponent(Type service)
 		{
-            foreach (IHandler handler in kernel.GetHandlers(service))
-            {
-                if (IsValidHandlerState(handler))
-                    return true;
-            }
-            return false;
+			foreach (IHandler handler in kernel.GetHandlers(service))
+			{
+				if (IsValidHandlerState(handler))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private bool HasValidComponent(String key)
@@ -350,26 +354,28 @@ namespace Castle.MicroKernel.Handlers
 
 				foreach(Type type in DependenciesByService)
 				{
-					IHandler handler = Kernel.GetHandler( type );
+					IHandler handler = Kernel.GetHandler(type);
 
 					if (handler == null)
 					{
-						sb.AppendFormat( "- {0} which was not registered. \r\n", type.FullName );
+						sb.AppendFormat("- {0} which was not registered. \r\n", type.FullName);
 					}
-				    else if (handler == this)
-				    {
-                        sb.AppendFormat("- {0}. \r\n  A dependency cannot be satisfied by itself, did you forget to add a parameter name to differentiate between the two dependencies? \r\n", 
-                                        type.FullName);
-				    }
+					else if (handler == this)
+					{
+						sb.AppendFormat("- {0}. \r\n  A dependency cannot be satisfied by itself, " + 
+							"did you forget to add a parameter name to differentiate between the " + 
+							"two dependencies? \r\n", type.FullName);
+					}
 					else
 					{
-						sb.AppendFormat( "- {0} which was registered but is also waiting for dependencies. \r\n", type.FullName );
+						sb.AppendFormat( "- {0} which was registered but is also waiting for " + 
+							"dependencies. \r\n", type.FullName);
 
 						IExposeDependencyInfo info = handler as IExposeDependencyInfo;
 						
 						if (info != null)
 						{
-							sb.Append( info.ObtainDependencyDetails() );
+							sb.Append(info.ObtainDependencyDetails());
 						}
 					}
 				}
@@ -381,21 +387,22 @@ namespace Castle.MicroKernel.Handlers
 
 				foreach(String key in DependenciesByKey)
 				{
-					IHandler handler = Kernel.GetHandler( key );
+					IHandler handler = Kernel.GetHandler(key);
 
 					if (handler == null)
 					{
-						sb.AppendFormat( "- {0} which was not registered. \r\n", key );
+						sb.AppendFormat("- {0} which was not registered. \r\n", key);
 					}
 					else
 					{
-						sb.AppendFormat( "- {0} which was registered but is also waiting for dependencies. \r\n", key );
+						sb.AppendFormat( "- {0} which was registered but is also " + 
+							"waiting for dependencies. \r\n", key);
 
 						IExposeDependencyInfo info = handler as IExposeDependencyInfo;
 						
 						if (info != null)
 						{
-							sb.Append( info.ObtainDependencyDetails() );
+							sb.Append(info.ObtainDependencyDetails());
 						}
 					}
 				}

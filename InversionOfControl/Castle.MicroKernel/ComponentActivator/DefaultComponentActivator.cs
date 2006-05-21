@@ -18,7 +18,6 @@ namespace Castle.MicroKernel.ComponentActivator
 	using System.Reflection;
 
 	using Castle.Model;
-
 	using Castle.MicroKernel.LifecycleConcerns;
 
 	/// <summary>
@@ -43,13 +42,13 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		#region AbstractComponentActivator Members
 
-		protected override sealed object InternalCreate()
+		protected override sealed object InternalCreate(CreationContext context)
 		{
-			object instance = Instantiate();
+			object instance = Instantiate(context);
 
-            SetUpProperties(instance);
+			SetUpProperties(instance, context);
 
-            ApplyCommissionConcerns(instance);
+			ApplyCommissionConcerns(instance);
 
 			return instance;
 		}
@@ -61,19 +60,21 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		#endregion
 
-		protected virtual object Instantiate()
+		protected virtual object Instantiate(CreationContext context)
 		{
-			ConstructorCandidate candidate = SelectEligibleConstructor();
+			ConstructorCandidate candidate = SelectEligibleConstructor(context);
 	
 			Type[] signature;
-			object[] arguments = CreateConstructorArguments( candidate, out signature );
-	
-			return CreateInstance(arguments, signature);
+			object[] arguments = CreateConstructorArguments(candidate, context, out signature);
+
+			return CreateInstance(context, arguments, signature);
 		}
 
-		protected virtual object CreateInstance(object[] arguments, Type[] signature)
+		protected virtual object CreateInstance(CreationContext context, object[] arguments, Type[] signature)
 		{
 			object instance;
+
+			Type implType = Model.Implementation;
 
 			if (Model.Interceptors.HasInterceptors)
 			{
@@ -90,11 +91,10 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					ConstructorInfo cinfo = Model.Implementation.GetConstructor(
+					ConstructorInfo cinfo = implType.GetConstructor(
 							BindingFlags.Public|BindingFlags.Instance, null, signature, null);
 
-					instance = System.Runtime.Serialization.FormatterServices.
-						GetUninitializedObject(Model.Implementation);
+					instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
 
 					cinfo.Invoke(instance, arguments);
 				}
@@ -107,19 +107,19 @@ namespace Castle.MicroKernel.ComponentActivator
 			return instance;
 		}
 
-		protected virtual void ApplyCommissionConcerns( object instance )
+		protected virtual void ApplyCommissionConcerns(object instance)
 		{
 			object[] steps = Model.LifecycleSteps.GetCommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
 
-		protected virtual void ApplyDecommissionConcerns( object instance )
+		protected virtual void ApplyDecommissionConcerns(object instance)
 		{
 			object[] steps = Model.LifecycleSteps.GetDecommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
 
-		protected virtual void ApplyConcerns( object[] steps, object instance )
+		protected virtual void ApplyConcerns(object[] steps, object instance)
 		{
 			foreach (ILifecycleConcern concern in steps)
 			{
@@ -127,7 +127,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			}
 		}
 
-		protected virtual ConstructorCandidate SelectEligibleConstructor()
+		protected virtual ConstructorCandidate SelectEligibleConstructor(CreationContext context)
 		{
 			if (Model.Constructors.Count == 0)
 			{
@@ -151,7 +151,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				foreach(DependencyModel dep in candidate.Dependencies)
 				{
-					if (CanSatisfyDependency(dep))
+					if (CanSatisfyDependency(context, dep))
 					{
 						candidate.Points += 2;
 					}
@@ -179,12 +179,13 @@ namespace Castle.MicroKernel.ComponentActivator
 			return winnerCandidate;
 		}
 
-		protected virtual bool CanSatisfyDependency(DependencyModel dep)
+		protected virtual bool CanSatisfyDependency(CreationContext context, DependencyModel dep)
 		{
-			return Kernel.Resolver.CanResolve(Model, dep);
+			return Kernel.Resolver.CanResolve(context, Model, dep);
 		}
 
-		protected virtual object[] CreateConstructorArguments( ConstructorCandidate constructor, out Type[] signature )
+		protected virtual object[] CreateConstructorArguments(
+			ConstructorCandidate constructor, CreationContext context, out Type[] signature)
 		{
 			signature = null;
 
@@ -197,7 +198,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
-				object value = Kernel.Resolver.Resolve(Model, dependency);
+				object value = Kernel.Resolver.Resolve(context, Model, dependency);
 				arguments[index] = value;
 				signature[index++] = dependency.TargetType;
 			}
@@ -205,11 +206,11 @@ namespace Castle.MicroKernel.ComponentActivator
 			return arguments;
 		}
 
-		protected virtual void SetUpProperties(object instance)
+		protected virtual void SetUpProperties(object instance, CreationContext context)
 		{
 			foreach(PropertySet property in Model.Properties)
 			{
-				object value = Kernel.Resolver.Resolve(Model, property.Dependency);
+				object value = Kernel.Resolver.Resolve(context, Model, property.Dependency);
 
 				if (value == null) continue;
 

@@ -25,13 +25,13 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 		/// Implementors should return a component instance.
 		/// </summary>
 		/// <returns></returns>
-		object Request( );
+		object Request(CreationContext context);
 
 		/// <summary>
 		/// Implementors should release the instance or put it
 		/// on the pool
 		/// </summary>
 		/// <param name="instance"></param>
-		void Release( object instance );
+		void Release(object instance);
 	}
 }

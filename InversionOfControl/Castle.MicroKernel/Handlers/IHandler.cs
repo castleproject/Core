@@ -56,7 +56,7 @@ namespace Castle.MicroKernel
 		/// can't be created for some reason
 		/// </summary>
 		/// <returns></returns>
-		object Resolve();
+		object Resolve(CreationContext context);
 
 		/// <summary>
 		/// Implementors should dispose the component instance

@@ -1,4 +1,3 @@
-#region Copyright
 // Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-#endregion
 
 namespace Castle.Windsor.Tests.Adapters.ComponentModel
 {
@@ -183,8 +180,9 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 
 			container.Add( component );
 
-            IHandler[] handlers = container.Container.Kernel.GetHandlers(typeof(IComponent));
-            Assert.AreEqual(component, handlers[0].Resolve());
+			IHandler[] handlers = container.Container.Kernel.GetHandlers(typeof(IComponent));
+			Assert.AreEqual(1, handlers.Length);
+			Assert.AreEqual(handlers[0].Resolve(CreationContext.Empty), component);
 		}
 
 		[Test]
