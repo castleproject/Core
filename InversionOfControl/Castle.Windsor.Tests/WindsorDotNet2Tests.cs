@@ -219,7 +219,7 @@ You must provide an override if a component has a dependency on a service that i
 			IWindsorContainer container = new WindsorContainer();
 
 			container.AddComponent("comp", typeof(NeedsGenericType));
-			container.AddComponent("cache", typeof(ICache<>),typeof(NullCache<>));
+			container.AddComponent("cache", typeof(ICache<>), typeof(NullCache<>));
 
     		NeedsGenericType needsGenericType = container.Resolve<NeedsGenericType>();
     		

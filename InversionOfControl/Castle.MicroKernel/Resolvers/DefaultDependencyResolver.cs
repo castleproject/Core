@@ -75,7 +75,7 @@ namespace Castle.MicroKernel.Resolvers
 
 			bool resolved = false;
 
-			foreach (ISubDependencyResolver subResolver in subResolvers)
+			foreach(ISubDependencyResolver subResolver in subResolvers)
 			{
 				if (subResolver.CanResolve(context, model, dependency))
 				{
@@ -303,10 +303,10 @@ namespace Castle.MicroKernel.Resolvers
 		/// This method rebuild the context for the parameter type.
 		/// Naive implementation.
 		/// </summary>
-		private CreationContext RebuildContextForParameter(CreationContext context, Type parameterType)
+		private CreationContext RebuildContextForParameter(CreationContext current, Type parameterType)
 		{
-			if(parameterType.ContainsGenericParameters)
-				return context;
+			if (parameterType.ContainsGenericParameters)
+				return current;
 			else
 				return new CreationContext(parameterType);
 		}
