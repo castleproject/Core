@@ -34,7 +34,7 @@ namespace Castle.Facilities.Db4oIntegration
 		{
 		}
 
-		protected override object Instantiate()
+		protected override object Instantiate( Castle.MicroKernel.CreationContext context )
 		{
 			SetupDb4o();
 

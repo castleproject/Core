@@ -36,7 +36,7 @@ namespace Castle.Facilities.Prevalence
 		{
 		}
 
-		protected override object Instantiate()
+		protected override object Instantiate(Castle.MicroKernel.CreationContext context)
 		{
 			Type systemType = (Type) 
 				Model.ExtendedProperties[PrevalenceFacility.SystemTypePropertyKey];

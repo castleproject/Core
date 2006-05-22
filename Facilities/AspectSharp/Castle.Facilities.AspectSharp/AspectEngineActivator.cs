@@ -34,7 +34,7 @@ namespace Castle.Facilities.AspectSharp
 		{
 		}
 
-		protected override object InternalCreate()
+		protected override object InternalCreate( Castle.MicroKernel.CreationContext context )
 		{
 			AspectEngineBuilder builder = (AspectEngineBuilder) 
 				base.Model.ExtendedProperties["builder"];

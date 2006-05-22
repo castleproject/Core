@@ -80,12 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
                     Name = "Castle.Facilities.AspectSharp"
                     Project = "{E276ABC2-D29D-436F-856C-0CBC0D4F02B5}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -111,19 +105,24 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "AspectSharp.Lang"
-                    AssemblyName = "AspectSharp.Lang"
-                    HintPath = "..\lib\AspectSharp.Lang.dll"
+                    Name = "AspectSharp"
+                    AssemblyName = "AspectSharp"
+                    HintPath = "..\..\..\AspectSharp\bin\AspectSharp.dll"
+                />
+                <Reference
+                    Name = "antlr.runtime"
+                    AssemblyName = "antlr.runtime"
+                    HintPath = "..\..\..\AspectSharp\bin\antlr.runtime.dll"
                 />
                 <Reference
                     Name = "AopAlliance"
                     AssemblyName = "AopAlliance"
-                    HintPath = "..\lib\AopAlliance.dll"
+                    HintPath = "..\..\..\AspectSharp\bin\AopAlliance.dll"
                 />
                 <Reference
-                    Name = "AspectSharp"
-                    AssemblyName = "AspectSharp"
-                    HintPath = "..\lib\AspectSharp.dll"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\..\..\..\NAnt\bin\lib\net\1.1\nunit.framework.dll"
                 />
             </References>
         </Build>

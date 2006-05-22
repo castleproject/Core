@@ -40,7 +40,7 @@ namespace Castle.Facilities.Prevalence
 		/// apropriate property
 		/// </summary>
 		/// <returns></returns>
-		protected override object Instantiate()
+		protected override object Instantiate(Castle.MicroKernel.CreationContext context)
 		{
 			String engineId = (String) 
 				Model.ExtendedProperties[PrevalenceFacility.EngineIdPropertyKey];

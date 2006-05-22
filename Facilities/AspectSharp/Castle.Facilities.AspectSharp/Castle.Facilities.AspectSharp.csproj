@@ -95,29 +95,29 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
                     Name = "AspectSharp.Lang"
                     AssemblyName = "AspectSharp.Lang"
-                    HintPath = "..\lib\AspectSharp.Lang.dll"
-                />
-                <Reference
-                    Name = "AopAlliance"
-                    AssemblyName = "AopAlliance"
-                    HintPath = "..\lib\AopAlliance.dll"
-                />
-                <Reference
-                    Name = "AspectSharp"
-                    AssemblyName = "AspectSharp"
-                    HintPath = "..\lib\AspectSharp.dll"
+                    HintPath = "..\..\..\AspectSharp\bin\AspectSharp.Lang.dll"
                 />
                 <Reference
                     Name = "antlr.runtime"
                     AssemblyName = "antlr.runtime"
-                    HintPath = "..\lib\antlr.runtime.dll"
+                    HintPath = "..\..\..\AspectSharp\bin\antlr.runtime.dll"
                 />
                 <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                    Name = "AopAlliance"
+                    AssemblyName = "AopAlliance"
+                    HintPath = "..\..\..\AspectSharp\bin\AopAlliance.dll"
+                />
+                <Reference
+                    Name = "AspectSharp"
+                    AssemblyName = "AspectSharp"
+                    HintPath = "..\..\..\AspectSharp\bin\AspectSharp.dll"
                 />
             </References>
         </Build>

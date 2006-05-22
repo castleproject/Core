@@ -42,7 +42,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 		{
 		}
 
-		protected override object InternalCreate()
+		protected override object InternalCreate( Castle.MicroKernel.CreationContext context )
 		{
 			String fileName = (String) Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_FILE ];
 			bool isEmbedded = (bool) Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_EMBEDDED ];
