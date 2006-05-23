@@ -73,6 +73,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 					}
 				}
 
+				VisitNodes(model.JoinedClasses);
+				VisitNodes(model.Classes);
+
 				base.VisitModel(model);
 
 				// They should have been connected by now
