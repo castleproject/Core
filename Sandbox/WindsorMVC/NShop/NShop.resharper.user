@@ -1,0 +1,198 @@
+<Configuration>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Qualified:NShop.Order">
+      <Item value="OrderLines" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:log4net.Core.ILogger">
+      <Item value="Log" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NHibernate.ITransaction">
+      <Item value="Commit" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@">
+      <Item value="Substring" priority="0" />
+      <Item value="Add" priority="0" />
+      <Item value="ToLower" priority="0" />
+      <Item value="Length" priority="0" />
+      <Item value="Dispose" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Type">
+      <Item value="GetGenericTypeDefinition" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Security.Principal.IIdentity">
+      <Item value="IsAuthenticated" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.MicroKernel.IDependencyResolver">
+      <Item value="CanResolve" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Web.Caching">
+      <Item value="Cache" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NHibernate.Cfg.Configuration">
+      <Item value="AddAssembly" priority="0" />
+      <Item value="BuildSessionFactory" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.Dictionary&lt;System.Web.IHttpHandler,NShop.Services.IController&gt;">
+      <Item value="Remove" priority="1" />
+      <Item value="TryGetValue" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.HttpContext">
+      <Item value="Request" priority="0" />
+      <Item value="Items" priority="0" />
+      <Item value="Server" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Repositories.ISecurityInformation">
+      <Item value="HasAuthorizationFor" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.UI.WebControls.GridView">
+      <Item value="DataSource" priority="1" />
+      <Item value="DataBind" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@NShop.Container">
+      <Item value="current" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.MicroKernel.IKernel">
+      <Item value="HandlerRegistered" priority="0" />
+      <Item value="Resolver" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.ICollection&lt;NShop.OrderLine&gt;">
+      <Item value="Add" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Repositories.NHibernateRepository&lt;NShop.Customer&gt;">
+      <Item value="Save" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.SmsSender">
+      <Item value="Send" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NHibernate.ISessionFactory">
+      <Item value="OpenSession" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.HttpServerUtility">
+      <Item value="MapPath" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Security.Principal.IPrincipal">
+      <Item value="Identity" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Services.IController">
+      <Item value="View" priority="3" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Customer">
+      <Item value="Email" priority="0" />
+      <Item value="Orders" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NHibernate.Expression.Conjunction">
+      <Item value="Add" priority="0" />
+      <Item value="ToSqlString" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Web.HttpContext.Current">
+      <Item value="User" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Web">
+      <Item value="HttpContext" priority="0" />
+      <Item value="Caching" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:string">
+      <Item value="Substring" priority="2" />
+      <Item value="LastIndexOf" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.ICollection&lt;NShop.Order&gt;">
+      <Item value="Count" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.ArrayList">
+      <Item value="Add" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NHibernate.ICriteria">
+      <Item value="Add" priority="1" />
+      <Item value="List" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.HttpRequest">
+      <Item value="Params" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NHibernate.ISession">
+      <Item value="BeginTransaction" priority="1" />
+      <Item value="CreateCriteria" priority="0" />
+      <Item value="Load" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Repositories.OrderRepository">
+      <Item value="Save" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@NShop.Container.Current">
+      <Item value="Resolve" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Web.HttpRuntime">
+      <Item value="Cache" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Model.Message">
+      <Item value="To" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.MicroKernel.IHandler[]">
+      <Item value="Length" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.ISessionProvider">
+      <Item value="Session" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Container">
+      <Item value="Kernel" priority="0" />
+      <Item value="AddComponent" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.Repositories.IRepository&lt;NShop.Customer&gt;">
+      <Item value="Find" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.MicroKernel.INamingSubSystem">
+      <Item value="GetHandlers" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop.EmailSender">
+      <Item value="Send" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:NShop._Default">
+      <Item value="Customers" priority="0" />
+      <Item value="Culture" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <EditorManager>
+    <RecentFiles>
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Services/f:ISessionProvider.cs" caret="45" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Decorators/f:SecurityDecorator.cs" caret="182" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Decorators/f:TranactionDecorator.cs" caret="197" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/f:Container.cs" caret="547" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Decorators/f:LoggingDecorator.cs" caret="915" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Mapping/f:Customer.hbm.xml" caret="722" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Database/f:Database.sql" caret="1938" visual-x="0" visual-y="731" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/f:Default.aspx" caret="445" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/f:Web.config" caret="529" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Views/f:IView.cs" caret="159" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Services/f:IController.cs" caret="469" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/f:Global.asax.cs" caret="189" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Model/f:ISecurable.cs" caret="126" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Impl/f:SecurityInformation.cs" caret="388" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Repositories/f:OrderRepository.cs" caret="236" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Repositories/f:NHibernateRepository.cs" caret="208" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Impl/f:SessionProvider.cs" caret="178" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:CodeSnippets/f:SendOrder.cs" caret="921" visual-x="0" visual-y="153" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:CodeSnippets/f:CustomerSaving.cs" caret="477" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/f:Windsor.Config.xml" caret="3079" visual-x="0" visual-y="969" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/f:FrontController.cs" caret="1127" visual-x="0" visual-y="0" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/d:Controllers/f:DefaultController.cs" caret="433" visual-x="0" visual-y="204" />
+      <File id="2D60FAEA-A2BA-410A-BF65-5AED522C5B9D/f:Default.aspx.cs" caret="763" visual-x="8" visual-y="0" />
+    </RecentFiles>
+  </EditorManager>
+  <FileStructureView>
+    <AutoScrollToSource>False</AutoScrollToSource>
+    <TrackCaretLocation>False</TrackCaretLocation>
+  </FileStructureView>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <ReFormatCode>
+    <OptimizeUsings>False</OptimizeUsings>
+    <RemoveRedundantThis>False</RemoveRedundantThis>
+    <ShortenReferences>False</ShortenReferences>
+    <DecorateModifiers>False</DecorateModifiers>
+  </ReFormatCode>
+  <SharedSolutionDisabledTemplatesManager>
+    <DisabledTemplates />
+  </SharedSolutionDisabledTemplatesManager>
+  <UserSolutionDisabledTemplatesManager>
+    <DisabledTemplates />
+  </UserSolutionDisabledTemplatesManager>
+</Configuration>
