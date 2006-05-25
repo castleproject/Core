@@ -457,6 +457,11 @@ namespace Castle.ActiveRecord
         }
         #endregion
 
+		public static void Refresh(T instance)
+		{
+			ActiveRecordBase.Refresh(instance);
+		}
+
         #region DeleteAll
         public static void DeleteAll()
         {
@@ -774,6 +779,14 @@ namespace Castle.ActiveRecord
         public virtual void Update()
         {
             ActiveRecordBase.Update(this);
+        }
+
+		/// <summary>
+        /// Refresh the instance from the database.
+        /// </summary>
+        public virtual void Refresh()
+        {
+            ActiveRecordBase.Refresh(this);
         }
 
         /// <summary>

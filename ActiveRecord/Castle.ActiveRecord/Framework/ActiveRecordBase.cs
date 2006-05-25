@@ -169,6 +169,44 @@ namespace Castle.ActiveRecord
 
 		#endregion
 
+		#region Refresh
+		
+		/// <summary>
+		/// Refresh the instance from the database.
+		/// </summary>
+		/// <param name="instance"></param>
+		protected internal static void Refresh(object instance)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
+			ISession session = holder.CreateSession(instance.GetType());
+
+			try
+			{
+				session.Refresh(instance);
+			}
+			catch(Exception ex)
+			{
+				// NHibernate catches our ValidationException, and as such it is the innerexception here
+				if (ex.InnerException is ValidationException)
+				{
+					throw ex.InnerException;
+				}
+				else
+				{
+					throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
+				}
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+		
+		#endregion
+
 		#region DeleteAll
 
 		protected internal static void DeleteAll(Type type)
@@ -861,6 +899,14 @@ namespace Castle.ActiveRecord
 		public virtual void Delete()
 		{
 			ActiveRecordBase.Delete(this);
+		}
+	
+		/// <summary>
+		/// Refresh the instance from the database.
+		/// </summary>
+		public virtual void Refresh()
+		{
+			ActiveRecordBase.Refresh(this);
 		}
 
 //		/// <summary>
