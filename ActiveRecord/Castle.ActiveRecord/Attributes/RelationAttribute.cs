@@ -23,7 +23,8 @@ namespace Castle.ActiveRecord
 		Bag,
 		Set,
 		IdBag,
-		Map
+		Map,
+		List
 	}
 
 	[AttributeUsage(AttributeTargets.Property), Serializable]
@@ -37,8 +38,8 @@ namespace Castle.ActiveRecord
 		internal String sort;
 		internal String index;
 		internal String indexType;
-        internal String element;
-	    internal bool lazy;
+		internal String element;
+		internal bool lazy;
 		internal bool inverse;
 		internal ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
 		internal RelationType relType = RelationType.Guess;
@@ -124,13 +125,13 @@ namespace Castle.ActiveRecord
 			set { indexType = value; }
 		}
 
-	    /// <summary>
-	    /// Use for simple types.
-	    /// </summary>
-        public string Element
-        {
-            get { return element; }
-            set { element = value; }
-        }
+		/// <summary>
+		/// Use for simple types.
+		/// </summary>
+		public string Element
+		{
+			get { return element; }
+			set { element = value; }
+		}
 	}
 }
