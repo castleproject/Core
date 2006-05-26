@@ -162,6 +162,23 @@
 		</zip>
 		<call target="deletereleasenotes" />
 	</target>
+
+	<target name="zip-build" depends="build">
+		<call target="createreleasenotes" />
+		<property name="date" value="${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())}-${datetime::get-hour(datetime::now())}-${datetime::get-(datetime::now())}"/>
+		<zip zipfile="${base.dir}/Castle-${framework::get-target-framework()}-${date}-.zip">
+			<fileset basedir="${base.dir}/build">
+				<include name="${framework::get-target-framework()}/*.*" />
+			</fileset>
+			<fileset basedir="${base.dir}/setup">
+				<include name="License.rtf" />
+			</fileset>
+			<fileset basedir="${tempdir}">
+				<include name="*.txt" />
+			</fileset>
+		</zip>
+		<call target="deletereleasenotes" />
+	</target>
 	
 	<target name="zipdoc">
 		<zip zipfile="${base.dir}/Castle-api-doc.zip">
