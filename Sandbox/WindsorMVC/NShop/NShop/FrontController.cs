@@ -25,11 +25,12 @@ namespace NShop
 			string controllerName = PathToControllerName(context);
 			Container current = Container.Current;
 		    IController controller = current.Resolve<IController>(controllerName);
+
+            controller.ViewUrl = context.Request.Path;
 			controller.Process(context);
-			if (controller.View == null)
+			if (controller.ViewUrl == null)
 				throw new InvalidOperationException("Controller doesn't have an associated view.");
-			string fullView = controller.View + ".aspx";
-			IHttpHandler instance = PageParser.GetCompiledPageInstance(url, context.Server.MapPath(fullView), context);
+            IHttpHandler instance = PageParser.GetCompiledPageInstance(url, context.Server.MapPath(controller.ViewUrl), context);
 			((IView) instance).Items = controller.Items;
 			lock (handler2Controller)
 			{

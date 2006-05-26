@@ -10,12 +10,6 @@ namespace NShop.Impl
 	{
 		IRepository<ISecurable> securityRepository;
 
-		public IRepository<ISecurable> SecurityRepository
-		{
-			get { return securityRepository; }
-			set { securityRepository = value; }
-		}
-
 		#region ISecurityInformation Members
 
 		public bool HasAuthorizationFor(string action)

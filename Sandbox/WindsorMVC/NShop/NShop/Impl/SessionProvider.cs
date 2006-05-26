@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Remoting.Messaging;
+using System.Web;
 using NHibernate;
 using NShop.Services;
 using NHibernate.Cfg;
@@ -11,7 +12,7 @@ namespace NShop.Impl
 		private const string sessionKey = "Session.Key";
 		static ISessionFactory sessionFactory;
 
-		private ISessionFactory SessionFactory
+		public ISessionFactory SessionFactory
 		{
 			get
 			{
@@ -33,7 +34,7 @@ namespace NShop.Impl
 				if(session==null)
 				{
 					session = SessionFactory.OpenSession();
-					CallContext.SetData(sessionKey, session);
+                    HttpContext.Current.Items[sessionKey] = session;
 				}
 				return session;
 			}
@@ -41,8 +42,8 @@ namespace NShop.Impl
 		
 		public static void Clear()
 		{
-			ISession session = CallContext.GetData(sessionKey) as ISession;
-			if (session == null)
+			ISession session = HttpContext.Current.Items[sessionKey] as ISession;
+			if (session != null)
 				session.Dispose();
 		}
 	}

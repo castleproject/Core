@@ -29,33 +29,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vendor\Castle.MicroKernel.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Model, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vendor\Castle.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vendor\Castle.Windsor.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vendor\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vendor\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\build\net-2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vendor\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\..\build\net-2.0\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Generics, Version=1.0.7.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="NHibernate.Generics, Version=1.0.5.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vendor\NHibernate.Generics.dll</HintPath>
+      <HintPath>..\..\..\..\..\nqa\NHibernate.Generics\NHibernate.Generics.Tests\bin\Release\NHibernate.Generics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -129,6 +117,20 @@
     <None Include="ClassDaigrams\ServicesImpl.cd" />
     <None Include="Database\Database.sql" />
     <None Include="ClassDaigrams\Model.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\InversionOfControl\Castle.MicroKernel\Castle.MicroKernel-2-0.csproj">
+      <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>
+      <Name>Castle.MicroKernel-2-0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InversionOfControl\Castle.Model\Castle.Model-2-0.csproj">
+      <Project>{6F052973-C8E0-41EB-BAAF-B052509B5597}</Project>
+      <Name>Castle.Model-2-0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InversionOfControl\Castle.Windsor\Castle.Windsor-2-0.csproj">
+      <Project>{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}</Project>
+      <Name>Castle.Windsor-2-0</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v8.0\WebApplications\Microsoft.WebApplication.targets" />

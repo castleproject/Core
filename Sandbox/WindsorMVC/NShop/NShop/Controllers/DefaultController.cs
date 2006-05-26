@@ -18,8 +18,9 @@ namespace NShop.Controllers
 	{
 		private readonly IRepository<Customer> customerRepostiroy;
 		private IDictionary<string, object> items = new Dictionary<string, object>();
+	    private string viewUrl;
 
-		public IDictionary<string, object> Items
+	    public IDictionary<string, object> Items
 		{
 			get { return items; }
 		}
@@ -34,13 +35,14 @@ namespace NShop.Controllers
 		{
 			Items["Customers"] = customerRepostiroy.Find();
 		}
-		
-		public string View
-		{
-			get { return "Default"; }
-		}
 
-		public void End()
+	    public string ViewUrl
+	    {
+	        get { return viewUrl; }
+	        set { viewUrl = value; }
+	    }
+
+	    public void End()
 		{
 		}
 	}

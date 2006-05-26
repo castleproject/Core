@@ -14,7 +14,7 @@ namespace NShop.Services
 	public interface IController
 	{
 		void Process(HttpContext context);
-		string View { get; }
+        string ViewUrl { get; set; }
 		void End();
 
 		IDictionary<string, object> Items { get; }
