@@ -165,8 +165,7 @@
 
 	<target name="zip-build" depends="build">
 		<call target="createreleasenotes" />
-		<property name="date" value="${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())}-${datetime::get-hour(datetime::now())}-${datetime::get-(datetime::now())}"/>
-		<zip zipfile="${base.dir}/Castle-${framework::get-target-framework()}-${date}-.zip">
+		<zip zipfile="${base.dir}/Castle-${framework::get-target-framework()}-${CCNetLabel}-.zip">
 			<fileset basedir="${base.dir}/build">
 				<include name="${framework::get-target-framework()}/*.*" />
 			</fileset>
