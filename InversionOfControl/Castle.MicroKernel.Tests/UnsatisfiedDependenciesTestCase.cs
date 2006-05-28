@@ -65,5 +65,63 @@ namespace Castle.MicroKernel.Tests
 			kernel.AddComponent("key", typeof(CustomerImpl2));
 			object instance = kernel["key"];
 		}
+
+		[Test]
+		[ExpectedException( typeof(HandlerException), "Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\nKeys (components with specific keys)\r\n- common2 which was not registered. \r\n" )]
+		public void UnsatisfiedOverride()
+		{
+			MutableConfiguration config = new MutableConfiguration("component");
+			
+			MutableConfiguration parameters = (MutableConfiguration ) 
+				config.Children.Add( new MutableConfiguration("parameters") );
+
+			parameters.Children.Add( new MutableConfiguration("common", "${common2}") );
+
+			kernel.ConfigurationStore.AddComponentConfiguration("key", config);
+
+			kernel.AddComponent("common1", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("key", typeof(CommonServiceUser));
+			object instance = kernel["key"];
+		}
+
+		[Test]
+		[ExpectedException( typeof(HandlerException), "Can't create component 'key' as it has dependencies to be satisfied. \r\nkey is waiting for the following dependencies: \r\n\r\nKeys (components with specific keys)\r\n- common2 which was not registered. \r\n" )]
+		public void OverrideIsForcedDependency()
+		{
+			MutableConfiguration config = new MutableConfiguration("component");
+			
+			MutableConfiguration parameters = (MutableConfiguration ) 
+				config.Children.Add( new MutableConfiguration("parameters") );
+
+			parameters.Children.Add( new MutableConfiguration("common", "${common2}") );
+
+			kernel.ConfigurationStore.AddComponentConfiguration("key", config);
+
+			kernel.AddComponent("common1", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("key", typeof(CommonServiceUser3));
+			object instance = kernel["key"];
+		}
+
+		[Test]
+		public void SatisfiedOverride()
+		{
+			MutableConfiguration config = new MutableConfiguration("component");
+			
+			MutableConfiguration parameters = (MutableConfiguration ) 
+				config.Children.Add( new MutableConfiguration("parameters") );
+
+			parameters.Children.Add( new MutableConfiguration("common", "${common2}") );
+
+			kernel.ConfigurationStore.AddComponentConfiguration("key", config);
+
+			kernel.AddComponent("common1", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("common2", typeof(ICommon), typeof(CommonImpl2));
+			kernel.AddComponent("key", typeof(CommonServiceUser));
+			CommonServiceUser instance = (CommonServiceUser) kernel["key"];
+			
+			Assert.IsNotNull(instance);
+			Assert.IsNotNull(instance.CommonService);
+			Assert.AreEqual("CommonImpl2", instance.CommonService.GetType().Name);
+		}
 	}
 }

@@ -15,10 +15,9 @@
 namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
-
+	using Castle.MicroKernel.Util;
 	using Castle.Model;
 	using Castle.Model.Configuration;
-    using Castle.MicroKernel.Util;
 
 	/// <summary>
 	/// Check for a node 'parameters' within the component 
@@ -56,6 +55,41 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				{
 					model.Parameters.Add(name, value);
 				}
+			}
+			
+			// Experimental code
+			
+			foreach(ParameterModel parameter in model.Parameters)
+			{
+				if (parameter.Value == null || !ReferenceExpressionUtil.IsReference(parameter.Value))
+				{
+					continue;
+				}
+				
+				String paramName = parameter.Name;
+				String newKey = ReferenceExpressionUtil.ExtractComponentKey(parameter.Value);
+				
+				// Update dependencies to ServiceOverride
+				
+				model.Dependencies.Add(new DependencyModel(DependencyType.ServiceOverride, newKey, null, false));
+				
+//				foreach(ConstructorCandidate candidate in model.Constructors)
+//				{
+//					foreach(DependencyModel dependency in candidate.Dependencies)
+//					{
+//						dependency.DependencyKey = newKey;
+//						dependency.DependencyType = DependencyType.ServiceOverride;
+//					}
+//				}
+//				
+//				foreach(PropertySet property in model.Properties)
+//				{
+//					if (property.Dependency.DependencyKey == paramName)
+//					{
+//						property.Dependency.DependencyType = DependencyType.ServiceOverride;
+//						property.Dependency.DependencyKey = newKey;
+//					}
+//				}
 			}
 		}
 	}

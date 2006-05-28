@@ -14,10 +14,8 @@
 
 namespace Castle.Windsor.Proxy
 {
-	using System;
 	using System.Reflection;
 	using System.Runtime.Remoting.Messaging;
-	using System.Threading;
 
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Invocation;

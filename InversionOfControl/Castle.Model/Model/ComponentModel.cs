@@ -265,7 +265,8 @@ namespace Castle.Model
         /// <summary>
         /// Dependencies are kept within constructors and
         /// properties. Others dependencies must be 
-        /// registered here, so the kernel can check them
+        /// registered here, so the kernel (as a matter 
+        /// of fact the handler) can check them
         /// </summary>
         public DependencyModelCollection Dependencies
         {

@@ -18,8 +18,7 @@ namespace Castle.Model
 	using System.Reflection;
 
 	/// <summary>
-	/// Represents a property and the respective optional 
-	/// dependency.
+	/// Represents a property and the respective dependency.
 	/// </summary>
 	[Serializable]
 	public class PropertySet

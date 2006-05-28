@@ -16,7 +16,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
 	using System.Reflection;
-
 	using Castle.Model;
 	using Castle.MicroKernel.SubSystems.Conversion;
 
@@ -40,14 +39,14 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		{
 			if (converter == null)
 			{
-				converter = (IConversionManager) 
-					kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+				converter = (IConversionManager)
+				            kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 			}
 
 			Type targetType = model.Implementation;
 
-			ConstructorInfo[] constructors = 
-				targetType.GetConstructors(BindingFlags.Public|BindingFlags.Instance);
+			ConstructorInfo[] constructors =
+				targetType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach(ConstructorInfo constructor in constructors)
 			{
@@ -59,31 +58,33 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			}
 		}
 
-		protected virtual ConstructorCandidate CreateConstructorCandidate( ConstructorInfo constructor )
+		protected virtual ConstructorCandidate CreateConstructorCandidate(ConstructorInfo constructor)
 		{
 			ParameterInfo[] parameters = constructor.GetParameters();
 
 			DependencyModel[] dependencies = new DependencyModel[parameters.Length];
 
-			for (int i = 0; i < parameters.Length; i++)
+			for(int i = 0; i < parameters.Length; i++)
 			{
 				ParameterInfo parameter = parameters[i];
 
 				Type paramType = parameter.ParameterType;
 
-				if ( converter.IsSupportedAndPrimitiveType(paramType) )
+				// This approach is somewhat problematic. We should use
+				// another strategy to differentiate types and classify dependencies
+				if (converter.IsSupportedAndPrimitiveType(paramType))
 				{
-					dependencies[i] = new DependencyModel( 
-						DependencyType.Parameter, parameter.Name, paramType, false );
+					dependencies[i] = new DependencyModel(
+						DependencyType.Parameter, parameter.Name, paramType, false);
 				}
 				else
 				{
 					dependencies[i] = new DependencyModel(
-						DependencyType.Service, parameter.Name, paramType, false );
+						DependencyType.Service, parameter.Name, paramType, false);
 				}
 			}
 
-			return new ConstructorCandidate( constructor, dependencies );
+			return new ConstructorCandidate(constructor, dependencies);
 		}
 	}
 }

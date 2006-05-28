@@ -216,12 +216,11 @@ namespace Castle.MicroKernel.Handlers
 
 			foreach(DependencyModel dependency in ComponentModel.Dependencies)
 			{
-				if (!dependency.IsOptional && dependency.DependencyType == DependencyType.Service)
+				if (!dependency.IsOptional && 
+				    (dependency.DependencyType == DependencyType.Service || 
+				     dependency.DependencyType == DependencyType.ServiceOverride))
 				{
-					if (dependency.TargetType != null)
-					{
-						AddDependency(dependency);
-					}
+					AddDependency(dependency);
 				}
 			}
 
@@ -232,7 +231,8 @@ namespace Castle.MicroKernel.Handlers
 
 			foreach(DependencyModel dependency in candidate.Dependencies)
 			{
-				if (dependency.DependencyType == DependencyType.Service)
+				if (dependency.DependencyType == DependencyType.Service || 
+					dependency.DependencyType == DependencyType.ServiceOverride)
 				{
 					AddDependency(dependency);
 				}
@@ -241,7 +241,8 @@ namespace Castle.MicroKernel.Handlers
 
 		protected virtual void AddDependency(DependencyModel dependency)
 		{
-			if (dependency.TargetType != null)
+			if (dependency.DependencyType == DependencyType.Service && 
+			    dependency.TargetType != null)
 			{
 				if (dependency.TargetType == typeof(IKernel)) return;
 
@@ -385,8 +386,10 @@ namespace Castle.MicroKernel.Handlers
 			{
 				sb.Append( "\r\nKeys (components with specific keys)\r\n" );
 
-				foreach(String key in DependenciesByKey)
+				foreach(DictionaryEntry entry in DependenciesByKey)
 				{
+					String key = entry.Key.ToString();
+					
 					IHandler handler = Kernel.GetHandler(key);
 
 					if (handler == null)

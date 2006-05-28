@@ -1,6 +1,11 @@
 RC 3
 ====
 
+- Fixed IOC-25: Overrides on the configuration should be considered a non-optional dependency
+
+  This fix changes a little the MicroKernel behavior. Now if you specify an service override
+  through external configuration, it will be considered a _non-optional_ dependency
+
 - Uri usage replaced by CustomUri which, differently than MS' Uri class, has the same
   behavior on net-1.1, net-2.0 and mono
 

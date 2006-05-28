@@ -33,4 +33,24 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 			get { return _common; }
 		}
 	}
+	
+	public class CommonServiceUser3
+	{
+		private ICommon _common;
+
+		public CommonServiceUser3()
+		{
+		}
+
+		public CommonServiceUser3(ICommon common)
+		{
+			_common = common;
+		}
+
+		public ICommon CommonService
+		{
+			get { return _common; }
+		}
+	}
+
 }
