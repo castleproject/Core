@@ -749,13 +749,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeTypeAtt(Type type, String typeName)
 		{
-			if (typeName != null)
-			{
-				return MakeAtt("type", typeName);
-			}
-			else if (type.IsEnum)
+			if (type.IsEnum)
 			{
 				return String.Empty;
+			}
+			else if (typeName != null)
+			{
+				return MakeAtt("type", typeName);
 			}
 			else
 			{
