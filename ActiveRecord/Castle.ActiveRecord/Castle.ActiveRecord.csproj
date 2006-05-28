@@ -574,6 +574,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Queries\Modifiers\IQueryModifier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Queries\Modifiers\QueryParameter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Queries\Modifiers\QueryRange.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Scopes\AbstractScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -15,9 +15,9 @@
 namespace Castle.ActiveRecord.Tests
 {
 	using System;
-
 	using NUnit.Framework;
 	
+	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Tests.Model;
 	using Castle.ActiveRecord.Tests.Model.CompositeModel;
 
@@ -25,6 +25,13 @@ namespace Castle.ActiveRecord.Tests
 	[TestFixture]
 	public class ActiveRecordTestCase : AbstractActiveRecordTest
 	{
+		[Test, ExpectedException(typeof(ActiveRecordException), "You can't invoke ActiveRecordStarter.Initialize more than once")]
+		public void InitializeCantBeInvokedMoreThanOnce()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post));
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog));
+		}
+		
 		[Test]
 		public void SimpleOperations()
 		{

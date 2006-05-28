@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Fixed AR-52 - Dont allow one to invoke Initialize more than once
+
 - Added some flexibility into ActiveRecord Queries. They are now mutable,
   which means we now have methods like 'SetParameter', 'SetParameterList' and
   'SetRange'; and the 'Query' property is now read-write.
