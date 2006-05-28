@@ -80,6 +80,7 @@ namespace Castle.ActiveRecord.Generator.Components
 			columnName = Regex.Replace(columnName, "([a-z])_([a-z])", UpCaser);
 			columnName = Regex.Replace(columnName, "(tb_|_)", "");
 			columnName = Regex.Replace(columnName, "^[a-z]", UpCaser);
+			columnName = Regex.Replace(columnName, "[^1-9a-zA-Z]", "");
 
 			return columnName;
 		}
@@ -92,6 +93,7 @@ namespace Castle.ActiveRecord.Generator.Components
 			columnName = Regex.Replace(columnName, "([a-z])_([a-z])", UpCaser);
 			columnName = Regex.Replace(columnName, "(tb_|_)", "");
 			columnName = Regex.Replace(columnName, "^[A-Z]",  DownCaser);
+			columnName = Regex.Replace(columnName, "[^1-9a-zA-Z]", "");
 
 			return String.Format("_{0}", columnName);
 		}
