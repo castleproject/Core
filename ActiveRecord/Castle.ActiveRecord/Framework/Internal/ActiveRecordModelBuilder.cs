@@ -20,8 +20,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	public class ActiveRecordModelBuilder
 	{
-		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
-		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
+		                                                           BindingFlags.Instance | BindingFlags.NonPublic;
+
+		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
+		                                                                BindingFlags.NonPublic | BindingFlags.Instance;
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
@@ -202,7 +205,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Key != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one JoinedKeyAttribute. " +
-								"Check type " + model.Type.FullName);
+							                                "Check type " + model.Type.FullName);
 						}
 
 						model.Key = new KeyModel(prop, propAtt);
@@ -215,7 +218,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Version != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one VersionAttribute. " +
-								"Check type " + model.Type.FullName);
+							                                "Check type " + model.Type.FullName);
 						}
 
 						model.Version = new VersionModel(prop, propAtt);
@@ -228,12 +231,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Timestamp != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one TimestampAttribute. " +
-								"Check type " + model.Type.FullName);
+							                                "Check type " + model.Type.FullName);
 						}
 
 						model.Timestamp = new TimestampModel(prop, propAtt);
 					}
-						// Relations
+					// Relations
 					else if (attribute is OneToOneAttribute)
 					{
 						OneToOneAttribute propAtt = attribute as OneToOneAttribute;
@@ -248,7 +251,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						model.BelongsTo.Add(new BelongsToModel(prop, propAtt));
 					}
-						//The ordering is important here, HasManyToAny must comes before HasMany!
+					// The ordering is important here, HasManyToAny must comes before HasMany!
 					else if (attribute is HasManyToAnyAttribute)
 					{
 						HasManyToAnyAttribute propAtt = attribute as HasManyToAnyAttribute;
@@ -290,7 +293,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					if (anyModel == null)
 					{
 						throw new ActiveRecordException("You can't specify a Any.MetaValue without specifying the Any attribute. " +
-							"Check type " + prop.DeclaringType.FullName);
+						                                "Check type " + prop.DeclaringType.FullName);
 					}
 					anyModel.MetaValues = anyMetaValues;
 				}
@@ -307,14 +310,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			// Changed as suggested http://support.castleproject.org/jira/browse/AR-40
 
 			bool shouldCheck = type.BaseType != typeof(object) &&
-				type.BaseType != typeof(ActiveRecordBase) &&
-				type.BaseType != typeof(ActiveRecordValidationBase); 
-				// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
+			                   type.BaseType != typeof(ActiveRecordBase) &&
+			                   type.BaseType != typeof(ActiveRecordValidationBase);
+			// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
 
 			if (shouldCheck) // Perform more checks 
 			{
 				Type basetype = type.BaseType;
-				
+
 				while(basetype != typeof(object))
 				{
 					if (basetype.IsDefined(typeof(JoinedBaseAttribute), false)) return false;
@@ -345,7 +348,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			if (attrs.Length == 0)
 			{
-				throw new ActiveRecordException(String.Format("Type {0} is not using the ActiveRecordAttribute, which is obligatory.", type.FullName));
+				throw new ActiveRecordException(
+					String.Format("Type {0} is not using the ActiveRecordAttribute, which is obligatory.", type.FullName));
 			}
 
 			ActiveRecordAttribute arAttribute = attrs[0] as ActiveRecordAttribute;

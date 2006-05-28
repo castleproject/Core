@@ -198,7 +198,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			PropertyInfo[] keyProps = model.Property.PropertyType.GetProperties();
 			foreach(PropertyInfo keyProp in keyProps)
 			{
-				KeyPropertyAttribute keyPropAttr = keyProp.GetCustomAttributes(typeof(KeyPropertyAttribute), false)[0] as KeyPropertyAttribute;
+				KeyPropertyAttribute keyPropAttr = keyProp.GetCustomAttributes(
+				                                   	typeof(KeyPropertyAttribute), false)[0] as KeyPropertyAttribute;
 				if (keyPropAttr.Column == null)
 				{
 					keyPropAttr.Column = keyProp.Name;
@@ -438,7 +439,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			AppendF("<one-to-one{0}{1}{2}{3}{4}{5} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.OneToOneAtt.AccessString),
-			        MakeAtt("class", MakeTypeName(model.Property.PropertyType)),
+			        MakeAtt("class", MakeTypeName(model.OneToOneAtt.MapType)),
 			        WriteIfNonNull("cascade", cascade),
 			        WriteIfNonNull("outer-join", TranslateOuterJoin(model.OneToOneAtt.OuterJoin)),
 			        WriteIfTrue("constrained", model.OneToOneAtt.Constrained));

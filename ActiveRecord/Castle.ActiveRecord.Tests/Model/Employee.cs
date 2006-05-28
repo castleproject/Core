@@ -16,7 +16,6 @@ namespace Castle.ActiveRecord.Tests.Model
 {
 	using System;
 
-
 	[ActiveRecord("Employee")]
 	public class Employee : ActiveRecordBase
 	{
@@ -65,7 +64,7 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll( typeof(Employee) );
+			ActiveRecordBase.DeleteAll(typeof(Employee));
 		}
 	}
 
@@ -113,7 +112,7 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll( typeof(Award) );
+			ActiveRecordBase.DeleteAll(typeof(Award));
 		}
 	}
 }

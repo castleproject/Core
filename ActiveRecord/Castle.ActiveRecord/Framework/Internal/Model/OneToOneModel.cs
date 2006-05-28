@@ -17,14 +17,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
-
 	[Serializable]
 	public class OneToOneModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly OneToOneAttribute att;
 
-		public OneToOneModel( PropertyInfo propInfo, OneToOneAttribute att )
+		public OneToOneModel(PropertyInfo propInfo, OneToOneAttribute att)
 		{
 			this.propInfo = propInfo;
 			this.att = att;

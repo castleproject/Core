@@ -17,14 +17,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
-
 	[Serializable]
 	public class KeyModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly JoinedKeyAttribute att;
 
-		public KeyModel( PropertyInfo propInfo, JoinedKeyAttribute att )
+		public KeyModel(PropertyInfo propInfo, JoinedKeyAttribute att)
 		{
 			this.propInfo = propInfo;
 			this.att = att;

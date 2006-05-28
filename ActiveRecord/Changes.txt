@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Fixed AR-46 - OneToOne Attribute Does Not Support Specifying a Target Type
+  Added property MapType to OneToOne attribute
+
 - Added ActiveRecordStarter.ResetInitializationFlag. Useful for test cases 
   that invoke Initialize multiple times
 

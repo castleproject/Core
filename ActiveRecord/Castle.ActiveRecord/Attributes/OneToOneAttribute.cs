@@ -101,30 +101,41 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class OneToOneAttribute : WithAccessAttribute
 	{
-		private bool _constrained;
-		private OuterJoinEnum _outerJoin = OuterJoinEnum.Auto;
-		private CascadeEnum _cascade = CascadeEnum.None;
+		private bool constrained;
+		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
+		private CascadeEnum cascade = CascadeEnum.None;
+		private Type mapType;
 
 		public OneToOneAttribute()
 		{
 		}
+		
+		/// <summary>
+		/// Allows one to reference a different type
+		/// than the property type
+		/// </summary>
+		public Type MapType
+		{
+			get { return mapType; }
+			set { mapType = value; }
+		}
 
 		public CascadeEnum Cascade
 		{
-			get { return _cascade; }
-			set { _cascade = value; }
+			get { return cascade; }
+			set { cascade = value; }
 		}
 
 		public bool Constrained
 		{
-			get { return _constrained; }
-			set { _constrained = value; }
+			get { return constrained; }
+			set { constrained = value; }
 		}
 
 		public OuterJoinEnum OuterJoin
 		{
-			get { return _outerJoin; }
-			set { _outerJoin = value; }
+			get { return outerJoin; }
+			set { outerJoin = value; }
 		}
 	}
 }

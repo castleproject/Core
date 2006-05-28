@@ -429,6 +429,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 			base.VisitHasAndBelongsToMany(model);
 		}
 
+		public override void VisitOneToOne(OneToOneModel model)
+		{
+			if (model.OneToOneAtt.MapType == null)
+			{
+				model.OneToOneAtt.MapType = model.Property.PropertyType;
+			}
+			
+			base.VisitOneToOne(model);
+		}
+
 		private RelationType GuessRelation(PropertyInfo property, RelationType type)
 		{
 			if (type == RelationType.Guess)
