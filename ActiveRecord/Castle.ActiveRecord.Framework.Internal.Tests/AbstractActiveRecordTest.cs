@@ -14,8 +14,16 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests
 {
+	using NUnit.Framework;
+
 	public abstract class AbstractActiveRecordTest
 	{
+		[SetUp]
+		public void Init()
+		{
+			ActiveRecordStarter.ResetInitializationFlag();
+		}
+		
 		protected IConfigurationSource GetConfigSource()
 		{
 #if dotNet2

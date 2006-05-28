@@ -27,6 +27,7 @@ namespace Castle.ActiveRecord.Tests
         [SetUp]
         public void Setup()
         {
+        	base.Init();
             ActiveRecordStarter.Initialize(GetConfigSource(),
                 typeof(PersistedRule),
                 typeof(WorkDaysRules));

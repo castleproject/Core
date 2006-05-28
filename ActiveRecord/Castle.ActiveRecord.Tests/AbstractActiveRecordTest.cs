@@ -36,6 +36,12 @@ namespace Castle.ActiveRecord.Tests
 		{
 			ActiveRecordStarter.CreateSchema();
 		}
+		
+		[SetUp]
+		public void Init()
+		{
+			ActiveRecordStarter.ResetInitializationFlag();
+		}
 
 		[TearDown]
 		public void Drop()

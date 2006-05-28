@@ -330,6 +330,14 @@ namespace Castle.ActiveRecord
 				}
 			}
 		}
+		
+		/// <summary>
+		/// Intended to be used only by test cases
+		/// </summary>
+		public static void ResetInitializationFlag()
+		{
+			isInitialized = false;
+		}
 
 		private static SchemaExport CreateSchemaExport(Configuration cfg)
 		{

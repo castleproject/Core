@@ -24,8 +24,11 @@ namespace Castle.ActiveRecord.Tests
 		[SetUp]
 		public void Setup()
 		{
+			base.Init();
+			
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
 				typeof(Blog), typeof(Post), typeof(Hand), typeof(Test2ARBase) );
+			
 			Recreate();
 		}
 

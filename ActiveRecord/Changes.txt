@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Added ActiveRecordStarter.ResetInitializationFlag. Useful for test cases 
+  that invoke Initialize multiple times
+
 - Fixed AR-52 - Dont allow one to invoke Initialize more than once
 
 - Added some flexibility into ActiveRecord Queries. They are now mutable,

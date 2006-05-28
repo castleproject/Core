@@ -25,8 +25,10 @@ namespace Castle.ActiveRecord.Tests
 	public class StrictModelTestCase : AbstractActiveRecordTest
 	{
 		[SetUp]
-		public void Init()
+		public new void Init()
 		{
+			base.Init();
+			
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
 				typeof(Estrato), typeof(ReferenceEstrato), typeof(SurveyEstrato),
 				typeof(QuestionContainer), typeof(Repository), typeof(Survey) );
