@@ -181,7 +181,10 @@ namespace Castle.MicroKernel.Handlers
 				}
 			}
 
-			foreach(String compKey in DependenciesByKey.Keys)
+			String[] keys = new String[DependenciesByKey.Keys.Count];
+			DependenciesByKey.Keys.CopyTo(keys, 0);
+
+			foreach(String compKey in keys)
 			{
 				if (HasValidComponent(compKey))
 				{
