@@ -228,6 +228,8 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 
 		public void CreateAndPopulateTables()
 		{
+			ActiveRecordStarter.ResetInitializationFlag();
+			
 			ActiveRecordStarter.Initialize( 
 				ConfigurationSettings.GetConfig( "activerecord" ) as IConfigurationSource, 
 				typeof(SimplePerson), typeof(Blog), typeof(Category) /*, typeof(BlogCategory)*/ );

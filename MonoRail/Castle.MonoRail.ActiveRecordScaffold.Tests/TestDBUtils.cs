@@ -26,6 +26,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 	{
 		public static void Recreate()
 		{
+			ActiveRecordStarter.ResetInitializationFlag();
+			
 			ActiveRecordStarter.Initialize( 
 				ConfigurationSettings.GetConfig( "activerecord" ) as IConfigurationSource, 
 				typeof(Blog), typeof(Category), typeof(Person), 
