@@ -32,6 +32,8 @@ namespace Castle.ActiveRecord.Tests
 		[SetUp]
 		public void Setup()
 		{
+			ActiveRecordStarter.ResetInitializationFlag();
+			
             ActiveRecordStarter.Initialize(GetConfigSource(),
 				typeof(Blog),
 				typeof(Post),
@@ -39,6 +41,7 @@ namespace Castle.ActiveRecord.Tests
 				typeof(Award),
 				typeof(Employee),
 				typeof(Person));
+
 			Recreate();
 
             Post.DeleteAll();

@@ -25,9 +25,11 @@ namespace Castle.ActiveRecord.Tests
 	public class NullablesGenericsTestCase : AbstractActiveRecordTest
 	{
 		[SetUp]
-		public void Init()
+		public new void Init()
 		{
-            ActiveRecordStarter.Initialize(GetConfigSource(), typeof(GenericNullableModel));
+			ActiveRecordStarter.ResetInitializationFlag();
+			
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(GenericNullableModel));
 	
 			Recreate();
 		}
