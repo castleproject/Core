@@ -22,14 +22,12 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
-
 	using Castle.MicroKernel.Facilities;
 	using Castle.Model;
 	using Castle.Model.Configuration;
-	
 	using Castle.Services.Logging;
 	using Castle.Services.Transaction;
-
+	
 	using TransactionMode = Castle.Services.Transaction.TransactionMode;
 
 	/// <summary>
@@ -50,9 +48,9 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				log = (ILogger) Kernel[typeof(ILogger)];
 			else
 				log = new NullLogger();
-			
+
 			log.Debug("Initializing AR Facility");
-			
+
 			if (FacilityConfig == null)
 			{
 				log.FatalError("Configuration for AR Facility not found.");
@@ -70,10 +68,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			}
 
 			ArrayList assemblies = new ArrayList(assembliyConfigNodes.Count);
-			
+
 			foreach(IConfiguration assemblyNode in assembliyConfigNodes)
 			{
-				assemblies.Add( ObtainAssembly( assemblyNode.Value ) );
+				assemblies.Add(ObtainAssembly(assemblyNode.Value));
 			}
 
 			Kernel.ComponentCreated += new Castle.MicroKernel.ComponentInstanceDelegate(Kernel_ComponentCreated);
@@ -92,14 +90,15 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		private void InitializeFramework(ArrayList assemblies)
 		{
 			log.Info("Initializing ActiveRecord Framework");
-			
+
+			ActiveRecordStarter.ResetInitializationFlag();
 			ActiveRecordStarter.SessionFactoryHolderCreated += new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
 
 			try
 			{
-				ActiveRecordStarter.Initialize( 
-					(Assembly[]) assemblies.ToArray( typeof(Assembly) ), 
-					new ConfigurationSourceAdapter(FacilityConfig) );
+				ActiveRecordStarter.Initialize(
+					(Assembly[]) assemblies.ToArray(typeof(Assembly)),
+					new ConfigurationSourceAdapter(FacilityConfig));
 			}
 			finally
 			{
@@ -109,18 +108,18 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		private void SetUpTransactionManager()
 		{
-			if (!Kernel.HasComponent( typeof(ITransactionManager) ))
+			if (!Kernel.HasComponent(typeof(ITransactionManager)))
 			{
 				log.Info("No Transaction Manager registered on Kernel, registering AR Transaction Manager");
-				
-				Kernel.AddComponent( "ar.transaction.manager", 
-				                     typeof(ITransactionManager), typeof(ActiveRecordTransactionManager) );
+
+				Kernel.AddComponent("ar.transaction.manager",
+				                    typeof(ITransactionManager), typeof(ActiveRecordTransactionManager));
 			}
 		}
 
 		private void OnNewTransaction(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
 		{
-			transaction.Enlist( new TransactionScopeResourceAdapter(transactionMode) );
+			transaction.Enlist(new TransactionScopeResourceAdapter(transactionMode));
 		}
 
 		private Assembly ObtainAssembly(String assemblyName)
@@ -142,14 +141,17 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			holder.OnRootTypeRegistered += new RootTypeHandler(OnRootTypeRegistered);
 
 			string componentName = "activerecord.sessionfactoryholder";
+
 			if (Kernel.HasComponent(componentName))
+			{
 				componentName += "." + (++sessionFactoryHolderCount);
-			
-			while (Kernel.HasComponent(componentName))
+			}
+
+			while(Kernel.HasComponent(componentName))
 			{
 				componentName =
 					componentName.Substring(0, componentName.LastIndexOf('.'))
-					+ (++sessionFactoryHolderCount);
+						+ (++sessionFactoryHolderCount);
 			}
 
 			log.Info("Registering SessionFactoryHolder named '{0}': {1}", componentName, holder);
@@ -162,13 +164,15 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			string componentName = "activerecord.sessionfactory";
 
 			if (Kernel.HasComponent(componentName))
+			{
 				componentName += "." + (++sessionFactoryCount);
+			}
 
-			while (Kernel.HasComponent(componentName))
+			while(Kernel.HasComponent(componentName))
 			{
 				componentName =
 					componentName.Substring(0, componentName.LastIndexOf('.'))
-					+ (++sessionFactoryCount);
+						+ (++sessionFactoryCount);
 			}
 
 			log.Info("Registering SessionFactory named '{0}' for the root type {1}: {2}", componentName, rootType, sender);
@@ -188,23 +192,22 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			string isDebug = facilityConfig.Attributes["isDebug"];
 
 			SetUpThreadInfoType("true" == isWeb, threadinfotype);
-
 			SetDebugFlag("true" == isDebug);
 
-			foreach (IConfiguration config in facilityConfig.Children)
+			foreach(IConfiguration config in facilityConfig.Children)
 			{
 				if (!"config".Equals(config.Name)) continue;
 
 				Type type = typeof(ActiveRecordBase);
-				
+
 				String typeAtt = config.Attributes["type"];
-				
+
 				if (typeAtt != null)
 				{
 					type = ObtainType(typeAtt);
 				}
 
-				Add( type, AdjustConfiguration(config) );
+				Add(type, AdjustConfiguration(config));
 			}
 		}
 
@@ -217,7 +220,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				String key = configNode.Attributes["key"];
 				String value = configNode.Attributes["value"];
 
-				newConfig.Children.Add( new MutableConfiguration(key, value) );
+				newConfig.Children.Add(new MutableConfiguration(key, value));
 			}
 
 			return newConfig;
