@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Simplified Exists<PkType> method on ActiveRecordBase<T>.
+
 - Fixed AR-46 - OneToOne Attribute Does Not Support Specifying a Target Type
   Added property MapType to OneToOne attribute
 

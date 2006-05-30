@@ -613,27 +613,10 @@ namespace Castle.ActiveRecord
         /// <returns>True if the ID exists; otherwise false.</returns>
         public static bool Exists<PkType>(PkType id)
         {
-            ActiveRecordModel model = ActiveRecordModel.GetModel(typeof(T));
-            if (model == null) return false;
-
-            // Need to make the check this way because of inheritance, 
-            // where the current class doesn't have
-            // a primary key but the base class does
-            ActiveRecordModel tmpModel = model;
-
-            while (tmpModel != null && tmpModel.Ids.Count == 0)
-            {
-                tmpModel = tmpModel.Parent;
-            }
-
-            if (tmpModel == null || tmpModel.Ids.Count != 1)
-                return false;
-
             Type arType = typeof(T);
-            PrimaryKeyModel pkModel = (PrimaryKeyModel)tmpModel.Ids[0];
-
-            SimpleQuery<PkType> query = new SimpleQuery<PkType>(arType, String.Format("select tbl.{0} from {1} tbl where tbl.{0} = ?", pkModel.PrimaryKeyAtt.Column, arType.Name), id);
-            return query.Execute().Length > 0;
+            ScalarQuery<int> query = new ScalarQuery<int>(arType, String.Format(
+                "select count(*) from {0} ar where ar.id = ?", arType.Name), id);
+            return ExecuteQuery2(query) > 0;
         }
          #endregion
 
