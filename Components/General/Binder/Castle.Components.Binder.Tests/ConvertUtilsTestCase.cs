@@ -49,16 +49,6 @@ namespace Castle.Components.Binder.Tests
 			Console.WriteLine(diff.Milliseconds);
 		}
 
-		private object Convert(Type desiredType, string input)
-		{
-			return ConvertUtils.Convert(desiredType, "myparam", input, out convSucceed);
-		}
-
-		private object Convert(Type desiredType, string paramName, string parseInput)
-		{
-			return ConvertUtils.Convert(desiredType, paramName, TestUtils.ParseNameValueString(parseInput), null, out convSucceed);
-		}
-
 		[Test]
 		public void StringConvert()
 		{
@@ -68,10 +58,10 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual("world", Convert(typeof(string), "hello", "hello=world"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual("", Convert(typeof(string), null));
+			Assert.AreEqual(null, Convert(typeof(string), null));
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual("\n\t ", Convert(typeof(string), "\n\t "));
+			Assert.AreEqual("\n\t", Convert(typeof(string), "\n\t "));
 			Assert.IsTrue(convSucceed);
 		}
 
@@ -303,6 +293,16 @@ namespace Castle.Components.Binder.Tests
 			{
 				Assert.IsFalse(convSucceed);
 			}
+		}
+
+		private object Convert(Type desiredType, string input)
+		{
+			return ConvertUtils.Convert(desiredType, "myparam", input, out convSucceed);
+		}
+
+		private object Convert(Type desiredType, string paramName, string parseInput)
+		{
+			return ConvertUtils.Convert(desiredType, paramName, TestUtils.ParseNameValueString(parseInput), null, out convSucceed);
 		}
 	}
 

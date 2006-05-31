@@ -147,7 +147,7 @@ namespace Castle.Components.Binder.Tests
 		{
 			String name = "John";
 			int age = 32;
-			decimal assets = (decimal) 100000;
+			decimal assets = 100000;
 			NameValueCollection args = new NameValueCollection();
 
 			args.Add("Person.Name", name);
@@ -161,6 +161,28 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsNotNull(person);
 			Assert.AreEqual(person.Age, age);
 			Assert.AreEqual(person.Name, name);
+			Assert.AreEqual(person.Assets, assets);
+		}
+		
+		[Test]
+		public void SimpleDataBindWithEmptyField()
+		{
+			String name = "";
+			int age = 32;
+			decimal assets = 100000;
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("Person.Name", name);
+			args.Add("Person.Age", age.ToString());
+			args.Add("Person.Assets", assets.ToString());
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
+
+			Assert.IsNotNull(instance);
+			Person person = instance as Person;
+			Assert.IsNotNull(person);
+			Assert.AreEqual(person.Age, age);
+			Assert.IsNull(person.Name);
 			Assert.AreEqual(person.Assets, assets);
 		}
 

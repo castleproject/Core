@@ -93,7 +93,12 @@ namespace Castle.Components.Binder
 
 				if (desiredType == typeof(String))
 				{
-					return conversionSucceeded ? input.ToString() : String.Empty;
+					if (conversionSucceeded && ((String) input) == String.Empty)
+					{
+						return null;
+					}
+					
+					return conversionSucceeded ? input.ToString().Trim(' ') : null;
 				}
 				else if (desiredType == typeof(int))
 				{
@@ -362,11 +367,6 @@ namespace Castle.Components.Binder
 		{
 			return (input == null) ? String.Empty : input.Trim();
 		}
-
-//		public static bool HasInput(Type desiredType, String paramName, NameValueCollection paramList, IDictionary fileList)
-//		{
-//			return GetInput(desiredType, paramName, paramList, fileList) != null;
-//		}
 
 		private static object GetInput(Type type, String paramName, NameValueCollection paramList, IDictionary fileList)
 		{

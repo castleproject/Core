@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.Components.Binder"
-                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "C:\devtools\nunit\bin\nunit.framework.dll"
@@ -94,6 +89,16 @@
                     Name = "System.Web"
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Nullables"
+                    AssemblyName = "Nullables"
+                    HintPath = "..\..\..\..\SharedLibs\nhibernate\Nullables.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -121,6 +126,11 @@
                 />
                 <File
                     RelPath = "NameValueCollectionAdapterTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NullablesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Changed ConvertUtils behavior. Now empty strings will be converted to null 
+  and conversionSucceeded = true. Also, string will be trimmed.
+
 - Introduced DataReaderAdapter which can be used to populate an object based
   on an IDataReader. The adapter does not take ownership of the reader
 
