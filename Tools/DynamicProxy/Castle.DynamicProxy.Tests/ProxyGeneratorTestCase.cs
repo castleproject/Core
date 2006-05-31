@@ -539,6 +539,26 @@ namespace Castle.DynamicProxy.Test
 
 			Assert.IsNotNull(info);
 		}
+		
+		[Test]
+		public void MethodsAreInterceptedInChain()
+		{
+			LogInvocationInterceptor interceptor = new LogInvocationInterceptor();
+			
+			object proxy = _generator.CreateClassProxy( 
+				typeof(ServiceClass2), interceptor);
+
+			ServiceClass2 obj = (ServiceClass2) proxy;
+			
+			obj.DoSomething();
+			obj.DoOtherThing();
+			
+			Assert.AreEqual(4, interceptor.Invocations.Length);
+			Assert.AreEqual("DoOtherThing", interceptor.Invocations[0]);
+			Assert.AreEqual("DoSomethingElse", interceptor.Invocations[1]);
+			Assert.AreEqual("DoOtherThing", interceptor.Invocations[2]);
+			Assert.AreEqual("DoSomethingElse", interceptor.Invocations[3]);
+		}
 
 		[Test]
 		public void IDataReaderProxyGeneration()

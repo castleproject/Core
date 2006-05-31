@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Threading;
-
 	using Castle.DynamicProxy.Builder.CodeBuilder;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 
@@ -48,19 +47,20 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected override String GenerateTypeName(Type type, Type[] interfaces)
 		{
 			StringBuilder sb = new StringBuilder();
-			foreach (Type inter in interfaces)
+			foreach(Type inter in interfaces)
 			{
 				sb.Append('_');
 				sb.Append(GetTypeName(inter));
 			}
 			// Naive implementation
-			return String.Format("ProxyInterface{2}{0}{1}", GetTypeName(type), sb.ToString(), NormalizeNamespaceName(type.Namespace));
+			return
+				String.Format("ProxyInterface{2}{0}{1}", GetTypeName(type), sb.ToString(), NormalizeNamespaceName(type.Namespace));
 		}
 
 		protected override void GenerateFields()
 		{
-			base.GenerateFields ();
-			_targetField = MainTypeBuilder.CreateField("__target", typeof (object));
+			base.GenerateFields();
+			_targetField = MainTypeBuilder.CreateField("__target", typeof(object));
 		}
 
 		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method, Reference invocationTarget)
@@ -94,7 +94,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ParameterInfo[] paramsInfo = method.GetParameters();
 			Type[] argTypes = new Type[paramsInfo.Length];
 
-			for(int i=0;i < argTypes.Length; i++)
+			for(int i = 0; i < argTypes.Length; i++)
 			{
 				argTypes[i] = paramsInfo[i].ParameterType;
 			}
@@ -116,50 +116,51 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		protected override EasyConstructor GenerateConstructor()
 		{
-			ArgumentReference arg1 = new ArgumentReference( Context.Interceptor );
-			ArgumentReference arg2 = new ArgumentReference( typeof(object) );
-			ArgumentReference arg3 = new ArgumentReference( typeof(object[]) );
+			ArgumentReference arg1 = new ArgumentReference(Context.Interceptor);
+			ArgumentReference arg2 = new ArgumentReference(typeof(object));
+			ArgumentReference arg3 = new ArgumentReference(typeof(object[]));
 
 			EasyConstructor constructor;
 
 			if (Context.HasMixins)
 			{
-				constructor = MainTypeBuilder.CreateConstructor( arg1, arg2, arg3 );
+				constructor = MainTypeBuilder.CreateConstructor(arg1, arg2, arg3);
 			}
 			else
 			{
-				constructor = MainTypeBuilder.CreateConstructor( arg1, arg2 );
+				constructor = MainTypeBuilder.CreateConstructor(arg1, arg2);
 			}
-			
+
 			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg3);
 
 			constructor.CodeBuilder.InvokeBaseConstructor();
 
-			constructor.CodeBuilder.AddStatement( new AssignStatement(
-				_targetField, arg2.ToExpression()) );
+			constructor.CodeBuilder.AddStatement(new AssignStatement(
+			                                     	_targetField, arg2.ToExpression()));
 
-			constructor.CodeBuilder.AddStatement( new ReturnStatement() );
+			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 
 			return constructor;
 		}
 
 		protected Type[] Join(Type[] interfaces, Type[] mixinInterfaces)
 		{
-			Type[] union = new Type[ interfaces.Length + mixinInterfaces.Length ];
-			Array.Copy( interfaces, 0, union, 0, interfaces.Length );
-			Array.Copy( mixinInterfaces, 0, union, interfaces.Length, mixinInterfaces.Length );
+			Type[] union = new Type[interfaces.Length + mixinInterfaces.Length];
+			Array.Copy(interfaces, 0, union, 0, interfaces.Length);
+			Array.Copy(mixinInterfaces, 0, union, interfaces.Length, mixinInterfaces.Length);
 			return union;
 		}
 
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1, ArgumentReference arg2)
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1,
+		                                               ArgumentReference arg2)
 		{
-			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
-			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
+			Type[] key_and_object = new Type[] {typeof(String), typeof(Object)};
+			MethodInfo addValueMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_object);
 
-			codebuilder.AddStatement( new ExpressionStatement(
-				new VirtualMethodInvocationExpression(arg1, addValueMethod, 
-				new FixedReference("__target").ToExpression(), 
-				_targetField.ToExpression() ) ) );
+			codebuilder.AddStatement(new ExpressionStatement(
+			                         	new VirtualMethodInvocationExpression(arg1, addValueMethod,
+			                         	                                      new FixedReference("__target").ToExpression(),
+			                         	                                      _targetField.ToExpression())));
 		}
 
 		protected override Expression GetPseudoInvocationTarget(MethodInfo method)
@@ -177,7 +178,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			if (Context.HasMixins)
 			{
 				_mixins = Context.MixinsAsArray();
-				Type[] mixinInterfaces = InspectAndRegisterInterfaces( _mixins );
+				Type[] mixinInterfaces = InspectAndRegisterInterfaces(_mixins);
 				interfaces = Join(interfaces, mixinInterfaces);
 			}
 
@@ -188,7 +189,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			rwlock.AcquireReaderLock(-1);
 
 			Type cacheType = GetFromCache(targetType, interfaces);
-			
+
 			if (cacheType != null)
 			{
 				rwlock.ReleaseReaderLock();
@@ -202,11 +203,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			{
 				_targetType = targetType;
 
-				CreateTypeBuilder( GenerateTypeName(targetType, interfaces), typeof(Object), interfaces );
+				CreateTypeBuilder(GenerateTypeName(targetType, interfaces), typeof(Object), interfaces);
 				GenerateFields();
-				ImplementGetObjectData( interfaces );
+				ImplementGetObjectData(interfaces);
 				ImplementCacheInvocationCache();
-				GenerateInterfaceImplementation( interfaces );
+				GenerateInterfaceImplementation(interfaces);
 				GenerateConstructor();
 
 				return CreateType();

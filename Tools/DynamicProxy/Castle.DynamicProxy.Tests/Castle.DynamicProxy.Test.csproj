@@ -204,6 +204,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\DuplicateNames.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\IDataReaderProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

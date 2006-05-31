@@ -71,4 +71,22 @@ namespace Castle.DynamicProxy.Test.Classes
 			get { return true; }
 		}
 	}
+	
+	public class ServiceClass2
+	{
+		public void DoSomething()
+		{
+			DoOtherThing();
+		}
+		
+		public virtual void DoOtherThing()
+		{
+			DoSomethingElse();
+		}
+
+		public virtual void DoSomethingElse()
+		{
+			
+		}
+	}
 }
