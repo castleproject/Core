@@ -203,7 +203,7 @@ namespace Castle.Components.Binder
 			conversionSucceeded = true;
 
 			String value = NormalizeString(input as String);
-	
+			
 			if (desiredType == typeof(Boolean))
 			{
 				if (value == String.Empty)
@@ -212,7 +212,25 @@ namespace Castle.Components.Binder
 				}
 				else
 				{
-					return !(String.Compare("false", value, true) == 0);
+					bool performNumericConversion = false;
+					
+					foreach(char c in value.ToCharArray())
+					{
+						if (Char.IsNumber(c))
+						{
+							performNumericConversion = true;
+							break;
+						}
+					}
+					
+					if (performNumericConversion)
+					{
+						return System.Convert.ToBoolean(System.Convert.ToInt32(value));
+					}
+					else
+					{
+						return !(String.Compare("false", value, true) == 0);
+					}
 				}
 			}
 			else if (value == String.Empty)

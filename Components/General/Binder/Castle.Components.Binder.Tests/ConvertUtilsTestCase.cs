@@ -234,6 +234,9 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(true, Convert(typeof(bool), "1"));
 			Assert.IsTrue(convSucceed);
 
+			Assert.AreEqual(false, Convert(typeof(bool), "0"));
+			Assert.IsTrue(convSucceed);
+
 			Assert.AreEqual(true, Convert(typeof(bool), "true"));
 			Assert.IsTrue(convSucceed);
 
