@@ -375,7 +375,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				options["frequency"] = "10";
 			}
 
-			String code = String.Format("new PeriodicalExecuter(function() {{ {0}, {1} }})", 
+			String code = String.Format("new PeriodicalExecuter(function() {{ {0} }}, {1} )", 
 				BuildRemoteFunction(url, options), options["frequency"]);
 
 			return String.Format( "<script>{0}</script>", code );
