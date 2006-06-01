@@ -101,6 +101,14 @@
 		</copy>
 	</target>
 	
+	<target name="copy-nullables">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nhibernate">
+				<include name="Nullables.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
 	<target name="copy-log4net">
 		<copy todir="${bin.dir}">
 			<fileset basedir="${sharedlibrary.dir}/log4net">
