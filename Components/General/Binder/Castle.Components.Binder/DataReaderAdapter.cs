@@ -257,6 +257,11 @@ namespace Castle.Components.Binder
 
 		#endregion
 
+		public bool HasRow
+		{
+			get { return readSuccessful; }
+		}
+
 		private void ReadRow()
 		{
 			readSuccessful = reader.Read();
