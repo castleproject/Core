@@ -170,16 +170,16 @@ namespace Castle.MonoRail.Framework.Helpers
 			totalItems = count;
 	
 			hasPrev = startIndex != 0;
-			hasNext = (startIndex + pageSize) < count;
+			hasNext = count == -1 || (startIndex + pageSize) < count;
 			hasFirst = curPage != 1;
 			hasLast = count > curPage * pageSize;
 	
 			curIndex = curPage;
 			previousIndex = curPage - 1;
 			nextIndex = curPage + 1;
-			lastIndex = count / pageSize;
+			lastIndex = count == -1 ? -1 : count / pageSize;
 	
-			if (count / (float) pageSize > lastIndex)
+			if (count != -1 && count / (float) pageSize > lastIndex)
 			{
 				lastIndex++;
 			}

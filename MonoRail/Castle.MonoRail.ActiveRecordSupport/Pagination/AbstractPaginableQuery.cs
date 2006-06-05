@@ -48,14 +48,24 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 			try
 			{
-				IQuery query = session.CreateQuery("select count(a) from " + Target.Name + " a");
+				IQuery query = session.CreateQuery(BuildCountHQL());
+				SetQueryParameters(query);
 
 				return (int) query.UniqueResult();
+			}
+			catch (HibernateException)
+			{
+				return -1;
 			}
 			finally
 			{
 				holder.ReleaseSession(session);
 			}
+		}
+
+		protected virtual string BuildCountHQL()
+		{
+			return "select count(*) from (" + BuildHQL() + ")";
 		}
 
 		/// <summary>
