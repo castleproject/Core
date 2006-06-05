@@ -189,6 +189,7 @@
     <Compile Include="ClassWithCtorAndVirtualCall.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DiamondProblem.cs" />
     <Compile Include="DotNet2Tests.cs" />
     <Compile Include="EasyTypeBuilderTestCase.cs">
       <SubType>Code</SubType>

@@ -20,12 +20,12 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
     using System.Reflection;
     using System.Reflection.Emit;
     using System.Runtime.Serialization;
-    using System.Threading;	
+    using System.Threading;
     using Castle.DynamicProxy.Builder.CodeBuilder;
     using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
-    #if dotNet2
+#if dotNet2
     using System.Runtime.CompilerServices;
-    #endif
+#endif
     /// <summary>
     /// Summary description for BaseCodeGenerator.
     /// </summary>
@@ -411,6 +411,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
             foreach (MethodInfo method in methods)
             {
+                if(method.IsFinal)
+                {
+                    Context.AddMethodToGenerateNewSlot(method);
+                } 
                 if (method.IsPrivate || !method.IsVirtual || method.IsFinal)
                 {
                     continue;
@@ -451,8 +455,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         protected String GetTypeName(Type type)
         {
             System.Text.StringBuilder nameBuilder = new System.Text.StringBuilder();
-            if(type.Namespace!=null)
-                nameBuilder.Append(type.Namespace.Replace('.','_'));
+            if (type.Namespace != null)
+                nameBuilder.Append(type.Namespace.Replace('.', '_'));
             if (type.DeclaringType != null)
                 nameBuilder.Append(type.DeclaringType.Name).Append("_");
 #if dotNet2
@@ -571,41 +575,45 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         }
 
         private MethodAttributes ObtainMethodAttributes(MethodInfo method)
-		{
-			MethodAttributes atts = MethodAttributes.Virtual;
-	
-			if (method.IsPublic)
-			{
-				atts |= MethodAttributes.Public;
-			}
+        {
+            MethodAttributes atts;
+            if (Context.ShouldCreateNewSlot(method))
+                atts = MethodAttributes.NewSlot;
+            else
+                atts = MethodAttributes.Virtual;
+
+            if (method.IsPublic)
+            {
+                atts |= MethodAttributes.Public;
+            }
             if (IsInternalToDynamicProxy(method.DeclaringType.Assembly) && method.IsAssembly)
             {
                 atts |= MethodAttributes.Assembly;
             }
-			if (method.IsHideBySig)
-			{
-				atts |= MethodAttributes.HideBySig;
-			}
-	
-			if (method.IsFamilyAndAssembly)
-			{
-				atts |= MethodAttributes.FamANDAssem;
-			}
-			else if (method.IsFamilyOrAssembly)
-			{
-				atts |= MethodAttributes.FamORAssem;
-			}
-			else if (method.IsFamily)
-			{
-				atts |= MethodAttributes.Family;
-			}
-	
-			if (method.Name.StartsWith("set_") || method.Name.StartsWith("get_"))
-			{
-				atts |= MethodAttributes.SpecialName;
-			}
-			return atts;
-		}
+            if (method.IsHideBySig)
+            {
+                atts |= MethodAttributes.HideBySig;
+            }
+
+            if (method.IsFamilyAndAssembly)
+            {
+                atts |= MethodAttributes.FamANDAssem;
+            }
+            else if (method.IsFamilyOrAssembly)
+            {
+                atts |= MethodAttributes.FamORAssem;
+            }
+            else if (method.IsFamily)
+            {
+                atts |= MethodAttributes.Family;
+            }
+
+            if (method.Name.StartsWith("set_") || method.Name.StartsWith("get_"))
+            {
+                atts |= MethodAttributes.SpecialName;
+            }
+            return atts;
+        }
 
         protected virtual void PreProcessMethod(MethodInfo method)
         {
@@ -717,7 +725,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
                 if (arguments[i].Type.IsByRef)
                 {
                     builder.CodeBuilder.AddStatement(
-                        new AssignStatement(dereferencedArguments[i], 
+                        new AssignStatement(dereferencedArguments[i],
                             new ConvertExpression(dereferencedArguments[i].Type,
                                 new LoadRefArrayElementExpression(i, args_local))));
                 }
