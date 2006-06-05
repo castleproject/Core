@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 				masterHandler = ObtainMasterPage(httpContext, controller);
 			}
 
-			IHttpHandler childPage = GetCompiledPageInstace(viewName, httpContext);
+			IHttpHandler childPage = GetCompiledPageInstance(viewName, httpContext);
 
 			ProcessPropertyBag(controller.PropertyBag, childPage);
 
@@ -91,13 +91,30 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessPage(controller, masterHandler, httpContext);
 		}
 
-		private IHttpHandler GetCompiledPageInstace( String viewName, HttpContext httpContext )
-		{
+		private IHttpHandler GetCompiledPageInstance( String viewName, HttpContext httpContext )
+		{	 
 			viewName += ".aspx";
 
 			//TODO: There needs to be a more efficient way to do this than two replace operations
 			String physicalPath = 
 				Path.Combine(ViewSourceLoader.ViewRootDir, viewName).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+		    
+#if dotNet2		    
+			// This is a hack until I can understand the different behavior exhibited by
+			// PageParser.GetCompiledPageInstance(..) when running ASP.NET 2.0.  It appears
+			// that the virtualPath (first argument) to this method must represent a valid
+			// virtual directory with respect to the web application.   As a result, the
+			// viewRootDir must be relative to the web application project.  If it is not,
+			// this will certainly fail.  If this is indeed the case, it may make sense to
+			// be able to obtain an absolute virtual path to the views directory from the
+			// ViewSourceLoader.
+
+			String physicalAppPath = httpContext.Request.PhysicalApplicationPath;
+			if (physicalPath.StartsWith(physicalAppPath))
+			{
+				viewName = "~/" + physicalPath.Substring(physicalAppPath.Length);
+			}		    
+#endif
 
 			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
@@ -179,11 +196,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		private Page ObtainMasterPage(HttpContext context, Controller controller)
 		{
-			String layout = "layouts/" + controller.LayoutName + ".aspx";
-			String physicalPath = Path.Combine(ViewSourceLoader.ViewRootDir, layout);
-			physicalPath = physicalPath.Replace('/', '\\');
-
-			return PageParser.GetCompiledPageInstance(layout, physicalPath, context) as Page;
+			String layout = "layouts/" + controller.LayoutName;
+            return GetCompiledPageInstance(layout, context) as Page;
 		}
 
 		private void StartFiltering(HttpResponse response)

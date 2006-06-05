@@ -20,6 +20,9 @@
 	</target>
 
 	<target name="init" depends="clean">
+                <property name="define" value="TRACE;${strong};${enabletest}"/>
+                <property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
+
 		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>
 
@@ -27,7 +30,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="${strong} ${enabletest}"
+			define="${define}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"

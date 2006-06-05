@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Added a hack to the WebFormsViewEngine to accomodate different behavior
+  with respect to invoking PageParser.GetCompiledInstance on ASP.NET 2.0
+
 - Added support for defaultValue attribute to FormHelper, which specificy
   what the value should be if the target evaluates to null.
 
