@@ -262,11 +262,12 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// TODO: Fabio, document this
+		/// Deletes all <paramref name="targetType" /> objects, based on the primary keys
+		/// supplied on <paramref name="pkValues" />.
 		/// </summary>
-		/// <param name="targetType"></param>
-		/// <param name="pkValues"></param>
-		/// <returns></returns>
+		/// <param name="targetType">The target ActiveRecord type</param>
+		/// <param name="pkValues">A list of primary keys</param>
+		/// <returns>The number of objects deleted</returns>
 		protected internal static int DeleteAll(Type targetType, IEnumerable pkValues)
 		{
 			if (pkValues == null)
