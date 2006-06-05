@@ -1,3 +1,5 @@
+Fixed DYNPROXY-22 - Can't handle `char' type in Interface Proxy
+
 Version 1.4.8
 
  * Added generic type detection, to avoid a case where types with the same generic type but with deferent parameters were treated the same

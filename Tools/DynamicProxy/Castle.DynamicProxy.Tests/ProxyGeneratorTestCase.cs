@@ -325,12 +325,20 @@ namespace Castle.DynamicProxy.Test
 			int int1 = -3;
 			proxy.RefInt(ref int1);
 			Assert.AreEqual(-2, int1);
+			
+			char c = 'z';
+			proxy.RefChar(ref c);
+			Assert.AreEqual('a', c);
+			
+			c = 'z';
+			proxy.OutChar(out c);
+			Assert.AreEqual('b', c);
 
 			int int2;
 			proxy.OutInt(out int2);
 			Assert.AreEqual(2, int2);
 
-			Assert.AreEqual("RefInt OutInt ", interceptor.LogContents);
+			Assert.AreEqual("RefInt RefChar OutChar OutInt ", interceptor.LogContents);
 		}
 
 		[Test]

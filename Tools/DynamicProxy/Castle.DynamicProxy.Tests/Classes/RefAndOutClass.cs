@@ -31,6 +31,16 @@ namespace Castle.DynamicProxy.Test.Classes
 		{
 			i = 2;
 		}
+		
+		public virtual void RefChar(ref char i)
+		{
+			i = 'a';
+		}
+
+		public virtual void OutChar(out char i)
+		{
+			i = 'b';
+		}
 
 		// Reference types
 		public virtual void RefString(ref string s)

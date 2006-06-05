@@ -30,6 +30,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 		private LdcOpCodesDictionary() : base()
 		{
 			Dictionary[ typeof (bool) ] = OpCodes.Ldc_I4;
+			Dictionary[ typeof (char) ] = OpCodes.Ldc_I4;
 			Dictionary[ typeof (SByte) ] = OpCodes.Ldc_I4;
 			Dictionary[ typeof (Int16) ] = OpCodes.Ldc_I4;
 			Dictionary[ typeof (Int32) ] = OpCodes.Ldc_I4;
@@ -77,6 +78,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 		private LdindOpCodesDictionary() : base()
 		{
 			Dictionary[ typeof (bool) ] = OpCodes.Ldind_I1;
+			Dictionary[ typeof (char) ] = OpCodes.Ldind_I2;
 			Dictionary[ typeof (SByte) ] = OpCodes.Ldind_I1;
 			Dictionary[ typeof (Int16) ] = OpCodes.Ldind_I2;
 			Dictionary[ typeof (Int32) ] = OpCodes.Ldind_I4;
@@ -124,6 +126,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 		private StindOpCodesDictionary() : base()
 		{
 			Dictionary[typeof(bool)] = OpCodes.Stind_I1;
+			Dictionary[typeof(char)] = OpCodes.Stind_I2;
 			Dictionary[typeof(SByte)] = OpCodes.Stind_I1;
 			Dictionary[typeof(Int16)] = OpCodes.Stind_I2;
 			Dictionary[typeof(Int32)] = OpCodes.Stind_I4;
