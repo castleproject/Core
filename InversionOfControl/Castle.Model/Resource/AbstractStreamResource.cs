@@ -73,7 +73,7 @@ namespace Castle.Model.Resource
 		/// Do not allow closing and disposal of the 
 		/// underlying <see cref="Stream"/>.
 		/// </summary>
-		public class StreamHideCloseDelegate : Stream
+		public class StreamHideCloseDelegate : Stream, IDisposable
 		{
 			private readonly Stream inner;
 
