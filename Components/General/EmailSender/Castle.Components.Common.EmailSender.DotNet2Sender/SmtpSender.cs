@@ -64,9 +64,25 @@ namespace Castle.Components.Common.EmailSender.DotNet2Sender
             MailMessage mailMessage = new MailMessage();
 
             mailMessage.From = new MailAddress(message.From);
-            mailMessage.To.Add(message.To);
-            mailMessage.CC.Add(message.Cc);
-            mailMessage.Bcc.Add(message.Bcc);
+			
+        	// TODO: We should split the To, CC and BCC 
+        	// and invoke add as many time as it's necessary
+        	
+        	if (message.To != null && message.To != String.Empty)
+			{
+				mailMessage.To.Add(message.To);
+			}
+			
+        	if (message.Cc != null && message.Cc != String.Empty)
+			{
+				mailMessage.CC.Add(message.Cc);
+			}
+
+			if (message.Bcc != null && message.Bcc != String.Empty)
+			{
+				mailMessage.Bcc.Add(message.Bcc);
+			}
+        	
             mailMessage.Subject = message.Subject;
             mailMessage.Body = message.Body;
             mailMessage.BodyEncoding = message.Encoding;
@@ -77,7 +93,6 @@ namespace Castle.Components.Common.EmailSender.DotNet2Sender
             {
                 mailMessage.Headers.Add(entry.Key.ToString(), entry.Value.ToString());
             }
-
 
             mailMessage.BodyEncoding = message.Encoding;
             

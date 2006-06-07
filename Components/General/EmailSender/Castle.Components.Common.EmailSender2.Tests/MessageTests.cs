@@ -14,11 +14,14 @@ namespace Castle.Components.Common.EmailSender2.Tests
 	{
         IKernel kernel = new Castle.MicroKernel.DefaultKernel();
 
-        [SetUp] public void Setup()
+        [SetUp] 
+        public void Setup()
         {
             kernel.AddComponent("key", typeof(IEmailSender), typeof(MockSecureSender));
         }
-        [TearDown] public void Teardown()
+        
+    	[TearDown] 
+    	public void Teardown()
         {
             kernel.Dispose();
         }
@@ -31,6 +34,8 @@ namespace Castle.Components.Common.EmailSender2.Tests
             Message m = new Message();
             m.AddAuthentication("castle", "rocks");
             sender.Send(m);
+        	
+        	// TODO: Where are the assertions?
         }
 	}
 }

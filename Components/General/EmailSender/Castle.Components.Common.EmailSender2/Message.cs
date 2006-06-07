@@ -15,7 +15,7 @@
 namespace Castle.Components.Common.EmailSender2
 {
 	using System;
-    using System.Net;
+	using System.Net;
 	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -49,7 +49,7 @@ namespace Castle.Components.Common.EmailSender2
 		private IDictionary _headers = new HybridDictionary();
 		private MessagePriority _priority = MessagePriority.Normal;
 		private MessageAttachmentCollection _attachments = new MessageAttachmentCollection();
-        private NetworkCredential _credentials;
+		private NetworkCredential _credentials;
 
 		public Message()
 		{
@@ -57,96 +57,92 @@ namespace Castle.Components.Common.EmailSender2
 
 		public String To
 		{
-			get { return this._to; }
-            set { this._to = value; }
+			get { return _to; }
+			set { _to = value; }
 		}
 
 		public String From
 		{
-            get { return this._from; }
-            set { this._from = value; }
+			get { return _from; }
+			set { _from = value; }
 		}
 
 		public String Cc
 		{
-            get { return this._cc; }
-            set { this._cc = value; }
+			get { return _cc; }
+			set { _cc = value; }
 		}
 
 		public String Bcc
 		{
-            get { return this._bcc; }
-            set { this._bcc = value; }
+			get { return _bcc; }
+			set { _bcc = value; }
 		}
 
 		public String Body
 		{
-            get { return this._body; }
-            set { this._body = value; }
+			get { return _body; }
+			set { _body = value; }
 		}
 
 		public String Subject
 		{
-            get { return this._subject; }
-            set { this._subject = value; }
+			get { return _subject; }
+			set { _subject = value; }
 		}
 
 		public Format Format
 		{
-            get { return this._format; }
-            set { this._format = value; }
+			get { return _format; }
+			set { _format = value; }
 		}
 
 		public Encoding Encoding
 		{
-            get { return this._encoding; }
-            set { this._encoding = value; }
+			get { return _encoding; }
+			set { _encoding = value; }
 		}
 
 		public MessagePriority Priority
 		{
-            get { return this._priority; }
-            set { this._priority = value; }
+			get { return _priority; }
+			set { _priority = value; }
 		}
 
 		public IDictionary Headers
 		{
-            get { return this._headers; }
+			get { return _headers; }
 		}
 
 		public MessageAttachmentCollection Attachments
 		{
-            get { return this._attachments; }
+			get { return _attachments; }
 		}
 
-        [Obsolete("Use AddCredentials")]
-        public void AddAuthentication(string username, string password)
-        {
-            this._credentials = new NetworkCredential(username, password);
-        }
+		[Obsolete("Use AddCredentials")]
+		public void AddAuthentication(string username, string password)
+		{
+			_credentials = new NetworkCredential(username, password);
+		}
 
-        public void AddCredentials(string username, string password)
-        {
-            this._credentials = new NetworkCredential(username, password);
-        }
-        public void AddCredentials(string username, string password, string domain)
-        {
-            this._credentials = new NetworkCredential(username, password, domain);
-        }
+		public void AddCredentials(string username, string password)
+		{
+			_credentials = new NetworkCredential(username, password);
+		}
 
-        internal NetworkCredential Credentials
-        {
-            get
-            {
-                return this._credentials;
-            }
-        }
-        public bool HasCredentials
-        {
-            get
-            {
-                return this._credentials != null ? true : false;
-            }
-        }
+		public void AddCredentials(string username, string password, string domain)
+		{
+			_credentials = new NetworkCredential(username, password, domain);
+		}
+
+		public bool HasCredentials
+		{
+			get { return _credentials != null ? true : false; }
+		}
+
+		internal NetworkCredential Credentials
+		{
+			get { return _credentials; }
+		}
 	}
 }

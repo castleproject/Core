@@ -33,7 +33,7 @@ namespace Castle.Components.Common.EmailSender2
         /// <param name="fileName">Path to the file.</param>
         public MessageAttachment(String mediaType, String fileName)
 		{
-            this._mediaType = mediaType;
+            _mediaType = mediaType;
 
 			if (fileName == null) throw new ArgumentNullException("fileName");
 
@@ -41,35 +41,35 @@ namespace Castle.Components.Common.EmailSender2
 
 			if (!info.Exists) throw new ArgumentException("The specified file does not exists", "fileName");
 
-			this._fileName = fileName;
+			_fileName = fileName;
 		}
 
         /// <summary>
         /// Creates a new attachment
         /// </summary>
         /// <param name="mediaType">Look at System.Net.Mimie.MediaTypeNames for help.</param>
-        /// <param name="fileName">File stream.</param>
+		/// <param name="stream">File stream.</param>
         public MessageAttachment(String mediaType, Stream stream)
         {
-            this._mediaType = mediaType;
+            _mediaType = mediaType;
 
             if(stream == null) throw new ArgumentNullException("stream");
 
-            this._stream = stream;
+            _stream = stream;
         }
 
         public String MediaType
 		{
-            get { return this._mediaType; }
+            get { return _mediaType; }
 		}
 
 		public String FileName
 		{
-            get { return this._fileName; }
+            get { return _fileName; }
 		}
         public Stream Stream
         {
-            get { return this._stream; }
+            get { return _stream; }
         }
 	}
 }

@@ -1,4 +1,8 @@
+6/6/2006
+- Applied Ernst Naezer patch fixing problem when cc / bcc fields were null
+
 2/2/2006
+
 - Added .Net 2.0 Support for the original EmailSender
 - Added a new .Net 2.0 specific EmailSender interface.
 - - .Net 2.0 does not have a Fields Property
