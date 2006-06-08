@@ -366,16 +366,30 @@ namespace Castle.Components.Binder
 			Type sourceType = (input != null ? input.GetType() : typeof(String));
 			TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
 
-			if (input != null && conv != null && conv.CanConvertFrom(sourceType))
+			if (conv != null && conv.CanConvertFrom(sourceType))
 			{
-				return conv.ConvertFrom(input);
+				try
+				{
+					return conv.ConvertFrom(input);
+				}
+				catch(Exception ex)
+				{
+					conversionSucceeded = false;
+
+					String message = String.Format("Conversion error: " + 
+						"Could not convert parameter '{0}' with value '{1}' to {2}", 
+					    paramName, input, desiredType);
+
+					throw new BindingException(message, ex);
+				}
 			}
 			else
 			{
 				conversionSucceeded = false;
 
 				String message = String.Format("Conversion error: " + 
-					"Could not convert parameter '{0}' with value '{1}' to {2}", paramName, input, desiredType);
+					"Could not convert parameter '{0}' with value '{1}' to {2}", 
+				    paramName, input, desiredType);
 
 				throw new BindingException(message);
 			}

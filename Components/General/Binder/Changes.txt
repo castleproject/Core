@@ -1,6 +1,8 @@
 Beta 2
 ======
 
+- Changed to allow null inputs be passed to type converters
+
 - Changed ConvertUtils behavior. Now empty strings will be converted to null 
   and conversionSucceeded = true. Also, string will be trimmed.
 
