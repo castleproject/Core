@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="nhibernate-nullables2" default="build">
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="bin.dir" value="${base.dir}/bin" />
+
+	<include buildfile="../../common.inc" />
+
+	<property name="name" value="NHibernate.Nullables2" />
+	<property name="assembly.name" value="${name}.dll" />
+	
+	<property name="nullables2.test" value="true" unless="${property::exists('activerecord.test')}" />
+
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${name}.Tests" />
+	
+	<property name="test.assembly.name" value="NhibTest.dll" />
+	<property name="test.assembly.appconfig" value="${test.assembly.name}.config" />
+
+	<property name="version" value="1.0.0.0" />
+
+	<target name="init">
+		<property name="define" value="TRACE;${strong}"/>
+		<property name="define" value="${define};DEBUG" if="${debug}"/>
+		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
+		
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-dynamicproxy" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-nhibernate" inheritall="true" />
+
+		<copy file="${test.src.dir}/${test.assembly.appconfig}" tofile="${bin.dir}/${test.assembly.appconfig}" />
+		<copy file="${test.src.dir}/FooBar.hbm.xml" tofile="${bin.dir}/FooBar.hbm.xml" />
+
+		<property name="app.config" value="${bin.dir}/${test.assembly.appconfig}" />
+		
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/nhibernate/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.1}" 
+		/>
+	</target>
+	
+	<target name="clean">
+
+	</target>
+
+	<target name="build" depends="init, tests.run, copytobuilddir" />
+
+	<target name="copytobuilddir">
+		<copy todir="${build.dir}">
+			<fileset basedir="${bin.dir}">
+				<include name="${assembly.name}" />
+				<include name="${name}.xml" />
+				<include name="${name}.pdb" if="${debug}" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="compile" depends="init">
+		<csc 
+			define="${define}" 
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
+
+			<nowarn>
+				<warning number="1591" />
+			</nowarn>
+
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/log4net.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.compile" depends="compile">
+		<csc 
+			define="${define}" 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name}">
+
+			<nowarn>
+				<warning number="1591" />
+			</nowarn>
+
+			<sources basedir="${test.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/${assembly.name}" />
+				<include name="${bin.dir}/NHibernate.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.run" depends="tests.compile" if="${nullables2.test}">
+		<nunit2>
+			<formatter type="${nunit.formatter}" />
+			<test 
+				assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+	</target>
+	
+</project>
