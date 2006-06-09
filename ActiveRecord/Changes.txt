@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Added native support for .NET 2.0 Nullables, using NHibernate.Nullables2 library.
+
 - Simplified Exists<PkType> method on ActiveRecordBase<T>.
 
 - Fixed AR-46 - OneToOne Attribute Does Not Support Specifying a Target Type
