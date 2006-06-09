@@ -17,6 +17,8 @@ namespace Castle.Components.Binder
 	using System;
 	using System.Collections;
 
+	public delegate void BinderHandler(object instance, String prefix, IBindingDataSourceNode node);
+
 	/// <summary>
 	/// Defines the contract for a data binder implementation approach.
 	/// </summary>
@@ -76,5 +78,9 @@ namespace Castle.Components.Binder
 		IDictionary Files { get; set; }
 
 		IBinderTranslator Translator { get; set; }
+		
+		event BinderHandler OnBeforeBinding;
+		
+		event BinderHandler OnAfterBinding;
 	}
 }

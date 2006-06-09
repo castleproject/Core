@@ -1,6 +1,11 @@
 Beta 2
 ======
 
+- Added two events to IDataBinder:
+
+  BinderHandler OnBeforeBinding;
+  BinderHandler OnAfterBinding;
+
 - Changed to allow null inputs be passed to type converters
 
 - Changed ConvertUtils behavior. Now empty strings will be converted to null 

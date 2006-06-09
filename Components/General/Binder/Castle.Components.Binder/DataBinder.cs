@@ -18,7 +18,7 @@ namespace Castle.Components.Binder
 	using System.ComponentModel;
 	using System.Reflection;
 	using System.Collections;
-
+	
 	/// <summary>
 	/// A DataBinder can be used to map properties from 
 	/// a <see cref="IBindingDataSourceNode"/> to one or more instance types.
@@ -71,6 +71,14 @@ namespace Castle.Components.Binder
 			this.translator = translator;
 		}
 
+		#endregion
+		
+		#region Events
+		
+		public event BinderHandler OnBeforeBinding;
+		
+		public event BinderHandler OnAfterBinding;
+		
 		#endregion
 
 		#region IDataBinder
@@ -179,10 +187,18 @@ namespace Castle.Components.Binder
 
 		protected virtual void AfterBinding(object instance, String prefix, IBindingDataSourceNode node)
 		{
+			if (OnAfterBinding != null)
+			{
+				OnAfterBinding(instance, prefix, node);
+			}
 		}
 
 		protected virtual void BeforeBinding(object instance, String prefix, IBindingDataSourceNode node)
 		{
+			if (OnBeforeBinding != null)
+			{
+				OnBeforeBinding(instance, prefix, node);
+			}
 		}
 
 		protected virtual bool ShouldRecreateInstance(object value, Type type, String prefix, IBindingDataSourceNode node)
