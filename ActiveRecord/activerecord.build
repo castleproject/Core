@@ -140,6 +140,7 @@
 				<include name="${bin.dir}/Iesi.Collections.dll" />
 				<include name="${bin.dir}/HashCodeProvider.dll" />
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
+				<include name="${bin.dir}/NHibernate.Nullables2.dll" if="${framework::get-target-framework()=='net-2.0'}" />
 			</references>
 		</csc>
 	</target>
@@ -188,6 +189,7 @@
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
 				<include name="${bin.dir}/Nullables.dll" />
 				<include name="${bin.dir}/Nullables.NHibernate.dll" />
+				<include name="${bin.dir}/NHibernate.Nullables2.dll" if="${framework::get-target-framework()=='net-2.0'}" />
 			</references>
 		</csc>
 	</target>

@@ -99,6 +99,11 @@
 				<include name="*.dll" />
 			</fileset>
 		</copy>
+		<copy todir="${bin.dir}" if="${framework::get-target-framework()=='net-2.0'}">
+			<fileset basedir="${base.dir}/SandBox/NHibernate.Nullables2/bin">
+				<include name="NHibernate.Nullables2.dll" />
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="copy-nullables">

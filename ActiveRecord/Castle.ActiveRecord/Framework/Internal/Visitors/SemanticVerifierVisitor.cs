@@ -174,18 +174,27 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.PropertyAtt.Column = model.Property.Name;
 			}
 
-			if (typeof(INullableType).IsAssignableFrom(model.Property.PropertyType))
+			Type propertyType = model.Property.PropertyType;
+			
+			if (typeof(INullableType).IsAssignableFrom(propertyType))
 			{
 				model.PropertyAtt.NotNull = false;
-
-				model.PropertyAtt.ColumnType = ObtainNullableTypeName(model.Property.PropertyType);
+				model.PropertyAtt.ColumnType = ObtainNullableTypeNameForNullablesLibrary(propertyType);
 			}
+			
+#if dotNet2
+			if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+			{
+				model.PropertyAtt.NotNull = false;
+				model.PropertyAtt.ColumnType = ObtainNullableTypeNameForCLRNullable(propertyType);
+			}
+#endif
 
-			if (ActiveRecordModel.GetModel(model.Property.PropertyType) != null)
+			if (ActiveRecordModel.GetModel(propertyType) != null)
 			{
 				throw new ActiveRecordException(String.Format(
 					"You can't use [Property] on {0}.{1} because {2} is an active record class, did you mean to use BelongTo?",
-					model.Property.DeclaringType.Name, model.Property.Name, model.Property.PropertyType.FullName));
+					model.Property.DeclaringType.Name, model.Property.Name, propertyType.FullName));
 			}
 		}
 
@@ -196,12 +205,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.FieldAtt.Column = model.Field.Name;
 			}
 
-			if (typeof(INullableType).IsAssignableFrom(model.Field.FieldType))
+			Type fieldType = model.Field.FieldType;
+			
+			if (typeof(INullableType).IsAssignableFrom(fieldType))
 			{
 				model.FieldAtt.NotNull = false;
-
-				model.FieldAtt.ColumnType = ObtainNullableTypeName(model.Field.FieldType);
+				model.FieldAtt.ColumnType = ObtainNullableTypeNameForNullablesLibrary(fieldType);
 			}
+
+#if dotNet2
+			if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>))
+			{
+				model.FieldAtt.NotNull = false;
+				model.FieldAtt.ColumnType = ObtainNullableTypeNameForCLRNullable(fieldType);
+			}
+#endif
 		}
 
 		public override void VisitKey(KeyModel model)
@@ -491,60 +509,55 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private static String ObtainNullableTypeName(Type type)
+		private static String ObtainNullableTypeNameForNullablesLibrary(Type type)
 		{
-			String typeName = null;
+			const string fmt = "Nullables.NHibernate.{0}Type, Nullables.NHibernate";
 
-			if (type == typeof(NullableBoolean))
-			{
-				typeName = "Nullables.NHibernate.NullableBooleanType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableByte))
-			{
-				typeName = "Nullables.NHibernate.NullableByteType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableChar))
-			{
-				typeName = "Nullables.NHibernate.NullableCharType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableDateTime))
-			{
-				typeName = "Nullables.NHibernate.NullableDateTimeType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableDecimal))
-			{
-				typeName = "Nullables.NHibernate.NullableDecimalType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableDouble))
-			{
-				typeName = "Nullables.NHibernate.NullableDoubleType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableGuid))
-			{
-				typeName = "Nullables.NHibernate.NullableGuidType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableInt16))
-			{
-				typeName = "Nullables.NHibernate.NullableInt16Type, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableInt32))
-			{
-				typeName = "Nullables.NHibernate.NullableInt32Type, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableInt64))
-			{
-				typeName = "Nullables.NHibernate.NullableInt64Type, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableSByte))
-			{
-				typeName = "Nullables.NHibernate.NullableSByteType, Nullables.NHibernate";
-			}
-			else if (type == typeof(NullableSingle))
-			{
-				typeName = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
-			}
+			bool supported =
+				type == typeof(NullableBoolean) ||
+				type == typeof(NullableInt16) ||
+				type == typeof(NullableInt32) ||
+				type == typeof(NullableInt64) ||
+				type == typeof(NullableByte) ||
+				type == typeof(NullableChar) ||
+				type == typeof(NullableDouble) ||
+				type == typeof(NullableSByte) ||
+				type == typeof(NullableSingle) ||
+				type == typeof(NullableGuid) ||
+				type == typeof(NullableDateTime) ||
+				type == typeof(NullableDecimal);
 
-			return typeName;
+			if (!supported)
+				throw new ActiveRecordException(String.Format("ActiveRecord does not support Nullable for {0} natively.", type));
+
+			return String.Format(fmt, type.Name); 
 		}
+
+#if dotNet2
+		private static String ObtainNullableTypeNameForCLRNullable(Type type)
+		{
+			const string fmt = "NHibernate.Nullables2.Nullable{0}Type, NHibernate.Nullables2";
+
+			Type underlyingType = Nullable.GetUnderlyingType(type);
+			bool supported =
+				underlyingType == typeof(Boolean) || 
+				underlyingType == typeof(Int16) || 
+				underlyingType == typeof(Int32) || 
+				underlyingType == typeof(Int64) || 
+				underlyingType == typeof(Byte) || 
+				underlyingType == typeof(Char) || 
+				underlyingType == typeof(Double) || 
+				underlyingType == typeof(SByte) || 
+				underlyingType == typeof(Single) || 
+				underlyingType == typeof(Guid) || 
+				underlyingType == typeof(DateTime) || 
+				underlyingType == typeof(Decimal);
+
+			if (!supported)
+				throw new ActiveRecordException(String.Format("ActiveRecord does not support Nullable<{0}> natively.", underlyingType));
+			
+			return String.Format(fmt, underlyingType.Name);
+		}
+#endif
 	}
 }
