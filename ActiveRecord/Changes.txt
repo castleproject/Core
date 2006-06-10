@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Added support for RelationType.List.
+
 - Added native support for .NET 2.0 Nullables, using NHibernate.Nullables2 library.
 
 - Simplified Exists<PkType> method on ActiveRecordBase<T>.
