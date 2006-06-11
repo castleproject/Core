@@ -57,7 +57,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					String xml = Xml;
 
-					byte[] ba = System.Text.ASCIIEncoding.UTF8.GetBytes(xml);
+					byte[] ba = System.Text.ASCIIEncoding.Unicode.GetBytes(xml);
 
 					fs.Write(ba, 0, ba.Length);
 
