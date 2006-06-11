@@ -22,7 +22,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
-	/// 
+	/// Class responsible on loading records for parameters marked with the <see cref="ARFetchAttribute" />.
 	/// </summary>
 	public class ARFetcher
 	{

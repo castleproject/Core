@@ -20,8 +20,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
-	/// This attribute tells <see cref="ARSmartDispatcherController" />
-	/// to fetches the ActiveRecord based on its Primary Key.
+	/// Mark a parameter with this attribute to instruct the <see cref="SmartDispatcherController" />
+	/// to load an <c>ActiveRecord</c> instance of the parameter type, using the request parameter
+	/// as the identifier.
 	/// </summary>
 	/// <remarks>
 	/// The <see cref="ARFetchAttribute"/> only loads an instance
@@ -105,7 +106,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// <summary>
 		/// When set to <c>true</c> an instance of
 		/// the target type will be created if the record 
-		/// is not found
+		/// is not found. The default is <c>false</c>.
 		/// </summary>
 		public bool Create
 		{
@@ -114,8 +115,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		}
 		
 		/// <summary>
-		/// When set to <c>true</c> the record must be found
-		/// or an exception will be thrown
+		/// When set to <c>true</c>, an exception will be thrown
+		/// if the record specified is not found. The default is <c>false</c>.
 		/// </summary>
 		public bool Required
 		{
