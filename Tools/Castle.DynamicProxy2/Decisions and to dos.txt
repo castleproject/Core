@@ -1,0 +1,10 @@
+- TODO: Update Operation dictionaries to support Char
+
+- Interface proxy
+
+  Support type kinds:
+  
+  * with target (use target as cache key too)
+  * without target, Proceed just returns
+  
+  * Watch out for 'leaking this' problem

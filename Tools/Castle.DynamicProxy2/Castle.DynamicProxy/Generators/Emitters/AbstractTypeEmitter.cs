@@ -31,6 +31,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected PropertiesCollection properties;
 		protected EventCollection events;
 		protected internal NestedClassCollection nested;
+#if DOTNET2
+		protected GenericTypeParameterBuilder[] genericTypeParams;
+#endif
 
 		public AbstractTypeEmitter()
 		{
@@ -153,6 +156,45 @@ namespace Castle.DynamicProxy.Generators.Emitters
 //		{
 //			get { return ++counter; }
 //		}
+
+#if DOTNET2
+
+		public GenericTypeParameterBuilder[] GenericTypeParams
+		{
+			get { return genericTypeParams; }
+		}
+
+		public void CreateGenericParameters(Type targetType)
+		{
+			// big sanity check
+			if (genericTypeParams != null)
+			{
+				throw new ApplicationException("CreateGenericParameters: cannot invoke me twice");
+			}
+			
+			if (targetType.IsGenericType)
+			{
+				Type[] genericArguments = targetType.GetGenericArguments();
+
+				String[] argumentNames = new String[genericArguments.Length];
+
+				for (int i = 0; i < argumentNames.Length; i++)
+				{
+					argumentNames[i] = genericArguments[i].Name;
+				}
+
+				genericTypeParams =
+					typebuilder.DefineGenericParameters(argumentNames);
+
+				for (int i = 0; i < genericTypeParams.Length; i++)
+				{
+					GenericParameterAttributes attributes = genericArguments[i].GenericParameterAttributes;
+					genericTypeParams[i].SetGenericParameterAttributes(attributes);
+				}
+			}
+		}
+
+#endif
 
 		public virtual Type BuildType()
 		{

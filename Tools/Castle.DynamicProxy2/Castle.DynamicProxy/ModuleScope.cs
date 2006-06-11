@@ -29,11 +29,12 @@ namespace Castle.DynamicProxy
 	{
 		public static readonly String FILE_NAME = "CastleDynProxy2.dll";
 		public static readonly String ASSEMBLY_NAME = "DynamicProxyGenAssembly2";
-        
+
 		/// <summary>
 		/// Avoid leaks caused by non disposal of generated types.
 		/// </summary>
 		private ModuleBuilder moduleBuilderWithStrongName = null;
+
 		private ModuleBuilder moduleBuilder = null;
 
 		/// <summary>
@@ -54,21 +55,21 @@ namespace Castle.DynamicProxy
 		{
 			return ObtainDynamicModule(false);
 		}
-	    
+
 		public ModuleBuilder ObtainDynamicModule(bool signStrongName)
 		{
-			lock (_lockobj)
+			lock(_lockobj)
 			{
 				if (signStrongName && moduleBuilderWithStrongName == null)
 				{
 					moduleBuilderWithStrongName = CreateModule(signStrongName);
 				}
-				else if(!signStrongName && moduleBuilder == null)
+				else if (!signStrongName && moduleBuilder == null)
 				{
 					moduleBuilder = CreateModule(signStrongName);
 				}
 			}
-			
+
 			return signStrongName ? moduleBuilderWithStrongName : moduleBuilder;
 		}
 
@@ -76,18 +77,18 @@ namespace Castle.DynamicProxy
 		{
 			AssemblyName assemblyName = new AssemblyName();
 			assemblyName.Name = ASSEMBLY_NAME;
-			
+
 			if (signStrongName)
 			{
 				assemblyName.KeyPair = new StrongNameKeyPair(GetKeyPair());
 			}
 
-#if ( PHYSICALASSEMBLY )
+#if PHYSICALASSEMBLY
 			assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-							assemblyName,
-							AssemblyBuilderAccess.RunAndSave);
+				assemblyName,
+				AssemblyBuilderAccess.RunAndSave);
 
-			moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME);
+			moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME, true);
 
 			return moduleBuilder;
 #else
@@ -106,7 +107,7 @@ namespace Castle.DynamicProxy
 
 		public void SaveAssembly()
 		{
-#if ( PHYSICALASSEMBLY )
+#if PHYSICALASSEMBLY
 			assemblyBuilder.Save(FILE_NAME);
 #endif
 		}
@@ -125,9 +126,9 @@ namespace Castle.DynamicProxy
 		{
 			byte[] keyPair;
 
-			using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+			using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
 			{
-				int length = (int)stream.Length;
+				int length = (int) stream.Length;
 				keyPair = new byte[length];
 				stream.Read(keyPair, 0, length);
 			}

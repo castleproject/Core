@@ -1,0 +1,273 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.DynamicProxy</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.DynamicProxy</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET2</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractInvocation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AllMethodsHook.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DefaultProxyBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\ClassProxyGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\AbstractTypeEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\ArgumentsUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\ClassEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\CodeBuilders\AbstractCodeBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\CodeBuilders\ConstructorCodeBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\CodeBuilders\MethodCodeBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\ConstructorCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\ConstructorEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\EventCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\EventEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\IMemberEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\LdcOpCodesDictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\LdindOpCodesDictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\MethodCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\MethodEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\NestedClassCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\NestedClassEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\OpCodeUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\PropertiesCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\PropertyEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\AddressOfReferenceExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ArgumentReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\AssignStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ConstructorInvocationStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ConvertExpression.cs" />
+    <Compile Include="Generators\Emitters\SimpleAST\Expression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ExpressionStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\FieldReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\IILEmitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\LiteralIntExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\LocalReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\MethodInvocationExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\MethodTokenExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\NewInstanceExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\NopStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\Reference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ReferenceExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ReturnReferenceExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ReturnStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\SelfReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\Statement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\TypeReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\TypeTokenExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\Emitters\StindOpCodesDictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generators\GeneratorException.cs" />
+    <Compile Include="IInterceptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IInterceptorSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IInvocation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProxyBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProxyGenerationHook.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProxyTargetAccessor.cs" />
+    <Compile Include="ModuleScope.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProxyGenerationOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProxyGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StandardInteceptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -50,8 +50,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 		internal ConstructorInfo ObtainDefaultConstructor()
 		{
-			return baseType.GetConstructor(
-				BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic, null, new Type[0], null);
+			Type type = baseType;
+
+#if DOTNET2
+			if (baseType.IsGenericType)
+			{
+				type = baseType.GetGenericTypeDefinition();
+			}
+#endif			
+			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+			
+			return type.GetConstructor(flags, null, new Type[0], null);
 		}
 	}
 }

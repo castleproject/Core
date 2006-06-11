@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				name, 
 				TypeAttributes.Sealed|TypeAttributes.NestedPublic|TypeAttributes.Class, 
 				baseType, interfaces);
-
+			
 			maintype.nested.Add(this);
 		}
 	}

@@ -15,15 +15,37 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Reflection;
 
-	public abstract class AbstractInvocation : IInvocation
+	public abstract class AbstractInvocation : MarshalByRefObject, IInvocation
 	{
 		private readonly IInterceptor[] interceptors;
+		private readonly Type targetType;
+		private readonly MethodInfo targetMethod;
+		private object returnValue;
 		private int index = -1;
 
-		protected AbstractInvocation(IInterceptor[] interceptors)
+		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod)
 		{
 			this.interceptors = interceptors;
+			this.targetType = targetType;
+			this.targetMethod = targetMethod;
+		}
+
+		public Type TargetType
+		{
+			get { return targetType; }
+		}
+
+		public MethodInfo Method
+		{
+			get { return targetMethod; }
+		}
+
+		public object ReturnValue
+		{
+			get { return returnValue; }
+			set { returnValue = value; }
 		}
 
 		public void Proceed()

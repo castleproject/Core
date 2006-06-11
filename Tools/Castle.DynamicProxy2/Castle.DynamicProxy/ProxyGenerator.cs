@@ -44,6 +44,13 @@ namespace Castle.DynamicProxy
 		{
 			Type type = CreateClassProxy(baseClass, interceptors, ProxyGenerationOptions.Default);
 
+#if DOTNET2
+			if (baseClass.IsGenericType)
+			{
+				type = type.MakeGenericType(baseClass.GetGenericArguments());
+			}
+#endif
+			
 			return Activator.CreateInstance(type, new object[] { interceptors });
 		}
 

@@ -14,33 +14,8 @@
 
 namespace Castle.DynamicProxy
 {
-	using System;
-	using System.Reflection;
-
-	public interface IInvocation
+	public interface IProxyTargetAccessor
 	{
-		// object Proxy { get; }
-
-		// object InvocationTarget { get;set; }
-
-		Type TargetType { get; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		MethodInfo Method { get; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		void Proceed();
-
-		object ReturnValue { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		// MethodInfo MethodInvocationTarget { get; }
+		object GetTarget();
 	}
 }

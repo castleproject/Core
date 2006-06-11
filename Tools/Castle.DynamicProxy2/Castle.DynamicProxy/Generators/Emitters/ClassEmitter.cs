@@ -32,10 +32,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				flags |= TypeAttributes.Serializable;
 			}
 
-            bool isAssemblySigned = IsAssemblySigned(baseType);
+			bool isAssemblySigned = IsAssemblySigned(baseType);
             
-			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(
-				name, flags, baseType, interfaces);
+			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
+			
+#if DOTNET2
+			if (baseType.IsGenericType)
+			{
+				CreateGenericParameters(baseType);
+
+				baseType = baseType.MakeGenericType(genericTypeParams);
+			}
+#endif
+			
+			typebuilder.SetParent(baseType);
 		}
 
 		private bool IsAssemblySigned(Type baseType)
