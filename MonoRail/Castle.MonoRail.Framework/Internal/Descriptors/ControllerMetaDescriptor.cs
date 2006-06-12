@@ -98,7 +98,9 @@ namespace Castle.MonoRail.Framework.Internal
 			{
 				Type declaringType = method.DeclaringType;
 
-				if (declaringType == typeof(Object) || declaringType == typeof(Controller) || declaringType == typeof(SmartDispatcherController))
+				if (declaringType == typeof(Object) || 
+				    declaringType == typeof(Controller) || 
+				    declaringType == typeof(SmartDispatcherController))
 				{
 					continue;
 				}
