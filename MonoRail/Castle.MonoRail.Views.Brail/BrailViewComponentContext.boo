@@ -53,3 +53,9 @@ class BrailViewComponentContext(IViewComponentContext):
 		if body is null:
 			raise RailsException("This component does not have a body content to be rendered")
 		body(writer)
+	
+	public def HasSection(sectionName as string) as bool:
+		return false
+	
+	public def RenderSection(sectionName as string):
+		raise NotImplementedException()

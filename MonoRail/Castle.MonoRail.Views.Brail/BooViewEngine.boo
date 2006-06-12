@@ -31,15 +31,10 @@ public class BooViewEngine (ViewEngineBase):
 	
 	# This is used to add a reference to the common scripts for each compiled scripts
 	common as System.Reflection.Assembly
-	# Watch the common script files directory
-	commonScriptWatcher as FileSystemWatcher
-	# Watch the Views directory for changes
-	viewsScriptWatcher as FileSystemWatcher
 	
 	static options as BooViewEngineOptions
 	baseSavePath as string
 	commonScriptPath as string
-	fullPathToViewDir as string
 	
 	static def InitializeConfig():
 		InitializeConfig("brail")
@@ -53,45 +48,17 @@ public class BooViewEngine (ViewEngineBase):
 	# Get configuration options if they exists, if they do not exist, load the default ones
 	# Create directory to save the compiled assemblies if required.
 	# pre-compile the common scripts
-	override def Init(IServiceProvider serviceProvider):
-		base,Init(serviceProvider)
-		allFiltersButAccess = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.Size | NotifyFilters.Attributes
+	override def Init(serviceProvider as IServiceProvider ):
+		super.Init(serviceProvider)
 		InitializeConfig() if options is null
 		baseDir = Path.GetDirectoryName(typeof(BooViewEngine).Assembly.Location)
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)
-		self.commonScriptPath = Path.Combine(ViewRootDir, options.CommonScriptsDirectory)
-		self.fullPathToViewDir = Path.GetFullPath(ViewRootDir)
-		if options.SaveToDisk and not Directory.Exists(baseSavePath):
-			Directory.CreateDirectory(baseSavePath)
-		
-		viewsScriptWatcher = FileSystemWatcher(ViewRootDir,
-			IncludeSubdirectories: true, Filter: "*.boo",
-			NotifyFilter: allFiltersButAccess)
-		viewsScriptWatcher.Changed += def (source, e as FileSystemEventArgs):
-			file = Path.GetFullPath(e.FullPath)
-			# Will cause a recompilation
-			compilations[file] = null
-		
-		viewsScriptWatcher.EnableRaisingEvents = true
-		
-		if not CompileCommonScripts():
-			return
-			
-		commonScriptWatcher = FileSystemWatcher(commonScriptPath,
-			IncludeSubdirectories: false, Filter:"*.boo",
-			NotifyFilter: allFiltersButAccess)
-		commonScriptWatcher.Changed += def (source, e as FileSystemEventArgs):
-			CompileCommonScripts.BeginInvoke( null,
-				{ ar as IAsyncResult | CompileCommonScripts.EndInvoke(ar) } )
-		
-		commonScriptWatcher.EnableRaisingEvents = true
+		self.commonScriptPath = Path.Combine(ViewSourceLoader.ViewRootDir, options.CommonScriptsDirectory)
 		
 		
 	# Just check if the filename exists, I'm not sure when it's called
 	override def HasTemplate(templateName as string):
-		file = GetFileName(templateName)
-		exists = File.Exists(file)
-		return exists
+		return ViewSourceLoader.HasTemplate(GetTemplateName(templateName))
 		
 	# Process a template name and output the results to the user
 	# This may throw if an error occured and the user is not local (which would 
@@ -101,7 +68,7 @@ public class BooViewEngine (ViewEngineBase):
 		Process(context.Response.Output, context, controller, templateName)
 	
 	override def Process(output as TextWriter, context as IRailsEngineContext, controller as Controller, templateName as string):
-		file = GetFileName(templateName)
+		file = GetTemplateName(templateName)
 		view as BrailBase
 		# Output may be the layout's child output if a layout exists
 		# or the context.Response.Output if the layout is null
@@ -125,16 +92,15 @@ public class BooViewEngine (ViewEngineBase):
 	def GetOutput(output as TextWriter, context as IRailsEngineContext, controller as Controller):
 		layout as BrailBase
 		if controller.LayoutName is not null:
-			layoutTemplate = "layouts/${controller.LayoutName}"
-			layoutFilename = GetFileName(layoutTemplate)
+			layoutTemplate = "layouts\\${controller.LayoutName}"
+			layoutFilename = GetTemplateName(layoutTemplate)
 			layout = GetCompiledScriptInstance(layoutFilename,output, 
 				context, controller)
 			output = layout.ChildOutput = StringWriter()	
 		return output, layout
 				
-	def GetFileName(templateName as string):
-		filename = Path.Combine(self.ViewRootDir,templateName)+".boo"
-		return Path.GetFullPath(filename)
+	def GetTemplateName(templateName as string):
+		return templateName+".boo"
 		
 	# This takes a filename and return an instance of the view ready to be used.
 	# If the file does not exist, an exception is raised
@@ -192,12 +158,19 @@ public class BooViewEngine (ViewEngineBase):
 	# in the director (not recursive!)
 	# Otherwise, it would return just the single file
 	def GetInput(filename as string, batch as bool) as (ICompilerInput):
-		return (FileInput(filename),) if not batch
+		return (CreateInput(filename),) if not batch
 		inputs = []
 		directory = Path.GetDirectoryName(filename)
-		for file in Directory.GetFiles(directory,"*.boo"):
-			inputs.Add(FileInput(file))
+		for file in ViewSourceLoader.ListViews(directory):
+			inputs.Add(CreateInput(file))
 		return inputs.ToArray(ICompilerInput)
+		
+	# create an input from a resource name
+	def CreateInput(name as string):
+		viewSrc = ViewSourceLoader.GetViewSource(name)
+		if viewSrc is null:
+			raise RailsException("${name} is not a valid view")
+		return ReaderInput(name, StreamReader(viewSrc.OpenViewStream()))
 	
 	# Perform the actual compilation of the scripts
 	# Things to note here:
@@ -233,9 +206,7 @@ public class BooViewEngine (ViewEngineBase):
 	# '/' and '\' are replaced with '_', I'm not handling ':' since the path
 	# should never include it since I'm converting this to a relative path
 	def NormalizeName(filename as string, batch as bool):
-		#Get relative filename,
-		name = Path.GetFullPath(filename)[fullPathToViewDir.Length+1:]
-		name = Path.GetDirectoryName(name) if batch
+		name = filename
 		for ch as char in (Path.AltDirectorySeparatorChar,
 			Path.DirectorySeparatorChar):
 			name = name.Replace(ch.ToString(),"_")
@@ -245,8 +216,6 @@ public class BooViewEngine (ViewEngineBase):
 	# an error in the common scripts would raise an exception.
 	def CompileCommonScripts():
 		if options.CommonScriptsDirectory is null:
-			return false
-		if not Directory.Exists(commonScriptPath):
 			return false
 		
 		# the demi.boo is stripped, but GetInput require it.
@@ -281,5 +250,9 @@ public class BooViewEngine (ViewEngineBase):
 			compiler.Parameters.References.Add(assembly)
 		compiler.Parameters.OutputType = CompilerOutputType.Library
 		return compiler
+		
+	ViewRootDir:
+		get:
+			return ViewSourceLoader.ViewRootDir
 		
 

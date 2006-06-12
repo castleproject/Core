@@ -82,7 +82,7 @@ abstract class BrailBase:
 	def GetSubViewFilename(subviewName as string):
 		#absolute path from Views directory
 		if subviewName[0] == char('/'):
-			return viewEngine.GetFileName(subviewName[1:])
+			return viewEngine.GetTemplateName(subviewName[1:])
 		return Path.Combine(ScriptDirectory,subviewName)+".boo"
 	
 	# this is called by ReplaceUnknownWithParameters step to create a more dynamic experiance

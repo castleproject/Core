@@ -1,0 +1,16 @@
+﻿Microsoft Visual Studio Solution File, Format Version 9.00
+# SharpDevelop 2.0.0.1462
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "Castle.MonoRail.Views.Brail", "Castle.MonoRail.Views.Brail.booproj", "{75535AA0-EC07-4908-99A4-5D9741E899B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75535AA0-EC07-4908-99A4-5D9741E899B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75535AA0-EC07-4908-99A4-5D9741E899B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75535AA0-EC07-4908-99A4-5D9741E899B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75535AA0-EC07-4908-99A4-5D9741E899B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
