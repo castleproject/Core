@@ -24,12 +24,15 @@ namespace Castle.DynamicProxy
 		private readonly MethodInfo targetMethod;
 		private object returnValue;
 		private int index = -1;
+		private object[] arguments;
 
-		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod)
+		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType,
+									 MethodInfo targetMethod, object[] arguments)
 		{
 			this.interceptors = interceptors;
 			this.targetType = targetType;
 			this.targetMethod = targetMethod;
+			this.arguments = arguments;
 		}
 
 		public Type TargetType
@@ -46,6 +49,23 @@ namespace Castle.DynamicProxy
 		{
 			get { return returnValue; }
 			set { returnValue = value; }
+		}
+
+		public object[] Arguments
+		{
+			get { return arguments; }
+		}
+
+		public void SetArgumentValue(int index, object value)
+		{
+			//TODO: Boundary checks
+			arguments[index] = value;
+		}
+
+		public object GetArgumentValue(int index)
+		{
+			//TODO: Boundary checks
+			return arguments[index];
 		}
 
 		public void Proceed()

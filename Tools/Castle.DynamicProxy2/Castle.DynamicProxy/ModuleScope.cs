@@ -80,7 +80,12 @@ namespace Castle.DynamicProxy
 
 			if (signStrongName)
 			{
-				assemblyName.KeyPair = new StrongNameKeyPair(GetKeyPair());
+				byte[] keyPairStream = GetKeyPair();
+
+				if (keyPairStream != null)
+				{
+					assemblyName.KeyPair = new StrongNameKeyPair(keyPairStream);
+				}
 			}
 
 #if PHYSICALASSEMBLY
@@ -128,6 +133,8 @@ namespace Castle.DynamicProxy
 
 			using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
 			{
+				if (stream == null) return null;
+				
 				int length = (int) stream.Length;
 				keyPair = new byte[length];
 				stream.Read(keyPair, 0, length);

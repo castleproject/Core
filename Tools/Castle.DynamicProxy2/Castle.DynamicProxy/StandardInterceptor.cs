@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy
 {
 	using System;
 
-	public class StandardInteceptor : MarshalByRefObject, IInterceptor
+	public class StandardInterceptor : MarshalByRefObject, IInterceptor
 	{
 		public void Intercept(IInvocation invocation)
 		{

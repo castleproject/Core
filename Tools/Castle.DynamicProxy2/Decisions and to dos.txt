@@ -8,3 +8,11 @@
   * without target, Proceed just returns
   
   * Watch out for 'leaking this' problem
+  
+- Xml Serializer 
+
+  Support it by creating an empty constructor
+  
+- Support generic functions 
+
+- Support generic parameters

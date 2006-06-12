@@ -24,11 +24,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public class MethodEmitter : IMemberEmitter
 	{
-		protected MethodBuilder _builder;
-		protected ArgumentReference[] _arguments;
+		protected MethodBuilder builder;
+		protected ArgumentReference[] arguments;
 
-		private MethodCodeBuilder _codebuilder;
-		private AbstractTypeEmitter _maintype;
+		private MethodCodeBuilder codebuilder;
+		private AbstractTypeEmitter maintype;
 
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
 		                       ReturnReferenceExpression returnRef, params ArgumentReference[] arguments) :
@@ -42,13 +42,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		                       MethodAttributes attrs,
 		                       ReturnReferenceExpression returnRef, params ArgumentReference[] arguments)
 		{
-			_maintype = maintype;
-			_arguments = arguments;
+			this.maintype = maintype;
+			this.arguments = arguments;
 
 			Type returnType = returnRef.Type;
 			Type[] args = ArgumentsUtil.InitializeAndConvert(arguments);
 
-			_builder = maintype.TypeBuilder.DefineMethod(name, attrs,
+			this.builder = maintype.TypeBuilder.DefineMethod(name, attrs,
 			                                             returnType, args);
 		}
 
@@ -60,38 +60,38 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
-				if (_codebuilder == null)
+				if (codebuilder == null)
 				{
-					_codebuilder = new MethodCodeBuilder(
-						_maintype.BaseType, _builder, _builder.GetILGenerator());
+					codebuilder = new MethodCodeBuilder(
+						maintype.BaseType, builder, builder.GetILGenerator());
 				}
-				return _codebuilder;
+				return codebuilder;
 			}
 		}
 
 		public ArgumentReference[] Arguments
 		{
-			get { return _arguments; }
+			get { return arguments; }
 		}
 
 		internal MethodBuilder MethodBuilder
 		{
-			get { return _builder; }
+			get { return builder; }
 		}
 
 		public Type ReturnType
 		{
-			get { return _builder.ReturnType; }
+			get { return builder.ReturnType; }
 		}
 
 		public MemberInfo Member
 		{
-			get { return _builder; }
+			get { return builder; }
 		}
 
 		public virtual void Generate()
 		{
-			_codebuilder.Generate(this, _builder.GetILGenerator());
+			codebuilder.Generate(this, builder.GetILGenerator());
 		}
 
 		public virtual void EnsureValidCodeBlock()
@@ -107,7 +107,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			foreach(ParameterInfo parameterInfo in info)
 			{
-				_builder.DefineParameter(parameterInfo.Position + 1, parameterInfo.Attributes, parameterInfo.Name);
+				builder.DefineParameter(parameterInfo.Position + 1, parameterInfo.Attributes, parameterInfo.Name);
 			}
 		}
 	}

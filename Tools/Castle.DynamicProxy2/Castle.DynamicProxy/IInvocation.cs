@@ -25,6 +25,12 @@ namespace Castle.DynamicProxy
 
 		Type TargetType { get; }
 
+		object[] Arguments { get; }
+
+		void SetArgumentValue(int index, object value);
+
+		object GetArgumentValue(int index);
+
 		/// <summary>
 		/// 
 		/// </summary>

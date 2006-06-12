@@ -44,6 +44,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				baseType = baseType.MakeGenericType(genericTypeParams);
 			}
 #endif
+			if (interfaces != null)
+			{
+				foreach(Type inter in interfaces)
+				{
+					typebuilder.AddInterfaceImplementation(inter);
+
+					CreateGenericParameters(inter);
+				}
+			}
 			
 			typebuilder.SetParent(baseType);
 		}

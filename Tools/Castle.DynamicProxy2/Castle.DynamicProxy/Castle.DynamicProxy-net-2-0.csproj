@@ -97,6 +97,8 @@
     <Compile Include="DefaultProxyBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\BaseProxyGenerator.cs" />
+    <Compile Include="Generators\CacheKey.cs" />
     <Compile Include="Generators\ClassProxyGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -172,6 +174,7 @@
     <Compile Include="Generators\Emitters\SimpleAST\AssignStatement.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ConstReference.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\ConstructorInvocationStatement.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -188,9 +191,12 @@
     <Compile Include="Generators\Emitters\SimpleAST\IILEmitter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\IndirectReference.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\LiteralIntExpression.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\LoadArrayElementExpression.cs" />
+    <Compile Include="Generators\Emitters\SimpleAST\LoadRefArrayElementExpression.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\LocalReference.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -212,6 +218,7 @@
     <Compile Include="Generators\Emitters\SimpleAST\ReferenceExpression.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ReferencesToObjectArrayExpression.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\ReturnReferenceExpression.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -234,6 +241,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Generators\GeneratorException.cs" />
+    <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="IInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -259,7 +267,7 @@
     <Compile Include="ProxyGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StandardInteceptor.cs">
+    <Compile Include="StandardInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

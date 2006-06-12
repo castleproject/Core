@@ -15,35 +15,41 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Reflection;
 	using System.Threading;
-
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class ClassProxyGenerator : BaseProxyGenerator
+	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
-		public ClassProxyGenerator(ModuleScope scope) : base(scope)
+		private Type targetType;
+		private FieldReference targetField;
+
+		public InterfaceProxyWithTargetGenerator(ModuleScope scope) : base(scope)
 		{
 		}
 
-		public Type GenerateCode(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
+		public Type GenerateCode(Type theInterface, Type targetType, ProxyGenerationOptions options)
 		{
 			ReaderWriterLock rwlock = Scope.RWLock;
 
 			rwlock.AcquireReaderLock(-1);
-			
+
 #if DOTNET2
-			if (theClass.IsGenericType)
+			if (theInterface.IsGenericType)
 			{
-				theClass = theClass.GetGenericTypeDefinition();
+				theInterface = theInterface.GetGenericTypeDefinition();
+			}
+
+			if (targetType.IsGenericType)
+			{
+				targetType = targetType.GetGenericTypeDefinition();
 			}
 #endif
 
-			CacheKey cacheKey = new CacheKey(theClass, interfaces, options);
+			CacheKey cacheKey = new CacheKey(theInterface, new Type[] { targetType }, options);
 
 			Type cacheType = GetFromCache(cacheKey);
-			
+
 			if (cacheType != null)
 			{
 				rwlock.ReleaseReaderLock();
@@ -51,22 +57,22 @@ namespace Castle.DynamicProxy.Generators
 				return cacheType;
 			}
 
+			this.targetType = targetType;
+
 			LockCookie lc = rwlock.UpgradeToWriterLock(-1);
 
 			try
 			{
-				baseType = theClass;
-
-				emitter = BuildClassEmitter(Guid.NewGuid().ToString("N"), theClass, interfaces);
+				emitter = BuildClassEmitter(Guid.NewGuid().ToString("N"), baseType, new Type[] { theInterface });
 
 				GenerateFields();
-				
+
 				IProxyGenerationHook hook = options.Hook;
-				
-				GenerateMethods(theClass, SelfReference.Self, hook, options.UseSelector);
-				
+
+				GenerateMethods(theInterface, targetField, hook, options.UseSelector);
+
 				// TODO: Add interfaces and mixins
-				
+
 				hook.MethodsInspected();
 
 				GenerateConstructor();
@@ -86,7 +92,7 @@ namespace Castle.DynamicProxy.Generators
 //				}
 
 				Type type = CreateType();
-				
+
 				AddToCache(cacheKey, type);
 
 				return type;
@@ -99,18 +105,27 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
+		protected override void GenerateFields()
+		{
+			base.GenerateFields();
+			
+			targetField = emitter.CreateField("__target", targetType);
+		}
+
 		protected override Reference GetProxyTargetReference()
 		{
-			return SelfReference.Self;
+			return targetField;
 		}
 
 		private void GenerateConstructor()
 		{
-			ArgumentReference cArg0 = new ArgumentReference(typeof(IInterceptor[]));
+			ArgumentReference cArg0 = new ArgumentReference(targetType);
+			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
 
-			ConstructorEmitter constructor = emitter.CreateConstructor(cArg0);
+			ConstructorEmitter constructor = emitter.CreateConstructor(cArg0, cArg1);
 
-			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorsField, cArg0.ToExpression()));
+			constructor.CodeBuilder.AddStatement(new AssignStatement(targetField, cArg0.ToExpression()));
+			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorsField, cArg1.ToExpression()));
 			constructor.CodeBuilder.InvokeBaseConstructor();
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}

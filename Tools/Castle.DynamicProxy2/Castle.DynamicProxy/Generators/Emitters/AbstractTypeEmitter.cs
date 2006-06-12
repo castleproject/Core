@@ -183,8 +183,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					argumentNames[i] = genericArguments[i].Name;
 				}
 
-				genericTypeParams =
-					typebuilder.DefineGenericParameters(argumentNames);
+				genericTypeParams = typebuilder.DefineGenericParameters(argumentNames);
 
 				for (int i = 0; i < genericTypeParams.Length; i++)
 				{
