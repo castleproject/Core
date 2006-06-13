@@ -183,6 +183,7 @@
     <Compile Include="DelegateDynamicAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EmailTemplateService.cs" />
     <Compile Include="EngineContextModule.cs" />
     <Compile Include="Extensions\ExceptionChaining\AbstractExceptionHandler.cs">
       <SubType>Code</SubType>
@@ -262,6 +263,7 @@
     <Compile Include="IDynamicActionProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IEmailTemplateService.cs" />
     <Compile Include="IFilter.cs">
       <SubType>Code</SubType>
     </Compile>
