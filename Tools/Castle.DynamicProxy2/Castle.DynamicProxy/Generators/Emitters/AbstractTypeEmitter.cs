@@ -152,11 +152,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return TypeBuilder.BaseType; }
 		}
 
-//		internal int IncrementAndGetCounterValue
-//		{
-//			get { return ++counter; }
-//		}
-
 #if DOTNET2
 
 		public GenericTypeParameterBuilder[] GenericTypeParams

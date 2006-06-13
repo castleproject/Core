@@ -21,7 +21,8 @@ namespace Castle.DynamicProxy.Generators
 	{
 		internal static ConstructorInfo AbstractInvocationConstructor = 
 			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic, 
-				null, new Type[] { typeof(IInterceptor[]), typeof(Type), typeof(MethodInfo), typeof(object[]) }, null);
+				null, new Type[] { typeof(IInterceptor[]), typeof(Type), typeof(MethodInfo), 
+				                   typeof(MethodInfo), typeof(object[]) }, null);
 
 		internal static MethodInfo AbstractInvocationProceed =
 			typeof(AbstractInvocation).GetMethod("Proceed", BindingFlags.Instance|BindingFlags.Public);

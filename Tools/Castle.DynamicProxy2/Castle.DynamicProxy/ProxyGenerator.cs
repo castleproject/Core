@@ -58,6 +58,12 @@ namespace Castle.DynamicProxy
 			
 			Type type = CreateInterfaceProxyTypeWithTarget(theInterface, target.GetType(), options);
 
+			if (theInterface.IsGenericType)
+			{
+				Type[] args = theInterface.GetGenericArguments();
+				type = type.MakeGenericType(args);
+			}
+
 			return Activator.CreateInstance(type, new object[] { target, interceptors });
 		}
 

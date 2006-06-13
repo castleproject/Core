@@ -12,41 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System;
-	using System.Reflection;
+	using System.Reflection.Emit;
 
-	public interface IInvocation
+	public class NullExpression : Expression
 	{
-		// object Proxy { get; }
+		public static readonly NullExpression Instance = new NullExpression();
 
-		// object InvocationTarget { get;set; }
+		protected NullExpression()
+		{
+		}
 
-		Type TargetType { get; }
-
-		object[] Arguments { get; }
-
-		void SetArgumentValue(int index, object value);
-
-		object GetArgumentValue(int index);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		MethodInfo Method { get; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		void Proceed();
-
-		object ReturnValue { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		MethodInfo MethodInvocationTarget { get; }
+		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		{
+			gen.Emit(OpCodes.Ldnull);
+		}
 	}
 }

@@ -178,7 +178,7 @@ namespace Castle.DynamicProxy.Generators
 
 				MethodAttributes atts = ObtainMethodAttributes(method);
 
-				NestedClassEmitter iinvocationImpl = CreateIInvocationImplementation(targetType, method);
+				NestedClassEmitter iinvocationImpl = CreateIInvocationImplementation(targetType, targetType, method, null);
 				// NestedClassEmitter iinvocationImpl = CreateIInvocationImplementation(baseType, method);
 
 				MethodEmitter methodEmitter = emitter.CreateMethod(method.Name,
@@ -215,6 +215,7 @@ namespace Castle.DynamicProxy.Generators
 					interceptors,
 					typeExp,
 					methodTokenExp,
+					NullExpression.Instance, 
 					new ReferencesToObjectArrayExpression(dereferencedArguments));
 
 				methodEmitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
@@ -238,15 +239,22 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected NestedClassEmitter CreateIInvocationImplementation(Type targetType, MethodInfo methodInfo)
+		protected NestedClassEmitter CreateIInvocationImplementation(Type primaryType, 
+		                                                             Type targetType,
+																	 MethodInfo methodInfo, MethodInfo methodOnTargetInfo)
 		{
+			if (methodOnTargetInfo == null)
+			{
+				methodOnTargetInfo = methodInfo;
+			}
+			
 			nestedCounter++;
 
 			NestedClassEmitter nested = new NestedClassEmitter(emitter,
 				"Invocation" + nestedCounter.ToString(), typeof(AbstractInvocation), new Type[0]);
 
+			nested.CreateGenericParameters(primaryType);
 #if DOTNET2
-			nested.CreateGenericParameters(targetType);
 #endif
 			// Create the fields
 
@@ -258,13 +266,14 @@ namespace Castle.DynamicProxy.Generators
 			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
 			ArgumentReference cArg2 = new ArgumentReference(typeof(Type));
 			ArgumentReference cArg3 = new ArgumentReference(typeof(MethodInfo));
-			ArgumentReference cArg4 = new ArgumentReference(typeof(object[]));
+			ArgumentReference cArg4 = new ArgumentReference(typeof(MethodInfo));
+			ArgumentReference cArg5 = new ArgumentReference(typeof(object[]));
 
-			ConstructorEmitter constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4);
+			ConstructorEmitter constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5);
 
 			constructor.CodeBuilder.AddStatement(new AssignStatement(targetField, cArg0.ToExpression()));
 			constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructor,
-				cArg1, cArg2, cArg3, cArg4);
+				cArg1, cArg2, cArg3, cArg4, cArg5);
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 
 			// InvokeMethodOnTarget implementation
@@ -296,7 +305,7 @@ namespace Castle.DynamicProxy.Generators
 
 			LocalReference ret_local = null;
 			MethodInvocationExpression baseMethodInvExp =
-				new MethodInvocationExpression(targetField, methodInfo, args);
+				new MethodInvocationExpression(targetField, methodOnTargetInfo, args);
 
 			// TODO: Process out/ref arguments
 

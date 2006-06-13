@@ -48,9 +48,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				foreach(Type inter in interfaces)
 				{
-					typebuilder.AddInterfaceImplementation(inter);
+					if (inter.IsGenericType)
+					{
+						CreateGenericParameters(inter);
 
-					CreateGenericParameters(inter);
+						typebuilder.AddInterfaceImplementation(inter.MakeGenericType(GenericTypeParams));
+					}
+					else
+					{
+						typebuilder.AddInterfaceImplementation(inter);
+					}
 				}
 			}
 			

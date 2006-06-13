@@ -22,8 +22,9 @@ namespace Castle.DynamicProxy
 		private readonly IInterceptor[] interceptors;
 		private readonly Type targetType;
 		private readonly MethodInfo targetMethod;
+		private MethodInfo interfMethod;
 		private object returnValue;
-		private int index = -1;
+		private int execIndex = -1;
 		private object[] arguments;
 
 		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType,
@@ -35,12 +36,24 @@ namespace Castle.DynamicProxy
 			this.arguments = arguments;
 		}
 
+		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType, 
+		                             MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments) : 
+		                             	this(interceptors, targetType, targetMethod, arguments)
+		{
+			this.interfMethod = interfMethod;
+		}
+
 		public Type TargetType
 		{
 			get { return targetType; }
 		}
 
 		public MethodInfo Method
+		{
+			get { return interfMethod == null ? targetMethod : interfMethod; }
+		}
+
+		public MethodInfo MethodInvocationTarget
 		{
 			get { return targetMethod; }
 		}
@@ -70,19 +83,19 @@ namespace Castle.DynamicProxy
 
 		public void Proceed()
 		{
-			index++;
+			execIndex++;
 
-			if (index == interceptors.Length)
+			if (execIndex == interceptors.Length)
 			{
 				InvokeMethodOnTarget();
 			}
-			else if (index > interceptors.Length)
+			else if (execIndex > interceptors.Length)
 			{
 				throw new ApplicationException("Blah");
 			}
 			else
 			{
-				interceptors[index].Intercept(this);
+				interceptors[execIndex].Intercept(this);
 			}
 		}
 

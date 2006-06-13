@@ -212,6 +212,7 @@
     <Compile Include="Generators\Emitters\SimpleAST\NopStatement.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\NullExpression.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\Reference.cs">
       <SubType>Code</SubType>
     </Compile>
