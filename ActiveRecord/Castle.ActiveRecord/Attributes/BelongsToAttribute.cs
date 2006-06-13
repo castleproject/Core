@@ -103,7 +103,7 @@ namespace Castle.ActiveRecord
 		}
 	    
 		/// <summary>
-		///  Defines the Composite Key columns used by association (aka Natural Keys).
+		/// Defines the Composite Key columns used by association (aka Natural Keys).
 		/// </summary>
 		public String[] CompositeKeyColumns
 		{

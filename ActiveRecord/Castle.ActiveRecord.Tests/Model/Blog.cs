@@ -55,7 +55,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { _author = value; }
 		}
 
-		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid")]
 		public IList Posts
 		{
 			get { return _posts; }
@@ -81,94 +81,6 @@ namespace Castle.ActiveRecord.Tests.Model
 		{
 			get { return _recentposts; }
 			set { _recentposts = value; }
-		}
-
-		/// <summary>
-		/// Hook to change the object state
-		/// before saving it.
-		/// </summary>
-		/// <param name="state"></param>
-		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-		protected override bool BeforeSave(IDictionary state)
-		{
-			return base.BeforeSave(state);
-		}
-
-		/// <summary>
-		/// Hook to transform the read data 
-		/// from the database before populating 
-		/// the object instance
-		/// </summary>
-		/// <param name="adapter"></param>
-		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-		protected override bool BeforeLoad(IDictionary adapter)
-		{
-			return base.BeforeLoad(adapter);
-		}
-
-		/// <summary>
-		/// Hook to perform additional tasks 
-		/// before removing the object instance representation
-		/// from the database.
-		/// </summary>
-		/// <param name="adapter"></param>
-		protected override void BeforeDelete(IDictionary adapter)
-		{
-			base.BeforeDelete(adapter);
-		}
-
-		/// <summary>
-		/// Called before a flush
-		/// </summary>
-		protected override void PreFlush()
-		{
-			base.PreFlush();
-		}
-
-		/// <summary>
-		/// Called after a flush that actually ends in execution of the SQL statements required to
-		/// synchronize in-memory state with the database.
-		/// </summary>
-		protected override void PostFlush()
-		{
-			base.PostFlush();
-		}
-
-		/// <summary>
-		/// Called when a transient entity is passed to <c>SaveOrUpdate</c>.
-		/// </summary>
-		/// <remarks>
-		///	The return value determines if the object is saved
-		///	<list>
-		///		<item><c>true</c> - the entity is passed to <c>Save()</c>, resulting in an <c>INSERT</c></item>
-		///		<item><c>false</c> - the entity is passed to <c>Update()</c>, resulting in an <c>UPDATE</c></item>
-		///		<item><c>null</c> - Hibernate uses the <c>unsaved-value</c> mapping to determine if the object is unsaved</item>
-		///	</list>
-		/// </remarks>
-		/// <returns></returns>
-		protected override object IsUnsaved()
-		{
-			return base.IsUnsaved();
-		}
-
-		/// <summary>
-		/// Called from <c>Flush()</c>. The return value determines whether the entity is updated
-		/// </summary>
-		/// <remarks>
-		///		<list>
-		///			<item>an array of property indicies - the entity is dirty</item>
-		///			<item>an empty array - the entity is not dirty</item>
-		///			<item><c>null</c> - use Hibernate's default dirty-checking algorithm</item>
-		///		</list>
-		/// </remarks>
-		/// <param name="id"></param>
-		/// <param name="previousState"></param>
-		/// <param name="currentState"></param>
-		/// <param name="types"></param>
-		/// <returns>An array of dirty property indicies or <c>null</c> to choose default behavior</returns>
-		protected override int[] FindDirty(object id, IDictionary previousState, IDictionary currentState, IType[] types)
-		{
-			return base.FindDirty(id, previousState, currentState, types);
 		}
 
 		public static void DeleteAll()
