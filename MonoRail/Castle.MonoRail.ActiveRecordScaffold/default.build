@@ -22,7 +22,7 @@
 	</target>
 
 	<target name="init" depends="clean">
-		<property name="define" value="${define};TRACE;${strong}"/>
+		<property name="define" value="${define};${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
 		
 		<property name="app.config" value="${bin.dir}/${test.assembly.name}.config" />

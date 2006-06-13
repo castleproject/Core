@@ -22,7 +22,7 @@
 	</target>
 
 	<target name="init" depends="clean">
-		<property name="define" value="${define};TRACE;${strong}"/>
+		<property name="define" value="${define};${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
 	</target>
 

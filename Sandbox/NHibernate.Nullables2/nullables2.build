@@ -9,7 +9,7 @@
 	<property name="name" value="NHibernate.Nullables2" />
 	<property name="assembly.name" value="${name}.dll" />
 	
-	<property name="nullables2.test" value="true" unless="${property::exists('activerecord.test')}" />
+	<property name="nullables2.test" value="${activerecord.test}" />
 
 	<property name="src.dir" value="${base.dir}/${name}" />
 	<property name="test.src.dir" value="${base.dir}/${name}.Tests" />
@@ -20,7 +20,7 @@
 	<property name="version" value="1.0.0.0" />
 
 	<target name="init">
-		<property name="define" value="TRACE;${strong}"/>
+		<property name="define" value="${define};${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
 		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
 		

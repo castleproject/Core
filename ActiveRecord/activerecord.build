@@ -26,7 +26,7 @@
 	<property name="version" value="0.0.1.3" />
 
 	<target name="init">
-		<property name="define" value="${define};TRACE;${strong}"/>
+		<property name="define" value="${define};${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
 		
 		<delete dir="${bin.dir}" failonerror="false" />

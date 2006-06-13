@@ -20,7 +20,7 @@
 	</target>
 
 	<target name="init" depends="clean">
-                <property name="define" value="${define};TRACE;${strong};${enabletest}"/>
+                <property name="define" value="${define};${strong};${enabletest}"/>
 
 		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>

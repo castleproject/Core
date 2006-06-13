@@ -9,6 +9,7 @@
 	<property name="strong"		value="STRONG"		unless="${property::exists('strong')}" />
 	<property name="debug"		value="false"		unless="${property::exists('debug')}" />
 	<property name="optimize"	value="true"		unless="${property::exists('optimize')}" />
+	<property name="trace"	    value="true"		unless="${property::exists('trace')}" />
 	<property name="doc.dir"	value="${base.dir}/docs" />
 	<property name="nunit.formatter" value="Plain"	unless="${property::exists('nunit.formatter')}" />
 	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
@@ -16,7 +17,11 @@
 	<property name="isMono" value="${string::starts-with(framework::get-target-framework(),'mono')}" />
 
 	<!-- Global compilation defines -->
-	<property name="define"     value="DOTNET2"     if="${framework::get-target-framework()=='net-2.0'}"/>
+	<property name="define"     value="TRACE"               if="${trace}" />
+	<!-- Framework 2.0 defines -->
+	<property name="define"     value="${define};DOTNET2"   if="${framework::get-target-framework()=='net-2.0'}"/>
+    <!-- Make sure the property exists -->
+	<property name="define"     value=""                    unless="${property::exists('define')}" />
 
 	<!-- properties used to connect to database for testing -->
 	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />
