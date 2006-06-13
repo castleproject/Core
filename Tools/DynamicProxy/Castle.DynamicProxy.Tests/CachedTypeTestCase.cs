@@ -68,9 +68,9 @@ namespace Castle.DynamicProxy.Test
 
             Assert.IsTrue(proxyB is Classes.DuplicateNames.Foo,
                 string.Format("Proxy {0} is not a subclass of {1}", proxyA.GetType(), typeof(Classes.DuplicateNames.Foo)));
-        }
+		}
 
-#if dotNet2
+#if DOTNET2
 
         [Test]
         public void GenerateProxyOfGenericType()

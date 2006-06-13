@@ -98,8 +98,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			//TODO: There needs to be a more efficient way to do this than two replace operations
 			String physicalPath = 
 				Path.Combine(ViewSourceLoader.ViewRootDir, viewName).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
-		    
-#if dotNet2		    
+
+#if DOTNET2		    
 			// This is a hack until I can understand the different behavior exhibited by
 			// PageParser.GetCompiledPageInstance(..) when running ASP.NET 2.0.  It appears
 			// that the virtualPath (first argument) to this method must represent a valid

@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord
 	using System.Collections;
 	using System.Data;
 	using System.Reflection;
-#if !dotNet2
+#if !DOTNET2
 	using System.Configuration;
 #endif
 	
@@ -192,7 +192,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize()
 		{
-#if dotNet2
+#if DOTNET2
 			IConfigurationSource source = System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
 #else
 			IConfigurationSource source =
@@ -203,7 +203,7 @@ namespace Castle.ActiveRecord
 				String message = "Could not obtain configuration from the AppDomain config file." +
 				                 " Sorry, but you have to fill the configuration or provide a " +
 				                 "IConfigurationSource instance yourself.";
-#if dotNet2
+#if DOTNET2
 				throw new System.Configuration.ConfigurationErrorsException(message);
 #else
 				throw new System.Configuration.ConfigurationException(message);

@@ -85,10 +85,10 @@ namespace Castle.ActiveRecord.Framework.Config
 					String message = String.Format("Unexpected node. Expect '{0}' found '{1}'", 
 						Config_Node_Name, node.Name);
 
-#if dotNet2
+#if DOTNET2
                     throw new System.Configuration.ConfigurationErrorsException(message);
 #else
-                     throw new ConfigurationException(message);
+					throw new ConfigurationException(message);
 #endif
 
                 }
@@ -104,10 +104,10 @@ namespace Castle.ActiveRecord.Framework.Config
 						String message = String.Format("Invalid attribute at node '{0}'. " + 
 							"The only supported attribute is 'type'", Config_Node_Name);
 
-#if dotNet2
+#if DOTNET2
                         throw new System.Configuration.ConfigurationErrorsException(message);
 #else
-                     throw new ConfigurationException(message);
+						throw new ConfigurationException(message);
 #endif
 					}
 
@@ -119,10 +119,10 @@ namespace Castle.ActiveRecord.Framework.Config
 					{
 						String message = String.Format("Could not obtain type from name '{0}'", typeName);
 
-#if dotNet2
+#if DOTNET2
                         throw new System.Configuration.ConfigurationErrorsException(message);
 #else
-                     throw new ConfigurationException(message);
+						throw new ConfigurationException(message);
 #endif
 					}
 				}
@@ -134,12 +134,12 @@ namespace Castle.ActiveRecord.Framework.Config
 		protected IDictionary BuildProperties(XmlNode node)
 		{
 			HybridDictionary dict = new HybridDictionary();
-#if dotNet2
+#if DOTNET2
 			System.Text.RegularExpressions.Regex connectionStringRegex = new System.Text.RegularExpressions.
 					Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[\d\w_-]+)\}");
 			string ConnectionStringKey = "hibernate.connection.connection_string";
 #endif
-			foreach(XmlNode addNode in node.SelectNodes("add"))
+			foreach (XmlNode addNode in node.SelectNodes("add"))
 			{
 				XmlAttribute keyAtt = addNode.Attributes["key"];
 				XmlAttribute valueAtt = addNode.Attributes["value"];
@@ -148,14 +148,14 @@ namespace Castle.ActiveRecord.Framework.Config
 				{
 					String message = String.Format("For each 'add' element you must specify 'key' and 'value' attributes");
 
-#if dotNet2
+#if DOTNET2
                     throw new System.Configuration.ConfigurationErrorsException(message);
 #else
-                     throw new ConfigurationException(message);
+					throw new ConfigurationException(message);
 #endif
 				}
 				string value = valueAtt.Value;
-#if dotNet2
+#if DOTNET2
 				
 				if(keyAtt.Value == ConnectionStringKey
 					&& connectionStringRegex.IsMatch(value))

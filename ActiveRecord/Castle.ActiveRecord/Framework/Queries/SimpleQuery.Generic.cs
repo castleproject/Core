@@ -13,7 +13,7 @@
 // limitations under the License.
 
 
-#if dotNet2
+#if DOTNET2
 
 namespace Castle.ActiveRecord.Queries
 {
@@ -32,7 +32,7 @@ namespace Castle.ActiveRecord.Queries
 	/// <typeparam name="T">The resulting object type</typeparam>
 	public class SimpleQuery<T> : HqlBasedQuery, IActiveRecordQuery<T[]>
 	{
-		#region Constructors
+#region Constructors
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
 		/// using the specified positional <paramref name="positionalParameters"/>.
@@ -59,14 +59,14 @@ namespace Castle.ActiveRecord.Queries
 		}
 		#endregion
 
-		#region IActiveRecordQuery<T[]> implementation
+#region IActiveRecordQuery<T[]> implementation
 		T[] IActiveRecordQuery<T[]>.Execute(ISession session)
 		{
 			return (T[]) InternalExecute(session);
 		}
 		#endregion
 
-		#region Public "Execute" and "Enumerate" Methods
+#region Public "Execute" and "Enumerate" Methods
 		/// <summary>
 		/// Executes the query and gets the results.
 		/// </summary>

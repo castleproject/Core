@@ -1,4 +1,4 @@
-#if dotNet2
+#if DOTNET2
 namespace Castle.DynamicProxy.Test
 {
     using System;

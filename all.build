@@ -413,7 +413,7 @@
 			<in>
 				<!-- Hardcode projects folders to speed up assemblies search -->
 				<items>
-					<include name="build/net-1.1"/>
+					<include name="${build.dir}"/>
 				</items>
 			</in>
 			<do>

@@ -21,15 +21,15 @@ namespace Castle.MicroKernel
 	{
 		public readonly static CreationContext Empty = new CreationContext();
 
-		#if DOTNET2
+#if DOTNET2
 		private readonly Type[] arguments;
-		#endif
+#endif
 
 		public CreationContext()
 		{
 		}
 
-		#if DOTNET2
+#if DOTNET2
 		
 		public CreationContext(Type target)
 		{
@@ -46,6 +46,6 @@ namespace Castle.MicroKernel
 			return target.GetGenericArguments();
 		}
 		
-		#endif
+#endif
 	}
 }

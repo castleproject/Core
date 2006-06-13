@@ -65,10 +65,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 		private object CheckUniqueness(ISession session, object instance)
 		{
 			ICriteria criteria = session.CreateCriteria( instance.GetType() );
-#if dotNet2
+#if DOTNET2
             if (Property.Name.Equals(_pkModel.Property.Name, StringComparison.InvariantCultureIgnoreCase))
 #else
-            if (Property.Name.ToLower() == _pkModel.Property.Name.ToLower())
+			if (Property.Name.ToLower() == _pkModel.Property.Name.ToLower())
 #endif
             {
                 // IsUniqueValidator is on the PrimaryKey Property, simplify query

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if dotNet2
+#if DOTNET2
 
 namespace Castle.ActiveRecord
 {
@@ -34,7 +34,7 @@ namespace Castle.ActiveRecord
 	{
         protected internal static ISessionFactoryHolder holder = ActiveRecordBase.holder;
 
-        #region internal static
+#region internal static
         internal static void EnsureInitialized()
         {
             Type type = typeof(T);
@@ -62,13 +62,13 @@ namespace Castle.ActiveRecord
             Framework.Internal.ActiveRecordModel.Register(arType, model);
         }
 
-        #endregion
+		#endregion
 
-        #region public static
+#region public static
 
-        #region Find Related
+#region Find Related
 
-        #region FindAll
+#region FindAll
         /// <summary>
         /// Returns all instances found for the specified type.
         /// </summary>
@@ -136,9 +136,9 @@ namespace Castle.ActiveRecord
         {
             return FindAll(null, criterias);
         }
-        #endregion
+		#endregion
 
-        #region FindAllByProperty
+#region FindAllByProperty
         /// <summary>
         /// Finds records based on a property value
         /// </summary>
@@ -165,9 +165,9 @@ namespace Castle.ActiveRecord
         {
             return FindAll(orders, Expression.Eq(property, value));
         }
-        #endregion
+		#endregion
 
-        #region Find/TryFind
+#region Find/TryFind
         /// <summary>
         /// Finds an object instance by a unique ID (typically primary key)
         /// </summary>
@@ -189,9 +189,9 @@ namespace Castle.ActiveRecord
         {
             return FindByPrimaryKey(id, false);
         }
-        #endregion
+		#endregion
 
-        #region FindFirst
+#region FindFirst
         /// <summary>
         /// Searches and returns the first row.
         /// </summary>
@@ -213,9 +213,9 @@ namespace Castle.ActiveRecord
         {
             return FindFirst(null, criterias);
         }
-        #endregion
+		#endregion
 
-        #region FindOne
+#region FindOne
         /// <summary>
         /// Searches and returns the a row. If more than one is found, 
         /// throws <see cref="ActiveRecordException"/>
@@ -233,9 +233,9 @@ namespace Castle.ActiveRecord
 
             return (result.Length == 0) ? default(T) : result[0];
         }
-        #endregion
+		#endregion
 
-        #region SlicedFindAll
+#region SlicedFindAll
         /// <summary>
         /// Returns a portion of the query results (sliced)
         /// </summary>
@@ -289,11 +289,11 @@ namespace Castle.ActiveRecord
         {
             return SlicedFindAll(firstResult, maxresults, null, criterias);
         }
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region Create
+#region Create
         /// <summary>
         /// Creates (Saves) a new instance to the database.
         /// </summary>
@@ -333,9 +333,9 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion
+		#endregion
 
-        #region Update
+#region Update
         /// <summary>
         /// Persists the modification on the instance state to the database.
         /// </summary>
@@ -371,9 +371,9 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion
+		#endregion
 
-        #region Save
+#region Save
         /// <summary>
         /// Saves the instance to the database
         /// </summary>
@@ -413,9 +413,9 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion
+		#endregion
 
-        #region Delete
+#region Delete
         /// <summary>
         /// Deletes the instance from the database.
         /// </summary>
@@ -455,14 +455,14 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion
+		#endregion
 
 		public static void Refresh(T instance)
 		{
 			ActiveRecordBase.Refresh(instance);
 		}
 
-        #region DeleteAll
+#region DeleteAll
         public static void DeleteAll()
         {
             Type type = typeof(T);
@@ -556,9 +556,9 @@ namespace Castle.ActiveRecord
 
             return counter;
         }
-        #endregion
+		#endregion
 
-        #region ExecuteQuery
+#region ExecuteQuery
         public static object ExecuteQuery(IActiveRecordQuery query)
         {
             Type targetType = query.Target;
@@ -602,9 +602,9 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion
+		#endregion
 
-        #region Exists
+#region Exists
         /// <summary>
         /// Check if the <paramref name="id"/> exists in the datastore.
         /// </summary>
@@ -618,13 +618,13 @@ namespace Castle.ActiveRecord
                 "select count(*) from {0} ar where ar.id = ?", arType.Name), id);
             return ExecuteQuery2(query) > 0;
         }
-         #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region protected internal static
+#region protected internal static
       
-        #region Execute
+#region Execute
         /// <summary>
         /// Invokes the specified delegate passing a valid 
         /// NHibernate session. Used for custom NHibernate queries.
@@ -661,9 +661,9 @@ namespace Castle.ActiveRecord
             }
         }
 
-        #endregion               
+		#endregion               
 
-        #region FindByPrimaryKey
+#region FindByPrimaryKey
         /// <summary>
         /// Finds an object instance by a unique ID
         /// </summary>
@@ -717,11 +717,11 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion        
+		#endregion        
 
-        #endregion
+		#endregion
 
-        #region private static
+#region private static
         private static T[] CreateReturnArray(ICriteria criteria)
         {
             System.Collections.IList result = criteria.List();
@@ -732,9 +732,9 @@ namespace Castle.ActiveRecord
             return array;
         }
 
-        #endregion
+		#endregion
 
-        #region protected internal
+#region protected internal
         /// <summary>
         /// Invokes the specified delegate passing a valid 
         /// NHibernate session. Used for custom NHibernate queries.
@@ -745,9 +745,9 @@ namespace Castle.ActiveRecord
         {
             return Execute(call, this as T);
         }
-        #endregion
+		#endregion
 
-        #region public virtual
+#region public virtual
         /// <summary>
         /// Saves the instance information to the database.
         /// May Create or Update the instance depending 
@@ -790,9 +790,9 @@ namespace Castle.ActiveRecord
         {
             ActiveRecordBase.Delete(this);
         }
-        #endregion
+		#endregion
 
-        #region public override
+#region public override
         public override String ToString()
         {
             Framework.Internal.ActiveRecordModel model = Framework.Internal.ActiveRecordModel.GetModel(typeof(T));
@@ -808,7 +808,7 @@ namespace Castle.ActiveRecord
 
             return base.ToString() + "#" + pkVal;
         }
-        #endregion
+		#endregion
     }
 }
 #endif

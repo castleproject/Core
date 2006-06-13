@@ -23,10 +23,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
     using System.Threading;
     using Castle.DynamicProxy.Builder.CodeBuilder;
     using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
-#if dotNet2
+#if DOTNET2
     using System.Runtime.CompilerServices;
 #endif
-    /// <summary>
+	/// <summary>
     /// Summary description for BaseCodeGenerator.
     /// </summary>
     [CLSCompliant(false)]
@@ -40,11 +40,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         private FieldReference _cacheField;
         private FieldReference _mixinField;
         private IList _generated = new ArrayList();
-#if dotNet2
+#if DOTNET2
         private ReaderWriterLock internalsToDynProxyLock = new ReaderWriterLock();
         private System.Collections.Generic.IDictionary<Assembly, bool> internalsToDynProxy = new System.Collections.Generic.Dictionary<Assembly, bool>();
 #endif
-        protected Type _baseType = typeof(Object);
+		protected Type _baseType = typeof(Object);
         protected EasyMethod _method2Invocation;
         protected object[] _mixins = new object[0];
 
@@ -459,7 +459,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
                 nameBuilder.Append(type.Namespace.Replace('.', '_'));
             if (type.DeclaringType != null)
                 nameBuilder.Append(type.DeclaringType.Name).Append("_");
-#if dotNet2
+#if DOTNET2
             if (type.IsGenericType)
             {
                 Type[] args = type.GetGenericArguments();
@@ -470,7 +470,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
                 }
             }
 #endif
-            nameBuilder.Append(type.Name);
+			nameBuilder.Append(type.Name);
             return nameBuilder.ToString();
         }
 
@@ -796,8 +796,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         }
 
         protected bool IsInternalToDynamicProxy(Assembly asm)
-        {
-#if dotNet2
+		{
+#if DOTNET2
             internalsToDynProxyLock.AcquireReaderLock(-1);
             try
             {
@@ -824,7 +824,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
                 internalsToDynProxyLock.ReleaseLock();
             }
 #else
-            return false;
+			return false;
 #endif
         }
     }

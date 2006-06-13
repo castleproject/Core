@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <project name="Common Build Properties">
-
 	<!-- Common properties that allow overrides -->
 
 	<property name="rootbuild.dir" value="${directory::get-current-directory()}" />
@@ -15,6 +14,9 @@
 	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
 	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
 	<property name="isMono" value="${string::starts-with(framework::get-target-framework(),'mono')}" />
+
+	<!-- Global compilation defines -->
+	<property name="define"     value="DOTNET2"     if="${framework::get-target-framework()=='net-2.0'}"/>
 
 	<!-- properties used to connect to database for testing -->
 	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />

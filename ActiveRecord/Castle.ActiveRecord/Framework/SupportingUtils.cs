@@ -164,7 +164,7 @@ namespace Castle.ActiveRecord.Framework
 
 		#endregion
 
-#if dotNet2
+#if DOTNET2
 
 		#region BuildObjectArray
 
