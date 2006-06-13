@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Threading;
-
 namespace Castle.MicroKernel.Handlers
 {
 	using System;
@@ -35,16 +33,15 @@ namespace Castle.MicroKernel.Handlers
 			AssertNotWaitingForDependency();
 
 #if DOTNET2
-			CreationContext newContext = new CreationContext(context.Dependencies,
-			                                                 ComponentModel.Service);
+			CreationContext newContext = new CreationContext(ComponentModel.Service);
 #else
-			CreationContext newContext = new CreationContext(context.Dependencies);
+			CreationContext newContext = new CreationContext();
 #endif
 
-            return lifestyleManager.Resolve(newContext);
+			return lifestyleManager.Resolve(newContext);
 		}
 
-	    public override void Release(object instance)
+		public override void Release(object instance)
 		{
 			lifestyleManager.Release(instance);
 		}

@@ -74,9 +74,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Castle\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll</HintPath>
+    <Reference Include="Castle.DynamicProxy">
+      <Name>Castle.DynamicProxy</Name>
+      <HintPath>..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

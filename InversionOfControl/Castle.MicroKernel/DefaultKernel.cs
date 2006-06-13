@@ -828,9 +828,9 @@ namespace Castle.MicroKernel
 		protected CreationContext CreateCreationContext(Type typeToExtractArguments)
 		{
 #if DOTNET2
-			return new CreationContext(new DependencyModel[0],typeToExtractArguments);
+			return new CreationContext(typeToExtractArguments);
 #else
-			return new CreationContext(new DependencyModel[0]);
+			return new CreationContext();
 #endif
 		}
 

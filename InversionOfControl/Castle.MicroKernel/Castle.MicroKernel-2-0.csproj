@@ -112,7 +112,6 @@
     <Compile Include="DefaultKernel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\CircularDependecyException.cs" />
     <Compile Include="Exceptions\ComponentNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>

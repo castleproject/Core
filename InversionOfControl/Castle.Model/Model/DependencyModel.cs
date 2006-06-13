@@ -66,11 +66,5 @@ namespace Castle.Model
 		{
 			get { return isOptional; }
 		}
-
-        public override string ToString()
-        {
-            return string.Format("{0} dependency '{1}' type '{2}'", this.DependencyType,
-                                 this.dependencyKey, this.TargetType);
-        }
 	}
 }
