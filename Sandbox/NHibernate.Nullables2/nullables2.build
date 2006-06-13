@@ -9,7 +9,8 @@
 	<property name="name" value="NHibernate.Nullables2" />
 	<property name="assembly.name" value="${name}.dll" />
 	
-	<property name="nullables2.test" value="${activerecord.test}" />
+	<property name="nullables2.test" value="${activerecord.test}" if="${property::exists('activerecord.test')}" />
+	<property name="nullables2.test" value="true" unless="${property::exists('nullables2.test')}" />
 
 	<property name="src.dir" value="${base.dir}/${name}" />
 	<property name="test.src.dir" value="${base.dir}/${name}.Tests" />
