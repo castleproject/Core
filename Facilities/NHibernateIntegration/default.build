@@ -30,6 +30,8 @@
 	</target>
 	
 	<target name="init" depends="clean">
+		<property name="define" value="${define};${strong}"/>
+		<property name="define" value="${define};DEBUG" if="${debug}"/>
 
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-container" inheritall="true" />
 
@@ -88,7 +90,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="${strong}"
+			define="${define}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"

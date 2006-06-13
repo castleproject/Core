@@ -16,37 +16,6 @@ namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 
-#if DOTNET2
-	using System.Collections.Generic;
-#endif
-
-	/// <summary>
-	/// Summary description for IGenericDao.
-	/// </summary>
-	/// <remarks>
-	/// Contributed by Steve Degosserie <steve.degosserie@vn.netika.com>
-	/// Ported to .net2 by Ernst Naezer <ernst@auxilium.nl>
-	/// </remarks>
-#if DOTNET2
-    public interface IGenericDao<T>
-    {
-        T[] FindAll();
-
-        T[] FindAll(int firstRow, int maxRows);
-
-        T FindById(object id);
-
-        T Create(T instance);
-
-        void Update(T instance);
-
-        void Delete(T instance);
-
-        void DeleteAll();
-
-        void Save(T instance);
-    }
-#else
 	/// <summary>
 	/// Summary description for IGenericDao.
 	/// </summary>
@@ -56,19 +25,19 @@ namespace Castle.Facilities.NHibernateIntegration
 	public interface IGenericDao
 	{
 		Array FindAll(Type type);
+
 		Array FindAll(Type type, int firstRow, int maxRows);
-
+		
 		object FindById(Type type, object id);
-
+		
 		object Create(object instance);
-
+		
 		void Update(object instance);
-
+		
 		void Delete(object instance);
-
+		
 		void DeleteAll(Type type);
-
+		
 		void Save(object instance);
 	}
-#endif
 }

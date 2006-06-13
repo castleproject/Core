@@ -1,9 +1,5 @@
 Version beta 3
 
-- Applied Ernst Naezer's patch adding support to generics
-
-  TODO: check whether the build file is able to use the DOTNET2 
-
 - Removed RegisterSessionFactory from ISessionManager
 
 - Used https://svn.sourceforge.net/svnroot/cuyahoga/trunk/Core/Facilities/ as inspiration

@@ -16,52 +16,15 @@ namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 
-#if DOTNET2
-	using System.Collections.Generic;
-#endif
-
-    using NHibernate.Expression;
+	using NHibernate.Expression;
 
 	/// <summary>
 	/// Summary description for INHibernateGenericDao.
 	/// </summary>
 	/// <remarks>
 	/// Contributed by Steve Degosserie <steve.degosserie@vn.netika.com>
-	/// Ported to .net2 by Ernst Naezer <ernst@auxilium.nl>	
-    /// </remarks>
-#if DOTNET2
-	public interface INHibernateGenericDao<T> : IGenericDao<T>
-	{
-		T[] FindAll(ICriterion[] criterias);
-
-		T[] FindAll(ICriterion[] criterias, int firstRow, int maxRows);
-
-		T[] FindAll(ICriterion[] criterias, Order[] sortItems);
-
-		T[] FindAll(ICriterion[] criterias, Order[] sortItems, int firstRow, int maxRows);
-
-		T[] FindAllWithCustomQuery(string queryString);
-
-		T[] FindAllWithCustomQuery(string queryString, int firstRow, int maxRows);
-
-		T[] FindAllWithNamedQuery(string namedQuery);
-
-		T[] FindAllWithNamedQuery(string namedQuery, int firstRow, int maxRows);
-
-		void InitializeLazyProperties(object instance);
-
-		void InitializeLazyProperty(object instance, string propertyName);
-	}
-
-#else
-        	
-    /// <summary>
-	/// Summary description for INHibernateGenericDao.
-	/// </summary>
-	/// <remarks>
-	/// Contributed by Steve Degosserie <steve.degosserie@vn.netika.com>
 	/// </remarks>
-    public interface INHibernateGenericDao : IGenericDao
+	public interface INHibernateGenericDao : IGenericDao
 	{
 		Array FindAll(Type type, ICriterion[] criterias);
 		
@@ -83,5 +46,4 @@ namespace Castle.Facilities.NHibernateIntegration
 		
 		void InitializeLazyProperty(object instance, string propertyName);
 	}
-#endif
 }
