@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 	public class StringTemplateViewEngine : ViewEngineBase
 	{
 		/// <summary>Maps controllers to [cached] ST groups for locating views templates</summary>
-		protected Hashtable area2templateManager;
+		protected Hashtable area2templateManager = new Hashtable();
 		protected StringTemplateGroup templateGroup;
 		protected STViewEngineConfiguration config;
 
@@ -135,7 +135,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 
 				if (context.Request.IsLocal)
 				{
-					SendErrorDetails(ex, writer);
+					SendErrorDetails(ex, writer, viewName);
 					return;
 				}
 				else
@@ -213,6 +213,12 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 			{
 				st = templateManager.GetInstanceOf(viewName.Replace('\\', '/'));
 			}
+
+            if (st == null)
+            {
+                throw new Castle.MonoRail.Framework.RailsException("Could not find the view: " + viewName);
+            }
+		    
 			return st;
 		}
 		
@@ -272,7 +278,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 			{
 				if (context.Request.IsLocal)
 				{
-					SendErrorDetails(ex, context.Response.Output);
+					SendErrorDetails(ex, context.Response.Output, "n/a");
 					return;
 				}
 				else
@@ -285,54 +291,70 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 		internal static void SetContextAsTemplateAttributes(IRailsEngineContext context, Controller controller, ref StringTemplate st)
 		{
 			st.SetAttribute(ConfigConstants.CONTROLLER_ATTRIB_KEY, controller);
-
 			st.SetAttribute(ConfigConstants.CONTEXT_ATTRIB_KEY,  context);
 			st.SetAttribute(ConfigConstants.REQUEST_ATTRIB_KEY,  context.Request);
 			st.SetAttribute(ConfigConstants.RESPONSE_ATTRIB_KEY, context.Response);
 			st.SetAttribute(ConfigConstants.SESSION_ATTRIB_KEY,  context.Session);
 
-			if (controller.Resources != null)
-			{
-				foreach(string key in controller.Resources.Keys)
-				{
-					st.SetAttribute( key, controller.Resources[ key ] );
-				}
-			}
+		    LoadResources(controller, st);
 
 //			foreach(object helper in controller.Helpers.Values)
 //			{
 //				st.SetAttribute(helper.GetType().Name, helper);
 //			}
 
-			foreach(string key in context.Params.AllKeys)
-			{
-				if (key == null)  continue; // Nasty bug?
-				object value = context.Params[key];
-				if (value == null) continue;
-				st.SetAttribute(key, value);
-				//innerContext[key] = value;
-			}
+		    LoadParams(context, st);
 
-			foreach(DictionaryEntry entry in context.Flash)
-			{
-				if (entry.Value == null) continue;
-				//innerContext[entry.Key] = entry.Value;
-				st.SetAttribute((string)entry.Key, entry.Value);
-			}
+		    LoadFlash(context, st);
 
-			foreach(DictionaryEntry entry in controller.PropertyBag)
-			{
-				if (entry.Value == null) continue;
-				//innerContext[entry.Key] = entry.Value;
-				st.SetAttribute((string)entry.Key, entry.Value);
-			}
+		    LoadPropertyBag(controller, st);
 
-			st.SetAttribute(ConfigConstants.SITEROOT_ATTRIB_KEY, context.ApplicationPath);
+		    st.SetAttribute(ConfigConstants.SITEROOT_ATTRIB_KEY, context.ApplicationPath);
 		}
 
-		private void SendErrorDetails(Exception ex, TextWriter writer)
+	    private static void LoadResources(Controller controller, StringTemplate st) {
+	        if (controller.Resources != null)
+	        {
+	            foreach(string key in controller.Resources.Keys)
+	            {
+	                st.SetAttribute( key, controller.Resources[ key ] );
+	            }
+	        }
+	    }
+
+	    private static void LoadParams(IRailsEngineContext context, StringTemplate st) {
+	        foreach(string key in context.Params.AllKeys)
+	        {
+	            if (key == null)  continue; // Nasty bug?
+	            object value = context.Params[key];
+	            if (value == null) continue;
+	            st.SetAttribute(key, value);
+	            //innerContext[key] = value;
+	        }
+	    }
+
+	    private static void LoadPropertyBag(Controller controller, StringTemplate st) {
+	        foreach(DictionaryEntry entry in controller.PropertyBag)
+	        {
+	            if (entry.Value == null) continue;
+	            //innerContext[entry.Key] = entry.Value;
+	            st.SetAttribute((string)entry.Key, entry.Value);
+	        }
+	    }
+
+	    private static void LoadFlash(IRailsEngineContext context, StringTemplate st) {
+	        foreach(DictionaryEntry entry in context.Flash)
+	        {
+	            if (entry.Value == null) continue;
+	            //innerContext[entry.Key] = entry.Value;
+	            st.SetAttribute((string)entry.Key, entry.Value);
+	        }
+	    }
+
+		private void SendErrorDetails(Exception ex, TextWriter writer, string viewName)
 		{
 			writer.WriteLine("<pre>");
+            writer.WriteLine("View Name: " + viewName);
 			writer.WriteLine(ex.ToString());
 			writer.WriteLine("</pre>");
 		}
