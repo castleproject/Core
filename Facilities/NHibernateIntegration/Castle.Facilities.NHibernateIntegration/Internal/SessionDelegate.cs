@@ -57,12 +57,34 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		#region ISession delegation
 
+#if DOTNET2
+		public T Get<T>(object id, LockMode lockMode)
+		{
+			return inner.Get<T>(id, lockMode);
+		}
+
+		public T Get<T>(object id)
+		{
+			return inner.Get<T>(id);
+		}
+
+		public T Load<T>(object id)
+		{
+			return inner.Load<T>(id);
+		}
+
+		public T Load<T>(object id, LockMode lockMode)
+		{
+			return inner.Load<T>(id, lockMode);
+		}
+#endif
+
 		public FlushMode FlushMode
 		{
 			get { return inner.FlushMode; }
 			set { inner.FlushMode = value; }
 		}
-		
+
 		public ISessionFactory SessionFactory
 		{
 			get { return inner.SessionFactory; }
@@ -87,17 +109,16 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			get { return inner.Transaction; }
 		}
-		
+
 		public void CancelQuery()
 		{
 			inner.CancelQuery();
 		}
-		
+
 		public bool IsDirty()
 		{
 			return inner.IsDirty();
 		}
-		
 
 		public void Flush()
 		{
@@ -273,7 +294,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			inner.Refresh(obj);
 		}
-		
+
 		public void Refresh(object obj, LockMode lockMode)
 		{
 			inner.Refresh(obj, lockMode);
@@ -360,7 +381,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		internal IDbConnection InternalClose(bool closing)
 		{
 			IDbConnection conn = null;
-	
+
 			sessionStore.Remove(this);
 
 			if (closing)
@@ -369,9 +390,9 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 
 			inner.Dispose();
-	
+
 			disposed = true;
-	
+
 			return conn;
 		}
 
@@ -382,12 +403,12 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			if (sdLeft != null && sdRight != null)
 			{
-				return Object.ReferenceEquals( sdLeft.inner, sdRight.inner );
+				return Object.ReferenceEquals(sdLeft.inner, sdRight.inner);
 			}
 			else
 			{
-				throw new NotSupportedException("AreEqual: left is " + 
-					left.GetType().Name + " and right is " + right.GetType().Name);
+				throw new NotSupportedException("AreEqual: left is " +
+				                                left.GetType().Name + " and right is " + right.GetType().Name);
 			}
 		}
 	}
