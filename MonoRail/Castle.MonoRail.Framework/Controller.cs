@@ -966,6 +966,12 @@ namespace Castle.MonoRail.Framework
 				{
 					aware.SetController(this);
 				}
+				
+				if (_helpers.Contains(helper.Name))
+				{
+					throw new ControllerException(String.Format("Found a duplicate helper " + 
+						"attribute named '{0}' on controller '{1}'", helper.Name, Name));
+				}
 
 				_helpers.Add(helper.Name, helperInstance);
 			}
