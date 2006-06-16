@@ -17,6 +17,7 @@ namespace Castle.Model.Internal
 	using System;
 	using System.Collections;
 
+	[Serializable]
 	public class LinkedList : IList
 	{
 		private LinkNode internalhead;
@@ -310,6 +311,7 @@ namespace Castle.Model.Internal
 		}
 	}
 
+	[Serializable]
 	class LinkNode
 	{
 		private object _value;
