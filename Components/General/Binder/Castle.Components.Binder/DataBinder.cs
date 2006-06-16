@@ -281,7 +281,7 @@ namespace Castle.Components.Binder
 
 						if (node.CanConvert)
 						{
-							object value = node.GetEntryValue(translatedParamName, prop.PropertyType, out conversionSucceeded);
+							object value = node.GetEntryValue(translatedParamName, propType, out conversionSucceeded);
 
 							if (conversionSucceeded)
 							{
@@ -290,7 +290,7 @@ namespace Castle.Components.Binder
 						}
 						else
 						{
-							object value = ConvertUtils.Convert(prop.PropertyType, 
+							object value = ConvertUtils.Convert(propType, 
 								translatedParamName, node, files, out conversionSucceeded);
 
 							if (conversionSucceeded && value != null)
