@@ -16,6 +16,7 @@ namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
+	using System.ComponentModel;
 	using System.Data;
 
 	public class DataReaderAdapter : IBindingDataSourceNode
@@ -128,7 +129,8 @@ namespace Castle.Components.Binder
 				}
 				else
 				{
-					throw new NotImplementedException("Only Int16, Int32 and Int64 enums types are supported");
+					throw new NotImplementedException("Only Int16, Int32 and Int64 " + 
+						"enums types are supported");
 				}
 			}
 			else if (desiredType == typeof(Guid))
@@ -137,7 +139,18 @@ namespace Castle.Components.Binder
 			}
 			else
 			{
-				return reader.GetValue(ordinal);
+				object val = reader.GetValue(ordinal);
+				
+				TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
+				
+				Type sourceType = (val != null ? val.GetType() : typeof(String));
+				
+				if (conv != null && conv.CanConvertFrom(sourceType))
+				{
+					return conv.ConvertFrom(val);
+				}
+				
+				return val;
 			}
 		}
 

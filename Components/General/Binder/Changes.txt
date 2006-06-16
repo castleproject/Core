@@ -1,6 +1,8 @@
 Beta 2
 ======
 
+- DataReaderAdapter: Added support for TypeConverters
+
 - Added two events to IDataBinder:
 
   BinderHandler OnBeforeBinding;

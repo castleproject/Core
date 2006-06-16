@@ -17,7 +17,7 @@ namespace Castle.Components.Binder.Tests
 	using System;
 	using System.Collections;
 	using System.Data;
-
+	using Nullables;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -59,6 +59,27 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsNotNull(contact);
 			Assert.AreEqual("hammett", contact.Name);
 			Assert.AreEqual("r pereira leite 44", contact.Address);
+		}
+
+		[Test]
+		public void UsingTypeConverter()
+		{
+			ArrayList data = new ArrayList();
+
+			data.Add( new object[] { "hammett", "r pereira leite 44", new DateTime(2006,7,16) } );
+
+			MockDataReader reader = new MockDataReader(data, new string[] { "name", "address", "dob" });
+			
+			DataReaderAdapter adapter = new DataReaderAdapter(reader);
+
+			DataBinder binder = new DataBinder();
+
+			Contact contact = (Contact) binder.BindObject(typeof(Contact), "", adapter);
+
+			Assert.IsNotNull(contact);
+			Assert.AreEqual("hammett", contact.Name);
+			Assert.AreEqual("r pereira leite 44", contact.Address);
+			Assert.IsTrue(contact.DOB.HasValue);
 		}
 
 		[Test]
@@ -341,6 +362,7 @@ namespace Castle.Components.Binder.Tests
 	{
 		private int age;
 		private String name, address;
+		private NullableDateTime dob;
 
 		public int Age
 		{
@@ -358,6 +380,12 @@ namespace Castle.Components.Binder.Tests
 		{
 			get { return address; }
 			set { address = value; }
+		}
+
+		public NullableDateTime DOB
+		{
+			get { return dob; }
+			set { dob = value; }
 		}
 	}
 }
