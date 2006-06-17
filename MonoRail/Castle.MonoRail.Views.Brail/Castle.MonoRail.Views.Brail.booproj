@@ -44,6 +44,14 @@
       <HintPath>..\..\SharedLibs\boo\anrControls.Markdown.NET.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Boo.Lang">
+      <HintPath>..\..\SharedLibs\boo\Boo.Lang.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Boo.Lang.Compiler">
+      <HintPath>..\..\SharedLibs\boo\Boo.Lang.Compiler.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TransformToBrailStep.boo" />

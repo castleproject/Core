@@ -34,7 +34,6 @@ public class BooViewEngine (ViewEngineBase):
 	
 	static options as BooViewEngineOptions
 	baseSavePath as string
-	commonScriptPath as string
 	
 	static def InitializeConfig():
 		InitializeConfig("brail")
@@ -51,10 +50,11 @@ public class BooViewEngine (ViewEngineBase):
 	override def Init(serviceProvider as IServiceProvider ):
 		super.Init(serviceProvider)
 		InitializeConfig() if options is null
-		baseDir = Path.GetDirectoryName(typeof(BooViewEngine).Assembly.Location)
+		baseDir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)
-		self.commonScriptPath = Path.Combine(ViewSourceLoader.ViewRootDir, options.CommonScriptsDirectory)
-		
+		if options.SaveToDisk and not Directory.Exists(self.baseSavePath):
+			Directory.CreateDirectory(self.baseSavePath)
+		CompileCommonScripts()
 		
 	# Just check if the filename exists, I'm not sure when it's called
 	override def HasTemplate(templateName as string):
@@ -134,15 +134,12 @@ public class BooViewEngine (ViewEngineBase):
 	# If an error occurs in batch compilation, then an attempt is made to compile just the single
 	# request file.
 	def CompileScript(filename as string, batch as bool) as Type:
+		filename = filename.Replace("/","\\") # normalize filename
 		inputs = GetInput(filename, batch)
 		name = NormalizeName(filename, batch)
 		result = DoCompile(inputs,name)
 		if result.Errors.Count:
 			if not batch:
-				#This can be very useful to figure out things, but it's also pretty bad
-				#security wise.
-				#code = BrailPreProcessor.Booify(System.IO.File.OpenText(filename).ReadToEnd())
-				#code = System.Web.HttpUtility.HtmlEncode(code)
 				raise RailsException("Error during compile:\r\n${result.Errors.ToString(true)}\r\n")
 			#error compiling a batch, let's try a single file
 			return CompileScript(filename,false)
@@ -160,6 +157,8 @@ public class BooViewEngine (ViewEngineBase):
 	def GetInput(filename as string, batch as bool) as (ICompilerInput):
 		return (CreateInput(filename),) if not batch
 		inputs = []
+		# use the System.IO.Path to get the folder name even though
+		# we are using the ViewSourceLoader to load the actual file
 		directory = Path.GetDirectoryName(filename)
 		for file in ViewSourceLoader.ListViews(directory):
 			inputs.Add(CreateInput(file))
@@ -219,7 +218,7 @@ public class BooViewEngine (ViewEngineBase):
 			return false
 		
 		# the demi.boo is stripped, but GetInput require it.
-		demiFile = Path.Combine(commonScriptPath,"demi.boo")
+		demiFile = Path.Combine(options.CommonScriptsDirectory,"demi.boo")
 		inputs = GetInput(demiFile,true)
 		compiler = SetupCompiler(inputs)
 		outputFile = Path.Combine(self.baseSavePath, "CommonScripts.dll")

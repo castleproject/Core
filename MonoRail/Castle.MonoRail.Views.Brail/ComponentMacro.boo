@@ -18,12 +18,20 @@ import Boo.Lang.Compiler
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.Ast.Visitors
 import Castle.MonoRail.Framework
+import Castle.MonoRail.Framework.Internal
 
 class ComponentMacro(AbstractAstMacro):
 
 	override def Expand(macro as MacroStatement):
 		if macro.Arguments.Count == 0:
 			raise RailsException("component must be called with a component name")
+			
+		method as Ast.Method
+		parent = macro.ParentNode
+		while not parent isa Ast.Method:
+			parent = parent.ParentNode
+		method = parent
+		
 		componentName = StringLiteralExpression(macro.Arguments[0].ToString())
 
 		# Make sure that hash table is an case insensitive one.
@@ -55,9 +63,22 @@ class ComponentMacro(AbstractAstMacro):
 		mie.Arguments.Add( AstUtil.CreateReferenceExpression("componentContext.ContextVars") )
 		block.Add( mie )
 		
-		# component = viewEngine.ViewComponentFactory.Create("componentName")
-		createComponent = MethodInvocationExpression( 
-				Target: AstUtil.CreateReferenceExpression("viewEngine.ViewComponentFactory.Create"))
+		viewComponentFactoryLocal = CodeBuilder.DeclareLocal(method,"viewComponentFactory", 
+			TypeSystemServices.Map( IViewComponentFactory) )
+		
+		# viewComponentFactory = MonoRailHttpHandler.CurrentContext.GetService(IViewComponentFactory)
+		callService = MethodInvocationExpression(
+			Target: AstUtil.CreateReferenceExpression("MonoRailHttpHandler.CurrentContext.GetService") )
+		callService.Arguments.Add( CodeBuilder.CreateTypeofExpression( IViewComponentFactory ) )
+		
+		block.Add(BinaryExpression(Operator: BinaryOperatorType.Assign,
+			Left:  CodeBuilder.CreateLocalReference("viewComponentFactory",viewComponentFactoryLocal),  
+			Right: callService ) )
+		
+		# component = viewComponentFactory.Create( componentName)
+		createComponent = MethodInvocationExpression(
+				Target: MemberReferenceExpression( CodeBuilder.CreateLocalReference("viewComponentFactory",viewComponentFactoryLocal),
+					"Create") )
 		createComponent.Arguments.Add( componentName )
 		block.Add(BinaryExpression(Operator: BinaryOperatorType.Assign,
 			Left: ReferenceExpression("component"),
