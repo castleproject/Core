@@ -26,7 +26,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 		DoGet("apppath/index.rails")
 		AssertReplyEqualTo("Current apppath is ")
 	
-	[Test, Ignore("Ní sure how to get the view source loader to tell if a file has changed")]
+	[Test]
 	def AppPathChangeOnTheFly():
 		script = Path.Combine(GetPhysicalDir(),"""Views\AppPath\Index.boo""")
 		newContent = "new content"
@@ -64,7 +64,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 		AssertReplyEqualTo(expected)
 
 	
-	[Test, Ignore("Ní sure how to get the view source loader to tell if a file has changed")]
+	[Test]
 	def CommonScriptsChangeOnTheFly():
 		common = Path.Combine(GetPhysicalDir(),"""Views\CommonScripts\Hello.boo""")
 		using read = File.OpenText(common ):

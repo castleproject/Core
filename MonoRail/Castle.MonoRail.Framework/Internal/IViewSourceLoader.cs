@@ -56,5 +56,10 @@ namespace Castle.MonoRail.Framework
 		/// 
 		/// </summary>
 		IList AdditionalSources { get; }
+
+		/// <summary>
+		/// Raised when the view is changed.
+		/// </summary>
+		event FileSystemEventHandler ViewChanged;
 	}
 }

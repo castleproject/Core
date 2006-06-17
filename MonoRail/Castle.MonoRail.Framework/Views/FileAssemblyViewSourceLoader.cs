@@ -29,6 +29,7 @@ namespace Castle.MonoRail.Framework
 		private readonly IList additionalSources = new ArrayList();
 		private String viewRootDir;
 		private bool enableCache = true;
+		private FileSystemWatcher viewFolderWatcher;
 
 		public void Init(IServiceProvider serviceProvider)
 		{
@@ -101,6 +102,76 @@ namespace Castle.MonoRail.Framework
 			get { return additionalSources; }
 		}
 
+		#region Handle File System Changes To Views
+
+		/// <summary>
+		/// Raised when the view is changed.
+		/// </summary>
+		public event FileSystemEventHandler ViewChanged
+		{
+		    add
+		    {
+		        //avoid concurrency problems with creating/removing the watcher
+		        //in two threads in parallel. Unlikely, but better to be safe.
+		        lock(this)
+		        {
+		            //create the watcher if it doesn't exists
+		            if (viewFolderWatcher == null)
+		                InitViewFolderWatch();
+		            ViewChangedImpl += value;
+		        }
+		    }
+		    remove
+		    {
+		        //avoid concurrency problems with creating/removing the watcher
+		        //in two threads in parallel. Unlikely, but better to be safe.
+		        lock(this)
+		        {
+		            ViewChangedImpl -= value;
+		            if (ViewChangedImpl == null)//no more subscribers.
+		            {
+		                DisposeViewFolderWatch();
+		            }
+		        }
+		    }
+		}
+
+		private event FileSystemEventHandler ViewChangedImpl;
+		
+		private void DisposeViewFolderWatch()
+		{
+			ViewChangedImpl -= new FileSystemEventHandler(viewFolderWatcher_Changed);
+			viewFolderWatcher.Dispose();
+		}
+
+		private void InitViewFolderWatch()
+		{
+			
+			viewFolderWatcher = new FileSystemWatcher(ViewRootDir);
+			//need all of those because VS likes to play games
+			//with the way it is saving files.
+			viewFolderWatcher.NotifyFilter = NotifyFilters.CreationTime |
+			                                 NotifyFilters.DirectoryName |
+			                                 NotifyFilters.FileName |
+			                                 NotifyFilters.LastWrite |
+			                                 NotifyFilters.Size;
+			viewFolderWatcher.IncludeSubdirectories = true;
+			viewFolderWatcher.Changed += new FileSystemEventHandler(viewFolderWatcher_Changed);
+			viewFolderWatcher.EnableRaisingEvents = true;
+		}
+
+		private void viewFolderWatcher_Changed(object sender, FileSystemEventArgs e)
+		{
+			//shouldn't ever happen, because we make sure that the watcher is only 
+			//active when there are subscribers, but checking will prevent possible concrureny issues with it.
+			FileSystemEventHandler temp = ViewChangedImpl;
+			if (temp != null)
+				temp(this, e);
+		}
+
+		#endregion
+
+		
 		private bool HasTemplateOnFileSystem(string templateName)
 		{
 			return CreateFileInfo(templateName).Exists;

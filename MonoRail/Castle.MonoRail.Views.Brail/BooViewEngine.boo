@@ -55,6 +55,16 @@ public class BooViewEngine (ViewEngineBase):
 		if options.SaveToDisk and not Directory.Exists(self.baseSavePath):
 			Directory.CreateDirectory(self.baseSavePath)
 		CompileCommonScripts()
+		ViewSourceLoader.ViewChanged += def(sender, e as FileSystemEventArgs):
+			if e.FullPath.IndexOf(options.CommonScriptsDirectory)!=-1:
+				# need to invalidate the entire CommonScripts assembly
+				# not worrying about concurrency here, since it is assumed
+				# that changes here are rare. Note, this force recompile of the 
+				# whole site.
+				CompileCommonScripts()	
+				return
+			# Will cause a recompilation
+			compilations[e.Name] = null
 		
 	# Just check if the filename exists, I'm not sure when it's called
 	override def HasTemplate(templateName as string):
@@ -169,7 +179,12 @@ public class BooViewEngine (ViewEngineBase):
 		viewSrc = ViewSourceLoader.GetViewSource(name)
 		if viewSrc is null:
 			raise RailsException("${name} is not a valid view")
-		return ReaderInput(name, StreamReader(viewSrc.OpenViewStream()))
+		# I need to do it this way because I can't tell 
+		# when to dispose of the stream. 
+		# It is not expected that this will be a big problem, the string
+		# will go away after the compile is done with them.
+		using stream = StreamReader(viewSrc.OpenViewStream()):
+			return StringInput(name, stream.ReadToEnd())
 	
 	# Perform the actual compilation of the scripts
 	# Things to note here:
