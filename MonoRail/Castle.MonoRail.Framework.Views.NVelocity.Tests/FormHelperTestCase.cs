@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("formhelper/save.rails");
 			AssertSuccess();
-			AssertReplyEqualTo("True False");
+			AssertReplyEqualTo("False False");
 
 			DoGet("formhelper/save.rails", "model.SubscribeMe=true");
 			AssertSuccess();
