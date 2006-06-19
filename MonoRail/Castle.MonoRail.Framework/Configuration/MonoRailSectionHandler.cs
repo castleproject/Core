@@ -42,6 +42,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private static readonly String Custom_Filter_Factory_Node_Name = "customFilterFactory";
 		private static readonly String View_Path_Root = "viewPathRoot";
 		private static readonly String Cache_Provider = "cacheProvider";
+        private static readonly String Scaffolding_Support = "scaffoldingSupport";
 
 		#endregion
 
@@ -127,6 +128,10 @@ namespace Castle.MonoRail.Framework.Configuration
 				{
 					ProcessCacheProvider(node, config);
 				}
+                else if (String.Compare(Scaffolding_Support, node.Name, true) == 0)
+                {
+                    ProcessScaffoldingSupport(node, config);
+                }
 			}
 
 			Validate(config);
@@ -295,9 +300,23 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#endregion
 
-		#region Routing Configuration
+        #region Scaffolding Support
 
-		private void ProcessRoutingNode(XmlNode routingNode, MonoRailConfiguration config)
+        private void ProcessScaffoldingSupport(XmlNode node, MonoRailConfiguration config)
+        {
+            XmlAttribute scaffoldingSupport = node.Attributes["type"];
+
+            if (scaffoldingSupport != null)
+            {
+                config.ScaffoldingTypeName = scaffoldingSupport.Value;
+            }
+        }
+
+        #endregion
+
+        #region Routing Configuration
+
+        private void ProcessRoutingNode(XmlNode routingNode, MonoRailConfiguration config)
 		{
 			foreach(XmlNode node in routingNode.ChildNodes)
 			{
@@ -397,6 +416,10 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				ValidateTypeImplements(config.CacheProviderType, typeof(ICacheProvider));
 			}
+            if (config.ScaffoldingType != null)
+            {
+                ValidateTypeImplements(config.ScaffoldingType, typeof(IScaffoldingSupport));
+            }
 			if (config.CustomViewComponentFactory != null)
 			{
 				ValidateTypeImplements(config.CustomViewComponentFactory, typeof(IViewComponentFactory));
