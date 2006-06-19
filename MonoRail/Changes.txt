@@ -4,6 +4,28 @@ Change history
 Release Candidate 1
 ===================
 
+- FormHelper: fixed Checkbox behavior with databinder by adding a hidden 
+  field with the same name but carrying the 'false' value. The false value
+  can be overriden with a key 'falseValue' if you're working with a non-boolean
+  
+  For example
+  
+  FormHelper.CheckboxField("some.property")
+  
+  Will render
+  
+  <input type="checkbox" id="some_property" name="some.property" value="true" />
+  <input type="hidden" id="some_propertyH" name="some.property" value="false" />
+
+
+  FormHelper.CheckboxField("acceptDisclaimer", %{trueValue = 'accept', hiddenValue = 'reject'})
+  
+  Will render
+  
+  <input type="checkbox" id="acceptDisclaimer" name="acceptDisclaimer" value="accept" />
+  <input type="hidden" id="acceptDisclaimerH" name="acceptDisclaimer" value="reject" />
+
+
 - Applied Ernst Naezer's patch to allow MR to throw a descriptive
   exception message when two helpers are registered using the same key
 

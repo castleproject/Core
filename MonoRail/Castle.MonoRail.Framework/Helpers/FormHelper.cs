@@ -174,12 +174,29 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CheckboxField(target, null);
 		}
 
+		/// <summary>
+		/// Document the entries trueValue and falseValue
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="attributes"></param>
+		/// <returns></returns>
 		public String CheckboxField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
+			
+			String trueValue = ObtainEntryAndRemove(attributes, "trueValue");
+			
+			bool isChecked;
 
-			bool isChecked = ((value != null && value is bool && ((bool)value) == true) || 
-				(!(value is bool) && (value != null)));
+			if (trueValue != null)
+			{
+				isChecked = AreEqual(value, trueValue);
+			}
+			else
+			{
+				isChecked = ((value != null && value is bool && ((bool)value)) || 
+					(!(value is bool) && (value != null)));
+			}
 
 			if (isChecked)
 			{
@@ -191,7 +208,14 @@ namespace Castle.MonoRail.Framework.Helpers
 				AddChecked(attributes);
 			}
 
-			return CreateInputElement("checkbox", target, "true", attributes);
+			String hiddenElementId = CreateHtmlId(attributes, target) + "H";
+			String hiddenElementValue = ObtainEntryAndRemove(attributes, "falseValue", "false");
+
+			String result = CreateInputElement("checkbox", target, "true", attributes);
+			
+			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
+			
+			return result;
 		}
 
 		#endregion
@@ -267,14 +291,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (attributes != null)
 			{
-				firstOption = (String) attributes["firstoption"];
-				attributes.Remove("firstoption");
+				firstOption = ObtainEntryAndRemove(attributes, "firstoption");
 				
-				valueProperty = (String) attributes["value"];
-				attributes.Remove("value");
+				valueProperty = ObtainEntryAndRemove(attributes, "value");
 				
-				textProperty = (String) attributes["text"];
-				attributes.Remove("text");
+				textProperty = ObtainEntryAndRemove(attributes, "text");
 
 				if (attributes.Contains("name"))
 				{
@@ -400,30 +421,22 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		protected String CreateInputElement(String type, String target, Object value, IDictionary attributes)
 		{
-			if (value == null && attributes != null)
+			if (value == null)
 			{
-				value = attributes["defaultValue"];
-
-				attributes.Remove("defaultValue");
+				value = ObtainEntryAndRemove(attributes, "defaultValue");
 			}
 
 			value = value == null ? "" : value;
 
-			String id = null;
+			string id = CreateHtmlId(attributes, target);
 
-			if (attributes != null && attributes.Contains("id"))
-			{
-				id = (String) attributes["id"];
+			return CreateInputElement(type, id, target, value, attributes);
+		}
 
-				attributes.Remove("id");
-			}
-			else
-			{
-				id = CreateHtmlId(target);
-			}
-
+		protected string CreateInputElement(String type, String id, String target, object value, IDictionary attributes)
+		{
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
-				type, id, target, value, GetAttributes(attributes));
+			                     type, id, target, value, GetAttributes(attributes));
 		}
 
 		protected object ObtainValue(String target)
@@ -545,9 +558,42 @@ namespace Castle.MonoRail.Framework.Helpers
 			return rootInstance;
 		}
 
+		protected static string CreateHtmlId(IDictionary attributes, String target)
+		{
+			String id = ObtainEntryAndRemove(attributes, "id");
+
+			if (id == null)
+			{
+				id = CreateHtmlId(target);
+			}
+			
+			return id;
+		}
+		
+		protected static String ObtainEntryAndRemove(IDictionary attributes, String key, String defaultValue)
+		{
+			String value = ObtainEntryAndRemove(attributes, key);
+			
+			return value != null ? value : defaultValue;
+		}
+		
+		protected static String ObtainEntryAndRemove(IDictionary attributes, String key)
+		{
+			String value = null;
+			
+			if (attributes != null && attributes.Contains(key))
+			{
+				value = (String) attributes[key];
+
+				attributes.Remove(key);
+			}
+			
+			return value;
+		}
+
 		#endregion
 
-		#region Private helpers
+		#region private helpers
 
 		private void AssertIsValidArray(object instance, string property, int index)
 		{

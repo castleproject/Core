@@ -105,16 +105,23 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			product.IsAvailable = false;
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" />", 
+			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" />" + 
+				"<input type=\"hidden\" id=\"product_isavailableH\" name=\"product.isavailable\" value=\"false\" />", 
 				helper.CheckboxField("product.isavailable"));
 
 			product.IsAvailable = true;
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" checked=\"checked\" />", 
+			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" checked=\"checked\" />" + 
+				"<input type=\"hidden\" id=\"product_isavailableH\" name=\"product.isavailable\" value=\"false\" />", 
 				helper.CheckboxField("product.isavailable"));
 
-			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />", 
+			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />" + 
+				"<input type=\"hidden\" id=\"sendemailH\" name=\"sendemail\" value=\"false\" />", 
 				helper.CheckboxField("sendemail"));
+
+			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked=\"checked\" />" + 
+				"<input type=\"hidden\" id=\"sendemailH\" name=\"sendemail\" value=\"0\" />", 
+				helper.CheckboxField("sendemail", new DictHelper().CreateDict("falseValue=0")));
 		}
 
 		[Test]

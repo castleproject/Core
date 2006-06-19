@@ -232,6 +232,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\FormHelperController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\HelperController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -373,6 +378,10 @@
                 />
                 <File
                     RelPath = "views\flash\validateRequest.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\formhelper\index.vm"
                     BuildAction = "None"
                 />
                 <File
