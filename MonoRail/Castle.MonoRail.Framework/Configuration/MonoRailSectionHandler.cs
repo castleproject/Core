@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private static readonly String Custom_Filter_Factory_Node_Name = "customFilterFactory";
 		private static readonly String View_Path_Root = "viewPathRoot";
 		private static readonly String Cache_Provider = "cacheProvider";
-        private static readonly String Scaffolding_Support = "scaffoldingSupport";
+		private static readonly String Scaffolding_Support = "scaffoldingSupport";
 
 		#endregion
 
@@ -128,10 +128,10 @@ namespace Castle.MonoRail.Framework.Configuration
 				{
 					ProcessCacheProvider(node, config);
 				}
-                else if (String.Compare(Scaffolding_Support, node.Name, true) == 0)
-                {
-                    ProcessScaffoldingSupport(node, config);
-                }
+				else if (String.Compare(Scaffolding_Support, node.Name, true) == 0)
+				{
+					ProcessScaffoldingSupport(node, config);
+				}
 			}
 
 			Validate(config);
@@ -300,19 +300,19 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#endregion
 
-        #region Scaffolding Support
+		#region Scaffolding Support
 
-        private void ProcessScaffoldingSupport(XmlNode node, MonoRailConfiguration config)
-        {
-            XmlAttribute scaffoldingSupport = node.Attributes["type"];
+		private void ProcessScaffoldingSupport(XmlNode node, MonoRailConfiguration config)
+		{
+			XmlAttribute scaffoldingSupport = node.Attributes["type"];
 
-            if (scaffoldingSupport != null)
-            {
-                config.ScaffoldingTypeName = scaffoldingSupport.Value;
-            }
-        }
+			if (scaffoldingSupport != null)
+			{
+				config.ScaffoldingTypeName = scaffoldingSupport.Value;
+			}
+		}
 
-        #endregion
+		#endregion
 
         #region Routing Configuration
 
