@@ -69,7 +69,14 @@ namespace Castle.Components.Binder
 			}
 			else if (desiredType == typeof(String))
 			{
-				return reader.GetString(ordinal);
+				String value = reader.GetString(ordinal);
+				
+				if (value != null)
+				{
+					value = value.Trim();
+				}
+				
+				return value;
 			}
 			else if (desiredType == typeof(Boolean))
 			{
