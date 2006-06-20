@@ -431,11 +431,16 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			string id = CreateHtmlId(attributes, target);
 
-			return CreateInputElement(type, id, target, value, attributes);
+			return CreateInputElement(type, id, target, value.ToString(), attributes);
 		}
 
-		protected string CreateInputElement(String type, String id, String target, object value, IDictionary attributes)
+		protected string CreateInputElement(String type, String id, String target, String value, IDictionary attributes)
 		{
+			if (Controller.Context != null) // We have a context
+			{
+				value = HtmlEncode(value);
+			}
+			
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
 			                     type, id, target, value, GetAttributes(attributes));
 		}
