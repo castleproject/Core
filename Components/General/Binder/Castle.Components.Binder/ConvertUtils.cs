@@ -212,6 +212,11 @@ namespace Castle.Components.Binder
 				}
 				else
 				{
+					if (value.IndexOf(',') != -1)
+					{
+						value = value.Substring(0, value.IndexOf(','));
+					}
+					
 					bool performNumericConversion = false;
 					
 					foreach(char c in value.ToCharArray())
