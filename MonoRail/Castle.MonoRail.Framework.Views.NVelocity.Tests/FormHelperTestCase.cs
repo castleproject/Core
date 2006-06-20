@@ -23,6 +23,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	public class FormHelperTestCase : AbstractMRTestCase
 	{
 		[Test]
+		public void ParamsAreUsedByFormHelper()
+		{
+			DoGet("formhelper/UseParamsToFillInputs.rails", "somearg=abc", "otherarg=123");
+			AssertSuccess();
+			AssertReplyEqualTo("<input type=\"hidden\" id=\"somearg\" name=\"somearg\" value=\"abc\" />\r\n<input type=\"text\" id=\"otherarg\" name=\"otherarg\" value=\"123\" />");
+		}
+
+		[Test]
 		public void CheckBoxBinding()
 		{
 			DoGet("formhelper/save.rails");

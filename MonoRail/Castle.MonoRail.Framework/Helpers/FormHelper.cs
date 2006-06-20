@@ -30,7 +30,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		PropertyBag,
 		Flash,
 		Session,
-		Request
+		Request, 
+		Params
 	}
 
 	/// <summary>
@@ -549,6 +550,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Session))
 			{
 				rootInstance = Controller.Context.Session[target];
+			}
+			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Params))
+			{
+				rootInstance = Controller.Params[target];
 			}
 			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Request))
 			{

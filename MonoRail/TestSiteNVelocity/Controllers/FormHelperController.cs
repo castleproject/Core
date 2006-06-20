@@ -27,6 +27,11 @@ namespace TestSiteNVelocity.Controllers
 		{
 			RenderText(model.hasSet.ToString() + " " + model.SubscribeMe);
 		}
+		
+		public void UseParamsToFillInputs()
+		{
+			
+		}
 	}
 	
 	public class TestModel

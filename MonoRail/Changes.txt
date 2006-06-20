@@ -4,6 +4,8 @@ Change history
 Release Candidate 1
 ===================
 
+- FormHelper: Now it can fill parameters with the values from the Request.Params
+
 - FormHelper: fixed Checkbox behavior with databinder by adding a hidden 
   field with the same name but carrying the 'false' value. The false value
   can be overriden with a key 'falseValue' if you're working with a non-boolean

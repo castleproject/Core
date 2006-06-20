@@ -385,6 +385,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\formhelper\useparamstofillinputs.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\helper\DictHelperUsage.vm"
                     BuildAction = "None"
                 />
