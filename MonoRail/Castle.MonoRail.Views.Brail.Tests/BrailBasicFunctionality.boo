@@ -35,7 +35,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 		using write = File.CreateText(script):
 			write.Write(newContent)
 		# Wait half a sec so Brail could pick up that a change in the file occured.
-		System.Threading.Thread.Sleep(100)
+		System.Threading.Thread.Sleep(500)
 		try:
 			DoGet("apppath/index.rails")
 			AssertReplyEqualTo(newContent)
