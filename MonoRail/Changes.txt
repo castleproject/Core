@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- MR-125 testsupport doesn't handle posting to smart dispatcher controller 
+  Fixed by Andrei Shires <andrei@internetware.co.uk>
+
 - FormHelper: Now it can fill parameters with the values from the Request.Params
 
 - FormHelper: fixed Checkbox behavior with databinder by adding a hidden 

@@ -129,6 +129,9 @@ namespace Castle.MonoRail.TestSupport
 				Request.QueryStringParams = qs.Split('&');
 			}
 
+			//Set the content type so that the post data comes through.
+			Request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
 			Request.Url = path;
 			Request.Verb = "POST";
 			
