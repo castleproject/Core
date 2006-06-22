@@ -63,5 +63,39 @@ namespace Castle.Facilities.Remoting.Tests
 
 			return (IWindsorContainer) handle.Unwrap();
 		}
+
+		protected IWindsorContainer GetContainer(AppDomain domain, String configFile)
+		{
+			ObjectHandle handle = domain.CreateInstance( 
+				typeof(ContainerPlaceHolder).Assembly.FullName, 
+				typeof(ContainerPlaceHolder).FullName, false, BindingFlags.Instance|BindingFlags.Public, null, 
+				new object[] { configFile }, 
+				CultureInfo.InvariantCulture, null, null );
+
+			ContainerPlaceHolder holder = handle.Unwrap() as ContainerPlaceHolder;
+
+			return holder.Container;
+		}
+	}
+
+	public class ContainerPlaceHolder
+	{
+		private static IWindsorContainer _container;
+
+		public ContainerPlaceHolder(string configFile)
+		{
+			if (_container == null)
+			{
+				_container = new WindsorContainer(configFile);
+			}
+		}
+
+		public IWindsorContainer Container
+		{
+			get
+			{
+				return _container;
+			}
+		}
 	}
 }

@@ -37,6 +37,28 @@ namespace Castle.Facilities.Remoting.Tests
 			clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerConsumingRemoteComponentCallback));
 		}
 
+		[Test, Ignore("Fixing")]
+		public void ServerRestarted()
+		{
+			clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerInvokingRemoteComponent));
+
+			serverContainer.Dispose();
+			AppDomain.Unload(serverDomain);
+
+			serverDomain = AppDomainFactory.Create("server");
+			serverContainer = CreateRemoteContainer(serverDomain, GetServerConfigFile() );
+
+			clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerInvokingRemoteComponent));
+		}
+
+		[Test, Ignore("Fixing")]
+		public void ClientDisposal()
+		{
+			IWindsorContainer clientContainer = GetClientContainer();
+
+			clientContainer.Dispose();
+		}
+
 		public void ClientContainerConsumingRemoteComponentCallback()
 		{
 			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, 
@@ -48,6 +70,24 @@ namespace Castle.Facilities.Remoting.Tests
 			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service) );
 
 			Assert.AreEqual(10, service.Sum(7,3));
+		}
+
+		public void ClientContainerInvokingRemoteComponent()
+		{
+			IWindsorContainer clientContainer = GetClientContainer();
+
+			ICalcService service = (ICalcService) clientContainer[ typeof(ICalcService) ];
+
+			Assert.IsTrue( RemotingServices.IsTransparentProxy(service) );
+			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service) );
+
+			Assert.AreEqual(10, service.Sum(7,3));
+		}
+
+		private IWindsorContainer GetClientContainer()
+		{
+			return GetContainer(clientDomain, 
+			                             "../Castle.Facilities.Remoting.Tests/client_kernelcomponent.xml");
 		}
 	}
 }
