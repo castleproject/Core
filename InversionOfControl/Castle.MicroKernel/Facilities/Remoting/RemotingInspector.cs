@@ -126,7 +126,9 @@ namespace Castle.Facilities.Remoting
 				case RemotingStrategy.RecoverableComponent:
 				{
 					CheckURIIsNotNull(uri, model.Name);
-					
+
+					ValidateLifeStyle(model);
+
 					localRegistry.AddComponentEntry( model );
 					
 					model.ExtendedProperties.Add("remoting.uri", uri);
@@ -136,6 +138,14 @@ namespace Castle.Facilities.Remoting
 					
 					break;
 				}
+			}
+		}
+
+		private static void ValidateLifeStyle(ComponentModel model)
+		{
+			if (model.LifestyleType != LifestyleType.Singleton && model.LifestyleType != LifestyleType.Undefined)
+			{
+				throw new FacilityException(string.Format("Component {0} isn't a Singleton (Lifestyle)", model.Name));
 			}
 		}
 

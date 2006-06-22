@@ -29,7 +29,6 @@ namespace Castle.Facilities.Remoting
 
 		private bool isServer, isClient;
 		private bool disconnectLocalRegistry;
-		private bool disconnectRemoteRegistry;
 		
 		/// <summary>
 		/// Used for client side (Expand explanation)
@@ -135,8 +134,6 @@ namespace Castle.Facilities.Remoting
 
 			remoteRegistry = (RemotingRegistry) 
 				RemotingServices.Connect( typeof(RemotingRegistry), remoteKernelUri );
-
-			disconnectRemoteRegistry = true;
 		}
 
 		private void ObtainConverter()
@@ -147,8 +144,6 @@ namespace Castle.Facilities.Remoting
 		public override void Dispose()
 		{
 			if (disconnectLocalRegistry) RemotingServices.Disconnect(localRegistry);
-
-			if (disconnectRemoteRegistry) remoteRegistry.Dispose();
 
 			base.Dispose();
 		}
