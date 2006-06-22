@@ -16,6 +16,7 @@ namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Data;
 
@@ -290,6 +291,7 @@ namespace Castle.Components.Binder
 		private IBindingDataSourceNode[] BuildNodes()
 		{
 			string[] fields = GetFields();
+			int[] indexesToSkip = FindDuplicateFields(fields);
 
 			ArrayList nodes = new ArrayList();
 
@@ -301,6 +303,10 @@ namespace Castle.Components.Binder
 
 				for(int i=0; i<reader.FieldCount; i++)
 				{
+					// Is in the skip list?
+					if (Array.IndexOf(indexesToSkip, i) >= 0) continue;
+					
+					// Is null?
 					if (reader.IsDBNull(i)) continue;
 
 					node.ProcessEntry(fields[i], reader.GetValue(i).ToString());
@@ -312,6 +318,37 @@ namespace Castle.Components.Binder
 			}
 
 			return (IBindingDataSourceNode[]) nodes.ToArray(typeof(IBindingDataSourceNode));
+		}
+
+		/// <summary>
+		/// Check the fields for duplicates.
+		/// </summary>
+		/// <param name="fields"></param>
+		/// <returns></returns>
+		/// <remarks>
+		/// I have to add this check as some stored procedures
+		/// return duplicate columns (doh!) and this isn't good
+		/// for the binder.
+		/// </remarks>
+		private int[] FindDuplicateFields(string[] fields)
+		{
+			HybridDictionary dict = new HybridDictionary(fields.Length, true);
+			ArrayList duplicateList = new ArrayList();
+			
+			for(int i=0; i < fields.Length; i++)
+			{
+				String field = fields[i];
+				
+				if (dict.Contains(field))
+				{
+					duplicateList.Add(i);
+					continue;
+				}	
+				
+				dict.Add(field, String.Empty);
+			}
+			
+			return (int[]) duplicateList.ToArray(typeof(int));
 		}
 
 		private string[] GetFields()

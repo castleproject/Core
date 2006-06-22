@@ -1,6 +1,8 @@
 Beta 2
 ======
 
+- Added check for duplicate fields in DataReaderAdapter. 
+
 - DataReaderAdapter: Added support for TypeConverters
 
 - Added two events to IDataBinder:
