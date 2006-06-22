@@ -6,19 +6,20 @@
     <facility 
 		id="remote.facility" 
 		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
-		isServer="true"
-		registryUri="kernel.rem"
-		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfig.config" />
-  
+		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfigClient.config"
+		isClient="true"
+		remoteKernelUri="tcp://localhost:12134/kernel.rem"
+		baseUri="tcp://localhost:12134" />
+      
   </facilities>
   
   <components>
   
     <component 
-		id="calc.service" 
+		id="calc.service.c1"
 		service="Castle.Facilities.Remoting.TestComponents.ICalcService, Castle.Facilities.Remoting.TestComponents"
 		type="Castle.Facilities.Remoting.TestComponents.CalcServiceImpl, Castle.Facilities.Remoting.TestComponents"
-		remoteserver="component" />
+		remoteclient="component" />
   
   </components>
 

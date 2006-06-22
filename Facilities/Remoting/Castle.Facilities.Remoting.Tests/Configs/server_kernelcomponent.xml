@@ -8,21 +8,16 @@
 		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
 		isServer="true"
 		registryUri="kernel.rem"
-		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfig.config" />
+		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfig.config" />
   
   </facilities>
   
   <components>
   
     <component 
-		id="myinterceptor"
-		type="Castle.Facilities.Remoting.TestComponents.ChangeResultInterceptor, Castle.Facilities.Remoting.TestComponents"
-		/>
-  
-    <component 
 		id="calc.service" 
 		service="Castle.Facilities.Remoting.TestComponents.ICalcService, Castle.Facilities.Remoting.TestComponents"
-		type="Castle.Facilities.Remoting.TestComponents.InterceptableCalcService, Castle.Facilities.Remoting.TestComponents"
+		type="Castle.Facilities.Remoting.TestComponents.CalcServiceImpl, Castle.Facilities.Remoting.TestComponents"
 		remoteserver="component" />
   
   </components>

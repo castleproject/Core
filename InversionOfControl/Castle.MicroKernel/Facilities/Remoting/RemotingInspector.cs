@@ -16,7 +16,6 @@ namespace Castle.Facilities.Remoting
 {
 	using System;
 	using System.Runtime.Remoting;
-
 	using Castle.Model;
 
 	using Castle.MicroKernel;
@@ -30,7 +29,8 @@ namespace Castle.Facilities.Remoting
 		Singleton,
 		SingleCall,
 		ClientActivated,
-		Component
+		Component,
+		RecoverableComponent
 	}
 
 	public class RemotingInspector : IContributeComponentModelConstruction
@@ -92,26 +92,50 @@ namespace Castle.Facilities.Remoting
 			if (server == RemotingStrategy.None) return;
 
 			String uri = ConstructServerURI(server, model.Name, model);
+			
+			switch (server)
+			{
+				case RemotingStrategy.Singleton:
+				{
+					CheckURIIsNotNull(uri, model.Name);
 
-			if (server == RemotingStrategy.Singleton)
-			{
-				CheckURIIsNotNull(uri, model.Name);
+					RemotingConfiguration.RegisterWellKnownServiceType(type, uri, WellKnownObjectMode.Singleton);
+					
+					break;
+				}
+				case RemotingStrategy.SingleCall:
+				{
+					CheckURIIsNotNull(uri, model.Name);
 
-				RemotingConfiguration.RegisterWellKnownServiceType(type, uri, WellKnownObjectMode.Singleton);
-			}
-			else if (server == RemotingStrategy.SingleCall)
-			{
-				CheckURIIsNotNull(uri, model.Name);
-
-				RemotingConfiguration.RegisterWellKnownServiceType(type, uri, WellKnownObjectMode.SingleCall);
-			}
-			else if (server == RemotingStrategy.ClientActivated)
-			{
-				RemotingConfiguration.RegisterActivatedServiceType(type);
-			}
-			else if (server == RemotingStrategy.Component)
-			{
-				localRegistry.AddComponentEntry( model );
+					RemotingConfiguration.RegisterWellKnownServiceType(type, uri, WellKnownObjectMode.SingleCall);
+					
+					break;
+				}
+				case RemotingStrategy.ClientActivated:
+				{
+					RemotingConfiguration.RegisterActivatedServiceType(type);
+					
+					break;
+				}
+				case RemotingStrategy.Component:
+				{
+					localRegistry.AddComponentEntry( model );
+					
+					break;
+				}
+				case RemotingStrategy.RecoverableComponent:
+				{
+					CheckURIIsNotNull(uri, model.Name);
+					
+					localRegistry.AddComponentEntry( model );
+					
+					model.ExtendedProperties.Add("remoting.uri", uri);
+					model.ExtendedProperties.Add("remoting.afinity", true);
+						
+					model.CustomComponentActivator = typeof(RemoteMarshallerActivator);
+					
+					break;
+				}
 			}
 		}
 
@@ -122,27 +146,49 @@ namespace Castle.Facilities.Remoting
 			ResetDependencies(model);
 
 			String uri = ConstructClientURI(client, model.Name, model);
-
-			if (client == RemotingStrategy.Singleton || client == RemotingStrategy.SingleCall)
+			
+			switch (client)
 			{
-				RemotingConfiguration.RegisterWellKnownClientType(type, uri);
+				case RemotingStrategy.Singleton:
+				case RemotingStrategy.SingleCall:
+				{
+					RemotingConfiguration.RegisterWellKnownClientType(type, uri);
 
-				model.ExtendedProperties.Add("remoting.uri", uri);
-				model.CustomComponentActivator = typeof(RemoteActivator);
-			}
-			else if (client == RemotingStrategy.ClientActivated)
-			{
-				CheckHasBaseURI();
+					model.ExtendedProperties.Add("remoting.uri", uri);
+					model.CustomComponentActivator = typeof(RemoteActivator);
+					
+					break;
+				}
+				case RemotingStrategy.ClientActivated:
+				{
+					CheckHasBaseURI();
 
-				RemotingConfiguration.RegisterActivatedClientType(type, baseUri);
+					RemotingConfiguration.RegisterActivatedClientType(type, baseUri);
 
-				model.ExtendedProperties.Add("remoting.appuri", baseUri);
-				model.CustomComponentActivator = typeof(RemoteClientActivatedActivator);
-			}
-			else if (client == RemotingStrategy.Component)
-			{
-				model.ExtendedProperties.Add("remoting.remoteregistry", remoteRegistry);
-				model.CustomComponentActivator = typeof(RemoteActivatorThroughRegistry);
+					model.ExtendedProperties.Add("remoting.appuri", baseUri);
+					model.CustomComponentActivator = typeof(RemoteClientActivatedActivator);
+			
+					break;
+				}
+				case RemotingStrategy.Component:
+				{
+					model.ExtendedProperties.Add("remoting.remoteregistry", remoteRegistry);
+					model.CustomComponentActivator = typeof(RemoteActivatorThroughRegistry);
+					
+					break;
+				}
+				case RemotingStrategy.RecoverableComponent:
+				{
+					CheckHasBaseURI();
+						
+					string remoteUri = BuildUri(uri);
+						
+					model.ExtendedProperties.Add("remoting.uri", remoteUri);
+					model.ExtendedProperties.Add("remoting.remoteregistry", remoteRegistry);
+					model.CustomComponentActivator = typeof(RemoteActivatorThroughConnector);
+					
+					break;
+				}
 			}
 		}
 
@@ -183,16 +229,23 @@ namespace Castle.Facilities.Remoting
 
 			if (client != RemotingStrategy.None && baseUri != null && value == null)
 			{
-				if (baseUri.EndsWith("/"))
-					uriText = String.Format("{0}{1}", baseUri, componentId);
-				else
-					uriText = String.Format("{0}/{1}", baseUri, componentId);
+				uriText = BuildUri(componentId);
 			}
 			else
 			{
 				uriText = value;
 			}
 
+			return uriText;
+		}
+
+		private string BuildUri(string cpntUri)
+		{
+			string uriText;
+			if (baseUri.EndsWith("/"))
+				uriText = String.Format("{0}{1}", baseUri, cpntUri);
+			else
+				uriText = String.Format("{0}/{1}", baseUri, cpntUri);
 			return uriText;
 		}
 

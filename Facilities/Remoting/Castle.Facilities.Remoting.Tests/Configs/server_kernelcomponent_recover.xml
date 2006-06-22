@@ -3,23 +3,26 @@
 
   <facilities>
   
+	<facility id="startable" type="Castle.Facilities.Startable.StartableFacility, Castle.MicroKernel" />
+  
     <facility 
 		id="remote.facility" 
 		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
-		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfig.config">
-    
-    </facility>
+		isServer="true"
+		registryUri="kernel.rem"
+		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfig.config" />
   
   </facilities>
-
   
   <components>
   
     <component 
 		id="calc.service" 
+		startable="true"
 		service="Castle.Facilities.Remoting.TestComponents.ICalcService, Castle.Facilities.Remoting.TestComponents"
 		type="Castle.Facilities.Remoting.TestComponents.CalcServiceImpl, Castle.Facilities.Remoting.TestComponents"
-		remoteserver="ClientActivated" />
+		remoteserver="recoverableComponent"
+		uri="calc.service.persistent.rem" />
   
   </components>
 

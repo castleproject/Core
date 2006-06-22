@@ -223,12 +223,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Facilities\Remoting\CustomActivators\RemoteActivatorThroughConnector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Facilities\Remoting\CustomActivators\RemoteActivatorThroughRegistry.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Facilities\Remoting\CustomActivators\RemoteClientActivatedActivator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\Remoting\CustomActivators\RemoteMarshallerActivator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

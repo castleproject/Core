@@ -14,24 +14,29 @@
 
 namespace Castle.Facilities.Remoting
 {
-	using Castle.Model;
+	using System.Runtime.Remoting;
 	
+	using Castle.Model;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
+	
 
-
-	public class RemoteActivatorThroughRegistry : DefaultComponentActivator
+	public class RemoteActivatorThroughConnector : DefaultComponentActivator
 	{
-		public RemoteActivatorThroughRegistry(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
+		public RemoteActivatorThroughConnector(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
 		{
 		}
 
 		protected override object Instantiate(CreationContext context)
 		{
+			string uri = (string) Model.ExtendedProperties["remoting.uri"];
+			
 			RemotingRegistry registry = (RemotingRegistry) 
 				Model.ExtendedProperties["remoting.remoteregistry"];
 			
-			return registry.CreateRemoteInstance(Model.Name);
+			registry.AssurePublication(Model.Name);
+				
+			return RemotingServices.Connect(Model.Service, uri); 
 		}
 	}
 }

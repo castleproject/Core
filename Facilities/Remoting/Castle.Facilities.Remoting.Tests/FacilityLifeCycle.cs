@@ -15,38 +15,26 @@
 namespace Castle.Facilities.Remoting.Tests
 {
 	using System;
-	using System.Runtime.Remoting;
-
+	
 	using Castle.Windsor;
-
-	using Castle.Facilities.Remoting.TestComponents;
-
+	
 	using NUnit.Framework;
 
 	[TestFixture, Serializable]
-	public class RemoteComponentTestCase : AbstractRemoteTestCase
+	public class FacilityLifeCycle: AbstractRemoteTestCase
 	{
 		protected override String GetServerConfigFile()
 		{
-			return BuildConfigPath("/server_kernelcomponent.xml");
+			return BuildConfigPath("server_kernelcomponent.xml");
 		}
-
+		
 		[Test]
-		public void ClientContainerConsumingRemoteComponent()
+		public void ClientDisposal()
 		{
-			clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerConsumingRemoteComponentCallback));
-		}
+			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, 
+				BuildConfigPath("client_kernelcomponent.xml"));
 
-		public void ClientContainerConsumingRemoteComponentCallback()
-		{
-			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_kernelcomponent.xml"));
-
-			ICalcService service = (ICalcService) clientContainer[ typeof(ICalcService) ];
-
-			Assert.IsTrue( RemotingServices.IsTransparentProxy(service) );
-			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service) );
-
-			Assert.AreEqual(10, service.Sum(7,3));
+			clientContainer.Dispose();
 		}
 	}
 }

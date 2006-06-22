@@ -129,16 +129,9 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "client_clientactivated.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "client_kernelcomponent.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "client_simple_scenario.xml"
-                    BuildAction = "Content"
+                    RelPath = "FacilityLifeCycle.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "RemoteClientActivatedTestCase.cs"
@@ -156,32 +149,74 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RemoteRecoverableCpntTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RemoteSingletonTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RemotingTcpConfig.config"
+                    RelPath = "ServerClientContainerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configs\client_12134_kernelcomponent.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configs\client_clientactivated.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configs\client_kernelcomponent.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configs\client_kernelcomponent_recover.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configs\client_simple_scenario.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configs\RemotingTcpConfig.config"
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "RemotingTcpConfigClient.config"
+                    RelPath = "Configs\RemotingTcpConfig2.config"
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "server_clientactivated.xml"
+                    RelPath = "Configs\RemotingTcpConfigClient.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Configs\server_client_kernelcomponent.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "server_kernelcomponent.xml"
+                    RelPath = "Configs\server_clientactivated.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "server_kernelcomponent_inter1.xml"
+                    RelPath = "Configs\server_kernelcomponent.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "server_simple_scenario.xml"
+                    RelPath = "Configs\server_kernelcomponent_inter1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configs\server_kernelcomponent_recover.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configs\server_simple_scenario.xml"
                     BuildAction = "Content"
                 />
             </Include>

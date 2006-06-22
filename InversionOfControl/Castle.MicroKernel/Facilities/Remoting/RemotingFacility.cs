@@ -141,15 +141,14 @@ namespace Castle.Facilities.Remoting
 
 		private void ObtainConverter()
 		{
-			converter = (ITypeConverter) Kernel.GetSubSystem( 
-				SubSystemConstants.ConversionManagerKey );
+			converter = (ITypeConverter) Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 		}
 
 		public override void Dispose()
 		{
 			if (disconnectLocalRegistry) RemotingServices.Disconnect(localRegistry);
 
-			if (disconnectRemoteRegistry) RemotingServices.Disconnect(remoteRegistry);
+			if (disconnectRemoteRegistry) remoteRegistry.Dispose();
 
 			base.Dispose();
 		}

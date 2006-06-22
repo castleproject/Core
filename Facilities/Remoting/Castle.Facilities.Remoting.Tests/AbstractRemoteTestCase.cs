@@ -33,7 +33,7 @@ namespace Castle.Facilities.Remoting.Tests
 		protected AppDomain clientDomain;
 
 		[SetUp]
-		public void Init()
+		public virtual void Init()
 		{
 			serverDomain = AppDomainFactory.Create("server");
 			clientDomain = AppDomainFactory.Create("client");
@@ -43,7 +43,7 @@ namespace Castle.Facilities.Remoting.Tests
 		}
 
 		[TearDown]
-		public void Terminate()
+		public virtual void Terminate()
 		{
 			serverContainer.Dispose();
 
@@ -64,7 +64,7 @@ namespace Castle.Facilities.Remoting.Tests
 			return (IWindsorContainer) handle.Unwrap();
 		}
 
-		protected IWindsorContainer GetContainer(AppDomain domain, String configFile)
+		protected IWindsorContainer GetRemoteContainer(AppDomain domain, String configFile)
 		{
 			ObjectHandle handle = domain.CreateInstance( 
 				typeof(ContainerPlaceHolder).Assembly.FullName, 
@@ -76,9 +76,14 @@ namespace Castle.Facilities.Remoting.Tests
 
 			return holder.Container;
 		}
+		
+		protected string BuildConfigPath(string configFile)
+		{
+			return "../Castle.Facilities.Remoting.Tests/Configs/" + configFile;
+		}
 	}
 
-	public class ContainerPlaceHolder
+	public class ContainerPlaceHolder : MarshalByRefObject
 	{
 		private static IWindsorContainer _container;
 

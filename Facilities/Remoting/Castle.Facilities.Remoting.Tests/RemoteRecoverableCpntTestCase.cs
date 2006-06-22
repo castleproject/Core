@@ -16,38 +16,54 @@ namespace Castle.Facilities.Remoting.Tests
 {
 	using System;
 	using System.Runtime.Remoting;
-
+	
 	using Castle.Windsor;
 	using Castle.Facilities.Remoting.TestComponents;
-
+	
 	using NUnit.Framework;
 
 	[TestFixture, Serializable]
-	public class RemoteComponentWithInterceptorTestCase : AbstractRemoteTestCase
+	public class RemoteRecoverableCpntTestCase : AbstractRemoteTestCase
 	{
 		protected override String GetServerConfigFile()
 		{
-			return BuildConfigPath("/server_kernelcomponent_inter1.xml");
+			return BuildConfigPath("server_kernelcomponent_recover.xml");
 		}
-
+		
 		[Test]
-		public void ClientContainerConsumingRemoteComponent()
+		public void ServerRestarted()
 		{
-			clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerConsumingRemoteComponentCallback));
+			clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerInvokingRemoteComponent));
+
+			ShutdownSever();
+
+			StartServer();
+
+			clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerInvokingRemoteComponent));
 		}
 
-		public void ClientContainerConsumingRemoteComponentCallback()
+		private void StartServer()
 		{
-			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_kernelcomponent.xml"));
+			serverDomain = AppDomainFactory.Create("server");
+			serverContainer = CreateRemoteContainer(serverDomain, GetServerConfigFile() );
+		}
+
+		private void ShutdownSever()
+		{
+			serverContainer.Dispose();
+			AppDomain.Unload(serverDomain);
+		}
+
+		public void ClientContainerInvokingRemoteComponent()
+		{
+			IWindsorContainer clientContainer = GetRemoteContainer(clientDomain, BuildConfigPath("client_kernelcomponent_recover.xml"));
 
 			ICalcService service = (ICalcService) clientContainer[ typeof(ICalcService) ];
 
 			Assert.IsTrue( RemotingServices.IsTransparentProxy(service) );
 			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service) );
 
-			// The result is being intercepted, that's why we 
-			// assert for 20 instead of 10
-			Assert.AreEqual(20, service.Sum(7,3));
+			Assert.AreEqual(10, service.Sum(7,3));
 		}
 	}
 }

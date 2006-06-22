@@ -29,7 +29,7 @@ namespace Castle.Facilities.Remoting.Tests
 	{
 		protected override String GetServerConfigFile()
 		{
-			return "../Castle.Facilities.Remoting.Tests/server_clientactivated.xml";
+			return BuildConfigPath("/server_clientactivated.xml");
 		}
 
 		[Test]
@@ -59,8 +59,7 @@ namespace Castle.Facilities.Remoting.Tests
 
 		public void ClientContainerConsumingRemoteComponentCallback()
 		{
-			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, 
-				"../Castle.Facilities.Remoting.Tests/client_clientactivated.xml");
+			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_clientactivated.xml"));
 
 			ICalcService service = (ICalcService) clientContainer[ typeof(ICalcService) ];
 

@@ -6,7 +6,7 @@
     <facility 
 		id="remote.facility" 
 		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
-		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfigClient.config"
+		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfigClient.config"
 		isClient="true"
 		remoteKernelUri="tcp://localhost:2133/kernel.rem"
 		baseUri="tcp://localhost:2133" />
@@ -19,7 +19,8 @@
 		id="calc.service"
 		service="Castle.Facilities.Remoting.TestComponents.ICalcService, Castle.Facilities.Remoting.TestComponents"
 		type="Castle.Facilities.Remoting.TestComponents.CalcServiceImpl, Castle.Facilities.Remoting.TestComponents"
-		remoteclient="component" />
+		remoteclient="recoverableComponent"
+		uri="calc.service.persistent.rem" />
   
   </components>
 

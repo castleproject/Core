@@ -16,9 +16,8 @@ namespace Castle.Facilities.Remoting
 {
 	using System;
 	using System.Collections;
-
+	
 	using Castle.Model;
-
 	using Castle.MicroKernel;
 
 
@@ -44,15 +43,31 @@ namespace Castle.Facilities.Remoting
 
 		public object CreateRemoteInstance(String key)
 		{
+			GetModel(key);
+
+			return kernel[key];
+		}
+
+		private ComponentModel GetModel(string key)
+		{
 			ComponentModel model = (ComponentModel) entries[key];
 
 			if (model == null)
 			{
-				throw new KernelException(String.Format("No remote/available " + 
-					"component found for key {0}", key));
+				throw new KernelException(
+					String.Format("No remote/available component found for key {0}", key));
 			}
-
-			return kernel[key];
+			
+			return model;
+		}
+		
+		public void AssurePublication(string key)
+		{
+			ComponentModel model = GetModel(key);
+			
+			MarshalByRefObject mbr = (MarshalByRefObject) kernel[key];
+			
+			RemoteMarshallerActivator.Marshal(mbr, model);
 		}
 
 		#region IDisposable Members
