@@ -77,8 +77,8 @@ namespace Castle.Facilities.Remoting
 				ConfigureClientFacility();
 			}
 
-			Kernel.ComponentModelBuilder.AddContributor( 
-				new RemotingInspector(converter, isServer, isClient, baseUri, remoteRegistry, localRegistry) );
+			Kernel.ComponentModelBuilder.AddContributor(
+				new RemotingInspector(converter, isServer, isClient, baseUri, remoteRegistry, localRegistry));
 		}
 
 		private void SetUpRemotingConfiguration()
@@ -103,7 +103,7 @@ namespace Castle.Facilities.Remoting
 
 		private void ConfigureServerFacility()
 		{
-			Kernel.AddComponent( "remoting.registry", typeof(RemotingRegistry) );
+			Kernel.AddComponent("remoting.registry", typeof(RemotingRegistry));
 
 			localRegistry = (RemotingRegistry) Kernel[ typeof(RemotingRegistry) ];
 
@@ -116,7 +116,7 @@ namespace Castle.Facilities.Remoting
 				throw new ConfigurationException(message);
 			}
 
-			RemotingServices.Marshal( localRegistry, kernelUri, typeof(RemotingRegistry) );
+			RemotingServices.Marshal(localRegistry, kernelUri, typeof(RemotingRegistry));
 
 			disconnectLocalRegistry = true;
 		}
@@ -133,12 +133,12 @@ namespace Castle.Facilities.Remoting
 			}
 
 			remoteRegistry = (RemotingRegistry) 
-				RemotingServices.Connect( typeof(RemotingRegistry), remoteKernelUri );
+				RemotingServices.Connect(typeof(RemotingRegistry), remoteKernelUri);
 		}
 
 		private void ObtainConverter()
 		{
-			converter = (ITypeConverter) Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+			converter = (ITypeConverter) Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 		}
 
 		public override void Dispose()

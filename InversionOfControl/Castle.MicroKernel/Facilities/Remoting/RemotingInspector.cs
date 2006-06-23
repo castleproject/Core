@@ -71,13 +71,13 @@ namespace Castle.Facilities.Remoting
 			if (remoteserverAttValue != null)
 			{
 				server = (RemotingStrategy) 
-					converter.PerformConversion( remoteserverAttValue, typeof(RemotingStrategy) );
+					converter.PerformConversion(remoteserverAttValue, typeof(RemotingStrategy));
 			}
 
 			if (remoteclientAttValue != null)
 			{
 				client = (RemotingStrategy) 
-					converter.PerformConversion( remoteclientAttValue, typeof(RemotingStrategy) );
+					converter.PerformConversion(remoteclientAttValue, typeof(RemotingStrategy));
 			}
 
 			DoSemanticCheck(server, model, client);
@@ -119,7 +119,7 @@ namespace Castle.Facilities.Remoting
 				}
 				case RemotingStrategy.Component:
 				{
-					localRegistry.AddComponentEntry( model );
+					localRegistry.AddComponentEntry(model);
 					
 					break;
 				}
@@ -129,7 +129,7 @@ namespace Castle.Facilities.Remoting
 
 					ValidateLifeStyle(model);
 
-					localRegistry.AddComponentEntry( model );
+					localRegistry.AddComponentEntry(model);
 					
 					model.ExtendedProperties.Add("remoting.uri", uri);
 					model.ExtendedProperties.Add("remoting.afinity", true);
@@ -143,9 +143,11 @@ namespace Castle.Facilities.Remoting
 
 		private static void ValidateLifeStyle(ComponentModel model)
 		{
-			if (model.LifestyleType != LifestyleType.Singleton && model.LifestyleType != LifestyleType.Undefined)
+			if (model.LifestyleType != LifestyleType.Singleton && 
+			    model.LifestyleType != LifestyleType.Undefined)
 			{
-				throw new FacilityException(string.Format("Component {0} isn't a Singleton (Lifestyle)", model.Name));
+				throw new FacilityException(String.Format("Component {0} is marked as a 'RecoverableComponent' but is using a lifestyle " + 
+					"different than Singleton. Unfortunatelly Singleton is the only lifestyle supported for this of remoting component configuration", model.Name));
 			}
 		}
 
@@ -191,7 +193,7 @@ namespace Castle.Facilities.Remoting
 				{
 					CheckHasBaseURI();
 						
-					string remoteUri = BuildUri(uri);
+					String remoteUri = BuildUri(uri);
 						
 					model.ExtendedProperties.Add("remoting.uri", remoteUri);
 					model.ExtendedProperties.Add("remoting.remoteregistry", remoteRegistry);
@@ -235,7 +237,7 @@ namespace Castle.Facilities.Remoting
 
 			String value = model.Configuration.Attributes["uri"];
 
-			String uriText = null;
+			String uriText;
 
 			if (client != RemotingStrategy.None && baseUri != null && value == null)
 			{
@@ -249,13 +251,19 @@ namespace Castle.Facilities.Remoting
 			return uriText;
 		}
 
-		private string BuildUri(string cpntUri)
+		private String BuildUri(String cpntUri)
 		{
-			string uriText;
+			String uriText;
+			
 			if (baseUri.EndsWith("/"))
+			{
 				uriText = String.Format("{0}{1}", baseUri, cpntUri);
+			}
 			else
+			{
 				uriText = String.Format("{0}/{1}", baseUri, cpntUri);
+			}
+			
 			return uriText;
 		}
 
@@ -265,11 +273,11 @@ namespace Castle.Facilities.Remoting
 
 			String value = model.Configuration.Attributes["uri"];
 
-			String uriText = null;
+			String uriText;
 
 			if (value == null)
 			{
-				value = componentId;
+				uriText = componentId;
 			}
 			else
 			{

@@ -34,7 +34,7 @@ namespace Castle.Facilities.Remoting
 			RemotingRegistry registry = (RemotingRegistry) 
 				Model.ExtendedProperties["remoting.remoteregistry"];
 			
-			registry.AssurePublication(Model.Name);
+			registry.Publish(Model.Name);
 				
 			return RemotingServices.Connect(Model.Service, uri); 
 		}

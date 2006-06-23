@@ -61,7 +61,7 @@ namespace Castle.Facilities.Remoting
 			return model;
 		}
 		
-		public void AssurePublication(string key)
+		public void Publish(string key)
 		{
 			ComponentModel model = GetModel(key);
 			
