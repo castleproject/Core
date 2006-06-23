@@ -15,13 +15,14 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
+	using System.Collections;
 	using System.IO;
 	using System.Net;
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using System.Web.Hosting;
 	using System.Configuration;
-	
+
 	using NUnit.Framework;
 
 	/// <summary>
@@ -48,22 +49,23 @@ namespace Castle.MonoRail.TestSupport
 
 			if (!Path.IsPathRooted(physicalDir))
 			{
-				DirectoryInfo dinfo = new DirectoryInfo( Path.Combine( 
-					AppDomain.CurrentDomain.SetupInformation.ApplicationBase, physicalDir ) );
+				DirectoryInfo dinfo = new DirectoryInfo(
+					Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, physicalDir));
 
 				physicalDir = dinfo.FullName;
 			}
 
-			if (!Directory.Exists( Path.Combine(physicalDir, "bin") ) || 
-				!File.Exists( Path.Combine(physicalDir, "web.config") ) )
+			if (!Directory.Exists(Path.Combine(physicalDir, "bin")) ||
+			    !File.Exists(Path.Combine(physicalDir, "web.config")))
 			{
-				String message = String.Format("The path specified for the " + 
-					"web project doesnt look as a web project dir (bin directory or web.config missing): {0}", physicalDir);
+				String message = String.Format("The path specified for the " +
+				                               "web project doesnt look as a web project dir (bin directory or web.config missing): {0}",
+				                               physicalDir);
 				throw new ConfigurationException(message);
 			}
 
-			host = (WebAppHost) ApplicationHost.CreateApplicationHost( 
-				typeof(WebAppHost), virDir, physicalDir );
+			host = (WebAppHost) ApplicationHost.CreateApplicationHost(
+			                    	typeof(WebAppHost), virDir, physicalDir);
 
 			host.Configure(virDir, physicalDir);
 		}
@@ -100,6 +102,8 @@ namespace Castle.MonoRail.TestSupport
 			AssertPathIsValid(path);
 
 			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
+			
+			ResendCookies();
 
 			outputBuffer.Length = 0;
 
@@ -107,7 +111,7 @@ namespace Castle.MonoRail.TestSupport
 
 			StringWriter writer = new StringWriter(outputBuffer);
 
-			response = host.Process( Request, writer );
+			response = host.Process(Request, writer);
 		}
 
 		/// <summary>
@@ -120,64 +124,66 @@ namespace Castle.MonoRail.TestSupport
 			if (postStringParams.Length != 0) Request.PostParams = postStringParams;
 
 			outputBuffer.Length = 0;
-			
+
 			int pos = path.IndexOf('?');
-			if( pos > -1 )
+			
+			if (pos > -1)
 			{
-				string qs = path.Substring( pos + 1 );
-				path = path.Substring(0, pos );
+				string qs = path.Substring(pos + 1);
+				path = path.Substring(0, pos);
 				Request.QueryStringParams = qs.Split('&');
 			}
 
-			//Set the content type so that the post data comes through.
+			// Set the content type so that the post data comes through.
 			Request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
 
 			Request.Url = path;
 			Request.Verb = "POST";
 			
+			ResendCookies();
+
 			StringWriter writer = new StringWriter(outputBuffer);
 
-			response = host.Process( Request, writer );
+			response = host.Process(Request, writer);
 		}
 
-        /// <summary>
-        /// Performs a Head operation on 
-        /// </summary>
-        /// <param name="path">The resource being request, for example <c>home/index.rails</c></param>
-        /// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
-        public void DoHead(String path, params String[] postStringParams)
-        {
-            if (postStringParams.Length != 0) Request.PostParams = postStringParams;
+		/// <summary>
+		/// Performs a Head operation on 
+		/// </summary>
+		/// <param name="path">The resource being request, for example <c>home/index.rails</c></param>
+		/// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
+		public void DoHead(String path, params String[] postStringParams)
+		{
+			if (postStringParams.Length != 0) Request.PostParams = postStringParams;
 
-            outputBuffer.Length = 0;
+			outputBuffer.Length = 0;
 
-            int pos = path.IndexOf('?');
-            if (pos > -1)
-            {
-                string qs = path.Substring(pos + 1);
-                path = path.Substring(0, pos);
-                Request.QueryStringParams = qs.Split('&');
-            }
+			int pos = path.IndexOf('?');
+			if (pos > -1)
+			{
+				string qs = path.Substring(pos + 1);
+				path = path.Substring(0, pos);
+				Request.QueryStringParams = qs.Split('&');
+			}
 
-            Request.Url = path;
-            Request.Verb = "HEAD";
+			Request.Url = path;
+			Request.Verb = "HEAD";
 
-            StringWriter writer = new StringWriter(outputBuffer);
+			StringWriter writer = new StringWriter(outputBuffer);
 
-            response = host.Process(Request, writer);
-        }
-		
+			response = host.Process(Request, writer);
+		}
 
 		private void AssertPathIsValid(string path)
 		{
-			if(path == null)
+			if (path == null)
 				throw new ArgumentNullException("path", "Can't test a null path");
-			if(path.Length==0)
-				throw new ArgumentException("Can't test an empty path","path");
-			if(path[0] == '/')
+			if (path.Length == 0)
+				throw new ArgumentException("Can't test an empty path", "path");
+			if (path[0] == '/')
 				throw new ArgumentException("Path mustn't start with a '/'!");
-			if(path.IndexOf('?')!=-1)
-				throw new ArgumentException("Path cannot contain query parameters! Pass them seperatedly","path");
+			if (path.IndexOf('?') != -1)
+				throw new ArgumentException("Path cannot contain query parameters! Pass them seperatedly", "path");
 		}
 
 		#endregion
@@ -206,18 +212,18 @@ namespace Castle.MonoRail.TestSupport
 		protected void AssertStatusCode(int expectedCode)
 		{
 			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
-			Assert.IsTrue(response.StatusCode == expectedCode, "Expecting status code {0} when it was in fact {1} {2}", 
-				expectedCode, response.StatusCode, response.StatusDescription);
+			Assert.IsTrue(response.StatusCode == expectedCode, "Expecting status code {0} when it was in fact {1} {2}",
+			              expectedCode, response.StatusCode, response.StatusDescription);
 		}
-		
+
 		/// <summary>
 		/// Asserts the return status code is less than 400
 		/// </summary>
 		protected void AssertSuccess()
 		{
 			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
-			Assert.IsTrue(response.StatusCode < 400, "Expecting status code < 400 when it was in fact {0} - {1}", 
-				response.StatusCode, response.StatusDescription);
+			Assert.IsTrue(response.StatusCode < 400, "Expecting status code < 400 when it was in fact {0} - {1}",
+			              response.StatusCode, response.StatusDescription);
 		}
 
 		/// <summary>
@@ -227,7 +233,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="expectedContents"></param>
 		protected void AssertReplyEqualTo(String expectedContents)
 		{
-			Assert.AreEqual( expectedContents, Output, "Reply differs. Expecting {0} but was {1}", expectedContents, Output );
+			Assert.AreEqual(expectedContents, Output, "Reply differs. Expecting {0} but was {1}", expectedContents, Output);
 		}
 
 		/// <summary>
@@ -238,9 +244,9 @@ namespace Castle.MonoRail.TestSupport
 		{
 			String buffer = Output;
 
-			Assert.IsTrue( buffer.StartsWith(contents), 
-				String.Format("Reply string did not start with '{0}'. It was '{1}'", Prepare(contents),
-                    Prepare(buffer.Substring(0, Math.Min(contents.Length, buffer.Length)))));
+			Assert.IsTrue(buffer.StartsWith(contents),
+			              String.Format("Reply string did not start with '{0}'. It was '{1}'", Prepare(contents),
+			                            Prepare(buffer.Substring(0, Math.Min(contents.Length, buffer.Length)))));
 		}
 
 		/// <summary>
@@ -251,9 +257,9 @@ namespace Castle.MonoRail.TestSupport
 		{
 			String buffer = Output;
 
-			Assert.IsTrue( buffer.EndsWith(contents), 
-				"Reply string did not end with '{0}'. It was '{1}'", contents,
-					buffer.Substring(0, Math.Min(contents.Length, buffer.Length) ) );
+			Assert.IsTrue(buffer.EndsWith(contents),
+			              "Reply string did not end with '{0}'. It was '{1}'", contents,
+			              buffer.Substring(0, Math.Min(contents.Length, buffer.Length)));
 		}
 
 		/// <summary>
@@ -262,8 +268,8 @@ namespace Castle.MonoRail.TestSupport
 		/// </summary>
 		protected void AssertReplyContains(String contents)
 		{
-			Assert.IsTrue( Output.IndexOf(contents) != -1, 
-				"AssertReplyContains did not find the content '{0}'. Raw content '{1}'", contents, Output );
+			Assert.IsTrue(Output.IndexOf(contents) != -1,
+			              "AssertReplyContains did not find the content '{0}'. Raw content '{1}'", contents, Output);
 		}
 
 		/// <summary>
@@ -273,8 +279,8 @@ namespace Castle.MonoRail.TestSupport
 		{
 			string contents = Output.Trim();
 
-			Assert.IsTrue( contents == String.Empty, 
-				"AssertReplyIsBlank found not whitespace characters '{0}'", contents);
+			Assert.IsTrue(contents == String.Empty,
+			              "AssertReplyIsBlank found not whitespace characters '{0}'", contents);
 		}
 
 		/// <summary>
@@ -291,7 +297,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <c>pattern</c>
 		/// </summary>
 		protected void AssertReplyMatch(String pattern, bool ignoreSpaces)
-		{						
+		{
 			AssertReplyMatch(pattern, ignoreSpaces, RegexOptions.None);
 		}
 
@@ -306,13 +312,13 @@ namespace Castle.MonoRail.TestSupport
 			if (ignoreSpaces)
 			{
 				contents = Regex.Replace(contents, @"\s+", "");
-				pattern  = Regex.Replace(pattern,  @"\s+", "");
+				pattern = Regex.Replace(pattern, @"\s+", "");
 			}
 
 			Regex re = new Regex(pattern, options);
 
-			Assert.IsTrue( re.IsMatch(contents), 
-				"AssertReplyMatch did not match pattern '{0}'. Raw content {1}", pattern, contents );
+			Assert.IsTrue(re.IsMatch(contents),
+			              "AssertReplyMatch did not match pattern '{0}'. Raw content {1}", pattern, contents);
 		}
 
 		/// <summary>
@@ -321,8 +327,8 @@ namespace Castle.MonoRail.TestSupport
 		/// </summary>
 		protected void AssertReplyDoesNotContain(String contents)
 		{
-			Assert.IsTrue( Output.IndexOf(contents) == -1, 
-				"AssertReplyDoNotContain found the content '{0}'", contents );
+			Assert.IsTrue(Output.IndexOf(contents) == -1,
+			              "AssertReplyDoNotContain found the content '{0}'", contents);
 		}
 
 		/// <summary>
@@ -345,24 +351,25 @@ namespace Castle.MonoRail.TestSupport
 		protected void AssertContentTypeStartsWith(String expectedContentType)
 		{
 			AssertHasHeader("Content-Type");
-			Assert.IsTrue( Response.Headers["Content-Type"].ToString().StartsWith(expectedContentType) );
+			Assert.IsTrue(Response.Headers["Content-Type"].ToString().StartsWith(expectedContentType));
 		}
 
 		protected void AssertContentTypeEndsWith(String expectedContentType)
 		{
 			AssertHasHeader("Content-Type");
-			Assert.IsTrue( Response.Headers["Content-Type"].ToString().EndsWith(expectedContentType) );
+			Assert.IsTrue(Response.Headers["Content-Type"].ToString().EndsWith(expectedContentType));
 		}
 
 		protected void AssertHasHeader(String headerName)
 		{
-			Assert.IsTrue( Response.Headers[headerName] != null, 
-				"Header '{0}' was not found", headerName );
+			Assert.IsTrue(Response.Headers[headerName] != null,
+			              "Header '{0}' was not found", headerName);
 		}
 
 		protected void AssertPropertyBagContains(String entryKey)
 		{
-			Assert.IsNotNull(response.PropertyBag, "PropertyBag could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsNotNull(response.PropertyBag,
+			                 "PropertyBag could not be used. Are you using a testing enable version of MonoRail Engine and Framework?");
 			Assert.IsTrue(response.PropertyBag.Contains(entryKey), "Entry {0} was not on PropertyBag", entryKey);
 		}
 
@@ -374,13 +381,15 @@ namespace Castle.MonoRail.TestSupport
 
 		protected void AssertFlashContains(String entryKey)
 		{
-			Assert.IsNotNull(response.Flash, "Flash could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsNotNull(response.Flash,
+			                 "Flash could not be used. Are you using a testing enable version of MonoRail Engine and Framework?");
 			Assert.IsTrue(response.Flash.Contains(entryKey), "Entry {0} was not on Flash", entryKey);
 		}
 
 		protected void AssertFlashDoesNotContain(String entryKey)
 		{
-			Assert.IsNotNull(response.Flash, "Flash could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsNotNull(response.Flash,
+			                 "Flash could not be used. Are you using a testing enable version of MonoRail Engine and Framework?");
 			Assert.IsFalse(response.Flash.Contains(entryKey), "Entry {0} was on Flash", entryKey);
 		}
 
@@ -392,13 +401,15 @@ namespace Castle.MonoRail.TestSupport
 
 		protected void AssertSessionContains(String entryKey)
 		{
-			Assert.IsNotNull(response.Session, "Session could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsNotNull(response.Session,
+			                 "Session could not be used. Are you using a testing enable version of MonoRail Engine and Framework?");
 			Assert.IsTrue(response.Session.Contains(entryKey), "Entry {0} was not on Session", entryKey);
 		}
 
 		protected void AssertSessionDoesNotContain(String entryKey)
 		{
-			Assert.IsNotNull(response.Session, "Session could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsNotNull(response.Session,
+			                 "Session could not be used. Are you using a testing enable version of MonoRail Engine and Framework?");
 			Assert.IsFalse(response.Session.Contains(entryKey), "Entry {0} was on Session", entryKey);
 		}
 
@@ -410,21 +421,21 @@ namespace Castle.MonoRail.TestSupport
 
 		protected void AssertHasCookie(String cookieName)
 		{
-			CookieCollection cookies = Response.Cookies.GetCookies( new Uri("http://localhost") );
+			CookieCollection cookies = Response.Cookies.GetCookies(new Uri("http://localhost"));
 
 			foreach(Cookie cookie in cookies)
 			{
 				if (cookie.Name.Equals(cookieName)) return;
 			}
 
-			Assert.Fail( "Cookie '{0}' was not found", cookieName );
+			Assert.Fail("Cookie '{0}' was not found", cookieName);
 		}
 
 		protected void AssertCookieValueEqualsTo(String cookieName, String expectedValue)
 		{
 			AssertHasCookie(cookieName);
 
-			CookieCollection cookies = Response.Cookies.GetCookies( new Uri("http://localhost") );
+			CookieCollection cookies = Response.Cookies.GetCookies(new Uri("http://localhost"));
 
 			foreach(Cookie cookie in cookies)
 			{
@@ -440,17 +451,24 @@ namespace Castle.MonoRail.TestSupport
 		{
 			AssertHasCookie(cookieName);
 
-			CookieCollection cookies = Response.Cookies.GetCookies( new Uri("http://localhost") );
+			CookieCollection cookies = Response.Cookies.GetCookies(new Uri("http://localhost"));
 
 			foreach(Cookie cookie in cookies)
 			{
 				if (cookie.Name.Equals(cookieName))
 				{
-					Assert.AreEqual(expectedExpiration.Day, cookie.Expires.Day, "Expiration day differs. Expecting {0} but was {1}", expectedExpiration.Day, cookie.Expires.Day);
-					Assert.AreEqual(expectedExpiration.Month, cookie.Expires.Month, "Expiration month differs. Expecting {0} but was {1}", expectedExpiration.Month, cookie.Expires.Month);
-					Assert.AreEqual(expectedExpiration.Year, cookie.Expires.Year, "Expiration year differs. Expecting {0} but was {1}", expectedExpiration.Year, cookie.Expires.Year);
-					Assert.AreEqual(expectedExpiration.Hour, cookie.Expires.Hour, "Expiration hour differs. Expecting {0} but was {1}", expectedExpiration.Hour, cookie.Expires.Hour);
-					Assert.AreEqual(expectedExpiration.Minute, cookie.Expires.Minute, "Expiration minute differs. Expecting {0} but was {1}", expectedExpiration.Minute, cookie.Expires.Minute);
+					Assert.AreEqual(expectedExpiration.Day, cookie.Expires.Day, "Expiration day differs. Expecting {0} but was {1}",
+					                expectedExpiration.Day, cookie.Expires.Day);
+					Assert.AreEqual(expectedExpiration.Month, cookie.Expires.Month,
+					                "Expiration month differs. Expecting {0} but was {1}", expectedExpiration.Month,
+					                cookie.Expires.Month);
+					Assert.AreEqual(expectedExpiration.Year, cookie.Expires.Year, "Expiration year differs. Expecting {0} but was {1}",
+					                expectedExpiration.Year, cookie.Expires.Year);
+					Assert.AreEqual(expectedExpiration.Hour, cookie.Expires.Hour, "Expiration hour differs. Expecting {0} but was {1}",
+					                expectedExpiration.Hour, cookie.Expires.Hour);
+					Assert.AreEqual(expectedExpiration.Minute, cookie.Expires.Minute,
+					                "Expiration minute differs. Expecting {0} but was {1}", expectedExpiration.Minute,
+					                cookie.Expires.Minute);
 					// Assert.AreEqual(expectedExpiration.Second, cookie.Expires.Second, "Expiration second differs. Expecting {0} but was {1}", expectedExpiration.Second, cookie.Expires.Second);
 					break;
 				}
@@ -467,10 +485,10 @@ namespace Castle.MonoRail.TestSupport
 
 			if (dir == null)
 			{
-				String message = String.Format("Could not find a configuration key " + 
-					"defining the web application physical directory. You must create " + 
-					"a key ('{0}') on your configuration file or override the method " + 
-					"AbstractMRTestCase.GetPhysicalDir", PhysicalWebDirConfigKey);
+				String message = String.Format("Could not find a configuration key " +
+				                               "defining the web application physical directory. You must create " +
+				                               "a key ('{0}') on your configuration file or override the method " +
+				                               "AbstractMRTestCase.GetPhysicalDir", PhysicalWebDirConfigKey);
 
 				throw new ConfigurationException(message);
 			}
@@ -492,11 +510,31 @@ namespace Castle.MonoRail.TestSupport
 
 		#endregion
 
-        private String Prepare(String content)
-        {
-            if (content == null || content.Length == 0) return String.Empty;
+		private String Prepare(String content)
+		{
+			if (content == null || content.Length == 0) return String.Empty;
 
-            return content.Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
-        }
+			return content.Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
+		}
+		
+		private void ResendCookies()
+		{
+			if (response != null)
+			{
+				// Clear just the cookie bucket
+				request.Headers.Remove("Cookie");
+
+				// Resend all cookie information from the response
+				foreach(DictionaryEntry entry in response.Headers)
+				{
+					if (entry.Key.ToString() == "Set-Cookie")
+					{
+						String value = entry.Value.ToString().Split(';')[0];
+						
+						request.Headers.Add("Cookie", value);
+					}
+				}
+			}
+		}
 	}
 }
