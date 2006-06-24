@@ -14,7 +14,7 @@
 
 namespace Castle.ActiveRecord.Framework.Scopes
 {
-	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Class to allow scopes to reach the implementation
@@ -25,7 +25,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	public sealed class ThreadScopeAccessor : IThreadScopeInfo
 	{
 		private static readonly ThreadScopeAccessor instance = new ThreadScopeAccessor();
-		
+
 		private IThreadScopeInfo scopeInfo;
 
 		public static ThreadScopeAccessor Instance
@@ -35,32 +35,34 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public IThreadScopeInfo ScopeInfo
 		{
-			get
-			{
-                return scopeInfo;
-			}
+			get { return scopeInfo; }
 			set { scopeInfo = value; }
 		}
 
 		#region IThreadScopeInfo Members
 
-		public System.Collections.Stack CurrentStack
+		public Stack CurrentStack
 		{
 			get { return scopeInfo.CurrentStack; }
 		}
 
 		public ISessionScope GetRegisteredScope()
 		{
-            if (scopeInfo == null)
-                throw new ActiveRecordException("Can't get registered scope because the Active Record framework was not initialized.");
+			if (scopeInfo == null)
+			{
+				throw new ActiveRecordException(
+					"Can't get registered scope because the Active Record framework was not initialized.");
+			}
 			return scopeInfo.GetRegisteredScope();
 		}
 
 		public void RegisterScope(ISessionScope scope)
 		{
-            if (scopeInfo == null)
-                throw new ActiveRecordException("A scope tried to registered itself within the framework, " +
-                                                "but the Active Record was not initialized");
+			if (scopeInfo == null)
+			{
+				throw new ActiveRecordException("A scope tried to registered itself within the framework, " +
+				                                "but the Active Record was not initialized");
+			}
 			scopeInfo.RegisterScope(scope);
 		}
 
