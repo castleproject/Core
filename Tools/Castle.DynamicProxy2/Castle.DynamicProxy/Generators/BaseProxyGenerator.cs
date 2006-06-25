@@ -287,56 +287,58 @@ namespace Castle.DynamicProxy.Generators
 			{
 				methodOnTargetInfo = methodInfo;
 			}
+									
+			// Create the fields
 			
+			FieldReference fieldRef = CreateIInvocationFields(nested, targetType);
+
+			// Create constructor
+
+			CreateIInvocationConstructor(nested, targetType, fieldRef);
+
 			// Apply generic parameters to the method
 
 			if (methodOnTargetInfo.IsGenericMethod)
 			{
 				Type[] genericArgs = methodOnTargetInfo.GetGenericArguments();
+
 				Type[] newGenericArgs = new Type[genericArgs.Length];
 				int index = 0;
 
 				foreach (Type gArg in genericArgs)
 				{
 					Type genericArg = nested.GetGenericArgument(gArg.Name);
-					
+
 					if (genericArg != null)
 					{
 						newGenericArgs[index++] = genericArg;
 					}
 				}
 
+				//  methodOnTargetInfo = FrameworkGetMethod(targetType, methodOnTargetInfo).
+				//	  MakeGenericMethod(newGenericArgs);
+
 				methodOnTargetInfo = methodOnTargetInfo.MakeGenericMethod(newGenericArgs);
-
-				methodOnTargetInfo = TypeBuilder.GetMethod(targetType, methodOnTargetInfo);
+				// methodOnTargetInfo = TypeBuilder.GetMethod(nested.TypeBuilder, methodOnTargetInfo);
 			}
-						
-			// Create the fields
-
-			FieldReference targetField = nested.CreateField("target", targetType);
-
-			// Create constructor
-
-			ArgumentReference cArg0 = new ArgumentReference(targetType);
-			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
-			ArgumentReference cArg2 = new ArgumentReference(typeof(Type));
-			ArgumentReference cArg3 = new ArgumentReference(typeof(MethodInfo));
-			ArgumentReference cArg4 = new ArgumentReference(typeof(MethodInfo));
-			ArgumentReference cArg5 = new ArgumentReference(typeof(object[]));
-
-			ConstructorEmitter constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5);
-
-			constructor.CodeBuilder.AddStatement(new AssignStatement(targetField, cArg0.ToExpression()));
-			constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructor,
-				cArg1, cArg2, cArg3, cArg4, cArg5);
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
-
+			
 			// InvokeMethodOnTarget implementation
 
-			MethodEmitter method = nested.CreateMethod("InvokeMethodOnTarget",
-				new ReturnReferenceExpression(typeof(void)),
-					MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.Virtual);
+			CreateIInvocationInvokeOnTarget(nested, parameters, fieldRef, methodOnTargetInfo);
+
+			return nested;
+		}
+
+		private void CreateIInvocationInvokeOnTarget(NestedClassEmitter nested, 
+		                                             ParameterInfo[] parameters, 
+		                                             FieldReference targetField,
+													 MethodInfo methodInfo)
+		{
+			MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.Virtual;
 			
+			MethodEmitter method = nested.CreateMethod("InvokeMethodOnTarget",
+													   new ReturnReferenceExpression(typeof(void)), methodAtts);
+
 			Expression[] args = new Expression[parameters.Length];
 
 			for (int i = 0; i < parameters.Length; i++)
@@ -345,7 +347,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (!param.IsOut && !param.IsRetval)
 				{
-					args[i] = new ConvertExpression(param.ParameterType, 
+					args[i] = new ConvertExpression(param.ParameterType,
 						new MethodInvocationExpression(SelfReference.Self,
 							typeof(AbstractInvocation).GetMethod("GetArgumentValue"),
 								new LiteralIntExpression(i)));
@@ -357,9 +359,9 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			LocalReference ret_local = null;
-			
+
 			MethodInvocationExpression baseMethodInvExp =
-				new MethodInvocationExpression(targetField, methodOnTargetInfo, args);
+				new MethodInvocationExpression(targetField, methodInfo, args);
 
 			// TODO: Process out/ref arguments
 
@@ -385,8 +387,83 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			method.CodeBuilder.AddStatement(new ReturnStatement());
+		}
 
-			return nested;
+		private void CreateIInvocationConstructor(NestedClassEmitter nested, Type targetType, FieldReference targetField)
+		{
+			ArgumentReference cArg0 = new ArgumentReference(targetType);
+			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
+			ArgumentReference cArg2 = new ArgumentReference(typeof(Type));
+			ArgumentReference cArg3 = new ArgumentReference(typeof(MethodInfo));
+			ArgumentReference cArg4 = new ArgumentReference(typeof(MethodInfo));
+			ArgumentReference cArg5 = new ArgumentReference(typeof(object[]));
+
+			ConstructorEmitter constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5);
+
+			constructor.CodeBuilder.AddStatement(new AssignStatement(targetField, cArg0.ToExpression()));
+			constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructor,
+				cArg1, cArg2, cArg3, cArg4, cArg5);
+			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		private FieldReference CreateIInvocationFields(NestedClassEmitter nested, Type targetType)
+		{
+			return nested.CreateField("target", targetType);
+		}
+
+		/// <summary>
+		/// Based on Nemerle's FrameworkGetMethod
+		/// </summary>
+		private MethodInfo FrameworkGetMethod(Type targetType, MethodInfo methodInfo)
+		{
+			Type runtimeType = typeof(object).Assembly.GetType("System.RuntimeType");
+
+			if (targetType.GetType().Equals(runtimeType))
+			{
+				return GetHackishMethod(targetType, methodInfo);
+			}
+			else
+			{
+				Type td = targetType.GetGenericTypeDefinition();
+
+				if (targetType.GetType().Equals(runtimeType))
+				{
+					methodInfo = GetHackishMethod(td, methodInfo);
+				}
+
+				return TypeBuilder.GetMethod(targetType, methodInfo);
+			}
+		}
+
+		/// <summary>
+		/// Based on Nemerle's GetHackishMethod
+		/// </summary>
+		private MethodInfo GetHackishMethod(Type targetType, MethodInfo methodInfo)
+		{
+			int mToken;
+			
+			if (methodInfo is MethodBuilder)
+			{
+				mToken = (int) typeof(MethodBuilder).
+				               	GetProperty("MetadataTokenInternal", BindingFlags.NonPublic | BindingFlags.Instance).
+								GetValue(methodInfo, null);
+			}
+			else
+			{
+				mToken = methodInfo.MetadataToken;
+			}
+			
+			BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public |
+			                     BindingFlags.Instance | BindingFlags.Static |
+			                     BindingFlags.DeclaredOnly;
+			
+			foreach(MethodInfo m in targetType.GetMethods(flags))
+			{
+				if (m.MetadataToken == mToken)
+					return m;
+			}
+
+			return null;
 		}
 
 		protected MethodAttributes ObtainMethodAttributes(MethodInfo method)
