@@ -24,21 +24,18 @@ namespace Castle.DynamicProxy.Generators
 	
 	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
-		private Type targetType;
+		private readonly Type interfaceType;
+		private readonly Type targetType2;
+		
 		private FieldReference targetField;
 
-		public InterfaceProxyWithTargetGenerator(ModuleScope scope) : base(scope)
+		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface, Type targetType)
+			: base(scope, typeof(Object))
 		{
 			canOnlyProxyVirtuals = false;
-		}
+			
+			this.interfaceType = interfaceType;
 
-		public Type GenerateCode(Type theInterface, Type targetType, ProxyGenerationOptions options)
-		{
-			ReaderWriterLock rwlock = Scope.RWLock;
-
-			rwlock.AcquireReaderLock(-1);
-
-#if DOTNET2
 			if (theInterface.IsGenericType)
 			{
 				theInterface = theInterface.GetGenericTypeDefinition();
@@ -46,11 +43,21 @@ namespace Castle.DynamicProxy.Generators
 
 			if (targetType.IsGenericType)
 			{
-				targetType = targetType.GetGenericTypeDefinition();
+				targetType2 = targetType.GetGenericTypeDefinition();
 			}
-#endif
+		}
 
-			CacheKey cacheKey = new CacheKey(theInterface, new Type[] { targetType }, options);
+		public Type GenerateCode(ProxyGenerationOptions options)
+		{
+			ReaderWriterLock rwlock = Scope.RWLock;
+
+			rwlock.AcquireReaderLock(-1);
+
+// #if DOTNET2
+						
+// #endif
+
+			CacheKey cacheKey = new CacheKey(interfaceType, new Type[] { targetType2 }, options);
 
 			Type cacheType = GetFromCache(cacheKey);
 
@@ -61,19 +68,18 @@ namespace Castle.DynamicProxy.Generators
 				return cacheType;
 			}
 
-			this.targetType = targetType;
-
 			LockCookie lc = rwlock.UpgradeToWriterLock(-1);
 
 			try
 			{
-				emitter = BuildClassEmitter(Guid.NewGuid().ToString("N"), baseType, new Type[] { theInterface });
+				emitter = BuildClassEmitter(Guid.NewGuid().ToString("N"), 
+				                            classBaseType, new Type[] { interfaceType });
 
 				GenerateFields();
 
 				IProxyGenerationHook hook = options.Hook;
 
-				GenerateMethods(theInterface, targetField, hook, options.UseSelector);
+				GenerateMethods(interfaceType, targetField, hook, options.UseSelector);
 
 				// TODO: Add interfaces and mixins
 
@@ -109,109 +115,25 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected new void GenerateMethods(Type interfaceType, Reference targetRef, 
-		                                   IProxyGenerationHook hook, bool useSelector)
+		protected override MethodInfo GetMethodOnTarget(MethodInfo method)
 		{
-			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+			ParameterInfo[] parametersInfo = method.GetParameters();
 
-			MethodInfo[] methods = interfaceType.GetMethods(flags);
+			Type[] parameters = new Type[parametersInfo.Length];
 
-			foreach (MethodInfo method in methods)
+			for (int i = 0; i < parametersInfo.Length; i++)
 			{
-				bool shouldIntercept = hook.ShouldInterceptMethod(interfaceType, method);
-
-				if (!shouldIntercept)
-				{
-					continue;
-				}
-
-				if (shouldIntercept && canOnlyProxyVirtuals && !method.IsVirtual)
-				{
-					hook.NonVirtualMemberNotification(baseType, method);
-					continue;
-				}
-
-				ParameterInfo[] parametersInfo = method.GetParameters();
-
-				Type[] parameters = new Type[parametersInfo.Length];
-
-				for (int i = 0; i < parametersInfo.Length; i++)
-				{
-					parameters[i] = parametersInfo[i].ParameterType;
-				}
-
-				MethodAttributes atts = ObtainMethodAttributes(method);
-
-				MethodInfo methodOnTarget = targetType.GetMethod(method.Name, parameters);
-
-				NestedClassEmitter iinvocationImpl =
-					CreateIInvocationImplementation(interfaceType, targetField.Reference.FieldType, method, methodOnTarget);
-				// NestedClassEmitter iinvocationImpl = CreateIInvocationImplementation(baseType, method);
-
-				MethodEmitter methodEmitter = emitter.CreateMethod(method.Name,
-					atts, new ReturnReferenceExpression(method.ReturnType), parameters);
-
-				methodEmitter.DefineParameters(parametersInfo);
-
-				TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(methodEmitter.Arguments);
-
-				LocalReference invocationImplLocal =
-					methodEmitter.CodeBuilder.DeclareLocal(iinvocationImpl.TypeBuilder);
-
-				// TODO: Initialize iinvocation instance 
-				// with ordinary arguments and in and out arguments
-
-				Expression interceptors = null;
-
-				if (useSelector)
-				{
-					// TODO: Generate code that checks the return of selector
-					// if no interceptors is returned, should we invoke the base.Method directly?
-				}
-				else
-				{
-					interceptors = interceptorsField.ToExpression();
-				}
-				
-				TypeTokenExpression typeExp = new TypeTokenExpression(baseType);
-				MethodTokenExpression methodTokenExp = new MethodTokenExpression(method, interfaceType);
-				MethodTokenExpression interMethodTokenExp = new MethodTokenExpression(methodOnTarget, targetType);
-
-				NewInstanceExpression newInvocImpl = new NewInstanceExpression(
-					iinvocationImpl.Constructors[0].Builder,
-					targetRef.ToExpression(),
-					interceptors,
-					typeExp,
-					methodTokenExp,
-					interMethodTokenExp, 
-					new ReferencesToObjectArrayExpression(dereferencedArguments));
-
-				methodEmitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
-
-				methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
-					new MethodInvocationExpression(invocationImplLocal,
-					Constants.AbstractInvocationProceed)));
-
-				if (method.ReturnType != typeof(void))
-				{
-					// Emit code to return with cast from ReturnValue
-					MethodInvocationExpression getRetVal =
-						new MethodInvocationExpression(invocationImplLocal,
-							typeof(AbstractInvocation).GetMethod("get_ReturnValue"));
-
-					methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(
-						new ConvertExpression(method.ReturnType, getRetVal)));
-				}
-
-				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement());
+				parameters[i] = parametersInfo[i].ParameterType;
 			}
-		}
 
+			return targetType2.GetMethod(method.Name, parameters);
+		}
+		
 		protected override void GenerateFields()
 		{
 			base.GenerateFields();
 
-			targetField = emitter.CreateField("__target", targetType.MakeGenericType(emitter.GenericTypeParams));
+			targetField = emitter.CreateField("__target", targetType2.MakeGenericType(emitter.GenericTypeParams));
 		}
 
 		protected override Reference GetProxyTargetReference()
@@ -221,7 +143,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private void GenerateConstructor()
 		{
-			ArgumentReference cArg0 = new ArgumentReference(targetType.MakeGenericType(emitter.GenericTypeParams));
+			ArgumentReference cArg0 = new ArgumentReference(targetType2.MakeGenericType(emitter.GenericTypeParams));
 			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
 
 			ConstructorEmitter constructor = emitter.CreateConstructor(cArg0, cArg1);

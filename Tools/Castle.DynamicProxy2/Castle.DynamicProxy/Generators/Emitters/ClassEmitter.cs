@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 #if DOTNET2
 			if (baseType.IsGenericType)
 			{
-				CreateGenericParameters(baseType);
+				CreateGenericParameters(baseType.GetGenericArguments());
 
 				baseType = baseType.MakeGenericType(genericTypeParams);
 			}
@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				{
 					if (inter.IsGenericType)
 					{
-						CreateGenericParameters(inter);
+						CreateGenericParameters(inter.GetGenericArguments());
 
 						typebuilder.AddInterfaceImplementation(inter.MakeGenericType(GenericTypeParams));
 					}

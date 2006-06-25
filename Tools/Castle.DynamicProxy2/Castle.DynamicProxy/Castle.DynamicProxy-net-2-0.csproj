@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET2</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY,DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -241,6 +241,7 @@
     <Compile Include="Generators\Emitters\StindOpCodesDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\TypeUtil.cs" />
     <Compile Include="Generators\GeneratorException.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="IInterceptor.cs">

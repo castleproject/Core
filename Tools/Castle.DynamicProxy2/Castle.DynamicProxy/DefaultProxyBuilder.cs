@@ -34,9 +34,9 @@ namespace Castle.DynamicProxy
 
 		public Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
 
-			return generator.GenerateCode(theClass, interfaces, options);
+			return generator.GenerateCode(interfaces, options);
 		}
 
 		public Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options)
@@ -46,16 +46,16 @@ namespace Castle.DynamicProxy
 
 		public virtual Type CreateClassProxy(Type theClass, ProxyGenerationOptions options)
 		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
 			
-			return generator.GenerateCode(theClass, null, options);
+			return generator.GenerateCode(null, options);
 		}
 
 		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options)
 		{
-			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope);
+			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface, targetType);
 
-			return generator.GenerateCode(theInterface, targetType, options);
+			return generator.GenerateCode(options);
 		}
 	}
 }

@@ -12,27 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Test.Interceptors
 {
-	using System;
-
-	public class StandardInterceptor : MarshalByRefObject, IInterceptor
+	public class ResultModifiedInvocationHandler : StandardInterceptor
 	{
-		public void Intercept(IInvocation invocation)
+		protected override void PostProceed(IInvocation invocation)
 		{
-			PreProceed(invocation);
-			invocation.Proceed();
-			PostProceed(invocation);
-		}
-
-		protected virtual void PreProceed(IInvocation invocation)
-		{
-
-		}
-
-		protected virtual void PostProceed(IInvocation invocation)
-		{
-
+			object returnValue = invocation.ReturnValue;
+			
+			if (returnValue != null && returnValue.GetType() == typeof(int))
+			{
+				int value = (int)returnValue;
+				
+				invocation.ReturnValue = --value;
+			}
 		}
 	}
 }

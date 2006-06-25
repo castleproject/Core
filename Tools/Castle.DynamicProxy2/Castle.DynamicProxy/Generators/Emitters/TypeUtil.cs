@@ -12,27 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Collections;
 
-	public class StandardInterceptor : MarshalByRefObject, IInterceptor
+	public abstract class TypeUtil
 	{
-		public void Intercept(IInvocation invocation)
+		public static Type[] Union(Type[] set1, Type[] set2)
 		{
-			PreProceed(invocation);
-			invocation.Proceed();
-			PostProceed(invocation);
-		}
+			if (set1 == null) throw new ArgumentNullException("set1");
+			if (set2 == null) throw new ArgumentNullException("set2");
+			
+			ArrayList types = new ArrayList();
+			
+			types.AddRange(set1);
+			types.AddRange(set2);
 
-		protected virtual void PreProceed(IInvocation invocation)
-		{
-
-		}
-
-		protected virtual void PostProceed(IInvocation invocation)
-		{
-
+			return (Type[]) types.ToArray(typeof(Type));
 		}
 	}
 }

@@ -12,27 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Tests
 {
-	using System;
+	using NUnit.Framework;
 
-	public class StandardInterceptor : MarshalByRefObject, IInterceptor
+	[TestFixture]
+	public class BasicInterfaceProxyTestCase
 	{
-		public void Intercept(IInvocation invocation)
-		{
-			PreProceed(invocation);
-			invocation.Proceed();
-			PostProceed(invocation);
-		}
-
-		protected virtual void PreProceed(IInvocation invocation)
-		{
-
-		}
-
-		protected virtual void PostProceed(IInvocation invocation)
-		{
-
-		}
 	}
 }

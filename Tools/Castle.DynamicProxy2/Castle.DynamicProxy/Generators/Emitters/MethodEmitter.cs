@@ -29,31 +29,114 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private MethodCodeBuilder codebuilder;
 		private AbstractTypeEmitter maintype;
-
-		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
-		                       ReturnReferenceExpression returnRef, params ArgumentReference[] arguments) :
-		                       	this(maintype, name,
-		                       	     MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public,
-		                       	     returnRef, arguments)
-		{
-		}
-
-		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
-		                       MethodAttributes attrs,
-		                       ReturnReferenceExpression returnRef, params ArgumentReference[] arguments)
-		{
-			this.maintype = maintype;
-			this.arguments = arguments;
-
-			Type returnType = returnRef.Type;
-			Type[] args = ArgumentsUtil.InitializeAndConvert(arguments);
-
-			this.builder = maintype.TypeBuilder.DefineMethod(name, attrs,
-			                                             returnType, args);
-		}
+		private Type[] actualGenParameters;
 
 		protected internal MethodEmitter()
 		{
+		}
+		
+		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
+		                       ReturnReferenceExpression returnRef, params ArgumentReference[] arguments) :
+		                       	this(maintype, name, MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public, returnRef, arguments)
+		{
+		}
+
+		internal MethodEmitter(AbstractTypeEmitter maintype, String name, MethodAttributes attrs)
+		{
+			this.maintype = maintype;
+
+			builder = maintype.TypeBuilder.DefineMethod(name, attrs);
+		}
+		
+		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
+		                       MethodAttributes attrs, ReturnReferenceExpression returnRef, 
+		                       params ArgumentReference[] arguments) : this(maintype, name, attrs)
+		{
+			SetReturnType(returnRef.Type);
+			SetParameters(ArgumentsUtil.InitializeAndConvert(arguments));
+		}
+		
+		public void SetReturnType(Type returnType)
+		{
+			builder.SetReturnType(returnType);
+		}
+
+		public Type[] ActualGenericParameters
+		{
+			get { return actualGenParameters; }
+		}
+
+		/// <summary>
+		/// Inspect the base method for generic definitions
+		/// and set the return type and the parameters
+		/// accordingly
+		/// </summary>
+		/// <param name="baseMethod"></param>
+		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod)
+		{
+			Type[] methodGenericArgs = baseMethod.GetGenericArguments();
+			
+			String[] names = new string[methodGenericArgs.Length];
+
+			for (int i = 0; i < names.Length; i++)
+			{
+				names[i] = methodGenericArgs[i].Name;
+			}
+
+			actualGenParameters = new Type[0];
+
+			if (methodGenericArgs.Length != 0)
+			{
+				actualGenParameters = builder.DefineGenericParameters(names);
+			}
+
+			// TODO: check if the return type is a generic
+			// definition for the method
+			SetReturnType(baseMethod.ReturnType);
+			
+			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
+
+			Type[] newParameters = new Type[baseMethodParameters.Length];
+
+			for (int i = 0; i < baseMethodParameters.Length; i++)
+			{
+				ParameterInfo param = baseMethodParameters[i];
+
+				if (param.ParameterType.IsGenericParameter)
+				{
+					foreach (Type genParam in actualGenParameters)
+					{
+						if (genParam.Name == param.ParameterType.Name)
+						{
+							newParameters[i] = genParam;
+							break;
+						}
+					}
+				}
+
+				if (newParameters[i] == null)
+				{
+					newParameters[i] = param.ParameterType;
+				}
+			}
+
+			SetParameters(newParameters);
+
+			DefineParameters(baseMethodParameters);
+		}
+		
+		public void SetParameters(Type[] paramTypes)
+		{
+			builder.SetParameters(paramTypes);
+
+			arguments = new ArgumentReference[paramTypes.Length];
+			
+			for(int i=0; i < paramTypes.Length; i++)
+			{
+				arguments[i] = new ArgumentReference(paramTypes[i]);
+			}
+			
+			ArgumentsUtil.InitializeArgumentsByPosition(arguments);
 		}
 
 		public virtual MethodCodeBuilder CodeBuilder

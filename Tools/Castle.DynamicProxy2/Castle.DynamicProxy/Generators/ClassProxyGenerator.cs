@@ -23,24 +23,27 @@ namespace Castle.DynamicProxy.Generators
 
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
-		public ClassProxyGenerator(ModuleScope scope) : base(scope)
+		private readonly Type targetType;
+
+		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
 		{
+			this.targetType = targetType;
+
+// #if DOTNET2
+			if (targetType.IsGenericType)
+			{
+				this.targetType = targetType.GetGenericTypeDefinition();
+			}
+// #endif
 		}
 
-		public Type GenerateCode(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
+		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
 		{
 			ReaderWriterLock rwlock = Scope.RWLock;
 
 			rwlock.AcquireReaderLock(-1);
 			
-#if DOTNET2
-			if (theClass.IsGenericType)
-			{
-				theClass = theClass.GetGenericTypeDefinition();
-			}
-#endif
-
-			CacheKey cacheKey = new CacheKey(theClass, interfaces, options);
+			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
 
 			Type cacheType = GetFromCache(cacheKey);
 			
@@ -55,15 +58,13 @@ namespace Castle.DynamicProxy.Generators
 
 			try
 			{
-				baseType = theClass;
-
-				emitter = BuildClassEmitter(Guid.NewGuid().ToString("N"), theClass, interfaces);
+				emitter = BuildClassEmitter(Guid.NewGuid().ToString("N"), targetType, interfaces);
 
 				GenerateFields();
 				
 				IProxyGenerationHook hook = options.Hook;
-				
-				GenerateMethods(theClass, SelfReference.Self, hook, options.UseSelector);
+
+				GenerateMethods(targetType, SelfReference.Self, hook, options.UseSelector);
 				
 				// TODO: Add interfaces and mixins
 				

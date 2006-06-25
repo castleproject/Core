@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -31,9 +32,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected PropertiesCollection properties;
 		protected EventCollection events;
 		protected internal NestedClassCollection nested;
-#if DOTNET2
+//#if DOTNET2
 		protected GenericTypeParameterBuilder[] genericTypeParams;
-#endif
+		protected IDictionary<String, Type> name2GenericType;
+//#endif
 
 		public AbstractTypeEmitter()
 		{
@@ -42,6 +44,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			constructors = new ConstructorCollection();
 			properties = new PropertiesCollection();
 			events = new EventCollection();
+			name2GenericType = new Dictionary<String, Type>();
+		}
+		
+		public bool IsGenericArgument(String genericArgumentName)
+		{
+			return name2GenericType.ContainsKey(genericArgumentName);
+		}
+		
+		public Type GetGenericArgument(String genericArgumentName)
+		{
+			return name2GenericType[genericArgumentName];
 		}
 
 		public void CreateDefaultConstructor()
@@ -63,6 +76,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 //			return member;
 //		}
 
+		public MethodEmitter CreateMethod(String name, MethodAttributes attributes)
+		{
+			MethodEmitter member = new MethodEmitter(this, name, attributes);
+			methods.Add(member);
+			return member;
+		}
+		
 		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments)
 		{
 			MethodEmitter member = new MethodEmitter(this, name, returnType, arguments);
@@ -152,14 +172,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return TypeBuilder.BaseType; }
 		}
 
-#if DOTNET2
+//#if DOTNET2
 
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
 			get { return genericTypeParams; }
 		}
 
-		public void CreateGenericParameters(Type targetType)
+		public void CreateGenericParameters(Type[] genericArguments)
 		{
 			// big sanity check
 			if (genericTypeParams != null)
@@ -167,28 +187,34 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new ApplicationException("CreateGenericParameters: cannot invoke me twice");
 			}
 			
-			if (targetType.IsGenericType)
+			// Type[] genericArguments = targetType.GetGenericArguments();
+
+			String[] argumentNames = new String[genericArguments.Length];
+
+			for (int i = 0; i < argumentNames.Length; i++)
 			{
-				Type[] genericArguments = targetType.GetGenericArguments();
+				argumentNames[i] = genericArguments[i].Name;
+			}
 
-				String[] argumentNames = new String[genericArguments.Length];
+			genericTypeParams = typebuilder.DefineGenericParameters(argumentNames);
 
-				for (int i = 0; i < argumentNames.Length; i++)
-				{
-					argumentNames[i] = genericArguments[i].Name;
-				}
-
-				genericTypeParams = typebuilder.DefineGenericParameters(argumentNames);
-
-				for (int i = 0; i < genericTypeParams.Length; i++)
+			for (int i = 0; i < genericTypeParams.Length; i++)
+			{
+				try
 				{
 					GenericParameterAttributes attributes = genericArguments[i].GenericParameterAttributes;
 					genericTypeParams[i].SetGenericParameterAttributes(attributes);
 				}
+				catch(NotSupportedException)
+				{
+					// Doesnt matter
+				}
+
+				name2GenericType.Add(genericArguments[i].Name, genericArguments[i]);
 			}
 		}
 
-#endif
+//#endif
 
 		public virtual Type BuildType()
 		{
