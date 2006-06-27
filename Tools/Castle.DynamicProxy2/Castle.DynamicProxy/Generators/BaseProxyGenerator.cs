@@ -329,6 +329,7 @@ namespace Castle.DynamicProxy.Generators
 			NestedClassEmitter nested = new NestedClassEmitter(emitter,
 				"Invocation" + nestedCounter.ToString(), typeof(AbstractInvocation), new Type[0]);
 
+			// Type[] genTypes = TypeUtil.Union(primaryType.GetGenericArguments(), methodEmitter.ActualGenericParameters);
 			Type[] genTypes = TypeUtil.Union(primaryType.GetGenericArguments(), methodEmitter.ActualGenericParameters);
 
 			nested.CreateGenericParameters(genTypes);
@@ -410,12 +411,24 @@ namespace Castle.DynamicProxy.Generators
 
 			LocalReference ret_local = null;
 
+			FieldInfo f = targetField.Reference;
+			
 			method.CodeBuilder.SetNonEmpty();
 			method.CodeBuilder.Generator.Emit(OpCodes.Ldarg_0);
-			method.CodeBuilder.Generator.Emit(OpCodes.Ldfld, targetField.Reference);
-			method.CodeBuilder.Generator.Emit(OpCodes.Pop);
-			method.CodeBuilder.Generator.Emit(OpCodes.Ret);
+			method.CodeBuilder.Generator.Emit(OpCodes.Ldfld, f);
+
+			// methodInfo = TypeBuilder.GetMethod(
+			// 	emitter.TypeBuilder.MakeGenericType(emitter.GetGenericArgument("T")), methodInfo);
+
+			methodInfo = methodInfo.MakeGenericMethod(nested.GetGenericArgument("Z"));
+			// methodInfo = methodInfo.MakeGenericMethod(typeof(int));
+			// methodInfo = methodInfo.MakeGenericMethod(nested.GetGenericArgument("T"));
+			// methodInfo = methodInfo.MakeGenericMethod(methodInfo.GetGenericArguments());
 			
+			method.CodeBuilder.Generator.EmitCall(OpCodes.Call, methodInfo, null);
+			
+			// method.CodeBuilder.Generator.Emit(OpCodes.Pop);
+			method.CodeBuilder.Generator.Emit(OpCodes.Ret);
 
 //			MethodInvocationExpression baseMethodInvExp =
 //				new MethodInvocationExpression(targetField, methodInfo, args);
