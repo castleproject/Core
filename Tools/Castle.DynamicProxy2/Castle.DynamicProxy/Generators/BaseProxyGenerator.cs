@@ -39,6 +39,7 @@ namespace Castle.DynamicProxy.Generators
 //		protected FieldReference interceptorSelectorField;
 //		protected FieldReference useSelectorField;
 		protected int nestedCounter;
+		protected int callbackCounter;
 		protected bool canOnlyProxyVirtuals = true;
 
 #if DOTNET2
@@ -185,76 +186,131 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (MethodInfo method in methods)
 			{
-				MethodAttributes atts = ObtainMethodAttributes(method);
-				
-				MethodEmitter methodEmitter = emitter.CreateMethod(method.Name, atts);
-				
-				methodEmitter.CopyParametersAndReturnTypeFrom(method);
-
-				MethodInfo methodOnTarget = GetMethodOnTarget(method);
-				
-				// Interface proxy
-				// NestedClassEmitter iinvocationImpl =
-				//	CreateIInvocationImplementation(interfaceType, targetField.Reference.FieldType,
-				//					method, methodOnTarget);
-								
-				NestedClassEmitter iinvocationImpl =
-					CreateIInvocationImplementation(methodEmitter, targetType, targetType, method, methodOnTarget);
-
-				TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(methodEmitter.Arguments);
-
-				LocalReference invocationImplLocal =
-					methodEmitter.CodeBuilder.DeclareLocal(iinvocationImpl.TypeBuilder);
-
-				// TODO: Initialize iinvocation instance 
-				// with ordinary arguments and in and out arguments
-
-				Expression interceptors = null;
-
-				if (useSelector)
-				{
-					// TODO: Generate code that checks the return of selector
-					// if no interceptors is returned, should we invoke the base.Method directly?
-				}
-				else
-				{
-					interceptors = interceptorsField.ToExpression();
-				}
-
-				TypeTokenExpression typeExp = new TypeTokenExpression(targetType);
-				// TypeTokenExpression typeExp = new TypeTokenExpression(classBaseType);
-				
-				MethodTokenExpression methodTokenExp = 
-					new MethodTokenExpression(methodOnTarget == null ? method : methodOnTarget, targetType);
-
-				NewInstanceExpression newInvocImpl = new NewInstanceExpression(
-					iinvocationImpl.Constructors[0].Builder,
-					targetRef.ToExpression(),
-					interceptors,
-					typeExp,
-					methodTokenExp,
-					NullExpression.Instance, 
-					new ReferencesToObjectArrayExpression(dereferencedArguments));
-
-				methodEmitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
-
-				methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
-					new MethodInvocationExpression(invocationImplLocal,
-					Constants.AbstractInvocationProceed)));
-
-				if (method.ReturnType != typeof(void))
-				{
-					// Emit code to return with cast from ReturnValue
-					MethodInvocationExpression getRetVal =
-						new MethodInvocationExpression(invocationImplLocal,
-							typeof(AbstractInvocation).GetMethod("get_ReturnValue"));
-
-					methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(
-						new ConvertExpression(method.ReturnType, getRetVal)));
-				}
-
-				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement());
+				GenerateMethod(method, targetRef, targetType, useSelector);
 			}
+		}
+
+		private void GenerateMethod(MethodInfo method, Reference targetRef, Type targetType, bool useSelector)
+		{
+			MethodAttributes atts = ObtainMethodAttributes(method);
+				
+			MethodEmitter methodEmitter = emitter.CreateMethod(method.Name, atts);
+				
+			methodEmitter.CopyParametersAndReturnTypeFrom(method);
+
+			MethodInfo methodOnTarget = GetMethodOnTarget(method);
+
+			MethodBuilder callbackMethod = CreateCallbackMethod(method, methodOnTarget);
+				
+			// Interface proxy
+			// NestedClassEmitter iinvocationImpl =
+			//	CreateIInvocationImplementation(interfaceType, targetField.Reference.FieldType,
+			//					method, methodOnTarget);
+								
+			NestedClassEmitter iinvocationImpl =
+				CreateIInvocationImplementation(emitter.TypeBuilder, methodEmitter, targetType, targetType, method, methodOnTarget, callbackMethod);
+
+			TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(methodEmitter.Arguments);
+
+			Type iinvocation = iinvocationImpl.TypeBuilder;
+
+			Type[] set1 = null; Type[] set2 = null;
+			
+			if (iinvocation.IsGenericType)
+			{
+				// get type generics
+				set1 = targetType.GetGenericArguments();
+			}
+			
+			if (method.IsGenericMethod)
+			{
+				// get method generics
+				set2 = method.GetGenericArguments();
+			}
+
+			iinvocation = iinvocation.MakeGenericType(TypeUtil.Union(set1, set2));
+	
+			LocalReference invocationImplLocal = methodEmitter.CodeBuilder.DeclareLocal(iinvocation);
+
+			// TODO: Initialize iinvocation instance 
+			// with ordinary arguments and in and out arguments
+
+			Expression interceptors = null;
+
+			if (useSelector)
+			{
+				// TODO: Generate code that checks the return of selector
+				// if no interceptors is returned, should we invoke the base.Method directly?
+			}
+			else
+			{
+				interceptors = interceptorsField.ToExpression();
+			}
+
+			TypeTokenExpression typeExp = new TypeTokenExpression(targetType);
+			// TypeTokenExpression typeExp = new TypeTokenExpression(classBaseType);
+				
+			MethodTokenExpression methodTokenExp = 
+				new MethodTokenExpression(methodOnTarget == null ? method : methodOnTarget, targetType);
+
+			ConstructorInfo constructor = iinvocationImpl.Constructors[0].Builder;
+			
+			constructor = TypeBuilder.GetConstructor(
+				iinvocation, iinvocationImpl.Constructors[0].Builder);
+			
+			NewInstanceExpression newInvocImpl = new NewInstanceExpression(
+				constructor,
+				targetRef.ToExpression(),
+				interceptors,
+				typeExp,
+				methodTokenExp,
+				NullExpression.Instance, 
+				new ReferencesToObjectArrayExpression(dereferencedArguments));
+
+			methodEmitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
+
+			methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
+			                                       	new MethodInvocationExpression(invocationImplLocal, Constants.AbstractInvocationProceed)));
+
+			if (method.ReturnType != typeof(void))
+			{
+				// Emit code to return with cast from ReturnValue
+				MethodInvocationExpression getRetVal =
+					new MethodInvocationExpression(invocationImplLocal,
+					                               typeof(AbstractInvocation).GetMethod("get_ReturnValue"));
+
+				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(
+				                                       	new ConvertExpression(method.ReturnType, getRetVal)));
+			}
+
+			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		private MethodBuilder CreateCallbackMethod(MethodInfo methodInfo, MethodInfo methodOnTarget)
+		{
+			MethodAttributes atts = MethodAttributes.Family;
+			
+			MethodEmitter callBackMethod = emitter.CreateMethod(methodInfo.Name + "_" + ++callbackCounter, atts);
+
+			MethodInfo targetMethod = methodOnTarget != null ? methodOnTarget : methodInfo;
+			
+			callBackMethod.CopyParametersAndReturnTypeFrom(targetMethod);
+			
+			// TODO: Params
+			
+			if (targetMethod.IsGenericMethod)
+			{
+				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.ActualGenericParameters);
+			}
+
+			callBackMethod.CodeBuilder.AddStatement(new ExpressionStatement(
+                                        	new MethodInvocationExpression(SelfReference.Self, targetMethod)));
+			
+			// TODO: return value
+
+			callBackMethod.CodeBuilder.AddStatement(new ReturnStatement());
+
+			return callBackMethod.MethodBuilder;
 		}
 
 		protected virtual MethodInfo GetMethodOnTarget(MethodInfo method)
@@ -262,10 +318,9 @@ namespace Castle.DynamicProxy.Generators
 			return null;
 		}
 
-		protected NestedClassEmitter CreateIInvocationImplementation(MethodEmitter methodEmitter, 
-		                                                             Type primaryType, Type targetType,
-																	 MethodInfo methodInfo, 
-		                                                             MethodInfo methodOnTargetInfo)
+		protected NestedClassEmitter CreateIInvocationImplementation(TypeBuilder proxyType, 
+			MethodEmitter methodEmitter, Type primaryType, Type targetType, 
+			MethodInfo methodInfo, MethodInfo methodOnTargetInfo, MethodInfo callbackMethod)
 		{
 			ParameterInfo[] parameters = methodInfo.GetParameters();
 			
@@ -274,14 +329,9 @@ namespace Castle.DynamicProxy.Generators
 			NestedClassEmitter nested = new NestedClassEmitter(emitter,
 				"Invocation" + nestedCounter.ToString(), typeof(AbstractInvocation), new Type[0]);
 
-			nested.CreateGenericParameters(TypeUtil.Union(
-			                               	primaryType.GetGenericArguments(), 
-			                               	methodEmitter.ActualGenericParameters));
+			Type[] genTypes = TypeUtil.Union(primaryType.GetGenericArguments(), methodEmitter.ActualGenericParameters);
 
-//			if (methodInfo.IsGenericMethod)
-//			{
-//				methodInfo = methodInfo.MakeGenericMethod(methodEmitter.ActualGenericParameters);
-//			}
+			nested.CreateGenericParameters(genTypes);
 
 			if (methodOnTargetInfo == null)
 			{
@@ -289,52 +339,52 @@ namespace Castle.DynamicProxy.Generators
 			}
 									
 			// Create the fields
-			
-			FieldReference fieldRef = CreateIInvocationFields(nested, targetType);
+
+			FieldReference fieldRef = CreateIInvocationFields(nested, proxyType);
 
 			// Create constructor
 
-			CreateIInvocationConstructor(nested, targetType, fieldRef);
+			CreateIInvocationConstructor(emitter.TypeBuilder, nested, fieldRef);
 
 			// Apply generic parameters to the method
 
-			if (methodOnTargetInfo.IsGenericMethod)
-			{
-				Type[] genericArgs = methodOnTargetInfo.GetGenericArguments();
-
-				Type[] newGenericArgs = new Type[genericArgs.Length];
-				int index = 0;
-
-				foreach (Type gArg in genericArgs)
-				{
-					Type genericArg = nested.GetGenericArgument(gArg.Name);
-
-					if (genericArg != null)
-					{
-						newGenericArgs[index++] = genericArg;
-					}
-				}
-
-				//  methodOnTargetInfo = FrameworkGetMethod(targetType, methodOnTargetInfo).
-				//	  MakeGenericMethod(newGenericArgs);
-
-				methodOnTargetInfo = methodOnTargetInfo.MakeGenericMethod(newGenericArgs);
-				// methodOnTargetInfo = TypeBuilder.GetMethod(nested.TypeBuilder, methodOnTargetInfo);
-			}
+//			if (callbackMethod.IsGenericMethod)
+//			{
+//				Type[] genericArgs = methodOnTargetInfo.GetGenericArguments();
+//
+//				Type[] newGenericArgs = new Type[genericArgs.Length];
+//				
+//				int index = 0;
+//
+//				foreach (Type gArg in genericArgs)
+//				{
+//					Type genericArg = nested.GetGenericArgument(gArg.Name);
+//
+//					if (genericArg != null)
+//					{
+//						newGenericArgs[index++] = genericArg;
+//					}
+//				}
+//
+//				// callbackMethod = callbackMethod.MakeGenericMethod(newGenericArgs);
+//
+//				Type proxyType2 = proxyType.MakeGenericType(nested.GenericTypeParams[0]);
+//
+//				callbackMethod = TypeBuilder.GetMethod(proxyType2, callbackMethod);
+//			}
 			
 			// InvokeMethodOnTarget implementation
 
-			CreateIInvocationInvokeOnTarget(nested, parameters, fieldRef, methodOnTargetInfo);
+			CreateIInvocationInvokeOnTarget(nested, parameters, fieldRef, callbackMethod);
 
 			return nested;
 		}
 
 		private void CreateIInvocationInvokeOnTarget(NestedClassEmitter nested, 
 		                                             ParameterInfo[] parameters, 
-		                                             FieldReference targetField,
-													 MethodInfo methodInfo)
+		                                             FieldReference targetField, MethodInfo methodInfo)
 		{
-			MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.Virtual;
+			const MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.Virtual;
 			
 			MethodEmitter method = nested.CreateMethod("InvokeMethodOnTarget",
 													   new ReturnReferenceExpression(typeof(void)), methodAtts);
@@ -360,38 +410,46 @@ namespace Castle.DynamicProxy.Generators
 
 			LocalReference ret_local = null;
 
-			MethodInvocationExpression baseMethodInvExp =
-				new MethodInvocationExpression(targetField, methodInfo, args);
+			method.CodeBuilder.SetNonEmpty();
+			method.CodeBuilder.Generator.Emit(OpCodes.Ldarg_0);
+			method.CodeBuilder.Generator.Emit(OpCodes.Ldfld, targetField.Reference);
+			method.CodeBuilder.Generator.Emit(OpCodes.Pop);
+			method.CodeBuilder.Generator.Emit(OpCodes.Ret);
+			
+
+//			MethodInvocationExpression baseMethodInvExp =
+//				new MethodInvocationExpression(targetField, methodInfo, args);
 
 			// TODO: Process out/ref arguments
 
-			if (methodInfo.ReturnType != typeof(void))
-			{
-				ret_local = method.CodeBuilder.DeclareLocal(typeof(object));
-				method.CodeBuilder.AddStatement(
-					new AssignStatement(ret_local,
-						new ConvertExpression(typeof(object), methodInfo.ReturnType, baseMethodInvExp)));
-			}
-			else
-			{
-				method.CodeBuilder.AddStatement(new ExpressionStatement(baseMethodInvExp));
-			}
+//			if (methodInfo.ReturnType != typeof(void))
+//			{
+//				ret_local = method.CodeBuilder.DeclareLocal(typeof(object));
+//				method.CodeBuilder.AddStatement(
+//					new AssignStatement(ret_local,
+//						new ConvertExpression(typeof(object), methodInfo.ReturnType, baseMethodInvExp)));
+//			}
+//			else
+//			{
+//				method.CodeBuilder.AddStatement(new ExpressionStatement(baseMethodInvExp));
+//			}
+//
+//			if (methodInfo.ReturnType != typeof(void))
+//			{
+//				MethodInvocationExpression setRetVal =
+//					new MethodInvocationExpression(SelfReference.Self,
+//						typeof(AbstractInvocation).GetMethod("set_ReturnValue"), ret_local.ToExpression());
+//
+//				method.CodeBuilder.AddStatement(new ExpressionStatement(setRetVal));
+//			}
 
-			if (methodInfo.ReturnType != typeof(void))
-			{
-				MethodInvocationExpression setRetVal =
-					new MethodInvocationExpression(SelfReference.Self,
-						typeof(AbstractInvocation).GetMethod("set_ReturnValue"), ret_local.ToExpression());
-
-				method.CodeBuilder.AddStatement(new ExpressionStatement(setRetVal));
-			}
-
-			method.CodeBuilder.AddStatement(new ReturnStatement());
+			// method.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private void CreateIInvocationConstructor(NestedClassEmitter nested, Type targetType, FieldReference targetField)
+		private void CreateIInvocationConstructor(TypeBuilder proxyType, NestedClassEmitter nested, 
+		                                          FieldReference targetField)
 		{
-			ArgumentReference cArg0 = new ArgumentReference(targetType);
+			ArgumentReference cArg0 = new ArgumentReference(proxyType);
 			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
 			ArgumentReference cArg2 = new ArgumentReference(typeof(Type));
 			ArgumentReference cArg3 = new ArgumentReference(typeof(MethodInfo));
@@ -414,57 +472,57 @@ namespace Castle.DynamicProxy.Generators
 		/// <summary>
 		/// Based on Nemerle's FrameworkGetMethod
 		/// </summary>
-		private MethodInfo FrameworkGetMethod(Type targetType, MethodInfo methodInfo)
-		{
-			Type runtimeType = typeof(object).Assembly.GetType("System.RuntimeType");
-
-			if (targetType.GetType().Equals(runtimeType))
-			{
-				return GetHackishMethod(targetType, methodInfo);
-			}
-			else
-			{
-				Type td = targetType.GetGenericTypeDefinition();
-
-				if (targetType.GetType().Equals(runtimeType))
-				{
-					methodInfo = GetHackishMethod(td, methodInfo);
-				}
-
-				return TypeBuilder.GetMethod(targetType, methodInfo);
-			}
-		}
+//		private MethodInfo FrameworkGetMethod(Type targetType, MethodInfo methodInfo)
+//		{
+//			Type runtimeType = typeof(object).Assembly.GetType("System.RuntimeType");
+//
+//			if (targetType.GetType().Equals(runtimeType))
+//			{
+//				return GetHackishMethod(targetType, methodInfo);
+//			}
+//			else
+//			{
+//				Type td = targetType.GetGenericTypeDefinition();
+//
+//				if (targetType.GetType().Equals(runtimeType))
+//				{
+//					methodInfo = GetHackishMethod(td, methodInfo);
+//				}
+//
+//				return TypeBuilder.GetMethod(targetType, methodInfo);
+//			}
+//		}
 
 		/// <summary>
 		/// Based on Nemerle's GetHackishMethod
 		/// </summary>
-		private MethodInfo GetHackishMethod(Type targetType, MethodInfo methodInfo)
-		{
-			int mToken;
-			
-			if (methodInfo is MethodBuilder)
-			{
-				mToken = (int) typeof(MethodBuilder).
-				               	GetProperty("MetadataTokenInternal", BindingFlags.NonPublic | BindingFlags.Instance).
-								GetValue(methodInfo, null);
-			}
-			else
-			{
-				mToken = methodInfo.MetadataToken;
-			}
-			
-			BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public |
-			                     BindingFlags.Instance | BindingFlags.Static |
-			                     BindingFlags.DeclaredOnly;
-			
-			foreach(MethodInfo m in targetType.GetMethods(flags))
-			{
-				if (m.MetadataToken == mToken)
-					return m;
-			}
-
-			return null;
-		}
+//		private MethodInfo GetHackishMethod(Type targetType, MethodInfo methodInfo)
+//		{
+//			int mToken;
+//			
+//			if (methodInfo is MethodBuilder)
+//			{
+//				mToken = (int) typeof(MethodBuilder).
+//				               	GetProperty("MetadataTokenInternal", BindingFlags.NonPublic | BindingFlags.Instance).
+//								GetValue(methodInfo, null);
+//			}
+//			else
+//			{
+//				mToken = methodInfo.MetadataToken;
+//			}
+//			
+//			BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public |
+//			                     BindingFlags.Instance | BindingFlags.Static |
+//			                     BindingFlags.DeclaredOnly;
+//			
+//			foreach(MethodInfo m in targetType.GetMethods(flags))
+//			{
+//				if (m.MetadataToken == mToken)
+//					return m;
+//			}
+//
+//			return null;
+//		}
 
 		protected MethodAttributes ObtainMethodAttributes(MethodInfo method)
 		{

@@ -21,13 +21,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		public static Type[] Union(Type[] set1, Type[] set2)
 		{
-			if (set1 == null) throw new ArgumentNullException("set1");
-			if (set2 == null) throw new ArgumentNullException("set2");
-			
 			ArrayList types = new ArrayList();
 			
-			types.AddRange(set1);
-			types.AddRange(set2);
+			if (set1 != null) types.AddRange(set1);
+			if (set2 != null) types.AddRange(set2);
 
 			return (Type[]) types.ToArray(typeof(Type));
 		}

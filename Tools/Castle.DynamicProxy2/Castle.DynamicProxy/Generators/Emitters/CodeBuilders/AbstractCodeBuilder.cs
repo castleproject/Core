@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			isEmpty = true;
 		}
 
-		protected ILGenerator Generator
+		protected internal ILGenerator Generator
 		{
 			get { return generator; }
 		}

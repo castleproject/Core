@@ -58,7 +58,10 @@ namespace Castle.DynamicProxy.Generators
 
 			try
 			{
-				emitter = BuildClassEmitter(Guid.NewGuid().ToString("N"), targetType, interfaces);
+				// String newName = Guid.NewGuid().ToString("N");
+				String newName = "Proxy";
+
+				emitter = BuildClassEmitter(newName, targetType, interfaces);
 
 				GenerateFields();
 				

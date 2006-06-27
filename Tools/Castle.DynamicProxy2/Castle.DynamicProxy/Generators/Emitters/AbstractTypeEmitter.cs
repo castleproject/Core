@@ -211,7 +211,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					// Doesnt matter
 				}
 
-				name2GenericType.Add(genericArguments[i].Name, genericArguments[i]);
+				name2GenericType.Add(argumentNames[i], genericArguments[i]);
 			}
 		}
 
