@@ -98,19 +98,17 @@ namespace Castle.Facilities.DynamicLoader
 			registry.RegisterLoader(domainId, l);
 
 			InitializeBatchRegistration(l, domainNode.Children["batchRegistration"]);
-			InitializeComponents(l, domainNode.Children["components"]);
 
 			Kernel.AddChildKernel(l.Kernel);
 
 			return appDomain;
 		}
 
-		private void InitializeComponents(RemoteLoader loader, IConfiguration configuration)
-		{
-		}
-
 		protected virtual void InitializeBatchRegistration(RemoteLoader loader, IConfiguration batchRegistrationNode)
 		{
+			if (batchRegistrationNode == null)
+				return;
+			
 			foreach (IConfiguration comp in batchRegistrationNode.Children)
 			{
 				switch (comp.Name)
@@ -141,6 +139,9 @@ namespace Castle.Facilities.DynamicLoader
 		/// </remarks>
 		private void InitializeBatchComponents(RemoteLoader loader, IConfiguration componentsNode)
 		{
+			if (componentsNode == null)
+				return;
+			
 			string componentIdMask = componentsNode.Attributes["id"];
 			List<Type> servicesProvided = new List<Type>();
 			
