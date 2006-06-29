@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.MicroKernel.ComponentActivator;
-using Castle.Model;
-
 namespace Castle.Facilities.DynamicLoader
 {
 	using System;
 	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
+	using System.Runtime.Serialization;
 	using System.Text.RegularExpressions;
 
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.ComponentActivator;
+	using Castle.Model;
 
 	/// <summary>
-	/// Loads component classes on a different <see cref="AppDomain"/>,
-	/// and registers into a <see cref="Kernel"/>.
+	/// Loads components on an isolated <see cref="AppDomain"/>.
 	/// </summary>
 	public class RemoteLoader : MarshalByRefObject, IDisposable
 	{
@@ -52,8 +51,8 @@ namespace Castle.Facilities.DynamicLoader
 		}
 		
 		/// <summary>
-		/// Loads every assembly contained in the <see cref="AppDomain"/> directory,
-		/// then searches for implementations of the given service and add as components.
+		/// Searches for implementations of the given services in the current <see cref="AppDomain"/>
+		/// and add as components. Used by <see cref="DynamicLoaderFacility.InitializeBatchRegistration"/>.
 		/// </summary>
 		/// <param name="componentIdMask">The component id mask. Any <c>*</c> (asterisk) character will be replaced by a sequential number, starting by 1 (one).</param>
 		/// <param name="services">The services in which to test</param>
@@ -149,6 +148,9 @@ namespace Castle.Facilities.DynamicLoader
 			return newId;
 		}
 
+		/// <summary>
+		/// Creates a component on an isolated <see cref="AppDomain"/>.
+		/// </summary>
 		public object CreateRemoteInstance(ComponentModel model, CreationContext context, object[] arguments, Type[] signature)
 		{
 			object instance;
@@ -163,7 +165,7 @@ namespace Castle.Facilities.DynamicLoader
 				}
 				catch (Exception ex)
 				{
-					throw new ComponentActivatorException("ComponentActivator: could not proxy " + model.Implementation.FullName, ex);
+					throw new ComponentActivatorException("RemoteLoader: could not proxy " + model.Implementation.FullName, ex);
 				}
 			}
 			else
@@ -173,13 +175,13 @@ namespace Castle.Facilities.DynamicLoader
 					ConstructorInfo cinfo = implType.GetConstructor(
 							BindingFlags.Public | BindingFlags.Instance, null, signature, null);
 
-					instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
+					instance = FormatterServices.GetUninitializedObject(implType);
 
 					cinfo.Invoke(instance, arguments);
 				}
 				catch (Exception ex)
 				{
-					throw new ComponentActivatorException("ComponentActivator: could not instantiate " + model.Implementation.FullName, ex);
+					throw new ComponentActivatorException("RemoteLoader: could not instantiate " + model.Implementation.FullName, ex);
 				}
 			}
 
