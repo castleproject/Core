@@ -1,0 +1,172 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8F649EDC-B84C-4F20-81AD-221ACA465E1D}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.Facilities.Logging.Tests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.Facilities.Logging.Tests</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.DynamicProxy">
+      <Name>Castle.DynamicProxy</Name>
+      <HintPath>..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.MicroKernel">
+      <Name>Castle.MicroKernel</Name>
+      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Model">
+      <Name>Castle.Model</Name>
+      <HintPath>..\..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Logging">
+      <Name>Castle.Services.Logging</Name>
+      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.Log4netIntegration">
+      <Name>Castle.Services.Logging.Log4netIntegration</Name>
+      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.NLogIntegration">
+      <Name>Castle.Services.Logging.NLogIntegration</Name>
+      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.NLogIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <Name>Castle.Windsor</Name>
+      <HintPath>..\..\..\InversionOfControl\bin\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\..\..\SharedLibs\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <Name>NLog</Name>
+      <HintPath>..\..\..\SharedLibs\nlog\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog.DotNet">
+      <Name>NLog.DotNet</Name>
+      <HintPath>..\..\..\SharedLibs\nlog\NLog.DotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <Name>nunit.framework</Name>
+      <HintPath>C:\devtools\nunit22\bin\nunit.framework.dll</HintPath>
+      <AssemblyFolderKey>hklm\dn\nunit.framework</AssemblyFolderKey>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Castle.Facilities.Logging\Castle.Facilities.Logging-vs2005.csproj">
+      <Name>Castle.Facilities.Logging</Name>
+      <Project>{32D54D33-206F-44EE-8329-8480ABE049B1}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\ISmtpServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\LoggingComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\SmtpServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConsoleFacitlyTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NullFacitlyTest.cs" />
+    <Compile Include="Log4NetFacilityTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NLogFacilityTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="log4net.config" />
+    <None Include="NLog.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>xcopy &gt;nul /d/y $(ProjectDir)*.config $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
+</Project>

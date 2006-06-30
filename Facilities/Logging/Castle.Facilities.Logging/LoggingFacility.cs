@@ -113,7 +113,11 @@ namespace Castle.Facilities.Logging
 		{
 			Type loggerFactoryType = null;
 
-			if (logApi == LoggerImplementation.Console)
+            if(logApi == LoggerImplementation.Null)
+            {
+                loggerFactoryType = typeof(NullLogFactory);
+            }
+			else if (logApi == LoggerImplementation.Console)
 			{
 				loggerFactoryType = typeof(ConsoleFactory);
 			}
