@@ -15,13 +15,15 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
-	using System.Collections;
 	using System.IO;
 	using System.Net;
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using System.Web.Hosting;
 	using System.Configuration;
+	using System.Collections.Specialized;
+	using System.Runtime.Serialization.Formatters.Binary;
+	using System.Xml;
 
 	using NUnit.Framework;
 
@@ -38,6 +40,54 @@ namespace Castle.MonoRail.TestSupport
 		private TestRequest request;
 		private TestResponse response;
 		private StringBuilder outputBuffer = new StringBuilder();
+
+		#region Public Methods
+
+		/// <summary>
+		/// Reinstates the request.
+		/// </summary>
+		/// <param name="serializedRequest">The serialized request.</param>
+		public void ReinstateRequest(byte[] serializedRequest)
+		{
+			BinaryFormatter bf;
+			MemoryStream ms = null;
+			try
+			{
+				ms = new MemoryStream(serializedRequest);
+				{
+					bf = new BinaryFormatter();
+					Request.Headers = (NameValueCollection) bf.Deserialize(ms);
+				}
+			}
+			finally
+			{
+				bf = null;
+				if (ms != null) ms.Close();
+				ms = null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the serialized request.
+		/// </summary>
+		/// <returns></returns>
+		public byte[] GetSerializedRequest()
+		{
+			MemoryStream objMS = new MemoryStream();
+			BinaryFormatter objBinaryFormatter = new BinaryFormatter();
+
+			try
+			{
+				objBinaryFormatter.Serialize(objMS, Request.Headers);
+			}
+			catch
+			{
+			}
+
+			return objMS.GetBuffer();
+		}
+
+		#endregion
 
 		#region Test Lifecycle
 
@@ -99,11 +149,25 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="queryStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
 		public void DoGet(String path, params String[] queryStringParams)
 		{
+			DoGet(path, true, queryStringParams);
+		}
+
+		/// <summary>
+		/// Performs a GET operation on
+		/// </summary>
+		/// <param name="path">The resource being request, for example <c>home/index.rails</c></param>
+		/// <param name="resendCookies">if set to <c>true</c> [resend cookies].</param>
+		/// <param name="queryStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
+		public void DoGet(String path, bool resendCookies, params String[] queryStringParams)
+		{
 			AssertPathIsValid(path);
 
 			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
-			
-			ResendCookies();
+
+			if (resendCookies)
+			{
+				ResendCookies();
+			}
 
 			outputBuffer.Length = 0;
 
@@ -121,12 +185,23 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
 		public void DoPost(String path, params String[] postStringParams)
 		{
+			DoPost(path, true, postStringParams);
+		}
+
+		/// <summary>
+		/// Performs a Post operation on
+		/// </summary>
+		/// <param name="path">The resource being request, for example <c>home/index.rails</c></param>
+		/// <param name="resendCookies">if set to <c>true</c> [resend cookies].</param>
+		/// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
+		public void DoPost(String path, bool resendCookies, params String[] postStringParams)
+		{
 			if (postStringParams.Length != 0) Request.PostParams = postStringParams;
 
 			outputBuffer.Length = 0;
 
 			int pos = path.IndexOf('?');
-			
+
 			if (pos > -1)
 			{
 				string qs = path.Substring(pos + 1);
@@ -139,8 +214,11 @@ namespace Castle.MonoRail.TestSupport
 
 			Request.Url = path;
 			Request.Verb = "POST";
-			
-			ResendCookies();
+
+			if (resendCookies)
+			{
+				ResendCookies();
+			}
 
 			StringWriter writer = new StringWriter(outputBuffer);
 
@@ -205,9 +283,62 @@ namespace Castle.MonoRail.TestSupport
 			get { return outputBuffer.ToString(); }
 		}
 
+		/// <summary>
+		/// Returns the sessionId related to the current session
+		/// </summary>
+		public string SessionId
+		{
+			get
+			{
+				string sessionId = string.Empty;
+
+				try
+				{
+					sessionId =
+						Request.Cookies.GetCookies(new Uri("http://localhost"))["ASP.NET_SessionId"].ToString().Split("=".ToCharArray())[1
+							];
+				}
+				catch
+				{
+				}
+
+				return sessionId;
+			}
+		}
+
 		#endregion
 
 		#region Available Asserts
+
+		/// <summary>
+		/// Asserts that the response contains a number of nodes matching an XPath expression.
+		/// </summary>
+		/// <param name="xpathExpression">The xpath expression to match against.</param>
+		/// <param name="numberOfExpectedNodes">The number of expected nodes.</param>
+		protected void AssertResponseNodeCount(String xpathExpression, int numberOfExpectedNodes)
+		{
+			XmlDocument xml = new XmlDocument();
+			xml.LoadXml(Output);
+
+			Assert.AreEqual(numberOfExpectedNodes, xml.SelectNodes(xpathExpression).Count);
+		}
+
+		/// <summary>
+		/// Asserts that the response was NOT a redirect to the specified
+		/// <c>url</c> - for example check that your request was not sent to a login screen.
+		/// </summary>
+		protected void AssertNotRedirectedTo(String url)
+		{
+			// Location header always starts with a leading / so
+			// if this is not present on the specified url, add it
+
+			if (url.IndexOf("/") != 0)
+			{
+				url = "/" + url;
+			}
+
+			Assert.IsFalse(url == Response.Headers["Location"]);
+		}
 
 		protected void AssertStatusCode(int expectedCode)
 		{
@@ -516,24 +647,30 @@ namespace Castle.MonoRail.TestSupport
 
 			return content.Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
 		}
-		
+
+		/// <summary>
+		/// Ensures that cookies (and therefore the session) will persist between requests,
+		/// emulating the behaviour of a genuine web client.
+		/// </summary>
 		private void ResendCookies()
 		{
+			// If no initial request has been made then there will be no response
+			// Therefore we do not need to resendcookies as none have been received
 			if (response != null)
 			{
-				// Clear just the cookie bucket
+				Uri uri = new Uri("http://localhost");
+
+				// We have a cookies container which is used to persist the cookies between requests,
+				// emulating the cookie cache on a web browser
+				// 
+				// Here we take the cookies from the response and append them to any existing cookies
+				request.Cookies.Add(uri, response.Cookies.GetCookies(uri));
+
+				// Clear all of the cookie headers to prepare for them to be resent on the next request
 				request.Headers.Remove("Cookie");
 
-				// Resend all cookie information from the response
-				foreach(DictionaryEntry entry in response.Headers)
-				{
-					if (entry.Key.ToString() == "Set-Cookie")
-					{
-						String value = entry.Value.ToString().Split(';')[0];
-						
-						request.Headers.Add("Cookie", value);
-					}
-				}
+				// Form a new cookie header from the cookies in the persistant request cookie container
+				request.Headers.Add("Cookie", request.Cookies.GetCookieHeader(uri));
 			}
 		}
 	}

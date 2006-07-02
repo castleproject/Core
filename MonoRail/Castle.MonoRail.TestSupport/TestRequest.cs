@@ -15,8 +15,8 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
+	using System.Net;	
 	using System.Collections.Specialized;
-
 
 	public class TestRequest : MarshalByRefObject
 	{
@@ -33,6 +33,7 @@ namespace Castle.MonoRail.TestSupport
 		private IntPtr userToken = IntPtr.Zero;
 		private NameValueCollection headers = new NameValueCollection();
 		private NameValueCollection serverVariables = new NameValueCollection();
+		private CookieContainer cookies = new CookieContainer();
 
 		public TestRequest()
 		{
@@ -115,6 +116,12 @@ namespace Castle.MonoRail.TestSupport
 		{
 			get { return postParams; }
 			set { postParams = value; }
+		}
+
+		public CookieContainer Cookies
+		{
+			get { return cookies; }
+			set { cookies = value; }
 		}
 	}
 }

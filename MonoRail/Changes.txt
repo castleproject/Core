@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Colin Ramsay <castleproject-devel@happyandlost.co.uk> patch adding more
+  asserts to TestSupport.AbstractMRTestCase and refactored some other things
+
 - MR-125 testsupport doesn't handle posting to smart dispatcher controller 
   Fixed by Andrei Shires <andrei@internetware.co.uk>
 
