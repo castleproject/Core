@@ -22,13 +22,13 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	/// <summary>
 	/// Abstract <seealso cref="ISessionScope"/> implementation
 	/// </summary>
-	public abstract class AbstractScope : ISessionScope
+	public abstract class AbstractScope : MarshalByRefObject, ISessionScope
 	{
 		private readonly SessionScopeType type;
 
 		protected Hashtable key2Session = new Hashtable();
 
-		public AbstractScope( SessionScopeType type )
+		public AbstractScope(SessionScopeType type)
 		{
 			this.type = type;
 			ThreadScopeAccessor.Instance.RegisterScope(this);
@@ -81,11 +81,6 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 		}
 
-		internal ICollection GetSessions()
-		{
-			return key2Session.Values;
-		}
-
 		protected internal void PerformDisposal( ICollection sessions, bool flush, bool close )
 		{
 			foreach(ISession session in sessions)
@@ -101,6 +96,11 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			{
 				RemoveSession(session);
 			}
+		}
+
+		internal ICollection GetSessions()
+		{
+			return key2Session.Values;
 		}
 
 		private void RemoveSession(ISession session)

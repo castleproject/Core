@@ -19,14 +19,12 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	using System.Runtime.CompilerServices;
 	using System.Web;
 
-
+	/// <summary>
+	/// 
+	/// </summary>
 	public class WebThreadScopeInfo : AbstractThreadScopeInfo
 	{
         const string ActiveRecordCurrentStack = "activerecord.currentstack";
-	    
-		public WebThreadScopeInfo()
-		{
-		}
 
 		public override Stack CurrentStack
 		{

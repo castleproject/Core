@@ -1,6 +1,11 @@
 beta 4
 ======
 
+- Fixed AR-62: DifferentDatabaseScope not switching between databases
+
+- Introduced HybridWebThreadScopeInfo which, as the name implies, 
+  uses both strategies to handle scope storage. Useful only for some complex scenarios
+
 - Added support for RelationType.List.
 
 - Added native support for .NET 2.0 Nullables, using NHibernate.Nullables2 library.

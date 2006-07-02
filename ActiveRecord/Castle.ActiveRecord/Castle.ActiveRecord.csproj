@@ -604,6 +604,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Scopes\HybridWebThreadScopeInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Scopes\ISessionScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

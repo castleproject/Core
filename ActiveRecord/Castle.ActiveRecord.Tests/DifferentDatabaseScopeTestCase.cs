@@ -217,6 +217,37 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsNotNull( blogs2 );
 			Assert.AreEqual( 0, blogs2.Length );
 		}
+		
+		[Test, Category("mssql")]
+		public void MoreThanOneConnectionWithinTheSessionScope()
+		{
+			SqlConnection conn = CreateSqlConnection();
+			SqlConnection conn2 = CreateSqlConnection2();
+			
+			using(new SessionScope())
+			{
+				foreach(SqlConnection connection in new SqlConnection[] { conn, conn2 })
+				{
+					connection.Open();
+					
+					using(new DifferentDatabaseScope(connection))
+					{
+						Blog blog = new Blog();
+						blog.Name = "hammett's blog";
+						blog.Author = "hamilton verissimo";
+						blog.Create();
+					}
+				}
+			}
+
+			OtherDbBlog[] blogs2 = OtherDbBlog.FindAll();
+			Assert.IsNotNull( blogs2 );
+			Assert.AreEqual( 1, blogs2.Length );
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+		}
 
 		[Test, Category("mssql")]
 		public void UsingSessionAndTransactionScope()
@@ -383,6 +414,25 @@ namespace Castle.ActiveRecord.Tests
 			IConfigurationSource config = GetConfigSource();
 	
 			IConfiguration db2 = config.GetConfiguration( typeof(Test2ARBase) );
+	
+			SqlConnection conn = null;
+	
+			foreach(IConfiguration child in db2.Children)
+			{
+				if (child.Name == "hibernate.connection.connection_string")
+				{
+					conn = new SqlConnection(child.Value);
+				}
+			}
+
+			return conn;
+		}
+
+		private SqlConnection CreateSqlConnection2()
+		{
+			IConfigurationSource config = GetConfigSource();
+	
+			IConfiguration db2 = config.GetConfiguration( typeof(ActiveRecordBase) );
 	
 			SqlConnection conn = null;
 	
