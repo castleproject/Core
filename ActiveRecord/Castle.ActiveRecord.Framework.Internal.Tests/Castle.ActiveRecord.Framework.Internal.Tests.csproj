@@ -239,6 +239,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\EnumTestClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\HasManyClassA.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

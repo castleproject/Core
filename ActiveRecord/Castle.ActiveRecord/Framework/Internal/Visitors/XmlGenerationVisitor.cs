@@ -750,16 +750,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeTypeAtt(Type type, String typeName)
 		{
-			if (type.IsEnum)
-			{
-				return String.Empty;
-			}
-			else if (typeName != null)
+		    if (typeName != null)
 			{
 				return MakeAtt("type", typeName);
 			}
 			else
 			{
+				if (type.IsEnum)
+				{
+					return String.Empty;
+				}
 				if (type.IsPrimitive || type == typeof(String))
 				{
 					return MakeAtt("type", type.Name);

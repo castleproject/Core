@@ -506,7 +506,34 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			Assert.AreEqual( expected, xml );
 		}
+		
+#if DOTNET2
+	    [Test]
+	    public void EnumWithColumnType()
+	    {
+            ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+            ActiveRecordModel model = builder.Create(typeof(EnumTestClass));
+            Assert.IsNotNull(model);
 
+            string xml = Process(builder, model);
+	        
+            string expected =
+                "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+                "<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+                "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.EnumTestClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"EnumTestClass\" lazy=\"false\">\r\n" +
+                "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+                "      <generator class=\"native\">\r\n" +
+                "      </generator>\r\n" +
+                "    </id>\r\n" +
+                "    <property name=\"NoColumnType\" access=\"property\" column=\"NoColumnType\" />\r\n" +
+                "    <property name=\"WithColumnType\" access=\"property\" column=\"WithColumnType\" type=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.GenericEnumStringType`1[[Castle.ActiveRecord.Framework.Internal.Tests.Model.EnumVal, Castle.ActiveRecord.Framework.Internal.Tests]], Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
+                "  </class>\r\n" +
+                "</hibernate-mapping>\r\n";
+
+            Assert.AreEqual(expected, xml);
+	    }
+#endif
+		
 		private string Process(ActiveRecordModelBuilder builder, ActiveRecordModel model)
 		{
 			GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor( builder.Models );

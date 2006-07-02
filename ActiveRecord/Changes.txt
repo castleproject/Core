@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Applied Brian Romanko <me@brianromanko.com> patch fixing enum support
+
 - Fixed AR-62: DifferentDatabaseScope not switching between databases
 
 - Introduced HybridWebThreadScopeInfo which, as the name implies, 
