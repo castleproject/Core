@@ -168,6 +168,135 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region CheckboxList
+		
+		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource)
+		{
+			return CreateCheckboxList(target, dataSource, null);
+		}
+		
+		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+			
+			return new CheckboxList(this, target, value, dataSource, attributes);
+		}
+		
+		internal String CheckboxItem(String target, object value, bool isChecked, IDictionary attributes)
+		{
+			if (isChecked)
+			{
+				if (attributes == null)
+				{
+					attributes = new HybridDictionary(true);
+				}
+
+				AddChecked(attributes);
+			}
+
+			String elementId = CreateHtmlId(attributes, target) + value;
+
+			String result = CreateInputElement("checkbox", elementId, target, value.ToString(), attributes);
+			
+			return result;
+		}
+
+		public sealed class CheckboxList : IEnumerable, IEnumerator
+		{
+			private readonly FormHelper helper;
+			private readonly String target;
+			private readonly IDictionary attributes;
+			private IEnumerator enumerator;
+			private object value;
+			private bool hasMovedNext, hasItem;
+			private string valueProperty;
+			private PropertyInfo valueMethodInfo;
+
+			public CheckboxList(FormHelper helper, String target, 
+			                    object value, IEnumerable dataSource, IDictionary attributes)
+			{
+				if (dataSource == null) throw new ArgumentNullException("dataSource");
+
+				this.helper = helper;
+				this.value = value;
+				this.target = target;
+				this.attributes = attributes;
+				
+				enumerator = dataSource.GetEnumerator();
+				
+				valueProperty = ObtainEntryAndRemove(attributes, "value");
+			}
+			
+			public String Item()
+			{
+				if (!hasMovedNext)
+				{
+					throw new InvalidOperationException("Before rendering a checkbox item, you must use MoveNext");
+				}
+				
+				if (!hasItem)
+				{
+					// Nothing to render
+					return String.Empty;
+				}
+				
+				object currentItem = Current;
+				object guidanceElem = currentItem;
+				
+				Type selectedType = null;
+
+				if (value != null)
+				{
+					selectedType = value.GetType();
+				}
+
+				if (valueProperty != null && valueMethodInfo == null)
+				{
+					valueMethodInfo = GetMethod(guidanceElem, valueProperty);
+				}
+
+				object valueToRender = currentItem;
+				
+				if (valueMethodInfo != null)
+				{
+					valueToRender = valueMethodInfo.GetValue(currentItem, null);
+				}
+
+				bool selected = false;
+				
+				if (value != null && value is ICollection)
+				{
+					selected = IsSelected(valueToRender, value, selectedType, valueMethodInfo, true);
+				}
+				
+				return helper.CheckboxItem(target, valueToRender, selected, attributes);
+			}
+
+			public IEnumerator GetEnumerator()
+			{
+				return this;
+			}
+
+			public bool MoveNext()
+			{
+				hasMovedNext = true;
+				hasItem = enumerator.MoveNext();
+				return hasItem;
+			}
+
+			public void Reset()
+			{
+				enumerator.Reset();
+			}
+
+			public object Current
+			{
+				get { return enumerator.Current; }
+			}
+		}
+
+		#endregion
+		
 		#region CheckboxField
 
 		public String CheckboxField(String target)
@@ -185,11 +314,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			object value = ObtainValue(target);
 			
-			String trueValue = ObtainEntryAndRemove(attributes, "trueValue");
+			String trueValue = ObtainEntryAndRemove(attributes, "trueValue", "true");
 			
 			bool isChecked;
 
-			if (trueValue != null)
+			if (trueValue != "true")
 			{
 				isChecked = AreEqual(value, trueValue);
 			}
@@ -212,7 +341,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			String hiddenElementId = CreateHtmlId(attributes, target) + "H";
 			String hiddenElementValue = ObtainEntryAndRemove(attributes, "falseValue", "false");
 
-			String result = CreateInputElement("checkbox", target, "true", attributes);
+			String result = CreateInputElement("checkbox", target, trueValue, attributes);
 			
 			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
 			
@@ -715,7 +844,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// to the <paramref name="selectedValue"/>. Or if <paramref name="selectedValue"/> is an
 		/// array <paramref name="value"/> is selected if <see cref="Array.IndexOf"/> can find it
 		/// in <paramref name="selectedValue"/>.</remarks>
-		private bool IsSelected(object value, object selectedValue, Type selectedType, PropertyInfo property, bool isMultiple)
+		private static bool IsSelected(object value, object selectedValue, Type selectedType, PropertyInfo property, bool isMultiple)
 		{
 			if (!isMultiple)
 			{
@@ -757,7 +886,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>This method is used to get the <see cref="MethodInfo"/> to retrieve
 		/// specified property from the specified type.</remarks>
 		/// <exception cref="ArgumentNullException">Thrown is <paramref name="elem"/> is <c>null</c>.</exception>
-		private PropertyInfo GetMethod(object elem, String property)
+		private static PropertyInfo GetMethod(object elem, String property)
 		{
 			if (elem == null) throw new ArgumentNullException("elem");
 			if (property == null) return null;
@@ -803,3 +932,4 @@ namespace Castle.MonoRail.Framework.Helpers
 		#endregion
 	}
 }
+

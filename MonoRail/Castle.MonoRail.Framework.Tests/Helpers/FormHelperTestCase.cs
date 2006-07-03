@@ -31,6 +31,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private FormHelper helper;
 		private Product product;
 		private SimpleUser user;
+		private Subscription subscription;
+		private Month[] months;
 
 		[SetUp]
 		public void Init()
@@ -42,6 +44,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			helper = new FormHelper();
 
+			subscription = new Subscription();
+			months = new Month[] {new Month(1, "January"), new Month(1, "February")};
 			product = new Product("memory card", 10, (decimal) 12.30);
 			user = new SimpleUser();
 
@@ -53,6 +57,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			controller.PropertyBag.Add("sendemail", true);
 			controller.PropertyBag.Add("confirmation", "abc");
 			controller.PropertyBag.Add("fileaccess", FileAccess.Read);
+			controller.PropertyBag.Add("subscription", subscription);
+			controller.PropertyBag.Add("months", months);
 
 			helper.SetController(controller);
 		}
@@ -98,6 +104,103 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.HiddenField("product.name"));
 			Assert.AreEqual("<input type=\"hidden\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />", 
 				helper.HiddenField("product.quantity"));
+		}
+
+		/// <summary>
+		/// Tests the subscription.Months as null and an int array as source
+		/// </summary>
+		[Test]
+		public void CheckboxFieldList1()
+		{
+			FormHelper.CheckboxList list = 
+				helper.CreateCheckboxList("subscription.Months", new int[] {1,2,3,4,5,6});
+			
+			Assert.IsNotNull(list);
+			
+			foreach(Object item in list)
+			{
+				String content = list.Item();
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months" + item + "\" name=\"subscription.Months\" value=\"" + item + "\" />", content);
+			}
+		}
+
+		/// <summary>
+		/// Tests the subscription.Months as non null and an int array as source
+		/// </summary>
+		[Test]
+		public void CheckboxFieldList2()
+		{
+			subscription.Months = new int[] { 1, 2, 3, 4, 5 };
+			
+			FormHelper.CheckboxList list = 
+				helper.CreateCheckboxList("subscription.Months", new int[] {1,2,3,4,5});
+			
+			Assert.IsNotNull(list);
+			
+			foreach(Object item in list)
+			{
+				String content = list.Item();
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months" + item + "\" name=\"subscription.Months\" value=\"" + item + "\" checked=\"checked\" />", content);
+			}
+		}
+		
+		/// <summary>
+		/// Tests the subscription.Months2 as null and using a <c>Month</c> array as data source
+		/// </summary>
+		[Test]
+		public void CheckboxFieldList3()
+		{
+			FormHelper.CheckboxList list = 
+				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
+			
+			Assert.IsNotNull(list);
+			
+			foreach(Month item in list)
+			{
+				String content = list.Item();
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2" + item.Id + "\" name=\"subscription.Months2\" value=\"" + item.Id + "\" />", content);
+			}
+		}
+		
+		/// <summary>
+		/// Tests the subscription.Months2 as non null and using a <c>Month</c> array as data source
+		/// </summary>
+		[Test]
+		public void CheckboxFieldList4()
+		{
+			subscription.Months2 = new Month[] {new Month(3, "March")};
+			
+			FormHelper.CheckboxList list = 
+				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
+			
+			Assert.IsNotNull(list);
+			
+			foreach(Month item in list)
+			{
+				String content = list.Item();
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2" + item.Id + "\" name=\"subscription.Months2\" value=\"" + item.Id + "\" />", content);
+			}
+		}
+
+		/// <summary>
+		/// Tests the subscription.Months2 as non null and using a <c>Month</c> array as data source
+		/// but with selection
+		/// </summary>
+		[Test]
+		public void CheckboxFieldList5()
+		{
+			subscription.Months2 = new Month[] {new Month(1, "January"), new Month(2, "Feb") };
+			
+			FormHelper.CheckboxList list = 
+				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
+			
+			Assert.IsNotNull(list);
+			
+			foreach(Month item in list)
+			{
+				String content = list.Item();
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2" + item.Id + "\" name=\"subscription.Months2\" value=\"" + item.Id + "\" checked=\"checked\" />", content);
+			}
 		}
 
 		[Test]
@@ -380,6 +483,47 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	}
 
 	#region Classes skeletons
+	
+	public class Month
+	{
+		private int id;
+		private String name;
+
+		public Month(int id, string name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+	}
+	
+	public class Subscription
+	{
+		int[] months; IList months2 = new ArrayList();
+
+		public int[] Months
+		{
+			get { return months; }
+			set { months = value; }
+		}
+
+		public IList Months2
+		{
+			get { return months2; }
+			set { months2 = value; }
+		}
+	}
 
 	public class Product
 	{
