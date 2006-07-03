@@ -81,7 +81,30 @@ namespace Castle.Components.Binder
 			}
 			else if (desiredType == typeof(Boolean))
 			{
-				return reader.GetBoolean(ordinal);
+				object bVal = reader.GetValue(ordinal);
+				
+				if (bVal is Boolean)
+				{
+					return bVal;
+				}
+				else
+				{
+					IConvertible convertible = bVal as IConvertible;
+					
+					if (convertible != null)
+					{
+						bool result = convertible.ToBoolean(null);
+						
+						return result;
+					}
+					else
+					{
+						String val = bVal.ToString();
+						
+						throw new NotImplementedException("Could not convert " + val + 
+							" to boolean");
+					}
+				}
 			}
 			else if (desiredType == typeof(Byte))
 			{
