@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model-2-0", "..\..\I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base Libraries", "Base Libraries", "{5672C41B-1D89-49DD-B3CC-18183A6DE077}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.DynamicLoader.Tests", "Castle.Facilities.DynamicLoader.Tests\Castle.Facilities.DynamicLoader.Tests.csproj", "{9A3F9825-B974-4F92-86A2-21FC3A444392}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.DynamicLoader.Tests-vs2005", "Castle.Facilities.DynamicLoader.Tests\Castle.Facilities.DynamicLoader.Tests-vs2005.csproj", "{9A3F9825-B974-4F92-86A2-21FC3A444392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

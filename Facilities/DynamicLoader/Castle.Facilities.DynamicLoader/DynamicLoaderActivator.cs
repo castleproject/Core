@@ -19,6 +19,7 @@ namespace Castle.Facilities.DynamicLoader
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
+	using Castle.MicroKernel.Facilities;
 	using Castle.Model;
 
 	/// <summary>
@@ -28,16 +29,21 @@ namespace Castle.Facilities.DynamicLoader
 	public class DynamicLoaderActivator : DefaultComponentActivator, IDisposable
 	{
 		readonly RemoteLoader loader;
-		readonly ClientSponsor keepAliveSponsor;
-		
+		ClientSponsor keepAliveSponsor;
+
 		/// <summary>
 		/// Creates a new <see cref="DynamicLoaderActivator"/>.
 		/// </summary>
 		public DynamicLoaderActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
+			if (!model.Implementation.IsSubclassOf(typeof(MarshalByRefObject)))
+				throw new FacilityException(String.Format("The implementation for the component '{0}' must inherit from System.MarshalByRefObject in order to be created in an isolated AppDomain.", model.Name));
+
 			this.loader = (RemoteLoader) model.ExtendedProperties["dynamicLoader.loader"];
-			this.keepAliveSponsor = new ClientSponsor(TimeSpan.FromMinutes(2));
+			
+			if (this.loader == null)
+				throw new FacilityException(String.Format("A remote loader was not created for component '{0}'.", model.Name));
 		}
 
 		/// <summary>
@@ -48,7 +54,12 @@ namespace Castle.Facilities.DynamicLoader
 		protected override object CreateInstance(CreationContext context, object[] arguments, Type[] signature)
 		{
 			object instance = loader.CreateRemoteInstance(Model, context, arguments, signature);
+
+			if (keepAliveSponsor == null)
+				keepAliveSponsor = new ClientSponsor(TimeSpan.FromMinutes(2));
+
 			keepAliveSponsor.Register((MarshalByRefObject) instance);
+
 			return instance;
 		}
 
@@ -60,8 +71,9 @@ namespace Castle.Facilities.DynamicLoader
 		{
 			if (instance is IDisposable)
 				((IDisposable) instance).Dispose();
-			
-			keepAliveSponsor.Unregister((MarshalByRefObject) instance);
+
+			if (keepAliveSponsor != null)
+				keepAliveSponsor.Unregister((MarshalByRefObject) instance);
 		}
 
 		/// <summary>
@@ -69,7 +81,8 @@ namespace Castle.Facilities.DynamicLoader
 		/// </summary>
 		public void Dispose()
 		{
-			keepAliveSponsor.Close();
+			if (keepAliveSponsor != null)
+				keepAliveSponsor.Close();
 		}
 	}
 }
