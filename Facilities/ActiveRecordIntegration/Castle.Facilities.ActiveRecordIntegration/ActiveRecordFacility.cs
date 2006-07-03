@@ -45,9 +45,13 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		protected override void Init()
 		{
 			if (Kernel.HasComponent(typeof(ILogger)))
+			{
 				log = (ILogger) Kernel[typeof(ILogger)];
+			}
 			else
+			{
 				log = new NullLogger();
+			}
 
 			log.Debug("Initializing AR Facility");
 
