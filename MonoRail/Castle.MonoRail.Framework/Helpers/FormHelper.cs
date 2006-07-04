@@ -187,12 +187,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			if (isChecked)
 			{
-				if (attributes == null)
-				{
-					attributes = new HybridDictionary(true);
-				}
-
 				AddChecked(attributes);
+			}
+			else
+			{
+				RemoveChecked(attributes);
 			}
 
 			target = String.Format("{0}[{1}]", target, index);
@@ -224,7 +223,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				this.helper = helper;
 				this.value = value;
 				this.target = target;
-				this.attributes = attributes;
+				this.attributes = attributes == null ? new HybridDictionary(true) : attributes;
 				
 				enumerator = dataSource.GetEnumerator();
 				
@@ -913,6 +912,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		private static void AddChecked(IDictionary attributes)
 		{
 			attributes["checked"] = "checked";
+		}
+
+		private static void RemoveChecked(IDictionary attributes)
+		{
+			attributes.Remove("checked");
 		}
 
 		private static String CreateHtmlId(String name)
