@@ -170,6 +170,34 @@ namespace Castle.MicroKernel.Tests.Configuration
 			Assert.AreEqual( "CommonImpl1", instance.Services[0].GetType().Name );
 			Assert.AreEqual( "CommonImpl2", instance.Services[1].GetType().Name );
 		}
+		
+		[Test]
+		public void ConstructorWithArrayParameterAndCustomType()
+		{
+			MutableConfiguration confignode = new MutableConfiguration("key");
+			
+			IConfiguration parameters = 
+				confignode.Children.Add( new MutableConfiguration("parameters") );
+
+			IConfiguration services = parameters.Children.Add(new MutableConfiguration("services"));
+			MutableConfiguration array = (MutableConfiguration) 
+				services.Children.Add(new MutableConfiguration("array"));
+
+			array.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
+			array.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
+
+			kernel.ConfigurationStore.AddComponentConfiguration( "key", confignode );
+
+			kernel.AddComponent( "commonservice1", typeof(ICommon), typeof(CommonImpl1) );
+			kernel.AddComponent( "commonservice2", typeof(ICommon), typeof(CommonImpl2) );
+			kernel.AddComponent( "key", typeof(ClassWithArrayConstructor) );
+			
+			ClassWithArrayConstructor instance = (ClassWithArrayConstructor) kernel["key"];
+			Assert.IsNotNull( instance.Services );
+			Assert.AreEqual( 2, instance.Services.Length );
+			Assert.AreEqual( "CommonImpl1", instance.Services[0].GetType().Name );
+			Assert.AreEqual( "CommonImpl2", instance.Services[1].GetType().Name );
+		}
 
 		[Test]
 		public void CustomLifestyleManager()
