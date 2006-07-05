@@ -68,7 +68,6 @@
 	</target>
 
 	<target name="activerecord" depends="init">
-		<nant buildfile="SandBox/NHibernate.Nullables2/nullables2.build" target="build" inheritall="true" if="${framework::get-target-framework()=='net-2.0'}" />
 		<nant buildfile="ActiveRecord/activerecord.build" target="build" inheritall="true" />
 	</target>
 	
