@@ -17,8 +17,6 @@ namespace Castle.ActiveRecord.Framework
 	using System;
 	using System.Collections;
 
-	using Nullables;
-
 	using Iesi.Collections;
 
 	/// <summary>
@@ -58,7 +56,7 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns>The strongly-typed array</returns>
 		public static Array BuildArray(Type type, IEnumerable list, bool distinct)
 		{
-			return BuildArray(type, list, null, distinct);
+			return BuildArray(type, list, -1, distinct);
 		}
 
 		/// <summary>
@@ -71,15 +69,15 @@ namespace Castle.ActiveRecord.Framework
 		/// If the HQL clause selects more than one field, or a join is performed
 		/// without using <c>fetch join</c>, the contents of the result list will
 		/// be of type <c>object[]</c>. Specify which index in this array should be used to
-		/// compose the new result array.
+		/// compose the new result array. Use <c>-1</c> to ignore this parameter.
 		/// </param>
 		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
 		/// <returns>The strongly-typed array</returns>
-		public static Array BuildArray(Type type, IEnumerable list, NullableInt32 entityIndex, bool distinct)
+		public static Array BuildArray(Type type, IEnumerable list, int entityIndex, bool distinct)
 		{
 			// we only need to perform an additional processing if an
 			// entityIndex was specified, or if distinct was chosen.
-			if (distinct || entityIndex.HasValue)
+			if (distinct || entityIndex != -1)
 			{
 				Set set = (distinct ? new ListSet() : null);
 
@@ -89,7 +87,7 @@ namespace Castle.ActiveRecord.Framework
 				
 				foreach (object item in list)
 				{
-					object el = (!entityIndex.HasValue ? item : ((object[]) item)[entityIndex.Value]);
+					object el = (entityIndex == -1 ? item : ((object[]) item)[entityIndex]);
 					
 					if (set == null || set.Add(el))
 					{
@@ -194,47 +192,8 @@ namespace Castle.ActiveRecord.Framework
 
 		public static T[] BuildArray<T>(IEnumerable list, int? entityIndex, bool distinct)
 		{
-			return (T[]) BuildArray(typeof(T), list, ConvertNullable(entityIndex), distinct);
+			return (T[]) BuildArray(typeof(T), list, entityIndex ?? -1, distinct);
 		}
-		#endregion
-
-		#region Nullable conversions
-
-		/// <summary>
-		/// Converts an <see cref="INullableType"/> from the <c>Nullables</c>
-		/// library into a .NET 2.0 <see cref="System.Nullable"/>.
-		/// </summary>
-		public static T? ConvertToDotNet2Nullable<T, U>(U value)
-			where T : struct
-			where U : struct, INullableType
-		{
-			T? r = null;
-			if (value.HasValue)
-				r = (T) value.Value;
-			return r;
-		}
-
-		/// <summary>
-		/// Converts a <see cref="NullableInt32"/> from the <c>Nullables</c>
-		/// library into a .NET 2.0 <see cref="System.Nullable"/>.
-		/// </summary>
-		public static int? ConvertNullable(NullableInt32 value)
-		{
-			return ConvertToDotNet2Nullable<int, NullableInt32>(value);
-		}
-
-		/// <summary>
-		/// Converts a .NET 2.0 <see cref="System.Nullable"/> into a
-		/// <see cref="NullableInt32"/> from the <c>Nullables</c> library.
-		/// </summary>
-		public static NullableInt32 ConvertNullable(int? value)
-		{
-			NullableInt32 r = null;
-			if (value.HasValue)
-				r = value.Value;
-			return r;
-		}
-
 		#endregion
 
 #endif

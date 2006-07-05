@@ -21,7 +21,6 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Queries.Modifiers;
 
 	using NHibernate;
-	using Nullables;
 
 	using Castle.ActiveRecord.Framework;
 	
@@ -139,12 +138,12 @@ namespace Castle.ActiveRecord
 		/// If the HQL clause selects more than one field, or a join is performed
 		/// without using <c>fetch join</c>, the contents of the result list will
 		/// be of type <c>object[]</c>. Specify which index in this array should be used to
-		/// compose the new result array.
+		/// compose the new result array. Use <c>-1</c> to ignore this parameter.
 		/// </param>
 		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
 		/// <returns>The strongly-typed array</returns>
 		[Obsolete("Use SupportingUtils.BuildArray directly")]
-		protected Array GetResultsArray(Type t, IList list, NullableInt32 entityIndex, bool distinct)
+		protected Array GetResultsArray(Type t, IList list, int entityIndex, bool distinct)
 		{
 			return SupportingUtils.BuildArray(t, list, entityIndex, distinct);
 		}

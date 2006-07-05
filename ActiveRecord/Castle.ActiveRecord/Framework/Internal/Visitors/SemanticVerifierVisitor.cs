@@ -20,8 +20,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	using Iesi.Collections;
 	
-	using Nullables;
-	
 	using Castle.ActiveRecord;
 
 	/// <summary>
@@ -88,7 +86,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					}
 				}
 
-				ThrowIfDoesntHavePrimaryKey(model);
+				ThrowIfDoesNotHavePrimaryKey(model);
 
 				base.VisitModel(model);
 			}
@@ -176,13 +174,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Type propertyType = model.Property.PropertyType;
 			
-			if (typeof(INullableType).IsAssignableFrom(propertyType))
+			if (NHibernateNullablesSupport.IsNHibernateNullableType(propertyType))
 			{
 				model.PropertyAtt.NotNull = false;
-				model.PropertyAtt.ColumnType = ObtainNullableTypeNameForNullablesLibrary(propertyType);
+				model.PropertyAtt.ColumnType = NHibernateNullablesSupport.GetITypeTypeNameForNHibernateNullable(propertyType);
 			}
-			
-#if dotNet2
+
+#if DOTNET2
 			if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
 			{
 				model.PropertyAtt.NotNull = false;
@@ -207,13 +205,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Type fieldType = model.Field.FieldType;
 			
-			if (typeof(INullableType).IsAssignableFrom(fieldType))
+			if (NHibernateNullablesSupport.IsNHibernateNullableType(fieldType))
 			{
 				model.FieldAtt.NotNull = false;
-				model.FieldAtt.ColumnType = ObtainNullableTypeNameForNullablesLibrary(fieldType);
+				model.FieldAtt.ColumnType = NHibernateNullablesSupport.GetITypeTypeNameForNHibernateNullable(fieldType);
 			}
 
-#if dotNet2
+#if DOTNET2
 			if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>))
 			{
 				model.FieldAtt.NotNull = false;
@@ -486,7 +484,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private static void ThrowIfDoesntHavePrimaryKey(ActiveRecordModel model)
+		private static void ThrowIfDoesNotHavePrimaryKey(ActiveRecordModel model)
 		{
 			// Nested types do not have primary keys
 			if (model.IsNestedType) return;
@@ -509,54 +507,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private static String ObtainNullableTypeNameForNullablesLibrary(Type type)
-		{
-			const string fmt = "Nullables.NHibernate.{0}Type, Nullables.NHibernate";
-
-			bool supported =
-				type == typeof(NullableBoolean) ||
-				type == typeof(NullableInt16) ||
-				type == typeof(NullableInt32) ||
-				type == typeof(NullableInt64) ||
-				type == typeof(NullableByte) ||
-				type == typeof(NullableChar) ||
-				type == typeof(NullableDouble) ||
-				type == typeof(NullableSByte) ||
-				type == typeof(NullableSingle) ||
-				type == typeof(NullableGuid) ||
-				type == typeof(NullableDateTime) ||
-				type == typeof(NullableDecimal);
-
-			if (!supported)
-				throw new ActiveRecordException(String.Format("ActiveRecord does not support Nullable for {0} natively.", type));
-
-			return String.Format(fmt, type.Name); 
-		}
-
-#if dotNet2
+#if DOTNET2
 		private static String ObtainNullableTypeNameForCLRNullable(Type type)
 		{
-			const string fmt = "NHibernate.Nullables2.Nullable{0}Type, NHibernate.Nullables2";
-
 			Type underlyingType = Nullable.GetUnderlyingType(type);
-			bool supported =
-				underlyingType == typeof(Boolean) || 
-				underlyingType == typeof(Int16) || 
-				underlyingType == typeof(Int32) || 
-				underlyingType == typeof(Int64) || 
-				underlyingType == typeof(Byte) || 
-				underlyingType == typeof(Char) || 
-				underlyingType == typeof(Double) || 
-				underlyingType == typeof(SByte) || 
-				underlyingType == typeof(Single) || 
-				underlyingType == typeof(Guid) || 
-				underlyingType == typeof(DateTime) || 
-				underlyingType == typeof(Decimal);
-
-			if (!supported)
-				throw new ActiveRecordException(String.Format("ActiveRecord does not support Nullable<{0}> natively.", underlyingType));
-			
-			return String.Format(fmt, underlyingType.Name);
+			return underlyingType.AssemblyQualifiedName;
 		}
 #endif
 	}

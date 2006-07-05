@@ -103,14 +103,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Nullables, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\nhibernate\Nullables.dll</HintPath>
-    </Reference>
-    <Reference Include="Nullables.NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -118,12 +110,8 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Web">
-      <Name>System.Web</Name>
-    </Reference>
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -397,6 +385,7 @@
     <Compile Include="Framework\ARSchemaCreator.cs" />
     <Compile Include="Framework\ActiveRecordValidationBase.Generic.cs" />
     <Compile Include="Framework\Internal\Model\ImportModel.cs" />
+    <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
     <Compile Include="Framework\Queries\CountQuery.cs" />
     <Compile Include="Framework\Queries\HqlBasedQuery.cs" />
     <Compile Include="Framework\Queries\IActiveRecordQuery.Generic.cs" />
