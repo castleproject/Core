@@ -638,7 +638,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			PropertyInfo propertyInfo = instanceType.GetProperty(property, PropertyFlags);
 
-			object instance = null;
+			object instance;
 
 			if (propertyInfo == null)
 			{
@@ -762,12 +762,12 @@ namespace Castle.MonoRail.Framework.Helpers
 					"In fact the type is {1}", property, instanceType.FullName);
 			}
 
-			if (list.Count == 0)
-			{
-				throw new RailsException("The array is empty. Property {1}", property);
-			}
+//			if (list.Count == 0)
+//			{
+//				throw new RailsException("The array is empty. Property {0}", property);
+//			}
 
-			if (index + 1 > list.Count || index < 0)
+			if (index < 0)
 			{
 				throw new RailsException("The specified index '{0}' is outside the bounds " + 
 					"of the array. Property {1}", index, property);
@@ -776,10 +776,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private object GetArrayElement(object instance, int index)
 		{
-			// We don't need to check array boundary here
-			// It was checked previously
-
 			IList list = (IList) instance;
+			
+			if (list == null || list.Count == 0 || index + 1 > list.Count)
+			{
+				return null;
+			}
 
 			return list[index];
 		}
