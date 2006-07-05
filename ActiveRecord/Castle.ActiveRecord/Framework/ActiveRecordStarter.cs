@@ -60,7 +60,7 @@ namespace Castle.ActiveRecord
 			{
 				if (isInitialized)
 				{
-					throw new ActiveRecordException("You can't invoke ActiveRecordStarter.Initialize more than once");
+					throw new ActiveRecordInitializationException("You can't invoke ActiveRecordStarter.Initialize more than once");
 				}
 				
 				if (source == null) throw new ArgumentNullException("source");
@@ -143,7 +143,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize(Assembly assembly, IConfigurationSource source)
 		{
-			Type[] types = assembly.GetExportedTypes();
+			Type[] types = GetExportedTypesFromAssembly(assembly);
 
 			ArrayList list = new ArrayList();
 
@@ -170,7 +170,7 @@ namespace Castle.ActiveRecord
 
 			foreach(Assembly assembly in assemblies)
 			{
-				Type[] types = assembly.GetExportedTypes();
+				Type[] types = GetExportedTypesFromAssembly(assembly);
 
 				foreach(Type type in types)
 				{
@@ -330,13 +330,25 @@ namespace Castle.ActiveRecord
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// Intended to be used only by test cases
 		/// </summary>
 		public static void ResetInitializationFlag()
 		{
 			isInitialized = false;
+		}
+
+		private static Type[] GetExportedTypesFromAssembly(Assembly assembly)
+		{
+			try
+			{
+				return assembly.GetExportedTypes();
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordInitializationException("Error while loading the exported types from the assembly: " + assembly.FullName, ex);
+			}
 		}
 
 		private static SchemaExport CreateSchemaExport(Configuration cfg)
@@ -426,7 +438,7 @@ namespace Castle.ActiveRecord
 					String message = String.Format("The specified type {0} does " +
 					                               "not implement the interface IThreadScopeInfo", threadScopeType.FullName);
 
-					throw new ActiveRecordException(message);
+					throw new ActiveRecordInitializationException(message);
 				}
 
 				return (IThreadScopeInfo) Activator.CreateInstance(threadScopeType);

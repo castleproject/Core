@@ -17,7 +17,6 @@ namespace Castle.ActiveRecord.Framework
 	using System;
 	using System.Runtime.Serialization;
 
-
 	[Serializable]
 	public class ActiveRecordException : Exception
 	{
@@ -29,7 +28,26 @@ namespace Castle.ActiveRecord.Framework
 		{
 		}
 
-		public ActiveRecordException(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected ActiveRecordException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
+	}
+	
+	/// <summary>
+	/// Exception thrown when an error is detected on the ActiveRecord initialization phase.
+	/// </summary>
+	[Serializable]
+	public class ActiveRecordInitializationException : ActiveRecordException
+	{
+		public ActiveRecordInitializationException(string message) : base(message)
+		{
+		}
+
+		public ActiveRecordInitializationException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
+		protected ActiveRecordInitializationException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

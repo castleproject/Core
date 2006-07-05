@@ -25,7 +25,7 @@ namespace Castle.ActiveRecord.Tests
 	[TestFixture]
 	public class ActiveRecordTestCase : AbstractActiveRecordTest
 	{
-		[Test, ExpectedException(typeof(ActiveRecordException), "You can't invoke ActiveRecordStarter.Initialize more than once")]
+		[Test, ExpectedException(typeof(ActiveRecordInitializationException), "You can't invoke ActiveRecordStarter.Initialize more than once")]
 		public void InitializeCantBeInvokedMoreThanOnce()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post));
