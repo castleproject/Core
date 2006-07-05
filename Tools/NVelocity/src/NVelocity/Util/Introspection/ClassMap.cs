@@ -191,9 +191,9 @@ namespace NVelocity.Util.Introspection
 		private static MethodInfo[] GetAccessibleMethods(Type clazz)
 		{
 			ArrayList methods = new ArrayList();
+			foreach (Type iface in clazz.GetInterfaces())
+				methods.AddRange(iface.GetMethods());
 			methods.AddRange(clazz.GetMethods());
-//			foreach (Type iface in clazz.GetInterfaces())
-//				methods.AddRange(iface.GetMethods());
 
 			return (MethodInfo[]) methods.ToArray(typeof(MethodInfo));
 		}
@@ -201,9 +201,9 @@ namespace NVelocity.Util.Introspection
 		private static PropertyInfo[] GetAccessibleProperties(Type clazz)
 		{
 			ArrayList props = new ArrayList();
+			foreach (Type iface in clazz.GetInterfaces())
+				props.AddRange(iface.GetProperties());
 			props.AddRange(clazz.GetProperties());
-//			foreach (Type iface in clazz.GetInterfaces())
-//				props.AddRange(iface.GetProperties());
 
 			return (PropertyInfo[]) props.ToArray(typeof(PropertyInfo));
 		}

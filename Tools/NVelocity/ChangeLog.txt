@@ -1,4 +1,7 @@
 
+- Added support for calling methods and properties defined on the interfaces a class implements.
+  The interface member will have lower priority when deciding against plain class members.
+
 - Add support to Math operations on context variables of the types 
 
   . Double

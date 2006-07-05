@@ -131,6 +131,11 @@ namespace NVelocity.Util.Introspection
 
 				foreach (MethodInfo max in maximals)
 				{
+					if (max.DeclaringType.IsInterface) {
+						maximals.Remove(max);
+						break;
+					}
+					
 					switch (IsMoreSpecific(appArgs, max.GetParameters()))
 					{
 						case MORE_SPECIFIC:
