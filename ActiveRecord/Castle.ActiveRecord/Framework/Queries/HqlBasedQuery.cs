@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Queries
 {
 	using System;
 	using System.Collections;
+	using System.Text.RegularExpressions;
 
 	using Castle.ActiveRecord.Queries.Modifiers;
 
@@ -88,6 +89,48 @@ namespace Castle.ActiveRecord.Queries
 			AddModifier(new QueryRange(maxResults));
 		}
 		#endregion
+		
+		/// <summary>
+		/// Tries to obtain the record count for the current query.
+		/// </summary>
+		/// <returns>The record count for the current query, or <c>-1</c> if failed.</returns>
+		public virtual int Count()
+		{
+			try
+			{
+				ScalarQuery q = new ScalarQuery(Target, PrepareQueryForCount(Query));
+				if (queryModifiers != null)
+				{
+					foreach (IQueryModifier mod in queryModifiers)
+					{
+						if (mod is QueryRange)
+							continue;
+						q.AddModifier(mod);
+					}
+				}
+
+				return Convert.ToInt32(ActiveRecordMediator.ExecuteQuery(q));
+			}
+			catch (Exception)
+			{
+				// swallow the exception and return -1
+				return -1;
+			}
+		}
+		
+		static readonly Regex 
+			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		protected virtual String PrepareQueryForCount(String query)
+		{
+			query = rxOrderBy.Replace(query, String.Empty);
+			if (rxNoSelect.IsMatch(query))
+				query = "select count(*) " + query;
+			else
+				query = "select count(*) from (" + query + ")";
+			
+			return query;
+		}
 
 		protected override IQuery CreateQuery(ISession session)
 		{

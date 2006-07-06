@@ -31,7 +31,7 @@ namespace Castle.ActiveRecord
 	{
 		private readonly Type targetType;
 		
-		private IList modifiers;
+		protected IList queryModifiers;
 
 		public ActiveRecordBaseQuery(Type type)
 		{
@@ -92,10 +92,10 @@ namespace Castle.ActiveRecord
 		/// <param name="modifier">The modifier</param>
 		protected void AddModifier(IQueryModifier modifier)
 		{
-			if (modifiers == null)
-				modifiers = new ArrayList();
+			if (queryModifiers == null)
+				queryModifiers = new ArrayList();
 
-			modifiers.Add(modifier);
+			queryModifiers.Add(modifier);
 		}
 		
 		/// <summary>
@@ -109,8 +109,8 @@ namespace Castle.ActiveRecord
 		/// </remarks>
 		protected void ApplyModifiers(IQuery query)
 		{
-			if (modifiers != null)
-				foreach (IQueryModifier modifier in modifiers)
+			if (queryModifiers != null)
+				foreach (IQueryModifier modifier in queryModifiers)
 					modifier.Apply(query);
 		}
 		
