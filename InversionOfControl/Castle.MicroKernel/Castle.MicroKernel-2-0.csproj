@@ -80,6 +80,7 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -148,12 +149,14 @@
     <Compile Include="Facilities\Remoting\CustomActivators\RemoteActivator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Facilities\Remoting\CustomActivators\RemoteActivatorThroughConnector.cs" />
     <Compile Include="Facilities\Remoting\CustomActivators\RemoteActivatorThroughRegistry.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Facilities\Remoting\CustomActivators\RemoteClientActivatedActivator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Facilities\Remoting\CustomActivators\RemoteMarshallerActivator.cs" />
     <Compile Include="Facilities\Remoting\RemotingFacility.cs">
       <SubType>Code</SubType>
     </Compile>
