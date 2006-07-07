@@ -470,7 +470,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
                 }
             }
 #endif
-			nameBuilder.Append(type.Name);
+			if (type.IsArray)
+				nameBuilder.Append("ArrayOf").Append(GetTypeName(type.GetElementType()));
+			else
+				nameBuilder.Append(type.Name);
             return nameBuilder.ToString();
         }
 
