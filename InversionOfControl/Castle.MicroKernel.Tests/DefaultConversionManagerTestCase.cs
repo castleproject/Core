@@ -138,15 +138,5 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual("second", array[1]);
 			Assert.AreEqual("third", array[2]);
 		}
-
-		[Test]
-		public void ArrayOfUnsupportedType()
-		{
-			Assert.IsFalse(conversionMng.CanHandleType(typeof(UnsupportedType[])));
-		}
-
-		public class UnsupportedType
-		{
-		}
 	}
 }
