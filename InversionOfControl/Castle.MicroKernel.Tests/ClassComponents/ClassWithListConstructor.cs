@@ -31,19 +31,4 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 			get { return services; }
 		}
 	}
-
-	public class ClassWithArrayConstructor
-	{
-		private readonly ICommon[] services;
-
-		public ClassWithArrayConstructor(ICommon[] services)
-		{
-			this.services = services;
-		}
-
-		public ICommon[] Services
-		{
-			get { return services; }
-		}
-	}
 }
