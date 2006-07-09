@@ -32,6 +32,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 				{
 					typeof (Char),
 					typeof (DateTime),
+					typeof (TimeSpan),
 					typeof (Decimal),
 					typeof (Boolean),
 					typeof (Int16),
