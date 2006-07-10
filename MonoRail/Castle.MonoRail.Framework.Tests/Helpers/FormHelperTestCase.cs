@@ -117,14 +117,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			
 			Assert.IsNotNull(list);
 			
-			int index = 0;
-			
 			foreach(Object item in list)
 			{
 				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months_" + index + 
-					"_\" name=\"subscription.Months[" + index + "]\" value=\"" + item + "\" />", content);
-				index++;
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months" + item + "\" name=\"subscription.Months\" value=\"" + item + "\" />", content);
 			}
 		}
 
@@ -141,14 +137,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			
 			Assert.IsNotNull(list);
 			
-			int index = 0;
-
 			foreach(Object item in list)
 			{
 				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months_" + index + 
-					"_\" name=\"subscription.Months[" + index + "]\" value=\"" + item + "\" checked=\"checked\" />", content);
-				index++;
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months" + item + "\" name=\"subscription.Months\" value=\"" + item + "\" checked=\"checked\" />", content);
 			}
 		}
 		
@@ -162,15 +154,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
 			
 			Assert.IsNotNull(list);
-
-			int index = 0;
-
+			
 			foreach(Month item in list)
 			{
 				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2_" + index + 
-					"_\" name=\"subscription.Months2[" + index + "].Id\" value=\"" + item.Id + "\" />", content);
-				index++;
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2" + item.Id + "\" name=\"subscription.Months2\" value=\"" + item.Id + "\" />", content);
 			}
 		}
 		
@@ -186,15 +174,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
 			
 			Assert.IsNotNull(list);
-
-			int index = 0;
-
+			
 			foreach(Month item in list)
 			{
 				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2_" + index + 
-					"_\" name=\"subscription.Months2[" + index + "].Id\" value=\"" + item.Id + "\" />", content);
-				index++;
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2" + item.Id + "\" name=\"subscription.Months2\" value=\"" + item.Id + "\" />", content);
 			}
 		}
 
@@ -211,15 +195,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
 			
 			Assert.IsNotNull(list);
-
-			int index = 0;
-
+			
 			foreach(Month item in list)
 			{
 				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2_" + index + 
-					"_\" name=\"subscription.Months2[" + index + "].Id\" value=\"" + item.Id + "\" checked=\"checked\" />", content);
-				index++;
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2" + item.Id + "\" name=\"subscription.Months2\" value=\"" + item.Id + "\" checked=\"checked\" />", content);
 			}
 		}
 
