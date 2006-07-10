@@ -4,9 +4,6 @@ Change history
 Release Candidate 1
 ===================
 
-- Introduced CreateCheckboxList. See preliminary documentation at 
-    http://www.castleproject.org/index.php/MonoRail:FormHelper#CheckboxList
-
 - Applied Colin Ramsay <castleproject-devel@happyandlost.co.uk> patch adding more
   asserts to TestSupport.AbstractMRTestCase and refactored some other things
 
