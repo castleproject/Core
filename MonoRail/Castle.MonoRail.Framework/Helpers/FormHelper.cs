@@ -182,7 +182,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			return new CheckboxList(this, target, value, dataSource, attributes);
 		}
 		
-		internal String CheckboxItem(String target, object value, bool isChecked, IDictionary attributes)
+		internal String CheckboxItem(int index, String target, String suffix, object value, 
+		                             bool isChecked, IDictionary attributes)
 		{
 			if (isChecked)
 			{
@@ -194,9 +195,11 @@ namespace Castle.MonoRail.Framework.Helpers
 				AddChecked(attributes);
 			}
 
-			String elementId = CreateHtmlId(attributes, target) + value;
+			target = String.Format("{0}[{1}]", target, index);
+			
+			String elementId = CreateHtmlId(attributes, target);
 
-			String result = CreateInputElement("checkbox", elementId, target, value.ToString(), attributes);
+			String result = CreateInputElement("checkbox", elementId, target + suffix, value.ToString(), attributes);
 			
 			return result;
 		}
@@ -211,6 +214,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			private bool hasMovedNext, hasItem;
 			private string valueProperty;
 			private PropertyInfo valueMethodInfo;
+			private int index = -1;
 
 			public CheckboxList(FormHelper helper, String target, 
 			                    object value, IEnumerable dataSource, IDictionary attributes)
@@ -269,7 +273,14 @@ namespace Castle.MonoRail.Framework.Helpers
 					selected = IsSelected(valueToRender, value, selectedType, valueMethodInfo, true);
 				}
 				
-				return helper.CheckboxItem(target, valueToRender, selected, attributes);
+				String suffix = String.Empty;
+				
+				if (valueMethodInfo != null)
+				{
+					suffix = "." + valueMethodInfo.Name;
+				}
+				
+				return helper.CheckboxItem(index, target, suffix, valueToRender, selected, attributes);
 			}
 
 			public IEnumerator GetEnumerator()
@@ -280,12 +291,17 @@ namespace Castle.MonoRail.Framework.Helpers
 			public bool MoveNext()
 			{
 				hasMovedNext = true;
+				
 				hasItem = enumerator.MoveNext();
+				
+				if (hasItem) index++;
+				
 				return hasItem;
 			}
 
 			public void Reset()
 			{
+				index = -1;
 				enumerator.Reset();
 			}
 
