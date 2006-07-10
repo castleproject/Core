@@ -49,6 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -134,12 +135,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ActiveRecordBaseGenericsTestCase.cs" />
+    <Compile Include="BugTestCase.cs" />
     <Compile Include="Config\AspNet2.0ConfigurationIntegration.cs" />
     <Compile Include="Config\ConfigurationSource.cs" />
+    <Compile Include="DifferentDatabaseScopeTestCase.cs" />
     <Compile Include="Model\CompositeModel\Agent.cs" />
     <Compile Include="Model\CompositeModel\AgentKey.cs" />
     <Compile Include="Model\CompositeModel\Group.cs" />
     <Compile Include="Model\CompositeModel\Org.cs" />
+    <Compile Include="Model\Nested\Operation.cs" />
+    <Compile Include="Model\OtherDbBlog.cs" />
+    <Compile Include="Model\OtherDbPost.cs" />
+    <Compile Include="NestedClassWithRelationsTestCase.cs" />
     <Compile Include="NullablesGenericsTestCase.cs" />
     <Compile Include="JoinedSubClassTestCase.cs">
       <SubType>Code</SubType>
@@ -279,7 +286,9 @@
     <Compile Include="Validators\ValidatorTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Castle.ActiveRecord.Tests.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Castle.ActiveRecord.Tests.dll.net-2.0.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
