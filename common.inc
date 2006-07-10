@@ -2,7 +2,7 @@
 <project name="Common Build Properties">
 	<!-- Common properties that allow overrides -->
 
-	<property name="rootbuild.dir" value="${directory::get-current-directory()}" />
+	<property name="rootbuild.dir" value="${directory::get-current-directory()}" unless="${property::exists('rootbuild.dir')}"/>
 		
 	<property name="build.dir" value="${rootbuild.dir}/build/${framework::get-target-framework()}" />
 

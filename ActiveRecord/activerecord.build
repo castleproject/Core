@@ -191,7 +191,7 @@
 	</target>
 
 	<target name="generator">
-		<nant buildfile="${base.dir}/Generator/generator.build" target="build" inheritall="false" />
+		<nant buildfile="${base.dir}/Generator/generator.build" target="build" inheritall="true" />
 	</target>
 	
 	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">

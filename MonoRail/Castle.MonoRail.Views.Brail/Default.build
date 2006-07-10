@@ -6,6 +6,8 @@
 	<property name="shared.lib.dir" value="${base.dir}/../../SharedLibs/Boo" />
 	<property name="sample.dir" value="${base.dir}/../TestSiteBrail" />
 
+	<property name="booviewengine.test" value="true" unless="${property::exists('booviewengine.test')}" />
+
 	<include buildfile="../../common.inc" />
 	
 	<property name="name" value="Castle.MonoRail.Views.Brail" />
@@ -66,7 +68,7 @@
 	</target>
 	<target name="test" depends="tests.run" />
 
-	<target name="tests.run" depends="tests.compile, sample.compile">
+	<target name="tests.run" depends="tests.compile, sample.compile" if="${booviewengine.test}">
 		<copy file="${bin.dir}\Castle.MonoRail.TestSupport.dll" todir="${sample.dir}/bin"/>
 		<nunit2>
 			<formatter type="${nunit.formatter}" />
