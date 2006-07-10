@@ -1,6 +1,10 @@
 beta 4
 ======
 
+- Removed dependency on the Nullables library.
+
+- Added native support for .NET 2.0 Nullables.
+
 - Applied Brian Romanko <me@brianromanko.com> patch fixing enum support
 
 - Fixed AR-62: DifferentDatabaseScope not switching between databases
