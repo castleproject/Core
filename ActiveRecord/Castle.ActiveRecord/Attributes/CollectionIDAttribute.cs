@@ -19,7 +19,6 @@ namespace Castle.ActiveRecord
 	[Serializable]
 	public enum CollectionIDType
 	{
-		None,
 		Identity,
 		Sequence,
 		HiLo,

@@ -16,7 +16,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System;
 
-
 	[ActiveRecord]
 	public class ClassA : ActiveRecordBase
 	{

@@ -189,6 +189,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\ClassKeyAssigned.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\ClassWithAnyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -19,7 +19,6 @@ namespace Castle.ActiveRecord
 	[Serializable]
 	public enum PrimaryKeyType
 	{
-		None,
 		Identity,
 		Sequence,
 		HiLo,

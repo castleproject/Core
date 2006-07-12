@@ -24,6 +24,36 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 	public class XmlGenerationTestCase : AbstractActiveRecordTest
 	{
 		[Test]
+		public void SimpleCaseWithPrimaryAssigned()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create( typeof(ClassKeyNone) );
+			Assert.IsNotNull( model );
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode( model );
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+
+			String xml = xmlVisitor.Xml;
+
+			String expected = 
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassKeyNone, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassKeyNone\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"assigned\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" />\r\n" + 
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
 		public void SimpleCaseWithKeyAndProperties()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();

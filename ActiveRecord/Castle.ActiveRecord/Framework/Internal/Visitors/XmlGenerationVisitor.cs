@@ -250,61 +250,59 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Ident();
 
-			if (model.PrimaryKeyAtt.Generator != PrimaryKeyType.None)
+			String className = null;
+
+			switch(model.PrimaryKeyAtt.Generator)
 			{
-				String className = null;
+				case PrimaryKeyType.Identity:
+				case PrimaryKeyType.Sequence:
+				case PrimaryKeyType.HiLo:
+				case PrimaryKeyType.SeqHiLo:
+				case PrimaryKeyType.Guid:
+				case PrimaryKeyType.Native:
+				case PrimaryKeyType.Assigned:
+				case PrimaryKeyType.Foreign:
+					className = model.PrimaryKeyAtt.Generator.ToString().ToLower();
+					break;
 
-				switch(model.PrimaryKeyAtt.Generator)
-				{
-					case PrimaryKeyType.Identity:
-					case PrimaryKeyType.Sequence:
-					case PrimaryKeyType.HiLo:
-					case PrimaryKeyType.SeqHiLo:
-					case PrimaryKeyType.Guid:
-					case PrimaryKeyType.Native:
-					case PrimaryKeyType.Assigned:
-					case PrimaryKeyType.Foreign:
-						className = model.PrimaryKeyAtt.Generator.ToString().ToLower();
-						break;
+				case PrimaryKeyType.GuidComb:
+					className = "guid.comb";
+					break;
 
-					case PrimaryKeyType.GuidComb:
-						className = "guid.comb";
-						break;
+				case PrimaryKeyType.UuidHex:
+					className = "uuid.hex";
+					break;
 
-					case PrimaryKeyType.UuidHex:
-						className = "uuid.hex";
-						break;
-
-					case PrimaryKeyType.UuidString:
-						className = "uuid.string";
-						break;
-				}
-
-				AppendF("<generator{0}>", MakeAtt("class", className));
-
-				if (model.PrimaryKeyAtt.SequenceName != null)
-				{
-					Ident();
-					AppendF("<param name=\"sequence\">{0}</param>", model.PrimaryKeyAtt.SequenceName);
-					Dedent();
-				}
-				if (model.PrimaryKeyAtt.Params != null)
-				{
-					Ident();
-
-					String[] paras = model.PrimaryKeyAtt.Params.Split(',');
-
-					foreach(String param in paras)
-					{
-						String[] pair = param.Split('=');
-
-						AppendF("<param name=\"{0}\">{1}</param>", pair[0], pair[1]);
-					}
-
-					Dedent();
-				}
-				AppendF("</generator>");
+				case PrimaryKeyType.UuidString:
+					className = "uuid.string";
+					break;
 			}
+
+			AppendF("<generator{0}>", MakeAtt("class", className));
+
+			if (model.PrimaryKeyAtt.SequenceName != null)
+			{
+				Ident();
+				AppendF("<param name=\"sequence\">{0}</param>", model.PrimaryKeyAtt.SequenceName);
+				Dedent();
+			}
+			if (model.PrimaryKeyAtt.Params != null)
+			{
+				Ident();
+
+				String[] paras = model.PrimaryKeyAtt.Params.Split(',');
+
+				foreach(String param in paras)
+				{
+					String[] pair = param.Split('=');
+
+					AppendF("<param name=\"{0}\">{1}</param>", pair[0], pair[1]);
+				}
+
+				Dedent();
+			}
+			AppendF("</generator>");
+			
 
 			Dedent();
 			Append("</id>");

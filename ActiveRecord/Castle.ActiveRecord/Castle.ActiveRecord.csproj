@@ -434,6 +434,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Internal\NHibernateNullablesSupport.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Internal\Model\ActiveRecordModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
