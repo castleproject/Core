@@ -27,7 +27,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		public void SimpleCaseWithPrimaryAssigned()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
-			ActiveRecordModel model = builder.Create( typeof(ClassKeyNone) );
+			ActiveRecordModel model = builder.Create( typeof(ClassKeyAssigned) );
 			Assert.IsNotNull( model );
 
 			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
 				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
-				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassKeyNone, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassKeyNone\" lazy=\"false\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassKeyAssigned, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassKeyAssigned\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"assigned\">\r\n" +
 				"      </generator>\r\n" +
