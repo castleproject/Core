@@ -19,7 +19,6 @@ namespace Castle.ActiveRecord.Framework.Config
 	using System.Xml;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using System.Configuration;
 
 	/// <summary>
 	/// Source of configuration based on Xml 
@@ -56,18 +55,20 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			XmlAttribute isWebAtt = section.Attributes["isWeb"];
 			XmlAttribute threadInfoAtt = section.Attributes["threadinfotype"];
-            XmlAttribute isDebug = section.Attributes["isDebug"];
+			XmlAttribute isDebug = section.Attributes["isDebug"];
 
-			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value, 
-				threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
+			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value,
+			                    threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
 
-			XmlAttribute sessionfactoryholdertypeAtt = 
+			XmlAttribute sessionfactoryholdertypeAtt =
 				section.Attributes["sessionfactoryholdertype"];
 
-			SetUpSessionFactoryHolderType( sessionfactoryholdertypeAtt != null ? 
-				sessionfactoryholdertypeAtt.Value : String.Empty );
+			SetUpSessionFactoryHolderType(sessionfactoryholdertypeAtt != null
+			                              	?
+			                              sessionfactoryholdertypeAtt.Value
+			                              	: String.Empty);
 
-            SetDebugFlag(isDebug != null && "true" == isDebug.Value);
+			SetDebugFlag(isDebug != null && "true" == isDebug.Value);
 
 			PopulateConfigNodes(section);
 		}
@@ -82,16 +83,15 @@ namespace Castle.ActiveRecord.Framework.Config
 
 				if (!Config_Node_Name.Equals(node.Name))
 				{
-					String message = String.Format("Unexpected node. Expect '{0}' found '{1}'", 
-						Config_Node_Name, node.Name);
+					String message = String.Format("Unexpected node. Expect '{0}' found '{1}'",
+					                               Config_Node_Name, node.Name);
 
 #if DOTNET2
-                    throw new System.Configuration.ConfigurationErrorsException(message);
+					throw new System.Configuration.ConfigurationErrorsException(message);
 #else
 					throw new ConfigurationException(message);
 #endif
-
-                }
+				}
 
 				Type targetType = typeof(ActiveRecordBase);
 
@@ -101,11 +101,11 @@ namespace Castle.ActiveRecord.Framework.Config
 
 					if (typeNameAtt == null)
 					{
-						String message = String.Format("Invalid attribute at node '{0}'. " + 
-							"The only supported attribute is 'type'", Config_Node_Name);
+						String message = String.Format("Invalid attribute at node '{0}'. " +
+						                               "The only supported attribute is 'type'", Config_Node_Name);
 
 #if DOTNET2
-                        throw new System.Configuration.ConfigurationErrorsException(message);
+						throw new System.Configuration.ConfigurationErrorsException(message);
 #else
 						throw new ConfigurationException(message);
 #endif
@@ -114,20 +114,20 @@ namespace Castle.ActiveRecord.Framework.Config
 					String typeName = typeNameAtt.Value;
 
 					targetType = Type.GetType(typeName, false, false);
- 					
+
 					if (targetType == null)
 					{
 						String message = String.Format("Could not obtain type from name '{0}'", typeName);
 
 #if DOTNET2
-                        throw new System.Configuration.ConfigurationErrorsException(message);
+						throw new System.Configuration.ConfigurationErrorsException(message);
 #else
 						throw new ConfigurationException(message);
 #endif
 					}
 				}
 
-				Add(targetType, BuildProperties(node) );
+				Add(targetType, BuildProperties(node));
 			}
 		}
 
@@ -136,10 +136,10 @@ namespace Castle.ActiveRecord.Framework.Config
 			HybridDictionary dict = new HybridDictionary();
 #if DOTNET2
 			System.Text.RegularExpressions.Regex connectionStringRegex = new System.Text.RegularExpressions.
-					Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[\d\w_-]+)\}");
+				Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[\d\w_-]+)\}");
 			string ConnectionStringKey = "hibernate.connection.connection_string";
 #endif
-			foreach (XmlNode addNode in node.SelectNodes("add"))
+			foreach(XmlNode addNode in node.SelectNodes("add"))
 			{
 				XmlAttribute keyAtt = addNode.Attributes["key"];
 				XmlAttribute valueAtt = addNode.Attributes["value"];
@@ -149,26 +149,26 @@ namespace Castle.ActiveRecord.Framework.Config
 					String message = String.Format("For each 'add' element you must specify 'key' and 'value' attributes");
 
 #if DOTNET2
-                    throw new System.Configuration.ConfigurationErrorsException(message);
+					throw new System.Configuration.ConfigurationErrorsException(message);
 #else
 					throw new ConfigurationException(message);
 #endif
 				}
 				string value = valueAtt.Value;
 #if DOTNET2
-				
-				if(keyAtt.Value == ConnectionStringKey
-					&& connectionStringRegex.IsMatch(value))
+
+				if (keyAtt.Value == ConnectionStringKey
+				    && connectionStringRegex.IsMatch(value))
 				{
 					string connectionStringName = connectionStringRegex.Match(value).
-                        Groups["ConnectionStringName"].Value;
-					value = System.Configuration.ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString; 
+						Groups["ConnectionStringName"].Value;
+					value = System.Configuration.ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
 				}
 #endif
-				dict.Add( keyAtt.Value, value );
+				dict.Add(keyAtt.Value, value);
 			}
 
 			return dict;
-		}		
+		}
 	}
 }

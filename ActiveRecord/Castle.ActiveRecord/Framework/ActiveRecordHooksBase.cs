@@ -26,39 +26,39 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	[Serializable]
 	public abstract class ActiveRecordHooksBase : ILifecycle
-    {
-        /// <summary>
-        /// Hook to change the object state
-        /// before saving it.
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-        protected virtual internal bool BeforeSave(IDictionary state)
+	{
+		/// <summary>
+		/// Hook to change the object state
+		/// before saving it.
+		/// </summary>
+		/// <param name="state"></param>
+		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
+		protected virtual internal bool BeforeSave(IDictionary state)
 		{
-            return false;
-        }
+			return false;
+		}
 
-        /// <summary>
-        /// Hook to transform the read data 
-        /// from the database before populating 
-        /// the object instance
-        /// </summary>
-        /// <param name="adapter"></param>
-        /// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-        protected virtual internal bool BeforeLoad(IDictionary adapter) 
+		/// <summary>
+		/// Hook to transform the read data 
+		/// from the database before populating 
+		/// the object instance
+		/// </summary>
+		/// <param name="adapter"></param>
+		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
+		protected virtual internal bool BeforeLoad(IDictionary adapter)
 		{
-            return false;
-        }
+			return false;
+		}
 
-        /// <summary>
-        /// Hook to perform additional tasks 
-        /// before removing the object instance representation
-        /// from the database.
-        /// </summary>
-        /// <param name="adapter"></param>
-        protected virtual internal void BeforeDelete(IDictionary adapter) 
+		/// <summary>
+		/// Hook to perform additional tasks 
+		/// before removing the object instance representation
+		/// from the database.
+		/// </summary>
+		/// <param name="adapter"></param>
+		protected virtual internal void BeforeDelete(IDictionary adapter)
 		{
-        }
+		}
 
 		/// <summary>
 		/// Called before a flush
@@ -107,7 +107,8 @@ namespace Castle.ActiveRecord
 		/// <param name="currentState"></param>
 		/// <param name="types"></param>
 		/// <returns>An array of dirty property indicies or <c>null</c> to choose default behavior</returns>
-		protected virtual internal int[] FindDirty(object id, IDictionary previousState, IDictionary currentState, IType[] types)
+		protected virtual internal int[] FindDirty(object id, IDictionary previousState, IDictionary currentState,
+		                                           IType[] types)
 		{
 			return null;
 		}
@@ -147,7 +148,6 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		protected virtual void OnSave()
 		{
-			
 		}
 
 		/// <summary>
@@ -155,7 +155,6 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		protected virtual void OnUpdate()
 		{
-			
 		}
 
 		/// <summary>
@@ -163,7 +162,6 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		protected virtual void OnDelete()
 		{
-			
 		}
 
 		/// <summary>
@@ -171,7 +169,6 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		protected virtual void OnLoad(object id)
 		{
-			
 		}
 	}
 }

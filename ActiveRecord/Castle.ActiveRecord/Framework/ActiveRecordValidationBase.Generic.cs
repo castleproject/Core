@@ -13,11 +13,12 @@
 // limitations under the License.
 
 #if DOTNET2
+
 namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
-
+	
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
 
@@ -47,7 +48,7 @@ namespace Castle.ActiveRecord
 	///	</code>
 	/// </example>
 	[Serializable]
-    public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T>, NHibernate.IValidatable where T : class
+	public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T>, NHibernate.IValidatable where T : class
 	{
 		/// <summary>
 		/// List of validators that should be executed for this class
@@ -66,27 +67,28 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public ActiveRecordValidationBase()
 		{
-			CollectValidators( typeof(T) );
+			CollectValidators(typeof(T));
 		}
 
 		/// <summary>
 		/// Collect the validations applied to this class properties.
 		/// </summary>
 		/// <param name="targetType"></param>
-		private void CollectValidators( Type targetType )
+		private void CollectValidators(Type targetType)
 		{
-            ActiveRecordModel model = Framework.Internal.ActiveRecordModel.GetModel(targetType);
+			ActiveRecordModel model = Framework.Internal.ActiveRecordModel.GetModel(targetType);
 
 			if (model == null)
 			{
-				throw new ActiveRecordException("Seems that the framework wasn't initialized properly. (ActiveRecordModel could not obtained)");
+				throw new ActiveRecordException(
+					"Seems that the framework wasn't initialized properly. (ActiveRecordModel could not obtained)");
 			}
 
-			__validators.AddRange( model.Validators );
+			__validators.AddRange(model.Validators);
 
-			while( model.Parent != null )
+			while(model.Parent != null)
 			{
-				__validators.AddRange( model.Parent.Validators );
+				__validators.AddRange(model.Parent.Validators);
 
 				model = model.Parent;
 			}
@@ -107,8 +109,8 @@ namespace Castle.ActiveRecord
 				if (!validator.Perform(this))
 				{
 					String errorMessage = validator.ErrorMessage;
-					
-					errorlist.Add( errorMessage );
+
+					errorlist.Add(errorMessage);
 
 					ArrayList items = null;
 
@@ -127,7 +129,7 @@ namespace Castle.ActiveRecord
 				}
 			}
 
-			_errorMessages = (String[]) errorlist.ToArray( typeof(String) );
+			_errorMessages = (String[]) errorlist.ToArray(typeof(String));
 
 			return errorlist.Count == 0;
 		}
@@ -174,8 +176,11 @@ namespace Castle.ActiveRecord
 		/// </remarks>
 		protected virtual void OnNotValid()
 		{
-			throw new ValidationException( "Can't save or update as there is one (or more) field that has not passed the validation test", ValidationErrorMessages );
+			throw new ValidationException(
+				"Can't save or update as there is one (or more) field that has not passed the validation test",
+				ValidationErrorMessages);
 		}
 	}
 }
+
 #endif

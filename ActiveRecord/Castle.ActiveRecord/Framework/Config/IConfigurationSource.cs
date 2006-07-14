@@ -15,7 +15,7 @@
 namespace Castle.ActiveRecord.Framework
 {
 	using System;
-
+	
 	using Castle.Model.Configuration;
 
 	/// <summary>
@@ -28,7 +28,7 @@ namespace Castle.ActiveRecord.Framework
 		/// the interface <see cref="IThreadScopeInfo"/>
 		/// </summary>
 		Type ThreadScopeInfoImplementation { get; }
-		
+
 		/// <summary>
 		/// Implementors should return the type that implements 
 		/// the interface <see cref="ISessionFactoryHolder"/>
@@ -43,6 +43,6 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns></returns>
 		IConfiguration GetConfiguration(Type type);
 
-        bool Debug { get; }
+		bool Debug { get; }
 	}
 }

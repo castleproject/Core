@@ -16,9 +16,8 @@ namespace Castle.ActiveRecord.Framework.Config
 {
 	using System;
 	using System.Collections;
-
+	
 	using Castle.Model.Configuration;
-
 
 	/// <summary>
 	/// Usefull for test cases.
@@ -28,7 +27,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		private readonly IDictionary _type2Config = new Hashtable();
 		private Type threadScopeInfoImplementation;
 		private Type sessionFactoryHolderImplementation;
-        private bool debug = false;
+		private bool debug = false;
 
 		public InPlaceConfigurationSource()
 		{
@@ -53,7 +52,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			return _type2Config[type] as IConfiguration;
 		}
 
-		public bool Debug 
+		public bool Debug
 		{
 			get { return debug; }
 		}
@@ -82,7 +81,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			if (customType != null && customType != String.Empty)
 			{
 				String typeName = customType;
-				
+
 				threadInfoType = Type.GetType(typeName, false, false);
 
 				if (threadInfoType == null)
@@ -93,7 +92,7 @@ namespace Castle.ActiveRecord.Framework.Config
 				}
 			}
 
-            ThreadScopeInfoImplementation = threadInfoType;
+			ThreadScopeInfoImplementation = threadInfoType;
 		}
 
 		protected void SetUpSessionFactoryHolderType(String customType)
@@ -103,7 +102,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			if (customType != null && customType != String.Empty)
 			{
 				String typeName = customType;
-				
+
 				sessionFactoryHolderType = Type.GetType(typeName, false, false);
 
 				if (sessionFactoryHolderType == null)
@@ -114,13 +113,13 @@ namespace Castle.ActiveRecord.Framework.Config
 				}
 			}
 
-            SessionFactoryHolderImplementation = sessionFactoryHolderType;
+			SessionFactoryHolderImplementation = sessionFactoryHolderType;
 		}
 
-        protected void SetDebugFlag(bool isDebug) 
-        {
-            debug = isDebug;
-        }
+		protected void SetDebugFlag(bool isDebug)
+		{
+			debug = isDebug;
+		}
 
 		private IConfiguration ConvertToConfiguration(IDictionary properties)
 		{
@@ -128,7 +127,7 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			foreach(DictionaryEntry entry in properties)
 			{
-				conf.Children.Add( new MutableConfiguration(entry.Key.ToString(), entry.Value.ToString()));
+				conf.Children.Add(new MutableConfiguration(entry.Key.ToString(), entry.Value.ToString()));
 			}
 
 			return conf;
