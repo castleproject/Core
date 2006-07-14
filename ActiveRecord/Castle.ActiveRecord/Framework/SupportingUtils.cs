@@ -16,7 +16,6 @@ namespace Castle.ActiveRecord.Framework
 {
 	using System;
 	using System.Collections;
-
 	using Iesi.Collections;
 
 	/// <summary>
@@ -46,6 +45,15 @@ namespace Castle.ActiveRecord.Framework
 
 		#region BuildArray
 
+		public static Array BuildArray(Type targetType, IList list)
+		{
+			Array array = Array.CreateInstance(targetType, list.Count);
+
+			list.CopyTo(array, 0);
+
+			return array;
+		}
+		
 		/// <summary>
 		/// Converts the results stored in an <see cref="IEnumerable"/> to an
 		/// strongly-typed array.
@@ -82,13 +90,13 @@ namespace Castle.ActiveRecord.Framework
 				Set set = (distinct ? new ListSet() : null);
 
 				ICollection collection = list as ICollection;
-				
+
 				IList newList = collection != null ? new ArrayList(collection.Count) : new ArrayList();
-				
-				foreach (object item in list)
+
+				foreach(object item in list)
 				{
 					object el = (entityIndex == -1 ? item : ((object[]) item)[entityIndex]);
-					
+
 					if (set == null || set.Add(el))
 					{
 						newList.Add(el);
@@ -99,12 +107,12 @@ namespace Castle.ActiveRecord.Framework
 			}
 
 			ICollection col = list as ICollection;
-			
+
 			if (col == null)
 			{
 				ArrayList newList = new ArrayList();
-				
-				foreach (object item in list)
+
+				foreach(object item in list)
 				{
 					newList.Add(item);
 				}
@@ -113,9 +121,9 @@ namespace Castle.ActiveRecord.Framework
 			}
 
 			Array typeSafeArray = Array.CreateInstance(type, col.Count);
-			
+
 			col.CopyTo(typeSafeArray, 0);
-			
+
 			return typeSafeArray;
 		}
 
@@ -143,12 +151,12 @@ namespace Castle.ActiveRecord.Framework
 
 			ICollection coll = list as ICollection;
 			IList newList = coll != null ? new ArrayList(coll.Count) : new ArrayList();
-			
-			foreach (object item in list)
+
+			foreach(object item in list)
 			{
 				object[] p = (item is object[] ? (object[]) item : new object[] {item});
 				object el = Activator.CreateInstance(type, p);
-				
+
 				if (set == null || set.Add(el))
 				{
 					newList.Add(el);
@@ -182,9 +190,11 @@ namespace Castle.ActiveRecord.Framework
 		{
 			return (T[]) BuildObjectArray(typeof(T), list, distinct);
 		}
+
 		#endregion
 
 		#region BuildArray
+
 		public static T[] BuildArray<T>(IEnumerable list, bool distinct)
 		{
 			return (T[]) BuildArray(typeof(T), list, distinct);
@@ -194,6 +204,7 @@ namespace Castle.ActiveRecord.Framework
 		{
 			return (T[]) BuildArray(typeof(T), list, entityIndex ?? -1, distinct);
 		}
+
 		#endregion
 
 #endif

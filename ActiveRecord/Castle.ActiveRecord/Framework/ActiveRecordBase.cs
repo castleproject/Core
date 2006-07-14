@@ -16,10 +16,10 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
-	
+
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Queries;
-
+	
 	using NHibernate;
 	using NHibernate.Expression;
 
@@ -52,13 +52,15 @@ namespace Castle.ActiveRecord
 			if (holder == null)
 			{
 				String message = String.Format("An ActiveRecord class ({0}) was used but the framework seems not " +
-					"properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?", type.FullName);
+				                               "properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?",
+				                               type.FullName);
 				throw new ActiveRecordException(message);
 			}
 			if (type != typeof(ActiveRecordBase) && GetModel(type) == null)
 			{
 				String message = String.Format("You have accessed an ActiveRecord class that wasn't properly initialized. " +
-					"The only explanation is that the call to ActiveRecordStarter.Initialize() didn't include {0} class", type.FullName);
+				                               "The only explanation is that the call to ActiveRecordStarter.Initialize() didn't include {0} class",
+				                               type.FullName);
 				throw new ActiveRecordException(message);
 			}
 		}
@@ -87,14 +89,14 @@ namespace Castle.ActiveRecord
 
 		#region protected internal static
 
-		#region Create/Update/Save/Delete/DeleteAll
+		#region Create/Update/Save/Delete/DeleteAll/Refresh
 
 		#region Create
 
 		/// <summary>
 		/// Creates (Saves) a new instance to the database.
 		/// </summary>
-		/// <param name="instance"></param>
+		/// <param name="instance">The ActiveRecord instance to be created on the database</param>
 		protected internal static void Create(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
@@ -134,7 +136,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Deletes the instance from the database.
 		/// </summary>
-		/// <param name="instance"></param>
+		/// <param name="instance">The ActiveRecord instance to be deleted</param>
 		protected internal static void Delete(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
@@ -170,11 +172,11 @@ namespace Castle.ActiveRecord
 		#endregion
 
 		#region Refresh
-		
+
 		/// <summary>
 		/// Refresh the instance from the database.
 		/// </summary>
-		/// <param name="instance"></param>
+		/// <param name="instance">The ActiveRecord instance to be reloaded</param>
 		protected internal static void Refresh(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
@@ -204,11 +206,18 @@ namespace Castle.ActiveRecord
 				holder.ReleaseSession(session);
 			}
 		}
-		
+
 		#endregion
 
 		#region DeleteAll
 
+		/// <summary>
+		/// Deletes all rows for the specified ActiveRecord type
+		/// </summary>
+		/// <remarks>
+		/// This method is usually useful for test cases.
+		/// </remarks>
+		/// <param name="type">ActiveRecord type on which the rows on the database should be deleted</param>
 		protected internal static void DeleteAll(Type type)
 		{
 			EnsureInitialized(type);
@@ -235,7 +244,16 @@ namespace Castle.ActiveRecord
 			}
 		}
 
-		protected internal static void DeleteAll(Type type, string where)
+		/// <summary>
+		/// Deletes all rows for the specified ActiveRecord type that matches
+		/// the supplied HQL condition
+		/// </summary>
+		/// <remarks>
+		/// This method is usually useful for test cases.
+		/// </remarks>
+		/// <param name="type">ActiveRecord type on which the rows on the database should be deleted</param>
+		/// <param name="where">HQL condition to select the rows to be deleted</param>
+		protected internal static void DeleteAll(Type type, String where)
 		{
 			EnsureInitialized(type);
 
@@ -309,7 +327,7 @@ namespace Castle.ActiveRecord
 		/// Persists the modification on the instance
 		/// state to the database.
 		/// </summary>
-		/// <param name="instance"></param>
+		/// <param name="instance">The ActiveRecord instance to be updated on the database</param>
 		protected internal static void Update(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
@@ -343,9 +361,14 @@ namespace Castle.ActiveRecord
 		#region Save
 
 		/// <summary>
-		/// Saves the instance to the database
+		/// Saves the instance to the database. If the primary key is unitialized
+		/// it creates the instance on the database. Otherwise it updates it.
+		/// <para>
+		/// If the primary key is assigned, then you must invoke <see cref="Create"/>
+		/// or <see cref="Update"/> instead.
+		/// </para>
 		/// </summary>
-		/// <param name="instance"></param>
+		/// <param name="instance">The ActiveRecord instance to be saved</param>
 		protected internal static void Save(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
@@ -449,7 +472,7 @@ namespace Castle.ActiveRecord
 
 		#region ExecuteQuery
 
-		protected internal static object ExecuteQuery(IActiveRecordQuery query)
+		public static object ExecuteQuery(IActiveRecordQuery query)
 		{
 			Type targetType = query.Target;
 
@@ -602,7 +625,7 @@ namespace Castle.ActiveRecord
 					}
 				}
 
-				return CreateReturnArray(criteria, targetType);
+				return SupportingUtils.BuildArray(targetType, criteria.List());
 			}
 			catch(ValidationException)
 			{
@@ -637,10 +660,6 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Finds records based on a property value
 		/// </summary>
-		/// <remarks>
-		/// Contributed by someone on the forum
-		/// http://forum.castleproject.org/posts/list/300.page
-		/// </remarks>
 		/// <param name="targetType">The target type</param>
 		/// <param name="property">A property name (not a column name)</param>
 		/// <param name="value">The value to be equals to</param>
@@ -669,7 +688,7 @@ namespace Castle.ActiveRecord
 		#region FindByPrimaryKey
 
 		/// <summary>
-		/// Finds an object instance by a unique ID
+		/// Finds an object instance by an unique ID
 		/// </summary>
 		/// <param name="targetType">The AR subclass type</param>
 		/// <param name="id">ID value</param>
@@ -680,7 +699,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Finds an object instance by a unique ID
+		/// Finds an object instance by an unique ID
 		/// </summary>
 		/// <param name="targetType">The AR subclass type</param>
 		/// <param name="id">ID value</param>
@@ -756,7 +775,7 @@ namespace Castle.ActiveRecord
 		#region FindOne
 
 		/// <summary>
-		/// Searches and returns the a row. If more than one is found, 
+		/// Searches and returns a row. If more than one is found, 
 		/// throws <see cref="ActiveRecordException"/>
 		/// </summary>
 		/// <param name="targetType">The target type</param>
@@ -768,7 +787,8 @@ namespace Castle.ActiveRecord
 
 			if (result.Length > 1)
 			{
-				throw new ActiveRecordException(targetType.Name + ".FindOne returned " + result.Length + " rows. Expecting one or none");
+				throw new ActiveRecordException(targetType.Name + ".FindOne returned " + result.Length +
+				                                " rows. Expecting one or none");
 			}
 
 			return (result.Length == 0) ? null : result.GetValue(0);
@@ -781,7 +801,8 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
+		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults, 
+		                                              Order[] orders, params ICriterion[] criterias)
 		{
 			EnsureInitialized(targetType);
 
@@ -805,9 +826,9 @@ namespace Castle.ActiveRecord
 				}
 
 				criteria.SetFirstResult(firstResult);
-				criteria.SetMaxResults(maxresults);
+				criteria.SetMaxResults(maxResults);
 
-				return CreateReturnArray(criteria, targetType);
+				return SupportingUtils.BuildArray(targetType, criteria.List());
 			}
 			catch(ValidationException)
 			{
@@ -826,27 +847,13 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
+		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
+		                                              params ICriterion[] criterias)
 		{
-			return SlicedFindAll(targetType, firstResult, maxresults, null, criterias);
+			return SlicedFindAll(targetType, firstResult, maxResults, null, criterias);
 		}
 
 		#endregion
-
-		#endregion
-
-		#region private static
-
-		private static Array CreateReturnArray(ICriteria criteria, Type targetType)
-		{
-			IList result = criteria.List();
-
-			Array array = Array.CreateInstance(targetType, result.Count);
-
-			result.CopyTo(array, 0);
-
-			return array;
-		}
 
 		#endregion
 
@@ -901,7 +908,7 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordBase.Delete(this);
 		}
-	
+
 		/// <summary>
 		/// Refresh the instance from the database.
 		/// </summary>

@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord
 
 	using NHibernate;
 	using NHibernate.Expression;
-
+	
 	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
@@ -106,11 +106,11 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		public static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, 
-			Order[] orders, params ICriterion[] criterias)
+		public static Array SlicedFindAll(Type targetType, int firstResult, int maxresults,
+		                                  Order[] orders, params ICriterion[] criterias)
 		{
-			return ActiveRecordBase.SlicedFindAll(targetType, firstResult, 
-				maxresults, orders, criterias);
+			return ActiveRecordBase.SlicedFindAll(targetType, firstResult,
+			                                      maxresults, orders, criterias);
 		}
 
 		/// <summary>

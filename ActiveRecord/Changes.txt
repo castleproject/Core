@@ -1,6 +1,11 @@
 beta 4
 ======
 
+- Fixed AR-65: ActiveRecordBase<T> prevent users from using type inheritance
+  Refactored ActiveRecordBase<T> to extend ActiveRecordBase
+  Refactored ActiveRecordMediator<T> to extend ActiveRecordMediator
+  Could not do the same thing for the validation<T>
+
 - Removed dependency on the Nullables library.
 
 - Added native support for .NET 2.0 Nullables.

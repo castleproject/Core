@@ -16,21 +16,14 @@
 
 namespace Castle.ActiveRecord
 {
-	using System;
-	using System.Collections;
-
-	using NHibernate;
 	using NHibernate.Expression;
-
-	using Castle.ActiveRecord.Framework;
 
 
 	/// <summary>
 	/// Allow programmers to use the 
-	/// ActiveRecord functionality without direct reference
-	/// to <see cref="ActiveRecordBase"/>
+	/// ActiveRecord functionality without extending <see cref="ActiveRecordBase"/>
 	/// </summary>
-	public static class ActiveRecordMediator<T> where T : class
+	public class ActiveRecordMediator<T> : ActiveRecordMediator where T : class
 	{
 		/// <summary>
 		/// Invokes the specified delegate passing a valid 
@@ -41,21 +34,7 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		public static object Execute(NHibernateDelegate call, T instance)
 		{
-			return ActiveRecordBase.Execute(typeof(T), call, instance);
-		}
-
-		/// <summary>
-		/// Finds an object instance by a unique ID
-		/// </summary>
-		/// <param name="id">ID value</param>
-		/// <param name="throwOnNotFound"><c>true</c> if you want to catch an exception 
-		/// if the object is not found</param>
-		/// <returns></returns>
-		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
-		/// <c>true</c> and the row is not found</exception>
-		public static T FindByPrimaryKey(object id, bool throwOnNotFound)
-		{
-			return (T) ActiveRecordBase.FindByPrimaryKey(typeof(T), id, throwOnNotFound);
+			return ActiveRecordMediator.Execute(typeof(T), call, instance);
 		}
 
 		/// <summary>
@@ -65,7 +44,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T FindByPrimaryKey(object id)
 		{
-			return FindByPrimaryKey(id, true);
+			return (T) ActiveRecordMediator.FindByPrimaryKey(typeof(T), id, true);
 		}
 
         /// <summary>
@@ -76,7 +55,7 @@ namespace Castle.ActiveRecord
         /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
         public static T FindFirst(Order[] orders, params ICriterion[] criterias)
         {
-            return (T)ActiveRecordBase.FindFirst(typeof(T), orders, criterias);
+			return (T) ActiveRecordMediator.FindFirst(typeof(T), orders, criterias);
         }
 
         /// <summary>
@@ -86,9 +65,8 @@ namespace Castle.ActiveRecord
         /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
         public static T FindFirst(params ICriterion[] criterias)
         {
-            return FindFirst(null, criterias);
+			return (T) ActiveRecordMediator.FindFirst(typeof(T), criterias);
         }
-
 
         /// <summary>
         /// Searches and returns the first row.
@@ -97,7 +75,7 @@ namespace Castle.ActiveRecord
         /// <returns>A instance the targetType or <c>null</c></returns>
         public static T FindOne(params ICriterion[] criterias)
         {
-            return (T)ActiveRecordBase.FindOne(typeof(T), criterias);
+			return (T) ActiveRecordMediator.FindOne(typeof(T), criterias);
         }
 
 		/// <summary>
@@ -106,23 +84,23 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll()
 		{
-			return FindAll((Order[]) null);
+			return (T[]) ActiveRecordMediator.FindAll(typeof(T));
 		}
 
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		public static T[] SlicedFindAll(int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
+		public static T[] SlicedFindAll(int firstResult, int maxResults, Order[] orders, params ICriterion[] criterias)
 		{
-			return (T[]) ActiveRecordBase.SlicedFindAll(typeof(T), firstResult, maxresults, orders, criterias);
+			return (T[]) ActiveRecordMediator.SlicedFindAll(typeof(T), firstResult, maxResults, orders, criterias);
 		}
 
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		public static T[] SlicedFindAll(int firstResult, int maxresults, params ICriterion[] criterias)
+		public static T[] SlicedFindAll(int firstResult, int maxResults, params ICriterion[] criterias)
 		{
-			return SlicedFindAll(firstResult, maxresults, null, criterias);
+			return (T[]) ActiveRecordMediator.SlicedFindAll(typeof(T), firstResult, maxResults, null, criterias);
 		}
 
 		/// <summary>
@@ -134,7 +112,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll(Order[] orders, params ICriterion[] criterias)
 		{
-			return (T[]) ActiveRecordBase.FindAll(typeof(T), orders, criterias);
+			return (T[]) ActiveRecordMediator.FindAll(typeof(T), orders, criterias);
 		}
 
 		/// <summary>
@@ -145,41 +123,26 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll(params ICriterion[] criterias)
 		{
-			return FindAll(null, criterias);
+			return (T[]) ActiveRecordMediator.FindAll(typeof(T), criterias);
 		}
 
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll(typeof(T));
+			ActiveRecordMediator.DeleteAll(typeof(T));
 		}
 
 		public static void DeleteAll(string where)
 		{
-			ActiveRecordBase.DeleteAll(typeof(T), where);
+			ActiveRecordMediator.DeleteAll(typeof(T), where);
 		}
 
-		public static IEnumerable EnumerateQuery(IActiveRecordQuery query)
-		{
-			return ActiveRecordBase.EnumerateQuery(query);
-		}
-		
-		public static object ExecuteQuery(IActiveRecordQuery query)
-		{
-			return ActiveRecordBase.ExecuteQuery(query);
-		}
-
-		public static R ExecuteQuery2<R>(IActiveRecordQuery<R> query)
-		{
-			return ActiveRecordBase<T>.ExecuteQuery2(query);
-		}
-		
 		/// <summary>
 		/// Saves the instance to the database
 		/// </summary>
 		/// <param name="instance"></param>
 		public static void Save(T instance)
 		{
-			ActiveRecordBase.Save(instance);
+			ActiveRecordMediator.Save(instance);
 		}
 
 		/// <summary>
@@ -188,7 +151,7 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		public static void Create(T instance)
 		{
-			ActiveRecordBase.Create(instance);
+			ActiveRecordMediator.Create(instance);
 		}
 
 		/// <summary>
@@ -198,7 +161,7 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		public static void Update(T instance)
 		{
-			ActiveRecordBase.Update(instance);
+			ActiveRecordMediator.Update(instance);
 		}
 
 		/// <summary>
@@ -207,16 +170,16 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		public static void Delete(T instance)
 		{
-			ActiveRecordBase.Delete(instance);
+			ActiveRecordMediator.Delete(instance);
 		}
 
 		/// <summary>
 		/// Testing hock only.
 		/// </summary>
-		public static ISessionFactoryHolder GetSessionFactoryHolder()
-		{
-			return ActiveRecordBase.holder;
-		}
+		// public static ISessionFactoryHolder GetSessionFactoryHolder()
+		// {
+		// 	return ActiveRecordMediator.holder;
+		// }
 
 	}
 }

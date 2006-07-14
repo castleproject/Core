@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #if DOTNET2
 
 namespace Castle.ActiveRecord.Queries
@@ -22,7 +21,7 @@ namespace Castle.ActiveRecord.Queries
 	using System.Collections.Generic;
 
 	using Castle.ActiveRecord.Framework;
-
+	
 	using NHibernate;
 
 	/// <summary>
@@ -32,7 +31,8 @@ namespace Castle.ActiveRecord.Queries
 	/// <typeparam name="T">The resulting object type</typeparam>
 	public class SimpleQuery<T> : HqlBasedQuery, IActiveRecordQuery<T[]>
 	{
-#region Constructors
+		#region Constructors
+
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
 		/// using the specified positional <paramref name="positionalParameters"/>.
@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="hql">The HQL</param>
 		/// <param name="positionalParameters">The positional positionalParameters</param>
 		public SimpleQuery(String hql, params Object[] positionalParameters)
-			: base(typeof (T), hql, positionalParameters)
+			: base(typeof(T), hql, positionalParameters)
 		{
 		}
 
@@ -57,22 +57,26 @@ namespace Castle.ActiveRecord.Queries
 			: base(targetType, hql, positionalParameters)
 		{
 		}
+
 		#endregion
 
-#region IActiveRecordQuery<T[]> implementation
+		#region IActiveRecordQuery<T[]> implementation
+
 		T[] IActiveRecordQuery<T[]>.Execute(ISession session)
 		{
 			return (T[]) InternalExecute(session);
 		}
+
 		#endregion
 
-#region Public "Execute" and "Enumerate" Methods
+		#region Public "Execute" and "Enumerate" Methods
+
 		/// <summary>
 		/// Executes the query and gets the results.
 		/// </summary>
 		public T[] Execute()
 		{
-			return ActiveRecordMediator<ActiveRecordBase>.ExecuteQuery2<T[]>(this);
+			return ActiveRecordBase<T>.ExecuteQuery2<T[]>(this);
 		}
 
 		/// <summary>
@@ -94,6 +98,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			return (IEnumerable<T>) ActiveRecordMediator.EnumerateQuery(this);
 		}
+
 		#endregion
 
 		protected override IEnumerable InternalEnumerate(ISession session)
@@ -104,7 +109,7 @@ namespace Castle.ActiveRecord.Queries
 		private IEnumerable<T> GenericEnumerate(ISession session)
 		{
 			IEnumerable en = InternalEnumerateFromBase(session);
-			foreach (T item in en)
+			foreach(T item in en)
 				yield return item;
 		}
 
