@@ -196,7 +196,7 @@ namespace Castle.ActiveRecord
 				}
 				else
 				{
-					throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
+					throw new ActiveRecordException("Could not perform Refresh for " + instance.GetType().Name, ex);
 				}
 			}
 			finally
@@ -330,7 +330,7 @@ namespace Castle.ActiveRecord
 			}
 			catch(Exception ex)
 			{
-				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+				throw new ActiveRecordException("Could not perform Update for " + instance.GetType().Name, ex);
 			}
 			finally
 			{
@@ -463,7 +463,7 @@ namespace Castle.ActiveRecord
 			}
 			catch(Exception ex)
 			{
-				throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
+				throw new ActiveRecordException("Could not perform ExecuteQuery for " + targetType.Name, ex);
 			}
 			finally
 			{
@@ -715,7 +715,7 @@ namespace Castle.ActiveRecord
 			}
 			catch(Exception ex)
 			{
-				throw new ActiveRecordException("Could not perform Load (Find by id) for " + targetType.Name, ex);
+				throw new ActiveRecordException("Could not perform FindByPrimaryKey for " + targetType.Name + ". Id: " + id, ex);
 			}
 			finally
 			{
@@ -860,7 +860,7 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		protected internal object Execute(NHibernateDelegate call)
 		{
-			return Execute(this.GetType(), call, this);
+			return Execute(GetType(), call, this);
 		}
 
 		#endregion
@@ -909,26 +909,6 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordBase.Refresh(this);
 		}
-
-//		/// <summary>
-//		/// Returns the number of records of this type in the database
-//		/// </summary>
-//		/// <returns></returns>
-//		public int CountAll()
-//		{
-//			return CountAll(this.GetType());
-//		}
-//
-//		/// <summary>
-//		/// Returns the number of records of this type in the database
-//		/// </summary>
-//		/// <param name="filter">A sql where string <code>Person=? and DOB > ?</code></param>
-//		/// <param name="args">Positional parameters for the filter string</param>
-//		/// <returns></returns>
-//		public int CountAll(string filter, params object[] args)
-//		{
-//			return CountAll(this.GetType(), filter, args);
-//		}
 
 		#endregion
 
