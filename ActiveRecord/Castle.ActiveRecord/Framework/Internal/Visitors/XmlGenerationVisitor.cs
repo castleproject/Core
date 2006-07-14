@@ -450,7 +450,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		    if (model.BelongsToAtt.Column == null)
             {
-                AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
+                AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
                         MakeAtt("name", model.Property.Name),
                         MakeAtt("access", model.BelongsToAtt.AccessString),
                         MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
