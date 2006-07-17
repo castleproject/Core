@@ -14,13 +14,11 @@
 
 namespace Castle.ActiveRecord.Tests
 {
-	using System;
-
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model;
 
-
+	
 	[TestFixture]
 	public class NullablesTestCase : AbstractActiveRecordTest
 	{
@@ -28,9 +26,9 @@ namespace Castle.ActiveRecord.Tests
 		public new void Init()
 		{
 			base.Init();
-			
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(NullableModel) );
-	
+
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(NullableModel));
+
 			Recreate();
 		}
 
