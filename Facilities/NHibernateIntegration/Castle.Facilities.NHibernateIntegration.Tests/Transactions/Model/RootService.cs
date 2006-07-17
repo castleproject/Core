@@ -50,5 +50,17 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 			Blog blog = firstDao.Create();
 			secondDao.CreateWithException2(blog);
 		}
+
+		[Transaction]
+		public virtual void DoBlogRefOperation(Blog blog)
+		{
+			BlogRef blogRef = new BlogRef();
+			blogRef.ParentBlog = blog;
+			blogRef.Title = "title";
+			firstDao.AddBlogRef(blogRef);
+
+			//constraint exception
+			firstDao.Delete("Blog1");
+		}
 	}
 }

@@ -36,6 +36,27 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 		}
 
 		[Test]
+		public void TestTransaction()
+		{
+			ISessionManager sessionManager = (ISessionManager) container[typeof(ISessionManager)];
+			
+			RootService service = (RootService) container[typeof(RootService)];
+			FirstDao dao = (FirstDao) container[typeof(FirstDao)];
+
+			Blog blog = dao.Create("Blog1");
+
+			try
+			{
+				service.DoBlogRefOperation(blog);
+			}
+			catch (Exception e)
+			{
+				// transaction exception
+				Console.Write(e);
+			}
+		} 
+		
+		[Test]
 		public void TransactionNotHijackingTheSession()
 		{
 			ISessionManager sessionManager = (ISessionManager) 

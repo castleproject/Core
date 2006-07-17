@@ -50,5 +50,25 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 				return blog;
 			}
 		}
+		
+		[Transaction]
+		public virtual void Delete(String name)
+		{
+			using(ISession session = sessManager.OpenSession())
+			{
+				NUnit.Framework.Assert.IsNotNull(session.Transaction);
+
+				session.Delete("from Blog b where b.Name ='" + name + "'");
+			}
+		}
+		
+		[Transaction]
+		public virtual void AddBlogRef(BlogRef blogRef)
+		{
+			using(ISession session = sessManager.OpenSession())
+			{				
+				session.Save(blogRef);
+			}
+		}
 	}
 }

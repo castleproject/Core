@@ -16,6 +16,7 @@
 				<resources>
 					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/Blog.hbm.xml" />
 					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/BlogItem.hbm.xml" />
+					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/BlogRef.hbm.xml" />
 				</resources>
 			</factory>
 
