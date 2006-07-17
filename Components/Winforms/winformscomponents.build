@@ -3,6 +3,10 @@
 
 	<target name="build" depends="init, assembly-resolver" />
 	
+	<target name="clean">
+		<nant buildfile="AssemblyResolverDialog/default.build" inheritall="true" target="clean" />
+	</target>
+	
 	<target name="init">
 	</target>
 	

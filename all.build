@@ -13,6 +13,19 @@
 	<target name="clean">
 		<delete dir="${build.dir}" failonerror="false" />
 	</target>
+		
+	<target name="cleanall">
+		<delete dir="${build.dir}" failonerror="false" />
+		<nant buildfile="ActiveRecord/activerecord.build" target="clean" inheritall="true" />
+		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="clean" inheritall="true" />
+		<nant buildfile="Tools/NVelocity/nvelocity.build" target="clean" inheritall="true" />
+		<nant buildfile="InversionOfControl/container.build" target="clean" inheritall="true" />
+		<nant buildfile="Services/services.build" target="clean" inheritall="true" />
+		<nant buildfile="Facilities/facilities.build" target="clean" inheritall="true" />
+		<nant buildfile="Components/components.build" target="clean" inheritall="true" />
+		<nant buildfile="MonoRail/monorail.build" target="clean" inheritall="true" />
+		<nant buildfile="AspectSharp/aspectsharp.build" target="clean" inheritall="true" />
+	</target>
 	
 	<target name="init">
 		<mkdir dir="${build.dir}" />

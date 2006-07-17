@@ -7,6 +7,10 @@
 
 	<target name="build" depends="init, logging, transaction, copytobuilddir" />
 	
+	<target name="clean">
+		<delete dir="${bin.dir}" failonerror="false" />
+	</target>
+	
 	<target name="init">
 		<delete dir="${bin.dir}" failonerror="false" />
 		<mkdir dir="${bin.dir}" />

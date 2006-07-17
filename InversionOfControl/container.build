@@ -12,6 +12,11 @@
 
 	<target name="build" depends="init, model, microkernel, windsor, copytobuilddir" />
 	
+	<target name="clean">
+		<delete dir="${bin.dir}" failonerror="false" />
+		<delete dir="${doc.dir}" failonerror="false" />
+	</target>
+	
 	<target name="init">
 		<property name="define" value="${define};${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>

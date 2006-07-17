@@ -3,6 +3,12 @@
 
 	<target name="build" depends="init, binder, templateengine, emailsender" />
 	
+	<target name="clean">
+		<nant buildfile="Binder/default.build" inheritall="true" target="clean" />
+		<nant buildfile="TemplateEngine/default.build" inheritall="true" target="clean" />
+		<nant buildfile="EmailSender/default.build" inheritall="true" target="clean" />
+	</target>
+	
 	<target name="init">
 	
 	</target>

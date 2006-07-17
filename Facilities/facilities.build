@@ -13,6 +13,24 @@
 	
 	<!-- entlib,x is/are out -->
 	
+	<target name="clean">
+		<nant buildfile="AutomaticTransactionManagement/default.build" inheritall="true" target="clean" />
+		<nant buildfile="ActiveRecordIntegration/default.build" inheritall="true" target="clean" />
+		<nant buildfile="AspectSharp/default.build" inheritall="true" target="clean" />
+		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="clean" />
+		<nant buildfile="Cache/default.build" inheritall="true" target="clean" />
+		<nant buildfile="Db4o/default.build" inheritall="true" target="clean" />
+		<!--<nant buildfile="EnterpriseLibrary/default.build" inheritall="true" target="clean" />-->
+		<nant buildfile="FactorySupport/default.build" inheritall="true" target="clean" />
+		<nant buildfile="IBatisNet/default.build" inheritall="true" target="clean" /> 
+		<nant buildfile="Logging/default.build" inheritall="true" target="clean" /> 
+		<nant buildfile="NHibernateIntegration/default.build" inheritall="true" target="clean" />
+		<nant buildfile="Prevalence/default.build" inheritall="true" target="clean" />
+		<nant buildfile="Remoting/default.build" inheritall="true" target="clean" />
+		<nant buildfile="Security/default.build" inheritall="true" target="clean" />
+		<nant buildfile="TypedFactory/default.build" inheritall="true" target="clean" />
+	</target>
+	
 	<target name="init">
 
 	</target>

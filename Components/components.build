@@ -5,6 +5,11 @@
 
 	<target name="build" depends="init, general, winforms" />
 	
+	<target name="clean" >
+		<nant buildfile="General/commoncomponents.build" inheritall="true" target="clean" />
+		<nant buildfile="Winforms/winformscomponents.build" inheritall="true" target="clean" />
+	</target>
+	
 	<target name="init">
 	
 	</target>

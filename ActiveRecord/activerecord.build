@@ -96,7 +96,8 @@
 	</target>
 	
 	<target name="clean">
-
+		<delete dir="${bin.dir}" failonerror="false" />
+		<delete dir="${doc.dir}" failonerror="false" />
 	</target>
 
 	<target name="build" depends="init, tests.run, generator, copytobuilddir" />
