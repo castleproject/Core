@@ -19,6 +19,7 @@ namespace Castle.ActiveRecord.Framework.Config
 	using System.Xml;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Configuration;
 
 	/// <summary>
 	/// Source of configuration based on Xml 
