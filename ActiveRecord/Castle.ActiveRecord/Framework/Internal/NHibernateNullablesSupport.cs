@@ -18,8 +18,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	
 	internal class NHibernateNullablesSupport
 	{
-		private const String NullableAsm = "Nullables, Version=1.0.2.0, Culture=neutral";
-		                     //, PublicKeyToken=154fdcb44c4484fc";
+		private const String NullableAsm = "Nullables, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc";
 
 		private const String NullableIType = "Nullables.NHibernate.{0}Type, Nullables.NHibernate";
 				
@@ -30,20 +29,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 			tINullableType = Type.GetType("Nullables.INullableType, " + NullableAsm, false);
 		}
 		
-		public static bool IsNHibernateNullableType(Type t)
+		public static bool IsNHibernateNullableType(Type type)
 		{
-			return tINullableType != null && tINullableType.IsAssignableFrom(t);
+			return tINullableType != null && tINullableType.IsAssignableFrom(type);
 		}
 
 		public static String GetITypeTypeNameForNHibernateNullable(Type type)
 		{
 			if (type == null)
+			{
 				return null;
+			}
 			
-			bool supported = type.AssemblyQualifiedName.EndsWith(NullableAsm);
+			bool isSupported = type.AssemblyQualifiedName.EndsWith(NullableAsm);
 
-			if (!supported)
+			if (!isSupported)
+			{
 				throw new ActiveRecordException(String.Format("ActiveRecord does not support Nullable for {0} natively.", type));
+			}
 
 			return String.Format(NullableIType, type.Name);
 		}
