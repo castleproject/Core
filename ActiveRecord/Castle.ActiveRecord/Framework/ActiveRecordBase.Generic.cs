@@ -376,9 +376,9 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="id">ID value</param>
 		/// <returns></returns>
-		protected internal static object FindByPrimaryKey(object id)
+		protected internal static T FindByPrimaryKey(object id)
 		{
-			return ActiveRecordBase.FindByPrimaryKey(typeof(T), id);
+			return (T) ActiveRecordBase.FindByPrimaryKey(typeof(T), id);
 		}
 
 		/// <summary>
@@ -390,9 +390,9 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
 		/// <c>true</c> and the row is not found</exception>
-		protected internal static object FindByPrimaryKey(object id, bool throwOnNotFound)
+		protected internal static T FindByPrimaryKey(object id, bool throwOnNotFound)
 		{
-			return ActiveRecordBase.FindByPrimaryKey(typeof(T), id, throwOnNotFound);
+			return (T) ActiveRecordBase.FindByPrimaryKey(typeof(T), id, throwOnNotFound);
 		}
 
 		#endregion
@@ -405,9 +405,9 @@ namespace Castle.ActiveRecord
 		/// <param name="orders">The sort order - used to determine which record is the first one</param>
 		/// <param name="criterias">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		public static object FindFirst(Order[] orders, params ICriterion[] criterias)
+		public static T FindFirst(Order[] orders, params ICriterion[] criterias)
 		{
-			return ActiveRecordBase.FindFirst(typeof(T), orders, criterias);
+			return (T) ActiveRecordBase.FindFirst(typeof(T), orders, criterias);
 		}
 
 		/// <summary>
@@ -415,9 +415,9 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="criterias">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		public static object FindFirst(params ICriterion[] criterias)
+		public static T FindFirst(params ICriterion[] criterias)
 		{
-			return ActiveRecordBase.FindFirst(typeof(T), criterias);
+			return (T) ActiveRecordBase.FindFirst(typeof(T), criterias);
 		}
 
 		#endregion
@@ -430,9 +430,9 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="criterias">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		public static object FindOne(params ICriterion[] criterias)
+		public static T FindOne(params ICriterion[] criterias)
 		{
-			return ActiveRecordBase.FindOne(typeof(T), criterias);
+			return (T) ActiveRecordBase.FindOne(typeof(T), criterias);
 		}
 
 		#endregion
