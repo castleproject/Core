@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	
 	internal class NHibernateNullablesSupport
 	{
-		private const String NullableAsm = "Nullables, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc";
+		private const String NullableAsm = "Nullables, Version=1.0.2.0, Culture=neutral";
 
 		private const String NullableIType = "Nullables.NHibernate.{0}Type, Nullables.NHibernate";
 				
@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				return null;
 			}
 			
-			bool isSupported = type.AssemblyQualifiedName.EndsWith(NullableAsm);
+			bool isSupported = type.AssemblyQualifiedName.IndexOf(NullableAsm) > 0;
 
 			if (!isSupported)
 			{
