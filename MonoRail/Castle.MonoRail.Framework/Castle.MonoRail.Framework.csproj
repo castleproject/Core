@@ -304,6 +304,7 @@
                 />
                 <File
                     RelPath = "Attributes\AccessibleThroughAttribute.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

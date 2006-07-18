@@ -42,5 +42,10 @@ namespace TestSite.StringTemplate.Controllers
 
 			RenderView( "success" );
 		}
+		
+		public void PostHere( string p1, int p2 )
+		{
+			RenderText( string.Format( "<p>param1={0}</p><p>param2={1}</p>", p1, p2 ) );
+		}
 	}
 }

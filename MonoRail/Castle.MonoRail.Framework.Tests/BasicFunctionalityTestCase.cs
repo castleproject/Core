@@ -157,5 +157,17 @@ namespace Castle.MonoRail.Framework.Tests
 			AssertCookieExpirationEqualsTo("cookiename2", twoWeeks);
 			AssertCookieValueEqualsTo("cookiename2", "value");
 		}
+
+		[Test]
+		public void FormPostSmartDispatcher()
+		{
+			DoPost( "registration/posthere.rails", "p1=foo", "p2=123" );
+			
+			AssertSuccess();
+
+			AssertReplyContains( "param1=foo" );
+			AssertReplyContains( "param2=123" );
+		}
+
 	}
 }
