@@ -1,0 +1,196 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.Facilities.NHibernateIntegration</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.Facilities.NHibernateIntegration</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.MicroKernel">
+      <Name>Castle.MicroKernel</Name>
+      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Model">
+      <Name>Castle.Model</Name>
+      <HintPath>..\..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Transaction">
+      <Name>Castle.Services.Transaction</Name>
+      <HintPath>..\..\..\Services\bin\Castle.Services.Transaction.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <Name>Castle.Windsor</Name>
+      <HintPath>..\..\..\InversionOfControl\bin\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <Name>Iesi.Collections</Name>
+      <HintPath>..\lib\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <Name>NHibernate</Name>
+      <HintPath>..\lib\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\DataException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\IGenericDao.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\INHibernateGenericDao.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\NHibernateGenericDao.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\SessionWebModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Util\FieldInfoCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Util\ReflectionUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\AbstractDictStackSessionStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\AbstractSessionStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\CallContextSessionStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\DefaultSessionManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ISessionFactoryResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ISessionManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ISessionStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\NHibernateTransactionManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ResourceAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\SessionDelegate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\SessionDisposeSynchronization.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\SessionFactoryResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\WebSessionStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NHibernateFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

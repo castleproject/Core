@@ -176,9 +176,9 @@
 		<call target="deletereleasenotes" />
 	</target>
 
-	<target name="zip-build" depends="build">
+	<target name="zip-build" depends="build" >
 		<call target="createreleasenotes" />
-		<zip zipfile="${base.dir}/Castle-${framework::get-target-framework()}-${CCNetLabel}-.zip">
+		<zip zipfile="${base.dir}/${CCNetLabel}-Castle-${framework::get-target-framework()}${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())}.zip">
 			<fileset basedir="${base.dir}/build">
 				<include name="${framework::get-target-framework()}/*.*" />
 			</fileset>
