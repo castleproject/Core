@@ -178,7 +178,9 @@
 
 	<target name="zip-build" depends="build" >
 		<call target="createreleasenotes" />
-		<zip zipfile="${base.dir}/${CCNetLabel}-${framework::get-target-framework()}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())}.zip">
+		<property name="build-type" value="release" unless="${debug}" />
+		<property name="build-type" value ="debug" if="${debug}"/>
+		<zip zipfile="${base.dir}/${CCNetLabel}-${framework::get-target-framework()}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())}-${build-type}.zip">
 			<fileset basedir="${base.dir}/build">
 				<include name="${framework::get-target-framework()}/*.*" />
 			</fileset>
