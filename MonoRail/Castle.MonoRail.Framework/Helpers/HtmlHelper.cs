@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return String.Format("<fieldset><legend>{0}</legend>", legend);
 		}
-		
+
 		/// <summary>
 		/// Creates a closing <b>fieldset</b> tag.
 		/// <code>
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return "</fieldset>";
 		}
-		
+
 		#endregion
 
 		#region Form
@@ -118,7 +118,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return sbWriter.ToString();
 		}
-		
+
 		/// <summary>
 		/// Creates a <b>form</b> tag with specified <paramref name="method"/>, <paramref name="action"/> and
 		/// <paramref name="id"/>.
@@ -145,7 +145,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return Form(action, id, method, null);
 		}
-		
+
 		/// <summary>
 		/// Creates a <b>form</b> tag with specified <paramref name="method"/>, <paramref name="action"/>,
 		/// <paramref name="id"/> and <paramref name="onSubmit"/> event handler. 
@@ -202,7 +202,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return String.Format("<form action=\"{0}\" {1}>", action, GetAttributes(attributes));
 		}
-		
+
 		/// <summary>
 		/// Creates a closing <b>form</b> tag.
 		/// <code>
@@ -226,9 +226,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return "</form>";
 		}
-		
+
 		#endregion
-		
+
 		#region Link and LinkTo
 
 		///<overloads>This method has two overloads.</overloads>
@@ -274,8 +274,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String Link(String target, String linkText, IDictionary attributes)
 		{
-			return String.Format("<a href=\"{0}\" {1}>{2}</a>", 
-				target, GetAttributes(attributes), linkText);
+			return String.Format("<a href=\"{0}\" {1}>{2}</a>",
+			                     target, GetAttributes(attributes), linkText);
 		}
 
 		///<overloads>This method has three overloads.</overloads>
@@ -300,7 +300,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return LinkTo(name, Controller.Name, action);
 		}
-		
+
 		/// <summary>
 		/// Creates an anchor (link) to the <paramref name="action"/> on the specified <paramref name="controller"/>.
 		/// <code>
@@ -325,10 +325,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			String url = Controller.Context.ApplicationPath;
 			String extension = Controller.Context.UrlInfo.Extension;
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}\">{4}</a>", 
-				url, controller, action, extension, name);
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}\">{4}</a>",
+			                     url, controller, action, extension, name);
 		}
-		
+
 		/// <summary>
 		/// Creates an anchor (link) to the <paramref name="action"/> on the specified <paramref name="controller"/>
 		/// passing provided <paramref name="id"/>.
@@ -357,8 +357,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			String url = Controller.Context.ApplicationPath;
 			String extension = Controller.Context.UrlInfo.Extension;
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>", 
-				url, controller, action, extension, id, name);
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>",
+			                     url, controller, action, extension, id, name);
 		}
 
 		/// <summary>
@@ -385,8 +385,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			String url = Controller.Context.ApplicationPath;
 			String extension = Controller.Context.UrlInfo.Extension;
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}\" {5}>{4}</a>", 
-				url, controller, action, extension, name, GetAttributes(attributes));
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}\" {5}>{4}</a>",
+			                     url, controller, action, extension, name, GetAttributes(attributes));
 		}
 
 		/// <summary>
@@ -413,12 +413,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			String url = Controller.Context.ApplicationPath;
 			String extension = Controller.Context.UrlInfo.Extension;
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={6}\" {5}>{4}</a>", 
-				url, controller, action, extension, name, GetAttributes(attributes), id);
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={6}\" {5}>{4}</a>",
+			                     url, controller, action, extension, name, GetAttributes(attributes), id);
 		}
-		
+
 		#endregion
-		
+
 		#region MapToVirtual
 
 		/// <summary>
@@ -437,17 +437,19 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String MapToVirtual(String target)
 		{
-			String appPath = Controller.Context.ApplicationPath.EndsWith("/") ?
-				Controller.Context.ApplicationPath : 
-				Controller.Context.ApplicationPath + "/";
+			String appPath = Controller.Context.ApplicationPath.EndsWith("/")
+			                 	?
+			                 Controller.Context.ApplicationPath
+			                 	:
+			                 Controller.Context.ApplicationPath + "/";
 
 			String targetPath = target.StartsWith("/") ? target.Substring(1) : target;
 
 			return String.Concat(appPath, targetPath);
 		}
-		
+
 		#endregion
-		
+
 		#region LabelFor
 
 		///<overloads>This method has two overloads.</overloads>
@@ -473,7 +475,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return LabelFor(forId, label, null);
 		}
-		
+
 		/// <summary>
 		/// Creates a label for the element indicated with
 		/// <paramref name="forId"/>.
@@ -505,8 +507,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			writer.WriteBeginTag("label");
-			writer.Write( " " );
-			writer.Write( GetAttributes(attributes) );
+			writer.Write(" ");
+			writer.Write(GetAttributes(attributes));
 			writer.WriteAttribute("for", forId);
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.Write(label);
@@ -515,9 +517,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return sbWriter.ToString();
 		}
-		
+
 		#endregion
-		
+
 		#region DateTime
 
 		///<overloads>This method has two overloads.</overloads>
@@ -577,7 +579,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return DateTime(name, value, null);
 		}
-		
+
 		/// <summary>
 		/// Creates three <b>select</b> tags to input day, month and year.
 		/// <code>
@@ -640,17 +642,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			String[] days = new String[31];
 			int index = 0;
-			for (int i = 1; i < 32; i++)
+			for(int i = 1; i < 32; i++)
 				days[index++] = i.ToString();
 
 			String[] months = new String[12];
 			index = 0;
-			for (int i = 1; i < 13; i++)
+			for(int i = 1; i < 13; i++)
 				months[index++] = i.ToString();
 
 			String[] years = new String[100];
 			index = 0;
-			for (int i = 1930; i < 2030; i++)
+			for(int i = 1930; i < 2030; i++)
 				years[index++] = i.ToString();
 
 			StringBuilder sb = new StringBuilder(1024);
@@ -669,9 +671,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return sb.ToString();
 		}
-		
+
 		#endregion
-		
+
 		#region TextArea
 
 		/// <summary>
@@ -694,9 +696,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String TextArea(String name, int cols, int rows, String value)
 		{
 			return String.Format("<textarea id=\"{0}\" name=\"{0}\" cols=\"{1}\" rows=\"{2}\">{3}</textarea>",
-				name, cols, rows, value);
+			                     name, cols, rows, value);
 		}
-		
+
 		#endregion
 
 		#region InputButton
@@ -744,7 +746,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputButton(String name, String value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"button\" name=\"{0}\" value=\"{1}\" {2} />",
-				name, value, GetAttributes(attributes));
+			                     name, value, GetAttributes(attributes));
 		}
 
 		#endregion
@@ -799,7 +801,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputCheckbox(String name, Object value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"checkbox\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2} />",
-				name, value, GetAttributes(attributes));
+			                     name, value, GetAttributes(attributes));
 		}
 
 		#endregion
@@ -833,7 +835,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputRadio(String name, Object value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"radio\" name=\"{0}\" value=\"{1}\" {2} />",
-				name, value, GetAttributes(attributes));
+			                     name, value, GetAttributes(attributes));
 		}
 
 		#endregion
@@ -865,13 +867,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputFile(String name, IDictionary attributes)
 		{
 			return String.Format("<input type=\"file\" name=\"{0}\" {1} />",
-				name, GetAttributes(attributes));
+			                     name, GetAttributes(attributes));
 		}
 
 		#endregion
 
 		#region InputText
-		
+
 		/// <overloads>This method has four overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the text type.
@@ -914,9 +916,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputText(String name, String value, int size, int maxlength)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" />",
-				name, value, size, maxlength);
+			                     name, value, size, maxlength);
 		}
-		
+
 		/// <summary>
 		/// Creates an input element of the text type with specified
 		/// <paramref name="size"/>, <paramref name="maxlength"/> and <paramref name="attributes"/>.
@@ -943,10 +945,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String InputText(String name, String value, int size, int maxlength, IDictionary attributes)
 		{
-			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" {4}/>",
-				name, value, size, maxlength, GetAttributes(attributes));
+			return
+				String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" {4}/>",
+				              name, value, size, maxlength, GetAttributes(attributes));
 		}
-		
+
 		/// <summary>
 		/// Creates an input element of the text type with custom <paramref name="name"/> and <paramref name="id"/>.
 		/// <code>&lt;input type=&quot;text&quot; name=&quot;nameArg&quot; id=&quot;idArg&quot; value=&quot;valueArg&quot; /&gt;</code>
@@ -977,7 +980,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputText(String name, String value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2}/>",
-				name, value, GetAttributes(attributes));
+			                     name, value, GetAttributes(attributes));
 		}
 
 		#endregion
@@ -1008,7 +1011,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (value == null) value = String.Empty;
 
 			return String.Format("<input type=\"password\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2}/>",
-				name, value, GetAttributes(attributes));
+			                     name, value, GetAttributes(attributes));
 		}
 
 		#endregion
@@ -1057,11 +1060,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String InputHidden(String name, object value)
 		{
-			return InputHidden(name, value != null ? value.ToString() : String.Empty );
+			return InputHidden(name, value != null ? value.ToString() : String.Empty);
 		}
 
 		#endregion
-		
+
 		#region SubmitButton
 
 		///<overloads>This method has two overloads.</overloads>
@@ -1083,7 +1086,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return SubmitButton(value, null);
 		}
-		
+
 		/// <summary>
 		/// Creates a submit button.
 		/// <code>&lt;input type=&quot;submit&quot; value=&quot;valueArg&quot; key1=&quot;value1&quot; key2=&quot;value2&quot;  /&gt;</code>
@@ -1113,15 +1116,15 @@ namespace Castle.MonoRail.Framework.Helpers
 			writer.WriteAttribute("type", "submit");
 			writer.WriteAttribute("value", value);
 			writer.Write(" ");
-			writer.Write( GetAttributes(attributes) );
+			writer.Write(GetAttributes(attributes));
 			writer.Write(HtmlTextWriter.SelfClosingTagEnd);
 			writer.WriteLine();
 
 			return sbWriter.ToString();
 		}
-		
+
 		#endregion
-		
+
 		#region Select
 
 		///<overloads>This method has two overloads.</overloads>
@@ -1145,7 +1148,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return String.Format("<select name=\"{0}\" id=\"{0}\">", name);
 		}
-		
+
 		/// <summary>
 		/// Creates opening <b>select</b> tag.
 		/// <code>&lt;select name=&quot;nameArg&quot; id=&quot;nameArg&quot; key1=&quot;value1&quot; key2=&quot;value2&quot; &gt;</code>
@@ -1173,7 +1176,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return String.Format("<select name=\"{0}\" id=\"{0}\" {1}>", name, htmlAttrs);
 		}
-		
+
 		/// <summary>
 		/// Creates a closing <b>select</b> tag.
 		/// </summary>
@@ -1191,9 +1194,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return String.Format("</select>");
 		}
-		
+
 		#endregion
-		
+
 		#region Create options
 
 		/// <summary>
@@ -1278,15 +1281,15 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			StringBuilder sb = new StringBuilder();
 
-			foreach (object elem in elems)
+			foreach(object elem in elems)
 			{
-				sb.AppendFormat("\t<option{0}>{1}</option>\r\n", 
-					elem.ToString() == selected ? " selected=\"selected\"" : "", elem);
+				sb.AppendFormat("\t<option{0}>{1}</option>\r\n",
+				                elem.ToString() == selected ? " selected=\"selected\"" : "", elem);
 			}
 
 			return sb.ToString();
 		}
-		
+
 		///<overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates options elements from an <see cref="Array"/>.
@@ -1375,7 +1378,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return CreateOptions(elems, textProperty, valueProperty);
 		}
-		
+
 		/// <summary>
 		/// Creates options elements from an <see cref="Array"/>.
 		/// <code>
@@ -1466,7 +1469,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return CreateOptions(elems, textProperty, valueProperty, selectedValue);
 		}
-		
+
 		///<overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates options elements from an <see cref="ICollection"/>.
@@ -1551,7 +1554,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return CreateOptions(elems, textProperty, valueProperty, null);
 		}
-		
+
 		/// <summary>
 		/// Creates options elements from an <see cref="ICollection"/>.
 		/// <code>
@@ -1563,17 +1566,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="elems">Collection of objects each of which describes an <b>option</b> tag.</param>
 		/// <param name="textProperty">Name of the <paramref name="elems"/>
 		/// objects property with the value for each <b>option</b> tag's
-        /// text.</param>
-        /// <param name="valueProperty">Name of the <paramref
+		/// text.</param>
+		/// <param name="valueProperty">Name of the <paramref
 		/// name="elems"/> objects property with the value for each
 		/// <b>option</b> tag's <b>value</b> attribute value.</param>
 		/// <param name="selectedValue"><see cref="object"/> indicating which
 		/// <b>option</b> tag is to be marked with <b>selected</b>
-        /// attribute.</param>
+		/// attribute.</param>
 		/// <returns>HTML string with array of <b>option</b> tags.</returns>
 		/// 
 		/// <remarks>Calling <c>CreateOptions( ICollection, "textPropertyArg",
-        /// "valuePropertyArg", object )</c> with specific type objects results in:
+		/// "valuePropertyArg", object )</c> with specific type objects results in:
 		/// <code>
 		/// &lt;option value=&quot;valueProp&quot; selected&gt;textProp&lt;/option&gt;
 		/// &lt;option value=&quot;0&quot;&gt;textProp2&lt;/option&gt;
@@ -1605,8 +1608,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		///		<term>Random type objects</term>
 		///		<description>Array is full of
 		/// random type objects. Properties specified by <paramref
-        /// name="textProperty"/> and <pararef name="valueProperty"/> aren't
-        /// used. Instead <b>value</b> argument is ommited and <see
+		/// name="textProperty"/> and <pararef name="valueProperty"/> aren't
+		/// used. Instead <b>value</b> argument is ommited and <see
 		/// cref="Object.ToString"/> is invoked on each item in <paramref
 		/// name="elems"/> to retrieve text for an <b>option</b> tag.
 		///		</description>
@@ -1615,17 +1618,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		///		<term>Single type objects</term>
 		///		<description>Array is objects
 		/// of one time. In this case <paramref name="textProperty"/> and
-        /// <paramref name="valueProperty"/> can specify the names of the
+		/// <paramref name="valueProperty"/> can specify the names of the
 		/// properties of that type to use for <b>option</b> tags
-        /// generation.
-        ///		</description>
-        ///	</item>
+		/// generation.
+		///		</description>
+		///	</item>
 		/// </list>
 		/// <note>You cannot mix <i>random type objects</i> and <i>specific type objects</i>.
 		/// <b>CreateOptions</b>
 		/// is looking at the first item in the <paramref name="elems"/>
 		/// collection to get <see cref="MethodInfo"/> to access specified
-        /// properties. If usage is mixed either an unexpected exception will be
+		/// properties. If usage is mixed either an unexpected exception will be
 		/// thrown or options will have unexpected strings.
 		/// </note>
 		/// </para>
@@ -1638,30 +1641,45 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String CreateOptions(ICollection elems, String textProperty, String valueProperty, object selectedValue)
 		{
 			if (elems == null) throw new ArgumentNullException("elems");
-			
+
 			if (elems.Count == 0) return String.Empty;
 
-			IEnumerator enumerator = elems.GetEnumerator(); 
-			enumerator.MoveNext(); 
+			IEnumerator enumerator = elems.GetEnumerator();
+			enumerator.MoveNext();
 			object guidanceElem = enumerator.Current;
 
 			bool isMultiple = (selectedValue != null && selectedValue.GetType().IsArray);
-			
-			MethodInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
-			MethodInfo textMethodInfo = null;
-			
+
+			MethodInfo defaultValueMethodInfo = GetMethod(guidanceElem, valueProperty);
+			MethodInfo defaultTextMethodInfo = null;
+
 			if (textProperty != null)
 			{
-				textMethodInfo = GetMethod(guidanceElem, textProperty);
+				defaultTextMethodInfo = GetMethod(guidanceElem, textProperty);
 			}
 
 			StringBuilder sb = new StringBuilder();
 
-			foreach (object elem in elems)
+			foreach(object elem in elems)
 			{
 				if (elem == null) continue;
 
 				object value = null;
+
+				MethodInfo valueMethodInfo = defaultValueMethodInfo;
+				MethodInfo textMethodInfo = defaultTextMethodInfo;
+
+				if (elem.GetType() != guidanceElem.GetType())
+				{
+					if (valueProperty != null)
+					{
+						valueMethodInfo = GetMethod(elem, valueProperty);
+					}
+					if (textProperty != null)
+					{
+						textMethodInfo = GetMethod(elem, textProperty);
+					}
+				}
 
 				if (valueMethodInfo != null) value = valueMethodInfo.Invoke(elem, null);
 
@@ -1672,20 +1690,20 @@ namespace Castle.MonoRail.Framework.Helpers
 					bool selected = IsSelected(value, selectedValue, isMultiple);
 
 					sb.AppendFormat("\t<option {0} value=\"{1}\">{2}</option>\r\n",
-						selected ? "selected=\"selected\"" : "", value, text);
+					                selected ? "selected=\"selected\"" : "", value, text);
 				}
 				else
 				{
 					bool selected = IsSelected(text, selectedValue, isMultiple);
 
 					sb.AppendFormat("\t<option {0} >{1}</option>\r\n",
-						selected ? "selected=\"selected\"" : "", text);
+					                selected ? "selected=\"selected\"" : "", text);
 				}
 			}
 
 			return sb.ToString();
 		}
-		
+
 		/// <summary>
 		/// Determines whether the specified value is selected.
 		/// </summary>
@@ -1708,10 +1726,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else
 			{
-				return Array.IndexOf( (Array) selectedValue, value ) != -1;
+				return Array.IndexOf((Array) selectedValue, value) != -1;
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets the property get method.
 		/// </summary>
@@ -1727,11 +1745,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (elem == null) throw new ArgumentNullException("elem");
 			if (property == null) return null;
 
-			return elem.GetType().GetMethod("get_" + property, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+			return
+				elem.GetType().GetMethod("get_" + property, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
 		}
-		
+
 		#endregion
-		
+
 		#region List
 
 		///<overloads>This method has two overloads.</overloads>
@@ -1811,7 +1830,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return BuildList("ul", elements, styleClass, itemClass);
 		}
-		
+
 		///<overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Builds an ordered <b>ol</b> list from supplied <see cref="ICollection"/>.
@@ -1849,7 +1868,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return BuildOrderedList(elements, null, null);
 		}
-		
+
 		/// <summary>
 		/// Builds an ordered <b>ol</b> list from supplied <see cref="ICollection"/> with
 		/// <b>ol</b> and <b>li</b> tags CSS class set to supplied attributes.
@@ -1889,7 +1908,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return BuildList("ol", elements, styleClass, itemClass);
 		}
-		
+
 		/// <summary>
 		/// Builds a list with list tag specified by <paramref name="tag"/>
 		/// from supplied <see cref="ICollection"/> with
@@ -1949,10 +1968,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.WriteLine();
 
-			foreach (object item in elements)
+			foreach(object item in elements)
 			{
 				if (item == null) continue;
-				
+
 				writer.WriteLine(BuildListItem(item.ToString(), itemClass));
 			}
 
@@ -1961,7 +1980,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return sbWriter.ToString();
 		}
-		
+
 		/// <summary>
 		/// Generates a list item <b>li</b> tag.
 		/// <code>
