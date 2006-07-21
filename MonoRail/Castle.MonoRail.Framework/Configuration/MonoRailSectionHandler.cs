@@ -85,7 +85,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				config.CheckIsClientConnected = String.Compare(checkClientIsConnectedAtt.Value, "true", true) == 0;
 			}
 
-			foreach(XmlNode node in section.ChildNodes)
+			foreach (XmlNode node in section.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element)
 				{
@@ -210,7 +210,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				{
 					config.ViewsXhtmlRendering = bool.Parse(xhtmlRendering.Value);
 				}
-				catch(FormatException ex)
+				catch (FormatException ex)
 				{
 					throw new ConfigurationException("The xhtmlRendering attribute of the views node must be a boolean value.", ex);
 				}
@@ -223,7 +223,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				config.CustomEngineTypeName = customEngine.Value;
 			}
 
-			foreach(XmlElement assemblyNode in node.SelectNodes("additionalSources/assembly"))
+			foreach (XmlElement assemblyNode in node.SelectNodes("additionalSources/assembly"))
 			{
 				String assemblyName = assemblyNode.GetAttribute("name");
 				String ns = assemblyNode.GetAttribute("namespace");
@@ -238,7 +238,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		private void ProcessControllersNode(XmlNode controllersNode, MonoRailConfiguration config)
 		{
-			foreach(XmlNode node in controllersNode.ChildNodes)
+			foreach (XmlNode node in controllersNode.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
 
@@ -264,7 +264,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		private void ProcessComponentsNode(XmlNode controllersNode, MonoRailConfiguration config)
 		{
-			foreach(XmlNode node in controllersNode.ChildNodes)
+			foreach (XmlNode node in controllersNode.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
 
@@ -314,11 +314,11 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#endregion
 
-        #region Routing Configuration
+		#region Routing Configuration
 
-        private void ProcessRoutingNode(XmlNode routingNode, MonoRailConfiguration config)
+		private void ProcessRoutingNode(XmlNode routingNode, MonoRailConfiguration config)
 		{
-			foreach(XmlNode node in routingNode.ChildNodes)
+			foreach (XmlNode node in routingNode.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
 
@@ -352,7 +352,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		private void ProcessExtensionsNode(XmlNode routingNode, MonoRailConfiguration config)
 		{
-			foreach(XmlNode node in routingNode.ChildNodes)
+			foreach (XmlNode node in routingNode.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
 
@@ -397,7 +397,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			IList extensionTypes = new ArrayList();
 
-			foreach(String typeName in config.Extensions)
+			foreach (String typeName in config.Extensions)
 			{
 				Type extensionType = MonoRailConfiguration.GetType(typeName);
 
@@ -416,10 +416,10 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				ValidateTypeImplements(config.CacheProviderType, typeof(ICacheProvider));
 			}
-            if (config.ScaffoldingType != null)
-            {
-                ValidateTypeImplements(config.ScaffoldingType, typeof(IScaffoldingSupport));
-            }
+			if (config.ScaffoldingType != null)
+			{
+				ValidateTypeImplements(config.ScaffoldingType, typeof(IScaffoldingSupport));
+			}
 			if (config.CustomViewComponentFactory != null)
 			{
 				ValidateTypeImplements(config.CustomViewComponentFactory, typeof(IViewComponentFactory));
@@ -438,7 +438,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			if (config.ControllerAssemblies.Count != 0 && config.ComponentsAssemblies.Count == 0)
 			{
-				foreach(String entry in config.ControllerAssemblies)
+				foreach (String entry in config.ControllerAssemblies)
 				{
 					config.ComponentsAssemblies.Add(entry);
 				}
@@ -463,7 +463,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			if (!expectedType.IsAssignableFrom(type))
 			{
 				String message = String.Format("Type {0} does not implement {1}",
-				                               type.FullName, expectedType.FullName);
+											   type.FullName, expectedType.FullName);
 				throw new ConfigurationException(message);
 			}
 		}
@@ -472,9 +472,16 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		private void ConfigureWindsorIntegration(MonoRailConfiguration config)
 		{
-			config.CustomControllerFactory = "Castle.MonoRail.WindsorExtension.WindsorControllerFactory, Castle.MonoRail.WindsorExtension";
-			config.CustomFilterFactory = "Castle.MonoRail.WindsorExtension.WindsorFilterFactory, Castle.MonoRail.WindsorExtension";
-			config.CustomViewComponentFactory = "Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, Castle.MonoRail.WindsorExtension";
+			config.CustomControllerFactory = GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorControllerFactory, Castle.MonoRail.WindsorExtension");
+			config.CustomFilterFactory = GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorFilterFactory, Castle.MonoRail.WindsorExtension");
+			config.CustomViewComponentFactory = GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, Castle.MonoRail.WindsorExtension");
+		}
+
+		private String GetEffectiveTypeName(string typeName)
+		{
+			String assemblyName = GetType().Assembly.GetName().Name;
+			String assemblyFullName = GetType().Assembly.GetName().FullName;
+			return string.Format("{0}{1}", typeName, assemblyFullName.Substring(assemblyName.Length));
 		}
 	}
 }

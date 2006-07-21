@@ -39,11 +39,64 @@ namespace Castle.MonoRail.Framework
 				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(context);
 			}
 #endif
-			return new MonoRailHttpHandler();
+
+			if (!EngineContextModule.Initialized)
+			{
+				throw new RailsException("Looks like you forgot to register the http module " +
+					typeof(EngineContextModule).FullName + "\r\nAdd '<add name=\"monorail\" type=\"Castle.MonoRail.Framework.EngineContextModule, Castle.MonoRail.Framework\" />' " +
+					"to the <httpModules> section on your web.config");
+			}
+
+			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
+
+			return ObtainMonoRailHandler(mrContext);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
 		{
+			HttpContext httpContext = HttpContext.Current;
+
+			if (httpContext != null)
+			{
+				IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(HttpContext.Current);
+
+				if (mrContext != null)
+				{
+					IMonoRailHttpHandlerProvider provider = ObtainMonoRailHandlerProvider(mrContext);
+					if (provider != null) provider.ReleaseHandler(handler);
+				}
+			}
+		}
+
+		private IHttpHandler ObtainMonoRailHandler(IRailsEngineContext mrContext)
+		{
+			IHttpHandler mrHandler = null;
+			IMonoRailHttpHandlerProvider provider = ObtainMonoRailHandlerProvider(mrContext);
+
+			if (provider != null)
+			{
+				mrHandler = provider.ObtainMonoRailHttpHandler(mrContext);
+			}
+			
+			if (mrHandler == null) mrHandler = new MonoRailHttpHandler(); 
+
+			return mrHandler;
+		}
+
+		private IMonoRailHttpHandlerProvider ObtainMonoRailHandlerProvider(IRailsEngineContext mrContext)
+		{
+			// Try the request-level override first..
+			IMonoRailHttpHandlerProvider provider = (IMonoRailHttpHandlerProvider)
+				mrContext.UnderlyingContext.Items[Constants.MonoRailHandlerProviderKey];
+			
+			// If not present, the try the context-level override.
+			if (provider == null)
+			{
+				provider = (IMonoRailHttpHandlerProvider)
+					mrContext.GetService(typeof(IMonoRailHttpHandlerProvider));
+			}
+
+			return provider;
 		}
 	}
 }

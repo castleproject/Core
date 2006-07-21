@@ -4,6 +4,8 @@ Change history
 Release Candidate 1
 ===================
 
+- Checked in changes to better support ASP.NET Views
+
 - Refactor FormHelper to use a common code to CheckboxList and Select. 
   Added support mentioned in MR-130
 

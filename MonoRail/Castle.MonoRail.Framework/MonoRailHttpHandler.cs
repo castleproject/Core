@@ -28,13 +28,6 @@ namespace Castle.MonoRail.Framework
 	{
 		public void ProcessRequest(HttpContext context)
 		{
-			if (!EngineContextModule.Initialized)
-			{
-				throw new RailsException("Looks like you forgot to register the http module " + 
-					typeof(EngineContextModule).FullName + "\r\nAdd '<add name=\"monorail\" type=\"Castle.MonoRail.Framework.EngineContextModule, Castle.MonoRail.Framework\" />' " + 
-					"to the <httpModules> section on your web.config");
-			}
-
 			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
 
 			Process(mrContext);

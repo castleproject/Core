@@ -257,6 +257,7 @@
     <Compile Include="IControllerAware.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMonoRailHttpHandlerProvider.cs" />
     <Compile Include="IDynamicAction.cs">
       <SubType>Code</SubType>
     </Compile>

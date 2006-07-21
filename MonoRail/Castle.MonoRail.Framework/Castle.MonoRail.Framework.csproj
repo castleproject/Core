@@ -173,6 +173,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IMonoRailHttpHandlerProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IParameterBinder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

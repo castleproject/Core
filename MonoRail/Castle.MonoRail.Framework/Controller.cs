@@ -112,6 +112,8 @@ namespace Castle.MonoRail.Framework
 
 		private IServiceProvider serviceProvider;
 
+		private bool _isPostBack = false;
+     
 		#endregion
 
 		#region Constructors
@@ -276,6 +278,23 @@ namespace Castle.MonoRail.Framework
 			get { return _context.Response.IsClientConnected; }
 		}
 
+ 		/// <summary>
+		/// Determines if the current Action resulted from an ASP.NET PostBack.
+		/// As a result, this property is only relavent when using WebForms views.
+		/// It is placed on the base Controller for convenience only to avoid the
+		/// need to extend the Controller or provide additional helper classes.
+		/// </summary>
+		protected bool IsPostBack
+		{
+			get { return _isPostBack; }
+		}
+
+   	private void DetermineIfPostBack()
+		{
+			NameValueCollection fields = Context.Params;
+			_isPostBack = (fields["__VIEWSTATE"] != null) || (fields["__EVENTTARGET"] != null);
+		}
+     
 		#endregion
 
 		#region Useful operations
@@ -703,11 +722,11 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		internal void Process(IRailsEngineContext context, String areaName, 
 			String controllerName, String actionName)
-		{
+		{        
 			InitializeFieldsFromServiceProvider(context);
 
 			InitializeControllerState(areaName, controllerName, actionName);
-			
+
 			HttpContext.Items["mr.controller"] = this;
 
 #if ALLOWTEST
@@ -739,9 +758,11 @@ namespace Castle.MonoRail.Framework
 
 			ActionProviderUtil.RegisterActions(this);
 
+			DetermineIfPostBack();
+
 			Initialize();
 
-			InternalSend(actionName);
+			InternalSend(actionName, null);
 		}
 
 		/// <summary>
@@ -757,9 +778,22 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">Action name</param>
 		public void Send(String action)
 		{
-			InternalSend(action);
+			_isPostBack = false;
+			InternalSend(action, null);
 		}
 
+		/// <summary>
+		/// Performs the specified action with arguments.
+		/// </summary>
+		/// <param name="action">Action name</param>
+		/// <param name="actionArgs">Action arguments</param>
+		public void Send(String action, params object[] actionArgs)
+		{
+			_isPostBack = true;
+			if (actionArgs == null) actionArgs = new object[0];
+			InternalSend(action, actionArgs);
+		}
+	    
 		/// <summary>
 		/// Performs the specified action, which means:
 		/// <br/>
@@ -771,7 +805,8 @@ namespace Castle.MonoRail.Framework
 		/// 6. Invoke the view engine<br/>
 		/// </summary>
 		/// <param name="action">Action name</param>
-		protected virtual void InternalSend(String action)
+		/// <param name="actionArgs">Action arguments</param>
+		protected virtual void InternalSend(String action, object[] actionArgs)
 		{
 			// If a redirect was sent there's no point in
 			// wasting processor cycles
@@ -798,7 +833,7 @@ namespace Castle.MonoRail.Framework
 			}
 
 			// Look for the target method
-			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, _context.Request);
+			MethodInfo method = SelectMethod(action, actionArgs);
 
 			// If we couldn't find a method for this action, look for a dynamic action
 			IDynamicAction dynAction = null;
@@ -809,7 +844,7 @@ namespace Castle.MonoRail.Framework
 
 				if (dynAction == null)
 				{
-					method = FindOutDefaultMethod();
+					method = FindOutDefaultMethod(actionArgs);
 
 					if (method == null)
 					{
@@ -828,15 +863,15 @@ namespace Castle.MonoRail.Framework
 				}
                 
 				if (actionDesc.AccessibleThrough != null)
-                {
-                    string verbName = actionDesc.AccessibleThrough.Verb.ToString();
-                    string requestType = Context.RequestType;
+				{
+					string verbName = actionDesc.AccessibleThrough.Verb.ToString();
+					string requestType = Context.RequestType;
 
-                    if (String.Compare(verbName, requestType, true) != 0)
-                    {
-                        throw new ControllerException(string.Format("Access to the action [{0}] on controller [{1}] is not allowed by the http verb [{2}].", action.ToLower(), this.Name.ToLower(), requestType));
-                    }
-                }
+					if (String.Compare(verbName, requestType, true) != 0)
+                    			{
+						throw new ControllerException(string.Format("Access to the action [{0}] on controller [{1}] is not allowed by the http verb [{2}].", action.ToLower(), this.Name.ToLower(), requestType));
+					}
+				}
 			}
 
 			HybridDictionary filtersToSkip = new HybridDictionary();
@@ -866,10 +901,13 @@ namespace Castle.MonoRail.Framework
 				{
 					CreateResources(method);
 
+					// Clear the PropertyBag.
+					PropertyBag.Clear();
+
 					// Execute the method / dynamic action
 					if (method != null)
 					{
-						InvokeMethod(method);
+						InvokeMethod(method, actionArgs);
 					}
 					else
 					{
@@ -903,7 +941,7 @@ namespace Castle.MonoRail.Framework
 
 				RaiseOnActionExceptionOnExtension();
 			}
-			
+
 			try
 			{
 				// Nothing to do if the peer disconnected
@@ -942,11 +980,18 @@ namespace Castle.MonoRail.Framework
 		/// if present look for and load _default action method
 		/// <seealso cref="DefaultActionAttribute"/>
 		/// </summary>
-		private MethodInfo FindOutDefaultMethod()
+		private MethodInfo FindOutDefaultMethod(object[] methodArgs)
 		{
 			if (metaDescriptor.DefaultAction != null)
 			{
-				return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, _context.Request);
+                if (methodArgs == null)
+                {
+					return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, _context.Request);
+                }
+			    else
+                {
+					return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, methodArgs);
+                }
 			}
 
 			return null;
@@ -1008,21 +1053,76 @@ namespace Castle.MonoRail.Framework
 
 		#region Action Invocation
 
+		private MethodInfo SelectMethod(String action, object[] actionArgs)
+		{
+			if (actionArgs == null)
+			{
+				return SelectMethod(action, MetaDescriptor.Actions, _context.Request);
+			}
+			else
+			{
+				return SelectMethod(action, MetaDescriptor.Actions, actionArgs);
+			}			
+		}
+		
 		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
 		{
 			return actions[action] as MethodInfo;
 		}
 
-		private void InvokeMethod(MethodInfo method)
+		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, object[] methodArgs)
 		{
-			InvokeMethod(method, _context.Request);
-		}
+			Type[] methodArgTypes = null;
+            
+			if (methodArgs == null)
+			{
+				methodArgTypes = new Type[0];
+			}
+			else
+			{
+				methodArgTypes = new Type[methodArgs.Length];
+                
+				for (int i=0; i < methodArgs.Length; i++)
+				{
+					object methodArg = methodArgs[i];
+					if (methodArg == null)
+					{
+						// Make an assumption here to avoid having to provide
+						// arguments Type[] to the Send method.
+						methodArgTypes[i] = typeof(object);
+					}
+ 					else
+					{
+						methodArgTypes[i] = methodArg.GetType();
+					}
+				}
+			}
 
+			return GetType().GetMethod(action, methodArgTypes);
+ 		}
+
+		private void InvokeMethod(MethodInfo method, object[] methodArgs)
+		{
+			if (methodArgs == null)
+			{
+				InvokeMethod(method, _context.Request);
+			}
+			else
+			{
+				InvokeMethod(method, _context.Request, methodArgs);
+			}
+		}
+	    	    
 		protected virtual void InvokeMethod(MethodInfo method, IRequest request)
 		{
 			method.Invoke(this, new object[0]);
 		}
 
+		protected virtual void InvokeMethod(MethodInfo method, IRequest request, object[] methodArgs)
+		{
+ 			method.Invoke(this, methodArgs);
+		}
+	    
 		#endregion
 
 		#region Resources

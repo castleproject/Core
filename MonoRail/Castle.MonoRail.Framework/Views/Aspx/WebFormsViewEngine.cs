@@ -25,9 +25,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	/// Default implementation of a <see cref="IViewEngine"/>.
 	/// Uses ASP.Net WebForms as views.
 	/// </summary>
-	public class WebFormsViewEngine : ViewEngineBase
+	public class WebFormsViewEngine : ViewEngineBase, IMonoRailHttpHandlerProvider
 	{
 		private static readonly String ProcessedBeforeKey = "processed_before";
+
+		private static readonly BindingFlags PropertyBindingFlags = BindingFlags.Public |
+			BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase;
 
 		public WebFormsViewEngine()
 		{
@@ -46,38 +49,31 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			AdjustContentType(context);
 
-			HttpContext httpContext = context.UnderlyingContext as HttpContext;
+			bool processedBefore = false;
 
 			//TODO: document this hack for the sake of our users
+			HttpContext httpContext = context.UnderlyingContext;
 			if (httpContext != null)
 			{
-				if (!httpContext.Items.Contains(ProcessedBeforeKey))
+				if (!(processedBefore = httpContext.Items.Contains(ProcessedBeforeKey)))
 				{
 					httpContext.Items[ProcessedBeforeKey] = true;
 				}
-				else
-				{
-					if (IsTheSameView(httpContext, viewName)) return;
-				}
 			}
-
-			Page masterHandler = null;
-
-			if (HasLayout(controller))
+			
+			if (processedBefore)
 			{
-				StartFiltering(httpContext.Response);
-				masterHandler = ObtainMasterPage(httpContext, controller);
+#if DOTNET2
+				ProcessExecuteView(controller, viewName, httpContext);
+				return;
+#else
+				if (IsTheSameView(httpContext, viewName)) return;
+#endif				
 			}
 
-			IHttpHandler childPage = GetCompiledPageInstance(viewName, httpContext);
-
-			ProcessPropertyBag(controller.PropertyBag, childPage);
-
-			ProcessPage(controller, childPage, httpContext);
-
-			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);
+			ProcessInlineView(controller, viewName, httpContext);	
 		}
-
+		
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			AdjustContentType(context);
@@ -91,16 +87,113 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessPage(controller, masterHandler, httpContext);
 		}
 
-		private IHttpHandler GetCompiledPageInstance( String viewName, HttpContext httpContext )
-		{	 
+		private void ProcessInlineView(Controller controller, String viewName, HttpContext httpContext)
+		{
+			PrepareLayout(controller, httpContext);
+
+			IHttpHandler childPage = GetCompiledPageInstance(viewName, httpContext);
+
+			ProcessPropertyBag(controller.PropertyBag, childPage);
+
+			ProcessPage(controller, childPage, httpContext);
+
+			ProcessLayoutIfNeeded(controller, httpContext, childPage);			
+		}
+
+		private void ProcessExecuteView(Controller controller, String viewName, HttpContext httpContext)
+		{				
+			string physicalPath = null;
+
+			PrepareLayout(controller, httpContext);
+
+			httpContext.Items[Constants.MonoRailHandlerProviderKey] = this;
+			httpContext.Items["wfv.virtualpath"] = MapViewToVirtualPath(
+				viewName, ref physicalPath, httpContext);
+			httpContext.Items["wfv.physicalpath"] = physicalPath;
+			httpContext.Server.Execute(httpContext.Request.RawUrl, false);
+
+			Page childPage = (Page) httpContext.Items["wfv.aspnetpage"];
+			ProcessLayoutIfNeeded(controller, httpContext, childPage);
+
+			// This prevents the parent Page from continuing to process.
+			httpContext.Response.End();
+		}
+
+		IHttpHandler IMonoRailHttpHandlerProvider.ObtainMonoRailHttpHandler(IRailsEngineContext context)
+		{
+			HttpContext httpContext = context.UnderlyingContext;
+
+			String virtualPath = (String) httpContext.Items["wfv.virtualpath"];
+			String physicalPath = (String) httpContext.Items["wfv.physicalpath"];
+
+			if (virtualPath != null && physicalPath != null)
+			{
+				Page page = (Page)PageParser.GetCompiledPageInstance(virtualPath, physicalPath, httpContext);
+
+				if (page != null)
+				{
+					page.Init += new EventHandler(PrepareView);
+					httpContext.Items["wfv.aspnetpage"] = page;
+					return page;
+				}
+			}
+
+			// Defer to the default MonoRail Handler provider.
+			return null;			
+		}
+
+		void IMonoRailHttpHandlerProvider.ReleaseHandler(IHttpHandler handler)
+		{
+	
+		}
+	
+		private void PrepareView(object sender, EventArgs e)
+		{
+			Page view = (Page) sender;
+			Controller controller = Controller.CurrentController;
+			
+			ProcessPropertyBag(controller.PropertyBag, view);
+
+			PreSendView(controller, view);
+
+			view.Unload += new EventHandler(FinalizeView);
+		}
+
+		private void FinalizeView(object sender, EventArgs e)
+		{
+			Controller controller = Controller.CurrentController;
+			PostSendView(controller,  sender);			
+		}
+		
+		private String MapViewToPhysicalPath(String viewName, HttpContext httpContext)
+		{
 			viewName += ".aspx";
 
 			//TODO: There needs to be a more efficient way to do this than two replace operations
-			String physicalPath = 
-				Path.Combine(ViewSourceLoader.ViewRootDir, viewName).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+			return Path.Combine(ViewSourceLoader.ViewRootDir, viewName).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+		}
+		
+		private String MapViewToVirtualPath(String viewName, ref string physicalPath, HttpContext httpContext)
+		{
+			if (physicalPath == null)
+			{
+				physicalPath = MapViewToPhysicalPath(viewName, httpContext);
+			}
 
-#if DOTNET2		    
-			// This is a hack until I can understand the different behavior exhibited by
+			String physicalAppPath = httpContext.Request.PhysicalApplicationPath;	
+			if (physicalPath.StartsWith(physicalAppPath))
+			{
+				viewName = "~/" + physicalPath.Substring(physicalAppPath.Length);
+			}
+
+			return viewName;
+		}
+		
+		private IHttpHandler GetCompiledPageInstance(String viewName, HttpContext httpContext)
+		{	 
+			String physicalPath = null;
+		    
+	    	// This is a hack until I can understand the different behavior exhibited by
 			// PageParser.GetCompiledPageInstance(..) when running ASP.NET 2.0.  It appears
 			// that the virtualPath (first argument) to this method must represent a valid
 			// virtual directory with respect to the web application.   As a result, the
@@ -109,12 +202,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			// be able to obtain an absolute virtual path to the views directory from the
 			// ViewSourceLoader.
 
-			String physicalAppPath = httpContext.Request.PhysicalApplicationPath;
-			if (physicalPath.StartsWith(physicalAppPath))
-			{
-				viewName = "~/" + physicalPath.Substring(physicalAppPath.Length);
-			}		    
-#endif
+			viewName = MapViewToVirtualPath(viewName, ref physicalPath, httpContext);
 
 			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
@@ -136,9 +224,26 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			PostSendView(controller, page);
 		}
 
-		private void ProcessLayoutIfNeeded(Controller controller, HttpContext httpContext, IHttpHandler childPage, Page masterHandler)
-		{
+		private void PrepareLayout(Controller controller, HttpContext httpContext)
+		{			
 			if (HasLayout(controller))
+			{
+				bool layoutPending = httpContext.Items.Contains("wfv.masterPage");
+				
+				Page masterHandler = ObtainMasterPage(httpContext, controller);
+
+				if (!layoutPending && masterHandler != null)
+				{
+					StartFiltering(httpContext.Response);
+				}
+			}
+		}
+		
+		private bool ProcessLayoutIfNeeded(Controller controller, HttpContext httpContext, IHttpHandler childPage)
+		{
+			Page masterHandler = (Page) httpContext.Items["wfv.masterPage"];
+			
+			if (masterHandler != null && HasLayout(controller))
 			{
 //				if (httpContext.Response.StatusCode == 200)
 //				{
@@ -156,12 +261,16 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 					}
 
 					ProcessPage(controller, masterHandler, httpContext);
+
+					return true;
 //				}
 //				else
 //				{
 //					WriteBuffered(httpContext.Response);
 //				}
 			}
+
+			return false;
 		}
 
 		private bool HasLayout(Controller controller)
@@ -194,17 +303,29 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return filter.GetBuffer();
 		}
 
-		private Page ObtainMasterPage(HttpContext context, Controller controller)
+		private Page ObtainMasterPage(HttpContext httpContext, Controller controller)
 		{
 			String layout = "layouts/" + controller.LayoutName;
-            return GetCompiledPageInstance(layout, context) as Page;
+			Page masterHandler = (Page) httpContext.Items["wfv.masterPage"];
+			
+			if (masterHandler != null)
+			{
+				String currentLayout = (String) masterHandler.Items["wfv.masterLayout"];
+				if (layout == currentLayout) return masterHandler;
+			}     
+			
+            masterHandler = (Page) GetCompiledPageInstance(layout, httpContext);
+			masterHandler.Items["wfv.masterLayout"] = layout;
+			httpContext.Items["wfv.masterPage"] = masterHandler;
+			
+			return masterHandler;
 		}
-
+	
 		private void StartFiltering(HttpResponse response)
 		{
 			Stream filter = response.Filter;
 			response.Filter = new DelegateMemoryStream(filter);
-			response.Buffer = true;
+			response.BufferOutput = true;
 		}
 
 		protected void ProcessPropertyBag(IDictionary bag, IHttpHandler handler)
@@ -219,17 +340,29 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			if (value == null) return;
 
+			String name = key.ToString();
 			Type type = handler.GetType();
+			Type valueType = value.GetType();
+		
+			FieldInfo fieldInfo = type.GetField(name, PropertyBindingFlags);
 
-			PropertyInfo info = 
-				type.GetProperty(key.ToString(), 
-				BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase);
+			if (fieldInfo != null)
+			{
+				if (fieldInfo.FieldType.IsAssignableFrom(valueType))
+				{
+					fieldInfo.SetValue(handler, value);
+				}
+			}
+			else
+			{
+				PropertyInfo propInfo = type.GetProperty(name, PropertyBindingFlags);
 
-			if (info == null || !info.CanWrite) return;
-
-			if (!value.GetType().IsAssignableFrom(info.PropertyType)) return;
-
-			info.GetSetMethod().Invoke( handler, new object[] {value} );
+				if (propInfo != null && (propInfo.CanWrite &&
+					(propInfo.PropertyType.IsAssignableFrom(valueType))))
+				{
+					propInfo.GetSetMethod().Invoke(handler, new object[] { value });
+				}
+			}
 		}
 	}
 
