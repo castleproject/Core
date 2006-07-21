@@ -100,6 +100,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessLayoutIfNeeded(controller, httpContext, childPage);			
 		}
 
+#if DOTNET2
 		private void ProcessExecuteView(Controller controller, String viewName, HttpContext httpContext)
 		{				
 			string physicalPath = null;
@@ -118,6 +119,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			// This prevents the parent Page from continuing to process.
 			httpContext.Response.End();
 		}
+#endif
 
 		IHttpHandler IMonoRailHttpHandlerProvider.ObtainMonoRailHttpHandler(IRailsEngineContext context)
 		{
@@ -306,19 +308,21 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private Page ObtainMasterPage(HttpContext httpContext, Controller controller)
 		{
 			String layout = "layouts/" + controller.LayoutName;
+#if DOTNET2
 			Page masterHandler = (Page) httpContext.Items["wfv.masterPage"];
 			
 			if (masterHandler != null)
 			{
 				String currentLayout = (String) masterHandler.Items["wfv.masterLayout"];
 				if (layout == currentLayout) return masterHandler;
-			}     
-			
-            masterHandler = (Page) GetCompiledPageInstance(layout, httpContext);
+			}
+			masterHandler = (Page) GetCompiledPageInstance(layout, httpContext);
 			masterHandler.Items["wfv.masterLayout"] = layout;
 			httpContext.Items["wfv.masterPage"] = masterHandler;
-			
 			return masterHandler;
+#else
+			return GetCompiledPageInstance(layout, httpContext) as Page;
+#endif
 		}
 	
 		private void StartFiltering(HttpResponse response)
