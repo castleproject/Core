@@ -308,21 +308,22 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private Page ObtainMasterPage(HttpContext httpContext, Controller controller)
 		{
 			String layout = "layouts/" + controller.LayoutName;
-#if DOTNET2
 			Page masterHandler = (Page) httpContext.Items["wfv.masterPage"];
-			
+
+#if DOTNET2
 			if (masterHandler != null)
 			{
 				String currentLayout = (String) masterHandler.Items["wfv.masterLayout"];
 				if (layout == currentLayout) return masterHandler;
 			}
+#endif
 			masterHandler = (Page) GetCompiledPageInstance(layout, httpContext);
+#if DOTNET2
 			masterHandler.Items["wfv.masterLayout"] = layout;
+#endif
+
 			httpContext.Items["wfv.masterPage"] = masterHandler;
 			return masterHandler;
-#else
-			return GetCompiledPageInstance(layout, httpContext) as Page;
-#endif
 		}
 	
 		private void StartFiltering(HttpResponse response)
