@@ -106,123 +106,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.HiddenField("product.quantity"));
 		}
 
-		/// <summary>
-		/// Tests the subscription.Months as null and an int array as source
-		/// </summary>
-		[Test]
-		public void CheckboxFieldList1()
-		{
-			FormHelper.CheckboxList list = 
-				helper.CreateCheckboxList("subscription.Months", new int[] {1,2,3,4,5,6});
-			
-			Assert.IsNotNull(list);
-			
-			int index = 0;
-			
-			foreach(Object item in list)
-			{
-				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months_" + index + 
-					"_\" name=\"subscription.Months[" + index + "]\" value=\"" + item + "\" />", content);
-				index++;
-			}
-		}
-
-		/// <summary>
-		/// Tests the subscription.Months as non null and an int array as source
-		/// </summary>
-		[Test]
-		public void CheckboxFieldList2()
-		{
-			subscription.Months = new int[] { 1, 2, 3, 4, 5 };
-			
-			FormHelper.CheckboxList list = 
-				helper.CreateCheckboxList("subscription.Months", new int[] {1,2,3,4,5});
-			
-			Assert.IsNotNull(list);
-			
-			int index = 0;
-
-			foreach(Object item in list)
-			{
-				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months_" + index + 
-					"_\" name=\"subscription.Months[" + index + "]\" value=\"" + item + "\" checked=\"checked\" />", content);
-				index++;
-			}
-		}
-		
-		/// <summary>
-		/// Tests the subscription.Months2 as null and using a <c>Month</c> array as data source
-		/// </summary>
-		[Test]
-		public void CheckboxFieldList3()
-		{
-			FormHelper.CheckboxList list = 
-				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
-			
-			Assert.IsNotNull(list);
-
-			int index = 0;
-
-			foreach(Month item in list)
-			{
-				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2_" + index + 
-					"_\" name=\"subscription.Months2[" + index + "].Id\" value=\"" + item.Id + "\" />", content);
-				index++;
-			}
-		}
-		
-		/// <summary>
-		/// Tests the subscription.Months2 as non null and using a <c>Month</c> array as data source
-		/// </summary>
-		[Test]
-		public void CheckboxFieldList4()
-		{
-			subscription.Months2 = new Month[] {new Month(3, "March")};
-			
-			FormHelper.CheckboxList list = 
-				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
-			
-			Assert.IsNotNull(list);
-
-			int index = 0;
-
-			foreach(Month item in list)
-			{
-				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2_" + index + 
-					"_\" name=\"subscription.Months2[" + index + "].Id\" value=\"" + item.Id + "\" />", content);
-				index++;
-			}
-		}
-
-		/// <summary>
-		/// Tests the subscription.Months2 as non null and using a <c>Month</c> array as data source
-		/// but with selection
-		/// </summary>
-		[Test]
-		public void CheckboxFieldList5()
-		{
-			subscription.Months2 = new Month[] {new Month(1, "January"), new Month(2, "Feb") };
-			
-			FormHelper.CheckboxList list = 
-				helper.CreateCheckboxList("subscription.Months2", months, DictHelper.Create("value=id"));
-			
-			Assert.IsNotNull(list);
-
-			int index = 0;
-
-			foreach(Month item in list)
-			{
-				String content = list.Item();
-				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months2_" + index + 
-					"_\" name=\"subscription.Months2[" + index + "].Id\" value=\"" + item.Id + "\" checked=\"checked\" />", content);
-				index++;
-			}
-		}
-
 		[Test]
 		public void CheckboxField()
 		{
@@ -282,151 +165,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			Assert.AreEqual("<label for=\"product_name\">Name:</label>", 
 				helper.LabelFor("product.name", "Name:"));
-		}
-
-		[Test]
-		public void SimplisticSelect()
-		{
-			ArrayList list = new ArrayList();
-
-			list.Add("cat1");
-			list.Add("cat2");
-
-			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"cat1\">cat1</option>\r\n<option value=\"cat2\">cat2</option>\r\n</select>",
-				helper.Select("product.category.id", list));
-		}
-
-		[Test]
-		public void SelectWithFirstOption()
-		{
-			ArrayList list = new ArrayList();
-			list.Add("cat1");
-			list.Add("cat2");
-
-			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"0\">Please select</option>\r\n" + 
-				"<option value=\"cat1\">cat1</option>\r\n<option value=\"cat2\">cat2</option>\r\n</select>",
-				helper.Select("product.category.id", list, DictHelper.Create("firstoption=Please select") ));
-		}
-
-		[Test]
-		public void SelectWithValueAndText()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new ProductCategory(1, "cat1"));
-			list.Add(new ProductCategory(2, "cat2"));
-
-			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"1\">cat1</option>\r\n<option value=\"2\">cat2</option>\r\n</select>",
-				helper.Select("product.category.id", list, DictHelper.Create("value=id", "text=name") ));
-		}
-
-		[Test]
-		public void SelectOnPrimitiveArrayWithoutValueAndText()
-		{
-			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"1\">1</option>\r\n<option value=\"2\">2</option>\r\n<option value=\"3\">3</option>\r\n<option value=\"4\">4</option>\r\n<option selected=\"selected\" value=\"5\">5</option>\r\n</select>",
-				helper.Select("product.category.id", 5, new int[] { 1, 2, 3, 4, 5}, DictHelper.Create() ));
-		}
-
-		[Test]
-		public void SelectWithValueAndTextAndSelect()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new ProductCategory(1, "cat1"));
-			list.Add(new ProductCategory(2, "cat2"));
-
-			product.Category.Id = 2;
-
-			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"1\">cat1</option>\r\n<option selected=\"selected\" value=\"2\">cat2</option>\r\n</select>",
-				helper.Select("product.category.id", list, DictHelper.Create("value=id", "text=name") ));
-		}
-
-		[Test]
-		public void SelectWithNoSelection()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new Role(1, "role1"));
-			list.Add(new Role(2, "role2"));
-
-			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
-				"<option value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
-				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
-		}
-
-		[Test]
-		public void SelectWithSelection()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new Role(1, "role1"));
-			list.Add(new Role(2, "role2"));
-
-			user.Roles.Add(new Role(1, "role1"));
-			user.Roles.Add(new Role(2, "role2"));
-
-			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
-				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option selected=\"selected\" value=\"2\">role2</option>\r\n</select>",
-				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
-		}
-
-		[Test]
-		public void SelectWithSelection2()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new Role(1, "role1"));
-			list.Add(new Role(2, "role2"));
-
-			user.Roles.Add(new Role(1, "role1"));
-
-			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
-				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
-				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
-		}
-
-		[Test]
-		public void SelectWithArraySelection()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new Role(1, "role1"));
-			list.Add(new Role(2, "role2"));
-
-			user.Roles.Add(new Role(1, "role1"));
-			user.Roles.Add(new Role(2, "role2"));
-
-			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option selected=\"selected\" value=\"2\">role2</option>\r\n</select>",
-				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
-		}
-
-		[Test]
-		public void SelectWithArraySelection2()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new Role(1, "role1"));
-			list.Add(new Role(2, "role2"));
-
-			user.Roles.Add(new Role(1, "role1"));
-
-			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option selected=\"selected\" value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
-				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
-		}
-
-		[Test]
-		public void SelectWithArraySelectionNoId()
-		{
-			ArrayList list = new ArrayList();
-			list.Add(new Role(1, "role1"));
-			list.Add(new Role(2, "role2"));
-
-			user.Roles.Add(new Role(1, "role1"));
-			user.Roles.Add(new Role(2, "role2"));
-
-			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option selected=\"selected\" value=\"role1\">role1</option>\r\n<option selected=\"selected\" value=\"role2\">role2</option>\r\n</select>",
-				helper.Select("user.RolesAsArray", list));
 		}
 
 		[Test]
@@ -662,6 +400,30 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public override string ToString()
 		{
 			return name;
+		}
+	}
+	
+	public class Role2
+	{
+		private int identification;
+		private String name;
+
+		public Role2(int id, string name)
+		{
+			this.identification = id;
+			this.name = name;
+		}
+
+		public int Identification
+		{
+			get { return identification; }
+			set { identification = value; }
+		}
+
+		public String Name
+		{
+			get { return name; }
+			set { name = value; }
 		}
 	}
 

@@ -241,6 +241,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\FormHelperCheckboxFieldListTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\FormHelperSelectTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\FormHelperSetOperation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\FormHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

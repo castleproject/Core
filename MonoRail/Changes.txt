@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Refactor FormHelper to use a common code to CheckboxList and Select. 
+  Added support mentioned in MR-130
+
 - Introduced CreateCheckboxList. See preliminary documentation at 
     http://www.castleproject.org/index.php/MonoRail:FormHelper#CheckboxList
 

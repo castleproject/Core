@@ -170,22 +170,21 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region CheckboxList
 		
-		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource)
+		public CheckboxList CreateCheckboxList(String target, ICollection dataSource)
 		{
 			return CreateCheckboxList(target, dataSource, null);
 		}
 		
-		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource, IDictionary attributes)
+		public CheckboxList CreateCheckboxList(String target, ICollection dataSource, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
 			
 			return new CheckboxList(this, target, value, dataSource, attributes);
 		}
 		
-		internal String CheckboxItem(int index, String target, String suffix, object value, 
-		                             bool isChecked, IDictionary attributes)
+		internal String CheckboxItem(int index, String target, String suffix, SetItem item, IDictionary attributes)
 		{
-			if (isChecked)
+			if (item.IsSelected)
 			{
 				AddChecked(attributes);
 			}
@@ -197,8 +196,15 @@ namespace Castle.MonoRail.Framework.Helpers
 			target = String.Format("{0}[{1}]", target, index);
 			
 			String elementId = CreateHtmlId(attributes, target);
+			
+			String computedTarget = target;
+			
+			if (suffix != null && suffix != String.Empty)
+			{
+				computedTarget += "." + suffix;
+			}
 
-			String result = CreateInputElement("checkbox", elementId, target + suffix, value.ToString(), attributes);
+			String result = CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
 			
 			return result;
 		}
@@ -208,26 +214,22 @@ namespace Castle.MonoRail.Framework.Helpers
 			private readonly FormHelper helper;
 			private readonly String target;
 			private readonly IDictionary attributes;
-			private IEnumerator enumerator;
-			private object value;
+			private readonly OperationState operationState;
+			private readonly IEnumerator enumerator;
 			private bool hasMovedNext, hasItem;
-			private string valueProperty;
-			private PropertyInfo valueMethodInfo;
 			private int index = -1;
 
 			public CheckboxList(FormHelper helper, String target, 
-			                    object value, IEnumerable dataSource, IDictionary attributes)
+			                    object initialSelectionSet, ICollection dataSource, IDictionary attributes)
 			{
 				if (dataSource == null) throw new ArgumentNullException("dataSource");
 
 				this.helper = helper;
-				this.value = value;
 				this.target = target;
 				this.attributes = attributes == null ? new HybridDictionary(true) : attributes;
 				
-				enumerator = dataSource.GetEnumerator();
-				
-				valueProperty = ObtainEntryAndRemove(attributes, "value");
+				operationState = SetOperation.IterateOnDataSource(initialSelectionSet, dataSource, attributes);
+				enumerator = operationState.GetEnumerator();
 			}
 			
 			public String Item()
@@ -242,44 +244,8 @@ namespace Castle.MonoRail.Framework.Helpers
 					// Nothing to render
 					return String.Empty;
 				}
-				
-				object currentItem = Current;
-				object guidanceElem = currentItem;
-				
-				Type selectedType = null;
-
-				if (value != null)
-				{
-					selectedType = value.GetType();
-				}
-
-				if (valueProperty != null && valueMethodInfo == null)
-				{
-					valueMethodInfo = GetMethod(guidanceElem, valueProperty);
-				}
-
-				object valueToRender = currentItem;
-				
-				if (valueMethodInfo != null)
-				{
-					valueToRender = valueMethodInfo.GetValue(currentItem, null);
-				}
-
-				bool selected = false;
-				
-				if (value != null && value is ICollection)
-				{
-					selected = IsSelected(valueToRender, value, selectedType, valueMethodInfo, true);
-				}
-				
-				String suffix = String.Empty;
-				
-				if (valueMethodInfo != null)
-				{
-					suffix = "." + valueMethodInfo.Name;
-				}
-				
-				return helper.CheckboxItem(index, target, suffix, valueToRender, selected, attributes);
+								
+				return helper.CheckboxItem(index, target, operationState.TargetSuffix, CurrentSetItem, attributes);
 			}
 
 			public IEnumerator GetEnumerator()
@@ -290,7 +256,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			public bool MoveNext()
 			{
 				hasMovedNext = true;
-				
 				hasItem = enumerator.MoveNext();
 				
 				if (hasItem) index++;
@@ -306,7 +271,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			public object Current
 			{
-				get { return enumerator.Current; }
+				get { return CurrentSetItem.Item; }
+			}
+			
+			public SetItem CurrentSetItem
+			{
+				get { return enumerator.Current as SetItem; }
 			}
 		}
 
@@ -395,12 +365,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region Select
 
-		public String Select(String target, IEnumerable dataSource)
+		public String Select(String target, ICollection dataSource)
 		{
 			return Select(target, dataSource, null);
 		}
 
-		public String Select(String target, IEnumerable dataSource, IDictionary attributes)
+		public String Select(String target, ICollection dataSource, IDictionary attributes)
 		{
 		    object selectedValue = ObtainValue(target);
 		    
@@ -421,7 +391,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="dataSource"></param>
 		/// <param name="attributes"></param>
 		/// <returns></returns>
-		public String Select(String target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
+		public String Select(String target, object selectedValue, ICollection dataSource, IDictionary attributes)
 		{
 			String id = CreateHtmlId(target);
 
@@ -430,18 +400,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			String firstOption = null; 
-			String valueProperty = null; 
-			String textProperty = null;
 			String name = target;
 
 			if (attributes != null)
 			{
 				firstOption = ObtainEntryAndRemove(attributes, "firstoption");
 				
-				valueProperty = ObtainEntryAndRemove(attributes, "value");
-				
-				textProperty = ObtainEntryAndRemove(attributes, "text");
-
 				if (attributes.Contains("name"))
 				{
 					name = (String) attributes["name"];
@@ -454,6 +418,8 @@ namespace Castle.MonoRail.Framework.Helpers
 					attributes.Remove("id");
 				}
 			}
+
+			OperationState state = SetOperation.IterateOnDataSource(selectedValue, dataSource, attributes);
 
 			writer.WriteBeginTag("select");
 			writer.WriteAttribute("id", id);
@@ -472,89 +438,23 @@ namespace Castle.MonoRail.Framework.Helpers
 				writer.WriteEndTag("option");
 				writer.WriteLine();
 			}
-
-			if (dataSource != null)
+			
+			foreach(SetItem item in state)
 			{
-				IEnumerator enumerator = dataSource.GetEnumerator(); 
-
-				if (enumerator.MoveNext())
+				writer.WriteBeginTag("option");
+				
+				if (item.IsSelected)
 				{
-					object guidanceElem = enumerator.Current;
-
-					Type selectedType = null;
-
-					if (selectedValue != null)
-					{
-						selectedType = selectedValue.GetType();
-					}
-
-					bool isMultiple = (selectedType != null && 
-						(selectedType.IsArray || typeof(ICollection).IsAssignableFrom(selectedType)));
-				
-					PropertyInfo valueMethodInfo = null;
-					PropertyInfo textMethodInfo = null;
-					
-					if (valueProperty != null)
-					{
-						valueMethodInfo = GetMethod(guidanceElem, valueProperty);
-					}
-				
-					if (textProperty != null)
-					{
-						textMethodInfo = GetMethod(guidanceElem, textProperty);
-					}
-
-					foreach(object elem in dataSource)
-					{
-						object value = null;
-
-						if (valueMethodInfo != null)
-						{
-							value = valueMethodInfo.GetValue(elem, null);
-						}
-
-						object text = textMethodInfo != null ? 
-							textMethodInfo.GetValue(elem, null) : elem.ToString();
-
-						writer.WriteBeginTag("option");
-					
-						bool selected = false;
-
-						if (value != null)
-						{
-							if (selectedType != null)
-							{
-								selected = IsSelected(value, selectedValue, selectedType, valueMethodInfo, isMultiple);
-							}
-						}
-						else
-						{
-							if (selectedType != null)
-							{
-								selected = IsSelected(elem, selectedValue, selectedType, textMethodInfo, isMultiple);
-							}
-						}
-
-						if (selected) writer.Write(" selected=\"selected\"");
-						
-						if (value == null)
-						{
-							value = text;
-						}
-
-						if (value != null)
-						{
-							writer.WriteAttribute("value", value.ToString());
-						}
-
-						writer.Write(HtmlTextWriter.TagRightChar);
-						writer.Write(text);
-						writer.WriteEndTag("option");
-						writer.WriteLine();
-					}
+					writer.Write(" selected=\"selected\"");
 				}
-			}
 
+				writer.WriteAttribute("value", item.Value);
+				writer.Write(HtmlTextWriter.TagRightChar);
+				writer.Write(item.Text);
+				writer.WriteEndTag("option");
+				writer.WriteLine();
+			}
+			
 			writer.WriteEndTag("select");
 
 			return sbWriter.ToString();
@@ -848,48 +748,46 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Determines whether the specified value is selected.
+		/// Determines whether the present value matches the value on 
+		/// the initialSetValue (which can be a single value or a set)
 		/// </summary>
-		/// <param name="value">Value to be tested.</param>
-		/// <param name="selectedValue">Selected value.</param>
-		/// <param name="isMultiple"><see langword="true"/> if <paramref name="selectedValue"/> is
-		/// <see cref="Type.IsArray"/>; otherwise, <see langword="false"/>.</param>
-		/// <returns>
-		/// 	<see langword="true"/> if the specified <paramref name="value"/> is selected; otherwise, <see langword="false"/>.
-		/// </returns>
-		/// <remarks>Specified <paramref name="value"/> is selected if it <see cref="Object.Equals"/>
-		/// to the <paramref name="selectedValue"/>. Or if <paramref name="selectedValue"/> is an
-		/// array <paramref name="value"/> is selected if <see cref="Array.IndexOf"/> can find it
-		/// in <paramref name="selectedValue"/>.</remarks>
-		private static bool IsSelected(object value, object selectedValue, Type selectedType, PropertyInfo property, bool isMultiple)
+		/// <param name="value">Value from the datasource</param>
+		/// <param name="initialSetValue">Value from the initial selection set</param>
+		/// <param name="propertyOnInitialSet">Optional. Property to obtain the value from</param>
+		/// <param name="isMultiple"><c>true</c> if the initial selection is a set</param>
+		/// <returns><c>true</c> if it's selected</returns>
+		private static bool IsPresent(object value, object initialSetValue, 
+		                              PropertyInfo propertyOnInitialSet, bool isMultiple)
 		{
 			if (!isMultiple)
 			{
-				if (selectedType != selectedValue.GetType() && property != null)
+				object valueToCompare = initialSetValue;
+				
+				if (propertyOnInitialSet != null)
 				{
-					value = property.GetValue(value, null);
+					valueToCompare = propertyOnInitialSet.GetValue(initialSetValue, null);
 				}
-
-				return AreEqual(value, selectedValue);
+				
+				return AreEqual(value, valueToCompare);
 			}
-			else 
+			else
 			{
-				foreach(object item in (IEnumerable)selectedValue)
+				foreach(object item in (IEnumerable) initialSetValue)
 				{
-					object newValue = item;
+					object valueToCompare = item;
 
-					if (property != null)
+					if (propertyOnInitialSet != null)
 					{
-						newValue = property.GetValue(item, null);
+						valueToCompare = propertyOnInitialSet.GetValue(item, null);
 					}
 
-					if (AreEqual(newValue, value))
+					if (AreEqual(value, valueToCompare))
 					{
 						return true;
 					}
 				}
 			}
-
+			
 			return false;
 		}
 		
@@ -908,7 +806,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (elem == null) throw new ArgumentNullException("elem");
 			if (property == null) return null;
 
-			return elem.GetType().GetProperty(property, PropertyFlags);
+			return GetMethod(elem.GetType(), property);
+		}
+		
+		private static PropertyInfo GetMethod(Type type, String property)
+		{
+			return type.GetProperty(property, PropertyFlags);
 		}
 
 		private static void AddChecked(IDictionary attributes)
@@ -952,6 +855,304 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		#endregion
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public class SetOperation
+		{
+			public static OperationState IterateOnDataSource(object initialSelection, 
+			                                                 ICollection dataSource, 
+			                                                 IDictionary attributes)
+			{
+				if (dataSource == null)
+				{
+					dataSource = new ArrayList();
+				}
+				
+				// Extract necessary elements to know which "heuristic" to use
+						
+				bool isInitialSelectionASet = IsSet(initialSelection);
+				
+				Type initialSelectionType = ExtractType(initialSelection);
+				Type dataSourceType = ExtractType(dataSource);
+			
+				String customSuffix = ObtainEntryAndRemove(attributes, "suffix");
+				String valueProperty = ObtainEntryAndRemove(attributes, "value");
+				String textProperty = ObtainEntryAndRemove(attributes, "text");
+				
+				if (initialSelectionType == null)
+				{
+					return new ListDataSourceState(dataSourceType, dataSource, valueProperty, textProperty, customSuffix);
+				}
+				else if (initialSelectionType == dataSourceType)
+				{
+					return new SameTypeOperationState(dataSourceType, initialSelection, dataSource, 
+					                                  valueProperty, textProperty, isInitialSelectionASet);
+				}
+				else // types are different, most complex scenario
+				{
+					String sourceProperty = ObtainEntryAndRemove(attributes, "sourceProperty");
+					
+					return new DifferentTypeOperationState(initialSelectionType, dataSourceType, 
+					                                       initialSelection, dataSource, 
+					                                       sourceProperty, valueProperty, textProperty, 
+					                                       isInitialSelectionASet);
+				}
+			}
+
+			private static Type ExtractType(object source)
+			{
+				if (source == null)
+				{
+					return null;
+				}
+				else if (source is ICollection)
+				{
+					return ExtractType(source as ICollection);
+				}
+				else
+				{
+					return source.GetType();
+				}
+			}
+		
+			private static Type ExtractType(ICollection source)
+			{
+				IEnumerator enumerator = source.GetEnumerator();
+			
+				if (enumerator.MoveNext())
+				{
+					return ExtractType(enumerator.Current);
+				}
+			
+				return null;
+			}
+
+			private static bool IsSet(object initialSelection)
+			{
+				return (initialSelection is ICollection);
+			}
+		}
+
+		public class SetItem
+		{
+			private readonly string value;
+			private readonly object item;
+			private readonly string text;
+			private readonly bool isSelected;
+
+			public SetItem(object item, String value, String text, bool isSelected)
+			{
+				this.item = item;
+				this.value = value;
+				this.text = text;
+				this.isSelected = isSelected;
+			}
+
+			public object Item
+			{
+				get { return item; }
+			}
+
+			public string Value
+			{
+				get { return value; }
+			}
+
+			public string Text
+			{
+				get { return text; }
+			}
+
+			public bool IsSelected
+			{
+				get { return isSelected; }
+			}
+		}
+		
+		public abstract class OperationState : IEnumerable, IEnumerator
+		{
+			protected readonly Type type;
+			protected readonly PropertyInfo valuePropInfo;
+			protected readonly PropertyInfo textPropInfo;
+			protected IEnumerator enumerator;
+
+			protected OperationState(Type type, ICollection dataSource, 
+			                         String valueProperty, String textProperty)
+			{
+				enumerator = dataSource.GetEnumerator();
+
+				this.type = type;
+					
+				if (valueProperty != null)
+				{
+					valuePropInfo = GetMethod(type, valueProperty);
+				}
+				
+				if (textProperty != null)
+				{
+					textPropInfo = GetMethod(type, textProperty);
+				}
+			}
+
+			public abstract String TargetSuffix { get; }
+
+			protected abstract SetItem CreateItemRepresentation(object current);
+
+			#region IEnumerator implementation
+
+			public bool MoveNext()
+			{
+				return enumerator.MoveNext();
+			}
+
+			public void Reset()
+			{
+				enumerator.Reset();
+			}
+
+			public object Current
+			{
+				get { return CreateItemRepresentation(enumerator.Current); }
+			}
+
+			#endregion
+			
+			#region IEnumerable implementation
+			
+			public IEnumerator GetEnumerator()
+			{
+				return this;
+			}
+			
+			#endregion
+		}
+		
+		public class ListDataSourceState : OperationState
+		{
+			private readonly string customSuffix;
+
+			public ListDataSourceState(Type type, ICollection dataSource, 
+			                           String valueProperty, String textProperty, String customSuffix) : base(type, dataSource, valueProperty, textProperty)
+			{
+				this.customSuffix = customSuffix;
+			}
+
+			public override string TargetSuffix
+			{
+				get { return customSuffix; }
+			}
+
+			protected override SetItem CreateItemRepresentation(object current)
+			{
+				object value = current;
+				object text = current;
+				
+				if (valuePropInfo != null)
+				{
+					value = valuePropInfo.GetValue(current, null);
+				}
+				
+				if (textPropInfo != null)
+				{
+					text = textPropInfo.GetValue(current, null);
+				}
+				
+				return new SetItem(current, value != null ? value.ToString() : String.Empty, 
+				                   text != null ? text.ToString() : String.Empty, 
+				                   false);
+			}
+		}
+		
+		public class SameTypeOperationState : OperationState
+		{
+			private readonly object initialSelection;
+			private readonly bool isInitialSelectionASet;
+
+			public SameTypeOperationState(Type type, object initialSelection, ICollection dataSource, 
+			                              String valueProperty, String textProperty, bool isInitialSelectionASet) : base(type, dataSource, valueProperty, textProperty)
+			{
+				this.initialSelection = initialSelection;
+				this.isInitialSelectionASet = isInitialSelectionASet;
+			}
+
+			public override string TargetSuffix
+			{
+				get { return valuePropInfo == null ? "" : valuePropInfo.Name; }
+			}
+
+			protected override SetItem CreateItemRepresentation(object current)
+			{
+				object value = current;
+				object text = current;
+				
+				if (valuePropInfo != null)
+				{
+					value = valuePropInfo.GetValue(current, null);
+				}
+				
+				if (textPropInfo != null)
+				{
+					text = textPropInfo.GetValue(current, null);
+				}
+				
+				bool isSelected = IsPresent(value, initialSelection, valuePropInfo, isInitialSelectionASet);
+
+				return new SetItem(current, value != null ? value.ToString() : String.Empty, 
+				                   text != null ? text.ToString() : String.Empty, 
+				                   isSelected);
+			}
+		}
+		
+		public class DifferentTypeOperationState : OperationState
+		{
+			private readonly object initialSelection;
+			private readonly bool isInitialSelectionASet;
+			private readonly PropertyInfo sourcePropInfo;
+
+			public DifferentTypeOperationState(Type initialSelectionType, Type dataSourceType, object initialSelection, ICollection dataSource, 
+			                                   String sourceProperty, String valueProperty, String textProperty, bool isInitialSelectionASet) : base(dataSourceType, dataSource, valueProperty, textProperty)
+			{
+				this.initialSelection = initialSelection;
+				this.isInitialSelectionASet = isInitialSelectionASet;
+				
+				if (sourceProperty != null)
+				{
+					sourcePropInfo = GetMethod(initialSelectionType, sourceProperty);
+				}
+				else if (valueProperty != null)
+				{
+					sourcePropInfo = GetMethod(initialSelectionType, valueProperty);
+				}
+			}
+
+			public override string TargetSuffix
+			{
+				get { return sourcePropInfo == null ? "" : sourcePropInfo.Name; }
+			}
+
+			protected override SetItem CreateItemRepresentation(object current)
+			{
+				object value = current;
+				object text = current;
+					
+				if (valuePropInfo != null)
+				{
+					value = valuePropInfo.GetValue(current, null);
+				}
+					
+				if (textPropInfo != null)
+				{
+					text = textPropInfo.GetValue(current, null);
+				}
+				
+				bool isSelected = IsPresent(value, initialSelection, sourcePropInfo, isInitialSelectionASet);
+
+				return new SetItem(current, value != null ? value.ToString() : String.Empty, 
+					text != null ? text.ToString() : String.Empty, 
+					isSelected);
+			}	
+		}
 	}
 }
-
