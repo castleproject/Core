@@ -64,6 +64,46 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		}
 
 		[Test]
+		public void NullDataSource()
+		{
+			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+				new int[] {1, 2, 3, 4}, null, null);
+			
+			Assert.IsNotNull(state);
+			Assert.IsTrue(state is FormHelper.NoIterationState);
+			Assert.IsNull(state.TargetSuffix);
+			
+			bool iterated = false;
+			
+			foreach(FormHelper.SetItem item in state)
+			{
+				iterated = true;
+			}
+			
+			Assert.IsFalse(iterated);
+		}
+		
+		[Test]
+		public void EmptyDataSource()
+		{
+			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+				new int[] {1, 2, 3, 4}, new int[0], null);
+			
+			Assert.IsNotNull(state);
+			Assert.IsTrue(state is FormHelper.NoIterationState);
+			Assert.IsNull(state.TargetSuffix);
+			
+			bool iterated = false;
+			
+			foreach(FormHelper.SetItem item in state)
+			{
+				iterated = true;
+			}
+			
+			Assert.IsFalse(iterated);
+		}
+
+		[Test]
 		public void SingleValueInitialSet_SameTypes()
 		{
 			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(

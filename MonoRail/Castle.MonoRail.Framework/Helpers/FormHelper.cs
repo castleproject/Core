@@ -865,11 +865,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			                                                 ICollection dataSource, 
 			                                                 IDictionary attributes)
 			{
-				if (dataSource == null)
-				{
-					dataSource = new ArrayList();
-				}
-				
 				// Extract necessary elements to know which "heuristic" to use
 						
 				bool isInitialSelectionASet = IsSet(initialSelection);
@@ -881,7 +876,14 @@ namespace Castle.MonoRail.Framework.Helpers
 				String valueProperty = ObtainEntryAndRemove(attributes, "value");
 				String textProperty = ObtainEntryAndRemove(attributes, "text");
 				
-				if (initialSelectionType == null)
+				if (dataSourceType == null)
+				{
+					// If the dataSourceType could not be obtained 
+					// then the datasource is empty or null
+					
+					return NoIterationState.Instance;
+				}
+				else if (initialSelectionType == null)
 				{
 					return new ListDataSourceState(dataSourceType, dataSource, valueProperty, textProperty, customSuffix);
 				}
@@ -919,6 +921,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 			private static Type ExtractType(ICollection source)
 			{
+				if (source == null)
+				{
+					return null;
+				}
+
 				IEnumerator enumerator = source.GetEnumerator();
 			
 				if (enumerator.MoveNext())
@@ -981,7 +988,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			protected OperationState(Type type, ICollection dataSource, 
 			                         String valueProperty, String textProperty)
 			{
-				enumerator = dataSource.GetEnumerator();
+				if (dataSource != null)
+				{
+					enumerator = dataSource.GetEnumerator();
+				}
 
 				this.type = type;
 					
@@ -1004,12 +1014,19 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			public bool MoveNext()
 			{
+				if (enumerator == null)
+				{
+					return false;
+				}
 				return enumerator.MoveNext();
 			}
 
 			public void Reset()
 			{
-				enumerator.Reset();
+				if (enumerator != null)
+				{
+					enumerator.Reset();
+				}
 			}
 
 			public object Current
@@ -1027,6 +1044,28 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			
 			#endregion
+		}
+
+		/// <summary>
+		/// Used for empty/null datasources
+		/// </summary>
+		public class NoIterationState : OperationState
+		{
+			public static readonly NoIterationState Instance = new NoIterationState();
+			
+			private NoIterationState() : base(null, null, null, null)
+			{
+			}
+
+			public override string TargetSuffix
+			{
+				get { return null; }
+			}
+
+			protected override SetItem CreateItemRepresentation(object current)
+			{
+				throw new NotImplementedException();
+			}
 		}
 		
 		public class ListDataSourceState : OperationState
