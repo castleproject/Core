@@ -3,13 +3,9 @@ namespace NVelocity.Util.Introspection
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using System.Runtime.Serialization;
+	using System.Text;
 
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
-	/// <author> <a href="mailto:bob@werken.com">Bob McWhirter</a> </author>
-	/// <author> <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a> </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a> </author>
-	/// <author> <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a> </author>
-	/// <version> $Id: MethodMap.cs,v 1.4 2004/12/27 05:55:08 corts Exp $ </version>
 	public class MethodMap
 	{
 		/// <summary> Keep track of all methods with the same name.</summary>
@@ -36,8 +32,6 @@ namespace NVelocity.Util.Introspection
 			}
 
 			l.Add(method);
-
-			return;
 		}
 
 		/// <summary>
@@ -101,8 +95,24 @@ namespace NVelocity.Util.Introspection
 		/// simple distinguishable exception, used when
 		/// we run across ambiguous overloading
 		/// </summary>
+		[Serializable]
 		public class AmbiguousException : Exception
 		{
+			public AmbiguousException()
+			{
+			}
+
+			public AmbiguousException(string message) : base(message)
+			{
+			}
+
+			public AmbiguousException(string message, Exception innerException) : base(message, innerException)
+			{
+			}
+
+			public AmbiguousException(SerializationInfo info, StreamingContext context) : base(info, context)
+			{
+			}
 		}
 
 		private static MethodInfo GetMostSpecific(IList methods, Type[] classes)
@@ -120,8 +130,8 @@ namespace NVelocity.Util.Introspection
 			}
 
 			// This list will contain the maximally specific methods. Hopefully at
-	    // the end of the below loop, the list will contain exactly one method,
-	    // (the most specific method) otherwise we have ambiguity.
+			// the end of the below loop, the list will contain exactly one method,
+			// (the most specific method) otherwise we have ambiguity.
 			ArrayList maximals = new ArrayList();
 
 			foreach (MethodInfo app in applicables)
@@ -131,11 +141,6 @@ namespace NVelocity.Util.Introspection
 
 				foreach (MethodInfo max in maximals)
 				{
-					if (max.DeclaringType.IsInterface) {
-						maximals.Remove(max);
-						break;
-					}
-					
 					switch (IsMoreSpecific(appArgs, max.GetParameters()))
 					{
 						case MORE_SPECIFIC:
@@ -160,13 +165,31 @@ namespace NVelocity.Util.Introspection
 				}
 
 				if (!lessSpecific)
+				{
 					maximals.Add(app);
+				}
+			}
+			
+			// In a last attempt we remove 
+			// the methods found for interfaces
+			if (maximals.Count > 1)
+			{
+				ArrayList newList = new ArrayList();
+				
+				foreach(MethodInfo method in maximals)
+				{
+					if (method.DeclaringType.IsInterface) continue;
+
+					newList.Add(method);
+				}
+				
+				maximals = newList;
 			}
 
 			if (maximals.Count > 1)
 			{
 				// We have more than one maximally specific method
-				throw new AmbiguousException();
+				throw new AmbiguousException(CreateDescriptiveAmbiguousErrorMessage(maximals, classes));
 			}
 
 			return (MethodInfo) maximals[0];
@@ -388,6 +411,54 @@ namespace NVelocity.Util.Introspection
 					return true;
 			}
 			return false;
+		}
+		
+		private static string CreateDescriptiveAmbiguousErrorMessage(IList list, Type[] classes)
+		{
+			StringBuilder sb = new StringBuilder();
+			
+			sb.Append("There are two or more methods that can be bound given the parameters types (");
+			
+			foreach(Type paramType in classes)
+			{
+				if (paramType == null)
+				{
+					sb.Append("null");
+				}
+				else
+				{
+					sb.Append(paramType.Name);
+				}
+				
+				sb.Append(" ");
+			}
+			
+			sb.Append(") Methods: ");
+			
+			foreach(MethodInfo method in list)
+			{
+				sb.AppendFormat(" {0}.{1}({2}) ", method.DeclaringType.Name, method.Name, 
+				                CreateParametersDescription(method.GetParameters()));
+			}
+			
+			return sb.ToString();
+		}
+
+		private static String CreateParametersDescription(ParameterInfo[] parameters)
+		{
+			String message = String.Empty;
+			
+			foreach(ParameterInfo param in parameters)
+			{
+				if (message != String.Empty)
+				{
+					message += ", ";
+				}
+				
+				message += param.ParameterType.Name;
+			}
+			
+			return message;
 		}
 	}
 }

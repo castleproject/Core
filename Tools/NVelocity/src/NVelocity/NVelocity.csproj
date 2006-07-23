@@ -282,6 +282,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Runtime\RuntimeException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\RuntimeInstance.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

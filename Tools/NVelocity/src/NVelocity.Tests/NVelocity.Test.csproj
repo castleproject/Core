@@ -100,6 +100,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Test\AmbiguousExceptionTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Test\AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -86,8 +86,11 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			String methodNameUsed = methodName;
+			
 			MethodInfo m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
+			
 			PropertyInfo p = null;
+
 			if (m == null)
 			{
 				methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
@@ -237,24 +240,22 @@ namespace NVelocity.Runtime.Parser.Node
 				}
 
 				/*
-		*  if we still haven't gotten the method, either we are calling 
-		*  a method that doesn't exist (which is fine...)  or I screwed
-		*  it up.
-		*/
+				*  if we still haven't gotten the method, either we are calling 
+				*  a method that doesn't exist (which is fine...)  or I screwed
+				*  it up.
+				*/
 
 				if (method == null && property == null)
 				{
 					return null;
 				}
 			}
-			catch (Exception e)
+			catch(Exception ex)
 			{
-				/*
-				*  can come from the doIntropection() also, from Introspector
-				*/
-
-				rsvc.Error("ASTMethod.execute() : exception from introspection : " + e);
-				throw;
+				rsvc.Error("ASTMethod.execute() : exception from introspection : " + ex);
+				
+				throw new RuntimeException(String.Format("Error during object instrospection. " + 
+					"Check inner exception for details. Node literal {0} Line {1} Column {2}", base.Literal, Line, Column), ex);
 			}
 
 			try
@@ -268,7 +269,7 @@ namespace NVelocity.Runtime.Parser.Node
 				*  all is well.
 				*/
 
-				Object obj = null;
+				Object obj;
 
 				if (method != null)
 				{
@@ -308,7 +309,7 @@ namespace NVelocity.Runtime.Parser.Node
 				*  also, let non-Exception Throwables go...
 				*/
 
-				if (ec != null && ite.GetBaseException() is Exception)
+				if (ec != null)
 				{
 					try
 					{
@@ -335,7 +336,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
-		private object[] BuildMethodArgs(MethodInfo method, int paramArrayIndex )
+		private object[] BuildMethodArgs(MethodInfo method, int paramArrayIndex)
 		{
 			object[] methodArguments = parameters;
 			ParameterInfo[] methodArgs = method.GetParameters();
