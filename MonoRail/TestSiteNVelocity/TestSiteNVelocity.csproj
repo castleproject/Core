@@ -152,6 +152,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\ComponentAndParams.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Components\GridComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -554,6 +559,10 @@
                 />
                 <File
                     RelPath = "views\UsingComponent\InlineComponentUsingTemplatedRender.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent2\ComponentAndParams1.vm"
                     BuildAction = "None"
                 />
                 <File

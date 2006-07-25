@@ -229,14 +229,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				{
 					if (childrenCount > 2)
 					{
-						String message = String.Format("A #{0} directive with a dictionary string param cannot have extra params - component {0}", componentName, Name);
+						String message = String.Format("A #{0} directive with a dictionary " + 
+							"string param cannot have extra params - component {0}", componentName, Name);
 						throw new ViewComponentException(message);
 					}
 					return dict;
 				}
 				else
 				{
-					String message = String.Format("A #{0} directive with parameters must use the keyword 'with' - component {0}", componentName, Name);
+					String message = String.Format("A #{0} directive with parameters must use " + 
+							"the keyword 'with' - component {0}", componentName, Name);
 					throw new ViewComponentException(message);
 				}
 			}
@@ -245,7 +247,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		}
 
 		private bool RenderComponentView(IInternalContextAdapter context, TextWriter writer, 
-			NVelocityViewContextAdapter contextAdapter)
+		                                 NVelocityViewContextAdapter contextAdapter)
 		{
 			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
 			{

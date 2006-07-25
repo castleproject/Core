@@ -178,6 +178,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertReplyContains("<table>    <th>EMail</th>\r\n    <th>Phone</th>\r\n  <tr><td colspan=2>Nothing here</td>\r\n  </tr></table>");
 		}
 
+		[Test]
+		public void ComponentAndParams1()
+		{
+			DoGet("usingcomponent2/ComponentAndParams1.rails");
+
+			AssertReplyContains("1 2 True Something hello");
+		}
+
 		void AssertOutput(String expected, object output)
 		{
 			Assert.AreEqual(NormalizeWhitespace(expected), NormalizeWhitespace(output.ToString()));

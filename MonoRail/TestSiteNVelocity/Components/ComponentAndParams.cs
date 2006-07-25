@@ -12,41 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace TestSiteNVelocity.Components
 {
 	using System;
 	using System.Collections;
-
 	using Castle.MonoRail.Framework;
 
-	public class UsingComponent2Controller : Controller
+	public class ComponentAndParams : ViewComponent
 	{
-		public void ComponentWithInvalidSections()
+		public override void Render()
 		{
-		}
-
-		public void GridComponent1()
-		{
-			FillPropertyBag();
-		}
-
-		public void GridComponent2()
-		{
-		}
-		
-		public void ComponentAndParams1()
-		{
+			object param1 = Context.ComponentParameters["intParamLiteral"];
+			object param2 = Context.ComponentParameters["intParam"];
+			object param3 = Context.ComponentParameters["dictParam"];
+			object param4 = Context.ComponentParameters["strParamLiteral"];
+			object param5 = Context.ComponentParameters["strParam"];
 			
-		}
-
-		private void FillPropertyBag()
-		{
-			ArrayList items = new ArrayList();
-
-			items.Add(new Contact("hammett", "111"));
-			items.Add(new Contact("Peter Griffin", "222"));
-
-			PropertyBag.Add("contacts", items);
+			RenderText(String.Format("{0} {1} {2} {3} {4}", param1, param2, param3 is IDictionary, param4, param5));
 		}
 	}
 }
