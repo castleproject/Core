@@ -198,9 +198,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			rwlock.UpgradeToWriterLock(-1);
-
+			
 			try
 			{
+				cacheType = GetFromCache(targetType, interfaces);
+				
+				if (cacheType != null)
+				{
+					return cacheType;
+				}
+				
 				_targetType = targetType;
 
 				CreateTypeBuilder(GenerateTypeName(targetType, interfaces), typeof(Object), interfaces);

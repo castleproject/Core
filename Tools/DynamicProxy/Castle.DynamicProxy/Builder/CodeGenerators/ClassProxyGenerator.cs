@@ -220,6 +220,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			try
 			{
+				cacheType = GetFromCache(baseClass, interfaces);
+				
+				if (cacheType != null)
+				{
+					return cacheType;
+				}
+
 				CreateTypeBuilder( GenerateTypeName(baseClass, interfaces), baseClass, interfaces );
 				GenerateFields();
 
