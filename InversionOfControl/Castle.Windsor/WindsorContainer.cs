@@ -51,7 +51,7 @@ namespace Castle.Windsor
         /// Constructs a container using the specified 
         /// <see cref="IConfigurationStore"/> implementation.
         /// </summary>
-        /// <param name="store"></param>
+		/// <param name="store">The instance of an <see cref="IConfigurationStore"/> implementation.</param>
         public WindsorContainer(IConfigurationStore store)
             : this()
         {
@@ -64,7 +64,7 @@ namespace Castle.Windsor
         /// Constructs a container using the specified 
         /// <see cref="IConfigurationInterpreter"/> implementation.
         /// </summary>
-        /// <param name="interpreter"></param>
+		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation.</param>
         public WindsorContainer(IConfigurationInterpreter interpreter)
             : this()
         {
@@ -108,18 +108,44 @@ namespace Castle.Windsor
         /// <param name="kernel"></param>
         public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
         {
+			if (kernel == null) throw new ArgumentNullException("kernel");
+			if (installer == null) throw new ArgumentNullException("installer");
+        	
             _kernel = kernel;
             _kernel.ProxyFactory = new Proxy.ProxySmartFactory();
 
             _installer = installer;
         }
 
+		/// <summary>
+		/// Constructs with a given <see cref="IProxyFactory"/>.
+		/// </summary>
+		/// <param name="proxyFactory">A instance of an <see cref="IProxyFactory"/>.</param>
         public WindsorContainer(IProxyFactory proxyFactory)
         {
+			if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
+			
             _kernel = new DefaultKernel(proxyFactory);
 
             _installer = new Installer.DefaultComponentInstaller();
         }
+
+    	/// <summary>
+    	/// Constructs a container assinging a parent before it starts the dependency resolution.
+    	/// </summary>
+    	/// <param name="parent">The instance of an <see cref="IWindsorContainer"/>.</param>
+		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation.</param>
+		public WindsorContainer(IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
+		{
+			if (parent == null) throw new ArgumentNullException("parent");
+			if (interpreter == null) throw new ArgumentNullException("interpreter");
+    		
+			parent.AddChildContainer(this);
+
+			interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore);
+
+			RunInstaller();
+		}
 
         #endregion
 

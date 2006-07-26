@@ -15,7 +15,7 @@
 namespace Castle.Windsor.Tests
 {
 	using System;
-
+	using Castle.Windsor.Configuration.Interpreters;
 	using NUnit.Framework;
 
 	using Castle.MicroKernel;
@@ -70,6 +70,20 @@ namespace Castle.Windsor.Tests
 			IWindsorContainer childcontainer = new WindsorContainer();			
 			container.AddChildContainer(childcontainer);
 			container3.AddChildContainer(childcontainer);
+		}
+
+
+		[Test]
+		public void StartWithParentContainer()
+		{
+			IWindsorContainer childcontainer = new WindsorContainer(container, new XmlInterpreter());
+			
+			Assert.AreEqual(container, childcontainer.Parent);
+
+			childcontainer.AddComponent("B", typeof(B));
+			B b = childcontainer["B"] as B;
+
+			Assert.IsNotNull(b);
 		}
 
 		public class A

@@ -89,6 +89,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-2-0.csproj">
+      <Project>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</Project>
+      <Name>Castle.MicroKernel.Tests-2-0</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-2-0.csproj">
       <Name>Castle.MicroKernel</Name>
       <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>

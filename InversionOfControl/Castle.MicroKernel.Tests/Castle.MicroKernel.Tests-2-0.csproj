@@ -110,6 +110,7 @@
     <Compile Include="BinaryTreeComponentNameTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassComponents\ClassWithArrayConstructor.cs" />
     <Compile Include="ClassComponents\ClassWithListConstructor.cs">
       <SubType>Code</SubType>
     </Compile>
