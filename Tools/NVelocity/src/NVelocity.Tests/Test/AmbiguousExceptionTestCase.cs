@@ -15,7 +15,9 @@
 namespace NVelocity.Test
 {
 	using System;
+	using System.Globalization;
 	using System.IO;
+	using System.Threading;
 
 	using NUnit.Framework;
 	
@@ -25,6 +27,13 @@ namespace NVelocity.Test
 	[TestFixture]
 	public class AmbiguousExceptionTestCase
 	{
+		[SetUp]
+		public void Init()
+		{
+			Thread.CurrentThread.CurrentCulture = 
+				CultureInfo.CreateSpecificCulture("en-us");
+		}
+		
 		[Test, ExpectedException(typeof(RuntimeException))]
 		public void ExceptionForAmbiguousMatches()
 		{
