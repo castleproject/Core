@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Colin Ramsay <castleproject-devel@happyandlost.co.uk> patch making
+  the _selectedViewName field accessible through a public property.
+
 - Checked in changes to better support ASP.NET Views
 
 - Refactor FormHelper to use a common code to CheckboxList and Select. 

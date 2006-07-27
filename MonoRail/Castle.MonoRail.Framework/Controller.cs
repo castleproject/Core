@@ -192,6 +192,15 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets the view which will be rendered by this action.
+		/// </summary>
+		public String SelectedViewName
+		{
+			get { return _selectedViewName; }
+			set { _selectedViewName = value; }
+		}
+
+		/// <summary>
 		/// Gets the property bag, which is used
 		/// to pass variables to the view.
 		/// </summary>
