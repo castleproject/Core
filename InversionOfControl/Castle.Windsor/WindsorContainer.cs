@@ -14,132 +14,133 @@
 
 namespace Castle.Windsor
 {
-    using System;
-    using System.Collections;
-
+	using System;
+	using System.Collections;
+	
 	using Castle.MicroKernel;
 	using Castle.Windsor.Configuration;
-    using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Configuration.Interpreters;
 
-    /// <summary>
-    /// Implementation of <see cref="IWindsorContainer"/>
-    /// which delegates to <see cref="IKernel"/> implementation.
-    /// </summary>
-    [Serializable]
-    public class WindsorContainer : MarshalByRefObject, IWindsorContainer
-    {
-        #region Fields
+	/// <summary>
+	/// Implementation of <see cref="IWindsorContainer"/>
+	/// which delegates to <see cref="IKernel"/> implementation.
+	/// </summary>
+	[Serializable]
+	public class WindsorContainer : MarshalByRefObject, IWindsorContainer
+	{
+		#region Fields
 
-        private IKernel _kernel;
-        private IWindsorContainer _parent;
-        private IComponentsInstaller _installer;
+		private IKernel _kernel;
+		private IWindsorContainer _parent;
+		private IComponentsInstaller _installer;
 
-        #endregion
+		#endregion
 
-        #region Constructors
+		#region Constructors
 
-        /// <summary>
-        /// Constructs a container without any external 
-        /// configuration reference
-        /// </summary>
-        public WindsorContainer()
-            : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
-        {
-        }
+		/// <summary>
+		/// Constructs a container without any external 
+		/// configuration reference
+		/// </summary>
+		public WindsorContainer()
+			: this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
+		{
+		}
 
-        /// <summary>
-        /// Constructs a container using the specified 
-        /// <see cref="IConfigurationStore"/> implementation.
-        /// </summary>
+		/// <summary>
+		/// Constructs a container using the specified 
+		/// <see cref="IConfigurationStore"/> implementation.
+		/// </summary>
 		/// <param name="store">The instance of an <see cref="IConfigurationStore"/> implementation.</param>
-        public WindsorContainer(IConfigurationStore store)
-            : this()
-        {
-            _kernel.ConfigurationStore = store;
+		public WindsorContainer(IConfigurationStore store)
+			: this()
+		{
+			_kernel.ConfigurationStore = store;
 
-            RunInstaller();
-        }
+			RunInstaller();
+		}
 
-        /// <summary>
-        /// Constructs a container using the specified 
-        /// <see cref="IConfigurationInterpreter"/> implementation.
-        /// </summary>
+		/// <summary>
+		/// Constructs a container using the specified 
+		/// <see cref="IConfigurationInterpreter"/> implementation.
+		/// </summary>
 		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation.</param>
-        public WindsorContainer(IConfigurationInterpreter interpreter)
-            : this()
-        {
-            if (interpreter == null) throw new ArgumentNullException("interpreter");
+		public WindsorContainer(IConfigurationInterpreter interpreter)
+			: this()
+		{
+			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
-            interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore);
+			interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore);
 
-            RunInstaller();
-        }
+			RunInstaller();
+		}
 
-        [Obsolete("Use includes instead of cascade configurations")]
-        public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child)
-            : this()
-        {
-            if (parent == null) throw new ArgumentNullException("parent");
-            if (child == null) throw new ArgumentNullException("child");
+		[Obsolete("Use includes instead of cascade configurations")]
+		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child)
+			: this()
+		{
+			if (parent == null) throw new ArgumentNullException("parent");
+			if (child == null) throw new ArgumentNullException("child");
 
-            _kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+			_kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
 
-            RunInstaller();
-        }
+			RunInstaller();
+		}
 
-        public WindsorContainer(String xmlFile)
-            : this(new XmlInterpreter(xmlFile))
-        {
-        }
+		public WindsorContainer(String xmlFile)
+			: this(new XmlInterpreter(xmlFile))
+		{
+		}
 
-        public WindsorContainer(String parentXmlFile, String childXmlFile)
-            : this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
-        {
-        }
+		public WindsorContainer(String parentXmlFile, String childXmlFile)
+			: this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
+		{
+		}
 
-        /// <summary>
-        /// Constructs a container using the specified <see cref="IKernel"/>
-        /// implementation. Rarely used.
-        /// </summary>
-        /// <remarks>
-        /// This constructs sets the Kernel.ProxyFactory property to
-        /// <see cref="Proxy.DefaultProxyFactory"/>
-        /// </remarks>
-        /// <param name="kernel"></param>
-        public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
-        {
+		/// <summary>
+		/// Constructs a container using the specified <see cref="IKernel"/>
+		/// implementation. Rarely used.
+		/// </summary>
+		/// <remarks>
+		/// This constructs sets the Kernel.ProxyFactory property to
+		/// <see cref="Proxy.DefaultProxyFactory"/>
+		/// </remarks>
+		/// <param name="kernel"></param>
+		public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
+		{
 			if (kernel == null) throw new ArgumentNullException("kernel");
 			if (installer == null) throw new ArgumentNullException("installer");
-        	
-            _kernel = kernel;
-            _kernel.ProxyFactory = new Proxy.ProxySmartFactory();
 
-            _installer = installer;
-        }
+			_kernel = kernel;
+			_kernel.ProxyFactory = new Proxy.ProxySmartFactory();
+
+			_installer = installer;
+		}
 
 		/// <summary>
 		/// Constructs with a given <see cref="IProxyFactory"/>.
 		/// </summary>
 		/// <param name="proxyFactory">A instance of an <see cref="IProxyFactory"/>.</param>
-        public WindsorContainer(IProxyFactory proxyFactory)
-        {
+		public WindsorContainer(IProxyFactory proxyFactory)
+		{
 			if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
-			
-            _kernel = new DefaultKernel(proxyFactory);
 
-            _installer = new Installer.DefaultComponentInstaller();
-        }
+			_kernel = new DefaultKernel(proxyFactory);
 
-    	/// <summary>
-    	/// Constructs a container assinging a parent before it starts the dependency resolution.
-    	/// </summary>
-    	/// <param name="parent">The instance of an <see cref="IWindsorContainer"/>.</param>
+			_installer = new Installer.DefaultComponentInstaller();
+		}
+
+		/// <summary>
+		/// Constructs a container assigning a parent container 
+		/// before starting the dependency resolution.
+		/// </summary>
+		/// <param name="parent">The instance of an <see cref="IWindsorContainer"/>.</param>
 		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation.</param>
 		public WindsorContainer(IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
-    		
+
 			parent.AddChildContainer(this);
 
 			interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore);
@@ -147,131 +148,132 @@ namespace Castle.Windsor
 			RunInstaller();
 		}
 
-        #endregion
+		#endregion
 
-        #region IWindsorContainer Members
-
-        /// <summary>
-        /// Returns the inner instance of the MicroKernel
-        /// </summary>
-        public virtual IKernel Kernel
-        {
-            get { return _kernel; }
-        }
-
-        /// <summary>
-        /// Gets or sets the parent container if this instance
-        /// is a sub container.
-        /// </summary>
-        public virtual IWindsorContainer Parent
-        {
-            get { return _parent; }
-            set
-            {
-                if (value == null)
-                {
-                    if (_parent != null)
-                    {
-                        _parent.Kernel.RemoveChildKernel(_kernel);
-                        _parent = null;
-                    }
-                }
-                else
-                {
-                    _parent = value;
-                    value.Kernel.AddChildKernel(_kernel);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Registers a facility within the kernel.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="facility"></param>
-        public virtual void AddFacility(String key, IFacility facility)
-        {
-            _kernel.AddFacility(key, facility);
-        }
-
-        /// <summary>
-        /// Adds a component to be managed by the container
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="classType"></param>
-        public virtual void AddComponent(String key, Type classType)
-        {
-            _kernel.AddComponent(key, classType);
-        }
-
-        /// <summary>
-        /// Adds a component to be managed by the container
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="serviceType"></param>
-        /// <param name="classType"></param>
-        public virtual void AddComponent(String key, Type serviceType, Type classType)
-        {
-            _kernel.AddComponent(key, serviceType, classType);
-        }
-
-        public virtual void AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
-        {
-            _kernel.AddComponentWithProperties(key, classType, extendedProperties);
-        }
-
-        public virtual void AddComponentWithProperties(string key, Type serviceType, Type classType, IDictionary extendedProperties)
-        {
-            _kernel.AddComponentWithProperties(key, serviceType, classType, extendedProperties);
-        }
-
-        /// <summary>
-        /// Returns a component instance by the key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public virtual object Resolve(String key)
-        {
-            return _kernel[key];
-        }
-
-        /// <summary>
-        /// Returns a component instance by the service
-        /// </summary>
-        /// <param name="service"></param>
-        /// <returns></returns>
-        public virtual object Resolve(Type service)
-        {
-            return _kernel[service];
-        }
-
-        /// <summary>
-        /// Shortcut to the method <see cref="Resolve"/>
-        /// </summary>
-        public virtual object this[String key]
-        {
-            get { return Resolve(key); }
-        }
-
-        /// <summary>
-        /// Shortcut to the method <see cref="Resolve"/>
-        /// </summary>
-        public virtual object this[Type service]
-        {
-            get { return Resolve(service); }
-        }
-
-		#if DOTNET2
+		#region IWindsorContainer Members
 
 		/// <summary>
-        /// Returns a component instance by the key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public virtual object Resolve(String key, Type service)
-        {
-            return _kernel[key];
-        }
+		/// Returns the inner instance of the MicroKernel
+		/// </summary>
+		public virtual IKernel Kernel
+		{
+			get { return _kernel; }
+		}
+
+		/// <summary>
+		/// Gets or sets the parent container if this instance
+		/// is a sub container.
+		/// </summary>
+		public virtual IWindsorContainer Parent
+		{
+			get { return _parent; }
+			set
+			{
+				if (value == null)
+				{
+					if (_parent != null)
+					{
+						_parent.Kernel.RemoveChildKernel(_kernel);
+						_parent = null;
+					}
+				}
+				else
+				{
+					_parent = value;
+					value.Kernel.AddChildKernel(_kernel);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Registers a facility within the kernel.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="facility"></param>
+		public virtual void AddFacility(String key, IFacility facility)
+		{
+			_kernel.AddFacility(key, facility);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="classType"></param>
+		public virtual void AddComponent(String key, Type classType)
+		{
+			_kernel.AddComponent(key, classType);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="serviceType"></param>
+		/// <param name="classType"></param>
+		public virtual void AddComponent(String key, Type serviceType, Type classType)
+		{
+			_kernel.AddComponent(key, serviceType, classType);
+		}
+
+		public virtual void AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
+		{
+			_kernel.AddComponentWithProperties(key, classType, extendedProperties);
+		}
+
+		public virtual void AddComponentWithProperties(string key, Type serviceType, Type classType,
+		                                               IDictionary extendedProperties)
+		{
+			_kernel.AddComponentWithProperties(key, serviceType, classType, extendedProperties);
+		}
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public virtual object Resolve(String key)
+		{
+			return _kernel[key];
+		}
+
+		/// <summary>
+		/// Returns a component instance by the service
+		/// </summary>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		public virtual object Resolve(Type service)
+		{
+			return _kernel[service];
+		}
+
+		/// <summary>
+		/// Shortcut to the method <see cref="Resolve"/>
+		/// </summary>
+		public virtual object this[String key]
+		{
+			get { return Resolve(key); }
+		}
+
+		/// <summary>
+		/// Shortcut to the method <see cref="Resolve"/>
+		/// </summary>
+		public virtual object this[Type service]
+		{
+			get { return Resolve(service); }
+		}
+
+#if DOTNET2
+
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public virtual object Resolve(String key, Type service)
+		{
+			return _kernel[key];
+		}
 
 		/// <summary>
 		/// Returns a component instance by the service 
@@ -293,66 +295,66 @@ namespace Castle.Windsor
 			return (T) Resolve(key, typeof(T));
 		}
 
-		#endif
+#endif
 
-        /// <summary>
-        /// Releases a component instance
-        /// </summary>
-        /// <param name="instance"></param>
-        public virtual void Release(object instance)
-        {
-            _kernel.ReleaseComponent(instance);
-        }
+		/// <summary>
+		/// Releases a component instance
+		/// </summary>
+		/// <param name="instance"></param>
+		public virtual void Release(object instance)
+		{
+			_kernel.ReleaseComponent(instance);
+		}
 
-        /// <summary>
-        /// Registers a subcontainer. The components exposed
-        /// by this container will be accessible from subcontainers.
-        /// </summary>
-        /// <param name="childContainer"></param>
-        public virtual void AddChildContainer(IWindsorContainer childContainer)
-        {
-            childContainer.Parent = this;
-        }
+		/// <summary>
+		/// Registers a subcontainer. The components exposed
+		/// by this container will be accessible from subcontainers.
+		/// </summary>
+		/// <param name="childContainer"></param>
+		public virtual void AddChildContainer(IWindsorContainer childContainer)
+		{
+			childContainer.Parent = this;
+		}
 
-        /// <summary>
-        /// Removes (unregisters) a subcontainer.  The components exposed by this container
-        /// will no longer be accessible to the child container.
-        /// </summary>
-        /// <param name="childContainer"></param>
-        public virtual void RemoveChildContainer(IWindsorContainer childContainer)
-        {
-            childContainer.Parent = null;
-        }
+		/// <summary>
+		/// Removes (unregisters) a subcontainer.  The components exposed by this container
+		/// will no longer be accessible to the child container.
+		/// </summary>
+		/// <param name="childContainer"></param>
+		public virtual void RemoveChildContainer(IWindsorContainer childContainer)
+		{
+			childContainer.Parent = null;
+		}
 
-        #endregion
+		#endregion
 
-        #region IDisposable Members
+		#region IDisposable Members
 
-        /// <summary>
-        /// Executes Dispose on underlying <see cref="IKernel"/>
-        /// </summary>
-        public virtual void Dispose()
-        {
-            _kernel.Dispose();
-        }
+		/// <summary>
+		/// Executes Dispose on underlying <see cref="IKernel"/>
+		/// </summary>
+		public virtual void Dispose()
+		{
+			_kernel.Dispose();
+		}
 
-        #endregion
+		#endregion
 
-        #region Protected Operations Members
+		#region Protected Operations Members
 
-        public IComponentsInstaller Installer
-        {
-            get { return _installer; }
-        }
+		public IComponentsInstaller Installer
+		{
+			get { return _installer; }
+		}
 
-        protected virtual void RunInstaller()
-        {
-            if (_installer != null)
-            {
-                _installer.SetUp(this, _kernel.ConfigurationStore);
-            }
-        }
+		protected virtual void RunInstaller()
+		{
+			if (_installer != null)
+			{
+				_installer.SetUp(this, _kernel.ConfigurationStore);
+			}
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }
