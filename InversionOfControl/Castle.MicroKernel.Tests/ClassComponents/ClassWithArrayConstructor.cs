@@ -14,26 +14,23 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
-	using System.Collections;
-
 	public class ClassWithArrayConstructor
 	{
-        private readonly ICommon[] services;
-	    private readonly ICommon _first;
+		private readonly ICommon[] services;
+		private readonly ICommon _first;
 
-	    public ICommon First
-	    {
-	        get { return _first; }
-	    }
-
-	    public ClassWithArrayConstructor(ICommon first, ICommon[] services)
+		public ICommon First
 		{
-            _first = first;
-            this.services = services;
+			get { return _first; }
 		}
 
-        public ICommon[] Services
+		public ClassWithArrayConstructor(ICommon first, ICommon[] services)
+		{
+			_first = first;
+			this.services = services;
+		}
+
+		public ICommon[] Services
 		{
 			get { return services; }
 		}

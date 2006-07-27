@@ -15,15 +15,11 @@
 namespace Castle.MicroKernel.Tests.Configuration
 {
 	using System;
-
 	using NUnit.Framework;
-
 	using Castle.Model.Configuration;
-
 	using Castle.MicroKernel.Resolvers;
 	using Castle.MicroKernel.Tests.Configuration.Components;
 	using Castle.MicroKernel.Tests.ClassComponents;
-
 
 	[TestFixture]
 	public class ConfigurationTestCase
@@ -46,7 +42,7 @@ namespace Castle.MicroKernel.Tests.Configuration
 		[ExpectedException(typeof(DependencyResolverException))]
 		public void ConstructorWithUnsatisfiedParameters()
 		{
-			kernel.AddComponent( "key", typeof(ClassWithConstructors) );
+			kernel.AddComponent("key", typeof(ClassWithConstructors));
 			object res = kernel["key"];
 		}
 
@@ -54,75 +50,75 @@ namespace Castle.MicroKernel.Tests.Configuration
 		public void ConstructorWithStringParameters()
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
-			
-			IConfiguration parameters = 
-				confignode.Children.Add( new MutableConfiguration("parameters") );
 
-			parameters.Children.Add( new MutableConfiguration("host", "castleproject.org") );
+			IConfiguration parameters =
+				confignode.Children.Add(new MutableConfiguration("parameters"));
 
-			kernel.ConfigurationStore.AddComponentConfiguration( "key", confignode );
+			parameters.Children.Add(new MutableConfiguration("host", "castleproject.org"));
 
-			kernel.AddComponent( "key", typeof(ClassWithConstructors) );
-			
+			kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+
+			kernel.AddComponent("key", typeof(ClassWithConstructors));
+
 			ClassWithConstructors instance = (ClassWithConstructors) kernel["key"];
-			Assert.IsNotNull( instance );
-			Assert.IsNotNull( instance.Host );
-			Assert.AreEqual( "castleproject.org", instance.Host );
+			Assert.IsNotNull(instance);
+			Assert.IsNotNull(instance.Host);
+			Assert.AreEqual("castleproject.org", instance.Host);
 		}
 
 		[Test]
 		public void ServiceOverride()
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
-			
-			IConfiguration parameters = 
-			 	confignode.Children.Add( new MutableConfiguration("parameters") );
 
-			parameters.Children.Add( new MutableConfiguration("common", "${commonservice2}") );
+			IConfiguration parameters =
+				confignode.Children.Add(new MutableConfiguration("parameters"));
 
-			kernel.ConfigurationStore.AddComponentConfiguration( "commonserviceuser", confignode );
+			parameters.Children.Add(new MutableConfiguration("common", "${commonservice2}"));
 
-			kernel.AddComponent( "commonservice1", typeof(ICommon), typeof(CommonImpl1) );
-			kernel.AddComponent( "commonservice2", typeof(ICommon), typeof(CommonImpl2) );
+			kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
 
-			kernel.AddComponent( "commonserviceuser", typeof(CommonServiceUser) );
+			kernel.AddComponent("commonservice1", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("commonservice2", typeof(ICommon), typeof(CommonImpl2));
+
+			kernel.AddComponent("commonserviceuser", typeof(CommonServiceUser));
 
 			CommonServiceUser instance = (CommonServiceUser) kernel["commonserviceuser"];
 
 			Assert.IsNotNull(instance);
-			Assert.AreEqual( typeof(CommonImpl2), instance.CommonService.GetType() );
+			Assert.AreEqual(typeof(CommonImpl2), instance.CommonService.GetType());
 		}
 
 		[Test]
 		public void ServiceOverrideUsingProperties()
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
-			
-			IConfiguration parameters = 
-				confignode.Children.Add( new MutableConfiguration("parameters") );
 
-			parameters.Children.Add( new MutableConfiguration("CommonService", "${commonservice2}") );
+			IConfiguration parameters =
+				confignode.Children.Add(new MutableConfiguration("parameters"));
 
-			kernel.ConfigurationStore.AddComponentConfiguration( "commonserviceuser", confignode );
+			parameters.Children.Add(new MutableConfiguration("CommonService", "${commonservice2}"));
 
-			kernel.AddComponent( "commonservice1", typeof(ICommon), typeof(CommonImpl1) );
-			kernel.AddComponent( "commonservice2", typeof(ICommon), typeof(CommonImpl2) );
+			kernel.ConfigurationStore.AddComponentConfiguration("commonserviceuser", confignode);
 
-			kernel.AddComponent( "commonserviceuser", typeof(CommonServiceUser2) );
+			kernel.AddComponent("commonservice1", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("commonservice2", typeof(ICommon), typeof(CommonImpl2));
+
+			kernel.AddComponent("commonserviceuser", typeof(CommonServiceUser2));
 
 			CommonServiceUser2 instance = (CommonServiceUser2) kernel["commonserviceuser"];
 
 			Assert.IsNotNull(instance);
-			Assert.AreEqual( typeof(CommonImpl2), instance.CommonService.GetType() );
+			Assert.AreEqual(typeof(CommonImpl2), instance.CommonService.GetType());
 		}
 
 		[Test]
 		public void ConstructorWithArrayParameter()
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
-			
-			IConfiguration parameters = 
-				confignode.Children.Add( new MutableConfiguration("parameters") );
+
+			IConfiguration parameters =
+				confignode.Children.Add(new MutableConfiguration("parameters"));
 
 			IConfiguration hosts = parameters.Children.Add(new MutableConfiguration("hosts"));
 			IConfiguration array = hosts.Children.Add(new MutableConfiguration("array"));
@@ -130,77 +126,76 @@ namespace Castle.MicroKernel.Tests.Configuration
 			array.Children.Add(new MutableConfiguration("item", "uol"));
 			array.Children.Add(new MutableConfiguration("item", "folha"));
 
-			kernel.ConfigurationStore.AddComponentConfiguration( "key", confignode );
+			kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
 
-			kernel.AddComponent( "key", typeof(ClassWithConstructors) );
-			
+			kernel.AddComponent("key", typeof(ClassWithConstructors));
+
 			ClassWithConstructors instance = (ClassWithConstructors) kernel["key"];
-			Assert.IsNotNull( instance );
-			Assert.IsNull( instance.Host );
-			Assert.AreEqual( "castle", instance.Hosts[0] );
-			Assert.AreEqual( "uol", instance.Hosts[1] );
-			Assert.AreEqual( "folha", instance.Hosts[2] );
+			Assert.IsNotNull(instance);
+			Assert.IsNull(instance.Host);
+			Assert.AreEqual("castle", instance.Hosts[0]);
+			Assert.AreEqual("uol", instance.Hosts[1]);
+			Assert.AreEqual("folha", instance.Hosts[2]);
 		}
 
 		[Test]
 		public void ConstructorWithListParameterAndCustomType()
 		{
 			MutableConfiguration confignode = new MutableConfiguration("key");
-			
-			IConfiguration parameters = 
-				confignode.Children.Add( new MutableConfiguration("parameters") );
+
+			IConfiguration parameters =
+				confignode.Children.Add(new MutableConfiguration("parameters"));
 
 			IConfiguration services = parameters.Children.Add(new MutableConfiguration("services"));
-			MutableConfiguration list = (MutableConfiguration) 
-				services.Children.Add(new MutableConfiguration("list"));
+			MutableConfiguration list = (MutableConfiguration)
+			                            services.Children.Add(new MutableConfiguration("list"));
 			list.Attributes.Add("type", "Castle.MicroKernel.Tests.ClassComponents.ICommon, Castle.MicroKernel.Tests");
 
 			list.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
 			list.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
 
-			kernel.ConfigurationStore.AddComponentConfiguration( "key", confignode );
-            kernel.AddComponent("key", typeof(ClassWithListConstructor));
+			kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+			kernel.AddComponent("key", typeof(ClassWithListConstructor));
 
-			kernel.AddComponent( "commonservice1", typeof(ICommon), typeof(CommonImpl1) );
-			kernel.AddComponent( "commonservice2", typeof(ICommon), typeof(CommonImpl2) );
-			
+			kernel.AddComponent("commonservice1", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("commonservice2", typeof(ICommon), typeof(CommonImpl2));
+
 			ClassWithListConstructor instance = (ClassWithListConstructor) kernel["key"];
-			Assert.IsNotNull( instance.Services );
-			Assert.AreEqual( 2, instance.Services.Count );
-			Assert.AreEqual( "CommonImpl1", instance.Services[0].GetType().Name );
-			Assert.AreEqual( "CommonImpl2", instance.Services[1].GetType().Name );
+			Assert.IsNotNull(instance.Services);
+			Assert.AreEqual(2, instance.Services.Count);
+			Assert.AreEqual("CommonImpl1", instance.Services[0].GetType().Name);
+			Assert.AreEqual("CommonImpl2", instance.Services[1].GetType().Name);
 		}
 
-        [Test]
-        public void ConstructorWithArrayParameterAndCustomType()
-        {
-            MutableConfiguration confignode = new MutableConfiguration("key");
+		[Test]
+		public void ConstructorWithArrayParameterAndCustomType()
+		{
+			MutableConfiguration confignode = new MutableConfiguration("key");
 
-            IConfiguration parameters =
-                confignode.Children.Add(new MutableConfiguration("parameters"));
+			IConfiguration parameters =
+				confignode.Children.Add(new MutableConfiguration("parameters"));
 
-            IConfiguration services = parameters.Children.Add(new MutableConfiguration("services"));
-            MutableConfiguration array = (MutableConfiguration)
-                services.Children.Add(new MutableConfiguration("array"));
-            //list.Attributes.Add("type", "Castle.MicroKernel.Tests.ClassComponents.ICommon, Castle.MicroKernel.Tests");
+			IConfiguration services = parameters.Children.Add(new MutableConfiguration("services"));
+			MutableConfiguration array = (MutableConfiguration)
+			                             services.Children.Add(new MutableConfiguration("array"));
+			//list.Attributes.Add("type", "Castle.MicroKernel.Tests.ClassComponents.ICommon, Castle.MicroKernel.Tests");
 
-            array.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
-            array.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
+			array.Children.Add(new MutableConfiguration("item", "${commonservice1}"));
+			array.Children.Add(new MutableConfiguration("item", "${commonservice2}"));
 
-            kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+			kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
 
-            kernel.AddComponent("key", typeof(ClassWithArrayConstructor));
-            
-            kernel.AddComponent("commonservice1", typeof(ICommon), typeof(CommonImpl1));
-            kernel.AddComponent("commonservice2", typeof(ICommon), typeof(CommonImpl2));
+			kernel.AddComponent("key", typeof(ClassWithArrayConstructor));
 
-            ClassWithArrayConstructor instance = (ClassWithArrayConstructor)kernel["key"];
-            Assert.IsNotNull(instance.Services);
-            Assert.AreEqual(2, instance.Services.Length);
-            Assert.AreEqual("CommonImpl1", instance.Services[0].GetType().Name);
-            Assert.AreEqual("CommonImpl2", instance.Services[1].GetType().Name);
-            
-        }
+			kernel.AddComponent("commonservice1", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("commonservice2", typeof(ICommon), typeof(CommonImpl2));
+
+			ClassWithArrayConstructor instance = (ClassWithArrayConstructor) kernel["key"];
+			Assert.IsNotNull(instance.Services);
+			Assert.AreEqual(2, instance.Services.Length);
+			Assert.AreEqual("CommonImpl1", instance.Services[0].GetType().Name);
+			Assert.AreEqual("CommonImpl2", instance.Services[1].GetType().Name);
+		}
 
 		[Test]
 		public void CustomLifestyleManager()
@@ -210,7 +205,8 @@ namespace Castle.MicroKernel.Tests.Configuration
 			MutableConfiguration confignode = new MutableConfiguration(key);
 			confignode.Attributes.Add("lifestyle", "custom");
 
-			confignode.Attributes.Add( "customLifestyleType", "Castle.MicroKernel.Tests.ClassComponents.CustomLifestyleManager, Castle.MicroKernel.Tests" );
+			confignode.Attributes.Add("customLifestyleType",
+			                          "Castle.MicroKernel.Tests.ClassComponents.CustomLifestyleManager, Castle.MicroKernel.Tests");
 
 			kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
 			kernel.AddComponent(key, typeof(ICommon), typeof(CommonImpl1));
@@ -218,10 +214,9 @@ namespace Castle.MicroKernel.Tests.Configuration
 			ICommon instance = (ICommon) kernel[key];
 			IHandler handler = kernel.GetHandler(key);
 
-			Assert.IsNotNull( instance );
-			Assert.AreEqual(Model.LifestyleType.Custom,  handler.ComponentModel.LifestyleType);
+			Assert.IsNotNull(instance);
+			Assert.AreEqual(Model.LifestyleType.Custom, handler.ComponentModel.LifestyleType);
 			Assert.AreEqual(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
 		}
-
 	}
 }
