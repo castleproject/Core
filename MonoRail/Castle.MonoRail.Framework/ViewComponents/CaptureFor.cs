@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			String id = (String) Context.ComponentParameters["id"];
 
-			if( id == null || id.Trim().Length == 0 )
+			if (id == null || id.Trim().Length == 0)
 			{
 				throw new RailsException("CaptureFor requires an id attribute use #blockcomponent(CaptureFor with \"id=someid\")...#end");
 			}
@@ -54,9 +54,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			StringBuilder sb = buffer.GetStringBuilder();
 			String appendAtt = Context.ComponentParameters["append"] as string;
 
-			if( appendAtt != null )
+			if (appendAtt != null)
 			{				
-				if( appendAtt == "before" )
+				if(appendAtt == "before")
 				{
 					sb.Append(currentContent);
 				}
