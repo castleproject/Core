@@ -910,9 +910,6 @@ namespace Castle.MonoRail.Framework
 				{
 					CreateResources(method);
 
-					// Clear the PropertyBag.
-					PropertyBag.Clear();
-
 					// Execute the method / dynamic action
 					if (method != null)
 					{
