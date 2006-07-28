@@ -293,7 +293,7 @@ namespace Castle.Components.Binder
 							object value = ConvertUtils.Convert(propType, 
 								translatedParamName, node, files, out conversionSucceeded);
 
-							if (conversionSucceeded && value != null)
+							if (conversionSucceeded)
 							{
 								prop.SetValue(instance, value, null);
 							}
