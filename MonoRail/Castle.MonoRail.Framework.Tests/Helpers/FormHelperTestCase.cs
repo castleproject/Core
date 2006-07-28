@@ -62,6 +62,42 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			helper.SetController(controller);
 		}
+		
+		[Test]
+		public void OverridingElementId()
+		{
+			Assert.AreEqual("<input type=\"text\" id=\"something\" name=\"product.name\" value=\"memory card\" />", 
+				helper.TextField("product.name", DictHelper.Create("id=something")));
+		
+			Assert.AreEqual("<input type=\"password\" id=\"something\" name=\"product.name\" value=\"memory card\" />", 
+				helper.PasswordField("product.name", DictHelper.Create("id=something")));
+			
+			Assert.AreEqual("<input type=\"hidden\" id=\"something\" name=\"product.name\" value=\"memory card\" />", 
+				helper.HiddenField("product.name", DictHelper.Create("id=something")));
+			
+			product.IsAvailable = false;
+
+			Assert.AreEqual("<input type=\"checkbox\" id=\"something\" name=\"product.isavailable\" value=\"true\" />" + 
+				"<input type=\"hidden\" id=\"somethingH\" name=\"product.isavailable\" value=\"false\" />", 
+				helper.CheckboxField("product.isavailable", DictHelper.Create("id=something")));
+
+			user.IsActive = true;
+
+			Assert.AreEqual("<input type=\"radio\" id=\"something\" name=\"user.isactive\" value=\"True\" checked=\"checked\" />", 
+				helper.RadioField("user.isactive", true, DictHelper.Create("id=something")));
+
+			Assert.AreEqual("<label for=\"something\">Name:</label>", 
+				helper.LabelFor("product.name", "Name:", DictHelper.Create("id=something")));
+
+			ArrayList list = new ArrayList();
+
+			list.Add("cat1");
+			list.Add("cat2");
+
+			Assert.AreEqual("<select id=\"something\" name=\"product.category.id\" >\r\n" + 
+				"<option value=\"cat1\">cat1</option>\r\n<option value=\"cat2\">cat2</option>\r\n</select>",
+				helper.Select("product.category.id", list, DictHelper.Create("id=something")));
+		}
 
 		[Test]
 		public void TextField()

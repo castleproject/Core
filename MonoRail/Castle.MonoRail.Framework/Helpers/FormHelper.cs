@@ -140,7 +140,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String LabelFor(String target, String label)
 		{
-			String id = CreateHtmlId(target);
+			return LabelFor(target, label, null);
+		}
+		
+		public String LabelFor(String target, String label, IDictionary attributes)
+		{
+			String id = CreateHtmlId(attributes, target);
 
 			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
@@ -164,6 +169,17 @@ namespace Castle.MonoRail.Framework.Helpers
 			object value = ObtainValue(target);
 
 			return CreateInputElement("hidden", target, value, null);
+		}
+		
+		public String HiddenField(String target, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+			
+			String id = CreateHtmlId(attributes, target);
+			
+			value = value != null ? value : String.Empty;
+
+			return CreateInputElement("hidden", id, target, value.ToString(), attributes);
 		}
 
 		#endregion
@@ -323,10 +339,11 @@ namespace Castle.MonoRail.Framework.Helpers
 				AddChecked(attributes);
 			}
 
-			String hiddenElementId = CreateHtmlId(attributes, target) + "H";
+			String id = CreateHtmlId(attributes, target);
+			String hiddenElementId = id + "H";
 			String hiddenElementValue = ObtainEntryAndRemove(attributes, "falseValue", "false");
 
-			String result = CreateInputElement("checkbox", target, trueValue, attributes);
+			String result = CreateInputElement("checkbox", id, target, trueValue, attributes);
 			
 			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
 			
