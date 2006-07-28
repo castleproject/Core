@@ -476,7 +476,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected void RedirectToAction(String action, params String[] queryStringParameters)
 		{
-			RedirectToAction(action, new DictHelper().CreateDict(queryStringParameters));
+			RedirectToAction(action, DictHelper.Create(queryStringParameters));
 		}
 
 		/// <summary> 
@@ -534,7 +534,7 @@ namespace Castle.MonoRail.Framework
 		
 		protected String CreateAbsoluteRailsUrlForAction(String action)
 		{
-			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, this.AreaName, this.Name, action, Context.UrlInfo.Extension);
+			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, AreaName, Name, action, Context.UrlInfo.Extension);
 		}
 		
 		/// <summary>
@@ -870,15 +870,17 @@ namespace Castle.MonoRail.Framework
 				{
 					LayoutName = actionDesc.Layout.LayoutName;
 				}
-                
+
 				if (actionDesc.AccessibleThrough != null)
 				{
 					string verbName = actionDesc.AccessibleThrough.Verb.ToString();
 					string requestType = Context.RequestType;
 
 					if (String.Compare(verbName, requestType, true) != 0)
-                    			{
-						throw new ControllerException(string.Format("Access to the action [{0}] on controller [{1}] is not allowed by the http verb [{2}].", action.ToLower(), this.Name.ToLower(), requestType));
+					{
+						throw new ControllerException(string.Format("Access to the action [{0}] " + 
+							"on controller [{1}] is not allowed by the http verb [{2}].", 
+							action.ToLower(), Name.ToLower(), requestType));
 					}
 				}
 			}
@@ -990,14 +992,14 @@ namespace Castle.MonoRail.Framework
 		{
 			if (metaDescriptor.DefaultAction != null)
 			{
-                if (methodArgs == null)
-                {
+				if (methodArgs == null)
+				{
 					return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, _context.Request);
-                }
-			    else
-                {
+				}
+				else
+				{
 					return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, methodArgs);
-                }
+				}
 			}
 
 			return null;
@@ -1078,7 +1080,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, object[] methodArgs)
 		{
-			Type[] methodArgTypes = null;
+			Type[] methodArgTypes;
             
 			if (methodArgs == null)
 			{
@@ -1097,7 +1099,7 @@ namespace Castle.MonoRail.Framework
 						// arguments Type[] to the Send method.
 						methodArgTypes[i] = typeof(object);
 					}
- 					else
+					else
 					{
 						methodArgTypes[i] = methodArg.GetType();
 					}
@@ -1105,7 +1107,7 @@ namespace Castle.MonoRail.Framework
 			}
 
 			return GetType().GetMethod(action, methodArgTypes);
- 		}
+		}
 
 		private void InvokeMethod(MethodInfo method, object[] methodArgs)
 		{
@@ -1118,7 +1120,7 @@ namespace Castle.MonoRail.Framework
 				InvokeMethod(method, _context.Request, methodArgs);
 			}
 		}
-	    	    
+
 		protected virtual void InvokeMethod(MethodInfo method, IRequest request)
 		{
 			method.Invoke(this, new object[0]);
