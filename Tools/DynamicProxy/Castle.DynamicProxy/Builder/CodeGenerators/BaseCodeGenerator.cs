@@ -468,9 +468,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			System.Text.StringBuilder nameBuilder = new System.Text.StringBuilder();
 			if (type.Namespace != null)
+			{
 				nameBuilder.Append(type.Namespace.Replace('.', '_'));
+			}
 			if (type.DeclaringType != null)
+			{
 				nameBuilder.Append(type.DeclaringType.Name).Append("_");
+			}
 #if DOTNET2
             if (type.IsGenericType)
             {
@@ -483,9 +487,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
             }
 #endif
 			if (type.IsArray)
+			{
 				nameBuilder.Append("ArrayOf").Append(GetTypeName(type.GetElementType()));
+			}
 			else
+			{
 				nameBuilder.Append(type.Name);
+			}
 			return nameBuilder.ToString();
 		}
 
