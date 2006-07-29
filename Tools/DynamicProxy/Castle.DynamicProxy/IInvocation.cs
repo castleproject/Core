@@ -17,34 +17,39 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 
 	/// <summary>
-	/// 
+	/// Proceed with, manipulate or find more information about the call that 
+	/// is being intercepted
 	/// </summary>
 	public interface IInvocation
 	{
 		/// <summary>
-		/// 
+		/// Get the dynamic proxy that intercepted this call.
 		/// </summary>
 		object Proxy { get; }
 
 		/// <summary>
-		/// 
+		/// Get or set target that will be invoked when Process() is called.  		
 		/// </summary>
+		/// <remarks>
+		/// Changing InvocationTarget only effects this call.  Any call made after
+		/// this will invoke the original target of the proxy.
+		/// </remarks>
 		object InvocationTarget { get;set; }
 
 		/// <summary>
-		/// 
+		/// Get the method that is being invoked.
 		/// </summary>
 		MethodInfo Method { get; }
 
 		/// <summary>
-		/// 
+		/// Proceed with the call that was intercepted.
 		/// </summary>
-		/// <param name="args"></param>
-		/// <returns></returns>
+		/// <param name="args">The arguments that will be passed onto the method.</param>
+		/// <returns>The argument returned from the method.</returns>
 		object Proceed( params object[] args );
 
 		/// <summary>
-		/// 
+		/// Get the method on the target object that is being invoked.
 		/// </summary>
 		MethodInfo MethodInvocationTarget { get; }
 
