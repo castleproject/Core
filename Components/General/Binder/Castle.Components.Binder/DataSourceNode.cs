@@ -71,7 +71,7 @@ namespace Castle.Components.Binder
 		{
 			if (isIndexed)
 			{
-				throw new BindingDataSourceException("Invalid state: the node {0} can not receive indexed and non-indexed data", name);
+				throw new BindingDataSourceException("Invalid state: the node {0} cannot receive indexed and non-indexed data", name);
 			}
 
 			entries.Add(key, value);

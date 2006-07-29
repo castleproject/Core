@@ -60,9 +60,5 @@ namespace Castle.Components.Binder
 			set { throw new NotImplementedException(); }
 		}
 
-		public override IEnumerator GetEnumerator()
-		{
-			return base.GetEnumerator();
-		}
 	}
 }

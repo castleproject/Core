@@ -55,7 +55,8 @@ namespace Castle.Components.Binder
 
 					if (closingBracket == -1)
 					{
-						throw new BindingDataSourceException("malformed key {0}. It looks like an indexed value for the prefix {1}, but no closing bracket was found", key, name);
+						throw new BindingDataSourceException("malformed key {0}. It looks " + 
+							"like an indexed value for the prefix {1}, but no closing bracket was found", key, name);
 					}
 
 					String indexString = key.Substring(checkIndex + 1, closingBracket - checkIndex - 1);
@@ -67,7 +68,8 @@ namespace Castle.Components.Binder
 					}
 					catch(Exception)
 					{
-						throw new BindingDataSourceException("malformed key {0}. It looks like an indexed value for the prefix {1}, but the index could not be converted to int32", key, name);
+						throw new BindingDataSourceException("malformed key {0}. It looks " + 
+							"like an indexed value for the prefix {1}, but the index could not be converted to int32", key, name);
 					}
 
 					bool isMeta = key[closingBracket + 1] == '@';
