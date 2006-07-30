@@ -451,8 +451,18 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.OneToOneAtt.MapType = model.Property.PropertyType;
 			}
-			
+
 			base.VisitOneToOne(model);
+		}
+
+		public override void VisitNested(NestedModel model)
+		{
+			if (model.NestedAtt.MapType == null)
+			{
+				model.NestedAtt.MapType = model.Property.PropertyType;
+			}
+			
+			base.VisitNested(model);
 		}
 
 		private RelationType GuessRelation(PropertyInfo property, RelationType type)

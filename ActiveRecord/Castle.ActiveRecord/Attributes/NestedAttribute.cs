@@ -96,6 +96,17 @@ namespace Castle.ActiveRecord
 	{
 		private bool update = true;
 		private bool insert = true;
+		private Type mapType;
+
+		/// <summary>
+		/// Allows one to reference a different type
+		/// than the property type
+		/// </summary>
+		public Type MapType
+		{
+			get { return mapType; }
+			set { mapType = value; }
+		}
 
 		public bool Update
 		{

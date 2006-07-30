@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Applied patch by Brian Romanko <me@brianromanko.com> allowing the use 
+  of different type for a Nested type (what NHibernate refers as a Component)
+
 - Fixed AR-65: ActiveRecordBase<T> prevent users from using type inheritance
   Refactored ActiveRecordBase<T> to extend ActiveRecordBase
   Refactored ActiveRecordMediator<T> to extend ActiveRecordMediator

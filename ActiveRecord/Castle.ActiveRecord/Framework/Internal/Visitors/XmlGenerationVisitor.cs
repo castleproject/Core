@@ -503,10 +503,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitNested(NestedModel model)
 		{
-			AppendF("<component{0}{1}{2}>",
+			AppendF("<component{0}{1}{2}{3}>",
 			        MakeAtt("name", model.Property.Name),
 			        WriteIfFalse("update", model.NestedAtt.Update),
-			        WriteIfFalse("insert", model.NestedAtt.Insert));
+			        WriteIfFalse("insert", model.NestedAtt.Insert),
+					WriteIfNonNull("class", MakeTypeName(model.NestedAtt.MapType)));
 
 			base.VisitNested(model);
 
