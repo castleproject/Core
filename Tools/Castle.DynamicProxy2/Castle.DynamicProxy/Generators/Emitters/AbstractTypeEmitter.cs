@@ -205,13 +205,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					// TODO: Review this
 					// GenericParameterAttributes attributes = genericArguments[i].GenericParameterAttributes;
 					// genericTypeParams[i].SetGenericParameterAttributes(attributes);
+					genericTypeParams[i].SetGenericParameterAttributes(GenericParameterAttributes.None);
 				}
 				catch(NotSupportedException)
 				{
 					// Doesnt matter
 				}
 
-				name2GenericType.Add(argumentNames[i], genericArguments[i]);
+				name2GenericType.Add(argumentNames[i], genericTypeParams[i]);
 			}
 		}
 
