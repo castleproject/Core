@@ -143,9 +143,11 @@
     <Compile Include="Model\CompositeModel\AgentKey.cs" />
     <Compile Include="Model\CompositeModel\Group.cs" />
     <Compile Include="Model\CompositeModel\Org.cs" />
+    <Compile Include="Model\Nested\NestedParent.cs" />
     <Compile Include="Model\Nested\Operation.cs" />
     <Compile Include="Model\OtherDbBlog.cs" />
     <Compile Include="Model\OtherDbPost.cs" />
+    <Compile Include="NestedClassWithMapTypeTestCase.cs" />
     <Compile Include="NestedClassWithRelationsTestCase.cs" />
     <Compile Include="NullablesGenericsTestCase.cs" />
     <Compile Include="JoinedSubClassTestCase.cs">
