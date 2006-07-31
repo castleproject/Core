@@ -71,4 +71,9 @@ class ComponentsTestCase(AbstractMRTestCase):
 			expected = 'static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n'
 			DoGet('usingcomponents/index9.rails')
 			AssertReplyEqualTo(expected)
-			
+
+	[Test]
+	def UsingCaptureFor():
+		DoGet('usingcomponents/captureFor.rails')
+		AssertReplyEqualTo("\r\n1234 Foo, Bar")
+	

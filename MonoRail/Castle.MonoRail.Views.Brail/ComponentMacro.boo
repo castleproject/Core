@@ -14,6 +14,7 @@
 namespace Castle.MonoRail.Views.Brail
 
 import System
+import System.IO
 import Boo.Lang.Compiler
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.Ast.Visitors
@@ -47,7 +48,9 @@ class ComponentMacro(AbstractAstMacro):
 		# create closure for macro's body or null
 		macroBody as Expression = NullLiteralExpression()
 		if macro.Block.Statements.Count > 0:
-			macroBody = CallableBlockExpression(Body: macro.Block)
+			callableExpr = CallableBlockExpression(Body: macro.Block)
+			callableExpr .Parameters.Add( ParameterDeclaration("outputStream", CodeBuilder.CreateTypeReference( TextWriter ) ) )
+			macroBody = callableExpr 
 			
 		initContext =  MethodInvocationExpression( 
 				Target: AstUtil.CreateReferenceExpression("Castle.MonoRail.Views.Brail.BrailViewComponentContext") )

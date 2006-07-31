@@ -23,7 +23,9 @@ import Boo.Lang.Compiler.Ast.Visitors
 # and turn them into:
 #  outputStream.Write("something")
 class OutputMacro(AbstractPrintMacro):
+
 	static output = AstUtil.CreateReferenceExpression("outputStream.Write")
+	
 	override def Expand(macro as MacroStatement):
 		if macro.Arguments.Count==0:
 			raise Exception("output must be called with arguemnts")

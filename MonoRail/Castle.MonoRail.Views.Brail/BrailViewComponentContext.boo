@@ -24,7 +24,7 @@ class BrailViewComponentContext(IViewComponentContext):
 	componentName as string
 	
 	[Getter(Writer)]
-	writer as TextWriter
+	defualt_writer as TextWriter
 	
 	[Getter(ContextVars)]
 	contextVars as IDictionary = Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default)
@@ -40,14 +40,13 @@ class BrailViewComponentContext(IViewComponentContext):
 	
 	def constructor(body as callable, name as string, 
 		writer as TextWriter, params as IDictionary):
-		
 		self.body = body
 		self.componentName = name
-		self.writer = writer
+		self.defualt_writer = writer
 		self.componentParameters = params
 	
 	def RenderBody():
-		RenderBody(writer)
+		RenderBody(defualt_writer)
 		
 	def RenderBody(writer as TextWriter):
 		if body is null:

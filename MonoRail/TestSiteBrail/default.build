@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="monorail-framework" default="build">
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="bin.dir" value="${base.dir}/../bin" />
+
+	<include buildfile="../../common.inc" />
+	
+	<property name="name" value="Castle.MonoRail.Framework" />
+	<property name="test.name" value="${name}.Tests" />
+	
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/" />
+	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
+
+	<target name="clean">
+
+	</target>
+
+	<target name="init" depends="clean">
+                <property name="define" value="${define};${strong};${enabletest}"/>
+
+		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
+	</target>
+
+	<target name="build" depends="init,compile" />
+	
+	<target name="compile" depends="init">
+		<csc 
+			define="${define}"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
+			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+
+			<resources prefix="${name}" dynamicprefix="true">
+				<include name="**/*.resx" />
+			</resources>
+			
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/Castle.Components.Binder.dll" />
+				<include name="${bin.dir}/Castle.Components.Common.EmailSender.dll" />
+				<include name="${bin.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.compile" depends="init">
+		<csc 
+			target="library" 
+		    define="${define}" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name}">
+			
+			<sources basedir="${test.src.dir}">
+				<include name="**/*.cs" />
+			</sources>
+
+			<resources basedir="${test.src.dir}" prefix="${test.name}" dynamicprefix="true">
+				<include name="Content/contentinassembly.vm" />
+			</resources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/${assembly.name}" />
+				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="test" depends="tests.run" />
+	
+	<target name="tests.run" depends="tests.compile">
+		<nunit2>
+			<formatter type="${nunit.formatter}" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+	</target>
+	
+</project>

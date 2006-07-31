@@ -42,3 +42,6 @@ class UsingComponentsController(SmartDispatcherController):
 		
 	def Template():
 		pass
+
+	def CaptureFor():
+		pass
