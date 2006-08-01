@@ -153,6 +153,19 @@ namespace Castle.ActiveRecord.Framework
 				if (type2Conf.ContainsKey(type)) return type;
 
 				type = type.BaseType;
+
+#if DOTNET2
+				//to enable multiple database support for generic types
+				if (type.IsGenericType)
+				{
+					Type genericTypeDef = type.GetGenericTypeDefinition();
+
+					if (type2Conf.ContainsKey(genericTypeDef))
+					{
+						return genericTypeDef;
+					}
+				}
+#endif
 			}
 
 			return typeof(ActiveRecordBase);

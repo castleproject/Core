@@ -1,6 +1,42 @@
 beta 4
 ======
 
+- Applied patch by Michael Morton <mmorton@wickednite.com>. Quoting explanation:
+
+Since the generic base class varies with the type parameter 
+(i.e. ActiveRecordBase<One> is not the same as ActiveRecordBase<Two>) 
+there is no easy way to specify multiple configurations using the 
+"type=" attribute.  There is also no easy way to create multiple 
+subclasses as the documentation suggests for when using the non 
+generic base class.
+
+However, there is an easy fix for this.  Even though, for example, 
+these two base types are "different", ActiveRecordBase<One> and 
+ActiveRecordBase<Two>, they share the same generic type definition, 
+namely "ActiveRecordBase`1".  With a small change to the function 
+"GetRootType" in "SessionFactoryHolder.cs" to make it look at the 
+generic type definition when dealing with a generic type, instead 
+of the generic type itself, you can once again easily access multiple databases.
+
+Usage:
+You can now create multiple base types for each of your databases, such as...
+
+class MyBaseOne<T> : ActiveRecordBase<T> { }
+class MyBaseTwo<T> : ActiveRecordBase<T> { }
+
+... and then specify config for each by using the "type=" attribute like so ...
+
+<config type="MyBaseOne`1, MyAssembly">
+</config>
+<config type="MyBaseTwo`1, MyAssembly">
+</config>
+
+Any subclasses of those will then get the correct configuration 
+settings.  I have been using this change in my own builds for a 
+couple weeks now and it seems to be working ok.  I have not 
+written any tests specifically for it, yet, but wanted to get 
+it out there in case anyone was interested.
+
 - Applied patch by Brian Romanko <me@brianromanko.com> allowing the use 
   of different type for a Nested type (what NHibernate refers as a Component)
 
