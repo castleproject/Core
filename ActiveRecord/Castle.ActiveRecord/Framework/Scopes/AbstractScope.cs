@@ -16,7 +16,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 {
 	using System;
 	using System.Collections;
-
+	
+	using Castle.ActiveRecord;
+	
 	using NHibernate;
 
 	/// <summary>
@@ -25,18 +27,47 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	public abstract class AbstractScope : MarshalByRefObject, ISessionScope
 	{
 		private readonly SessionScopeType type;
+		
+		private readonly FlushAction flushAction;
 
 		protected Hashtable key2Session = new Hashtable();
 
-		public AbstractScope(SessionScopeType type)
+		public AbstractScope(FlushAction flushAction, SessionScopeType type)
 		{
+			this.flushAction = flushAction;
 			this.type = type;
+			
 			ThreadScopeAccessor.Instance.RegisterScope(this);
 		}
 
+		/// <summary>
+		/// Returns the <see cref="SessionScopeType"/> defined 
+		/// for this scope
+		/// </summary>
 		public SessionScopeType ScopeType
 		{
 			get { return type; }
+		}
+
+		/// <summary>
+		/// Returns the <see cref="ISessionScope.FlushAction"/> defined 
+		/// for this scope
+		/// </summary>
+		public FlushAction FlushAction
+		{
+			get { return flushAction; }
+		}
+
+		/// <summary>
+		/// Flushes the sessions that this scope 
+		/// is maintaining
+		/// </summary>
+		public void Flush()
+		{
+			foreach(ISession session in GetSessions())
+			{
+				session.Flush();
+			}
 		}
 
 		public virtual bool IsKeyKnown(object key)
@@ -58,12 +89,16 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public virtual bool WantsToCreateTheSession
 		{
-			get { return false; }
+			get { return true; }
 		}
 
 		public virtual ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor)
 		{
-			throw new NotImplementedException();
+			ISession session = sessionFactory.OpenSession(interceptor);
+
+			SetFlushMode(session);
+
+			return session;
 		}
 
 		public void Dispose()
@@ -81,7 +116,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 		}
 
-		protected internal void PerformDisposal( ICollection sessions, bool flush, bool close )
+		protected internal void PerformDisposal(ICollection sessions, bool flush, bool close)
 		{
 			foreach(ISession session in sessions)
 			{
@@ -95,6 +130,18 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			foreach(ISession session in sessions)
 			{
 				RemoveSession(session);
+			}
+		}
+
+		protected void SetFlushMode(ISession session)
+		{
+			if (FlushAction == FlushAction.Auto)
+			{
+				session.FlushMode = FlushMode.Auto;
+			}
+			else if (FlushAction == FlushAction.Never)
+			{
+				session.FlushMode = FlushMode.Never;
 			}
 		}
 

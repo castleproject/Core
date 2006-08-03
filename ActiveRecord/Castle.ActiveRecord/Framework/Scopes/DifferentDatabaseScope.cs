@@ -16,7 +16,11 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		private readonly SessionScope parentSimpleScope;
 		private readonly TransactionScope parentTransactionScope;
 
-		public DifferentDatabaseScope(IDbConnection connection) : base(SessionScopeType.Custom)
+		public DifferentDatabaseScope(IDbConnection connection) : this(connection, FlushAction.Auto)
+		{
+		}
+		
+		public DifferentDatabaseScope(IDbConnection connection, FlushAction flushAction) : base(flushAction, SessionScopeType.Custom)
 		{
 			if (connection == null) throw new ArgumentNullException("connection");
 

@@ -42,7 +42,23 @@ namespace Castle.ActiveRecord
 	/// </remarks>
 	public interface ISessionScope : IDisposable
 	{
+		/// <summary>
+		/// Returns the <see cref="FlushAction"/> defined 
+		/// for this scope
+		/// </summary>
+		FlushAction FlushAction { get; }
+		
+		/// <summary>
+		/// Returns the <see cref="SessionScopeType"/> defined 
+		/// for this scope
+		/// </summary>
 		SessionScopeType ScopeType { get; }
+		
+		/// <summary>
+		/// Flushes the sessions that this scope 
+		/// is maintaining
+		/// </summary>
+		void Flush();
 
 		/// <summary>
 		/// This method is invoked when no session was available
@@ -76,8 +92,21 @@ namespace Castle.ActiveRecord
 		/// <returns>the session instance or null if none was found</returns>
 		ISession GetSession(object key);
 
+		/// <summary>
+		/// Implementors should return true if they
+		/// want that their scope implementation 
+		/// be in charge of creating the session
+		/// </summary>
 		bool WantsToCreateTheSession { get; }
 
+		/// <summary>
+		/// If the <see cref="WantsToCreateTheSession"/> returned
+		/// <c>true</c> then this method is invoked to allow 
+		/// the scope to create a properly configured session
+		/// </summary>
+		/// <param name="sessionFactory">From where to open the session</param>
+		/// <param name="interceptor">the NHibernate interceptor</param>
+		/// <returns>the newly created session</returns>
 		ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor);
 	}
 }

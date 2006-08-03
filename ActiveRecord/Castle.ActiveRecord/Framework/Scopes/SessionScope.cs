@@ -25,27 +25,61 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public class SessionScope : AbstractScope
 	{
-		protected SessionScope(SessionScopeType type) : base(type)
+		protected SessionScope(FlushAction flushAction, SessionScopeType type) : base(flushAction, type)
 		{
 		}
 
-		public SessionScope() : base(SessionScopeType.Simple)
+		/// <summary>
+		/// 
+		/// </summary>
+		public SessionScope() : this(FlushAction.Auto)
+		{
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="flushAction"></param>
+		public SessionScope(FlushAction flushAction) : base(flushAction, SessionScopeType.Simple)
 		{
 		}
 
-		public void Dispose(bool discardChanges)
-		{
-			ThreadScopeAccessor.Instance.UnRegisterScope(this);
-
-			PerformDisposal(key2Session.Values, !discardChanges, true);
-
-			key2Session.Clear();
-			key2Session = null;
-		}
+//		public void Dispose(bool discardChanges)
+//		{
+//			ThreadScopeAccessor.Instance.UnRegisterScope(this);
+//
+//			PerformDisposal(key2Session.Values, !discardChanges, true);
+//
+//			key2Session.Clear();
+//			key2Session = null;
+//		}
 
 		protected override void PerformDisposal(ICollection sessions)
 		{
-			PerformDisposal(sessions, true, true);
+			if (FlushAction == FlushAction.Never)
+			{
+				PerformDisposal(sessions, false, true);
+			}
+			else if (FlushAction == FlushAction.Auto)
+			{
+				PerformDisposal(sessions, true, true);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ISessionScope Current
+		{
+			get
+			{
+				if (ThreadScopeAccessor.Instance.HasInitializedScope)
+				{
+					return ThreadScopeAccessor.Instance.GetRegisteredScope();
+				}
+				
+				return null;
+			}
 		}
 	}
 }

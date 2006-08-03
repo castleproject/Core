@@ -51,15 +51,20 @@ namespace Castle.ActiveRecord
 		private IDictionary _transactions = new HybridDictionary();
 		private TransactionScope parentTransactionScope;
 		private AbstractScope parentSimpleScope;
-		private bool _rollbackOnly;
 		private EventHandlerList events = new EventHandlerList();
+		private bool rollbackOnly;
 
-		public TransactionScope(TransactionMode mode) : base(SessionScopeType.Transactional)
+		public TransactionScope() : this(TransactionMode.New)
+		{
+		}
+
+		public TransactionScope(TransactionMode mode) : base(FlushAction.Auto, SessionScopeType.Transactional)
 		{
 			this.mode = mode;
 
-			ISessionScope previousScope = ScopeUtil.FindPreviousScope(this,  
-				mode == TransactionMode.Inherits ? true : false );
+			bool preferenceForTransactionScope = mode == TransactionMode.Inherits ? true : false;
+			
+			ISessionScope previousScope = ScopeUtil.FindPreviousScope(this, preferenceForTransactionScope);
 
 			if (previousScope != null)
 			{
@@ -78,10 +83,6 @@ namespace Castle.ActiveRecord
 					}
 				}
 			}
-		}
-
-		public TransactionScope() : this(TransactionMode.New)
-		{
 		}
 
 		#region OnTransactionCompleted event
@@ -120,14 +121,15 @@ namespace Castle.ActiveRecord
 			{
 				parentTransactionScope.VoteRollBack();
 			}
-			_rollbackOnly = true;
+			rollbackOnly = true;
 		}
 
 		public void VoteCommit()
 		{
-			if (_rollbackOnly)
+			if (rollbackOnly)
 			{
-				throw new TransactionException("The transaction was marked as rollback only - by itself or one of the nested transactions");
+				throw new TransactionException("The transaction was marked as rollback " + 
+					"only - by itself or one of the nested transactions");
 			}
 		}
 
@@ -216,7 +218,7 @@ namespace Castle.ActiveRecord
 
 			foreach (ITransaction transaction in _transactions.Values)
 			{
-				if (_rollbackOnly)
+				if (rollbackOnly)
 				{
 					transaction.Rollback();
 				}
@@ -234,7 +236,7 @@ namespace Castle.ActiveRecord
 			}
 			else
 			{
-				if (_rollbackOnly)
+				if (rollbackOnly)
 				{
 					// Cancel all pending changes 
 					// (not sure whether this is a good idea, it should be scoped
