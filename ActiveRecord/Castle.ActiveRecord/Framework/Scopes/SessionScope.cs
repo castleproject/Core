@@ -44,15 +44,15 @@ namespace Castle.ActiveRecord
 		{
 		}
 
-//		public void Dispose(bool discardChanges)
-//		{
-//			ThreadScopeAccessor.Instance.UnRegisterScope(this);
-//
-//			PerformDisposal(key2Session.Values, !discardChanges, true);
-//
-//			key2Session.Clear();
-//			key2Session = null;
-//		}
+		public void Dispose(bool discardChanges)
+		{
+			ThreadScopeAccessor.Instance.UnRegisterScope(this);
+
+			PerformDisposal(key2Session.Values, !discardChanges, true);
+
+			key2Session.Clear();
+			key2Session = null;
+		}
 
 		protected override void PerformDisposal(ICollection sessions)
 		{

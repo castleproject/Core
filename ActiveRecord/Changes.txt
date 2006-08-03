@@ -8,8 +8,6 @@ beta 4
     Added FlushAction property
     Added Flush method to allow people to have more control on when to flush
 
-- Removed overload SessionScope.Dispose(bool discard)
-
 - Applied patch by Michael Morton <mmorton@wickednite.com>. Quoting explanation:
 
 Since the generic base class varies with the type parameter 
