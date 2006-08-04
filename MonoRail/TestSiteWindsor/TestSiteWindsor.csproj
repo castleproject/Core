@@ -124,6 +124,11 @@
                     Project = "{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "NVelocity"
+                    Project = "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -136,6 +141,11 @@
                 <File
                     RelPath = "default.htm"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "EmptyInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "global.asax"
@@ -165,6 +175,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\TestWizardController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "views\home\ComponentOnLayout.vm"
                     BuildAction = "None"
                 />
@@ -178,6 +193,22 @@
                 />
                 <File
                     RelPath = "views\layouts\layout.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\InnerAction2.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\page1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\page3.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\page4.vm"
                     BuildAction = "None"
                 />
             </Include>

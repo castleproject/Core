@@ -12,16 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace TestSiteWindsor.Controllers
 {
 	using System;
 
+	using Castle.MicroKernel;
 	using Castle.MonoRail.Framework;
 
 
 	[DynamicActionProvider( typeof(WizardActionProvider) ), Serializable]
 	public class TestWizardController : Controller, IWizardController
 	{
+		private readonly IKernel kernel;
+
+		public TestWizardController(IKernel kernel)
+		{
+			this.kernel = kernel;
+		}
+
 		public void Index()
 		{
 			RenderText("Hello!");
@@ -38,12 +46,17 @@ namespace TestSiteNVelocity.Controllers
 
 		public void OnAfterStep(String wizardName, String stepName, WizardStepPage step)
 		{
-			
 		}
 
 		public WizardStepPage[] GetSteps(IRailsEngineContext context)
 		{
-			return new WizardStepPage[] { new Page1(), new Page2(), new Page3(), new Page4() };
+			return new WizardStepPage[]
+			{
+				(WizardStepPage) kernel[typeof(Page1)],
+				(WizardStepPage) kernel[typeof(Page2)],
+				(WizardStepPage) kernel[typeof(Page3)],
+				(WizardStepPage) kernel[typeof(Page4)],
+			};
 		}
 	}
 
@@ -84,6 +97,6 @@ namespace TestSiteNVelocity.Controllers
 			Flash["InnerActionInvoked"] = true;
 
 			DoNavigate();
-		}		
+		}
 	}
 }

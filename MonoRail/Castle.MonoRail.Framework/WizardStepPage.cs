@@ -121,7 +121,18 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public virtual String ActionName
 		{
-			get { return GetType().Name; }
+			get
+			{
+				Type thisType = GetType();
+				
+				// Hack fix for "dynamic proxied" controllers
+				if (thisType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+				{
+					return thisType.BaseType.Name;
+				}
+				
+				return GetType().Name;
+			}
 		}
 
 		/// <summary>

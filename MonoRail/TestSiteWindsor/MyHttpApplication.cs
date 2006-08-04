@@ -14,14 +14,11 @@
 
 namespace TestSiteWindsor
 {
-	using System;
 	using System.Web;
 
+	using Castle.Model.Resource;
 	using Castle.Windsor;
-	using Castle.MonoRail.WindsorExtension;
-
-	using TestSiteWindsor.Controllers;
-
+	using Castle.Windsor.Configuration.Interpreters;
 
 	public class MyHttpApplication : HttpApplication, IContainerAccessor
 	{
@@ -29,18 +26,18 @@ namespace TestSiteWindsor
 
 		public void Application_OnStart() 
 		{
-			container = new WindsorContainer();
+			container = new WindsorContainer(new XmlInterpreter(new ConfigResource()));
 
-			container.AddFacility( "rails", new RailsFacility() );
+			// container.AddFacility( "rails", new RailsFacility() );
 
-			AddControllers(container);
+			// AddControllers(container);
 		}
 
-		private void AddControllers(WindsorContainer container)
-		{
-			container.AddComponent( "home", typeof(HomeController) );
-			container.AddComponent( "mycomp", typeof(MyComponent) );
-		}
+//		private void AddControllers(WindsorContainer container)
+//		{
+//			container.AddComponent( "home", typeof(HomeController) );
+//			container.AddComponent( "mycomp", typeof(MyComponent) );
+//		}
 
 		public void Application_OnEnd() 
 		{
