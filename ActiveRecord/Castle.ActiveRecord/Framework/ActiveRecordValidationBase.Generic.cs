@@ -137,7 +137,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a list of current validation errors messages.
 		/// </summary>
-		public String[] ValidationErrorMessages
+		public virtual String[] ValidationErrorMessages
 		{
 			get
 			{

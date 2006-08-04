@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Applied Marc-Andre's patch fixing AR-68
+  "Make ActiveRecordValidation.ValidationErrorMessages virtual to simplify localisation"
+
 - Added SessionScope.Current static property to gain access to the
   current ISessionScope implementation
 
