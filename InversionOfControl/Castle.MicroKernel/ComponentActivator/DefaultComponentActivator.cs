@@ -215,7 +215,17 @@ namespace Castle.MicroKernel.ComponentActivator
 				if (value == null) continue;
 
 				MethodInfo setMethod = property.Property.GetSetMethod();
-				setMethod.Invoke( instance, new object[] { value } );
+
+				try
+				{
+					setMethod.Invoke(instance, new object[] { value });
+				}
+				catch(Exception ex)
+				{
+					String message = String.Format("Error setting property {0} on type {1}, Component id is {2}. See inner exception for more information.", 
+					                               setMethod.Name, instance.GetType().FullName, Model.Name);
+					throw new ComponentActivatorException(message, ex);
+				}
 			}
 		}
 	}

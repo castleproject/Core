@@ -1,6 +1,9 @@
 RC 3
 ====
 
+- Change: Better error message when there's an exception 
+  setting up properties
+
 - Fixed IOC-25: Overrides on the configuration should be considered a non-optional dependency
 
   This fix changes a little the MicroKernel behavior. Now if you specify an service override
