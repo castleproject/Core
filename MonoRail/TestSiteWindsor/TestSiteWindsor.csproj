@@ -120,11 +120,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Components.Binder"
-                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.MonoRail.Framework.Views.CompositeView"
                     Project = "{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
