@@ -146,7 +146,7 @@ namespace Castle.MonoRail.TestSupport
 
 		public override string GetFilePathTranslated()
 		{
-			return appPhysicalPath + filePath.Replace('/', '\\');
+			return appPhysicalPath + filePath.Replace('/', Path.DirectorySeparatorChar);
 		}
 
 		public override String MapPath(String path) 
@@ -177,9 +177,9 @@ namespace Castle.MonoRail.TestSupport
 				mappedPath = new DirectoryInfo( Path.Combine( appPhysicalPath, path ) ).FullName;
 			}
 
-			mappedPath = mappedPath.Replace('/', '\\');
+			mappedPath = mappedPath.Replace('/', Path.DirectorySeparatorChar);
 
-			if (mappedPath.EndsWith("\\") && !mappedPath.EndsWith(":\\"))
+			if (mappedPath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !mappedPath.EndsWith(":\\"))
 			{
 				mappedPath = mappedPath.Substring(0, mappedPath.Length-1);
 			}

@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Marc-Andre's patch fixing MR-133
+  "TestSupport not working under Mono"
+
 - Removed PropertyBag.Clear() in Controller.cs to restore the ability to
   update the PropertyBag in filters.
 
