@@ -275,6 +275,8 @@ namespace Castle.Components.Binder
 
 					if (IsSimpleProperty(propType))
 					{
+						if (!prop.CanWrite) continue;
+						
 						String translatedParamName = Translate(instanceType, paramName);
 
 						if (translatedParamName == null) continue;
@@ -431,8 +433,6 @@ namespace Castle.Components.Binder
 
 		private bool ShouldIgnoreProperty(PropertyInfo prop)
 		{
-			if (!prop.CanWrite) return true;
-
 			int index1 = 0; 
 			int index2 = -1;
 
