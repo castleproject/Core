@@ -69,7 +69,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				return CreateContainer(instanceType);
 			}
 
-			object instance = null;
+			object instance;
 
 			bool shouldLoad = autoLoad != AutoLoadBehavior.Never;
 
@@ -125,7 +125,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		protected override bool ShouldRecreateInstance(object value, Type type, string prefix, IBindingDataSourceNode node)
 		{
-			// See http://support.castleproject.org/jira//browse/AR-41
+			// See http://support.castleproject.org/jira/browse/AR-41
 			if (value == null) return true;
 
 			ActiveRecordModel model = ActiveRecordModel.GetModel(type);
@@ -221,7 +221,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					{
 						object convertedId = ConvertUtils.Convert(pkModel.Property.PropertyType, id);
 
-						AddToContainer(instance, ActiveRecordMediator.FindByPrimaryKey(targetType, convertedId, true));
+						object item = ActiveRecordMediator.FindByPrimaryKey(targetType, convertedId, true);
+
+						AddToContainer(instance, item);
 					}
 				}
 
@@ -262,11 +264,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (model == null) return;
 
-//			if (validate)
-//			{
-//				ValidateInstances(instance);
-//			}
-
 			if (persistchanges)
 			{
 				SaveManyMappings(instance, model, node);
@@ -297,38 +294,12 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 		}
 
-//		private void ValidateInstances(object instances)
-//		{
-//			Type instanceType = instances.GetType();
-//			ActiveRecordValidationBase[] records = null;
-//
-//			if (instanceType.IsArray)
-//			{
-//				records = instances as ActiveRecordValidationBase[];
-//			}
-//			else if (typeof(ActiveRecordValidationBase).IsAssignableFrom(instanceType))
-//			{
-//				records = new ActiveRecordValidationBase[] {(ActiveRecordValidationBase) instances};
-//			}
-//
-//			if (records != null)
-//			{
-//				foreach(ActiveRecordValidationBase record in records)
-//				{
-//					if (!record.IsValid())
-//					{
-//						throw new RailsException("Error validating {0} {1}",
-//							record.GetType().Name, string.Join("\n", record.ValidationErrorMessages));
-//					}
-//				}
-//			}
-//		}
-
 		protected void SaveManyMappings(object instance, ActiveRecordModel model, IBindingDataSourceNode node)
 		{
 			foreach(HasManyModel hasManyModel in model.HasMany)
 			{
 				if (hasManyModel.HasManyAtt.Inverse) continue;
+
 				if (hasManyModel.HasManyAtt.RelationType != RelationType.Bag &&
 					hasManyModel.HasManyAtt.RelationType != RelationType.Set) continue;
 
@@ -347,6 +318,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			foreach(HasAndBelongsToManyModel hasManyModel in model.HasAndBelongsToMany)
 			{
 				if (hasManyModel.HasManyAtt.Inverse) continue;
+
 				if (hasManyModel.HasManyAtt.RelationType != RelationType.Bag &&
 					hasManyModel.HasManyAtt.RelationType != RelationType.Set) continue;
 
@@ -416,16 +388,53 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			{
 				(container as ISet).Add(item);
 			}
+			else if (container != null)
+			{
+#if DOTNET2
+				Type itemType = item.GetType();
+
+				Type collectionType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(itemType);
+
+				if (collectionType.IsAssignableFrom(container.GetType()))
+				{
+					MethodInfo addMethod = container.GetType().GetMethod("Add");
+
+					addMethod.Invoke(container, new object[] {item});
+				}
+#endif
+			}
 		}
 
 		private bool IsContainerType(Type type)
 		{
-			return type == typeof(IList) || type == typeof(ISet);
+			bool isContainerType = type == typeof(IList) || type == typeof(ISet);
+#if DOTNET2
+			if (!isContainerType && type.IsGenericType)
+			{
+				Type[] genericArgs = type.GetGenericArguments();
+
+				Type genType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(genericArgs);
+
+				isContainerType = genType.IsAssignableFrom(type);
+			}
+#endif
+			return isContainerType;
 		}
 
 		private bool IsContainerInstance(object instance)
 		{
-			return (instance is IList || instance is ISet);
+			bool result = (instance is IList || instance is ISet);
+#if DOTNET2
+			if (!result && instance.GetType().IsGenericType)
+			{
+				Type[] genericArgs = instance.GetType().GetGenericArguments();
+				
+				Type genType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(genericArgs);
+
+				result = genType.IsAssignableFrom(instance.GetType());
+			}
+#endif
+			return result;
 		}
 
 		private bool IsValidKey(object id)
