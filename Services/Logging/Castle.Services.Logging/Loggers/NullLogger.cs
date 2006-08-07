@@ -23,6 +23,8 @@ namespace Castle.Services.Logging
 	/// </summary>
 	public class NullLogger : ILogger
 	{
+		public static readonly NullLogger Instance = new NullLogger();
+		
 		/// <summary>
 		/// Creates a new <c>NullLogger</c>.
 		/// </summary>
