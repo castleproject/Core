@@ -39,6 +39,7 @@
 	<target name="init" depends="clean">
 		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-container" inheritall="true" />
 		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-nvelocity" inheritall="true" />
+		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-logging-service" inheritall="true" />
 	</target>
 
 	<target name="build" depends="init,tests.run,copytobuilddir" />

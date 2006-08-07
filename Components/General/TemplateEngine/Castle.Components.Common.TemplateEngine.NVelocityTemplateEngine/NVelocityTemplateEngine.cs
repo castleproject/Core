@@ -12,21 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using NVelocity;
-using NVelocity.App;
-using NVelocity.Context;
-using NVelocity.Runtime;
-
 namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 {
 	using System;
 	using System.Collections;
-	using System.IO;
 	using System.ComponentModel;
+	using System.IO;
+	using System.Web;
 
 	using Castle.Components.Common.TemplateEngine;
+	using Castle.Services.Logging;
 
 	using Commons.Collections;
+
+	using NVelocity;
+	using NVelocity.App;
+	using NVelocity.Context;
+	using NVelocity.Runtime;
 
 	/// <summary>
 	/// Implementation of <see cref="ITemplateEngine"/> 
@@ -34,7 +36,8 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 	/// </summary>
 	public class NVelocityTemplateEngine : ITemplateEngine, ISupportInitialize
 	{
-		private readonly VelocityEngine vengine = new VelocityEngine();
+		private VelocityEngine vengine;
+		private ILogger log = NullLogger.Instance;
 		
 		private String assemblyName;
 		private String templateDir = ".";
@@ -55,7 +58,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		/// <param name="templateDir"></param>
 		public NVelocityTemplateEngine(String templateDir)
 		{
-			this.templateDir = templateDir;
+			this.TemplateDir = templateDir;
 		}
 
 		/// <summary>
@@ -75,7 +78,13 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		public string TemplateDir
 		{
 			get { return templateDir; }
-			set { templateDir = value; }
+			set
+			{
+				if (vengine != null)
+					throw new InvalidOperationException("Could not change the TemplateDir after Template Engine initialization.");
+				
+				templateDir = value;
+			}
 		}
 
 		/// <summary>
@@ -87,15 +96,25 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			set { enableCache = value; }
 		}
 
+		public ILogger Log
+		{
+			get { return log; }
+			set { log = value; }
+		}
+
 		/// <summary>
 		/// Starts/configure NVelocity based on the properties.
 		/// </summary>
 		public void BeginInit()
 		{
+			vengine = new VelocityEngine();
+			
 			ExtendedProperties props = new ExtendedProperties();
 
 			if (assemblyName != null)
 			{
+				log.Info("Initializing NVelocityTemplateEngine component using Assembly: {0}", assemblyName);
+				
 				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "assembly");
 				props.SetProperty("assembly.resource.loader.class", "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader;NVelocity");
 				props.SetProperty("assembly.resource.loader.cache", EnableCache.ToString().ToLower() );
@@ -103,8 +122,11 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			}
 			else
 			{
+				String expandedTemplateDir = ExpandTemplateDir(templateDir);
+				log.Info("Initializing NVelocityTemplateEngine component using template directory: {0}", expandedTemplateDir);
+				
 				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "file");
-				props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, templateDir);
+				props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, expandedTemplateDir);
 				props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, EnableCache.ToString().ToLower() );
 			}
 
@@ -123,6 +145,9 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		/// <returns></returns>
 		public bool HasTemplate(String templateName)
 		{
+			if (vengine == null)
+				throw new InvalidOperationException("Template Engine not yet initialized.");
+				
 			try
 			{
 				vengine.GetTemplate(templateName);
@@ -136,15 +161,13 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		}
 
 		/// <summary>
-		/// Implementors should process the template with
-		/// data from the context.
+		/// Process the template with data from the context.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="templateName"></param>
-		/// <param name="output"></param>
-		/// <returns></returns>
 		public bool Process(IDictionary context, String templateName, TextWriter output)
 		{
+			if (vengine == null)
+				throw new InvalidOperationException("Template Engine not yet initialized.");
+
 			Template template = vengine.GetTemplate(templateName);
 
 			template.Merge(CreateContext(context), output);
@@ -155,6 +178,29 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		private IContext CreateContext(IDictionary context)
 		{
 			return new VelocityContext( new Hashtable(context) );
+		}
+
+		private String ExpandTemplateDir(String templateDir)
+		{
+			log.Debug("Template directory before expansion: {0}", templateDir);
+			
+			// if nothing to expand, then exit
+			if (templateDir == null)
+				templateDir = String.Empty;
+			
+			// expand web application root
+			if (templateDir.StartsWith("~/"))
+			{
+				HttpContext webContext = HttpContext.Current;
+				if (webContext != null && webContext.Request != null)
+					templateDir = webContext.Server.MapPath(templateDir);
+			}
+			
+			// normalizes the path (including ".." notation, for parent directories)
+			templateDir = new DirectoryInfo(templateDir).FullName;
+
+			log.Debug("Template directory after expansion: {0}", templateDir);
+			return templateDir;
 		}
 	}
 }
