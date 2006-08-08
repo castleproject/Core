@@ -37,10 +37,22 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Finds an object instance by a unique ID
+		/// Finds an object instance by its primary key.
 		/// </summary>
 		/// <param name="id">ID value</param>
-		/// <returns></returns>
+		/// <param name="throwOnNotFound"><c>true</c> if you want an exception to be thrown
+		/// if the object is not found</param>
+		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
+		/// <c>true</c> and the row is not found</exception>
+		public static T FindByPrimaryKey(object id, bool throwIfNotFound)
+		{
+			return (T) ActiveRecordMediator.FindByPrimaryKey(typeof(T), id, throwIfNotFound);
+		}
+
+		/// <summary>
+		/// Finds an object instance by its primary key.
+		/// </summary>
+		/// <param name="id">ID value</param>
 		public static T FindByPrimaryKey(object id)
 		{
 			return (T) ActiveRecordMediator.FindByPrimaryKey(typeof(T), id, true);
@@ -171,14 +183,6 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordMediator.Delete(instance);
 		}
-
-		/// <summary>
-		/// Testing hock only.
-		/// </summary>
-		// public static ISessionFactoryHolder GetSessionFactoryHolder()
-		// {
-		// 	return ActiveRecordMediator.holder;
-		// }
 	}
 }
 

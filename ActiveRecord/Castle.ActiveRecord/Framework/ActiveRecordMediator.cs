@@ -43,13 +43,12 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Finds an object instance by a unique ID
+		/// Finds an object instance by its primary key.
 		/// </summary>
 		/// <param name="targetType">The AR subclass type</param>
 		/// <param name="id">ID value</param>
-		/// <param name="throwOnNotFound"><c>true</c> if you want to catch an exception 
+		/// <param name="throwOnNotFound"><c>true</c> if you want an exception to be thrown
 		/// if the object is not found</param>
-		/// <returns></returns>
 		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
 		/// <c>true</c> and the row is not found</exception>
 		public static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
@@ -58,11 +57,10 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Finds an object instance by a unique ID
+		/// Finds an object instance by its primary key.
 		/// </summary>
 		/// <param name="targetType">The AR subclass type</param>
 		/// <param name="id">ID value</param>
-		/// <returns></returns>
 		public static object FindByPrimaryKey(Type targetType, object id)
 		{
 			return FindByPrimaryKey(targetType, id, true);
