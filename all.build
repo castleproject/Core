@@ -8,7 +8,7 @@
 
 	<include buildfile="common.inc" />
 	
-	<target name="build" depends="clean, init, tools, container, components, services, activerecord, monorail, aspectsharp, facilities, samples" />
+	<target name="build" depends="clean, init, services, tools, container, components, activerecord, monorail, aspectsharp, facilities, samples" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" failonerror="false" />
