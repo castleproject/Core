@@ -34,6 +34,15 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		/// <returns></returns>
 		bool CanHandleType( Type type );
 
+        /// <summary>
+        /// Returns true if this instance of <c>ITypeConverter</c>
+        /// is able to handle the specified type with the specified 
+        /// configuration
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        bool CanHandleType(Type type, IConfiguration configuration);
+
 		/// <summary>
 		/// Should perform the conversion from the
 		/// string representation specified to the type

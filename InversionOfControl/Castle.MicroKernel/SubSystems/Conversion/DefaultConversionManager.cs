@@ -93,7 +93,18 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			return false;
 		}
 
-		public object PerformConversion(String value, Type targetType)
+	    public bool CanHandleType(Type type, IConfiguration configuration)
+	    {
+            foreach (ITypeConverter converter in converters)
+            {
+                if (converter.CanHandleType(type,configuration))
+                    return true;
+            }
+
+            return false;
+	    }
+
+	    public object PerformConversion(String value, Type targetType)
 		{
 			foreach(ITypeConverter converter in converters)
 			{
@@ -111,7 +122,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			foreach(ITypeConverter converter in converters)
 			{
-				if (converter.CanHandleType(targetType)) 
+				if (converter.CanHandleType(targetType,configuration)) 
 					return converter.PerformConversion(configuration, targetType);
 			}
 

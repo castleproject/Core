@@ -32,6 +32,13 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			set { context = value; }
 		}
 
+	    //The default behavior is to just pass it to the normal CanHadnleType
+	    //peeking into the configuration is used for some advanced functionality
+	    public virtual bool CanHandleType(Type type, IConfiguration configuration)
+	    {
+            return CanHandleType(type);
+	    }
+	    
 		public abstract bool CanHandleType(Type type);
 
 		public abstract object PerformConversion(String value, Type targetType);
