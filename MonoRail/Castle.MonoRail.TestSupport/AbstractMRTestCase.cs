@@ -162,7 +162,10 @@ namespace Castle.MonoRail.TestSupport
 		{
 			AssertPathIsValid(path);
 
-			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
+			if (queryStringParams.Length != 0)
+			{
+				Request.QueryStringParams = queryStringParams;
+			}
 
 			if (resendCookies)
 			{

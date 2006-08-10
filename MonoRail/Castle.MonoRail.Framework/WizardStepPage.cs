@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework
 	using System.Reflection;
 
 	using Castle.Components.Binder;
+	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
@@ -164,19 +165,65 @@ namespace Castle.MonoRail.Framework
 		/// to dictate to where it should go.
 		/// </summary>
 		/// <remarks>
-		/// By default this will invoke <see cref="RedirectToNextStep"/>
+		/// By default this will invoke <see cref="RedirectToNextStep()"/>
 		/// however you can send a field form <c>navigate.to</c> to customize this.
 		/// The possible values for <c>navigate.to</c> are:
 		/// <list type="bullet">
 		/// <item><term>previous</term>
-		/// <description>Invokes <see cref="RedirectToPreviousStep"/></description></item>
+		/// <description>Invokes <see cref="RedirectToPreviousStep()"/></description></item>
 		/// <item><term>first</term>
-		/// <description>Invokes <see cref="RedirectToFirstStep"/></description></item>
+		/// <description>Invokes <see cref="RedirectToFirstStep()"/></description></item>
 		/// <item><term>step name</term>
 		/// <description>A custom step name to navigate</description></item>
 		/// </list>
 		/// </remarks>
 		protected void DoNavigate()
+		{
+			DoNavigate((IDictionary) null);
+		}
+		
+		/// <summary>
+		/// Navigates within the wizard steps using optionally a form parameter 
+		/// to dictate to where it should go.
+		/// </summary>
+		/// <remarks>
+		/// By default this will invoke <see cref="RedirectToNextStep"/>
+		/// however you can send a field form <c>navigate.to</c> to customize this.
+		/// The possible values for <c>navigate.to</c> are:
+		/// <list type="bullet">
+		/// <item><term>previous</term>
+		/// <description>Invokes <see cref="RedirectToPreviousStep()"/></description></item>
+		/// <item><term>first</term>
+		/// <description>Invokes <see cref="RedirectToFirstStep()"/></description></item>
+		/// <item><term>step name</term>
+		/// <description>A custom step name to navigate</description></item>
+		/// </list>
+		/// </remarks>
+		/// <param name="queryStringParameters">Query string parameters to be on the URL</param>
+		protected void DoNavigate(params String[] queryStringParameters)
+		{
+			DoNavigate(DictHelper.Create(queryStringParameters));
+		}
+		
+		/// <summary>
+		/// Navigates within the wizard steps using optionally a form parameter 
+		/// to dictate to where it should go.
+		/// </summary>
+		/// <remarks>
+		/// By default this will invoke <see cref="RedirectToNextStep()"/>
+		/// however you can send a field form <c>navigate.to</c> to customize this.
+		/// The possible values for <c>navigate.to</c> are:
+		/// <list type="bullet">
+		/// <item><term>previous</term>
+		/// <description>Invokes <see cref="RedirectToPreviousStep()"/></description></item>
+		/// <item><term>first</term>
+		/// <description>Invokes <see cref="RedirectToFirstStep()"/></description></item>
+		/// <item><term>step name</term>
+		/// <description>A custom step name to navigate</description></item>
+		/// </list>
+		/// </remarks>
+		/// <param name="queryStringParameters">Query string parameters to be on the URL</param>
+		protected void DoNavigate(IDictionary queryStringParameters)
 		{
 			string uriPrefix = "uri:";
 
@@ -184,31 +231,49 @@ namespace Castle.MonoRail.Framework
 
 			if (navigateTo == "previous")
 			{
-				RedirectToPreviousStep();
+				RedirectToPreviousStep(queryStringParameters);
 			}
 			else if (navigateTo == null || navigateTo == String.Empty || navigateTo == "next")
 			{
-				RedirectToNextStep();
+				RedirectToNextStep(queryStringParameters);
 			}
 			else if (navigateTo.StartsWith(uriPrefix))
 			{
-				Redirect(navigateTo.Substring(uriPrefix.Length));
+				Redirect(navigateTo.Substring(uriPrefix.Length), queryStringParameters);
 			}
 			else if (navigateTo == "first")
 			{
-				RedirectToFirstStep();
+				RedirectToFirstStep(queryStringParameters);
 			}
 			else
 			{
-				RedirectToStep(navigateTo);
+				RedirectToStep(navigateTo, queryStringParameters);
 			}
+		}
+		
+		/// <summary>
+		/// Sends a redirect to the next wizard step (if it exists)
+		/// </summary>
+		/// <exception cref="RailsException">if no further step exists</exception>
+		protected void RedirectToNextStep()
+		{
+			RedirectToNextStep((IDictionary) null);
 		}
 
 		/// <summary>
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
 		/// <exception cref="RailsException">if no further step exists</exception>
-		protected void RedirectToNextStep()
+		protected void RedirectToNextStep(params String[] queryStringParameters)
+		{
+			RedirectToNextStep(DictHelper.Create(queryStringParameters));
+		}
+		
+		/// <summary>
+		/// Sends a redirect to the next wizard step (if it exists)
+		/// </summary>
+		/// <exception cref="RailsException">if no further step exists</exception>
+		protected void RedirectToNextStep(IDictionary queryStringParameters)
 		{
 			String wizardName = WizardUtils.ConstructWizardNamespace(_wizardcontroller);
 
@@ -224,7 +289,7 @@ namespace Castle.MonoRail.Framework
 
 				WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, nextStepIndex, nextStep);
 				
-				InternalRedirectToStep(nextStepIndex, nextStep);
+				InternalRedirectToStep(nextStepIndex, nextStep, queryStringParameters);
 			}
 			else
 			{
@@ -239,6 +304,26 @@ namespace Castle.MonoRail.Framework
 		/// if no previous step exists (ie. already in the first one)</exception>
 		protected void RedirectToPreviousStep()
 		{
+			RedirectToPreviousStep((IDictionary) null);
+		}
+		
+		/// <summary>
+		/// Sends a redirect to the previous wizard step
+		/// </summary>
+		/// <exception cref="RailsException">
+		/// if no previous step exists (ie. already in the first one)</exception>
+		protected void RedirectToPreviousStep(params String[] queryStringParameters)
+		{
+			RedirectToPreviousStep(DictHelper.Create(queryStringParameters));
+		}
+		
+		/// <summary>
+		/// Sends a redirect to the previous wizard step
+		/// </summary>
+		/// <exception cref="RailsException">
+		/// if no previous step exists (ie. already in the first one)</exception>
+		protected void RedirectToPreviousStep(IDictionary queryStringParameters)
+		{
 			String wizardName = WizardUtils.ConstructWizardNamespace(_wizardcontroller);
 
 			int currentIndex = (int) Context.Session[wizardName + "currentstepindex"];
@@ -251,7 +336,7 @@ namespace Castle.MonoRail.Framework
 
 				String prevStep = (String) stepList[prevStepIndex];
 
-				InternalRedirectToStep(prevStepIndex, prevStep);
+				InternalRedirectToStep(prevStepIndex, prevStep, queryStringParameters);
 			}
 			else
 			{
@@ -264,17 +349,49 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected void RedirectToFirstStep()
 		{
+			RedirectToFirstStep((IDictionary) null);
+		}
+		
+		/// <summary>
+		/// Sends a redirect to the first wizard step
+		/// </summary>
+		protected void RedirectToFirstStep(params String[] queryStringParameters)
+		{
+			RedirectToFirstStep(DictHelper.Create(queryStringParameters));
+		}
+		
+		/// <summary>
+		/// Sends a redirect to the first wizard step
+		/// </summary>
+		protected void RedirectToFirstStep(IDictionary queryStringParameters)
+		{
 			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
 
 			String firstStep = (String) stepList[0];
 
-			InternalRedirectToStep(0, firstStep);
+			InternalRedirectToStep(0, firstStep, queryStringParameters);
 		}
 
 		/// <summary>
 		/// Sends a redirect to a custom step (that must exists)
 		/// </summary>
 		protected bool RedirectToStep(String stepName)
+		{
+			return RedirectToStep(stepName, (IDictionary) null);
+		}
+		
+		/// <summary>
+		/// Sends a redirect to a custom step (that must exists)
+		/// </summary>
+		protected bool RedirectToStep(String stepName, params String[] queryStringParameters)
+		{
+			return RedirectToStep(stepName, DictHelper.Create(queryStringParameters));
+		}
+		
+		/// <summary>
+		/// Sends a redirect to a custom step (that must exists)
+		/// </summary>
+		protected bool RedirectToStep(String stepName, IDictionary queryStringParameters)
 		{
 			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
 
@@ -284,7 +401,7 @@ namespace Castle.MonoRail.Framework
 
 				if (curStep == stepName)
 				{
-					InternalRedirectToStep(index, stepName);
+					InternalRedirectToStep(index, stepName, queryStringParameters);
 					return true;
 				}
 			}
@@ -304,18 +421,23 @@ namespace Castle.MonoRail.Framework
 			return base.TransformActionName(ActionName + "-" + action);
 		}
 
-		private void InternalRedirectToStep(int stepIndex, String step)
+		private void InternalRedirectToStep(int stepIndex, String step, IDictionary queryStringParameters)
 		{
 			WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, stepIndex, step);
 	
-			// We need to preserve any attribute from the QueryString
-			// for example in case the url has an Id
-			if( Context.Request.QueryString.HasKeys() )
-			{							
+			if (queryStringParameters != null && queryStringParameters.Count != 0)
+			{
+				Redirect(_wizardcontroller.Name, step, queryStringParameters);
+			}
+			else if (Context.Request.QueryString.HasKeys())
+			{
+				// We need to preserve any attribute from the QueryString
+				// for example in case the url has an Id
+
 				String url = UrlInfo.CreateAbsoluteRailsUrl( Context.ApplicationPath, 
-					_wizardcontroller.Name, step, Context.UrlInfo.Extension ) + Context.Request.Uri.Query;
-					
-				Context.Response.Redirect( url );
+								_wizardcontroller.Name, step, Context.UrlInfo.Extension ) + Context.Request.Uri.Query;
+				
+				Context.Response.Redirect(url);
 			}
 			else
 			{

@@ -14,7 +14,7 @@ $PresentationHelper.LinkToNew( $model, "Create a new $model.Type.Name", $DictHel
     <th>&nbsp;</th>
   </tr>
 
-#if($items.Length = 0)
+#if($items.Length == 0)
   <tr>
     <td colspan="$cols" align="center">Empty</td>
   </tr>

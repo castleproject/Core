@@ -306,7 +306,7 @@ namespace Castle.MonoRail.Framework
      
 		#endregion
 
-		#region Useful operations
+		#region Useful Operations
 
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
@@ -549,6 +549,29 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Redirects to the specified URL. All other Redirects call this one.
+		/// </summary>
+		/// <param name="url">Target URL</param>
+		public virtual void Redirect(String url, IDictionary parameters)
+		{
+			CancelView();
+			
+			if (parameters != null && parameters.Count != 0)
+			{
+				if (url.IndexOf('?') != -1)
+				{
+					url = url + '&' + ToQueryString(parameters);
+				}
+				else
+				{
+					url = url + '?' + ToQueryString(parameters);
+				}
+			}
+
+			_context.Response.Redirect(url);
+		}
+
+		/// <summary>
 		/// Redirects to another controller and action.
 		/// </summary>
 		/// <param name="controller">Controller name</param>
@@ -648,6 +671,11 @@ namespace Castle.MonoRail.Framework
 
 		protected String ToQueryString(IDictionary parameters)
 		{
+			if (parameters == null || parameters.Count == 0)
+			{
+				return String.Empty;
+			}
+			
 			StringBuilder buffer = new StringBuilder();
 			IServerUtility srv = Context.Server;
 	
@@ -660,7 +688,10 @@ namespace Castle.MonoRail.Framework
 			}
 			
 			if (buffer.Length > 0)
-				buffer.Length -= 1; // removing extra &
+			{
+				// removes extra &
+				buffer.Length -= 1;
+			} 
 
 			return buffer.ToString();
 		}

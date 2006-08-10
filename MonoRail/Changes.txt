@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- WizardStepPage: added more redirect overloads to allow parameters to be 
+  specified
+
 - AR Support: Added support to deal with ICollection<T> containers
 
 - Applied Marc-Andre's patch fixing MR-133
