@@ -126,7 +126,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 	    {
 	        if(propMember!=null)
 	        {
-                XmlAttribute propMemberAttribute = prop.OwnerDocument.CreateAttribute(ExtraInformationAttributeName);
+                XmlAttribute propMemberAttribute = node.OwnerDocument.CreateAttribute(ExtraInformationAttributeName);
 	            propMemberAttribute.Value = propMember;
 	            XmlAttribute xmlAttribute = node as XmlAttribute;
 	            if (xmlAttribute != null)
