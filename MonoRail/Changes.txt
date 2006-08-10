@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied peter dol's patch fixing MR-136
+  "An overload for ButtonToRemote that accepts htmloptions"
+
 - WizardStepPage: added more redirect overloads to allow parameters to be 
   specified
 

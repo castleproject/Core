@@ -156,6 +156,19 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Creates a button that if clicked will fire an Ajax invocation. 
+		/// </summary>
+		/// <param name="innerContent">Button legend</param>
+		/// <param name="url">the url</param>
+		/// <param name="options">the options for the ajax invocations</param>
+		/// <param name="htmloptions">Attributes to be applied to the html element</param>
+		/// <returns>The handcrafted input</returns>
+		public String ButtonToRemote(String innerContent, String url, IDictionary options, IDictionary htmloptions)
+		{
+			return ButtonToFunction(innerContent, BuildRemoteFunction(url, options), htmloptions);
+		}
+
+		/// <summary>
 		/// Returns a link to a remote action defined by <tt>options[:url]</tt> 
 		/// (using the url_for format) that's called in the background using 
 		/// XMLHttpRequest. The result of that request can then be inserted into a
