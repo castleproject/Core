@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
+
 namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors
 {
 	using System;
@@ -52,8 +54,8 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 		private void ProcessAttributes(XmlElement element, IXmlProcessorEngine engine)
 		{
 			ProcessIncludeAttribute(element, engine);
-
-			foreach(XmlAttribute att in element.Attributes)
+            //we may add attributes to the element as we iterate over it.
+			foreach(XmlAttribute att in new ArrayList(element.Attributes))
 			{
 				textProcessor.ProcessString(att, att.Value, engine);
 			}

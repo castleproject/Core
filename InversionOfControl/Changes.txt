@@ -1,6 +1,13 @@
 RC 3
 ====
 
+- Added: Another parameters syntax, #{ kung.foo.fighting @ monkeys }
+	Everything after the @ is set into an attributed called "castle.extra.information" that is avialable to the convertors
+	It is _not_ used to resolve the property name.
+	This allows some advance scenarios for converters.
+
+- Added overload to ITypeConvertor that allows the object to inspect the configuration as well as the type of the parameter
+
 - Change: Better error message when there's an exception 
   setting up properties
 
