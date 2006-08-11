@@ -109,7 +109,11 @@ namespace Castle.MonoRail.Framework
 
 			ConfigureBinder(binder, controller);
 
-			return binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, ResolveParams(controller));
+			object instance = binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, ResolveParams(controller));
+
+			controller.BoundInstanceErrors[instance] = binder.ErrorList;
+
+			return instance;
 		}
 
 		protected void ConfigureBinder(DataBinder binder, SmartDispatcherController controller)

@@ -58,6 +58,12 @@ namespace Castle.MonoRail.Framework
 			get { return binder; }
 		}
 
+		public IDictionary BoundInstanceErrors
+		{
+			get { return boundInstances; }
+			set { boundInstances = value; }
+		}
+
 		public IBindingDataSourceNode QueryStringNode
 		{
 			get
@@ -314,9 +320,7 @@ namespace Castle.MonoRail.Framework
 
 		protected ErrorList GetDataBindErrors(object instance)
 		{
-			ArrayList list = boundInstances[instance] as ArrayList;
-
-			return new ErrorList(list);
+			return boundInstances[instance] as ErrorList;
 		}
 
 		protected void CreateParamCollections(IRequest request)

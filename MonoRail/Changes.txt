@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Freyr Magnússon's patch fixing MR-137
+  "Databinding through DataBindAttribute does not register errors with SmartDispatcherController"
+
 - Applied peter dol's patch fixing MR-136
   "An overload for ButtonToRemote that accepts htmloptions"
 
