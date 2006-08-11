@@ -21,13 +21,13 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 	public class DefaultTextNodeProcessor : AbstractXmlNodeProcessor
 	{
 		private static readonly XmlNodeType[] acceptNodes = new XmlNodeType[] {XmlNodeType.CDATA, XmlNodeType.Text};
-        public const string ExtraInformationAttributeName = "castle.extra.information";
+
 		/// <summary>
 		/// Properties names can contain a-zA-Z0-9_. 
-		/// i.e. #!{ my_node_name } || #{ my.node.name } || #{ my.node.obj @ name }
+		/// i.e. #!{ my_node_name } || #{ my.node.name }
 		/// spaces are trimmed
 		/// </summary>
-        private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#!?\{\s*(?<key>(?:\w|\.)+)\s*(@\s*(?<extraInfo>(?:\w+)))?\s*\})", RegexOptions.Compiled);
+		private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
 
 		public DefaultTextNodeProcessor()
 		{
@@ -70,10 +70,8 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 				}
 
 				string propRef = match.Groups[1].Value; // #!{ propKey }
-				string propKey = match.Groups["key"].Value; // propKey
-                string extraInfo = null;
-                if (match.Groups["extraInfo"].Success)
-                    extraInfo = match.Groups["extraInfo"].Value;
+				string propKey = match.Groups[2].Value; // propKey
+
 				XmlNode prop = engine.GetProperty(propKey);
 
 				if (prop != null)
@@ -85,11 +83,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 						MoveAttributes(node.ParentNode as XmlElement, prop as XmlElement);
 					}
 
-				    // sets an attribute 'castle.extra.information' with the value of everything
-				    // after the @ in the prop.
-                    SetExtraInformationForConfiguration(node, prop, extraInfo);
-
-				    AppendChild(fragment, prop.ChildNodes);
+					AppendChild(fragment, prop.ChildNodes);
 				}
 				else if (IsRequiredProperty(propRef))
 				{
@@ -122,21 +116,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 			}
 		}
 
-	    private static void SetExtraInformationForConfiguration(XmlNode node, XmlNode prop, string propMember)
-	    {
-	        if(propMember!=null)
-	        {
-                XmlAttribute propMemberAttribute = node.OwnerDocument.CreateAttribute(ExtraInformationAttributeName);
-	            propMemberAttribute.Value = propMember;
-	            XmlAttribute xmlAttribute = node as XmlAttribute;
-	            if (xmlAttribute != null)
-	                xmlAttribute.OwnerElement.Attributes.Append(propMemberAttribute);
-	            else
-	                node.ParentNode.Attributes.Append(propMemberAttribute);
-	        }
-	    }
-
-	    private bool IsRequiredProperty(string propRef)
+		private bool IsRequiredProperty(string propRef)
 		{
 			return propRef.StartsWith("#{");
 		}

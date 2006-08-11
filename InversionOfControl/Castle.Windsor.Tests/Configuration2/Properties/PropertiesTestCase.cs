@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors;
-
 namespace Castle.Windsor.Tests.Configuration2.Properties
 {
 	using System;
@@ -41,25 +39,7 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 			container = new WindsorContainer(file);
 
 			AssertConfiguration();
-
-    
 		}
-
-        [Test]
-        public void CorrectEval_OfExtraInformation()
-        {
-            String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
-                                                                              "config_with_properties_and_prop_members.xml");
-            container = new WindsorContainer(file);
-
-            IConfiguration component3 = container.Kernel.ConfigurationStore.GetComponentConfiguration("component3");
-            string component3_attr = component3.Children[0].Attributes[DefaultTextNodeProcessor.ExtraInformationAttributeName];
-            Assert.AreEqual("name", component3_attr);
-
-            IConfiguration component4 = container.Kernel.ConfigurationStore.GetComponentConfiguration("component4");
-            string component4_attr = component4.Children[0].Attributes[DefaultTextNodeProcessor.ExtraInformationAttributeName];
-            Assert.AreEqual("age", component4_attr);
-        }
 
 		[Test]
 		public void SilentProperties()
