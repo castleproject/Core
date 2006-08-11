@@ -1,5 +1,6 @@
 RC 3
 ====
+- Added overload to ITypeConvertor that accept the current node configuration as well as the type in CanHandleType()
 
 - Change: Better error message when there's an exception 
   setting up properties
