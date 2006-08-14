@@ -72,17 +72,18 @@ namespace Castle.Components.Binder
 							"like an indexed value for the prefix {1}, but the index could not be converted to int32", key, name);
 					}
 
-					bool isMeta = key[closingBracket + 1] == '@';
+					bool isMeta = key.Length > closingBracket + 1 && key[closingBracket + 1] == '@';
 
+					// the offset 2 skips the '].' chars
+					String entryName = key.Length > closingBracket + 2 ? key.Substring(closingBracket + 2) : String.Empty;
+					
 					if (isMeta)
 					{
-						// the offset 2 skips the '].' chars
-						node.ProcessMetaIndexedEntry(indexValue, key.Substring(closingBracket + 2), GetEntryValue(key));
+						node.ProcessMetaIndexedEntry(indexValue, entryName, GetEntryValue(key));
 					}
 					else
 					{
-						// the offset 2 skips the '].' chars
-						node.ProcessIndexedEntry(indexValue, key.Substring(closingBracket + 2), GetEntryValue(key));
+						node.ProcessIndexedEntry(indexValue, entryName, GetEntryValue(key));
 					}
 				}
 			}
