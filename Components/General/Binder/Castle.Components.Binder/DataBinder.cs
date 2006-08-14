@@ -433,19 +433,19 @@ namespace Castle.Components.Binder
 
 		private bool ShouldIgnoreProperty(PropertyInfo prop)
 		{
-			int index1 = 0; 
-			int index2 = -1;
+			bool allowed = true;
+			bool disallowed = false;
 
 			if (allowedPropertyList != null)
 			{
-				index1 = Array.BinarySearch(allowedPropertyList, prop.Name, CaseInsensitiveComparer.Default);
+				allowed = Array.BinarySearch(allowedPropertyList, prop.Name, CaseInsensitiveComparer.Default) >= 0;
 			}
 			if (excludedPropertyList != null)
 			{
-				index2 = Array.BinarySearch(excludedPropertyList, prop.Name, CaseInsensitiveComparer.Default);
+				disallowed = Array.BinarySearch(excludedPropertyList, prop.Name, CaseInsensitiveComparer.Default) >= 0;
 			}
 
-			return (index1 <= -1) || (index2 >= 0);
+			return (!allowed) || (disallowed);
 		}
 
 		private bool IsSimpleProperty(Type propType)

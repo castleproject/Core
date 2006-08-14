@@ -229,6 +229,31 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(sc[1].Age, 16);
 			Assert.AreEqual(sc[1].Name, "Mary");
 		}
+		
+		[Test, Ignore("Support not implemented")]
+		public void SimpleArrayDataBind2()
+		{
+			string data = @" 
+				person.Months[1] = 10
+				person.Months[2] = 20
+				person.Months[3] = 30
+				person.Months[4] = 40
+			";
+
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
+
+			Assert.IsNotNull(instance);
+			Person person = instance as Person;
+			Assert.IsNotNull(person);
+			Assert.IsNotNull(person.Months);
+			Assert.AreEqual(4, person.Months.Length);
+			Assert.AreEqual(10, person.Months[0]);
+			Assert.AreEqual(20, person.Months[1]);
+			Assert.AreEqual(30, person.Months[2]);
+			Assert.AreEqual(40, person.Months[3]);
+		}
 
 		[Test]
 		public void IgnoringArrayDataBind()
@@ -607,6 +632,7 @@ namespace Castle.Components.Binder.Tests
 		private Int32 _age;
 		private Decimal _assets;
 		private DateTime _dob;
+		private int[] months;
 
 		public String Name
 		{
@@ -630,6 +656,12 @@ namespace Castle.Components.Binder.Tests
 		{
 			get { return _dob; }
 			set { _dob = value; }
+		}
+
+		public int[] Months
+		{
+			get { return months; }
+			set { months = value; }
 		}
 	}
 
