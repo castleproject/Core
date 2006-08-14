@@ -304,7 +304,9 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	
 	public class Subscription
 	{
-		int[] months; IList months2 = new ArrayList();
+		int[] months; 
+		IList months2 = new ArrayList();
+		Month[] months3;
 
 		public int[] Months
 		{
@@ -316,6 +318,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			get { return months2; }
 			set { months2 = value; }
+		}
+
+		public Month[] Months3
+		{
+			get { return months3; }
+			set { months3 = value; }
 		}
 	}
 
