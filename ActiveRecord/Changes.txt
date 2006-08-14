@@ -1,6 +1,20 @@
 beta 4
 ======
 
+- Refactored ActiveRecordStarter.Initialize to use ActiveRecordSectionHandler.Instance
+
+- Introduced ActiveRecordSectionHandler.Instance to avoid repetitive code.
+  Now, instead of
+  
+  IConfiguration source = (IConfiguration) ConfigurationSettings.GetSection("activerecord");
+  
+  (or similar) you can use
+  
+  IConfiguration source = ActiveRecordSectionHandler.Instance;
+  
+  Bare in mind that it looks for a section named "activerecord" on the configuration
+  file associated with the AppDomain, and throws an exception if it cannot be found.
+
 - Applied Marc-Andre's patch fixing AR-68
   "Make ActiveRecordValidation.ValidationErrorMessages virtual to simplify localisation"
 
@@ -100,6 +114,7 @@ it out there in case anyone was interested.
       http://forum.castleproject.org/posts/list/566.page
 
 - Added Debug to IConfiguration Source. If set then XmlGenerationVisitor will save nhibernate mapping files to the AppDomain.BaseDirectory. 
+  Usage: if you're the XmlConfigurationSource or the Section add the isDebug="true" attribute
 
 - Added support to CompositeKeys as Foreign Keys (kudos to G. Richard Bellamy)
 

@@ -18,13 +18,13 @@ namespace Castle.ActiveRecord
 	using System.Collections;
 	using System.Data;
 	using System.Reflection;
-#if !DOTNET2
-	using System.Configuration;
-#endif
+
 	using NHibernate.Cfg;
 	using NHibernate.Tool.hbm2ddl;
+	
 	using Castle.Model.Configuration;
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.ActiveRecord.Framework.Internal;
 
@@ -115,7 +115,7 @@ namespace Castle.ActiveRecord
 				list.Add(type);
 			}
 
-			Initialize(source, (Type[]) list.ToArray(typeof (Type)));
+			Initialize(source, (Type[]) list.ToArray(typeof(Type)));
 		}
 
 		/// <summary>
@@ -141,7 +141,7 @@ namespace Castle.ActiveRecord
 				}
 			}
 
-			Initialize(source, (Type[]) list.ToArray(typeof (Type)));
+			Initialize(source, (Type[]) list.ToArray(typeof(Type)));
 		}
 
 		/// <summary>
@@ -150,24 +150,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize()
 		{
-#if DOTNET2
-			IConfigurationSource source =
-				System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
-#else
-			IConfigurationSource source =
-				System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
-#endif
-			if (source == null)
-			{
-				String message = "Could not obtain configuration from the AppDomain config file." +
-				                 " Sorry, but you have to fill the configuration or provide a " +
-				                 "IConfigurationSource instance yourself.";
-#if DOTNET2
-				throw new System.Configuration.ConfigurationErrorsException(message);
-#else
-				throw new System.Configuration.ConfigurationException(message);
-#endif
-			}
+			IConfigurationSource source = ActiveRecordSectionHandler.Instance;
 
 			Initialize(Assembly.GetExecutingAssembly(), source);
 		}
@@ -201,7 +184,7 @@ namespace Castle.ActiveRecord
 		{
 			CheckInitialized();
 
-			CreateSchemaFromFile(scriptFileName, ActiveRecordBase.holder.CreateSession(typeof (ActiveRecordBase)).Connection);
+			CreateSchemaFromFile(scriptFileName, ActiveRecordBase.holder.CreateSession(typeof(ActiveRecordBase)).Connection);
 		}
 
 		/// <summary>
@@ -306,7 +289,7 @@ namespace Castle.ActiveRecord
 		                                                       Type[] types)
 		{
 			// Base configuration
-			SetUpConfiguration(source, typeof (ActiveRecordBase), holder);
+			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
 
@@ -315,14 +298,14 @@ namespace Castle.ActiveRecord
 			foreach (Type type in types)
 			{
 				if (models.Contains(type) || 
-				    type == typeof (ActiveRecordBase) || 
-				    type == typeof (ActiveRecordValidationBase) ||
-				    type == typeof (ActiveRecordHooksBase))
+				    type == typeof(ActiveRecordBase) || 
+				    type == typeof(ActiveRecordValidationBase) ||
+				    type == typeof(ActiveRecordHooksBase))
 				{
 					continue;
 				}
 				else if (type.IsAbstract && 
-				         typeof (ActiveRecordBase).IsAssignableFrom(type) && 
+				         typeof(ActiveRecordBase).IsAssignableFrom(type) && 
 				         !IsTypeHierarchyBase(type))
 				{
 					SetUpConfiguration(source, type, holder);
@@ -341,12 +324,12 @@ namespace Castle.ActiveRecord
 
 		private static bool IsTypeHierarchyBase(Type type)
 		{
-			if (type.IsDefined(typeof (JoinedBaseAttribute), false))
+			if (type.IsDefined(typeof(JoinedBaseAttribute), false))
 			{
 				return true;
 			}
 			
-			object[] attrs = type.GetCustomAttributes(typeof (ActiveRecordAttribute), false);
+			object[] attrs = type.GetCustomAttributes(typeof(ActiveRecordAttribute), false);
 
 			if (attrs != null && attrs.Length > 0)
             {
@@ -403,7 +386,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		private static bool IsActiveRecordType(Type type)
 		{
-			return type.IsDefined(typeof (ActiveRecordAttribute), false);
+			return type.IsDefined(typeof(ActiveRecordAttribute), false);
 		}
 
 		private static void CheckInitialized()
@@ -454,7 +437,7 @@ namespace Castle.ActiveRecord
 			{
 				Type sessionFactoryHolderType = source.SessionFactoryHolderImplementation;
 
-				if (!typeof (ISessionFactoryHolder).IsAssignableFrom(sessionFactoryHolderType))
+				if (!typeof(ISessionFactoryHolder).IsAssignableFrom(sessionFactoryHolderType))
 				{
 					String message =
 						String.Format("The specified type {0} does " + "not implement the interface ISessionFactoryHolder",
@@ -477,7 +460,7 @@ namespace Castle.ActiveRecord
 			{
 				Type threadScopeType = source.ThreadScopeInfoImplementation;
 
-				if (!typeof (IThreadScopeInfo).IsAssignableFrom(threadScopeType))
+				if (!typeof(IThreadScopeInfo).IsAssignableFrom(threadScopeType))
 				{
 					String message =
 						String.Format("The specified type {0} does " + "not implement the interface IThreadScopeInfo",
