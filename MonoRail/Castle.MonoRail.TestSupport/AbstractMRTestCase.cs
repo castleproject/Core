@@ -166,7 +166,7 @@ namespace Castle.MonoRail.TestSupport
 			{
 				Request.QueryStringParams = queryStringParams;
 			}
-
+			
 			if (resendCookies)
 			{
 				ResendCookies();
@@ -175,6 +175,7 @@ namespace Castle.MonoRail.TestSupport
 			outputBuffer.Length = 0;
 
 			Request.Url = path;
+			Request.PostParams = null;
 
 			StringWriter writer = new StringWriter(outputBuffer);
 
@@ -199,7 +200,14 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
 		public void DoPost(String path, bool resendCookies, params String[] postStringParams)
 		{
-			if (postStringParams.Length != 0) Request.PostParams = postStringParams;
+			if (postStringParams.Length != 0)
+			{
+				Request.PostParams = postStringParams;
+			}
+			else
+			{
+				Request.PostParams = null;
+			}
 
 			outputBuffer.Length = 0;
 
