@@ -54,14 +54,25 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void SimpleBind()
 		{
-			DoGet("smart/SimpleBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20");
-			String expected = "incoming hammett 11 20";
+			DoPost("smart/SimpleBind.rails");
+			String expected = "incoming  0 0";
+			AssertReplyEqualTo(expected);
 
+			DoPost("smart/SimpleBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20");
+			expected = "incoming hammett 11 20";
+			AssertReplyEqualTo(expected);
+
+			// Double check
+			DoPost("smart/SimpleBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20");
+			expected = "incoming hammett 11 20";
+			AssertReplyEqualTo(expected);
+
+			DoGet("smart/SimpleBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20");
+			expected = "incoming hammett 11 20";
 			AssertReplyEqualTo(expected);
 
 			DoGet("smart/SimpleBind.rails", "order.name=hammett");
 			expected = "incoming hammett 0 0";
-
 			AssertReplyEqualTo(expected);
 		}
 
@@ -112,7 +123,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 			DoGet("smart/FillingBehavior.rails", "abc.name=someone", "abc.date1day=11", "abc.date1month=10", "abc.date1year=2005");
 			String expected = "incoming someone " + new DateTime( 2005, 10, 11 ).ToShortDateString() + " " + 
-				DateTime.Now.AddDays(1).ToShortDateString();
+			                  DateTime.Now.AddDays(1).ToShortDateString();
 
 			AssertReplyEqualTo(expected);
 		}
@@ -123,7 +134,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 			DoGet("smart/FillingBehavior.rails");
 			String expected = "incoming hammett " + 
-				DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
+			                  DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
 
 			AssertReplyEqualTo(expected);
 		}
