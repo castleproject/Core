@@ -1,0 +1,12 @@
+<configuration>
+
+	<components>
+
+		<component id="comp1" 
+			type="Castle.Windsor.Tests.Components.ExtendedComponentWithProperties, Castle.Windsor.Tests"
+			inspectionBehavior="Invalid">
+		</component>
+
+	</components>
+
+</configuration>

@@ -14,11 +14,9 @@
 
 namespace Castle.Windsor.Tests
 {
-	using System;
 	using System.Runtime.Remoting;
 	using NUnit.Framework;
 
-	using Castle.Windsor.Proxy;
 	using Castle.Windsor.Tests.Components;
 
 	[TestFixture]

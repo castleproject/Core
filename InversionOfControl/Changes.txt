@@ -1,5 +1,15 @@
 RC 3
 ====
+
+- Fixed IOC-24: "Allow user to provide an attribute which will customize how to inspect properties (PropertiesDependenciesModelInspector)"
+  Now users can add an 'inspectionBehavior' attribute to the component node that defines
+  the inspection strategy. Possible values are
+  
+  - None: No properties inspection should happen
+  - All: All properties will be inspected and collected (on the class and on the superclasses). 
+         This is the default behavior
+  - DeclaredOnly: Only properties specified on type are checked (superclasses will be ignored) 
+
 - Added overload to ITypeConvertor that accept the current node configuration as well as the type in CanHandleType()
 
 - Change: Better error message when there's an exception 

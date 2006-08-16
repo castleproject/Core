@@ -20,6 +20,7 @@ namespace Castle.Model
 
 	using Castle.Model.Configuration;
 
+	#region Enums
 	/// <summary>
 	/// Enumeration used to mark the component's lifestyle.
 	/// </summary>
@@ -52,6 +53,19 @@ namespace Castle.Model
 		/// </summary>
 		Custom
 	}
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum PropertiesInspectionBehavior
+	{
+		Undefined,
+		None,
+		All,
+		DeclaredOnly
+	}
+	
+	#endregion
 
 	/// <summary>
 	/// Represents the collection of information and
@@ -80,6 +94,8 @@ namespace Castle.Model
 
         /// <summary>Lifestyle for the component</summary>
         private LifestyleType lifestyleType;
+		
+		private PropertiesInspectionBehavior inspectionBehavior;
 
         /// <summary>Custom lifestyle, if any</summary>
         private Type customLifestyle;
@@ -123,6 +139,7 @@ namespace Castle.Model
             this.service = service;
             this.implementation = implementation;
             this.lifestyleType = LifestyleType.Undefined;
+        	this.inspectionBehavior = PropertiesInspectionBehavior.Undefined;
         }
 
         /// <summary>
@@ -226,7 +243,18 @@ namespace Castle.Model
             set { lifestyleType = value; }
         }
 
-        public Type CustomLifestyle
+		/// <summary>
+		/// Gets or sets the strategy for
+		/// inspecting public properties 
+		/// on the components
+		/// </summary>
+		public PropertiesInspectionBehavior InspectionBehavior
+		{
+			get { return inspectionBehavior; }
+			set { inspectionBehavior = value; }
+		}
+
+		public Type CustomLifestyle
         {
             get { return customLifestyle; }
             set { customLifestyle = value; }

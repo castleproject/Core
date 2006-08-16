@@ -19,6 +19,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 	using Castle.Model;
 	using Castle.MicroKernel.SubSystems.Conversion;
+	using Castle.Model.Configuration;
 
 	/// <summary>
 	/// This implementation of <see cref="IContributeComponentModelConstruction"/>
@@ -55,24 +56,45 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 		protected virtual void InspectProperties(ComponentModel model)
 		{
+			if (model.InspectionBehavior == PropertiesInspectionBehavior.Undefined)
+			{
+				model.InspectionBehavior = GetInspectionBehaviorFromTheConfiguration(model.Configuration);
+			}
+			
+			if (model.InspectionBehavior == PropertiesInspectionBehavior.None)
+			{
+				// Nothing to be inspected
+				return;
+			}
+			
+			BindingFlags bindingFlags;
+			
+			if (model.InspectionBehavior == PropertiesInspectionBehavior.DeclaredOnly)
+			{
+				bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+			}
+			else // if (model.InspectionBehavior == PropertiesInspectionBehavior.All) or Undefined
+			{
+				bindingFlags = BindingFlags.Public | BindingFlags.Instance;
+			}
+			
 			Type targetType = model.Implementation;
 	
-			PropertyInfo[] properties = targetType.GetProperties( 
-				BindingFlags.Public|BindingFlags.Instance );
+			PropertyInfo[] properties = targetType.GetProperties(bindingFlags);
 	
 			foreach(PropertyInfo property in properties)
 			{
-                if (!property.CanWrite)
+				if (!property.CanWrite)
 				{
 					continue;
 				}
 
-                ParameterInfo[] indexerParams = property.GetIndexParameters();
+				ParameterInfo[] indexerParams = property.GetIndexParameters();
 
-                if (indexerParams != null && indexerParams.Length != 0)
-                {
-                    continue;
-                }
+				if (indexerParams != null && indexerParams.Length != 0)
+				{
+					continue;
+				}
 
 				DependencyModel dependency = null;
 
@@ -98,6 +120,34 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				}
 
 				model.Properties.Add( new PropertySet(property, dependency) );
+			}
+		}
+
+		private PropertiesInspectionBehavior GetInspectionBehaviorFromTheConfiguration(IConfiguration config)
+		{
+			if (config == null || config.Attributes["inspectionBehavior"] == null)
+			{
+				// return default behavior
+				return PropertiesInspectionBehavior.All;
+			}
+
+			String enumStringVal = config.Attributes["inspectionBehavior"];
+
+			try
+			{
+				return (PropertiesInspectionBehavior) 
+					Enum.Parse(typeof(PropertiesInspectionBehavior), enumStringVal, true);
+			}
+			catch(Exception)
+			{
+				String[] enumNames = Enum.GetNames(typeof(PropertiesInspectionBehavior));
+				
+				String message = String.Format("Error on properties inspection. " + 
+					"Could not convert the inspectionBehavior attribute value into an expected enum value. " + 
+					"Value found is '{0}' while possible values are '{1}'", 
+						enumStringVal, String.Join(",", enumNames));
+				
+				throw new KernelException(message);
 			}
 		}
 	}

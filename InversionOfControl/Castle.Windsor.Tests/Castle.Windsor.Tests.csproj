@@ -143,6 +143,19 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "PropertiesInspectionBehaviorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "propertyInspectionBehavior.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "propertyInspectionBehaviorInvalid.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "RealProxyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -197,6 +210,11 @@
                 />
                 <File
                     RelPath = "Components\CalculatorServiceWithLifecycle.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\ComponentWithProperties.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
