@@ -111,7 +111,10 @@ namespace Castle.MonoRail.Framework
 
 			object instance = binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, ResolveParams(controller));
 
-			controller.BoundInstanceErrors[instance] = binder.ErrorList;
+			if (instance != null)
+			{
+				controller.BoundInstanceErrors[instance] = binder.ErrorList;
+			}
 
 			return instance;
 		}

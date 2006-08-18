@@ -353,7 +353,7 @@ namespace Castle.Components.Binder
 
 			if (node == null || node.ShouldIgnore)
 			{
-				return null;
+				return (object[]) Array.CreateInstance(instanceType.GetElementType(), 0);
 			}
 
 			if (node.IsIndexed)

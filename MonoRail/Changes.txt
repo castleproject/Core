@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Changed DataBinder behavior to return empty arrays, instead of null arrays, 
+  when the IBindingDataSourceNode is null
+
 - Applied patch by  Bryan Brown fixing MR-138
   "patch to fix formhelper.LabelFor to use IDictionary"
 

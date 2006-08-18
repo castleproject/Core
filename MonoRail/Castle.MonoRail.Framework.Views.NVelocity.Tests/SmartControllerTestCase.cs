@@ -52,6 +52,19 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
+		public void SimpleBindArray()
+		{
+			DoPost("smart/SimpleBindArray.rails");
+			AssertReplyEqualTo("incoming 0");
+
+			DoGet("smart/SimpleBindArray.rails");
+			AssertReplyEqualTo("incoming 0");
+
+			DoGet("smart/SimpleBindArray.rails", "orders[0].Name=hammett", "orders[1].Name=hamilton");
+			AssertReplyEqualTo("incoming 2");
+		}
+		
+		[Test]
 		public void SimpleBind()
 		{
 			DoPost("smart/SimpleBind.rails");

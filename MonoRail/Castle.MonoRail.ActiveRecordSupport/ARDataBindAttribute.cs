@@ -106,7 +106,14 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			binder.AutoLoad = autoLoad;
     
-			return binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, ResolveParams(controller));
+			object instance = binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, ResolveParams(controller));
+        	
+			if (instance != null)
+			{
+				controller.BoundInstanceErrors[instance] = binder.ErrorList;
+			}
+
+			return instance;
 		}
 	}
 }

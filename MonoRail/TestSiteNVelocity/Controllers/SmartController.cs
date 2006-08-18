@@ -36,6 +36,18 @@ namespace TestSiteNVelocity.Controllers
 			RenderText(String.Format("incoming {0}", order.ToString()));
 		}
 
+		public void SimpleBindArray([DataBind("orders")] Order[] orders)
+		{
+			if (orders == null)
+			{
+				RenderText("Null array shouldn't be returned by databinder");
+			}
+			else
+			{
+				RenderText(String.Format("incoming {0}", orders.Length));
+			}
+		}
+
 		public void ComplexBind([DataBind("order")] Order order, [DataBind("person")] Person person)
 		{
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
