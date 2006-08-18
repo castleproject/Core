@@ -892,7 +892,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				String customSuffix = ObtainEntryAndRemove(attributes, "suffix");
 				String valueProperty = ObtainEntryAndRemove(attributes, "value");
 				String textProperty = ObtainEntryAndRemove(attributes, "text");
-				
+								
 				if (dataSourceType == null)
 				{
 					// If the dataSourceType could not be obtained 
@@ -902,6 +902,11 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 				else if (initialSelectionType == null)
 				{
+					if (customSuffix == null && valueProperty != null)
+					{
+						customSuffix = valueProperty;
+					}
+
 					return new ListDataSourceState(dataSourceType, dataSource, valueProperty, textProperty, customSuffix);
 				}
 				else if (initialSelectionType == dataSourceType)
