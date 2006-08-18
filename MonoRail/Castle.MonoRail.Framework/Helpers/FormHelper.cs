@@ -153,6 +153,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			writer.WriteBeginTag("label");
 			writer.WriteAttribute("for", id);
+			writer.Write(GetAttributes(attributes)); 
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.Write(label);
 			writer.WriteEndTag("label");
