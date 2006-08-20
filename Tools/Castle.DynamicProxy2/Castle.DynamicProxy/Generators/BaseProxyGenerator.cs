@@ -148,7 +148,6 @@ namespace Castle.DynamicProxy.Generators
 		// TODO: Implement this
 		protected void AddToCache(CacheKey key, Type type)
 		{
-			
 		}
 
 		protected MethodInfo[] GetMethodsToProxy(Type type, IProxyGenerationHook hook)

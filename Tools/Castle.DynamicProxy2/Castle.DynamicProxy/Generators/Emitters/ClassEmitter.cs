@@ -36,14 +36,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
             
 			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
 			
-#if DOTNET2
+//#if DOTNET2
 			if (baseType.IsGenericType)
 			{
-				CreateGenericParameters(baseType.GetGenericArguments());
-
+			 	CreateGenericParameters(baseType.GetGenericArguments());
+			 
 				baseType = baseType.MakeGenericType(genericTypeParams);
 			}
-#endif
+//#endif
+			
 			if (interfaces != null)
 			{
 				foreach(Type inter in interfaces)

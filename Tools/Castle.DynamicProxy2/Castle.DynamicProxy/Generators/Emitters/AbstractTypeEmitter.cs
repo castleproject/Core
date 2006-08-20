@@ -23,10 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public abstract class AbstractTypeEmitter
 	{
-		// private int counter;
-
 		protected TypeBuilder typebuilder;
-
 		protected ConstructorCollection constructors;
 		protected MethodCollection methods;
 		protected PropertiesCollection properties;
@@ -34,7 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected internal NestedClassCollection nested;
 //#if DOTNET2
 		protected GenericTypeParameterBuilder[] genericTypeParams;
-		protected IDictionary<String, Type> name2GenericType;
+		protected Dictionary<String, GenericTypeParameterBuilder> name2GenericType;
 //#endif
 
 		public AbstractTypeEmitter()
@@ -44,7 +41,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			constructors = new ConstructorCollection();
 			properties = new PropertiesCollection();
 			events = new EventCollection();
-			name2GenericType = new Dictionary<String, Type>();
+			name2GenericType = new Dictionary<String, GenericTypeParameterBuilder>();
 		}
 		
 		public bool IsGenericArgument(String genericArgumentName)
@@ -186,66 +183,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				throw new ApplicationException("CreateGenericParameters: cannot invoke me twice");
 			}
-			
-			String[] argumentNames = new String[genericArguments.Length];
 
-			for (int i = 0; i < argumentNames.Length; i++)
-			{
-				argumentNames[i] = genericArguments[i].Name;
-			}
-
-			genericTypeParams = typebuilder.DefineGenericParameters(argumentNames);
-
-			for (int i = 0; i < genericTypeParams.Length; i++)
-			{
-				try
-				{
-					// TODO: Review this
-					GenericParameterAttributes attributes = genericArguments[i].GenericParameterAttributes;
-					Type[] types = genericArguments[i].GetGenericParameterConstraints();
-
-					genericTypeParams[i].SetGenericParameterAttributes(attributes);
-
-					Type[] interfacesConstraints = Array.FindAll(types, delegate(Type type)
-						{
-							return type.IsInterface;
-						}
-					);
-
-					Type baseClassConstraint = Array.Find(types, delegate(Type type)
-						{
-							return type.IsClass;
-						}
-					);
-
-					if (interfacesConstraints.Length != 0)
-					{
-						genericTypeParams[i].SetInterfaceConstraints(interfacesConstraints);
-					}
-
-					if (baseClassConstraint != null)
-					{
-						genericTypeParams[i].SetBaseTypeConstraint(baseClassConstraint);
-					}
-				}
-				catch(NotSupportedException)
-				{
-					// Doesnt matter
-
-					genericTypeParams[i].SetGenericParameterAttributes(GenericParameterAttributes.None);
-				}
-
-				if (name2GenericType.ContainsKey(argumentNames[i]))
-				{
-					name2GenericType.Remove(argumentNames[i]);
-				}
-				
-				name2GenericType.Add(argumentNames[i], genericTypeParams[i]);
-			}
+			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, typebuilder, name2GenericType);
 		}
-
-//#endif
-
+		
 		public virtual Type BuildType()
 		{
 			EnsureBuildersAreInAValidState();

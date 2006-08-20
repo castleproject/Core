@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		internal ConstructorBuilder Builder
+		public ConstructorBuilder Builder
 		{
 			get { return builder; }
 		}

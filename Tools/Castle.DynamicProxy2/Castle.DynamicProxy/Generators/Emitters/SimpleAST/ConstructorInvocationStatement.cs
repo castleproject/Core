@@ -25,6 +25,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public ConstructorInvocationStatement(ConstructorInfo method, params Expression[] args)
 		{
+			if (method == null) throw new ArgumentNullException("method");
+			if (args == null) throw new ArgumentNullException("args");
+			
 			this.cmethod = method;
 			this.args = args;
 		}

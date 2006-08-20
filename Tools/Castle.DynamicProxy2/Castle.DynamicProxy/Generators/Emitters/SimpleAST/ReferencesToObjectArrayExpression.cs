@@ -52,6 +52,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				{
 					gen.Emit(OpCodes.Box, reference.Type.UnderlyingSystemType);
 				}
+				if (reference.Type.IsGenericParameter)
+				{
+					gen.Emit(OpCodes.Box, reference.Type);
+				}
 
 				gen.Emit(OpCodes.Stelem_Ref);
 			}

@@ -2,26 +2,49 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	delegate GenericTypeParameterBuilder[] ApplyGenArgs(String[] argumentNames);
+	
 	class GenericUtil
 	{
 		public static void PopulateGenericArguments(AbstractTypeEmitter parentEmitter, Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
 		{
+			if (parentEmitter.GenericTypeParams == null) return;
+			
 			foreach(GenericTypeParameterBuilder genType in parentEmitter.GenericTypeParams)
 			{
 				name2GenericType.Add(genType.Name, genType);
 			}
+		}
+		
+		public static GenericTypeParameterBuilder[] DefineGenericArguments(Type[] genericArguments,
+																		   TypeBuilder builder,
+																		   Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
+		{
+			return DefineGenericArguments(genericArguments, name2GenericType, delegate(String[] args)
+			{
+				return builder.DefineGenericParameters(args);
+			});
 		}
 
 		public static GenericTypeParameterBuilder[] DefineGenericArguments(Type[] genericArguments, 
 		                                                                   MethodBuilder builder, 
 		                                                                   Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
 		{
+			return DefineGenericArguments(genericArguments, name2GenericType, delegate(String[] args)
+           	{
+				return builder.DefineGenericParameters(args);
+           	});
+		}
+
+		private static GenericTypeParameterBuilder[] DefineGenericArguments(Type[] genericArguments, 
+		                                           Dictionary<String, GenericTypeParameterBuilder> name2GenericType, 
+		                                           ApplyGenArgs gen)
+		{
 			GenericTypeParameterBuilder[] genericTypeParams = null;
-			
+
 			String[] argumentNames = new String[genericArguments.Length];
 
 			for (int i = 0; i < argumentNames.Length; i++)
@@ -31,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			if (argumentNames.Length != 0)
 			{
-				genericTypeParams = builder.DefineGenericParameters(argumentNames);
+				genericTypeParams = gen(argumentNames);
 
 				for (int i = 0; i < genericTypeParams.Length; i++)
 				{
