@@ -17,23 +17,23 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Reflection;
 
-	abstract class Constants
+	public abstract class Constants
 	{
-		internal static ConstructorInfo AbstractInvocationConstructor = 
+		public static ConstructorInfo AbstractInvocationConstructor = 
 			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic, 
 				null, new Type[] { typeof(IInterceptor[]), typeof(Type), typeof(MethodInfo), 
 				                   typeof(MethodInfo), typeof(object[]) }, null);
 
-		internal static MethodInfo AbstractInvocationProceed =
+		public static MethodInfo AbstractInvocationProceed =
 			typeof(AbstractInvocation).GetMethod("Proceed", BindingFlags.Instance|BindingFlags.Public);
 
-		internal static MethodInfo GetMethodFromHandle1 =
+		public static MethodInfo GetMethodFromHandle1 =
 			typeof(MethodBase).GetMethod(
 				"GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
 				new Type[] { typeof(RuntimeMethodHandle) }, null);
 
 #if DOTNET2
-		internal static MethodInfo GetMethodFromHandle2 =
+		public static MethodInfo GetMethodFromHandle2 =
 			typeof(MethodBase).GetMethod(
 				"GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
 				new Type[] { typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle) }, null);

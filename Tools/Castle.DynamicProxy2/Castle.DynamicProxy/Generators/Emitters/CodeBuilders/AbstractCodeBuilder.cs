@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			isEmpty = true;
 		}
 
-		protected internal ILGenerator Generator
+		public /*protected internal*/ ILGenerator Generator
 		{
 			get { return generator; }
 		}
@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 //			return label;
 //		}
 //
-		protected internal void SetNonEmpty()
+		public /*protected internal*/ void SetNonEmpty()
 		{
 			isEmpty = false;
 		}

@@ -187,8 +187,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new ApplicationException("CreateGenericParameters: cannot invoke me twice");
 			}
 			
-			// Type[] genericArguments = targetType.GetGenericArguments();
-
 			String[] argumentNames = new String[genericArguments.Length];
 
 			for (int i = 0; i < argumentNames.Length; i++)
@@ -203,15 +201,45 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				try
 				{
 					// TODO: Review this
-					// GenericParameterAttributes attributes = genericArguments[i].GenericParameterAttributes;
-					// genericTypeParams[i].SetGenericParameterAttributes(attributes);
-					genericTypeParams[i].SetGenericParameterAttributes(GenericParameterAttributes.None);
+					GenericParameterAttributes attributes = genericArguments[i].GenericParameterAttributes;
+					Type[] types = genericArguments[i].GetGenericParameterConstraints();
+
+					genericTypeParams[i].SetGenericParameterAttributes(attributes);
+
+					Type[] interfacesConstraints = Array.FindAll(types, delegate(Type type)
+						{
+							return type.IsInterface;
+						}
+					);
+
+					Type baseClassConstraint = Array.Find(types, delegate(Type type)
+						{
+							return type.IsClass;
+						}
+					);
+
+					if (interfacesConstraints.Length != 0)
+					{
+						genericTypeParams[i].SetInterfaceConstraints(interfacesConstraints);
+					}
+
+					if (baseClassConstraint != null)
+					{
+						genericTypeParams[i].SetBaseTypeConstraint(baseClassConstraint);
+					}
 				}
 				catch(NotSupportedException)
 				{
 					// Doesnt matter
+
+					genericTypeParams[i].SetGenericParameterAttributes(GenericParameterAttributes.None);
 				}
 
+				if (name2GenericType.ContainsKey(argumentNames[i]))
+				{
+					name2GenericType.Remove(argumentNames[i]);
+				}
+				
 				name2GenericType.Add(argumentNames[i], genericTypeParams[i]);
 			}
 		}

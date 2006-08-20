@@ -35,12 +35,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			InvokeBaseConstructor(ObtainDefaultConstructor());
 		}
 
-		internal void InvokeBaseConstructor(ConstructorInfo constructor)
+		public void InvokeBaseConstructor(ConstructorInfo constructor)
 		{
 			AddStatement(new ConstructorInvocationStatement(constructor));
 		}
 
-		internal void InvokeBaseConstructor(ConstructorInfo constructor, 
+		public void InvokeBaseConstructor(ConstructorInfo constructor, 
 			params ArgumentReference[] arguments)
 		{
 			AddStatement(

@@ -15,6 +15,8 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	
@@ -29,7 +31,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private MethodCodeBuilder codebuilder;
 		private AbstractTypeEmitter maintype;
-		private Type[] actualGenParameters;
+		// private Type[] actualGenParameters;
+		private GenericTypeParameterBuilder[] genericTypeParams;
+		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>();
 
 		protected internal MethodEmitter()
 		{
@@ -61,9 +65,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder.SetReturnType(returnType);
 		}
 
-		public Type[] ActualGenericParameters
+		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
-			get { return actualGenParameters; }
+			get { return genericTypeParams; }
 		}
 
 		/// <summary>
@@ -72,57 +76,27 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// accordingly
 		/// </summary>
 		/// <param name="baseMethod"></param>
-		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod)
+		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
-			Type[] methodGenericArgs = baseMethod.GetGenericArguments();
-			
-			String[] names = new string[methodGenericArgs.Length];
+			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);
 
-			for (int i = 0; i < names.Length; i++)
-			{
-				names[i] = methodGenericArgs[i].Name;
-			}
+			Type[] genericArguments = baseMethod.GetGenericArguments();
 
-			actualGenParameters = new Type[0];
+			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, builder, name2GenericType);
 
-			if (methodGenericArgs.Length != 0)
-			{
-				actualGenParameters = builder.DefineGenericParameters(names);
-			}
-
-			// TODO: check if the return type is a generic
-			// definition for the method
-			SetReturnType(baseMethod.ReturnType);
+			// Bind parameter types
 			
 			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
 
-			Type[] newParameters = new Type[baseMethodParameters.Length];
+			SetParameters(GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType));
 
-			for (int i = 0; i < baseMethodParameters.Length; i++)
-			{
-				ParameterInfo param = baseMethodParameters[i];
+			// TODO: uncomment this later
+			// DefineParameters(baseMethodParameters);
 
-				if (param.ParameterType.IsGenericParameter)
-				{
-					foreach (Type genParam in actualGenParameters)
-					{
-						if (genParam.Name == param.ParameterType.Name)
-						{
-							newParameters[i] = genParam;
-							break;
-						}
-					}
-				}
+			// TODO: check if the return type is a generic
+			// definition for the method
 
-				if (newParameters[i] == null)
-				{
-					newParameters[i] = param.ParameterType;
-				}
-			}
-
-			SetParameters(newParameters);
-
-			DefineParameters(baseMethodParameters);
+			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
 		}
 		
 		public void SetParameters(Type[] paramTypes)
@@ -157,7 +131,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return arguments; }
 		}
 
-		internal MethodBuilder MethodBuilder
+		public /*internal*/ MethodBuilder MethodBuilder
 		{
 			get { return builder; }
 		}
