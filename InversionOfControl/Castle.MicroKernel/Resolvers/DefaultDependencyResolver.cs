@@ -308,7 +308,7 @@ namespace Castle.MicroKernel.Resolvers
 			if (parameterType.ContainsGenericParameters)
 				return current;
 			else
-				return new CreationContext(parameterType);
+				return new CreationContext(current.Dependencies, parameterType);
 		}
 #endif
 	}

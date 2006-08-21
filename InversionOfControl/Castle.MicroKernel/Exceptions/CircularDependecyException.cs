@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Handlers
+namespace Castle.MicroKernel.Exceptions
 {
-	using System;
-using System.Collections;
+    using System;
+    using System.Runtime.Serialization;
 
-	/// <summary>
-	/// Might be implemented by a handler 
-	/// so it can expose access to dependency information 
-	/// which is used to construct meaningful error messages
-	/// </summary>
-	public interface IExposeDependencyInfo
-	{
-		/// <summary>
-		/// Returns human readable list of dependencies 
-		/// this handler is waiting for.
-		/// <param name="dependenciesChecked">list of the dependecies that was already checked, used to avoid cycles.</param>
-		/// </summary>
-		String ObtainDependencyDetails(IList dependenciesChecked);
-	}
+	[Serializable]
+    public class CircularDependecyException : Exception
+    {
+    	public CircularDependecyException(string message) : base(message)
+    	{
+    	}
+
+    	public CircularDependecyException(string message, Exception innerException) : base(message, innerException)
+    	{
+    	}
+
+		public CircularDependecyException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
+    }
 }

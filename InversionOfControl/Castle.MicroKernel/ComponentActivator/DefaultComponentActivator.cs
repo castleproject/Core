@@ -198,7 +198,11 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
+				object dependencyKey = context.TrackDependency(constructor.Constructor, dependency);
 				object value = Kernel.Resolver.Resolve(context, Model, dependency);
+
+				//The depdency was resolved successfully, we can stop tracking it.
+				context.RemoveDependencyTracking(dependencyKey);
 				arguments[index] = value;
 				signature[index++] = dependency.TargetType;
 			}
@@ -210,7 +214,11 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			foreach(PropertySet property in Model.Properties)
 			{
+				object dependencyKey = context.TrackDependency(property.Property, property.Dependency);
 				object value = Kernel.Resolver.Resolve(context, Model, property.Dependency);
+
+				//The depdency was resolved successfully, we can stop tracking it.
+				context.RemoveDependencyTracking(dependencyKey);
 
 				if (value == null) continue;
 

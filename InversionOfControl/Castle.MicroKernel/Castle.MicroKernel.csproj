@@ -148,6 +148,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Exceptions\CircularDependecyException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Exceptions\ComponentNotFoundException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

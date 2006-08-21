@@ -344,10 +344,16 @@ namespace Castle.MicroKernel.Handlers
 		/// this handler is waiting for.
 		/// </summary>
 		/// <returns></returns>
-		public String ObtainDependencyDetails()
+        public String ObtainDependencyDetails(IList dependenciesChecked)
 		{
 			if (this.CurrentState == HandlerState.Valid) return String.Empty;
+		    
+            if (dependenciesChecked.Contains(this))
+                return String.Empty;
+            
+		    dependenciesChecked.Add(this);
 
+			
 			StringBuilder sb = new StringBuilder();
 
 			sb.AppendFormat( "\r\n{0} is waiting for the following dependencies: \r\n", ComponentModel.Name );
@@ -379,7 +385,7 @@ namespace Castle.MicroKernel.Handlers
 						
 						if (info != null)
 						{
-							sb.Append(info.ObtainDependencyDetails());
+							sb.Append(info.ObtainDependencyDetails(dependenciesChecked));
 						}
 					}
 				}
@@ -408,7 +414,7 @@ namespace Castle.MicroKernel.Handlers
 						
 						if (info != null)
 						{
-							sb.Append(info.ObtainDependencyDetails());
+							sb.Append(info.ObtainDependencyDetails(dependenciesChecked));
 						}
 					}
 				}

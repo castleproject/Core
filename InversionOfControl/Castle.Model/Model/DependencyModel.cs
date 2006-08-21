@@ -35,9 +35,8 @@ namespace Castle.Model
 		private bool isOptional;
 		private DependencyType dependencyType;
 
-		public DependencyModel(
-			DependencyType type, String dependencyKey,
-			Type targetType, bool isOptional)
+		public DependencyModel(DependencyType type, String dependencyKey, 
+		                       Type targetType, bool isOptional)
 		{
 			this.dependencyType = type;
 			this.dependencyKey = dependencyKey;
@@ -65,6 +64,33 @@ namespace Castle.Model
 		public bool IsOptional
 		{
 			get { return isOptional; }
+		}
+
+        public override string ToString()
+        {
+            return string.Format("{0} dependency '{1}' type '{2}'", 
+                                 DependencyType, dependencyKey, TargetType);
+        }
+
+		public override int GetHashCode()
+		{
+			int result = dependencyKey.GetHashCode();
+			result = 29 * result + targetType.GetHashCode();
+			result = 29 * result + isOptional.GetHashCode();
+			result = 29 * result + dependencyType.GetHashCode();
+			return result;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (this == obj) return true;
+			DependencyModel dependencyModel = obj as DependencyModel;
+			if (dependencyModel == null) return false;
+			if (!Equals(dependencyKey, dependencyModel.dependencyKey)) return false;
+			if (!Equals(targetType, dependencyModel.targetType)) return false;
+			if (!Equals(isOptional, dependencyModel.isOptional)) return false;
+			if (!Equals(dependencyType, dependencyModel.dependencyType)) return false;
+			return true;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 RC 3
 ====
+- Added checks to handle cycles in dependencies graphs and avoid deadly Stack Overflow Exceptions.
 
 - Fixed IOC-24: "Allow user to provide an attribute which will customize how to inspect properties (PropertiesDependenciesModelInspector)"
   Now users can add an 'inspectionBehavior' attribute to the component node that defines

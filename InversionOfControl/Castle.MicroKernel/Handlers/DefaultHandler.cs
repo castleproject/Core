@@ -17,6 +17,7 @@ namespace Castle.MicroKernel.Handlers
 	using System;
 
 	using Castle.Model;
+	using System.Collections;
 
 	/// <summary>
 	/// Summary description for DefaultHandler.
@@ -33,15 +34,16 @@ namespace Castle.MicroKernel.Handlers
 			AssertNotWaitingForDependency();
 
 #if DOTNET2
-			CreationContext newContext = new CreationContext(ComponentModel.Service);
+			CreationContext newContext = new CreationContext(context.Dependencies, 
+															 ComponentModel.Service);
 #else
-			CreationContext newContext = new CreationContext();
+			CreationContext newContext = new CreationContext(context.Dependencies);
 #endif
 
-			return lifestyleManager.Resolve(newContext);
+            return lifestyleManager.Resolve(newContext);
 		}
 
-		public override void Release(object instance)
+	    public override void Release(object instance)
 		{
 			lifestyleManager.Release(instance);
 		}
@@ -51,7 +53,8 @@ namespace Castle.MicroKernel.Handlers
 			if (CurrentState == HandlerState.WaitingDependency)
 			{
 				String message = String.Format("Can't create component '{1}' " +
-					"as it has dependencies to be satisfied. {0}", ObtainDependencyDetails(),
+					"as it has dependencies to be satisfied. {0}", 
+					ObtainDependencyDetails(new ArrayList()),
 						ComponentModel.Name);
 
 				throw new HandlerException(message);

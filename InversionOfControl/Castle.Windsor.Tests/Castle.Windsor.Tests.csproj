@@ -129,6 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CircularDependencyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DependencyProblem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -215,6 +220,11 @@
                 />
                 <File
                     RelPath = "Components\ComponentWithProperties.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\CircularDependencyComponents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
