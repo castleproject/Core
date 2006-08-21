@@ -94,6 +94,10 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DefaultProxyBuilder.cs" />
+    <Compile Include="Generators\BaseProxyGenerator.cs" />
+    <Compile Include="Generators\CacheKey.cs" />
+    <Compile Include="Generators\ClassProxyGenerator.cs" />
     <Compile Include="Generators\Constants.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -238,6 +242,7 @@
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\PropertyToGenerate.cs" />
     <Compile Include="IInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -260,6 +265,7 @@
     <Compile Include="ProxyGenerationOptions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ProxyGenerator.cs" />
     <Compile Include="StandardInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>

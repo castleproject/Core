@@ -35,66 +35,66 @@ namespace Castle.DynamicProxy
 			set { proxyBuilder = value; }
 		}
 
-		#region CreateInterfaceProxyWithTarget overloads
-
-		public object CreateInterfaceProxyWithTarget(Type theInterface, IInterceptor interceptor, 
-		                                             object target)
-		{
-			return CreateInterfaceProxyWithTarget(theInterface, new IInterceptor[] {interceptor}, 
-			                                      target);
-		}
-
-		public object CreateInterfaceProxyWithTarget(Type theInterface, IInterceptor[] interceptors, 
-		                                             object target)
-		{
-			return CreateInterfaceProxyWithTarget(theInterface, interceptors, target, 
-			                                      ProxyGenerationOptions.Default);
-		}
-
-		public object CreateInterfaceProxyWithTarget(Type theInterface, IInterceptor[] interceptors, 
-		                                             object target, ProxyGenerationOptions options)
-		{
-			// TODO: Make sure the target is not null and implement the interface
-			
-			Type type = CreateInterfaceProxyTypeWithTarget(theInterface, target.GetType(), options);
-
-			if (theInterface.IsGenericType)
-			{
-				Type[] args = theInterface.GetGenericArguments();
-				type = type.MakeGenericType(args);
-			}
-
-			return Activator.CreateInstance(type, new object[] { target, interceptors });
-		}
-
-		#endregion
+//		#region CreateInterfaceProxyWithTarget overloads
+//
+//		public object CreateInterfaceProxyWithTarget(Type theInterface, IInterceptor interceptor, 
+//		                                             object target)
+//		{
+//			return CreateInterfaceProxyWithTarget(theInterface, new IInterceptor[] {interceptor}, 
+//			                                      target);
+//		}
+//
+//		public object CreateInterfaceProxyWithTarget(Type theInterface, IInterceptor[] interceptors, 
+//		                                             object target)
+//		{
+//			return CreateInterfaceProxyWithTarget(theInterface, interceptors, target, 
+//			                                      ProxyGenerationOptions.Default);
+//		}
+//
+//		public object CreateInterfaceProxyWithTarget(Type theInterface, IInterceptor[] interceptors, 
+//		                                             object target, ProxyGenerationOptions options)
+//		{
+//			// TODO: Make sure the target is not null and implement the interface
+//			
+//			Type type = CreateInterfaceProxyTypeWithTarget(theInterface, target.GetType(), options);
+//
+//			if (theInterface.IsGenericType)
+//			{
+//				Type[] args = theInterface.GetGenericArguments();
+//				type = type.MakeGenericType(args);
+//			}
+//
+//			return Activator.CreateInstance(type, new object[] { target, interceptors });
+//		}
+//
+//		#endregion
 
 		#region CreateClassProxy overloads
 
-		public object CreateClassProxy(Type baseClass, IInterceptor interceptor)
+		public object CreateClassProxy(Type targetType, IInterceptor interceptor)
 		{
-			return CreateClassProxy(baseClass, new IInterceptor[] {interceptor} );
+			return CreateClassProxy(targetType, new IInterceptor[] { interceptor });
 		}
 
-		public object CreateClassProxy(Type baseClass, IInterceptor[] interceptors)
+		public object CreateClassProxy(Type targetType, IInterceptor[] interceptors)
 		{
 #if DOTNET2
-			if (baseClass.IsGenericTypeDefinition)
+			if (targetType.IsGenericTypeDefinition)
 			{
 				throw new ArgumentException("You can't specify a generic type definition", "baseClass");
 			}
 #endif
-
-			Type type = CreateClassProxyType(baseClass, ProxyGenerationOptions.Default);
+			
+			Type proxyType = CreateClassProxyType(targetType, ProxyGenerationOptions.Default);
 
 #if DOTNET2
-			if (baseClass.IsGenericType)
+			if (targetType.IsGenericType)
 			{
-				type = type.MakeGenericType(baseClass.GetGenericArguments());
+				proxyType = proxyType.MakeGenericType(targetType.GetGenericArguments());
 			}
 #endif
-			
-			return Activator.CreateInstance(type, new object[] { interceptors });
+
+			return Activator.CreateInstance(proxyType, new object[] { interceptors });
 		}
 
 		#endregion
@@ -104,10 +104,10 @@ namespace Castle.DynamicProxy
 			return ProxyBuilder.CreateClassProxy(baseClass, options);
 		}
 
-		protected Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, 
-		                                                  ProxyGenerationOptions options)
-		{
-			return ProxyBuilder.CreateInterfaceProxyTypeWithTarget(theInterface, targetType, options);
-		}
+//		protected Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, 
+//		                                                  ProxyGenerationOptions options)
+//		{
+//			return ProxyBuilder.CreateInterfaceProxyTypeWithTarget(theInterface, targetType, options);
+//		}
 	}
 }

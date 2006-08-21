@@ -32,30 +32,30 @@ namespace Castle.DynamicProxy
 			get { return scope; }
 		}
 
-		public Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
-		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
-
-			return generator.GenerateCode(interfaces, options);
-		}
-
-		public Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options)
-		{
-			throw new NotImplementedException();
-		}
-
 		public virtual Type CreateClassProxy(Type theClass, ProxyGenerationOptions options)
 		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
-			
-			return generator.GenerateCode(null, options);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope);
+
+			return generator.GenerateCode(theClass, null, options);
 		}
 
-		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options)
+		public Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface, targetType);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope);
 
-			return generator.GenerateCode(options);
+			return generator.GenerateCode(theClass, interfaces, options);
 		}
+
+//		public Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options)
+//		{
+//			throw new NotImplementedException();
+//		}
+//
+//		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options)
+//		{
+//			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface, targetType);
+//
+//			return generator.GenerateCode(options);
+//		}
 	}
 }

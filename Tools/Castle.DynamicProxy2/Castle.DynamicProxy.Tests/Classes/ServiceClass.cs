@@ -61,11 +61,11 @@ namespace Castle.DynamicProxy.Test.Classes
 			return b1 + b2;
 		}
 
-		public virtual UInt64 Sum(UInt64 b1, UInt64 b2)
-		{
-			return b1 + b2;
-		}
-
+//		public virtual UInt64 Sum(UInt64 b1, UInt64 b2)
+//		{
+//			return b1 + b2;
+//		}
+//
 		public virtual bool Valid
 		{
 			get { return true; }

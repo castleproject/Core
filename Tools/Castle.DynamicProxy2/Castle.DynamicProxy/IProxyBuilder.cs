@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy
 		/// <param name="theInterface"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>
-		Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options);
+		// Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options);
 
 		/// <summary>
 		/// Implementors should return a proxy for the specified
@@ -56,6 +56,6 @@ namespace Castle.DynamicProxy
 		/// <param name="targetType"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>
-		Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options);
+		// Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options);
 	}
 }

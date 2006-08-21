@@ -126,6 +126,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return new FieldReference(fieldBuilder);
 		}
+		
+		public PropertyEmitter CreateProperty(String name, PropertyAttributes attributes, Type propertyType)
+		{
+			PropertyEmitter propEmitter = new PropertyEmitter(this, name, attributes, propertyType);
+			properties.Add(propEmitter);
+			return propEmitter;
+		}
 
 //		public EasyProperty CreateProperty(String name, Type returnType)
 //		{
