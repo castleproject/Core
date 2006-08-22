@@ -15,62 +15,143 @@
 namespace TestSiteNVelocity.Controllers
 {
 	using System;
-
+	using System.IO;
 	using Castle.MonoRail.Framework;
 	using Nullables;
 
 	public class SmartController : SmartDispatcherController
 	{
+//		private StreamWriter writer;
+//		private FileStream fs;
+
+		public SmartController()
+		{
+		}
+
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+//			fs = new FileStream(@"E:\dev\castleall\trunk\MonoRail\smartout.txt", FileMode.Append, FileAccess.Write, FileShare.Write);
+//			writer = new StreamWriter(fs);
+//			
+//			writer.WriteLine("Started");
+		}
+
+		protected override void ReleaseResources()
+		{
+			base.ReleaseResources();
+			
+//			writer.WriteLine("Disposed");
+//			writer.WriteLine("");
+//			
+//			writer.Flush();
+//			writer.Close();
+//			
+//			fs.Close();
+		}
+
 		public void StringMethod(string name)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("StringMethod: name {0}", name);
+//			writer.WriteLine("------------------------------");
+			
 			RenderText("incoming " + name);
 		}
 
 		public void Complex(string strarg, int intarg, String[] strarray)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("Complex: strarg {0} intarg {1} strarray {2}", strarg, intarg, strarray);
+//			writer.WriteLine("------------------------------");
+			
 			RenderText(String.Format("incoming {0} {1} {2}", strarg, intarg, String.Join(",", strarray)));
 		}
 
 		public void SimpleBind([DataBind("order")] Order order)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("SimpleBind: order {0}", order);
+//			writer.WriteLine("------------------------------");
+			
 			RenderText(String.Format("incoming {0}", order.ToString()));
 		}
 
 		public void SimpleBindArray([DataBind("orders")] Order[] orders)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+			
 			if (orders == null)
 			{
 				RenderText("Null array shouldn't be returned by databinder");
 			}
 			else
 			{
+//				writer.WriteLine("SimpleBindArray: incoming {0}", orders.Length);
+				
 				RenderText(String.Format("incoming {0}", orders.Length));
 			}
+
+//			writer.WriteLine("------------------------------");
 		}
 
 		public void ComplexBind([DataBind("order")] Order order, [DataBind("person")] Person person)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("ComplexBind: incoming {0} {1}", order.ToString(), person.ToString());
+//			writer.WriteLine("------------------------------");
+//			
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
 		public void ComplexBindExcludePrice([DataBind("order", Exclude="Price")] Order order, [DataBind("person")] Person person)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("ComplexBindExcludePrice: incoming {0} {1}", order.ToString(), person.ToString());
+//
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
+//			
+//			writer.WriteLine("------------------------------");
 		}
 
 		public void ComplexBindExcludeName([DataBind("order", Exclude="Name")] Order order, [DataBind("person")] Person person)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("ComplexBindExcludeName: incoming {0} {1}", order.ToString(), person.ToString());
+//
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
+//			
+//			writer.WriteLine("------------------------------");
 		}
 
 		public void ComplexBindWithPrefix([DataBind("order")] Order order, [DataBind("person")] Person person)
 		{
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("ComplexBindWithPrefix: incoming {0} {1}", order.ToString(), person.ToString());
+//
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
+//
+//			writer.WriteLine("------------------------------");
 		}
 
 		public void FillingBehavior([DataBind("abc")] ClassWithInitializers clazz)
 		{
 			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
+//			writer.WriteLine("------------------------------");
+//			DumpFormAndGet();
+//			writer.WriteLine("FillingBehavior: incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString());
+//			writer.WriteLine("------------------------------");
+			
 			RenderText(String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString()));
 		}
 
@@ -103,6 +184,27 @@ namespace TestSiteNVelocity.Controllers
 			RenderText(tp1.ToString());
 			RenderText(tp2.ToString());
 		}
+		
+//		private void DumpFormAndGet()
+//		{
+//			writer.WriteLine("  <------ ");
+//			writer.WriteLine("  QueryString: ");
+//			writer.WriteLine(Request.Params["QUERY_STRING"]);
+//			writer.WriteLine("  ");
+//			writer.WriteLine("  Form: ");
+//			foreach(String key in Request.Form.AllKeys)
+//			{
+//				if (key == null)
+//				{
+//					writer.WriteLine("    null key!");
+//				}
+//				else
+//				{
+//					writer.WriteLine("    {0} {1}", key, Request.Form[key]);
+//				}
+//			}
+//			writer.WriteLine("  ------> ");
+//		}
 	}
 
 	public class ClassWithInitializers

@@ -61,9 +61,7 @@ namespace Castle.MonoRail.TestSupport
 			}
 			finally
 			{
-				bf = null;
 				if (ms != null) ms.Close();
-				ms = null;
 			}
 		}
 
@@ -166,6 +164,10 @@ namespace Castle.MonoRail.TestSupport
 			{
 				Request.QueryStringParams = queryStringParams;
 			}
+			else
+			{
+				Request.QueryStringParams = null;
+			}
 			
 			if (resendCookies)
 			{
@@ -219,6 +221,10 @@ namespace Castle.MonoRail.TestSupport
 				path = path.Substring(0, pos);
 				Request.QueryStringParams = qs.Split('&');
 			}
+			else
+			{
+				Request.QueryStringParams = null;
+			}
 
 			// Set the content type so that the post data comes through.
 			Request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -243,7 +249,14 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
 		public void DoHead(String path, params String[] postStringParams)
 		{
-			if (postStringParams.Length != 0) Request.PostParams = postStringParams;
+			if (postStringParams.Length != 0)
+			{
+				Request.PostParams = postStringParams;
+			}
+			else
+			{
+				Request.PostParams = null;
+			}
 
 			outputBuffer.Length = 0;
 
@@ -253,6 +266,10 @@ namespace Castle.MonoRail.TestSupport
 				string qs = path.Substring(pos + 1);
 				path = path.Substring(0, pos);
 				Request.QueryStringParams = qs.Split('&');
+			}
+			else
+			{
+				Request.QueryStringParams = null;
 			}
 
 			Request.Url = path;
@@ -270,9 +287,9 @@ namespace Castle.MonoRail.TestSupport
 			if (path.Length == 0)
 				throw new ArgumentException("Can't test an empty path", "path");
 			if (path[0] == '/')
-				throw new ArgumentException("Path mustn't start with a '/'!");
-			if (path.IndexOf('?') != -1)
-				throw new ArgumentException("Path cannot contain query parameters! Pass them seperatedly", "path");
+				throw new ArgumentException("Path cannot start with a '/'");
+			// if (path.IndexOf('?') != -1)
+			//	throw new ArgumentException("Path cannot contain query parameters! Pass them seperatedly", "path");
 		}
 
 		#endregion

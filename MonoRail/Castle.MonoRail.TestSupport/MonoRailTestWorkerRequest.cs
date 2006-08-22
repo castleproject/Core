@@ -21,7 +21,6 @@ namespace Castle.MonoRail.TestSupport
 	using System.Collections;
 	using System.Globalization;
 
-
 	public class MonoRailTestWorkerRequest : SimpleWorkerRequest
 	{
 		private TextWriter output;
@@ -35,9 +34,12 @@ namespace Castle.MonoRail.TestSupport
 		private String queryString;
 		private byte[] preloadedContent;
 		private byte[] queryStringBytes;
+		private StringBuilder buffer = new StringBuilder();
 
-		public MonoRailTestWorkerRequest(TestRequest requestData, 
-			String virtualAppPath, String physicalAppPath, TextWriter output) : base(virtualAppPath, String.Empty, output)
+		public MonoRailTestWorkerRequest(TestRequest requestData,
+		                                 String virtualAppPath,
+		                                 String physicalAppPath,
+		                                 TextWriter output) : base(virtualAppPath, String.Empty, output)
 		{
 			this.virtualAppPath = virtualAppPath;
 			this.requestData = requestData;
@@ -83,12 +85,12 @@ namespace Castle.MonoRail.TestSupport
 				}
 			}
 
-			int totalunknownHeaders = unknownHeaders.Count/2;
+			int totalunknownHeaders = unknownHeaders.Count / 2;
 			unknownRequestHeaders = new String[totalunknownHeaders][];
 
 			int j = 0;
 
-			for (int i = 0; i < totalunknownHeaders; i++)
+			for(int i = 0; i < totalunknownHeaders; i++)
 			{
 				unknownRequestHeaders[i] = new String[2];
 				unknownRequestHeaders[i][0] = (String) unknownHeaders[j++];
@@ -100,13 +102,15 @@ namespace Castle.MonoRail.TestSupport
 		{
 			if (requestData.QueryStringParams != null)
 			{
-				queryString = String.Empty;
-
-				foreach (String param in requestData.QueryStringParams)
+				buffer.Length = 0;
+				
+				foreach(String param in requestData.QueryStringParams)
 				{
-					queryString += String.Format("{0}&", param);
+					buffer.AppendFormat("{0}&", param);
 				}
-
+				
+				queryString = buffer.ToString();
+				
 				queryStringBytes = Encoding.ASCII.GetBytes(queryString);
 			}
 		}
@@ -115,16 +119,14 @@ namespace Castle.MonoRail.TestSupport
 		{
 			if (requestData.PostParams != null)
 			{
-				String postParamsExpanded = String.Empty;
+				buffer.Length = 0;
 
-				foreach (String param in requestData.PostParams)
+				foreach(String param in requestData.PostParams)
 				{
-					postParamsExpanded += String.Format("{0}&", param);
+					buffer.AppendFormat("{0}&", param);
 				}
 
-				byte[] buffer = Encoding.ASCII.GetBytes(postParamsExpanded);
-
-				preloadedContent = buffer;
+				preloadedContent = Encoding.ASCII.GetBytes(buffer.ToString());
 			}
 		}
 
@@ -135,8 +137,8 @@ namespace Castle.MonoRail.TestSupport
 
 		private string GetPathInternal()
 		{
-			return virtualAppPath.Equals("/") ? 
-				("/" + filePath) : (virtualAppPath + "/" + filePath);
+			return virtualAppPath.Equals("/")
+			       	? ("/" + filePath) : (virtualAppPath + "/" + filePath);
 		}
 
 		public override string GetAppPath()
@@ -149,11 +151,11 @@ namespace Castle.MonoRail.TestSupport
 			return appPhysicalPath + filePath.Replace('/', Path.DirectorySeparatorChar);
 		}
 
-		public override String MapPath(String path) 
+		public override String MapPath(String path)
 		{
-			String mappedPath = String.Empty;
+			String mappedPath;
 
-			if (path == null || path.Length == 0 || path.Equals("/")) 
+			if (path == null || path.Length == 0 || path.Equals("/"))
 			{
 				// asking for the site root
 				if ("/".Equals(virtualAppPath))
@@ -161,7 +163,7 @@ namespace Castle.MonoRail.TestSupport
 					// app at the site root
 					mappedPath = appPhysicalPath;
 				}
-				else 
+				else
 				{
 					// unknown site root - don't point to app root to avoid double config inclusion
 					mappedPath = Environment.SystemDirectory;
@@ -174,14 +176,14 @@ namespace Castle.MonoRail.TestSupport
 					path = path.Substring(1);
 				}
 
-				mappedPath = new DirectoryInfo( Path.Combine( appPhysicalPath, path ) ).FullName;
+				mappedPath = new DirectoryInfo(Path.Combine(appPhysicalPath, path)).FullName;
 			}
 
 			mappedPath = mappedPath.Replace('/', Path.DirectorySeparatorChar);
 
 			if (mappedPath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !mappedPath.EndsWith(":\\"))
 			{
-				mappedPath = mappedPath.Substring(0, mappedPath.Length-1);
+				mappedPath = mappedPath.Substring(0, mappedPath.Length - 1);
 			}
 
 			return mappedPath;
@@ -189,7 +191,7 @@ namespace Castle.MonoRail.TestSupport
 
 		public override String GetAppPathTranslated()
 		{
-			return this.appPhysicalPath;
+			return appPhysicalPath;
 		}
 
 		public override byte[] GetPreloadedEntityBody()
@@ -218,7 +220,7 @@ namespace Castle.MonoRail.TestSupport
 
 		public override String GetUnknownRequestHeader(String name)
 		{
-			for (int i = 0; i < unknownRequestHeaders.Length; i++)
+			for(int i = 0; i < unknownRequestHeaders.Length; i++)
 			{
 				if (String.Compare(name, unknownRequestHeaders[i][0], true, CultureInfo.InvariantCulture) == 0)
 				{
@@ -240,7 +242,7 @@ namespace Castle.MonoRail.TestSupport
 
 			if (value == null)
 			{
-				switch (name)
+				switch(name)
 				{
 					case "SERVER_PROTOCOL":
 						return requestData.Protocol;
@@ -298,8 +300,8 @@ namespace Castle.MonoRail.TestSupport
 
 		public override string GetRawUrl()
 		{
-			return String.Format("{0}{1}{2}", 
-				GetPathInternal(), queryString != null ? "?" : "", queryString);
+			return String.Format("{0}{1}{2}",
+			                     GetPathInternal(), queryString != null ? "?" : "", queryString);
 		}
 
 		public override string GetRemoteAddress()
@@ -325,7 +327,7 @@ namespace Castle.MonoRail.TestSupport
 		public override void SendKnownResponseHeader(int index, string value)
 		{
 			String key = GetKnownResponseHeaderName(index);
-			
+
 			SendUnknownResponseHeader(key, value);
 		}
 
@@ -367,7 +369,7 @@ namespace Castle.MonoRail.TestSupport
 				else
 				{
 					IList list = new ArrayList();
-					
+
 					list.Add(existingValue);
 					list.Add(value);
 
@@ -384,11 +386,6 @@ namespace Castle.MonoRail.TestSupport
 		public override string GetProtocol()
 		{
 			return requestData.Protocol;
-		}
-
-		public override void SendResponseFromMemory(IntPtr data, int length)
-		{
-			base.SendResponseFromMemory(data, length);
 		}
 
 		public override void SendCalculatedContentLength(int contentLength)
@@ -408,7 +405,6 @@ namespace Castle.MonoRail.TestSupport
 
 		public override void CloseConnection()
 		{
-			
 		}
 	}
 }
