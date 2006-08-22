@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{E1B10210-6A42-4993-B383-0F6AAC255A24}"
     >
@@ -94,6 +94,11 @@
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "MultiThreadTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "Test\AjaxHelper2.cs"
                     SubType = "Code"

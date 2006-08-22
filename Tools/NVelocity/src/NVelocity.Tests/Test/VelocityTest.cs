@@ -12,7 +12,7 @@ namespace NVelocity.Test
 	/// </summary>
 	[TestFixture]
 	public class VelocityTest
-	{
+	{	
 		[Test]
 		public void MathOperations()
 		{
