@@ -28,7 +28,7 @@
 	<property name="aopalliance.assembly.name" value="${aopalliance.name}.dll" />
 	
 	<property name="strong" value="false"  />
-	<property name="version" value="2.1.1.0" />
+	<property name="version" value="2.1.1.1" />
 
 	<property name="skip.antlr" value="false" />
 
