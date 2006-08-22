@@ -97,8 +97,20 @@ namespace AspectSharp.Builder
 				Configuration.Aspects.Add(aspect);
 
 				XmlNode singleType = node.SelectSingleNode("for/singletype");
-				aspect.TargetType = new TargetTypeDefinition();
-				aspect.TargetType.SingleType = CreateTypeReference(singleType);
+				if (singleType != null)
+				{
+					aspect.TargetType = new TargetTypeDefinition();
+					aspect.TargetType.SingleType = CreateTypeReference(singleType);
+					aspect.TargetType.TargetStrategy = TargetStrategyEnum.SingleType;
+				}
+
+				XmlNode assignableType = node.SelectSingleNode("for/assignable");
+				if (assignableType != null)
+				{
+					aspect.TargetType = new TargetTypeDefinition();
+					aspect.TargetType.AssignType = CreateTypeReference(assignableType);
+					aspect.TargetType.TargetStrategy = TargetStrategyEnum.Assignable;
+				}
 
 				XmlNodeList mixins = node.SelectNodes("mixin");
 				foreach (XmlNode inner in mixins)

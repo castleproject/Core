@@ -19,8 +19,10 @@ using AspectSharp.Builder;
 namespace Castle.Facilities.AspectSharp
 {
 	using System;
+	using System.Xml;
 
 	using Castle.Model;
+	using Castle.Model.Configuration;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 
@@ -49,11 +51,23 @@ namespace Castle.Facilities.AspectSharp
 
 		private void RegisterAspectEngine()
 		{
-			String contents = FacilityConfig.Value;
+			AspectEngineBuilder builder = null;
 
-			// By now we're supporting only AspectLanguageEngineBuilder
+			// see if we have an xml config
+			foreach(IConfiguration child in FacilityConfig.Children)
+			{
+				if("configuration".Equals(child.Name))
+				{
+					string config = ConfigurationToXml(child);
+					builder = new XmlEngineBuilder(config);
+				}
+			}
 
-			AspectEngineBuilder builder = new AspectLanguageEngineBuilder(contents);
+			// else we try to use the language engine 
+			if(builder == null)
+			{
+				builder = new AspectLanguageEngineBuilder(FacilityConfig.Value);
+			}
 
 			ComponentModel model = 
 				new ComponentModel("aspectsharp.engine", 
@@ -63,6 +77,41 @@ namespace Castle.Facilities.AspectSharp
 			model.CustomComponentActivator = typeof(AspectEngineActivator);
 
 			Kernel.AddCustomComponent( model );
+		}
+
+		protected string ConfigurationToXml(IConfiguration config)
+		{
+			XmlElement configRoot = ConfigurationToXml(config, null);
+
+			return configRoot.OuterXml;
+		}
+
+		protected XmlElement ConfigurationToXml(IConfiguration config, XmlElement root)
+		{
+			XmlDocument xmlDoc;
+
+			if (root == null)
+				xmlDoc = new XmlDocument();
+			else
+				xmlDoc = root.OwnerDocument;
+
+			XmlElement node = xmlDoc.CreateElement(config.Name);
+			node.InnerText = config.Value;
+
+			foreach (string attributeName in config.Attributes)
+			{
+				XmlAttribute xmlAttribute = xmlDoc.CreateAttribute(Convert.ToString(attributeName));
+				xmlAttribute.Value = Convert.ToString(config.Attributes[attributeName]);
+
+				node.Attributes.Append(xmlAttribute);
+			}
+
+			foreach (IConfiguration child in config.Children)
+			{
+				node.AppendChild(ConfigurationToXml(child, node));
+			}
+
+			return node;
 		}
 
 		private void RegisterInterceptor()

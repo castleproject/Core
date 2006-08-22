@@ -37,6 +37,13 @@ namespace AspectSharp.Core.Matchers
 		{
 			Type type = GetTypeToCompare(aspect);
 
+#if DOTNET2
+			if (type.IsGenericTypeDefinition && targetType.IsGenericType)
+			{
+				type = type.MakeGenericType(targetType.GetGenericArguments());
+			}
+#endif
+
 			if (type.IsAssignableFrom(targetType))
 			{
 				return true;

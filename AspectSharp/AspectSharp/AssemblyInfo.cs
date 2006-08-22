@@ -23,7 +23,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyProduct("Castle AspectSharp")]
 [assembly: AssemblyCopyright("Copyright (c) Original author or authors")]
 [assembly : AssemblyCulture("")]
-[assembly : AssemblyVersion("2.1.1.0")]
+[assembly : AssemblyVersion("2.1.1.1")]
 
 #if STRONG
 [assembly : AssemblyDelaySign(false)]
