@@ -598,6 +598,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\Conversion\Converters\TimeSpanConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubSystems\Conversion\Converters\TypeNameConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -41,6 +41,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		protected virtual void InitDefaultConverters()
 		{
 			Add( new PrimitiveConverter() );
+			Add( new TimeSpanConverter() );
 			Add( new TypeNameConverter() );
 			Add( new EnumConverter() );
 			Add( new ListConverter() );

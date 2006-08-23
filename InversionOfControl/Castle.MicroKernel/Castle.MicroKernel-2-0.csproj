@@ -364,6 +364,7 @@
     <Compile Include="SubSystems\Conversion\Converters\PrimitiveConverter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\TimeSpanConverter.cs" />
     <Compile Include="SubSystems\Conversion\Converters\TypeNameConverter.cs">
       <SubType>Code</SubType>
     </Compile>
