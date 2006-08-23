@@ -138,5 +138,15 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual("second", array[1]);
 			Assert.AreEqual("third", array[2]);
 		}
+
+		[Test]
+		public void PerformConversionTimeSpan()
+		{
+			Assert.AreEqual(TimeSpan.Zero, conversionMng.PerformConversion("0", typeof(TimeSpan)));
+			Assert.AreEqual(TimeSpan.FromDays(14), conversionMng.PerformConversion("14", typeof(TimeSpan)));
+			Assert.AreEqual(new TimeSpan(0, 1, 2, 3), conversionMng.PerformConversion("1:2:3", typeof(TimeSpan)));
+			Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 250), conversionMng.PerformConversion("0:0:0.250", typeof(TimeSpan)));
+			Assert.AreEqual(new TimeSpan(10, 20, 30, 40, 500), conversionMng.PerformConversion("10.20:30:40.50", typeof(TimeSpan)));
+		}
 	}
 }
