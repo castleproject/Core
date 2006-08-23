@@ -23,7 +23,7 @@ namespace NVelocity
 	using NVelocity.App;
 	using NVelocity.Test;
 
-	[TestFixture, NUnit.Framework.Explicit]
+	[TestFixture/*, Explicit*/]
 	public class MultiThreadTestCase
 	{
 		private ManualResetEvent startEvent = new ManualResetEvent(false);

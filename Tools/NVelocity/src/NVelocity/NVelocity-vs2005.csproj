@@ -373,6 +373,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime\Parser\Node\IParserVisitor.cs" />
+    <Compile Include="Runtime\Parser\Node\MathUtil.cs" />
     <Compile Include="Runtime\Parser\Node\NodeUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -446,6 +447,7 @@
     <Compile Include="Runtime\RuntimeConstants.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Runtime\RuntimeException.cs" />
     <Compile Include="Runtime\RuntimeInstance.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -221,7 +221,7 @@ namespace Commons.Collections
 		/// </exception>
 		public void Load(Stream input, String enc)
 		{
-			lock (this)
+			lock(this)
 			{
 				PropertiesReader reader = null;
 				if (enc != null)
@@ -247,7 +247,7 @@ namespace Commons.Collections
 					{
 						String line = reader.ReadProperty();
 
-						if(line==null) break;
+						if (line==null) break;
 
 						int equalSign = line.IndexOf((Char) '=');
 
