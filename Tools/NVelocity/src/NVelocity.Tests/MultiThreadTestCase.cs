@@ -28,7 +28,6 @@ namespace NVelocity
 	{
 		private ManualResetEvent startEvent = new ManualResetEvent(false);
 		private ManualResetEvent stopEvent = new ManualResetEvent(false);
-		private VelocityContext c;
 		private ArrayList items;
 		private VelocityEngine ve;
 
@@ -41,10 +40,6 @@ namespace NVelocity
 			items.Add("b");
 			items.Add("c");
 			items.Add("d");
-
-			c = new VelocityContext();
-			c.Put("x", new Something());
-			c.Put("items", items);
 
 			ve = new VelocityEngine();
 			ve.Init();
@@ -101,6 +96,10 @@ namespace NVelocity
 
 				StringWriter sw = new StringWriter();
 
+				VelocityContext c = new VelocityContext();
+				c.Put("x", new Something());
+				c.Put("items", items);
+
 				bool ok = ve.Evaluate(c, sw,
 					"ContextTest.CaseInsensitive",
 					@"
@@ -121,6 +120,10 @@ namespace NVelocity
 			while (!stopEvent.WaitOne(1, false))
 			{
 				StringWriter sw = new StringWriter();
+
+				VelocityContext c = new VelocityContext();
+				c.Put("x", new Something());
+				c.Put("items", items);
 
 				bool ok = ve.Evaluate(c, sw,
 					"ContextTest.CaseInsensitive",
