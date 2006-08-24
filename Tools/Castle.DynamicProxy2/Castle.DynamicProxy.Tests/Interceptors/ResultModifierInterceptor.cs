@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Test.Interceptors
 {
-	public class ResultModifiedInvocationHandler : StandardInterceptor
+	public class ResultModifierInterceptor : StandardInterceptor
 	{
 		protected override void PostProceed(IInvocation invocation)
 		{
@@ -25,6 +25,10 @@ namespace Castle.DynamicProxy.Test.Interceptors
 				int value = (int)returnValue;
 				
 				invocation.ReturnValue = --value;
+			}
+			if (returnValue != null && returnValue.GetType() == typeof(bool))
+			{
+				invocation.ReturnValue = true;
 			}
 		}
 	}
