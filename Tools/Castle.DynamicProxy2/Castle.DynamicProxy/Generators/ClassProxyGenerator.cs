@@ -123,7 +123,9 @@ namespace Castle.DynamicProxy.Generators
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
 
-						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(propToGen.GetMethod.Attributes);
+						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod);
+
+						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(atts);
 
 						ImplementProxiedMethod(targetType, getEmitter,
 						                       propToGen.GetMethod, emitter,
@@ -133,7 +135,9 @@ namespace Castle.DynamicProxy.Generators
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
 
-						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(propToGen.SetMethod.Attributes);
+						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod);
+
+						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(atts);
 
 						ImplementProxiedMethod(targetType, setEmitter,
 						                       propToGen.SetMethod, emitter, 

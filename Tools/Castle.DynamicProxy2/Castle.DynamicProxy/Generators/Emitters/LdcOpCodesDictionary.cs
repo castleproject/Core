@@ -29,16 +29,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private LdcOpCodesDictionary() : base()
 		{
-			Dictionary[ typeof (bool) ] = OpCodes.Ldc_I4;
-			Dictionary[ typeof (SByte) ] = OpCodes.Ldc_I4;
-			Dictionary[ typeof (Int16) ] = OpCodes.Ldc_I4;
-			Dictionary[ typeof (Int32) ] = OpCodes.Ldc_I4;
-			Dictionary[ typeof (Int64) ] = OpCodes.Ldc_I8;
-			Dictionary[ typeof (float) ] = OpCodes.Ldc_R4;
-			Dictionary[ typeof (double) ] = OpCodes.Ldc_R8;
-			Dictionary[ typeof (byte) ] = OpCodes.Ldc_I4_0;
-			Dictionary[ typeof (UInt16) ] = OpCodes.Ldc_I4_0;
-			Dictionary[ typeof (UInt32) ] = OpCodes.Ldc_I4_0;
+			Dictionary[typeof(bool)] = OpCodes.Ldc_I4;
+			Dictionary[typeof(SByte)] = OpCodes.Ldc_I4;
+			Dictionary[typeof(Int16)] = OpCodes.Ldc_I4;
+			Dictionary[typeof(Int32)] = OpCodes.Ldc_I4;
+			Dictionary[typeof(Int64)] = OpCodes.Ldc_I8;
+			Dictionary[typeof(float)] = OpCodes.Ldc_R4;
+			Dictionary[typeof(double)] = OpCodes.Ldc_R8;
+			Dictionary[typeof(byte)] = OpCodes.Ldc_I4_0;
+			Dictionary[typeof(UInt16)] = OpCodes.Ldc_I4_0;
+			Dictionary[typeof(UInt32)] = OpCodes.Ldc_I4_0;
+			Dictionary[typeof(UInt64)] = OpCodes.Ldc_I4_0;
 		}
 
 		public OpCode this[Type type]
@@ -47,7 +48,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				if (Dictionary.Contains(type))
 				{
-					return (OpCode) Dictionary[ type ];
+					return (OpCode) Dictionary[type];
 				}
 				return EmptyOpCode;
 			}

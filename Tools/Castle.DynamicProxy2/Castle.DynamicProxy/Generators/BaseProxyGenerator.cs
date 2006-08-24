@@ -268,6 +268,13 @@ namespace Castle.DynamicProxy.Generators
 			return atts;
 		}
 
+		private PropertyAttributes ObtainPropertyAttributes(PropertyInfo property)
+		{
+			PropertyAttributes atts = PropertyAttributes.None;
+
+			return atts;
+		}
+
 		#endregion
 
 		protected MethodBuilder CreateCallbackMethod(ClassEmitter emitter,
@@ -505,8 +512,10 @@ namespace Castle.DynamicProxy.Generators
 					continue;
 				}
 
-				PropertyEmitter propEmitter = 
-					emitter.CreateProperty(propInfo.Name, propInfo.Attributes, propInfo.PropertyType);
+				PropertyAttributes atts = ObtainPropertyAttributes(propInfo);
+
+				PropertyEmitter propEmitter =
+					emitter.CreateProperty(propInfo.Name, atts, propInfo.PropertyType);
 
 				PropertyToGenerate propToGenerate =
 					new PropertyToGenerate(generateReadable, generateWritable, propEmitter, getMethod, setMethod);
@@ -516,6 +525,8 @@ namespace Castle.DynamicProxy.Generators
 
 			propsToGenerate = (PropertyToGenerate[]) toGenerateList.ToArray(typeof(PropertyToGenerate));
 		}
+
+		
 
 		protected bool AcceptMethod(MethodInfo method, bool onlyVirtuals)
 		{
