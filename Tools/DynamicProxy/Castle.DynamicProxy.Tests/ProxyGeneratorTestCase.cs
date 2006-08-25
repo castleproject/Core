@@ -26,7 +26,6 @@ namespace Castle.DynamicProxy.Test
 	using Castle.DynamicProxy.Test.Interceptors;
 	using Castle.DynamicProxy.Test.ClassInterfaces;
 	
-
 	[TestFixture]
 	public class ProxyGeneratorTestCase
 	{

@@ -93,8 +93,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			constructor.CodeBuilder.InvokeBaseConstructor( baseConstructor, originalArguments );
 
 			constructor.CodeBuilder.AddStatement( new ReturnStatement() );
-
-
+			
 			return constructor;
 		}
 
@@ -143,7 +142,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		}
 
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, 
-			ArgumentReference arg1, ArgumentReference arg2)
+		                                               ArgumentReference arg1, ArgumentReference arg2)
 		{
 			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
 			Type[] key_and_bool = new Type[] {typeof (String), typeof (bool)};
