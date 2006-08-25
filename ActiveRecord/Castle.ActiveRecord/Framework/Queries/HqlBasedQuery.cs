@@ -111,16 +111,17 @@ namespace Castle.ActiveRecord.Queries
 
 				return Convert.ToInt32(ActiveRecordMediator.ExecuteQuery(q));
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				// swallow the exception and return -1
+				// log the exception and return -1
+				Log.Debug("Error while obtaining count. Will return -1 as result.", ex);
 				return -1;
 			}
 		}
 		
 		static readonly Regex 
-			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
+			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
 		protected virtual String PrepareQueryForCount(String query)
 		{
 			query = rxOrderBy.Replace(query, String.Empty);
@@ -128,6 +129,8 @@ namespace Castle.ActiveRecord.Queries
 				query = "select count(*) " + query;
 			else
 				query = "select count(*) from (" + query + ")";
+			
+			Log.Debug("Query prepared for count: {0}", query);
 			
 			return query;
 		}
