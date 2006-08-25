@@ -17,12 +17,12 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 
+	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Queries;
 	using Castle.ActiveRecord.Queries.Modifiers;
+	using Castle.Services.Logging;
 
 	using NHibernate;
-
-	using Castle.ActiveRecord.Framework;
 	
 	/// <summary>
 	/// Base class for all ActiveRecord queries.
@@ -30,6 +30,8 @@ namespace Castle.ActiveRecord
 	public abstract class ActiveRecordBaseQuery : IActiveRecordQuery, ICloneable
 	{
 		private readonly Type targetType;
+		
+		private ILogger log = NullLogger.Instance;
 		
 		protected IList queryModifiers;
 
@@ -41,6 +43,19 @@ namespace Castle.ActiveRecord
 		public Type Target
 		{
 			get { return targetType; }
+		}
+		
+		/// <summary>
+		/// Use the specified logger to output diagnostic messages.
+		/// </summary>
+		public ILogger Log
+		{
+			get { return log; }
+			set {
+				if (value == null)
+					throw new ArgumentException("The logger could not be null, use NullLogger.Instance instead.");
+				log = value;
+			}
 		}
 
 		#region IActiveRecordQuery implementation

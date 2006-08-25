@@ -36,6 +36,7 @@
 		<mkdir dir="${doc.dir}" />
 
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-castle.model" inheritall="true" />
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-logging-service" inheritall="true" />
 
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-dynamicproxy" inheritall="true" />
 
@@ -132,6 +133,7 @@
 
 			<references>
 				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.Services.Logging.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/Nullables.dll" if="${framework::get-target-framework()=='net-1.1'}" />
 				<include name="${bin.dir}/Nullables.NHibernate.dll" if="${framework::get-target-framework()=='net-1.1'}" />
@@ -158,6 +160,7 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.Services.Logging.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/log4net.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
@@ -180,6 +183,7 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.Services.Logging.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/log4net.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
