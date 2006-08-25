@@ -71,12 +71,12 @@ namespace Castle.DynamicProxy
 
 		#region CreateClassProxy overloads
 
-		public object CreateClassProxy(Type targetType, IInterceptor interceptor)
+		public object CreateClassProxy(Type targetType, params IInterceptor[] interceptors)
 		{
-			return CreateClassProxy(targetType, new IInterceptor[] { interceptor });
+			return CreateClassProxy(targetType, null, interceptors);
 		}
 
-		public object CreateClassProxy(Type targetType, IInterceptor[] interceptors)
+		public object CreateClassProxy(Type targetType, Type[] interfaces, params IInterceptor[] interceptors)
 		{
 #if DOTNET2
 			if (targetType.IsGenericTypeDefinition)
@@ -84,8 +84,8 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("You can't specify a generic type definition", "baseClass");
 			}
 #endif
-			
-			Type proxyType = CreateClassProxyType(targetType, ProxyGenerationOptions.Default);
+
+			Type proxyType = CreateClassProxyType(targetType, interfaces, ProxyGenerationOptions.Default);
 
 #if DOTNET2
 			if (targetType.IsGenericType)
@@ -99,9 +99,9 @@ namespace Castle.DynamicProxy
 
 		#endregion
 
-		protected Type CreateClassProxyType(Type baseClass, ProxyGenerationOptions options)
+		protected Type CreateClassProxyType(Type baseClass, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			return ProxyBuilder.CreateClassProxy(baseClass, options);
+			return ProxyBuilder.CreateClassProxy(baseClass, interfaces, options);
 		}
 
 //		protected Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, 

@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Test
 {
+	using System;
 	using Castle.DynamicProxy.Test.Classes;
 	using Castle.DynamicProxy.Test.Interceptors;
 	
@@ -57,5 +58,22 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual(45, instance.Sum((uint)20, (uint)25)); // uint
 			Assert.AreEqual(45, instance.Sum((ulong)20, (ulong)25)); // ulong
 		}
+
+		[Test]
+		public void ProxyForClassWithInterfaces()
+		{
+			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new Type[] { typeof(IDisposable) },
+				new ResultModifierInterceptor());
+
+			Assert.IsNotNull(proxy);
+			Assert.IsTrue(typeof(ServiceClass).IsAssignableFrom(proxy.GetType()));
+			Assert.IsTrue(typeof(IDisposable).IsAssignableFrom(proxy.GetType()));
+
+			ServiceClass inter = (ServiceClass)proxy;
+
+			Assert.AreEqual(44, inter.Sum(20, 25));
+			Assert.AreEqual(true, inter.Valid);
+		}
+
 	}
 }

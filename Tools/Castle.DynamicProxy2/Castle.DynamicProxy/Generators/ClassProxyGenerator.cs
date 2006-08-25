@@ -35,6 +35,8 @@ namespace Castle.DynamicProxy.Generators
 
 		public Type GenerateCode(Type targetType, Type[] interfaces, ProxyGenerationOptions options)
 		{
+			Type type = null;
+			
 			ReaderWriterLock rwlock = Scope.RWLock;
 
 			rwlock.AcquireReaderLock(-1);
@@ -54,10 +56,12 @@ namespace Castle.DynamicProxy.Generators
 
 			try
 			{
-				// String newName = Guid.NewGuid().ToString("N");
-				String newName = "Proxy";
+				String newName = Guid.NewGuid().ToString("N");
+				// String newName = "Proxy";
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaces);
+
+				ReplicateNonInheritableAttributes(targetType, emitter);
 
 				// Fields generations
 
@@ -69,6 +73,16 @@ namespace Castle.DynamicProxy.Generators
 				PropertyToGenerate[] propsToGenerate;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, out propsToGenerate, targetType);
 
+				// Implement interfaces
+
+				if (interfaces != null && interfaces.Length != 0)
+				{
+					foreach(Type inter in interfaces)
+					{
+						ImplementInterface(inter);
+					}
+				}
+				
 				// Constructor
 
 				GenerateConstructor(targetType, methods, emitter, interceptorsField);
@@ -114,6 +128,8 @@ namespace Castle.DynamicProxy.Generators
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(
 						targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self);
 
+					ReplicateNonInheritableAttributes(method, newProxiedMethod);
+					
 					method2Emitter[method] = newProxiedMethod;
 				}
 
@@ -130,7 +146,10 @@ namespace Castle.DynamicProxy.Generators
 						ImplementProxiedMethod(targetType, getEmitter,
 						                       propToGen.GetMethod, emitter,
 											   nestedClass, interceptorsField, SelfReference.Self);
+
+						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
 					}
+					
 					if (propToGen.CanWrite)
 					{
 						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
@@ -142,20 +161,43 @@ namespace Castle.DynamicProxy.Generators
 						ImplementProxiedMethod(targetType, setEmitter,
 						                       propToGen.SetMethod, emitter, 
 						                       nestedClass, interceptorsField, SelfReference.Self);
+
+						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
 					}
 				}
 
-				Type type = emitter.BuildType();
+				type = emitter.BuildType();
 
 				AddToCache(cacheKey, type);
 
-				return type;
 			}
 			finally
 			{
 				rwlock.DowngradeFromWriterLock(ref lc);
+			}
 
-				Scope.SaveAssembly();
+			Scope.SaveAssembly();
+
+			return type;
+		}
+
+		private void ReplicateNonInheritableAttributes(Type targetType, ClassEmitter emitter)
+		{
+			object[] attrs = targetType.GetCustomAttributes(false);
+			
+			foreach(Attribute attribute in attrs)
+			{
+				emitter.DefineCustomAttribute(attribute);
+			}
+		}
+
+		private void ReplicateNonInheritableAttributes(MethodInfo method, MethodEmitter emitter)
+		{
+			object[] attrs = method.GetCustomAttributes(false);
+
+			foreach (Attribute attribute in attrs)
+			{
+				emitter.DefineCustomAttribute(attribute);
 			}
 		}
 

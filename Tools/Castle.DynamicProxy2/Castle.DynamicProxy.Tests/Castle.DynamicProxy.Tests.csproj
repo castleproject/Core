@@ -36,10 +36,13 @@
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
     <Compile Include="BasicClassProxyTestCase.cs" />
+    <Compile Include="Classes\AttributedClass.cs" />
     <Compile Include="Classes\NonPublicConstructorClass.cs" />
     <Compile Include="Classes\NonPublicMethodsClass.cs" />
     <Compile Include="Classes\ServiceClass.cs" />
+    <Compile Include="ClassWithAttributesTestCase.cs" />
     <Compile Include="Interceptors\LogInvocationInterceptor.cs" />
+    <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interceptors\ResultModifierInterceptor.cs" />
   </ItemGroup>

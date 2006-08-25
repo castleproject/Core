@@ -125,6 +125,7 @@
     <Compile Include="Generators\Emitters\ConstructorEmitter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\CustomAttributeUtil.cs" />
     <Compile Include="Generators\Emitters\EventCollection.cs">
       <SubType>Code</SubType>
     </Compile>

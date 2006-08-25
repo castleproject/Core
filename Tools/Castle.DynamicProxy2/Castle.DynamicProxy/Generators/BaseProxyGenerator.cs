@@ -27,6 +27,19 @@ namespace Castle.DynamicProxy.Generators
 	/// Base class that exposes the common functionalities
 	/// to proxy generation.
 	/// </summary>
+	/// <remarks>
+	/// TODO: 
+	/// - Add events so people can hook into the proxy generation and change the generated code
+	/// - Add support for interfaces
+	/// - Add serialization support
+	/// - Add Xml serialization support
+	/// - Allow one to specify the base class for interface proxies
+	/// - Use the interceptor selector if provided
+	/// - Expose parameters of non-parameterless constructors on the generated constructor
+	/// - Duplicate attributes from the target (interface or concrete class). Class level, method level attributes
+	///   - What about parameter attributes?
+	/// - Add tests and fixes for 'leaking this' problem
+	/// </remarks>
 	public abstract class BaseProxyGenerator
 	{
 		private readonly ModuleScope scope;
@@ -87,6 +100,12 @@ namespace Castle.DynamicProxy.Generators
 			return ImplementProxiedMethod(targetType, 
 			                              methodEmitter, method, 
 			                              emitter, invocationImpl, interceptorsField, targetRef);
+		}
+
+		protected void ImplementInterface(Type _interface)
+		{
+			// TODO: The invocation generated in this case should throw an exception
+			// on the InvokeMethodOnBase as there's no target to call
 		}
 
 		protected MethodEmitter ImplementProxiedMethod(Type targetType, MethodEmitter methodEmitter, MethodInfo method,

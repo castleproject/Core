@@ -134,28 +134,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return propEmitter;
 		}
 
-//		public EasyProperty CreateProperty(String name, Type returnType)
-//		{
-//			EasyProperty prop = new EasyProperty(this, name, returnType);
-//			properties.Add(prop);
-//			return prop;
-//		}
-//
-//		public EasyProperty CreateProperty(PropertyInfo property)
-//		{
-//			EasyProperty prop = new EasyProperty(this, property.Name, property.PropertyType);
-//			prop.IndexParameters = property.GetIndexParameters();
-//			properties.Add(prop);
-//			return prop;
-//		}
-//
-//		public EasyEvent CreateEvent(String name, Type eventHandlerType)
-//		{
-//			EasyEvent easyEvent = new EasyEvent(this, name, eventHandlerType);
-//			events.Add(easyEvent);
-//			return easyEvent;
-//		}
-
+		public void DefineCustomAttribute(Attribute attribute)
+		{
+			typebuilder.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
+		}
+		
 		public ConstructorCollection Constructors
 		{
 			get { return constructors; }
