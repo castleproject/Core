@@ -29,6 +29,7 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
+
 		public ClassProxyGenerator(ModuleScope scope) : base(scope)
 		{
 		}
@@ -56,8 +57,8 @@ namespace Castle.DynamicProxy.Generators
 
 			try
 			{
-				String newName = Guid.NewGuid().ToString("N");
-				// String newName = "Proxy";
+				// String newName = Guid.NewGuid().ToString("N");
+				String newName = "Proxy";
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaces);
 
@@ -71,7 +72,13 @@ namespace Castle.DynamicProxy.Generators
 				// Collect methods
 
 				PropertyToGenerate[] propsToGenerate;
-				MethodInfo[] methods = CollectMethodsAndProperties(emitter, out propsToGenerate, targetType);
+				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate);
+
+				// Constructor
+
+				initCacheMethod = CreateInitializeCacheMethod(targetType, methods, emitter);
+
+				GenerateConstructor(initCacheMethod, emitter, interceptorsField);
 
 				// Implement interfaces
 
@@ -79,13 +86,9 @@ namespace Castle.DynamicProxy.Generators
 				{
 					foreach(Type inter in interfaces)
 					{
-						ImplementInterface(inter);
+						ImplementBlankInterface(targetType, inter, emitter, interceptorsField);
 					}
 				}
-				
-				// Constructor
-
-				GenerateConstructor(targetType, methods, emitter, interceptorsField);
 
 				// Create callback methods
 
@@ -165,6 +168,12 @@ namespace Castle.DynamicProxy.Generators
 						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
 					}
 				}
+				
+				// Complete Initialize 
+
+				CompleteInitCacheMethod(initCacheMethod);
+				
+				// Crosses fingers and build type
 
 				type = emitter.BuildType();
 
@@ -181,25 +190,7 @@ namespace Castle.DynamicProxy.Generators
 			return type;
 		}
 
-		private void ReplicateNonInheritableAttributes(Type targetType, ClassEmitter emitter)
-		{
-			object[] attrs = targetType.GetCustomAttributes(false);
-			
-			foreach(Attribute attribute in attrs)
-			{
-				emitter.DefineCustomAttribute(attribute);
-			}
-		}
 
-		private void ReplicateNonInheritableAttributes(MethodInfo method, MethodEmitter emitter)
-		{
-			object[] attrs = method.GetCustomAttributes(false);
-
-			foreach (Attribute attribute in attrs)
-			{
-				emitter.DefineCustomAttribute(attribute);
-			}
-		}
 
 		protected override Reference GetProxyTargetReference()
 		{

@@ -230,6 +230,7 @@
     <Compile Include="Generators\Emitters\SimpleAST\Statement.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ThrowStatement.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\TypeReference.cs">
       <SubType>Code</SubType>
     </Compile>

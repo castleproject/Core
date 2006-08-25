@@ -73,7 +73,19 @@ namespace Castle.DynamicProxy.Test
 
 			Assert.AreEqual(44, inter.Sum(20, 25));
 			Assert.AreEqual(true, inter.Valid);
+			
+			try
+			{
+				IDisposable disp = (IDisposable) proxy;
+				disp.Dispose();
+				
+				Assert.Fail("Expected exception as Dispose has no implementation");
+			}
+			catch(NotImplementedException ex)
+			{
+				Assert.AreEqual("This is a DynamicProxy2 error: the interceptor attempted " + 
+					"to 'Proceed' for a method without a target, for example, an interface method", ex.Message);
+			}
 		}
-
 	}
 }
