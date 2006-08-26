@@ -1,0 +1,33 @@
+Today
+=====
+
+Castle has a transaction service which is a simplification of JTA. The idea is to create logical transactions boundaries, usually associated with a thread (or something else) that represent an activity. 
+
+Once a transaction is started, transaction-aware resources can detect it and enlist resources and/or register synchronizations. For example, NHibernate facility and ActiveRecord Facility start database transactions and enlist them into the logical transaction on the thread, so it's up to Castle.Services.Transaction to control the end of the transaction and how it's gonna end (commit/abort)
+
+This model is also very extensible. It wont be too difficult to create a transaction-aware IO (file services), and a transaction-aware email component.
+
+
+.Net 2 TransactionScope
+=======================
+
+With .Net 2 Microsoft offers a more lightweight and scoped transaction support which is also logical, but with a very limited API, i.e. not at all extensible.
+
+The most logical path would be to make bridge the Castle API to use/rely on MS' implementation, but as the API is almost 100% internal/private this won't be possible. 
+
+
+What need to be accomplished
+============================
+
+Ideally we continue to create castle transactions and thus continue to provide the extensibility we offer today. But we internally create a MS' transaction. 
+
+Transaction-aware resources need to be tested to check if they integrate well with MS' API. For a more concrete example, if a logical transaction is created in the middle of an ActiveRecord operation, will the transaction be activated for the connections in use? Will it support isolated transactions?
+
+This require lots of tests and right now there's no clear and proven way to achieve the proposed goal, that's why we invite and encourage people to experiment and contribute.
+
+
+
+
+
+
+hammett / 4:13 AM 26/08/2006
