@@ -74,6 +74,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Components.Common.EmailSender, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Components.Common.EmailSender.SmtpEmailSender, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
+    </Reference>
     <Reference Include="Nullables, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\nhibernate\Nullables.dll</HintPath>
@@ -121,6 +129,8 @@
     <Compile Include="Components\BlockViewComponent2.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\ComponentAndParams.cs" />
+    <Compile Include="Components\GridComponent.cs" />
     <Compile Include="Components\InlineComponentWithParam1.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,6 +143,7 @@
     <Compile Include="Components\SimpleInlineViewComponent3.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\SimpleInlineViewComponent4.cs" />
     <Compile Include="Components\TemplatedInlineViewComponent.cs" />
     <Compile Include="Controllers\ActionProviders\DynamicActionProvider1.cs">
       <SubType>Code</SubType>
@@ -152,6 +163,7 @@
     <Compile Include="Controllers\DynController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\Exception.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -161,6 +173,7 @@
     <Compile Include="Controllers\FlashController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\FormHelperController.cs" />
     <Compile Include="Controllers\HelperController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -197,6 +210,7 @@
     <Compile Include="Controllers\TestWizardController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\UsingComponent2Controller.cs" />
     <Compile Include="Controllers\UsingComponentController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -211,9 +225,12 @@
     <None Include="views\components\TemplatedInlineViewComponent\templatedview.vm" />
     <None Include="views\cookies\index.vm" />
     <None Include="views\dyn\index.vm" />
+    <None Include="views\email\SendEmail.vm" />
     <None Include="views\flash\flashContents.vm" />
     <None Include="views\flash\flashIt.vm" />
     <None Include="views\flash\validateRequest.vm" />
+    <None Include="views\formhelper\index.vm" />
+    <None Include="views\formhelper\useparamstofillinputs.vm" />
     <None Include="views\helper\DictHelperUsage.vm" />
     <None Include="views\home\display.vm" />
     <None Include="views\home\heyhello.vm" />
@@ -222,6 +239,8 @@
     <None Include="views\layoutable\index.vm" />
     <None Include="views\layouts\master.vm" />
     <None Include="views\layouts\master2.vm" />
+    <None Include="views\mail\myemail1.vm" />
+    <None Include="views\mail\myemail2.vm" />
     <None Include="views\paginated\list1.vm" />
     <None Include="views\rescues\appException.vm" />
     <None Include="views\rescues\argException.vm" />
@@ -237,9 +256,15 @@
     <None Include="views\testwizard\page3.vm" />
     <None Include="views\testwizard\page4.vm" />
     <None Include="views\userlist.vm" />
+    <None Include="views\UsingComponent2\ComponentAndParams1.vm" />
+    <None Include="views\UsingComponent2\ComponentWithInvalidSections.vm" />
+    <None Include="views\UsingComponent2\GridComponent1.vm" />
+    <None Include="views\UsingComponent2\GridComponent2.vm" />
     <None Include="views\UsingComponent\CaptureFor.vm" />
     <None Include="views\UsingComponent\CaptureForAppend.vm" />
     <None Include="views\UsingComponent\CaptureForAppendBefore.vm" />
+    <None Include="views\UsingComponent\CaptureForDirective.vm" />
+    <None Include="views\UsingComponent\index10.vm" />
     <None Include="views\UsingComponent\InlineComponentUsingTemplatedRender.vm" />
     <None Include="views\UsingComponent\index.vm" />
     <None Include="views\UsingComponent\index1.vm" />
