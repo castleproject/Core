@@ -174,7 +174,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				context.Add(entry.Key, entry.Value);
 			}
 
-#if DEBUG
+#if USE_LOCAL_TEMPLATES
 			templateEngine.Process( context, templateName, writer );
 #else
 			templateEngine.Process( context, "Castle.MonoRail.ActiveRecordScaffold/Templates/" + templateName, writer );

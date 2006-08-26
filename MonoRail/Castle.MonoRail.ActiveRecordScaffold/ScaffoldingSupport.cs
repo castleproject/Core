@@ -88,7 +88,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			if (templateEngine == null)
 			{
 				NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
-#if DEBUG
+#if USE_LOCAL_TEMPLATES
 				nvelTemplateEng.TemplateDir = @"E:\dev\castleall\trunk\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
 				nvelTemplateEng.BeginInit();
 				nvelTemplateEng.EndInit();
