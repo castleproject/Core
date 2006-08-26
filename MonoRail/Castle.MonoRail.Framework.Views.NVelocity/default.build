@@ -73,10 +73,18 @@
 	<target name="test" depends="tests.run" />
 
 	<target name="tests.run" depends="tests.compile">
+		<exec 
+			program="${nunit-console}" 
+			workingdir="${bin.dir}" 
+			commandline="${test.assembly.name} /xml:${test.output.dir}/${assembly.name}-results.xml /nologo"
+			unless="${tests.disabled}" />
+		
+		<!--
 		<nunit2>
 			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
+		-->
 	</target>
 
 </project>

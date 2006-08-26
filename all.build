@@ -5,6 +5,7 @@
 	<property name="skipcaspol" value="true" />
 	<property name="sharedlibrary.dir" value="${base.dir}/SharedLibs" />
 	<property name="tempdir" value="tempdir" />
+	<property name="test.output.dir" value="${path::combine(base.dir, 'test-results')}" />
 
 	<include buildfile="common.inc" />
 	
@@ -12,6 +13,8 @@
 
 	<target name="clean">
 		<delete dir="${build.dir}" failonerror="false" />
+		
+		<delete dir="${test.output.dir}" failonerror="false" />
 	</target>
 		
 	<target name="cleanall">
@@ -29,7 +32,24 @@
 	
 	<target name="init">
 		<mkdir dir="${build.dir}" />
+		<mkdir dir="${test.output.dir}" />
+		
 		<call target="copydistdependencies" />
+
+		<exec 
+			program="${nunit-console}" 
+			resultproperty="nunit.found"
+			failonerror="false" />
+
+		<echo message="nunit-console invocation result: ${nunit.found}" />
+
+		<property name="tests.disabled" value="false" />
+
+		<if test="${nunit.found!='0'}">
+			<property name="tests.disabled" value="true" />
+		</if>
+
+		<echo message="Tests with nunit-console are disabled?  ${tests.disabled}" />
 	</target>
 	
 	<target name="copydistdependencies">

@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <project name="Common Build Properties">
 	<!-- Common properties that allow overrides -->
+	
+	<property name="nunit-console" value="nunit-console.exe" if="${framework::get-target-framework()=='net-1.1'}" />
+	<property name="nunit-console" value="nunit-console-1-1.exe" if="${framework::get-target-framework()=='net-1.1'}" />
+	<property name="nunit-console" value="nunit-console-2-0.exe" if="${framework::get-target-framework()=='net-2.0'}" />
+
+	<echo message="Using ${nunit-console}" />
 
 	<property name="rootbuild.dir" value="${directory::get-current-directory()}" unless="${property::exists('rootbuild.dir')}"/>
 		
@@ -20,7 +26,7 @@
 	<property name="define"     value="TRACE"               if="${trace}" />
 	<!-- Framework 2.0 defines -->
 	<property name="define"     value="${define};DOTNET2"   if="${framework::get-target-framework()=='net-2.0'}"/>
-    <!-- Make sure the property exists -->
+	<!-- Make sure the property exists -->
 	<property name="define"     value=""                    unless="${property::exists('define')}" />
 
 	<!-- properties used to connect to database for testing -->
@@ -66,17 +72,14 @@
 		value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}"
 		dynamic="true" />
 
-    <!-- Uncomment this block for nant backward compatibility
+	<!-- Uncomment this block for nant backward compatibility
 	<property name="lib.framework.dir"
 		value="${path::combine(lib.family.dir, framework::get-version(framework::get-target-framework()))}"
 		dynamic="true" />
-    -->
+	-->
 		
-	<property name="nunit.framework.dll"
-			value="${path::combine(lib.framework.dir, 'nunit.framework.dll')}" />
+	<property name="nunit.framework.dll" value="${path::combine(lib.framework.dir, 'nunit.framework.dll')}" />
 
-	<property name="nant.tasks.nunit2"
-			value="False"
-			unless="${property::exists('nant.tasks.nunit2')}" />
+	<property name="nant.tasks.nunit2" value="False" unless="${property::exists('nant.tasks.nunit2')}" />
 
 </project>

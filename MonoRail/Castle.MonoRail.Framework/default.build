@@ -20,7 +20,7 @@
 	</target>
 
 	<target name="init" depends="clean">
-                <property name="define" value="${define};${strong};${enabletest}"/>
+		<property name="define" value="${define};${strong};${enabletest}"/>
 
 		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>
@@ -60,7 +60,7 @@
 	<target name="tests.compile" depends="init">
 		<csc 
 			target="library" 
-		    define="${define}" 
+			define="${define}" 
 			debug="${debug}" 
 			output="${bin.dir}/${test.assembly.name}">
 			
@@ -83,10 +83,18 @@
 	<target name="test" depends="tests.run" />
 	
 	<target name="tests.run" depends="tests.compile">
+		<exec 
+			program="${nunit-console}" 
+			workingdir="${bin.dir}" 
+			commandline="${test.assembly.name} /xml:${test.output.dir}/${assembly.name}-results.xml /nologo"
+			unless="${tests.disabled}" />
+		
+		<!--
 		<nunit2>
 			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
+		-->
 	</target>
 	
 </project>

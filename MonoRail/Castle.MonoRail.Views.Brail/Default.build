@@ -19,11 +19,20 @@
 	<property name="src.dir" value="${base.dir}/" />
 	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
 
+	<target name="clean">
+	</target>
+
+	<target name="init" depends="clean">
+		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
+	</target>
+
 	<loadtasks assembly="${shared.lib.dir}/Boo.NAnt.Tasks.dll" verbose="true" />
+	
 	<echo>${bin.dir}\anrControls.Markdown.NET.dll</echo>
-	<target name="compile">		
+	
+	<target name="compile" depends="init">
 		<booc target="library" 
-		      output="${bin.dir}\${assembly.name}" 
+				output="${bin.dir}\${assembly.name}" 
 				debug="${debug}">
 			<sources basedir="${src.dir}">
 				<include name="**.boo" />
@@ -42,8 +51,8 @@
 
 	<target name="tests.compile">
 		<booc target="library" 
-		      output="${bin.dir}\${test.assembly.name}" 
-		      debug="${debug}" >
+				output="${bin.dir}\${test.assembly.name}" 
+				debug="${debug}" >
 			<sources basedir="${test.src.dir}">
 				<include name="**/*.boo" />
 				<exclude name="Views/**.boo" />
@@ -66,14 +75,24 @@
 	<target name="sample.compile">
 		<nant buildfile="${sample.dir}/sample.build" inheritall="true"/>
 	</target>
-	<target name="test" depends="tests.run" />
+	
+	<target name="test" depends="tests.run,init" />
 
 	<target name="tests.run" depends="tests.compile, sample.compile" if="${booviewengine.test}">
 		<copy file="${bin.dir}\Castle.MonoRail.TestSupport.dll" todir="${sample.dir}/bin"/>
+		
+		<exec 
+			program="${nunit-console}" 
+			workingdir="${bin.dir}" 
+			commandline="${test.assembly.name} /xml:${test.output.dir}/${assembly.name}-results.xml /nologo"
+			unless="${tests.disabled}" />
+
+		<!--
 		<nunit2>
 			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" appconfig="${test.src.dir}\app.config"/>
 		</nunit2>
+		-->
 	</target>
 
 </project>
