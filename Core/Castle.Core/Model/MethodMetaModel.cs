@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.Core
 {
 	using System;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 
 	[Serializable]

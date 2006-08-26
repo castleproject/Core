@@ -37,7 +37,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleLoggerTestCase.cs" />
+    <Compile Include="DiagnosticsLoggerTestCase.cs" />
+    <Compile Include="GraphTestCase.cs" />
+    <Compile Include="LevelFilteredLoggerTests.cs" />
+    <Compile Include="LinkedListTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\AssemblyResourceFactoryTestCase.cs" />
+    <Compile Include="Resources\CustomUriTestCase.cs" />
+    <Compile Include="Resources\FileResourceFactoryTestCase.cs" />
+    <Compile Include="Resources\UncResourceFactoryTestCase.cs" />
+    <Compile Include="StreamLoggerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\file1.txt" />
+    <Content Include="Resources\MoreRes\file2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

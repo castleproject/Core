@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model.Tests
+namespace Castle.Core.Tests
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Castle.Model.Internal;
+	using Castle.Core.Internal;
 
 	[TestFixture]
 	public class GraphTestCase

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model.Resource
+namespace Castle.Core.Resource
 {
 	using System;
 	using System.IO;

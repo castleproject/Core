@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model.Tests.Resources
+namespace Castle.Core.Tests.Resources
 {
 	using System;
 	using System.IO;
 
 	using NUnit.Framework;
 
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 
 	[TestFixture]
 	public class FileResourceFactoryTestCase
 	{
 		private FileResourceFactory resFactory = new FileResourceFactory();
-		private String basePath = "../Castle.Model.Tests/Resources";
+		private String basePath = "../Castle.Core.Tests/Resources";
 
 		[TestFixtureSetUp]
 		public void Init()

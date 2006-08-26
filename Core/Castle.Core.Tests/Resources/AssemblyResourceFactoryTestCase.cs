@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model.Tests.Resources
+namespace Castle.Core.Tests.Resources
 {
 	using System;
 
 	using NUnit.Framework;
 	
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 
 
@@ -26,7 +26,7 @@ namespace Castle.Model.Tests.Resources
 	public class AssemblyResourceFactoryTestCase
 	{
 		private AssemblyResourceFactory resFactory = new AssemblyResourceFactory();
-		private String AssemblyName = "Castle.Model.Tests";
+		private String AssemblyName = "Castle.Core.Tests";
 		private String ResPath = "Resources";
 
 		[Test]

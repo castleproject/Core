@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model.Tests.Resources
+namespace Castle.Core.Tests.Resources
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 
 	[TestFixture]
@@ -33,7 +33,7 @@ namespace Castle.Model.Tests.Resources
 			Assert.IsFalse( resFactory.Accept( new CustomUri("http://www.castleproject.org") ) );
 		}
 
-		[Test, Ignore("Requires network share")]
+		[Test, Explicit]
 		public void CreateWithAbsolutePath()
 		{
 			CustomUri uri = new CustomUri(@"\\hammet\C$\file.txt");
@@ -45,7 +45,7 @@ namespace Castle.Model.Tests.Resources
 			Assert.AreEqual("The long and winding road", line);
 		}
 
-		[Test, Ignore("Requires network share")]
+		[Test, Explicit]
 		public void CreateRelative()
 		{
 			CustomUri uri = new CustomUri(@"\\hammet\C$\file.txt");
@@ -59,7 +59,7 @@ namespace Castle.Model.Tests.Resources
 			Assert.AreEqual("Something", line);
 		}
 
-		[Test, Ignore("Takes too long")]
+		[Test, Explicit]
 		[ExpectedException(typeof(ResourceException))]
 		public void NonExistingResource()
 		{
