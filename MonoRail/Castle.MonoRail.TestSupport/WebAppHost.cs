@@ -35,8 +35,6 @@ namespace Castle.MonoRail.TestSupport
 		{
 			this.appVirtualPath = appVirtualPath;
 			this.appPhysicalPath = appPhysicalPath;
-
-			// AppDomain.CurrentDomain.SetupInformation.ConfigurationFile = "web-test.config";
 		}
 
 		public TestResponse Process(TestRequest request, TextWriter writer)
@@ -46,7 +44,7 @@ namespace Castle.MonoRail.TestSupport
 
 			workerRequest.Prepare();
 
-			HttpRuntime.ProcessRequest( workerRequest );
+			HttpRuntime.ProcessRequest(workerRequest);
 
 			return workerRequest.Response;
 		}

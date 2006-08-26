@@ -120,14 +120,13 @@ namespace Castle.MonoRail.TestSupport
 
 		[SetUp]
 		public virtual void Initialize()
-		{
+		{			
 			request = new TestRequest();
 		}
 
 		[TearDown]
 		public virtual void Terminate()
 		{
-			outputBuffer.Length = 0;
 		}
 
 		[TestFixtureTearDown]
@@ -174,14 +173,10 @@ namespace Castle.MonoRail.TestSupport
 				ResendCookies();
 			}
 
-			outputBuffer.Length = 0;
-
 			Request.Url = path;
 			Request.PostParams = null;
 
-			StringWriter writer = new StringWriter(outputBuffer);
-
-			response = host.Process(Request, writer);
+			SendRequest();
 		}
 
 		/// <summary>
@@ -237,9 +232,7 @@ namespace Castle.MonoRail.TestSupport
 				ResendCookies();
 			}
 
-			StringWriter writer = new StringWriter(outputBuffer);
-
-			response = host.Process(Request, writer);
+			SendRequest();
 		}
 
 		/// <summary>
@@ -275,9 +268,7 @@ namespace Castle.MonoRail.TestSupport
 			Request.Url = path;
 			Request.Verb = "HEAD";
 
-			StringWriter writer = new StringWriter(outputBuffer);
-
-			response = host.Process(Request, writer);
+			SendRequest();
 		}
 
 		private void AssertPathIsValid(string path)
@@ -700,6 +691,17 @@ namespace Castle.MonoRail.TestSupport
 				// Form a new cookie header from the cookies in the persistant request cookie container
 				request.Headers.Add("Cookie", request.Cookies.GetCookieHeader(uri));
 			}
+		}
+
+		private void SendRequest()
+		{
+			outputBuffer = new StringBuilder();
+
+			StringWriter writer = new StringWriter(outputBuffer);
+
+			response = host.Process(Request, writer);
+			
+			writer.Close();
 		}
 	}
 }
