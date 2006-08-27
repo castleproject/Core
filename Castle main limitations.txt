@@ -1,3 +1,7 @@
+
+** Most of the issues below will be fixed by Castle.DynamicProxy 2.0
+
+
 Interface proxy and properties only available on the implementation type
 ========================================================================
 

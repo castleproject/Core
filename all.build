@@ -137,22 +137,11 @@
 		<nant buildfile="AspectSharp/aspectsharp.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="samples">
-	
+	<target name="samples" depends="init">
+
 	</target>
 
-	<target name="dist" depends="zipsource, zipsamples, zip11, zip20, zipdoc">
-	<!--
-		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="dist" inheritall="true" />
-		<nant buildfile="AspectSharp/aspectsharp.build" target="distribution" inheritall="true" />
-		<nant buildfile="InversionOfControl/container.build" target="dist" inheritall="true" />
-		<nant buildfile="Components/components.build" target="dist" inheritall="true" />
-		<nant buildfile="ActiveRecord/activerecord.build" target="dist" inheritall="true" />
-		<nant buildfile="MonoRail/monorail.build" target="dist" inheritall="true" />
-		<nant buildfile="Services/services.build" target="dist" inheritall="true" />
-		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
-	-->
-	</target>
+	<!-- Packaging related tasks -->
 	
 	<target name="createreleasenotes">
 		<mkdir dir="${releasenotes.dir}" />
@@ -220,54 +209,63 @@
 		<delete dir="${releasenotes.dir}" />
 	</target>
 
-	<target name="zip11">
-		<call target="createreleasenotes" />
-		<zip zipfile="${base.dir}/Castle-net-1.1.zip">
-			<fileset basedir="${base.dir}/build">
-				<include name="net-1.1/*.*" />
-			</fileset>
-			<fileset basedir="${base.dir}/setup">
-				<include name="License.rtf" />
-			</fileset>
-			<fileset basedir="${releasenotes.dir}">
-				<include name="*.txt" />
+	<target name="zip_dependencies"  >
+		<zip zipfile="${base.dir}/build/${framework::get-target-framework()}/external-dependencies.zip">
+			<fileset basedir="${base.dir}/build/${framework::get-target-framework()}">
+				<include name="*.*" />
+				<exclude name="**/Castle*" />
+				<exclude name="**/AspectSharp*" />
+				<exclude name="**/db4o.dll" />
+				<exclude name="**/EULA.rtf" />
 			</fileset>
 		</zip>
-		<call target="deletereleasenotes" />
 	</target>
 
-	<target name="zip20">
-		<call target="createreleasenotes" />
-		<zip zipfile="${base.dir}/Castle-net-2.0.zip">
-			<fileset basedir="${base.dir}/build">
-				<include name="net-2.0/*.*" />
-			</fileset>
-			<fileset basedir="${base.dir}/setup">
-				<include name="License.rtf" />
-			</fileset>
-			<fileset basedir="${releasenotes.dir}">
-				<include name="*.txt" />
-			</fileset>
-		</zip>
-		<call target="deletereleasenotes" />
-	</target>
-
-	<target name="zip-build" depends="build" >
-		<call target="createreleasenotes" />
+	<target name="zip-build" depends="build">
 		<property name="build-type" value="release" unless="${debug}" />
-		<property name="build-type" value ="debug" if="${debug}"/>
-		<zip zipfile="${base.dir}/${CCNetLabel}-${framework::get-target-framework()}-${build-type}.zip">
-			<fileset basedir="${base.dir}/build">
-				<include name="${framework::get-target-framework()}/*.*" />
+		<property name="build-type" value="debug" if="${debug}"/>
+		<property name="build-zipfile" value="${base.dir}/castleproject-build_${CCNetLabel}-${framework::get-target-framework()}-${build-type}.zip" />
+		
+		<delete>
+			<fileset basedir="${base.dir}">
+				<include name="*.zip" />
+				<include name="${base.dir}/build/${framework::get-target-framework()}/external-dependencies.zip" />
 			</fileset>
-			<fileset basedir="${base.dir}/setup">
-				<include name="License.rtf" />
+		</delete>
+
+		<!-- Prepare release note files -->
+		<call target="createreleasenotes" />
+
+		<!-- Include a zip file with all source code -->
+		<call target="zipsource" if="${debug}" />
+
+		<!-- Include a zip file with all dependencies -->
+		<call target="zip_dependencies" />
+
+		<!-- Create the master zip file with all files included -->
+		<zip zipfile="${build-zipfile}">
+			<fileset basedir="${base.dir}/build/">
+				<include name="${framework::get-target-framework()}/Castle*.*" />
+				<include name="${framework::get-target-framework()}/AspectSharp*.*" />
+				<include name="${framework::get-target-framework()}/external-dependencies.zip" />
 			</fileset>
-			<fileset basedir="${releasenotes.dir}">
-				<include name="*.txt" />
+			<fileset basedir="${base.dir}">
+				<include name="ASL - Apache Software Foundation License.txt" />
+				<include name="Committers.txt" />
+				<include name="Castle main limitations.txt" />
+				<include name="castle-sourcecode.zip" />
+			</fileset>
+			<fileset>
+				<include name="${releasenotes.dir}/**/*.txt" />
 			</fileset>
 		</zip>
+		
+		<if test="${property::exists('build.target.dir')}">
+			<copy file="${build-zipfile}" todir="${build.target.dir}" />
+		</if>
+		
 		<call target="deletereleasenotes" />
+	
 	</target>
 	
 	<target name="zipdoc">
@@ -377,7 +375,7 @@
 	</target>
 	
 	<target name="zipsource">
-		<zip zipfile="Castle-src.zip">
+		<zip zipfile="castle-sourcecode.zip">
 			<fileset basedir="${base.dir}">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -392,17 +390,27 @@
 				<include name="**/*.vm" />
 				<include name="**/*.gif" />
 				<include name="**/*.resx" />
-				<include name="*.snk" />
-				<include name="SharedLibs/**/*.dll" />
-				<include name="SharedLibs/**/*.rtf" />
-				<include name="ActiveRecord/Generator/lib/*.dll" />
 				
-				<exclude name="**\obj\Debug\*.*" />
-				<exclude name="**\bin\*.*" />
-				<exclude name="**\*.user" />
-				<exclude name="/Rook" />
-				<exclude name="/Sandbox" />
-				<exclude name="/setup" />
+				<exclude name="**/obj/" />
+				<exclude name="**/obj/**/*.*" />
+				<exclude name="**/bin*/**/*.*" />
+				<exclude name="**/temp/**/*.*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/_ReSharper.*" />
+				<exclude name="**/_ReSharper.*/**/*.*" />
+				<exclude name="**/*.suo" />
+				<exclude name="SharedLibs/**/*.*" />
+				<exclude name="Samples/**/*.*" />
+				<exclude name="experiments/**/*.*" />
+				<exclude name="build/**/*.*" />
+				<exclude name="Rook/**/*.*" />
+				<exclude name="Sandbox/**/*.*" />
+				<exclude name="setup/*.*" />
+				<exclude name="Tools/VSNetWizards/**/*.*" />
+				<exclude name="Tools/SubversionHooks/**/*.*" />
+				<exclude name="Tools/ManagedExtensions/**/*.*" />
+				<exclude name="Tools/Castle.DynamicProxy2/**/*.*" />
+				<exclude name="Tools/DynamicProxy2/**/*.*" />
 			</fileset>
 		</zip>
 	</target>
@@ -540,43 +548,6 @@
 				<exclude name="**/*.chm"/>
 			</fileset>
 		</delete>
-	</target>
-
-	<target name="ziptrunk">
-		<zip zipfile="Castle-all.zip">
-			<fileset basedir="${base.dir}">
-				<include name="all.build" />
-				<include name="common.inc" />
-				<include name="CastleKey.snk" />
-				<include name="How to build.txt" />
-				
-				<include name="ActiveRecord/**.*" />
-				<include name="AspectSharp/**.*" />
-				<include name="Components/**.*" />
-				<include name="Deps/**.*" />
-				<include name="Facilities/**.*" />
-				<include name="InversionOfControl/**.*" />
-				<include name="MonoRail/**.*" />
-				<include name="Services/**.*" />
-				<include name="Tools/**.*" />
-				
-				<exclude name="**\*.user" />
-				<exclude name="**\*.pdb" />
-				<exclude name="**\*.zip" />
-				<exclude name="**\*.chm" />
-				<exclude name="**\*.resharperoptions" />
-				<exclude name="**\*.suo" />
-				<exclude name="**\obj\Debug\*.*" />
-			</fileset>
-		</zip>
-	</target>
-
-	<target name="update-from-svn">
-		<!--
-		<exec program="C:\devtools\svn-win32-1.2.3\bin\svn.exe">
-			<arg value=""/>
-		</exec>
-		-->
 	</target>
 
 </project>
