@@ -2,9 +2,11 @@
 <project name="Common Build Properties">
 	<!-- Common properties that allow overrides -->
 	
+	<if test="${not property::exists('nunit-console')}">
 	<property name="nunit-console" readonly="false" value="nunit-console.exe" if="${framework::get-target-framework()=='net-1.1'}" />
 	<property name="nunit-console" readonly="false" value="nunit-console-1-1.exe" if="${framework::get-target-framework()=='net-1.1'}" />
 	<property name="nunit-console" readonly="false" value="nunit-console-2-0.exe" if="${framework::get-target-framework()=='net-2.0'}" />
+	</if>
 
 	<echo message="Using ${nunit-console}" />
 
