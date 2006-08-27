@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="MultiThreadTestCase.cs" />
     <Compile Include="Test\AjaxHelper2.cs" />
+    <Compile Include="Test\AmbiguousExceptionTestCase.cs" />
     <Compile Include="Test\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

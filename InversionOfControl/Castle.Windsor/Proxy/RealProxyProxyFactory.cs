@@ -17,7 +17,7 @@ namespace Castle.Windsor.Proxy
 	using System;
 
 	using Castle.MicroKernel;
-	using Castle.Model;
+	using Castle.Core;
 
 
 	public class RealProxyProxyFactory : AbstractProxyFactory

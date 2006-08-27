@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{E276ABC2-D29D-436F-856C-0CBC0D4F02B5}"
     >
@@ -90,11 +90,6 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
@@ -118,6 +113,11 @@
                     Name = "AspectSharp"
                     AssemblyName = "AspectSharp"
                     HintPath = "..\..\..\AspectSharp\bin\AspectSharp.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

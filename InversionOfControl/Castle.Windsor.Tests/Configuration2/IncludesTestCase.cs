@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests.Configuration2
 
 	using NUnit.Framework;
 
-	using Castle.Model.Resource;
-	using Castle.Model.Configuration;
+	using Castle.Core.Resource;
+	using Castle.Core.Configuration;
 
 	using Castle.MicroKernel;
 	

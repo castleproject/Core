@@ -23,7 +23,7 @@
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.WindsorExtension.dll" />
 				<include name="Castle.DynamicProxy.dll" />
-				<include name="Castle.Model.dll" />
+				<include name="Castle.Core.dll" />
 				<include name="Castle.MicroKernel.dll" />
 				<include name="Castle.Windsor.dll" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
@@ -53,7 +53,7 @@
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.WindsorExtension.dll" />
 				<include name="${bin2.dir}/Castle.DynamicProxy.dll" />
-				<include name="${bin2.dir}/Castle.Model.dll" />
+				<include name="${bin2.dir}/Castle.Core.dll" />
 				<include name="${bin2.dir}/Castle.MicroKernel.dll" />
 				<include name="${bin2.dir}/Castle.Windsor.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.CompositeView.dll" />

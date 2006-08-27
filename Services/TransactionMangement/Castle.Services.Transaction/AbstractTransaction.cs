@@ -22,7 +22,7 @@ namespace Castle.Services.Transaction
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	using Castle.Services.Logging;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Helper abstract class for <see cref="ITransaction"/> implementors. 

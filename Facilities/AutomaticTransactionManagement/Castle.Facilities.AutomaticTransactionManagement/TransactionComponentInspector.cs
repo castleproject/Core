@@ -18,12 +18,12 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using System.Collections;
 	using System.Reflection;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder.Inspectors;
 	using Castle.MicroKernel.Facilities;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	using Castle.Services.Transaction;
 
 	/// <summary>

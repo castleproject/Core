@@ -16,8 +16,8 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
 	using Castle.MicroKernel.Util;
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Check for a node 'parameters' within the component 

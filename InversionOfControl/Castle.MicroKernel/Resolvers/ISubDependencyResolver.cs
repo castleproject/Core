@@ -16,7 +16,7 @@ namespace Castle.MicroKernel
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Implementors should use a strategy to obtain 

@@ -16,9 +16,9 @@ namespace Castle.Facilities.Logging
 {
 	using System;
 	
-	using Castle.Model;
+	using Castle.Core;
+	using Castle.Core.Logging;
 	using Castle.MicroKernel;
-	using Castle.Services.Logging;
 
 	/// <summary>
 	/// Custom resolver used by the MicroKernel. It gives

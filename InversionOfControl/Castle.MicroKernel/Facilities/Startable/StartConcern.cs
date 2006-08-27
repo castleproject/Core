@@ -17,7 +17,7 @@ namespace Castle.Facilities.Startable
 	using System;
 	using System.Reflection;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel.LifecycleConcerns;
 

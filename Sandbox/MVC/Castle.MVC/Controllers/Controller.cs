@@ -27,7 +27,7 @@
 
 #region Using
 
-using Castle.Model;
+using Castle.Core;
 using Castle.MVC.Configuration;
 using Castle.MVC.Navigation;
 using Castle.MVC.States;

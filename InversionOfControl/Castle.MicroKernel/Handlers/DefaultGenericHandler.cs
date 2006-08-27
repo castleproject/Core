@@ -19,7 +19,7 @@ namespace Castle.MicroKernel.Handlers
 	using System;
 	using System.Collections.Generic;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for DefaultGenericHandler.

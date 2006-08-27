@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Proxy
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// This is a placeholder implementation of <see cref="IProxyFactory"/>.

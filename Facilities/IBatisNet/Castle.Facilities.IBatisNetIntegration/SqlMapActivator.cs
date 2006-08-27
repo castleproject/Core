@@ -26,7 +26,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 	using System;
 	using System.Xml;
 	using Castle.MicroKernel.Facilities;
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;

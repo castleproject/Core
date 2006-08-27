@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Tests.Pools
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	[Pooled(2, 5)]
 	public class PoolableComponent1

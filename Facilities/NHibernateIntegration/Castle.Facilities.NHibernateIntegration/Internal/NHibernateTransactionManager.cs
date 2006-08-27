@@ -16,7 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 {
 	using System;
 	
-	using Castle.Model;
+	using Castle.Core;
 	
 	using Castle.Services.Transaction;
 

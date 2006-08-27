@@ -14,7 +14,7 @@
 
 namespace Castle.Facilities.ActiveRecordIntegration
 {
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.Services.Transaction;
 

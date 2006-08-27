@@ -43,7 +43,7 @@
 			</sources>
 
 			<references>
-				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.Core.dll" />
 			</references>
 		</csc>
 	</target>
@@ -62,7 +62,7 @@
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
-				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.Core.dll" />
 			</references>
 		</csc>
 	</target>

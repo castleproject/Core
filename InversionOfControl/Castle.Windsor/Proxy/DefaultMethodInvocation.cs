@@ -20,7 +20,7 @@ namespace Castle.Windsor.Proxy
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Invocation;
 	
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// This implementation of <see cref="IMethodInvocation"/>

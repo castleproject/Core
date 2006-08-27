@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.SubSystems.Resource
 	using System;
 	using System.Collections;
 
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 	/// <summary>
 	/// Pendent

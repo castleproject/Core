@@ -16,7 +16,7 @@ namespace Castle.Facilities.ManagedExtensions.Server
 {
 	using System;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	using Castle.ManagementExtensions;
 

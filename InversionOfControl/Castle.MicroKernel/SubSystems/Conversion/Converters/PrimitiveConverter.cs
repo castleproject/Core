@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Implements all standard conversions.

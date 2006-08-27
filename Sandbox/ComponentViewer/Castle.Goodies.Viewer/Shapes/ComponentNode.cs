@@ -22,7 +22,7 @@ namespace Castle.Goodies.Viewer.Shapes
 	using Netron.GraphLib.Attributes;
 	using Netron.GraphLib.Interfaces;
 
-	using Castle.Model;
+	using Castle.Core;
 
 
 	[Serializable]

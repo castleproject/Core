@@ -17,7 +17,7 @@ namespace Castle.Facilities.Logging
 	using System;
 	using System.Configuration;
 
-	using Castle.Services.Logging;
+	using Castle.Core.Logging;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;

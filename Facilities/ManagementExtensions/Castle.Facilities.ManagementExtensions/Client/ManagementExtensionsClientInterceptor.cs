@@ -16,7 +16,7 @@ namespace Castle.Facilities.ManagedExtensions.Client
 {
 	using System;
 
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Summary description for ManagementExtensionsClientInterceptor.

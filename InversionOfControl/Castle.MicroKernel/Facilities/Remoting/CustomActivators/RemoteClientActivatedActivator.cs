@@ -16,7 +16,7 @@ namespace Castle.Facilities.Remoting
 {
 	using System;
 	using System.Runtime.Remoting.Activation;
-	using Castle.Model;
+	using Castle.Core;
 	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;

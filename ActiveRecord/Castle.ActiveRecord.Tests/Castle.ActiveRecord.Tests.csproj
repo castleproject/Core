@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
     >
@@ -116,9 +116,9 @@
                     HintPath = "..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\InversionOfControl\bin\Castle.Model.dll"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

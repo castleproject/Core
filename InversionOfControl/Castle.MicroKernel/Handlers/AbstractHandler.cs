@@ -19,7 +19,7 @@ namespace Castle.MicroKernel.Handlers
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Implements the basis of <see cref="IHandler"/>

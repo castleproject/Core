@@ -17,7 +17,7 @@ namespace Castle.MonoRail.WindsorExtension
 	using System;
 	using System.Web;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MonoRail.Framework;

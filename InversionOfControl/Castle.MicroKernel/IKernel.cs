@@ -17,7 +17,7 @@ namespace Castle.MicroKernel
 	using System;
 	using System.Collections;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// The <c>IKernel</c> interface exposes all the functionality

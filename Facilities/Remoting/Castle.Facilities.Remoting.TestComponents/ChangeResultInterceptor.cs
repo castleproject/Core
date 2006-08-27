@@ -16,7 +16,7 @@ namespace Castle.Facilities.Remoting.TestComponents
 {
 	using System;
 
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 	public class ChangeResultInterceptor : IMethodInterceptor
 	{

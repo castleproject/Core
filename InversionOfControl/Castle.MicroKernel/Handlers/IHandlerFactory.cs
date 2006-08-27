@@ -16,7 +16,7 @@ namespace Castle.MicroKernel
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Extension point to allow the developer

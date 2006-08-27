@@ -14,7 +14,7 @@
 
 namespace Castle.MicroKernel.ModelBuilder
 {
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Implementors must inspect the component for 

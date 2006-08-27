@@ -16,7 +16,7 @@ namespace Castle.Facilities.AspectSharp.Tests.Components
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.Facilities.AspectSharp.Tests.Interceptors;
 

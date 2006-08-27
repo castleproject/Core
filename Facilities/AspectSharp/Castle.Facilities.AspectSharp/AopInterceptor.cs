@@ -14,19 +14,17 @@
 
 using AspectSharp;
 using AspectSharp.Core;
-using AspectSharp.Core.Dispatcher;
 using AspectSharp.Lang.AST;
 
 namespace Castle.Facilities.AspectSharp
 {
-	using System;
-
-	using Castle.Model;
-	using Castle.Model.Interceptor;
+	using Castle.Core;
+	using Castle.Core.Interceptor;
 
 	using Castle.MicroKernel;
 
 	using Castle.DynamicProxy;
+	using IInvocation=Castle.DynamicProxy.IInvocation;
 
 	/// <summary>
 	/// Summary description for AopInterceptor.

@@ -7,14 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests", 
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model", "Castle.Model\Castle.Model.csproj", "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model.Tests", "Castle.Model.Tests\Castle.Model.Tests.csproj", "{0892A412-08B8-4DD8-AA42-142818611E0B}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor", "Castle.Windsor\Castle.Windsor.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -28,6 +20,8 @@ Global
 		Debug = Debug
 		Release = Release
 	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.ActiveCfg = Debug|.NET
 		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.Build.0 = Debug|.NET
@@ -37,14 +31,6 @@ Global
 		{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}.Debug.Build.0 = Debug|.NET
 		{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}.Release.ActiveCfg = Release|.NET
 		{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}.Release.Build.0 = Release|.NET
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Debug.ActiveCfg = Debug|.NET
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Debug.Build.0 = Debug|.NET
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Release.ActiveCfg = Release|.NET
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Release.Build.0 = Release|.NET
-		{0892A412-08B8-4DD8-AA42-142818611E0B}.Debug.ActiveCfg = Debug|.NET
-		{0892A412-08B8-4DD8-AA42-142818611E0B}.Debug.Build.0 = Debug|.NET
-		{0892A412-08B8-4DD8-AA42-142818611E0B}.Release.ActiveCfg = Release|.NET
-		{0892A412-08B8-4DD8-AA42-142818611E0B}.Release.Build.0 = Release|.NET
 		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.ActiveCfg = Debug|.NET
 		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.Build.0 = Debug|.NET
 		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.ActiveCfg = Release|.NET

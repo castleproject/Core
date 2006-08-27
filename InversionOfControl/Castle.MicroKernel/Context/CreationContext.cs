@@ -20,7 +20,7 @@ namespace Castle.MicroKernel
 	using System.Text;
 
 	using Castle.MicroKernel.Exceptions;
-	using Castle.Model;
+	using Castle.Core;
 
 	
 	[Serializable]

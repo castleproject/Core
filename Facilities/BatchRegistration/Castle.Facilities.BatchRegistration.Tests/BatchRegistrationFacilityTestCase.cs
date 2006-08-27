@@ -17,7 +17,7 @@ namespace Castle.Facilities.BatchRegistration.Tests
 	using System;
 	using System.Configuration;
 
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 	using Castle.MicroKernel;
 

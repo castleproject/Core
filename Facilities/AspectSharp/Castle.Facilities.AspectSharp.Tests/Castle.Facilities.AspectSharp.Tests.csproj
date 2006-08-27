@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{A4C8F37D-553D-48AD-8DD3-0AB0B09E43FC}"
     >
@@ -100,11 +100,6 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "AspectSharp"
                     AssemblyName = "AspectSharp"
                     HintPath = "..\..\..\AspectSharp\bin\AspectSharp.dll"
@@ -123,6 +118,11 @@
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\..\..\..\..\NAnt\bin\lib\net\1.1\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

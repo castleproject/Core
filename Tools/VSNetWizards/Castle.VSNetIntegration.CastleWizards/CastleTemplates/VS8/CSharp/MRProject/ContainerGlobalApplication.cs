@@ -3,7 +3,7 @@ namespace !NAMESPACE!
 	using System;
 	using System.Web;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.Windsor;
 
 

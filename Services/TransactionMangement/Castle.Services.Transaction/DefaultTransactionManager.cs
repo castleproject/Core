@@ -18,7 +18,7 @@ namespace Castle.Services.Transaction
 	using System.Collections;
 	using System.ComponentModel;
 
-	using Castle.Services.Logging;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// TODO: Ensure this class is thread-safe

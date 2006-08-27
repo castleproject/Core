@@ -18,8 +18,8 @@ namespace Castle.Windsor.Proxy
 
 	using Castle.MicroKernel;
 	
-	using Castle.Model;
-	using Castle.Model.Interceptor;
+	using Castle.Core;
+	using Castle.Core.Interceptor;
 
 
 	public abstract class AbstractProxyFactory : IProxyFactory

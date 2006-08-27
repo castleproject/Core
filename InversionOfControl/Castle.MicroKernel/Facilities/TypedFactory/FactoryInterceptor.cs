@@ -16,8 +16,8 @@ namespace Castle.Facilities.TypedFactory
 {
 	using System;
 
-	using Castle.Model;
-	using Castle.Model.Interceptor;
+	using Castle.Core;
+	using Castle.Core.Interceptor;
 
 	using Castle.MicroKernel;
 

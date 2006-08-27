@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord
 	using NHibernate.Cfg;
 	using NHibernate.Tool.hbm2ddl;
 	
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Scopes;

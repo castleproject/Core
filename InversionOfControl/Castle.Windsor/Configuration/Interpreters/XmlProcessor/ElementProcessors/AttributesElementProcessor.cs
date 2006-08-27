@@ -34,7 +34,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 		/// 	<properties>
 		///			<attributes>
 		///				<myAttribute>attributeValue</myAttribute>
-		///			<attributes>
+		///			</attributes>
 		///			<myProperty>propertyValue</myProperty>
 		///		</properties>
 		/// </code>

@@ -18,8 +18,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 	using System.Collections;
 	using System.Configuration;
 
-	using Castle.Model.Resource;
-	using Castle.Model.Configuration;
+	using Castle.Core.Resource;
+	using Castle.Core.Configuration;
 
 	using Castle.MicroKernel;
 

@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -59,10 +58,20 @@ namespace Castle.DynamicProxy.Generators
 			{
 				// String newName = Guid.NewGuid().ToString("N");
 				String newName = "Proxy";
+				
+				// Add Interfaces that the proxy implements 
+
+				interfaces = AddDefaultInterfaces(interfaces);
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaces);
 
+				// Custom attributes
+				
 				ReplicateNonInheritableAttributes(targetType, emitter);
+				
+				// Implement Interfaces
+
+				ImplementXmlSerializable(targetType, emitter);
 
 				// Fields generations
 

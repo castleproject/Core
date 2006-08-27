@@ -21,7 +21,7 @@ namespace Castle.Facilities.Startable
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
 	
-	using Castle.Model;
+	using Castle.Core;
 
 
     public class StartableFacility : AbstractFacility

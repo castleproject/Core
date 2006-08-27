@@ -19,7 +19,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Custom activator to create the instance on demand.

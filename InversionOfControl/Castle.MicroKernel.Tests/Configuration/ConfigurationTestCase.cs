@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Tests.Configuration
 {
 	using System;
 	using NUnit.Framework;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Resolvers;
 	using Castle.MicroKernel.Tests.Configuration.Components;
 	using Castle.MicroKernel.Tests.ClassComponents;
@@ -215,7 +215,7 @@ namespace Castle.MicroKernel.Tests.Configuration
 			IHandler handler = kernel.GetHandler(key);
 
 			Assert.IsNotNull(instance);
-			Assert.AreEqual(Model.LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+			Assert.AreEqual(Core.LifestyleType.Custom, handler.ComponentModel.LifestyleType);
 			Assert.AreEqual(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
 		}
 	}

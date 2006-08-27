@@ -104,7 +104,7 @@ public class TransactionInterceptor: MarshalByRefObject, IMethodInterceptor, IOn
         }
     }
 
-    public void SetInterceptedComponentModel(Castle.Model.ComponentModel target) {
+    public void SetInterceptedComponentModel(Castle.Core.ComponentModel target) {
         metaInfo = infoStore.GetMetaFor(target.Implementation);
     }
 }

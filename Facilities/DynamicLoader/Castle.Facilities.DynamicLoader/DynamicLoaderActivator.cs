@@ -20,7 +20,7 @@ namespace Castle.Facilities.DynamicLoader
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Facilities;
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Delegates the creation of components to a <see cref="RemoteLoader"/>,

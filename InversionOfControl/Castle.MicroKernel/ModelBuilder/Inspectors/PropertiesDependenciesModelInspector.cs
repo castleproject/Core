@@ -17,9 +17,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System;
 	using System.Reflection;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel.SubSystems.Conversion;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// This implementation of <see cref="IContributeComponentModelConstruction"/>

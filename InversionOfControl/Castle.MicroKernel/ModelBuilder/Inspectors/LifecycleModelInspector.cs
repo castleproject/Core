@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System;
 	using System.ComponentModel;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel.LifecycleConcerns;
 

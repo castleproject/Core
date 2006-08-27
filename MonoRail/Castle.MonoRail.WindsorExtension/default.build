@@ -44,7 +44,7 @@
 
 			<references>
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
-				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.Core.dll" />
 				<include name="${bin.dir}/Castle.MicroKernel.dll" />
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
 				<include name="${bin.dir}/Castle.Windsor.dll" />

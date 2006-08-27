@@ -28,7 +28,7 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 		{
 		}
 
-		public void Init(IKernel kernel, Castle.Model.Configuration.IConfiguration facilityConfig)
+		public void Init(IKernel kernel, Castle.Core.Configuration.IConfiguration facilityConfig)
 		{
 			Assert.IsNotNull(kernel);
 			Assert.IsNotNull(facilityConfig);

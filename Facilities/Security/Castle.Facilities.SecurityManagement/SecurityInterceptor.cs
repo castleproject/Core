@@ -18,7 +18,7 @@ namespace Castle.Facilities.SecurityManagement
     using System.Security;
     using System.Threading;
     using Castle.MicroKernel;
-    using Castle.Model.Interceptor;
+    using Castle.Core.Interceptor;
     using Castle.Services.Security;
 
     /// <summary>

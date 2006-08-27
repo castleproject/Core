@@ -6,7 +6,7 @@
 
 	<!-- castle's assemblies location -->
 	<property name="castle.ar" value="${base.dir}/ActiveRecord/bin/Castle.ActiveRecord.dll" />
-	<property name="castle.model" value="${base.dir}/InversionOfControl/bin/Castle.Model.dll" />
+	<property name="castle.core" value="${base.dir}/Core/bin/Castle.Core.dll" />
 	<property name="castle.kernel" value="${base.dir}/InversionOfControl/bin/Castle.MicroKernel.dll" />
 	<property name="castle.windsor" value="${base.dir}/InversionOfControl/bin/Castle.Windsor.dll" />
 	<property name="castle.dynamicproxy" value="${base.dir}/Tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
@@ -15,15 +15,15 @@
 
 	<!-- tasks to copy castle's assemblies -->
 
-	<target name="copy-castle.model">
-		<copy file="${castle.model}" todir="${bin.dir}" />
+	<target name="copy-castle.core">
+		<copy file="${castle.core}" todir="${bin.dir}" />
 	</target>
 	
 	<target name="copy-dynamicproxy">
 		<copy file="${castle.dynamicproxy}" todir="${bin.dir}" />
 	</target>
 	
-	<target name="copy-container" depends="copy-castle.model, copy-dynamicproxy">
+	<target name="copy-container" depends="copy-castle.core, copy-dynamicproxy">
 		<copy file="${castle.kernel}" todir="${bin.dir}" />
 		<copy file="${castle.windsor}" todir="${bin.dir}" />
 	</target>

@@ -23,7 +23,7 @@ namespace Castle.Facilities.Prevalence
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Summary description for PrevalenceFacility.

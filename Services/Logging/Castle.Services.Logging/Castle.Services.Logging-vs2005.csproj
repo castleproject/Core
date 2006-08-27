@@ -88,46 +88,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractLoggerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ConsoleFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ILogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ILoggerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LoggerException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loggers\ConsoleLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loggers\DiagnosticsLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loggers\LevelFilteredLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loggers\NullLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loggers\StreamLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loggers\WebLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NullLogFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WebLoggerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

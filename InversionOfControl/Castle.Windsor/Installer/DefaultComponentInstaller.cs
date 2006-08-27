@@ -17,7 +17,7 @@ namespace Castle.Windsor.Installer
 	using System;
 	using System.Configuration;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	using Castle.MicroKernel;
 

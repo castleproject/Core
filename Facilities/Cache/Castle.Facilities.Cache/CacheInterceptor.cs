@@ -17,7 +17,7 @@ namespace Castle.Facilities.Cache
 	using System;
 
 	using Castle.Facilities.Cache.Manager;
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Caches the return value of the intercepted method.

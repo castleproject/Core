@@ -12,13 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+using IInterceptor = Castle.DynamicProxy.IInterceptor;
+using IInvocation = Castle.DynamicProxy.IInvocation;
+
 namespace Castle.Windsor.Proxy
 {
 	using System;
 
-	using Castle.DynamicProxy;
+	// using Castle.DynamicProxy;
 
-	using Castle.Model.Interceptor;
+	// using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Represents an ordered chain of <see cref="IMethodInterceptor"/>

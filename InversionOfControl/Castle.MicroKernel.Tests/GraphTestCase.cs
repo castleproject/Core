@@ -18,8 +18,8 @@ namespace Castle.MicroKernel.Tests
 
 	using NUnit.Framework;
 
-	using Castle.Model;
-	using Castle.Model.Internal;
+	using Castle.Core;
+	using Castle.Core.Internal;
 
 	[TestFixture]
 	public class GraphTestCase

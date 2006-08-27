@@ -225,7 +225,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			{
 				AddReference(project, "Castle.DynamicProxy.dll");
 				AddReference(project, "Castle.MicroKernel.dll");
-				AddReference(project, "Castle.Model.dll");
+				AddReference(project, "Castle.Core.dll");
 				AddReference(project, "Castle.Windsor.dll");
 				AddReference(project, "Castle.MonoRail.WindsorExtension.dll");
 

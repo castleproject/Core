@@ -235,7 +235,7 @@ namespace Castle.MonoRail.Generator.Generators
 				CopyFileToLib(sourcedir, "Castle.MonoRail.WindsorExtension.dll");
 				CopyFileToLib(sourcedir, "Castle.DynamicProxy.dll");
 				CopyFileToLib(sourcedir, "Castle.MicroKernel.dll");
-				CopyFileToLib(sourcedir, "Castle.Model.dll");
+				CopyFileToLib(sourcedir, "Castle.Core.dll");
 				CopyFileToLib(sourcedir, "Castle.Windsor.dll");
 			}
 		}

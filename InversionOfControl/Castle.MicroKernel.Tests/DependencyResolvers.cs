@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Tests
 {
 	using NUnit.Framework;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	using Castle.MicroKernel.Handlers;
 

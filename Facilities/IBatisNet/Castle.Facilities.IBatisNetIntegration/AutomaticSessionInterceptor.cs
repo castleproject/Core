@@ -26,7 +26,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 	using System;
 	using System.Reflection;
 
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
 	using Castle.Services.Transaction;
 	using Transaction = Castle.Services.Transaction.ITransaction;

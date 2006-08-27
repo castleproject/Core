@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Queries;
 	using Castle.ActiveRecord.Queries.Modifiers;
-	using Castle.Services.Logging;
+	using Castle.Core.Logging;
 
 	using NHibernate;
 	

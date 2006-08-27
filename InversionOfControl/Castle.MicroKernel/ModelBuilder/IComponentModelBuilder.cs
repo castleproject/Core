@@ -17,7 +17,7 @@ namespace Castle.MicroKernel
 	using System;
 	using System.Collections;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel.ModelBuilder;
 

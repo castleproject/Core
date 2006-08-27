@@ -18,8 +18,8 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
 
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// 

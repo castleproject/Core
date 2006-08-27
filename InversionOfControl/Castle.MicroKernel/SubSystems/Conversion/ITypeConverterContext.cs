@@ -14,7 +14,7 @@
 
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
-	using Castle.Model;
+	using Castle.Core;
 
 	public interface ITypeConverterContext
 	{

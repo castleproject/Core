@@ -21,7 +21,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 	using System.Web;
 
 	using Castle.Components.Common.TemplateEngine;
-	using Castle.Services.Logging;
+	using Castle.Core.Logging;
 
 	using Commons.Collections;
 

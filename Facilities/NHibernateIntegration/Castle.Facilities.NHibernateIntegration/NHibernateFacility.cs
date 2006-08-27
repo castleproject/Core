@@ -22,7 +22,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	using NHibernate;
 	using Configuration = NHibernate.Cfg.Configuration;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;

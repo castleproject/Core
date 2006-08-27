@@ -19,8 +19,8 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 
 	using NUnit.Framework;
 
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Tests.ClassComponents;
 
 
@@ -33,7 +33,7 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 	{
 		private IKernel kernel;
 
-		private Castle.Model.ComponentModel expectedClient;
+		private Castle.Core.ComponentModel expectedClient;
 		private IList expectedModels;
 
 		#region Setup / Teardown
@@ -126,7 +126,7 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 			Assert.IsNotNull(spamservice);
 		}
 
-		private void AssertEvent(Castle.Model.ComponentModel client, Castle.Model.DependencyModel model, object dependency)
+		private void AssertEvent(Castle.Core.ComponentModel client, Castle.Core.DependencyModel model, object dependency)
 		{
 			bool ok = false;
 			Assert.AreEqual(expectedClient, client);

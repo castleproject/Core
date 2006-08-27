@@ -19,7 +19,7 @@ namespace Castle.Applications.PestControl.Web
 	using System.Web;
 
 	using Castle.Applications.PestControl.Web.Controllers.Filters;
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.Interpreters;
 

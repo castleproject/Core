@@ -17,15 +17,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 	using System;
 	using System.IO;
 
-	using Castle.Services.Logging;
+	using Castle.Core.Logging;
 
 	using log4net;
 	using log4net.Config;
 
 	public class Log4netFactory : AbstractLoggerFactory
 	{
-		public Log4netFactory()
-			: this("log4net.config")
+		public Log4netFactory() : this("log4net.config")
 		{
 		}
 

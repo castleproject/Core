@@ -20,7 +20,7 @@ namespace Castle.Rook.Compiler.TypeSystem
 	using System.Reflection;
 	using System.Reflection.Emit;
 	
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.Rook.Compiler.Services;
 
 

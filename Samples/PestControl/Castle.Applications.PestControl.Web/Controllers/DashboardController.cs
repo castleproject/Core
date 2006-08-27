@@ -16,7 +16,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MonoRail.Framework;
 

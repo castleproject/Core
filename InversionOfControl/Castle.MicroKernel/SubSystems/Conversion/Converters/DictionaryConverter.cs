@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System;
 	using System.Collections;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 
 	[Serializable]

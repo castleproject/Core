@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Web;
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Model.Resource;
+using Castle.Core.Resource;
 using Castle.MVC.Navigation;
 using Castle.MVC.StatePersister;
 using Castle.MVC.States;

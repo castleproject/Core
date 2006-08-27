@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework
 {
 	using System;
 	
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Abstracts the source of configuration for the framework.

@@ -18,7 +18,7 @@ namespace Castle.MicroKernel
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for KernelEventSupport.

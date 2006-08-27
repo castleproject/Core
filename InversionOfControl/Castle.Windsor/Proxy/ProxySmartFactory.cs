@@ -16,7 +16,7 @@ namespace Castle.Windsor.Proxy
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel;
 	
 	/// <summary>

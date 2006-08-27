@@ -19,8 +19,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 	using System.Configuration;
 	using System.Text;
 
-	using Castle.Model.Resource;
-	using Castle.Model.Configuration;
+	using Castle.Core.Resource;
+	using Castle.Core.Configuration;
 	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.SubSystems.Resource;
@@ -59,7 +59,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 		}
 
-		public XmlInterpreter(Castle.Model.Resource.IResource source) : base(source)
+		public XmlInterpreter(Castle.Core.Resource.IResource source) : base(source)
 		{
 		}
 

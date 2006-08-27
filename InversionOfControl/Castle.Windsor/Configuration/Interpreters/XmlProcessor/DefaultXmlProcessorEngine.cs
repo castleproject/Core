@@ -21,7 +21,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 	using System.Xml;
 
 	using Castle.MicroKernel.SubSystems.Resource;
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 	using ElementProcessors;
 

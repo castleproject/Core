@@ -19,8 +19,8 @@ namespace Castle.MicroKernel
 	using System.Collections;
 	using System.Runtime.Serialization;
 
-	using Castle.Model;
-	using Castle.Model.Internal;
+	using Castle.Core;
+	using Castle.Core.Internal;
 	
 	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.ModelBuilder;

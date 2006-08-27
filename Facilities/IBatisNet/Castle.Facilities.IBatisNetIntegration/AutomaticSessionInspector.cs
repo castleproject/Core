@@ -23,7 +23,7 @@
 
 namespace Castle.Facilities.IBatisNetIntegration
 {
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;
 

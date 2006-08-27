@@ -23,7 +23,7 @@ namespace Castle.Facilities.DynamicLoader
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Loads components on an isolated <see cref="AppDomain"/>.

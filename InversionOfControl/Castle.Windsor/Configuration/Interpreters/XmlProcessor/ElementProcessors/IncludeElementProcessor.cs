@@ -17,7 +17,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 	using System;
 	using System.Xml;
 
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 	public class IncludeElementProcessor : AbstractXmlNodeProcessor
 	{

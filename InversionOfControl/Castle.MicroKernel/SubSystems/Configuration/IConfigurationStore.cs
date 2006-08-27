@@ -16,8 +16,8 @@ namespace Castle.MicroKernel
 {
 	using System;
 
-	using Castle.Model.Configuration;
-	using Castle.Model.Resource;
+	using Castle.Core.Configuration;
+	using Castle.Core.Resource;
 
 	/// <summary>
 	/// The contract used by the kernel to obtain

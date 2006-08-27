@@ -19,7 +19,7 @@ namespace Castle.Windsor.Proxy
 	using System.Runtime.Remoting;
 	using System.Runtime.Remoting.Messaging;
 
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 
 	public class MessageProxyInvocation : IMethodInvocation

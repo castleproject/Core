@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
     >
@@ -90,11 +90,6 @@
                     HintPath = "..\lib\Iesi.Collections.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
@@ -118,6 +113,11 @@
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\..\SharedLibs\log4net\log4net.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

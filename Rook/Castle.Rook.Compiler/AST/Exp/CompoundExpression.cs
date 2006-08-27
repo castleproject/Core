@@ -15,7 +15,7 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using Castle.Model.Internal;
+	using Castle.Core.Internal;
 
 
 	public class CompoundExpression : Expression

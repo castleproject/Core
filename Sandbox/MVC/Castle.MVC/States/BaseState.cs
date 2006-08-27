@@ -30,7 +30,7 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using Castle.Model;
+using Castle.Core;
 using Castle.MVC.StatePersister;
 
 #endregion 

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
     >
@@ -86,11 +86,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    Project = "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
                     HintPath = "..\bin\Castle.DynamicProxy.dll"
@@ -104,6 +99,11 @@
                     Name = "Castle.Windsor"
                     Project = "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>
@@ -219,12 +219,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Components\ComponentWithProperties.cs"
+                    RelPath = "Components\CircularDependencyComponents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Components\CircularDependencyComponents.cs"
+                    RelPath = "Components\ComponentWithProperties.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

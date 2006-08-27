@@ -16,7 +16,7 @@ namespace Castle.Facilities.ManagedExtensions.Client
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;

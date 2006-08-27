@@ -15,7 +15,7 @@
 namespace Castle.Facilities.Startable.Tests
 {
 	using System;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	using NUnit.Framework;
 
 	using Castle.MicroKernel;

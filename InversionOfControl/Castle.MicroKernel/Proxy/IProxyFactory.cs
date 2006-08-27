@@ -14,7 +14,7 @@
 
 namespace Castle.MicroKernel
 {
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Defines the contract used by the kernel 

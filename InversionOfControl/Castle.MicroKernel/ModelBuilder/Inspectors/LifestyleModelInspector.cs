@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System;
 	using System.Configuration;
 
-	using Castle.Model;
+	using Castle.Core;
 	
 	/// <summary>
 	/// Inspects the component configuration and the type looking for a

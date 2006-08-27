@@ -19,7 +19,7 @@ namespace Castle.Facilities.Db4oIntegration
 	using com.db4o;
 
 	using Castle.MicroKernel;
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 	using Castle.Services.Transaction;
 	
 	public class AutoCommitInterceptor : IMethodInterceptor

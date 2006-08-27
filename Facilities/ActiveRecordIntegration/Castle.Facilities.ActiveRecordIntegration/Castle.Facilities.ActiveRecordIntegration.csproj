@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{0C47AD89-6D32-4FD8-963F-EF29075EED68}"
     >
@@ -90,11 +90,6 @@
                     HintPath = "..\..\..\ActiveRecord\bin\Castle.DynamicProxy.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\ActiveRecord\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\ActiveRecord\bin\Iesi.Collections.dll"
@@ -113,6 +108,16 @@
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    AssemblyName = "Castle.ActiveRecord"
+                    HintPath = "..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
                 />
             </References>
         </Build>

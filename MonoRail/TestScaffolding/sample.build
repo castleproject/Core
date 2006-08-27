@@ -33,7 +33,7 @@
 				<include name="log4net.dll" />
 				<include name="NVelocity.dll" />
 				<include name="Castle.ActiveRecord.dll" />
-				<include name="Castle.Model.dll" />
+				<include name="Castle.Core.dll" />
 				<include name="HashCodeProvider.dll" />
 				<include name="Iesi.Collections.dll" />
 				<include name="NHibernate.dll" />

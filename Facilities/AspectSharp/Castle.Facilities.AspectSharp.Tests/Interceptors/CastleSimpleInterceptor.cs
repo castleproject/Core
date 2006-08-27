@@ -16,7 +16,7 @@ namespace Castle.Facilities.AspectSharp.Tests.Interceptors
 {
 	using System;
 
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Summary description for CastleSimpleInterceptor.

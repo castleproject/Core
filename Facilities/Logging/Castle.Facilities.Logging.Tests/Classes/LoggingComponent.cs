@@ -14,7 +14,7 @@
 
 namespace Castle.Facilities.Logging.Tests.Classes
 {
-	using Castle.Services.Logging;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Summary description for LoggingComponent.

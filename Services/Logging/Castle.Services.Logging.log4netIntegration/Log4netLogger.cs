@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Logger = Castle.Services.Logging.ILogger;
+using Logger = Castle.Core.Logging.ILogger;
 
 namespace Castle.Services.Logging.Log4netIntegration
 {

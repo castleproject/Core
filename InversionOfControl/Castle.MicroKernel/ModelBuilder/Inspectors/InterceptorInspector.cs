@@ -18,8 +18,8 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System.Configuration;
 
 	using Castle.MicroKernel.Util;
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Inspect the component for <c>InterceptorAttribute</c> and

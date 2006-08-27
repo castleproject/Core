@@ -31,7 +31,7 @@ namespace Castle.Facilities.Prevalence
 		{
 		}
 
-		public void ProcessModel(IKernel kernel, Castle.Model.ComponentModel model)
+		public void ProcessModel(IKernel kernel, Castle.Core.ComponentModel model)
 		{
 			if (model.Implementation == typeof(PrevalenceEngine))
 			{

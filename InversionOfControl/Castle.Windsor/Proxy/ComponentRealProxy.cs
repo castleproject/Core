@@ -18,7 +18,7 @@ namespace Castle.Windsor.Proxy
 	using System.Runtime.Remoting.Proxies;
 	using System.Runtime.Remoting.Messaging;
 
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 
 	public class ComponentRealProxy : RealProxy

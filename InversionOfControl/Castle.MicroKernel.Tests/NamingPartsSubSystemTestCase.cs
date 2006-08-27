@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Tests
 
 	using NUnit.Framework;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel.SubSystems.Naming;
 

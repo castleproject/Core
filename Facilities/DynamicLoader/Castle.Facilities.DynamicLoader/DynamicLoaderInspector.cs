@@ -18,7 +18,7 @@ namespace Castle.Facilities.DynamicLoader
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Inspects component configuration nodes, looking for <c>domain</c>

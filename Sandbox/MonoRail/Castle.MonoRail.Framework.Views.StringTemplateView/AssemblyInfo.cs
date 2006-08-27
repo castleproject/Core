@@ -35,5 +35,5 @@ using System.Runtime.CompilerServices;
 #else
 // This assembly must be signed, so if STRONG is not defined
 // we assume this compilation is being held by Visual Studio
-[assembly: AssemblyKeyFile("../../../../CastleKey.snk")]
+[assembly: AssemblyKeyFile("../../../../../CastleKey.snk")]
 #endif

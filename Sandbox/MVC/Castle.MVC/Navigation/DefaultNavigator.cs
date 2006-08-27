@@ -25,7 +25,7 @@
 *************************************************/
 #endregion 
 
-using Castle.Model;
+using Castle.Core;
 using Castle.MVC.StatePersister;
 using Castle.MVC.States;
 using Castle.MVC.Views;

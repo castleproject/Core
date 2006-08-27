@@ -16,7 +16,7 @@ namespace Castle.Windsor.Configuration
 {
 	using Castle.MicroKernel;
 
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 	/// <summary>
 	/// Interpreter of a specific language to describe 

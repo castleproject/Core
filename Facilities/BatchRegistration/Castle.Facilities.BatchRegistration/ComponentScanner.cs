@@ -19,7 +19,7 @@ namespace Castle.Facilities.BatchRegistration
 	using System.Collections;
 	using System.Configuration;
 
-	using Castle.Model;
+	using Castle.Core;
 
 
 	public sealed class ComponentScanner

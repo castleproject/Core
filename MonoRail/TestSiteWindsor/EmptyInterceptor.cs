@@ -14,7 +14,7 @@
 
 namespace TestSiteWindsor
 {
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 	public class EmptyInterceptor : IMethodInterceptor
 	{

@@ -20,7 +20,7 @@ namespace Castle.Facilities.SecurityManagement
     using Castle.MicroKernel;
     using Castle.MicroKernel.Facilities;
     using Castle.MicroKernel.ModelBuilder;
-    using Castle.Model;
+    using Castle.Core;
     using Castle.Services.Security;
 
     /// <summary>

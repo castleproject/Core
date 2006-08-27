@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Framework.Config
 	using System;
 	using System.Collections;
 	
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Usefull for test cases.

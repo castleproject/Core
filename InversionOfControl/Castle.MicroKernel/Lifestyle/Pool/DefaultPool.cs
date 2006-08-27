@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 	using System.Threading;
 	using System.Collections;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	[Serializable]
 	public class DefaultPool : IPool, IDisposable

@@ -16,7 +16,7 @@ namespace Castle.Facilities.BatchRegistration.Tests.Components
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	[CastleComponent("comp1")]
 	public class Component1

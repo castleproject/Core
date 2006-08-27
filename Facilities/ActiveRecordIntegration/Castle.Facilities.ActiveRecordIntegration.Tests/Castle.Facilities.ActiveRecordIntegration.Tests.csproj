@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{ED24B4A4-1147-45C4-9DE4-D1AEE3878FAD}"
     >
@@ -106,11 +106,6 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\ActiveRecord\bin\NHibernate.dll"
@@ -129,6 +124,11 @@
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
                     HintPath = "..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

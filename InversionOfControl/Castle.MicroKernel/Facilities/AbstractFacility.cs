@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Facilities
 {
 	using System;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Base class for facilities. 

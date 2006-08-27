@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -30,3 +31,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyKeyFile("../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
 #endif
+
+[assembly: CLSCompliant(true)]

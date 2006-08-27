@@ -19,7 +19,7 @@ using System.Text;
 using NUnit.Framework;
 using Castle.ActiveRecord.Framework;
 using System.Configuration;
-using Castle.Model.Configuration;
+using Castle.Core.Configuration;
 
 namespace Castle.ActiveRecord.Tests.Config
 {

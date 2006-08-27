@@ -16,7 +16,7 @@ namespace Castle.Facilities.Db4oIntegration
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;
 

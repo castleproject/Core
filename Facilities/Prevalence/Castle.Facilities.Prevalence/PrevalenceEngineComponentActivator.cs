@@ -20,7 +20,7 @@ namespace Castle.Facilities.Prevalence
 	using Bamboo.Prevalence;
 	using Bamboo.Prevalence.Util;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;

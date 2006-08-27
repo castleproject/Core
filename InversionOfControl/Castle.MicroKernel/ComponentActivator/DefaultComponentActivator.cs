@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.ComponentActivator
 	using System;
 	using System.Reflection;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel.LifecycleConcerns;
 
 	/// <summary>

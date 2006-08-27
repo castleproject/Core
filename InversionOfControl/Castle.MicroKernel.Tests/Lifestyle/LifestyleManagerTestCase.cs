@@ -16,8 +16,8 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 {
 	using System;
 	using System.Threading;
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 	using NUnit.Framework;
 
 	using Castle.MicroKernel;

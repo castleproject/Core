@@ -21,8 +21,8 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 	using System.Collections.Specialized;
 	using System.Runtime.CompilerServices;
 
-	using Castle.Model.Configuration;
-	using Castle.Model.Resource;
+	using Castle.Core.Configuration;
+	using Castle.Core.Resource;
 	using Castle.MicroKernel.SubSystems.Resource;
 
 	/// <summary>

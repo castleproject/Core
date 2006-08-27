@@ -18,7 +18,7 @@ namespace Castle.Facilities.AspectSharp.Tests
 
 	using NUnit.Framework;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	using Castle.Windsor;
 

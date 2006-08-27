@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Tests.Lifecycle.Components
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for HttpFakeServer.

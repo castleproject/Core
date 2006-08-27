@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord.Tests
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.ActiveRecord.Tests.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	
 	using NHibernate;
 	

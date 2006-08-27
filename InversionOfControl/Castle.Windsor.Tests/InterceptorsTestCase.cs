@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests
 
 	using NUnit.Framework;
 
-	using Castle.Model;
-	using Castle.Model.Interceptor;
+	using Castle.Core;
+	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
 	using Castle.Windsor.Tests.Components;
 
@@ -170,7 +170,7 @@ namespace Castle.Windsor.Tests
 	{
 		#region IFacility Members
 
-		public void Init(IKernel kernel, Model.Configuration.IConfiguration facilityConfig)
+		public void Init(IKernel kernel, Core.Configuration.IConfiguration facilityConfig)
 		{
 			kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
 		}

@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.LifecycleConcerns
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for InitializationConcern.

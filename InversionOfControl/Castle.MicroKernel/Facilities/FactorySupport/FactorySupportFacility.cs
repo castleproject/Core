@@ -16,7 +16,7 @@ namespace Castle.Facilities.FactorySupport
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 

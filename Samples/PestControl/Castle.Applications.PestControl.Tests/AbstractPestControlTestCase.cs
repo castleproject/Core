@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Model.Resource;
+using Castle.Core.Resource;
 
 namespace Castle.Applications.PestControl.Tests
 {

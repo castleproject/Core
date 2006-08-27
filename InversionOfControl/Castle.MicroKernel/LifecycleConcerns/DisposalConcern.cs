@@ -33,7 +33,7 @@ namespace Castle.MicroKernel.LifecycleConcerns
 		{
 		}
 
-		public void Apply(Castle.Model.ComponentModel model, object component)
+		public void Apply(Castle.Core.ComponentModel model, object component)
 		{
 			((IDisposable)component).Dispose();
 		}

@@ -17,7 +17,7 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	using System;
 	using System.Collections;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.Applications.MindDump.Dao;
 	using Castle.Applications.MindDump.Model;

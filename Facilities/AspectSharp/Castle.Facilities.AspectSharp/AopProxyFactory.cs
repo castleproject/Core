@@ -19,7 +19,7 @@ namespace Castle.Facilities.AspectSharp
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel;
 	

@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	
+
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -33,12 +33,12 @@ namespace Castle.DynamicProxy.Generators
 	/// - Add support for interfaces
 	/// - Add serialization support
 	/// - Add Xml serialization support
+	/// - Support for Interface proxy
 	/// - Allow one to specify the base class for interface proxies
 	/// - Use the interceptor selector if provided
 	/// - Expose parameters of non-parameterless constructors on the generated constructor
-	/// - Duplicate attributes from the target (interface or concrete class). Class level, method level attributes
-	///   - What about parameter attributes?
 	/// - Add tests and fixes for 'leaking this' problem
+	/// - Mixin support
 	/// </remarks>
 	public abstract class BaseProxyGenerator
 	{
@@ -100,8 +100,7 @@ namespace Castle.DynamicProxy.Generators
 			MethodAttributes atts = ObtainMethodAttributes(method);
 			MethodEmitter methodEmitter = emitter.CreateMethod(method.Name, atts);
 
-			return ImplementProxiedMethod(targetType, 
-			                              methodEmitter, method, 
+			return ImplementProxiedMethod(targetType, methodEmitter, method, 
 			                              emitter, invocationImpl, interceptorsField, targetRef);
 		}
 

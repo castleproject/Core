@@ -17,8 +17,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System;
 	using System.Collections;
 
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Composition of all available conversion managers

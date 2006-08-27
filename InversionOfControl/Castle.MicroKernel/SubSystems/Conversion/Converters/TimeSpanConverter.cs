@@ -40,7 +40,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			}
 		}
 
-		public override object PerformConversion(Castle.Model.Configuration.IConfiguration configuration, Type targetType)
+		public override object PerformConversion(Castle.Core.Configuration.IConfiguration configuration, Type targetType)
 		{
 			return PerformConversion(configuration.Value, targetType);
 		}

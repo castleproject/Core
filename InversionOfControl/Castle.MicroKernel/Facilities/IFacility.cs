@@ -14,7 +14,7 @@
 
 namespace Castle.MicroKernel
 {
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	/// <summary>
 	/// Unit of extension. A facility should use 

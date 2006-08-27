@@ -18,7 +18,7 @@ namespace Extending2.Components
 	using System.Data;
 	using System.Collections;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	[PerThread]
 	public class DefaultTransactionManager : ITransactionManager

@@ -18,7 +18,7 @@ namespace Castle.Facilities.Logging.Tests
 	
 	using Castle.Windsor;
 	
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	
 	using Castle.MicroKernel.SubSystems.Configuration;
 

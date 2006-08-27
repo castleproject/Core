@@ -330,7 +330,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			{
 				Utils.AddReference(project, "Castle.DynamicProxy.dll");
 				Utils.AddReference(project, "Castle.MicroKernel.dll");
-				Utils.AddReference(project, "Castle.Model.dll");
+				Utils.AddReference(project, "Castle.Core.dll");
 				Utils.AddReference(project, "Castle.Windsor.dll");
 				Utils.AddReference(project, "Castle.MonoRail.WindsorExtension.dll");
 			}

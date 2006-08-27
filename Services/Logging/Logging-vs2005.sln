@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging-vs2005", "Castle.Services.Logging\Castle.Services.Logging-vs2005.csproj", "{1AFAEC30-152C-43E2-B37C-E713419D20B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.Tests-vs2005", "Castle.Services.Logging.Tests\Castle.Services.Logging.Tests-vs2005.csproj", "{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.log4netIntegration-vs2005", "Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration-vs2005.csproj", "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.NLogIntegration-vs2005", "Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration-vs2005.csproj", "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
@@ -23,10 +21,6 @@ Global
 		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Release|Any CPU.ActiveCfg = Release|Any CPU

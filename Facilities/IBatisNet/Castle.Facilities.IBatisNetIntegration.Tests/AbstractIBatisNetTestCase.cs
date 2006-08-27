@@ -28,7 +28,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 	using NUnit.Framework;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	using Castle.Windsor;
 	using Castle.MicroKernel.SubSystems.Configuration;
 

@@ -21,7 +21,7 @@ namespace Castle.Facilities.Prevalence.Tests
 	using Bamboo.Prevalence.Util;
 	
 	using Castle.MicroKernel;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 
 	using NUnit.Framework;
 

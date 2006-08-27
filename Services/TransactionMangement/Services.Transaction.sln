@@ -12,6 +12,8 @@ Global
 		Debug = Debug
 		Release = Release
 	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Debug.ActiveCfg = Debug|.NET
 		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Debug.Build.0 = Debug|.NET
@@ -21,6 +23,10 @@ Global
 		{67CDFD3A-450F-4CD4-9401-EF15361E2713}.Debug.Build.0 = Debug|.NET
 		{67CDFD3A-450F-4CD4-9401-EF15361E2713}.Release.ActiveCfg = Release|.NET
 		{67CDFD3A-450F-4CD4-9401-EF15361E2713}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		transaction.build = transaction.build
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

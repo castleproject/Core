@@ -24,7 +24,7 @@ namespace Castle.Windsor.Tests
     using Castle.Windsor.Tests.Configuration2;
     using Castle.Windsor.Tests.Components;
     using Castle.Windsor.Configuration.Interpreters;
-    using Castle.Model.Resource;
+    using Castle.Core.Resource;
     using Castle.MicroKernel.Handlers;
     using Castle.MicroKernel.Resolvers;
 

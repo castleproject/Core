@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.ComponentActivator
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 
 	public class ExternalInstanceActivator : AbstractComponentActivator

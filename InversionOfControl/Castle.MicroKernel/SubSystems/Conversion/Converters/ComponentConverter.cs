@@ -17,8 +17,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System;
 
 	using Castle.MicroKernel.Util;
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 
 	[Serializable]
 	public class ComponentConverter : AbstractTypeConverter, IKernelDependentConverter

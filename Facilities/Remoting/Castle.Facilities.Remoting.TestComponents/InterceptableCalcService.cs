@@ -16,7 +16,7 @@ namespace Castle.Facilities.Remoting.TestComponents
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	[Interceptor( typeof(ChangeResultInterceptor) )]
 	public class InterceptableCalcService : CalcServiceImpl

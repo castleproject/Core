@@ -16,7 +16,7 @@ namespace Castle.Facilities.Cache.Manager
 {
 	using System.Text;
 
-	using Castle.Model.Interceptor;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Generates the key to retrieve/save objects from/to the cache.

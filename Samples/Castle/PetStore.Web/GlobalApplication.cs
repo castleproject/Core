@@ -19,7 +19,7 @@ namespace PetStore.Web
 
 	using Castle.ActiveRecord;
 	
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.Interpreters;

@@ -19,7 +19,7 @@ namespace Castle.Components.Winforms.AssemblyResolver
 	using System.Collections.Specialized;
 	using System.Windows.Forms;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// This component installs an Assembly Resolver delegate that 

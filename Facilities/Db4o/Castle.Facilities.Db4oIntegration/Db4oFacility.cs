@@ -18,7 +18,7 @@ namespace Castle.Facilities.Db4oIntegration
 	using System.Collections;
 	using System.Configuration;
 
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	using Castle.Services.Transaction;
 	using Castle.MicroKernel.Facilities;
 

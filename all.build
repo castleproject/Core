@@ -9,7 +9,7 @@
 
 	<include buildfile="common.inc" />
 	
-	<target name="build" depends="clean, init, services, tools, container, components, activerecord, monorail, aspectsharp, facilities, samples" />
+	<target name="build" depends="clean, init, core, services, tools, container, components, activerecord, monorail, aspectsharp, facilities, samples" />
 
 	<target name="clean">
 		<delete dir="${build.dir}" failonerror="false" />
@@ -115,6 +115,10 @@
 
 	<target name="services" depends="init">
 		<nant buildfile="Services/services.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="core" depends="init">
+		<nant buildfile="Core/core.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="facilities" depends="init">

@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
     using System;
 
-    using Castle.Model.Configuration;
+    using Castle.Core.Configuration;
 
     /// <summary>
     /// Uses the ConfigurationStore registered in the kernel to obtain
@@ -31,7 +31,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
         /// </summary>
         /// <param name="kernel"></param>
         /// <param name="model"></param>
-        public virtual void ProcessModel(IKernel kernel, Castle.Model.ComponentModel model)
+        public virtual void ProcessModel(IKernel kernel, Castle.Core.ComponentModel model)
         {
             model.Configuration = kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
         }

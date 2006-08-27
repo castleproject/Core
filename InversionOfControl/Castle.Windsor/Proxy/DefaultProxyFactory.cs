@@ -12,18 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy;
+using IInterceptor = Castle.DynamicProxy.IInterceptor;
+using IInvocation = Castle.DynamicProxy.IInvocation;
+
 namespace Castle.Windsor.Proxy
 {
 	using System;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-
-	using Castle.Model;
-	using Castle.Model.Interceptor;
-
-	using Castle.MicroKernel;
 	
-	using Castle.DynamicProxy;
+	using Castle.Core;
+	using Castle.MicroKernel;
 
 	/// <summary>
 	/// This implementation of <see cref="IProxyFactory"/> relies 

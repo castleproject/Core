@@ -124,7 +124,7 @@ namespace Castle.Windsor.Tests
         }
     }
 
-	[Castle.Model.Transient]
+	[Castle.Core.Transient]
 	public class TransientRepository<T> : IRepository<T> where T: new()
 	{
 		public T Get(int id)

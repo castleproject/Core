@@ -17,7 +17,7 @@ namespace Castle.MicroKernel.Resolvers
 	using System;
 	using System.Collections;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	using Castle.MicroKernel.Util;
 	using Castle.MicroKernel.SubSystems.Conversion;

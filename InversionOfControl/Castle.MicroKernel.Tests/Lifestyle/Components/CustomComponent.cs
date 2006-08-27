@@ -14,7 +14,7 @@
 
 namespace Castle.MicroKernel.Tests.Lifestyle.Components
 {
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for CustomComponent.

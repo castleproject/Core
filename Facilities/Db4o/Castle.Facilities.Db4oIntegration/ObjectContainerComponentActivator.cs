@@ -22,7 +22,7 @@ namespace Castle.Facilities.Db4oIntegration
 	using com.db4o;
 	using com.db4o.config;
 	
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 

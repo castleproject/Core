@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.SubSystems.Resource
 {
 	using System;
 
-	using Castle.Model.Resource;
+	using Castle.Core.Resource;
 
 	/// <summary>
 	/// An implementation of <c>a</c> should 

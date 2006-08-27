@@ -1,5 +1,5 @@
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Model.Resource;
+using Castle.Core.Resource;
 using Castle.MVC.Test.Presentation;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;

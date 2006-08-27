@@ -16,7 +16,7 @@ namespace Castle.MicroKernel
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Represents a delegate which holds basic information about a component.

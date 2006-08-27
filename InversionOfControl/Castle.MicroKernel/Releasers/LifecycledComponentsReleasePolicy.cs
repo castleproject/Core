@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Releasers
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	/// <summary>
 	/// Only tracks components that have decommission steps

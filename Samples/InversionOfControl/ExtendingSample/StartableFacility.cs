@@ -17,8 +17,8 @@ namespace ExtendingSample
 	using System;
 	using System.Collections;
 
-	using Castle.Model;
-	using Castle.Model.Configuration;
+	using Castle.Core;
+	using Castle.Core.Configuration;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.LifecycleConcerns;

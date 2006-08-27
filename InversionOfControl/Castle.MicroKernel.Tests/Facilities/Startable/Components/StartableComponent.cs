@@ -16,7 +16,7 @@ namespace Castle.Facilities.Startable.Tests.Components
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Core;
 
 	[Transient]
 	public class StartableComponent : IStartable

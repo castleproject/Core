@@ -13,7 +13,7 @@ namespace Castle.Goodies.Viewer
 
 	using Netron.GraphLib;
 
-	using Castle.Model;
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.Windsor;
 

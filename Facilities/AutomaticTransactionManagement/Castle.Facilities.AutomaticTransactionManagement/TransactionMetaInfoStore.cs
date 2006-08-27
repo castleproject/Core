@@ -20,7 +20,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using System.Reflection;
 
 	using Castle.MicroKernel.Facilities;
-	using Castle.Model.Configuration;
+	using Castle.Core.Configuration;
 	using Castle.Services.Transaction;
 
 	/// <summary>
