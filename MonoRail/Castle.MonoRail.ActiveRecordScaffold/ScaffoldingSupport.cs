@@ -89,7 +89,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
 #if USE_LOCAL_TEMPLATES
-				nvelTemplateEng.TemplateDir = @"E:\dev\castleall\trunk\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
+				nvelTemplateEng.TemplateDir = @"E:\dev\projects\castle\castlesvn\trunk\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
 				nvelTemplateEng.BeginInit();
 				nvelTemplateEng.EndInit();
 #else
