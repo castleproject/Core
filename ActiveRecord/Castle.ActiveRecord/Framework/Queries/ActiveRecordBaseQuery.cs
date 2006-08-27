@@ -51,9 +51,12 @@ namespace Castle.ActiveRecord
 		public ILogger Log
 		{
 			get { return log; }
-			set {
+			set 
+			{
 				if (value == null)
+				{
 					throw new ArgumentException("The logger could not be null, use NullLogger.Instance instead.");
+				}
 				log = value;
 			}
 		}
@@ -108,7 +111,9 @@ namespace Castle.ActiveRecord
 		protected void AddModifier(IQueryModifier modifier)
 		{
 			if (queryModifiers == null)
+			{
 				queryModifiers = new ArrayList();
+			}
 
 			queryModifiers.Add(modifier);
 		}
@@ -125,8 +130,12 @@ namespace Castle.ActiveRecord
 		protected void ApplyModifiers(IQuery query)
 		{
 			if (queryModifiers != null)
+			{
 				foreach (IQueryModifier modifier in queryModifiers)
+				{
 					modifier.Apply(query);
+				}
+			}
 		}
 		
 		/// <summary>

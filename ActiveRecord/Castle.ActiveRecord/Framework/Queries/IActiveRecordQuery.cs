@@ -27,6 +27,7 @@ namespace Castle.ActiveRecord
 		Type Target { get; }
 
 		object Execute(ISession session);
+		
 		IEnumerable Enumerate(ISession session);
 	}
 }

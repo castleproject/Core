@@ -28,10 +28,13 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class HqlBasedQuery : ActiveRecordBaseQuery
 	{
+		static readonly Regex 
+			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
+			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
 		private String hql;
 
-		public HqlBasedQuery(Type targetType, string hql)
-			: base(targetType)
+		public HqlBasedQuery(Type targetType, string hql) : base(targetType)
 		{
 			this.hql = hql;
 		}
@@ -57,6 +60,7 @@ namespace Castle.ActiveRecord.Queries
 		}
 
 		#region SetParameter and SetParameterList
+		
 		public void SetParameter(string parameterName, object value)
 		{
 			AddModifier(new QueryParameter(parameterName, value));
@@ -76,9 +80,11 @@ namespace Castle.ActiveRecord.Queries
 		{
 			AddModifier(new QueryParameter(parameterName, list, type));
 		}
+		
 		#endregion
 
 		#region SetQueryRange
+		
 		public void SetQueryRange(int firstResult, int maxResults)
 		{
 			AddModifier(new QueryRange(firstResult, maxResults));
@@ -88,6 +94,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			AddModifier(new QueryRange(maxResults));
 		}
+		
 		#endregion
 		
 		/// <summary>
@@ -99,12 +106,13 @@ namespace Castle.ActiveRecord.Queries
 			try
 			{
 				ScalarQuery q = new ScalarQuery(Target, PrepareQueryForCount(Query));
+				
 				if (queryModifiers != null)
 				{
 					foreach (IQueryModifier mod in queryModifiers)
 					{
-						if (mod is QueryRange)
-							continue;
+						if (mod is QueryRange) continue;
+						
 						q.AddModifier(mod);
 					}
 				}
@@ -119,16 +127,18 @@ namespace Castle.ActiveRecord.Queries
 			}
 		}
 		
-		static readonly Regex 
-			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
-			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
 		protected virtual String PrepareQueryForCount(String query)
 		{
 			query = rxOrderBy.Replace(query, String.Empty);
+			
 			if (rxNoSelect.IsMatch(query))
+			{
 				query = "select count(*) " + query;
+			}
 			else
+			{
 				query = "select count(*) from (" + query + ")";
+			}
 			
 			Log.Debug("Query prepared for count: {0}", query);
 			

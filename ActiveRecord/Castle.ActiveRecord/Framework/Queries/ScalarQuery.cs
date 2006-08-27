@@ -22,6 +22,7 @@ namespace Castle.ActiveRecord.Queries
 	public class ScalarQuery : HqlBasedQuery
 	{
 		#region Constructors
+		
 		public ScalarQuery(Type targetType, string hql, params Object[] positionalParameters)
 			: base(targetType, hql, positionalParameters)
 		{
@@ -31,6 +32,7 @@ namespace Castle.ActiveRecord.Queries
 			: base(targetType, hql)
 		{
 		}
+		
 		#endregion
 
 		/// <summary>

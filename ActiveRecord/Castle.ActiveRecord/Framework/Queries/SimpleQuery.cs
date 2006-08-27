@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class SimpleQuery : HqlBasedQuery
 	{
-		Type returnType;
+		private Type returnType;
 
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c>.
