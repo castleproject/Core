@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.Design;
 
 	public delegate void ExtensionHandler(IRailsEngineContext context);
 
@@ -32,9 +33,17 @@ namespace Castle.MonoRail.Framework
 
 		private EventHandlerList events;
 
-		public ExtensionManager()
+		private IServiceContainer serviceContainer;
+
+		public ExtensionManager(IServiceContainer serviceContainer)
 		{
 			events = new EventHandlerList();
+			this.serviceContainer = serviceContainer;
+		}
+
+		public IServiceContainer ServiceContainer
+		{
+			get { return serviceContainer; }
 		}
 
 		public event ExtensionHandler ContextCreated

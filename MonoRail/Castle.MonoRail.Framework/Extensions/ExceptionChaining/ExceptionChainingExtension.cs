@@ -40,15 +40,35 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	///   	&lt;/exception&gt;
 	///   &lt;/monoRail&gt;
 	/// </code>
+	/// <para>
+	/// Controllers can request IExceptionProcessor through IServiceProvider
+	/// and invoke the handlers to process an exception
+	/// </para>
+	/// <code>
+	/// public void BuyMercedes()
+	/// {
+	///		try
+	///		{
+	///			...
+	///		}
+	///		catch(Exception ex)
+	///		{
+	///			IExceptionProcessor exProcessor = (IExceptionProcessor) ServiceProvider.GetService(typeof(IExceptionProcessor));
+	///			exProcessor.ProcessException(ex);
+	/// 
+	///			RenderView("CouldNotBuyMercedes");
+	///		}
+	/// }
+	/// </code>
 	/// </remarks>
-	public class ExceptionChainingExtension : IMonoRailExtension
+	public class ExceptionChainingExtension : IMonoRailExtension, IExceptionProcessor
 	{
 		private IExceptionHandler firstHandler;
 
 		public void Init(ExtensionManager manager, MonoRailConfiguration configuration)
 		{
-			manager.ActionException += new ExtensionHandler(OnActionException);
-			manager.UnhandledException += new ExtensionHandler(OnUnhandledException);
+			manager.ActionException += new ExtensionHandler(OnException);
+			manager.UnhandledException += new ExtensionHandler(OnException);
 
 			XmlNodeList handlers = configuration.ConfigSection.SelectNodes("exception/exceptionHandler");
 
@@ -63,20 +83,39 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 				InstallExceptionHandler(node, typeAtt.Value);
 			}
+
+			manager.ServiceContainer.AddService(typeof(IExceptionProcessor), this);
 		}
-
-		private void OnActionException(IRailsEngineContext context)
+		
+		#region IExceptionProcessor implementation
+		
+		public void ProcessException(Exception exception)
 		{
-			if (firstHandler != null) firstHandler.Process(context);
+			if (exception == null) return;
+			
+			IRailsEngineContext context = MonoRailHttpHandler.CurrentContext;
+			context.LastException = exception;
 
-			// Mark the request as processed (so if the 
-			// ApplicationInstance_Error is invoked again, we wouldn't re-invoke the chain)
-
+			OnException(context);
 		}
+		
+		#endregion
 
-		private void OnUnhandledException(IRailsEngineContext context)
+		private void OnException(IRailsEngineContext context)
 		{
-			// TODO: Delegate to OnActionException
+			const String mrExceptionKey = "MonoRail.ExceptionHandled";
+			
+			if (context.UnderlyingContext.Items.Contains(mrExceptionKey))
+			{
+				return;
+			}
+			
+			if (firstHandler != null)
+			{
+				context.UnderlyingContext.Items.Add(mrExceptionKey, true);
+				
+				firstHandler.Process(context);
+			}
 		}
 
 		private void InstallExceptionHandler(XmlNode node, String typeName)

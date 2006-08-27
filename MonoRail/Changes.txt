@@ -4,6 +4,29 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied patch by Freyr Magnússon <freyr.magnusson@gmail.com> fixing MR-139
+  "ExceptionChainingExtension doesn´t handle unhandled exceptions"
+  
+  Which also introduces a new feature:
+
+Controllers can request IExceptionProcessor through IServiceProvider
+and invoke the handlers to process an exception. For example:
+
+public void BuyMercedes()
+{
+		try
+		{
+			...
+		}
+		catch(Exception ex)
+		{
+			IExceptionProcessor exProcessor = (IExceptionProcessor) ServiceProvider.GetService(typeof(IExceptionProcessor));
+			exProcessor.ProcessException(ex);
+
+			RenderView("CouldNotBuyMercedes");
+		}
+}
+
 - Changed DataBinder behavior to return empty arrays, instead of null arrays, 
   when the IBindingDataSourceNode is null
 

@@ -103,7 +103,7 @@ namespace Castle.MonoRail.Framework
 			context.ReleaseRequestState += new EventHandler(OnReleaseRequestState);
 			context.PreRequestHandlerExecute += new EventHandler(OnPreRequestHandlerExecute);
 			context.PostRequestHandlerExecute += new EventHandler(OnPostRequestHandlerExecute);
-			context.Error += new EventHandler(OnError);
+			context.Error += new EventHandler(OnError);		    
 		}
 
 		private MonoRailConfiguration ObtainConfiguration()
@@ -127,7 +127,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual void InitializeExtensions()
 		{
-			extensionManager = new ExtensionManager();
+			extensionManager = new ExtensionManager(this);
 
 			foreach(Type extensionType in monoRailConfiguration.Extensions)
 			{
@@ -341,6 +341,8 @@ namespace Castle.MonoRail.Framework
 		private void OnError(object sender, EventArgs e)
 		{
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
+
+			mrContext.LastException = mrContext.UnderlyingContext.Server.GetLastError();
 
 			extensionManager.RaiseUnhandledError(mrContext);
 		}

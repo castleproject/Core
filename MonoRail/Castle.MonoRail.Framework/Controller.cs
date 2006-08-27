@@ -280,7 +280,7 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>
 		/// Shortcut to 
-		/// <see cref="IRailsEngineContext.Response.IsClientConnected"/>
+		/// <see cref="IResponse.IsClientConnected"/>
 		/// </summary>
 		protected bool IsClientConnected
 		{
@@ -298,12 +298,12 @@ namespace Castle.MonoRail.Framework
 			get { return _isPostBack; }
 		}
 
-   	private void DetermineIfPostBack()
+		private void DetermineIfPostBack()
 		{
 			NameValueCollection fields = Context.Params;
 			_isPostBack = (fields["__VIEWSTATE"] != null) || (fields["__EVENTTARGET"] != null);
 		}
-     
+
 		#endregion
 
 		#region Useful Operations

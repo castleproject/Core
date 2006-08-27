@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{EC393863-333E-49CE-94A6-654B9F323954}"
     >
@@ -459,6 +459,11 @@
                 />
                 <File
                     RelPath = "Extensions\ExceptionChaining\IExceptionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\ExceptionChaining\IExceptionProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
