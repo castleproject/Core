@@ -1,8 +1,7 @@
 beta 4
 ======
 
-- ActiveRecord now depends on Castle.Services.Logging. Just a small amount of logging 
-  is being performed at this time, but the idea is to increase AR verbosity 
+- Added some logging. That's just a start: the idea is to increase AR verbosity 
   in order to reduce the need of debugging to diagnose problems.
 
 - Refactored ActiveRecordStarter.Initialize to use ActiveRecordSectionHandler.Instance
