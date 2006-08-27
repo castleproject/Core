@@ -2,9 +2,9 @@
 <project name="Common Build Properties">
 	<!-- Common properties that allow overrides -->
 	
-	<property name="nunit-console" value="nunit-console.exe" if="${framework::get-target-framework()=='net-1.1'}" />
-	<property name="nunit-console" value="nunit-console-1-1.exe" if="${framework::get-target-framework()=='net-1.1'}" />
-	<property name="nunit-console" value="nunit-console-2-0.exe" if="${framework::get-target-framework()=='net-2.0'}" />
+	<property name="nunit-console" readonly="false" value="nunit-console.exe" if="${framework::get-target-framework()=='net-1.1'}" />
+	<property name="nunit-console" readonly="false" value="nunit-console-1-1.exe" if="${framework::get-target-framework()=='net-1.1'}" />
+	<property name="nunit-console" readonly="false" value="nunit-console-2-0.exe" if="${framework::get-target-framework()=='net-2.0'}" />
 
 	<echo message="Using ${nunit-console}" />
 

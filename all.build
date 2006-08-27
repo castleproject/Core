@@ -4,7 +4,7 @@
 	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="skipcaspol" value="true" />
 	<property name="sharedlibrary.dir" value="${base.dir}/SharedLibs" />
-	<property name="tempdir" value="tempdir" />
+	<property name="releasenotes.dir" value="ReleaseNotes" />
 	<property name="test.output.dir" value="${path::combine(base.dir, 'test-results')}" />
 
 	<include buildfile="common.inc" />
@@ -155,17 +155,69 @@
 	</target>
 	
 	<target name="createreleasenotes">
-		<mkdir dir="${tempdir}" />
+		<mkdir dir="${releasenotes.dir}" />
+		<delete dir="${releasenotes.dir}" />
 		
-		<copy file="ActiveRecord/Changes.txt" tofile="${tempdir}/ActiveRecord Release Notes.txt" />
-		<copy file="MonoRail/Changes.txt" tofile="${tempdir}/MonoRail Release Notes.txt" />
-		<copy file="InversionOfControl/Changes.txt" tofile="${tempdir}/InversionOfControl Release Notes.txt" />
-		<copy file="ActiveRecord/Changes.txt" tofile="${tempdir}/ActiveRecord Release Notes.txt" />
-		<copy file="Tools/DynamicProxy/Changes.txt" tofile="${tempdir}/DynamicProxy Release Notes.txt" />
+		<echo message="Top level projects Release notes" />
+
+		<copy file="ActiveRecord/Changes.txt" tofile="${releasenotes.dir}/ActiveRecord Release Notes.txt" />
+		<copy file="MonoRail/Changes.txt" tofile="${releasenotes.dir}/MonoRail Release Notes.txt" />
+		<copy file="InversionOfControl/Changes.txt" tofile="${releasenotes.dir}/InversionOfControl Release Notes.txt" />
+		<copy file="AspectSharp/Changes.txt" tofile="${releasenotes.dir}/AspectSharp Release Notes.txt" />
+		<copy file="Tools/DynamicProxy/Changes.txt" tofile="${releasenotes.dir}/DynamicProxy Release Notes.txt" />
+		<copy file="Core/Changes.txt" tofile="${releasenotes.dir}/Core Release Notes.txt" />
+
+		<echo message="Components Release notes" />
+		
+		<mkdir dir="${releasenotes.dir}/Components" />
+		<property name="target.folder" value="Components" />
+		<call target="copy-scope-releasednotes" />
+
+		<echo message="Facilities Release notes" />
+
+		<mkdir dir="${releasenotes.dir}/Facilities" />
+		<property name="target.folder" value="Facilities" />
+		<call target="copy-scope-releasednotes" />
+
+		<echo message="Services Release notes" />
+
+		<mkdir dir="${releasenotes.dir}/Services" />
+		<property name="target.folder" value="Services" />
+		<call target="copy-scope-releasednotes" />
+		
+	</target>
+	
+	<target name="copy-scope-releasednotes">
+		<foreach item="File" property="changeLogFile">
+			<in>
+				<items>
+					<include name="${target.folder}/**/Changes.txt"/>
+				</items>
+			</in>
+			<do>
+				<echo message="changeLogFile ${changeLogFile}" />
+
+				<property name="folder" value="${directory::get-parent-directory(changeLogFile)}" />
+				
+				<if test="${platform::is-win32()}">
+					<property name="lastsepindex" value="${string::last-index-of(folder, '\') + 1}" />
+				</if>
+				
+				<if test="${platform::is-unix()}">
+					<property name="lastsepindex" value="${string::last-index-of(folder, '/') + 1}" />
+				</if>
+
+				<property name="length" value="${string::get-length(folder) - int::parse(lastsepindex)}" />
+
+				<property name="project.name" value="${string::substring(folder, lastsepindex, length)}" />
+
+				<copy file="${changeLogFile}" tofile="${releasenotes.dir}/${target.folder}/${project.name} Release Notes.txt" />
+			</do>
+		</foreach>	
 	</target>
 	
 	<target name="deletereleasenotes">
-		<delete dir="${tempdir}" />
+		<delete dir="${releasenotes.dir}" />
 	</target>
 
 	<target name="zip11">
@@ -177,7 +229,7 @@
 			<fileset basedir="${base.dir}/setup">
 				<include name="License.rtf" />
 			</fileset>
-			<fileset basedir="${tempdir}">
+			<fileset basedir="${releasenotes.dir}">
 				<include name="*.txt" />
 			</fileset>
 		</zip>
@@ -193,7 +245,7 @@
 			<fileset basedir="${base.dir}/setup">
 				<include name="License.rtf" />
 			</fileset>
-			<fileset basedir="${tempdir}">
+			<fileset basedir="${releasenotes.dir}">
 				<include name="*.txt" />
 			</fileset>
 		</zip>
@@ -204,14 +256,14 @@
 		<call target="createreleasenotes" />
 		<property name="build-type" value="release" unless="${debug}" />
 		<property name="build-type" value ="debug" if="${debug}"/>
-		<zip zipfile="${base.dir}/${CCNetLabel}-${framework::get-target-framework()}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())}-${build-type}.zip">
+		<zip zipfile="${base.dir}/${CCNetLabel}-${framework::get-target-framework()}-${build-type}.zip">
 			<fileset basedir="${base.dir}/build">
 				<include name="${framework::get-target-framework()}/*.*" />
 			</fileset>
 			<fileset basedir="${base.dir}/setup">
 				<include name="License.rtf" />
 			</fileset>
-			<fileset basedir="${tempdir}">
+			<fileset basedir="${releasenotes.dir}">
 				<include name="*.txt" />
 			</fileset>
 		</zip>
