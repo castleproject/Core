@@ -169,5 +169,15 @@ namespace Castle.MonoRail.Framework.Tests
 			AssertReplyContains( "param2=123" );
 		}
 
+		[Test]
+		public void OverloadNullSmartDispatcher()
+		{
+			DoPost("registration/posthere.rails", "p1=foo", "p2=123");
+
+			AssertSuccess();
+
+			AssertReplyContains("param1=foo");
+			AssertReplyContains("param2=123");
+		}	
 	}
 }

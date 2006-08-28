@@ -1,6 +1,8 @@
 Beta 2
 ======
 
+- Added a CanConvert and an additional Convert
+
 - Added check for duplicate fields in DataReaderAdapter. 
 
 - DataReaderAdapter: Added support for TypeConverters

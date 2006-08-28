@@ -85,18 +85,7 @@ namespace Castle.MonoRail.Framework
 
 		private IMonoRailHttpHandlerProvider ObtainMonoRailHandlerProvider(IRailsEngineContext mrContext)
 		{
-			// Try the request-level override first..
-			IMonoRailHttpHandlerProvider provider = (IMonoRailHttpHandlerProvider)
-				mrContext.UnderlyingContext.Items[Constants.MonoRailHandlerProviderKey];
-			
-			// If not present, the try the context-level override.
-			if (provider == null)
-			{
-				provider = (IMonoRailHttpHandlerProvider)
-					mrContext.GetService(typeof(IMonoRailHttpHandlerProvider));
-			}
-
-			return provider;
+			return (IMonoRailHttpHandlerProvider) mrContext.GetService(typeof(IMonoRailHttpHandlerProvider));
 		}
 	}
 }

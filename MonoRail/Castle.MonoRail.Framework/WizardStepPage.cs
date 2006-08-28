@@ -144,7 +144,7 @@ namespace Castle.MonoRail.Framework
 			RenderView( ActionName );
 		}
 
-		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
+		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
 		{
 			if (action == "RenderWizardView")
 			{

@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 	using System;
 	using System.IO;
 	using System.Collections;
+	using System.ComponentModel.Design;
 	using Encoding							= System.Text.Encoding;
 	using StringBuilder						= System.Text.StringBuilder;
 	using Castle.MonoRail.Framework;
@@ -56,9 +57,9 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 
 		#region IViewEngine Members
 
-		public override void Init(IServiceProvider serviceProvider)
+		public override void Init(IServiceContainer serviceContainer)
 		{
-			base.Init(serviceProvider);
+			base.Init(serviceContainer);
 
 			config = STViewEngineConfiguration.GetConfig(ConfigConstants.ELEMENT_stview_sectionname);
 

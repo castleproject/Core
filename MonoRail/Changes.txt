@@ -4,6 +4,16 @@ Change history
 Release Candidate 1
 ===================
 
+- Updated AbstractServiceContainer to support adding/removing services.
+
+- MonoRails services now accept and IServiceContainer instead of an
+  IServiceProvider to be able to add services if desired.
+
+- Small refactor of Controller to to accomodate passing action arguments.
+
+- Updated SmartDispatchController to utilize HttpRequest parameters when
+  additional arguments are supplied via a Send.
+
 - Applied patch by Freyr Magnússon <freyr.magnusson@gmail.com> fixing MR-139
   "ExceptionChainingExtension doesn´t handle unhandled exceptions"
   

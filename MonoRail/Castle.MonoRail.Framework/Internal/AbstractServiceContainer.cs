@@ -35,17 +35,28 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public void AddService(Type serviceType, object serviceInstance)
 		{
+			AddService(serviceType, serviceInstance, false);
+		}
+
+		public void AddService(Type serviceType, object serviceInstance, bool promote)
+		{
+			if (promote)
+			{
+				IServiceContainer parentContainer = ParentContainer;
+
+				if (parentContainer != null)
+				{
+					parentContainer.AddService(serviceType, serviceInstance, promote);
+					return;
+				}
+			}
+
 			if (type2Service == null)
 			{
 				type2Service = new HybridDictionary();
 			}
 
-			type2Service[serviceType] = serviceInstance;
-		}
-
-		public void AddService(Type serviceType, object serviceInstance, bool promote)
-		{
-			throw new NotImplementedException();
+			type2Service[serviceType] = serviceInstance;		
 		}
 
 		public void AddService(Type serviceType, ServiceCreatorCallback callback)
@@ -60,18 +71,37 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public void RemoveService(Type serviceType)
 		{
-			throw new NotImplementedException();
+			RemoveService(serviceType, false);
 		}
 
 		public void RemoveService(Type serviceType, bool promote)
 		{
-			throw new NotImplementedException();
+			if (promote)
+			{
+				IServiceContainer parentContainer = ParentContainer;
+
+				if (parentContainer != null)
+				{
+					parentContainer.RemoveService(serviceType, promote);
+					return;
+				}
+			}
+
+			if (type2Service != null)
+			{
+				type2Service.Remove(serviceType);
+			}
 		}
 
 		public object GetService(Type serviceType)
 		{
 			object service = null;
 
+			if (serviceType == typeof(IServiceContainer))
+			{
+				return this;
+			}
+			
 			if (type2Service != null)
 			{
 				service = type2Service[serviceType];
@@ -83,6 +113,21 @@ namespace Castle.MonoRail.Framework.Internal
 			}
 
 			return service;
+		}
+
+		private IServiceContainer ParentContainer
+		{
+			get
+			{
+				IServiceContainer container = null;
+				
+				if (parent != null)
+				{
+					container = (IServiceContainer) parent.GetService(typeof(IServiceContainer));
+				}
+				
+				return container;
+			}
 		}
 	}
 }

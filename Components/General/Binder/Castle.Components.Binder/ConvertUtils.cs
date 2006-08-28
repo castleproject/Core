@@ -30,6 +30,27 @@ namespace Castle.Components.Binder
 		{
 		}
 
+		public static bool CanConvert(Type desiredType, object input, out bool exactMatch)
+		{
+			exactMatch = false;
+
+			if (input == null)
+			{
+				return true;
+			}
+			else if (input.GetType() == desiredType)
+			{
+				exactMatch = true;
+			}
+			else if (!desiredType.IsInstanceOfType(input))
+			{
+				TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
+				return (conv != null && conv.CanConvertFrom(input.GetType()));
+			}
+
+			return true;
+		}
+		
 		public static object Convert(Type desiredType, String paramName, 
 			NameValueCollection paramList, IDictionary files)
 		{
@@ -69,6 +90,30 @@ namespace Castle.Components.Binder
 			return Convert(desiredType, "unspecified param", value, out conversionSucceeded);
 		}
 
+		public static object Convert(Type desiredType, object input, out bool conversionSucceeded)
+		{
+			if (input == null)
+			{
+				conversionSucceeded = true;
+				return null;
+			}
+			else
+			{
+				conversionSucceeded = desiredType.IsInstanceOfType(input);
+				if (conversionSucceeded) return input;
+
+				TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
+
+				if (conv != null)
+				{
+					conversionSucceeded = conv.CanConvertFrom(input.GetType());
+					if (conversionSucceeded) return conv.ConvertFrom(input);
+				}
+			}
+
+			return null;
+		}
+		
 		/// <summary>
 		/// Convert the input param into the desired type
 		/// </summary>

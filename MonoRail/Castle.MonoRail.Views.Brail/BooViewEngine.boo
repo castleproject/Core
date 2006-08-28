@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Views.Brail
 import System
 import System.IO
 import System.Collections
+import System.ComponentModel.Design
 import Castle.MonoRail.Framework
 import Boo.Lang.Parser
 import Boo.Lang.Compiler
@@ -47,8 +48,8 @@ public class BooViewEngine (ViewEngineBase):
 	# Get configuration options if they exists, if they do not exist, load the default ones
 	# Create directory to save the compiled assemblies if required.
 	# pre-compile the common scripts
-	override def Init(serviceProvider as IServiceProvider ):
-		super.Init(serviceProvider)
+	override def Init(serviceContainer as IServiceContainer):
+		super.Init(serviceContainer)
 		InitializeConfig() if options is null
 		baseDir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)

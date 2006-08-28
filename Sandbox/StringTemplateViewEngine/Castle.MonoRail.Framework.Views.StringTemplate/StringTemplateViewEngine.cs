@@ -2,6 +2,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplate
 {
 	using System;
 	using System.Collections;
+	using System.ComponentModel.Design;
 	using System.Configuration;
 	using System.IO;
 	using antlr.stringtemplate;
@@ -16,9 +17,9 @@ namespace Castle.MonoRail.Framework.Views.StringTemplate
 		private StringTemplateSettings settings = null;
 
 
-		public override void Init(IServiceProvider serviceProvider)
+		public override void Init(IServiceContainer serviceContainer)
 		{
-			base.Init(serviceProvider);
+			base.Init(serviceContainer);
 
 			settings = (StringTemplateSettings) ConfigurationSettings.GetConfig("stringTemplateViewEngine");
 			if (settings.Delimiter != null)

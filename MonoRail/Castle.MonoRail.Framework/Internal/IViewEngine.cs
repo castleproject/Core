@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
+	using System.ComponentModel.Design;
 
 	/// <summary>
 	/// Depicts the contract used by the engine
@@ -26,7 +27,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes the view engine.
 		/// </summary>
-		void Init(IServiceProvider provider);
+		void Init(IServiceContainer serviceContainer);
 
 		/// <summary>
 		/// Gets/sets whether rendering should aim to 

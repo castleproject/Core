@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 {
 	using System;
 	using System.IO;
+	using System.ComponentModel.Design;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views.Aspx;
 	using Castle.MonoRail.Framework.Views.NVelocity;
@@ -35,17 +36,17 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 
 		#region IViewEngine Members
 
-		public override void Init(IServiceProvider serviceProvider)
+		public override void Init(IServiceContainer serviceContainer)
 		{
-			base.Init(serviceProvider);
+			base.Init(serviceContainer);
 
 			_aspxViewEngine = new WebFormsViewEngine();
 			_aspxViewEngine.XhtmlRendering = XhtmlRendering;
-			_aspxViewEngine.Init(serviceProvider);
+			_aspxViewEngine.Init(serviceContainer);
 
 			_nvelocityViewEngine = new NVelocityViewEngine();
 			_nvelocityViewEngine.XhtmlRendering = XhtmlRendering;
-			_nvelocityViewEngine.Init(serviceProvider);
+			_nvelocityViewEngine.Init(serviceContainer);
 		}
 
 		public override bool HasTemplate(String templateName)

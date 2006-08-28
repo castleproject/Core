@@ -31,11 +31,6 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		internal static readonly String OriginalViewKey = "rails.original_view";
 
-		/// <summary>
-		/// TODO: Document why this is necessary
-		/// </summary>
-		internal static readonly String MonoRailHandlerProviderKey = "rails.handler_provider";
-
 		#endregion
 
 		#region Email Constants

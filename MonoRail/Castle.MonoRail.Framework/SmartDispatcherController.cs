@@ -104,16 +104,16 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
-		protected override void InvokeMethod(MethodInfo method, IRequest request)
+		protected override void InvokeMethod(MethodInfo method, IRequest request, params object[] actionArgs)
 		{
 			ParameterInfo[] parameters = method.GetParameters();
 
-			object[] methodArgs = BuildMethodArguments(parameters, request);
+			object[] methodArgs = BuildMethodArguments(parameters, request, actionArgs);
 
 			method.Invoke(this, methodArgs);
 		}
 
-		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
+		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
 		{
 			object methods = actions[action];
 
@@ -126,10 +126,10 @@ namespace Castle.MonoRail.Framework
 
 			return SelectBestCandidate(
 				(MethodInfo[]) candidates.ToArray(typeof(MethodInfo)),
-				request.Params);
+				request.Params, actionArgs);
 		}
 
-		protected virtual MethodInfo SelectBestCandidate(MethodInfo[] candidates, NameValueCollection webParams)
+		protected virtual MethodInfo SelectBestCandidate(MethodInfo[] candidates, NameValueCollection webParams, params object[] actionArgs)
 		{
 			if (candidates.Length == 1)
 			{
@@ -142,7 +142,7 @@ namespace Castle.MonoRail.Framework
 
 			foreach(MethodInfo candidate in candidates)
 			{
-				int points = CalculatePoints(candidate, webParams);
+				int points = CalculatePoints(candidate, webParams, actionArgs);
 
 				if (lastMaxPoints < points)
 				{
@@ -154,10 +154,11 @@ namespace Castle.MonoRail.Framework
 			return bestCandidate;
 		}
 
-		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams)
+		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams, params object[] actionArgs)
 		{
 			int points = 0;
 			int matchCount = 0;
+			int actionArgsIndex = 0;
 
 			ParameterInfo[] parameters = candidate.GetParameters();
 
@@ -191,6 +192,23 @@ namespace Castle.MonoRail.Framework
 					points += 10;
 					matchCount++;
 				}
+				else if ((actionArgs != null) && (actionArgsIndex < actionArgs.Length))
+				{
+					bool exactMatch;
+					Type parameterType = param.ParameterType;
+					object actionArg = actionArgs[actionArgsIndex];
+
+					if (ConvertUtils.CanConvert(parameterType, actionArg, out exactMatch))
+					{
+						points += 10;
+
+						// Give extra weight to exact matches.
+						if (exactMatch) points += 5;
+						
+						matchCount++;
+						actionArgsIndex++;	
+					}
+				}
 			}
 
 			// the bonus should be nice only for disambiguation.
@@ -220,8 +238,9 @@ namespace Castle.MonoRail.Framework
 		/// </remarks>
 		/// <param name="parameters">Parameters to obtain the values to</param>
 		/// <param name="request">The current request, which is the source to obtain the data</param>
+		/// <param name="actionArgs">Extra arguments to pass to the action.</param>
 		/// <returns>An array with the arguments values</returns>
-		protected virtual object[] BuildMethodArguments(ParameterInfo[] parameters, IRequest request)
+		protected virtual object[] BuildMethodArguments(ParameterInfo[] parameters, IRequest request, params object[] actionArgs)
 		{
 			object[] args = new object[parameters.Length];
 			String paramName = String.Empty;
@@ -231,6 +250,8 @@ namespace Castle.MonoRail.Framework
 
 			IDictionary files = request.Files;
 
+			int actionArgsIndex = 0;
+			
 			try
 			{
 				for(int argIndex = 0; argIndex < args.Length; argIndex++)
@@ -257,10 +278,23 @@ namespace Castle.MonoRail.Framework
 
 					if (!handled)
 					{
-						bool conversionSucceeded;
+						object convertedVal = null;
+						bool conversionSucceeded = false;
+							
+						if ((allParams[paramName] == null) &&
+						    (actionArgs != null) && (actionArgsIndex < actionArgs.Length))
+						{
+							object actionArg = actionArgs[actionArgsIndex];
+							convertedVal = ConvertUtils.Convert(param.ParameterType, actionArg, out conversionSucceeded);
 
-						object convertedVal = ConvertUtils.Convert(
-							param.ParameterType, paramName, allParams, files, out conversionSucceeded);
+							if (conversionSucceeded) actionArgsIndex++;						
+						}
+						
+						if (!conversionSucceeded)
+						{
+							convertedVal = ConvertUtils.Convert(
+								param.ParameterType, paramName, allParams, files, out conversionSucceeded);
+						}
 
 						if (conversionSucceeded)
 						{
@@ -268,7 +302,7 @@ namespace Castle.MonoRail.Framework
 						}
 						else
 						{
-							// Should we log, cry out loud, throw exception or what?
+							// Should we log, cry out loud, throw exception or what?							
 						}
 					}
 				}

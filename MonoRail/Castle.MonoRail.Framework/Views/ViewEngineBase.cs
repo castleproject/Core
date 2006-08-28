@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
+	using System.ComponentModel.Design;
 
 	/// <summary>
 	/// Abstract base class for View Engines.
@@ -28,9 +29,9 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes the view engine.
 		/// </summary>
-		public virtual void Init(IServiceProvider serviceProvider)
+		public virtual void Init(IServiceContainer serviceContainer)
 		{
-			viewSourceLoader = (IViewSourceLoader) serviceProvider.GetService(typeof(IViewSourceLoader));
+			viewSourceLoader = (IViewSourceLoader) serviceContainer.GetService(typeof(IViewSourceLoader));
 		}
 
 		/// <summary>

@@ -829,8 +829,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actionArgs">Action arguments</param>
 		public void Send(String action, params object[] actionArgs)
 		{
-			_isPostBack = true;
-			if (actionArgs == null) actionArgs = new object[0];
+			_isPostBack = false;
 			InternalSend(action, actionArgs);
 		}
 	    
@@ -873,7 +872,8 @@ namespace Castle.MonoRail.Framework
 			}
 
 			// Look for the target method
-			MethodInfo method = SelectMethod(action, actionArgs);
+
+			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, _context.Request, actionArgs);
 
 			// If we couldn't find a method for this action, look for a dynamic action
 			IDynamicAction dynAction = null;
@@ -1023,14 +1023,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (metaDescriptor.DefaultAction != null)
 			{
-				if (methodArgs == null)
-				{
-					return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, _context.Request);
-				}
-				else
-				{
-					return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, methodArgs);
-				}
+				return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, _context.Request, methodArgs);
 			}
 
 			return null;
@@ -1092,74 +1085,19 @@ namespace Castle.MonoRail.Framework
 
 		#region Action Invocation
 
-		private MethodInfo SelectMethod(String action, object[] actionArgs)
-		{
-			if (actionArgs == null)
-			{
-				return SelectMethod(action, MetaDescriptor.Actions, _context.Request);
-			}
-			else
-			{
-				return SelectMethod(action, MetaDescriptor.Actions, actionArgs);
-			}			
-		}
-		
-		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
+		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
 		{
 			return actions[action] as MethodInfo;
 		}
 
-		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, object[] methodArgs)
-		{
-			Type[] methodArgTypes;
-            
-			if (methodArgs == null)
-			{
-				methodArgTypes = new Type[0];
-			}
-			else
-			{
-				methodArgTypes = new Type[methodArgs.Length];
-                
-				for (int i=0; i < methodArgs.Length; i++)
-				{
-					object methodArg = methodArgs[i];
-					if (methodArg == null)
-					{
-						// Make an assumption here to avoid having to provide
-						// arguments Type[] to the Send method.
-						methodArgTypes[i] = typeof(object);
-					}
-					else
-					{
-						methodArgTypes[i] = methodArg.GetType();
-					}
-				}
-			}
-
-			return GetType().GetMethod(action, methodArgTypes);
-		}
-
 		private void InvokeMethod(MethodInfo method, object[] methodArgs)
 		{
-			if (methodArgs == null)
-			{
-				InvokeMethod(method, _context.Request);
-			}
-			else
-			{
-				InvokeMethod(method, _context.Request, methodArgs);
-			}
-		}
-
-		protected virtual void InvokeMethod(MethodInfo method, IRequest request)
-		{
-			method.Invoke(this, new object[0]);
+			InvokeMethod(method, _context.Request, methodArgs);
 		}
 
 		protected virtual void InvokeMethod(MethodInfo method, IRequest request, object[] methodArgs)
 		{
- 			method.Invoke(this, methodArgs);
+ 			method.Invoke(this, new object[0]);
 		}
 	    
 		#endregion

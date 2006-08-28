@@ -22,6 +22,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	using System;
 	using System.IO;
 	using System.Collections;
+	using System.ComponentModel.Design;
 	
 	using Commons.Collections;
 
@@ -48,9 +49,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		#region IViewEngine Members
 
-		public override void Init(IServiceProvider serviceProvider)
+		public override void Init(IServiceContainer serviceContainer)
 		{
-			base.Init(serviceProvider);
+			base.Init(serviceContainer);
 
 			ExtendedProperties props = new ExtendedProperties();
 
@@ -67,7 +68,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			InitializeVelocityProperties(props);
 
-			velocity.SetApplicationAttribute("service.provider", serviceProvider);
+			velocity.SetApplicationAttribute("service.provider", serviceContainer);
 
 			velocity.Init(props);
 		}
