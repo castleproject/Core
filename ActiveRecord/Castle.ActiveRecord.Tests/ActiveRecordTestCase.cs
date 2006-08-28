@@ -572,5 +572,36 @@ namespace Castle.ActiveRecord.Tests
 			blog.Delete();
 			Assert.IsTrue(blog.OnDeleteCalled);
 		}
+
+		[Test]
+		public void RegisterTypeTest()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource());
+			ActiveRecordStarter.RegisterTypes(typeof(Blog), typeof(Post));
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			blogs = Blog.FindAll();
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
+
+			Blog retrieved = blogs[0];
+			Assert.IsNotNull(retrieved);
+
+			Assert.AreEqual(blog.Name, retrieved.Name);
+			Assert.AreEqual(blog.Author, retrieved.Author);
+		}
 	}
 }

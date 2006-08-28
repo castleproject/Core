@@ -41,6 +41,13 @@ namespace Castle.ActiveRecord
 		private static readonly Object lockConfig = new object();
 
 		private static bool isInitialized = false;
+		
+		private static IDictionary registeredTypes;
+		
+		/// <summary>
+		/// This is saved so one can invoke <see cref="RegisterTypes"/> later
+		/// </summary>
+		private static IConfigurationSource configSource;
 
 		/// <summary>
 		/// So others frameworks can intercept the 
@@ -54,7 +61,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize(IConfigurationSource source, params Type[] types)
 		{
-			lock (lockConfig)
+			lock(lockConfig)
 			{
 				if (isInitialized)
 				{
@@ -69,6 +76,10 @@ namespace Castle.ActiveRecord
 				{
 					throw new ArgumentNullException("types");
 				}
+				
+				registeredTypes = new Hashtable();
+				
+				configSource = source;
 
 				// First initialization
 				ISessionFactoryHolder holder = CreateSessionFactoryHolderImplementation(source);
@@ -81,15 +92,10 @@ namespace Castle.ActiveRecord
 				ActiveRecordModel.type2Model.Clear();
 				ActiveRecordModel.isDebug = source.Debug;
 
-				ActiveRecordModelCollection models = BuildModels(holder, source, types);
+				// Sets up base configuration
+				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
-				GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
-				connectorVisitor.VisitNodes(models);
-
-				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
-				semanticVisitor.VisitNodes(models);
-
-				AddXmlToNHibernateCfg(holder, models);
+				RegisterTypes(holder, source, types, true);
 
 				isInitialized = true;
 			}
@@ -105,7 +111,7 @@ namespace Castle.ActiveRecord
 
 			ArrayList list = new ArrayList();
 
-			foreach (Type type in types)
+			foreach(Type type in types)
 			{
 				if (!IsActiveRecordType(type))
 				{
@@ -126,11 +132,11 @@ namespace Castle.ActiveRecord
 		{
 			ArrayList list = new ArrayList();
 
-			foreach (Assembly assembly in assemblies)
+			foreach(Assembly assembly in assemblies)
 			{
 				Type[] types = GetExportedTypesFromAssembly(assembly);
 
-				foreach (Type type in types)
+				foreach(Type type in types)
 				{
 					if (!IsActiveRecordType(type))
 					{
@@ -156,13 +162,23 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Registers new types in ActiveRecord
+		/// Usefull for dynamic type-adding after initialization
+		/// </summary>
+		/// <param name="types"></param>
+		public static void RegisterTypes(params Type[] types)
+		{
+			RegisterTypes(ActiveRecordBase.holder, configSource, types, false);
+		}
+
+		/// <summary>
 		/// Generates and executes the creation scripts for the database.
 		/// </summary>
 		public static void CreateSchema()
 		{
 			CheckInitialized();
 
-			foreach (Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -211,7 +227,7 @@ namespace Castle.ActiveRecord
 		{
 			CheckInitialized();
 
-			foreach (Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -235,7 +251,7 @@ namespace Castle.ActiveRecord
 
 			CheckInitialized();
 
-			foreach (Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -260,7 +276,7 @@ namespace Castle.ActiveRecord
 
 			CheckInitialized();
 
-			foreach (Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -286,40 +302,72 @@ namespace Castle.ActiveRecord
 
 		private static ActiveRecordModelCollection BuildModels(ISessionFactoryHolder holder, 
 		                                                       IConfigurationSource source,
-		                                                       Type[] types)
+		                                                       Type[] types, bool ignoreProblematicTypes)
 		{
-			// Base configuration
-			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
-
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
 
 			ActiveRecordModelCollection models = builder.Models;
 
-			foreach (Type type in types)
+			foreach(Type type in types)
 			{
-				if (models.Contains(type) || 
-				    type == typeof(ActiveRecordBase) || 
-				    type == typeof(ActiveRecordValidationBase) ||
-				    type == typeof(ActiveRecordHooksBase))
+				if (ShouldIgnoreType(type))
 				{
-					continue;
+					if (ignoreProblematicTypes)
+					{
+						continue;
+					}
+					else
+					{
+						throw new ActiveRecordException(
+							String.Format("Type `{0}` is registered already", type.FullName));
+					}
 				}
-				else if (type.IsAbstract && 
-				         typeof(ActiveRecordBase).IsAssignableFrom(type) && 
-				         !IsTypeHierarchyBase(type))
+				else if (TypeDefinesADatabaseBoundary(type))
 				{
 					SetUpConfiguration(source, type, holder);
-
+					
 					continue;
 				}
 				else if (!IsActiveRecordType(type))
 				{
-					continue;
+					if (ignoreProblematicTypes)
+					{
+						continue;
+					}
+					else
+					{
+						throw new ActiveRecordException(
+							String.Format("Type `{0}` is not an ActiveRecord type. Use ActiveRecordAttributes to define one", type.FullName));
+					}
 				}
-
-				builder.Create(type);
+				
+				ActiveRecordModel model = builder.Create(type);
+				
+				if (model == null)
+				{
+					throw new ActiveRecordException(
+						String.Format("ActiveRecordModel for `{0}` could not be created", type.FullName));
+				}
+				
+				registeredTypes.Add(type, String.Empty);
 			}
+			
 			return models;
+		}
+
+		private static bool TypeDefinesADatabaseBoundary(Type type)
+		{
+			return (type.IsAbstract &&
+			        typeof(ActiveRecordBase).IsAssignableFrom(type) &&
+			        !IsTypeHierarchyBase(type));
+		}
+
+		private static bool ShouldIgnoreType(Type type)
+		{
+			return (registeredTypes.Contains(type) ||
+			        type == typeof(ActiveRecordBase) ||
+			        type == typeof(ActiveRecordValidationBase) ||
+			        type == typeof(ActiveRecordHooksBase));
 		}
 
 		private static bool IsTypeHierarchyBase(Type type)
@@ -332,11 +380,12 @@ namespace Castle.ActiveRecord
 			object[] attrs = type.GetCustomAttributes(typeof(ActiveRecordAttribute), false);
 
 			if (attrs != null && attrs.Length > 0)
-            {
+			{
 				ActiveRecordAttribute att = (ActiveRecordAttribute)attrs[0];
 
 				return att.DiscriminatorColumn != null;
-            }
+			}
+			
 			return false;
 		}
 
@@ -344,7 +393,7 @@ namespace Castle.ActiveRecord
 		{
 			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
 
-			foreach (ActiveRecordModel model in models)
+			foreach(ActiveRecordModel model in models)
 			{
 				Configuration cfg = holder.GetConfiguration(holder.GetRootType(model.Type));
 
@@ -404,7 +453,7 @@ namespace Castle.ActiveRecord
 
 			Configuration cfg = new Configuration();
 
-			foreach (IConfiguration childConfig in config.Children)
+			foreach(IConfiguration childConfig in config.Children)
 			{
 				cfg.Properties.Add(childConfig.Name, childConfig.Value);
 			}
@@ -451,6 +500,22 @@ namespace Castle.ActiveRecord
 			else
 			{
 				return new SessionFactoryHolder();
+			}
+		}
+
+		private static void RegisterTypes(ISessionFactoryHolder holder, IConfigurationSource source, Type[] types, bool ignoreProblematicTypes)
+		{
+			lock(lockConfig)
+			{
+				ActiveRecordModelCollection models = BuildModels(holder, source, types, ignoreProblematicTypes);
+
+				GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
+				connectorVisitor.VisitNodes(models);
+
+				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
+				semanticVisitor.VisitNodes(models);
+
+				AddXmlToNHibernateCfg(holder, models);
 			}
 		}
 

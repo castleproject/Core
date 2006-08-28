@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Fixed AR-73: "Dynamic type adding after initialization"
+
 - Added some logging. That's just a start: the idea is to increase AR verbosity 
   in order to reduce the need of debugging to diagnose problems.
 

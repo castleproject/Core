@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
     >
@@ -80,12 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
@@ -114,6 +108,11 @@
                     Name = "Castle.ActiveRecord.Tests"
                     Project = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll"
                 />
             </References>
         </Build>
