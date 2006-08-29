@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Applied josh robb's patch "small fixup for length 
+  validator error messages where there is only a minimum or maximum specified"
+
 - Fixed AR-73: "Dynamic type adding after initialization"
 
 - Added some logging. That's just a start: the idea is to increase AR verbosity 

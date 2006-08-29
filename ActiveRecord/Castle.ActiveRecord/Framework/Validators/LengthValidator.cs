@@ -106,12 +106,20 @@ namespace Castle.ActiveRecord.Framework.Validators
 			if (this.exactLength != int.MinValue)
 			{
 				return String.Format("{0} must be {1} characters long.", Property.Name, this.exactLength);
-			}
+			} 
+			else if (this.minLength == int.MinValue && this.maxLength != int.MaxValue) //too long
+			{
+				return String.Format("{0} must be less than {1} characters long.", Property.Name, this.maxLength);
+			} 
+			else if (this.minLength != int.MinValue && this.maxLength == int.MaxValue) //too short
+			{
+				return String.Format("{0} must be more than {1} characters long.", Property.Name, this.minLength);
+			} 
 			else if (this.minLength != int.MinValue || this.maxLength != int.MaxValue) //Are we in range mode?
 			{
 				return String.Format("{0} must be between {1} and {2} characters long.", Property.Name, this.minLength, this.maxLength);
-			}
-			else
+			} 
+			else 
 			{
 				throw new InvalidOperationException();
 			}

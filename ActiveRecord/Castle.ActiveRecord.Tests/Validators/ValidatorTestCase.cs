@@ -103,6 +103,14 @@ namespace Castle.ActiveRecord.Tests.Validators
 			Assert.IsTrue(LengthValidatorTest("abc", 2, 4));
 			Assert.IsTrue(LengthValidatorTest("abcd", 2, 4));
 			Assert.IsFalse(LengthValidatorTest("abcde", 2, 4));
+
+			// minimum only
+			Assert.IsTrue(LengthValidatorTest("abcde", 2, int.MaxValue));
+			Assert.IsFalse(LengthValidatorTest("abcde", 6, int.MaxValue));
+
+			// maximum only
+			Assert.IsFalse(LengthValidatorTest("abcde", int.MinValue, 2));
+			Assert.IsTrue(LengthValidatorTest("abcde", int.MinValue, 6));
 		}
 
 		private bool LengthValidatorTest(string input, int exactLength)
