@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Changed ConvertUtils to consider non successful an attempt to convert a null 
+  value to boolean
+
 - Added a CanConvert and an additional Convert
 
 - Added check for duplicate fields in DataReaderAdapter. 
