@@ -61,7 +61,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public class ARDataBindAttribute : DataBindAttribute, IParameterBinder
 	{
 		private AutoLoadBehavior autoLoad = AutoLoadBehavior.Never;
-        
+
 		/// <summary>
 		/// Defines a binder for the parameter
 		/// using the <see cref="ARDataBinder"/> and the 
@@ -98,16 +98,21 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { autoLoad = value; }
 		}
 
-        public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			ARDataBinder binder = new ARDataBinder();
+			ARDataBinder binder = controller.Binder as ARDataBinder;
+
+			if (binder == null)
+			{
+				binder = new ARDataBinder();
+			}
 
 			ConfigureBinder(binder, controller);
 
 			binder.AutoLoad = autoLoad;
-    
+
 			object instance = binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, ResolveParams(controller));
-        	
+
 			if (instance != null)
 			{
 				controller.BoundInstanceErrors[instance] = binder.ErrorList;
