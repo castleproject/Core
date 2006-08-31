@@ -28,7 +28,7 @@ namespace Castle.Core.Logging
 		/// <returns></returns>
 		public override ILogger Create(String name)
 		{
-			return new NullLogger();
+			return NullLogger.Instance;
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Castle.Core.Logging
 		/// <returns></returns>
 		public override ILogger Create(String name, LoggerLevel level)
 		{
-			return new NullLogger();
+            return NullLogger.Instance;
 		}
 	}
 }
