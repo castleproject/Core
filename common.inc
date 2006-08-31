@@ -14,6 +14,13 @@
 		
 	<property name="build.dir" value="${rootbuild.dir}/build/${framework::get-target-framework()}" />
 
+	<property name="dotnet.version" value="1" readonly="true" if="${framework::get-target-framework()=='net-1.0'}" />
+	<property name="dotnet.version" value="1" readonly="true" if="${framework::get-target-framework()=='net-1.1'}" />
+	<property name="dotnet.version" value="1" readonly="true" if="${framework::get-target-framework()=='mono-1.0'}" />
+	<property name="dotnet.version" value="2" readonly="true" if="${framework::get-target-framework()=='net-2.0'}" />
+	<property name="dotnet.version" value="2" readonly="true" if="${framework::get-target-framework()=='mono-2.0'}" />
+	<property name="dotnet.version" value="0" readonly="true" unless="${property::exists('dotnet.version')}" />
+	
 	<property name="strong"		value="STRONG"		unless="${property::exists('strong')}" />
 	<property name="debug"		value="false"		unless="${property::exists('debug')}" />
 	<property name="optimize"	value="true"		unless="${property::exists('optimize')}" />

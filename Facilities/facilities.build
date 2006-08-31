@@ -8,7 +8,7 @@
 	<target name="build" depends="init, buildlist1, buildlist2, buildlist3" />
 	
 	<target name="buildlist1" depends="autotransaction,arintegration,aspectsharp,batchregistration,cache,db4o" />
-	<target name="buildlist2" depends="factorysupport,nhibernate,ibatis,logging" />
+	<target name="buildlist2" depends="dynamicloader,factorysupport,nhibernate,ibatis,logging" />
 	<target name="buildlist3" depends="prevalence,remoting,securitymanagement,typedfactory" />
 	
 	<!-- entlib,x is/are out -->
@@ -20,6 +20,7 @@
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="clean" />
 		<nant buildfile="Cache/default.build" inheritall="true" target="clean" />
 		<nant buildfile="Db4o/default.build" inheritall="true" target="clean" />
+		<nant buildfile="DynamicLoader/default.build" inheritall="true" target="clean" />
 		<!--<nant buildfile="EnterpriseLibrary/default.build" inheritall="true" target="clean" />-->
 		<nant buildfile="FactorySupport/default.build" inheritall="true" target="clean" />
 		<nant buildfile="IBatisNet/default.build" inheritall="true" target="clean" /> 
@@ -57,6 +58,10 @@
 
 	<target name="db4o">
 		<nant buildfile="Db4o/default.build" inheritall="true" target="build" />
+	</target>
+
+	<target name="dynamicloader">
+		<nant buildfile="DynamicLoader/default.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="entlib">
@@ -102,6 +107,7 @@
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Cache/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Db4o/default.build" inheritall="true" target="dist" />
+		<nant buildfile="DynamicLoader/default.build" inheritall="true" target="dist" />
 		<nant buildfile="EnterpriseLibrary/default.build" inheritall="true" target="dist" />
 		<nant buildfile="EventWiring/default.build" inheritall="true" target="dist" />
 		<nant buildfile="FactorySupport/default.build" inheritall="true" target="dist" />
