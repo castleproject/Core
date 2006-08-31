@@ -24,7 +24,7 @@ namespace Castle.MicroKernel
 
 	
 	[Serializable]
-	public sealed class CreationContext
+	public sealed class CreationContext : MarshalByRefObject
 	{
 		public readonly static CreationContext Empty = new CreationContext(new DependencyModel[0]);
 		
@@ -99,8 +99,9 @@ namespace Castle.MicroKernel
 		}
 	    
 		#endif
-	    
-	    internal class DependencyKey
+		
+	    [Serializable]
+		 internal class DependencyKey : MarshalByRefObject
 	    {
             DependencyModel dependencyModel;
             MemberInfo info;
