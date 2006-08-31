@@ -37,8 +37,6 @@
 
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-castle.core" inheritall="true" />
 
-		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-logging-service" inheritall="true" />
-
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-dynamicproxy" inheritall="true" />
 
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-nhibernate" inheritall="true" />
