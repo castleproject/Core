@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Reflection;
 
 	public enum CallbackEnum
 	{
@@ -61,6 +62,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class AjaxHelper : AbstractHelper
 	{
+		static HybridDictionary ajaxProxyCache = new HybridDictionary();
+		
 		public AjaxHelper()
 		{
 		}
@@ -85,6 +88,86 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
 				Controller.Context.ApplicationPath + "/MonoRail/Files/BehaviourScripts", 
 				Controller.Context.UrlInfo.Extension);
+		}
+
+		/// <summary>
+		/// Generates an AJAX JavaScript proxy for the current controller.
+		/// </summary>
+		public String GenerateJSProxy(string proxyName)
+		{
+			return GenerateJSProxy(proxyName, Controller.AreaName, Controller.Name);
+		}
+
+		/// <summary>
+		/// Generates an AJAX JavaScript proxy for a given controller.
+		/// </summary>
+		public String GenerateJSProxy(string proxyName, string controller)
+		{
+			return GenerateJSProxy(proxyName, null, controller);
+		}
+
+		/// <summary>
+		/// Generates an AJAX JavaScript proxy for a given controller.
+		/// </summary>
+		public String GenerateJSProxy(string proxyName, string area, string controller)
+		{
+			String cacheKey = area + "|" + controller;
+			String result = (String) ajaxProxyCache[cacheKey];
+
+			if (result == null)
+			{
+				Type controllerType;
+				if (Controller.AreaName == area && Controller.Name == controller)
+				{
+					controllerType = Controller.GetType();
+				}
+				else
+				{
+					// TODO: find a better way to inspect a controller
+					Internal.UrlInfo urlInfo = new Internal.UrlInfo(null, area, controller, null, null);
+					IControllerFactory f = (IControllerFactory) Controller.Context.GetService(typeof(IControllerFactory));
+					controllerType = f.CreateController(urlInfo).GetType();
+				}
+
+				String baseUrl = Controller.Context.ApplicationPath + "/";
+				if (area != null)
+					baseUrl += area + "/";
+				baseUrl += controller + "/";
+				
+				// TODO: develop a smarter function generation, inspecting the return
+				// value of the action and generating a proxy that does the same.
+				// also, think on a proxy pattern for the Ajax.Updater.
+				StringBuilder functions = new StringBuilder();
+				functions.Append("{ ");
+				foreach (MethodInfo mi in controllerType.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+				{
+					foreach (AjaxActionAttribute attr in mi.GetCustomAttributes(typeof(AjaxActionAttribute), true))
+					{
+						StringBuilder parameters = new StringBuilder("_=");
+						String url = baseUrl + mi.Name + "." + Controller.Context.UrlInfo.Extension;
+						String functionName = attr.Name != null ? attr.Name : mi.Name;
+						functionName = Char.ToLower(functionName[0]) + (functionName.Length > 0 ? functionName.Substring(1) : null);
+
+						functions.AppendFormat("{0}: function(", functionName);
+						foreach (ParameterInfo pi in mi.GetParameters())
+						{
+							String paramName = pi.Name;
+							paramName = Char.ToLower(paramName[0]) + (paramName.Length > 0 ? paramName.Substring(1) : null);
+							functions.AppendFormat("{0}, ", paramName);
+							parameters.AppendFormat("&{0}='+{0}+'", paramName);
+						}
+						functions.Append("callback){");
+						functions.AppendFormat("new Ajax.Request('{0}', {{parameters: '{1}', onComplete: callback}});", url, parameters.ToString());
+						functions.Append("},");
+					}
+				}
+				functions.Length -= 1;
+				functions.Append("}");
+
+				ajaxProxyCache[cacheKey] = result = functions.ToString();
+			}
+			
+			return @"<script type=""text/javascript"">var " + proxyName + " = " + result + ";</script>";
 		}
 		
 		/// <summary>

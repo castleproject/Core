@@ -57,6 +57,9 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return _urlRaw; }
 		}
 
+		/// <summary>
+		/// The URL extension, without the leading dot.
+		/// </summary>
 		public String Extension
 		{
 			get { return _extension; }
