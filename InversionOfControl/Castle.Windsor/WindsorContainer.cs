@@ -92,6 +92,7 @@ namespace Castle.Windsor
 		{
 		}
 
+		[Obsolete("Use includes instead of cascade configurations")]
 		public WindsorContainer(String parentXmlFile, String childXmlFile)
 			: this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
 		{

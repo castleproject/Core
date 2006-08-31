@@ -55,7 +55,8 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// If the typename was not provided or the type 
 		/// could not be instantiated/found
 		/// </exception>
-		/// <param name="configuration"></param>
+		/// <param name="manager">The Extension Manager</param>
+		/// <param name="configuration">The configuration</param>
 		public void Init(ExtensionManager manager, MonoRailConfiguration configuration)
 		{
 			manager.AcquireSessionState += new ExtensionHandler(OnAdquireSessionState);

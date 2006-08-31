@@ -392,12 +392,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates an anchor (link) to the <paramref name="action"/> on the specified <paramref name="controller"/>
 		/// <code>
-		/// &lt;a href=&quot;/website/controllerArg/actionArg.rails&quot;&gt;nameArg&lt;/a&gt;
+		/// &lt;a href=&quot;/website/controllerArg/actionArg.rails?id=x&quot;&gt;nameArg&lt;/a&gt;
 		/// </code>
 		/// </summary>
 		/// <param name="name">Name for the link.</param>
 		/// <param name="controller">Controller to link to.</param>
 		/// <param name="action">Action to link to.</param>
+		/// <param name="action">The ID to be passed as a parameter for the action</param>
 		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
 		/// <returns>HTML string with anchor to the specified <paramref name="controller"/></returns>
 		/// <remarks>Calling <c>LinkToAttributed( "nameArg", "controllerArg", "actionArg", IDictionary )</c> results in:
@@ -426,7 +427,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <code>/website/targetArg</code>
 		/// </summary>
 		/// <param name="target">Target path to map.</param>
-		/// <returns>URL string pointing to the <see cref="target"/> in the context of the website.</returns>
+		/// <returns>URL string pointing to the <paramref name="target"/> in the context of the website.</returns>
 		/// <remarks>Calling <c>MapToVirtual( "targetArg" )</c> results in:
 		/// <code>/website/targetArg</code>
 		/// </remarks>

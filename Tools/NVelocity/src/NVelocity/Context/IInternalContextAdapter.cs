@@ -24,6 +24,6 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		Object Remove(object key);
+		new Object Remove(object key);
 	}
 }

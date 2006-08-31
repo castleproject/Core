@@ -552,6 +552,7 @@ namespace Castle.MonoRail.Framework
 		/// Redirects to the specified URL. All other Redirects call this one.
 		/// </summary>
 		/// <param name="url">Target URL</param>
+		/// <param name="parameters">URL parameters</param>
 		public virtual void Redirect(String url, IDictionary parameters)
 		{
 			CancelView();

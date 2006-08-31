@@ -33,7 +33,8 @@ namespace Castle.MonoRail.Framework
 		/// and subscribe to some event the <see cref="ExtensionManager"/>
 		/// exposes.
 		/// </summary>
-		/// <param name="configuration"></param>
+		/// <param name="manager">The Extension Manager</param>
+		/// <param name="configuration">The MonoRail configuration</param>
 		void Init(ExtensionManager manager, MonoRailConfiguration configuration);
 
 	}

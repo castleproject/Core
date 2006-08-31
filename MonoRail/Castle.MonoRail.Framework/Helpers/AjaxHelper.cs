@@ -149,6 +149,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a button that if clicked will fire an Ajax invocation. 
 		/// </summary>
 		/// <param name="innerContent">Button legend</param>
+		/// <param name="url">The URL of the Ajax action</param>
+		/// <param name="options">The options for the Ajax call</param>
 		/// <returns>The handcrafted input</returns>
 		public String ButtonToRemote(String innerContent, String url, IDictionary options)
 		{

@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Returns an encoded string that can be used as part of the url query string or the post body param
 		/// </summary>
 		/// <param name="args">NameValueCollection with the params to be constructed</param>
-		/// <returns>URL safe params name1=value1[&name2=value2&...]</returns>
+		/// <returns>URL safe params name1=value1[&amp;name2=value2&amp;...]</returns>
 		public String BuildWebParams( NameValueCollection args )
 		{
 			if (args == null) return String.Empty;
