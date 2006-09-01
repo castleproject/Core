@@ -19,14 +19,20 @@ Release Candidate 1
        ## will declare an object named "myLists", allowing access
        ## to all [AjaxAction]s on the controller named 'lists', in the 'util' area
 
-  Note that all proxies are asynchronous, so you must always supply a callback
-  as the last parameter. The callback must be a JavaScript function, and will be called
-  when the action finishes. For the action:
+  Note that proxies can perform synchronous (blocking) or asynchronous (non-blocking) calls.
+  For asynchronous calls, you must always supply a JavaScript function as an additional
+  last parameter. When that parameter is absent, the proxy will perform a synchronous call.
 
      [AjaxAction] public void Sum(int num1, int num2) { RenderText(Convert.ToString(num1 + num2)); }
 
-  You must write:
+  You can write:
 
+     // synchronous call
+     $('result').value = myLists.sum($('num1').value, $('num2').value);
+
+  Or:
+
+     // asynchronous call
      myLists.sum($('num1').value, $('num2').value, function(t) { $('result').value = t.responseText; });
 
   Being:
