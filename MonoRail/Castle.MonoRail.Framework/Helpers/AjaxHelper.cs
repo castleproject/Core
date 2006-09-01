@@ -113,7 +113,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		public String GenerateJSProxy(string proxyName, string area, string controller)
 		{
-			String cacheKey = area + "|" + controller;
+			String cacheKey = (area + "|" + controller).ToLower();
 			String result = (String) ajaxProxyCache[cacheKey];
 
 			if (result == null)
@@ -167,7 +167,7 @@ namespace Castle.MonoRail.Framework.Helpers
 							String paramName = pi.Name;
 							paramName = Char.ToLower(paramName[0]) + (paramName.Length > 0 ? paramName.Substring(1) : null);
 							functions.AppendFormat("{0}, ", paramName);
-							parameters.AppendFormat("&{0}='+{0}+'", paramName);
+							parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
 						}
 						functions.Append("callback){");
 						functions.AppendFormat("new Ajax.Request('{0}', {{parameters: '{1}', onComplete: callback}});", url, parameters.ToString());
