@@ -4,6 +4,38 @@ Change history
 Release Candidate 1
 ===================
 
+- Introduced [AjaxAction] attribute. Any action marked with this attribute
+  can be accessed on client-side scripting using a JavaScript proxy, like
+  this:
+
+     $ajaxHelper.getJavascriptFunctions()
+       ## MANDATORY, must come before any call to generateJSProxy
+
+     $ajaxHelper.generateJSProxy('thisController')
+       ## will declare an object named "thisController", allowing access
+       ## to all [AjaxAction]s on the current controller
+
+     $ajaxHelper.generateJSProxy('util', 'lists', 'myLists')
+       ## will declare an object named "myLists", allowing access
+       ## to all [AjaxAction]s on the controller named 'lists', in the 'util' area
+
+  Note that all proxies are asynchronous, so you must always supply a callback
+  as the last parameter. The callback must be a JavaScript function, and will be called
+  when the action finishes. For the action:
+
+     [AjaxAction] public void Sum(int num1, int num2) { RenderText(Convert.ToString(num1 + num2)); }
+
+  You must write:
+
+     myLists.sum($('num1').value, $('num2').value, function(t) { $('result').value = t.responseText; });
+
+  Being:
+
+     $('num1').value     = the value of an input with id=num1
+     $('num2').value     = the value of an input with id=num2
+     function(t) { ... } = the callback
+     t.responseText      = any text that the action could have rendered
+
 - Applied Marc-André's patch fixing MR-140
   "ARDataBindAttribute doesn't  use the controller's DataBinder"
 
