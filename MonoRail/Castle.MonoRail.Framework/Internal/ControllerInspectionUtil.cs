@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Utilities methods to inspect the controller Type
@@ -22,24 +23,31 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public abstract class ControllerInspectionUtil
 	{
+		internal static IDictionary inspectedControllers = new Hashtable();
+		
 		public static ControllerDescriptor Inspect(Type controllerType)
 		{
+			ControllerDescriptor descriptor;
+
 			if (controllerType.IsDefined(typeof(ControllerDetailsAttribute), true))
 			{
-				object[] attrs = controllerType.GetCustomAttributes( 
-					typeof(ControllerDetailsAttribute), true );
+				object[] attrs = controllerType.GetCustomAttributes(
+					typeof(ControllerDetailsAttribute), true);
 
 				ControllerDetailsAttribute details = attrs[0] as ControllerDetailsAttribute;
 
-				return new ControllerDescriptor( controllerType, 
-					ObtainControllerName(details.Name, controllerType), 
-						details.Area );
+				descriptor = new ControllerDescriptor(controllerType,
+				                                      ObtainControllerName(details.Name, controllerType),
+				                                      details.Area);
 			}
 			else
 			{
-				return new ControllerDescriptor( controllerType, 
-					ObtainControllerName(null, controllerType), String.Empty );
+				descriptor = new ControllerDescriptor(controllerType,
+				                                      ObtainControllerName(null, controllerType), String.Empty);
 			}
+
+			inspectedControllers[controllerType] = descriptor;
+			return descriptor;
 		}
 
 		private static String ObtainControllerName(String name, Type controller)

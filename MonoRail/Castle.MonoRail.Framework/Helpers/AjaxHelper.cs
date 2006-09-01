@@ -20,6 +20,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections.Specialized;
 	using System.Reflection;
 
+	using Internal;
+
 	public enum CallbackEnum
 	{
 		Uninitialized,
@@ -62,7 +64,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class AjaxHelper : AbstractHelper
 	{
-		static HybridDictionary ajaxProxyCache = new HybridDictionary();
+		private static HybridDictionary ajaxProxyCache = new HybridDictionary();
 		
 		public AjaxHelper()
 		{
@@ -116,17 +118,28 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (result == null)
 			{
-				Type controllerType;
+				Type controllerType = null;
 				if (Controller.AreaName == area && Controller.Name == controller)
 				{
 					controllerType = Controller.GetType();
 				}
 				else
 				{
-					// TODO: find a better way to inspect a controller
-					Internal.UrlInfo urlInfo = new Internal.UrlInfo(null, area, controller, null, null);
-					IControllerFactory f = (IControllerFactory) Controller.Context.GetService(typeof(IControllerFactory));
-					controllerType = f.CreateController(urlInfo).GetType();
+					// HACK: find a better way to inspect a controller
+					IDictionary controllers = ControllerInspectionUtil.inspectedControllers;
+					foreach (DictionaryEntry entry in controllers)
+					{
+						ControllerDescriptor descriptor = (ControllerDescriptor) entry.Value;
+						if (String.Compare(descriptor.Area, area, true) == 0 && String.Compare(descriptor.Name, controller, true) == 0)
+						{
+							controllerType = (Type) entry.Key;
+						}
+					}
+				}
+				
+				if (controllerType == null)
+				{
+					throw new RailsException("Controller not found with Area: '{0}', Name: '{1}'", area, controller);
 				}
 
 				String baseUrl = Controller.Context.ApplicationPath + "/";
