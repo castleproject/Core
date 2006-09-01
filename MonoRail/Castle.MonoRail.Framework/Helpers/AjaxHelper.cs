@@ -170,7 +170,7 @@ namespace Castle.MonoRail.Framework.Helpers
 							parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
 						}
 						functions.Append("callback){");
-						functions.AppendFormat("new Ajax.Request('{0}', {{parameters: '{1}', onComplete: callback}});", url, parameters.ToString());
+						functions.AppendFormat("var r=new Ajax.Request('{0}', {{parameters: '{1}', asynchronous: !!callback, onComplete: callback}}); if(!callback) return r.transport.responseText;", url, parameters.ToString());
 						functions.Append("},");
 					}
 				}
