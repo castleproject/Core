@@ -108,13 +108,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				if (eq == null || hc == null)
 				{
-					throw new ActiveRecordException(string.Format("To use type '{0}' as a composite id, " + 
+					throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id, " + 
 						"you must implement Equals and GetHashCode.", model.Property.PropertyType.Name));
 				}
 
 				if (model.Property.PropertyType.IsSerializable == false)
 				{
-					throw new ActiveRecordException(string.Format("To use type '{0}' as a composite id " + 
+					throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id " + 
 						"it must be marked as Serializable.", model.Property.PropertyType.Name));
 				}
 
@@ -130,7 +130,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				if (keyPropAttrCount < 2)
 				{
-					throw new ActiveRecordException(string.Format("To use type '{0}' as a composite id it must have two or more properties marked with the [KeyProperty] attribute.", model.Property.PropertyType.Name));
+					throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id it must have two or more properties marked with the [KeyProperty] attribute.", model.Property.PropertyType.Name));
 				}
 			}
 			else
@@ -255,7 +255,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					if (!accessor.IsVirtual)
 					{
 						throw new ActiveRecordException(
-							string.Format("Property {0} must be virtual because " +
+							String.Format("Property {0} must be virtual because " +
 								"class {1} support lazy loading [ActiveRecord(Lazy=true)]",
 							              model.Property.Name,
 							              model.Property.DeclaringType.Name));
@@ -372,7 +372,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) we need that you " +
-						"specify the association table - {0}.{1} " +
+						"specify the association table - {0}.{1} ",
 						currentModel.Type.Name, model.Property.Name));
 			}
 
@@ -381,7 +381,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) we need that you " +
 						"specify the ColumnKey or CompositeKeyColumnKeys - which is the column(s) that represents the type {0} " +
-						"on the association table - {0}.{1} " +
+						"on the association table - {0}.{1} ",
 						currentModel.Type.Name, model.Property.Name));
 			}
 
@@ -397,7 +397,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) with a CompositeKey, " +
 						"there must be at least two CompositeKeyColumnKeys  - which are the columns that represent the type {0} " +
-						"on the association table - {0}.{1} " +
+						"on the association table - {0}.{1} ",
 						currentModel.Type.Name, model.Property.Name));
 			}
 
@@ -406,7 +406,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) we need that you " +
 						"specify the ColumnRef or CompositeKeyColumnRefs - which is the column(s) that represents the other end '{2}' " +
-						"on the association table - {0}.{1} " +
+						"on the association table - {0}.{1} ",
 						currentModel.Type.Name, model.Property.Name, otherend.Name));
 			}
 
@@ -422,7 +422,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) with a CompositeKey, " +
 						"there must be at least two CompositeKeyColumnRefs - which are the columns that represent the other end '{2}' " +
-						"on the association table - {0}.{1} " +
+						"on the association table - {0}.{1} ",
 						currentModel.Type.Name, model.Property.Name, otherend.Name));
 			}
 
@@ -431,8 +431,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				throw new ActiveRecordException(String.Format(
 					"For a many to many association (HasAndBelongsToMany) using IDBag, you need " +
 						"to specify a CollectionIDAttribute giving us more details. " +
-						"{0}.{1} " +
-						currentModel.Type.Name, model.Property.Name, otherend.Name));
+						"{0}.{1} ",
+						currentModel.Type.Name, model.Property.Name));
 			}
 
 			if (model.HasManyAtt.RelationType == RelationType.Map && model.HasManyAtt.Index == null)
