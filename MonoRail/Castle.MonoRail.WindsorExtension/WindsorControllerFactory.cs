@@ -35,7 +35,7 @@ namespace Castle.MonoRail.WindsorExtension
 		{
 			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
 
-			ControllerTree tree = null;
+			ControllerTree tree;
 			
 			try
 			{
