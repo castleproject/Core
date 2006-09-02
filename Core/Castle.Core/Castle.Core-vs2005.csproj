@@ -44,11 +44,16 @@
     <Compile Include="Internal\IVertex.cs" />
     <Compile Include="Internal\LinkedList.cs" />
     <Compile Include="Internal\TopologicalSortAlgo.cs" />
+    <Compile Include="IServiceEnabledComponent.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="Lifecycle\IRecyclable.cs" />
     <Compile Include="Lifecycle\IStartable.cs" />
-    <Compile Include="Logging\AbstractLoggerFactory.cs" />
-    <Compile Include="Logging\ConsoleFactory.cs" />
+    <Compile Include="Logging\Factories\AbstractLoggerFactory.cs" />
+    <Compile Include="Logging\Factories\ConsoleFactory.cs" />
+    <Compile Include="Logging\Factories\DiagnosticsLoggerFactory.cs" />
+    <Compile Include="Logging\Factories\NullLogFactory.cs" />
+    <Compile Include="Logging\Factories\StreamLoggerFactory.cs" />
+    <Compile Include="Logging\Factories\WebLoggerFactory.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\ILoggerFactory.cs" />
     <Compile Include="Logging\LoggerException.cs" />
@@ -59,7 +64,6 @@
     <Compile Include="Logging\Loggers\StreamLogger.cs" />
     <Compile Include="Logging\Loggers\WebLogger.cs" />
     <Compile Include="Logging\NullLogFactory.cs" />
-    <Compile Include="Logging\WebLoggerFactory.cs" />
     <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\Configuration\AbstractConfiguration.cs" />
     <Compile Include="Model\Configuration\ConfigurationCollection.cs" />

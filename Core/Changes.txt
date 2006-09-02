@@ -1,6 +1,9 @@
 0.0.1.0
 =======
 
+- IServiceEnabledComponent Introduced to be used across the project as
+  a standard way to have access to common services, for example, logger factories
+
 - Added missing log factories
 
 - Refactor StreamLogger and DiagnosticLogger to be more consistent behavior-wise
