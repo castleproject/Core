@@ -143,7 +143,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 
 				String baseUrl = Controller.Context.ApplicationPath + "/";
-				if (area != null)
+				if (area != null && area != String.Empty)
 					baseUrl += area + "/";
 				baseUrl += controller + "/";
 				
