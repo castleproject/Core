@@ -1,0 +1,34 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2003", "Castle.Core\Castle.Core-vs2003.csproj", "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core.Tests-vs2003", "Castle.Core.Tests\Castle.Core.Tests-vs2003.csproj", "{328B0413-66D5-4285-AF2E-9D72951FDA51}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Debug.ActiveCfg = Debug|.NET
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Debug.Build.0 = Debug|.NET
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Release.ActiveCfg = Release|.NET
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Release.Build.0 = Release|.NET
+		{328B0413-66D5-4285-AF2E-9D72951FDA51}.Debug.ActiveCfg = Debug|.NET
+		{328B0413-66D5-4285-AF2E-9D72951FDA51}.Debug.Build.0 = Debug|.NET
+		{328B0413-66D5-4285-AF2E-9D72951FDA51}.Release.ActiveCfg = Release|.NET
+		{328B0413-66D5-4285-AF2E-9D72951FDA51}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

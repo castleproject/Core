@@ -22,10 +22,11 @@ namespace Castle.Core.Logging
 	///	provides a LogLevel attribute and reroutes all functions into
 	///	one Log method.
 	/// </summary>
-	public abstract class LevelFilteredLogger : ILogger
+	[Serializable]
+	public abstract class LevelFilteredLogger : MarshalByRefObject, ILogger
 	{
 		private LoggerLevel level = LoggerLevel.Off;
-		private String name = String.Empty;
+		private String name = "unnamed";
 
 		/// <summary>
 		/// Creates a new <c>LevelFilteredLogger</c>.
@@ -41,245 +42,291 @@ namespace Castle.Core.Logging
 
 		public LevelFilteredLogger(LoggerLevel level)
 		{
-			Level = level;
+			this.level = level;
 		}
 
-		public LevelFilteredLogger(String name, LoggerLevel level)
+		public LevelFilteredLogger(String name, LoggerLevel level) : this(level)
 		{
 			ChangeName(name);
-			Level = level;
 		}
 
+		/// <summary>
+		/// Keep the instance alive in a remoting scenario
+		/// </summary>
+		/// <returns></returns>
+		public override object InitializeLifetimeService()
+		{
+			return null;
+		}
 
 		public abstract ILogger CreateChildLogger(string name);
-		protected abstract void Log(LoggerLevel level, String name, String message, Exception exception);
-		protected void ChangeName(String name)
-		{
-			if (name == null)
-				throw new ArgumentNullException("name");
-
-			this.name = name;
-		}
-		private void Log(LoggerLevel level, String message, Exception exception)
-		{
-			Log(level, Name, message, exception);
-		}
-
-
+		
 		/// <value>
 		/// The <c>LoggerLevel</c> that this logger
 		/// will be using. Defaults to <c>LoggerLevel.Off</c>
 		/// </value>
-		public virtual LoggerLevel Level
+		public LoggerLevel Level
 		{
 			get { return level; }
-			set 
-			{ 
-				if (!Enum.IsDefined(typeof(LoggerLevel), value))
-					throw new InvalidEnumArgumentException();
-
-				level = value;
-			}
+			set { level = value; }
 		}
 
 		/// <value>
 		/// The name that this logger will be using. 
 		/// Defaults to <c>String.Empty</c>
 		/// </value>
-		public virtual String Name
+		public String Name
 		{
 			get { return name; }
 		}
 
-
 		#region ILogger implementation
 
+		/// <summary>
+		/// Logs a debug message.
+		/// </summary>
+		/// <param name="message">The Message</param>
 		public void Debug(string message)
 		{
-			if (!IsDebugEnabled)
-				return;
+			if (!IsDebugEnabled) return;
 
 			Log(LoggerLevel.Debug, message, null);
 		}
 
+		/// <summary>
+		/// Logs a debug message. 
+		/// </summary>
+		/// <param name="message">The Message</param>
+		/// <param name="exception">The Exception</param>
 		public void Debug(string message, Exception exception)
 		{
-			if (!IsDebugEnabled)
-				return;
+			if (!IsDebugEnabled) return;
 
 			Log(LoggerLevel.Debug, message, exception);
 		}
 
+		/// <summary>
+		/// Logs a debug message.
+		/// </summary>
+		/// <param name="format">Message format</param>
+		/// <param name="args">Array of objects to write using format</param>
 		public void Debug(string format, params Object[] args)
 		{
-			if (!IsDebugEnabled)
-				return;
+			if (!IsDebugEnabled) return;
 
 			Log(LoggerLevel.Debug, String.Format(format, args), null);
 		}
 
-
-		public void Info(string message )
+		/// <summary>
+		/// Logs an info message.
+		/// </summary>
+		/// <param name="message">The Message</param>
+		public void Info(string message)
 		{
-			if (!IsInfoEnabled)
-				return;
+			if (!IsInfoEnabled) return;
 
 			Log(LoggerLevel.Info, message, null);
 		}
 
+		/// <summary>
+		/// Logs an info message. 
+		/// </summary>
+		/// <param name="message">The Message</param>
+		/// <param name="exception">The Exception</param>
 		public void Info(string message, Exception exception)
 		{
-			if (!IsInfoEnabled)
-				return;
+			if (!IsInfoEnabled) return;
 
 			Log(LoggerLevel.Info, message, exception);	
 		}
 
+		/// <summary>
+		/// Logs an info message.
+		/// </summary>
+		/// <param name="format">Message format</param>
+		/// <param name="args">Array of objects to write using format</param>
 		public void Info(string format, params Object[] args)
 		{
-			if (!IsInfoEnabled)
-				return;
+			if (!IsInfoEnabled) return;
 
 			Log(LoggerLevel.Info, String.Format(format, args), null);
 		}
 
-
+		/// <summary>
+		/// Logs a warn message.
+		/// </summary>
+		/// <param name="message">The Message</param>
 		public void Warn(string message)
 		{
-			if (!IsWarnEnabled)
-				return;
+			if (!IsWarnEnabled) return;
 
 			Log(LoggerLevel.Warn, message, null);
 		}
 
+		/// <summary>
+		/// Logs a warn message. 
+		/// </summary>
+		/// <param name="message">The Message</param>
+		/// <param name="exception">The Exception</param>
 		public void Warn(string message, Exception exception)
 		{
-			if (!IsWarnEnabled)
-				return;
+			if (!IsWarnEnabled) return;
 
 			Log(LoggerLevel.Warn, message, exception);
 		}
 
+		/// <summary>
+		/// Logs an warn message.
+		/// </summary>
+		/// <param name="format">Message format</param>
+		/// <param name="args">Array of objects to write using format</param>
 		public void Warn(string format, params Object[] args)
 		{
-			if (!IsWarnEnabled)
-				return;
+			if (!IsWarnEnabled) return;
 
 			Log(LoggerLevel.Warn, String.Format(format, args), null);
 		}
 
-
-		public void Error(string message )
+		/// <summary>
+		/// Logs an error message.
+		/// </summary>
+		/// <param name="message">The Message</param>
+		public void Error(string message)
 		{
-			if (!IsErrorEnabled)
-				return;
+			if (!IsErrorEnabled) return;
 
 			Log(LoggerLevel.Error, message, null);
 		}
 
+		/// <summary>
+		/// Logs an error message. 
+		/// </summary>
+		/// <param name="message">The Message</param>
+		/// <param name="exception">The Exception</param>
 		public void Error(string message, Exception exception)
 		{
-			if (!IsErrorEnabled)
-				return;
+			if (!IsErrorEnabled) return;
 
 			Log(LoggerLevel.Error, message, exception);
 		}
 
+		/// <summary>
+		/// Logs an error message.
+		/// </summary>
+		/// <param name="format">Message format</param>
+		/// <param name="args">Array of objects to write using format</param>
 		public void Error(string format, params Object[] args)
 		{
-			if (!IsErrorEnabled)
-				return;
+			if (!IsErrorEnabled) return;
 
 			Log(LoggerLevel.Error, String.Format(format, args), null);
 		}
 
-
+		/// <summary>
+		/// Logs a fatal error message.
+		/// </summary>
+		/// <param name="message">The Message</param>
 		public void FatalError(string message )
 		{
-			if (!IsFatalErrorEnabled)
-				return;
+			if (!IsFatalErrorEnabled) return;
 
 			Log(LoggerLevel.Fatal, message, null);
 		}
 
+		/// <summary>
+		/// Logs a fatal error message.
+		/// </summary>
+		/// <param name="message">The Message</param>
+		/// <param name="exception">The Exception</param>
 		public void FatalError(string message, Exception exception)
 		{
-			if (!IsFatalErrorEnabled)
-				return;
+			if (!IsFatalErrorEnabled) return;
 
 			Log(LoggerLevel.Fatal, message, exception);
 		}
 
+		/// <summary>
+		/// Logs a fatal error message.
+		/// </summary>
+		/// <param name="format">Message format</param>
+		/// <param name="args">Array of objects to write using format</param>
 		public void FatalError(string format, params Object[] args)
 		{
-			if (!IsFatalErrorEnabled)
-				return;
+			if (!IsFatalErrorEnabled) return;
 
 			Log(LoggerLevel.Fatal, String.Format(format, args), null);
 		}
 
-
-		/// <value>
-		/// True if the <c>Level</c> is lower
-		/// or equal to <c>LoggerLevel.Debug</c>
-		/// </value>
+		/// <summary>
+		/// Determines if messages of priority "debug" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if log level flags include the <see cref="LoggerLevel.Debug"/> bit</value> 
 		public bool IsDebugEnabled
 		{
-			get
-			{
-				return Level <= LoggerLevel.Debug;
-			}
+			get { return (Level >= LoggerLevel.Debug); }
 		}
 
-		/// <value>
-		/// True if the <c>Level</c> is lower
-		/// or equal to <c>LoggerLevel.Info</c>
-		/// </value>
+		/// <summary>
+		/// Determines if messages of priority "info" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if log level flags include the <see cref="LoggerLevel.Info"/> bit</value> 
 		public bool IsInfoEnabled
 		{
-			get
-			{
-				return Level <= LoggerLevel.Info;
-			}
+			get { return (Level >= LoggerLevel.Info); }
 		}
 
-		/// <value>
-		/// True if the <c>Level</c> is lower
-		/// or equal to <c>LoggerLevel.Warn</c>
-		/// </value>
+		/// <summary>
+		/// Determines if messages of priority "warn" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if log level flags include the <see cref="LoggerLevel.Warn"/> bit</value> 
 		public bool IsWarnEnabled
 		{
-			get
-			{
-				return Level <= LoggerLevel.Warn;
-			}
+			get { return (Level >= LoggerLevel.Warn); }
 		}
 		
-		/// <value>
-		/// True if the <c>Level</c> is lower
-		/// or equal to <c>LoggerLevel.Error</c>
-		/// </value>
+		/// <summary>
+		/// Determines if messages of priority "error" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if log level flags include the <see cref="LoggerLevel.Error"/> bit</value> 
 		public bool IsErrorEnabled
 		{
-			get
-			{
-				return Level <= LoggerLevel.Error;
-			}
+			get { return (Level >= LoggerLevel.Error); }
 		}
 
-		/// <value>
-		/// True if the <c>Level</c> is lower
-		/// or equal to <c>LoggerLevel.Fatal</c>
-		/// </value>
+		/// <summary>
+		/// Determines if messages of priority "fatal" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if log level flags include the <see cref="LoggerLevel.Fatal"/> bit</value> 
 		public bool IsFatalErrorEnabled
 		{
-			get 
-			{
-				return Level <= LoggerLevel.Fatal;
-			}
+			get { return (Level >= LoggerLevel.Fatal); }
 		}
 
-
 		#endregion
+
+		/// <summary>
+		/// Implementors output the log content by implementing this method only.
+		/// Note that exception can be null
+		/// </summary>
+		/// <param name="level"></param>
+		/// <param name="name"></param>
+		/// <param name="message"></param>
+		/// <param name="exception"></param>
+		protected abstract void Log(LoggerLevel level, String name, String message, Exception exception);
+		
+		protected void ChangeName(String newName)
+		{
+			if (newName == null)
+			{
+				throw new ArgumentNullException("newName");
+			}
+
+			name = newName;
+		}
+
+		private void Log(LoggerLevel level, String message, Exception exception)
+		{
+			Log(level, Name, message, exception);
+		}
 	}
 }

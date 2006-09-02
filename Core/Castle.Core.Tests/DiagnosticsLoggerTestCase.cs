@@ -24,26 +24,25 @@ namespace Castle.Core.Logging.Tests
 		[SetUp]
 		public void Clear()
 		{
-			if (EventLog.Exists("mylog"))
+			if (EventLog.Exists("castle_testlog"))
 			{
-				EventLog.Delete("mylog");
+				EventLog.Delete("castle_testlog");
 			}
 		}
 
 		[Test]
 		public void SimpleUsage()
 		{
-			DiagnosticsLogger logger = new DiagnosticsLogger("mylog", "mysource");
+			DiagnosticsLogger logger = new DiagnosticsLogger("castle_testlog", "test_source");
 
 			logger.Warn("my message");
-			
 			logger.Error("my other message", new Exception("Bad, bad exception"));
 
 			EventLog log = new EventLog();
-			log.Log = "mylog";
+			log.Log = "castle_testlog";
 			log.MachineName = ".";
 
-			Assert.AreEqual( 2, log.Entries.Count );
+			Assert.AreEqual(2, log.Entries.Count);
 
 			logger.Close();
 		}

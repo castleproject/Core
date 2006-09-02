@@ -22,9 +22,17 @@ namespace Castle.Core.Logging
 	public enum LoggerLevel
 	{
 		/// <summary>
-		/// Debug logging level
+		/// Logging will be off
 		/// </summary>
-		Debug,
+		Off,
+		/// <summary>
+		/// Fatal logging level
+		/// </summary>
+		Fatal,
+		/// <summary>
+		/// Error logging level
+		/// </summary>
+		Error,
 		/// <summary>
 		/// Info logging level
 		/// </summary>
@@ -34,17 +42,9 @@ namespace Castle.Core.Logging
 		/// </summary>
 		Warn,
 		/// <summary>
-		/// Error logging level
+		/// Debug logging level
 		/// </summary>
-		Error,
-		/// <summary>
-		/// Fatal logging level
-		/// </summary>
-		Fatal,
-		/// <summary>
-		/// Logging will be off
-		/// </summary>
-		Off
+		Debug
 	}
 
 	/// <summary>

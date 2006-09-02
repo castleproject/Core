@@ -54,8 +54,8 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Info;
 
 			Assert.IsFalse(logger.IsDebugEnabled, "LevelFilteredLogger.IsDebugEnabled does not return false when the level is Info");
+			Assert.IsFalse(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return false when the level is Info");
 			Assert.IsTrue(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled does not return true when the level is Info");
-			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return true when the level is Info");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return true when the level is Info");
 			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return true when the level is Info");
 		}
@@ -66,11 +66,10 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Warn;
 
 			Assert.IsFalse(logger.IsDebugEnabled, "LevelFilteredLogger.IsDebugEnabled does not return false when the level is Warn");
-			Assert.IsFalse(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled does not return false when the level is Warn");
+			Assert.IsTrue(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled does not return false when the level is Warn");
 			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return true when the level is Warn");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return true when the level is Warn");
 			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return true when the level is Warn");
-
 		}
 
 		[Test]
@@ -128,16 +127,9 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidEnumArgumentException))]
-		public void SettingLevelToInvalid()
-		{
-			logger.Level = (LoggerLevel) (-1);
-		}
-
-		[Test]
 		public void DefaultName()
 		{
-			Assert.AreEqual(String.Empty, logger.Name, "Default LevelFilteredLogger.Name is not String.Empty");
+			Assert.AreEqual("unnamed", logger.Name, "Default LevelFilteredLogger.Name is not String.Empty");
 		}
 
 		[Test]
@@ -486,7 +478,7 @@ namespace Castle.Core.Logging.Tests
 
 			logger.Info("Test");
 
-			ValidateNoCalls();
+			ValidateCall(LoggerLevel.Info, "Test", null);
 		}
 
 		[Test]
@@ -550,7 +542,7 @@ namespace Castle.Core.Logging.Tests
 
 			logger.Info("Test", exception);
 
-			ValidateNoCalls();
+			ValidateCall(LoggerLevel.Info, "Test", exception);
 		}
 
 		[Test]
@@ -614,7 +606,7 @@ namespace Castle.Core.Logging.Tests
 
 			logger.Info("{0}st", "Te");
 
-			ValidateNoCalls();
+			ValidateCall(LoggerLevel.Info, "Test", null);
 		}
 
 		[Test]
@@ -705,7 +697,7 @@ namespace Castle.Core.Logging.Tests
 
 			logger.Warn("Test");
 
-			ValidateCall(LoggerLevel.Warn, "Test", null);
+			ValidateNoCalls();
 		}
 
 		[Test]
@@ -768,7 +760,7 @@ namespace Castle.Core.Logging.Tests
 
 			logger.Warn("Test", exception);
 
-			ValidateCall(LoggerLevel.Warn, "Test", exception);
+			ValidateNoCalls();
 		}
 
 		[Test]
@@ -833,7 +825,7 @@ namespace Castle.Core.Logging.Tests
 
 			logger.Warn("{0}st", "Te");
 
-			ValidateCall(LoggerLevel.Warn, "Test", null);
+			ValidateNoCalls();
 		}
 
 		[Test]
@@ -1341,7 +1333,7 @@ namespace Castle.Core.Logging.Tests
 			Assert.AreEqual(expectedLevel, level, "LevelFilteredLogger.Log was not called with the right level");
 			Assert.AreEqual(expectedMessage, message, "LevelFilteredLogger.Log was not called with the right message");
 			Assert.AreSame(expectedException, exception, "LevelFilteredLogger.Log was not called with the right exception");
-			Assert.AreEqual(String.Empty, name, "LevelFilteredLogger.Log was not called with the right name");
+			Assert.AreEqual("unnamed", name, "LevelFilteredLogger.Log was not called with the right name");
 		}
 
 		private void ValidateNoCalls()

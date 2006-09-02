@@ -26,6 +26,7 @@ namespace Castle.Core.Logging
 	/// <remarks>
 	/// This logger is not thread safe.
 	/// </remarks>
+	[Serializable]
 	public class StreamLogger : LevelFilteredLogger, IDisposable
 	{		        
 		private StreamWriter writer;
@@ -89,7 +90,36 @@ namespace Castle.Core.Logging
 
 		~StreamLogger()
 		{
-			Dispose();
+			Close(false);
+		}
+
+		#region IDisposable Members
+
+		public void Dispose()
+		{
+			Close(true);
+		}
+
+		#endregion
+
+		public void Close()
+		{
+			Close(true);
+		}
+
+		protected void Close(bool supressFinalize)
+		{
+			if (supressFinalize)
+			{
+				GC.SuppressFinalize(this);
+			}
+
+			if (writer != null)
+			{
+				writer.Close();
+			}
+		
+			writer = null;
 		}
 
 		/// <summary>
@@ -106,43 +136,26 @@ namespace Castle.Core.Logging
 
 		protected override void Log(LoggerLevel level, String name, String message, Exception exception)
 		{
+			if (writer == null) return; // just in case it's been disposed
+			
 			writer.WriteLine("[{0}] '{1}' {2}", level.ToString(), name, message);
 
 			if (exception != null)
 			{
-				if (exception.StackTrace != null)
-				{
-					writer.WriteLine("[{0}] '{1}' {2}: {3}\n{4}", 
-						level.ToString(), 
-						name, 
-						exception.GetType().FullName, 
-						exception.Message, 
-						exception.StackTrace);
-				}
-				else
-				{
-					writer.WriteLine("[{0}] '{1}' {2}: {3}", 
-						level.ToString(), 
-						name, 
-						exception.GetType().FullName, 
-						exception.Message);
-				}
+				writer.WriteLine("[{0}] '{1}' {2}: {3} {4}", 
+					level.ToString(), 
+					name, 
+					exception.GetType().FullName, 
+					exception.Message, 
+					exception.StackTrace);
 			}
 		}
 
 		public override ILogger CreateChildLogger(string name)
 		{
-			return null;
-		}
-
-		public void Dispose()
-		{
-			if (writer != null)
-			{
-				writer.Close();
-			}
+			// TODO: We could create a ChildStreamLogger that didn't take ownership of the stream
 			
-			writer = null;
+			throw new NotSupportedException("A streamlogger does not support child loggers");
 		}
 	}
 }

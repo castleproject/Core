@@ -21,9 +21,9 @@ namespace Castle.Core.Logging
 	/// This is mainly for the cases when you have a utility that
 	/// does not have a logger to supply.
 	/// </summary>
+	[Serializable]
 	public class ConsoleLogger : LevelFilteredLogger
 	{
-
 		/// <summary>
 		/// Creates a new ConsoleLogger with the <c>Level</c>
 		/// set to <c>LoggerLevel.Debug</c> and the <c>Name</c>
@@ -60,7 +60,6 @@ namespace Castle.Core.Logging
 		{
 		}
 
-
 		/// <summary>
 		/// A Common method to log.
 		/// </summary>
@@ -78,21 +77,20 @@ namespace Castle.Core.Logging
 			}
 		}
 
-
 		/// <summary>
 		///	Returns a new <c>ConsoleLogger</c> with the name
 		///	added after this loggers name, with a dot in between.
 		/// </summary>
-		/// <param name="name">The added hierchial name.</param>
+		/// <param name="newName">The added hierarchical name.</param>
 		/// <returns>A new <c>ConsoleLogger</c>.</returns> 
-		public override ILogger CreateChildLogger(string name )
+		public override ILogger CreateChildLogger(string newName)
 		{
-			if (this.Name == String.Empty)
+			if (newName == null)
 			{
-				return new ConsoleLogger(name, Level);
+				throw new ArgumentNullException("newName", "To create a child logger you must supply a non null name");
 			}
 
-			return new ConsoleLogger(String.Format("{0}.{1}", this.Name, name), Level);
+			return new ConsoleLogger(String.Format("{0}.{1}", Name, newName), Level);
 		}
 	}
 }
