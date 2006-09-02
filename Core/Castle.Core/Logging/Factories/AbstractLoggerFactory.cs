@@ -17,24 +17,21 @@ namespace Castle.Core.Logging
 	using System;
 	using System.IO;
 
-	public abstract class AbstractLoggerFactory : ILoggerFactory
+	[Serializable]
+	public abstract class AbstractLoggerFactory : MarshalByRefObject, ILoggerFactory
 	{
-		public AbstractLoggerFactory()
-		{
-		}
-
 		public virtual ILogger Create(Type type)
 		{
 			if (type == null) throw new ArgumentNullException("type");
 
-			return this.Create(type.FullName);
+			return Create(type.FullName);
 		}
 
 		public virtual ILogger Create(Type type, LoggerLevel level)
 		{
 			if (type == null) throw new ArgumentNullException("type");
 
-			return this.Create(type.FullName, level);
+			return Create(type.FullName, level);
 		}
 
 		public abstract ILogger Create(String name);

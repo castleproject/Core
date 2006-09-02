@@ -15,27 +15,27 @@
 namespace Castle.Core.Logging
 {
 	using System;
+	using System.IO;
+	using System.Text;
 
-	public class WebLoggerFactory : ILoggerFactory
+	/// <summary>
+	/// Creates <see cref="StreamLogger"/> outputing 
+	/// to files. The name of the file is derived from the log name
+	/// plus the 'log' extension.
+	/// </summary>
+	[Serializable]
+	public class StreamLoggerFactory : AbstractLoggerFactory
 	{
-		public ILogger Create(Type type)
+		public override ILogger Create(string name)
 		{
-			return new WebLogger( type.FullName );
+			return new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write), Encoding.Default);
 		}
 
-		public ILogger Create(String name)
+		public override ILogger Create(string name, LoggerLevel level)
 		{
-			return new WebLogger( name );
-		}
-
-		public ILogger Create(Type type, LoggerLevel level)
-		{
-			return new WebLogger( type.FullName, level );
-		}
-
-		public ILogger Create(String name, LoggerLevel level)
-		{
-			return new WebLogger( name, level );
+			StreamLogger logger = new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write), Encoding.Default);
+			logger.Level = level;
+			return logger;
 		}
 	}
 }

@@ -1,6 +1,8 @@
 0.0.1.0
 =======
 
+- Added missing log factories
+
 - Refactor StreamLogger and DiagnosticLogger to be more consistent behavior-wise
 
 - Refactored WebLogger to extend LevelFilteredLogger (removed duplication)

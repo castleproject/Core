@@ -174,16 +174,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Logging\AbstractLoggerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Logging\ConsoleFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Logging\ILogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -199,16 +189,35 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Logging\NullLogFactory.cs"
+                    RelPath = "Logging\Factories\AbstractLoggerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Logging\WebLoggerFactory.cs"
+                    RelPath = "Logging\Factories\ConsoleFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Logging\Factories\" />
+                <File
+                    RelPath = "Logging\Factories\DiagnosticsLoggerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\Factories\NullLogFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\Factories\StreamLoggerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\Factories\WebLoggerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "Logging\Loggers\ConsoleLogger.cs"
                     SubType = "Code"
