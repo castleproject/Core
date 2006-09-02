@@ -1,6 +1,10 @@
 beta 4
 ======
 
+- Applied Freyr Magnússon's patch fixing misbehave related to abstract classes that defines different
+  database boundaries: "ActiveRecordStarter Initialize method assembply overloads fail 
+  to add derived base types from config"
+
 - Applied josh robb's patch "small fixup for length 
   validator error messages where there is only a minimum or maximum specified"
 

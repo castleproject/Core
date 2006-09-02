@@ -107,19 +107,9 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize(Assembly assembly, IConfigurationSource source)
 		{
-			Type[] types = GetExportedTypesFromAssembly(assembly);
-
 			ArrayList list = new ArrayList();
 
-			foreach(Type type in types)
-			{
-				if (!IsActiveRecordType(type))
-				{
-					continue;
-				}
-
-				list.Add(type);
-			}
+			CollectValidActiveRecordTypesFromAssembly(assembly, list, source);
 
 			Initialize(source, (Type[]) list.ToArray(typeof(Type)));
 		}
@@ -134,17 +124,7 @@ namespace Castle.ActiveRecord
 
 			foreach(Assembly assembly in assemblies)
 			{
-				Type[] types = GetExportedTypesFromAssembly(assembly);
-
-				foreach(Type type in types)
-				{
-					if (!IsActiveRecordType(type))
-					{
-						continue;
-					}
-
-					list.Add(type);
-				}
+                CollectValidActiveRecordTypesFromAssembly(assembly, list, source);
 			}
 
 			Initialize(source, (Type[]) list.ToArray(typeof(Type)));
@@ -539,6 +519,29 @@ namespace Castle.ActiveRecord
 			else
 			{
 				return new ThreadScopeInfo();
+			}
+		}
+
+		/// <summary>
+		/// Retrive all classies decorated with ActiveRecordAttribute or have been configured
+		/// as a AR base class.
+		/// </summary>
+		/// <param name="assembly">Assembly to retrive types from</param>
+		/// <param name="list">Array to store retrived types in</param>
+		/// <param name="source">IConfigurationSource to inspect AR base declerations from</param>
+		private static void CollectValidActiveRecordTypesFromAssembly(Assembly assembly, ArrayList list, IConfigurationSource source)
+		{
+			Type[] types = GetExportedTypesFromAssembly(assembly);
+
+			Type activeRecordBaseType = typeof(ActiveRecordBase);
+
+			foreach (Type type in types)
+			{
+				if (IsActiveRecordType(type) || 
+				    (source.GetConfiguration(type) != null && activeRecordBaseType.IsAssignableFrom(type)))
+				{
+					list.Add(type);
+				}
 			}
 		}
 	}
