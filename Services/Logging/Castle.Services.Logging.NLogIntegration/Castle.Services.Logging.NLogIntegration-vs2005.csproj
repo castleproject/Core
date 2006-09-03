@@ -82,10 +82,6 @@
       <Name>NLog</Name>
       <HintPath>..\..\..\SharedLibs\nlog\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="NLog.DotNet">
-      <Name>NLog.DotNet</Name>
-      <HintPath>..\..\..\SharedLibs\nlog\NLog.DotNet.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
