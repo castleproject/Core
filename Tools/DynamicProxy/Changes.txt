@@ -1,5 +1,34 @@
-Applied Dragos Nuta <dragos.nuta@uti.ro> patch correcting the usage of ReaderWriter lock
-Fixed DYNPROXY-22 - Can't handle `char' type in Interface Proxy
+
+- Applied brian@protexis.com suggestion to fix bug. Quoting "When the GetMethods call is 
+  made on the Type object, the returned array of Method objects do not nessessarily 
+  belong to the same Assembly object as the Type object.
+
+  Consequently, the line ....
+
+  if (method.IsAssembly && !IsInternalToDynamicProxy(inter.Assembly))
+
+  should be ...
+
+  if (method.IsAssembly && !IsInternalToDynamicProxy(method.Module.Assembly))
+
+  For example,
+
+    - There are two assemblies AssemblyA and AssemblyB
+    - AssemblyA does NOT expose its internals to DynamicAssemblyProxyGen
+    - AssemblyB does expose its internals to DynamicAssemblyProxyGen
+    - ClassA belongs to AssemblyA
+    - ClassB belongs to AssemblyB
+    - ClassA has a method MethodA whoses protection level is 'internal'
+    - ClassB subclasses ClassA
+
+  When the current implementation of DynamicProxy attempts to create an instance 
+  of ClassB, it fails because it tries to create MethodA when it does not have access to it. "
+
+
+
+- Applied Dragos Nuta <dragos.nuta@uti.ro> patch correcting the usage of ReaderWriter lock
+  
+- Fixed DYNPROXY-22 - Can't handle `char' type in Interface Proxy
 
 Version 1.4.8
 
