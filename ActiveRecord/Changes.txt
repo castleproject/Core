@@ -1,5 +1,6 @@
 beta 4
 ======
+- Applied patch from josh robb - FindAllByProperty now handles null values internallly.
 
 - Applied Freyr Magnússon's patch fixing misbehave related to abstract classes that defines different
   database boundaries: "ActiveRecordStarter Initialize method assembply overloads fail 
