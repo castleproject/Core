@@ -441,14 +441,19 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			if (id != null)
 			{
-				if (id.GetType() == typeof(String))
-				{
-					return id.ToString() != String.Empty;
-				}
-				else
-				{
-					return Convert.ToInt64(id) != 0;
-				}
+                if (id.GetType() == typeof(String))
+                {
+                    return id.ToString() != String.Empty;
+                }
+                else
+                    if (id.GetType() == typeof(Guid))
+                    {
+                        return (Guid)id != Guid.Empty;
+                    }
+                    else
+                    {
+                        return Convert.ToInt64(id) != 0;
+                    }
 			}
 			
 			return false;
