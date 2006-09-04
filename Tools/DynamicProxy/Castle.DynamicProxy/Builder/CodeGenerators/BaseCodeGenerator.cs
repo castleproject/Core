@@ -431,7 +431,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				{
 					continue;
 				}
-				if (method.IsAssembly && !IsInternalToDynamicProxy(method.Module.Assembly))
+				if (method.IsAssembly && !IsInternalToDynamicProxy(inter.Assembly))
 				{
 					continue;
 				}
