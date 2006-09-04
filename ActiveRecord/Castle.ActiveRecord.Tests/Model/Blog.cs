@@ -123,6 +123,16 @@ namespace Castle.ActiveRecord.Tests.Model
 			return ActiveRecordBase.Exists(typeof(Blog), filter, args);
 		}
 
+		public static Blog[] FindByProperty(String property, object value) 
+		{
+			return (Blog[]) FindAllByProperty(typeof(Blog), property, value);
+		}
+
+		public static Blog[] FindByProperty(String property, String orderByColumn, object value) 
+		{
+			return (Blog[]) FindAllByProperty(typeof(Blog), orderByColumn, property, value);
+		}
+
 		/// <summary>
 		/// Lifecycle method invoked during Save of the entity
 		/// </summary>

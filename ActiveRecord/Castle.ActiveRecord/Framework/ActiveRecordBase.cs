@@ -403,7 +403,7 @@ namespace Castle.ActiveRecord
 
 		#endregion
 
-		#endregion        
+		#endregion
 
 		#region Execute
 
@@ -664,24 +664,24 @@ namespace Castle.ActiveRecord
 		/// <param name="property">A property name (not a column name)</param>
 		/// <param name="value">The value to be equals to</param>
 		/// <returns></returns>
-		protected static Array FindAllByProperty(Type targetType, String property, object value)
+		protected internal static Array FindAllByProperty(Type targetType, String property, object value)
 		{
-            ICriteria criteria = (value == null) ? Expression.IsNull(property) : Expression.Eq(property, value);
-            return FindAll(targetType, criteria);
+			ICriterion criteria = (value == null) ? Expression.IsNull(property) : Expression.Eq(property, value);
+			return FindAll(targetType, criteria);
 		}
 
 		/// <summary>
-		/// Finds records based on a property value
+		/// Finds records based on a property value - automatically converts null values to IS NULL style queries. 
 		/// </summary>
 		/// <param name="targetType">The target type</param>
 		/// <param name="orderByColumn">The column name to be ordered ASC</param>
 		/// <param name="property">A property name (not a column name)</param>
 		/// <param name="value">The value to be equals to</param>
 		/// <returns></returns>
-		protected static Array FindAllByProperty(Type targetType, String orderByColumn, String property, object value)
+		protected internal static Array FindAllByProperty(Type targetType, String orderByColumn, String property, object value)
 		{
-			return FindAll(targetType,
-			               new Order[] {Order.Asc(orderByColumn)}, Expression.Eq(property, value));
+			ICriterion criteria = (value == null) ? Expression.IsNull(property) : Expression.Eq(property, value);
+			return FindAll(targetType, new Order[] { Order.Asc(orderByColumn) }, criteria);
 		}
 
 		#endregion

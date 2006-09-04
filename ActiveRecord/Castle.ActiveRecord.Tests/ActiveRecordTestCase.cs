@@ -177,7 +177,7 @@ namespace Castle.ActiveRecord.Tests
 
 			Org org = new Org("org1", "Test Org.");
 			org.Save();
-            
+
 			Group group1 = new Group();
 			group1.Name = "Group1";
 			group1.Save();
@@ -602,6 +602,37 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.AreEqual(blog.Name, retrieved.Name);
 			Assert.AreEqual(blog.Author, retrieved.Author);
+		}
+
+		[Test]
+		public void TestName() 
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource());
+			ActiveRecordStarter.RegisterTypes(typeof(Blog), typeof(Post));
+			Recreate();
+
+			Blog blog = new Blog();
+			blog.Name = null;
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			Blog[] blogs = Blog.FindByProperty("Name", null);
+
+			Assert.IsTrue(blogs.Length == 1);
+
+			using (new SessionScope()) 
+			{
+				blog.Name = "Hammetts blog";
+				blog.Save();
+			}
+
+			blogs = Blog.FindByProperty("Name", null);
+
+			Assert.IsTrue(blogs.Length == 0);
+
+			blogs = Blog.FindByProperty("Name", "Hammetts blog");
+
+			Assert.IsTrue(blogs.Length == 1);
 		}
 	}
 }

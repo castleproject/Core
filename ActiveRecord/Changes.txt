@@ -1,5 +1,8 @@
 beta 4
 ======
+
+- Applied patch to patch from josh robb - FindAllByProperty now handles null values internallly.
+
 - Applied patch from josh robb - FindAllByProperty now handles null values internallly.
 
 - Applied Freyr Magnússon's patch fixing misbehave related to abstract classes that defines different
