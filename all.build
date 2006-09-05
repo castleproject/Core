@@ -7,7 +7,7 @@
 	<property name="releasenotes.dir" value="ReleaseNotes" />
 	<property name="test.output.dir" value="${path::combine(base.dir, 'test-results')}" />
 
-	<include buildfile="common.inc" />
+	<include buildfile="common.xml" />
 	
 	<target name="build" depends="clean, init, core, services, tools, container, components, activerecord, monorail, aspectsharp, facilities, samples" />
 
@@ -401,10 +401,9 @@
 				<exclude name="**/*.suo" />
 				<exclude name="SharedLibs/**/*.*" />
 				<exclude name="Samples/**/*.*" />
-				<exclude name="experiments/**/*.*" />
+				<exclude name="Experiments/**/*.*" />
 				<exclude name="build/**/*.*" />
 				<exclude name="Rook/**/*.*" />
-				<exclude name="Sandbox/**/*.*" />
 				<exclude name="setup/*.*" />
 				<exclude name="Tools/VSNetWizards/**/*.*" />
 				<exclude name="Tools/SubversionHooks/**/*.*" />

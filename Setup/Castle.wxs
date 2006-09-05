@@ -338,7 +338,7 @@
 		<DirectoryRef Id="WizardTemplatesDir">
 			<Component Id="vsaddin" DiskId="1" Guid="E4A2DCF9-32F1-4692-942D-E8081EB61FD2">
 				<File Id="addinfile" Name="casaddin.dll" 
-					LongName="Castle.VSNetIntegration.CastleWizards.dll" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\bin\Debug\Castle.VSNetIntegration.CastleWizards.dll" />
+					LongName="Castle.VSNetIntegration.CastleWizards.dll" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\bin\Debug\Castle.VSNetIntegration.CastleWizards.dll" />
 
 				<Registry Id="registry0" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizard" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry1" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizard\CLSID" Value="{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" Type="string" />
@@ -384,17 +384,17 @@
 				
 				<Condition>VS2003_SCHEMAS_DIR</Condition>
 				
-				<File Id="vs7file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Sandbox\VSNetIntegration\Castle ActiveRecord Project.vsz">
+				<File Id="vs7file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Experiments\VSNetIntegration\Castle ActiveRecord Project.vsz">
 					<CopyFile Id="vs7file0cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
 				</File>
-				<File Id="vs7file0a" LongName="Castle ActiveRecord Project.ico" Name="Project1.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+				<File Id="vs7file0a" LongName="Castle ActiveRecord Project.ico" Name="Project1.ico" src="..\Experiments\VSNetIntegration\CastlePiecesIcon.ico">
 					<CopyFile Id="vs7file0cpa" DestinationProperty="VS2003_SCHEMAS_DIR" />
 				</File>
 				
-				<File Id="vs7file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Sandbox\VSNetIntegration\Castle MonoRail Project.vsz">
+				<File Id="vs7file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Experiments\VSNetIntegration\Castle MonoRail Project.vsz">
 					<CopyFile Id="vs7file1cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
 				</File>
-				<File Id="vs7file1a" LongName="Castle MonoRail Project.ico"     Name="Project2.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+				<File Id="vs7file1a" LongName="Castle MonoRail Project.ico"     Name="Project2.ico" src="..\Experiments\VSNetIntegration\CastlePiecesIcon.ico">
 					<CopyFile Id="vs7file1cpa" DestinationProperty="VS2003_SCHEMAS_DIR" />
 				</File>
 				
@@ -402,28 +402,28 @@
 
 			<Directory Id="directory14" Name="MRPROJ_0" LongName="CSharp">
 				<Component Id="component6" DiskId="1">
-					<File Id="vs7tfile0" Name="ABSTRA_1.CS" LongName="AbstractModelTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\AbstractModelTestCase.cs" />
-					<File Id="vs7tfile1" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\App.config" />
-					<File Id="vs7tfile2" Name="ARPROJ_1.CSP" LongName="ARProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\ARProject.csproj" />
-					<File Id="vs7tfile3" Name="ARPROJ_2.CSP" LongName="ARProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\ARProjectTest.csproj" />
-					<File Id="vs7tfile4" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\AssemblyInfo.cs" />
+					<File Id="vs7tfile0" Name="ABSTRA_1.CS" LongName="AbstractModelTestCase.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\AbstractModelTestCase.cs" />
+					<File Id="vs7tfile1" Name="APP_1.CON" LongName="App.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\App.config" />
+					<File Id="vs7tfile2" Name="ARPROJ_1.CSP" LongName="ARProject.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\ARProject.csproj" />
+					<File Id="vs7tfile3" Name="ARPROJ_2.CSP" LongName="ARProjectTest.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\ARProjectTest.csproj" />
+					<File Id="vs7tfile4" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\AssemblyInfo.cs" />
 				</Component>
 				
 				<Directory Id="directory15" Name="MRPROJ_1" LongName="MRProject">
 					<Component Id="component7" DiskId="1">
-						<File Id="vs7tfile36" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\AssemblyInfo.cs" />
-						<File Id="vs7tfile37" Name="CONTAI_1.CS" LongName="ContainerGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\ContainerGlobalApplication.cs" />
-						<File Id="vs7tfile38" Name="CONTRO_1.CON" LongName="controllers.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\controllers.config" />
-						<File Id="vs7tfile39" Name="FACILI_1.CON" LongName="facilities.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\facilities.config" />
-						<File Id="vs7tfile40" Name="GLOBAL_1.ASA" LongName="global.asax" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\global.asax" />
-						<File Id="vs7tfile41" Name="INDEX_1.ASP" LongName="index.aspx" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.aspx" />
-						<File Id="vs7tfile42" Name="index.boo" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.boo" />
-						<File Id="vs7tfile43" Name="index.vm" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.vm" />
-						<File Id="vs7tfile44" Name="MRPROJ_1.CSP" LongName="MRProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\MRProject.csproj" />
-						<File Id="vs7tfile47" Name="MRPROJ_1.SLN" LongName="MRProject.sln" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\MRProject.sln" />
-						<File Id="vs7tfile49" Name="SIMPLE_1.CS" LongName="SimpleGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\SimpleGlobalApplication.cs" />
-						<File Id="vs7tfile50" Name="WEB_1.CON" LongName="Web.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\Web.config" />
-						<File Id="vs7tfile51" Name="WEBCON_1.CS" LongName="WebContainer.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\WebContainer.cs" />
+						<File Id="vs7tfile36" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\AssemblyInfo.cs" />
+						<File Id="vs7tfile37" Name="CONTAI_1.CS" LongName="ContainerGlobalApplication.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\ContainerGlobalApplication.cs" />
+						<File Id="vs7tfile38" Name="CONTRO_1.CON" LongName="controllers.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\controllers.config" />
+						<File Id="vs7tfile39" Name="FACILI_1.CON" LongName="facilities.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\facilities.config" />
+						<File Id="vs7tfile40" Name="GLOBAL_1.ASA" LongName="global.asax" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\global.asax" />
+						<File Id="vs7tfile41" Name="INDEX_1.ASP" LongName="index.aspx" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.aspx" />
+						<File Id="vs7tfile42" Name="index.boo" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.boo" />
+						<File Id="vs7tfile43" Name="index.vm" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.vm" />
+						<File Id="vs7tfile44" Name="MRPROJ_1.CSP" LongName="MRProject.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\MRProject.csproj" />
+						<File Id="vs7tfile47" Name="MRPROJ_1.SLN" LongName="MRProject.sln" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\MRProject.sln" />
+						<File Id="vs7tfile49" Name="SIMPLE_1.CS" LongName="SimpleGlobalApplication.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\SimpleGlobalApplication.cs" />
+						<File Id="vs7tfile50" Name="WEB_1.CON" LongName="Web.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\Web.config" />
+						<File Id="vs7tfile51" Name="WEBCON_1.CS" LongName="WebContainer.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\WebContainer.cs" />
 					</Component>
 					<Directory Id="directory18" Name="Content">
 						<Directory Id="directory19" Name="css">
@@ -439,7 +439,7 @@
 					</Directory>
 					<Directory Id="directory21" Name="CONTRO_1" LongName="Controllers">
 						<Component Id="component10" DiskId="1">
-							<File Id="vs7tfile68" Name="HOMECO_1.CS" LongName="HomeController.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\Controllers\HomeController.cs" />
+							<File Id="vs7tfile68" Name="HOMECO_1.CS" LongName="HomeController.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\Controllers\HomeController.cs" />
 						</Component>
 					</Directory>
 					<Directory Id="directory26" Name="Views">
@@ -453,10 +453,10 @@
 				
 				<Directory Id="directory28" Name="MRPROJ_2" LongName="MRProjectTest">
 					<Component Id="component12" DiskId="1">
-						<File Id="vs7tfile72" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\App.config" />
-						<File Id="vs7tfile73" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\AssemblyInfo.cs" />
-						<File Id="vs7tfile74" Name="HOMECO_1.CS" LongName="HomeControllerTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\HomeControllerTestCase.cs" />
-						<File Id="vs7tfile75" Name="MRPROJ_1.CSP" LongName="MRProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\MRProjectTest.csproj" />
+						<File Id="vs7tfile72" Name="APP_1.CON" LongName="App.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\App.config" />
+						<File Id="vs7tfile73" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\AssemblyInfo.cs" />
+						<File Id="vs7tfile74" Name="HOMECO_1.CS" LongName="HomeControllerTestCase.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\HomeControllerTestCase.cs" />
+						<File Id="vs7tfile75" Name="MRPROJ_1.CSP" LongName="MRProjectTest.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\MRProjectTest.csproj" />
 					</Component>
 				</Directory>
 			</Directory>
@@ -472,46 +472,46 @@
 				
 				<Condition>VS2005_SCHEMAS_DIR</Condition>
 				
-				<File Id="vs8file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Sandbox\VSNetIntegration\Castle ActiveRecord Project.vsz">
+				<File Id="vs8file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Experiments\VSNetIntegration\Castle ActiveRecord Project.vsz">
 					<CopyFile Id="vs8file0cp" DestinationProperty="VS2005_SCHEMAS_DIR" />
 				</File>
 				
-				<File Id="vs8file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Sandbox\VSNetIntegration\Castle MonoRail Project.vsz">
+				<File Id="vs8file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Experiments\VSNetIntegration\Castle MonoRail Project.vsz">
 					<CopyFile Id="vs8file1cp" DestinationProperty="VS2005_SCHEMAS_DIR" />
 				</File>
 				
-				<File Id="vs8file0a" LongName="Castle ActiveRecord Project.ico" Name="Project1.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+				<File Id="vs8file0a" LongName="Castle ActiveRecord Project.ico" Name="Project1.ico" src="..\Experiments\VSNetIntegration\CastlePiecesIcon.ico">
 					<CopyFile Id="vs8file0cpa" DestinationProperty="VS2005_SCHEMAS_DIR" />
 				</File>
-				<File Id="vs8file1a" LongName="Castle MonoRail Project.ico"     Name="Project2.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+				<File Id="vs8file1a" LongName="Castle MonoRail Project.ico"     Name="Project2.ico" src="..\Experiments\VSNetIntegration\CastlePiecesIcon.ico">
 					<CopyFile Id="vs8file1cpa" DestinationProperty="VS2005_SCHEMAS_DIR" />
 				</File>
 			</Component>
 			
 			<Directory Id="directoryvs814" Name="MRPROJ_0" LongName="CSharp">
 				<Component Id="componentvs86" DiskId="1">
-					<File Id="vs8tfile0" Name="ABSTRA_1.CS" LongName="AbstractModelTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\AbstractModelTestCase.cs" />
-					<File Id="vs8tfile1" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\App.config" />
-					<File Id="vs8tfile2" Name="ARPROJ_1.CSP" LongName="ARProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\ARProject.csproj" />
-					<File Id="vs8tfile3" Name="ARPROJ_2.CSP" LongName="ARProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\ARProjectTest.csproj" />
-					<File Id="vs8tfile4" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\AssemblyInfo.cs" />
+					<File Id="vs8tfile0" Name="ABSTRA_1.CS" LongName="AbstractModelTestCase.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\AbstractModelTestCase.cs" />
+					<File Id="vs8tfile1" Name="APP_1.CON" LongName="App.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\App.config" />
+					<File Id="vs8tfile2" Name="ARPROJ_1.CSP" LongName="ARProject.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\ARProject.csproj" />
+					<File Id="vs8tfile3" Name="ARPROJ_2.CSP" LongName="ARProjectTest.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\ARProjectTest.csproj" />
+					<File Id="vs8tfile4" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\AssemblyInfo.cs" />
 				</Component>
 				
 				<Directory Id="directoryvs815" Name="MRPROJ_1" LongName="MRProject">
 					<Component Id="componentvs87" DiskId="1">
-						<File Id="vs8tfile36" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\AssemblyInfo.cs" />
-						<File Id="vs8tfile37" Name="CONTAI_1.CS" LongName="ContainerGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\ContainerGlobalApplication.cs" />
-						<File Id="vs8tfile38" Name="CONTRO_1.CON" LongName="controllers.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\controllers.config" />
-						<File Id="vs8tfile39" Name="FACILI_1.CON" LongName="facilities.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\facilities.config" />
-						<File Id="vs8tfile40" Name="GLOBAL_1.ASA" LongName="global.asax" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\global.asax" />
-						<File Id="vs8tfile41" Name="INDEX_1.ASP" LongName="index.aspx" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.aspx" />
-						<File Id="vs8tfile42" Name="index.boo" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.boo" />
-						<File Id="vs8tfile43" Name="index.vm" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.vm" />
-						<File Id="vs8tfile44" Name="MRPROJ_1.CSP" LongName="MRProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\MRProject.csproj" />
-						<File Id="vs8tfile47" Name="MRPROJ_1.SLN" LongName="MRProject.sln" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\MRProject.sln" />
-						<File Id="vs8tfile49" Name="SIMPLE_1.CS" LongName="SimpleGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\SimpleGlobalApplication.cs" />
-						<File Id="vs8tfile50" Name="WEB_1.CON" LongName="Web.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\Web.config" />
-						<File Id="vs8tfile51" Name="WEBCON_1.CS" LongName="WebContainer.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\WebContainer.cs" />
+						<File Id="vs8tfile36" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\AssemblyInfo.cs" />
+						<File Id="vs8tfile37" Name="CONTAI_1.CS" LongName="ContainerGlobalApplication.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\ContainerGlobalApplication.cs" />
+						<File Id="vs8tfile38" Name="CONTRO_1.CON" LongName="controllers.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\controllers.config" />
+						<File Id="vs8tfile39" Name="FACILI_1.CON" LongName="facilities.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\facilities.config" />
+						<File Id="vs8tfile40" Name="GLOBAL_1.ASA" LongName="global.asax" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\global.asax" />
+						<File Id="vs8tfile41" Name="INDEX_1.ASP" LongName="index.aspx" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.aspx" />
+						<File Id="vs8tfile42" Name="index.boo" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.boo" />
+						<File Id="vs8tfile43" Name="index.vm" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.vm" />
+						<File Id="vs8tfile44" Name="MRPROJ_1.CSP" LongName="MRProject.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\MRProject.csproj" />
+						<File Id="vs8tfile47" Name="MRPROJ_1.SLN" LongName="MRProject.sln" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\MRProject.sln" />
+						<File Id="vs8tfile49" Name="SIMPLE_1.CS" LongName="SimpleGlobalApplication.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\SimpleGlobalApplication.cs" />
+						<File Id="vs8tfile50" Name="WEB_1.CON" LongName="Web.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\Web.config" />
+						<File Id="vs8tfile51" Name="WEBCON_1.CS" LongName="WebContainer.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\WebContainer.cs" />
 					</Component>
 					<Directory Id="directoryvs818" Name="Content">
 						<Directory Id="directoryvs819" Name="css">
@@ -527,7 +527,7 @@
 					</Directory>
 					<Directory Id="directoryvs821" Name="CONTRO_1" LongName="Controllers">
 						<Component Id="componentvs810" DiskId="1">
-							<File Id="vs8tfile68" Name="HOMECO_1.CS" LongName="HomeController.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\Controllers\HomeController.cs" />
+							<File Id="vs8tfile68" Name="HOMECO_1.CS" LongName="HomeController.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\Controllers\HomeController.cs" />
 						</Component>
 					</Directory>
 					<Directory Id="directoryvs826" Name="Views">
@@ -541,10 +541,10 @@
 				
 				<Directory Id="directoryvs828" Name="MRPROJ_2" LongName="MRProjectTest">
 					<Component Id="componentvs812" DiskId="1">
-						<File Id="vs8tfile72" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\App.config" />
-						<File Id="vs8tfile73" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\AssemblyInfo.cs" />
-						<File Id="vs8tfile74" Name="HOMECO_1.CS" LongName="HomeControllerTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\HomeControllerTestCase.cs" />
-						<File Id="vs8tfile75" Name="MRPROJ_1.CSP" LongName="MRProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\MRProjectTest.csproj" />
+						<File Id="vs8tfile72" Name="APP_1.CON" LongName="App.config" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\App.config" />
+						<File Id="vs8tfile73" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\AssemblyInfo.cs" />
+						<File Id="vs8tfile74" Name="HOMECO_1.CS" LongName="HomeControllerTestCase.cs" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\HomeControllerTestCase.cs" />
+						<File Id="vs8tfile75" Name="MRPROJ_1.CSP" LongName="MRProjectTest.csproj" src="..\Experiments\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\MRProjectTest.csproj" />
 					</Component>
 				</Directory>
 			</Directory>

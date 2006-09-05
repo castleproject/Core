@@ -71,15 +71,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor", "TestSite
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView", "..\Sandbox\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView\Castle.MonoRail.Framework.Views.StringTemplateView.csproj", "{AECBD3E5-110C-4602-B74A-444A61350983}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView", "..\Experiments\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView\Castle.MonoRail.Framework.Views.StringTemplateView.csproj", "{AECBD3E5-110C-4602-B74A-444A61350983}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView.Tests", "..\Sandbox\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView.Tests\Castle.MonoRail.Framework.Views.StringTemplateView.Tests.csproj", "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView.Tests", "..\Experiments\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView.Tests\Castle.MonoRail.Framework.Views.StringTemplateView.Tests.csproj", "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite.StringTemplate", "..\Sandbox\MonoRail\TestSite.StringTemplate\TestSite.StringTemplate.csproj", "{824EC872-2992-4518-8C41-4F87640D752A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite.StringTemplate", "..\Experiments\MonoRail\TestSite.StringTemplate\TestSite.StringTemplate.csproj", "{824EC872-2992-4518-8C41-4F87640D752A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

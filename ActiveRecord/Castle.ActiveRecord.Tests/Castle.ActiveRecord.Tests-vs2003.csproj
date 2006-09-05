@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
     >
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)\$(TargetFileName).config $(TargetDir)"
+                PostBuildEvent = 'xcopy "$(ProjectDir)App-vs2003.config" "$(TargetDir)" /y/c&#xd;&#xa;move /y "$(TargetDir)App-vs2003.config" "$(TargetDir)$(TargetFileName).config"'
                 RootNamespace = "Castle.ActiveRecord.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -149,6 +149,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "App-vs2003.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -157,10 +161,6 @@
                     RelPath = "BugTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Castle.ActiveRecord.Tests.dll.config"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "DifferentDatabaseScopeTestCase.cs"
@@ -174,6 +174,11 @@
                 />
                 <File
                     RelPath = "MultipleDatabasesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NestedClassWithMapTypeTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -384,6 +389,11 @@
                 />
                 <File
                     RelPath = "Model\LazyModel\ProductLazy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Nested\NestedParent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

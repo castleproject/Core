@@ -8,7 +8,7 @@
 
 	<property name="booviewengine.test" value="true" unless="${property::exists('booviewengine.test')}" />
 
-	<include buildfile="../../common.inc" />
+	<include buildfile="../../common.xml" />
 	
 	<property name="name" value="Castle.MonoRail.Views.Brail" />
 	<property name="test.name" value="${name}.Tests" />

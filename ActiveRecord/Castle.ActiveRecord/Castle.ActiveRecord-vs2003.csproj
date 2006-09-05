@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
     >
@@ -80,26 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\lib\Iesi.Collections.dll"
-                />
-                <Reference
-                    Name = "NHibernate"
-                    AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
-                />
-                <Reference
-                    Name = "Nullables"
-                    AssemblyName = "Nullables"
-                    HintPath = "..\lib\Nullables.dll"
-                />
-                <Reference
-                    Name = "Nullables.NHibernate"
-                    AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\lib\Nullables.NHibernate.dll"
-                />
-                <Reference
                     Name = "System.Web"
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
@@ -113,6 +93,31 @@
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
                     HintPath = "..\..\Core\bin\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Nullables.NHibernate"
+                    AssemblyName = "Nullables.NHibernate"
+                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll"
+                />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                />
+                <Reference
+                    Name = "Nullables"
+                    AssemblyName = "Nullables"
+                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

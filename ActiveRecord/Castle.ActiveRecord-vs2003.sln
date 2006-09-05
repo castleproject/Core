@@ -1,13 +1,13 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord", "Castle.ActiveRecord\Castle.ActiveRecord.csproj", "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord-vs2003", "Castle.ActiveRecord\Castle.ActiveRecord-vs2003.csproj", "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Tests", "Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests.csproj", "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Framework.Internal.Tests-vs2003", "Castle.ActiveRecord.Framework.Internal.Tests\Castle.ActiveRecord.Framework.Internal.Tests-vs2003.csproj", "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Framework.Internal.Tests", "Castle.ActiveRecord.Framework.Internal.Tests\Castle.ActiveRecord.Framework.Internal.Tests.csproj", "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Tests-vs2003", "Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests-vs2003.csproj", "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -21,14 +21,14 @@ Global
 		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Debug.Build.0 = Debug|.NET
 		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Release.ActiveCfg = Release|.NET
 		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Release.Build.0 = Release|.NET
-		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug.ActiveCfg = Debug|.NET
-		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug.Build.0 = Debug|.NET
-		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.ActiveCfg = Release|.NET
-		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.Build.0 = Release|.NET
 		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Debug.ActiveCfg = Debug|.NET
 		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Debug.Build.0 = Debug|.NET
 		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Release.ActiveCfg = Release|.NET
 		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Release.Build.0 = Release|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug.ActiveCfg = Debug|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug.Build.0 = Debug|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.ActiveCfg = Release|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		activerecord.build = activerecord.build

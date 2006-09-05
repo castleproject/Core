@@ -105,39 +105,39 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "WeifenLuo.WinFormsUI.Docking"
                     AssemblyName = "WeifenLuo.WinFormsUI.Docking"
                     HintPath = "..\lib\WeifenLuo.WinFormsUI.Docking.dll"
                 />
                 <Reference
-                    Name = "NetronMaths"
-                    AssemblyName = "NetronMaths"
-                    HintPath = "..\..\..\Deps\netron\NetronMaths.dll"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\bin\Castle.Core.dll"
                 />
                 <Reference
                     Name = "NetronGraphLib"
                     AssemblyName = "NetronGraphLib"
-                    HintPath = "..\..\..\Deps\netron\NetronGraphLib.dll"
+                    HintPath = "..\bin\NetronGraphLib.dll"
+                />
+                <Reference
+                    Name = "NetronMaths"
+                    AssemblyName = "NetronMaths"
+                    HintPath = "..\bin\NetronMaths.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\bin\Castle.Windsor.dll"
                 />
             </References>
         </Build>

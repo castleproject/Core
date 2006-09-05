@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
     >
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)\$(TargetFileName).config $(TargetDir)"
+                PostBuildEvent = 'xcopy "$(ProjectDir)App.config" "$(TargetDir)" /y/c&#xd;&#xa;move /y "$(TargetDir)App.config" "$(TargetDir)$(TargetFileName).config"'
                 RootNamespace = "Castle.ActiveRecord.Framework.Internal.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -124,13 +124,13 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Castle.ActiveRecord.Framework.Internal.Tests.dll.config"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "GraphConnectorTestCase.cs"

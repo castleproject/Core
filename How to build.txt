@@ -12,11 +12,11 @@ Use the all.build in the root directory. It compiles everything in the right ord
 Building for .Net 2.0
 =====================
 
-Some of the Castle components has additional features that require the .Net 2.0 framework. 
-If you want to use Castle on a project that runs the .Net 2.0 framework, you should make sure that you're
-building for .Net 2.0
-Usually it will happen automatically if the .Net 2.0 is installed on your computer, but you can make sure by specifying
-the 2.0 version like so:
+Some of the Castle components have additional features that require the .Net 2.0 
+framework. If you want to use Castle on a project that runs the .Net 2.0 
+framework, you should make sure that you're building for .Net 2.0 Usually it 
+will happen automatically if the .Net 2.0 is installed on your computer, but you 
+can make sure by specifying the 2.0 version like so:
   
   > nant -t:net-2.0
 
@@ -50,18 +50,18 @@ The basic NHibernate settings can be set as NAnt arguments:
 
 
 
-MonoRail tests are failing
-==========================
+MonoRail or BooViewEngine tests are failing
+===========================================
 
 Not good. If you have more than one CLR runtime installed, try specifying the 1.1 runtime:
 
   > nant -t:net-1.1
 
-If the problem persists, just disable the MonoRail tests:
+If the problem persists, just disable the MonoRail or BooViewEngine tests:
   
   > nant -D:monorail.test=false
-
-
+  > nant -D:booviewengine.test=false
+  
 Build options
 =============
 
@@ -80,7 +80,3 @@ More questions?
 ===============
 
 Please direct more questions to our devel mailing list or our forum at http://www.castleproject.org/
-
-
-
-

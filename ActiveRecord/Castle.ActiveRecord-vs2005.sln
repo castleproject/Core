@@ -1,10 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord-2.0", "Castle.ActiveRecord\Castle.ActiveRecord-2.0.csproj", "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord-vs2005", "Castle.ActiveRecord\Castle.ActiveRecord-vs2005.csproj", "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Tests-2.0", "Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests-2.0.csproj", "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Tests-vs2005", "Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests-vs2005.csproj", "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Framework.Internal.Tests-2.0", "Castle.ActiveRecord.Framework.Internal.Tests\Castle.ActiveRecord.Framework.Internal.Tests-2.0.csproj", "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Framework.Internal.Tests-vs2005", "Castle.ActiveRecord.Framework.Internal.Tests\Castle.ActiveRecord.Framework.Internal.Tests-vs2005.csproj", "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{489743F5-3634-4656-A851-AC8727F736FD}"
 	ProjectSection(SolutionItems) = preProject

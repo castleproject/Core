@@ -4,7 +4,7 @@
 	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
 
-	<include buildfile="../common.inc" />
+	<include buildfile="../common.xml" />
 
 	<property name="library.dir" value="${base.dir}/lib" />
 

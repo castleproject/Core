@@ -18,7 +18,7 @@
 	<property name="optimize" value="true" />
 	<property name="version" value="aplha-1" />
 
-	<include buildfile="../../common.inc" />
+	<include buildfile="../../common.xml" />
 
 	<target name="clean">
 		<delete dir="bin" failonerror="false" />
