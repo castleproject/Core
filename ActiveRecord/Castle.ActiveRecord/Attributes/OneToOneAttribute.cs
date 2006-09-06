@@ -15,6 +15,16 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum FetchEnum
+	{
+		Unspecified,
+		Join, 
+		Select
+	}
 
 	/// <summary>
 	/// Associates a foreign table where the current class
@@ -101,10 +111,11 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class OneToOneAttribute : WithAccessAttribute
 	{
-		private bool constrained;
-		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
 		private CascadeEnum cascade = CascadeEnum.None;
+		private FetchEnum fetch = FetchEnum.Unspecified;
+		private String propertyRef;
 		private Type mapType;
+		private bool constrained;
 
 		public OneToOneAttribute()
 		{
@@ -120,22 +131,53 @@ namespace Castle.ActiveRecord
 			set { mapType = value; }
 		}
 
+		/// <summary>
+		/// From NHibernate docs: specifies which operations should be 
+		/// cascaded from the parent object to the associated object.
+		/// </summary>
 		public CascadeEnum Cascade
 		{
 			get { return cascade; }
 			set { cascade = value; }
 		}
 
+		/// <summary>
+		/// From NHibernate docs: Chooses between outer-join fetching 
+		/// or sequential select fetching.
+		/// </summary>
+		/// <remarks>
+		/// Defaults to <see cref="FetchEnum.Select"/>
+		/// </remarks>
+		public FetchEnum Fetch
+		{
+			get { return fetch; }
+			set { fetch = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate docs: The name of a property of the 
+		/// associated class that is joined to the primary key 
+		/// of this class. If not specified, the primary key of 
+		/// the associated class is used.
+		/// </summary>
+		public string PropertyRef
+		{
+			get { return propertyRef; }
+			set { propertyRef = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate docs: specifies that a foreign key 
+		/// constraint on the primary key of the mapped table 
+		/// references the table of the associated class. 
+		/// This option affects the order in which Save() and 
+		/// Delete() are cascaded (and is also used by the 
+		/// schema export tool).
+		/// </summary>
 		public bool Constrained
 		{
 			get { return constrained; }
 			set { constrained = value; }
-		}
-
-		public OuterJoinEnum OuterJoin
-		{
-			get { return outerJoin; }
-			set { outerJoin = value; }
 		}
 	}
 }

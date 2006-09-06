@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
     >
@@ -239,6 +239,11 @@
                 />
                 <File
                     RelPath = "Model\DiscriminatorGrandchild.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Employee.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

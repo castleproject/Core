@@ -276,18 +276,25 @@ namespace Castle.ActiveRecord.Tests
 			Award.DeleteAll();
 			Employee.DeleteAll();
 
+			Award award;
 			Employee emp = new Employee();
-			emp.FirstName = "john";
-			emp.LastName = "doe";
-			emp.Save();
 
-			Assert.AreEqual(1, Employee.FindAll().Length);
+			using(new SessionScope())
+			{
+				emp.FirstName = "john";
+				emp.LastName = "doe";
+				emp.Save();
 
-			Award award = new Award(emp);
-			award.Description = "Invisible employee";
-			award.Save();
+				Assert.AreEqual(1, Employee.FindAll().Length);
+				Assert.AreEqual(0, Award.FindAll().Length);
+
+				award = new Award(emp);
+				award.Description = "Invisible employee";
+				award.Save();
+			}
 
 			Assert.AreEqual(1, Award.FindAll().Length);
+			Assert.AreEqual(1, Employee.FindAll().Length);
 
 			Employee emp2 = Employee.Find(emp.ID);
 			Assert.IsNotNull(emp2);

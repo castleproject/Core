@@ -439,7 +439,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        MakeAtt("access", model.OneToOneAtt.AccessString),
 			        MakeAtt("class", MakeTypeName(model.OneToOneAtt.MapType)),
 			        WriteIfNonNull("cascade", cascade),
-			        WriteIfNonNull("outer-join", TranslateOuterJoin(model.OneToOneAtt.OuterJoin)),
+			        WriteIfNonNull("property-ref", model.OneToOneAtt.PropertyRef),
+			        WriteIfNonNull("fetch", TranslateFetch(model.OneToOneAtt.Fetch)),
 			        WriteIfTrue("constrained", model.OneToOneAtt.Constrained));
 		}
 
@@ -736,6 +737,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		private static string TranslateFetch(FetchEnum fetch)
+		{
+			switch(fetch)
+			{
+				case FetchEnum.Select:
+					return "select";
+				case FetchEnum.Join:
+					return "join";
+				default:
+					return null;
+			}
+		}
+		
 		private static string TranslateOuterJoin(OuterJoinEnum ojEnum)
 		{
 			String outerJoin = null;
@@ -744,6 +758,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				outerJoin = ojEnum.ToString().ToLower();
 			}
+			
 			return outerJoin;
 		}
 

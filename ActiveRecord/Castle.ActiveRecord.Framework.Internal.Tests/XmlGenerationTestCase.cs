@@ -537,6 +537,52 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			Assert.AreEqual( expected, xml );
 		}
 		
+		[Test]
+		public void One2OneKey()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel empModel = builder.Create(typeof(Employee));
+			ActiveRecordModel awardModel = builder.Create(typeof(Award));
+			Assert.IsNotNull(empModel);
+			Assert.IsNotNull(awardModel);
+
+			string xml = Process(builder, empModel);
+
+			string expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Employee, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"Employee\" lazy=\"false\">\r\n" + 
+				"    <id name=\"ID\" access=\"property\" column=\"EmployeeID\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
+				"      <generator class=\"native\">\r\n" + 
+				"      </generator>\r\n" + 
+				"    </id>\r\n" + 
+				"    <property name=\"FirstName\" access=\"property\" column=\"FirstName\" type=\"String\" />\r\n" + 
+				"    <property name=\"LastName\" access=\"property\" column=\"LastName\" type=\"String\" />\r\n" + 
+				"    <one-to-one name=\"Award\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Award, Castle.ActiveRecord.Framework.Internal.Tests\" fetch=\"join\" />\r\n" + 
+				"  </class>\r\n" + 
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual( expected, xml );
+
+			xml = Process(builder, awardModel);
+
+			expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Award, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"Award\" lazy=\"false\">\r\n" + 
+				"    <id name=\"ID\" access=\"property\" column=\"EmployeeID\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
+				"      <generator class=\"foreign\">\r\n" + 
+				"        <param name=\"property\">Employee</param>\r\n" + 
+				"      </generator>\r\n" + 
+				"    </id>\r\n" + 
+				"    <property name=\"Description\" access=\"property\" column=\"Description\" type=\"String\" />\r\n" + 
+				"    <one-to-one name=\"Employee\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Employee, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" + 
+				"  </class>\r\n" + 
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual( expected, xml );
+		}
+		
 #if DOTNET2
 	    [Test]
 	    public void EnumWithColumnType()

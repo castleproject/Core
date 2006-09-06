@@ -1,6 +1,12 @@
 beta 4
 ======
 
+- Review OneToOneAttribute test case, added one more unit test
+
+- Removed OuterJoin attribute from OneToOneAttribute, replaced by Fetch property
+
+- Added PropertyRef to OneToOneAttribute
+
 - Applied patch to patch from josh robb - FindAllByProperty now handles null values internallly.
 
 - Applied patch from josh robb - FindAllByProperty now handles null values internallly.

@@ -27,29 +27,29 @@ namespace Castle.ActiveRecord.Tests.Model
 		[PrimaryKey(PrimaryKeyType.Native, "EmployeeID")]
 		public int ID
 		{
-			get { return this.id; }
-			set { this.id = value; }
+			get { return id; }
+			set { id = value; }
 		}
 
-		[Property()]
+		[Property]
 		public string FirstName
 		{
-			get { return this.firstName; }
-			set { this.firstName = value; }
+			get { return firstName; }
+			set { firstName = value; }
 		}
 
-		[Property()]
+		[Property]
 		public string LastName
 		{
-			get { return this.lastName; }
-			set { this.lastName = value; }
+			get { return lastName; }
+			set { lastName = value; }
 		}
 
-		[OneToOne]
+		[OneToOne(Constrained=true)]
 		public Award Award
 		{
-			get { return this.award; }
-			set { this.award = value; }
+			get { return award; }
+			set { award = value; }
 		}
 
 		public static Employee Find(int id)
@@ -87,22 +87,22 @@ namespace Castle.ActiveRecord.Tests.Model
 		[OneToOne]
 		public Employee Employee
 		{
-			get { return this.employee; }
-			set { this.employee = value; }
+			get { return employee; }
+			set { employee = value; }
 		}
 
 		[PrimaryKey(PrimaryKeyType.Foreign, "EmployeeID")]
 		public int ID
 		{
-			get { return this.id; }
-			set { this.id = value; }
+			get { return id; }
+			set { id = value; }
 		}
 
 		[Property]
 		public string Description
 		{
-			get { return this.description; }
-			set { this.description = value; }
+			get { return description; }
+			set { description = value; }
 		}
 
 		public static Award[] FindAll()
