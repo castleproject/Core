@@ -194,9 +194,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			String isWeb = facilityConfig.Attributes["isWeb"];
 			String threadinfotype = facilityConfig.Attributes["threadinfotype"];
 			string isDebug = facilityConfig.Attributes["isDebug"];
+			string sessionfactoryholdertype = facilityConfig.Attributes["sessionfactoryholdertype"];
 
 			SetUpThreadInfoType("true" == isWeb, threadinfotype);
 			SetDebugFlag("true" == isDebug);
+			SetUpSessionFactoryHolderType(sessionfactoryholdertype);
 
 			foreach(IConfiguration config in facilityConfig.Children)
 			{
