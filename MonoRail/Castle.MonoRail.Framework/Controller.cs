@@ -315,7 +315,7 @@ namespace Castle.MonoRail.Framework
 		{
 			String basePath = _controllerName;
 
-			if (_areaName != null)
+			if (_areaName != null && _areaName.Length > 0)
 			{
 				basePath = Path.Combine(_areaName, _controllerName);
 			}
@@ -360,7 +360,7 @@ namespace Castle.MonoRail.Framework
 		{
 			String basePath = _controllerName;
 
-			if (_areaName != null)
+			if (_areaName != null && _areaName.Length > 0)
 			{
 				basePath = Path.Combine(_areaName, _controllerName);
 			}
