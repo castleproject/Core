@@ -1,6 +1,6 @@
 <Configuration>
   <CodeStyleSettings>
     <Sharing>EXTERNAL</Sharing>
-    <ExternalPath>..\..\ReSharper.CodingStyle.xml</ExternalPath>
+    <ExternalPath>..\ReSharper.CodingStyle.xml</ExternalPath>
   </CodeStyleSettings>
 </Configuration>
