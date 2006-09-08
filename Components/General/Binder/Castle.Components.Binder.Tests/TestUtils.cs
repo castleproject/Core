@@ -41,10 +41,12 @@ namespace Castle.Components.Binder.Tests
 		/// <remarks>
 		/// Notice that any that leading and trailing spaces are discarded
 		/// </remarks>
-		public static NameValueCollection ParseNameValueString(string data)
+		public static NameValueCollection ParseNameValueString(String data)
 		{
 			NameValueCollection args = new NameValueCollection();
+			
 			data = data.Trim();
+			
 			foreach(string nameValue in data.Split('\n'))
 			{
 				if (nameValue.Trim() == "") continue;
@@ -52,6 +54,7 @@ namespace Castle.Components.Binder.Tests
 				string[] pair = nameValue.Split('=');
 				args.Add(pair[0].Trim(), pair[1].Trim());
 			}
+			
 			return args;
 		}
 	}

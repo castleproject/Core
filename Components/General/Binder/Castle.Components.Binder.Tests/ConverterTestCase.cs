@@ -15,20 +15,16 @@
 namespace Castle.Components.Binder.Tests
 {
 	using System;
-	using System.Collections;
-	using System.ComponentModel;
 	using System.Globalization;
 	using System.Threading;
-	using System.Web;
 	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class ConvertUtilsTestCase
+	public class ConverterTestCase
 	{
 		private bool convSucceed;
-
-		private static TimeSpan init;
+		private DefaultConverter converter;
 
 		[TestFixtureSetUp]
 		public void Init()
@@ -37,16 +33,8 @@ namespace Castle.Components.Binder.Tests
 
 			Thread.CurrentThread.CurrentCulture	= en;
 			Thread.CurrentThread.CurrentUICulture = en;
-
-			init = new TimeSpan(DateTime.Now.Ticks);
-		}
-
-		[TestFixtureTearDown]
-		public void Terminate()
-		{
-			TimeSpan diff = new TimeSpan(DateTime.Now.Ticks) - init;
-
-			Console.WriteLine(diff.Milliseconds);
+			
+			converter = new DefaultConverter();
 		}
 
 		[Test]
@@ -54,14 +42,11 @@ namespace Castle.Components.Binder.Tests
 		{
 			Assert.AreEqual("hello", Convert(typeof(string), "hello"));
 			Assert.IsTrue(convSucceed);
-
-			Assert.AreEqual("world", Convert(typeof(string), "hello", "hello=world"));
-			Assert.IsTrue(convSucceed);
-
+			
 			Assert.AreEqual(null, Convert(typeof(string), null));
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual("\n\t", Convert(typeof(string), "\n\t "));
+			Assert.AreEqual("\n  \t", Convert(typeof(string), " \n  \t "));
 			Assert.IsTrue(convSucceed);
 		}
 
@@ -71,14 +56,11 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(new int[] {1, 2, 3}, Convert(typeof(int[]), "1,2,3"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(new int[] {1, 2, 3}, Convert(typeof(int[]), "hello", "hello=1,2,3"));
-			Assert.IsTrue(convSucceed);
-
 			Assert.AreEqual(null, Convert(typeof(int[]), null));
 			Assert.IsFalse(convSucceed);
 
 			Assert.AreEqual(new int[] {}, Convert(typeof(int[]), ""));
-			Assert.IsFalse(convSucceed);
+			Assert.IsTrue(convSucceed);
 		}
 
 		[Test]
@@ -91,9 +73,6 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(UriPartial.Authority, Convert(typeof(UriPartial), "Authority"));
-			Assert.IsTrue(convSucceed);
-
-			Assert.AreEqual(UriPartial.Path, Convert(typeof(UriPartial), "uripartial", "uripartial=Path"));
 			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(UriPartial), null));
@@ -119,9 +98,6 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual((decimal) 12.22, Convert(typeof(decimal), "12.22"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual((decimal) 13.33, Convert(typeof(decimal), "value", "value=13.33"));
-			Assert.IsTrue(convSucceed);
-
 			Assert.AreEqual(null, Convert(typeof(decimal), null));
 			Assert.IsFalse(convSucceed);
 
@@ -145,9 +121,6 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(new Guid("6CDEF425-6EEA-42AC-A318-0772B55FF259"), Convert(typeof(Guid), "6CDEF425-6EEA-42AC-A318-0772B55FF259"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(new Guid("6CDEF425-6EEA-42AC-A318-0772B55FF259"), Convert(typeof(Guid), "value", "value=6CDEF425-6EEA-42AC-A318-0772B55FF259"));
-			Assert.IsTrue(convSucceed);
-
 			Assert.AreEqual(null, Convert(typeof(Guid), null));
 			Assert.IsFalse(convSucceed);
 
@@ -169,9 +142,6 @@ namespace Castle.Components.Binder.Tests
 		public void DateTimeConvert()
 		{
 			Assert.AreEqual(new DateTime(2005, 1, 31), Convert(typeof(DateTime), "2005-01-31"));
-			Assert.IsTrue(convSucceed);
-
-			Assert.AreEqual(new DateTime(2005, 1, 31), Convert(typeof(DateTime), "value", "valueday=31 \n valuemonth=1 \n valueyear=2005"));
 			Assert.IsTrue(convSucceed);
 
 			Convert(typeof(DateTime), null);
@@ -257,21 +227,6 @@ namespace Castle.Components.Binder.Tests
 		}
 
 		[Test]
-		public void HttpPostFileConvert()
-		{
-			Hashtable hash = new Hashtable();
-			hash["value"] = "file content";
-
-			Assert.AreEqual("file content", 
-				ConvertUtils.Convert(typeof(HttpPostedFile), "value", new Hashtable(), hash, out convSucceed));
-			Assert.IsTrue(convSucceed);
-
-			Assert.AreEqual(null, 
-				ConvertUtils.Convert(typeof(HttpPostedFile), "invalidValue", new Hashtable(), hash, out convSucceed));
-			Assert.IsFalse(convSucceed);
-		}
-
-		[Test]
 		public void TypeConverterConvert()
 		{
 			Assert.IsTrue(Convert(typeof(CustomType), "validvalue").GetType() == typeof(CustomType));
@@ -284,7 +239,6 @@ namespace Castle.Components.Binder.Tests
 			}
 			catch(BindingException)
 			{
-				Assert.IsFalse(convSucceed);
 			}
 
 			try
@@ -294,62 +248,12 @@ namespace Castle.Components.Binder.Tests
 			}
 			catch(BindingException)
 			{
-				Assert.IsFalse(convSucceed);
 			}
 		}
 
 		private object Convert(Type desiredType, string input)
 		{
-			return ConvertUtils.Convert(desiredType, "myparam", input, out convSucceed);
-		}
-
-		private object Convert(Type desiredType, string paramName, string parseInput)
-		{
-			return ConvertUtils.Convert(desiredType, paramName, TestUtils.ParseNameValueString(parseInput), null, out convSucceed);
-		}
-	}
-
-	[TypeConverter(typeof(TypeConverterHelper))]
-	class CustomType
-	{
-		public CustomType()
-		{
-		}
-	}
-
-	[TypeConverter(typeof(TypeConverterHelper2))]
-	class CustomType2
-	{
-		public CustomType2()
-		{
-		}
-	}
-
-	class TypeConverterHelper : TypeConverter
-	{
-		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-		{
-			return sourceType == typeof(string);
-		}
-
-		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-		{
-			if (value.ToString() == "validvalue")
-			{
-				return new CustomType();
-			}
-			else
-			{
-				throw new Exception("Invalid Value");
-			}
-		}
-	}
-
-	class TypeConverterHelper2 : TypeConverter
-	{
-		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-		{
-			return false;
+			return converter.Convert(desiredType, typeof(string), input, out convSucceed);
 		}
 	}
 }

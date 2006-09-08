@@ -1,6 +1,14 @@
 Beta 2
 ======
 
+- Removed support for meta elements (as they were passed 
+    via get/form and that doesn't look very safe)
+
+- More test cases were added
+
+- Major refactoring on Graph design and interfaces. However there wasn't any big change 
+  on the DataBinder class itself.
+
 - Changed ConvertUtils to consider non successful an attempt to convert a null 
   value to boolean
 

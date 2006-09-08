@@ -22,9 +22,9 @@ namespace Castle.Components.Binder
 	/// </summary>
 	public class DataBindError
 	{
-		private readonly String _parent;
-		private readonly String _property;
-		private readonly Exception _exception;
+		private readonly String parent;
+		private readonly String property;
+		private readonly Exception exception;
 
 		public DataBindError(String parent, String property) : this(parent, property, null)
 		{
@@ -32,29 +32,29 @@ namespace Castle.Components.Binder
 
 		public DataBindError(String parent, String property, Exception exception)
 		{
-			_parent = parent;
-			_property = property;
-			_exception = exception;
+			this.parent = parent;
+			this.property = property;
+			this.exception = exception;
 		}
 
 		public String Key
 		{
-			get { return _parent + "." + Property; }
+			get { return parent + "." + Property; }
 		}
 
 		public String Parent
 		{
-			get { return _parent; }
+			get { return parent; }
 		}
 
 		public String Property
 		{
-			get { return _property; }
+			get { return property; }
 		}
 
 		public Exception Exception
 		{
-			get { return _exception; }
+			get { return exception; }
 		}
 
 		public override String ToString()

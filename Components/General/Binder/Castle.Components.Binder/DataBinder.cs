@@ -15,26 +15,25 @@
 namespace Castle.Components.Binder
 {
 	using System;
+	using System.Collections;
 	using System.ComponentModel;
 	using System.Reflection;
-	using System.Collections;
+	using System.Web;
+	
+	using Castle.Core;
 	
 	/// <summary>
-	/// A DataBinder can be used to map properties from 
-	/// a <see cref="IBindingDataSourceNode"/> to one or more instance types.
 	/// </summary>
-	public class DataBinder : IDataBinder
+	[Serializable]
+	public class DataBinder : MarshalByRefObject, IDataBinder, IServiceEnabledComponent
 	{
-		#region Fields
-
 		protected internal static readonly BindingFlags PropertiesBindingFlags =
 			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-		
+
+		private IConverter converter = new DefaultConverter();
+
 		/// <summary>Collect the databind errors</summary>
 		protected IList errors;
-		
-		/// <summary>Holds a reference to a hash of string to <c>HttpPostedFiles</c></summary>
-		private IDictionary files;
 
 		/// <summary>Holds a sorted array of properties names that should be ignored</summary>
 		private String[] excludedPropertyList;
@@ -44,73 +43,92 @@ namespace Castle.Components.Binder
 
 		private Stack instanceStack;
 
-		private IBinderTranslator translator;
+		private IBinderTranslator binderTranslator;
 
-		#endregion
-
-		#region Constructors
-
-		/// <summary>
-		/// Constructs a <c>DataBinder</c>
-		/// </summary>
-		public DataBinder() : this(new Hashtable())
+		public DataBinder()
 		{
 		}
 
-		/// <summary>
-		/// Constructs a <c>DataBinder</c> 
-		/// with a hash of string to <c>HttpPostedFiles</c>
-		/// </summary>
-		public DataBinder(IDictionary files)
+		#region IServiceEnabledComponent
+		
+		public void Service(IServiceProvider provider)
 		{
-			this.files = files;
-		}
-
-		public DataBinder(IBinderTranslator translator) : this()
-		{
-			this.translator = translator;
+			
 		}
 
 		#endregion
 		
-		#region Events
-		
-		public event BinderHandler OnBeforeBinding;
-		
-		public event BinderHandler OnAfterBinding;
-		
-		#endregion
-
 		#region IDataBinder
-
-		/// <summary>
-		/// Create an instance of the specified type and binds the properties that
-		/// are available on the datasource.
-		/// </summary>
-		/// <param name="targetType">The target type. Can be an array</param>
-		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
-		/// <param name="dataSource">A hierarchycal representation of flat data</param>
-		/// <returns>an instance of the specified target type</returns>
-		public object BindObject(Type targetType, String prefix, IBindingDataSourceNode dataSource)
+		
+		public bool CanBindParameter(Type desiredType, String paramName, CompositeNode treeRoot)
 		{
-			return BindObject(targetType, prefix, null, null, dataSource);
+			bool canConvert;
+			
+			Node childNode = treeRoot.GetChildNode(paramName);
+			
+			if (childNode != null)
+			{
+				canConvert = true;
+			}
+			else if (childNode == null && desiredType == typeof(DateTime))
+			{
+				TrySpecialDateTimeBinding(treeRoot, paramName, out canConvert);
+			}
+			else
+			{
+				canConvert = false;
+			}
+			
+			return canConvert;
+		}
+		
+		public bool CanBindObject(Type targetType, String prefix, CompositeNode treeRoot)
+		{
+			Node childNode = treeRoot.GetChildNode(prefix);
+			
+			return childNode != null;
+		}
+		
+		public object BindParameter(Type desiredType, String paramName, CompositeNode treeRoot)
+		{
+			bool conversionSucceeded;
+			object result;
+			
+			try
+			{
+				if (desiredType.IsArray)
+				{
+					Node childNode = treeRoot.GetChildNode(paramName);
+
+					result = ConvertToArray(desiredType, paramName, childNode, out conversionSucceeded);
+				}
+				else
+				{
+					result = ConvertToSimpleValue(desiredType, paramName, treeRoot, out conversionSucceeded);
+				}
+			}
+			catch(Exception ex)
+			{
+				// Something unexpected during convertion
+				// throw new exception with paramName specified
+				
+				throw new BindingException("Exception converting param '" + paramName + "' to " + desiredType + ". Check inner exception for details", ex);
+			}
+			
+			return result;
 		}
 
-		/// <summary>
-		/// Create an instance of the specified type and binds the properties that
-		/// are available on the datasource respecting the white and black list
-		/// </summary>
-		/// <param name="targetType">The target type. Can be an array</param>
-		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
-		/// <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
-		/// <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
-		/// <param name="dataSource">A hierarchycal representation of flat data</param>
-		/// <returns>an instance of the specified target type</returns>
-		public object BindObject(Type targetType, String prefix, String excludedProperties, String allowedProperties, IBindingDataSourceNode dataSource)
+		public object BindObject(Type targetType, string prefix, CompositeNode treeRoot)
+		{
+			return BindObject(targetType, prefix, null, null, treeRoot);
+		}
+
+		public object BindObject(Type targetType, string prefix, string excludedProperties, string allowedProperties,
+		                         CompositeNode treeRoot)
 		{
 			if (targetType == null) throw new ArgumentNullException("targetType");
 			if (prefix == null) throw new ArgumentNullException("prefix");
-			if (dataSource == null) throw new ArgumentNullException("dataSource");
+			if (treeRoot == null) throw new ArgumentNullException("treeRoot");
 
 			errors = new ArrayList();
 			instanceStack = new Stack();
@@ -118,36 +136,19 @@ namespace Castle.Components.Binder
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
 
-			return InternalBindObject(targetType, prefix, dataSource.ObtainNode(prefix));
+			return InternalBindObject(targetType, prefix, treeRoot.GetChildNode(prefix));
 		}
 
-		/// <summary>
-		/// Binds the properties that are available on the datasource to the specified object instance.
-		/// </summary>
-		/// <param name="instance">The target instance.</param>
-		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
-		/// <param name="dataSource">A hierarchycal representation of flat data</param>
-		/// <returns>an instance of the specified target type</returns>
-		public void BindObjectInstance(object instance, String prefix, IBindingDataSourceNode dataSource)
+		public void BindObjectInstance(object instance, string prefix, CompositeNode treeRoot)
 		{
-			BindObjectInstance(instance, prefix, null, null, dataSource);
+			BindObjectInstance(instance, prefix, null, null, treeRoot);
 		}
 
-		/// <summary>
-		/// Binds the properties that
-		/// are available on the datasource respecting the white and black list
-		/// </summary>
-		/// <param name="instance">The target type.</param>
-		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
-		/// <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
-		/// <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
-		/// <param name="dataSource">A hierarchycal representation of flat data</param>
-		/// <returns>an instance of the specified target type</returns>
-		public void BindObjectInstance(object instance, String prefix, String excludedProperties, String allowedProperties, IBindingDataSourceNode dataSource)
+		public void BindObjectInstance(object instance, string prefix, string excludedProperties, string allowedProperties, CompositeNode treeRoot)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 			if (prefix == null) throw new ArgumentNullException("prefix");
-			if (dataSource == null) throw new ArgumentNullException("dataSource");
+			if (treeRoot == null) throw new ArgumentNullException("treeRoot");
 
 			errors = new ArrayList();
 			instanceStack = new Stack();
@@ -155,9 +156,9 @@ namespace Castle.Components.Binder
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
 
-			InternalRecursiveBindObjectInstance(instance, prefix, dataSource.ObtainNode(prefix));
+			InternalRecursiveBindObjectInstance(instance, prefix, treeRoot.GetChildNode(prefix));
 		}
-
+		
 		/// <summary>
 		/// Represents the databind errors
 		/// </summary>
@@ -166,69 +167,39 @@ namespace Castle.Components.Binder
 			get { return new ErrorList(errors); }
 		}
 
-		/// <summary>
-		/// Holds a reference to a hash of string to <c>HttpPostedFiles</c>
-		/// </summary>
-		public IDictionary Files
+		public IConverter Converter
 		{
-			get { return files; }
-			set { files = value; }
+			get { return converter; }
+			set { converter = value; }
 		}
 
 		public IBinderTranslator Translator
 		{
-			get { return translator; }
-			set { translator = value; }
+			get { return binderTranslator; }
+			set { binderTranslator = value; }
 		}
+
+		public event BinderHandler OnBeforeBinding;
+		public event BinderHandler OnAfterBinding;
 
 		#endregion
+		
+		#region Implementation
 
-		#region Overridables
-
-		protected virtual void AfterBinding(object instance, String prefix, IBindingDataSourceNode node)
-		{
-			if (OnAfterBinding != null)
-			{
-				OnAfterBinding(instance, prefix, node);
-			}
-		}
-
-		protected virtual void BeforeBinding(object instance, String prefix, IBindingDataSourceNode node)
-		{
-			if (OnBeforeBinding != null)
-			{
-				OnBeforeBinding(instance, prefix, node);
-			}
-		}
-
-		protected virtual bool ShouldRecreateInstance(object value, Type type, String prefix, IBindingDataSourceNode node)
-		{
-			return value == null || type.IsArray;
-		}
-
-		protected virtual bool ShouldIgnoreType(Type instanceType)
-		{
-			return instanceType.IsAbstract || instanceType.IsInterface;
-		}
-
-		protected virtual bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
-		{
-			return false;
-		}
-
-		#endregion
-
-		#region Internal implementation
-
-		protected object InternalBindObject(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
+		protected object InternalBindObject(Type instanceType, String paramPrefix, Node node)
 		{
 			bool succeeded;
 			return InternalBindObject(instanceType, paramPrefix, node, out succeeded);
 		}
 
-		protected object InternalBindObject(Type instanceType, String paramPrefix, IBindingDataSourceNode node, out bool succeeded)
+		protected object InternalBindObject(Type instanceType, String paramPrefix, Node node, out bool succeeded)
 		{
 			succeeded = false;
+
+			if (IsSpecialType(instanceType))
+			{
+				return BindSpecialObjectInstance(instanceType, paramPrefix, node, out succeeded);
+			}
 
 			if (ShouldIgnoreType(instanceType)) return null;
 
@@ -245,9 +216,21 @@ namespace Castle.Components.Binder
 			}
 		}
 
-		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, IBindingDataSourceNode node)
+		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, Node node)
 		{
-			if (node == null || node.ShouldIgnore) return;
+			if (node == null) return;
+			
+			if (node.NodeType != NodeType.Composite && node.NodeType != NodeType.Indexed)
+			{
+				throw new BindingException("Non-composite node passed to InternalRecursiveBindObjectInstance while binding {0} with prefix {1}", instance, prefix);
+			}
+			
+			InternalRecursiveBindObjectInstance(instance, prefix, (CompositeNode) node);
+		}
+
+		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, CompositeNode node)
+		{
+			if (node == null || instance == null) return;
 
 			BeforeBinding(instance, prefix, node);
 
@@ -260,6 +243,7 @@ namespace Castle.Components.Binder
 
 			Type instanceType = instance.GetType();
 
+			// TODO: Good candidate to cache:
 			PropertyInfo[] props = instanceType.GetProperties(PropertiesBindingFlags);
 
 			foreach(PropertyInfo prop in props)
@@ -281,29 +265,28 @@ namespace Castle.Components.Binder
 
 						if (translatedParamName == null) continue;
 
-						if (node.CanConvert)
-						{
-							object value = node.GetEntryValue(translatedParamName, propType, out conversionSucceeded);
+//						if (node.CanConvert)
+//						{
+//							object value = node.GetEntryValue(translatedParamName, propType, out conversionSucceeded);
+//
+//							if (conversionSucceeded)
+//							{
+//								prop.SetValue(instance, value, null);
+//							}
+//						}
+//						else
+//						{
+							object value = ConvertToSimpleValue(propType, translatedParamName, node, out conversionSucceeded);
 
 							if (conversionSucceeded)
 							{
 								prop.SetValue(instance, value, null);
 							}
-						}
-						else
-						{
-							object value = ConvertUtils.Convert(propType, 
-								translatedParamName, node, files, out conversionSucceeded);
-
-							if (conversionSucceeded)
-							{
-								prop.SetValue(instance, value, null);
-							}
-						}
+//						}
 					}
-					else if (node.CanHandleNested)
+					else // if (node.CanHandleNested)
 					{
-						IBindingDataSourceNode nestedNode = node.ObtainNode(paramName);
+						Node nestedNode = node.GetChildNode(paramName);
 
 						if (nestedNode != null)
 						{
@@ -336,66 +319,279 @@ namespace Castle.Components.Binder
 
 			AfterBinding(instance, prefix, node);
 		}
+		
+		protected int StackDepth
+		{
+			get { return instanceStack.Count; }
+		}
 
 		private string Translate(Type instanceType, string paramName)
 		{
-			if (translator != null)
+			if (binderTranslator != null)
 			{
-				return translator.Translate(instanceType, paramName);
+				return binderTranslator.Translate(instanceType, paramName);
 			}
 
 			return paramName;
 		}
 
-		private object[] InternalBindObjectArray(Type instanceType, String paramPrefix, IBindingDataSourceNode node, out bool succeeded)
+		private object InternalBindObjectArray(Type instanceType, String paramPrefix, Node node, out bool succeeded)
 		{
 			succeeded = false;
 
-			if (node == null || node.ShouldIgnore)
+			if (node == null)
 			{
-				return (object[]) Array.CreateInstance(instanceType.GetElementType(), 0);
+				return Array.CreateInstance(instanceType.GetElementType(), 0);
 			}
-
-			if (node.IsIndexed)
-			{
-				ArrayList bindArray = new ArrayList();
-
-				succeeded = true;
-
-				foreach(IBindingDataSourceNode elementNode in node.IndexedNodes)
-				{
-					AddArrayElement(bindArray, instanceType, paramPrefix, elementNode);
-				}
-
-				return (object[]) bindArray.ToArray(instanceType.GetElementType());
-			}
-
-			return null;
-		}
-
-		private void AddArrayElement(ArrayList bindArray, Type instanceType, String prefix, IBindingDataSourceNode elementNode)
-		{
-			if (!elementNode.ShouldIgnore)
-			{
-				object instance = CreateInstance(instanceType.GetElementType(), prefix, elementNode);
-
-				InternalRecursiveBindObjectInstance(instance, prefix, elementNode);
-
-				bindArray.Add(instance);
-			}
+			
+			return ConvertToArray(instanceType, paramPrefix, node, out succeeded);
 		}
 
 		#endregion
 
 		#region CreateInstance
 
-		protected virtual object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode dataSource)
+		protected virtual object CreateInstance(Type instanceType, String paramPrefix, Node node)
 		{
 			return Activator.CreateInstance(instanceType);
 		}
 
 		#endregion
+		
+		#region Overridables
 
+		protected virtual void AfterBinding(object instance, String prefix, Node node)
+		{
+			if (OnAfterBinding != null)
+			{
+				OnAfterBinding(instance, prefix, node);
+			}
+		}
+
+		protected virtual void BeforeBinding(object instance, String prefix, Node node)
+		{
+			if (OnBeforeBinding != null)
+			{
+				OnBeforeBinding(instance, prefix, node);
+			}
+		}
+
+		protected virtual bool ShouldRecreateInstance(object value, Type type, String prefix, Node node)
+		{
+			return value == null || type.IsArray;
+		}
+
+		protected virtual bool ShouldIgnoreType(Type instanceType)
+		{
+			return instanceType.IsAbstract || instanceType.IsInterface;
+		}
+
+		protected virtual bool PerformCustomBinding(object instance, string prefix, Node node)
+		{
+			return false;
+		}
+		
+		/// <summary>
+		/// Implementations will bound the instance itself.
+		/// <seealso cref="IsSpecialType"/>
+		/// </summary>
+		/// <remarks>
+		/// <seealso cref="IsSpecialType"/>
+		/// </remarks>
+		/// <param name="instanceType"></param>
+		/// <param name="prefix"></param>
+		/// <param name="node"></param>
+		/// <param name="succeeded"></param>
+		protected virtual object BindSpecialObjectInstance(Type instanceType, String prefix, 
+		                                                 Node node, out bool succeeded)
+		{
+			succeeded = false;
+			
+			return null;
+		}
+
+		/// <summary>
+		/// Invoked during object binding to allow 
+		/// subclasses to have a chance of binding the types itself.
+		/// If the implementation returns <c>true</c>
+		/// the binder will invoke <see cref="BindSpecialObjectInstance"/>
+		/// </summary>
+		/// <param name="instanceType">Type about to be bound</param>
+		/// <returns><c>true</c> if subclass wants to handle binding</returns>
+		protected virtual bool IsSpecialType(Type instanceType)
+		{
+			return false;
+		}
+
+		#endregion
+		
+		protected object ConvertLeafNode(Type desiredType, LeafNode lNode, out bool conversionSucceeded)
+		{
+			return Converter.Convert(desiredType, lNode.ValueType, lNode.Value, out conversionSucceeded);
+		}
+		
+		private object ConvertToSimpleValue(Type desiredType, string key, CompositeNode parent, out bool conversionSucceeded)
+		{
+			conversionSucceeded = false;
+			
+			Node childNode = parent.GetChildNode(key);
+				
+			if (childNode == null && desiredType == typeof(DateTime))
+			{
+				return TrySpecialDateTimeBinding(parent, key, out conversionSucceeded);
+			}
+			else if (childNode == null)
+			{
+				return null;
+			}
+			else if (childNode.NodeType == NodeType.Leaf)
+			{
+				return ConvertLeafNode(desiredType, (LeafNode) childNode, out conversionSucceeded);
+			}
+			else
+			{
+				throw new BindingException("Could not convert param as the node related " + 
+				                           "to the param is not a leaf node. Param {0} parent node: {1}", key, parent.Name);
+			}
+		}
+
+		private object ConvertToArray(Type desiredType, String key, Node node, out bool conversionSucceeded)
+		{
+			Type elemType = desiredType.GetElementType();
+			
+			if (node == null)
+			{
+				conversionSucceeded = false;
+				return Array.CreateInstance(elemType, 0);
+			}
+			else if (node.NodeType == NodeType.Leaf)
+			{
+				LeafNode leafNode = node as LeafNode;
+					
+				return Converter.Convert(desiredType, leafNode.ValueType, leafNode.Value, out conversionSucceeded);
+			}
+			else if (node.NodeType == NodeType.Indexed)
+			{
+				IndexedNode indexedNode = node as IndexedNode;
+				
+				if (IsSimpleProperty(elemType))
+				{
+					return ConvertFlatNodesToArray(desiredType, indexedNode.ChildNodes, out conversionSucceeded);
+				}
+				else
+				{
+					return ConvertComplexNodesToArray(desiredType, indexedNode, out conversionSucceeded);
+				}
+			}
+			else
+			{
+				throw new BindingException("Could not convert param to array as the node related " + 
+					"to the param is not a leaf node nor an indexed node. Key {0}", key);
+			}
+		}
+
+		private object ConvertComplexNodesToArray(Type desiredType, IndexedNode parent, out bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+			
+			Type arrayElemType = desiredType.GetElementType();
+			
+			ArrayList validItems = new ArrayList();
+			
+			foreach(Node node in parent.ChildNodes)
+			{
+				if (node.NodeType == NodeType.Composite)
+				{
+					CompositeNode lnode = node as CompositeNode;
+					
+					validItems.Add(InternalBindObject(arrayElemType, parent.Name, lnode));
+					
+					if (!conversionSucceeded)
+					{
+						break;
+					}
+				}
+			}
+			
+			return conversionSucceeded ? validItems.ToArray(arrayElemType) : Array.CreateInstance(arrayElemType, 0);
+		}
+		
+		private object ConvertFlatNodesToArray(Type desiredType, Node[] nodes, out bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+			
+			Type arrayElemType = desiredType.GetElementType();
+			
+			ArrayList validItems = new ArrayList();
+			
+			foreach(Node node in nodes)
+			{
+				if (node.Name != String.Empty)
+				{
+					throw new BindingException("Unexpected non-flat node found: {0}", node.Name);
+				}
+				
+				if (node.NodeType == NodeType.Leaf)
+				{
+					LeafNode lnode = node as LeafNode;
+					
+					validItems.Add(ConvertLeafNode(arrayElemType, lnode, out conversionSucceeded));
+					
+					if (!conversionSucceeded)
+					{
+						break;
+					}
+				}
+			}
+			
+			return conversionSucceeded ? validItems.ToArray(arrayElemType) : Array.CreateInstance(arrayElemType, 0);
+		}
+
+		private object TrySpecialDateTimeBinding(CompositeNode treeRoot, String paramName, out bool conversionSucceeded)
+		{
+			Node dayNode = treeRoot.GetChildNode(paramName + "day");
+			Node monthNode = treeRoot.GetChildNode(paramName + "month");
+			Node yearNode = treeRoot.GetChildNode(paramName + "year");
+			
+			Node hourNode = treeRoot.GetChildNode(paramName + "hour");
+			Node minuteNode = treeRoot.GetChildNode(paramName + "minute");
+			Node secondNode = treeRoot.GetChildNode(paramName + "second");
+			
+			if (dayNode != null)
+			{
+				int day = (int) RelaxedConvertLeafNode(typeof(int), dayNode, 0);
+				int month = (int) RelaxedConvertLeafNode(typeof(int), monthNode, 0);
+				int year = (int) RelaxedConvertLeafNode(typeof(int), yearNode, 0);
+				
+				int hour = (int) RelaxedConvertLeafNode(typeof(int), hourNode, 0);
+				int minute = (int) RelaxedConvertLeafNode(typeof(int), minuteNode, 0);
+				int second = (int) RelaxedConvertLeafNode(typeof(int), secondNode, 0);
+				
+				conversionSucceeded = true;
+					
+				return new DateTime(year, month, day, hour, minute, second);
+			}
+			
+			conversionSucceeded = false;
+			return null;
+		}
+
+		private object RelaxedConvertLeafNode(Type desiredType, Node node, object defaultValue)
+		{
+			if (node == null) return defaultValue;
+			
+			if (node.NodeType != NodeType.Leaf)
+			{
+				throw new BindingException("Expected LeafNode, found {0} named {1}", node.NodeType, node.Name);
+			}
+			
+			bool conversionSucceeded;
+			
+			object result = ConvertLeafNode(desiredType, (LeafNode) node, out conversionSucceeded);
+			
+			return conversionSucceeded ? result : defaultValue;
+		}
+		
 		#region Support methods
 		
 		protected object InstanceOnStack
@@ -452,23 +648,28 @@ namespace Castle.Components.Binder
 		{
 			// When dealing with arrays or lists we want to check
 			// the type of the array element type
-			if (propType.IsArray || typeof(IList).IsAssignableFrom(propType))
+//			if (propType.IsArray)
+//			{
+//				propType = propType.GetElementType();
+//			}
+			if (propType.IsArray)
 			{
-				propType = propType.GetElementType();
+				return false;
 			}
 
 			bool isSimple = propType.IsPrimitive || 
-				propType.IsEnum ||
-				propType == typeof(String) ||
-				propType == typeof(Guid) ||
-				propType == typeof(DateTime) ||
-				propType == typeof(Decimal);
-
+			                propType.IsEnum || 
+			                propType == typeof(String) || 
+			                propType == typeof(Guid) || 
+			                propType == typeof(DateTime) || 
+			                propType == typeof(Decimal) || 
+			                propType == typeof(HttpPostedFile);
+			
 			if (isSimple) return true;
 
-			TypeConverter converter = TypeDescriptor.GetConverter(propType);
+			TypeConverter tconverter = TypeDescriptor.GetConverter(propType);
 
-			return converter.CanConvertFrom( typeof(String) );
+			return tconverter.CanConvertFrom(typeof(String));
 		}
 
 		private void PushInstance(object instance)

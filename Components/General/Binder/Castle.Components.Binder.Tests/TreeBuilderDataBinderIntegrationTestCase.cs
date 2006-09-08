@@ -15,39 +15,35 @@
 namespace Castle.Components.Binder.Tests
 {
 	using System;
-	using System.Globalization;
-	using System.Threading;
-	using Nullables;
+	using System.Collections.Specialized;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class NullablesTestCase
+	public class TreeBuilderDataBinderIntegrationTestCase
 	{
-		private bool convSucceed;
-		
-		[TestFixtureSetUp]
+		private DataBinder binder;
+		private TreeBuilder builder;
+
+		[SetUp]
 		public void Init()
 		{
-			CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
-
-			Thread.CurrentThread.CurrentCulture	= en;
-			Thread.CurrentThread.CurrentUICulture = en;
+			builder = new TreeBuilder();
+			binder = new DataBinder();
 		}
-
+		
 		[Test]
-		public void NullableIntConversion()
+		public void SimpleEntries()
 		{
-			Assert.AreEqual(new NullableInt32(10), Convert(typeof(NullableInt32), "10"));
-			Assert.IsTrue(convSucceed);
-
-			NullableInt32 val = (NullableInt32) Convert(typeof(NullableInt32), "");
-			Assert.IsFalse(val.HasValue);
-			Assert.IsTrue(convSucceed);
-		}
-
-		private object Convert(Type desiredType, string input)
-		{
-			return new DefaultConverter().Convert(desiredType, input, out convSucceed);
+			NameValueCollection nameValueColl = new NameValueCollection();
+			
+			nameValueColl.Add("name", "hammett");
+			nameValueColl.Add("age", "27");
+			nameValueColl.Add("age", "28");
+			
+			CompositeNode root = builder.BuildSourceNode(nameValueColl);
+			
+			Assert.AreEqual("hammett", binder.BindParameter(typeof(String), "name", root));
+			Assert.AreEqual(new int[] { 27, 28 }, binder.BindParameter(typeof(int[]), "age", root));
 		}
 	}
 }

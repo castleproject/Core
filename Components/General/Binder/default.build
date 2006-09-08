@@ -26,6 +26,7 @@
 	
 	<target name="init" depends="clean">
 		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-nullables" inheritall="true" />
+		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-castle.core" inheritall="true" />
 	</target>
 
 	<target name="build" depends="init,tests.run,copytobuilddir" />
@@ -57,6 +58,10 @@
 			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
+
+			<references>
+				<include name="${bin.dir}/Castle.Core.dll" />
+			</references>
 		</csc>
 	</target>
 

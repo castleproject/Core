@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
     >
@@ -80,12 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
                     Name = "System.Web"
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
@@ -96,9 +90,19 @@
                     HintPath = "..\..\..\..\SharedLibs\nhibernate\Nullables.dll"
                 />
                 <Reference
-                    Name = "Castle.Components.Binder"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder-vs2003"
                     Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>
@@ -110,7 +114,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConvertUtilsTestCase.cs"
+                    RelPath = "ConverterTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataBinderArrayTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataBinderSingleValueTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -120,12 +134,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DataReaderAdapterTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NameValueCollectionAdapterTestCase.cs"
+                    RelPath = "DataReaderIntegrationTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -136,6 +145,21 @@
                 />
                 <File
                     RelPath = "TestUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TreeBuilderDataBinderIntegrationTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TreeBuilderRegressionTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TreeBuilderTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

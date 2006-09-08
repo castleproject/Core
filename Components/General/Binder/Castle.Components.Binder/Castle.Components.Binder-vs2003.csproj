@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
     >
@@ -84,32 +84,22 @@
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\..\Core\bin\Castle.Core.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AbstractBindingDataSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BindingDataSourceException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "BindingException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ConvertUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -124,12 +114,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DataReaderAdapter.cs"
+                    RelPath = "DataReaderTreeBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DataSourceNode.cs"
+                    RelPath = "DefaultConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -144,7 +134,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IBindingDataSourceNode.cs"
+                    RelPath = "IConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -159,7 +149,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NameValueCollectionAdapter.cs"
+                    RelPath = "Node.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TreeBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

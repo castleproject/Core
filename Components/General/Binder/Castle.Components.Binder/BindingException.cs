@@ -20,11 +20,11 @@ namespace Castle.Components.Binder
 	[Serializable]
 	public class BindingException : Exception
 	{
-		public BindingException(string message, params object[] args) : base(String.Format(message, args))
+		public BindingException(String message, params object[] args) : base(String.Format(message, args))
 		{
 		}
 
-		public BindingException(string message, Exception innerException) : base(message, innerException)
+		public BindingException(String message, Exception innerException) : base(message, innerException)
 		{
 		}
 

@@ -15,26 +15,19 @@
 namespace Castle.Components.Binder
 {
 	using System;
-	using System.Collections;
 
-	public interface IBindingDataSourceNode : IDictionary
+	/// <summary>
+	/// Depicts the contract for implementations able to convert an object
+	/// -- usually a string -- to the specified desired type.
+	/// </summary>
+	public interface IConverter
 	{
-		IBindingDataSourceNode ObtainNode(String name);
-
-		String GetEntryValue(String name);
-
-		Object GetEntryValue(String name, Type desiredType, out bool conversionSucceeded);
-
-		String GetMetaEntryValue(String name);
-
-		IBindingDataSourceNode[] IndexedNodes { get; }
-
-		bool IsIndexed { get; }
-
-		bool CanConvert { get; }
-
-		bool CanHandleNested { get; }
-
-		bool ShouldIgnore { get; }
+		object Convert(Type desiredType, Type inputType, object input, out bool conversionSucceeded);
+		
+		bool CanConvert(Type desiredType, Type inputType, object input, out bool exactMatch);
+		
+//		object Convert(Type desiredType, object input);
+//
+//		object Convert(Type desiredType, object input, out bool conversionSucceeded);
 	}
 }
