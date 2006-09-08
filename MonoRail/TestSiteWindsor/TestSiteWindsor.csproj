@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{22432F75-FD21-474A-AB8F-43100DE79FDB}"
     >
@@ -95,11 +95,6 @@
                     HintPath = "..\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
                     HintPath = "..\bin\Castle.Windsor.dll"
@@ -125,9 +120,9 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "NVelocity"
-                    Project = "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

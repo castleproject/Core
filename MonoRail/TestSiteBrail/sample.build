@@ -28,6 +28,7 @@
 				<include name="Castle.Components.Common.EmailSender.dll" />
 				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 				<include name="Castle.Components.Binder.dll" />
+				<include name="Castle.Core.dll" />
 				<include name="Boo.Lang.dll" />
 				<include name="log4net.dll" />
 				<include name="Boo.Lang.Compiler.dll" />
@@ -55,8 +56,9 @@
 			</sources>
 			<references basedir="${bin.dir}">
 				<include name="Castle.MonoRail.Framework.Dll"/>
-				<include name="Castle.Components.Common.EmailSender.dll" />
+				<include name="Castle.Core.dll" />
 				<include name="Castle.Components.Binder.dll" />
+				<include name="Castle.Components.Common.EmailSender.dll" />
 				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</references>
 			<resources basedir="${src.dir}">

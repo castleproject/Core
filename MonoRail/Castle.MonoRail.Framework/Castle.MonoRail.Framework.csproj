@@ -99,6 +99,11 @@
                     Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -309,6 +314,11 @@
                 />
                 <File
                     RelPath = "Attributes\AccessibleThroughAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\AjaxActionAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

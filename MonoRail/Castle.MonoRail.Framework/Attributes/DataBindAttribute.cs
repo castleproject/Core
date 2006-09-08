@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections.Specialized;
 	using System.Reflection;
 
 	using Castle.Components.Binder;
@@ -96,20 +97,20 @@ namespace Castle.MonoRail.Framework
 
 		public int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			IBindingDataSourceNode node = ResolveParams(controller);
+			CompositeNode node = controller.ObtainParamsNode(From);
 
-			node = node.ObtainNode(prefix);
-			
-			return node != null ? 10 : 0;
+			DataBinder binder = controller.Binder;
+
+			return binder.CanBindObject(parameterInfo.ParameterType, prefix, node) ? 10 : 0;
 		}
 
 		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			DataBinder binder = controller.Binder;
 
-			ConfigureBinder(binder, controller);
+			CompositeNode node = controller.ObtainParamsNode(From);
 
-			object instance = binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, ResolveParams(controller));
+			object instance = binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, node);
 
 			if (instance != null)
 			{
@@ -117,24 +118,6 @@ namespace Castle.MonoRail.Framework
 			}
 
 			return instance;
-		}
-
-		protected void ConfigureBinder(DataBinder binder, SmartDispatcherController controller)
-		{
-			binder.Files = controller.Context.Request.Files;
-		}
-
-		protected IBindingDataSourceNode ResolveParams(SmartDispatcherController controller)
-		{
-			switch(From)
-			{
-				case ParamStore.Form:
-					return controller.FormNode;
-				case ParamStore.QueryString:
-					return controller.QueryStringNode;
-				default:
-					return controller.ParamsNode;
-			}
 		}
 	}
 }

@@ -16,12 +16,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
-
+	
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
-	using Castle.MonoRail.Framework;
 	
 	using Iesi.Collections;
 
@@ -57,41 +55,41 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { autoLoad = value; }
 		}
 
-		protected override object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
+		protected override object CreateInstance(Type instanceType, String paramPrefix, Node node)
 		{
 			if (node == null)
 			{
-				throw new RailsException("Nothing found for the given prefix. Are you sure the form fields are using the prefix " + paramPrefix + "?");
+				throw new BindingException("Nothing found for the given prefix. Are you sure the form fields are using the prefix " + paramPrefix + "?");
 			}
 
-			if (IsContainerType(instanceType))
+			if (node.NodeType != NodeType.Composite)
 			{
-				return CreateContainer(instanceType);
+				throw new BindingException("Unexpected node type. Expecting Composite, found " + node.NodeType);
 			}
+			
+			CompositeNode cNode = (CompositeNode) node;
 
 			object instance;
 
 			bool shouldLoad = autoLoad != AutoLoadBehavior.Never;
-
-			String autoloadOverride = node.GetMetaEntryValue("autoload");
-
-			if (autoloadOverride != null)
+			
+			if (shouldLoad)
 			{
-				shouldLoad = (autoloadOverride == "yes" || autoloadOverride == "true");
+				shouldLoad = autoLoad == AutoLoadBehavior.OnlyNested && StackDepth != 0;
 			}
 
 			if (shouldLoad)
 			{
 				if (instanceType.IsArray)
 				{
-					throw new RailsException("ARDataBinder AutoLoad does not support arrays");
+					throw new BindingException("ARDataBinder AutoLoad does not support arrays");
 				}
 
 				ActiveRecordModel model = ActiveRecordModel.GetModel(instanceType);
 
 				PrimaryKeyModel pkModel;
 
-				object id = ObtainPKValue(model, node, paramPrefix, out pkModel);
+				object id = ObtainPrimaryKeyValue(model, cNode, paramPrefix, out pkModel);
 				
 				if (IsValidKey(id))
 				{
@@ -103,13 +101,14 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					{
 						instance = base.CreateInstance(instanceType, paramPrefix, node);
 					}
-					else if (autoLoad == AutoLoadBehavior.NullIfInvalidKey)
+					else if (autoLoad == AutoLoadBehavior.NullIfInvalidKey || 
+					         autoLoad == AutoLoadBehavior.OnlyNested)
 					{
 						instance = null;
 					}
 					else
 					{
-						throw new RailsException(string.Format(
+						throw new BindingException(string.Format(
 							"Could not find primary key '{0}' for '{1}'", 
 								pkModel.Property.Name, instanceType.FullName));
 					}
@@ -123,63 +122,45 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return instance;
 		}
 
-		protected override bool ShouldRecreateInstance(object value, Type type, string prefix, IBindingDataSourceNode node)
+		protected override object BindSpecialObjectInstance(Type instanceType, string prefix, Node node, out bool succeeded)
 		{
-			// See http://support.castleproject.org/jira/browse/AR-41
-			if (value == null) return true;
-
-			ActiveRecordModel model = ActiveRecordModel.GetModel(type);
-
-			if (AutoLoad == AutoLoadBehavior.Never || model == null)
-			{
-				return base.ShouldRecreateInstance(value, type, prefix, node);
-			}
-
-			PrimaryKeyModel pkModel;
-
-			object id = ObtainPKValue(model, node, prefix, out pkModel);
-
-			object currentId = pkModel.Property.GetValue(value, null);
-
-			return !Object.ReferenceEquals(id, currentId);
-		}
-
-		protected override bool ShouldIgnoreType(Type instanceType)
-		{
-			if (IsContainerType(instanceType))
-			{
-				return false;
-			}
-
-			return base.ShouldIgnoreType(instanceType);
-		}
-
-		protected override bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
-		{
-			if (instance == null)
-			{
-				return true;
-			}
+			succeeded = false;
+			
 			object stackInstance = InstanceOnStack;
-
-			if (stackInstance == null)
+			
+			ActiveRecordModel model = ActiveRecordModel.GetModel(stackInstance.GetType());
+			
+			if (model == null)
 			{
-				return false;
+				return null;
 			}
+			
+			object container = CreateContainer(instanceType);
+			
+			bool found = false;
+			Type targetType = null;
+			ActiveRecordModel targetModel = null;
 
-			if (IsContainerInstance(instance))
+			foreach(HasAndBelongsToManyModel hasMany2ManyModel in model.HasAndBelongsToMany)
 			{
-				Type type = stackInstance.GetType();
-
-				ActiveRecordModel model = ActiveRecordModel.GetModel(type);
-				ActiveRecordModel targetModel = null;
-
-				bool found = false;
-				Type targetType = null;
-
-				foreach(HasAndBelongsToManyModel hasManyModel in model.HasAndBelongsToMany)
+				// Inverse=true relations will be ignored
+				if (hasMany2ManyModel.Property.Name == prefix && !hasMany2ManyModel.HasManyAtt.Inverse)
 				{
-					if (hasManyModel.Property.Name == prefix)
+					targetType = hasMany2ManyModel.HasManyAtt.MapType;
+
+					targetModel = ActiveRecordModel.GetModel(targetType);
+
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found)
+			{
+				foreach(HasManyModel hasManyModel in model.HasMany)
+				{
+					// Inverse=true relations will be ignored
+					if (hasManyModel.Property.Name == prefix && !hasManyModel.HasManyAtt.Inverse)
 					{
 						targetType = hasManyModel.HasManyAtt.MapType;
 
@@ -189,195 +170,175 @@ namespace Castle.MonoRail.ActiveRecordSupport
 						break;
 					}
 				}
-
-				if (found)
-				{
-					ClearContainer(instance);
-
-					if (node.IsIndexed)
-					{
-						Array collArray = Array.CreateInstance(targetType, node.IndexedNodes.Length);
-
-						collArray = (Array) InternalBindObject(collArray.GetType(), prefix, node);
-
-						foreach(object item in collArray)
-						{
-							AddToContainer(instance, item);
-						}
-
-						return true;
-					}
-
-					PrimaryKeyModel pkModel = targetModel.Ids[0] as PrimaryKeyModel;
-
-					String ids = node.GetEntryValue(pkModel.Property.Name);
-
-					if (ids == null)
-					{
-						return true;
-					}
-
-					foreach(String id in ids.Split(','))
-					{
-						object convertedId = ConvertUtils.Convert(pkModel.Property.PropertyType, id);
-
-						object item = ActiveRecordMediator.FindByPrimaryKey(targetType, convertedId, true);
-
-						AddToContainer(instance, item);
-					}
-				}
-
-				return true;
 			}
 
-			return false;
+			if (found)
+			{
+				succeeded = true;
+				
+				ClearContainer(container);
+					
+				if (node.NodeType == NodeType.Indexed)
+				{
+					IndexedNode indexNode = (IndexedNode) node;
+						
+					Array collArray = Array.CreateInstance(targetType, indexNode.ChildrenCount);
+						
+					collArray = (Array) InternalBindObject(collArray.GetType(), prefix, node);
+						
+					foreach(object item in collArray)
+					{
+						AddToContainer(container, item);
+					}
+				}
+				else if (node.NodeType == NodeType.Leaf)
+				{
+					PrimaryKeyModel pkModel = targetModel.Ids[0] as PrimaryKeyModel;
+					Type pkType = pkModel.Property.PropertyType;
+					
+					LeafNode leafNode = (LeafNode) node;
+
+					bool convSucceeded;
+
+					if (leafNode.IsArray) // Multiples values found
+					{
+						foreach(object element in (Array)leafNode.Value)
+						{
+							object keyConverted = Converter.Convert(pkType, leafNode.ValueType.GetElementType(), 
+							                                        element, out convSucceeded);
+							
+							if (convSucceeded)
+							{
+								object item = ActiveRecordMediator.FindByPrimaryKey(targetType, keyConverted, true);
+								AddToContainer(container, item);
+							}
+						}
+					}
+					else // Single value found
+					{
+						object keyConverted = Converter.Convert(pkType, leafNode.ValueType.GetElementType(), 
+						                                        leafNode.Value, out convSucceeded);
+							
+						if (convSucceeded)
+						{
+							object item = ActiveRecordMediator.FindByPrimaryKey(targetType, keyConverted, true);
+							AddToContainer(container, item);
+						}
+					}
+				}
+			}
+			
+			return container;
 		}
 
-		private static object ObtainPKValue(ActiveRecordModel model, IBindingDataSourceNode node, 
-			String prefix, out PrimaryKeyModel pkModel)
+		protected override bool IsSpecialType(Type instanceType)
+		{
+			return IsContainerType(instanceType);
+		}
+
+		protected override bool ShouldRecreateInstance(object value, Type type, string prefix, Node node)
+		{
+			if (IsContainerType(type))
+			{
+				return true;
+			}
+			
+			return base.ShouldRecreateInstance(value, type, prefix, node);
+		}
+
+		#region helpers
+		
+		private object ObtainPrimaryKeyValue(ActiveRecordModel model, CompositeNode node, String prefix, out PrimaryKeyModel pkModel)
 		{
 			if (model.Ids.Count != 1)
 			{
-				throw new RailsException("ARDataBinder does not support more than one primary key");
+				throw new BindingException("ARDataBinder does not support more than one primary key");
 			}
 
 			pkModel = model.Ids[0] as PrimaryKeyModel;
 
 			String pkPropName = pkModel.Property.Name;
-			String propValue = node.GetEntryValue(pkPropName);
-
-			if (propValue == null)
+			
+			Node idNode = node.GetChildNode(pkPropName);
+			
+			if (idNode != null && idNode.NodeType != NodeType.Leaf)
 			{
-				throw new RailsException("ARDataBinder autoload failed as element {0} " +
+				throw new BindingException("Expecting leaf node to contain id for ActiveRecord class. " + 
+					"Prefix: {0} PK Property Name: {1}", prefix, pkPropName);
+			}
+			
+			LeafNode lNode = (LeafNode) idNode;
+
+			if (lNode == null)
+			{
+				throw new BindingException("ARDataBinder autoload failed as element {0} " +
 					"doesn't have a primary key {1} value", prefix, pkPropName);
 			}
 
-			return ConvertUtils.Convert(pkModel.Property.PropertyType, propValue);
+			bool conversionSuc;
+			
+			return Converter.Convert(pkModel.Property.PropertyType, lNode.ValueType, lNode.Value, out conversionSuc);
 		}
-
-		protected override void AfterBinding(object instance, String paramPrefix, IBindingDataSourceNode node)
+		
+		private bool IsValidKey(object id)
 		{
-			// Defensive programming
-			if (instance == null) return;
-
-			ActiveRecordModel model = ActiveRecordModel.GetModel(instance.GetType());
-
-			if (model == null) return;
-
-			if (persistchanges)
+			if (id != null)
 			{
-				SaveManyMappings(instance, model, node);
-				PersistInstances(instance);
+				if (id.GetType() == typeof(String))
+				{
+					return id.ToString() != String.Empty;
+				}
+				else
+				{
+					return Convert.ToInt64(id) != 0;
+				}
 			}
+			
+			return false;
 		}
 
-		private void PersistInstances(object instances)
+		private bool IsContainerType(Type type)
 		{
-			Type instanceType = instances.GetType();
-			ActiveRecordBase[] records = null;
+			bool isContainerType = type == typeof(IList) || type == typeof(ISet);
+#if DOTNET2
+			if (!isContainerType && type.IsGenericType)
+			{
+				Type[] genericArgs = type.GetGenericArguments();
 
-			if (instanceType.IsArray)
-			{
-				records = instances as ActiveRecordBase[];
-			}
-			else if (typeof(ActiveRecordBase).IsAssignableFrom(instanceType))
-			{
-				records = new ActiveRecordBase[] {(ActiveRecordBase) instances};
-			}
+				Type genType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(genericArgs);
 
-			if (records != null)
-			{
-				foreach(ActiveRecordBase record in records)
-				{
-					record.Save();
-				}
+				isContainerType = genType.IsAssignableFrom(type);
 			}
+#endif
+			return isContainerType;
 		}
 
-		protected void SaveManyMappings(object instance, ActiveRecordModel model, IBindingDataSourceNode node)
+		private object CreateContainer(Type type)
 		{
-			foreach(HasManyModel hasManyModel in model.HasMany)
+			if (type == typeof(IList))
 			{
-				if (hasManyModel.HasManyAtt.Inverse) continue;
-
-				if (hasManyModel.HasManyAtt.RelationType != RelationType.Bag &&
-					hasManyModel.HasManyAtt.RelationType != RelationType.Set) continue;
-
-				ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasManyModel.HasManyAtt.MapType);
-
-				PrimaryKeyModel keyModel = ARCommonUtils.ObtainPKProperty(otherModel);
-
-				if (otherModel == null || keyModel == null)
-				{
-					continue; // Impossible to save
-				}
-
-				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, node);
+				return new ArrayList();
+			}
+			else if (type == typeof(ISet))
+			{
+				return new HashedSet();
 			}
 
-			foreach(HasAndBelongsToManyModel hasManyModel in model.HasAndBelongsToMany)
-			{
-				if (hasManyModel.HasManyAtt.Inverse) continue;
-
-				if (hasManyModel.HasManyAtt.RelationType != RelationType.Bag &&
-					hasManyModel.HasManyAtt.RelationType != RelationType.Set) continue;
-
-				ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasManyModel.HasManyAtt.MapType);
-
-				PrimaryKeyModel keyModel = ARCommonUtils.ObtainPKProperty(otherModel);
-
-				if (otherModel == null || keyModel == null)
-				{
-					continue; // Impossible to save
-				}
-
-				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, node);
-			}
+			return null;
 		}
-
-		private void CreateMappedInstances(object instance, PropertyInfo prop,
-			PrimaryKeyModel keyModel, ActiveRecordModel otherModel, IBindingDataSourceNode node)
+		
+		private void ClearContainer(object instance)
 		{
-			object container = InitializeRelationPropertyIfNull(instance, prop);
-
-			String paramName = String.Format("{0}.{1}", prop.Name, keyModel.Property.Name);
-
-			int[] ids = (int[]) ConvertUtils.Convert(typeof(int[]), paramName, node, null);
-
-			if (ids != null)
+			if (instance is IList)
 			{
-				foreach(int id in ids)
-				{
-					object item = Activator.CreateInstance(otherModel.Type);
-
-					keyModel.Property.SetValue(item, id, EmptyArg);
-
-					AddToContainer(container, item);
-				}
+				(instance as IList).Clear();
+			}
+			else if (instance is ISet)
+			{
+				(instance as ISet).Clear();
 			}
 		}
-
-		private static object InitializeRelationPropertyIfNull(object instance, PropertyInfo property)
-		{
-			object container = property.GetValue(instance, EmptyArg);
-
-			if (container == null)
-			{
-				if (property.PropertyType == typeof(IList))
-				{
-					container = new ArrayList();
-				}
-				else if (property.PropertyType == typeof(ISet))
-				{
-					container = new HashedSet();
-				}
-
-				property.SetValue(instance, container, EmptyArg);
-			}
-
-			return container;
-		}
-
+		
 		private void AddToContainer(object container, object item)
 		{
 			if (container is IList)
@@ -404,85 +365,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 #endif
 			}
 		}
-
-		private bool IsContainerType(Type type)
-		{
-			bool isContainerType = type == typeof(IList) || type == typeof(ISet);
-#if DOTNET2
-			if (!isContainerType && type.IsGenericType)
-			{
-				Type[] genericArgs = type.GetGenericArguments();
-
-				Type genType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(genericArgs);
-
-				isContainerType = genType.IsAssignableFrom(type);
-			}
-#endif
-			return isContainerType;
-		}
-
-		private bool IsContainerInstance(object instance)
-		{
-			bool result = (instance is IList || instance is ISet);
-#if DOTNET2
-			if (!result && instance.GetType().IsGenericType)
-			{
-				Type[] genericArgs = instance.GetType().GetGenericArguments();
-				
-				Type genType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(genericArgs);
-
-				result = genType.IsAssignableFrom(instance.GetType());
-			}
-#endif
-			return result;
-		}
-
-		private bool IsValidKey(object id)
-		{
-			if (id != null)
-			{
-                if (id.GetType() == typeof(String))
-                {
-                    return id.ToString() != String.Empty;
-                }
-                else
-                    if (id.GetType() == typeof(Guid))
-                    {
-                        return (Guid)id != Guid.Empty;
-                    }
-                    else
-                    {
-                        return Convert.ToInt64(id) != 0;
-                    }
-			}
-			
-			return false;
-		}
-
-		private object CreateContainer(Type type)
-		{
-			if (type == typeof(IList))
-			{
-				return new ArrayList();
-			}
-			else if (type == typeof(ISet))
-			{
-				return new HashedSet();
-			}
-
-			return null;
-		}
-
-		private void ClearContainer(object instance)
-		{
-			if (instance is IList)
-			{
-				(instance as IList).Clear();
-			}
-			else if (instance is ISet)
-			{
-				(instance as ISet).Clear();
-			}
-		}
+		
+		#endregion
 	}
 }

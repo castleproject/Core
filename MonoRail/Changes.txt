@@ -4,6 +4,12 @@ Change history
 Release Candidate 1
 ===================
 
+- Included Test site for ActiveRecord support project, watir tests included
+
+- Refactored ARDataBinder to support HasMany and HasAndBelongsToMany
+
+- Applied Ernst Naezer <enix@ch10.shuis.tudelft.nl>'s patch fixing build
+
 - Introduced [AjaxAction] attribute. Any action marked with this attribute
   can be accessed on client-side scripting using a JavaScript proxy, like
   this:

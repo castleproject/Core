@@ -19,6 +19,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -26,6 +27,13 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// </summary>
 	public class ARFetcher
 	{
+		private readonly IConverter converter;
+
+		public ARFetcher(IConverter converter)
+		{
+			this.converter = converter;
+		}
+
 		public object FetchActiveRecord(ParameterInfo param, ARFetchAttribute attr, IRequest request)
 		{
 			Type type = param.ParameterType;
@@ -81,10 +89,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 				Type pkType = pkModel.Property.PropertyType;
 
-				if (pk.GetType() != pkType)
-					pk = Convert.ChangeType(pk, pkType);
+				bool conversionSucceeded;
+				object convertedPk = converter.Convert(pkType, pk.GetType(), pk, out conversionSucceeded);
+				
+				if (!conversionSucceeded)
+				{
+					throw new RailsException("ARFetcher could not convert PK {0} to type {1}", pk, pkType);
+				}
 
-				instance = ActiveRecordMediator.FindByPrimaryKey(type, pk, attr.Required);
+				instance = ActiveRecordMediator.FindByPrimaryKey(type, convertedPk, attr.Required);
 			}
 
 			if (instance == null && attr.Create)

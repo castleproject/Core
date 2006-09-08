@@ -49,7 +49,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	{
 		private String requestParameterName;
 		private bool create, required;
-		private static ARFetcher fetcher = new ARFetcher();
 		
 		/// <summary>
 		/// Constructs an <see cref="ARFetchAttribute"/> 
@@ -133,6 +132,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		object IParameterBinder.Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
+			ARFetcher fetcher = new ARFetcher(controller.Binder.Converter);
+			
 			return fetcher.FetchActiveRecord(parameterInfo, this, controller.Request);
 		}
 	}

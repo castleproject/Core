@@ -19,7 +19,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using Castle.ActiveRecord.Queries;
 
 	using NHibernate;
-	using NHibernate.Expression;
 
 	/// <summary>
 	/// Performs a simple query and paginate the results.

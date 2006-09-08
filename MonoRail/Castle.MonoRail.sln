@@ -23,19 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.V
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity", "..\Tools\NVelocity\src\NVelocity\NVelocity.csproj", "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.CompositeView", "Castle.MonoRail.Framework.Views.CompositeView\Castle.MonoRail.Framework.Views.CompositeView.csproj", "{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport", "Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport.csproj", "{2409063E-BE05-4596-A677-758096D1C759}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport.Tests", "Castle.MonoRail.ActiveRecordSupport.Tests\Castle.MonoRail.ActiveRecordSupport.Tests.csproj", "{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -71,19 +63,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor", "TestSite
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView", "..\Experiments\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView\Castle.MonoRail.Framework.Views.StringTemplateView.csproj", "{AECBD3E5-110C-4602-B74A-444A61350983}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView.Tests", "..\Experiments\MonoRail\Castle.MonoRail.Framework.Views.StringTemplateView.Tests\Castle.MonoRail.Framework.Views.StringTemplateView.Tests.csproj", "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite.StringTemplate", "..\Experiments\MonoRail\TestSite.StringTemplate\TestSite.StringTemplate.csproj", "{824EC872-2992-4518-8C41-4F87640D752A}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2003", "..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2003.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteARSupport", "TestSiteARSupport\TestSiteARSupport.csproj", "{0F1BFB63-76D3-4470-891B-3B2519B36D2B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -91,6 +75,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{EC393863-333E-49CE-94A6-654B9F323954}.Debug.ActiveCfg = Debug|.NET
@@ -117,20 +103,14 @@ Global
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.Build.0 = Debug|.NET
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.ActiveCfg = Release|.NET
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.Build.0 = Release|.NET
-		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Debug.ActiveCfg = Debug|.NET
-		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Debug.Build.0 = Debug|.NET
-		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Release.ActiveCfg = Release|.NET
-		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Release.Build.0 = Release|.NET
 		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Debug.ActiveCfg = Debug|.NET
 		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Debug.Build.0 = Debug|.NET
 		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Release.ActiveCfg = Release|.NET
 		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Release.Build.0 = Release|.NET
 		{2409063E-BE05-4596-A677-758096D1C759}.Debug.ActiveCfg = Debug|.NET
+		{2409063E-BE05-4596-A677-758096D1C759}.Debug.Build.0 = Debug|.NET
 		{2409063E-BE05-4596-A677-758096D1C759}.Release.ActiveCfg = Release|.NET
 		{2409063E-BE05-4596-A677-758096D1C759}.Release.Build.0 = Release|.NET
-		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Debug.ActiveCfg = Debug|.NET
-		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Release.ActiveCfg = Release|.NET
-		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Release.Build.0 = Release|.NET
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug.ActiveCfg = Debug|.NET
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release.ActiveCfg = Release|.NET
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release.Build.0 = Release|.NET
@@ -159,20 +139,14 @@ Global
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.Build.0 = Debug|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.ActiveCfg = Release|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.Build.0 = Release|.NET
-		{AECBD3E5-110C-4602-B74A-444A61350983}.Debug.ActiveCfg = Debug|.NET
-		{AECBD3E5-110C-4602-B74A-444A61350983}.Release.ActiveCfg = Release|.NET
-		{AECBD3E5-110C-4602-B74A-444A61350983}.Release.Build.0 = Release|.NET
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.ActiveCfg = Debug|.NET
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.ActiveCfg = Release|.NET
-		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.Build.0 = Release|.NET
-		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.ActiveCfg = Debug|.NET
-		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.Build.0 = Debug|.NET
-		{824EC872-2992-4518-8C41-4F87640D752A}.Release.ActiveCfg = Release|.NET
-		{824EC872-2992-4518-8C41-4F87640D752A}.Release.Build.0 = Release|.NET
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.ActiveCfg = Debug|.NET
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.Build.0 = Debug|.NET
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.ActiveCfg = Release|.NET
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.Build.0 = Release|.NET
+		{0F1BFB63-76D3-4470-891B-3B2519B36D2B}.Debug.ActiveCfg = Debug|.NET
+		{0F1BFB63-76D3-4470-891B-3B2519B36D2B}.Debug.Build.0 = Debug|.NET
+		{0F1BFB63-76D3-4470-891B-3B2519B36D2B}.Release.ActiveCfg = Release|.NET
+		{0F1BFB63-76D3-4470-891B-3B2519B36D2B}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt

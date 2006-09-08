@@ -1,0 +1,13 @@
+<html>
+<body>
+<form action="insert.castle" method="post">
+  <p>
+  Name: 
+  $FormHelper.TextField("category.name") 
+  </p>
+
+  <input type="submit" id="insertbutton" value="Insert" />
+
+</form>
+</body>
+</html>

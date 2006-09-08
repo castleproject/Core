@@ -22,6 +22,7 @@
 			<fileset basedir="../bin">
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="Castle.Core.dll" />
 				<include name="Castle.Components.Binder.dll" />
 				<include name="Castle.Components.Common.EmailSender.dll" />
 				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />

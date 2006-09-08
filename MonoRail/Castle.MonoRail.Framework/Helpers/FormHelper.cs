@@ -212,7 +212,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			target = String.Format("{0}[{1}]", target, index);
 			
-			String elementId = CreateHtmlId(attributes, target);
+			String elementId = CreateHtmlId(attributes, target, false);
 			
 			String computedTarget = target;
 			
@@ -221,9 +221,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				computedTarget += "." + suffix;
 			}
 
-			String result = CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
-			
-			return result;
+			return CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
 		}
 
 		public sealed class CheckboxList : IEnumerable, IEnumerator
@@ -632,7 +630,21 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		protected static string CreateHtmlId(IDictionary attributes, String target)
 		{
-			String id = ObtainEntryAndRemove(attributes, "id");
+			return CreateHtmlId(attributes, target, true);
+		}
+		
+		protected static string CreateHtmlId(IDictionary attributes, String target, bool removeEntry)
+		{
+			String id;
+			
+			if (removeEntry)
+			{
+				id = ObtainEntryAndRemove(attributes, "id");
+			}
+			else
+			{
+				id = ObtainEntry(attributes, "id");
+			}
 
 			if (id == null)
 			{
@@ -641,7 +653,17 @@ namespace Castle.MonoRail.Framework.Helpers
 			
 			return id;
 		}
-		
+
+		protected static String ObtainEntry(IDictionary attributes, String key)
+		{
+			if (attributes != null && attributes.Contains(key))
+			{
+				return (String) attributes[key];
+			}
+			
+			return null;
+		}
+
 		protected static String ObtainEntryAndRemove(IDictionary attributes, String key, String defaultValue)
 		{
 			String value = ObtainEntryAndRemove(attributes, key);

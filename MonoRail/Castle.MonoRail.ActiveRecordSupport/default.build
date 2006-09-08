@@ -7,13 +7,10 @@
 	<include buildfile="../../common.xml" />
 	
 	<property name="name" value="Castle.MonoRail.ActiveRecordSupport" />
-	<property name="test.name" value="${name}.Tests" />
 	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${test.name}.dll" />
 	
 	<property name="src.dir" value="${base.dir}/" />
-	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
 
 	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
 
@@ -22,25 +19,6 @@
 	</target>
 
 	<target name="init" depends="clean">
-		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
-				
-		<property name="app.config" value="${bin.dir}/${test.assembly.name}.config" />
-		
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
-			value="${ar.dialect}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.driver_class']/@value"
-			value="${ar.connection.driver_class}" 
-		/>
-		<xmlpoke
-			file="${app.config}"
-			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.connection_string']/@value"
-			value="${ar.connection.connection_string.1}" 
-		/>
 
 	</target>
 
@@ -65,48 +43,21 @@
 			</sources>
 
 			<references>
+				<include name="${bin.dir}/Castle.Core.dll" />
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
-        <include name="${bin.dir}/Nullables.dll" />
-        <include name="${bin.dir}/Iesi.Collections.dll" />
-			</references>
-		</csc>
-	</target>
-
-	<target name="tests.compile" depends="init">
-		<csc 
-			target="library" 
-			debug="${debug}" 
-			output="${bin.dir}/${test.assembly.name}">
-			
-			<sources basedir="${test.src.dir}">
-				<include name="**/*.cs" />
-			</sources>
-
-			<references>
-				<include name="${bin.dir}/${assembly.name}" />
-				<include name="${nunit.framework.dll}" />
-				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
-				<include name="${bin.dir}/Castle.Components.Binder.dll" />
-				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
-				<include name="${bin.dir}/Castle.MonoRail.Framework.Tests.dll" />
-				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
-				<include name="${bin.dir}/TestScaffolding.dll" />
+				<include name="${bin.dir}/Nullables.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
-				<include name="${bin.dir}/NHibernate.dll" />
 			</references>
 		</csc>
 	</target>
-	
+
 	<target name="test" depends="tests.run" />
 	
-	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">
-		<nunit2>
-			<formatter type="${nunit.formatter}" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}" />
-		</nunit2>
+	<target name="tests.run" depends="compile" if="${activerecord.test}">
+
 	</target>
 	
 </project>
