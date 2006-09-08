@@ -4,6 +4,11 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed MR-145 
+  "Change node/section name from monoRail to monorail on configuration file"
+  
+  Now on the configuration, use <monorail> instead of <monoRail>
+
 - Included Test site for ActiveRecord support project, watir tests included
 
 - Refactored ARDataBinder to support HasMany and HasAndBelongsToMany

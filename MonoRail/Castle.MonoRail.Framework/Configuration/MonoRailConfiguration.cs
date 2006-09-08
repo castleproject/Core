@@ -23,7 +23,8 @@ namespace Castle.MonoRail.Framework.Configuration
 	{
 		private static readonly String DefaultScaffoldType = "Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold";
 
-		public static readonly String SectionName = "monoRail";
+		public static readonly String SectionName = "monorail";
+		public static readonly String AlternativeSectionName = "monoRail";
 
 		private bool _viewsXhtmlRendering;
 		private IList _controllers = new ArrayList();
