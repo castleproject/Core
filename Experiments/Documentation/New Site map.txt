@@ -1,0 +1,160 @@
+IRC discussion:
+[13:28] <goodenough> I think we have to slice up the project as a whole into the audiences we are trying to serve.
+[13:28] <hammett> they have put together a nice tutorial on how to create patches and work on the docs
+[13:28] <goodenough> Oh really? That sounds interesting.
+[13:29] <goodenough> I have never been dilligent enough about documentation and am taking my learning castle as a way to improve those skills.
+[13:29] <goodenough> It would be great to have it all very fine tuned.
+[13:30] <hammett> about audience
+[13:31] <hammett> you mean nwecomers, beginners, intermediate and advanced?
+[13:31] <hammett> because castle is a project from developers to developers
+[13:31] <goodenough> Yes. Also, why are they looking at the project.
+[13:31] <hammett> or do you mean business people, managers and developers?
+[13:31] <hammett> ok, got it;
+[13:31] <goodenough> In some cases the devs will be able to use Castle without letting on, but it may come down to them having to make the pitch to the big guys.
+[13:32] <goodenough> And we can have some executive over-view docs (that don't need to be as current with the code) to help out.
+[13:33] <goodenough> It makes sense to break the docs up by subproject. That way each part of the documentation can be focused on the subject matter.
+[13:33] <hammett> another thing I've though, docbook is too restrictive
+[13:34] <hammett> I'd rather use some xml/xsl but no docbook. have you used it?
+[13:34] <goodenough> That being said, we also need to address that all of these parts can be used together in various ways - some help with how that happens, why you would want to do it, and the technical details of implemenation.
+[13:34] <goodenough> I haven't used it.
+
+
+TO DO: 
+- Find out a way to set the audience target and difficult level of each article.
+- Link documentation pages with a Back and Next navigation. Keep each page as small as possible
+- Add pages on "troubleshooting" and "how to report bugs"
+
+Folder structure
+================
+
+xdocs
+  - branches
+  - tags
+  - trunk
+    - activerecord
+      - documentation
+    - monorail
+      - documentation
+
+docs
+  - root
+    - activerecord
+      - documentation
+        - 1.0
+        - trunk
+
+????????
+
+
+Top Level pages
+=============
+
+New to Castle?
+=============
+- What is Castle Project?
+- How can it help me?
+
+Castle
+======
+- Mission
+- Roadmap
+- FAQ
+- History
+- Who is using
+
+ActiveRecord (subsections: what is it? why would I use it? why would I not use it)
+============
+- Getting started
+- Documentation
+  - How to Index
+- FAQ
+- Recipes
+- External Articles
+
+MonoRail (subsections: what is it? why would I use it? why would I not use it)
+========
+- Getting started
+- Documentation
+  - Basic reference
+  - Helpers
+  - View engines
+  - How to
+- FAQ
+- Recipes
+- External Articles
+- Samples
+
+MicroKernel/Windsor
+================
+- Getting started
+- Documentation
+- FAQ
+- External Articles
+- Facilities
+- Services
+- Common Components
+- Recipes
+
+Aspect#
+=======
+
+
+DynamicProxy
+===========
+- Getting started
+- Documentation
+- FAQ
+- External Articles
+- Recipes
+
+Community
+=========
+- Get involved
+- Castle Team
+- Reaching us
+- Blogs
+- Events
+- Articles
+
+============================================================================
+
+New Pages to create
+
+MonoRail
+========
+
+- Put an image on the front page with the parts that constitute the whole framework like Helpers, ViewComponents, i18n support
+
+- Explain the new http module and the services, how to get to the services from anywhere and so on
+
+MonoRail's main topics:
+
+- ViewComponents
+- i18nSupport
+- View engines
+- Helpers
+- Extensions
+- TestSupport
+- Caching
+- Wizard Support
+- Scaffolding
+  - AR Scaffolding
+- DynamicActions
+- SmartController
+  - DataBinder
+- AR Integration
+  - ARDataBinder
+
+
+MicroKernel / Windsor 
+
+  MicroKernel lightweight. Useful for selfcontained applications/tools like compiler, embedded architectures with replaceable components
+
+  Windsor: more robust implementation: Satisfy common enterprise application needs. Adds a complete and powerful support for external configuration.
+
+
+============================================================================
+
+Aspect# Pages
+-------------
+
