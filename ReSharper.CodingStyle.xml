@@ -194,7 +194,7 @@
       <REDUNDANT_THIS_QUALIFIER_STYLE>USE_FOR_THIS_CLASS</REDUNDANT_THIS_QUALIFIER_STYLE>
     </FormatSettings>
     <UsingsSettings>
-      <AddImportsToDeepestScope>False</AddImportsToDeepestScope>
+      <AddImportsToDeepestScope>True</AddImportsToDeepestScope>
       <AllowAlias>True</AllowAlias>
       <PreferQualifiedReference>False</PreferQualifiedReference>
       <SortUsings>True</SortUsings>
