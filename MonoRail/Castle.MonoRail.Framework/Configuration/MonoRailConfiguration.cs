@@ -184,6 +184,12 @@ namespace Castle.MonoRail.Framework.Configuration
 		{
 			MonoRailConfiguration config = (MonoRailConfiguration)
 				ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
+			
+			if (config == null)
+			{
+				config = (MonoRailConfiguration)
+					ConfigurationSettings.GetConfig(MonoRailConfiguration.AlternativeSectionName);
+			}
 
 			if (config == null)
 			{
