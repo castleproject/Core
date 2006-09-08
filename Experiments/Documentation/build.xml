@@ -1,0 +1,103 @@
+<project name="site" default="docs" basedir=".">
+
+    <!-- Initialization properties -->
+    <property name="project.name"   value="castle-site"/>
+    <property name="docs.src" value="./xdocs"/>
+    <property name="docs.dest" value="./docs"/>
+
+    <path id="classpath">
+        <fileset dir="./lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="prepare">
+        <available classname="org.apache.velocity.anakia.AnakiaTask" 
+            property="AnakiaTask.present">
+            <classpath refid="classpath"/>
+        </available>
+    </target>
+
+    <target depends="prepare" name="prepare-error" unless="AnakiaTask.present">
+        <echo>
+            AnakiaTask is not present! Please check to make sure that 
+            velocity.jar is in your classpath.
+        </echo>
+    </target>
+
+    <target name="docs" depends="prepare-error" if="AnakiaTask.present">
+        <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+            <classpath refid="classpath"/>
+        </taskdef>
+		
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/"
+			extension=".html" style="./site.vsl"
+			projectFile="navigation.xml"
+			excludes="**/stylesheets/** empty.xml navigation.xml **/test/flood/*"
+			includes="*.xml"
+			lastModifiedCheck="true"
+			templatePath="${docs.src}/stylesheets">
+		</anakia>
+
+		<!-- ActiveRecord -->
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/"
+			extension=".html" style="./site.vsl"
+			projectFile="activerecord/navigation.xml"
+			excludes="**/stylesheets/** empty.xml navigation.xml **/test/flood/*"
+			includes="activerecord/**/*.xml"
+			lastModifiedCheck="true"
+			templatePath="${docs.src}/stylesheets">
+		</anakia>
+		
+		
+		<!--
+        <anakia basedir="${docs.src}" 
+             destdir="${docs.dest}"
+             extension=".html" style="./site.vsl"
+             projectFile="stylesheets/flood.xml"
+             excludes="**/stylesheets/** empty.xml"
+             includes="test/flood/*.xml"
+             lastModifiedCheck="true"
+             templatePath="${docs.src}/stylesheets"
+        >
+        </anakia>
+		-->
+
+        <copy todir="${docs.dest}/" filtering="no">
+            <fileset dir="${docs.src}/">
+                <exclude name="**/*.xml"/>
+                <exclude name="**/stylesheets/**"/>
+                <exclude name="**/*~"/>
+                <exclude name="**/.#*"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+	<!--
+	<target name="vulnerabilitydb">
+		<xslt 
+			destdir="${docs.src}/security" 
+			in="${docs.src}/security/vulnerabilities-httpd.xml" 
+			out="${docs.src}/security/vulnerabilities_13.xml" 
+			style="${docs.src}/stylesheets/securitydb.xsl">
+			<param name="majorversion" expression="1.3"/>
+		</xslt>
+		<xslt 
+			destdir="${docs.src}/security" 
+			in="${docs.src}/security/vulnerabilities-httpd.xml" 
+			out="${docs.src}/security/vulnerabilities_20.xml" 
+			style="${docs.src}/stylesheets/securitydb.xsl">
+			<param name="majorversion" expression="2.0"/>
+		</xslt>
+		<xslt 
+			destdir="${docs.src}/security" 
+			in="${docs.src}/security/vulnerabilities-httpd.xml" 
+			out="${docs.src}/security/vulnerabilities_22.xml" 
+			style="${docs.src}/stylesheets/securitydb.xsl">
+			<param name="majorversion" expression="2.2"/>
+		</xslt>
+	</target>
+	-->
+
+</project>

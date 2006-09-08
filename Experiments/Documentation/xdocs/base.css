@@ -1,0 +1,209 @@
+body
+{
+	background: white url(images/bg.png) repeat-x top;
+	padding: 0;
+	margin: 0 22px;
+	font-size: 0.9em;
+}
+#topbuttonscontainer 
+{
+	/* border: 1px dashed red; */
+	position: relative;
+	height: 25px;
+}
+
+#maintitle 
+{
+	/* border: 1px dashed green; */
+	clear: both;
+	position: relative;
+	margin: 0;
+	height: 38px;
+}
+
+#maintitle h1 
+{
+	position: absolute;
+	top: 0; 
+	left: 0;
+	margin: 0;
+}
+#maintitle h1 a,#maintitle h1 a:hover 
+{
+	display: block;
+	width: 307px; 
+	height: 38px;
+	background: url(images/main_title.gif) no-repeat;
+	font-size: 1px;
+	text-indent: -7000em;
+	text-decoration: none;
+}
+
+#mainbar 
+{
+	margin-top: 3px;
+	padding: 0;
+	background: white url(images/main_bar_bg.png) repeat-x right top;
+	height: 40px;
+}
+#mainbarleft
+{
+	background: url(images/main_bar_left.png) no-repeat left top; 
+	height: 40px;
+}
+#mainbarright
+{
+	background: url(images/main_bar_right.png) no-repeat right top; 
+	height: 40px;
+}
+
+#sidebar
+{
+	position: absolute;
+	top: 128px;
+	left: 22px;
+	width: 191px;
+	line-height: 120%;
+	/* border: 1px dashed green; */
+}
+#sidebar .menutitle
+{
+	font-weight: bold;
+	font-size: 0.85em;
+	padding-bottom: 2px;
+	display: block;
+}
+#sidebar .darkmenu
+{
+	padding: 0;
+	padding-bottom: 10px;
+	font-family: verdana, sans-serif;
+	font-weight: bold;
+	background-image: url(images/darkbg_bottom.png);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	color: #CDCDCD;
+	text-decoration: none;
+}
+#sidebar .darkmenu a
+{
+	color: white;
+	text-decoration: none;
+}
+#sidebar .darkmenu a:hover
+{
+	color: white;
+	text-decoration: underline;
+}
+
+#sidebar .darkmenucontent
+{
+	background-image: url(images/darkbg_top.png);
+	background-repeat: no-repeat;
+	background-position: top;
+	padding: 15px;
+}
+
+#sidebar .lightmenu
+{
+	padding: 0;
+	padding-bottom: 10px;
+	font-family: verdana, sans-serif;
+	font-weight: bold;
+	background-image: url(images/lightbg_bottom.png);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	color: #505050;
+}
+#sidebar .lightmenu a
+{
+	color: #505050;
+	text-decoration: none;
+}
+#sidebar .lightmenu a:hover
+{
+	color: #000000;
+	text-decoration: underline;
+}
+#sidebar .lightmenucontent
+{
+	background-image: url(images/lightbg_top.png);
+	background-repeat: no-repeat;
+	background-position: top;
+	padding: 15px;
+}
+
+#sidebar ul 
+{
+	margin: 0;
+	padding: 0;
+}
+#sidebar li 
+{
+	font-weight: normal;
+	font-size: 0.75em;
+	margin: 0;
+	margin-left: 18px;
+	padding: 0;
+}
+#sidebar li a:hover 
+{
+	text-decoration: underline;
+}
+
+#page 
+{
+    /*border: solid 1px gray;*/
+	margin: 0;
+	margin-top: 17px;
+	padding: 0;
+}
+
+#content 
+{
+	background: url(images/content_start.png) repeat-x left top;
+    /*border: dashed 1px navy;*/
+	margin: 0;
+	margin-left: 208px;
+	font-family: verdana, tahoma, arial, sans-serif;
+	font-size: 0.9em;
+	padding-top: 7px;
+}
+
+#footer 
+{
+	text-align: center;
+	vertical-align: middle;
+    /* border: solid 1px black; */
+	clear: both;
+	background: url(images/content_start.png) repeat-x left top;
+	margin: 20px 0px 0 auto;
+	width: auto;
+	text-align: center;
+	font-size: 80%;
+	padding-top: 10px;
+}
+#footer ul 
+{
+	margin: 0;
+	padding: 0;
+}
+#footer li 
+{
+	display: inline;
+	list-style: none;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+#footer #stickers 
+{
+	padding-top: 20px;
+}
+#footer #stickers div 
+{
+	display: inline;
+}
+#footer #stickers img 
+{
+	border: none;
+}

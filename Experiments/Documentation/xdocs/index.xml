@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="docs@httpd.apache.org">Documentation Group</author>
+    <title>Welcome!</title>
+  </properties>
+<body>
+<section id="Welcome">
+<title>The Number One HTTP Server On The Internet</title>
+
+<p>The Apache HTTP Server Project is an effort to develop and maintain
+an open-source HTTP server for modern operating systems including UNIX
+and Windows NT. The goal of this project is to provide a secure,
+efficient and extensible server that provides HTTP services in sync
+with the current HTTP standards.</p>
+
+<p>Apache has been the most popular web server on the Internet since
+April 1996.  The November 2005 <a 
+href="http://news.netcraft.com/archives/web_server_survey.html">Netcraft Web Server Survey</a>
+found that more than 70% of the web sites on the Internet are using Apache,
+thus making it more widely used than all other web servers combined.</p>
+
+<p>The Apache HTTP Server is a project of the <a
+href="http://www.apache.org/">Apache Software Foundation</a>.</p>
+</section>
+
+<section id="2.2.3">
+<title>Apache 2.2.3 Released</title>
+
+<p>The Apache HTTP Server Project is proud to <a
+href="http://www.apache.org/dist/httpd/Announcement2.2.html">announce</a>
+the release of version 2.2.3 of the Apache HTTP Server ("Apache").  In
+addition to a number of bug fixes to release 2.2.3, this release includes
+an 'important' security fix for mod_rewrite.</p>
+
+<p>This version of Apache is a major release and the start of a new stable
+   branch, and represents the best available version of Apache HTTP Server.
+   <a href="docs/2.2/new_features_2_2.html">New features</a> include
+   Smart Filtering, Improved Caching, AJP Proxy, Proxy Load Balancing, 
+   Graceful Shutdown support, Large File Support, the Event MPM, and refactored
+   Authentication/Authorization.</p>
+
+<p align="center">
+<a href="download.cgi">Download</a> | 
+<a href="docs/2.2/new_features_2_2.html">New Features in Apache 2.2</a> |
+<a href="http://www.apache.org/dist/httpd/CHANGES_2.2">ChangeLog for 2.2</a>
+</p>
+
+</section>
+
+<section id="2.0.59">
+<title>Apache 2.0.59 Released</title>
+
+<p>The Apache HTTP Server Project is proud to 
+   <a href="http://www.apache.org/dist/httpd/Announcement2.0.html">announce</a>
+   the legacy release of version 2.0.59 of the Apache HTTP Server 
+   ("Apache").</p>
+
+<p>This version of Apache is principally a security release. In particular,
+   it includes an 'important' security patch to mod_rewrite.</p>
+
+<p>For further details, see the 
+   <a href="http://www.apache.org/dist/httpd/Announcement2.0.html"
+     >announcement</a>.</p>
+
+<p align="center">
+<a href="download.cgi">Download</a> | 
+<a href="docs/2.0/new_features_2_0.html">New Features in Apache 2.0</a> |
+<a href="http://www.apache.org/dist/httpd/CHANGES_2.0.59"
+  >ChangeLog for 2.0.59</a> |
+<a href="http://www.apache.org/dist/httpd/CHANGES_2.0"
+  >Complete ChangeLog for 2.0</a>
+</p>
+
+</section>
+
+<section id="1.3.37">
+<title>Apache 1.3.37 Released</title>
+
+<p>The Apache Group is pleased to announce the
+   <a href="http://www.apache.org/dist/httpd/Announcement1.3.html"
+      >legacy release of the 1.3.37 version of the Apache HTTP Server</a>.
+</p>
+
+<p>This version of Apache is principally a security release. In particular,
+   it includes an 'important' security patch to mod_rewrite.</p>
+
+<p>For further details, see the 
+   <a href="http://www.apache.org/dist/httpd/Announcement1.3.html"
+     >announcement</a>.</p>
+
+<p align="center">
+<a href="download.cgi">Download</a> | 
+<a href="docs/1.3/windows.html">Apache for Win32</a> |
+<a href="docs/1.3/new_features_1_3.html">New Features in Apache 1.3</a> |
+<a href="http://www.apache.org/dist/httpd/CHANGES_1.3">ChangeLog for 1.3.37</a>
+</p>
+
+</section>
+
+<section id="Mirrors">
+<title>Want to try out the Apache HTTP Server?</title>
+
+<p>Great!  We have updated our <a href="/download.cgi">download page</a> in
+an effort to better utilize our mirrors.  We hope that by making it easier
+to use our mirrors that we will be able to provide a better download
+experience.</p>
+
+<p>Please ensure that you <a href="/download.cgi#verify">verify</a>
+your downloads using PGP or MD5 signatures!</p>
+</section>
+
+</body>
+</document>

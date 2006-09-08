@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="docs@httpd.apache.org">Documentation Group</author>
+    <title>Castle ActiveRecord</title>
+  </properties>
+
+  <body>
+
+<intro>
+<p>
+Castle ActiveRecord is an implementation of the ActiveRecord pattern for .NET. 
+The ActiveRecord pattern consists on instance methods and properties 
+representing rows in the database, and static methods acting on all rows.
+</p>
+<p>
+Castle ActiveRecord is built on top of NHibernate, but its attribute-based 
+mapping frees the developer of writing XML for database-to-object mapping, 
+which is needed when using NHibernate directly. For more information please refer
+to ActiveRecord:Getting started
+</p>
+</intro>
+
+<toc/>
+
+<section id="WhyWouldIUseIt">
+<title>Why would I use it?</title>
+
+<p>
+The Apache HTTP Server Project is an effort to develop and maintain
+an open-source HTTP server for modern operating systems including UNIX
+and Windows NT. The goal of this project is to provide a secure,
+efficient and extensible server that provides HTTP services in sync
+with the current HTTP standards.
+</p>
+
+</section>
+
+<section id="WhyWouldIUseIt">
+<title>Why would I <b>not</b> use it?</title>
+
+<p>
+The Apache HTTP Server Project is an effort to develop and maintain
+an open-source HTTP server for modern operating systems including UNIX
+and Windows NT. The goal of this project is to provide a secure,
+efficient and extensible server that provides HTTP services in sync
+with the current HTTP standards.
+</p>
+
+</section>
+
+
+</body>
+</document>
