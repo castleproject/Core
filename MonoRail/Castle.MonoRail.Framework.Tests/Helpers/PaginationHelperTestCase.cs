@@ -16,12 +16,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
 	using System.Collections;
-
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 	using NUnit.Framework;
 
 	using Castle.MonoRail.Framework.Helpers;
-
-
 
 	[TestFixture]
 	public class PaginationHelperTestCase
@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			IList items = new ArrayList();
 
-			Page page = PaginationHelper.CreatePagination( items, 10, 1 );
+			IPaginatedPage page = PaginationHelper.CreatePagination(items, 10, 1);
 			
 			Assert.IsNotNull(page);
 			
@@ -64,7 +64,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			items.Add("4");
 			items.Add("5");
 
-			Page page = PaginationHelper.CreatePagination( items, 10, 1 );
+			IPaginatedPage page = PaginationHelper.CreatePagination(items, 10, 1);
 			
 			Assert.IsNotNull(page);
 			
@@ -85,7 +85,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			items.Add("1");
 
-			Page page = PaginationHelper.CreatePagination( items, 10, 1 );
+			IPaginatedPage page = PaginationHelper.CreatePagination(items, 10, 1);
 			
 			Assert.IsNotNull(page);
 			
@@ -108,7 +108,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			items.Add("2");
 			items.Add("3");
 
-			Page page = PaginationHelper.CreatePagination( items, 3, 1 );
+			IPaginatedPage page = PaginationHelper.CreatePagination(items, 3, 1);
 			
 			Assert.IsNotNull(page);
 			
@@ -134,7 +134,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			// First page
 
-			Page page = PaginationHelper.CreatePagination( items, 5, 1 );
+			IPaginatedPage page = PaginationHelper.CreatePagination(items, 5, 1);
 			
 			Assert.IsNotNull(page);
 			
@@ -177,5 +177,63 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsFalse(page.HasNext);
 			Assert.IsTrue(page.HasPrevious);
 		}
+
+#if DOTNET2
+		[Test]
+		public void UsageWithGenerics()
+		{
+			IList<int> items = new List<int>();
+
+			for (int i = 1; i <= 15; i++)
+			{
+				items.Add(i);
+			}
+
+			// First page
+
+			IPaginatedPage page = PaginationHelper.CreatePagination(items, 5, 1);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(1, page.FirstItem);
+			Assert.AreEqual(5, page.LastItem);
+			Assert.AreEqual(15, page.TotalItems);
+
+			Assert.IsFalse(page.HasFirst);
+			Assert.IsTrue(page.HasLast);
+			Assert.IsTrue(page.HasNext);
+			Assert.IsFalse(page.HasPrevious);
+
+			// Second page
+
+			page = PaginationHelper.CreatePagination(items, 5, 2);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(6, page.FirstItem);
+			Assert.AreEqual(10, page.LastItem);
+			Assert.AreEqual(15, page.TotalItems);
+
+			Assert.IsTrue(page.HasFirst);
+			Assert.IsTrue(page.HasLast);
+			Assert.IsTrue(page.HasNext);
+			Assert.IsTrue(page.HasPrevious);
+
+			// Last page
+
+			page = PaginationHelper.CreatePagination(items, 5, 3);
+
+			Assert.IsNotNull(page);
+
+			Assert.AreEqual(11, page.FirstItem);
+			Assert.AreEqual(15, page.LastItem);
+			Assert.AreEqual(15, page.TotalItems);
+
+			Assert.IsTrue(page.HasFirst);
+			Assert.IsFalse(page.HasLast);
+			Assert.IsFalse(page.HasNext);
+			Assert.IsTrue(page.HasPrevious);
+		}
+#endif
 	}
 }

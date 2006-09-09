@@ -16,6 +16,9 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 
 	/// <summary>
 	/// Used as callback handler to obtain the items 
@@ -67,7 +70,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="datasource">Data source to be used as target of the pagination</param>
 		/// <param name="pageSize">Page size</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static Page CreatePagination(IList datasource, int pageSize)
+		public static IPaginatedPage CreatePagination(IList datasource, int pageSize)
 		{
 			String currentPage = CurrentContext.Request.Params["page"];
 
@@ -89,13 +92,53 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="pageSize">Page size</param>
 		/// <param name="currentPage">current page index (1 based)</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static Page CreatePagination(IList datasource, int pageSize, int currentPage)
+		public static IPaginatedPage CreatePagination(IList datasource, int pageSize, int currentPage)
 		{
 			if (currentPage <= 0) currentPage = 1;
 
 			return new Page(datasource, currentPage, pageSize);
 		}
 
+#if DOTNET2
+
+		/// <summary>
+		/// Creates a <see cref="Page"/> which is a sliced view of
+		/// the data source
+		/// </summary>
+		/// <param name="datasource">Data source to be used as target of the pagination</param>
+		/// <param name="pageSize">Page size</param>
+		/// <returns>A <see cref="Page"/> instance</returns>
+		public static IPaginatedPage CreatePagination<T>(IList<T> datasource, int pageSize)
+		{
+			String currentPage = CurrentContext.Request.Params["page"];
+
+			int curPage = 1;
+
+			if (currentPage != null)
+			{
+				curPage = Int32.Parse(currentPage);
+			}
+
+			return CreatePagination(datasource, pageSize, curPage);
+		}
+
+		/// <summary>
+		/// Creates a <see cref="Page"/> which is a sliced view of
+		/// the data source
+		/// </summary>
+		/// <param name="datasource">Data source to be used as target of the pagination</param>
+		/// <param name="pageSize">Page size</param>
+		/// <param name="currentPage">current page index (1 based)</param>
+		/// <returns>A <see cref="Page"/> instance</returns>
+		public static IPaginatedPage CreatePagination<T>(IList<T> datasource, int pageSize, int currentPage)
+		{
+			if (currentPage <= 0) currentPage = 1;
+
+			return new GenericPage<T>(datasource, currentPage, pageSize);
+		}
+
+#endif
+		
 		/// <summary>
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source. This method first looks for the datasource 
@@ -107,7 +150,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="pageSize">Page size</param>
 		/// <param name="dataObtentionCallback">Callback to be used to populate the cache</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static Page CreateCachedPagination(String cacheKey, int pageSize, DataObtentionDelegate dataObtentionCallback)
+		public static IPaginatedPage CreateCachedPagination(String cacheKey, int pageSize, DataObtentionDelegate dataObtentionCallback)
 		{
 			IList datasource = (IList) CurrentContext.Cache[cacheKey];
 
@@ -157,6 +200,43 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 	}
 
+#if DOTNET2
+
+	/// <summary>
+	/// Represents the sliced data and offers
+	/// a few read only properties to create a pagination bar.
+	/// </summary>
+	public class GenericPage<T> : AbstractPage
+	{
+		private readonly IList<T> slice = new List<T>();
+
+		public GenericPage(IList<T> list, int curPage, int pageSize)
+		{
+			// Calculate slice indexes
+			int startIndex = (pageSize * curPage) - pageSize;
+			int endIndex = Math.Min(startIndex + pageSize, list.Count);
+
+			CreateSlicedCollection(startIndex, endIndex, list);
+
+			CalculatePaginationInfo(startIndex, endIndex, list.Count, pageSize, curPage);
+		}
+
+		private void CreateSlicedCollection(int startIndex, int endIndex, IList<T> list)
+		{
+			for (int index = startIndex; index < endIndex; index++)
+			{
+				slice.Add(list[index]);
+			}
+		}
+
+		public override IEnumerator GetEnumerator()
+		{
+			return slice.GetEnumerator();
+		}
+	}
+	
+#endif
+	
 	public abstract class AbstractPage : IPaginatedPage
 	{
 		private int firstItem, lastItem, totalItems;

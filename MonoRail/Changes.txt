@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed MR-126
+  "PaginationHelper must support IList<T>"
+
 - Fixed MR-146
   "FormHelper must be able to handle IList<T>"
 
