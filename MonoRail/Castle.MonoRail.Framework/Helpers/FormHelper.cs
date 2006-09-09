@@ -187,12 +187,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region CheckboxList
 		
-		public CheckboxList CreateCheckboxList(String target, ICollection dataSource)
+		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource)
 		{
 			return CreateCheckboxList(target, dataSource, null);
 		}
-		
-		public CheckboxList CreateCheckboxList(String target, ICollection dataSource, IDictionary attributes)
+
+		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
 			
@@ -234,8 +234,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			private bool hasMovedNext, hasItem;
 			private int index = -1;
 
-			public CheckboxList(FormHelper helper, String target, 
-			                    object initialSelectionSet, ICollection dataSource, IDictionary attributes)
+			public CheckboxList(FormHelper helper, String target,
+								object initialSelectionSet, IEnumerable dataSource, IDictionary attributes)
 			{
 				if (dataSource == null) throw new ArgumentNullException("dataSource");
 
@@ -381,16 +381,16 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region Select
 
-		public String Select(String target, ICollection dataSource)
+		public String Select(String target, IEnumerable dataSource)
 		{
 			return Select(target, dataSource, null);
 		}
 
-		public String Select(String target, ICollection dataSource, IDictionary attributes)
+		public String Select(String target, IEnumerable dataSource, IDictionary attributes)
 		{
-		    object selectedValue = ObtainValue(target);
-		    
-		    return Select(target, selectedValue, dataSource, attributes);		    
+			object selectedValue = ObtainValue(target);
+
+			return Select(target, selectedValue, dataSource, attributes);
 		}
 		
 		/// <summary>
@@ -407,7 +407,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="dataSource"></param>
 		/// <param name="attributes"></param>
 		/// <returns></returns>
-		public String Select(String target, object selectedValue, ICollection dataSource, IDictionary attributes)
+		public String Select(String target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
 		{
 			String id = CreateHtmlId(target);
 
@@ -654,7 +654,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return id;
 		}
 
-		protected static String ObtainEntry(IDictionary attributes, String key)
+		protected internal static String ObtainEntry(IDictionary attributes, String key)
 		{
 			if (attributes != null && attributes.Contains(key))
 			{
@@ -664,14 +664,14 @@ namespace Castle.MonoRail.Framework.Helpers
 			return null;
 		}
 
-		protected static String ObtainEntryAndRemove(IDictionary attributes, String key, String defaultValue)
+		protected internal static String ObtainEntryAndRemove(IDictionary attributes, String key, String defaultValue)
 		{
 			String value = ObtainEntryAndRemove(attributes, key);
 			
 			return value != null ? value : defaultValue;
 		}
 		
-		protected static String ObtainEntryAndRemove(IDictionary attributes, String key)
+		protected internal static String ObtainEntryAndRemove(IDictionary attributes, String key)
 		{
 			String value = null;
 			
@@ -695,17 +695,26 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			IList list = instance as IList;
 
-			if (list == null)
+			bool validList = false;
+
+#if DOTNET2
+			if (list == null && instanceType.IsGenericType)
+			{
+				Type[] genArgs = instanceType.GetGenericArguments();
+
+				Type genList = typeof(System.Collections.Generic.IList<>).MakeGenericType(genArgs);
+				Type genTypeDef = instanceType.GetGenericTypeDefinition().MakeGenericType(genArgs);
+
+				validList = genList.IsAssignableFrom(genTypeDef);
+			}
+#endif
+			
+			if (!validList && list == null)
 			{
 				throw new RailsException("The property {0} is being accessed as " + 
 					"an indexed property but does not seem to implement IList. " + 
 					"In fact the type is {1}", property, instanceType.FullName);
 			}
-
-//			if (list.Count == 0)
-//			{
-//				throw new RailsException("The array is empty. Property {0}", property);
-//			}
 
 			if (index < 0)
 			{
@@ -716,7 +725,34 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private object GetArrayElement(object instance, int index)
 		{
-			IList list = (IList) instance;
+			IList list = instance as IList;
+
+#if DOTNET2
+			if (list == null && instance != null && instance.GetType().IsGenericType)
+			{
+				Type instanceType = instance.GetType();
+
+				Type[] genArguments = instanceType.GetGenericArguments();
+
+				Type genType = instanceType.GetGenericTypeDefinition().MakeGenericType(genArguments);
+				
+				// I'm not going to retest for IList implementation as 
+				// if we got here, the AssertIsValidArray has run successfully
+
+				PropertyInfo countPropInfo = genType.GetProperty("Count");
+
+				int count = (int) countPropInfo.GetValue(instance, null);
+				
+				if (count == 0 || index + 1 > count)
+				{
+					return null;
+				}
+
+				PropertyInfo indexerPropInfo = genType.GetProperty("Item");
+
+				return indexerPropInfo.GetValue(instance, new object[] { index });
+			}
+#endif
 			
 			if (list == null || list.Count == 0 || index + 1 > list.Count)
 			{
@@ -796,8 +832,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="propertyOnInitialSet">Optional. Property to obtain the value from</param>
 		/// <param name="isMultiple"><c>true</c> if the initial selection is a set</param>
 		/// <returns><c>true</c> if it's selected</returns>
-		private static bool IsPresent(object value, object initialSetValue, 
-		                              PropertyInfo propertyOnInitialSet, bool isMultiple)
+		protected internal static bool IsPresent(object value, object initialSetValue, 
+		                                         PropertyInfo propertyOnInitialSet, bool isMultiple)
 		{
 			if (!isMultiple)
 			{
@@ -841,15 +877,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>This method is used to get the <see cref="MethodInfo"/> to retrieve
 		/// specified property from the specified type.</remarks>
 		/// <exception cref="ArgumentNullException">Thrown is <paramref name="elem"/> is <c>null</c>.</exception>
-		private static PropertyInfo GetMethod(object elem, String property)
+		protected internal static PropertyInfo GetMethod(object elem, String property)
 		{
 			if (elem == null) throw new ArgumentNullException("elem");
 			if (property == null) return null;
 
 			return GetMethod(elem.GetType(), property);
 		}
-		
-		private static PropertyInfo GetMethod(Type type, String property)
+
+		protected internal static PropertyInfo GetMethod(Type type, String property)
 		{
 			return type.GetProperty(property, PropertyFlags);
 		}
@@ -896,347 +932,5 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public class SetOperation
-		{
-			public static OperationState IterateOnDataSource(object initialSelection, 
-			                                                 ICollection dataSource, 
-			                                                 IDictionary attributes)
-			{
-				// Extract necessary elements to know which "heuristic" to use
-						
-				bool isInitialSelectionASet = IsSet(initialSelection);
-				
-				Type initialSelectionType = ExtractType(initialSelection);
-				Type dataSourceType = ExtractType(dataSource);
-			
-				String customSuffix = ObtainEntryAndRemove(attributes, "suffix");
-				String valueProperty = ObtainEntryAndRemove(attributes, "value");
-				String textProperty = ObtainEntryAndRemove(attributes, "text");
-								
-				if (dataSourceType == null)
-				{
-					// If the dataSourceType could not be obtained 
-					// then the datasource is empty or null
-					
-					return NoIterationState.Instance;
-				}
-				else if (initialSelectionType == null)
-				{
-					if (customSuffix == null && valueProperty != null)
-					{
-						customSuffix = valueProperty;
-					}
-
-					return new ListDataSourceState(dataSourceType, dataSource, valueProperty, textProperty, customSuffix);
-				}
-				else if (initialSelectionType == dataSourceType)
-				{
-					return new SameTypeOperationState(dataSourceType, initialSelection, dataSource, 
-					                                  valueProperty, textProperty, isInitialSelectionASet);
-				}
-				else // types are different, most complex scenario
-				{
-					String sourceProperty = ObtainEntryAndRemove(attributes, "sourceProperty");
-					
-					return new DifferentTypeOperationState(initialSelectionType, dataSourceType, 
-					                                       initialSelection, dataSource, 
-					                                       sourceProperty, valueProperty, textProperty, 
-					                                       isInitialSelectionASet);
-				}
-			}
-
-			private static Type ExtractType(object source)
-			{
-				if (source == null)
-				{
-					return null;
-				}
-				else if (source is ICollection)
-				{
-					return ExtractType(source as ICollection);
-				}
-				else
-				{
-					return source.GetType();
-				}
-			}
-		
-			private static Type ExtractType(ICollection source)
-			{
-				if (source == null)
-				{
-					return null;
-				}
-
-				IEnumerator enumerator = source.GetEnumerator();
-			
-				if (enumerator.MoveNext())
-				{
-					return ExtractType(enumerator.Current);
-				}
-			
-				return null;
-			}
-
-			private static bool IsSet(object initialSelection)
-			{
-				return (initialSelection is ICollection);
-			}
-		}
-
-		public class SetItem
-		{
-			private readonly string value;
-			private readonly object item;
-			private readonly string text;
-			private readonly bool isSelected;
-
-			public SetItem(object item, String value, String text, bool isSelected)
-			{
-				this.item = item;
-				this.value = value;
-				this.text = text;
-				this.isSelected = isSelected;
-			}
-
-			public object Item
-			{
-				get { return item; }
-			}
-
-			public string Value
-			{
-				get { return value; }
-			}
-
-			public string Text
-			{
-				get { return text; }
-			}
-
-			public bool IsSelected
-			{
-				get { return isSelected; }
-			}
-		}
-		
-		public abstract class OperationState : IEnumerable, IEnumerator
-		{
-			protected readonly Type type;
-			protected readonly PropertyInfo valuePropInfo;
-			protected readonly PropertyInfo textPropInfo;
-			protected IEnumerator enumerator;
-
-			protected OperationState(Type type, ICollection dataSource, 
-			                         String valueProperty, String textProperty)
-			{
-				if (dataSource != null)
-				{
-					enumerator = dataSource.GetEnumerator();
-				}
-
-				this.type = type;
-					
-				if (valueProperty != null)
-				{
-					valuePropInfo = GetMethod(type, valueProperty);
-				}
-				
-				if (textProperty != null)
-				{
-					textPropInfo = GetMethod(type, textProperty);
-				}
-			}
-
-			public abstract String TargetSuffix { get; }
-
-			protected abstract SetItem CreateItemRepresentation(object current);
-
-			#region IEnumerator implementation
-
-			public bool MoveNext()
-			{
-				if (enumerator == null)
-				{
-					return false;
-				}
-				return enumerator.MoveNext();
-			}
-
-			public void Reset()
-			{
-				if (enumerator != null)
-				{
-					enumerator.Reset();
-				}
-			}
-
-			public object Current
-			{
-				get { return CreateItemRepresentation(enumerator.Current); }
-			}
-
-			#endregion
-			
-			#region IEnumerable implementation
-			
-			public IEnumerator GetEnumerator()
-			{
-				return this;
-			}
-			
-			#endregion
-		}
-
-		/// <summary>
-		/// Used for empty/null datasources
-		/// </summary>
-		public class NoIterationState : OperationState
-		{
-			public static readonly NoIterationState Instance = new NoIterationState();
-			
-			private NoIterationState() : base(null, null, null, null)
-			{
-			}
-
-			public override string TargetSuffix
-			{
-				get { return null; }
-			}
-
-			protected override SetItem CreateItemRepresentation(object current)
-			{
-				throw new NotImplementedException();
-			}
-		}
-		
-		public class ListDataSourceState : OperationState
-		{
-			private readonly string customSuffix;
-
-			public ListDataSourceState(Type type, ICollection dataSource, 
-			                           String valueProperty, String textProperty, String customSuffix) : base(type, dataSource, valueProperty, textProperty)
-			{
-				this.customSuffix = customSuffix;
-			}
-
-			public override string TargetSuffix
-			{
-				get { return customSuffix; }
-			}
-
-			protected override SetItem CreateItemRepresentation(object current)
-			{
-				object value = current;
-				object text = current;
-				
-				if (valuePropInfo != null)
-				{
-					value = valuePropInfo.GetValue(current, null);
-				}
-				
-				if (textPropInfo != null)
-				{
-					text = textPropInfo.GetValue(current, null);
-				}
-				
-				return new SetItem(current, value != null ? value.ToString() : String.Empty, 
-				                   text != null ? text.ToString() : String.Empty, 
-				                   false);
-			}
-		}
-		
-		public class SameTypeOperationState : OperationState
-		{
-			private readonly object initialSelection;
-			private readonly bool isInitialSelectionASet;
-
-			public SameTypeOperationState(Type type, object initialSelection, ICollection dataSource, 
-			                              String valueProperty, String textProperty, bool isInitialSelectionASet) : base(type, dataSource, valueProperty, textProperty)
-			{
-				this.initialSelection = initialSelection;
-				this.isInitialSelectionASet = isInitialSelectionASet;
-			}
-
-			public override string TargetSuffix
-			{
-				get { return valuePropInfo == null ? "" : valuePropInfo.Name; }
-			}
-
-			protected override SetItem CreateItemRepresentation(object current)
-			{
-				object value = current;
-				object text = current;
-				
-				if (valuePropInfo != null)
-				{
-					value = valuePropInfo.GetValue(current, null);
-				}
-				
-				if (textPropInfo != null)
-				{
-					text = textPropInfo.GetValue(current, null);
-				}
-				
-				bool isSelected = IsPresent(value, initialSelection, valuePropInfo, isInitialSelectionASet);
-
-				return new SetItem(current, value != null ? value.ToString() : String.Empty, 
-				                   text != null ? text.ToString() : String.Empty, 
-				                   isSelected);
-			}
-		}
-		
-		public class DifferentTypeOperationState : OperationState
-		{
-			private readonly object initialSelection;
-			private readonly bool isInitialSelectionASet;
-			private readonly PropertyInfo sourcePropInfo;
-
-			public DifferentTypeOperationState(Type initialSelectionType, Type dataSourceType, object initialSelection, ICollection dataSource, 
-			                                   String sourceProperty, String valueProperty, String textProperty, bool isInitialSelectionASet) : base(dataSourceType, dataSource, valueProperty, textProperty)
-			{
-				this.initialSelection = initialSelection;
-				this.isInitialSelectionASet = isInitialSelectionASet;
-				
-				if (sourceProperty != null)
-				{
-					sourcePropInfo = GetMethod(initialSelectionType, sourceProperty);
-				}
-				else if (valueProperty != null)
-				{
-					sourcePropInfo = GetMethod(initialSelectionType, valueProperty);
-				}
-			}
-
-			public override string TargetSuffix
-			{
-				get { return sourcePropInfo == null ? "" : sourcePropInfo.Name; }
-			}
-
-			protected override SetItem CreateItemRepresentation(object current)
-			{
-				object value = current;
-				object text = current;
-					
-				if (valuePropInfo != null)
-				{
-					value = valuePropInfo.GetValue(current, null);
-				}
-					
-				if (textPropInfo != null)
-				{
-					text = textPropInfo.GetValue(current, null);
-				}
-				
-				bool isSelected = IsPresent(value, initialSelection, sourcePropInfo, isInitialSelectionASet);
-
-				return new SetItem(current, value != null ? value.ToString() : String.Empty, 
-					text != null ? text.ToString() : String.Empty, 
-					isSelected);
-			}	
-		}
 	}
 }

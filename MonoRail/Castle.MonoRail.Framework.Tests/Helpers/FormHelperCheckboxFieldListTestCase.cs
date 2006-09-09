@@ -250,5 +250,50 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				index++;
 			}
 		}
+
+#if DOTNET2
+
+		[Test]
+		public void CheckboxFieldListInDotNet2()
+		{
+			FormHelper.CheckboxList list =
+				helper.CreateCheckboxList("subscription.Months4", months, DictHelper.Create("value=id"));
+
+			Assert.IsNotNull(list);
+
+			int index = 0;
+
+			foreach(Month item in list)
+			{
+				String content = list.Item();
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months4_" + index +
+					"_\" name=\"subscription.Months4[" + index + "].id\" value=\"" + item.Id + "\" />", content);
+				index++;
+			}
+		}
+
+		[Test]
+		public void CheckboxFieldListInDotNet2_WithSelection()
+		{
+			subscription.Months4.Add(new Month(1, "January"));
+			subscription.Months4.Add(new Month(2, "Feb"));
+
+			FormHelper.CheckboxList list =
+				helper.CreateCheckboxList("subscription.Months4", months, DictHelper.Create("value=id"));
+
+			Assert.IsNotNull(list);
+
+			int index = 0;
+
+			foreach(Month item in list)
+			{
+				String content = list.Item();
+				Assert.AreEqual("<input type=\"checkbox\" id=\"subscription_Months4_" + index +
+					"_\" name=\"subscription.Months4[" + index + "].Id\" value=\"" + item.Id + "\" checked=\"checked\" />", content);
+				index++;
+			}
+		}
+		
+#endif
 	}
 }

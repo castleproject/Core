@@ -36,17 +36,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void EmptyInitialSet()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				null, new int[] {1, 2, 3, 4}, null);
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.ListDataSourceState);
+			Assert.IsTrue(state is ListDataSourceState);
 			Assert.IsNull(state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 				
@@ -66,16 +66,16 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void NullDataSource()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new int[] {1, 2, 3, 4}, null, null);
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.NoIterationState);
+			Assert.IsTrue(state is NoIterationState);
 			Assert.IsNull(state.TargetSuffix);
 			
 			bool iterated = false;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 			}
@@ -86,16 +86,16 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void EmptyDataSource()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new int[] {1, 2, 3, 4}, new int[0], null);
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.NoIterationState);
+			Assert.IsTrue(state is NoIterationState);
 			Assert.IsNull(state.TargetSuffix);
 			
 			bool iterated = false;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 			}
@@ -106,17 +106,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void SingleValueInitialSet_SameTypes()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				1, new int[] {1, 2, 3, 4}, null);
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.SameTypeOperationState);
+			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("", state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 				
@@ -143,17 +143,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void MultipleValuesInitialSet_SameTypes()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new int[] {1,2}, new int[] {1, 2, 3, 4}, null);
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.SameTypeOperationState);
+			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("", state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 				
@@ -180,18 +180,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void SingleValueInitialSet_SameTypes_NonPrimitive()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new Role(1, "Admin"), new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
 				DictHelper.Create("text=Name", "value=Id"));
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.SameTypeOperationState);
+			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("Id", state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 
@@ -220,19 +220,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void MultipleValuesInitialSet_SameTypes_NonPrimitive()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
 				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
 				DictHelper.Create("text=Name", "value=Id"));
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.SameTypeOperationState);
+			Assert.IsTrue(state is SameTypeOperationState);
 			Assert.AreEqual("Id", state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 
@@ -260,19 +260,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void MultipleValuesInitialSet_DifferentTypes_NonPrimitive()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new ProductCategory[] {new ProductCategory(0,"User"), new ProductCategory(1,"Admin")}, 
 				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
 				DictHelper.Create("text=Name", "value=Id"));
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.DifferentTypeOperationState);
+			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("Id", state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 
@@ -300,19 +300,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void SingleValueInitialSet_DifferentTypes_NonPrimitive_NoNameMatching()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new Role2(1,"Admin"), 
 				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
 				DictHelper.Create("text=Name", "value=Id", "sourceproperty=identification"));
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.DifferentTypeOperationState);
+			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("Identification", state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 
@@ -341,19 +341,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void MultipleValuesInitialSet_DifferentTypes_NonPrimitive_NoNameMatching()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new Role2[] {new Role2(0,"User"), new Role2(1,"Admin")}, 
 				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
 				DictHelper.Create("text=Name", "value=Id", "sourceproperty=identification"));
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.DifferentTypeOperationState);
+			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("Identification", state.TargetSuffix);
 
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 
@@ -381,19 +381,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void MultipleValuesInitialSet_DifferentTypes_Primitive_NoNameMatching()
 		{
-			FormHelper.OperationState state = FormHelper.SetOperation.IterateOnDataSource(
+			OperationState state = SetOperation.IterateOnDataSource(
 				new int[] {0,1}, 
 				new Role[] {new Role(0,"User"), new Role(1,"Admin")}, 
 				DictHelper.Create("text=Name", "value=Id"));
 			
 			Assert.IsNotNull(state);
-			Assert.IsTrue(state is FormHelper.DifferentTypeOperationState);
+			Assert.IsTrue(state is DifferentTypeOperationState);
 			Assert.AreEqual("", state.TargetSuffix);
 			
 			bool iterated = false;
 			int index = 1;
 			
-			foreach(FormHelper.SetItem item in state)
+			foreach(SetItem item in state)
 			{
 				iterated = true;
 

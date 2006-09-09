@@ -69,6 +69,8 @@
 	<target name="init" depends="clean">
 		<property name="define" value="${define};${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
+		
+		<echo message="Define is ${define}" />
 
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-castle.core" inheritall="true" />
 

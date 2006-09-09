@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;ALLOWTEST,DOTNET2</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -81,6 +81,10 @@
     <Reference Include="Castle.Components.Common.EmailSender.SmtpEmailSender">
       <Name>Castle.Components.Common.EmailSender.SmtpEmailSender</Name>
       <HintPath>..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Core\bin\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -201,6 +205,7 @@
     <Compile Include="Extensions\ExceptionChaining\IExceptionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Extensions\ExceptionChaining\IExceptionProcessor.cs" />
     <Compile Include="Extensions\ExtensionManager.cs" />
     <Compile Include="Extensions\IMonoRailExtension.cs">
       <SubType>Code</SubType>
@@ -249,6 +254,7 @@
     <Compile Include="Helpers\PaginationHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\SetOperation.cs" />
     <Compile Include="Helpers\ValidationHelper.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -15,6 +15,9 @@
 namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System.Collections;
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 	using System.Globalization;
 	using System.IO;
 	using System.Threading;
@@ -32,6 +35,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private SimpleUser user;
 		private Subscription subscription;
 		private Month[] months;
+		private Contact contact;
 
 		[SetUp]
 		public void Init()
@@ -47,6 +51,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			months = new Month[] {new Month(1, "January"), new Month(1, "February")};
 			product = new Product("memory card", 10, (decimal) 12.30);
 			user = new SimpleUser();
+			contact = new Contact();
 
 			HomeController controller = new HomeController();
 
@@ -58,6 +63,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			controller.PropertyBag.Add("fileaccess", FileAccess.Read);
 			controller.PropertyBag.Add("subscription", subscription);
 			controller.PropertyBag.Add("months", months);
+			controller.PropertyBag.Add("contact", contact);
 
 			helper.SetController(controller);
 		}
@@ -206,5 +212,21 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				"<option selected=\"selected\" value=\"role1\">role1</option>\r\n<option selected=\"selected\" value=\"role2\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list));
 		}
+
+#if DOTNET2
+
+		[Test]
+		public void BasicFunctionalityInDotNet2()
+		{
+			List<Month> list = new List<Month>();
+			list.Add(new Month(1, "Jan"));
+			list.Add(new Month(2, "Feb"));
+
+			Assert.AreEqual("<select id=\"contact_dobmonth_id\" name=\"contact.dobmonth.id\" >\r\n" +
+				"<option value=\"1\">Jan</option>\r\n<option value=\"2\">Feb</option>\r\n</select>",
+				helper.Select("contact.dobmonth.id", list, DictHelper.Create("value=id", "text=name")));
+		}
+
+#endif
 	}
 }

@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -159,6 +159,9 @@
     <Compile Include="Helpers\DictHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\FormHelperCheckboxFieldListTestCase.cs" />
+    <Compile Include="Helpers\FormHelperSelectTestCase.cs" />
+    <Compile Include="Helpers\FormHelperSetOperation.cs" />
     <Compile Include="Helpers\FormHelperTestCase.cs" />
     <Compile Include="Helpers\HtmlHelperTestCase.cs">
       <SubType>Code</SubType>

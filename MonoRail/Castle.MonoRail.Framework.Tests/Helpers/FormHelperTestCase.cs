@@ -16,6 +16,9 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
 	using System.Collections;
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 	using System.Globalization;
 	using System.IO;
 	using System.Threading;
@@ -257,6 +260,23 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.TextField("user.roles[1].Name"));
 		}
 
+#if DOTNET2
+		
+		[Test]
+		public void IndexedValueTextFieldInDotNet2()
+		{
+			subscription.Months4.Clear();
+			subscription.Months4.Add(new Month(1, "Jan"));
+			subscription.Months4.Add(new Month(2, "Feb"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"subscription_months4_0_id\" name=\"subscription.months4[0].id\" value=\"1\" />",
+				helper.TextField("subscription.months4[0].id"));
+			Assert.AreEqual("<input type=\"text\" id=\"subscription_months4_0_name\" name=\"subscription.months4[0].name\" value=\"Jan\" />",
+				helper.TextField("subscription.months4[0].name"));
+		}
+
+#endif
+
 		[Test, ExpectedException(typeof(RailsException))]
 		public void InvalidIndex1()
 		{
@@ -307,6 +327,9 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		int[] months; 
 		IList months2 = new ArrayList();
 		Month[] months3;
+#if DOTNET2
+		IList<Month> months4 = new CustomList<Month>();
+#endif
 
 		public int[] Months
 		{
@@ -325,6 +348,16 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			get { return months3; }
 			set { months3 = value; }
 		}
+
+#if DOTNET2
+
+		public IList<Month> Months4
+		{
+			get { return this.months4; }
+			set { this.months4 = value; }
+		}
+
+#endif
 	}
 
 	public class Product
@@ -507,6 +540,92 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			set { roles = value; }
 		}
 	}
+	
+	public class Contact
+	{
+		private Month dobMonth;
+
+		public Month DobMonth
+		{
+			get { return this.dobMonth; }
+			set { this.dobMonth = value; }
+		}
+	}
+	
+#if DOTNET2
+
+	public class CustomList<T> : IList<T>
+	{
+		private List<T> innerList = new List<T>();
+		
+		public int IndexOf(T item)
+		{
+			return innerList.IndexOf(item);
+		}
+
+		public void Insert(int index, T item)
+		{
+			innerList.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			innerList.RemoveAt(index);
+		}
+
+		public T this[int index]
+		{
+			get { return innerList[index]; }
+			set { innerList[index] = value; }
+		}
+
+		public void Add(T item)
+		{
+			innerList.Add(item);
+		}
+
+		public void Clear()
+		{
+			innerList.Clear();
+		}
+
+		public bool Contains(T item)
+		{
+			return innerList.Contains(item);
+		}
+
+		public void CopyTo(T[] array, int arrayIndex)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool Remove(T item)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int Count
+		{
+			get { return innerList.Count; }
+		}
+
+		public bool IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return innerList.GetEnumerator();
+		}
+	}
+
+#endif
 
 	#endregion
 }

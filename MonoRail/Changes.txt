@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed MR-146
+  "FormHelper must be able to handle IList<T>"
+
 - Fixed MR-145 
   "Change node/section name from monoRail to monorail on configuration file"
   
