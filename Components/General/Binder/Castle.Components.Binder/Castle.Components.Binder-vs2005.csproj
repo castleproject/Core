@@ -74,6 +74,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Core\bin\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -88,19 +92,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractBindingDataSource.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BindingDataSourceException.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="BindingException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ConvertUtils.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataBinder.cs">
@@ -109,26 +104,21 @@
     <Compile Include="DataBindError.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataReaderAdapter.cs" />
-    <Compile Include="DataSourceNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="DataReaderTreeBuilder.cs" />
+    <Compile Include="DefaultConverter.cs" />
     <Compile Include="ErrorList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IBinderTranslator.cs" />
-    <Compile Include="IBindingDataSourceNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="IConverter.cs" />
     <Compile Include="IDataBinder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IndexComparer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NameValueCollectionAdapter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Node.cs" />
+    <Compile Include="TreeBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
