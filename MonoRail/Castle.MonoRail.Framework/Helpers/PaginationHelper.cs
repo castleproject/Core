@@ -208,33 +208,29 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class GenericPage<T> : AbstractPage
 	{
-		private readonly IList<T> slice = new List<T>();
+		private readonly int sliceStart, sliceEnd;
+		private readonly IList<T> sourceList;
 
 		public GenericPage(IList<T> list, int curPage, int pageSize)
 		{
 			// Calculate slice indexes
-			int startIndex = (pageSize * curPage) - pageSize;
-			int endIndex = Math.Min(startIndex + pageSize, list.Count);
+			int startIndex = this.sliceStart = (pageSize * curPage) - pageSize;
+			int endIndex = this.sliceEnd = Math.Min(startIndex + pageSize, list.Count);
 
-			CreateSlicedCollection(startIndex, endIndex, list);
+			this.sourceList = list;
 
 			CalculatePaginationInfo(startIndex, endIndex, list.Count, pageSize, curPage);
 		}
 
-		private void CreateSlicedCollection(int startIndex, int endIndex, IList<T> list)
-		{
-			for (int index = startIndex; index < endIndex; index++)
-			{
-				slice.Add(list[index]);
-			}
-		}
-
 		public override IEnumerator GetEnumerator()
 		{
-			return slice.GetEnumerator();
+			for (int i = sliceStart; i < sliceEnd; i++)
+			{
+				yield return this.sourceList[i];
+			}
 		}
 	}
-	
+
 #endif
 	
 	public abstract class AbstractPage : IPaginatedPage
