@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using System.Text;
 
 	using Iesi.Collections;
 	
@@ -31,6 +32,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	{
 		private readonly ActiveRecordModelCollection arCollection;
 		private ActiveRecordModel currentModel;
+		private StringBuilder columnPrefix = new StringBuilder();
 
 		public SemanticVerifierVisitor(ActiveRecordModelCollection arCollection)
 		{
@@ -139,6 +141,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					model.PrimaryKeyAtt.Column = model.Property.Name;
 				}
+				
+				// Append column prefix
+				model.PrimaryKeyAtt.Column = columnPrefix + model.PrimaryKeyAtt.Column;
 
 				if (model.PrimaryKeyAtt.Generator == PrimaryKeyType.Foreign)
 				{
@@ -172,6 +177,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.PropertyAtt.Column = model.Property.Name;
 			}
 
+			// Append column prefix
+			model.PropertyAtt.Column = columnPrefix + model.PropertyAtt.Column;
+
 			Type propertyType = model.Property.PropertyType;
 			
 			if (NHibernateNullablesSupport.IsNHibernateNullableType(propertyType))
@@ -203,6 +211,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.FieldAtt.Column = model.Field.Name;
 			}
 
+			// Append column prefix
+			model.FieldAtt.Column = columnPrefix + model.FieldAtt.Column;
+
 			Type fieldType = model.Field.FieldType;
 			
 			if (NHibernateNullablesSupport.IsNHibernateNullableType(fieldType))
@@ -226,6 +237,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.JoinedKeyAtt.Column = model.Property.Name;
 			}
+
+			// Append column prefix
+			model.JoinedKeyAtt.Column = columnPrefix + model.JoinedKeyAtt.Column;
 		}
 
 		public override void VisitVersion(VersionModel model)
@@ -234,6 +248,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.VersionAtt.Column = model.Property.Name;
 			}
+
+			// Append column prefix
+			model.VersionAtt.Column = columnPrefix + model.VersionAtt.Column;
 		}
 
 		public override void VisitTimestamp(TimestampModel model)
@@ -242,6 +259,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.TimestampAtt.Column = model.Property.Name;
 			}
+
+			// Append column prefix
+			model.TimestampAtt.Column = columnPrefix + model.TimestampAtt.Column;
 		}
 
 		public override void VisitBelongsTo(BelongsToModel model)
@@ -267,6 +287,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				model.BelongsToAtt.Column = model.Property.Name;
 			}
+
+			// Append column prefix
+			model.BelongsToAtt.Column = columnPrefix + model.BelongsToAtt.Column;
+			
 			if (model.BelongsToAtt.Type == null)
 			{
 				model.BelongsToAtt.Type = model.Property.PropertyType;
@@ -457,12 +481,22 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitNested(NestedModel model)
 		{
+			if (model.NestedAtt.ColumnPrefix != null)
+			{
+				columnPrefix.Append(model.NestedAtt.ColumnPrefix);
+			}
+
 			if (model.NestedAtt.MapType == null)
 			{
 				model.NestedAtt.MapType = model.Property.PropertyType;
 			}
 			
 			base.VisitNested(model);
+
+			if (model.NestedAtt.ColumnPrefix != null)
+			{
+				columnPrefix.Length -= model.NestedAtt.ColumnPrefix.Length;
+			}
 		}
 
 		private RelationType GuessRelation(PropertyInfo property, RelationType type)

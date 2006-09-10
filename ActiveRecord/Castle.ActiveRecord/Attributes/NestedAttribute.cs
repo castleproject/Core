@@ -97,6 +97,23 @@ namespace Castle.ActiveRecord
 		private bool update = true;
 		private bool insert = true;
 		private Type mapType;
+		private String columnPrefix;
+
+		/// <summary>
+		/// Informs ActiveRecord that the marked property contains nested elements, contained
+		/// in a separate, reusable class.
+		/// </summary>
+		public NestedAttribute() {}
+
+		/// <summary>
+		/// Informs ActiveRecord that the marked property contains nested elements, contained
+		/// in a separate, reusable class.
+		/// </summary>
+		/// <param name="columnPrefix">A prefix to insert before each column in the nested component</param>
+		public NestedAttribute(String columnPrefix)
+		{
+			this.columnPrefix = columnPrefix;
+		}
 
 		/// <summary>
 		/// Allows one to reference a different type
@@ -108,16 +125,31 @@ namespace Castle.ActiveRecord
 			set { mapType = value; }
 		}
 
+		/// <summary>
+		/// Set to <c>false</c> to ignore this nested component when updating entities of this ActiveRecord class.
+		/// </summary>
 		public bool Update
 		{
 			get { return update; }
 			set { update = value; }
 		}
 
+		/// <summary>
+		/// Set to <c>false</c> to ignore this nested component when inserting entities of this ActiveRecord class.
+		/// </summary>
 		public bool Insert
 		{
 			get { return insert; }
 			set { insert = value; }
+		}
+
+		/// <summary>
+		/// A prefix to insert before each column in the nested component.
+		/// </summary>
+		public String ColumnPrefix
+		{
+			get { return this.columnPrefix; }
+			set { this.columnPrefix = value; }
 		}
 	}
 }

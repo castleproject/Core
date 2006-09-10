@@ -138,6 +138,7 @@
     <Compile Include="BugTestCase.cs" />
     <Compile Include="Config\AspNet2.0ConfigurationIntegration.cs" />
     <Compile Include="Config\ConfigurationSource.cs" />
+    <Compile Include="NestedClassWithPrefixTestCase.cs" />
     <Compile Include="DifferentDatabaseScopeTestCase.cs" />
     <Compile Include="Model\CompositeModel\Agent.cs" />
     <Compile Include="Model\CompositeModel\AgentKey.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Model\CompositeModel\Org.cs" />
     <Compile Include="Model\Nested\NestedParent.cs" />
     <Compile Include="Model\Nested\Operation.cs" />
+    <Compile Include="Model\Nested\WithPrefix.cs" />
     <Compile Include="Model\OtherDbBlog.cs" />
     <Compile Include="Model\OtherDbPost.cs" />
     <Compile Include="NestedClassWithMapTypeTestCase.cs" />
