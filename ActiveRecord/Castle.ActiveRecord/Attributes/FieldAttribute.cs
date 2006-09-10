@@ -77,12 +77,18 @@ namespace Castle.ActiveRecord
 			set { _column = value; }
 		}
 
+		/// <summary>
+		/// Set to <c>false</c> to ignore this field when updating entities of this ActiveRecord class.
+		/// </summary>
 		public bool Update
 		{
 			get { return _update; }
 			set { _update = value; }
 		}
 
+		/// <summary>
+		/// Set to <c>false</c> to ignore this field when inserting entities of this ActiveRecord class.
+		/// </summary>
 		public bool Insert
 		{
 			get { return _insert; }

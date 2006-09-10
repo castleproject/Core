@@ -130,7 +130,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Defines whether this association will be included in database UPDATEs or not.
+		/// Set to <c>false</c> to ignore this association when updating entities of this ActiveRecord class.
 		/// </summary>
 		public bool Update
 		{
@@ -139,7 +139,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Defines whether this association will be included in database INSERTs or not.
+		/// Set to <c>false</c> to ignore this association when inserting entities of this ActiveRecord class.
 		/// </summary>
 		public bool Insert
 		{
