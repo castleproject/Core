@@ -23,7 +23,8 @@
 */
 #content h1.firstHeading 
 {
-	margin-top: 7px;
+	display: block;
+	margin-top: 5px;
 	font-size: 1.7em;
 	vertical-align: middle;
 	border: 1px solid white;
@@ -54,6 +55,11 @@
 .printfooter 
 {
 	display: none;
+}
+
+tt
+{
+	font-size: 1.1em;
 }
 
 pre 
@@ -151,8 +157,10 @@ pre
 
 .callout-pic
 {
+	/*border: solid gray 1px;*/
 	float:right;
 	text-align: center;
 	width: 220px;
+	padding-top: 5px;
 	padding-left: 10px;
 }

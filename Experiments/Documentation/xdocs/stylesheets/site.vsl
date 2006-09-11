@@ -292,17 +292,12 @@ $note
 		</div>
 		
 		<div id="content">
-		<div id="sublogo" style="margin-top: 12px;">
-		 <h1 class="firstHeading">
+		<div class="callout-pic"><img src="$relativePath/images/monorail-med.png" /></div>
+
+		<h1 class="firstHeading">
 		    $root.getChild("properties").getChild("title").getText()
-		 </h1> 
-		</div>
+		</h1> 
 
-	    <div id="contentSub"></div>
-
-<div class="callout-pic">
-<img src="$relativePath/images/activerecord-med.png" />
-</div>
 
 #set($introElem = $root.getChild("body").getChild("intro"))	
 #if($introElem)
