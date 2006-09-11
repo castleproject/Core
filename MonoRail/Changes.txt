@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed MR-129
+  "Add log support as discussed on the mailing list"
+
 - Added Logger property to Controller
 
 - Added more logging information to the request lifecycle
