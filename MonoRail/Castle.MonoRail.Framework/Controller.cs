@@ -25,6 +25,7 @@ namespace Castle.MonoRail.Framework
 
 	using Castle.Components.Common.EmailSender;
 	using Castle.Core;
+	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
@@ -46,6 +47,11 @@ namespace Castle.MonoRail.Framework
 		/// Holds the request/context information
 		/// </summary>
 		internal IRailsEngineContext _context;
+		
+		/// <summary>
+		/// Logger instance. Should never be null
+		/// </summary>
+		private ILogger logger = NullLogger.Instance;
 
 		/// <summary>
 		/// Holds information to pass to the view
@@ -190,6 +196,14 @@ namespace Castle.MonoRail.Framework
 		public String Action
 		{
 			get { return _evaluatedAction; }
+		}
+
+		/// <summary>
+		/// Logger for the controller
+		/// </summary>
+		public ILogger Logger
+		{
+			get { return logger; }
 		}
 
 		/// <summary>
@@ -745,6 +759,13 @@ namespace Castle.MonoRail.Framework
 
 			metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(this);
 
+			ILoggerFactory loggerFactory = (ILoggerFactory) context.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(GetType().Name);
+			}
+			
 			_context = context;
 		}
 
@@ -854,6 +875,11 @@ namespace Castle.MonoRail.Framework
 			// If a redirect was sent there's no point in
 			// wasting processor cycles
 			if (Response.WasRedirected) return;
+			
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("InternalSend for action '{0}'", action);
+			}
 
 			bool checkWhetherClientHasDisconnected = ShouldCheckWhetherClientHasDisconnected;
 
@@ -970,11 +996,21 @@ namespace Castle.MonoRail.Framework
 			}
 			catch (ThreadAbortException)
 			{
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error("ThreadAbortException, process aborted");
+				}
+
 				hasError = true;
 			}
 			catch (Exception ex)
 			{
 				hasError = true;
+				
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error("Exception during action process", ex);
+				}
 
 				// Try and perform the rescue
 				if (!PerformRescue(method, ex))
@@ -1307,11 +1343,15 @@ namespace Castle.MonoRail.Framework
 				ProcessView();
 				return true;
 			}
-			catch (Exception e)
+			catch (Exception exception)
 			{
 				// In this situation, the rescue view could not be found
 				// So we're back to the default error exibition
-				Console.WriteLine(e);
+				
+				if (logger.IsFatalErrorEnabled)
+				{
+					logger.FatalError("Failed to process rescue view. View name " + _selectedViewName, exception);
+				}
 			}
 
 			return false;
@@ -1410,6 +1450,11 @@ namespace Castle.MonoRail.Framework
 			}
 			catch(Exception ex)
 			{
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error("Error sending e-mail", ex);
+				}
+				
 				throw new RailsException("Error sending e-mail", ex);
 			}
 		}

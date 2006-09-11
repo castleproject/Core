@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Web;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Coordinates the creation of new <see cref="MonoRailHttpHandler"/> 
@@ -24,6 +25,8 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class MonoRailHttpHandlerFactory : IHttpHandlerFactory
 	{
+		private ILoggerFactory loggerFactory;
+		
 		public MonoRailHttpHandlerFactory()
 		{
 		}
@@ -79,7 +82,12 @@ namespace Castle.MonoRail.Framework
 				mrHandler = provider.ObtainMonoRailHttpHandler(mrContext);
 			}
 			
-			if (mrHandler == null) mrHandler = new MonoRailHttpHandler(); 
+			if (mrHandler == null)
+			{
+				ILogger logger = CreateLogger(typeof(MonoRailHttpHandler).FullName, mrContext);
+				
+				mrHandler = new MonoRailHttpHandler(logger);
+			} 
 
 			return mrHandler;
 		}
@@ -87,6 +95,29 @@ namespace Castle.MonoRail.Framework
 		private IMonoRailHttpHandlerProvider ObtainMonoRailHandlerProvider(IRailsEngineContext mrContext)
 		{
 			return (IMonoRailHttpHandlerProvider) mrContext.GetService(typeof(IMonoRailHttpHandlerProvider));
+		}
+
+		/// <summary>
+		/// This might be subject to race conditions, but
+		/// I'd rather take the risk - which in the end
+		/// means just replacing the instance - than
+		/// creating locks that will affect every single request
+		/// </summary>
+		/// <param name="provider"></param>
+		/// <returns></returns>
+		private ILogger CreateLogger(String name, IServiceProvider provider)
+		{
+			if (loggerFactory == null)
+			{
+				loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+				
+				if (loggerFactory == null)
+				{
+					loggerFactory = new NullLogFactory();
+				}
+			}
+			
+			return loggerFactory.Create(name);
 		}
 	}
 }

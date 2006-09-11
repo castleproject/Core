@@ -693,11 +693,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\ControllerTree.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Internal\ResourceDictionary.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -878,17 +873,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Services\ControllerDescriptorBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Services\DefaultCacheProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Services\DefaultControllerDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Services\DefaultControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\DefaultControllerTree.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

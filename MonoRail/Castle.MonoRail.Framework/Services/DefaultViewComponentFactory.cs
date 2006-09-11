@@ -129,11 +129,6 @@ namespace Castle.MonoRail.Framework.Services
 
 				if (typeof(ViewComponent).IsAssignableFrom(type))
 				{
-					if (logger.IsDebugEnabled)
-					{
-						logger.Debug("Registering view component Name: {0}", type.Name);
-					}
-					
 					RegisterComponent(type.Name, type);
 				}
 			}

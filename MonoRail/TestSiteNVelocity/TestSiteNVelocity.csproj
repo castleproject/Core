@@ -129,6 +129,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "log4net.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "sample.build"
                     BuildAction = "None"
                 />

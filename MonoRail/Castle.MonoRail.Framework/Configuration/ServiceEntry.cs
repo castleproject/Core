@@ -44,13 +44,15 @@ namespace Castle.MonoRail.Framework.Configuration
 	{
 		private ServiceIdentification serviceType;
 		private Type service;
-		
+		private Type _interface;
+
 		#region ISerializedConfig implementation
 
 		public void Deserialize(XmlNode section)
 		{
 			XmlAttribute idAtt = section.Attributes["id"];
 			XmlAttribute typeAtt = section.Attributes["type"];
+			XmlAttribute interAtt = section.Attributes["interface"];
 			
 			if (idAtt == null || idAtt.Value == String.Empty)
 			{
@@ -75,6 +77,11 @@ namespace Castle.MonoRail.Framework.Configuration
 			}
 			
 			service = TypeLoadUtil.GetType(typeAtt.Value);
+			
+			if (interAtt != null)
+			{
+				_interface = TypeLoadUtil.GetType(interAtt.Value);
+			}
 		}
 		
 		#endregion
@@ -87,6 +94,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		public Type Service
 		{
 			get { return service; }
+		}
+
+		public Type Interface
+		{
+			get { return _interface; }
 		}
 	}
 }

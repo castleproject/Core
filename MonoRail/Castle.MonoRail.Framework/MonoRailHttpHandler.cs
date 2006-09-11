@@ -17,15 +17,35 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Web;
 	using System.Web.SessionState;
-
+	
+	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Implements <see cref="IHttpHandler"/> to dispatch the web
 	/// requests. 
+	/// <seealso cref="MonoRailHttpHandlerFactory"/>
 	/// </summary>
-	public class MonoRailHttpHandler : MarshalByRefObject, IHttpHandler, IRequiresSessionState
+	public class MonoRailHttpHandler : IHttpHandler, IRequiresSessionState
 	{
+		/// <summary>Logger instance that won't be null, even when logging is disabled</summary>
+		private readonly ILogger logger;
+
+		/// <summary>
+		/// Constructs a <c>MonoRailHttpHandler</c>
+		/// </summary>
+		/// <param name="logger"></param>
+		public MonoRailHttpHandler(ILogger logger)
+		{
+			this.logger = logger;
+		}
+
+		#region IHttpHandler implementation
+		
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="context"></param>
 		public void ProcessRequest(HttpContext context)
 		{
 			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
@@ -33,10 +53,15 @@ namespace Castle.MonoRail.Framework
 			Process(mrContext);
 		}
 
+		/// <summary>
+		/// Pendent
+		/// </summary>
 		public bool IsReusable
 		{
 			get { return true; }
 		}
+		
+		#endregion
 
 		/// <summary>
 		/// Performs the base work of MonoRail. Extracts 
@@ -48,6 +73,12 @@ namespace Castle.MonoRail.Framework
 		public virtual void Process(IRailsEngineContext context)
 		{
 			UrlInfo info = ExtractUrlInfo(context);
+			
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Starting request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'", 
+				             info.Area, info.Controller, info.Action, info.Extension, info.UrlRaw);
+			}
 
 			IControllerFactory controllerFactory = (IControllerFactory) context.GetService(typeof(IControllerFactory));
 
@@ -57,6 +88,11 @@ namespace Castle.MonoRail.Framework
 			{
 				String message = String.Format("No controller for {0}\\{1}", info.Area, info.Controller);
 				
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error(message);
+				}
+
 				throw new RailsException(message);
 			}
 
@@ -78,6 +114,12 @@ namespace Castle.MonoRail.Framework
 				else if (context.Session.Contains(Flash.FlashKey))
 				{
 					context.Session.Remove(Flash.FlashKey);
+				}
+				
+				if (logger.IsDebugEnabled)
+				{
+					logger.Debug("Ending request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'", 
+						info.Area, info.Controller, info.Action, info.Extension, info.UrlRaw);
 				}
 			}
 		}

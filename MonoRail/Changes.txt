@@ -4,6 +4,10 @@ Change history
 Release Candidate 1
 ===================
 
+- Added Logger property to Controller
+
+- Added more logging information to the request lifecycle
+
 - Logging support: Important services are now logging what they are doing. 
   Verbose logging happens at Debug Level. Error level is used for exceptions
 

@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		
 		public void Deserialize(XmlNode section)
 		{
-			XmlNodeList services = section.SelectNodes("services/add");
+			XmlNodeList services = section.SelectNodes("services/service");
 			
 			foreach(XmlNode node in services)
 			{
@@ -50,7 +50,14 @@ namespace Castle.MonoRail.Framework.Configuration
 				
 				if (entry.ServiceType == ServiceIdentification.Custom)
 				{
-					customServices.Add(entry.Service);
+					if (entry.Interface != null)
+					{
+						RegisterService(entry.Interface, entry.Service);
+					}
+					else
+					{
+						customServices.Add(entry.Service);
+					}
 				}
 				else
 				{
@@ -63,7 +70,12 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		public void RegisterService(ServiceIdentification id, Type service)
 		{
-			service2Impl[ToInterface(id)] = service;
+			RegisterService(ToInterface(id), service);
+		}
+		
+		public void RegisterService(Type inter, Type service)
+		{
+			service2Impl[inter] = service;
 		}
 		
 		public Type GetService(ServiceIdentification id)

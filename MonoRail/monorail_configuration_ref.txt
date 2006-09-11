@@ -5,8 +5,6 @@
 	smtpUsername="" 
 	smtpPassword="">
 	
-	<logger factory="" level=""  />
-
 	<!-- custom Factories/Should be configured on services. Here for backward compatible purposes -->
 	
 	<customControllerFactory type="type name that implements IControllerFactory" />
@@ -57,7 +55,10 @@
 	-->
 	
 	<services>
-		<service id="[see list above]" type="Service.Type.Name, Assembly" />
+		<service 
+			id="[see list above]" 
+			type="Service.Type.Name, Assembly"
+			interface="optional" />
 	</services>
 	
 	<extensions>

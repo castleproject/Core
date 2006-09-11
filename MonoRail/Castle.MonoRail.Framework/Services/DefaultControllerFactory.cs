@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Inspecting assembly {0}", assemblyFileName);
+				logger.Debug("Inspecting assembly '{0}'", assemblyFileName);
 			}
 			
 			Assembly assembly = Assembly.Load( assemblyFileName );
@@ -116,11 +116,6 @@ namespace Castle.MonoRail.Framework.Services
 				{
 					ControllerDescriptor contrDesc = ControllerInspectionUtil.Inspect(type);
 					
-					if (logger.IsDebugEnabled)
-					{
-						logger.Debug("Registering controller descriptor for Area: {0} Name: {1}", contrDesc.Area, contrDesc.Name);
-					}
-					
 					RegisterController(contrDesc);
 				}
 			}
@@ -128,6 +123,12 @@ namespace Castle.MonoRail.Framework.Services
 
 		private void RegisterController(ControllerDescriptor descriptor)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Registering controller descriptor for Area: '{0}' Name: '{1}'", 
+				             descriptor.Area, descriptor.Name);
+			}
+
 			Tree.AddController(descriptor.Area, descriptor.Name, descriptor.ControllerType);
 		}
 	}
