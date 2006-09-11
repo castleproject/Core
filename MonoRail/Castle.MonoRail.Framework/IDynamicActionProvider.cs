@@ -15,7 +15,8 @@
 namespace Castle.MonoRail.Framework
 {
 	/// <summary>
-	/// 
+	/// Defines that the implementor wants to add
+	/// dynamic actions to controllers.
 	/// </summary>
 	public interface IDynamicActionProvider
 	{
@@ -23,7 +24,7 @@ namespace Castle.MonoRail.Framework
 		/// Implementors should register their dynamics 
 		/// actions into the controller
 		/// </summary>
-		/// <param name="controller"></param>
+		/// <param name="controller">The target controller</param>
 		void IncludeActions(Controller controller);
 	}
 }

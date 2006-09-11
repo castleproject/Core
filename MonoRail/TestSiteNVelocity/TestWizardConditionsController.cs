@@ -12,21 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace TestSiteNVelocity
 {
 	using System;
-
 	using Castle.MonoRail.Framework;
 
-
 	[DynamicActionProvider(typeof(WizardActionProvider))]
-	public class TestWizardController : Controller, IWizardController
+	public class TestWizardConditionsController : Controller, IWizardController
 	{
 		public void Index()
 		{
 			RenderText("Hello!");
 		}
-
+		
 		public void OnWizardStart()
 		{
 		}
@@ -43,12 +41,24 @@ namespace TestSiteNVelocity.Controllers
 
 		public WizardStepPage[] GetSteps(IRailsEngineContext context)
 		{
-			return new WizardStepPage[] { new Page1(), new Page2(), new Page3(), new Page4() };
+			return new WizardStepPage[] { new Page1() };
 		}
 	}
 
 	public class Page1 : WizardStepPage
 	{
+		protected override bool IsPreConditionSatisfied(IRailsEngineContext context)
+		{
+			bool isOk = Query["id"] == "1";
+			
+			if (!isOk)
+			{
+				Redirect("TestWizardConditions", "Index");
+			}
+			
+			return isOk;
+		}
+		
 		public void InnerAction()
 		{
 			Flash["InnerActionInvoked"] = true;
@@ -59,31 +69,5 @@ namespace TestSiteNVelocity.Controllers
 		public void InnerAction2()
 		{
 		}
-	}
-
-	public class Page2 : WizardStepPage
-	{
-		protected override void RenderWizardView()
-		{
-			RenderText("A content rendered using RenderText");
-		}
-	}
-
-	public class Page3 : WizardStepPage
-	{
-		protected override void RenderWizardView()
-		{
-			RenderView("page3");
-		}
-	}
-
-	public class Page4 : WizardStepPage
-	{
-		public void InnerAction()
-		{
-			Flash["InnerActionInvoked"] = true;
-
-			DoNavigate();
-		}		
 	}
 }

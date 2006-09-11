@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	/// <summary>
-	/// An action that is not exactly a method
+	/// An action that is not a method
 	/// on the controller.
 	/// </summary>
 	public interface IDynamicAction

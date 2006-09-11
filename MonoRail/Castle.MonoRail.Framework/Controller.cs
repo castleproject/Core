@@ -275,11 +275,27 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Shortcut to Request.Params
+		/// Shortcut to <see cref="IRequest.Params"/> 
 		/// </summary>
 		public NameValueCollection Params
 		{
 			get { return Request.Params; }
+		}
+		
+		/// <summary>
+		/// Shortcut to <see cref="IRequest.Form"/> 
+		/// </summary>
+		public NameValueCollection Form
+		{
+			get { return Request.Form; }
+		}
+
+		/// <summary>
+		/// Shortcut to <see cref="IRequest.QueryString"></see>
+		/// </summary>
+		public NameValueCollection Query
+		{
+			get { return Request.QueryString; }
 		}
 
 		public IDictionary DynamicActions
@@ -785,8 +801,8 @@ namespace Castle.MonoRail.Framework
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		internal void Process(IRailsEngineContext context, String areaName, 
-			String controllerName, String actionName)
+		internal void Process(IRailsEngineContext context, 
+		                      String areaName, String controllerName, String actionName)
 		{        
 			InitializeFieldsFromServiceProvider(context);
 

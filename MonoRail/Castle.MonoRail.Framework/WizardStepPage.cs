@@ -85,7 +85,7 @@ namespace Castle.MonoRail.Framework
 		#endregion
 
 		#region Core Lifecycle methods
-
+		
 		/// <summary>
 		/// Invoked by <see cref="WizardActionProvider"/>. 
 		/// </summary>
@@ -113,7 +113,6 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected internal virtual void Reset()
 		{
-			
 		}
 
 		/// <summary>
@@ -141,7 +140,19 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected internal virtual void RenderWizardView()
 		{
-			RenderView( ActionName );
+			RenderView(ActionName);
+		}
+
+		/// <summary>
+		/// Allow the step to assert some condition 
+		/// before being accessed. Returning <c>false</c>
+		/// prevents the step from being processed but 
+		/// before doing that you must send a redirect.
+		/// </summary>
+		/// <returns></returns>
+		protected internal virtual bool IsPreConditionSatisfied(IRailsEngineContext context)
+		{
+			return true;
 		}
 
 		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)

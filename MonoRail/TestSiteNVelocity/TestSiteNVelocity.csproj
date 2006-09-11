@@ -137,6 +137,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "TestWizardConditionsController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "web.config"
                     BuildAction = "None"
                 />
@@ -512,6 +517,14 @@
                 />
                 <File
                     RelPath = "views\testwizard\page4.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizardconditions\InnerAction2.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizardconditions\page1.vm"
                     BuildAction = "None"
                 />
                 <File

@@ -113,5 +113,34 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertReplyEqualTo("hasprevious True\r\nhasnext False");
 		}
+		
+		[Test]
+		public void ConditionalWizardSteps()
+		{
+			DoGet("testwizardconditions/index.rails");
+			AssertSuccess();
+			AssertReplyEqualTo("Hello!");
+			
+			DoGet("testwizardconditions/page1.rails");
+			AssertRedirectedTo("/TestWizardConditions/Index.rails");
+
+			DoGet("testwizardconditions/page1-InnerAction.rails");
+			AssertRedirectedTo("/TestWizardConditions/Index.rails");
+
+			DoGet("testwizardconditions/page1-InnerAction2.rails");
+			AssertRedirectedTo("/TestWizardConditions/Index.rails");
+
+			DoGet("testwizardconditions/page1.rails", "id=1");
+			AssertSuccess();
+			AssertReplyEqualTo("Wizard page 1");
+
+			DoGet("testwizardconditions/page1-InnerAction.rails", "id=1");
+			AssertSuccess();
+			AssertReplyEqualTo("InnerAction contents");
+
+			DoGet("testwizardconditions/page1-InnerAction2.rails", "id=1");
+			AssertSuccess();
+			AssertReplyEqualTo("View for Inner action 2");
+		}
 	}
 }

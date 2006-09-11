@@ -47,6 +47,10 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="controller"></param>
 		public void IncludeActions(Controller controller)
 		{
 			IRailsEngineContext context = controller.Context;
@@ -63,8 +67,7 @@ namespace Castle.MonoRail.Framework
 
 			if (steps == null || steps.Length == 0)
 			{
-				throw new RailsException("The controller {0} returned no WizardStepPage", 
-					controller.Name);
+				throw new RailsException("The controller {0} returned no WizardStepPage", controller.Name);
 			}
 
 			IList stepList = new ArrayList();
@@ -143,27 +146,40 @@ namespace Castle.MonoRail.Framework
 			// this way filters can pass values to the step property without having to know it
 			currentStepInstance.PropertyBag = controller.PropertyBag;
 
+			// If OnBeforeStep returns false we stop
 			if (!wizController.OnBeforeStep(wizardName, currentStep, currentStepInstance))
 			{
 				return;
 			}
 
-			WizardUtils.RegisterCurrentStepInfo(controller, currentStepInstance.ActionName);
-
 			if (innerAction == null || innerAction == String.Empty)
 			{
-				currentStepInstance.Process(
-					controller.Context, 
-					urlInfo.Area, urlInfo.Controller, "RenderWizardView");
+				innerAction = "RenderWizardView";
 			}
-			else
+			
+			// Initialize step data so instance members can be used
+			currentStepInstance.InitializeFieldsFromServiceProvider(controller.Context);
+			currentStepInstance.InitializeControllerState(urlInfo.Area, urlInfo.Controller, innerAction);
+
+			// Record the step we're working with
+			WizardUtils.RegisterCurrentStepInfo(controller, currentStepInstance.ActionName);
+
+			// The step cannot be accessed in the current state of matters
+			if (!currentStepInstance.IsPreConditionSatisfied(controller.Context))
 			{
-				currentStepInstance.Process(
-					controller.Context, 
+				return;
+			}
+			
+			// Dispatch process
+			try
+			{
+				currentStepInstance.Process(controller.Context, 
 					urlInfo.Area, urlInfo.Controller, innerAction);
 			}
-
-			wizController.OnAfterStep(wizardName, currentStep, currentStepInstance);
+			finally
+			{
+				wizController.OnAfterStep(wizardName, currentStep, currentStepInstance);
+			}
 		}
 
 		protected void EmptyAction(Controller controller)
@@ -177,8 +193,8 @@ namespace Castle.MonoRail.Framework
 
 			IRailsEngineContext context = controller.Context;
 
-			return (context.Session.Contains(wizardName + "currentstepindex") &&
-				context.Session.Contains(wizardName + "currentstep") );
+			return (context.Session.Contains(wizardName + "currentstepindex") && 
+			        context.Session.Contains(wizardName + "currentstep"));
 		}
 
 		protected void StartWizard(Controller controller, bool redirect)
