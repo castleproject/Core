@@ -114,6 +114,11 @@
                     AssemblyName = "NVelocity"
                     HintPath = "..\..\Tools\NVelocity\bin\NVelocity.dll"
                 />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                />
             </References>
         </Build>
         <Files>

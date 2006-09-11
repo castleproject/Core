@@ -17,6 +17,9 @@ namespace Castle.MonoRail.Framework.Views
 	using System;
 	using System.IO;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class FileViewSource : IViewSource
 	{
 		private readonly FileInfo fileInfo;

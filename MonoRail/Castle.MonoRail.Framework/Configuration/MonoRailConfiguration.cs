@@ -15,206 +15,195 @@
 namespace Castle.MonoRail.Framework.Configuration
 {
 	using System;
-	using System.Xml;
-	using System.Collections;
 	using System.Configuration;
+	using System.Xml;
 
-	public class MonoRailConfiguration
+	/// <summary>
+	/// Pendent
+	/// </summary>
+	public class MonoRailConfiguration : ISerializedConfig
 	{
-		private static readonly String DefaultScaffoldType = "Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold";
+		private static readonly String SectionName = "monorail";
+		private static readonly String AlternativeSectionName = "monoRail";
 
-		public static readonly String SectionName = "monorail";
-		public static readonly String AlternativeSectionName = "monoRail";
+		private bool checkClientIsConnected, useWindsorIntegration;
+		private Type customFilterFactory;
+		private XmlNode configurationSection;
 
-		private bool _viewsXhtmlRendering;
-		private IList _controllers = new ArrayList();
-		private IList _components = new ArrayList();
-		private IList _routingRules = new ArrayList();
-		private IList _extensions = new ArrayList();
-		private IList additionalViewSources = new ArrayList();
-		private String _viewsPhysicalPath;
-		private String _customControllerFactory;
-		private String _customViewComponentFactory;
-		private String _customFilterFactory;
-		private String _customResourceFactory;
-		private String _customEngineTypeName;
-		private String _cacheProviderTypeName;
-		private String _scaffoldingTypeName = DefaultScaffoldType;
-		private SmtpConfig _smtp = new SmtpConfig();
-		private XmlNode _section;
-		private bool _checkIsClientConnected;
+		private SmtpConfig smtpConfig;
+		private ViewEngineConfig viewEngineConfig;
+		private ControllersConfig controllersConfig;
+		private ViewComponentsConfig viewComponentsConfig;
+		private ScaffoldConfig scaffoldConfig;
 
-		public MonoRailConfiguration()
+		private RoutingRuleCollection routingRules;
+		private ExtensionEntryCollection extensions;
+		private ServiceEntryCollection services;
+		
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="section"></param>
+		public MonoRailConfiguration(XmlNode section)
 		{
+			smtpConfig = new SmtpConfig();
+			viewEngineConfig = new ViewEngineConfig();
+			controllersConfig = new ControllersConfig();
+			viewComponentsConfig = new ViewComponentsConfig();
+			scaffoldConfig = new ScaffoldConfig();
+			routingRules = new RoutingRuleCollection();
+			extensions = new ExtensionEntryCollection();
+			services = new ServiceEntryCollection();
+			
+			checkClientIsConnected = false;
+			
+			configurationSection = section;
 		}
 
-		public bool CheckIsClientConnected
+		public static MonoRailConfiguration GetConfig()
 		{
-			get { return _checkIsClientConnected; }
-			set { _checkIsClientConnected = value; }
-		}
-
-		public IList ControllerAssemblies
-		{
-			get { return _controllers; }
-		}
-
-		public IList ComponentsAssemblies
-		{
-			get { return _components; }
-		}
-
-		public IList RoutingRules
-		{
-			get { return _routingRules; }
-		}
-
-		public IList Extensions
-		{
-			get { return _extensions; }
-			set { _extensions = value; }
-		}
-
-		public IList AdditionalViewSources
-		{
-			get { return additionalViewSources; }
-		}
-
-		public String ViewsPhysicalPath
-		{
-			get { return _viewsPhysicalPath; }
-			set { _viewsPhysicalPath = value; }
-		}
-
-		public bool ViewsXhtmlRendering
-		{
-			get { return _viewsXhtmlRendering; }
-			set { _viewsXhtmlRendering = value; }
-		}
-
-		public String CustomViewComponentFactory
-		{
-			get { return _customViewComponentFactory; }
-			set { _customViewComponentFactory = value; }
-		}
-
-		public String CustomControllerFactory
-		{
-			get { return _customControllerFactory; }
-			set { _customControllerFactory = value; }
-		}
-
-		public String CustomFilterFactory
-		{
-			get { return _customFilterFactory; }
-			set { _customFilterFactory = value; }
-		}
-
-		public String CustomResourceFactory
-		{
-			get { return _customResourceFactory; }
-			set { _customResourceFactory = value; }
-		}
-
-		public String CustomEngineTypeName
-		{
-			get { return _customEngineTypeName; }
-			set { _customEngineTypeName = value; }
-		}
-
-		public String CacheProviderTypeName
-		{
-			get { return _cacheProviderTypeName; }
-			set { _cacheProviderTypeName = value; }
-		}
-
-		public String ScaffoldingTypeName
-		{
-			get { return _scaffoldingTypeName; }
-			set { _scaffoldingTypeName = value; }
-		}
-
-		public Type CustomViewEngineType
-		{
-			get { return _customEngineTypeName != null ? GetType(_customEngineTypeName) : null; }
-		}
-
-		public Type CustomViewComponentFactoryType
-		{
-			get { return _customViewComponentFactory != null ? GetType(_customViewComponentFactory) : null; }
-		}
-
-		public Type CustomFilterFactoryType
-		{
-			get { return _customFilterFactory != null ? GetType(_customFilterFactory) : null; }
-		}
-
-		public Type CustomResourceFactoryType
-		{
-			get { return _customResourceFactory != null ? GetType(_customResourceFactory) : null; }
-		}
-
-		public Type CustomControllerFactoryType
-		{
-			get { return _customControllerFactory != null ? GetType(_customControllerFactory) : null; }
-		}
-
-		public Type ScaffoldingType
-		{
-			get { return _scaffoldingTypeName != null ? GetType(_scaffoldingTypeName, true) : null; }
-		}
-
-		public Type CacheProviderType
-		{
-			get { return _cacheProviderTypeName != null ? GetType(_cacheProviderTypeName, true) : null; }
-		}
-
-		public SmtpConfig SmtpConfig
-		{
-			get { return _smtp; }
-			set { _smtp = value; }
-		}
-
-		public XmlNode ConfigSection
-		{
-			get { return _section;  }
-			set { _section = value; }
-		}
-
-		internal static MonoRailConfiguration GetConfig()
-		{
+			// TODO: Add .net 2 diffs
+			
 			MonoRailConfiguration config = (MonoRailConfiguration)
-				ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
+			                               ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
 			
 			if (config == null)
 			{
 				config = (MonoRailConfiguration)
-					ConfigurationSettings.GetConfig(MonoRailConfiguration.AlternativeSectionName);
+				         ConfigurationSettings.GetConfig(MonoRailConfiguration.AlternativeSectionName);
 			}
 
 			if (config == null)
 			{
-				throw new ApplicationException( "Unfortunately, you have to provide " +
-					"a small configuration to use MonoRail. Check the samples or the documentation." );
+				throw new ApplicationException("You have to provide a small configuration to use " + 
+				                               "MonoRail. Check the samples or the documentation");
 			}
 
 			return config;
 		}
 
-		public static Type GetType( String typeName )
+		#region ISerializedConfig implementation
+		
+		public void Deserialize(XmlNode node)
 		{
-			return GetType( typeName, false );
-		}
+			viewEngineConfig.Deserialize(node);
+			smtpConfig.Deserialize(node);
+			controllersConfig.Deserialize(node);
+			viewComponentsConfig.Deserialize(node);
+			scaffoldConfig.Deserialize(node);
+			
+			services.Deserialize(node);
+			extensions.Deserialize(node);
+			routingRules.Deserialize(node);
 
-		public static Type GetType( String typeName, bool ignoreError )
-		{
-			Type loadedType = Type.GetType(typeName, false, false);
+			ProcessFilterFactoryNode(node.SelectSingleNode("customFilterFactory"));
+			
+			XmlAttribute checkClientIsConnectedAtt = node.Attributes["checkClientIsConnected"];
 
-			if ( loadedType == null && !ignoreError )
+			if (checkClientIsConnectedAtt != null && checkClientIsConnectedAtt.Value != String.Empty)
 			{
-				throw new ConfigurationException( String.Format("The type {0} could not be found", typeName) );
+				checkClientIsConnected = String.Compare(checkClientIsConnectedAtt.Value, "true", true) == 0;
 			}
-			return loadedType;
+			
+			XmlAttribute useWindsorAtt = node.Attributes["useWindsorIntegration"];
+
+			if (useWindsorAtt != null && useWindsorAtt.Value != String.Empty)
+			{
+				useWindsorIntegration = String.Compare(useWindsorAtt.Value, "true", true) == 0;
+				
+				ConfigureWindsorIntegration();
+			}
 		}
+		
+		#endregion
+		
+		private void ProcessFilterFactoryNode(XmlNode node)
+		{
+			if (node == null) return;
+			
+			XmlAttribute type = node.Attributes["type"];
+
+			if (type == null)
+			{
+				throw new ConfigurationException("The custom filter factory node must specify a 'type' attribute");
+			}
+
+			customFilterFactory = TypeLoadUtil.GetType(type.Value);
+		}
+
+		public SmtpConfig SmtpConfig
+		{
+			get { return smtpConfig; }
+		}
+
+		public ViewEngineConfig ViewEngineConfig
+		{
+			get { return viewEngineConfig; }
+		}
+
+		public ControllersConfig ControllersConfig
+		{
+			get { return controllersConfig; }
+		}
+
+		public ViewComponentsConfig ViewComponentsConfig
+		{
+			get { return viewComponentsConfig; }
+		}
+
+		public RoutingRuleCollection RoutingRules
+		{
+			get { return routingRules; }
+		}
+
+		public ExtensionEntryCollection ExtensionEntries
+		{
+			get { return extensions; }
+		}
+
+		public ServiceEntryCollection ServiceEntries
+		{
+			get { return services; }
+		}
+
+		public Type CustomFilterFactory
+		{
+			get { return customFilterFactory; }
+		}
+
+		public ScaffoldConfig ScaffoldConfig
+		{
+			get { return scaffoldConfig; }
+		}
+
+		public bool CheckClientIsConnected
+		{
+			get { return checkClientIsConnected; }
+		}
+
+		public bool UseWindsorIntegration
+		{
+			get { return useWindsorIntegration; }
+		}
+
+		public XmlNode ConfigurationSection
+		{
+			get { return configurationSection; }
+		}
+
+		private void ConfigureWindsorIntegration()
+		{
+			const String windsorAssembly = "Castle.MonoRail.WindsorExtension";
+			
+			controllersConfig.CustomControllerFactory = TypeLoadUtil.GetType(
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorControllerFactory, " + windsorAssembly));
+			
+			viewComponentsConfig.CustomViewComponentFactory = TypeLoadUtil.GetType(
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, " + windsorAssembly));
+			
+			customFilterFactory = TypeLoadUtil.GetType(
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorFilterFactory, " + windsorAssembly));
+		}
+		
 	}
 }

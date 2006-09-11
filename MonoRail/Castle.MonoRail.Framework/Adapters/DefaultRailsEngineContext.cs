@@ -25,6 +25,7 @@ namespace Castle.MonoRail.Framework.Adapters
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Services;
 
 	/// <summary>
 	/// Adapter to expose a valid <see cref="IRailsEngineContext"/> 
@@ -198,11 +199,11 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				String path = String.Empty;
 
-				if ( UnderlyingContext != null )
+				if (UnderlyingContext != null)
 				{
 					path = UnderlyingContext.Request.ApplicationPath;
 			
-					if( "/".Equals(path) )
+					if("/".Equals(path))
 					{
 						path = String.Empty;
 					}

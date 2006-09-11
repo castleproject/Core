@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework.Services.Utils
 {
 	using System;
-	using System.Collections;
+	
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Utilities methods to inspect the controller Type
@@ -23,8 +24,12 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public abstract class ControllerInspectionUtil
 	{
-		internal static IDictionary inspectedControllers = new Hashtable();
-		
+		/// <summary>
+		/// Creates a <see cref="ControllerDescriptor"/> based on the conventions
+		/// and possible attributes found for the Controller Type specified
+		/// </summary>
+		/// <param name="controllerType">The controller type</param>
+		/// <returns>A controller descriptor</returns>
 		public static ControllerDescriptor Inspect(Type controllerType)
 		{
 			ControllerDescriptor descriptor;
@@ -46,7 +51,6 @@ namespace Castle.MonoRail.Framework.Internal
 				                                      ObtainControllerName(null, controllerType), String.Empty);
 			}
 
-			inspectedControllers[controllerType] = descriptor;
 			return descriptor;
 		}
 

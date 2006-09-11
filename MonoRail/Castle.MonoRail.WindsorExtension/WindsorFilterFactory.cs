@@ -16,10 +16,9 @@ namespace Castle.MonoRail.WindsorExtension
 {
 	using System;
 
-	using Castle.Windsor;
-
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Services;
+	using Castle.Windsor;
 
 	/// <summary>
 	/// Custom implementation of <see cref="IFilterFactory"/>

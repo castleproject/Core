@@ -17,6 +17,8 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Creates <see cref="ResourceDescriptor"/> from attributes 
@@ -25,24 +27,54 @@ namespace Castle.MonoRail.Framework.Internal
 	public class DefaultResourceDescriptorProvider : IResourceDescriptorProvider
 	{
 		/// <summary>
-		/// Gives a chance to the provider initialize
-		/// itself and request services from the 
-		/// service provider
+		/// The logger instance
 		/// </summary>
-		/// <param name="serviceProvider"></param>
-		public void Init(IServiceProvider serviceProvider)
+		private ILogger logger = NullLogger.Instance;
+
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(DefaultResourceDescriptorProvider));
+			}
 		}
 
-		public ResourceDescriptor[] CollectResources(MemberInfo member)
+		#endregion
+
+		public ResourceDescriptor[] CollectResources(MemberInfo memberInfo)
 		{
-			object[] attributes = member.GetCustomAttributes(typeof(IResourceDescriptorBuilder), true);
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Collecting resources information for {0}", memberInfo.Name);
+			}
+			
+			object[] attributes = memberInfo.GetCustomAttributes(typeof(IResourceDescriptorBuilder), true);
 
 			ArrayList descriptors = new ArrayList();
 
 			foreach(IResourceDescriptorBuilder builder in attributes)
 			{
-				descriptors.AddRange(builder.BuildResourceDescriptors());
+				ResourceDescriptor[] descs = builder.BuildResourceDescriptors();
+				
+				if (logger.IsDebugEnabled)
+				{
+					foreach(ResourceDescriptor desc in descs)
+					{
+						logger.Debug("Collected resource {0} Assembly Name {1} Culture {2} ResName {3} ResType {4}",
+						             desc.Name, desc.AssemblyName, desc.CultureName, desc.ResourceName, desc.ResourceType);
+					}
+				}
+				
+				descriptors.AddRange(descs);
 			}
 
 			return (ResourceDescriptor[]) descriptors.ToArray(typeof(ResourceDescriptor));

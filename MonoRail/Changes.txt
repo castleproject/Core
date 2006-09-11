@@ -4,6 +4,18 @@ Change history
 Release Candidate 1
 ===================
 
+- Logging support: Important services are now logging what they are doing. 
+  Verbose logging happens at Debug Level. Error level is used for exceptions
+
+- Refactored: The EngineContextModule was simplified. Now its duty is to 
+  instantiate the services and invoke the lifecycle methods. Each service uses
+  its lifecycle methods to reference other services and obtain its configuration
+
+- Refactored: replaceable services were moved to Services namespace
+
+- Refactored: interfaces meant to be public were moved from Internal 
+  namespace to the root
+
 - Fixed MR-126
   "PaginationHelper must support IList<T>"
 

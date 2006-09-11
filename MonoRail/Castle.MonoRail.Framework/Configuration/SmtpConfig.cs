@@ -15,28 +15,49 @@
 namespace Castle.MonoRail.Framework.Configuration
 {
 	using System;
+	using System.Xml;
 
-	public class SmtpConfig
+	public class SmtpConfig : ISerializedConfig
 	{
-		private String _host = "localhost";
-		private String _username, _password;
+		private String host = "localhost";
+		private String username, password;
+
+		public void Deserialize(XmlNode section)
+		{
+			XmlAttribute smtpHostAtt = section.Attributes["smtpHost"];
+			XmlAttribute smtpUserAtt = section.Attributes["smtpUsername"];
+			XmlAttribute smtpPwdAtt = section.Attributes["smtpPassword"];
+
+			if (smtpHostAtt != null && smtpHostAtt.Value != String.Empty)
+			{
+				host = smtpHostAtt.Value;
+			}
+			if (smtpUserAtt != null && smtpUserAtt.Value != String.Empty)
+			{
+				username = smtpUserAtt.Value;
+			}
+			if (smtpPwdAtt != null && smtpPwdAtt.Value != String.Empty)
+			{
+				password = smtpPwdAtt.Value;
+			}		
+		}
 
 		public String Host
 		{
-			get { return _host; }
-			set { _host = value; }
+			get { return host; }
+			set { host = value; }
 		}
 
 		public String Username
 		{
-			get { return _username; }
-			set { _username = value; }
+			get { return username; }
+			set { username = value; }
 		}
 
 		public String Password
 		{
-			get { return _password; }
-			set { _password = value; }
+			get { return password; }
+			set { password = value; }
 		}
 	}
 }

@@ -16,10 +16,12 @@ namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
 	using System.Reflection;
+	
+	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Services;
 
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Framework.Internal;
 
 	[TestFixture]
 	public class DefaultControllerFactoryTestCase
@@ -32,6 +34,7 @@ namespace Castle.MonoRail.Framework.Tests
 		public void Init()
 		{
 			factory = new DefaultControllerFactory();
+			factory.Service(new TestServiceContainer());
 			factory.Inspect( Assembly.GetExecutingAssembly() );
 		}
 

@@ -12,19 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework.Services
 {
 	using System;
 	using System.Collections;
 
+	using Castle.Core.Logging;
 
+	/// <summary>
+	/// Simple implementation that relies on weak 
+	/// references in a dictionary
+	/// </summary>
 	public class WeakReferenceCacheProvider : ICacheProvider
 	{
+		/// <summary>
+		/// The logger instance
+		/// </summary>
+		private ILogger logger = NullLogger.Instance;
+
 		private IDictionary entries = Hashtable.Synchronized(new Hashtable());
 
-		public void Init(IServiceProvider serviceProvider)
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(WeakReferenceCacheProvider));
+			}
 		}
+
+		#endregion
 
 		public bool HasKey(String key)
 		{
@@ -33,6 +58,11 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public object Get(String key)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Getting entry {0}", key);
+			}
+			
 			WeakReference reference = (WeakReference) entries[key];
 
 			if (reference == null) return null;
@@ -49,11 +79,21 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public void Store(String key, object data)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Storing entry {0} with value {1}", key, data);
+			}
+
 			entries[key] = new WeakReference(data);
 		}
 
 		public void Delete(String key)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Deleting entry {0}", key);
+			}
+			
 			entries.Remove(key);
 		}
 	}

@@ -44,6 +44,7 @@
 				<include name="${bin.dir}\log4net.dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.TestSupport.dll"/>
 				<include name="${bin.dir}\Boo.Lang.Parser.dll"/>
+				<include name="${bin.dir}\Castle.Core.dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.Framework.dll"/>
 			</references>
 		</booc>
@@ -61,6 +62,7 @@
 				<include name="${bin.dir}\${assembly.name}" />
 				<!-- get NUnit from the GAC -->
 				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}\Castle.Core.dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.TestSupport.dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.Framework.Dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.Framework.Tests.Dll"/>

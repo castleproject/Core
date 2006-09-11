@@ -17,6 +17,8 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 	using System.Collections;
 
+	using Castle.Core.Logging;
+
 	/// <summary>
 	/// Creates <see cref="HelperDescriptor"/> from attributes 
 	/// associated with the <see cref="Controller"/>
@@ -24,24 +26,53 @@ namespace Castle.MonoRail.Framework.Internal
 	public class DefaultHelperDescriptorProvider : IHelperDescriptorProvider
 	{
 		/// <summary>
-		/// Gives a chance to the provider initialize
-		/// itself and request services from the 
-		/// service provider
+		/// The logger instance
 		/// </summary>
-		/// <param name="serviceProvider"></param>
-		public void Init(IServiceProvider serviceProvider)
+		private ILogger logger = NullLogger.Instance;
+
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(DefaultHelperDescriptorProvider));
+			}
 		}
+
+		#endregion
 
 		public HelperDescriptor[] CollectHelpers(Type controllerType)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Collecting helpers for {0}", controllerType);
+			}
+
 			object[] attributes = controllerType.GetCustomAttributes(typeof(IHelperDescriptorBuilder), true);
 
 			ArrayList descriptors = new ArrayList();
 
 			foreach(IHelperDescriptorBuilder builder in attributes)
 			{
-				descriptors.AddRange(builder.BuildHelperDescriptors());
+				HelperDescriptor[] descs = builder.BuildHelperDescriptors();
+				
+				if (logger.IsDebugEnabled)
+				{
+					foreach(HelperDescriptor desc in descs)
+					{
+						logger.Debug("Collected helper {0} with name {1}", desc.HelperType, desc.Name);
+					}
+				}
+				
+				descriptors.AddRange(descs);
 			}
 
 			return (HelperDescriptor[]) descriptors.ToArray(typeof(HelperDescriptor));

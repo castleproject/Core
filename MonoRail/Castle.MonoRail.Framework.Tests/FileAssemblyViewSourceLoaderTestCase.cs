@@ -15,9 +15,11 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Services;
 
 	using NUnit.Framework;
 
+	
 	[TestFixture]
 	public class FileAssemblyViewSourceLoaderTestCase
 	{
@@ -28,7 +30,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			loader = new FileAssemblyViewSourceLoader();
 			loader.ViewRootDir = @"../Castle.MonoRail.Framework.Tests";
-			loader.Init(new TestServiceContainer());
+			loader.Service(new TestServiceContainer());
 		}
 
 		[Test]
@@ -78,6 +80,7 @@ namespace Castle.MonoRail.Framework.Tests
 	{
 		public TestServiceContainer()
 		{
+			AddService(typeof(IControllerTree), new DefaultControllerTree());
 			AddService(typeof(IResourceDescriptorProvider), new DefaultResourceDescriptorProvider());
 			AddService(typeof(IRescueDescriptorProvider), new DefaultRescueDescriptorProvider());
 			AddService(typeof(ILayoutDescriptorProvider), new DefaultLayoutDescriptorProvider());

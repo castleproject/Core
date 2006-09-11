@@ -18,10 +18,11 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.IO;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public interface IViewSourceLoader
 	{
-		void Init(IServiceProvider serviceProvider);
-
 		/// <summary>
 		/// Evaluates whether the specified template exists.
 		/// </summary>

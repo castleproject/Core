@@ -12,20 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework.Services
 {
 	using System;
 	using System.Collections;
 	using System.Reflection;
 	using System.Threading;
 
+	using Castle.Core.Logging;
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Constructs and caches all collected information
 	/// about a <see cref="Controller"/> and its actions.
 	/// <seealso cref="ControllerMetaDescriptor"/>
 	/// </summary>
-	public class ControllerDescriptorProvider : IControllerDescriptorProvider
+	public class DefaultControllerDescriptorProvider : IControllerDescriptorProvider
 	{
+		/// <summary>
+		/// The logger instance
+		/// </summary>
+		private ILogger logger = NullLogger.Instance;
+
+		/// <summary>
+		/// Used to lock the cache
+		/// </summary>
 		private ReaderWriterLock locker = new ReaderWriterLock();
 		private Hashtable descriptorRepository = new Hashtable();
 		private IHelperDescriptorProvider helperDescriptorProvider;
@@ -34,10 +45,17 @@ namespace Castle.MonoRail.Framework.Internal
 		private IRescueDescriptorProvider rescueDescriptorProvider;
 		private IResourceDescriptorProvider resourceDescriptorProvider;
 
-		#region IControllerDescriptorProvider implementation
+		#region IServiceEnabledComponent implementation
 
-		public void Init(IServiceProvider serviceProvider)
+		public void Service(IServiceProvider serviceProvider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) serviceProvider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(DefaultControllerDescriptorProvider));
+			}
+
 			helperDescriptorProvider = (IHelperDescriptorProvider) 
 				serviceProvider.GetService(typeof(IHelperDescriptorProvider));
 
@@ -54,6 +72,8 @@ namespace Castle.MonoRail.Framework.Internal
 				serviceProvider.GetService(typeof(IResourceDescriptorProvider));
 		}
 
+		#endregion
+
 		/// <summary>
 		/// Constructs and populates a <see cref="ControllerMetaDescriptor"/>.
 		/// </summary>
@@ -64,49 +84,117 @@ namespace Castle.MonoRail.Framework.Internal
 		public ControllerMetaDescriptor BuildDescriptor(Controller controller)
 		{
 			Type controllerType = controller.GetType();
+			
+			return BuildDescriptor(controllerType);
+		}
 
+		/// <summary>
+		/// Constructs and populates a <see cref="ControllerMetaDescriptor"/>.
+		/// </summary>
+		/// <remarks>
+		/// This implementation is also responsible for caching 
+		/// constructed meta descriptors.
+		/// </remarks>
+		public ControllerMetaDescriptor BuildDescriptor(Type controllerType)
+		{
 			ControllerMetaDescriptor desc;
 
 			locker.AcquireReaderLock(-1);
 
+			desc = (ControllerMetaDescriptor) descriptorRepository[controllerType];
+
+			if (desc != null)
+			{
+				locker.ReleaseReaderLock();
+				return desc;
+			}
+
 			try
 			{
+				locker.UpgradeToWriterLock(-1);
+
+				// We need to recheck after getting the writer lock
 				desc = (ControllerMetaDescriptor) descriptorRepository[controllerType];
 
 				if (desc != null)
 				{
 					return desc;
 				}
+				
+				desc = InternalBuildDescriptor(controllerType);
 
-				LockCookie lc = locker.UpgradeToWriterLock(-1);
-
-				try
-				{
-					desc = BuildDescriptor(controllerType);
-
-					descriptorRepository[controllerType] = desc;
-				}
-				finally
-				{
-					locker.DowngradeFromWriterLock(ref lc);
-				}
+				descriptorRepository[controllerType] = desc;
 			}
 			finally
 			{
-				locker.ReleaseReaderLock();
+				locker.ReleaseWriterLock();
 			}
 
 			return desc;
 		}
-
-		#endregion
-
-		private ControllerMetaDescriptor BuildDescriptor(Type controllerType)
+		
+		private ControllerMetaDescriptor InternalBuildDescriptor(Type controllerType)
 		{
-			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor(controllerType);
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Building controller descriptor for {0}", controllerType);
+			}
+
+			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor();
 
 			CollectClassLevelAttributes(controllerType, descriptor);
+			
+			CollectActions(controllerType, descriptor);
 
+			CollectActionLevelAttributes(descriptor);
+
+			return descriptor;
+		}
+
+		#region Action data
+		
+		private void CollectActions(Type controllerType, ControllerMetaDescriptor desc)
+		{
+			// HACK: GetRealControllerType is a workaround for DYNPROXY-14 bug
+			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
+			controllerType = GetRealControllerType(controllerType);
+
+			MethodInfo[] methods = controllerType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+			foreach(MethodInfo method in methods)
+			{
+				Type declaringType = method.DeclaringType;
+
+				if (declaringType == typeof(Object) || 
+					declaringType == typeof(Controller) || 
+					declaringType == typeof(SmartDispatcherController))
+				{
+					continue;
+				}
+
+				if (desc.Actions.Contains(method.Name))
+				{
+					ArrayList list = desc.Actions[method.Name] as ArrayList;
+
+					if (list == null)
+					{
+						list = new ArrayList();
+						list.Add(desc.Actions[method.Name]);
+
+						desc.Actions[method.Name] = list;
+					}
+
+					list.Add(method);
+				}
+				else
+				{
+					desc.Actions[method.Name] = method;
+				}
+			}
+		}
+
+		private void CollectActionLevelAttributes(ControllerMetaDescriptor descriptor)
+		{
 			foreach(object action in descriptor.Actions.Values)
 			{
 				if (action is IList)
@@ -121,14 +209,15 @@ namespace Castle.MonoRail.Framework.Internal
 
 				CollectActionAttributes(action as MethodInfo, descriptor);
 			}
-
-			return descriptor;
 		}
-
-		#region Action data
 
 		private void CollectActionAttributes(MethodInfo method, ControllerMetaDescriptor descriptor)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Collection attributes for action {0}", method.Name);
+			}
+
 			ActionMetaDescriptor actionDescriptor = descriptor.GetAction(method);
 
 			CollectResources(actionDescriptor, method);
@@ -137,6 +226,11 @@ namespace Castle.MonoRail.Framework.Internal
 			CollectAccessibleThrough(actionDescriptor, method);
 			CollectSkipRescue(actionDescriptor, method);
 			CollectLayout(actionDescriptor, method);
+			
+			if (method.IsDefined(typeof(AjaxActionAttribute), true))
+			{
+				descriptor.AjaxActions.Add(method);
+			}
 		}
 
 		private void CollectSkipRescue(ActionMetaDescriptor actionDescriptor, MethodInfo method)
@@ -172,6 +266,27 @@ namespace Castle.MonoRail.Framework.Internal
 		private void CollectResources(BaseMetaDescriptor desc, MemberInfo memberInfo)
 		{
 			desc.Resources = resourceDescriptorProvider.CollectResources(memberInfo);
+		}
+		
+		private Type GetRealControllerType(Type controllerType)
+		{
+			Type prev = controllerType;
+
+			// try to get the first type which is not a proxy
+			// TODO: skip it in case of mixins
+			while (controllerType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+			{
+				controllerType = controllerType.BaseType;
+
+				if (controllerType == typeof(SmartDispatcherController) || controllerType == typeof(Controller))
+				{
+					// oops, it's a pure-proxy controller. just let it go.
+					controllerType = prev;
+					break;
+				}
+			}
+
+			return controllerType;
 		}
 
 		#endregion

@@ -17,23 +17,35 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.IO;
-
+	
+	using Castle.Core;
+	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views;
 
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class FileAssemblyViewSourceLoader : IViewSourceLoader
+	public class FileAssemblyViewSourceLoader : IViewSourceLoader, IServiceEnabledComponent
 	{
 		private readonly IList additionalSources = new ArrayList();
 		private String viewRootDir;
 		private bool enableCache = true;
 		private FileSystemWatcher viewFolderWatcher;
+		
+		#region IServiceEnabledComponent implementation
 
-		public void Init(IServiceProvider serviceProvider)
+		public void Service(IServiceProvider provider)
 		{
+			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
+			
+			if (config != null)
+			{
+				viewRootDir = config.ViewEngineConfig.ViewPathRoot;
+			}
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Evaluates whether the specified template exists.
@@ -109,31 +121,33 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public event FileSystemEventHandler ViewChanged
 		{
-		    add
-		    {
-		        //avoid concurrency problems with creating/removing the watcher
-		        //in two threads in parallel. Unlikely, but better to be safe.
-		        lock(this)
-		        {
-		            //create the watcher if it doesn't exists
-		            if (viewFolderWatcher == null)
-		                InitViewFolderWatch();
-		            ViewChangedImpl += value;
-		        }
-		    }
-		    remove
-		    {
-		        //avoid concurrency problems with creating/removing the watcher
-		        //in two threads in parallel. Unlikely, but better to be safe.
-		        lock(this)
-		        {
-		            ViewChangedImpl -= value;
-		            if (ViewChangedImpl == null)//no more subscribers.
-		            {
-		                DisposeViewFolderWatch();
-		            }
-		        }
-		    }
+			add
+			{
+				//avoid concurrency problems with creating/removing the watcher
+				//in two threads in parallel. Unlikely, but better to be safe.
+				lock(this)
+				{
+					//create the watcher if it doesn't exists
+					if (viewFolderWatcher == null)
+					{
+						InitViewFolderWatch();
+					}
+					ViewChangedImpl += value;
+				}
+			}
+			remove
+			{
+				//avoid concurrency problems with creating/removing the watcher
+				//in two threads in parallel. Unlikely, but better to be safe.
+				lock(this)
+				{
+					ViewChangedImpl -= value;
+					if (ViewChangedImpl == null)//no more subscribers.
+					{
+						DisposeViewFolderWatch();
+					}
+				}
+			}
 		}
 
 		private event FileSystemEventHandler ViewChangedImpl;
@@ -170,7 +184,6 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#endregion
-
 		
 		private bool HasTemplateOnFileSystem(string templateName)
 		{

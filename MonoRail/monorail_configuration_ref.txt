@@ -1,0 +1,79 @@
+<monorail 
+	useWindsorIntegration="true|false"
+	checkClientIsConnected="true|false"
+	smtpHost="" 
+	smtpUsername="" 
+	smtpPassword="">
+	
+	<logger factory="" level=""  />
+
+	<!-- custom Factories/Should be configured on services. Here for backward compatible purposes -->
+	
+	<customControllerFactory type="type name that implements IControllerFactory" />
+	<customComponentFactory type="type name that implements IComponentFactory" />
+	<customFilterFactory type="type name that implements IFilterFactory" />
+
+	<controllers>
+		<assembly>AssemblyName1</assembly>
+		<assembly>AssemblyName2</assembly>
+	</controllers>
+	
+	<viewcomponents>
+		<assembly>AssemblyName1</assembly>
+		<assembly>AssemblyName2</assembly>
+	</viewcomponents>
+	
+	<viewEngine 
+		viewPathRoot="views" 
+		customEngine="ViewEngine.Type.Name, Assembly">
+		
+		<additionalSources>
+			<assembly name="" namespace="" />
+			<assembly name="" namespace="" />
+		</additionalSources>
+		
+	</viewEngine>
+
+	<!-- List of services ids:
+
+			Custom
+			ControllerFactory
+			ViewEngine
+			ViewSourceLoader
+			ViewComponentFactory
+			FilterFactory
+			ResourceFactory
+			EmailSender
+			ControllerDescriptorProvider
+			ResourceDescriptorProvider
+			RescueDescriptorProvider
+			LayoutDescriptorProvider
+			HelperDescriptorProvider
+			FilterDescriptorProvider
+			EmailTemplateService
+			ControllerTree
+			CacheProvider
+			ScaffoldingSupport
+	-->
+	
+	<services>
+		<service id="[see list above]" type="Service.Type.Name, Assembly" />
+	</services>
+	
+	<extensions>
+		<extension type="Extension.Type.Name, Assembly" />
+		<extension type="Extension.Type.Name, Assembly" />
+	</extensions>
+
+	<routing>
+		<rule>
+			<pattern>(/blog/posts/)(\d+)/(\d+)/(.)*$</pattern>
+			<replace><![CDATA[ /blog/view.rails?year=$2&month=$3 ]]></replace>
+		</rule>
+		<rule>
+			<pattern>(/news/)(\d+)/(\d+)/(.)*$</pattern>
+			<replace><![CDATA[ /news/view.rails?year=$2&month=$3 ]]></replace>
+		</rule>
+	</routing>
+	
+</monorail>

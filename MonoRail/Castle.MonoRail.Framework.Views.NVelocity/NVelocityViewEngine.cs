@@ -22,12 +22,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	using System;
 	using System.IO;
 	using System.Collections;
-	using System.ComponentModel.Design;
+	
+	using Castle.Core;
 	
 	using Commons.Collections;
 
-	
-	public class NVelocityViewEngine : ViewEngineBase
+	/// <summary>
+	/// Pendent
+	/// </summary>
+	public class NVelocityViewEngine : ViewEngineBase, IInitializable
 	{
 		internal const String TemplateExtension = ".vm";
 
@@ -35,10 +38,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		
 		private const String TemplatePathPattern = "{0}{1}{2}";
 
-		// private static IViewComponentFactory staticViewComponentFactory;
+		private IServiceProvider provider;
 
 		protected VelocityEngine velocity = new VelocityEngine();
-
+		
 		/// <summary>
 		/// Creates a new <see cref="NVelocityViewEngine"/> instance.
 		/// </summary>
@@ -47,12 +50,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			
 		}
 
-		#region IViewEngine Members
+		#region IInitializable implementation
 
-		public override void Init(IServiceContainer serviceContainer)
+		public void Initialize()
 		{
-			base.Init(serviceContainer);
-
 			ExtendedProperties props = new ExtendedProperties();
 
 			if (ViewSourceLoader.HasTemplate("nvelocity.properties"))
@@ -68,10 +69,25 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			InitializeVelocityProperties(props);
 
-			velocity.SetApplicationAttribute("service.provider", serviceContainer);
+			velocity.SetApplicationAttribute("service.provider", provider);
 
 			velocity.Init(props);
 		}
+		
+		#endregion
+		
+		#region IServiceEnabledComponent implementation
+
+		public override void Service(IServiceProvider provider)
+		{
+			base.Service(provider);
+			
+			this.provider = provider;
+		}
+		
+		#endregion
+
+		#region IViewEngine implementation
 
 		public override bool HasTemplate(String templateName)
 		{
@@ -84,7 +100,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			
 			AdjustContentType(context);
 
-			Template template = null;
+			Template template;
 
 			bool hasLayout = controller.LayoutName != null;
 

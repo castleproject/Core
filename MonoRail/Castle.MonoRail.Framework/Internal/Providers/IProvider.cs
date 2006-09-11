@@ -14,19 +14,12 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
-	using System;
+	using Castle.Core;
 
 	/// <summary>
-	/// Base interface for different providers
+	/// Base interface for providers
 	/// </summary>
-	public interface IProvider
+	public interface IProvider : IServiceEnabledComponent
 	{
-		/// <summary>
-		/// Gives a chance to the provider initialize
-		/// itself and request services from the 
-		/// service provider
-		/// </summary>
-		/// <param name="serviceProvider"></param>
-		void Init(IServiceProvider serviceProvider);
 	}
 }

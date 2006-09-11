@@ -15,8 +15,8 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-
-	using Castle.MonoRail.Framework.Configuration;
+	using System.Xml;
+	using Castle.Core;
 
 	/// <summary>
 	/// Contract for extensions that want to hook 
@@ -25,17 +25,13 @@ namespace Castle.MonoRail.Framework
 	/// <remarks>
 	/// Extensions implementations must be thread safe and stateless.
 	/// </remarks>
-	public interface IMonoRailExtension
+	public interface IMonoRailExtension : IServiceEnabledComponent
 	{
 		/// <summary>
-		/// Implementors have a chance to read custom 
-		/// elements from <see cref="MonoRailConfiguration"/>
-		/// and subscribe to some event the <see cref="ExtensionManager"/>
-		/// exposes.
+		/// Gives to the extension implementor a chance to read 
+		/// attributes and child nodes of the extension node
 		/// </summary>
-		/// <param name="manager">The Extension Manager</param>
-		/// <param name="configuration">The MonoRail configuration</param>
-		void Init(ExtensionManager manager, MonoRailConfiguration configuration);
-
+		/// <param name="node">The node that defines the MonoRail extension</param>
+		void SetExtensionConfigNode(XmlNode node);
 	}
 }

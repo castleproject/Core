@@ -15,11 +15,14 @@
 namespace TestSiteARSupport.Controllers
 {
 	using System;
+	
 	using Castle.Components.Binder;
 	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
+	
 	using TestSiteARSupport.Model;
 
+	
 	public class CategoryController : ARSmartDispatcherController
 	{
 		public void New()

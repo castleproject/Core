@@ -17,19 +17,20 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.ComponentModel;
-	using System.ComponentModel.Design;
+	using System.Configuration;
 	using System.Web;
 
-	using Castle.Components.Common.EmailSender;
-	using Castle.Components.Common.EmailSender.SmtpEmailSender;
-
+	using Castle.Core;
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Services;
 	using Castle.MonoRail.Framework.Views.Aspx;
 
 	/// <summary>
-	/// Pendent
+	/// Provides the services used and shared by the framework. Also 
+	/// is in charge of creating an implementation of <see cref="IRailsEngineContext"/>
+	/// upon the start of a new request.
 	/// </summary>
 	public class EngineContextModule : AbstractServiceContainer, IHttpModule 
 	{
@@ -37,32 +38,20 @@ namespace Castle.MonoRail.Framework
 		
 		private static bool initialized;
 		
+		/// <summary>The only one Extension Manager</summary>
 		private ExtensionManager extensionManager;
-
-		/// <summary>Keeps extensions. Just prevents them from being collected.</summary>
-		private ArrayList extensions = new ArrayList();
-
-		private MonoRailConfiguration monoRailConfiguration;
-		private IViewEngine viewEngine;
-		private IViewSourceLoader viewSourceLoader;
-		private IFilterFactory filterFactory;
-		private IResourceFactory resourceFactory;
-		private IControllerFactory controllerFactory;
-		private IScaffoldingSupport scaffoldingSupport;
-		private IViewComponentFactory viewCompFactory;
-		private IEmailSender emailSender;
-		private IControllerDescriptorProvider controllerDescriptorProvider;
-		private ICacheProvider cacheProvider;
-		private IResourceDescriptorProvider resourceDescriptorProvider;
-		private IRescueDescriptorProvider rescueDescriptorProvider;
-		private ILayoutDescriptorProvider layoutDescriptorProvider;
-		private IHelperDescriptorProvider helperDescriptorProvider;
-		private IFilterDescriptorProvider filterDescriptorProvider;
-		private IEmailTemplateService emailTemplateService;
+		
+		/// <summary>Prevents GC to collect the extensions</summary>
+		private IList extensions = new ArrayList();
 
 		public void Init(HttpApplication context)
 		{
-			InitServices();
+			InitConfiguration();
+			
+			MonoRailConfiguration config = ObtainConfiguration();
+
+			InitExtensions(config);
+			InitServices(config);
 			InitApplicationHooks(context);
 
 			initialized = true;
@@ -70,31 +59,136 @@ namespace Castle.MonoRail.Framework
 
 		public void Dispose()
 		{
-			
+			extensions.Clear();
 		}
-
-		private void InitServices()
+		
+		/// <summary>
+		/// Reads the configuration and initializes
+		/// registered extensions.
+		/// </summary>
+		/// <param name="config">The configuration object</param>
+		private void InitExtensions(MonoRailConfiguration config)
 		{
-			monoRailConfiguration = ObtainConfiguration();
-
-			InitializeControllerDescriptorProvider();
-			InitializeDescriptorProviders();
-			InitializeExtensions();
-			InitializeCacheProvider();
-			InitializeControllerFactory();
-			InitializeViewComponentFactory();
-			InitializeFilterFactory();
-			InitializeResourceFactory();
-			InitializeViewSourceLoader();
-			InitializeViewEngine();
-			InitializeScaffoldingSupport();
-			InitializeEmailSender();
-
-			RegisterServices(this);
-
-			ConfigureAndInvokeInit();
+			extensionManager = new ExtensionManager(this);
+			
+			foreach(ExtensionEntry entry in config.ExtensionEntries)
+			{
+				AssertImplementsService(typeof(IMonoRailExtension), entry.ExtensionType);
+				
+				IMonoRailExtension extension = (IMonoRailExtension) ActivateService(entry.ExtensionType);
+				
+				extension.SetExtensionConfigNode(entry.ExtensionNode);
+				
+				extensions.Add(extension);
+			}
 		}
 
+		/// <summary>
+		/// Coordinates the instantiation, registering and initialization (lifecycle-wise)
+		/// of the services used by MonoRail.
+		/// </summary>
+		/// <param name="config">The configuration object</param>
+		private void InitServices(MonoRailConfiguration config)
+		{
+			AddService(typeof(ExtensionManager), extensionManager);
+			AddService(typeof(MonoRailConfiguration), config);
+			
+			IList services = InstantiateAndRegisterServices(config.ServiceEntries);
+			
+			LifecycleService(services);
+			LifecycleService(extensions);
+
+			LifecycleInitialize(services);
+			LifecycleInitialize(extensions);
+		}
+
+		/// <summary>
+		/// Checks for services that implements <see cref="IInitializable"/>
+		/// or <see cref="ISupportInitialize"/> and initialize them through the interface
+		/// </summary>
+		/// <param name="services">List of MonoRail's services</param>
+		private void LifecycleInitialize(IList services)
+		{
+			foreach(object instance in services)
+			{
+				IInitializable initializable = instance as IInitializable;
+				
+				if (initializable != null)
+				{
+					initializable.Initialize();
+				}
+				
+				ISupportInitialize suppInitialize = instance as ISupportInitialize;
+				
+				if (suppInitialize != null)
+				{
+					suppInitialize.BeginInit();
+					suppInitialize.EndInit();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Checks for services that implements <see cref="IServiceEnabledComponent"/>
+		/// and invoke <see cref="IServiceEnabledComponent.Service"/> on them
+		/// </summary>
+		/// <param name="services">List of MonoRail's services</param>
+		private void LifecycleService(IList services)
+		{
+			foreach(object instance in services)
+			{
+				IServiceEnabledComponent serviceEnabled = instance as IServiceEnabledComponent;
+				
+				if (serviceEnabled != null)
+				{
+					serviceEnabled.Service(this);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Instantiates and registers the services used by MonoRail.
+		/// </summary>
+		/// <param name="services">The service's registry</param>
+		/// <returns>List of service's instances</returns>
+		private IList InstantiateAndRegisterServices(ServiceEntryCollection services)
+		{
+			IList instances = new ArrayList();
+			
+			// Builtin services
+			
+			foreach(DictionaryEntry entry in services.ServiceImplMap)
+			{
+				Type service = (Type) entry.Key;
+				Type impl = (Type) entry.Value;
+				
+				AssertImplementsService(service, impl);
+				
+				object instance = ActivateService(impl);
+				
+				AddService(service, instance);
+				
+				instances.Add(instance);
+			}
+
+			// Custom services
+			
+			foreach(Type type in services.CustomServices)
+			{
+				object instance = ActivateService(type);
+				
+				AddService(type, instance);
+				
+				instances.Add(instance);
+			}
+
+			return instances;
+		}
+
+		/// <summary>
+		/// Registers to <c>HttpApplication</c> events
+		/// </summary>
+		/// <param name="context">The application instance</param>
 		private void InitApplicationHooks(HttpApplication context)
 		{
 			context.BeginRequest += new EventHandler(OnBeginRequest);
@@ -106,189 +200,143 @@ namespace Castle.MonoRail.Framework
 			context.Error += new EventHandler(OnError);		    
 		}
 
+		/// <summary>
+		/// Registers the default implementation of services, if 
+		/// they are not registered
+		/// </summary>
+		private void InitConfiguration()
+		{
+			MonoRailConfiguration config = MonoRailConfiguration.GetConfig();
+
+			RegisterMissingServices(config);
+		}
+
+		/// <summary>
+		/// Checks whether non-optional services were supplied 
+		/// through the configuration, and if not, register the 
+		/// default implementation.
+		/// </summary>
+		/// <param name="config">The configuration object</param>
+		private void RegisterMissingServices(MonoRailConfiguration config)
+		{
+			ServiceEntryCollection services = config.ServiceEntries;
+
+			if (!services.HasService(ServiceIdentification.ViewSourceLoader))
+			{
+				services.RegisterService(ServiceIdentification.ViewSourceLoader, 
+				                         typeof(FileAssemblyViewSourceLoader));
+			}
+			if (!services.HasService(ServiceIdentification.ViewEngine))
+			{
+				Type viewEngineType = config.ViewEngineConfig.CustomEngine;
+				
+				if (viewEngineType == null)
+				{
+					viewEngineType = typeof(WebFormsViewEngine);
+				}
+				
+				services.RegisterService(ServiceIdentification.ViewEngine, viewEngineType);
+			}
+			if (!services.HasService(ServiceIdentification.ScaffoldingSupport))
+			{
+				Type defaultScaffoldingType =
+					TypeLoadUtil.GetType(
+						TypeLoadUtil.GetEffectiveTypeName(
+							"Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold"), true);
+				
+				if (defaultScaffoldingType != null)
+				{
+					services.RegisterService(ServiceIdentification.ScaffoldingSupport, defaultScaffoldingType);
+				}
+			}
+			if (!services.HasService(ServiceIdentification.ControllerFactory))
+			{
+				if (config.ControllersConfig.CustomControllerFactory != null)
+				{
+					services.RegisterService(ServiceIdentification.ControllerFactory, 
+					                         config.ControllersConfig.CustomControllerFactory);
+				}
+				else
+				{
+					services.RegisterService(ServiceIdentification.ControllerFactory, 
+					                         typeof(DefaultControllerFactory));
+				}
+			}
+			if (!services.HasService(ServiceIdentification.ViewComponentFactory))
+			{
+				if (config.ViewComponentsConfig.CustomViewComponentFactory != null)
+				{
+					services.RegisterService(ServiceIdentification.ViewComponentFactory, 
+					                         config.ViewComponentsConfig.CustomViewComponentFactory);
+				}
+				else
+				{
+					services.RegisterService(ServiceIdentification.ViewComponentFactory, 
+					                         typeof(DefaultViewComponentFactory));
+				}
+			}
+			if (!services.HasService(ServiceIdentification.FilterFactory))
+			{
+				if (config.CustomFilterFactory != null)
+				{
+					services.RegisterService(ServiceIdentification.FilterFactory, 
+					                         config.CustomFilterFactory);
+				}
+				else
+				{
+					services.RegisterService(ServiceIdentification.FilterFactory, 
+					                         typeof(DefaultFilterFactory));
+				}
+			}
+			if (!services.HasService(ServiceIdentification.ResourceFactory))
+			{
+				services.RegisterService(ServiceIdentification.ResourceFactory, typeof(DefaultResourceFactory));
+			}
+			if (!services.HasService(ServiceIdentification.EmailSender))
+			{
+				services.RegisterService(ServiceIdentification.EmailSender, typeof(MonoRailSmtpSender));
+			}
+			if (!services.HasService(ServiceIdentification.ControllerDescriptorProvider))
+			{
+				services.RegisterService(ServiceIdentification.ControllerDescriptorProvider, typeof(DefaultControllerDescriptorProvider));
+			}
+			if (!services.HasService(ServiceIdentification.ResourceDescriptorProvider))
+			{
+				services.RegisterService(ServiceIdentification.ResourceDescriptorProvider, typeof(DefaultResourceDescriptorProvider));
+			}
+			if (!services.HasService(ServiceIdentification.RescueDescriptorProvider))
+			{
+				services.RegisterService(ServiceIdentification.RescueDescriptorProvider, typeof(DefaultRescueDescriptorProvider));
+			}
+			if (!services.HasService(ServiceIdentification.LayoutDescriptorProvider))
+			{
+				services.RegisterService(ServiceIdentification.LayoutDescriptorProvider, typeof(DefaultLayoutDescriptorProvider));
+			}
+			if (!services.HasService(ServiceIdentification.HelperDescriptorProvider))
+			{
+				services.RegisterService(ServiceIdentification.HelperDescriptorProvider, typeof(DefaultHelperDescriptorProvider));
+			}
+			if (!services.HasService(ServiceIdentification.FilterDescriptorProvider))
+			{
+				services.RegisterService(ServiceIdentification.FilterDescriptorProvider, typeof(DefaultFilterDescriptorProvider));
+			}
+			if (!services.HasService(ServiceIdentification.EmailTemplateService))
+			{
+				services.RegisterService(ServiceIdentification.EmailTemplateService, typeof(EmailTemplateService));
+			}
+			if (!services.HasService(ServiceIdentification.ControllerTree))
+			{
+				services.RegisterService(ServiceIdentification.ControllerTree, typeof(DefaultControllerTree));
+			}
+			if (!services.HasService(ServiceIdentification.CacheProvider))
+			{
+				services.RegisterService(ServiceIdentification.CacheProvider, typeof(DefaultCacheProvider));
+			}
+		}
+
 		private MonoRailConfiguration ObtainConfiguration()
 		{
 			return MonoRailConfiguration.GetConfig();
-		}
-
-		private void InitializeControllerDescriptorProvider()
-		{
-			controllerDescriptorProvider = new ControllerDescriptorProvider();
-		}
-
-		private void InitializeDescriptorProviders()
-		{
-			resourceDescriptorProvider = new DefaultResourceDescriptorProvider();
-			rescueDescriptorProvider = new DefaultRescueDescriptorProvider();
-			layoutDescriptorProvider = new DefaultLayoutDescriptorProvider();
-			helperDescriptorProvider = new DefaultHelperDescriptorProvider();
-			filterDescriptorProvider = new DefaultFilterDescriptorProvider();
-		}
-
-		protected virtual void InitializeExtensions()
-		{
-			extensionManager = new ExtensionManager(this);
-
-			foreach(Type extensionType in monoRailConfiguration.Extensions)
-			{
-				IMonoRailExtension extension = 
-					Activator.CreateInstance( extensionType ) as IMonoRailExtension;
-
-				extension.Init(extensionManager, monoRailConfiguration);
-
-				extensions.Add(extension);
-			}
-		}
-
-		protected virtual void InitializeViewSourceLoader()
-		{
-			viewSourceLoader = new FileAssemblyViewSourceLoader();
-
-			foreach(AssemblySourceInfo sourceInfo in monoRailConfiguration.AdditionalViewSources)
-			{
-				viewSourceLoader.AdditionalSources.Add(sourceInfo);
-			}
-		}
-
-		protected virtual void InitializeViewEngine()
-		{
-			if (monoRailConfiguration.CustomViewEngineType != null)
-			{
-				viewEngine = (IViewEngine) 
-					Activator.CreateInstance(monoRailConfiguration.CustomViewEngineType);
-			}
-			else
-			{
-				// If nothing was specified, 
-				// we use the default view engine 
-				// based on webforms
-				viewEngine = new WebFormsViewEngine();
-			}
-		}
-
-		protected virtual void InitializeFilterFactory()
-		{
-			if (monoRailConfiguration.CustomFilterFactoryType != null)
-			{
-				filterFactory = (IFilterFactory) Activator.CreateInstance(monoRailConfiguration.CustomFilterFactoryType);
-			}
-			else
-			{
-				filterFactory = new DefaultFilterFactory();
-			}
-		}
-
-		protected virtual void InitializeViewComponentFactory()
-		{
-			if (monoRailConfiguration.CustomViewComponentFactoryType != null)
-			{
-				viewCompFactory = (IViewComponentFactory) 
-					Activator.CreateInstance(monoRailConfiguration.CustomViewComponentFactoryType);
-			}
-			else
-			{
-				DefaultViewComponentFactory compFactory = new DefaultViewComponentFactory();
-
-				foreach(String assemblyName in monoRailConfiguration.ComponentsAssemblies)
-				{
-					compFactory.Inspect(assemblyName);
-				}
-
-				viewCompFactory = compFactory;
-			}
-		}
-
-		protected virtual void InitializeResourceFactory()
-		{
-			if (monoRailConfiguration.CustomResourceFactoryType != null)
-			{
-				resourceFactory = (IResourceFactory) 
-					Activator.CreateInstance(monoRailConfiguration.CustomResourceFactoryType);
-			}
-			else
-			{
-				resourceFactory = new DefaultResourceFactory();
-			}
-		}
-		
-		protected virtual void InitializeScaffoldingSupport()
-		{
-			if (monoRailConfiguration.ScaffoldingType != null)
-			{
-				scaffoldingSupport = (IScaffoldingSupport) 
-					Activator.CreateInstance(monoRailConfiguration.ScaffoldingType);
-			}
-		}
-
-		protected virtual void InitializeControllerFactory()
-		{
-			if (monoRailConfiguration.CustomControllerFactoryType != null)
-			{
-				controllerFactory = (IControllerFactory) 
-					Activator.CreateInstance(monoRailConfiguration.CustomControllerFactoryType);
-			}
-			else
-			{
-				DefaultControllerFactory factory = new DefaultControllerFactory();
-
-				foreach(String assemblyName in monoRailConfiguration.ControllerAssemblies)
-				{
-					factory.Inspect(assemblyName);
-				}
-
-				controllerFactory = factory;
-			}
-		}
-
-		protected void InitializeEmailSender()
-		{
-			// TODO: allow user to customize this
-
-			emailSender = new SmtpSender(monoRailConfiguration.SmtpConfig.Host);
-
-			ISupportInitialize initializer = emailSender as ISupportInitialize;
-
-			if (initializer != null)
-			{
-				initializer.BeginInit();
-				initializer.EndInit();
-			}
-
-			emailTemplateService = new EmailTemplateService(viewEngine);
-		}
-
-		private void InitializeCacheProvider()
-		{
-			if (monoRailConfiguration.CacheProviderType == null)
-			{
-				cacheProvider = new DefaultCacheProvider();
-			}
-			else
-			{
-				cacheProvider = (ICacheProvider) 
-					Activator.CreateInstance(monoRailConfiguration.CacheProviderType);
-			}
-		}
-
-		private void ConfigureAndInvokeInit()
-		{
-			resourceDescriptorProvider.Init(this);
-			rescueDescriptorProvider.Init(this);
-			layoutDescriptorProvider.Init(this);
-			helperDescriptorProvider.Init(this);
-			filterDescriptorProvider.Init(this);
-
-			controllerDescriptorProvider.Init(this);
-
-			// TODO: Add this configuration attribute
-			// viewSourceLoader.EnableCache = monoRailConfiguration.ViewsEnableCache;
-			viewSourceLoader.ViewRootDir = monoRailConfiguration.ViewsPhysicalPath;
-			viewSourceLoader.Init(this);
-
-			viewEngine.XhtmlRendering = monoRailConfiguration.ViewsXhtmlRendering;
-			viewEngine.Init(this);
-
-			cacheProvider.Init(this);
 		}
 
 		#region Hooks dispatched to extensions
@@ -356,7 +404,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#endregion
-
+		
 		private IRailsEngineContext CreateRailsEngineContext(HttpContext context)
 		{
 			IRailsEngineContext mrContext = ObtainRailsEngineContext(context);
@@ -370,27 +418,27 @@ namespace Castle.MonoRail.Framework
 
 			return mrContext;
 		}
-
-		protected virtual void RegisterServices(IServiceContainer context)
+		
+		private object ActivateService(Type type)
 		{
-			context.AddService(typeof(ExtensionManager), extensionManager);
-			context.AddService(typeof(IControllerFactory), controllerFactory);
-			context.AddService(typeof(IViewSourceLoader), viewSourceLoader);
-			context.AddService(typeof(IViewEngine), viewEngine);
-			context.AddService(typeof(IFilterFactory), filterFactory);
-			context.AddService(typeof(IResourceFactory), resourceFactory);
-			context.AddService(typeof(IScaffoldingSupport), scaffoldingSupport);
-			context.AddService(typeof(IViewComponentFactory), viewCompFactory);
-			context.AddService(typeof(IControllerDescriptorProvider), controllerDescriptorProvider);
-			context.AddService(typeof(IEmailSender), emailSender);
-			context.AddService(typeof(IEmailTemplateService), emailTemplateService);
-			context.AddService(typeof(ICacheProvider), cacheProvider);
-			context.AddService(typeof(MonoRailConfiguration), monoRailConfiguration);
-			context.AddService(typeof(IResourceDescriptorProvider), resourceDescriptorProvider);
-			context.AddService(typeof(IRescueDescriptorProvider), rescueDescriptorProvider);
-			context.AddService(typeof(ILayoutDescriptorProvider), layoutDescriptorProvider);
-			context.AddService(typeof(IHelperDescriptorProvider), helperDescriptorProvider);
-			context.AddService(typeof(IFilterDescriptorProvider), filterDescriptorProvider);
+			try
+			{
+				return Activator.CreateInstance(type);
+			}
+			catch(Exception ex)
+			{
+				throw new ConfigurationException(String.Format("Initialization Exception: " + 
+					"Could not instantiate {0}", type.FullName), ex);
+			}
+		}
+
+		private void AssertImplementsService(Type service, Type impl)
+		{
+			if (!service.IsAssignableFrom(impl))
+			{
+				throw new ConfigurationException(String.Format("Initialization Exception: " + 
+					"Service {0} does not implement or extend {1}", impl.FullName, service.FullName));
+			}
 		}
 
 		internal static bool Initialized

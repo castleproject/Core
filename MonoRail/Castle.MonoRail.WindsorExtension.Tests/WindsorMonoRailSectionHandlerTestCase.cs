@@ -35,22 +35,22 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 			AssertCommon(config);
 		}
 
-		[Test, Ignore("Does not work on .net 2")]
+		[Test, Explicit]
 		public void ComplexTest()
 		{
 			MonoRailConfiguration config = GetConfig("ComplexTest.xml");
 
 			AssertCommon(config);
-			Assert.AreEqual( "PhotosDemo", config.ControllerAssemblies[1] );
+			Assert.AreEqual( "PhotosDemo", config.ControllersConfig.Assemblies[1] );
 		}
 
-		[Test, Ignore("Does not work on .net 2")]
+		[Test, Explicit]
 		public void PiComplexTest()
 		{
 			MonoRailConfiguration config = GetConfig("Pi-ComplexTest.xml");
 
 			AssertCommon(config);
-			Assert.AreEqual( "PhotosDemo", config.ControllerAssemblies[1] );
+			Assert.AreEqual( "PhotosDemo", config.ControllersConfig.Assemblies[1] );
 		}
 
 		private static void AssertCommon( MonoRailConfiguration config )
@@ -58,10 +58,11 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 			Assert.AreEqual( "castleproject.org", config.SmtpConfig.Host);
 			Assert.AreEqual( "secret", config.SmtpConfig.Password);
 			Assert.AreEqual( "JoeDoe", config.SmtpConfig.Username);
-			Assert.AreEqual( "Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine", config.CustomViewEngineType.FullName );			
-			Assert.AreEqual( "MoviesDemo", config.ControllerAssemblies[0] );
+			Assert.AreEqual( "Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine", 
+			                 config.ViewEngineConfig.CustomEngine.FullName );			
+			Assert.AreEqual( "MoviesDemo", config.ControllersConfig.Assemblies[0] );
 	
-			Assert.IsTrue( config.ViewsPhysicalPath.EndsWith("views") );
+			Assert.IsTrue( config.ViewEngineConfig.ViewPathRoot.EndsWith("views") );
 		}
 
 		public MonoRailConfiguration GetConfig(string fileName)

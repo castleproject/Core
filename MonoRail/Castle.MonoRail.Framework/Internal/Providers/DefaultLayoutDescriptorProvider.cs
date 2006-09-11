@@ -16,6 +16,8 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 	using System.Reflection;
+	
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Creates <see cref="LayoutDescriptor"/> from attributes 
@@ -24,22 +26,48 @@ namespace Castle.MonoRail.Framework.Internal
 	public class DefaultLayoutDescriptorProvider : ILayoutDescriptorProvider
 	{
 		/// <summary>
-		/// Gives a chance to the provider initialize
-		/// itself and request services from the 
-		/// service provider
+		/// The logger instance
 		/// </summary>
-		/// <param name="serviceProvider"></param>
-		public void Init(IServiceProvider serviceProvider)
+		private ILogger logger = NullLogger.Instance;
+
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(DefaultLayoutDescriptorProvider));
+			}
 		}
 
+		#endregion
+		
 		public LayoutDescriptor CollectLayout(MemberInfo memberInfo)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Collecting layout information for {0}", memberInfo.Name);
+			}
+			
 			object[] attributes = memberInfo.GetCustomAttributes(typeof(ILayoutDescriptorBuilder), true);
 
 			if (attributes.Length == 1)
 			{
-				return (attributes[0] as ILayoutDescriptorBuilder).BuildLayoutDescriptor();
+				LayoutDescriptor desc = (attributes[0] as ILayoutDescriptorBuilder).BuildLayoutDescriptor();
+				
+				if (logger.IsDebugEnabled)
+				{
+					logger.Debug("Collected layout with name {0}", desc.LayoutName);
+				}
+				
+				return desc;
 			}
 
 			return null;

@@ -85,11 +85,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
                 <Reference
-                    Name = "Castle.Components.Binder-vs2003"
-                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.MonoRail.ActiveRecordSupport"
                     Project = "{2409063E-BE05-4596-A677-758096D1C759}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -143,6 +138,11 @@
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\ActiveRecord\bin\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    AssemblyName = "Castle.Components.Binder"
+                    HintPath = "..\..\Components\General\Binder\bin\Castle.Components.Binder.dll"
                 />
             </References>
         </Build>

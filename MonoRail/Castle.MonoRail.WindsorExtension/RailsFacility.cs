@@ -19,8 +19,9 @@ namespace Castle.MonoRail.WindsorExtension
 	using Castle.MicroKernel.Facilities;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Internal.Graph;
 	using Castle.MonoRail.Framework.Controllers;
+	using Castle.MonoRail.Framework.Services;
+	using Castle.MonoRail.Framework.Services.Utils;
 
 	/// <summary>
 	/// Facility responsible for registering the controllers in
@@ -28,7 +29,7 @@ namespace Castle.MonoRail.WindsorExtension
 	/// </summary>
 	public class RailsFacility : AbstractFacility
 	{
-		private ControllerTree tree;
+		private IControllerTree tree;
 
 		public RailsFacility()
 		{
@@ -36,10 +37,10 @@ namespace Castle.MonoRail.WindsorExtension
 
 		protected override void Init()
 		{
-			Kernel.AddComponent("rails.controllertree", typeof(ControllerTree));
+			Kernel.AddComponent("rails.controllertree", typeof(IControllerTree), typeof(DefaultControllerTree));
 			Kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
 
-			tree = (ControllerTree) Kernel["rails.controllertree"];
+			tree = (IControllerTree) Kernel["rails.controllertree"];
 
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 

@@ -65,12 +65,29 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	{
 		private IExceptionHandler firstHandler;
 
-		public void Init(ExtensionManager manager, MonoRailConfiguration configuration)
+		#region IMonoRailExtension implementation
+		
+		public void SetExtensionConfigNode(XmlNode node)
 		{
+			// Ignored
+		}
+		
+		#endregion
+		
+		#region IServiceEnabledComponent implementation
+
+		public void Service(IServiceProvider provider)
+		{
+			ExtensionManager manager = (ExtensionManager) 
+			                           provider.GetService(typeof(ExtensionManager));
+			
+			MonoRailConfiguration config = (MonoRailConfiguration) 
+			                               provider.GetService(typeof(MonoRailConfiguration));
+			
 			manager.ActionException += new ExtensionHandler(OnException);
 			manager.UnhandledException += new ExtensionHandler(OnException);
 
-			XmlNodeList handlers = configuration.ConfigSection.SelectNodes("exception/exceptionHandler");
+			XmlNodeList handlers = config.ConfigurationSection.SelectNodes("exception/exceptionHandler");
 
 			foreach(XmlNode node in handlers)
 			{
@@ -87,6 +104,8 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			manager.ServiceContainer.AddService(typeof(IExceptionProcessor), this);
 		}
 		
+		#endregion
+
 		#region IExceptionProcessor implementation
 		
 		public void ProcessException(Exception exception)
@@ -120,9 +139,9 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 		private void InstallExceptionHandler(XmlNode node, String typeName)
 		{
-			IExceptionHandler handler = null;
+			IExceptionHandler handler;
 
-			Type handlerType = MonoRailConfiguration.GetType(typeName);
+			Type handlerType = TypeLoadUtil.GetType(typeName);
 
 			if (handlerType == null)
 			{

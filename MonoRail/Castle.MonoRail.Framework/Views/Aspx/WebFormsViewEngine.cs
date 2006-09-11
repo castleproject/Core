@@ -19,7 +19,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.Web.UI;
 	using System.IO;
 	using System.Collections;
-	using System.ComponentModel.Design;
 	using System.Reflection;
 
 	/// <summary>
@@ -35,11 +34,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		public WebFormsViewEngine()
 		{
-		}
-
-		public override void Init(IServiceContainer serviceContainer)
-		{
-			base.Init(serviceContainer);
 		}
 
 		public override bool HasTemplate(String templateName)
@@ -59,6 +53,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			//TODO: document this hack for the sake of our users
 			HttpContext httpContext = context.UnderlyingContext;
+			
 			if (httpContext != null)
 			{
 				if (!(processedBefore = httpContext.Items.Contains(ProcessedBeforeKey)))
@@ -195,10 +190,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		}
 		
 		private IHttpHandler GetCompiledPageInstance(String viewName, HttpContext httpContext)
-		{	 
+		{
 			String physicalPath = null;
-		    
-	    		// This is a hack until I can understand the different behavior exhibited by
+
+			// This is a hack until I can understand the different behavior exhibited by
 			// PageParser.GetCompiledPageInstance(..) when running ASP.NET 2.0.  It appears
 			// that the virtualPath (first argument) to this method must represent a valid
 			// virtual directory with respect to the web application.   As a result, the
@@ -230,7 +225,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		}
 
 		private void PrepareLayout(Controller controller, HttpContext httpContext)
-		{			
+		{
 			if (HasLayout(controller))
 			{
 				bool layoutPending = httpContext.Items.Contains("wfv.masterPage");
@@ -424,7 +419,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			public void ReleaseHandler(IHttpHandler handler)
 			{
 
-			}		
+			}
 		}
 	
 #endif

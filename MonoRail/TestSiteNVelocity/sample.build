@@ -57,6 +57,7 @@
 				<include name="${bin2.dir}/Commons.dll" />
 				<include name="${bin2.dir}/log4net.dll" />
 				<include name="${bin2.dir}/NVelocity.dll" />
+				<include name="${bin2.dir}/Castle.Core.dll" />
 				<include name="${bin2.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />

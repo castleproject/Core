@@ -21,7 +21,6 @@ namespace Castle.MonoRail.WindsorExtension
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Internal.Graph;
 
 
 	/// <summary>
@@ -35,11 +34,11 @@ namespace Castle.MonoRail.WindsorExtension
 		{
 			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
 
-			ControllerTree tree;
+			IControllerTree tree;
 			
 			try
 			{
-				tree = (ControllerTree) container["rails.controllertree"];
+				tree = (IControllerTree) container["rails.controllertree"];
 			}
 			catch(ComponentNotFoundException)
 			{

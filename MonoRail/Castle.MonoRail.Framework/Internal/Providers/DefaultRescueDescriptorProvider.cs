@@ -17,6 +17,8 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Creates <see cref="RescueDescriptor"/> from attributes 
@@ -25,24 +27,54 @@ namespace Castle.MonoRail.Framework.Internal
 	public class DefaultRescueDescriptorProvider : IRescueDescriptorProvider
 	{
 		/// <summary>
-		/// Gives a chance to the provider initialize
-		/// itself and request services from the 
-		/// service provider
+		/// The logger instance
 		/// </summary>
-		/// <param name="serviceProvider"></param>
-		public void Init(IServiceProvider serviceProvider)
+		private ILogger logger = NullLogger.Instance;
+
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(DefaultRescueDescriptorProvider));
+			}
 		}
 
-		public RescueDescriptor[] CollectRescues(MemberInfo member)
+		#endregion
+
+		public RescueDescriptor[] CollectRescues(MemberInfo memberInfo)
 		{
-			object[] attributes = member.GetCustomAttributes(typeof(IRescueDescriptorBuilder), true);
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Collecting rescue information for {0}", memberInfo.Name);
+			}
+			
+			object[] attributes = memberInfo.GetCustomAttributes(typeof(IRescueDescriptorBuilder), true);
 
 			ArrayList descriptors = new ArrayList();
 
 			foreach(IRescueDescriptorBuilder builder in attributes)
 			{
-				descriptors.AddRange(builder.BuildRescueDescriptors());
+				RescueDescriptor[] descs = builder.BuildRescueDescriptors();
+				
+				if (logger.IsDebugEnabled)
+				{
+					foreach(RescueDescriptor desc in descs)
+					{
+						logger.Debug("Collected rescue with view name {0} for exception type {1}", 
+						             desc.ViewName, desc.ExceptionType);
+					}
+				}
+				
+				descriptors.AddRange(descs);
 			}
 
 			return (RescueDescriptor[]) descriptors.ToArray(typeof(RescueDescriptor));

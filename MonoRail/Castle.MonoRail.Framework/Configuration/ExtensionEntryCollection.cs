@@ -12,40 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework.Configuration
 {
-	using System;
-	using System.Web;
+	using System.Collections;
+	using System.Xml;
 
-	public class DefaultCacheProvider : ICacheProvider
+	public class ExtensionEntryCollection : CollectionBase, ISerializedConfig
 	{
-		public void Init(IServiceProvider serviceProvider)
+		#region ISerializedConfig implementation
+		
+		public void Deserialize(XmlNode section)
 		{
+			XmlNodeList services = section.SelectNodes("extensions/extension");
+			
+			foreach(XmlNode node in services)
+			{
+				ExtensionEntry entry = new ExtensionEntry();
+				
+				entry.Deserialize(node);
+				
+				InnerList.Add(entry);
+			}
 		}
-
-		public bool HasKey(String key)
+		
+		#endregion
+		
+		public ExtensionEntry this[int index]
 		{
-			return Get(key) != null;
-		}
-
-		public object Get(String key)
-		{
-			return GetCurrentContext().Cache.Get(key);
-		}
-
-		public void Store(String key, object data)
-		{
-			GetCurrentContext().Cache.Insert(key, data);
-		}
-
-		public void Delete(String key)
-		{
-			GetCurrentContext().Cache.Remove(key);
-		}
-
-		private HttpContext GetCurrentContext()
-		{
-			return HttpContext.Current;
+			get { return InnerList[index] as ExtensionEntry; }
 		}
 	}
 }

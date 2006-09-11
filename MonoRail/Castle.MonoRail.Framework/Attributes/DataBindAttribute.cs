@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections.Specialized;
 	using System.Reflection;
 
 	using Castle.Components.Binder;

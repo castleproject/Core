@@ -17,6 +17,7 @@ import System
 import System.IO
 import System.Collections
 import System.ComponentModel.Design
+import Castle.Core
 import Castle.MonoRail.Framework
 import Boo.Lang.Parser
 import Boo.Lang.Compiler
@@ -26,7 +27,7 @@ import Boo.Lang.Compiler.Pipelines
 
 # This is the class that is responsible to take a template name and turn it into an
 # executable code that then is piped to the user.
-public class BooViewEngine (ViewEngineBase):
+public class BooViewEngine (ViewEngineBase, IInitializable):
 	compilations = Hashtable.Synchronized(Hashtable(CaseInsensitiveHashCodeProvider.Default, 
 			CaseInsensitiveComparer.Default))
 	
@@ -35,6 +36,7 @@ public class BooViewEngine (ViewEngineBase):
 	
 	static options as BooViewEngineOptions
 	baseSavePath as string
+	provider
 	
 	static def InitializeConfig():
 		InitializeConfig("brail")
@@ -45,17 +47,16 @@ public class BooViewEngine (ViewEngineBase):
 	static def InitializeConfig(name as string):
 		options = System.Configuration.ConfigurationSettings.GetConfig(name)
 	
-	# Get configuration options if they exists, if they do not exist, load the default ones
-	# Create directory to save the compiled assemblies if required.
-	# pre-compile the common scripts
-	override def Init(serviceContainer as IServiceContainer):
-		super.Init(serviceContainer)
+	def Initialize():
 		InitializeConfig() if options is null
 		baseDir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)
+		
 		if options.SaveToDisk and not Directory.Exists(self.baseSavePath):
 			Directory.CreateDirectory(self.baseSavePath)
+		
 		CompileCommonScripts()
+		
 		ViewSourceLoader.ViewChanged += def(sender, e as FileSystemEventArgs):
 			if e.FullPath.IndexOf(options.CommonScriptsDirectory)!=-1:
 				# need to invalidate the entire CommonScripts assembly
@@ -66,6 +67,13 @@ public class BooViewEngine (ViewEngineBase):
 				return
 			# Will cause a recompilation
 			compilations[e.Name] = null
+	
+	# Get configuration options if they exists, if they do not exist, load the default ones
+	# Create directory to save the compiled assemblies if required.
+	# pre-compile the common scripts
+	override def Service(provider as IServiceProvider):
+		super.Service(provider)
+		self.provider = provider
 		
 	# Just check if the filename exists, I'm not sure when it's called
 	override def HasTemplate(templateName as string):

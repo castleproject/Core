@@ -356,7 +356,7 @@ namespace Castle.MonoRail.TestSupport
 				url = "/" + url;
 			}
 
-			Assert.IsFalse(url == Response.Headers["Location"]);
+			Assert.IsFalse(url == (String) Response.Headers["Location"]);
 		}
 
 		protected void AssertStatusCode(int expectedCode)

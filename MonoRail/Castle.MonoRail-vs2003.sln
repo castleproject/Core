@@ -63,10 +63,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor", "TestSite
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2003", "..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2003.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteARSupport", "TestSiteARSupport\TestSiteARSupport.csproj", "{0F1BFB63-76D3-4470-891B-3B2519B36D2B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -139,10 +135,6 @@ Global
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.Build.0 = Debug|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.ActiveCfg = Release|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.Build.0 = Release|.NET
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.ActiveCfg = Debug|.NET
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.Build.0 = Debug|.NET
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.ActiveCfg = Release|.NET
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.Build.0 = Release|.NET
 		{0F1BFB63-76D3-4470-891B-3B2519B36D2B}.Debug.ActiveCfg = Debug|.NET
 		{0F1BFB63-76D3-4470-891B-3B2519B36D2B}.Debug.Build.0 = Debug|.NET
 		{0F1BFB63-76D3-4470-891B-3B2519B36D2B}.Release.ActiveCfg = Release|.NET

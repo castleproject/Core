@@ -19,12 +19,11 @@ namespace Castle.MonoRail.WindsorExtension
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class WindsorMonoRailSectionHandler : MonoRailSectionHandler
 	{
-		public WindsorMonoRailSectionHandler() : base()
-		{
-		}
-	
 		public override object Create(object parent, object configContext, XmlNode section)
 		{							
 			XmlProcessor processor = new XmlProcessor();

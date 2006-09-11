@@ -15,24 +15,37 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Configuration;
 	using System.IO;
-	using System.ComponentModel.Design;
+	
+	using Castle.Core;
+	using Castle.MonoRail.Framework.Configuration;
 
 	/// <summary>
 	/// Abstract base class for View Engines.
 	/// </summary>
-	public abstract class ViewEngineBase : IViewEngine
+	public abstract class ViewEngineBase : IViewEngine, IServiceEnabledComponent
 	{
 		private bool xhtmlRendering;
 		private IViewSourceLoader viewSourceLoader;
 
-		/// <summary>
-		/// Initializes the view engine.
-		/// </summary>
-		public virtual void Init(IServiceContainer serviceContainer)
+		#region IServiceEnabledComponent implementation
+		
+		public virtual void Service(IServiceProvider provider)
 		{
-			viewSourceLoader = (IViewSourceLoader) serviceContainer.GetService(typeof(IViewSourceLoader));
+			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
+			
+			xhtmlRendering = config.ViewEngineConfig.EnableXHtmlRendering;
+			
+			viewSourceLoader = (IViewSourceLoader) provider.GetService(typeof(IViewSourceLoader));
+			
+			if (viewSourceLoader == null)
+			{
+				throw new ConfigurationException("Could not obtain IViewSourceLoader");
+			}
 		}
+		
+		#endregion
 
 		/// <summary>
 		/// Evaluates whether the specified template exists.
@@ -98,12 +111,12 @@ namespace Castle.MonoRail.Framework
 			if (XhtmlRendering)
 			{
 				//Find out what they'll accept
-				 String httpAccept = context.Request.Headers["Accept"];
+				String httpAccept = context.Request.Headers["Accept"];
 
 				//TODO: Evaluate the q-values of the Accept header
 
 				//Do they accept application/xhtml+xml?
-				if(httpAccept != null && httpAccept.IndexOf("application/xhtml+xml") != -1)
+				if (httpAccept != null && httpAccept.IndexOf("application/xhtml+xml") != -1)
 				{
 					//Send them the proper content type
 					context.Response.ContentType = "application/xhtml+xml";

@@ -12,22 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework
 {
-	using System;
+	using System.Reflection;
+	
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// Standard implementation of <see cref="IFilterFactory"/>.
+	/// Depicts the contract used by the engine
+	/// to obtain implementations of <see cref="IResource"/>.
 	/// </summary>
-	public class DefaultFilterFactory : IFilterFactory
+	public interface IResourceFactory
 	{
-		public virtual IFilter Create(Type filterType)
-		{
-			return (IFilter) Activator.CreateInstance(filterType);
-		}
+		IResource Create(ResourceDescriptor descriptor, Assembly appAssembly);
 
-		public virtual void Release(IFilter filter)
-		{
-		}
+		void Release(IResource resource);
 	}
 }

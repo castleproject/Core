@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework
 {
-	using System.Reflection;
-
 	/// <summary>
-	/// Depicts the contract used by the engine
-	/// to obtain implementations of <see cref="IResource"/>.
+	/// Pendent
 	/// </summary>
-	public interface IResourceFactory
+	public interface IScaffoldingSupport
 	{
-		IResource Create(ResourceDescriptor descriptor, Assembly appAssembly);
-
-		void Release(IResource resource);
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="controller"></param>
+		void Process(Controller controller);
 	}
 }

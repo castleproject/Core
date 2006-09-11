@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}"
     >
@@ -88,6 +88,11 @@
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

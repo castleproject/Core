@@ -12,15 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework
 {
+	using System;
+	
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Defines the contract for implementations that should
-	/// collect from one or more source the meta information that
-	/// dictates the <see cref="Controller"/> behavior and its actions.
+	/// collect from one or more sources the meta information that
+	/// dictates the <see cref="Controller"/> behavior and the actions it exposes.
 	/// </summary>
 	public interface IControllerDescriptorProvider : IProvider
 	{
 		ControllerMetaDescriptor BuildDescriptor(Controller controller);
+		
+		ControllerMetaDescriptor BuildDescriptor(Type controllerType);
 	}
 }

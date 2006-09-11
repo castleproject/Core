@@ -17,36 +17,35 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System;
 	using System.Text.RegularExpressions;
 
-
 	/// <summary>
 	/// Pendent
 	/// </summary>
 	public class RoutingRule
 	{
-		private String _pattern, _replace;
-		private Regex _rule;
+		private String pattern, replace;
+		private Regex rule;
 
-		public RoutingRule( String pattern, String replace )
+		public RoutingRule(string pattern, string replace)
 		{
-			_pattern = pattern;
-			_replace = replace;
-
-			_rule = new Regex( pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline );
+			this.pattern = pattern;
+			this.replace = replace;
+			
+			rule = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 		}
 
 		public String Pattern
 		{
-			get { return _pattern; }
+			get { return pattern; }
 		}
 
 		public String Replace
 		{
-			get { return _replace; }
+			get { return replace; }
 		}
 
 		public Regex CompiledRule
 		{
-			get { return _rule; }
+			get { return rule; }
 		}
 	}
 }

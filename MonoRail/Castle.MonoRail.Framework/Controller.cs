@@ -24,6 +24,7 @@ namespace Castle.MonoRail.Framework
 	using System.Collections.Specialized;
 
 	using Castle.Components.Common.EmailSender;
+	using Castle.Core;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
@@ -656,7 +657,7 @@ namespace Castle.MonoRail.Framework
 			StringBuilder buffer = new StringBuilder();
 			IServerUtility srv = Context.Server;
 	
-			foreach (String key in parameters.Keys)
+			foreach(String key in parameters.Keys)
 			{
 				buffer.Append( srv.UrlEncode(key) )
 					  .Append('=')
@@ -664,8 +665,10 @@ namespace Castle.MonoRail.Framework
 					  .Append('&');
 			}
 
-			if (buffer.Length > 0)
-				buffer.Length -= 1; // removing extra &
+			if (buffer.Length > 0) // removing extra &
+			{
+				buffer.Length -= 1;
+			} 
 
 			return buffer.ToString();
 		}
@@ -680,7 +683,7 @@ namespace Castle.MonoRail.Framework
 			StringBuilder buffer = new StringBuilder();
 			IServerUtility srv = Context.Server;
 	
-			foreach (DictionaryEntry entry in parameters)
+			foreach(DictionaryEntry entry in parameters)
 			{
 				buffer.Append( srv.UrlEncode(Convert.ToString(entry.Key)) )
 					  .Append('=')
@@ -719,7 +722,7 @@ namespace Castle.MonoRail.Framework
 			{ 
 				MonoRailConfiguration conf = (MonoRailConfiguration) 
 					_context.GetService(typeof(MonoRailConfiguration)); 
-				return conf.CheckIsClientConnected;
+				return conf.CheckClientIsConnected;
 			}
 		}
 
@@ -1034,7 +1037,7 @@ namespace Castle.MonoRail.Framework
 		{
 			_helpers = new HybridDictionary();
 
-			foreach (HelperDescriptor helper in metaDescriptor.Helpers)
+			foreach(HelperDescriptor helper in metaDescriptor.Helpers)
 			{
 				object helperInstance = Activator.CreateInstance(helper.HelperType);
 
@@ -1043,6 +1046,13 @@ namespace Castle.MonoRail.Framework
 				if (aware != null)
 				{
 					aware.SetController(this);
+				}
+				
+				IServiceEnabledComponent serviceEnabled = helperInstance as IServiceEnabledComponent;
+
+				if (serviceEnabled != null)
+				{
+					serviceEnabled.Service(serviceProvider);
 				}
 				
 				if (_helpers.Contains(helper.Name))
@@ -1064,7 +1074,7 @@ namespace Castle.MonoRail.Framework
 						new PaginationHelper(), new FormHelper()
 					};
 
-			foreach (AbstractHelper helper in builtInHelpers)
+			foreach(AbstractHelper helper in builtInHelpers)
 			{
 				helper.SetController(this);
 
@@ -1162,7 +1172,7 @@ namespace Castle.MonoRail.Framework
 				return false;
 			}
 
-			foreach (SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
+			foreach(SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
 			{
 				// SkipAllFilters handling...
 				if (skipfilter.BlanketSkip) return true;
@@ -1190,7 +1200,7 @@ namespace Castle.MonoRail.Framework
 
 		private bool ProcessFilters(ExecuteEnum when, IDictionary filtersToSkip)
 		{
-			foreach (FilterDescriptor desc in _filters)
+			foreach(FilterDescriptor desc in _filters)
 			{
 				if (filtersToSkip.Contains(desc.FilterType)) continue;
 
@@ -1227,7 +1237,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (_filters == null) return;
 
-			foreach (FilterDescriptor desc in _filters)
+			foreach(FilterDescriptor desc in _filters)
 			{
 				if (desc.FilterInstance != null)
 				{

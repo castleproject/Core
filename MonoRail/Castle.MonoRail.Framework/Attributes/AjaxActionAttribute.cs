@@ -22,10 +22,10 @@ namespace Castle.MonoRail.Framework
 	/// Defines that an action is accessible through AJAX calls,
 	/// so <see cref="AjaxHelper"/> can generate a JavaScript proxy for it.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Method)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
 	public class AjaxActionAttribute : Attribute
 	{
-		string name;
+		private string name;
 
 		/// <summary>
 		/// Method marked with this attribute will be accessible through AJAX calls,

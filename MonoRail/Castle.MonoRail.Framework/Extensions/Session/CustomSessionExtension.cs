@@ -45,6 +45,28 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// obtained from the configuration
 		/// </summary>
 		private ICustomSessionFactory customSession;
+		
+		#region IMonoRailExtension implementation
+		
+		public void SetExtensionConfigNode(XmlNode node)
+		{
+			// Ignored
+		}
+		
+		#endregion
+		
+		#region IServiceEnabledComponent implementation
+
+		public void Service(IServiceProvider provider)
+		{
+			ExtensionManager manager = (ExtensionManager) provider.GetService(typeof(ExtensionManager));
+			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
+			
+			Init(manager, config);
+		}
+		
+		#endregion
+
 
 		/// <summary>
 		/// Reads the attribute <c>customSession</c> 
@@ -57,13 +79,13 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// </exception>
 		/// <param name="manager">The Extension Manager</param>
 		/// <param name="configuration">The configuration</param>
-		public void Init(ExtensionManager manager, MonoRailConfiguration configuration)
+		private void Init(ExtensionManager manager, MonoRailConfiguration configuration)
 		{
 			manager.AcquireSessionState += new ExtensionHandler(OnAdquireSessionState);
 			manager.ReleaseSessionState += new ExtensionHandler(OnReleaseSessionState);
 
 			XmlAttribute customSessionAtt = 
-				configuration.ConfigSection.Attributes["customSession"];
+				configuration.ConfigurationSection.Attributes["customSession"];
 
 			if (customSessionAtt == null || customSessionAtt.Value.Length == 0)
 			{
@@ -72,7 +94,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 					"'customSession' attribute on 'monoRail' configuration node");
 			}
 
-			Type customSessType = MonoRailConfiguration.GetType(customSessionAtt.Value);
+			Type customSessType = TypeLoadUtil.GetType(customSessionAtt.Value);
 
 			if (customSessType == null)
 			{

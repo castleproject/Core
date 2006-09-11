@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework.Configuration
 {
 	using System;
+	using System.Xml;
 
 	/// <summary>
-	/// Depicts the contract for cache provider. Was
-	/// created to be used with providers like memcached.
+	/// Used by configurable elements
 	/// </summary>
-	public interface ICacheProvider : IProvider
+	public interface ISerializedConfig
 	{
-		bool HasKey(String key);
-
-		object Get(String key);
-
-		void Store(String key, object data);
-
-		void Delete(String key);
+		void Deserialize(XmlNode section);
 	}
 }

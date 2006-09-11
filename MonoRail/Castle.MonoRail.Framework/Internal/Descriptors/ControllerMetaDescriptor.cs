@@ -31,13 +31,13 @@ namespace Castle.MonoRail.Framework.Internal
 		private IList scaffoldings = new ArrayList();
 		private HelperDescriptor[] helpers;
 		private IList actionProviders = new ArrayList();
+		private IList ajaxActions = new ArrayList();
 		private Hashtable actionMetaDescriptors = new Hashtable();
 		private IDictionary actions = new HybridDictionary(true);
 		private FilterDescriptor[] filters;
 
-		public ControllerMetaDescriptor(Type controllerType)
+		public ControllerMetaDescriptor()
 		{
-			CollectActions(controllerType);
 		}
 
 		public ActionMetaDescriptor GetAction(MethodInfo actionMethod)
@@ -53,6 +53,16 @@ namespace Castle.MonoRail.Framework.Internal
 			return desc;
 		}
 
+		public IDictionary Actions
+		{
+			get { return actions; }
+		}
+
+		public IList AjaxActions
+		{
+			get { return ajaxActions; }
+		}
+
 		public DefaultActionAttribute DefaultAction
 		{
 			get { return defaultAction; }
@@ -63,11 +73,6 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			get { return helpers; }
 			set { helpers = value; }
-		}
-
-		public IDictionary Actions
-		{
-			get { return actions; }
 		}
 
 		public FilterDescriptor[] Filters
@@ -84,67 +89,6 @@ namespace Castle.MonoRail.Framework.Internal
 		public IList ActionProviders
 		{
 			get { return actionProviders; }
-		}
-
-		private void CollectActions(Type controllerType)
-		{
-			// HACK: GetRealControllerType is a workaround for DYNPROXY-14 bug
-			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
-			controllerType = GetRealControllerType(controllerType);
-
-			MethodInfo[] methods = controllerType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
-
-			foreach (MethodInfo method in methods)
-			{
-				Type declaringType = method.DeclaringType;
-
-				if (declaringType == typeof(Object) || 
-				    declaringType == typeof(Controller) || 
-				    declaringType == typeof(SmartDispatcherController))
-				{
-					continue;
-				}
-
-				if (actions.Contains(method.Name))
-				{
-					ArrayList list = actions[method.Name] as ArrayList;
-
-					if (list == null)
-					{
-						list = new ArrayList();
-						list.Add(actions[method.Name]);
-
-						actions[method.Name] = list;
-					}
-
-					list.Add(method);
-				}
-				else
-				{
-					actions[method.Name] = method;
-				}
-			}
-		}
-
-		private Type GetRealControllerType(Type controllerType)
-		{
-			Type prev = controllerType;
-
-			// try to get the first type which is not a proxy
-			// TODO: skip it in case of mixins
-			while (controllerType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
-			{
-				controllerType = controllerType.BaseType;
-
-				if (controllerType == typeof(SmartDispatcherController) || controllerType == typeof(Controller))
-				{
-					// oops, it's a pure-proxy controller. just let it go.
-					controllerType = prev;
-					break;
-				}
-			}
-
-			return controllerType;
 		}
 	}
 }

@@ -16,7 +16,6 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
-	using System.ComponentModel.Design;
 
 	/// <summary>
 	/// Depicts the contract used by the engine
@@ -27,13 +26,13 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes the view engine.
 		/// </summary>
-		void Init(IServiceContainer serviceContainer);
+		//void Init(IServiceContainer serviceContainer);
 
 		/// <summary>
 		/// Gets/sets whether rendering should aim to 
 		/// be XHTML compliant, obtained from the configuration.
 		/// </summary>
-		bool XhtmlRendering { get; set; }
+		//bool XhtmlRendering { get; set; }
 
 		/// <summary>
 		/// Evaluates whether the specified template exists.

@@ -95,14 +95,14 @@
                     HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
-                    Name = "Castle.Components.Binder-vs2003"
-                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
                     HintPath = "..\..\Core\bin\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    AssemblyName = "Castle.Components.Binder"
+                    HintPath = "..\..\Components\General\Binder\bin\Castle.Components.Binder.dll"
                 />
             </References>
         </Build>
@@ -143,17 +143,37 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "EmailTemplateService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "EngineContextModule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Flash.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ICacheProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IControllerAware.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IControllerDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IControllerTree.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -174,6 +194,11 @@
                 />
                 <File
                     RelPath = "IFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IFilterFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -203,7 +228,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IResourceFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IResponse.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IScaffoldingSupport.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -219,6 +254,26 @@
                 />
                 <File
                     RelPath = "IViewComponentContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IViewComponentFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IViewEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IViewSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IViewSourceLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -393,6 +448,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\ControllersConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ExtensionEntry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ExtensionEntryCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ISerializedConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\MonoRailConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -408,7 +483,42 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\RoutingRuleCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ScaffoldConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ServiceEntry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ServiceEntryCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\SmtpConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\TypeLoadUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ViewComponentsConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ViewEngineConfig.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -558,27 +668,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\SetOperation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\ValidationHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Helpers\WizardHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\AbstractControllerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\AbstractServiceContainer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\AbstractViewComponentFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -593,77 +693,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\ControllerInspectionUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\DefaultCacheProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\DefaultControllerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\DefaultFilterFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\DefaultResourceFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\DefaultViewComponentFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Flash.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IControllerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IFilterFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IResourceFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IScaffoldingSupport.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IViewComponentFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IViewEngine.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IViewSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IViewSourceLoader.cs"
+                    RelPath = "Internal\ControllerTree.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -694,11 +724,6 @@
                 />
                 <File
                     RelPath = "Internal\UrlTokenizerException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\WeakReferenceCacheProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -778,16 +803,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\Graph\ControllerTree.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Providers\ControllerDescriptorBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Internal\Providers\DefaultFilterDescriptorProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -809,16 +824,6 @@
                 />
                 <File
                     RelPath = "Internal\Providers\DefaultResourceDescriptorProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Providers\ICacheProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Providers\IControllerDescriptorProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -854,6 +859,71 @@
                 />
                 <File
                     RelPath = "Internal\Test\TestContextHolder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\AbstractControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\AbstractServiceContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\AbstractViewComponentFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\ControllerDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\DefaultCacheProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\DefaultControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\DefaultFilterFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\DefaultResourceFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\DefaultViewComponentFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\EmailTemplateService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\MonoRailSmtpSender.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\WeakReferenceCacheProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\Utils\ControllerInspectionUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -912,7 +982,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Views\Xslt\" />
             </Include>
         </Files>
     </CSHARP>

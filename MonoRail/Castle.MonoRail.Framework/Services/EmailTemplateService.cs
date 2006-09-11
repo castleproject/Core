@@ -21,6 +21,8 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 
 	using Castle.Components.Common.EmailSender;
+	using Castle.Core;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Default implementation of <see cref="IEmailTemplateService"/>
@@ -29,14 +31,35 @@ namespace Castle.MonoRail.Framework
 	/// Will work only during a MonoRail process as it needs a <see cref="IRailsEngineContext"/>
 	/// and a <see cref="Controller"/> instance to execute.
 	/// </remarks>
-	public class EmailTemplateService : IEmailTemplateService
+	public class EmailTemplateService : IServiceEnabledComponent, IEmailTemplateService
 	{
-		private readonly IViewEngine viewEngine;
+		/// <summary>
+		/// The logger instance
+		/// </summary>
+		private ILogger logger = NullLogger.Instance;
 
-		public EmailTemplateService(IViewEngine viewEngine)
+		public EmailTemplateService()
 		{
-			this.viewEngine = viewEngine;
 		}
+		
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
+		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(EmailTemplateService));
+			}
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Creates an instance of <see cref="Message"/>
@@ -56,6 +79,11 @@ namespace Castle.MonoRail.Framework
 			if (HttpContext.Current == null)
 			{
 				throw new RailsException("No http context available");
+			}
+			
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Rendering email message. Template name {0}", templateName);
 			}
 
 			IRailsEngineContext context = EngineContextModule.ObtainRailsEngineContext(HttpContext.Current);
@@ -114,6 +142,7 @@ namespace Castle.MonoRail.Framework
 			
 			// process delivery addresses from template.
 			MatchCollection matches1 = Constants.readdress.Matches(body);
+			
 			for(int i=0; i< matches1.Count; i++)
 			{
 				String header  = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
@@ -132,11 +161,18 @@ namespace Castle.MonoRail.Framework
 						break;
 				}
 			}
+			
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Rendering email message to {0} cc {1} bcc {2}", message.To, message.Cc, message.Bcc);
+			}
+
 			body = Constants.readdress.Replace(body, String.Empty);
 
 			// process from address from template
 			Match match = Constants.refrom.Match(body);
-			if(match.Success)
+			
+			if (match.Success)
 			{
 				message.From = match.Groups[Constants.ValueKey].ToString();
 				body = Constants.refrom.Replace(body, String.Empty);
@@ -144,12 +180,13 @@ namespace Castle.MonoRail.Framework
 
 			// process subject and X headers from template
 			MatchCollection matches2 = Constants.reheader.Matches(body);
+			
 			for(int i=0; i< matches2.Count; i++)
 			{
 				String header	= matches2[i].Groups[Constants.HeaderKey].ToString();
 				String strval	= matches2[i].Groups[Constants.ValueKey].ToString();
 
-				if(header.ToLower() == Constants.Subject)
+				if (header.ToLower() == Constants.Subject)
 				{
 					message.Subject = strval;
 				}
@@ -157,15 +194,31 @@ namespace Castle.MonoRail.Framework
 				{
 					message.Headers.Add(header, strval);
 				}
+				
+				if (logger.IsDebugEnabled)
+				{
+					logger.Debug("Adding header {0} value {1}", header, strval);
+				}
 			}
+			
 			body = Constants.reheader.Replace(body, String.Empty);
 
 			message.Body = body;
+			
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Email message body {0}", body);
+			}
 
 			// a little magic to see if the body is html
-			if(message.Body.ToLower().IndexOf(Constants.HtmlTag) > -1)
+			if (message.Body.ToLower().IndexOf(Constants.HtmlTag) != -1)
 			{
 				message.Format = Format.Html;
+				
+				if (logger.IsDebugEnabled)
+				{
+					logger.Debug("Content set to Html");
+				}
 			}
 			
 			return message;

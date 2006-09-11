@@ -16,9 +16,12 @@ namespace Castle.MonoRail.Framework.Views
 {
 	using System;
 	using System.IO;
+	
 	using Castle.MonoRail.Framework.Internal;
 
-
+	/// <summary>
+	/// 
+	/// </summary>
 	public class EmbeddedResourceViewSource : IViewSource
 	{
 		private readonly AssemblySourceInfo sourceInfo;

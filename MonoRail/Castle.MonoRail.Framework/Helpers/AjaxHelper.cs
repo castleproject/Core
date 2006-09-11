@@ -20,7 +20,9 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections.Specialized;
 	using System.Reflection;
 
-	using Internal;
+	using Castle.Core;
+	using Castle.Core.Logging;
+	using Castle.MonoRail.Framework.Internal;
 
 	public enum CallbackEnum
 	{
@@ -62,13 +64,40 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// This version provides less overloads but makes intensive use of 
 	/// <see cref="IDictionary"/> to pass on options and attributes.
 	/// </remarks>
-	public class AjaxHelper : AbstractHelper
+	public class AjaxHelper : AbstractHelper, IServiceEnabledComponent
 	{
 		private static HybridDictionary ajaxProxyCache = new HybridDictionary();
 		
-		public AjaxHelper()
+		/// <summary>
+		/// The logger instance
+		/// </summary>
+		private ILogger logger = NullLogger.Instance;
+		
+		/// <summary>
+		/// Used by <c>GenerateJSProxy</c> overloads.
+		/// </summary>
+		private IControllerFactory controllerFactory;
+
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(AjaxHelper));
+			}
+			
+			controllerFactory = (IControllerFactory) provider.GetService(typeof(IControllerFactory));
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Renders a Javascript library inside a single script tag.
@@ -92,6 +121,8 @@ namespace Castle.MonoRail.Framework.Helpers
 				Controller.Context.UrlInfo.Extension);
 		}
 
+		#region GenerateJSProxy overloads
+		
 		/// <summary>
 		/// Generates an AJAX JavaScript proxy for the current controller.
 		/// </summary>
@@ -102,6 +133,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Generates an AJAX JavaScript proxy for a given controller.
+		/// <para>
+		/// TODO: Better documentation
+		/// </para>
 		/// </summary>
 		public String GenerateJSProxy(string proxyName, string controller)
 		{
@@ -110,6 +144,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Generates an AJAX JavaScript proxy for a given controller.
+		/// <para>
+		/// TODO: Better documentation
+		/// </para>
 		/// </summary>
 		public String GenerateJSProxy(string proxyName, string area, string controller)
 		{
@@ -118,62 +155,60 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (result == null)
 			{
-				Type controllerType = null;
-				if (Controller.AreaName == area && Controller.Name == controller)
-				{
-					controllerType = Controller.GetType();
-				}
-				else
-				{
-					// HACK: find a better way to inspect a controller
-					IDictionary controllers = ControllerInspectionUtil.inspectedControllers;
-					foreach (DictionaryEntry entry in controllers)
-					{
-						ControllerDescriptor descriptor = (ControllerDescriptor) entry.Value;
-						if (String.Compare(descriptor.Area, area, true) == 0 && String.Compare(descriptor.Name, controller, true) == 0)
-						{
-							controllerType = (Type) entry.Key;
-						}
-					}
-				}
+				Controller controllerInstance = controllerFactory.CreateController(new UrlInfo("/", area, controller, "", ""));
 				
-				if (controllerType == null)
+				if (controllerInstance == null)
 				{
 					throw new RailsException("Controller not found with Area: '{0}', Name: '{1}'", area, controller);
 				}
-
+				
 				String baseUrl = Controller.Context.ApplicationPath + "/";
+				
 				if (area != null && area != String.Empty)
+				{
 					baseUrl += area + "/";
+				}
+				
 				baseUrl += controller + "/";
 				
 				// TODO: develop a smarter function generation, inspecting the return
 				// value of the action and generating a proxy that does the same.
 				// also, think on a proxy pattern for the Ajax.Updater.
 				StringBuilder functions = new StringBuilder();
+				
 				functions.Append("{ ");
-				foreach (MethodInfo mi in controllerType.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+				
+				foreach(MethodInfo ajaxActionMethod in controllerInstance.MetaDescriptor.AjaxActions)
 				{
-					foreach (AjaxActionAttribute attr in mi.GetCustomAttributes(typeof(AjaxActionAttribute), true))
-					{
-						StringBuilder parameters = new StringBuilder("_=");
-						String url = baseUrl + mi.Name + "." + Controller.Context.UrlInfo.Extension;
-						String functionName = attr.Name != null ? attr.Name : mi.Name;
-						functionName = Char.ToLower(functionName[0]) + (functionName.Length > 0 ? functionName.Substring(1) : null);
+					String methodName = ajaxActionMethod.Name;
+					
+					object[] attributes = ajaxActionMethod.GetCustomAttributes(typeof(AjaxActionAttribute), true);
+					
+					AjaxActionAttribute ajaxActionAtt = (AjaxActionAttribute) attributes[0];
+					
+					StringBuilder parameters = new StringBuilder("_=");
+					String url = baseUrl + methodName + "." + Controller.Context.UrlInfo.Extension;
+					String functionName = ajaxActionAtt.Name != null ? ajaxActionAtt.Name : methodName;
+					
+					functionName = Char.ToLower(functionName[0]) + (functionName.Length > 0 ? functionName.Substring(1) : null);
 
-						functions.AppendFormat("{0}: function(", functionName);
-						foreach (ParameterInfo pi in mi.GetParameters())
-						{
-							String paramName = pi.Name;
-							paramName = Char.ToLower(paramName[0]) + (paramName.Length > 0 ? paramName.Substring(1) : null);
-							functions.AppendFormat("{0}, ", paramName);
-							parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
-						}
-						functions.Append("callback){");
-						functions.AppendFormat("var r=new Ajax.Request('{0}', {{parameters: '{1}', asynchronous: !!callback, onComplete: callback}}); if(!callback) return r.transport.responseText;", url, parameters.ToString());
-						functions.Append("},");
+					functions.AppendFormat("{0}: function(", functionName);
+					
+					foreach(ParameterInfo pi in ajaxActionMethod.GetParameters())
+					{
+						String paramName = pi.Name;
+						paramName = Char.ToLower(paramName[0]) + (paramName.Length > 0 ? paramName.Substring(1) : null);
+						functions.AppendFormat("{0}, ", paramName);
+						parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
 					}
+					
+					functions.Append("callback){");
+					functions.AppendFormat("var r=new Ajax.Request('{0}', " + 
+						"{{parameters: '{1}', asynchronous: !!callback, onComplete: callback}}); " + 
+						"if(!callback) return r.transport.responseText;", url, parameters.ToString());
+					functions.Append("},");
 				}
+				
 				functions.Length -= 1;
 				functions.Append("}");
 
@@ -182,6 +217,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			
 			return @"<script type=""text/javascript"">var " + proxyName + " = " + result + ";</script>";
 		}
+		
+		#endregion
 		
 		/// <summary>
 		/// Returns a link that'll trigger a javascript +function+ using the 

@@ -18,7 +18,8 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.Threading;
 
 	using Castle.MonoRail.Framework.Internal;
-
+	using Castle.MonoRail.Framework.Services;
+	
 	using NUnit.Framework;
 
 
@@ -28,13 +29,13 @@ namespace Castle.MonoRail.Framework.Tests
 		private ManualResetEvent startEvent = new ManualResetEvent(false);
 		private ManualResetEvent stopEvent = new ManualResetEvent(false);
 
-		private ControllerDescriptorProvider builder;
+		private DefaultControllerDescriptorProvider builder;
 
 		[SetUp]
 		public void Init()
 		{
-			builder = new ControllerDescriptorProvider();
-			builder.Init(new TestServiceContainer());
+			builder = new DefaultControllerDescriptorProvider();
+			builder.Service(new TestServiceContainer());
 		}
 
 		[Test]
@@ -67,8 +68,6 @@ namespace Castle.MonoRail.Framework.Tests
 			{
 				ControllerMetaDescriptor desc1 = builder.BuildDescriptor( new Controller1() );
 				ControllerMetaDescriptor desc2 = builder.BuildDescriptor( new Controller2() );
-				desc1 = builder.BuildDescriptor( new Controller1() );
-				desc2 = builder.BuildDescriptor( new Controller2() );
 
 				Assert.AreEqual( 0, desc1.ActionProviders.Count );
 				Assert.AreEqual( 1, desc1.Filters.Length );

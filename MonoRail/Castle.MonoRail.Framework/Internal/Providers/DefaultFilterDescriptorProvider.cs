@@ -17,6 +17,8 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 	using System.Collections;
 
+	using Castle.Core.Logging;
+
 	/// <summary>
 	/// Creates <see cref="FilterDescriptor"/> from attributes 
 	/// associated with the <see cref="Controller"/>
@@ -24,24 +26,54 @@ namespace Castle.MonoRail.Framework.Internal
 	public class DefaultFilterDescriptorProvider : IFilterDescriptorProvider
 	{
 		/// <summary>
-		/// Gives a chance to the provider initialize
-		/// itself and request services from the 
-		/// service provider
+		/// The logger instance
 		/// </summary>
-		/// <param name="serviceProvider"></param>
-		public void Init(IServiceProvider serviceProvider)
+		private ILogger logger = NullLogger.Instance;
+
+		#region IServiceEnabledComponent implementation
+		
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
+		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(DefaultFilterDescriptorProvider));
+			}
 		}
+
+		#endregion
 
 		public FilterDescriptor[] CollectFilters(Type controllerType)
 		{
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug("Collecting filters for {0}", controllerType);
+			}
+			
 			object[] attributes = controllerType.GetCustomAttributes(typeof(IFilterDescriptorBuilder), true);
 
 			ArrayList filters = new ArrayList();
 			
 			foreach(IFilterDescriptorBuilder builder in attributes)
 			{
-				filters.AddRange(builder.BuildFilterDescriptors());
+				FilterDescriptor[] descs = builder.BuildFilterDescriptors();
+				
+				if (logger.IsDebugEnabled)
+				{
+					foreach(FilterDescriptor desc in descs)
+					{
+						logger.Debug("Collected filter {0} to execute {1} order {2}", 
+						             desc.FilterType, desc.When, desc.ExecutionOrder);
+					}
+				}
+
+				filters.AddRange(descs);
 			}
 
 			return (FilterDescriptor[]) filters.ToArray(typeof(FilterDescriptor));

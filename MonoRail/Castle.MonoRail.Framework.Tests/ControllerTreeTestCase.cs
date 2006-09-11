@@ -15,10 +15,10 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
-
+	
+	using Castle.MonoRail.Framework.Services;
+	
 	using NUnit.Framework;
-
-	using Castle.MonoRail.Framework.Internal.Graph;
 
 
 	[TestFixture]
@@ -28,13 +28,13 @@ namespace Castle.MonoRail.Framework.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void InvalidConstruction()
 		{
-			new ControllerTree(null);
+			new DefaultControllerTree(null);
 		}
 
 		[Test]
 		public void EmptyArea()
 		{
-			ControllerTree tree = new ControllerTree();
+			DefaultControllerTree tree = new DefaultControllerTree();
 			tree.AddController("", "home", "controller1");
 			tree.AddController("", "contact", "controller2");
 			tree.AddController("", "cart", "controller3");
@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void FewAreas()
 		{
-			ControllerTree tree = new ControllerTree();
+			DefaultControllerTree tree = new DefaultControllerTree();
 
 			tree.AddController("", "home", "controller1");
 			tree.AddController("", "contact", "controller2");

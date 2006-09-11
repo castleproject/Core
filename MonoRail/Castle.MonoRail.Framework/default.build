@@ -76,6 +76,7 @@
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
+				<include name="${bin.dir}/Castle.Core.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
 			</references>
 		</csc>

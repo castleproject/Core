@@ -16,8 +16,8 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 {
 	using System;
 	using System.IO;
-	using System.ComponentModel.Design;
-	using Castle.MonoRail.Framework.Internal;
+
+	using Castle.Core;
 	using Castle.MonoRail.Framework.Views.Aspx;
 	using Castle.MonoRail.Framework.Views.NVelocity;
 
@@ -25,45 +25,55 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 	/// Composition of view engines that dispatch to 
 	/// one or other based on the view file extesion.
 	/// </summary>
-	public class CompositeViewEngine : ViewEngineBase
+	public class CompositeViewEngine : ViewEngineBase, IInitializable
 	{
-		private WebFormsViewEngine _aspxViewEngine;
-		private NVelocityViewEngine _nvelocityViewEngine;
+		private readonly WebFormsViewEngine aspxViewEngine;
+		private readonly NVelocityViewEngine nvelocityViewEngine;
 
 		public CompositeViewEngine()
 		{
+			aspxViewEngine = new WebFormsViewEngine();
+			nvelocityViewEngine = new NVelocityViewEngine();
 		}
+
+		#region IInitializable implementation
+		
+		public void Initialize()
+		{
+			nvelocityViewEngine.Initialize();
+		}
+		
+		#endregion
+
+		#region IServiceEnabledComponent implementation
+
+		public override void Service(IServiceProvider provider)
+		{
+			base.Service(provider);
+
+			aspxViewEngine.Service(provider);
+			nvelocityViewEngine.Service(provider);
+		}
+		
+		#endregion
 
 		#region IViewEngine Members
 
-		public override void Init(IServiceContainer serviceContainer)
-		{
-			base.Init(serviceContainer);
-
-			_aspxViewEngine = new WebFormsViewEngine();
-			_aspxViewEngine.XhtmlRendering = XhtmlRendering;
-			_aspxViewEngine.Init(serviceContainer);
-
-			_nvelocityViewEngine = new NVelocityViewEngine();
-			_nvelocityViewEngine.XhtmlRendering = XhtmlRendering;
-			_nvelocityViewEngine.Init(serviceContainer);
-		}
-
 		public override bool HasTemplate(String templateName)
 		{
-			return _nvelocityViewEngine.HasTemplate(templateName) || _aspxViewEngine.HasTemplate(templateName);
+			return nvelocityViewEngine.HasTemplate(templateName) || aspxViewEngine.HasTemplate(templateName);
 		}
 
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			bool aspxProcessed, vmProcessed; aspxProcessed = vmProcessed = false;
 
-			if (_aspxViewEngine.HasTemplate(viewName))
+			if (aspxViewEngine.HasTemplate(viewName))
 			{
 				aspxProcessed = ProcessAspx(context, controller, viewName);
 			}
 
-			if (!aspxProcessed && _nvelocityViewEngine.HasTemplate(viewName))
+			if (!aspxProcessed && nvelocityViewEngine.HasTemplate(viewName))
 			{
 				vmProcessed = ProcessVm(context, controller, viewName);
 			}
@@ -82,26 +92,26 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 		/// </summary>
 		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller, String viewName)
 		{
-			_nvelocityViewEngine.Process(output, context, controller, viewName);
+			nvelocityViewEngine.Process(output, context, controller, viewName);
 		}
 
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
-			_nvelocityViewEngine.ProcessContents(context, controller, contents);
+			nvelocityViewEngine.ProcessContents(context, controller, contents);
 		}
 
 		#endregion
 
 		protected virtual bool ProcessVm(IRailsEngineContext context, Controller controller, string viewName)
 		{
-			_nvelocityViewEngine.Process(context, controller, viewName);
+			nvelocityViewEngine.Process(context, controller, viewName);
 
 			return true;
 		}
 
 		protected virtual bool ProcessAspx(IRailsEngineContext context, Controller controller, string viewName)
 		{
-			_aspxViewEngine.Process(context, controller, viewName);
+			aspxViewEngine.Process(context, controller, viewName);
 			
 			return true;
 		}
