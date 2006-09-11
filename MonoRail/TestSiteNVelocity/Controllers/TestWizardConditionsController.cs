@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity
+namespace TestSiteNVelocity.Controllers
 {
 	using System;
 	using Castle.MonoRail.Framework;
@@ -43,31 +43,31 @@ namespace TestSiteNVelocity
 		{
 			return new WizardStepPage[] { new Page1() };
 		}
-	}
-
-	public class Page1 : WizardStepPage
-	{
-		protected override bool IsPreConditionSatisfied(IRailsEngineContext context)
-		{
-			bool isOk = Query["id"] == "1";
-			
-			if (!isOk)
-			{
-				Redirect("TestWizardConditions", "Index");
-			}
-			
-			return isOk;
-		}
 		
-		public void InnerAction()
+		public class Page1 : WizardStepPage
 		{
-			Flash["InnerActionInvoked"] = true;
+			protected override bool IsPreConditionSatisfied(IRailsEngineContext context)
+			{
+				bool isOk = Query["id"] == "1";
+			
+				if (!isOk)
+				{
+					Redirect("TestWizardConditions", "Index");
+				}
+			
+				return isOk;
+			}
+		
+			public void InnerAction()
+			{
+				Flash["InnerActionInvoked"] = true;
 
-			RenderText("InnerAction contents");
-		}
+				RenderText("InnerAction contents");
+			}
 
-		public void InnerAction2()
-		{
+			public void InnerAction2()
+			{
+			}
 		}
 	}
 }

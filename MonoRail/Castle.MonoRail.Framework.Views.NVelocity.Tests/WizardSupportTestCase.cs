@@ -142,5 +142,45 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertReplyEqualTo("View for Inner action 2");
 		}
+		
+		[Test]
+		public void WizardWithinAnArea()
+		{
+			DoGet("wizard/TestWizardWithArea/start.rails");
+			AssertRedirectedTo("/wizard/testwizardwitharea/Page1.rails");
+
+			DoGet("wizard/TestWizardWithArea/index.rails");
+			AssertReplyEqualTo("Hello!");
+
+			DoGet("wizard/TestWizardWithArea/Page1.rails");
+			AssertSuccess();
+			AssertSessionEntryEqualsTo("wizard.testwizardwithareacurrentstepindex", 0);
+			AssertSessionEntryEqualsTo("wizard.testwizardwithareacurrentstep", "Page1");
+
+			DoGet("wizard/TestWizardWithArea/Page1.rails");
+			AssertSuccess();
+			AssertSessionEntryEqualsTo("wizard.testwizardwithareacurrentstepindex", 0);
+			AssertSessionEntryEqualsTo("wizard.testwizardwithareacurrentstep", "Page1");
+
+			DoGet("wizard/TestWizardWithArea/Page1.rails");
+			AssertFlashDoesNotContain("InnerActionInvoked");
+			AssertSuccess();
+
+			DoGet("wizard/TestWizardWithArea/Page1-InnerAction.rails");
+			AssertSuccess();
+			AssertFlashContains("InnerActionInvoked");
+
+			DoGet("wizard/testwizardwitharea/Page4-InnerAction.rails", "navigate.to=uri:/wizard/testwizardwitharea/Page3.rails" );
+			AssertRedirectedTo("/wizard/testwizardwitharea/Page3.rails");
+			AssertFlashContains("InnerActionInvoked");
+
+			DoGet("wizard/TestWizardWithArea/Page4-InnerAction.rails", "navigate.to=uri:/wizard/testwizardwitharea/Page3.rails" );
+			AssertRedirectedTo("/wizard/testwizardwitharea/Page3.rails");
+			AssertFlashContains("InnerActionInvoked");
+
+			DoGet("wizard/TestWizardWithArea/Page4-InnerAction.rails", "navigate.to=uri:http://google/" );
+			AssertRedirectedTo("http://google/");
+			AssertFlashContains("InnerActionInvoked");
+		}
 	}
 }

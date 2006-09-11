@@ -218,7 +218,7 @@ namespace Castle.MonoRail.Framework
 
 			if (redirect)
 			{
-				context.Response.Redirect(controller.Name, firstStep);
+				context.Response.Redirect(controller.AreaName, controller.Name, firstStep);
 			}
 		}
 

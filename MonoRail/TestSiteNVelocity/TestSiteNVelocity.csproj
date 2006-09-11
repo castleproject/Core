@@ -137,11 +137,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "TestWizardConditionsController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "web.config"
                     BuildAction = "None"
                 />
@@ -310,7 +305,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\TestWizardConditionsController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\TestWizardController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\TestWizardWithAreaController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -601,6 +606,22 @@
                 />
                 <File
                     RelPath = "views\validated\default.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\wizard\testwizardwitharea\InnerAction2.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\wizard\testwizardwitharea\page1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\wizard\testwizardwitharea\page3.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\wizard\testwizardwitharea\page4.vm"
                     BuildAction = "None"
                 />
             </Include>

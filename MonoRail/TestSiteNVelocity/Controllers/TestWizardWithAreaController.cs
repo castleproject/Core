@@ -15,12 +15,11 @@
 namespace TestSiteNVelocity.Controllers
 {
 	using System;
-
 	using Castle.MonoRail.Framework;
 
-
 	[DynamicActionProvider(typeof(WizardActionProvider))]
-	public class TestWizardController : Controller, IWizardController
+	[ControllerDetails(Area="wizard")]
+	public class TestWizardWithAreaController : Controller, IWizardController
 	{
 		public void Index()
 		{
@@ -86,4 +85,6 @@ namespace TestSiteNVelocity.Controllers
 			}		
 		}
 	}
+
+	
 }
