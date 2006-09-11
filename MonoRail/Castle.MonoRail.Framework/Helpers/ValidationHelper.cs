@@ -46,6 +46,32 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Configure the submit and validation options.
+		/// </summary>
+		public void SetSubmitOptions(IDictionary parameters)
+		{
+			_submitOptions["confirm"] = parameters["confirm"];
+			_submitOptions["disable"] = parameters["disable"];
+			_submitOptions["groupError"] = parameters["groupError"];
+			_submitOptions["errorMode"] = parameters["errorMode"];
+		}
+
+		/// <summary>
+		/// Configure the submit and validation options.
+		/// </summary>
+		/// <param name="confirm"><b>True</b> for submit confirmation. Otherwise, <b>false</b>.</param>
+		/// <param name="disable"><b>True</b> for submit buttons disabling.</param>
+		/// <param name="groupError"><b>True</b> for error grouping.</param>
+		/// <param name="errorMode"><see cref="int"/> representing the error mode.</param>
+		public void SetSubmitOptions(bool confirm, bool disable, bool groupError, int errorMode)
+		{
+			_submitOptions["confirm"] = confirm;
+			_submitOptions["disable"] = disable;
+			_submitOptions["groupError"] = groupError;
+			_submitOptions["errorMode"] = errorMode;
+		}
+
+		/// <summary>
 		/// Gets or Sets the Virtual Directory the scripts are in.
 		/// </summary>
 		/// <remarks>The default is <see cref="Controller.Context.ApplicationPath"/>.</remarks>
@@ -201,21 +227,6 @@ namespace Castle.MonoRail.Framework.Helpers
 				options["disable"].ToString().ToLower(),
 				options["groupError"].ToString().ToLower(),
 				options["errorMode"]);
-		}
-
-		/// <summary>
-		/// Configure the submit and validation options.
-		/// </summary>
-		/// <param name="confirm"><b>True</b> for submit confirmation. Otherwise, <b>false</b>.</param>
-		/// <param name="disable"><b>True</b> for submit buttons disabling.</param>
-		/// <param name="groupError"><b>True</b> for error grouping.</param>
-		/// <param name="errorMode"><see cref="int"/> representing the error mode.</param>
-		public void SetSubmitOptions(bool confirm, bool disable, bool groupError, int errorMode)
-		{
-			_submitOptions["confirm"] = confirm;
-			_submitOptions["disable"] = disable;
-			_submitOptions["groupError"] = groupError;
-			_submitOptions["errorMode"] = errorMode;
 		}
 	}
 }
