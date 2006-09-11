@@ -289,8 +289,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 
 			// Append column prefix
-			model.BelongsToAtt.Column = columnPrefix + model.BelongsToAtt.Column;
-			
+			if (model.BelongsToAtt.Column != null)
+			{
+				model.BelongsToAtt.Column = columnPrefix + model.BelongsToAtt.Column;
+			}
+
 			if (model.BelongsToAtt.Type == null)
 			{
 				model.BelongsToAtt.Type = model.Property.PropertyType;

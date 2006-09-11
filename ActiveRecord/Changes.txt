@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Applied Freyr Magnússon's patch fixing AR-75 
+  "SemanticVerifierVisitor causing fauly xml when using composit key"
+
 - Review OneToOneAttribute test case, added one more unit test
 
 - Removed OuterJoin attribute from OneToOneAttribute, replaced by Fetch property
