@@ -4,6 +4,11 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed MR-106
+  "Apply Sean's suggestions"
+  
+  Component 'ChildContentComponent' introduced, plus a few test cases for it.
+
 - Fixed MR-101
   "Seems Wizard Controller can't define Area"
 

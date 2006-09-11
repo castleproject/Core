@@ -185,6 +185,20 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertReplyContains("1 2 True Something hello");
 		}
+		
+		[Test]
+		public void ChildContentComponent1()
+		{
+			DoGet("usingcomponent2/ChildContentComponent1.rails");
+			AssertReplyContains("View content and Something");
+		}
+		
+		[Test]
+		public void ChildContentComponent2()
+		{
+			DoGet("usingcomponent2/ChildContentComponent2.rails");
+			AssertReplyContains("View content and 1 2 True Something hello");
+		}
 
 		void AssertOutput(String expected, object output)
 		{

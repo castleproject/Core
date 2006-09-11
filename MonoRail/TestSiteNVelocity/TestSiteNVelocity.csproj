@@ -365,6 +365,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\components\ChildContentComponent\default.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\components\SimpleInlineViewComponent2\mycompview1.vm"
                     BuildAction = "None"
                 />
@@ -586,6 +590,14 @@
                 />
                 <File
                     RelPath = "views\UsingComponent\InlineComponentUsingTemplatedRender.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent2\ChildContentComponent1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent2\ChildContentComponent2.vm"
                     BuildAction = "None"
                 />
                 <File

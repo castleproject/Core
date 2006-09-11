@@ -25,6 +25,14 @@ namespace TestSiteNVelocity.Controllers
 		{
 		}
 
+		public void ChildContentComponent1()
+		{
+		}
+
+		public void ChildContentComponent2()
+		{
+		}
+
 		public void GridComponent1()
 		{
 			FillPropertyBag();

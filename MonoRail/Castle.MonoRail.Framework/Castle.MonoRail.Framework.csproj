@@ -933,6 +933,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ViewComponents\ChildContentComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ViewComponents\SecurityComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
