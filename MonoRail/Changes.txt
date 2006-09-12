@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Marc-André's patch fixing MR-149
+  "[TestSupport] Verb not specified for Get request"
+
 - Applied Ernst Naezer's patch that fixes MR-95 
   "Update ProtoType/Scriptaculous js libraries to latest version"
   

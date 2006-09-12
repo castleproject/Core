@@ -174,6 +174,7 @@ namespace Castle.MonoRail.TestSupport
 			}
 
 			Request.Url = path;
+			Request.Verb = "GET";
 			Request.PostParams = null;
 
 			SendRequest();
