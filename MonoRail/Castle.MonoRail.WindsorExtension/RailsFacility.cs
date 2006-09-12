@@ -45,37 +45,7 @@ namespace Castle.MonoRail.WindsorExtension
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 
 			AddBuiltInControllers();
-
-//			ExtractServicesFromModule();
 		}
-
-//		protected void ExtractServicesFromModule()
-//		{
-//			if (HttpContext.Current == null)
-//			{
-//				throw new FacilityException("No Http Context available while executing RailsFacility start up");
-//			}
-//
-//			HttpModuleCollection modules = HttpContext.Current.ApplicationInstance.Modules;
-//
-//			foreach(String key in HttpContext.Current.ApplicationInstance.Modules.AllKeys)
-//			{
-//				object module = modules.Get(key);
-//
-//				EngineContextModule engineModule = module as EngineContextModule;
-//
-//				if (engineModule == null) continue;
-//
-//				ExtractServices(engineModule);
-//
-//				break;
-//			}
-//		}
-
-//		protected void ExtractServices(IServiceProvider provider)
-//		{
-//			Kernel.Resolver.AddSubResolver(new SubDependencyResolverAdapter(provider));
-//		}
 
 		protected virtual void AddBuiltInControllers()
 		{
@@ -102,28 +72,4 @@ namespace Castle.MonoRail.WindsorExtension
 			}
 		}
 	}
-
-//	internal class SubDependencyResolverAdapter : ISubDependencyResolver
-//	{
-//		private readonly IServiceProvider provider;
-//
-//		public SubDependencyResolverAdapter(IServiceProvider provider)
-//		{
-//			this.provider = provider;
-//		}
-//
-//		public object Resolve(ComponentModel model, DependencyModel dependency)
-//		{
-//			if (dependency.DependencyType == DependencyType.Parameter) return null;
-//
-//			return provider.GetService(dependency.TargetType);
-//		}
-//
-//		public bool CanResolve(ComponentModel model, DependencyModel dependency)
-//		{
-//			if (dependency.DependencyType == DependencyType.Parameter) return false;
-//
-//			return provider.GetService(dependency.TargetType) != null;
-//		}
-//	}
 }
