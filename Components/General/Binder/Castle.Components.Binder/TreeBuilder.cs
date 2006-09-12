@@ -73,11 +73,13 @@ namespace Castle.Components.Binder
 		{
 			if (name == null || name == String.Empty)
 			{
-				// Not valid
+				// Ignore
+				return;
 			}
 			if (name[0] == '.' || name[0] == '[' || name[0] == ']')
 			{
 				// Something went wrong
+				throw new BindingException("Invalid key: " + name);
 			}
 			
 			int dotIndex = name.IndexOf('.');
