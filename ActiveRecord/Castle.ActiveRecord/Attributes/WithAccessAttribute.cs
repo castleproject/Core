@@ -19,26 +19,26 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class WithAccessAttribute : Attribute
 	{
-		private PropertyAccess _access = PropertyAccess.Property;
-		private string _customAccess = null;
+		private PropertyAccess access = PropertyAccess.Property;
+		private string customAccess = null;
 
 		public PropertyAccess Access
 		{
-			get { return _access; }
-			set { _access = value; }
+			get { return access; }
+			set { access = value; }
 		}
 
 		public string CustomAccess
 		{
-			get { return _customAccess;}
-			set { _customAccess=value;}
+			get { return customAccess;}
+			set { customAccess=value;}
 		}
 
 		public string AccessString
 		{
 			get
 			{
-				if (CustomAccess!=null)
+				if (CustomAccess != null)
 				{
 					return CustomAccess;
 				}

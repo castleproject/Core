@@ -88,7 +88,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					}
 				}
 
-				ThrowIfDoesNotHavePrimaryKey(model);
+				AssertHasValidKey(model);
 
 				base.VisitModel(model);
 			}
@@ -100,73 +100,75 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitPrimaryKey(PrimaryKeyModel model)
 		{
-			// check for composite key first
-			if (model.Property.PropertyType.GetCustomAttributes(typeof(CompositeKeyAttribute), false).Length > 0)
+			if (model.PrimaryKeyAtt.Column == null)
 			{
-				BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
+				model.PrimaryKeyAtt.Column = model.Property.Name;
+			}
+				
+			// Append column prefix
+			model.PrimaryKeyAtt.Column = columnPrefix + model.PrimaryKeyAtt.Column;
 
-				MethodInfo eq = model.Property.PropertyType.GetMethod("Equals", flags);
-				MethodInfo hc = model.Property.PropertyType.GetMethod("GetHashCode", flags);
+			if (model.PrimaryKeyAtt.Generator == PrimaryKeyType.Foreign)
+			{
+				// Let's see if we are an OneToOne
 
-				if (eq == null || hc == null)
+				if (currentModel.OneToOnes.Count != 0)
 				{
-					throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id, " + 
-						"you must implement Equals and GetHashCode.", model.Property.PropertyType.Name));
-				}
+					// Yes, set the one to one as param 
 
-				if (model.Property.PropertyType.IsSerializable == false)
-				{
-					throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id " + 
-						"it must be marked as Serializable.", model.Property.PropertyType.Name));
-				}
+					OneToOneModel oneToOne = (OneToOneModel) currentModel.OneToOnes[0];
 
-				int keyPropAttrCount = 0;
-				PropertyInfo[] compositeKeyProps = model.Property.PropertyType.GetProperties();
-				foreach(PropertyInfo keyProp in compositeKeyProps)
-				{
-					if (keyProp.GetCustomAttributes(typeof(KeyPropertyAttribute), false).Length > 0)
+					String param = "property=" + oneToOne.Property.Name;
+
+					if (model.PrimaryKeyAtt.Params == null)
 					{
-						keyPropAttrCount++;
+						model.PrimaryKeyAtt.Params = param;
 					}
-				}
-
-				if (keyPropAttrCount < 2)
-				{
-					throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id it must have two or more properties marked with the [KeyProperty] attribute.", model.Property.PropertyType.Name));
+					else
+					{
+						model.PrimaryKeyAtt.Params += "," + param;
+					}
 				}
 			}
-			else
+		}
+
+		public override void VisitCompositePrimaryKey(CompositeKeyModel model)
+		{
+			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
+
+			Type compositeKeyClassType = model.Property.PropertyType;
+			
+			MethodInfo eq = compositeKeyClassType.GetMethod("Equals", flags);
+			MethodInfo hc = compositeKeyClassType.GetMethod("GetHashCode", flags);
+
+			if (eq == null || hc == null)
 			{
-				if (model.PrimaryKeyAtt.Column == null)
+				throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id, " + 
+					"you must implement Equals and GetHashCode.", model.Property.PropertyType.Name));
+			}
+
+			if (compositeKeyClassType.IsSerializable == false)
+			{
+				throw new ActiveRecordException(String.Format("To use type '{0}' as a composite id " + 
+					"it must be marked as Serializable.", model.Property.PropertyType.Name));
+			}
+
+			int keyPropAttrCount = 0;
+			
+			PropertyInfo[] compositeKeyProps = compositeKeyClassType.GetProperties();
+			
+			foreach(PropertyInfo keyProp in compositeKeyProps)
+			{
+				if (keyProp.GetCustomAttributes(typeof(KeyPropertyAttribute), false).Length > 0)
 				{
-					model.PrimaryKeyAtt.Column = model.Property.Name;
+					keyPropAttrCount++;
 				}
-				
-				// Append column prefix
-				model.PrimaryKeyAtt.Column = columnPrefix + model.PrimaryKeyAtt.Column;
+			}
 
-				if (model.PrimaryKeyAtt.Generator == PrimaryKeyType.Foreign)
-				{
-					// Just a thought, let's see if we are a OneToOne
-
-					if (currentModel.OneToOnes.Count != 0)
-					{
-						// Yes, set the one to one as param 
-
-						OneToOneModel oneToOne = (OneToOneModel) currentModel.OneToOnes[0];
-
-						String param = "property=" + oneToOne.Property.Name;
-
-						if (model.PrimaryKeyAtt.Params == null)
-						{
-							model.PrimaryKeyAtt.Params = param;
-						}
-						else
-						{
-							model.PrimaryKeyAtt.Params += "," + param;
-						}
-					}
-				}
+			if (keyPropAttrCount < 2)
+			{
+				throw new ActiveRecordException(String.Format("To use type '{0}' as a composite " + 
+					"id it must have two or more properties marked with the [KeyProperty] attribute.", model.Property.PropertyType.Name));
 			}
 		}
 
@@ -272,13 +274,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					//Assuming that a property must have at least a single accessor
 					MethodInfo accessor = model.Property.GetAccessors(true)[0];
+					
 					if (!accessor.IsVirtual)
 					{
 						throw new ActiveRecordException(
 							String.Format("Property {0} must be virtual because " +
 								"class {1} support lazy loading [ActiveRecord(Lazy=true)]",
-							              model.Property.Name,
-							              model.Property.DeclaringType.Name));
+							              model.Property.Name, model.Property.DeclaringType.Name));
 					}
 				}
 			}
@@ -484,16 +486,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitNested(NestedModel model)
 		{
+			if (model.NestedAtt.MapType == null)
+			{
+				model.NestedAtt.MapType = model.Property.PropertyType;
+			}
+
 			if (model.NestedAtt.ColumnPrefix != null)
 			{
 				columnPrefix.Append(model.NestedAtt.ColumnPrefix);
 			}
 
-			if (model.NestedAtt.MapType == null)
-			{
-				model.NestedAtt.MapType = model.Property.PropertyType;
-			}
-			
 			base.VisitNested(model);
 
 			if (model.NestedAtt.ColumnPrefix != null)
@@ -531,7 +533,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private static void ThrowIfDoesNotHavePrimaryKey(ActiveRecordModel model)
+		private static void AssertHasValidKey(ActiveRecordModel model)
 		{
 			// Nested types do not have primary keys
 			if (model.IsNestedType) return;
@@ -541,16 +543,23 @@ namespace Castle.ActiveRecord.Framework.Internal
 			// a primary key but the base class does
 			ActiveRecordModel tmpModel = model;
 
-			while(tmpModel != null && tmpModel.Ids.Count == 0)
+			while(tmpModel != null && tmpModel.PrimaryKey == null && tmpModel.CompositeKey == null)
 			{
 				tmpModel = tmpModel.Parent;
 			}
+			
+			if (tmpModel != null && tmpModel.PrimaryKey != null && tmpModel.CompositeKey != null)
+			{
+				throw new ActiveRecordException(
+					String.Format(
+						"A type cannot have a primary key and a composite key at the same time. Check type {0}", 
+							model.Type.FullName));
+			}
 
-			if (tmpModel == null || tmpModel.Ids.Count == 0)
+			if (tmpModel == null || tmpModel.PrimaryKey == null && tmpModel.CompositeKey == null)
 			{
 				throw new ActiveRecordException(String.Format(
-					"A type must declare a primary key. " +
-						"Check type {0}", model.Type.FullName));
+					"A type must declare a primary key. Check type {0}", model.Type.FullName));
 			}
 		}
 

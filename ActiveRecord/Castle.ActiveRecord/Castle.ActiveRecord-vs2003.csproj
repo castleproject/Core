@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
     >
@@ -455,6 +455,11 @@
                 />
                 <File
                     RelPath = "Framework\Internal\Model\CollectionIDModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\CompositeKeyModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

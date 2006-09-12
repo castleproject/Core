@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	{
 		private CompositeKeyForClassWithCompositeKey _key;
 
-		[PrimaryKey]
+		[CompositeKey]
 		public CompositeKeyForClassWithCompositeKey Key
 		{
 			get { return _key; }

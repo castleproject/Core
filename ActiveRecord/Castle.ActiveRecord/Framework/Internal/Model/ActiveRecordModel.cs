@@ -31,12 +31,18 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private bool isDiscriminatorSubClass;
 		private bool isJoinedSubClass;
 		private bool isNestedType;
+		
 		private ActiveRecordAttribute arAtt;
 		private ActiveRecordModel parent;
+		private PrimaryKeyModel primaryKey;
+		private CompositeKeyModel compositeKey;
+		private KeyModel key;
+		private TimestampModel timestamp;
+		private VersionModel version;
+		
 		private IList imports = new ArrayList();
 		private IList hasManyToAny = new ArrayList();
 		private IList anys = new ArrayList();
-		private IList ids = new ArrayList();
 		private IList properties = new ArrayList();
 		private IList fields = new ArrayList();
 		private IList classes = new ArrayList();
@@ -50,9 +56,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private IList hilos = new ArrayList();
 		private IList notMappedProperties = new ArrayList();
 		private IList validators = new ArrayList();
-		private KeyModel key;
-		private TimestampModel timestamp;
-		private VersionModel version;
 
 		public ActiveRecordModel(Type type)
 		{
@@ -192,9 +195,22 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return collectionIds; }
 		}
 
-		public IList Ids
+		/// <summary>
+		/// For unique Primary keys
+		/// </summary>
+		public PrimaryKeyModel PrimaryKey
 		{
-			get { return ids; }
+			get { return primaryKey; }
+			set { primaryKey = value; }
+		}
+
+		/// <summary>
+		/// For Composite Primary keys
+		/// </summary>
+		public CompositeKeyModel CompositeKey
+		{
+			get { return compositeKey; }
+			set { compositeKey = value; }
 		}
 
 		public IList Hilos

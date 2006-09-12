@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.ActiveRecord
 {
+	using System;
+
 	/// <summary>
 	/// Decorates a class that implements <c>Equals()</c> and <c>GetHashCode()</c>,
 	/// is <c>Serializable</c>,
 	/// and has two or more <c>KeyPropertyAttribute</c> properties.
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Class ), Serializable]
+	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Property), Serializable]
 	public class CompositeKeyAttribute : WithAccessAttribute
 	{
-		private string _unsavedValue;
+		private string unsavedValue;
 
 		public string UnsavedValue
 		{
-			get { return _unsavedValue; }
-			set { _unsavedValue = value; }
+			get { return unsavedValue; }
+			set { unsavedValue = value; }
 		}
 	}
 }

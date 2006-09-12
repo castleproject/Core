@@ -144,9 +144,9 @@ namespace Castle.ActiveRecord.Framework.Internal
                         WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
                         WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
-				EnsureOnlyOneKey(model);
 				WriteCache(model.ActiveRecordAtt.Cache);
-				VisitNodes(model.Ids);
+				VisitNode(model.PrimaryKey);
+				VisitNode(model.CompositeKey);
 				WriteDiscriminator(model);
 				VisitNode(model.Version);
 				VisitNode(model.Timestamp);
@@ -168,63 +168,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitPrimaryKey(PrimaryKeyModel model)
 		{
-			if (model.Property.PropertyType.GetCustomAttributes(typeof(CompositeKeyAttribute), false).Length > 0)
-			{
-				DoNaturalKey(model);
-			}
-			else
-			{
-				DoSurrogateKey(model);
-			}
-		}
-
-		private void DoNaturalKey(PrimaryKeyModel model)
-		{
-			CompositeKeyAttribute att = model.Property.PropertyType.GetCustomAttributes(typeof(CompositeKeyAttribute), false)[0] as CompositeKeyAttribute;
-			string unsavedVal = att.UnsavedValue;
-			if (unsavedVal == null)
-			{
-				unsavedVal = "none";
-			}
-
-			AppendF("<composite-id{0}{1}{2}{3}>",
-			        MakeAtt("name", model.Property.Name),
-			        MakeClassAtt(model.Property.PropertyType),
-			        WriteIfNonNull("unsaved-value", unsavedVal),
-			        MakeAtt("access", att.AccessString));
-
-			Ident();
-
-			PropertyInfo[] keyProps = model.Property.PropertyType.GetProperties();
-			foreach(PropertyInfo keyProp in keyProps)
-			{
-				KeyPropertyAttribute keyPropAttr = keyProp.GetCustomAttributes(
-				                                   	typeof(KeyPropertyAttribute), false)[0] as KeyPropertyAttribute;
-				if (keyPropAttr.Column == null)
-				{
-					keyPropAttr.Column = keyProp.Name;
-				}
-
-				AppendF("<key-property{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
-				        MakeAtt("name", keyProp.Name),
-				        MakeAtt("access", keyPropAttr.AccessString),
-				        MakeAtt("column", keyPropAttr.Column),
-				        MakeTypeAtt(keyProp.PropertyType, keyPropAttr.ColumnType),
-				        WriteIfNotZero("length", keyPropAttr.Length),
-				        WriteIfNonNull("unsaved-value", keyPropAttr.UnsavedValue),
-				        WriteIfTrue("not-null", keyPropAttr.NotNull),
-				        WriteIfTrue("unique", keyPropAttr.Unique),
-				        WriteIfFalse("insert", keyPropAttr.Insert),
-				        WriteIfFalse("update", keyPropAttr.Update),
-				        WriteIfNonNull("formula", keyPropAttr.Formula));
-			}
-
-			Dedent();
-			AppendF("</composite-id>");
-		}
-
-		private void DoSurrogateKey(PrimaryKeyModel model)
-		{
 			String unsavedVal = model.PrimaryKeyAtt.UnsavedValue;
 
 			if (unsavedVal == null)
@@ -241,12 +184,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 
 			AppendF("<id{0}{1}{2}{3}{4}{5}>",
-			        MakeAtt("name", model.Property.Name),
-			        MakeAtt("access", model.PrimaryKeyAtt.AccessString),
-			        MakeAtt("column", model.PrimaryKeyAtt.Column),
-			        MakeTypeAtt(model.Property.PropertyType, model.PrimaryKeyAtt.ColumnType),
-			        WriteIfNotZero("length", model.PrimaryKeyAtt.Length),
-			        WriteIfNonNull("unsaved-value", unsavedVal));
+				MakeAtt("name", model.Property.Name),
+				MakeAtt("access", model.PrimaryKeyAtt.AccessString),
+				MakeAtt("column", model.PrimaryKeyAtt.Column),
+				MakeTypeAtt(model.Property.PropertyType, model.PrimaryKeyAtt.ColumnType),
+				WriteIfNotZero("length", model.PrimaryKeyAtt.Length),
+				WriteIfNonNull("unsaved-value", unsavedVal));
 
 			Ident();
 
@@ -306,6 +249,55 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Dedent();
 			Append("</id>");
+		}
+
+		public override void VisitCompositePrimaryKey(CompositeKeyModel model)
+		{
+			CompositeKeyAttribute att = model.CompositeKeyAtt;
+			
+			string unsavedVal = att.UnsavedValue;
+			
+			if (unsavedVal == null)
+			{
+				unsavedVal = "none";
+			}
+
+			AppendF("<composite-id{0}{1}{2}{3}>",
+				MakeAtt("name", model.Property.Name),
+				MakeClassAtt(model.Property.PropertyType),
+				WriteIfNonNull("unsaved-value", unsavedVal),
+				MakeAtt("access", att.AccessString));
+
+			Ident();
+
+			PropertyInfo[] keyProps = model.Property.PropertyType.GetProperties();
+			
+			foreach(PropertyInfo keyProp in keyProps)
+			{
+				KeyPropertyAttribute keyPropAttr = keyProp.GetCustomAttributes(
+					typeof(KeyPropertyAttribute), false)[0] as KeyPropertyAttribute;
+				
+				if (keyPropAttr.Column == null)
+				{
+					keyPropAttr.Column = keyProp.Name;
+				}
+
+				AppendF("<key-property{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
+					MakeAtt("name", keyProp.Name),
+					MakeAtt("access", keyPropAttr.AccessString),
+					MakeAtt("column", keyPropAttr.Column),
+					MakeTypeAtt(keyProp.PropertyType, keyPropAttr.ColumnType),
+					WriteIfNotZero("length", keyPropAttr.Length),
+					WriteIfNonNull("unsaved-value", keyPropAttr.UnsavedValue),
+					WriteIfTrue("not-null", keyPropAttr.NotNull),
+					WriteIfTrue("unique", keyPropAttr.Unique),
+					WriteIfFalse("insert", keyPropAttr.Insert),
+					WriteIfFalse("update", keyPropAttr.Update),
+					WriteIfNonNull("formula", keyPropAttr.Formula));
+			}
+
+			Dedent();
+			AppendF("</composite-id>");
 		}
 
 		public override void VisitImport(ImportModel model)
@@ -801,8 +793,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeCustomTypeAttIfNotNull(String attName, Type type)
 		{
-			if (type == null)
-				return String.Empty;
+			if (type == null) return String.Empty;
+			
 			return MakeCustomTypeAtt(attName, type);
 		}
 
@@ -878,14 +870,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 			if (cacheEnum != CacheEnum.Undefined)
 			{
 				AppendF("<jcs-cache usage=\"{0}\" />", TranslateCacheEnum(cacheEnum));
-			}
-		}
-
-		private void EnsureOnlyOneKey(ActiveRecordModel model)
-		{
-			if (model.Ids.Count > 1)
-			{
-				throw new ActiveRecordException("Composite keys are not supported yet. Type " + model.Type.FullName);
 			}
 		}
 

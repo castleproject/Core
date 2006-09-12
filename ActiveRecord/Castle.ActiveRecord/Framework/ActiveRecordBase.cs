@@ -926,12 +926,12 @@ namespace Castle.ActiveRecord
 		{
 			Framework.Internal.ActiveRecordModel model = GetModel(GetType());
 
-			if (model == null || model.Ids.Count != 1)
+			if (model == null || model.PrimaryKey == null)
 			{
 				return base.ToString();
 			}
 
-			Framework.Internal.PrimaryKeyModel pkModel = (Framework.Internal.PrimaryKeyModel) model.Ids[0];
+			Framework.Internal.PrimaryKeyModel pkModel = model.PrimaryKey;
 
 			object pkVal = pkModel.Property.GetValue(this, null);
 

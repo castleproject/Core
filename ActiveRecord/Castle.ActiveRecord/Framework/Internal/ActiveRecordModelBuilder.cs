@@ -161,8 +161,26 @@ namespace Castle.ActiveRecord.Framework.Internal
 					{
 						PrimaryKeyAttribute propAtt = attribute as PrimaryKeyAttribute;
 						isArProperty = true;
+						
+						if (prop.PropertyType.IsDefined(typeof(CompositeKeyAttribute), true))
+						{
+							object[] att = prop.PropertyType.GetCustomAttributes(typeof(CompositeKeyAttribute), true);
+							
+							CompositeKeyAttribute cAtt = att[0] as CompositeKeyAttribute;
+							
+							model.CompositeKey = new CompositeKeyModel(prop, cAtt);
+						}
+						else
+						{
+							model.PrimaryKey = new PrimaryKeyModel(prop, propAtt);
+						}
+					}
+					else if (attribute is CompositeKeyAttribute)
+					{
+						CompositeKeyAttribute propAtt = attribute as CompositeKeyAttribute;
+						isArProperty = true;
 
-						model.Ids.Add(new PrimaryKeyModel(prop, propAtt));
+						model.CompositeKey = new CompositeKeyModel(prop, propAtt);
 					}
 					else if (attribute is AnyAttribute)
 					{

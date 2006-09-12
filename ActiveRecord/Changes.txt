@@ -1,6 +1,21 @@
 beta 4
 ======
 
+- Refactored CompositeKey support. Now instead of using 
+
+    [PrimaryKey]
+    public SomeClass Id { get/set }
+  
+    [CompositeKey]
+    public class SomeClass { ...
+  
+  You should use
+
+    [CompositeKey]
+    public SomeClass Id { get/set }
+	
+  The old way is still supported though.
+
 - Applied Freyr Magnússon's patch fixing AR-75 
   "SemanticVerifierVisitor causing fauly xml when using composit key"
 

@@ -16,11 +16,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 
-
 	public interface IVisitor
 	{
 		void VisitModel(ActiveRecordModel model);
 		void VisitPrimaryKey(PrimaryKeyModel model);
+		void VisitCompositePrimaryKey(CompositeKeyModel model);
 		void VisitHasManyToAny(HasManyToAnyModel model);
 		void VisitAny(AnyModel model);
 		void VisitProperty(PropertyModel model);

@@ -42,9 +42,9 @@ namespace Castle.ActiveRecord.Framework.Validators
 
 			while (model != null)
 			{
-				if (model.Ids.Count != 0)
+				if (model.PrimaryKey != null)
 				{
-					_pkModel = model.Ids[0] as PrimaryKeyModel;
+					_pkModel = model.PrimaryKey;
 				}
 
 				model = model.Parent;
@@ -55,10 +55,12 @@ namespace Castle.ActiveRecord.Framework.Validators
                 throw new ValidationFailure("We couldn't find the primary key for " + instanceType.FullName + 
 					" so we can't ensure the uniqueness of any field. Validatior failed");
 			}
+			
 			_fieldValue = fieldValue;
+			
             using (new SessionScope())
             {
-                return (bool)ActiveRecordMediator.Execute(instanceType, new NHibernateDelegate(CheckUniqueness), instance);
+                return (bool) ActiveRecordMediator.Execute(instanceType, new NHibernateDelegate(CheckUniqueness), instance);
             }
 		}
 

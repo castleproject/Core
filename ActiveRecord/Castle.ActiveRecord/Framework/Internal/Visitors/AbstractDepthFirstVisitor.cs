@@ -48,7 +48,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				return;
 			}
 
-			VisitNodes( model.Ids );
+			VisitNode( model.PrimaryKey );
+			VisitNode( model.CompositeKey );
 			VisitNode( model.Key );
 			VisitNode( model.Version );
 			VisitNode( model.Timestamp );
@@ -71,6 +72,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 		}
 
+		public virtual void VisitCompositePrimaryKey(CompositeKeyModel model)
+		{
+		}
 
 		public virtual void VisitHasManyToAny(HasManyToAnyModel model)
 		{
