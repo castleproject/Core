@@ -353,8 +353,28 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "views\ajax\formremotetag.vm"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "views\ajax\index.vm"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\ajax\jsproxies.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ajax\observefield.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ajax\observeform.vm"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\ajax\periodicallycall.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "views\ajax\periodinvocation.vm"

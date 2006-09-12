@@ -18,79 +18,38 @@ namespace TestSiteNVelocity.Controllers
 	using System.Collections;
 
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Helpers;
 
-	[Helper(typeof(AjaxHelperOld),"ajaxHelperAlias")]
-	// do not remove this is to make sure, you can add the same helper twice with different names
-	[Helper(typeof(AjaxHelperOld))] 
-	[Helper(typeof(AjaxHelper))] 
+	
 	public class AjaxController : SmartDispatcherController
 	{
-		private AjaxHelperOld HelperOld
-		{
-			get { return (AjaxHelperOld) Helpers["ajaxHelperAlias"]; }
-		}
-
-		private AjaxHelper Helper
-		{
-			get { return (AjaxHelper) Helpers["AjaxHelper"]; }
-		}
+		#region ObserveField
 		
-		public AjaxController()
-		{
-		}
-
-		public void JsFunctions()
-		{
-			RenderText(HelperOld.GetJavascriptFunctions());
-		}
-
-		public void BehaviourFunctions()
-		{
-			RenderText(Helper.GetBehaviourFunctions());
-		}
-		
-		public void LinkToFunction()
-		{
-			RenderText(HelperOld.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')"));
-		}
-
-		public void LinkToRemote()
-		{
-			Hashtable options = new Hashtable();
-			RenderText(HelperOld.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options));
-		}
-
-		public void BuildFormRemoteTag()
-		{
-			RenderText(HelperOld.BuildFormRemoteTag("url", null, null));
-		}
-
 		public void ObserveField()
 		{
-			RenderText(HelperOld.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
 		}
 
+		public void InferAddress(String value)
+		{
+			RenderText("Address " + value);
+		}
+		
+		#endregion
+		
+		#region ObserveForm
+		
 		public void ObserveForm()
 		{
-			RenderText(HelperOld.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
+			
 		}
 
-		public void Index()
+		public void AccountFormValidate(String name, String addressf)
 		{
-			IList list = GetList();
-
-			PropertyBag.Add("users", list);
+			RenderText("name {0} address {1}", name, addressf);
 		}
 
-		public void PeriodInvocation()
-		{
-		}
-
-		public void PeriodInvokeTarget()
-		{
-			RenderText("Ok");
-		}
+		#endregion
+		
+		#region AutoCompletion
 
 		/// <summary>
 		/// Auto completion action
@@ -106,40 +65,62 @@ namespace TestSiteNVelocity.Controllers
 		{
 			RenderText("<ul class=\"names\"><li class=\"name\">Jisheng Johnny</li><li class=\"name\">John Diana</li><li class=\"name\">Johnathan Maurice</li></ul>");
 		}
+		
+		#endregion
+		
+		#region Periodically calls
+		
+		public void PeriodicallyCall()
+		{
+		}
+		
+		/// <summary>
+		/// Invoked by Ajax
+		/// </summary>
+		public void PeriodicallyCalled(int value)
+		{
+			RenderText((value + value).ToString());
+		}
+		
+		#endregion
+		
+		#region JS Proxies
+
+		public void JsProxies()
+		{
+			
+		}
+		
+		[AjaxAction]
+		public void InvocableMethod1()
+		{
+			RenderText("Success");
+		}
+
+		[AjaxAction("friendlyName")]
+		public void InvocableMethod2(String value)
+		{
+			RenderText("Success " + value);
+		}
+		
+		#endregion
+		
+		#region BuildFormRemoteTag
+		
+		public void FormRemoteTag()
+		{
+			IList list = GetList();
+			PropertyBag.Add("users", list);
+		}
 
 		public void AddUserWithAjax(String name, String email)
 		{
 			GetList().Add(new User(name, email));
-
-			Index();
+			
+			IList list = GetList();
+			PropertyBag.Add("users", list);
 
 			RenderView("/userlist");
-		}
-
-		public void InferAddress()
-		{
-			RenderText("<b>pereira leite st, 44<b>");
-		}
-
-		public void AccountFormValidate(String name, String addressf)
-		{
-			String message = "";
-
-			if (name == null || name.Length == 0)
-			{
-				message = "<b>Please, dont forget to enter the name<b>";
-			}
-			if (addressf == null || addressf.Length == 0)
-			{
-				message += "<b>Please, dont forget to enter the address<b>";
-			}
-
-			if (message == "")
-			{
-				message = "Seems that you know how to fill a form! :-)";
-			}
-
-			RenderText(message);
 		}
 
 		private IList GetList()
@@ -158,6 +139,8 @@ namespace TestSiteNVelocity.Controllers
 
 			return list;
 		}
+		
+		#endregion
 	}
 
 	public class User

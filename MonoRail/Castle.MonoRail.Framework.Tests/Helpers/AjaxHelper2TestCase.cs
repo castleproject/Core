@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			String expected = "<script type=\"text/javascript\">" + 
 				"new Form.Element.Observer('fieldid', 1, " + 
 				"function(element, value) { new Ajax.Updater('elementtoupdate', " + 
-				"'update.rails', {asynchronous:true, evalScripts:true, parameters:value}) })</script>";
+				"'update.rails', {asynchronous:true, evalScripts:true, parameters:'value=' + value}) })</script>";
 
 			String actual = helper.ObserveField("fieldid", 1, "update.rails", new DictHelper().CreateDict("update=elementtoupdate") );
 			

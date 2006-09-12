@@ -230,11 +230,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helpers\AjaxHelperTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Helpers\DateFormatHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

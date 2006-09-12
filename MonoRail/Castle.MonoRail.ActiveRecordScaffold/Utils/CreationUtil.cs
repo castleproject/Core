@@ -16,16 +16,17 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 
-
 	public abstract class CreationUtil
 	{
-		private CreationUtil() { }
+		private CreationUtil()
+		{
+		}
 
-		public static object Create( Type type )
+		public static object Create(Type type)
 		{
 			try
 			{
-				return Activator.CreateInstance( type );
+				return Activator.CreateInstance(type);
 			}
 			catch(Exception)
 			{

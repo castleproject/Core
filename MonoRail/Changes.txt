@@ -4,6 +4,14 @@ Change history
 Release Candidate 1
 ===================
 
+- Added watir tests for JS proxies (fixes MR-142 "Write test cases for AjaxHelper.GenerateJSProxy()")
+
+- Added watir tests for Ajax support
+
+- Changed Ajax helper to default to parameters:'value=' + value instead of parameters:value.
+  This old way was causing null keys on the form dictionary and thus being ignored by 
+  the databinder
+
 - Fixed MR-106
   "Apply Sean's suggestions"
   

@@ -148,11 +148,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NVelocityAjaxTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "NVelocityBasicFunctionalityTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

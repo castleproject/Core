@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
     >
@@ -123,6 +123,16 @@
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    AssemblyName = "Castle.Components.Binder"
+                    HintPath = "..\..\Components\General\Binder\bin\Castle.Components.Binder.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

@@ -17,11 +17,9 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 	using System.Reflection;
 	using System.Collections;
-
 	using Castle.ActiveRecord;
 	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
-
 
 	public abstract class CommonOperationUtils
 	{
@@ -53,8 +51,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			return items;
 		}
 
-		internal static void SaveInstance(object instance,
-		                                  Controller controller, ArrayList errors, IDictionary prop2Validation)
+		internal static void SaveInstance(object instance, Controller controller, 
+		                                  ArrayList errors, IDictionary prop2Validation)
 		{
 			if (instance is ActiveRecordValidationBase)
 			{
@@ -72,7 +70,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 			else
 			{
-				ActiveRecordMediator.Save( instance );
+				ActiveRecordMediator.Save(instance);
 			}
 		}
 
@@ -85,7 +83,9 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				throw new ScaffoldException("Can't edit without the proper id");
 			}
 
-			return ConvertUtils.Convert(keyProperty.PropertyType, "id", controller.Params, null);
+			bool conversionSuceeded;
+			
+			return new DefaultConverter().Convert(keyProperty.PropertyType, id, out conversionSuceeded);
 		}
 	}
 }

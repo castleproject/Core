@@ -1,6 +1,6 @@
 <html>
 <head>
-$AjaxHelper2.GetJavascriptFunctions()
+$AjaxHelper.GetJavascriptFunctions()
 $Effects2Helper.GetJavascriptFunctions()
 
   <style type="text/css">
@@ -52,7 +52,7 @@ $Effects2Helper.GetJavascriptFunctions()
 <body>
 Auto completion:<br>
 
-$AjaxHelper2.InputTextWithAutoCompletion( "name", "nameautocompletion.rails", null, null )
+$AjaxHelper.InputTextWithAutoCompletion("%{input='name', url='nameautocompletion.rails'}", "%{}")
 
 </body>
 

@@ -6,7 +6,7 @@ $AjaxHelperAlias.GetJavascriptFunctions()
 <body>
 Observer field example:
 
-<form>
+<form id="theform">
   Please enter the zip code:<br>
   <input type="text" name="zip" id="zip"> 
   
@@ -16,7 +16,7 @@ Observer field example:
 
 </form>
 
-$AjaxHelperAlias.ObserveField("zip", 2, "inferaddress.rails", "address", "'aa new content'")
+$AjaxHelperAlias.ObserveField("%{field='zip', frequency='2', url='inferaddress.rails', update='address', with='Form.serialize(theform)'}")
 
 <hr>
 
@@ -47,7 +47,7 @@ $AjaxHelperAlias.ObserveForm("myform", 2, "accountformvalidate.rails", "message"
 
 <br>
 <b>Add New User:</b>
-$AjaxHelper.BuildFormRemoteTag("AddUserWithAjax.rails", "userlist", null, "$('status').innerHTML = 'Saving...'", null, null, "$('status').innerHTML = 'Done!'")
+$AjaxHelper.BuildFormRemoteTag("AddUserWithAjax.rails", "%{update='userlist'}" )
 <table>  
 	<tr>
 		<td>Name:</td>

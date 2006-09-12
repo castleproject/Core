@@ -462,6 +462,16 @@ namespace Castle.MonoRail.Framework
 
 			Response.Write(contents);
 		}
+		
+		/// <summary>
+		/// Cancels the view processing and writes
+		/// the specified contents to the browser
+		/// </summary>
+		/// <param name="contents"></param>
+		public void RenderText(String contents, params object[] args)
+		{
+			RenderText(String.Format(contents, args));
+		}
 
 		/// <summary>
 		/// Sends raw contents to be rendered directly by the view engine.
@@ -1065,8 +1075,6 @@ namespace Castle.MonoRail.Framework
 				DisposeFilter();
 
 				ReleaseResources();
-
-				AddFlashToSessionIfUsed();
 			}
 		}
 
@@ -1088,6 +1096,8 @@ namespace Castle.MonoRail.Framework
 		protected virtual void CreateAndInitializeHelpers()
 		{
 			_helpers = new HybridDictionary();
+			
+			// Custom helpers
 
 			foreach(HelperDescriptor helper in metaDescriptor.Helpers)
 			{
@@ -1099,14 +1109,9 @@ namespace Castle.MonoRail.Framework
 				{
 					aware.SetController(this);
 				}
-				
-				IServiceEnabledComponent serviceEnabled = helperInstance as IServiceEnabledComponent;
 
-				if (serviceEnabled != null)
-				{
-					serviceEnabled.Service(serviceProvider);
-				}
-				
+				PerformAdditionalHelperInitialization(helperInstance);
+
 				if (_helpers.Contains(helper.Name))
 				{
 					throw new ControllerException(String.Format("Found a duplicate helper " + 
@@ -1116,10 +1121,15 @@ namespace Castle.MonoRail.Framework
 				_helpers.Add(helper.Name, helperInstance);
 			}
 
+			CreateStandardHelpers();
+		}
+
+		private void CreateStandardHelpers()
+		{
 			AbstractHelper[] builtInHelpers =
 				new AbstractHelper[]
 					{
-						new AjaxHelper(), new AjaxHelperOld(),
+						new AjaxHelper(),
 						new EffectsFatHelper(), new Effects2Helper(),
 						new DateFormatHelper(), new HtmlHelper(),
 						new ValidationHelper(), new DictHelper(),
@@ -1136,12 +1146,19 @@ namespace Castle.MonoRail.Framework
 				{
 					_helpers[helperName] = helper;
 				}
+				
+				PerformAdditionalHelperInitialization(helper);
 			}
 		}
 
-		private void AddFlashToSessionIfUsed()
+		private void PerformAdditionalHelperInitialization(object helperInstance)
 		{
-			
+			IServiceEnabledComponent serviceEnabled = helperInstance as IServiceEnabledComponent;
+
+			if (serviceEnabled != null)
+			{
+				serviceEnabled.Service(serviceProvider);
+			}
 		}
 
 		#endregion
