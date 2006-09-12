@@ -158,6 +158,10 @@
     </Compile>
     <Compile Include="Attributes\SkipFilterAttribute.cs" />
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
+    <Compile Include="Configuration\ControllersConfig.cs" />
+    <Compile Include="Configuration\ExtensionEntry.cs" />
+    <Compile Include="Configuration\ExtensionEntryCollection.cs" />
+    <Compile Include="Configuration\ISerializedConfig.cs" />
     <Compile Include="Configuration\MonoRailConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -167,9 +171,16 @@
     <Compile Include="Configuration\RoutingRule.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\RoutingRuleCollection.cs" />
+    <Compile Include="Configuration\ScaffoldConfig.cs" />
+    <Compile Include="Configuration\ServiceEntry.cs" />
+    <Compile Include="Configuration\ServiceEntryCollection.cs" />
     <Compile Include="Configuration\SmtpConfig.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\TypeLoadUtil.cs" />
+    <Compile Include="Configuration\ViewComponentsConfig.cs" />
+    <Compile Include="Configuration\ViewEngineConfig.cs" />
     <Compile Include="Constants.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -188,7 +199,6 @@
     <Compile Include="DelegateDynamicAction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EmailTemplateService.cs" />
     <Compile Include="EngineContextModule.cs" />
     <Compile Include="Extensions\ExceptionChaining\AbstractExceptionHandler.cs">
       <SubType>Code</SubType>
@@ -225,13 +235,11 @@
     <Compile Include="Filters\RequestValidatorFilter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Flash.cs" />
     <Compile Include="Helpers\AbstractHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\AjaxHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Helpers\AjaxHelperOld.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\DateFormatHelper.cs">
@@ -261,9 +269,14 @@
     <Compile Include="Helpers\WizardHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ICacheProvider.cs" />
     <Compile Include="IControllerAware.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IControllerDescriptorProvider.cs" />
+    <Compile Include="IControllerFactory.cs" />
+    <Compile Include="IControllerTree.cs" />
+    <Compile Include="IFilterFactory.cs" />
     <Compile Include="IMonoRailHttpHandlerProvider.cs" />
     <Compile Include="IDynamicAction.cs">
       <SubType>Code</SubType>
@@ -275,31 +288,10 @@
     <Compile Include="IFilter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\AbstractControllerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\AbstractServiceContainer.cs" />
-    <Compile Include="Internal\AbstractViewComponentFactory.cs" />
     <Compile Include="Internal\ActionProviderUtil.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\AssemblySourceInfo.cs" />
-    <Compile Include="Internal\ControllerInspectionUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\DefaultCacheProvider.cs" />
-    <Compile Include="Internal\DefaultControllerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\DefaultFilterFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\DefaultResourceFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\DefaultViewComponentFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Internal\Descriptors\ActionMetaDescriptor.cs" />
     <Compile Include="Internal\Descriptors\BaseMetaDescriptor.cs" />
     <Compile Include="Internal\Descriptors\ControllerDescriptor.cs" />
@@ -314,40 +306,11 @@
     <Compile Include="Internal\Descriptors\LayoutDescriptor.cs" />
     <Compile Include="Internal\Descriptors\RescueDescriptor.cs" />
     <Compile Include="Internal\Descriptors\ResourceDescriptor.cs" />
-    <Compile Include="Internal\Flash.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\Graph\ControllerTree.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\IControllerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\IFilterFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\IResourceFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\IScaffoldingSupport.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\IViewComponentFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\IViewEngine.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\IViewSource.cs" />
-    <Compile Include="Internal\IViewSourceLoader.cs" />
-    <Compile Include="Internal\Providers\ControllerDescriptorBuilder.cs" />
     <Compile Include="Internal\Providers\DefaultFilterDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultHelperDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultLayoutDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultRescueDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultResourceDescriptorProvider.cs" />
-    <Compile Include="Internal\Providers\ICacheProvider.cs" />
-    <Compile Include="Internal\Providers\IControllerDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\IFilterDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\IHelperDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\ILayoutDescriptorProvider.cs" />
@@ -375,7 +338,6 @@
     <Compile Include="Internal\UrlTokenizerException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\WeakReferenceCacheProvider.cs" />
     <Compile Include="Internal\WizardUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -389,9 +351,11 @@
     <Compile Include="IResource.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IResourceFactory.cs" />
     <Compile Include="IResponse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IScaffoldingSupport.cs" />
     <Compile Include="IServerUtility.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -401,6 +365,10 @@
     <Compile Include="IViewComponentContext.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IViewComponentFactory.cs" />
+    <Compile Include="IViewEngine.cs" />
+    <Compile Include="IViewSource.cs" />
+    <Compile Include="IViewSourceLoader.cs" />
     <Compile Include="IWizardController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -419,6 +387,20 @@
     <Compile Include="RoutingModule.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\AbstractControllerFactory.cs" />
+    <Compile Include="Services\AbstractServiceContainer.cs" />
+    <Compile Include="Services\AbstractViewComponentFactory.cs" />
+    <Compile Include="Services\DefaultCacheProvider.cs" />
+    <Compile Include="Services\DefaultControllerDescriptorProvider.cs" />
+    <Compile Include="Services\DefaultControllerFactory.cs" />
+    <Compile Include="Services\DefaultControllerTree.cs" />
+    <Compile Include="Services\DefaultFilterFactory.cs" />
+    <Compile Include="Services\DefaultResourceFactory.cs" />
+    <Compile Include="Services\DefaultViewComponentFactory.cs" />
+    <Compile Include="Services\EmailTemplateService.cs" />
+    <Compile Include="Services\MonoRailSmtpSender.cs" />
+    <Compile Include="Services\Utils\ControllerInspectionUtil.cs" />
+    <Compile Include="Services\WeakReferenceCacheProvider.cs" />
     <Compile Include="SmartDispatcherController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -427,6 +409,7 @@
     </Compile>
     <Compile Include="ViewComponentException.cs" />
     <Compile Include="ViewComponents\CaptureFor.cs" />
+    <Compile Include="ViewComponents\ChildContentComponent.cs" />
     <Compile Include="ViewComponents\SecurityComponent.cs" />
     <Compile Include="Views\Aspx\ActionTo.cs">
       <SubType>Code</SubType>
@@ -465,6 +448,9 @@
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2005</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internal\Graph\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

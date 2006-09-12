@@ -127,9 +127,6 @@
     <Compile Include="DynamicActionProviderTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NVelocityAjaxTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NVelocityBasicFunctionalityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
