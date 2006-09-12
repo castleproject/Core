@@ -1,6 +1,10 @@
 beta 4
 ======
 
+- Applied suggestion from Gokhan Altinoren fixing AR-77
+  "VisitPrimaryKey fails to generate correct <generator> xml 
+  element for PrimaryKeyType.Identity when the system culture is set to Turkish"
+
 - Applied Michael Morton's patch fixing AR-76
   "SemanticVerifierVisitor Issue With NHibernate User Types"
 

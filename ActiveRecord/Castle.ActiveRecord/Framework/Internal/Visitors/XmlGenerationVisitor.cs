@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
+	using System.Globalization;
 	using System.Reflection;
 	using System.Text;
 
@@ -205,7 +206,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				case PrimaryKeyType.Native:
 				case PrimaryKeyType.Assigned:
 				case PrimaryKeyType.Foreign:
-					className = model.PrimaryKeyAtt.Generator.ToString().ToLower();
+					className = model.PrimaryKeyAtt.Generator.ToString().ToLower(CultureInfo.InvariantCulture);
 					break;
 
 				case PrimaryKeyType.GuidComb:
