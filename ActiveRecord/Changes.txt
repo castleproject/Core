@@ -22,6 +22,30 @@ beta 4
 - Applied Freyr Magnússon's patch fixing AR-75 
   "SemanticVerifierVisitor causing fauly xml when using composit key"
 
+- Added support for "ColumnPrefix" on [Nested] attribute. This change allows
+  a better usage of components, such as:
+
+    public class Name {
+      private String first, last;
+      
+      [Property("first_name")] public string First { ... }
+      [Property("last_name")] public string Last { ... }
+    }
+    
+    [ActiveRecord("children")]
+    public class Child {
+      private Name name, fatherName, motherName;
+      
+      /* maps to database columns: first_name and last_name */
+      [Nested] Name Name { ... }
+      
+      /* maps to database columns: father_first_name and father_last_name */
+      [Nested(ColumnPrefix="father_")] Name FatherName { ... }
+      
+      /* maps to database columns: mother_first_name and mother_last_name */
+      [Nested(ColumnPrefix="mother_")] Name MotherName { ... }
+    }
+
 - Review OneToOneAttribute test case, added one more unit test
 
 - Removed OuterJoin attribute from OneToOneAttribute, replaced by Fetch property
