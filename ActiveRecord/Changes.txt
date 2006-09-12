@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Applied Michael Morton's patch fixing AR-76
+  "SemanticVerifierVisitor Issue With NHibernate User Types"
+
 - Refactored CompositeKey support. Now instead of using 
 
     [PrimaryKey]

@@ -184,14 +184,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Type propertyType = model.Property.PropertyType;
 			
-			if (NHibernateNullablesSupport.IsNHibernateNullableType(propertyType))
+			if (NHibernateNullablesSupport.IsNHibernateNullableType(propertyType) && 
+			    (model.PropertyAtt.ColumnType == null || model.PropertyAtt.ColumnType.Length == 0))
 			{
 				model.PropertyAtt.NotNull = false;
 				model.PropertyAtt.ColumnType = NHibernateNullablesSupport.GetITypeTypeNameForNHibernateNullable(propertyType);
 			}
 
 #if DOTNET2
-			if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+			if (propertyType.IsGenericType && 
+			    propertyType.GetGenericTypeDefinition() == typeof(Nullable<>) && 
+			    String.IsNullOrEmpty(model.PropertyAtt.ColumnType))
 			{
 				model.PropertyAtt.NotNull = false;
 				model.PropertyAtt.ColumnType = ObtainNullableTypeNameForCLRNullable(propertyType);
@@ -218,14 +221,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Type fieldType = model.Field.FieldType;
 			
-			if (NHibernateNullablesSupport.IsNHibernateNullableType(fieldType))
+			if (NHibernateNullablesSupport.IsNHibernateNullableType(fieldType) && 
+			    (model.FieldAtt.ColumnType == null || model.FieldAtt.ColumnType.Length == 0))
 			{
 				model.FieldAtt.NotNull = false;
 				model.FieldAtt.ColumnType = NHibernateNullablesSupport.GetITypeTypeNameForNHibernateNullable(fieldType);
 			}
 
 #if DOTNET2
-			if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>))
+			if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>) && 
+			    String.IsNullOrEmpty(model.FieldAtt.ColumnType))
 			{
 				model.FieldAtt.NotNull = false;
 				model.FieldAtt.ColumnType = ObtainNullableTypeNameForCLRNullable(fieldType);
