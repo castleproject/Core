@@ -1,5 +1,17 @@
 RC 3
 ====
+
+- Added a PerWebRequestLifestyleManager which creates at most one instance of
+  an object per web request.  To use it you must add the following http module
+
+  <httpModules>
+      ...
+	  <add name="PerWebRequest" type="Castle.MicroKernel.Lifestyle.PerWebRequestLifestyleManager , Castle.MicroKernel,Version=0.0.1.7, Culture=neutral, PublicKeyToken=407dd0808d44fbdc"/>
+
+  <httpModules>
+
+  The strong name could be omitted if not in the GAC
+
 - Added checks to handle cycles in dependencies graphs and avoid deadly Stack Overflow Exceptions.
 
 - Fixed IOC-24: "Allow user to provide an attribute which will customize how to inspect properties (PropertiesDependenciesModelInspector)"
