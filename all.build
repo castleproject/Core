@@ -339,6 +339,11 @@
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
 				<include name="**/*.cs" />
+				<include name="**/*.css" />
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.js" />
 				<include name="**/*.ico" />
 				<include name="**/*.csproj" />
 				<include name="**/*.xml" />
