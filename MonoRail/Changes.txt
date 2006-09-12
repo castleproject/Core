@@ -4,6 +4,12 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Ernst Naezer's patch that fixes MR-95 
+  "Update ProtoType/Scriptaculous js libraries to latest version"
+  
+  Prototype library updated to version 1.5.0_rc1
+  script.aculo.us updated to 1.6.4
+
 - Added watir tests for JS proxies (fixes MR-142 "Write test cases for AjaxHelper.GenerateJSProxy()")
 
 - Added watir tests for Ajax support
