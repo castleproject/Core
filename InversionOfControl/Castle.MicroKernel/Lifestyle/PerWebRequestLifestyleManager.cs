@@ -43,7 +43,7 @@ namespace Castle.MicroKernel.Lifestyle
 			{
 				if (!PerWebRequestLifestyleModule.Initialized)
 				{
-					throw new ConfigurationErrorsException("Looks like you forgot to register the http module " +
+					throw new ConfigurationException("Looks like you forgot to register the http module " +
 						typeof(PerWebRequestLifestyleModule).FullName +
 						"\r\nAdd '<add name=\"PerRequestLifestyle\" type=\"ClientService.RBT.Components.IoC.PerWebRequestLifestyleModule, ClientService.RBT.Components\" />' " +
                         "to the <httpModules> section on your web.config");
