@@ -22,7 +22,7 @@ class ProductLicense
 
 		def create(ie, created, expires)
 
-			ie.goto('http://localhost:88/ProductLicense/new.castle')
+			ie.goto("#{$base_url}/ProductLicense/new.castle")
 
 			ie.text_field(:id, "pl_created").set(created)
 			ie.text_field(:id, "pl_Expires").set(expires)
@@ -45,7 +45,7 @@ class ProductLicense
 		
 		def create_with_accounts(ie, created, expires, *accounts)
 
-			ie.goto('http://localhost:88/ProductLicense/newwithaccounts.castle')
+			ie.goto("#{$base_url}/ProductLicense/newwithaccounts.castle")
 
 			ie.text_field(:id, "pl_created").set(created)
 			ie.text_field(:id, "pl_Expires").set(expires)
@@ -73,7 +73,7 @@ class ProductLicense
 		
 		def edit(ie, id, created, expires)
 
-			ie.goto("http://localhost:88/ProductLicense/edit.castle?id=#{id}")
+			ie.goto("#{$base_url}/ProductLicense/edit.castle?id=#{id}")
 
 			ie.text_field(:id, "pl_created").set(created)
 			ie.text_field(:id, "pl_Expires").set(expires)
@@ -92,7 +92,7 @@ class ProductLicense
 		
 		def delete(ie, id)
 
-			ie.goto("http://localhost:88/ProductLicense/removeconfirm.castle?id=#{id}")
+			ie.goto("#{$base_url}/ProductLicense/removeconfirm.castle?id=#{id}")
 
 			fail('Looks like removeConfirm.castle didnt load instance') unless ie.contains_text("Confirm removal of #{id}?")
 			

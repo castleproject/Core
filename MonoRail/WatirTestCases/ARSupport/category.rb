@@ -23,7 +23,7 @@ class Category
 
 		def create(ie, name)
 
-			ie.goto('http://localhost:88/category/new.castle')
+			ie.goto("#{$base_url}/category/new.castle")
 
 			ie.text_field(:id, "category_name").set(name)
 			
@@ -41,7 +41,7 @@ class Category
 		
 		def edit(ie, id, name)
 
-			ie.goto("http://localhost:88/category/edit.castle?id=#{id}")
+			ie.goto("#{$base_url}/category/edit.castle?id=#{id}")
 			
 			assert_no_exception(ie)
 
@@ -57,7 +57,7 @@ class Category
 		
 		def delete(ie, id)
 
-			ie.goto("http://localhost:88/category/removeconfirm.castle?id=#{id}")
+			ie.goto("#{$base_url}/category/removeconfirm.castle?id=#{id}")
 			
 			assert_valid_remove_confirmation(ie, id)
 

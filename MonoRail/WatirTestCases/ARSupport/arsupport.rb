@@ -120,6 +120,8 @@ class CastleTests
 	end
 end
 
+$base_url = "http://localhost:89"
+
 $ie = IE.new()
 $ie.set_fast_speed
 Test::Unit::UI::Console::TestRunner.run(CastleTests)

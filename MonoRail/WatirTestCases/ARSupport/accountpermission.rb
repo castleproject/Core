@@ -22,7 +22,7 @@ class AccountPermission
 
 		def create(ie, name)
 
-			ie.goto('http://localhost:88/accountpermission/new.castle')
+			ie.goto("#{$base_url}/accountpermission/new.castle")
 
 			ie.text_field(:id, "apermission_name").set(name)
 			
@@ -43,7 +43,7 @@ class AccountPermission
 		
 		def edit(ie, id, new_name)
 
-			ie.goto("http://localhost:88/accountpermission/edit.castle?id=#{id}")
+			ie.goto("#{$base_url}/accountpermission/edit.castle?id=#{id}")
 
 			ie.text_field(:id, "apermission_name").set(new_name)
 			
@@ -60,7 +60,7 @@ class AccountPermission
 		
 		def delete(ie, id)
 
-			ie.goto("http://localhost:88/accountpermission/removeconfirm.castle?id=#{id}")
+			ie.goto("#{$base_url}/accountpermission/removeconfirm.castle?id=#{id}")
 
 			fail('Looks like removeConfirm.castle didnt load instance') unless ie.contains_text("Confirm removal of #{id}?")
 			

@@ -22,28 +22,28 @@ class Account
 
 		def create(ie, name, email, password, confirmation, prod_lic_id, *permissions)
 
-			ie.goto('http://localhost:88/account/new.castle')
+			ie.goto("#{$base_url}/account/new.castle")
 			
 			send_create(ie, name, email, password, confirmation, prod_lic_id, permissions)
 		end
 
 		def create2(ie, name, email, password, confirmation, prod_lic_id, *permissions)
 
-			ie.goto('http://localhost:88/account/new2.castle')
+			ie.goto("#{$base_url}/account/new2.castle")
 
 			send_create(ie, name, email, password, confirmation, prod_lic_id, permissions)
 		end
 		
 		def edit(ie, id, name, email, password, confirmation, prod_lic_id, *permissions)
 
-			ie.goto("http://localhost:88/account/edit.castle?id=#{id}")
+			ie.goto("#{$base_url}/account/edit.castle?id=#{id}")
 			
 			send_edit(ie, id, name, email, password, confirmation, prod_lic_id, permissions)
 		end
 		
 		def delete(ie, id)
 
-			ie.goto("http://localhost:88/account/removeconfirm.castle?id=#{id}")
+			ie.goto("#{$base_url}/account/removeconfirm.castle?id=#{id}")
 
 			fail('Looks like removeConfirm.castle didnt load instance') unless ie.contains_text("Confirm removal of #{id}?")
 			

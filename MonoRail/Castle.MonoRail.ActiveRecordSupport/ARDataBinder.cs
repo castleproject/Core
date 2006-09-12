@@ -193,7 +193,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				}
 				else if (node.NodeType == NodeType.Leaf)
 				{
-					PrimaryKeyModel pkModel = targetModel.Ids[0] as PrimaryKeyModel;
+					PrimaryKeyModel pkModel = targetModel.PrimaryKey;
 					Type pkType = pkModel.Property.PropertyType;
 					
 					LeafNode leafNode = (LeafNode) node;
@@ -250,12 +250,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		
 		private object ObtainPrimaryKeyValue(ActiveRecordModel model, CompositeNode node, String prefix, out PrimaryKeyModel pkModel)
 		{
-			if (model.Ids.Count != 1)
-			{
-				throw new BindingException("ARDataBinder does not support more than one primary key");
-			}
-
-			pkModel = model.Ids[0] as PrimaryKeyModel;
+			pkModel = model.PrimaryKey;
 
 			String pkPropName = pkModel.Property.Name;
 			

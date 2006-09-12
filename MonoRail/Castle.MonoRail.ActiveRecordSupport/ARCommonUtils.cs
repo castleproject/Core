@@ -29,9 +29,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			while (curModel != null)
 			{
-				foreach(PrimaryKeyModel keyModel in curModel.Ids)
+				if (curModel.PrimaryKey != null)
 				{
-					return keyModel;
+					return curModel.PrimaryKey;
 				}
 
 				curModel = curModel.Parent;

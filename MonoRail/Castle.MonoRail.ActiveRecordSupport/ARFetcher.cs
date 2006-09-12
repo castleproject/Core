@@ -50,7 +50,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					"class. It could not be bound to an [ARFetch] attribute.", type.Name));
 			}
 
-			if (model.Ids.Count != 1)
+			if (model.CompositeKey != null)
 			{
 				throw new RailsException("ARFetch only supports single-attribute primary keys");
 			}
@@ -85,7 +85,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (pk != null && !String.Empty.Equals(pk))
 			{
-				PrimaryKeyModel pkModel = (PrimaryKeyModel) model.Ids[0];
+				PrimaryKeyModel pkModel = model.PrimaryKey;
 
 				Type pkType = pkModel.Property.PropertyType;
 
