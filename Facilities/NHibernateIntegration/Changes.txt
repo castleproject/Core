@@ -1,5 +1,11 @@
 Version beta 3
 
+- Applied Ernst Naezer's patch that adds support for configurable flushModes.
+
+  On the facility configuration node, you can specify the following attribute:
+
+    defaultFlushModel="Auto|Commit|Never"
+
 - Removed RegisterSessionFactory from ISessionManager
 
 - Used https://svn.sourceforge.net/svnroot/cuyahoga/trunk/Core/Facilities/ as inspiration

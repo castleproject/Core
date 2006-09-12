@@ -135,6 +135,20 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		protected void RegisterSessionManager()
 		{
+			string defaultFlushMode = FacilityConfig.Attributes["defaultFlushMode"];
+
+			if (defaultFlushMode != null && defaultFlushMode != string.Empty)
+			{
+				MutableConfiguration confignode = new MutableConfiguration("nhfacility.sessionmanager");
+
+				IConfiguration properties =
+					confignode.Children.Add(new MutableConfiguration("parameters"));
+
+				properties.Children.Add(new MutableConfiguration("DefaultFlushMode", defaultFlushMode));
+
+				Kernel.ConfigurationStore.AddComponentConfiguration("nhfacility.sessionmanager", confignode);
+			}
+
 			Kernel.AddComponent( "nhfacility.sessionmanager", 
 				typeof(ISessionManager), typeof(DefaultSessionManager) );
 		}

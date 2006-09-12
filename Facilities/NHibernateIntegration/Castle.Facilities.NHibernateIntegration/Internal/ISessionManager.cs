@@ -26,6 +26,11 @@ namespace Castle.Facilities.NHibernateIntegration
 	public interface ISessionManager
 	{
 		/// <summary>
+		/// The flushmode the created session gets
+		/// </summary>
+		FlushMode DefaultFlushMode { get;set;}
+		
+		/// <summary>
 		/// Returns a valid opened and connected ISession instance
 		/// </summary>
 		/// <returns></returns>

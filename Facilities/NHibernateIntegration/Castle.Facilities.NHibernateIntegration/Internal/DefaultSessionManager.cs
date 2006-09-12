@@ -35,6 +35,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		private readonly ISessionStore sessionStore;
 		private readonly ISessionFactoryResolver factoryResolver;
 		private readonly IDictionary alias2SessionFactory = new HybridDictionary(true);
+		private FlushMode defaultFlushMode = FlushMode.Auto;
 
 		public DefaultSessionManager(ISessionStore sessionStore, IKernel kernel, ISessionFactoryResolver factoryResolver)
 		{
@@ -43,6 +44,12 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			this.factoryResolver = factoryResolver;
 		}
 
+		public FlushMode DefaultFlushMode
+		{
+			get { return this.defaultFlushMode; }
+			set { this.defaultFlushMode = value; }
+		}
+		
 //		public void RegisterSessionFactory(String alias, ISessionFactory sessionFactory)
 //		{
 //			if (alias == null) throw new ArgumentNullException("alias");
@@ -162,17 +169,23 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 				throw new FacilityException("No ISessionFactory implementation " + 
 					"associated with the given alias: " + alias);
 			}
+			ISession session = null;
 
 			if (kernel.HasComponent("nhibernate.session.interceptor"))
 			{
 				IInterceptor interceptor = (IInterceptor) kernel["nhibernate.session.interceptor"];
 				
-				return sessionFactory.OpenSession(interceptor);
+				session =  sessionFactory.OpenSession(interceptor);
 			}
 			else
 			{
-				return sessionFactory.OpenSession();
+				session =  sessionFactory.OpenSession();
 			}
+
+			session.FlushMode = this.defaultFlushMode;
+
+			return session;
 		}
+
 	}
 }
