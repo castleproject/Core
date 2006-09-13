@@ -1,6 +1,10 @@
 beta 4
 ======
 
+- Applied maa's patch adding support to NHibernate's INamingStrategy. 
+  This allow one to associate an implementation of INamingStrategy
+  through an attribute 'namingstrategytype' on activerecord config node
+
 - Applied suggestion from Gokhan Altinoren fixing AR-77
   "VisitPrimaryKey fails to generate correct <generator> xml 
   element for PrimaryKeyType.Identity when the system culture is set to Turkish"

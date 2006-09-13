@@ -27,6 +27,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		private readonly IDictionary _type2Config = new Hashtable();
 		private Type threadScopeInfoImplementation;
 		private Type sessionFactoryHolderImplementation;
+        private Type namingStrategyImplementation;
 		private bool debug = false;
 
 		public InPlaceConfigurationSource()
@@ -45,6 +46,12 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			get { return sessionFactoryHolderImplementation; }
 			set { sessionFactoryHolderImplementation = value; }
+		}
+
+		public Type NamingStrategyImplementation
+		{
+			get { return namingStrategyImplementation; }
+			set { namingStrategyImplementation = value; }
 		}
 
 		public IConfiguration GetConfiguration(Type type)
@@ -114,6 +121,25 @@ namespace Castle.ActiveRecord.Framework.Config
 			}
 
 			SessionFactoryHolderImplementation = sessionFactoryHolderType;
+		}
+
+		protected void SetUpNamingStrategyType(String customType) 
+		{
+			if (customType != null && customType != String.Empty) 
+			{
+				String typeName = customType;
+
+				Type namingStrategyType = Type.GetType(typeName, false, false);
+
+				if (namingStrategyType == null)
+				{
+					String message = String.Format("The type name {0} could not be found", typeName);
+
+					throw new ActiveRecordException(message);
+				}
+
+				NamingStrategyImplementation = namingStrategyType;
+			}
 		}
 
 		protected void SetDebugFlag(bool isDebug)

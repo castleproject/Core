@@ -69,6 +69,10 @@ namespace Castle.ActiveRecord.Framework.Config
 			                              sessionfactoryholdertypeAtt.Value
 			                              	: String.Empty);
 
+			XmlAttribute namingStrategyTypeAtt = section.Attributes["namingstrategytype"];
+
+			SetUpNamingStrategyType(namingStrategyTypeAtt != null ? namingStrategyTypeAtt.Value : String.Empty);
+
 			SetDebugFlag(isDebug != null && "true" == isDebug.Value);
 
 			PopulateConfigNodes(section);

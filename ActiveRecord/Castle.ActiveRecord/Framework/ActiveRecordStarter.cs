@@ -448,6 +448,21 @@ namespace Castle.ActiveRecord
 			if (config != null)
 			{
 				Configuration nconf = CreateConfiguration(config);
+
+				if (source.NamingStrategyImplementation != null) 
+				{
+					Type namingStrategyType = source.NamingStrategyImplementation;
+
+					if (!typeof(INamingStrategy).IsAssignableFrom(namingStrategyType))
+					{
+						String message = String.Format("The specified type {0} does " + "not implement the interface INamingStrategy", namingStrategyType.FullName);
+
+						throw new ActiveRecordException(message);
+					}
+
+					nconf.SetNamingStrategy((INamingStrategy)Activator.CreateInstance(namingStrategyType));
+				}
+
 				holder.Register(type, nconf);
 			}
 		}
