@@ -73,9 +73,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			bool shouldLoad = autoLoad != AutoLoadBehavior.Never;
 			
-			if (shouldLoad)
+			if (_autoLoad == AutoLoadBehavior.OnlyNested)
 			{
-				shouldLoad = autoLoad == AutoLoadBehavior.OnlyNested && StackDepth != 0;
+				shouldLoad =  StackDepth != 0;
 			}
 
 			if (shouldLoad)
