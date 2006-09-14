@@ -153,17 +153,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ICacheManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ICacheProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ICacheRule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
