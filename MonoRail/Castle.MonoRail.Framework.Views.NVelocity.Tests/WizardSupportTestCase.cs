@@ -97,7 +97,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertReplyEqualTo("View for Inner action 2");
 		}
-	
+
 		[Test]
 		public void WizardPageWithView()
 		{

@@ -98,9 +98,9 @@ namespace Castle.MonoRail.Framework
 		{
 			_wizardcontroller = wizardController;
 
-			_context = wizardController.Context;
+			context = wizardController.Context;
 
-			UrlInfo urlInfo = _context.UrlInfo;
+			UrlInfo urlInfo = context.UrlInfo;
 
 			InitializeFieldsFromServiceProvider(wizardController.Context);
 			InitializeControllerState(urlInfo.Area, urlInfo.Controller, urlInfo.Action);

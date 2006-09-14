@@ -24,17 +24,6 @@ namespace Castle.MonoRail.Framework
 	public interface IViewEngine
 	{
 		/// <summary>
-		/// Initializes the view engine.
-		/// </summary>
-		//void Init(IServiceContainer serviceContainer);
-
-		/// <summary>
-		/// Gets/sets whether rendering should aim to 
-		/// be XHTML compliant, obtained from the configuration.
-		/// </summary>
-		//bool XhtmlRendering { get; set; }
-
-		/// <summary>
 		/// Evaluates whether the specified template exists.
 		/// </summary>
 		/// <returns><c>true</c> if it exists</returns>

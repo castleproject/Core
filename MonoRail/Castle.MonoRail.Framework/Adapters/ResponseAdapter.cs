@@ -17,22 +17,21 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System;
 	using System.IO;
 	using System.Web;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 
 	public class ResponseAdapter : IResponse
 	{
-		private readonly String _appPath;
-		private readonly IRailsEngineContext _engine;
-		private readonly HttpResponse _response;
-		private bool _redirected;
+		private readonly IRailsEngineContext engine;
+		private readonly HttpResponse response;
+		private readonly String appPath;
+		private bool redirected;
 
-		public ResponseAdapter( HttpResponse response, IRailsEngineContext engine, String appPath )
+		public ResponseAdapter(HttpResponse response, IRailsEngineContext engine, String appPath)
 		{
-			_response = response;
-			_appPath = appPath;
-			_engine = engine;
+			this.response = response;
+			this.appPath = appPath;
+			this.engine = engine;
 		}
 
 		/// <summary>
@@ -41,7 +40,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		public HttpCachePolicy CachePolicy
 		{
-			get { return _response.Cache; }
+			get { return response.Cache; }
 		}
 
 		/// <summary>
@@ -49,8 +48,8 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		public String CacheControlHeader
 		{
-			get { return _response.CacheControl; }
-			set { _response.CacheControl = value; }
+			get { return response.CacheControl; }
+			set { response.CacheControl = value; }
 		}
 
 		/// <summary>
@@ -58,156 +57,156 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		public String Charset
 		{
-			get { return _response.Charset; }
-			set { _response.Charset = value; }
+			get { return response.Charset; }
+			set { response.Charset = value; }
 		}
 
 		public int StatusCode
 		{
-			get { return _response.StatusCode; }
-			set { _response.StatusCode = value; }
+			get { return response.StatusCode; }
+			set { response.StatusCode = value; }
 		}
 
 		public String ContentType
 		{
-			get { return _response.ContentType; }
-			set { _response.ContentType = value; }
+			get { return response.ContentType; }
+			set { response.ContentType = value; }
 		}
 
-		public void AppendHeader( String name, String headerValue )
+		public void AppendHeader(String name, String headerValue)
 		{
-			_response.AppendHeader( name, headerValue );
+			response.AppendHeader(name, headerValue);
 		}
 
-		public System.IO.TextWriter Output
+		public TextWriter Output
 		{
-			get { return _response.Output; }
+			get { return response.Output; }
 		}
 
-		public System.IO.Stream OutputStream
+		public Stream OutputStream
 		{
-			get { return _response.OutputStream; }
+			get { return response.OutputStream; }
 		}
 
-		public void BinaryWrite( byte[] buffer )
+		public void BinaryWrite(byte[] buffer)
 		{
-			_response.BinaryWrite( buffer );
+			response.BinaryWrite(buffer);
 		}
 
-		public void BinaryWrite( Stream stream )
+		public void BinaryWrite(Stream stream)
 		{
-			byte[] buffer = new byte[ stream.Length ];
+			byte[] buffer = new byte[stream.Length];
 
-			stream.Read( buffer, 0, buffer.Length );
+			stream.Read(buffer, 0, buffer.Length);
 
-			BinaryWrite( buffer );
+			BinaryWrite(buffer);
 		}
 
 		public void Clear()
 		{
-			_response.Clear();
+			response.Clear();
 		}
 
 		public void ClearContent()
 		{
-			_response.ClearContent();
+			response.ClearContent();
 		}
 
-		public void Write( String s )
+		public void Write(String s)
 		{
-			_response.Write(s);
+			response.Write(s);
 		}
 
-		public void Write( object obj )
+		public void Write(object obj)
 		{
-			_response.Write( obj );
+			response.Write(obj);
 		}
 
-		public void Write( char ch )
+		public void Write(char ch)
 		{
-			_response.Write( ch );
+			response.Write(ch);
 		}
 
-		public void Write( char[] buffer, int index, int count )
+		public void Write(char[] buffer, int index, int count)
 		{
-			_response.Write( buffer, index, count );
+			response.Write(buffer, index, count);
 		}
 
-		public void WriteFile( String fileName )
+		public void WriteFile(String fileName)
 		{
-			_response.WriteFile( fileName );
+			response.WriteFile(fileName);
 		}
 
-		public void Redirect( String url )
+		public void Redirect(String url)
 		{
-			_redirected = true;
-			
-			_response.Redirect( url, false );
+			redirected = true;
+
+			response.Redirect(url, false);
 		}
 
-		public void Redirect( String url, bool endProcess )
+		public void Redirect(String url, bool endProcess)
 		{
-			_redirected = true;
-			
-			_response.Redirect( url, endProcess );
+			redirected = true;
+
+			response.Redirect(url, endProcess);
 		}
 
-		public void Redirect( String controller, String action )
+		public void Redirect(String controller, String action)
 		{
-			_redirected = true;
-			
-			_response.Redirect( UrlInfo.CreateAbsoluteRailsUrl( 
-				_appPath, controller, action, _engine.UrlInfo.Extension ), false );
+			redirected = true;
+
+			response.Redirect(UrlInfo.CreateAbsoluteRailsUrl(
+			                   	appPath, controller, action, engine.UrlInfo.Extension), false);
 		}
 
-		public void Redirect( String area, String controller, String action )
+		public void Redirect(String area, String controller, String action)
 		{
-			if ( area == null || area.Length == 0 )
+			if (area == null || area.Length == 0)
 			{
-				Redirect( controller, action );
+				Redirect(controller, action);
 			}
 			else
 			{
-    			_redirected = true;
+				redirected = true;
 
-				_response.Redirect( UrlInfo.CreateAbsoluteRailsUrl( 
-					_appPath, area, controller, action, _engine.UrlInfo.Extension ), false );
+				response.Redirect(UrlInfo.CreateAbsoluteRailsUrl(
+				                   	appPath, area, controller, action, engine.UrlInfo.Extension), false);
 			}
 		}
 
 		public bool IsClientConnected
 		{
-			get { return _response.IsClientConnected; }
+			get { return response.IsClientConnected; }
 		}
 
 		public bool WasRedirected
 		{
-			get { return _redirected; }
+			get { return redirected; }
 		}
 
-		public void CreateCookie( String name, String cookieValue )
+		public void CreateCookie(String name, String cookieValue)
 		{
-			CreateCookie( new HttpCookie( name, cookieValue ) );
+			CreateCookie(new HttpCookie(name, cookieValue));
 		}
 
-		public void CreateCookie( String name, String cookieValue, DateTime expiration )
+		public void CreateCookie(String name, String cookieValue, DateTime expiration)
 		{
-			HttpCookie cookie = new HttpCookie( name, cookieValue );
-			
+			HttpCookie cookie = new HttpCookie(name, cookieValue);
+
 			cookie.Expires = expiration;
 			cookie.Path = "/";
 
-			CreateCookie( cookie );
+			CreateCookie(cookie);
 		}
 
-		public void CreateCookie( HttpCookie cookie )
+		public void CreateCookie(HttpCookie cookie)
 		{
-			_response.Cookies.Add( cookie );
+			response.Cookies.Add(cookie);
 		}
-		
-		public void RemoveCookie( string name )
+
+		public void RemoveCookie(string name)
 		{
-			_response.Cookies.Remove( name );
+			response.Cookies.Remove(name);
 		}
 	}
 }
