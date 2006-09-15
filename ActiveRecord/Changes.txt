@@ -1,7 +1,7 @@
 beta 4
 ======
 
-- Applied maa's patch adding support to NHibernate's INamingStrategy. 
+- Applied Michael Morton's patch adding support to NHibernate's INamingStrategy. 
   This allow one to associate an implementation of INamingStrategy
   through an attribute 'namingstrategytype' on activerecord config node
 
