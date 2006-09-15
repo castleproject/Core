@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Applied patch from Ernst Naezer's fixing a situation where the prefix is composed
+  like "node1.node2.node3"
+
 - Removed support for meta elements (as they were passed 
     via get/form and that doesn't look very safe)
 

@@ -139,6 +139,28 @@ namespace Castle.Components.Binder.Tests
 		}
 		
 		[Test]
+		public void SimpleDataBindDotPath()
+		{
+			String name = "John";
+			int age = 32;
+			decimal assets = 100000;
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("Test.Person.Name", name);
+			args.Add("Test.Person.Age", age.ToString());
+			args.Add("Test.Person.Assets", assets.ToString());
+			
+			object instance = binder.BindObject(typeof(Person), "test.person", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			Person person = instance as Person;
+			Assert.IsNotNull(person);
+			Assert.AreEqual(person.Age, age);
+			Assert.AreEqual(person.Name, name);
+			Assert.AreEqual(person.Assets, assets);
+		}
+
+		[Test]
 		public void SimpleDataBindWithEmptyField()
 		{
 			String name = "";

@@ -71,6 +71,23 @@ namespace Castle.Components.Binder
 		
 		public Node GetChildNode(String name)
 		{
+			int index = name.IndexOf(".");
+			
+			if (index != -1)
+			{
+				string firstNodeName = name.Substring(0, index);
+				string remainingName = name.Substring(index + 1);
+
+				Node innerNode = (Node)name2Node[firstNodeName];
+
+				if (innerNode != null && innerNode.NodeType == NodeType.Composite)
+				{
+					return (innerNode as CompositeNode).GetChildNode(remainingName);
+				}
+
+				throw new BindingException("node is not Composite but still need to recurse to {0}", remainingName);
+			}
+
 			return (Node) name2Node[name];
 		}
 		
