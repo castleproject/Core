@@ -503,5 +503,21 @@ namespace Castle.ActiveRecord.Tests
 			Post[] posts = Post.FindAll();
 			Assert.AreEqual( 1, posts.Length );
 		}
+		
+		[Test]
+		public void ReportedProblemOnForum()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Company), typeof(Person));
+			Recreate();
+
+			using(new TransactionScope())
+			{
+				Company comp1 = new Company("comp1");
+				comp1.Create();
+				
+				Company comp2 = new Company("comp2");
+				comp2.Create();
+			}
+		}
 	}
 }
