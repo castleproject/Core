@@ -85,6 +85,26 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\SharedLibs\log4net\log4net.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\..\SharedLibs\nhibernate\NHibernate.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                />
+                <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\..\..\Services\bin\Castle.Services.Transaction.dll"

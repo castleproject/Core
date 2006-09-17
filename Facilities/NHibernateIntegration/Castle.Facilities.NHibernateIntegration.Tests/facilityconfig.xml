@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <castle>
+	<components>
+		<component
+			id="nhibernate.session.interceptor.intercepted"
+			type="Castle.Facilities.NHibernateIntegration.Tests.Common.TestInterceptor, Castle.Facilities.NHibernateIntegration.Tests"
+			service="NHibernate.IInterceptor, NHibernate" />
+	</components>
 	<facilities>
 		
 		<facility 
@@ -32,6 +38,17 @@
 				</resources>
 			</factory>
 
+			<factory id="sessionFactory3" alias="intercepted">
+				<settings>
+					<item key="hibernate.connection.provider">NHibernate.Connection.DriverConnectionProvider</item>
+					<item key="hibernate.connection.driver_class">NHibernate.Driver.SqlClientDriver</item>
+					<item key="hibernate.connection.connection_string">Data Source=.;Initial Catalog=test2;Integrated Security=SSPI</item>
+					<item key="hibernate.dialect">NHibernate.Dialect.MsSql2000Dialect</item>
+				</settings>
+				<resources>
+					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/Order.hbm.xml" />
+				</resources>
+			</factory>
 		</facility>
 		
 	</facilities>

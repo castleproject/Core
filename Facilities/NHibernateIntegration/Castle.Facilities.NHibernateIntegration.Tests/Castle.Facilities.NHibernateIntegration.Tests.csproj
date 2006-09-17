@@ -115,14 +115,24 @@
                     HintPath = "..\..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
                 />
                 <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\SharedLibs\log4net\log4net.dll"
+                />
+                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\SharedLibs\nhibernate\NHibernate.dll"
                 />
                 <Reference
-                    Name = "Nullables"
-                    AssemblyName = "Nullables"
-                    HintPath = "..\..\..\SharedLibs\nhibernate\Nullables.dll"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "log4net"
@@ -212,6 +222,11 @@
                 <File
                     RelPath = "Common\Order.hbm.xml"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Common\TestInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Internals\SessionManagerTestCase.cs"

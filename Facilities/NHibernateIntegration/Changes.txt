@@ -1,5 +1,15 @@
 Version beta 3
 
+- Applied Curtis Schlak's patch fixing FACILITIES-52
+  "Factory-Specific IInterceptors"
+
+  Quoting: "To use a factory-specific interceptor, include a component with an id of
+
+  nhibernate.session.interceptor.<alias_name>
+
+  where <alias_name> is the alias used for the factory that you would like 
+  the interceptor to act upon."
+
 - Applied Michal Levy's patch fixing FACILITIES-51
   "When using more than one session inside transaction, only first session is 
    registered in NH transaction context"

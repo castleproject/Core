@@ -16,8 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
-
+	
 	using NHibernate;
 
 	using Castle.MicroKernel;
@@ -34,7 +33,6 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		private readonly IKernel kernel;
 		private readonly ISessionStore sessionStore;
 		private readonly ISessionFactoryResolver factoryResolver;
-		private readonly IDictionary alias2SessionFactory = new HybridDictionary(true);
 		private FlushMode defaultFlushMode = FlushMode.Auto;
 
 		public DefaultSessionManager(ISessionStore sessionStore, IKernel kernel, ISessionFactoryResolver factoryResolver)
@@ -46,23 +44,10 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 		public FlushMode DefaultFlushMode
 		{
-			get { return this.defaultFlushMode; }
-			set { this.defaultFlushMode = value; }
+			get { return defaultFlushMode; }
+			set { defaultFlushMode = value; }
 		}
 		
-//		public void RegisterSessionFactory(String alias, ISessionFactory sessionFactory)
-//		{
-//			if (alias == null) throw new ArgumentNullException("alias");
-//			if (sessionFactory == null) throw new ArgumentNullException("sessionFactory");
-//
-//			if (alias2SessionFactory.Contains(alias))
-//			{
-//				throw new FacilityException("Duplicated alias: " + alias);
-//			}
-//
-//			alias2SessionFactory.Add(alias, sessionFactory);
-//		}
-
 		public ISession OpenSession()
 		{
 			return OpenSession(Constants.DefaultAlias);
@@ -78,7 +63,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			SessionDelegate wrapped = sessionStore.FindCompatibleSession(alias);
 
-			ISession session = null;
+			ISession session;
 
 			if (wrapped == null)
 			{
@@ -107,7 +92,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			IList list = (IList) transaction.Context["nh.session.enlisted"];
 
-			bool shouldEnlist = false;
+			bool shouldEnlist;
 
 			if (list == null)
 			{
@@ -170,9 +155,18 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 				throw new FacilityException("No ISessionFactory implementation " + 
 					"associated with the given alias: " + alias);
 			}
-			ISession session = null;
+			
+			ISession session;
 
-			if (kernel.HasComponent("nhibernate.session.interceptor"))
+			string aliasedInterceptorId = string.Format("nhibernate.session.interceptor.{0}", alias);
+			
+			if (kernel.HasComponent(aliasedInterceptorId))
+			{
+				IInterceptor interceptor = (IInterceptor) kernel[aliasedInterceptorId];
+				
+				return sessionFactory.OpenSession(interceptor);
+			}
+			else if (kernel.HasComponent("nhibernate.session.interceptor"))
 			{
 				IInterceptor interceptor = (IInterceptor) kernel["nhibernate.session.interceptor"];
 				
@@ -183,7 +177,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 				session =  sessionFactory.OpenSession();
 			}
 
-			session.FlushMode = this.defaultFlushMode;
+			session.FlushMode = defaultFlushMode;
 
 			return session;
 		}

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Facilities.NHibernateIntegration.Tests.Common;
+
 namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 {
 	using System;
@@ -49,6 +51,55 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			Assert.IsTrue( (container[typeof(ISessionStore)] 
 				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
+		}
+
+		[Test]
+		public void NonInterceptedSession()
+		{
+			ISessionManager manager = (ISessionManager)
+				container[typeof(ISessionManager)];
+			string sessionAlias = "db2";
+
+			ISession session = manager.OpenSession(sessionAlias);
+			Order o = new Order();
+			o.Value = 9.3f;
+			session.SaveOrUpdate(o);
+			session.Close();
+			
+			session = manager.OpenSession(sessionAlias);
+			session.Get(typeof(Order), 1);
+			session.Close();
+			
+			TestInterceptor interceptor = container["nhibernate.session.interceptor.intercepted"] as TestInterceptor;
+			Assert.IsNotNull(interceptor);
+			Assert.IsFalse(interceptor.ConfirmOnSaveCall());
+			Assert.IsFalse(interceptor.ConfirmInstantiationCall());
+			interceptor.ResetState();
+		}
+
+		[Test]
+		public void InterceptedSessionByConfiguration()
+		{
+			ISessionManager manager = (ISessionManager)
+				container[typeof(ISessionManager)];
+
+			string sessionAlias = "intercepted";
+
+			ISession session = manager.OpenSession(sessionAlias);
+			Order o = new Order();
+			o.Value = 9.3f;
+			session.SaveOrUpdate(o);
+			session.Close();
+			
+			session = manager.OpenSession(sessionAlias);
+			session.Get(typeof(Order), 1);
+			session.Close();
+			
+			TestInterceptor interceptor = container["nhibernate.session.interceptor.intercepted"] as TestInterceptor;
+			Assert.IsNotNull(interceptor);
+			Assert.IsTrue(interceptor.ConfirmOnSaveCall());
+			Assert.IsTrue(interceptor.ConfirmInstantiationCall());
+			interceptor.ResetState();
 		}
 
 		[Test]
