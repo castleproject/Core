@@ -1,16 +1,16 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+?<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion> 
-    <ProjectGuid>{A3135261-0009-4f9c-A339-2900143E20F0}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BAD20F91-0A6C-401C-8368-B8FFF7E256BA}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Castle.Facilities.NHibernateIntegration</AssemblyName>
+    <AssemblyName>Castle.Facilities.NHibernateIntegration.Tests</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -18,7 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>Castle.Facilities.NHibernateIntegration</RootNamespace>
+    <RootNamespace>Castle.Facilities.NHibernateIntegration.Tests</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -74,6 +74,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Facilities.AutomaticTransactionManagement">
+      <Name>Castle.Facilities.AutomaticTransactionManagement</Name>
+      <HintPath>..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
       <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
@@ -102,89 +106,96 @@
       <Name>NHibernate</Name>
       <HintPath>..\lib\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <Name>nunit.framework</Name>
+      <HintPath>C:\devtools\NUnit 2.2.2\bin\nunit.framework.dll</HintPath>
+      <AssemblyFolderKey>hklm\dn\nunit.framework</AssemblyFolderKey>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Web">
-      <Name>System.Web</Name>
-    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractNHibernateTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\DataException.cs">
+    <Compile Include="BlogItemDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\IGenericDao.cs">
+    <Compile Include="Common\Blog.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\INHibernateGenericDao.cs">
+    <Compile Include="Common\BlogDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\NHibernateGenericDao.cs">
+    <Compile Include="Common\BlogItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\SessionWebModule.cs">
+    <Compile Include="Common\BlogItemDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\Util\FieldInfoCollection.cs">
+    <Compile Include="Common\BlogRef.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\Util\ReflectionUtil.cs">
+    <Compile Include="Common\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Constants.cs">
+    <Compile Include="Common\Order.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\AbstractDictStackSessionStore.cs">
+    <Compile Include="Internals\SessionManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\AbstractSessionStore.cs">
+    <Compile Include="Internals\SessionStoreTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\CallContextSessionStore.cs">
+    <Compile Include="SessionCreation\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\DefaultSessionManager.cs">
+    <Compile Include="SessionCreation\MyDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ISessionFactoryResolver.cs">
+    <Compile Include="SessionCreation\MySecondDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ISessionManager.cs">
+    <Compile Include="Transactions\Model\FirstDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ISessionStore.cs">
+    <Compile Include="Transactions\Model\RootService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\NHibernateTransactionManager.cs">
+    <Compile Include="Transactions\Model\SecondDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\ResourceAdapter.cs">
+    <Compile Include="Transactions\TransactionsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\SessionDelegate.cs">
+    <Compile Include="Wiring\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\SessionDisposeSynchronization.cs">
+    <Compile Include="Wiring\MyDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\SessionFactoryResolver.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\WebSessionStore.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NHibernateFacility.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Content Include="Common\Blog.hbm.xml" />
+    <Content Include="Common\BlogItem.hbm.xml" />
+    <Content Include="Common\BlogRef.hbm.xml" />
+    <Content Include="Common\Order.hbm.xml" />
+    <Content Include="facilityconfig.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Facilities.NHibernateIntegration\Castle.Facilities.NHibernateIntegration-vs2005.csproj">
+      <Project>{A3135261-0009-4F9C-A339-2900143E20F0}</Project>
+      <Name>Castle.Facilities.NHibernateIntegration-vs2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

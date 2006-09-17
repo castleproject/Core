@@ -1,5 +1,11 @@
 Version beta 3
 
+- Applied Michal Levy's patch fixing FACILITIES-51
+  "When using more than one session inside transaction, only first session is 
+   registered in NH transaction context"
+
+- Added more transactions test cases
+
 - Applied Ernst Naezer's patch that adds support for configurable flushModes.
 
   On the facility configuration node, you can specify the following attribute:

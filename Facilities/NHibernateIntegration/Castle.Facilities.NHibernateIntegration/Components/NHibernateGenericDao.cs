@@ -40,6 +40,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			this.sessionManager = sessionManager;
 		}
 
+		public NHibernateGenericDao(ISessionManager sessionManager, string sessionFactoryAlias) : this(sessionManager)
+		{
+			this.sessionFactoryAlias = sessionFactoryAlias;
+		}
+
 		protected ISessionManager SessionManager
 		{
 			get { return sessionManager; }
@@ -50,7 +55,6 @@ namespace Castle.Facilities.NHibernateIntegration
 			get { return sessionFactoryAlias; }
 			set { sessionFactoryAlias = value; }
 		}
-
 
 		#region IGenericDAO Members
 
@@ -349,13 +353,19 @@ namespace Castle.Facilities.NHibernateIntegration
 		#endregion
 
 		#region Private methods
+		
 		private ISession GetSession()
 		{
 			if (sessionFactoryAlias == null || sessionFactoryAlias.Length == 0)
+			{
 				return sessionManager.OpenSession();
+			}
 			else
+			{
 				return sessionManager.OpenSession(sessionFactoryAlias);
+			}
 		}
+		
 		#endregion
 	}
 }

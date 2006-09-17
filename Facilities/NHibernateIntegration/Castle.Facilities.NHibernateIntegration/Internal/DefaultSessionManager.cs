@@ -100,7 +100,8 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		}
 
 		protected bool EnlistIfNecessary(bool weAreSessionOwner, 
-			ITransaction transaction, SessionDelegate session)
+		                                 ITransaction transaction, 
+		                                 SessionDelegate session)
 		{
 			if (transaction == null) return false;
 
@@ -111,8 +112,6 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			if (list == null)
 			{
 				list = new ArrayList();
-
-				list.Add(session);
 
 				transaction.Context["nh.session.enlisted"] = list;
 
@@ -136,7 +135,9 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			{
 				// TODO: propagate IsolationLevel, expose as transaction property
 
-				transaction.Enlist( new ResourceAdapter(session.BeginTransaction()) );
+				transaction.Enlist(new ResourceAdapter(session.BeginTransaction()));
+
+				list.Add(session);
 
 				if (weAreSessionOwner)
 				{

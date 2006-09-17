@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration", "Castle.Facilities.NHibernateIntegration\Castle.Facilities.NHibernateIntegration.csproj", "{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration-vs2005", "Castle.Facilities.NHibernateIntegration\Castle.Facilities.NHibernateIntegration-vs2005.csproj", "{A3135261-0009-4F9C-A339-2900143E20F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration.Tests", "Castle.Facilities.NHibernateIntegration.Tests\Castle.Facilities.NHibernateIntegration.Tests.csproj", "{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration.Tests-vs2005", "Castle.Facilities.NHibernateIntegration.Tests\Castle.Facilities.NHibernateIntegration.Tests-vs2005.csproj", "{BAD20F91-0A6C-401C-8368-B8FFF7E256BA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4850DCAD-4122-4D91-A33C-31ED7B3006BF}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,14 +19,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3135261-0009-4F9C-A339-2900143E20F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3135261-0009-4F9C-A339-2900143E20F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3135261-0009-4F9C-A339-2900143E20F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3135261-0009-4F9C-A339-2900143E20F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD20F91-0A6C-401C-8368-B8FFF7E256BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD20F91-0A6C-401C-8368-B8FFF7E256BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD20F91-0A6C-401C-8368-B8FFF7E256BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD20F91-0A6C-401C-8368-B8FFF7E256BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,29 +17,27 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 	using System;
 
 	using Castle.Facilities.AutomaticTransactionManagement;
-
-	using NHibernate;
 	
+	using NHibernate;
 	using NUnit.Framework;
-
 
 	[TestFixture]
 	public class TransactionsTestCase : AbstractNHibernateTestCase
 	{
 		protected override void ConfigureContainer()
 		{
-			container.AddFacility( "transactions", new TransactionFacility() );
+			container.AddFacility("transactions", new TransactionFacility());
 
-			container.AddComponent( "root", typeof(RootService) );
-			container.AddComponent( "myfirstdao", typeof(FirstDao) );
-			container.AddComponent( "myseconddao", typeof(SecondDao) );
+			container.AddComponent("root", typeof(RootService));
+			container.AddComponent("myfirstdao", typeof(FirstDao));
+			container.AddComponent("myseconddao", typeof(SecondDao));
 		}
 
 		[Test]
 		public void TestTransaction()
 		{
 			ISessionManager sessionManager = (ISessionManager) container[typeof(ISessionManager)];
-			
+
 			RootService service = (RootService) container[typeof(RootService)];
 			FirstDao dao = (FirstDao) container[typeof(FirstDao)];
 
@@ -49,18 +47,18 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 			{
 				service.DoBlogRefOperation(blog);
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				// transaction exception
 				Console.Write(e);
 			}
-		} 
-		
+		}
+
 		[Test]
 		public void TransactionNotHijackingTheSession()
 		{
-			ISessionManager sessionManager = (ISessionManager) 
-				container[ typeof(ISessionManager) ];
+			ISessionManager sessionManager = (ISessionManager)
+			                                 container[typeof(ISessionManager)];
 
 			using(ISession session = sessionManager.OpenSession())
 			{
@@ -75,16 +73,16 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 
 				RootService rootService = (RootService) container["root"];
 
-				Array blogs = rootService.FindAll( typeof(Blog) );
-				Assert.AreEqual( 1, blogs.Length );
+				Array blogs = rootService.FindAll(typeof(Blog));
+				Assert.AreEqual(1, blogs.Length);
 			}
 		}
 
 		[Test]
 		public void SessionBeingSharedByMultipleTransactionsInSequence()
 		{
-			ISessionManager sessionManager = (ISessionManager) 
-				container[ typeof(ISessionManager) ];
+			ISessionManager sessionManager = (ISessionManager)
+			                                 container[typeof(ISessionManager)];
 
 			using(ISession session = sessionManager.OpenSession())
 			{
@@ -107,16 +105,16 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 
 				RootService rootService = (RootService) container["root"];
 
-				Array blogs = rootService.FindAll( typeof(Blog) );
-				Assert.AreEqual( 3, blogs.Length );
+				Array blogs = rootService.FindAll(typeof(Blog));
+				Assert.AreEqual(3, blogs.Length);
 			}
 		}
 
 		[Test]
 		public void NonTransactionalRoot()
 		{
-			ISessionManager sessionManager = (ISessionManager) 
-				container[ typeof(ISessionManager) ];
+			ISessionManager sessionManager = (ISessionManager)
+			                                 container[typeof(ISessionManager)];
 
 			using(ISession session = sessionManager.OpenSession())
 			{
@@ -143,10 +141,10 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 
 				RootService rootService = (RootService) container["root"];
 
-				Array blogs = rootService.FindAll( typeof(Blog) );
-				Assert.AreEqual( 1, blogs.Length );
-				Array blogitems = rootService.FindAll( typeof(BlogItem) );
-				Assert.IsNull( blogitems );
+				Array blogs = rootService.FindAll(typeof(Blog));
+				Assert.AreEqual(1, blogs.Length);
+				Array blogitems = rootService.FindAll(typeof(BlogItem));
+				Assert.IsNull(blogitems);
 			}
 		}
 
@@ -157,13 +155,13 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 
 			service.SuccessFullCall();
 
-			Array blogs = service.FindAll( typeof(Blog) );
-			Array blogitems = service.FindAll( typeof(BlogItem) );
+			Array blogs = service.FindAll(typeof(Blog));
+			Array blogitems = service.FindAll(typeof(BlogItem));
 
-			Assert.IsNotNull( blogs );
-			Assert.IsNotNull( blogitems );
-			Assert.AreEqual( 1, blogs.Length );
-			Assert.AreEqual( 1, blogitems.Length );
+			Assert.IsNotNull(blogs);
+			Assert.IsNotNull(blogitems);
+			Assert.AreEqual(1, blogs.Length);
+			Assert.AreEqual(1, blogitems.Length);
 		}
 
 		[Test]
@@ -181,11 +179,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 
 			// Ensure rollback happened
 
-			Array blogs = service.FindAll( typeof(Blog) );
-			Array blogitems = service.FindAll( typeof(BlogItem) );
+			Array blogs = service.FindAll(typeof(Blog));
+			Array blogitems = service.FindAll(typeof(BlogItem));
 
-			Assert.IsNull( blogs );
-			Assert.IsNull( blogitems );
+			Assert.IsNull(blogs);
+			Assert.IsNull(blogitems);
 		}
 
 		[Test]
@@ -203,11 +201,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 
 			// Ensure rollback happened
 
-			Array blogs = service.FindAll( typeof(Blog) );
-			Array blogitems = service.FindAll( typeof(BlogItem) );
+			Array blogs = service.FindAll(typeof(Blog));
+			Array blogitems = service.FindAll(typeof(BlogItem));
 
-			Assert.IsNull( blogs );
-			Assert.IsNull( blogitems );
+			Assert.IsNull(blogs);
+			Assert.IsNull(blogitems);
 		}
 	}
 }

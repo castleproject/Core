@@ -23,11 +23,18 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 	{
 		private readonly FirstDao firstDao;
 		private readonly SecondDao secondDao;
+		private OrderDao orderDao;
 
 		public RootService(FirstDao firstDao, SecondDao secondDao, ISessionManager sessManager) : base(sessManager)
 		{
 			this.firstDao = firstDao;
 			this.secondDao = secondDao;
+		}
+
+		public OrderDao OrderDao
+		{
+			get { return orderDao; }
+			set { orderDao = value; }
 		}
 
 		[Transaction]
@@ -61,6 +68,14 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 
 			//constraint exception
 			firstDao.Delete("Blog1");
+		}
+		
+		[Transaction]
+		public virtual void DoTwoDBOperation_Create(bool throwException)
+		{
+			Blog blog = firstDao.Create();
+			secondDao.Create(blog);
+			orderDao.Create(1.122f);
 		}
 	}
 }

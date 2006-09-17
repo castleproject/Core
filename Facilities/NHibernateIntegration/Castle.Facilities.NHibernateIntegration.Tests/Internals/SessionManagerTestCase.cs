@@ -142,14 +142,25 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			transaction.Begin();
 
-			// Nested
-
+			Assert.IsNull(session1.Transaction, "Existing session is not automaticaly enlisted in newly started transaction.");
+			
+			// Nested			
 			using(ISession session2 = manager.OpenSession())
 			{
 				Assert.IsNotNull(session2);
 
 				Assert.IsNotNull(session1);
-				Assert.IsNotNull(session1.Transaction);
+				Assert.IsNotNull(session1.Transaction, "After requesting compatible session, first session is enlisted in transaction too.");
+				
+				using(ISession session3 = manager.OpenSession())
+				{
+					Assert.IsNotNull(session3);
+					Assert.IsNotNull(session3.Transaction);
+				}
+
+				SessionDelegate delagate1 = (SessionDelegate) session1;
+				SessionDelegate delagate2 = (SessionDelegate)session2;
+				Assert.AreSame(delagate1.InnerSession, delagate2.InnerSession);
 			}
 
 			transaction.Commit();
@@ -182,13 +193,13 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 			transaction.Begin();
 
 			ISession session1 = manager.OpenSession();
-			ISession session2 = manager.OpenSession("db2");
-
 			Assert.IsNotNull(session1);
 			Assert.IsNotNull(session1.Transaction);
+
+			ISession session2 = manager.OpenSession("db2");
 			Assert.IsNotNull(session2);
 			Assert.IsNotNull(session2.Transaction);
-
+			
 			transaction.Commit();
 
 			Assert.IsTrue(session1.Transaction.WasCommitted);
@@ -203,13 +214,15 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
+		/// <summary>
+		/// This test ensures that the session is enlisted in actual transaction 
+		/// only once for second database session
+		/// </summary>
 		[Test]
-		public void NewTransactionAfterUsingSessionWithTwoDatabases()
+		public void SecondDatabaseSessionEnlistedOnlyOnceInActualTransaction()
 		{
 			ISessionManager manager = (ISessionManager) 
 				container[typeof(ISessionManager)];
-
-			ISession session1 = manager.OpenSession();			
 
 			ITransactionManager tmanager = (ITransactionManager)
 				container[typeof(ITransactionManager)];
@@ -219,25 +232,33 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			transaction.Begin();
 
-			// Nested
+			// open connection to first database and enlist session in running transaction
+			ISession session1 = manager.OpenSession();
 
-			using(ISession session2 = manager.OpenSession())
+			// open connection to second database and enlist session in running transaction
+			using(ISession session2 = manager.OpenSession("db2"))
 			{
 				Assert.IsNotNull(session2);
-
-				Assert.IsNotNull(session1);
-				Assert.IsNotNull(session1.Transaction);
+				Assert.IsNotNull(session2.Transaction);				
 			}
+			// "real" NH session2 was not disposed because its in active transaction
 
+			// request compatible session for db2 --> we must get existing NH session to db2 which should be already enlisted in active transaction
+			using (ISession session3 = manager.OpenSession("db2"))
+			{
+				Assert.IsNotNull(session3);
+				Assert.IsNotNull(session3.Transaction);				
+			}
+			
 			transaction.Commit();
 
 			Assert.IsTrue(session1.Transaction.WasCommitted);
 			Assert.IsTrue(session1.IsConnected); 
-
+			
 			session1.Dispose();
 
 			Assert.IsTrue( (container[typeof(ISessionStore)] 
 				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
-		}
+		}		
 	}
 }
