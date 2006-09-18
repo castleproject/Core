@@ -165,10 +165,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			// Not related to each other
 			if (!model.Type.IsAssignableFrom(child.Type)) return false;
             
-			// The model is the ancestor of the child, but is it the direct AR ancsetor?
+			// The model is the ancestor of the child, but is it the direct AR ancestor?
 			Type arAncestor = child.Type.BaseType;
 
-			while (arAncestor != typeof(object) && ActiveRecordModel.GetModel(arAncestor) == null)
+			while(arAncestor != typeof(object) && ActiveRecordModel.GetModel(arAncestor) == null)
 			{
 				arAncestor = arAncestor.BaseType;
 			}

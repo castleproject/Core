@@ -381,6 +381,7 @@
     <Compile Include="Framework\ActiveRecordHooksBase.cs" />
     <Compile Include="Framework\ARSchemaCreator.cs" />
     <Compile Include="Framework\ActiveRecordValidationBase.Generic.cs" />
+    <Compile Include="Framework\Internal\Model\CompositeKeyModel.cs" />
     <Compile Include="Framework\Internal\Model\ImportModel.cs" />
     <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
     <Compile Include="Framework\Queries\CountQuery.cs" />

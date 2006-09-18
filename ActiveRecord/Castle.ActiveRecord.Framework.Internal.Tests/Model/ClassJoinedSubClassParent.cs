@@ -14,9 +14,6 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-	using System;
-
-
 	[ActiveRecord("disctable"), JoinedBase]
 	public class ClassJoinedSubClassParent : ActiveRecordBase
 	{
