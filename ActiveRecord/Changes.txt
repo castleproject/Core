@@ -1,6 +1,22 @@
 beta 4
 ======
 
+- Added support for generic abstract base class for a type hierarchy per discussions with Don
+  Morrison on IRC. The Generic Abstract Base class must conform to all the previous rules to 
+  implement an abstract base class in a type hierarchy.
+
+  When initializing the class using the ActiveRecordStarter, you must use syntax similar to the
+  following:
+
+    ActiveRecordStarter.Initialize( GetConfigSource(),
+      typeof(Model.GenericModel.Entity<>), 
+      typeof(CompanyEntity), 
+      typeof(PersonEntity));
+
+  Please see the GenericJoinedSubClassTestCase.cs for an example.
+
+  All rules about covariance and contravariance still apply.
+
 - Applied Michael Morton's patch adding support to NHibernate's INamingStrategy. 
   This allow one to associate an implementation of INamingStrategy
   through an attribute 'namingstrategytype' on activerecord config node

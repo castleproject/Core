@@ -138,6 +138,8 @@
     <Compile Include="BugTestCase.cs" />
     <Compile Include="Config\AspNet2.0ConfigurationIntegration.cs" />
     <Compile Include="Config\ConfigurationSource.cs" />
+    <Compile Include="JoinedSubClassTestCase.cs" />
+    <Compile Include="Model\GenericModel\Entity.cs" />
     <Compile Include="NestedClassWithPrefixTestCase.cs" />
     <Compile Include="DifferentDatabaseScopeTestCase.cs" />
     <Compile Include="Model\CompositeModel\Agent.cs" />
@@ -152,7 +154,7 @@
     <Compile Include="NestedClassWithMapTypeTestCase.cs" />
     <Compile Include="NestedClassWithRelationsTestCase.cs" />
     <Compile Include="NullablesGenericsTestCase.cs" />
-    <Compile Include="JoinedSubClassTestCase.cs">
+    <Compile Include="GenericJoinedSubClassTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\BadPostClass.cs" />

@@ -159,6 +159,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private static bool IsChildClass(ActiveRecordModel model, ActiveRecordModel child)
 		{
+#if DOTNET2
+			// generic check
+			if (child.Type.BaseType.IsGenericType)
+			{
+				if (child.Type.BaseType.GetGenericTypeDefinition() == model.Type) return true;
+			}
+#endif
 			// Direct decendant
 			if (child.Type.BaseType == model.Type) return true;
 

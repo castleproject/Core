@@ -328,8 +328,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 			// Changed as suggested http://support.castleproject.org/jira/browse/AR-40
 
 			bool shouldCheck = type.BaseType != typeof(object) &&
-			                   type.BaseType != typeof(ActiveRecordBase) &&
-			                   type.BaseType != typeof(ActiveRecordValidationBase);
+							   type.BaseType != typeof(ActiveRecordBase) &&
+							   type.BaseType != typeof(ActiveRecordValidationBase);
+#if DOTNET2
+			// generic check
+			if (type.BaseType.IsGenericType)
+			{
+				shouldCheck = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
+							  type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
+			}
+#endif
+
 			// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
 
 			if (shouldCheck) // Perform more checks 

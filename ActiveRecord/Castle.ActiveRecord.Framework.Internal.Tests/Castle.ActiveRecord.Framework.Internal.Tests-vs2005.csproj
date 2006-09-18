@@ -165,6 +165,7 @@
     </Compile>
     <Compile Include="Model\CompositeKeyForClassWithCompositeKey.cs" />
     <Compile Include="Model\ClassADynamicInsertUpdate.cs" />
+    <Compile Include="Model\GenBaseJoinedClass.cs" />
     <Compile Include="Model\DiscriminatorGrandchild.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\EnumTestClass.cs" />
