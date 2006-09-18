@@ -87,9 +87,6 @@ namespace Castle.Facilities.Logging
 			Kernel.Resolver.AddSubResolver(new LoggerResolver(factory));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		private void ReadConfigurationAndCreateLoggerFactory()
 		{
 			LoggerImplementation logApi = LoggerImplementation.Console;
@@ -112,55 +109,51 @@ namespace Castle.Facilities.Logging
 		private void CreateProperLoggerFactory(LoggerImplementation logApi, String customType, String configFile)
 		{
 			Type loggerFactoryType = null;
+			
+			switch (logApi)
+			{
+				case LoggerImplementation.Null:
+					loggerFactoryType = typeof(NullLogFactory);
+					break;
+				case LoggerImplementation.Console:
+					loggerFactoryType = typeof(ConsoleFactory);
+					break;
+				case LoggerImplementation.Diagnostics:
+					loggerFactoryType = typeof(DiagnosticsLoggerFactory);
+					break;
+				case LoggerImplementation.Web:
+					loggerFactoryType = typeof(WebLoggerFactory);
+					break;
+				case LoggerImplementation.Log4net:
+					loggerFactoryType = (Type) converter.PerformConversion(Log4NetLoggerFactoryTypeName, typeof(Type));
+					break;
+				case LoggerImplementation.NLog:
+					loggerFactoryType = (Type) converter.PerformConversion(NLogLoggerFactoryTypeName, typeof(Type));
+					break;
+				case LoggerImplementation.Custom:
+					if (customType == null)
+					{
+						throw new ConfigurationException("If you specify loggingApi='custom' " +
+							"then you must use the attribute customLoggerFactory to inform the " +
+							"type name of the custom logger factory");
+					}
 
-            if(logApi == LoggerImplementation.Null)
-            {
-                loggerFactoryType = typeof(NullLogFactory);
-            }
-			else if (logApi == LoggerImplementation.Console)
-			{
-				loggerFactoryType = typeof(ConsoleFactory);
-			}
-			else if (logApi == LoggerImplementation.Log4net)
-			{
-				loggerFactoryType = (Type)
-					converter.PerformConversion(Log4NetLoggerFactoryTypeName, typeof(Type));
+					loggerFactoryType = (Type)
+						converter.PerformConversion(customType, typeof(Type));
 
+					if (!typeof(ILoggerFactory).IsAssignableFrom(loggerFactoryType))
+					{
+						throw new FacilityException("The specified type '" + customType +
+							"' does not implement ILoggerFactory");
+					}
+					break;
+				
+				default:
+					throw new ConfigurationException("An invalid loggingApi was specified: " + logApi);
 			}
-			else if (logApi == LoggerImplementation.NLog)
-			{
-				loggerFactoryType = (Type)
-					converter.PerformConversion(NLogLoggerFactoryTypeName, typeof(Type));
-
-			}
-			else if (logApi == LoggerImplementation.Diagnostics)
-			{
-			}
-			else if (logApi == LoggerImplementation.Null)
-			{
-			}
-			else if (logApi == LoggerImplementation.Web)
-			{
-				loggerFactoryType = typeof(WebLoggerFactory);
-			}
-			else if (logApi == LoggerImplementation.Custom)
-			{
-				if (customType == null)
-				{
-					throw new ConfigurationException("If you specify loggingApi='custom' " +
-						"then you must use the attribute customLoggerFactory to inform the " +
-						"type name of the custom logger factory");
-				}
-
-				loggerFactoryType = (Type)
-					converter.PerformConversion(customType, typeof(Type));
-
-				if (!typeof(ILoggerFactory).IsAssignableFrom(loggerFactoryType))
-				{
-					throw new FacilityException("The specified type '" + customType +
-						"' does not implement ILoggerFactory");
-				}
-			}
+			
+			if (loggerFactoryType == null) // some sanity checking
+				throw new FacilityException("LoggingFacility was unable to find an implementation of ILoggerFactory.");
 
 			object[] args = null;
 
