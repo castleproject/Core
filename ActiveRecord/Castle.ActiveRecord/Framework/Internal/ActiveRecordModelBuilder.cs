@@ -326,20 +326,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private static bool ShouldCheckBase(Type type)
 		{
 			// Changed as suggested http://support.castleproject.org/jira/browse/AR-40
-
-			bool shouldCheck = type.BaseType != typeof(object) &&
-							   type.BaseType != typeof(ActiveRecordBase) &&
-							   type.BaseType != typeof(ActiveRecordValidationBase);
-#if DOTNET2
-			// generic check
-			if (type.BaseType.IsGenericType)
-			{
-				shouldCheck = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
-							  type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
-			}
-#endif
-
-			// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
+			bool shouldCheck = IsRootType(type);
 
 			if (shouldCheck) // Perform more checks 
 			{
@@ -365,6 +352,25 @@ namespace Castle.ActiveRecord.Framework.Internal
 					basetype = basetype.BaseType;
 				}
 			}
+
+			return shouldCheck;
+		}
+
+		private static bool IsRootType(Type type) {
+			
+			bool shouldCheck = type.BaseType != typeof(object) &&
+			                   type.BaseType != typeof(ActiveRecordBase) &&
+			                   type.BaseType != typeof(ActiveRecordValidationBase);
+								// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
+
+#if DOTNET2
+			// generic check
+			if (type.BaseType.IsGenericType)
+			{
+				shouldCheck = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
+				              type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
+			}
+#endif
 
 			return shouldCheck;
 		}
