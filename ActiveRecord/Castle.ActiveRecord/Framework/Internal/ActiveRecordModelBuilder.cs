@@ -358,7 +358,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private static bool IsRootType(Type type) {
 			
-			bool shouldCheck = type.BaseType != typeof(object) &&
+			bool isRootType = type.BaseType != typeof(object) &&
 			                   type.BaseType != typeof(ActiveRecordBase) &&
 			                   type.BaseType != typeof(ActiveRecordValidationBase);
 								// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
@@ -367,12 +367,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			// generic check
 			if (type.BaseType.IsGenericType)
 			{
-				shouldCheck = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
+				isRootType = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
 				              type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
 			}
 #endif
 
-			return shouldCheck;
+			return isRootType;
 		}
 
 		private void ProcessActiveRecordAttribute(Type type, ActiveRecordModel model)
