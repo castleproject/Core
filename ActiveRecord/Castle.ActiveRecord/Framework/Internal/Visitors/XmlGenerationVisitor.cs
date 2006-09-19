@@ -77,10 +77,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("table", model.ActiveRecordAtt.Table),
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
-                        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
-						MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
-						WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
-                        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
+				        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
+				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
+				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
 				VisitNode(model.Key);
 				VisitNodes(model.Fields);
@@ -103,8 +103,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        MakeAtt("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
 				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
-                        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
-                        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
+				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
 				VisitNodes(model.Fields);
 				VisitNodes(model.Properties);
@@ -142,8 +142,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        WriteIfNonNull("where", model.ActiveRecordAtt.Where),
 				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
-                        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
-                        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
+				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
 				WriteCache(model.ActiveRecordAtt.Cache);
 				VisitNode(model.PrimaryKey);
@@ -442,37 +442,37 @@ namespace Castle.ActiveRecord.Framework.Internal
 			String cascade = TranslateCascadeEnum(model.BelongsToAtt.Cascade);
 			String outerJoin = TranslateOuterJoin(model.BelongsToAtt.OuterJoin);
 
-		    if (model.BelongsToAtt.Column == null)
-            {
-                AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
-                        MakeAtt("name", model.Property.Name),
-                        MakeAtt("access", model.BelongsToAtt.AccessString),
-                        MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
-                        WriteIfFalse("insert", model.BelongsToAtt.Insert),
-                        WriteIfFalse("update", model.BelongsToAtt.Update),
-                        WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
-                        WriteIfTrue("unique", model.BelongsToAtt.Unique),
-                        WriteIfNonNull("cascade", cascade),
-                        WriteIfNonNull("outer-join", outerJoin));
-                Ident();
-                WriteCompositeColumns(model.BelongsToAtt.CompositeKeyColumns);
-                Dedent();
-                Append("</many-to-one>");
-		    }
-		    else
-            {
-                AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9} />",
-                        MakeAtt("name", model.Property.Name),
-                        MakeAtt("access", model.BelongsToAtt.AccessString),
-                        MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
-                        MakeAtt("column", model.BelongsToAtt.Column),
-                        WriteIfFalse("insert", model.BelongsToAtt.Insert),
-                        WriteIfFalse("update", model.BelongsToAtt.Update),
-                        WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
-                        WriteIfTrue("unique", model.BelongsToAtt.Unique),
-                        WriteIfNonNull("cascade", cascade),
-                        WriteIfNonNull("outer-join", outerJoin));
-		    }
+			if (model.BelongsToAtt.Column == null)
+			{
+				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
+						MakeAtt("name", model.Property.Name),
+						MakeAtt("access", model.BelongsToAtt.AccessString),
+						MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
+						WriteIfFalse("insert", model.BelongsToAtt.Insert),
+						WriteIfFalse("update", model.BelongsToAtt.Update),
+						WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
+						WriteIfTrue("unique", model.BelongsToAtt.Unique),
+						WriteIfNonNull("cascade", cascade),
+						WriteIfNonNull("outer-join", outerJoin));
+				Ident();
+				WriteCompositeColumns(model.BelongsToAtt.CompositeKeyColumns);
+				Dedent();
+				Append("</many-to-one>");
+			}
+			else
+			{
+				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9} />",
+						MakeAtt("name", model.Property.Name),
+						MakeAtt("access", model.BelongsToAtt.AccessString),
+						MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
+						MakeAtt("column", model.BelongsToAtt.Column),
+						WriteIfFalse("insert", model.BelongsToAtt.Insert),
+						WriteIfFalse("update", model.BelongsToAtt.Update),
+						WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
+						WriteIfTrue("unique", model.BelongsToAtt.Unique),
+						WriteIfNonNull("cascade", cascade),
+						WriteIfNonNull("outer-join", outerJoin));
+			}
 		}
 
 		public override void VisitHasMany(HasManyModel model)
@@ -757,7 +757,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeTypeAtt(Type type, String typeName)
 		{
-		    if (typeName != null)
+			if (typeName != null)
 			{
 				return MakeAtt("type", typeName);
 			}
@@ -937,10 +937,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return MakeAtt(attName, value.ToString());
 		}
 
-        private String MakeAtt(String attName, String value)
-        {
-            return String.Format(" {0}=\"{1}\"", attName, value);
-        }
+		private String MakeAtt(String attName, String value)
+		{
+			return String.Format(" {0}=\"{1}\"", attName, value);
+		}
 
 		private String MakeAtt(String attName, bool value)
 		{
