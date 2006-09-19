@@ -79,7 +79,10 @@
       <Name>Castle.DynamicProxy</Name>
       <HintPath>..\bin\Castle.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.3.6162.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINDOWS\assembly\GAC_MSIL\nunit.framework\2.2.8.0__96d09a1eb7f44a77\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -89,6 +92,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-vs2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-2-0.csproj">
       <Project>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</Project>
       <Name>Castle.MicroKernel.Tests-2-0</Name>
@@ -96,11 +103,6 @@
     <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-2-0.csproj">
       <Name>Castle.MicroKernel</Name>
       <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Castle.Model\Castle.Model-2-0.csproj">
-      <Name>Castle.Model</Name>
-      <Project>{6F052973-C8E0-41EB-BAAF-B052509B5597}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="..\Castle.Windsor\Castle.Windsor-2-0.csproj">

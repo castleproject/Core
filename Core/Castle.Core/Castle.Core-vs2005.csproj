@@ -39,6 +39,9 @@
     <Compile Include="Attributes\LifestyleAttributes.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
     <Compile Include="Interceptor\IInvocation.cs" />
+    <Compile Include="Interceptor\IMethodInterceptor.cs" />
+    <Compile Include="Interceptor\IMethodInvocation.cs" />
+    <Compile Include="Interceptor\IOnBehalfAware.cs" />
     <Compile Include="Internal\GraphNode.cs" />
     <Compile Include="Internal\GraphSets.cs" />
     <Compile Include="Internal\IVertex.cs" />
@@ -63,7 +66,6 @@
     <Compile Include="Logging\Loggers\NullLogger.cs" />
     <Compile Include="Logging\Loggers\StreamLogger.cs" />
     <Compile Include="Logging\Loggers\WebLogger.cs" />
-    <Compile Include="Logging\NullLogFactory.cs" />
     <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\Configuration\AbstractConfiguration.cs" />
     <Compile Include="Model\Configuration\ConfigurationCollection.cs" />

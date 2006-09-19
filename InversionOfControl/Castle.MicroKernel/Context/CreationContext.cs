@@ -33,6 +33,11 @@ namespace Castle.MicroKernel
 		private readonly Type[] arguments;
 #endif
 
+		public CreationContext()
+		{
+			dependencies = new DependencyModelCollection();
+		}
+
 		public CreationContext(DependencyModelCollection dependencies)
 		{
 			this.dependencies = new DependencyModelCollection(dependencies);
@@ -94,8 +99,8 @@ namespace Castle.MicroKernel
 		}
 
 #if DOTNET2
-		
-		public CreationContext(DependencyModel[] dependencies, Type target)
+
+		public CreationContext(DependencyModelCollection dependencies, Type target)
 		{
 			this.dependencies = new DependencyModelCollection(dependencies);
 			arguments = ExtractGenericArguments(target);
