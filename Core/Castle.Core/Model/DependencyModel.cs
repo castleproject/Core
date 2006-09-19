@@ -75,9 +75,9 @@ namespace Castle.Core
 		public override int GetHashCode()
 		{
 			int result = dependencyKey.GetHashCode();
-			result = 29 * result + targetType.GetHashCode();
-			result = 29 * result + isOptional.GetHashCode();
-			result = 29 * result + dependencyType.GetHashCode();
+			result += 37 ^ targetType.GetHashCode();
+			result += 37 ^ isOptional.GetHashCode();
+			result += 37 ^ dependencyType.GetHashCode();
 			return result;
 		}
 

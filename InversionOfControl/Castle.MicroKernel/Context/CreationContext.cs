@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel
 {
 	using System;
-	using System.Collections;
 	using System.Reflection;
 	using System.Text;
 
@@ -27,65 +26,79 @@ namespace Castle.MicroKernel
 	public sealed class CreationContext : MarshalByRefObject
 	{
 		public readonly static CreationContext Empty = new CreationContext(new DependencyModel[0]);
-		
-		private readonly ArrayList dependencies;
-	    
-		#if DOTNET2
-		private readonly Type[] arguments;
-		#endif
 
-        public CreationContext(ICollection dependencies)
-        {
-            this.dependencies = new ArrayList(dependencies);
-        }
+		private readonly DependencyModelCollection dependencies;
+
+#if DOTNET2
+		private readonly Type[] arguments;
+#endif
+
+		public CreationContext(DependencyModelCollection dependencies)
+		{
+			this.dependencies = new DependencyModelCollection(dependencies);
+		}
+		
+		public CreationContext(DependencyModel[] dependencies)
+		{
+			this.dependencies = new DependencyModelCollection(dependencies);
+		}
 
 		/// <summary>
 		/// Track dependencies and guards against circular dependencies.
 		/// </summary>
 		/// <returns>A dependency key that can be used to remove the dependency if it was resolved correctly.</returns>
-        public object TrackDependency(MemberInfo info, DependencyModel dependencyModel)
-        {
-            if (dependencies.Contains(dependencyModel))
-            {
-                StringBuilder sb = new StringBuilder("A cycle was detected when trying to create a service. ");
-                sb.Append("The dependency graph that resulted in a cycle is:");
-                
-            	foreach (DependencyKey key in dependencies)
-                {
-                    sb.AppendFormat("\r\n - {0} for {1} in type {2}", 
-                                    key.Dependency, key.Info, key.Info.DeclaringType);
-                }
-            	
-                sb.AppendFormat("\r\n + {0} for {1} in {2}\r\n", 
-                                dependencyModel, info, info.DeclaringType);
-                
-            	throw new CircularDependecyException(sb.ToString());
-            }
+		public DependencyModel TrackDependency(MemberInfo info, DependencyModel dependencyModel)
+		{
+			if (dependencies.Contains(dependencyModel))
+			{
+				StringBuilder sb = new StringBuilder("A cycle was detected when trying to create a service. ");
+				sb.Append("The dependency graph that resulted in a cycle is:");
 
-			object trackingKey = new DependencyKey(dependencyModel, info);
+				foreach(DependencyModel key in dependencies)
+				{
+					DependencyModelExtended extendedInfo = key as DependencyModelExtended;
+					
+					if (extendedInfo != null)
+					{
+						sb.AppendFormat("\r\n - {0} for {1} in type {2}",
+							key.ToString(), extendedInfo.Info, extendedInfo.Info.DeclaringType);
+					}
+					else
+					{
+						sb.AppendFormat("\r\n - {0}", key.ToString());
+					}
+				}
+
+				sb.AppendFormat("\r\n + {0} for {1} in {2}\r\n",
+				                dependencyModel, info, info.DeclaringType);
+
+				throw new CircularDependecyException(sb.ToString());
+			}
+
+			DependencyModelExtended trackingKey = new DependencyModelExtended(dependencyModel, info);
 			dependencies.Add(trackingKey);
 			return trackingKey;
-        }
+		}
 
 		/// <summary>
 		/// Removes a dependency that was resolved successfully.
 		/// </summary>
-		public void RemoveDependencyTracking(object key)
+		public void RemoveDependencyTracking(DependencyModel model)
 		{
-			dependencies.Remove(key);
+			dependencies.Remove(model);
 		}
 
-	    public ICollection Dependencies
-	    {
-	        get { return dependencies; }
-	    }
-
-		#if DOTNET2
-		
-		public CreationContext(ICollection dependencies, Type target)
+		public DependencyModelCollection Dependencies
 		{
-            this.dependencies = new ArrayList(dependencies);
-		    arguments = ExtractGenericArguments(target);
+			get { return dependencies; }
+		}
+
+#if DOTNET2
+		
+		public CreationContext(DependencyModel[] dependencies, Type target)
+		{
+			this.dependencies = new DependencyModelCollection(dependencies);
+			arguments = ExtractGenericArguments(target);
 		}
 
 		public Type[] GenericArguments
@@ -97,43 +110,24 @@ namespace Castle.MicroKernel
 		{
 			return target.GetGenericArguments();
 		}
-	    
-		#endif
-		
-	    [Serializable]
-		 internal class DependencyKey : MarshalByRefObject
-	    {
-            DependencyModel dependencyModel;
-            MemberInfo info;
 
-            public DependencyKey(DependencyModel model, MemberInfo service)
-	        {
-	            dependencyModel = model;
-	            info = service;
-	        }
+#endif
 
-			public DependencyModel Dependency
+		[Serializable]
+		internal class DependencyModelExtended : DependencyModel
+		{
+			private readonly MemberInfo info;
+
+			public DependencyModelExtended(DependencyModel inner, MemberInfo info) : 
+				base(inner.DependencyType, inner.DependencyKey, inner.TargetType, inner.IsOptional)
 			{
-				get { return dependencyModel; }
+				this.info = info;
 			}
 
 			public MemberInfo Info
 			{
 				get { return info; }
 			}
-
-
-            public override bool Equals(object obj)
-            {
-				if ( Object.ReferenceEquals(this, obj))
-					return true;
-				return dependencyModel.Equals(obj);
-            }
-
-            public override int GetHashCode()
-            {
-                return dependencyModel.GetHashCode();
-            }
-	    }
+		}
 	}
 }

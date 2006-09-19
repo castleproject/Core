@@ -23,14 +23,44 @@ namespace Castle.Core
 	[Serializable]
 	public class DependencyModelCollection : ReadOnlyCollectionBase
 	{
+		public DependencyModelCollection()
+		{
+		}
+
+		public DependencyModelCollection(DependencyModelCollection dependencies)
+		{
+			foreach(DependencyModel model in dependencies)
+			{
+				Add(model);
+			}
+		}
+
+		public DependencyModelCollection(DependencyModel[] dependencies)
+		{
+			foreach(DependencyModel model in dependencies)
+			{
+				Add(model);
+			}
+		}
+
 		public void Add(DependencyModel model)
 		{
 			InnerList.Add(model);
+		}
+		
+		public void Remove(DependencyModel model)
+		{
+			InnerList.Remove(model);
 		}
 
 		public void Clear()
 		{
 			InnerList.Clear();
+		}
+
+		public bool Contains(DependencyModel model)
+		{
+			return InnerList.Contains(model);
 		}
 	}
 }

@@ -14,32 +14,36 @@
 
 namespace Castle.Windsor.Tests
 {
-    using Castle.MicroKernel.Exceptions;
-    using Castle.Windsor.Tests.Components;
-
-    using NUnit.Framework;
+	using Castle.MicroKernel.Exceptions;
+	using Castle.Windsor.Tests.Components;
+	using NUnit.Framework;
 	using Castle.MicroKernel.Handlers;
 
-    [TestFixture]
-    public class CircularDependencyTests
-    {
-        [Test]
-        [ExpectedException(typeof(CircularDependecyException), @"A cycle was detected when trying to create a service. The dependency graph that resulted in a cycle is:
+	[TestFixture]
+	public class CircularDependencyTests
+	{
+		[Test]
+		[
+			ExpectedException(typeof(CircularDependecyException),
+				@"A cycle was detected when trying to create a service. The dependency graph that resulted in a cycle is:
  - Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in type Castle.Windsor.Tests.Components.Controller
  - Service dependency 'Controller' type 'Castle.Windsor.Tests.Components.IController' for Castle.Windsor.Tests.Components.IController Controller in type Castle.Windsor.Tests.Components.View
  + Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in Castle.Windsor.Tests.Components.Controller
-")]
-        public void ThrowsACircularDependencyException()
-        {
-            IWindsorContainer container = new WindsorContainer();
-            container.AddComponent("controller", typeof(IController), typeof(Controller));
-            container.AddComponent("view", typeof(IView), typeof(View));
+"
+				)]
+		public void ThrowsACircularDependencyException()
+		{
+			IWindsorContainer container = new WindsorContainer();
+			container.AddComponent("controller", typeof(IController), typeof(Controller));
+			container.AddComponent("view", typeof(IView), typeof(View));
 
-            container.Resolve("controller");
-        }
-    	
+			container.Resolve("controller");
+		}
+
 		[Test]
-		[ExpectedException(typeof(HandlerException), @"Can't create component 'compA' as it has dependencies to be satisfied. 
+		[
+			ExpectedException(typeof(HandlerException),
+				@"Can't create component 'compA' as it has dependencies to be satisfied. 
 compA is waiting for the following dependencies: 
 
 Services: 
@@ -59,7 +63,8 @@ compD is waiting for the following dependencies:
 
 Services: 
 - Castle.Windsor.Tests.Components.CompA which was registered but is also waiting for dependencies. 
-")]
+"
+				)]
 		public void ThrowsACircularDependencyException2()
 		{
 			IWindsorContainer container = new WindsorContainer();
@@ -70,5 +75,5 @@ Services:
 
 			container.Resolve("compA");
 		}
-    }
+	}
 }

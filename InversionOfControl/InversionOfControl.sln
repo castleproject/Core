@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests", "Cas
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2003", "..\Core\Castle.Core\Castle.Core-vs2003.csproj", "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -39,6 +43,10 @@ Global
 		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Debug.Build.0 = Debug|.NET
 		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Release.ActiveCfg = Release|.NET
 		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Release.Build.0 = Release|.NET
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Debug.ActiveCfg = Debug|.NET
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Debug.Build.0 = Debug|.NET
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Release.ActiveCfg = Release|.NET
+		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt

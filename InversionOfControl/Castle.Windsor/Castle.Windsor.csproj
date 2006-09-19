@@ -90,9 +90,9 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Core"
-                    AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    Name = "Castle.Core-vs2003"
+                    Project = "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
