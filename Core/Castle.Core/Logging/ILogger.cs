@@ -24,27 +24,27 @@ namespace Castle.Core.Logging
 		/// <summary>
 		/// Logging will be off
 		/// </summary>
-		Off,
+		Off = 0,
 		/// <summary>
 		/// Fatal logging level
 		/// </summary>
-		Fatal,
+		Fatal = 1,
 		/// <summary>
 		/// Error logging level
 		/// </summary>
-		Error,
-		/// <summary>
-		/// Info logging level
-		/// </summary>
-		Info,
+		Error = 2,
 		/// <summary>
 		/// Warn logging level
 		/// </summary>
-		Warn,
+		Warn = 3,
+		/// <summary>
+		/// Info logging level
+		/// </summary>
+		Info = 4,
 		/// <summary>
 		/// Debug logging level
 		/// </summary>
-		Debug
+		Debug = 5,
 	}
 
 	/// <summary>
