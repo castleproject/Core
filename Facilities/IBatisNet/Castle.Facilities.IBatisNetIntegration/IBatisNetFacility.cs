@@ -127,7 +127,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 				}
 			}
 
-			ComponentModel model = new ComponentModel(id, typeof(SqlMapper), null);
+			ComponentModel model = new ComponentModel(id, typeof(ISqlMapper), null);
 			model.ExtendedProperties.Add( MAPPER_CONFIG_FILE, fileName );
 			model.ExtendedProperties.Add( MAPPER_CONFIG_EMBEDDED, isEmbedded );
 			model.ExtendedProperties.Add( MAPPER_CONFIG_CONNECTION_STRING, connectionString );

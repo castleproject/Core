@@ -29,9 +29,9 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 	public class SqlMapKeeper: ISynchronization
 	{
-		private SqlMapper _sqlMap = null;
+		private ISqlMapper _sqlMap = null;
 
-		public SqlMapKeeper(SqlMapper sqlMap)
+		public SqlMapKeeper(ISqlMapper sqlMap)
 		{
 			_sqlMap = sqlMap;
 		}

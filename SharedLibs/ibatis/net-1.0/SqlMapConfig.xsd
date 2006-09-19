@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://ibatis.apache.org/dataMapper" 
+elementFormDefault="qualified" 
+xmlns:mstns="http://tempuri.org/XMLSchema.xsd" 
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://ibatis.apache.org/dataMapper"
+xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense" 
+vs:friendlyname="iBATIS.NET DataMapper Configuration Schema" 
+vs:ishtmlschema="false" 
+vs:iscasesensitive="true" 
+vs:requireattributequotes="true" 
+vs:defaultnamespacequalifier="" 
+vs:defaultnsprefix=""> 
+
+	<xs:annotation>
+		<xs:documentation>
+		DataMapper XML Schema Definition
+	</xs:documentation>
+	</xs:annotation>
+	<xs:element name="typeAlias">
+		<xs:complexType>
+			<xs:attribute name="alias" type="xs:string" use="required"/>
+			<xs:attribute name="type" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="typeHandler">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string"/>
+			<xs:attribute name="dbType" type="xs:string"/>
+			<xs:attribute name="callback" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="typeHandlers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="typeHandler" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="alias">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="typeAlias" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dataSource">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="connectionString" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="database">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="provider"/>
+				<xs:element ref="dataSource"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="properties">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="resource" type="xs:string"/>
+			<xs:attribute name="url" type="xs:string"/>
+			<xs:attribute name="embedded" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="property">
+		<xs:complexType>
+			<xs:attribute name="resource" type="xs:string"/>
+			<xs:attribute name="url" type="xs:string"/>
+			<xs:attribute name="embedded" type="xs:string"/>
+			<xs:attribute name="key" type="xs:string"/>
+			<xs:attribute name="value" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="provider">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="setting">
+		<xs:complexType>
+			<xs:attribute name="useStatementNamespaces" type="xs:string"  default="false"/>
+			<xs:attribute name="cacheModelsEnabled" type="xs:string"/>
+			<xs:attribute name="validateSqlMap" type="xs:string" default="false"/>
+			<xs:attribute name="useEmbedStatementParams" type="xs:boolean" default="false"/>
+			<xs:attribute name="useReflectionOptimizer" type="xs:boolean" default="true"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="settings">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="setting" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sqlMap">
+		<xs:complexType>
+			<xs:attribute name="resource" type="xs:string"/>
+			<xs:attribute name="url" type="xs:string"/>
+			<xs:attribute name="embedded" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="providers">
+		<xs:complexType>
+			<xs:attribute name="resource" type="xs:string"/>
+			<xs:attribute name="url" type="xs:string"/>
+			<xs:attribute name="embedded" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:annotation>
+		<xs:documentation>
+		 The document root.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="sqlMapConfig">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element ref="properties" minOccurs="0"/>
+				<xs:element ref="settings" minOccurs="0"/>
+				<xs:element ref="providers" minOccurs="0"/>
+				<xs:element ref="database" minOccurs="0"/>
+				<xs:element ref="alias" minOccurs="0"/>
+				<xs:element ref="typeHandlers" minOccurs="0"/>
+				<xs:element ref="sqlMaps" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sqlMaps">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sqlMap" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

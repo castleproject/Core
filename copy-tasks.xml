@@ -170,9 +170,9 @@
 		</copy>
 	</target>
 	
-	<target name="copy-ibatis" depends="copy-log4net">
+	<target name="copy-ibatis">
 		<copy todir="${bin.dir}">
-			<fileset basedir="${sharedlibrary.dir}/ibatis">
+			<fileset basedir="${sharedlibrary.dir}/ibatis/net-1.0">
 				<include name="*.dll" />
 			</fileset>
 		</copy>

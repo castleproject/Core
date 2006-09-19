@@ -129,7 +129,7 @@
 					<property name="DocumentPrivates" value="False" />
 					<property name="DocumentEmptyNamespaces" value="False" />
 					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004,2005 - Castle Project (original author or authors)" />
+					<property name="CopyrightText" value="Copyright 2004,2006 - Castle Project (original author or authors)" />
 					<property name="CopyrightHref" value="http://www.castleproject.org" />
 				</documenter>
 			</documenters>

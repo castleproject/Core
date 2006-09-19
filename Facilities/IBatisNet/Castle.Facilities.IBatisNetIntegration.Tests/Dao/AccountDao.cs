@@ -29,9 +29,9 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests.Dao
 
 	public class AccountDao : IAccountDao
 	{
-		private SqlMapper _sqlMap;
+		private ISqlMapper _sqlMap;
 
-		public AccountDao(SqlMapper SqlMap)
+		public AccountDao(ISqlMapper SqlMap)
 		{
 			_sqlMap = SqlMap;
 		}

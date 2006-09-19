@@ -82,27 +82,27 @@
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\bin\Castle.Services.Transaction.dll"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
                 />
                 <Reference
-                    Name = "IBatisNet.Common"
-                    AssemblyName = "IBatisNet.Common"
-                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.Common.dll"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
                 />
                 <Reference
                     Name = "IBatisNet.DataMapper"
                     AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.DataMapper.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.0\IBatisNet.DataMapper.dll"
+                />
+                <Reference
+                    Name = "IBatisNet.Common"
+                    AssemblyName = "IBatisNet.Common"
+                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.0\IBatisNet.Common.dll"
                 />
             </References>
         </Build>

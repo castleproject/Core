@@ -55,7 +55,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 			String key = ObtainSqlMapKeyFor(info);
 
-			SqlMapper sqlMap = ObtainSqlMapperFor(key);
+			ISqlMapper sqlMap = ObtainSqlMapperFor(key);
 
 			if (sqlMap.IsSessionStarted)
 			{
@@ -88,7 +88,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 			}
 		}
 
-		private bool EnlistSessionIfHasTransactionActive(String key, SqlMapper sqlMap)
+		private bool EnlistSessionIfHasTransactionActive(String key, ISqlMapper sqlMap)
 		{
 			if (!_kernel.HasComponent(typeof(ITransactionManager))) return false;
 
@@ -130,16 +130,16 @@ namespace Castle.Facilities.IBatisNetIntegration
 			return sqlMapID;
 		}
 
-		protected SqlMapper ObtainSqlMapperFor(String key)
+		protected ISqlMapper ObtainSqlMapperFor(String key)
 		{
 			// Use the key specified in the attribute - if any
 			if (String.Empty.Equals(key))
 			{
-				return (SqlMapper) _kernel[ typeof(SqlMapper) ];
+				return (ISqlMapper) _kernel[ typeof(ISqlMapper) ];
 			}
 			else
 			{
-				return (SqlMapper) _kernel[ key ];
+				return (ISqlMapper) _kernel[ key ];
 			}
 		}
 	}

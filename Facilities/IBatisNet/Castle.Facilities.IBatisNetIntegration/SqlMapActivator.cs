@@ -49,7 +49,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 			String connectionString = (String) Model.ExtendedProperties [ IBatisNetFacility.MAPPER_CONFIG_CONNECTION_STRING ];
 
 			IBatisNet.DataMapper.Configuration.DomSqlMapBuilder domSqlMapBuilder = new DomSqlMapBuilder();
-			SqlMapper sqlMapper;
+			ISqlMapper sqlMapper;
 
 			if( isEmbedded )
 			{

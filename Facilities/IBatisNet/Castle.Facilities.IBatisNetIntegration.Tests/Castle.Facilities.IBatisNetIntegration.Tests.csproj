@@ -86,31 +86,6 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\bin\Castle.Model.dll"
-                />
-                <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\bin\Castle.Windsor.dll"
-                />
-                <Reference
-                    Name = "Castle.Services.Transaction"
-                    AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
-                />
-                <Reference
                     Name = "Castle.Facilities.IBatisNetIntegration"
                     Project = "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -121,24 +96,39 @@
                     HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
                 />
                 <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                />
+                <Reference
                     Name = "IBatisNet.DataMapper"
                     AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.DataMapper.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.0\IBatisNet.DataMapper.dll"
                 />
                 <Reference
                     Name = "IBatisNet.Common"
                     AssemblyName = "IBatisNet.Common"
-                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.Common.dll"
-                />
-                <Reference
-                    Name = "IBatisNet.Common.Logging.Log4Net"
-                    AssemblyName = "IBatisNet.Common.Logging.Log4Net"
-                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.Common.Logging.Log4Net.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\..\SharedLibs\log4net\log4net.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.0\IBatisNet.Common.dll"
                 />
             </References>
         </Build>
@@ -183,10 +173,6 @@
                     RelPath = "ServiceTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SqlMap.config"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Dao\AccountDao.cs"

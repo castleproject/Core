@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+targetNamespace="http://ibatis.apache.org/mapping" 
+elementFormDefault="qualified" 
+xmlns:mstns="http://tempuri.org/XMLSchema.xsd" 
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://ibatis.apache.org/mapping"
+xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense" 
+vs:friendlyname="iBATIS.NET mapping file Configuration Schema" 
+vs:ishtmlschema="false" 
+vs:iscasesensitive="true" 
+vs:requireattributequotes="true" 
+vs:defaultnamespacequalifier="" 
+vs:defaultnsprefix="" >
+
+	<xs:annotation>
+		<xs:documentation>
+		Mapping XML Schema Definition
+	</xs:documentation>
+	</xs:annotation>
+
+	<xs:element name="alias">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="typeAlias" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="discriminator">
+		<xs:complexType>
+			<xs:attribute name="column" type="xs:string"/>
+			<xs:attribute name="type" type="xs:string"/>
+			<xs:attribute name="typeHandler" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="subMap">
+		<xs:complexType>
+			<xs:attribute name="value" use="required" type="xs:string"/>
+			<xs:attribute name="resultMapping" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="cacheModel">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="flushInterval" minOccurs="0"/>
+				<xs:element ref="flushOnExecute" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="serialize" type="xs:string"  default="false"/>
+			<xs:attribute name="readOnly" type="xs:string"  default="true"/>
+			<xs:attribute name="implementation" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="LRU"/>
+						<xs:enumeration value="MEMORY"/>
+						<xs:enumeration value="FIFO"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="cacheModels">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cacheModel" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="procedure">
+		<xs:complexType mixed="true">
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="parameterMap" type="xs:string" use="required"/>
+			<xs:attribute name="resultMap" type="xs:string"/>
+			<xs:attribute name="resultClass" type="xs:string"/>
+			<xs:attribute name="cacheModel" type="xs:string"/>
+			<xs:attribute name="listClass" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="delete">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="generate"/>
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="id" use="required"/>
+			<xs:attribute name="parameterMap" type="xs:string"/>
+			<xs:attribute name="parameterClass" type="xs:string"/>
+			<xs:attribute name="extends" type="xs:string"/>		
+			<xs:attribute name="remapResults">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="false"/>
+						<xs:enumeration value="true"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>			
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dynamic">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="flushInterval">
+		<xs:complexType>
+			<xs:attribute name="milliseconds" type="xs:byte"/>
+			<xs:attribute name="seconds" type="xs:byte"/>
+			<xs:attribute name="minutes" type="xs:byte"/>
+			<xs:attribute name="hours" type="xs:byte"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="flushOnExecute">
+		<xs:complexType>
+			<xs:attribute name="statement" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="generate">
+		<xs:complexType>
+			<xs:attribute name="table" type="xs:string" use="required"/>
+			<xs:attribute name="by" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="insert">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="selectKey"/>
+				<xs:element ref="generate"/>
+				<xs:element ref="dynamic"/>
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="parameterClass" type="xs:string"/>
+			<xs:attribute name="parameterMap" type="xs:string"/>
+			<xs:attribute name="resultClass" type="xs:string"/>
+			<xs:attribute name="remapResults">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="false"/>
+						<xs:enumeration value="true"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isNotParameterPresent">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isNotPropertyAvailable">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isEmpty">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isEqual">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+			<xs:attribute name="compareProperty" type="xs:string"/>
+			<xs:attribute name="compareValue" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isNull">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isGreaterEqual">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+			<xs:attribute name="compareProperty" type="xs:string"/>
+			<xs:attribute name="compareValue" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isGreaterThan">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+			<xs:attribute name="compareProperty" type="xs:string"/>
+			<xs:attribute name="compareValue" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isLessEqual">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+			<xs:attribute name="compareProperty" type="xs:string"/>
+			<xs:attribute name="compareValue" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isLessThan">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+			<xs:attribute name="compareProperty" type="xs:string"/>
+			<xs:attribute name="compareValue" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isNotEmpty">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isNotEqual">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+			<xs:attribute name="compareProperty" type="xs:string"/>
+			<xs:attribute name="compareValue" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isNotNull">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isParameterPresent">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="isPropertyAvailable">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="prepend" type="xs:string"/>
+			<xs:attribute name="property" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="iterate">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="open" type="xs:string" use="required"/>
+			<xs:attribute name="close" type="xs:string" use="required"/>
+			<xs:attribute name="conjunction" type="xs:string" use="required"/>
+			<xs:attribute name="property" type="xs:string"/>
+			<xs:attribute name="prepend" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="parameter">
+		<xs:complexType>
+			<xs:attribute name="property" type="xs:string" use="required"/>
+			<xs:attribute name="column" type="xs:string"/>
+			<xs:attribute name="nullValue" type="xs:string"/>
+			<xs:attribute name="type" type="xs:string"/>
+			<xs:attribute name="dbType" type="xs:string"/>
+			<xs:attribute name="size" type="xs:string"/>
+			<xs:attribute name="scale" type="xs:string"/>
+			<xs:attribute name="precision" type="xs:string"/>
+			<xs:attribute name="typeHandler" type="xs:string"/>
+			<xs:attribute name="direction">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="Input"/>
+						<xs:enumeration value="Output"/>
+						<xs:enumeration value="InputOutput"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="parameterMap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="class" type="xs:string" />
+			<xs:attribute name="extends" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="parameterMaps">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="parameterMap" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="property">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="value" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="result">
+		<xs:complexType>
+			<xs:attribute name="property" type="xs:string" use="required"/>
+			<xs:attribute name="column" type="xs:string"/>
+			<xs:attribute name="lazyLoad">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="false"/>
+						<xs:enumeration value="true"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="select" type="xs:string"/>
+			<xs:attribute name="nullValue" type="xs:string"/>
+			<xs:attribute name="type" type="xs:string"/>
+			<xs:attribute name="dbType" type="xs:string"/>
+			<xs:attribute name="columnIndex" type="xs:string"/>
+			<xs:attribute name="resultMapping" type="xs:string"/>
+			<xs:attribute name="typeHandler" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="argument">
+		<xs:complexType>
+			<xs:attribute name="argumentName" type="xs:string" use="required"/>
+			<xs:attribute name="column" type="xs:string"/>
+			<xs:attribute name="select" type="xs:string"/>
+			<xs:attribute name="nullValue" type="xs:string"/>
+			<xs:attribute name="type" type="xs:string"/>
+			<xs:attribute name="dbType" type="xs:string"/>
+			<xs:attribute name="columnIndex" type="xs:string"/>
+			<xs:attribute name="resultMapping" type="xs:string"/>
+			<xs:attribute name="typeHandler" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="constructor">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="argument" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="resultMap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="constructor" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="result" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="discriminator" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="subMap" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="class" type="xs:string" use="required"/>
+			<xs:attribute name="extends" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="resultMaps">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="resultMap" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="select">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="dynamic"/>
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+				<xs:element ref="generate"/>
+			</xs:choice>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="parameterClass" type="xs:string"/>
+			<xs:attribute name="resultMap" type="xs:string"/>
+			<xs:attribute name="resultClass" type="xs:string"/>
+			<xs:attribute name="parameterMap" type="xs:string"/>
+			<xs:attribute name="cacheModel" type="xs:string"/>
+			<xs:attribute name="listClass" type="xs:string"/>
+			<xs:attribute name="extends" type="xs:string"/>
+			<xs:attribute name="remapResults">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="false"/>
+						<xs:enumeration value="true"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="selectKey">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="property" type="xs:string" use="required"/>
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="post"/>
+								<xs:enumeration value="pre"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="resultClass" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sqlMap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="alias" minOccurs="0"/>
+				<xs:element ref="cacheModels" minOccurs="0"/>
+				<xs:element ref="resultMaps" minOccurs="0"/>
+				<xs:element ref="statements" minOccurs="0" />
+				<xs:element ref="parameterMaps" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="namespace" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="statement">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="dynamic"/>
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="parameterClass" type="xs:string"/>
+			<xs:attribute name="resultMap" type="xs:string"/>
+			<xs:attribute name="resultClass" type="xs:string"/>
+			<xs:attribute name="parameterMap" type="xs:string"/>
+			<xs:attribute name="listClass" type="xs:string"/>
+			<xs:attribute name="cacheModel" type="xs:string"/>
+			<xs:attribute name="remapResults">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="false"/>
+						<xs:enumeration value="true"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="statements">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="statement"/>
+				<xs:element ref="insert"/>
+				<xs:element ref="update"/>
+				<xs:element ref="delete"/>
+				<xs:element ref="select"/>
+				<xs:element ref="procedure"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="typeAlias">
+		<xs:complexType>
+			<xs:attribute name="alias" type="xs:string" use="required"/>
+			<xs:attribute name="type" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="update">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="generate"/>
+				<xs:element ref="dynamic"/>
+				<xs:element ref="isEmpty"/>
+				<xs:element ref="isEqual"/>
+				<xs:element ref="isGreaterEqual"/>
+				<xs:element ref="isGreaterThan"/>
+				<xs:element ref="isLessThan"/>
+				<xs:element ref="isLessEqual"/>
+				<xs:element ref="isNotEmpty"/>
+				<xs:element ref="isNotEqual"/>
+				<xs:element ref="isNotNull"/>
+				<xs:element ref="isNotParameterPresent"/>
+				<xs:element ref="isNotPropertyAvailable"/>
+				<xs:element ref="isNull"/>
+				<xs:element ref="isParameterPresent"/>
+				<xs:element ref="isPropertyAvailable"/>
+				<xs:element ref="iterate"/>
+			</xs:choice>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="parameterMap" type="xs:string"/>
+			<xs:attribute name="parameterClass" type="xs:string"/>
+			<xs:attribute name="extends" type="xs:string"/>
+			<xs:attribute name="remapResults">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="false"/>
+						<xs:enumeration value="true"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

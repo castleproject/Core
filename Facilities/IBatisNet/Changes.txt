@@ -1,3 +1,6 @@
+Version beta 3
+- Updated to last GA version of iBATIS.DataMApper 1.5.1
+
 Beta 2
 - Added in the ability to configure the connection string in the xml configuration
 
