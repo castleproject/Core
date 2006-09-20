@@ -1,7 +1,7 @@
 beta 4
 ======
 
-- Added XmlIgnore to IDictionary filed on ARValidationBase
+- Added XmlIgnore to IDictionary field on ARValidationBase
 
 - Added support for generic abstract base class for a type hierarchy per discussions with Don
   Morrison on IRC. The Generic Abstract Base class must conform to all the previous rules to 
