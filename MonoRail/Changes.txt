@@ -4,6 +4,13 @@ Change history
 Release Candidate 1
 ===================
 
+- Added support for null property handling in Brail.
+	${objMayBeNull.Name} -- will throw if null
+	${ IgnoreNull(objMayBeNull).Name } -- will return empty string when null
+	
+-- Breaking change in Brail. Removed <? ?> as markers for code blocks. This was done to allow handling of xml processing instructions (<?xml ?> for instnace).
+	Use <?brail ?> markers instead.
+
 - Applied Marc-André's patch fixing MR-149
   "[TestSupport] Verb not specified for Get request"
 
