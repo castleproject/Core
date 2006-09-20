@@ -55,6 +55,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		private ArrayList __validators = new ArrayList();
 
+		[System.Xml.Serialization.XmlIgnore]
 		private IDictionary __failedProperties;
 
 		/// <summary>
