@@ -36,9 +36,7 @@
     <Compile Include="BrailAjaxTestCase.boo" />
     <Compile Include="BrailBasicFunctionality.boo" />
     <Compile Include="BrailHelperTestCase.boo" />
-    <Compile Include="BrailLayoutTestCase.boo" />
     <Compile Include="BrailRoutingTestCase.boo" />
-    <Compile Include="BrailSmartControllerTestCase.boo" />
     <Compile Include="BrailSubViewTestCase.boo" />
     <Compile Include="ComponentsTestCase.boo" />
     <Compile Include="DirectRenderTestCase.boo" />
@@ -57,9 +55,9 @@
     <Compile Include="Views\layout\update.boo" />
     <Compile Include="Views\layouts\general.boo" />
     <Compile Include="Views\layouts\printable.boo" />
+    <Compile Include="LanguageFeatures.boo" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
   </ItemGroup>
-  <Import Project="$(BooBinPath)\MsBuild.Boo.Targets" />
 </Project>

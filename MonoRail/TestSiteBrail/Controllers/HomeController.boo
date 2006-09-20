@@ -57,3 +57,15 @@ class HomeController(Controller):
 		
 	def Empty():
 		pass
+		
+	def NullableProperties():
+		PropertyBag.Add( "List", (Foo("Bar"),Foo(null),Foo("Baz")))
+		
+		
+class Foo:
+	
+	[Property(Foo)]
+	foo as string
+	
+	def constructor(foo as string):
+		self.foo = foo

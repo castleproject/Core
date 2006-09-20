@@ -21,7 +21,7 @@ import Castle.MonoRail.Framework
 
 class BrailPreProcessor(AbstractCompilerStep):
 	
-	static Seperators = {"<?brail":"?>", "<?":"?>", "<%":"%>"}
+	static Seperators = {"<?brail":"?>",  "<%":"%>"}
 	static logger = LogManager.GetLogger(BrailPreProcessor)
 	
 	override def Run():
