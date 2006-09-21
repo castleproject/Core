@@ -172,7 +172,7 @@
 	
 	<target name="copy-ibatis">
 		<copy todir="${bin.dir}">
-			<fileset basedir="${sharedlibrary.dir}/ibatis/net-1.0">
+			<fileset basedir="${sharedlibrary.dir}/ibatis/${framework::get-target-framework()}">
 				<include name="*.dll" />
 			</fileset>
 		</copy>

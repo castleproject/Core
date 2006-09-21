@@ -93,10 +93,11 @@
 	</target>
 	
 	<target name="tests.run" depends="tests.compile" if="${ibatis.test}">
-		<nunit2 >
-			<formatter type="${nunit.formatter}" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}" />
-		</nunit2>
+		<exec 
+			program="${nunit-console}" 
+			workingdir="${bin.dir}" 
+			commandline="${test.assembly.name}"
+			unless="${tests.disabled}" />
 	</target>
 	
 	<target name="docs">
