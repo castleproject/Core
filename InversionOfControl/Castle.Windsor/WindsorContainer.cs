@@ -219,13 +219,13 @@ namespace Castle.Windsor
 
 		public virtual void AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
 		{
-			_kernel.AddComponentWithProperties(key, classType, extendedProperties);
+			_kernel.AddComponentWithExtendedProperties(key, classType, extendedProperties);
 		}
 
 		public virtual void AddComponentWithProperties(string key, Type serviceType, Type classType,
 		                                               IDictionary extendedProperties)
 		{
-			_kernel.AddComponentWithProperties(key, serviceType, classType, extendedProperties);
+			_kernel.AddComponentWithExtendedProperties(key, serviceType, classType, extendedProperties);
 		}
 
 		/// <summary>

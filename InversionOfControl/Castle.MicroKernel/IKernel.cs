@@ -57,7 +57,7 @@ namespace Castle.MicroKernel
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
 		/// <param name="extendedProperties"></param>
-		void AddComponentWithProperties(String key, Type classType, IDictionary extendedProperties);
+		void AddComponentWithExtendedProperties(String key, Type classType, IDictionary extendedProperties);
 
 		/// <summary>
 		/// Adds a concrete class and an interface 
@@ -68,7 +68,7 @@ namespace Castle.MicroKernel
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
 		/// <param name="extendedProperties"></param>
-		void AddComponentWithProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
+		void AddComponentWithExtendedProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
 
 		/// <summary>
 		/// Adds a custom made <see cref="ComponentModel"/>.
@@ -122,9 +122,27 @@ namespace Castle.MicroKernel
 		object this[String key] { get; }
 
 		/// <summary>
-		/// Returns the component instance by the Type
+		/// Returns the component instance by the service type
 		/// </summary>
-		object this[Type key] { get; }
+		object this[Type service] { get; }
+
+		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		object Resolve(Type service, IDictionary arguments);
+
+		/// <summary>
+		/// Returns the component instance by the component key
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		object Resolve(String key, IDictionary arguments);
 
 		#if DOTNET2
 
@@ -136,8 +154,26 @@ namespace Castle.MicroKernel
 		object Resolve(String key, Type service);
 
 		#endif
+		
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="dependencies"></param>
+		void RegisterCustomDependencies(Type service, IDictionary dependencies);
+		
+		/// <summary>
+		/// Associates objects with a component handler,
+		/// allowing it to use the specified dictionary
+		/// when resolving dependencies
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="dependencies"></param>
+		void RegisterCustomDependencies(String key, IDictionary dependencies);
 
-        /// <summary>
+		/// <summary>
 		/// Releases a component instance. This allows
 		/// the kernel to execute the proper decomission 
 		/// lifecycles on the component instance.
@@ -280,5 +316,6 @@ namespace Castle.MicroKernel
 		/// Graph of components and iteractions.
 		/// </summary>
 		GraphNode[] GraphNodes { get; }
+
 	}
 }

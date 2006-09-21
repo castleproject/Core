@@ -118,26 +118,26 @@ namespace Castle.MicroKernel
 		{
 			this.proxyFactory = proxyFactory;
 
-			this.childKernels = new ArrayList();
-			this.facilities = new ArrayList();
-			this.subsystems = new Hashtable();
+			childKernels = new ArrayList();
+			facilities = new ArrayList();
+			subsystems = new Hashtable();
 
 			RegisterSubSystems();
 
-			this.releaserPolicy = new LifecycledComponentsReleasePolicy();
-			this.handlerFactory = new DefaultHandlerFactory(this);
-			this.modelBuilder = new DefaultComponentModelBuilder(this);
-			this.resolver = new DefaultDependencyResolver(this);
-			this.resolver.Initialize(new DependencyDelegate(RaiseDependencyResolving));
+			releaserPolicy = new LifecycledComponentsReleasePolicy();
+			handlerFactory = new DefaultHandlerFactory(this);
+			modelBuilder = new DefaultComponentModelBuilder(this);
+			resolver = new DefaultDependencyResolver(this);
+			resolver.Initialize(new DependencyDelegate(RaiseDependencyResolving));
 		}
 
 		public DefaultKernel(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
-			MemberInfo[] members = FormatterServices.GetSerializableMembers( GetType(), context );
+			MemberInfo[] members = FormatterServices.GetSerializableMembers(GetType(), context);
 			
-			object[] kernelmembers = (object[]) info.GetValue( "members", typeof(object[]) );
+			object[] kernelmembers = (object[]) info.GetValue("members", typeof(object[]));
 			
-			FormatterServices.PopulateObjectMembers( this, members, kernelmembers );
+			FormatterServices.PopulateObjectMembers(this, members, kernelmembers);
 		}
 
 		#endregion
@@ -146,17 +146,17 @@ namespace Castle.MicroKernel
 
 		protected virtual void RegisterSubSystems()
 		{
-			AddSubSystem( SubSystemConstants.ConfigurationStoreKey, 
-				new DefaultConfigurationStore() );
+			AddSubSystem(SubSystemConstants.ConfigurationStoreKey, 
+				new DefaultConfigurationStore());
 	
-			AddSubSystem( SubSystemConstants.ConversionManagerKey, 
-				new SubSystems.Conversion.DefaultConversionManager() );
+			AddSubSystem(SubSystemConstants.ConversionManagerKey, 
+				new SubSystems.Conversion.DefaultConversionManager());
 	
-			AddSubSystem( SubSystemConstants.NamingKey, 
-				new SubSystems.Naming.DefaultNamingSubSystem() );
+			AddSubSystem(SubSystemConstants.NamingKey, 
+				new SubSystems.Naming.DefaultNamingSubSystem());
 
-			AddSubSystem( SubSystemConstants.ResourceKey, 
-				new SubSystems.Resource.DefaultResourceSubSystem() );
+			AddSubSystem(SubSystemConstants.ResourceKey, 
+				new SubSystems.Resource.DefaultResourceSubSystem());
 		}
 
 		#endregion
@@ -192,7 +192,7 @@ namespace Castle.MicroKernel
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
 		/// <param name="parameters"></param>
-		public virtual void AddComponentWithProperties( String key, Type classType, IDictionary parameters )
+		public virtual void AddComponentWithExtendedProperties(String key, Type classType, IDictionary parameters)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (parameters == null) throw new ArgumentNullException("parameters");
@@ -211,7 +211,7 @@ namespace Castle.MicroKernel
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
 		/// <param name="parameters"></param>
-		public virtual void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary parameters )
+		public virtual void AddComponentWithExtendedProperties(String key, Type serviceType, Type classType, IDictionary parameters)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (parameters == null) throw new ArgumentNullException("parameters");
@@ -228,7 +228,7 @@ namespace Castle.MicroKernel
 		/// 
 		/// </summary>
 		/// <param name="model"></param>
-		public virtual void AddCustomComponent( ComponentModel model )
+		public virtual void AddCustomComponent(ComponentModel model)
 		{
 			if (model == null) throw new ArgumentNullException("model");
 
@@ -243,7 +243,7 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="instance"></param>
-		public void AddComponentInstance( String key, object instance )
+		public void AddComponentInstance(String key, object instance)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (instance == null) throw new ArgumentNullException("instance");
@@ -266,7 +266,7 @@ namespace Castle.MicroKernel
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
 		/// <param name="instance"></param>
-		public void AddComponentInstance( String key, Type serviceType, object instance )
+		public void AddComponentInstance(String key, Type serviceType, object instance)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (serviceType == null) throw new ArgumentNullException("serviceType");
@@ -399,6 +399,70 @@ namespace Castle.MicroKernel
 				IHandler handler = GetHandler(service);
 
 				return ResolveComponent(handler, service);
+			}
+		}
+
+		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		public object Resolve(Type service, IDictionary arguments)
+		{
+			if (service == null) throw new ArgumentNullException("service");
+			if (arguments == null) throw new ArgumentNullException("arguments");
+
+			if (!HasComponent(service))
+			{
+				throw new ComponentNotFoundException(service);
+			}
+
+			IHandler handler = GetHandler(service);
+
+			return ResolveComponent(handler, service, arguments);
+		}
+
+		/// <summary>
+		/// Returns the component instance by the component key
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		public object Resolve(string key, IDictionary arguments)
+		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (arguments == null) throw new ArgumentNullException("arguments");
+
+			if (!HasComponent(key))
+			{
+				throw new ComponentNotFoundException(key);
+			}
+
+			IHandler handler = GetHandler(key);
+
+			return ResolveComponent(handler, arguments);
+		}
+
+		public void RegisterCustomDependencies(Type service, IDictionary dependencies)
+		{
+			IHandler handler = GetHandler(service);
+
+			foreach(DictionaryEntry entry in dependencies)
+			{
+				handler.AddCustomDependencyValue(entry.Key.ToString(), entry.Value);
+			}
+		}
+
+		public void RegisterCustomDependencies(String key, IDictionary dependencies)
+		{
+			IHandler handler = GetHandler(key);
+
+			foreach(DictionaryEntry entry in dependencies)
+			{
+				handler.AddCustomDependencyValue(entry.Key.ToString(), entry.Value);
 			}
 		}
 
@@ -736,7 +800,7 @@ namespace Castle.MicroKernel
 		private void DisposeHandlers()
 		{
 			GraphNode[] nodes = GraphNodes;
-			IVertex[] vertices = TopologicalSortAlgo.Sort( nodes );
+			IVertex[] vertices = TopologicalSortAlgo.Sort(nodes);
 	
 			for(int i=0; i < vertices.Length; i++)
 			{
@@ -746,9 +810,9 @@ namespace Castle.MicroKernel
 				// to other container
 				if (!NamingSubSystem.Contains(model.Name)) continue;
 				
-				bool successOnRemoval = RemoveComponent( model.Name );
+				bool successOnRemoval = RemoveComponent(model.Name);
 
-				System.Diagnostics.Debug.Assert( successOnRemoval );
+				System.Diagnostics.Debug.Assert(successOnRemoval);
 			}
 		}
 
@@ -816,7 +880,17 @@ namespace Castle.MicroKernel
 
 		protected object ResolveComponent(IHandler handler, Type service)
 		{
-			CreationContext context = CreateCreationContext(service);
+			return ResolveComponent(handler, service, null);
+		}
+
+		protected object ResolveComponent(IHandler handler, IDictionary additionalArguments)
+		{
+			return ResolveComponent(handler, handler.ComponentModel.Service, additionalArguments);
+		}
+
+		protected object ResolveComponent(IHandler handler, Type service, IDictionary additionalArguments)
+		{
+			CreationContext context = CreateCreationContext(handler, service, additionalArguments);
 
 			object instance = handler.Resolve(context);
 
@@ -825,12 +899,13 @@ namespace Castle.MicroKernel
 			return instance;
 		}
 
-		protected CreationContext CreateCreationContext(Type typeToExtractArguments)
+		protected CreationContext CreateCreationContext(IHandler handler, Type typeToExtractGenericArguments, 
+		                                                IDictionary additionalArguments)
 		{
 #if DOTNET2
-			return new CreationContext(new DependencyModelCollection(), typeToExtractArguments);
+			return new CreationContext(handler, typeToExtractGenericArguments, additionalArguments);
 #else
-			return new CreationContext();
+			return new CreationContext(handler, additionalArguments);
 #endif
 		}
 
@@ -842,11 +917,11 @@ namespace Castle.MicroKernel
 		{
 			base.GetObjectData(info, context);
 
-			MemberInfo[] members = FormatterServices.GetSerializableMembers( GetType(), context );
+			MemberInfo[] members = FormatterServices.GetSerializableMembers(GetType(), context);
 
 			object[] kernelmembers = FormatterServices.GetObjectData(this, members);
 
-			info.AddValue( "members", kernelmembers, typeof(object[]) );
+			info.AddValue("members", kernelmembers, typeof(object[]));
 		}
 
 		void IDeserializationCallback.OnDeserialization(object sender)

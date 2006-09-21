@@ -34,13 +34,20 @@ namespace Castle.MicroKernel
 		/// </summary>
 		WaitingDependency
 	}
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="source"></param>
+	/// <param name="args"></param>
+	public delegate void HandlerStateDelegate(object source, EventArgs args);
 
 	/// <summary>
 	/// Contract for the IHandler, which manages an
 	/// component state and coordinates its creation 
 	/// and destruction (dispatching to activators, lifestyle managers)
 	/// </summary>
-	public interface IHandler
+	public interface IHandler : ISubDependencyResolver
 	{
 		/// <summary>
 		/// Initializes the handler with a reference to the
@@ -74,5 +81,35 @@ namespace Castle.MicroKernel
 		/// managed by this handler.
 		/// </summary>
 		ComponentModel ComponentModel { get; }
+		
+		/// <summary>
+		/// TODO: Document this
+		/// </summary>
+		event HandlerStateDelegate OnHandlerStateChanged;
+
+		/// <summary>
+		/// Dictionary of String/object used to 
+		/// associate data with a component dependency.
+		/// For example, if you component SmtpServer depends on 
+		/// host and port, you can add those to this
+		/// dictionary and the handler will be able to use them.
+		/// </summary>
+		/// <remarks>
+		/// TODO: Document this
+		/// </remarks>
+		void AddCustomDependencyValue(string key, object value);
+
+		/// <summary>
+		/// TODO: Document this
+		/// </summary>
+		/// <param name="key"></param>
+		void RemoveCustomDependencyValue(string key);
+
+		/// <summary>
+		/// TODO: Document this
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		bool HasCustomParameter(string key);
 	}
 }

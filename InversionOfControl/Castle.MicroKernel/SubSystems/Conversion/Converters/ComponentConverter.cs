@@ -42,7 +42,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 			DependencyModel dependency = new DependencyModel(DependencyType.ServiceOverride, key, targetType, false);
 
-			return Context.Kernel.Resolver.Resolve(CreationContext.Empty, Context.CurrentModel, dependency);
+			return Context.Kernel.Resolver.Resolve(CreationContext.Empty, null, Context.CurrentModel, dependency);
 		}
 
 		public override object PerformConversion(IConfiguration configuration, Type targetType)

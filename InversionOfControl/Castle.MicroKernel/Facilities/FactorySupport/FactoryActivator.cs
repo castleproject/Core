@@ -85,7 +85,7 @@ namespace Castle.Facilities.FactorySupport
 		}
 
 		private object Create(object factoryInstance, string factoryId, 
-			MethodInfo instanceCreateMethod, string factoryCreate)
+		                      MethodInfo instanceCreateMethod, string factoryCreate)
 		{
 			IConversionManager converter = (IConversionManager) 
 				Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
@@ -100,20 +100,18 @@ namespace Castle.Facilities.FactorySupport
 				{
 					Type paramType = parameter.ParameterType;
 
-					DependencyModel depModel = null;
+					DependencyModel depModel;
 
-					if ( converter.IsSupportedAndPrimitiveType(paramType) )
+					if (converter.IsSupportedAndPrimitiveType(paramType))
 					{
-						depModel = new DependencyModel( 
-							DependencyType.Parameter, parameter.Name, paramType, false );
+						depModel = new DependencyModel(DependencyType.Parameter, parameter.Name, paramType, false);
 					}
 					else
 					{
-						depModel = new DependencyModel(
-							DependencyType.Service, parameter.Name, paramType, false );
+						depModel = new DependencyModel(DependencyType.Service, parameter.Name, paramType, false);
 					}
 
-					if (!Kernel.Resolver.CanResolve(CreationContext.Empty, Model, depModel))
+					if (!Kernel.Resolver.CanResolve(CreationContext.Empty, null, Model, depModel))
 					{
 						String message = String.Format(
 							"Factory Method {0}.{1} requires an argument '{2}' that could not be resolved", 
@@ -121,7 +119,7 @@ namespace Castle.Facilities.FactorySupport
 						throw new FacilityException(message);
 					}
 
-					object arg = Kernel.Resolver.Resolve(CreationContext.Empty, Model, depModel );
+					object arg = Kernel.Resolver.Resolve(CreationContext.Empty, null, Model, depModel);
 
 					methodArgs.Add(arg);
 				}

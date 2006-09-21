@@ -39,8 +39,7 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			this.kernel = kernel;
 
-			this.converter = (ITypeConverter)
-				kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+			converter = (ITypeConverter) kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 		}
 
 		public void Initialize(DependencyDelegate dependencyDelegate)
@@ -63,27 +62,126 @@ namespace Castle.MicroKernel.Resolvers
 		}
 
 		/// <summary>
-		/// Try to resolve the dependency by checking the parameters in 
-		/// the model or checking the Kernel for the requested service.
+		/// Returns true if the resolver is able to satisfy the specified dependency.
 		/// </summary>
 		/// <param name="model"></param>
 		/// <param name="dependency"></param>
 		/// <returns></returns>
-		public object Resolve(CreationContext context, ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+		{
+			// 1 - check for the dependency on CreationContext, if present
+
+			if (context != null)
+			{
+				if (context.CanResolve(context, parentResolver, model, dependency))
+				{
+					return true;
+				}
+			}
+
+			// 2 - check within parent resolver, if present
+
+			if (parentResolver != null)
+			{
+				if (parentResolver.CanResolve(context, parentResolver, model, dependency))
+				{
+					return true;
+				}
+			}
+
+			// 3 - check within subresolvers
+
+			foreach(ISubDependencyResolver subResolver in subResolvers)
+			{
+				if (subResolver.CanResolve(context, parentResolver, model, dependency))
+				{
+					return true;
+				}
+			}
+
+			// 4 - normal flow, checking against the kernel
+
+			if (dependency.DependencyType == DependencyType.Service || 
+			    dependency.DependencyType == DependencyType.ServiceOverride)
+			{
+				return CanResolveServiceDependency(model, dependency);
+			}
+			else
+			{
+				return CanResolveParameterDependency(model, dependency);
+			}
+		}
+
+		/// <summary>
+		/// Try to resolve the dependency by checking the parameters in 
+		/// the model or checking the Kernel for the requested service.
+		/// </summary>
+		/// <remarks>
+		/// The dependency resolver has the following precedence order:
+		/// <list type="bullet">
+		/// <item><description>
+		/// The dependency is checked within the <see cref="CreationContext"/>
+		/// </description></item>
+		/// <item><description>
+		/// The dependency is checked within the <see cref="IHandler"/> instance for the component
+		/// </description></item>
+		/// <item><description>
+		/// The dependency is checked within the registered <see cref="ISubDependencyResolver"/>s
+		/// </description></item>
+		/// <item><description>
+		/// Finally the resolver tries the normal flow 
+		/// which is using the configuration
+		/// or other component to satisfy the dependency
+		/// </description></item>
+		/// </list>
+		/// </remarks>
+		/// <param name="model"></param>
+		/// <param name="dependency"></param>
+		/// <returns></returns>
+		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 		{
 			object value = null;
 
 			bool resolved = false;
 
-			foreach(ISubDependencyResolver subResolver in subResolvers)
+			// 1 - check for the dependency on CreationContext, if present
+
+			if (context != null)
 			{
-				if (subResolver.CanResolve(context, model, dependency))
+				if (context.CanResolve(context, parentResolver, model, dependency))
 				{
-					value = subResolver.Resolve(context, model, dependency);
+					value = context.Resolve(context, parentResolver, model, dependency);
 					resolved = true;
-					break;
 				}
 			}
+
+			// 2 - check within parent resolver, if present
+
+			if (!resolved && parentResolver != null)
+			{
+				if (parentResolver.CanResolve(context, parentResolver, model, dependency))
+				{
+					value = parentResolver.Resolve(context, parentResolver, model, dependency);
+					resolved = true;
+				}
+			}
+
+			// 3 - check within subresolvers
+
+			if (!resolved)
+			{
+				foreach(ISubDependencyResolver subResolver in subResolvers)
+				{
+					if (subResolver.CanResolve(context, parentResolver, model, dependency))
+					{
+						value = subResolver.Resolve(context, parentResolver, model, dependency);
+						resolved = true;
+						break;
+					}
+				}
+			}
+
+			// 4 - normal flow, checking against the kernel
 
 			if (!resolved)
 			{
@@ -119,32 +217,6 @@ namespace Castle.MicroKernel.Resolvers
 			return value;
 		}
 
-		/// <summary>
-		/// Returns true if the resolver is able to satisfy this dependency.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="dependency"></param>
-		/// <returns></returns>
-		public bool CanResolve(CreationContext context, ComponentModel model, DependencyModel dependency)
-		{
-			foreach (ISubDependencyResolver subResolver in subResolvers)
-			{
-				if (subResolver.CanResolve(context, model, dependency))
-				{
-					return true;
-				}
-			}
-
-			if (dependency.DependencyType == DependencyType.Service)
-			{
-				return CanResolveServiceDependency(model, dependency);
-			}
-			else
-			{
-				return CanResolveParameterDependency(model, dependency);
-			}
-		}
-
 		protected virtual bool CanResolveServiceDependency(ComponentModel model, DependencyModel dependency)
 		{
 			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
@@ -155,7 +227,7 @@ namespace Castle.MicroKernel.Resolvers
 
 				String value = ExtractComponentKey(parameter.Value, parameter.Name);
 
-				return kernel.HasComponent(value);
+				return HasComponentInValidState(value);
 			}
 			else if (dependency.TargetType == typeof(IKernel))
 			{
@@ -165,7 +237,14 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				// Default behaviour
 
-				return kernel.HasComponent(dependency.TargetType);
+				if (dependency.TargetType != null)
+				{
+					return HasComponentInValidState(dependency.TargetType);
+				}
+				else
+				{
+					return HasComponentInValidState(dependency.DependencyKey);
+				}
 			}
 		}
 
@@ -178,7 +257,7 @@ namespace Castle.MicroKernel.Resolvers
 
 		protected virtual object ResolveServiceDependency(CreationContext context, ComponentModel model, DependencyModel dependency)
 		{
-			IHandler handler = null;
+			IHandler handler;
 
 			if (dependency.DependencyType == DependencyType.Service)
 			{
@@ -217,20 +296,6 @@ namespace Castle.MicroKernel.Resolvers
 					}
 
 					handler = kernel.GetHandler(dependency.TargetType);
-
-					// Default behaviour
-					// Find all handlers that can match this dependency, so we will not
-					// get locked on the first one if it is the same as we are currently searching
-					// and it is the same model as the one that we are search the dependency on.
-					// This can happen in decorators scenarios.wl
-					// foreach (IHandler possibleHandler in kernel.GetHandlers(dependency.TargetType))
-					// {
-					// 	if (possibleHandler.ComponentModel != model)
-					// 	{
-					// 		handler = possibleHandler;
-					// 		break;
-					// 	}
-					// }
 				}
 			}
 
@@ -273,6 +338,8 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			String key = dependency.DependencyKey;
 
+			if (key == null) return null;
+
 			return model.Parameters[key];
 		}
 
@@ -298,7 +365,33 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			dependencyResolvingDelegate(model, dependency, value);
 		}
+
+		private bool HasComponentInValidState(string key)
+		{
+			IHandler handler = kernel.GetHandler(key);
+
+			return IsHandlerInValidState(handler);
+		}
+
+		private bool HasComponentInValidState(Type service)
+		{
+			IHandler handler = kernel.GetHandler(service);
+
+			return IsHandlerInValidState(handler);
+		}
+
+		private static bool IsHandlerInValidState(IHandler handler)
+		{
+			if (handler != null)
+			{
+				return handler.CurrentState == HandlerState.Valid;
+			}
+
+			return false;
+		}
+
 #if DOTNET2
+		
 		/// <summary>
 		/// This method rebuild the context for the parameter type.
 		/// Naive implementation.
@@ -306,10 +399,15 @@ namespace Castle.MicroKernel.Resolvers
 		private CreationContext RebuildContextForParameter(CreationContext current, Type parameterType)
 		{
 			if (parameterType.ContainsGenericParameters)
+			{
 				return current;
+			}
 			else
-				return new CreationContext(current.Dependencies, parameterType);
+			{
+				return new CreationContext(current.Handler, parameterType, current);
+			}
 		}
-#endif
+		
+		#endif
 	}
 }

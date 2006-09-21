@@ -181,7 +181,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual bool CanSatisfyDependency(CreationContext context, DependencyModel dep)
 		{
-			return Kernel.Resolver.CanResolve(context, Model, dep);
+			return Kernel.Resolver.CanResolve(context, context.Handler, Model, dep);
 		}
 
 		protected virtual object[] CreateConstructorArguments(
@@ -198,11 +198,14 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
+				// We track dependencies in order to detect cycled graphs
+				// This prevents a stack overflow
 				DependencyModel dependencyKey = context.TrackDependency(constructor.Constructor, dependency);
-				object value = Kernel.Resolver.Resolve(context, Model, dependency);
+				
+				object value = Kernel.Resolver.Resolve(context, context.Handler, Model, dependency);
 
-				//The depdency was resolved successfully, we can stop tracking it.
-				context.RemoveDependencyTracking(dependencyKey);
+				// The dependency was resolved successfully, we can stop tracking it.
+				context.UntrackDependency(dependencyKey);
 				arguments[index] = value;
 				signature[index++] = dependency.TargetType;
 			}
@@ -215,10 +218,10 @@ namespace Castle.MicroKernel.ComponentActivator
 			foreach(PropertySet property in Model.Properties)
 			{
 				DependencyModel dependencyKey = context.TrackDependency(property.Property, property.Dependency);
-				object value = Kernel.Resolver.Resolve(context, Model, property.Dependency);
+				object value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
 
-				//The depdency was resolved successfully, we can stop tracking it.
-				context.RemoveDependencyTracking(dependencyKey);
+				//The dependency was resolved successfully, we can stop tracking it.
+				context.UntrackDependency(dependencyKey);
 
 				if (value == null) continue;
 

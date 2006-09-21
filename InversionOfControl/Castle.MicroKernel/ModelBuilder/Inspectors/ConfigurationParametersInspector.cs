@@ -41,7 +41,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 			if (parameters == null) return;
 
-			foreach (IConfiguration parameter in parameters.Children)
+			foreach(IConfiguration parameter in parameters.Children)
 			{
 				String name = parameter.Name;
 				String value = parameter.Value;
@@ -66,30 +66,11 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 					continue;
 				}
 				
-				String paramName = parameter.Name;
 				String newKey = ReferenceExpressionUtil.ExtractComponentKey(parameter.Value);
 				
 				// Update dependencies to ServiceOverride
 				
 				model.Dependencies.Add(new DependencyModel(DependencyType.ServiceOverride, newKey, null, false));
-				
-//				foreach(ConstructorCandidate candidate in model.Constructors)
-//				{
-//					foreach(DependencyModel dependency in candidate.Dependencies)
-//					{
-//						dependency.DependencyKey = newKey;
-//						dependency.DependencyType = DependencyType.ServiceOverride;
-//					}
-//				}
-//				
-//				foreach(PropertySet property in model.Properties)
-//				{
-//					if (property.Dependency.DependencyKey == paramName)
-//					{
-//						property.Dependency.DependencyType = DependencyType.ServiceOverride;
-//						property.Dependency.DependencyKey = newKey;
-//					}
-//				}
 			}
 		}
 	}

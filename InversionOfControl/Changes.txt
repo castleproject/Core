@@ -1,6 +1,19 @@
 RC 3
 ====
 
+- Refactored AbstractHandler to use IDependencyResolver
+
+- Dependencies can be resolved now in three levels:
+
+  * CreationContext (which now implements ISubDependencyResolver)
+  * IHandler (which now implements ISubDependencyResolver)
+  * IKernel which is the normal flow
+
+- Implemented IoC-29 using a different approach
+
+- Renamed IKernel.AddComponentWithProperties to AddComponentWithExtendedProperties.
+  The old method name misled the programmer about its purpose.
+
 - Added a PerWebRequestLifestyleManager which creates at most one instance of
   an object per web request.  To use it you must add the following http module
 

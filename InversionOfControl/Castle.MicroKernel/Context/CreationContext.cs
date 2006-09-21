@@ -15,38 +15,128 @@
 namespace Castle.MicroKernel
 {
 	using System;
+	using System.Collections;
 	using System.Reflection;
 	using System.Text;
 
 	using Castle.MicroKernel.Exceptions;
 	using Castle.Core;
 
-	
+	/// <summary>
+	/// Used during a component request, passed along to the whole process.
+	/// This allow some data to be passed along the process, which is used 
+	/// to detected cycled dependency graphs and now it's also being used
+	/// to provide arguments to components.
+	/// </summary>
 	[Serializable]
-	public sealed class CreationContext : MarshalByRefObject
+	public sealed class CreationContext : MarshalByRefObject, ISubDependencyResolver
 	{
 		public readonly static CreationContext Empty = new CreationContext(new DependencyModel[0]);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly IHandler handler;
+
+		private readonly IDictionary additionalArguments;
+
+		/// <summary>
+		/// Holds the scoped dependencies being resolved. 
+		/// If a dependency appears twice on the same scope, we'd have a cycle.
+		/// </summary>
 		private readonly DependencyModelCollection dependencies;
 
-#if DOTNET2
-		private readonly Type[] arguments;
-#endif
+		#if DOTNET2
+		
+		private readonly Type[] genericArguments;
+		
+		#endif
 
-		public CreationContext()
+		public CreationContext(IHandler handler, IDictionary additionalArguments)
 		{
+			this.handler = handler;
+			this.additionalArguments = additionalArguments;
 			dependencies = new DependencyModelCollection();
 		}
 
-		public CreationContext(DependencyModelCollection dependencies)
+		public CreationContext(IHandler handler, CreationContext parentContext)
 		{
-			this.dependencies = new DependencyModelCollection(dependencies);
+			this.handler = handler;
+			additionalArguments = parentContext.additionalArguments;
+			dependencies = new DependencyModelCollection(parentContext.Dependencies);
 		}
-		
+
 		public CreationContext(DependencyModel[] dependencies)
 		{
+			this.handler = null;
 			this.dependencies = new DependencyModelCollection(dependencies);
 		}
+
+		public CreationContext(IHandler handler, DependencyModelCollection dependencies)
+			: this(handler, (IDictionary)null)
+		{
+			this.dependencies = new DependencyModelCollection(dependencies);
+		}
+
+		#if DOTNET2
+
+		public CreationContext(IHandler handler, Type typeToExtractGenericArguments, IDictionary additionalArguments)
+			: this(handler, additionalArguments)
+		{
+			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
+		}
+
+		public CreationContext(IHandler handler, Type typeToExtractGenericArguments, 
+		                       CreationContext parentContext) : this(handler, parentContext.Dependencies)
+		{
+			additionalArguments = parentContext.additionalArguments;
+			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
+		}
+
+		#endif
+
+		#region ISubDependencyResolver 
+
+		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, 
+		                      ComponentModel model, DependencyModel dependency)
+		{
+			if (additionalArguments != null)
+			{
+				return additionalArguments[dependency.DependencyKey];
+			}
+			
+			return null;
+		}
+
+		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, 
+		                       ComponentModel model, DependencyModel dependency)
+		{
+			if (dependency.DependencyKey == null) return false;
+			
+			if (additionalArguments != null)
+			{
+				return additionalArguments.Contains(dependency.DependencyKey);
+			}
+			
+			return false;
+		}
+
+		#endregion
+		
+		public bool HasAdditionalParameters
+		{
+			get { return additionalArguments != null && additionalArguments.Count != 0; }
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		public IHandler Handler
+		{
+			get { return handler; }
+		}
+
+		#region Cycle detection related members
 
 		/// <summary>
 		/// Track dependencies and guards against circular dependencies.
@@ -56,7 +146,8 @@ namespace Castle.MicroKernel
 		{
 			if (dependencies.Contains(dependencyModel))
 			{
-				StringBuilder sb = new StringBuilder("A cycle was detected when trying to create a service. ");
+				StringBuilder sb = new StringBuilder("A cycle was detected when trying to resolve a dependency. ");
+				
 				sb.Append("The dependency graph that resulted in a cycle is:");
 
 				foreach(DependencyModel key in dependencies)
@@ -88,7 +179,7 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Removes a dependency that was resolved successfully.
 		/// </summary>
-		public void RemoveDependencyTracking(DependencyModel model)
+		public void UntrackDependency(DependencyModel model)
 		{
 			dependencies.Remove(model);
 		}
@@ -98,32 +189,18 @@ namespace Castle.MicroKernel
 			get { return dependencies; }
 		}
 
-#if DOTNET2
-
-		public CreationContext(DependencyModelCollection dependencies, Type target)
-		{
-			this.dependencies = new DependencyModelCollection(dependencies);
-			arguments = ExtractGenericArguments(target);
-		}
-
-		public Type[] GenericArguments
-		{
-			get { return arguments; }
-		}
-
-		private static Type[] ExtractGenericArguments(Type target)
-		{
-			return target.GetGenericArguments();
-		}
-
-#endif
-
+		/// <summary>
+		/// Extends <see cref="DependencyModel"/> adding <see cref="MemberInfo"/>
+		/// information. This is only useful to provide detailed information 
+		/// on exceptions.
+		/// </summary>
 		[Serializable]
 		internal class DependencyModelExtended : DependencyModel
 		{
 			private readonly MemberInfo info;
 
-			public DependencyModelExtended(DependencyModel inner, MemberInfo info) : 
+			public DependencyModelExtended(DependencyModel inner, MemberInfo info)
+				:
 				base(inner.DependencyType, inner.DependencyKey, inner.TargetType, inner.IsOptional)
 			{
 				this.info = info;
@@ -134,5 +211,21 @@ namespace Castle.MicroKernel
 				get { return info; }
 			}
 		}
+
+		#endregion
+
+		#if DOTNET2
+
+		public Type[] GenericArguments
+		{
+			get { return genericArguments; }
+		}
+
+		private static Type[] ExtractGenericArguments(Type typeToExtractGenericArguments)
+		{
+			return typeToExtractGenericArguments.GetGenericArguments();
+		}
+
+		#endif
 	}
 }

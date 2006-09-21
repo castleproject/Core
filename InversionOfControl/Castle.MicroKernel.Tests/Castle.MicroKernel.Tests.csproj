@@ -90,9 +90,9 @@
                     HintPath = "C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll"
                 />
                 <Reference
-                    Name = "Castle.Core-vs2003"
-                    Project = "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>
@@ -150,6 +150,11 @@
                 />
                 <File
                     RelPath = "NamingPartsSubSystemTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RuntimeParametersTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -340,6 +345,11 @@
                 />
                 <File
                     RelPath = "Pools\PooledLifestyleManagerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RuntimeParameters\ComponentWithParameters.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

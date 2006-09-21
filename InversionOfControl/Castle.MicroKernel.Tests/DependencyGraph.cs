@@ -15,7 +15,7 @@
 namespace Castle.MicroKernel.Tests
 {
 	using System;
-
+	using Castle.MicroKernel.Handlers;
 	using NUnit.Framework;
 
 	public class A
@@ -103,7 +103,7 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
-		[Ignore("Since the modification for hierarchy of dependencies, cycles are not supported")]
+		[ExpectedException(typeof(HandlerException), "Can't create component 'a' as it has dependencies to be satisfied. \r\na is waiting for the following dependencies: \r\n\r\nServices: \r\n- Castle.MicroKernel.Tests.CycleB which was registered but is also waiting for dependencies. \r\n\r\nb is waiting for the following dependencies: \r\n\r\nServices: \r\n- Castle.MicroKernel.Tests.CycleA which was registered but is also waiting for dependencies. \r\n")]
 		public void CycleComponentGraphs()
 		{
 			kernel.AddComponent( "a", typeof(CycleA) );

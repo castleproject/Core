@@ -17,15 +17,10 @@
 namespace Castle.Windsor.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Text;
 
-    using Castle.Windsor.Tests.Configuration2;
     using Castle.Windsor.Tests.Components;
     using Castle.Windsor.Configuration.Interpreters;
-    using Castle.Core.Resource;
-    using Castle.MicroKernel.Handlers;
     using Castle.MicroKernel.Resolvers;
 
     using NUnit.Framework;
@@ -33,12 +28,6 @@ namespace Castle.Windsor.Tests
     [TestFixture]
     public class WindsorDotNet2Tests
     {
-        public string GetFilePath(string fileName)
-        {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                               "../Castle.Windsor.Tests/DotNet2Config/" + fileName);
-        }
-
         [Test]
         public void ResolveGeneric()
         {
@@ -225,7 +214,13 @@ You must provide an override if a component has a dependency on a service that i
     		
 			Assert.IsNotNull(needsGenericType);
     	}
-    }
+	
+    	public string GetFilePath(string fileName)
+		{
+			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+							   "../Castle.Windsor.Tests/DotNet2Config/" + fileName);
+		}
+	}
 }
 
 #endif

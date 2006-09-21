@@ -80,7 +80,6 @@ namespace Castle.MicroKernel.Tests.Configuration
 
 			kernel.AddComponent("commonservice1", typeof(ICommon), typeof(CommonImpl1));
 			kernel.AddComponent("commonservice2", typeof(ICommon), typeof(CommonImpl2));
-
 			kernel.AddComponent("commonserviceuser", typeof(CommonServiceUser));
 
 			CommonServiceUser instance = (CommonServiceUser) kernel["commonserviceuser"];

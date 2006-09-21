@@ -25,7 +25,7 @@ namespace Castle.Windsor.Tests
 		[Test]
 		[
 			ExpectedException(typeof(CircularDependecyException),
-				@"A cycle was detected when trying to create a service. The dependency graph that resulted in a cycle is:
+				@"A cycle was detected when trying to resolve a dependency. The dependency graph that resulted in a cycle is:
  - Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in type Castle.Windsor.Tests.Components.Controller
  - Service dependency 'Controller' type 'Castle.Windsor.Tests.Components.IController' for Castle.Windsor.Tests.Components.IController Controller in type Castle.Windsor.Tests.Components.View
  + Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in Castle.Windsor.Tests.Components.Controller

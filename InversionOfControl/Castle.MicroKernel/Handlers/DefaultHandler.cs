@@ -31,16 +31,19 @@ namespace Castle.MicroKernel.Handlers
 
 		public override object Resolve(CreationContext context)
 		{
-			AssertNotWaitingForDependency();
+			if (!context.HasAdditionalParameters)
+			{
+				AssertNotWaitingForDependency();
+			}
 
 #if DOTNET2
-			CreationContext newContext = new CreationContext(context.Dependencies, 
-															 ComponentModel.Service);
+			CreationContext newContext = new CreationContext(this, ComponentModel.Service, context);
 #else
-			CreationContext newContext = new CreationContext(context.Dependencies);
+			CreationContext newContext = new CreationContext(this, context);
 #endif
 
-            return lifestyleManager.Resolve(newContext);
+			// return lifestyleManager.Resolve(newContext);
+			return lifestyleManager.Resolve(context);
 		}
 
 	    public override void Release(object instance)
@@ -54,8 +57,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				String message = String.Format("Can't create component '{1}' " +
 					"as it has dependencies to be satisfied. {0}", 
-					ObtainDependencyDetails(new ArrayList()),
-						ComponentModel.Name);
+					ObtainDependencyDetails(new ArrayList()), ComponentModel.Name);
 
 				throw new HandlerException(message);
 			}
