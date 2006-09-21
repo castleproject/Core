@@ -16,7 +16,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
+
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
@@ -250,8 +250,16 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		
 		private object ObtainPrimaryKeyValue(ActiveRecordModel model, CompositeNode node, String prefix, out PrimaryKeyModel pkModel)
 		{
-			pkModel = model.PrimaryKey;
 
+			if (model.IsJoinedSubClass)
+			{
+				pkModel = model.Parent.PrimaryKey;
+			}
+			else
+			{
+				pkModel = model.PrimaryKey;
+			}
+			
 			String pkPropName = pkModel.Property.Name;
 			
 			Node idNode = node.GetChildNode(pkPropName);
@@ -282,6 +290,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				if (id.GetType() == typeof(String))
 				{
 					return id.ToString() != String.Empty;
+				}
+				else if (id.GetType() == typeof(Guid))
+				{
+					return Guid.Empty != ((Guid) id);
 				}
 				else
 				{

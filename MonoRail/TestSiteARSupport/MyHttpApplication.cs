@@ -29,8 +29,12 @@ namespace TestSiteARSupport
 
 			ActiveRecordStarter.Initialize( source, 
 				typeof(Account), 
-				typeof(AccountPermission), typeof(ProductLicense),
-				typeof(SimplePerson), typeof(Category) );
+				typeof(AccountPermission), 
+				typeof(ProductLicense),
+				typeof(SimplePerson), 
+				typeof(Category),
+				typeof(PersonBase),
+				typeof(PersonUser));
 			
 			ActiveRecordStarter.CreateSchema();
 		}

@@ -23,6 +23,7 @@ require 'accountpermission'
 require 'productlicense'
 require 'account'
 require 'category'
+require 'personuser'
 
 # Test cases for MonoRail ActiveRecord support
 
@@ -107,6 +108,17 @@ class ProductLicenseOneToManyTestCase < Test::Unit::TestCase
 	
 end
 
+class PersonUserJoinedSubClassWithAbstractGenericPersonBaseTestCase < Test::Unit::TestCase
+	
+	def test_crud()
+		id1 = PersonUser.create($ie, 'MyFirstName1', 'MyMiddleName1', 'MyLastName1', 'MyUserName1', 'MyPassword1')
+		id2 = PersonUser.create($ie, 'MyFirstName2', 'MyMiddleName2', 'MyLastName2', 'MyUserName2', 'MyPassword2')
+
+		PersonUser.delete($ie, id1)
+		PersonUser.delete($ie, id2)
+	end
+
+end
 
 class CastleTests
 	def self.suite
@@ -116,6 +128,7 @@ class CastleTests
 		suite << AccountTestCase.suite
 		suite << CategoryTestCase.suite
 		suite << ProductLicenseOneToManyTestCase.suite
+		suite << PersonUserJoinedSubClassWithAbstractGenericPersonBaseTestCase.suite
 		return suite
 	end
 end

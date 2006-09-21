@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Don Morrison's patch fixing MR-150
+  "Patch to fix problem with ARDataBinder and ARFetcher when dealing with joined subclasses."
+
 - Added support for null property handling in Brail.
 	${objMayBeNull.Name} -- will throw if null
 	${ IgnoreNull(objMayBeNull).Name } -- will return empty string when null

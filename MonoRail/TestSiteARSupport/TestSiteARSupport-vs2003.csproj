@@ -182,6 +182,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\PersonUserController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\ProductLicenseController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -198,6 +203,16 @@
                 />
                 <File
                     RelPath = "Model\Category.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\PersonBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\PersonUser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

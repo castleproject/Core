@@ -85,7 +85,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (pk != null && !String.Empty.Equals(pk))
 			{
-				PrimaryKeyModel pkModel = model.PrimaryKey;
+				PrimaryKeyModel pkModel;
+				if (model.IsJoinedSubClass)
+				{
+					pkModel = model.Parent.PrimaryKey;
+				}
+				else
+				{
+					pkModel = model.PrimaryKey;
+				}
 
 				Type pkType = pkModel.Property.PropertyType;
 

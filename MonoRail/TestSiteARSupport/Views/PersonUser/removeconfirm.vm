@@ -1,0 +1,15 @@
+<html>
+<body>
+
+<form method="post" action="delete.castle">
+
+$FormHelper.HiddenField("user.Id")
+
+Confirm removal of $user.Id?
+
+<input type="submit" id="button" value="Delete it"/>
+
+</form>
+
+</body>
+</html>
