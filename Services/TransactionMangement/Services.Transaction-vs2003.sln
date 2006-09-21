@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Transaction", "Castle.Services.Transaction\Castle.Services.Transaction.csproj", "{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Transaction", "Castle.Services.Transaction\Castle.Services.Transaction-vs2003.csproj", "{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Transaction.Tests", "Castle.Services.Transaction.Tests\Castle.Services.Transaction.Tests.csproj", "{67CDFD3A-450F-4CD4-9401-EF15361E2713}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Transaction.Tests", "Castle.Services.Transaction.Tests\Castle.Services.Transaction.Tests-vs2003.csproj", "{67CDFD3A-450F-4CD4-9401-EF15361E2713}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
