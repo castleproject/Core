@@ -64,6 +64,79 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			handler.Release( instance1 );
 			handler.Release( instance2 );
 		}
+		
+		[Test]
+		[ExpectedException(typeof(ArgumentException))]
+		public void BadLifestyleSetProgromatically()
+		{
+			kernel.AddComponent("a", typeof(IComponent), typeof(NoInfoComponent), LifestyleType.Undefined);
+		}
+		
+		[Test]
+		public void LifestyleSetProgromatically()
+		{
+			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.Transient, false);
+			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.Singleton, false);
+			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.Thread, false);
+			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.Transient, false);
+
+			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Transient, false);
+			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Singleton, false);
+			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Thread, false);
+			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Transient, false);
+
+			TestLifestyleAndSameness(typeof(PerThreadComponent), LifestyleType.Transient, true, false);
+			TestLifestyleAndSameness(typeof(SingletonComponent), LifestyleType.Transient, true, false);
+			TestLifestyleAndSameness(typeof(TransientComponent), LifestyleType.Singleton, true, true);
+
+			TestLifestyleWithServiceAndSameness(typeof(PerThreadComponent), LifestyleType.Transient, true, false);
+			TestLifestyleWithServiceAndSameness(typeof(SingletonComponent), LifestyleType.Transient, true, false);
+			TestLifestyleWithServiceAndSameness(typeof(TransientComponent), LifestyleType.Singleton, true, true);
+		}
+		
+		private void TestLifestyleAndSameness(Type componentType, LifestyleType lifestyle, bool overwrite, bool areSame)
+		{
+			string key = TestHandlersLifestyle(componentType, lifestyle, overwrite);
+			TestSameness(key, areSame);
+		}
+		
+		private void TestLifestyleWithServiceAndSameness(Type componentType, LifestyleType lifestyle, bool overwrite, bool areSame)
+		{
+			string key = TestHandlersLifestyleWithService(componentType, lifestyle, overwrite);
+			TestSameness(key, areSame);
+		}
+		
+		private void TestSameness(string key, bool areSame)
+		{
+			IComponent one = kernel[key] as IComponent;
+			IComponent two = kernel[key] as IComponent;
+			if(areSame)
+			{
+				Assert.AreSame(one, two);
+			}
+			else
+			{
+				Assert.AreNotSame(one, two);
+			}
+		}
+		
+		private string TestHandlersLifestyle(Type componentType, LifestyleType lifestyle, bool overwrite)
+		{
+			string key = Guid.NewGuid().ToString();
+			kernel.AddComponent(key, componentType, lifestyle, overwrite);
+			IHandler handler = kernel.GetHandler(key);
+			Assert.AreEqual(lifestyle, handler.ComponentModel.LifestyleType);
+			return key;
+		}
+
+		private string TestHandlersLifestyleWithService(Type componentType, LifestyleType lifestyle, bool overwrite)
+		{
+			string key = Guid.NewGuid().ToString();
+			kernel.AddComponent(key, typeof(IComponent), componentType, lifestyle, overwrite);
+			IHandler handler = kernel.GetHandler(key);
+			Assert.AreEqual(lifestyle, handler.ComponentModel.LifestyleType);
+			return key;
+		}
 
 		[Test]
 		public void LifestyleSetThroughAttribute()

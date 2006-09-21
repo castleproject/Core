@@ -17,6 +17,7 @@ namespace Castle.Windsor
 	using System;
 	using System.Collections;
 
+	using Castle.Core;
 	using Castle.MicroKernel;
 
 	/// <summary>
@@ -28,44 +29,61 @@ namespace Castle.Windsor
 		/// <summary>
 		/// Registers a facility within the kernel.
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="facility"></param>
+		/// <param name="key">The key by which the <see cref="IFacility"/> gets indexed.</param>
+		/// <param name="facility">The <see cref="IFacility"/> to add to the container.</param>
 		void AddFacility(String key, IFacility facility);
 
 		/// <summary>
 		/// Adds a component to be managed by the container
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="classType"></param>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="classType">The <see cref="Type"/> to manage.</param>
 		void AddComponent(String key, Type classType);
 
 		/// <summary>
 		/// Adds a component to be managed by the container
 		/// </summary>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that the component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> to manage.</param>
+		void AddComponent(String key, Type serviceType, Type classType);
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="classType">The <see cref="Type"/> to manage.</param>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		void AddComponentWithLifestyle(String key, Type classType, LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that the component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> to manage.</param>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		void AddComponentWithLifestyle(String key, Type serviceType, Type classType, LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a concrete class as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="classType"></param>
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithProperties(String key, Type classType, IDictionary extendedProperties);
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
-		void AddComponent(String key, Type serviceType, Type classType);
-
-        /// <summary>
-        /// Adds a concrete class as a component and specify the extended properties.
-        /// Used by facilities, mostly.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="classType"></param>
-        /// <param name="extendedProperties"></param>
-        void AddComponentWithProperties(String key, Type classType, IDictionary extendedProperties);
-
-        /// <summary>
-        /// Adds a concrete class and an interface 
-        /// as a component and specify the extended properties.
-        /// Used by facilities, mostly.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="serviceType"></param>
-        /// <param name="classType"></param>
-        /// <param name="extendedProperties"></param>
-        void AddComponentWithProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
 
 		/// <summary>
 		/// Returns a component instance by the key

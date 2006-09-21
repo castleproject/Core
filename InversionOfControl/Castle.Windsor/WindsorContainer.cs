@@ -16,7 +16,8 @@ namespace Castle.Windsor
 {
 	using System;
 	using System.Collections;
-	
+
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.Windsor.Configuration;
 	using Castle.Windsor.Configuration.Interpreters;
@@ -30,9 +31,9 @@ namespace Castle.Windsor
 	{
 		#region Fields
 
-		private IKernel _kernel;
-		private IWindsorContainer _parent;
-		private IComponentsInstaller _installer;
+		private IKernel kernel;
+		private IWindsorContainer parent;
+		private IComponentsInstaller installer;
 
 		#endregion
 
@@ -52,10 +53,9 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationStore"/> implementation.
 		/// </summary>
 		/// <param name="store">The instance of an <see cref="IConfigurationStore"/> implementation.</param>
-		public WindsorContainer(IConfigurationStore store)
-			: this()
+		public WindsorContainer(IConfigurationStore store) : this()
 		{
-			_kernel.ConfigurationStore = store;
+			kernel.ConfigurationStore = store;
 
 			RunInstaller();
 		}
@@ -65,36 +65,32 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationInterpreter"/> implementation.
 		/// </summary>
 		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation.</param>
-		public WindsorContainer(IConfigurationInterpreter interpreter)
-			: this()
+		public WindsorContainer(IConfigurationInterpreter interpreter) : this()
 		{
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
-			interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore);
+			interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore);
 
 			RunInstaller();
 		}
 
 		[Obsolete("Use includes instead of cascade configurations")]
-		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child)
-			: this()
+		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this()
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
 			if (child == null) throw new ArgumentNullException("child");
 
-			_kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+			kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
 
 			RunInstaller();
 		}
 
-		public WindsorContainer(String xmlFile)
-			: this(new XmlInterpreter(xmlFile))
+		public WindsorContainer(String xmlFile) : this(new XmlInterpreter(xmlFile))
 		{
 		}
 
 		[Obsolete("Use includes instead of cascade configurations")]
-		public WindsorContainer(String parentXmlFile, String childXmlFile)
-			: this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
+		public WindsorContainer(String parentXmlFile, String childXmlFile) : this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
 		{
 		}
 
@@ -112,10 +108,10 @@ namespace Castle.Windsor
 			if (kernel == null) throw new ArgumentNullException("kernel");
 			if (installer == null) throw new ArgumentNullException("installer");
 
-			_kernel = kernel;
-			_kernel.ProxyFactory = new Proxy.ProxySmartFactory();
+			this.kernel = kernel;
+			this.kernel.ProxyFactory = new Proxy.ProxySmartFactory();
 
-			_installer = installer;
+			this.installer = installer;
 		}
 
 		/// <summary>
@@ -126,9 +122,9 @@ namespace Castle.Windsor
 		{
 			if (proxyFactory == null) throw new ArgumentNullException("proxyFactory");
 
-			_kernel = new DefaultKernel(proxyFactory);
+			kernel = new DefaultKernel(proxyFactory);
 
-			_installer = new Installer.DefaultComponentInstaller();
+			installer = new Installer.DefaultComponentInstaller();
 		}
 
 		/// <summary>
@@ -144,7 +140,7 @@ namespace Castle.Windsor
 
 			parent.AddChildContainer(this);
 
-			interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore);
+			interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore);
 
 			RunInstaller();
 		}
@@ -158,7 +154,7 @@ namespace Castle.Windsor
 		/// </summary>
 		public virtual IKernel Kernel
 		{
-			get { return _kernel; }
+			get { return kernel; }
 		}
 
 		/// <summary>
@@ -167,21 +163,21 @@ namespace Castle.Windsor
 		/// </summary>
 		public virtual IWindsorContainer Parent
 		{
-			get { return _parent; }
+			get { return parent; }
 			set
 			{
 				if (value == null)
 				{
-					if (_parent != null)
+					if (parent != null)
 					{
-						_parent.Kernel.RemoveChildKernel(_kernel);
-						_parent = null;
+						parent.Kernel.RemoveChildKernel(kernel);
+						parent = null;
 					}
 				}
 				else
 				{
-					_parent = value;
-					value.Kernel.AddChildKernel(_kernel);
+					parent = value;
+					value.Kernel.AddChildKernel(kernel);
 				}
 			}
 		}
@@ -193,7 +189,7 @@ namespace Castle.Windsor
 		/// <param name="facility"></param>
 		public virtual void AddFacility(String key, IFacility facility)
 		{
-			_kernel.AddFacility(key, facility);
+			kernel.AddFacility(key, facility);
 		}
 
 		/// <summary>
@@ -203,7 +199,7 @@ namespace Castle.Windsor
 		/// <param name="classType"></param>
 		public virtual void AddComponent(String key, Type classType)
 		{
-			_kernel.AddComponent(key, classType);
+			kernel.AddComponent(key, classType);
 		}
 
 		/// <summary>
@@ -214,18 +210,41 @@ namespace Castle.Windsor
 		/// <param name="classType"></param>
 		public virtual void AddComponent(String key, Type serviceType, Type classType)
 		{
-			_kernel.AddComponent(key, serviceType, classType);
+			kernel.AddComponent(key, serviceType, classType);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="classType">The <see cref="Type"/> to manage.</param>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		public void AddComponentWithLifestyle(string key, Type classType, LifestyleType lifestyle)
+		{
+			kernel.AddComponent(key, classType, lifestyle, true);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that the component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> to manage.</param>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		public void AddComponentWithLifestyle(string key, Type serviceType, Type classType, LifestyleType lifestyle)
+		{
+			kernel.AddComponent(key, serviceType, classType, lifestyle, true);
 		}
 
 		public virtual void AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
 		{
-			_kernel.AddComponentWithExtendedProperties(key, classType, extendedProperties);
+			kernel.AddComponentWithExtendedProperties(key, classType, extendedProperties);
 		}
 
 		public virtual void AddComponentWithProperties(string key, Type serviceType, Type classType,
 		                                               IDictionary extendedProperties)
 		{
-			_kernel.AddComponentWithExtendedProperties(key, serviceType, classType, extendedProperties);
+			kernel.AddComponentWithExtendedProperties(key, serviceType, classType, extendedProperties);
 		}
 
 		/// <summary>
@@ -235,7 +254,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public virtual object Resolve(String key)
 		{
-			return _kernel[key];
+			return kernel[key];
 		}
 
 		/// <summary>
@@ -245,7 +264,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public virtual object Resolve(Type service)
 		{
-			return _kernel[service];
+			return kernel[service];
 		}
 
 		/// <summary>
@@ -273,7 +292,7 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		public virtual object Resolve(String key, Type service)
 		{
-			return _kernel[key];
+			return kernel[key];
 		}
 
 		/// <summary>
@@ -304,7 +323,7 @@ namespace Castle.Windsor
 		/// <param name="instance"></param>
 		public virtual void Release(object instance)
 		{
-			_kernel.ReleaseComponent(instance);
+			kernel.ReleaseComponent(instance);
 		}
 
 		/// <summary>
@@ -336,7 +355,7 @@ namespace Castle.Windsor
 		/// </summary>
 		public virtual void Dispose()
 		{
-			_kernel.Dispose();
+			kernel.Dispose();
 		}
 
 		#endregion
@@ -345,14 +364,14 @@ namespace Castle.Windsor
 
 		public IComponentsInstaller Installer
 		{
-			get { return _installer; }
+			get { return installer; }
 		}
 
 		protected virtual void RunInstaller()
 		{
-			if (_installer != null)
+			if (installer != null)
 			{
-				_installer.SetUp(this, _kernel.ConfigurationStore);
+				installer.SetUp(this, kernel.ConfigurationStore);
 			}
 		}
 

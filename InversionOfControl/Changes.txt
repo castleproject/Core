@@ -1,6 +1,9 @@
 RC 3
 ====
 
+- Applied Curtis Schlak's patch fixing IOC-30
+  "Add overload to Windsor AddComponent to specify the Lifestyle"
+
 - Refactored AbstractHandler to use IDependencyResolver
 
 - Dependencies can be resolved now in three levels:

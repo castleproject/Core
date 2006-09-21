@@ -42,14 +42,107 @@ namespace Castle.MicroKernel
 		void AddComponent(String key, Type classType);
 
 		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/>, <paramref name="serviceType"/>, or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		void AddComponent(String key, Type classType, LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">
+		/// If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.
+		/// </param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/> or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		void AddComponent(String key, Type classType, LifestyleType lifestyle, bool overwriteLifestyle);
+
+		/// <summary>
 		/// Adds a concrete class and an interface 
 		/// as a component
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="serviceType"></param>
-		/// <param name="classType"></param>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
 		void AddComponent(String key, Type serviceType, Type classType);
 
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/>, <paramref name="serviceType"/>, or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		void AddComponent(String key, Type serviceType, Type classType, LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">
+		/// If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.
+		/// </param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/>, <paramref name="serviceType"/>, or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle, bool overwriteLifestyle);
+		
 		/// <summary>
 		/// Adds a concrete class as a component and specify the extended properties.
 		/// Used by facilities, mostly.
@@ -220,19 +313,6 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		IHandler GetHandler(Type service);
 
-		// <summary>
-		// Returns the <see cref="IHandler"/>
-		// for the specified service.
-		// This overload is intended for use mainly to resolve
-		// the key handler by the generic type as well.
-		// It is expected that it will be mainly called by <see cref="IDependencyResolver"/>
-		// implementations.
-		// </summary>
-		// <param name="key">the key to match by</param>
-		// <param name="service">The type to match</param>
-		// <returns></returns>
-		// IHandler GetHandler(string key, Type service);
-
 		/// <summary>
 		/// Return handlers for components that 
 		/// implements the specified service.
@@ -316,6 +396,5 @@ namespace Castle.MicroKernel
 		/// Graph of components and iteractions.
 		/// </summary>
 		GraphNode[] GraphNodes { get; }
-
 	}
 }

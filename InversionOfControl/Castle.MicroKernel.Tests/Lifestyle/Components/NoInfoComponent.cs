@@ -19,7 +19,19 @@ namespace Castle.MicroKernel.Tests.Lifestyle.Components
 	/// <summary>
 	/// Component without lifestyle information
 	/// </summary>
-	public class NoInfoComponent
+	public class NoInfoComponent : IComponent
 	{
+		#region IComponent Members
+
+		public int ID
+		{
+			get
+			{
+				// TODO:  Add NoInfoComponent.ID getter implementation
+				return 0;
+			}
+		}
+
+		#endregion
 	}
 }

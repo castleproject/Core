@@ -165,22 +165,126 @@ namespace Castle.MicroKernel
 
 		public virtual void AddComponent(String key, Type classType)
 		{
-			if (key == null) throw new ArgumentNullException("key");
-			if (classType == null) throw new ArgumentNullException("classType");
+			AddComponent(key, classType, classType);
+		}
 
-			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, null);
-			RaiseComponentModelCreated(model);
-			IHandler handler = HandlerFactory.Create(model);
-			RegisterHandler(key, handler);
+		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="IKernel.AddComponent(string,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/> or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		public void AddComponent(string key, Type classType, LifestyleType lifestyle)
+		{
+			AddComponent(key, classType, classType, lifestyle);
+		}
+
+		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">
+		/// If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.
+		/// </param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="IKernel.AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/> or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		public void AddComponent(string key, Type classType, LifestyleType lifestyle, bool overwriteLifestyle)
+		{
+			AddComponent(key, classType, classType, lifestyle, overwriteLifestyle);
 		}
 
 		public virtual void AddComponent(String key, Type serviceType, Type classType)
 		{
+			AddComponent(key, serviceType, classType, LifestyleType.Singleton);
+		}
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/>, <paramref name="serviceType"/>, or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle)
+		{
+			AddComponent(key, serviceType, classType, lifestyle, false);
+		}
+		
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="key">The key with which to index the component.</param>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="classType">The <see cref="Type"/> of the component.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">
+		/// If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.
+		/// </param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified <paramref name="classType"/> using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// Thrown if <paramref name="key"/>, <paramref name="serviceType"/>, or <paramref name="classType"/>
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle, bool overwriteLifestyle)
+		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (serviceType == null) throw new ArgumentNullException("serviceType");
 			if (classType == null) throw new ArgumentNullException("classType");
+			if (LifestyleType.Undefined == lifestyle) throw new ArgumentException("The specified lifestyle must be Thread, Transient, or Singleton.", "lifestyle");
 
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, serviceType, classType, null);
+			if (overwriteLifestyle || LifestyleType.Undefined == model.LifestyleType)
+			{
+				model.LifestyleType = lifestyle;
+			}
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
