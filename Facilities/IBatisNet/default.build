@@ -96,7 +96,7 @@
 		<exec 
 			program="${nunit-console}" 
 			workingdir="${bin.dir}" 
-			commandline="${test.assembly.name}"
+			commandline="${test.assembly.name} /xml:${test.output.dir}/${assembly.name}-results.xml /nologo"
 			unless="${tests.disabled}" />
 	</target>
 	
