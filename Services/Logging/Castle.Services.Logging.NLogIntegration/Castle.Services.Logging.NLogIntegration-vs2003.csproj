@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
     >
@@ -80,19 +80,14 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.Services.Logging"
-                    Project = "{1AFAEC30-152C-43E2-B37C-E713419D20B8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NLog"
                     AssemblyName = "NLog"
                     HintPath = "..\..\..\SharedLibs\nlog\NLog.dll"
                 />
                 <Reference
-                    Name = "NLog.DotNet"
-                    AssemblyName = "NLog.DotNet"
-                    HintPath = "..\..\..\SharedLibs\nlog\NLog.DotNet.dll"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

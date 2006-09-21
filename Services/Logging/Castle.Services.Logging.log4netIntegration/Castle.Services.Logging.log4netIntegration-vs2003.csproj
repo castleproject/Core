@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
     >
@@ -88,6 +88,11 @@
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\..\..\SharedLibs\log4net\log4net.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
                 />
             </References>
         </Build>

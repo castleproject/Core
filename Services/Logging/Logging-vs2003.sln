@@ -1,17 +1,13 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging", "Castle.Services.Logging\Castle.Services.Logging.csproj", "{1AFAEC30-152C-43E2-B37C-E713419D20B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging", "Castle.Services.Logging\Castle.Services.Logging-vs2003.csproj", "{1AFAEC30-152C-43E2-B37C-E713419D20B8}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.Tests", "Castle.Services.Logging.Tests\Castle.Services.Logging.Tests.csproj", "{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.log4netIntegration", "Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration-vs2003.csproj", "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.log4netIntegration", "Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj", "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.NLogIntegration", "Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj", "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.NLogIntegration", "Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration-vs2003.csproj", "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -20,15 +16,13 @@ Global
 		Debug = Debug
 		Release = Release
 	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Debug.ActiveCfg = Debug|.NET
 		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Debug.Build.0 = Debug|.NET
 		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Release.ActiveCfg = Release|.NET
 		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Release.Build.0 = Release|.NET
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Debug.ActiveCfg = Debug|.NET
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Debug.Build.0 = Debug|.NET
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Release.ActiveCfg = Release|.NET
-		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Release.Build.0 = Release|.NET
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Debug.ActiveCfg = Debug|.NET
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Debug.Build.0 = Debug|.NET
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Release.ActiveCfg = Release|.NET
