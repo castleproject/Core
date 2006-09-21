@@ -206,19 +206,6 @@ namespace Castle.Core
             }
         }
 
-        // TODO: Considering not supporting this 
-        //		public MethodMetaModelCollection MethodMetaModels
-        //		{
-        //			get
-        //			{
-        //				lock(this)
-        //				{
-        //					if (methodMetaModels == null) methodMetaModels = new MethodMetaModelCollection();
-        //				}
-        //				return methodMetaModels;
-        //			}
-        //		}
-
         public IConfiguration Configuration
         {
             get { return configuration; }

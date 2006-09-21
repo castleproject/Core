@@ -1,6 +1,21 @@
 0.0.1.0
 =======
 
+- Applied Curtis Schlak's patch fixing IOC-27
+  "assembly resource format only works for resources where the assemblies name and default namespace are the same."
+  
+  Quoting:
+
+  "I chose to preserve backwards compatibility by implementing the code in the 
+  reverse order as suggested by the reporter. Given the following URI for a resource:
+
+  assembly://my.cool.assembly/context/moo/file.xml
+
+  It will initially look for an embedded resource with the manifest name of 
+  "my.cool.assembly.context.moo.file.xml" in the loaded assembly my.cool.assembly.dll. 
+  If it does not find it, then it looks for the embedded resource with the manifest name 
+  of "context.moo.file.xml".
+
 - IServiceEnabledComponent Introduced to be used across the project as
   a standard way to have access to common services, for example, logger factories
 

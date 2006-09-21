@@ -71,23 +71,21 @@ namespace Castle.Core.Resource
 
 			assemblyName = resourcex.Host;
 			resourcePath = ConvertToResourceName(assemblyName, resourcex.Path, basePath);
-
+			
 			Assembly assembly = ObtainAssembly(assemblyName);
 
 			String[] names = assembly.GetManifestResourceNames();
 
-			String nameFound = null;
+			String nameFound = GetNameFound(names);
 
-			foreach(String name in names)
+			if(nameFound == null)
 			{
-				if (String.Compare(resourcePath, name, true) == 0)
-				{
-					nameFound = name; break;
-				}
+				resourcePath = resourcex.Path.Replace('/', '.').Substring(1);
+				nameFound = GetNameFound(names);
 			}
-
+			
 			if (nameFound == null)
-			{
+			{	
 				String message = String.Format("The assembly resource {0} could not be located", resourcePath);
 				throw new ResourceException(message);
 			}
@@ -95,6 +93,19 @@ namespace Castle.Core.Resource
 			this.basePath = ConvertToPath(resourcePath);
 
 			return assembly.GetManifestResourceStream(nameFound);
+		}
+
+		private string GetNameFound(string[] names)
+		{
+			string nameFound = null;
+			foreach(String name in names)
+			{
+				if (String.Compare(resourcePath, name, true) == 0)
+				{
+					nameFound = name; break;
+				}
+			}
+			return nameFound;
 		}
 
 		private string ConvertToResourceName(String assemblyName, String resource, String basePath)
@@ -105,7 +116,12 @@ namespace Castle.Core.Resource
 
 		private string ConvertToPath(String resource)
 		{
-			return resource.Replace('.', '/');
+			string path = resource.Replace('.', '/');
+			if(path[0] != '/')
+			{
+				path = string.Format("/{0}", path);
+			}
+			return path;
 		}
 
 		private Assembly ObtainAssembly(String assemblyName)

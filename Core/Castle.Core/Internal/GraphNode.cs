@@ -31,11 +31,11 @@ namespace Castle.Core
 		/// Kind of copy constructor
 		/// </summary>
 		/// <param name="copy"></param>
-		public GraphNode(GraphNode copy)
-		{
-			incoming = new ArrayList(Incoming);
-			outgoing = new ArrayList(Outgoing);
-		}
+//		public GraphNode(GraphNode copy)
+//		{
+//			incoming = new ArrayList(Incoming);
+//			outgoing = new ArrayList(Outgoing);
+//		}
 
 		#region IVertex Members
 
