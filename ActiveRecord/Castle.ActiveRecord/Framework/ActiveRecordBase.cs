@@ -580,6 +580,16 @@ namespace Castle.ActiveRecord
 			return CountAll(targetType, filter, args) != 0;
 		}
 
+		/// <summary>
+		/// Check if the <paramref name="id"/> exists in the database.
+		/// </summary>
+		/// <param name="id">The id to check on</param>
+		/// <returns><c>true</c> if the ID exists; otherwise <c>false</c>.</returns>
+		protected internal static bool Exists(Type targetType, object id)
+		{
+			return Exists(targetType, "id=?", id);
+		}
+
 		#endregion
 
 		#region FindAll

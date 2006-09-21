@@ -123,6 +123,11 @@ namespace Castle.ActiveRecord.Tests.Model
 			return ActiveRecordBase.Exists(typeof(Blog), filter, args);
 		}
 
+		public static bool Exists(int id)
+		{
+			return ActiveRecordBase.Exists(typeof(Blog), id);
+		}
+
 		public static Blog[] FindByProperty(String property, object value) 
 		{
 			return (Blog[]) FindAllByProperty(typeof(Blog), property, value);

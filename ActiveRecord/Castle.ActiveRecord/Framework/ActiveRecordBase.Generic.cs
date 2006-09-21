@@ -19,7 +19,6 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Queries;
 	
 	using NHibernate;
 	using NHibernate.Expression;
@@ -169,24 +168,7 @@ namespace Castle.ActiveRecord
 
 		protected internal static R ExecuteQuery2<R>(IActiveRecordQuery<R> query)
 		{
-			Type targetType = query.Target;
-
-			ActiveRecordBase.EnsureInitialized(targetType);
-
-			ISession session = holder.CreateSession(targetType);
-
-			try
-			{
-				return query.Execute(session);
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform ExecuteQuery2 for " + targetType.Name, ex);
-			}
-			finally
-			{
-				holder.ReleaseSession(session);
-			}
+			return (R)ActiveRecordBase.ExecuteQuery(query);
 		}
 
 		#endregion
@@ -273,12 +255,7 @@ namespace Castle.ActiveRecord
 		/// <returns><c>true</c> if the ID exists; otherwise <c>false</c>.</returns>
 		public static bool Exists<PkType>(PkType id)
 		{
-			Type arType = typeof(T);
-
-			ScalarQuery<int> query = new ScalarQuery<int>(arType, 
-			  String.Format("select count(*) from {0} ar where ar.id = ?", arType.Name), id);
-
-			return ExecuteQuery2(query) > 0;
+			return ActiveRecordBase.Exists(typeof(T), id);
 		}
 
 

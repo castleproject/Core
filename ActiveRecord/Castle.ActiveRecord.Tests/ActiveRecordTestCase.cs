@@ -641,5 +641,29 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsTrue(blogs.Length == 1);
 		}
+
+        public void ExistsTest()
+        {
+			ActiveRecordStarter.Initialize(GetConfigSource());
+			ActiveRecordStarter.RegisterTypes(typeof(Blog), typeof(Post));
+			Recreate();
+
+            Blog blog = new Blog();
+            blog.Name = "hammett's blog";
+            blog.Author = "hamilton verissimo";
+            blog.Save();
+
+            Assert.IsTrue(blog.Id > 0);
+            Assert.IsTrue(Blog.Exists(blog.Id));
+
+            blog = new Blog();
+            blog.Name = "chad's blog";
+            blog.Author = "chad humphries";
+            blog.Save();
+
+            Assert.IsTrue(Blog.Exists(blog.Id));
+
+            Assert.IsFalse(Blog.Exists(1000));
+        }
 	}
 }

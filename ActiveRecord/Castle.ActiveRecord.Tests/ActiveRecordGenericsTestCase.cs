@@ -268,9 +268,9 @@ namespace Castle.ActiveRecord.Tests
             //        );
             //Assert.IsTrue(posts.Length > 0);
 
-            SimpleQuery q = new SimpleQuery(typeof(Post), "from Post p where p.Id = ? or p.Blog.Name = ?", 1, "hammett's blog other blog");
+			SimpleQuery<Post> q = new SimpleQuery<Post>(typeof(Post), "from Post p where p.Id = ? or p.Blog.Name = ?", 1, "hammett's blog other blog");
 
-            Post[] p = (Post[])Post.ExecuteQuery(q);
+            Post[] p = q.Execute();
 
             Assert.IsTrue(p.Length > 0);
 
