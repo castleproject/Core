@@ -36,19 +36,17 @@ namespace Castle.Facilities.Logging
 			this.loggerFactory = loggerFactory;
 		}
 
-		public object Resolve(Castle.MicroKernel.CreationContext context,
-			ComponentModel model, 
-			DependencyModel dependency)
+		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 		{
-			if (CanResolve(context, model, dependency))
+			if (CanResolve(context,  parentResolver, model, dependency))
 			{
-				return loggerFactory.Create( model.Implementation );
+				return loggerFactory.Create(model.Implementation);
 			}
 
 			return null;
 		}
 
-		public bool CanResolve(Castle.MicroKernel.CreationContext context, ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 		{
 			return dependency.TargetType == typeof(ILogger);
 		}

@@ -109,7 +109,7 @@ namespace Castle.Facilities.Prevalence
 			
 			ConfigureSnapshot(engineConfig, properties);
 
-			Kernel.AddComponentWithProperties(engineKey, typeof(PrevalenceEngine), properties);
+			Kernel.AddComponentWithExtendedProperties(engineKey, typeof(PrevalenceEngine), properties);
 
 			RegisterSystem(engineKey, systemId, systemType);
 		}
@@ -175,7 +175,7 @@ namespace Castle.Facilities.Prevalence
 
 			properties[EngineIdPropertyKey] = engineKey;
 
-			Kernel.AddComponentWithProperties(systemId, systemType, properties);
+			Kernel.AddComponentWithExtendedProperties(systemId, systemType, properties);
 		}
 
 		protected void TakeSnapshotIfRequired(IConfiguration engineConfig)

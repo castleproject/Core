@@ -107,7 +107,7 @@ namespace Castle.Facilities.Db4oIntegration
 				properties.Add(PasswordKey, config.Attributes[PasswordKey]);
 			}
 
-			Kernel.AddComponentWithProperties(compKey, typeof(ObjectContainer), typeof(ObjectContainer), properties);
+			Kernel.AddComponentWithExtendedProperties(compKey, typeof(ObjectContainer), typeof(ObjectContainer), properties);
 		}
 	}
 }
