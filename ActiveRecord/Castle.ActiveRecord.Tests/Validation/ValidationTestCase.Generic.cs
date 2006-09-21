@@ -11,9 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#if DOTNET2
+
 namespace Castle.ActiveRecord.Tests.Validation
 {
+#if DOTNET2
 	using System;
 
 	using NUnit.Framework;
@@ -21,7 +22,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 	using Castle.ActiveRecord.Tests.Validation.GenericModel;
 
 	[TestFixture]
-    public class ValidationTestCaseGeneric : AbstractActiveRecordTest
+	public class ValidationTestCaseGeneric : AbstractActiveRecordTest
 	{
 		[Test]
 		public void IsValid()
@@ -167,5 +168,5 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.IsTrue( c1.IsValid() );
 		}
 	}
-}
 #endif
+}

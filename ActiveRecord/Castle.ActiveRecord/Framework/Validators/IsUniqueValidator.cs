@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System;
 	
 	using Castle.ActiveRecord.Framework.Internal;
+	using Castle.ActiveRecord.Framework.Scopes;
 
 	using NHibernate;
 	using NHibernate.Expression;
@@ -36,9 +37,8 @@ namespace Castle.ActiveRecord.Framework.Validators
 
 		public override bool Perform(object instance, object fieldValue)
 		{
-			//ActiveRecordValidationBase arInstance = (ActiveRecordValidationBase) instance;
-            Type instanceType = instance.GetType();
-            ActiveRecordModel model = ActiveRecordBase.GetModel(instance.GetType());
+			Type instanceType = instance.GetType();
+			ActiveRecordModel model = ActiveRecordBase.GetModel(instance.GetType());
 
 			while (model != null)
 			{
@@ -52,37 +52,45 @@ namespace Castle.ActiveRecord.Framework.Validators
 
 			if (_pkModel == null)
 			{
-                throw new ValidationFailure("We couldn't find the primary key for " + instanceType.FullName + 
+				throw new ValidationFailure("We couldn't find the primary key for " + instanceType.FullName + 
 					" so we can't ensure the uniqueness of any field. Validatior failed");
 			}
 			
 			_fieldValue = fieldValue;
 			
-            using (new SessionScope())
-            {
-                return (bool) ActiveRecordMediator.Execute(instanceType, new NHibernateDelegate(CheckUniqueness), instance);
-            }
+			SessionScope scope = null;
+			if (ThreadScopeAccessor.Instance.GetRegisteredScope() == null
+				|| ThreadScopeAccessor.Instance.GetRegisteredScope().GetType() != typeof(TransactionScope))
+			{
+				scope = new SessionScope();
+			}
+			try
+			{
+				return (bool) ActiveRecordMediator.Execute(instanceType, new NHibernateDelegate(CheckUniqueness), instance);
+			}
+			finally
+			{
+				if (scope != null) scope.Dispose();
+			}
 		}
 
 		private object CheckUniqueness(ISession session, object instance)
 		{
 			ICriteria criteria = session.CreateCriteria( instance.GetType() );
 #if DOTNET2
-            if (Property.Name.Equals(_pkModel.Property.Name, StringComparison.InvariantCultureIgnoreCase))
+			if (Property.Name.Equals(_pkModel.Property.Name, StringComparison.InvariantCultureIgnoreCase))
 #else
 			if (Property.Name.ToLower() == _pkModel.Property.Name.ToLower())
 #endif
-            {
-                // IsUniqueValidator is on the PrimaryKey Property, simplify query
-                criteria.Add(Expression.Eq(Property.Name, _fieldValue));
-            }
-            else
-            {
-                object id = _pkModel.Property.GetValue(instance, new object[0]);
-                criteria.Add(Expression.And(
-                                Expression.Eq(Property.Name, _fieldValue),
-                                Expression.Not(Expression.Eq(_pkModel.Property.Name, id))));
-            }			
+			{
+				// IsUniqueValidator is on the PrimaryKey Property, simplify query
+				criteria.Add(Expression.Eq(Property.Name, _fieldValue));
+			}
+			else
+			{
+				object id = _pkModel.Property.GetValue(instance, new object[0]);
+				criteria.Add(Expression.And(Expression.Eq(Property.Name, _fieldValue), Expression.Not(Expression.Eq(_pkModel.Property.Name, id))));
+			}
 			return criteria.List().Count == 0;
 		}
 

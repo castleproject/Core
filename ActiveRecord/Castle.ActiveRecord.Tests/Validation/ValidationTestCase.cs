@@ -138,25 +138,25 @@ namespace Castle.ActiveRecord.Tests.Validation
 			blog.Create();
 		}
 
-        [Test]
-        public void IsUniqueWithSessionScope()
-        {
-            ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog2));
-            Recreate();
+		[Test]
+		public void IsUniqueWithSessionScope()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof (Blog2));
+			Recreate();
 
-            Blog2.DeleteAll();
+			Blog2.DeleteAll();
 
-            Blog2 blog = new Blog2();
-            blog.Name = "hammett";
-            blog.Create();
+			Blog2 blog = new Blog2();
+			blog.Name = "hammett";
+			blog.Create();
 
-            using (new SessionScope())
-            {
-                Blog2 fromDb = Blog2.Find(blog.Id);
-                fromDb.Name = "foo";
-                fromDb.Save();
-            }
-        }
+			using (new SessionScope())
+			{
+				Blog2 fromDb = Blog2.Find(blog.Id);
+				fromDb.Name = "foo";
+				fromDb.Save();
+			}
+		}
 
 		[Test]
 		[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
@@ -173,12 +173,12 @@ namespace Castle.ActiveRecord.Tests.Validation
 			blog.Create();
 
 			blog = new Blog3();
-            blog.Id = "assignedKey";
+			blog.Id = "assignedKey";
 			blog.Name = "Second Blog";
 
-            String[] messages = blog.ValidationErrorMessages;
-            Assert.IsTrue(messages.Length == 1);
-            Assert.AreEqual("The ID you specified already exists.", messages[0]);
+			String[] messages = blog.ValidationErrorMessages;
+			Assert.IsTrue(messages.Length == 1);
+			Assert.AreEqual("The ID you specified already exists.", messages[0]);
 
 			blog.Create();
 		}
@@ -210,6 +210,29 @@ namespace Castle.ActiveRecord.Tests.Validation
 			c1.Name = "hammett";
 
 			Assert.IsTrue( c1.IsValid() );
+		}
+		
+		[Test]
+		public void ValidateIsUniqueWithinTransactionScope()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog2) );
+			Recreate();
+			
+			// The IsUniqueValidator was created a new SessionScope and causing an
+			// error when used inside TransactionScope
+			
+			using (TransactionScope scope = new TransactionScope())
+			{
+				Blog2 blog = new Blog2();
+				blog.Name = "A cool blog";
+				blog.Create();
+					
+				blog = new Blog2();
+				blog.Name = "Another cool blog";
+				blog.Create();
+				
+				scope.VoteCommit();
+			}
 		}
 	}
 }
