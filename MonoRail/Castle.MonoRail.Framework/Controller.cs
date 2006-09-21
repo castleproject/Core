@@ -455,7 +455,6 @@ namespace Castle.MonoRail.Framework
 		/// Cancels the view processing and writes
 		/// the specified contents to the browser
 		/// </summary>
-		/// <param name="contents"></param>
 		public void RenderText(String contents)
 		{
 			CancelView();
@@ -467,10 +466,18 @@ namespace Castle.MonoRail.Framework
 		/// Cancels the view processing and writes
 		/// the specified contents to the browser
 		/// </summary>
-		/// <param name="contents"></param>
 		public void RenderText(String contents, params object[] args)
 		{
 			RenderText(String.Format(contents, args));
+		}
+
+		/// <summary>
+		/// Cancels the view processing and writes
+		/// the specified contents to the browser
+		/// </summary>
+		public void RenderText(IFormatProvider formatProvider, String contents, params object[] args)
+		{
+			RenderText(String.Format(formatProvider, contents, args));
 		}
 
 		/// <summary>
