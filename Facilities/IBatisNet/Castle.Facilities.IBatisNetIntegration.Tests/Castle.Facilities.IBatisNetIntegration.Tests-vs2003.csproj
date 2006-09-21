@@ -80,12 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
                     Name = "Castle.Facilities.IBatisNetIntegration"
                     Project = "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -123,12 +117,17 @@
                 <Reference
                     Name = "IBatisNet.DataMapper"
                     AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.0\IBatisNet.DataMapper.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.1\IBatisNet.DataMapper.dll"
                 />
                 <Reference
                     Name = "IBatisNet.Common"
                     AssemblyName = "IBatisNet.Common"
-                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.0\IBatisNet.Common.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\net-1.1\IBatisNet.Common.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\bin\NUnit 2.2.8\bin\nunit.framework.dll"
                 />
             </References>
         </Build>
