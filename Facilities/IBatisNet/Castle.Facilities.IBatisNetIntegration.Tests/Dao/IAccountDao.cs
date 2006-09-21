@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +20,7 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests.Dao
@@ -29,7 +31,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests.Dao
 	{
 		Account GetAccount(int id);
 
-		void InsertAccount(Account account) ;
+		void InsertAccount(Account account);
 
 		void ResetTableAccount();
 	}

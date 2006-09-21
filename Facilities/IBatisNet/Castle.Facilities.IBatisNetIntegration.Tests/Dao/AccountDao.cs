@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +20,13 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests.Dao
 {
-	using IBatisNet.DataMapper;
-
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
+	using IBatisNet.DataMapper;
 
 	public class AccountDao : IAccountDao
 	{
@@ -40,7 +41,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests.Dao
 
 		public Account GetAccount(int id)
 		{
-			return _sqlMap.QueryForObject("GetAccount",id) as Account;
+			return _sqlMap.QueryForObject("GetAccount", id) as Account;
 		}
 
 		public void InsertAccount(Account account)
@@ -51,7 +52,6 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests.Dao
 		public void ResetTableAccount()
 		{
 			_sqlMap.Delete("ResetTableAccount", null);
-
 		}
 
 		#endregion

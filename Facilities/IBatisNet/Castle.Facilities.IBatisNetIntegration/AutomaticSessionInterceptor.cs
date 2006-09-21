@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,25 +20,24 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration
 {
 	using System;
 	using System.Reflection;
-
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
 	using Castle.Services.Transaction;
-	using Transaction = Castle.Services.Transaction.ITransaction;
-
 	using IBatisNet.Common.Logging;
 	using IBatisNet.DataMapper;
+	using Transaction = Services.Transaction.ITransaction;
 
 	public class AutomaticSessionInterceptor : IMethodInterceptor
 	{
 		private IKernel _kernel = null;
-		private static readonly ILog _logger = LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod().DeclaringType );
+		private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 		public AutomaticSessionInterceptor(IKernel kernel)
 		{
@@ -48,7 +48,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 		{
 			MethodInfo info = invocation.MethodInvocationTarget;
 
-			if (info.IsDefined( typeof(NoSessionAttribute), true ))
+			if (info.IsDefined(typeof (NoSessionAttribute), true))
 			{
 				return invocation.Proceed(args);
 			}
@@ -62,7 +62,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 				return invocation.Proceed(args);
 			}
 
-			if (_logger.IsDebugEnabled) 
+			if (_logger.IsDebugEnabled)
 			{
 				_logger.Debug("Automatic Open connection on method :" + invocation.Method.Name);
 			}
@@ -80,7 +80,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 			}
 			finally
 			{
-				if (_logger.IsDebugEnabled) 
+				if (_logger.IsDebugEnabled)
 				{
 					_logger.Debug("Close connection on method :" + invocation.Method.Name);
 				}
@@ -90,13 +90,19 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		private bool EnlistSessionIfHasTransactionActive(String key, ISqlMapper sqlMap)
 		{
-			if (!_kernel.HasComponent(typeof(ITransactionManager))) return false;
+			if (!_kernel.HasComponent(typeof (ITransactionManager)))
+			{
+				return false;
+			}
 
 			bool enlisted = false;
 
-			if (key == null) key = "iBATIS.DataMapper";
+			if (key == null)
+			{
+				key = "iBATIS.DataMapper";
+			}
 
-			ITransactionManager manager = (ITransactionManager) _kernel[ typeof(ITransactionManager) ];
+			ITransactionManager manager = (ITransactionManager) _kernel[typeof (ITransactionManager)];
 
 			Transaction transaction = manager.CurrentTransaction;
 
@@ -106,7 +112,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 				{
 					transaction.Context[key] = true;
 					transaction.Enlist(new ResourceSqlMapAdapter(sqlMap.BeginTransaction(false)));
-					transaction.RegisterSynchronization( new SqlMapKeeper(sqlMap) );
+					transaction.RegisterSynchronization(new SqlMapKeeper(sqlMap));
 					enlisted = true;
 				}
 			}
@@ -120,10 +126,9 @@ namespace Castle.Facilities.IBatisNetIntegration
 		{
 			String sqlMapID = String.Empty;
 
-			if ( info.IsDefined(typeof(SessionAttribute),true) )  
+			if (info.IsDefined(typeof (SessionAttribute), true))
 			{
-				SessionAttribute[] attributs = 
-					info.GetCustomAttributes(typeof(SessionAttribute), true) as SessionAttribute[];
+				SessionAttribute[] attributs = info.GetCustomAttributes(typeof (SessionAttribute), true) as SessionAttribute[];
 				sqlMapID = attributs[0].SqlMapId;
 			}
 
@@ -135,11 +140,11 @@ namespace Castle.Facilities.IBatisNetIntegration
 			// Use the key specified in the attribute - if any
 			if (String.Empty.Equals(key))
 			{
-				return (ISqlMapper) _kernel[ typeof(ISqlMapper) ];
+				return (ISqlMapper) _kernel[typeof (ISqlMapper)];
 			}
 			else
 			{
-				return (ISqlMapper) _kernel[ key ];
+				return (ISqlMapper) _kernel[key];
 			}
 		}
 	}

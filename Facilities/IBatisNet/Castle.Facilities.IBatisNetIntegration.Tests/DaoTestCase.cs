@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,24 +20,23 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
 	using System;
 	using System.Threading;
-
-	using NUnit.Framework;
-
 	using Castle.Facilities.AutomaticTransactionManagement;
 	using Castle.Facilities.IBatisNetIntegration.Tests.Dao;
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class DaoTestCase : AbstractIBatisNetTestCase
 	{
-		private ManualResetEvent  _startEvent = new ManualResetEvent(false);
-		private ManualResetEvent  _stopEvent = new ManualResetEvent(false);
+		private ManualResetEvent _startEvent = new ManualResetEvent(false);
+		private ManualResetEvent _stopEvent = new ManualResetEvent(false);
 		private IAccountDao _dao = null;
 
 		[Test]
@@ -45,8 +45,8 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			container = CreateConfiguredContainer();
 			container.AddFacility("IBatisNet", new IBatisNetFacility());
 
-			container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
-			
+			container.AddComponent("AccountDao", typeof (IAccountDao), typeof (AccountDao));
+
 			ResetDatabase();
 
 			IAccountDao dao = container["AccountDao"] as AccountDao;
@@ -60,7 +60,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			account = null;
 			account = dao.GetAccount(99) as Account;
 
-			Assert.IsNotNull( account );
+			Assert.IsNotNull(account);
 			Assert.AreEqual(99, account.Id, "account.Id");
 		}
 
@@ -70,17 +70,17 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			container = CreateConfiguredContainer();
 			container.AddFacility("IBatisNet", new IBatisNetFacility());
 
-			container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
-			
+			container.AddComponent("AccountDao", typeof (IAccountDao), typeof (AccountDao));
+
 			ResetDatabase();
 
 			_dao = container["AccountDao"] as AccountDao;
-			
+
 			const int threadCount = 10;
 
 			Thread[] threads = new Thread[threadCount];
-			
-			for(int i = 0; i < threadCount; i++)
+
+			for (int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal));
 				threads[i].Start();
@@ -88,14 +88,14 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 			_startEvent.Set();
 
-			Thread.CurrentThread.Join(1 * 2000);
+			Thread.CurrentThread.Join(1*2000);
 
 			_stopEvent.Set();
 		}
 
 		public void ExecuteMethodUntilSignal()
 		{
-			System.Random _random = new Random();
+			Random _random = new Random();
 			_startEvent.WaitOne(int.MaxValue, false);
 
 			while (!_stopEvent.WaitOne(1, false))
@@ -110,7 +110,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 				_dao.InsertAccount(account);
 				account = null;
 				account = _dao.GetAccount(id);
-				Assert.IsNotNull( account );
+				Assert.IsNotNull(account);
 			}
 		}
 
@@ -121,15 +121,15 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			container.AddFacility("IBatisNet", new IBatisNetFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 
-			container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
-			
+			container.AddComponent("AccountDao", typeof (IAccountDao), typeof (AccountDao));
+
 			_dao = container["AccountDao"] as AccountDao;
-			
+
 			const int threadCount = 10;
 
 			Thread[] threads = new Thread[threadCount];
-			
-			for(int i = 0; i < threadCount; i++)
+
+			for (int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal));
 				threads[i].Start();
@@ -137,7 +137,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 			_startEvent.Set();
 
-			Thread.CurrentThread.Join(1 * 2000);
+			Thread.CurrentThread.Join(1*2000);
 
 			_stopEvent.Set();
 		}

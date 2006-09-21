@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,15 +20,14 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
-	using Castle.Windsor;
-
-	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
 	using Castle.Facilities.IBatisNetIntegration.Tests.Dao;
-
+	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
+	using Castle.Windsor;
 	using NUnit.Framework;
 
 	public class BaseTest
@@ -37,14 +37,14 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 		/// <summary>
 		/// SetUp
 		/// </summary>
-		[SetUp] 
-		public void Init() 
+		[SetUp]
+		public void Init()
 		{
 			container = null;
 		}
 
 
-		public void ResetDatabase() 
+		public void ResetDatabase()
 		{
 			IAccountDao dao = container["AccountDao"] as AccountDao;
 
@@ -55,7 +55,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 		/// Verify that the input account is equal to the account(id=5).
 		/// </summary>
 		/// <param name="account">An account object</param>
-		protected void AssertAccount1(Account account) 
+		protected void AssertAccount1(Account account)
 		{
 			Assert.AreEqual(1, account.Id, "account.Id");
 			Assert.AreEqual("Joe", account.FirstName, "account.FirstName");
@@ -67,7 +67,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 		/// Verify that the input account is equal to the account(id=1).
 		/// </summary>
 		/// <param name="account">An account object</param>
-		protected void AssertAccount5(Account account) 
+		protected void AssertAccount5(Account account)
 		{
 			Assert.AreEqual(5, account.Id, "account.Id");
 			Assert.AreEqual("Gilles", account.FirstName, "account.FirstName");

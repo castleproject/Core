@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,70 +20,61 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration
 {
 	using System;
 	using System.Xml;
-	using Castle.MicroKernel.Facilities;
 	using Castle.Core;
-
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
-
+	using Castle.MicroKernel.Facilities;
 	using IBatisNet.Common.Utilities;
 	using IBatisNet.DataMapper;
 	using IBatisNet.DataMapper.Configuration;
 
 	public class SqlMapActivator : AbstractComponentActivator
 	{
-		public SqlMapActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, 
-			ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
-		{
-		}
+		public SqlMapActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
+			: base(model, kernel, onCreation, onDestruction) {}
 
-		protected override object InternalCreate( Castle.MicroKernel.CreationContext context )
+		protected override object InternalCreate(CreationContext context)
 		{
-			String fileName = (String) Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_FILE ];
-			bool isEmbedded = (bool) Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_EMBEDDED ];
-			String connectionString = (String) Model.ExtendedProperties [ IBatisNetFacility.MAPPER_CONFIG_CONNECTION_STRING ];
+			String fileName = (String) Model.ExtendedProperties[IBatisNetFacility.MAPPER_CONFIG_FILE];
+			bool isEmbedded = (bool) Model.ExtendedProperties[IBatisNetFacility.MAPPER_CONFIG_EMBEDDED];
+			String connectionString = (String) Model.ExtendedProperties[IBatisNetFacility.MAPPER_CONFIG_CONNECTION_STRING];
 
-			IBatisNet.DataMapper.Configuration.DomSqlMapBuilder domSqlMapBuilder = new DomSqlMapBuilder();
+			DomSqlMapBuilder domSqlMapBuilder = new DomSqlMapBuilder();
 			ISqlMapper sqlMapper;
 
-			if( isEmbedded )
+			if (isEmbedded)
 			{
-				XmlDocument sqlMapConfig = Resources.GetEmbeddedResourceAsXmlDocument( fileName );
-				sqlMapper = domSqlMapBuilder.Configure(sqlMapConfig);     
+				XmlDocument sqlMapConfig = Resources.GetEmbeddedResourceAsXmlDocument(fileName);
+				sqlMapper = domSqlMapBuilder.Configure(sqlMapConfig);
 			}
 			else
 			{
 				sqlMapper = domSqlMapBuilder.Configure(fileName);
 			}
 
-			if( connectionString !=null && connectionString.Length > 0)
+			if (connectionString != null && connectionString.Length > 0)
 			{
 				sqlMapper.DataSource.ConnectionString = connectionString;
 			}
 
-			
-			if( sqlMapper != null )
+
+			if (sqlMapper != null)
 			{
-				return sqlMapper;	
+				return sqlMapper;
 			}
 			else
 			{
-				throw new FacilityException(
-					string.Format("The IBatisNetIntegration Facility was unable to successfully configure SqlMapper ID [{0}] with File [{1}] that was set to Embedded [{2}].", 
-					Model.Name, Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_FILE ].ToString(),
-					Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_EMBEDDED ].ToString())
-					);
+				throw new FacilityException(string.Format("The IBatisNetIntegration Facility was unable to successfully configure SqlMapper ID [{0}] with File [{1}] that was set to Embedded [{2}].", Model.Name, Model.ExtendedProperties[IBatisNetFacility.MAPPER_CONFIG_FILE].ToString(), Model.ExtendedProperties[IBatisNetFacility.MAPPER_CONFIG_EMBEDDED].ToString()));
 			}
 		}
 
-		protected override void InternalDestroy(object instance)
-		{
-		}
+		protected override void InternalDestroy(object instance) {}
 	}
 }

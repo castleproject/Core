@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,30 +20,31 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
 	using System;
 	using System.IO;
-
+	using System.Threading;
+	using Castle.Core.Configuration;
+	using Castle.MicroKernel.SubSystems.Configuration;
+	using Castle.Windsor;
 	using NUnit.Framework;
 
-	using Castle.Core.Configuration;
-	using Castle.Windsor;
-	using Castle.MicroKernel.SubSystems.Configuration;
-
-	public abstract class AbstractIBatisNetTestCase : BaseTest 
+	public abstract class AbstractIBatisNetTestCase : BaseTest
 	{
 		public const String DATA_MAPPER = "sqlServerSqlMap";
 		public static readonly String ACCESS_SOURCE_FILE = ".." + Path.DirectorySeparatorChar + "Castle.mdb";
 		public static readonly String ACCESS_DESTINATION_FILE = ".." + Path.DirectorySeparatorChar + "Castle_temp.mdb";
+
 		[SetUp]
 		public virtual void InitDb()
 		{
-			if(File.Exists(ACCESS_SOURCE_FILE))
+			if (File.Exists(ACCESS_SOURCE_FILE))
 			{
-				File.Copy(ACCESS_SOURCE_FILE,ACCESS_DESTINATION_FILE,true);
+				File.Copy(ACCESS_SOURCE_FILE, ACCESS_DESTINATION_FILE, true);
 			}
 		}
 
@@ -64,10 +66,10 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 		[TearDown]
 		public virtual void ShutdownDb()
 		{
-			if(File.Exists(ACCESS_DESTINATION_FILE))
+			if (File.Exists(ACCESS_DESTINATION_FILE))
 			{
 				// This is necessary so that the locks on the file have time to release prior to deletion.
-				System.Threading.Thread.Sleep(1200);
+				Thread.Sleep(1200);
 				File.Delete(ACCESS_DESTINATION_FILE);
 			}
 		}

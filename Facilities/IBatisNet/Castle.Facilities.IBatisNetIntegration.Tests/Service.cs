@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,16 +20,15 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
 	using System;
-
-	using Castle.Services.Transaction;
-
 	using Castle.Facilities.IBatisNetIntegration.Tests.Dao;
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
+	using Castle.Services.Transaction;
 
 	/// <summary>
 	/// Description résumée de Service.

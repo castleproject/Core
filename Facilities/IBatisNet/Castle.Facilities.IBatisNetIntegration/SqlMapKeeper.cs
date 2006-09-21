@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,15 +20,15 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration
 {
 	using Castle.Services.Transaction;
-
 	using IBatisNet.DataMapper;
 
-	public class SqlMapKeeper: ISynchronization
+	public class SqlMapKeeper : ISynchronization
 	{
 		private ISqlMapper _sqlMap = null;
 
@@ -36,9 +37,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 			_sqlMap = sqlMap;
 		}
 
-		public void BeforeCompletion()
-		{
-		}
+		public void BeforeCompletion() {}
 
 		public void AfterCompletion()
 		{

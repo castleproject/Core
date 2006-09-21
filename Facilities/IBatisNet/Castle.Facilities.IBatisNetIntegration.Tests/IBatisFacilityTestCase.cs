@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,17 +20,16 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
-	using NUnit.Framework;
-	
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
 	using Castle.Windsor;
-
 	using IBatisNet.Common;
 	using IBatisNet.DataMapper;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class IBatisNetFacilityTestCase : AbstractIBatisNetTestCase
@@ -40,7 +40,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			IWindsorContainer container = CreateConfiguredContainer();
 			container.AddFacility("IBatisNet", new IBatisNetFacility());
 
-			SqlMapper sqlMap = container[AbstractIBatisNetTestCase.DATA_MAPPER] as SqlMapper;
+			SqlMapper sqlMap = container[DATA_MAPPER] as SqlMapper;
 
 			using (IDalSession session = sqlMap.OpenConnection())
 			{
@@ -52,12 +52,10 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 				sqlMap.Insert("InsertAccount", account);
 				account = null;
-				account = sqlMap.QueryForObject("GetAccount",99) as Account;
+				account = sqlMap.QueryForObject("GetAccount", 99) as Account;
 
 				Assert.AreEqual(99, account.Id, "account.Id");
 			}
-
 		}
-
 	}
 }

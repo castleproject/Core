@@ -1,4 +1,5 @@
 #region License
+
 /// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,17 +20,16 @@
 /// donated by Gilles Bayon <gilles.bayon@gmail.com>
 /// 
 /// --
+
 #endregion
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
 	using System;
-
-	using NUnit.Framework;
-
 	using Castle.Facilities.AutomaticTransactionManagement;
 	using Castle.Facilities.IBatisNetIntegration.Tests.Dao;
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class ServiceTestCase : AbstractIBatisNetTestCase
@@ -40,10 +40,10 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			container = CreateConfiguredContainer();
 			container.AddFacility("IBatisNet", new IBatisNetFacility());
 
-			container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
-			container.AddComponent("Service", typeof(IService), typeof(Service));
+			container.AddComponent("AccountDao", typeof (IAccountDao), typeof (AccountDao));
+			container.AddComponent("Service", typeof (IService), typeof (Service));
 
-			this.ResetDatabase();
+			ResetDatabase();
 			IService service = container["Service"] as IService;
 
 			Account account = service.GetAccount(5);
@@ -51,33 +51,32 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			AssertAccount5(account);
 		}
 
-			[Test]
-			public void TransactionalUsage()
-			{
-				container = CreateConfiguredContainer();
-				container.AddFacility("IBatisNet", new IBatisNetFacility());
-				container.AddFacility("transaction", new TransactionFacility());
+		[Test]
+		public void TransactionalUsage()
+		{
+			container = CreateConfiguredContainer();
+			container.AddFacility("IBatisNet", new IBatisNetFacility());
+			container.AddFacility("transaction", new TransactionFacility());
 
-				container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
-				container.AddComponent("Service", typeof(IService), typeof(Service));
+			container.AddComponent("AccountDao", typeof (IAccountDao), typeof (AccountDao));
+			container.AddComponent("Service", typeof (IService), typeof (Service));
 
-				this.ResetDatabase();
-				IService service = container["Service"] as IService;
+			ResetDatabase();
+			IService service = container["Service"] as IService;
 
-				Account account = new Account();
-				account.Id = 999;
-				account.EmailAddress = "ibatis@somewhere.com";
-				account.FirstName = "Gilles";
-				account.LastName = "Bayon";
+			Account account = new Account();
+			account.Id = 999;
+			account.EmailAddress = "ibatis@somewhere.com";
+			account.FirstName = "Gilles";
+			account.LastName = "Bayon";
 
-				service.InsertTransactionalAccount(account);
-				account = null;
-				account = service.GetAccountWithSpecificDataMapper(999) as Account;
+			service.InsertTransactionalAccount(account);
+			account = null;
+			account = service.GetAccountWithSpecificDataMapper(999) as Account;
 
-				Assert.IsNotNull( account );
-				Assert.AreEqual(999, account.Id, "account.Id");
-
-			}
+			Assert.IsNotNull(account);
+			Assert.AreEqual(999, account.Id, "account.Id");
+		}
 
 
 		[Test]
@@ -87,8 +86,8 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			container.AddFacility("IBatisNet", new IBatisNetFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 
-			container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
-			container.AddComponent("Service", typeof(IService), typeof(Service));
+			container.AddComponent("AccountDao", typeof (IAccountDao), typeof (AccountDao));
+			container.AddComponent("Service", typeof (IService), typeof (Service));
 
 			IService service = container["Service"] as IService;
 			service.DummyNoSession();
@@ -101,10 +100,10 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			container.AddFacility("IBatisNet", new IBatisNetFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 
-			container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
-			container.AddComponent("Service", typeof(IService), typeof(Service));
+			container.AddComponent("AccountDao", typeof (IAccountDao), typeof (AccountDao));
+			container.AddComponent("Service", typeof (IService), typeof (Service));
 
-			this.ResetDatabase();
+			ResetDatabase();
 			IService service = container["Service"] as IService;
 
 			Account account = new Account();
@@ -118,7 +117,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 				service.InsertTransactionalAccountWithError(account);
 				Assert.Fail("Exception was expected");
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				// Expected
 			}
@@ -126,7 +125,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			account = null;
 			account = service.GetAccountWithSpecificDataMapper(999) as Account;
 
-			Assert.IsNull( account );
+			Assert.IsNull(account);
 		}
 	}
 }
