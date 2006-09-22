@@ -98,6 +98,11 @@
 				<include name="*.*" />
 			</fileset>
 		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nunit/${framework::get-target-framework()}">
+				<include name="*.*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="activerecord" depends="init">
