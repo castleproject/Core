@@ -76,7 +76,7 @@
   <ItemGroup>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

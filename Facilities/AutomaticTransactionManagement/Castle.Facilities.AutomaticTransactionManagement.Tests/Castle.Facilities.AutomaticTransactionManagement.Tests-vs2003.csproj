@@ -82,8 +82,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
+                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"

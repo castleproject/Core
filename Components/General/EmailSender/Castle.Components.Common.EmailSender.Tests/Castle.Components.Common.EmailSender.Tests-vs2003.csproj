@@ -82,8 +82,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "C:\Program Files\NUnit 2.2\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
+                    HintPath = "..\..\..\..\build\net-1.1\nunit.framework.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"

@@ -29,8 +29,12 @@ namespace Castle.ActiveRecord.Tests.Config
         [Test]
         public void GetConnectionStringFromWebConfig()
         {
+#if DOTNET2
+			IConfigurationSource source = ConfigurationManager.GetSection("activerecord-asp-net-2.0") as IConfigurationSource;
+#else
             IConfigurationSource source =
                 ConfigurationSettings.GetConfig("activerecord-asp-net-2.0") as IConfigurationSource;
+#endif
 
             IConfiguration config = source.GetConfiguration(typeof(ActiveRecordBase));
 

@@ -81,7 +81,7 @@
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\..\build\net-2.0\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

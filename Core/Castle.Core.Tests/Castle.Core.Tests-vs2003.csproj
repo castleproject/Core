@@ -82,7 +82,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll"
+                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
                 />
                 <Reference
                     Name = "Castle.Core-vs2003"

@@ -83,7 +83,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\lib\nunit.framework.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\nunit.framework.dll"
                 />
                 <Reference
                     Name = "NVelocity"
