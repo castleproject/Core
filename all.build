@@ -64,7 +64,7 @@
 			</fileset>
 		</copy>
 		<copy todir="${build.dir}">
-			<fileset basedir="${sharedlibrary.dir}/ibatis">
+			<fileset basedir="${sharedlibrary.dir}/ibatis/${framework::get-target-framework()}">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
@@ -84,7 +84,7 @@
 			</fileset>
 		</copy>
 		<copy todir="${build.dir}">
-			<fileset basedir="${sharedlibrary.dir}/nlog">
+			<fileset basedir="${sharedlibrary.dir}/nlog/${framework::get-target-framework()}">
 				<include name="*.*" />
 			</fileset>
 		</copy>
