@@ -10,19 +10,11 @@
 	<property name="name.log4net" value="${name}.Log4netIntegration" />
 	<property name="name.nlog"    value="${name}.NLogIntegration" />
 	
-	<property name="test.name" value="${name}.Tests" />
-	
-	<property name="assembly.name" value="${name}.dll" />
 	<property name="assembly.name.nlog" value="${name.nlog}.dll" />
 	<property name="assembly.name.log4net" value="${name.log4net}.dll" />
 	
-	<property name="test.assembly.name" value="${test.name}.dll" />
-	
-	<property name="src.dir" value="${base.dir}/${name}" />
 	<property name="src.nlog.dir" value="${base.dir}/${name.nlog}" />
 	<property name="src.log4net.dir" value="${base.dir}/${name.log4net}" />
-
-	<property name="test.src.dir" value="${base.dir}/${test.name}" />
 
 	<property name="version" value="beta-1" />
     
@@ -47,40 +39,15 @@
 	<target name="build" depends="init,compile,copy" />
 	
 	<target name="copy">
-		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
 		<copy file="${bin.dir}/${assembly.name.nlog}" todir="../bin" />
 		<copy file="${bin.dir}/${assembly.name.log4net}" todir="../bin" />
-		<copy file="${bin.dir}/${name}.xml" todir="../bin" />
 		<copy file="${bin.dir}/${name.nlog}.xml" todir="../bin" />
 		<copy file="${bin.dir}/${name.log4net}.xml" todir="../bin" />
-		<copy file="${bin.dir}/${name}.pdb" todir="../bin" if="${debug}" />
 		<copy file="${bin.dir}/${name.nlog}.pdb" todir="../bin" if="${debug}" />
 		<copy file="${bin.dir}/${name.log4net}.pdb" todir="../bin" if="${debug}" />
 	</target>
 	
 	<target name="compile" depends="init">
-		<csc 
-			define="${strong}"
-			target="library" 
-			debug="${debug}"
-			optimize="${optimize}"
-			output="${bin.dir}/${assembly.name}"
-			doc="${bin.dir}/${name}.xml">
-			
-			<nowarn>
-				<warning number="1591" />
-				<warning number="1572" />
-			</nowarn>
-			
-			<sources basedir="${src.dir}" defaultexcludes="true">
-				<include name="**/*.cs" />
-			</sources>
-
-			<references>
-				<include name="${bin.dir}/*.dll" />
-			</references>
-		</csc>
-		
 		<csc 
 			define="${strong}"
 			target="library" 

@@ -5,6 +5,7 @@ Beta 2
 ======
 - Updated External Config File support to use IsPathRooted to decide how to load config file.
 - NLog 1.0 has a major assembly change. Everything is now in one dll. Check http://www.nlog-project.org/releasenotes.html for the full details
+- Castle.Services.Logging has moved to Castle.Core.Logging.
 
 Beta 1
 ======
