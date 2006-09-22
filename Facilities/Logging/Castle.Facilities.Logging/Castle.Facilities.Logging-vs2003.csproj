@@ -75,24 +75,19 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "Castle.Services.Logging"
-                    AssemblyName = "Castle.Services.Logging"
-                    HintPath = "..\..\..\Services\bin\Castle.Services.Logging.dll"
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
                 />
             </References>
         </Build>

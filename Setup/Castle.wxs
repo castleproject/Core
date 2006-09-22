@@ -134,7 +134,6 @@
 					<File Id="file47" Name="ASPECT_2.DLL" LongName="AspectSharp.Lang.dll"					src="..\build\net-1.1\AspectSharp.Lang.dll" />
 
 					<!-- Services -->
-					<File Id="file39" Name="logging.DLL"  LongName="Castle.Services.Logging.dll"					src="..\build\net-1.1\Castle.Services.Logging.dll" />
 					<File Id="file40" Name="logging1.DLL" LongName="Castle.Services.Logging.Log4netIntegration.dll" src="..\build\net-1.1\Castle.Services.Logging.Log4netIntegration.dll" />
 					<File Id="file41" Name="logging2.DLL" LongName="Castle.Services.Logging.NLogIntegration.dll"	src="..\build\net-1.1\Castle.Services.Logging.NLogIntegration.dll" />
 					<File Id="file42" Name="security.DLL" LongName="Castle.Services.Security.dll"					src="..\build\net-1.1\Castle.Services.Security.dll" />

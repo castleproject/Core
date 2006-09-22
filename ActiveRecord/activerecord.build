@@ -133,7 +133,6 @@
 
 			<references>
 				<include name="${bin.dir}/Castle.Core.dll" />
-				<include name="${bin.dir}/Castle.Services.Logging.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/Nullables.dll" if="${framework::get-target-framework()=='net-1.1'}" />
 				<include name="${bin.dir}/Nullables.NHibernate.dll" if="${framework::get-target-framework()=='net-1.1'}" />
@@ -160,7 +159,6 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.Core.dll" />
-				<include name="${bin.dir}/Castle.Services.Logging.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/log4net.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
@@ -183,7 +181,6 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.Core.dll" />
-				<include name="${bin.dir}/Castle.Services.Logging.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/log4net.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />

@@ -74,17 +74,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.MicroKernel">
-      <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Model">
-      <Name>Castle.Model</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Services.Logging">
-      <Name>Castle.Services.Logging</Name>
-      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.dll</HintPath>
+    <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

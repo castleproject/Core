@@ -80,55 +80,10 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilities.Logging"
-                    Project = "{32D54D33-206F-44EE-8329-8480ABE049B1}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
-                    Name = "Castle.Services.Logging"
-                    AssemblyName = "Castle.Services.Logging"
-                    HintPath = "..\..\..\Services\bin\Castle.Services.Logging.dll"
-                />
-                <Reference
-                    Name = "Castle.Services.Logging.Log4netIntegration"
-                    AssemblyName = "Castle.Services.Logging.Log4netIntegration"
-                    HintPath = "..\..\..\Services\bin\Castle.Services.Logging.Log4netIntegration.dll"
-                />
-                <Reference
-                    Name = "Castle.Services.Logging.NLogIntegration"
-                    AssemblyName = "Castle.Services.Logging.NLogIntegration"
-                    HintPath = "..\..\..\Services\bin\Castle.Services.Logging.NLogIntegration.dll"
-                />
-                <Reference
-                    Name = "NLog.DotNet"
-                    AssemblyName = "NLog.DotNet"
-                    HintPath = "..\..\..\SharedLibs\nlog\NLog.DotNet.dll"
-                />
-                <Reference
-                    Name = "NLog"
-                    AssemblyName = "NLog"
-                    HintPath = "..\..\..\SharedLibs\nlog\NLog.dll"
                 />
                 <Reference
                     Name = "log4net"
@@ -136,9 +91,34 @@
                     HintPath = "..\..\..\SharedLibs\log4net\log4net.dll"
                 />
                 <Reference
+                    Name = "Castle.Services.Logging.NLogIntegration"
+                    AssemblyName = "Castle.Services.Logging.NLogIntegration"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Logging.NLogIntegration.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                />
+                <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Services.Logging.Log4netIntegration"
+                    AssemblyName = "Castle.Services.Logging.Log4netIntegration"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Logging.Log4netIntegration.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.Logging-vs2003"
+                    Project = "{32D54D33-206F-44EE-8329-8480ABE049B1}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

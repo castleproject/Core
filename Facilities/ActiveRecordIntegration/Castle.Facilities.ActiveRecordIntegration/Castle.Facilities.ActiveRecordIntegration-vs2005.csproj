@@ -90,10 +90,6 @@
       <Name>Castle.Model</Name>
       <HintPath>..\..\..\ActiveRecord\bin\Castle.Model.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Logging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
       <HintPath>..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll</HintPath>

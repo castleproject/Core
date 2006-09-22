@@ -74,45 +74,25 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy">
-      <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll</HintPath>
+    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.MicroKernel">
-      <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+    <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Model">
-      <Name>Castle.Model</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
+    <Reference Include="Castle.Services.Logging.Log4netIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Logging">
-      <Name>Castle.Services.Logging</Name>
-      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.dll</HintPath>
+    <Reference Include="Castle.Services.Logging.NLogIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.Services.Logging.NLogIntegration.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Logging.Log4netIntegration">
-      <Name>Castle.Services.Logging.Log4netIntegration</Name>
-      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Services.Logging.NLogIntegration">
-      <Name>Castle.Services.Logging.NLogIntegration</Name>
-      <HintPath>..\..\..\Services\bin\Castle.Services.Logging.NLogIntegration.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor">
-      <Name>Castle.Windsor</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Windsor.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <Name>log4net</Name>
-      <HintPath>..\..\..\SharedLibs\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog">
-      <Name>NLog</Name>
-      <HintPath>..\..\..\SharedLibs\nlog\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog.DotNet">
-      <Name>NLog.DotNet</Name>
-      <HintPath>..\..\..\SharedLibs\nlog\NLog.DotNet.dll</HintPath>
+    <Reference Include="Castle.Windsor, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>

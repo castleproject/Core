@@ -84,7 +84,6 @@
 	<target name="copy-logging-service">
 		<copy todir="${bin.dir}">
 			<fileset basedir="${base.dir}/Services/bin">
-				<include name="Castle.Services.Logging.dll" />
 				<include name="Castle.Services.Logging.Log4netIntegration.dll" />
 				<include name="Castle.Services.Logging.NLogIntegration.dll" />
 			</fileset>
