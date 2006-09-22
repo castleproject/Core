@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
+
 namespace PetStore.Web.Controllers.Admin
 {
 	using System;
@@ -45,7 +47,7 @@ namespace PetStore.Web.Controllers.Admin
 
 		public void List()
 		{
-			Product[] products = Product.FindAll();
+			IList products = Product.FindAll();
 
 			PropertyBag.Add("list", PaginationHelper.CreatePagination(products, 10));
 		}

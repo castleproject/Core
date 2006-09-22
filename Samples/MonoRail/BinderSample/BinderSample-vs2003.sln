@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinderSample.Web", "BinderSample.Web\BinderSample.Web-vs2003.csproj", "{466784AE-DE64-4CD4-900C-683921659E73}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{466784AE-DE64-4CD4-900C-683921659E73}.Debug.ActiveCfg = Debug|.NET
+		{466784AE-DE64-4CD4-900C-683921659E73}.Debug.Build.0 = Debug|.NET
+		{466784AE-DE64-4CD4-900C-683921659E73}.Release.ActiveCfg = Release|.NET
+		{466784AE-DE64-4CD4-900C-683921659E73}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

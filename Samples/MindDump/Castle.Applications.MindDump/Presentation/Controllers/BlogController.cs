@@ -25,7 +25,7 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 
 
 	[ControllerDetails("blogs")]
-	[Filter(ExecuteEnum.After, typeof(PrintableFilter))]
+	[Filter(ExecuteEnum.AfterAction, typeof(PrintableFilter))]
 	public class BlogController : SmartDispatcherController
 	{
 		private BlogService _blogService;

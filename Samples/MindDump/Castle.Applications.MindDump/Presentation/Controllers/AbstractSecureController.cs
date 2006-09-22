@@ -21,7 +21,7 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	using Castle.Applications.MindDump.Presentation.Filters;
 
 
-	[Filter(ExecuteEnum.Before, typeof(AuthenticationCheckFilter) )]
+	[Filter(ExecuteEnum.BeforeAction, typeof(AuthenticationCheckFilter) )]
 	public abstract class AbstractSecureController : SmartDispatcherController
 	{
 		

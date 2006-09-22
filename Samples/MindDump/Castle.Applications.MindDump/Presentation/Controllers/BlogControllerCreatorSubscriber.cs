@@ -22,16 +22,15 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	using Castle.Applications.MindDump.Dao;
 	using Castle.Applications.MindDump.Model;
 	using Castle.Applications.MindDump.Services;
-
-	using Castle.MonoRail.Framework.Internal.Graph;
+	using Castle.MonoRail.Framework;
 
 
 	public class BlogControllerCreatorSubscriber : IMindDumpEventSubscriber, IInitializable
 	{
 		private BlogDao _blogDao;
-		private ControllerTree _controllerTree;
+		private IControllerTree _controllerTree;
 
-		public BlogControllerCreatorSubscriber(BlogDao blogDao, ControllerTree controllerTree)
+		public BlogControllerCreatorSubscriber(BlogDao blogDao, IControllerTree controllerTree)
 		{
 			_blogDao = blogDao;
 			_controllerTree = controllerTree;

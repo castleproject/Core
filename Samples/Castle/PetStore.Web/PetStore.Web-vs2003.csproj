@@ -1,0 +1,364 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{5537DCB6-D3F1-4704-96BA-83FAEC9981D7}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "PetStore.Web"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "PetStore.Web"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "Nullables.NHibernate"
+                    AssemblyName = "Nullables.NHibernate"
+                    HintPath = "..\..\..\build\net-1.1\Nullables.NHibernate.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\..\..\build\net-1.1\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    AssemblyName = "Castle.ActiveRecord"
+                    HintPath = "..\..\..\build\net-1.1\Castle.ActiveRecord.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.ActiveRecordScaffold"
+                    AssemblyName = "Castle.MonoRail.ActiveRecordScaffold"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.ActiveRecordScaffold.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.ActiveRecordSupport"
+                    AssemblyName = "Castle.MonoRail.ActiveRecordSupport"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.ActiveRecordSupport.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    AssemblyName = "Castle.MonoRail.Framework"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.CompositeView"
+                    AssemblyName = "Castle.MonoRail.Framework.Views.CompositeView"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.CompositeView.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
+                    AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.WindsorExtension"
+                    AssemblyName = "Castle.MonoRail.WindsorExtension"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.WindsorExtension.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\..\build\net-1.1\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\build\net-1.1\log4net.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\..\build\net-1.1\NHibernate.dll"
+                />
+                <Reference
+                    Name = "Nullables"
+                    AssemblyName = "Nullables"
+                    HintPath = "..\..\..\build\net-1.1\Nullables.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.AutomaticTransactionManagement"
+                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Facilities.AutomaticTransactionManagement.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.ActiveRecordIntegration"
+                    AssemblyName = "Castle.Facilities.ActiveRecordIntegration"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Facilities.ActiveRecordIntegration.dll"
+                />
+                <Reference
+                    Name = "PetStore.Model"
+                    Project = "{932E2BF7-5E0B-42AA-A364-0138A150872E}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "PetStore.Service"
+                    Project = "{5AA760BE-5153-498F-A9D9-CDB628A7E110}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "common-facilities.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "common-services.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "controllers.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "data-access-ar.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "data-access-nh.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "data-access-standard.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "GlobalApplication.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "properties.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Components\ImageLocationComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Content\css\admin.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Content\css\site.css"
+                    BuildAction = "Content"
+                />
+                <Folder RelPath = "Content\images\" />
+                <Folder RelPath = "Content\productpics\" />
+                <File
+                    RelPath = "Controllers\AbstractSecureController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AuthenticationFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\BaseSiteController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\CartController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ProductController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Admin\AdminController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Admin\CategoryManagementController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Admin\ProductManagementController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\State\CartState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\Admin\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Admin\login.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Home\Index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Layouts\admin.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Layouts\default.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Product\Details.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Product\List.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Product\ListByCategory.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ProductManagement\List.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ProductManagement\New.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\shared\inlineerror.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\shared\ProductBox.vm"
+                    BuildAction = "None"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

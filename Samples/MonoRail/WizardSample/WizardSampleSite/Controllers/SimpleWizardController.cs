@@ -17,7 +17,6 @@ namespace WizardSampleSite.Controllers
 	using System;
 	using System.Collections;
 
-	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 	using WizardSampleSite.Model;
@@ -158,10 +157,7 @@ namespace WizardSampleSite.Controllers
 		{
 			Account account = MainInfoStep.GetAccountFromSession(Session);
 
-			String[] interests = (String[]) ConvertUtils.Convert( 
-				typeof(String[]), Params["interests"]);
-
-			account.Interests = interests;
+			account.Interests = (String[])BindObject(ParamStore.Params, typeof (String[]), "interests");
 
 			DoNavigate();
 		}

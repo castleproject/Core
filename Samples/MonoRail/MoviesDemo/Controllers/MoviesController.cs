@@ -49,7 +49,7 @@ namespace MoviesDemo.Controllers
 			 PropertyBag["movie"] = Movie.Find(movieId);
 		}
 
-		public void Save([DataBind(Prefix="movie")] Movie movie)
+		public void Save([DataBind("movie")] Movie movie)
 		{
 			if (movie.Id == 0)
 			{

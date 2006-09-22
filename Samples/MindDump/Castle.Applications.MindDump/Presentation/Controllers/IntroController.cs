@@ -22,7 +22,7 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	using Castle.Applications.MindDump.Services;
 
 
-	[Filter(ExecuteEnum.Before, typeof(AuthenticationAttemptFilter))]
+	[Filter(ExecuteEnum.BeforeAction, typeof(AuthenticationAttemptFilter))]
 	[Layout("default")]
 	public class IntroController : Controller
 	{

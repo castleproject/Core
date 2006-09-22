@@ -1,0 +1,364 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{F1297EF2-C5C5-4393-B9AC-B43535E704C2}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "SampleSite"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "SampleSite"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\..\..\build\net-1.1\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    AssemblyName = "Castle.MonoRail.Framework"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.CompositeView"
+                    AssemblyName = "Castle.MonoRail.Framework.Views.CompositeView"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.CompositeView.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
+                    AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
+                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    HintPath = "..\..\..\build\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.htm"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "MyHttpApplication.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\AbstractApplicationController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\CodeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\FooterLinkFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AdvancedArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AjaxArea\FormRemoteTagController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AjaxArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AjaxArea\LinkToFunctionController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AjaxArea\LinkToRemoteController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AjaxArea\ObserverFieldController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AjaxArea\ObserverFormController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Areas\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ControllersArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\DatabindArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\FiltersArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HelpersArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\LayoutsArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\MoreArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\RescuesArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ResourcesArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ScaffoldArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "css\default.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\cor_diagram2.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\title.jpg"
+                    BuildAction = "Content"
+                />
+                <Folder RelPath = "Models\" />
+                <File
+                    RelPath = "Views\AdvancedArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\formremotetag\contactlist.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\formremotetag\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\linktofunction\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\linktoremote\CalcPower.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\linktoremote\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\observerfield\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\observerfield\statelist.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\AjaxArea\observerform\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\Areas\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\Code\ShowCode.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\ControllersArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\DatabindArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\FiltersArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\HelpersArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\Home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\layouts\default.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\layouts\defaultajax.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\LayoutsArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\MoreArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\rescues\lie.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\rescues\sincere.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\RescuesArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\ResourcesArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\ScaffoldArea\home\index.vm"
+                    BuildAction = "None"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

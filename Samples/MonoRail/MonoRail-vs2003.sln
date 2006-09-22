@@ -1,0 +1,53 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSite", "SampleSite\SampleSite-vs2003.csproj", "{F1297EF2-C5C5-4393-B9AC-B43535E704C2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinderSample.Web", "BinderSample\BinderSample.Web\BinderSample.Web-vs2003.csproj", "{466784AE-DE64-4CD4-900C-683921659E73}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesDemo", "MoviesDemo\MoviesDemo-vs2003.csproj", "{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizardSampleSite", "WizardSample\WizardSampleSite\WizardSampleSite-vs2003.csproj", "{D2958D15-2739-4C03-B490-4F67559C0CC3}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCompletionSample", "AjaxSample\AutoCompletionSample\AutoCompletionSample-vs2003.csproj", "{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{F1297EF2-C5C5-4393-B9AC-B43535E704C2}.Debug.ActiveCfg = Debug|.NET
+		{F1297EF2-C5C5-4393-B9AC-B43535E704C2}.Debug.Build.0 = Debug|.NET
+		{F1297EF2-C5C5-4393-B9AC-B43535E704C2}.Release.ActiveCfg = Release|.NET
+		{F1297EF2-C5C5-4393-B9AC-B43535E704C2}.Release.Build.0 = Release|.NET
+		{466784AE-DE64-4CD4-900C-683921659E73}.Debug.ActiveCfg = Debug|.NET
+		{466784AE-DE64-4CD4-900C-683921659E73}.Debug.Build.0 = Debug|.NET
+		{466784AE-DE64-4CD4-900C-683921659E73}.Release.ActiveCfg = Release|.NET
+		{466784AE-DE64-4CD4-900C-683921659E73}.Release.Build.0 = Release|.NET
+		{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}.Debug.ActiveCfg = Debug|.NET
+		{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}.Debug.Build.0 = Debug|.NET
+		{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}.Release.ActiveCfg = Release|.NET
+		{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}.Release.Build.0 = Release|.NET
+		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Debug.ActiveCfg = Debug|.NET
+		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Debug.Build.0 = Debug|.NET
+		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Release.ActiveCfg = Release|.NET
+		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Release.Build.0 = Release|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Debug.ActiveCfg = Debug|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Debug.Build.0 = Debug|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Release.ActiveCfg = Release|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

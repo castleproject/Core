@@ -64,7 +64,7 @@ namespace Castle.Applications.PestControl.Services.BuildSystems
 			{
 				if (handler.CurrentState == HandlerState.Valid)
 				{
-					list.Add( handler.Resolve() );
+					list.Add( handler.Resolve(CreationContext.Empty) );
 				}
 			}
 
