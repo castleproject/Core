@@ -74,9 +74,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NVelocity, Version=0.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\SharedLibs\nvelocity\NVelocity.dll</HintPath>
+      <HintPath>..\..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NVelocity, Version=0.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\build\net-2.0\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -98,10 +102,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Services\Logging\Castle.Services.Logging\Castle.Services.Logging-vs2005.csproj">
-      <Project>{1AFAEC30-152C-43E2-B37C-E713419D20B8}</Project>
-      <Name>Castle.Services.Logging-vs2005</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Castle.Components.Common.TemplateEngine\Castle.Components.Common.TemplateEngine-vs2005.csproj">
       <Project>{9698FE03-CD65-4FBC-B734-7326674A4894}</Project>
       <Name>Castle.Components.Common.TemplateEngine-vs2005</Name>

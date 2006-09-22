@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel", "Castle.MicroKernel\Castle.MicroKernel-vs2003.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests", "Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2003.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor", "Castle.Windsor\Castle.Windsor-vs2003.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests", "Castle.Windsor.Tests\Castle.Windsor.Tests-vs2003.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.ActiveCfg = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.Build.0 = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.ActiveCfg = Release|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.Build.0 = Release|.NET
+		{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}.Debug.ActiveCfg = Debug|.NET
+		{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}.Debug.Build.0 = Debug|.NET
+		{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}.Release.ActiveCfg = Release|.NET
+		{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}.Release.Build.0 = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.ActiveCfg = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.Build.0 = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.ActiveCfg = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.Build.0 = Release|.NET
+		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Debug.ActiveCfg = Debug|.NET
+		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Debug.Build.0 = Debug|.NET
+		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Release.ActiveCfg = Release|.NET
+		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		container.build = container.build
+		Know issues.txt = Know issues.txt
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

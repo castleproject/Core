@@ -76,15 +76,15 @@
   <ItemGroup>
     <Reference Include="Castle.Components.Common.EmailSender">
       <Name>Castle.Components.Common.EmailSender</Name>
-      <HintPath>..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.Components.Common.EmailSender.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Components.Common.EmailSender.SmtpEmailSender">
       <Name>Castle.Components.Common.EmailSender.SmtpEmailSender</Name>
-      <HintPath>..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Core\bin\Castle.Core.dll</HintPath>
+    <Reference Include="Castle.Core">
+      <Name>Castle.Core</Name>
+      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

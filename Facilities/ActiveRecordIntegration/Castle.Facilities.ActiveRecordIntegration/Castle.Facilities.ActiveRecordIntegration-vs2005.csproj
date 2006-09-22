@@ -76,35 +76,35 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord, Version=0.0.1.7, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\..\ActiveRecord\bin\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Model">
-      <Name>Castle.Model</Name>
-      <HintPath>..\..\..\ActiveRecord\bin\Castle.Model.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\..\..\ActiveRecord\bin\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
-      <HintPath>..\..\..\ActiveRecord\bin\log4net.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\..\ActiveRecord\bin\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

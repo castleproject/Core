@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.DynamicLoader-vs2005", "Castle.Facilities.DynamicLoader\Castle.Facilities.DynamicLoader-vs2005.csproj", "{8B029508-E9E0-4646-A5AF-68B4015D8C61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel-2-0", "..\..\InversionOfControl\Castle.MicroKernel\Castle.MicroKernel-2-0.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model-2-0", "..\..\InversionOfControl\Castle.Model\Castle.Model-2-0.csproj", "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base Libraries", "Base Libraries", "{5672C41B-1D89-49DD-B3CC-18183A6DE077}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.DynamicLoader.Tests-vs2005", "Castle.Facilities.DynamicLoader.Tests\Castle.Facilities.DynamicLoader.Tests-vs2005.csproj", "{9A3F9825-B974-4F92-86A2-21FC3A444392}"
 EndProject
 Global
@@ -21,14 +15,6 @@ Global
 		{8B029508-E9E0-4646-A5AF-68B4015D8C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B029508-E9E0-4646-A5AF-68B4015D8C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B029508-E9E0-4646-A5AF-68B4015D8C61}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A3F9825-B974-4F92-86A2-21FC3A444392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A3F9825-B974-4F92-86A2-21FC3A444392}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A3F9825-B974-4F92-86A2-21FC3A444392}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,9 +22,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{6F052973-C8E0-41EB-BAAF-B052509B5597} = {5672C41B-1D89-49DD-B3CC-18183A6DE077}
-		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159} = {5672C41B-1D89-49DD-B3CC-18183A6DE077}
 	EndGlobalSection
 EndGlobal

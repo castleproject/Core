@@ -81,7 +81,7 @@
     </Reference>
     <Reference Include="NVelocity">
       <Name>NVelocity</Name>
-      <HintPath>..\..\SharedLibs\NVelocity\NVelocity.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

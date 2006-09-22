@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
     >
@@ -87,37 +87,37 @@
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                    HintPath = "..\..\build\net-1.1\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
+                    HintPath = "..\..\build\net-1.1\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
                 />
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.dll"
+                    HintPath = "..\..\build\net-1.1\Nullables.dll"
                 />
                 <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\Nullables.NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll"
+                    HintPath = "C:\Program Files\NUnit 2.2\bin\nunit.framework.dll"
                 />
             </References>
         </Build>

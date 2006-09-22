@@ -90,11 +90,6 @@
                     HintPath = "..\..\SharedLibs\log4net\log4net.dll"
                 />
                 <Reference
-                    Name = "Castle.Core"
-                    AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
-                />
-                <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
                     HintPath = "..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll"
@@ -115,9 +110,9 @@
                     HintPath = "..\..\SharedLibs\nhibernate\Nullables.dll"
                 />
                 <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
             </References>
         </Build>

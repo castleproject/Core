@@ -76,15 +76,15 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\ActiveRecord\bin\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Model">
+    <Reference Include="Castle.Core">
       <Name>Castle.Model</Name>
-      <HintPath>..\..\ActiveRecord\bin\Castle.Model.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\ActiveRecord\bin\NHibernate.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>

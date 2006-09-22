@@ -74,21 +74,21 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.DynamicProxy">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Work\SuperSol.Connector\Lib\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Castle.MicroKernel">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Model, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Castle.Core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Transaction, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Services.Transaction">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Work\SuperSol.Connector\Lib\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

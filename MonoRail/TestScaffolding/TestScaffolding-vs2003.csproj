@@ -82,22 +82,22 @@
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
+                    HintPath = "..\..\build\net-1.1\log4net.dll"
                 />
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\SharedLibs\NVelocity\NVelocity.dll"
+                    HintPath = "..\..\build\net-1.1\NVelocity.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\SharedLibs\NHibernate\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\SharedLibs\NHibernate\Iesi.Collections.dll"
+                    HintPath = "..\..\build\net-1.1\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "System.Web"
@@ -107,28 +107,28 @@
                 <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.ActiveRecord.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
-                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
                     Private = "True"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine"
-                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.TemplateEngine.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.EmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender"
-                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework"

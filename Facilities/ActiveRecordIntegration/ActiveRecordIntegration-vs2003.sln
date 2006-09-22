@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRecordIntegration", "Castle.Facilities.ActiveRecordIntegration\Castle.Facilities.ActiveRecordIntegration-vs2003.csproj", "{0C47AD89-6D32-4FD8-963F-EF29075EED68}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRecordIntegration.Tests", "Castle.Facilities.ActiveRecordIntegration.Tests\Castle.Facilities.ActiveRecordIntegration.Tests-vs2003.csproj", "{ED24B4A4-1147-45C4-9DE4-D1AEE3878FAD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0C47AD89-6D32-4FD8-963F-EF29075EED68}.Debug.ActiveCfg = Debug|.NET
+		{0C47AD89-6D32-4FD8-963F-EF29075EED68}.Debug.Build.0 = Debug|.NET
+		{0C47AD89-6D32-4FD8-963F-EF29075EED68}.Release.ActiveCfg = Release|.NET
+		{0C47AD89-6D32-4FD8-963F-EF29075EED68}.Release.Build.0 = Release|.NET
+		{ED24B4A4-1147-45C4-9DE4-D1AEE3878FAD}.Debug.ActiveCfg = Debug|.NET
+		{ED24B4A4-1147-45C4-9DE4-D1AEE3878FAD}.Debug.Build.0 = Debug|.NET
+		{ED24B4A4-1147-45C4-9DE4-D1AEE3878FAD}.Release.ActiveCfg = Release|.NET
+		{ED24B4A4-1147-45C4-9DE4-D1AEE3878FAD}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		configuration.xml = configuration.xml
+		default.build = default.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+		Running the test cases.txt = Running the test cases.txt
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

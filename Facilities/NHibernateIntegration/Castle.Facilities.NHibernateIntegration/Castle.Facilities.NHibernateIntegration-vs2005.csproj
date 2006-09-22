@@ -76,31 +76,31 @@
   <ItemGroup>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\..\Core\bin\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\Services\bin\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\lib\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
-      <HintPath>..\lib\log4net.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\lib\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

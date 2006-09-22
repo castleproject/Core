@@ -1,4 +1,4 @@
-?<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
@@ -76,35 +76,35 @@
   <ItemGroup>
     <Reference Include="Castle.Facilities.AutomaticTransactionManagement">
       <Name>Castle.Facilities.AutomaticTransactionManagement</Name>
-      <HintPath>..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\..\Core\bin\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\Services\bin\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\lib\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
-      <HintPath>..\lib\log4net.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\lib\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
@@ -152,6 +152,7 @@
     <Compile Include="Common\Order.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\TestInterceptor.cs" />
     <Compile Include="Internals\SessionManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -170,6 +171,7 @@
     <Compile Include="Transactions\Model\FirstDao.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Transactions\Model\OrderDao.cs" />
     <Compile Include="Transactions\Model\RootService.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +181,7 @@
     <Compile Include="Transactions\TransactionsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Transactions\TransactionWithTwoDatabasesTestCase.cs" />
     <Compile Include="Wiring\DaoTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

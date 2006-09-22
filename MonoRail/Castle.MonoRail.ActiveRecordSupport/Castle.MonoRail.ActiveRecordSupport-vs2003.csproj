@@ -87,17 +87,17 @@
                 <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.ActiveRecord.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                    HintPath = "..\..\build\net-1.1\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
                     Private = "True"
                 />
                 <Reference
@@ -108,12 +108,12 @@
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Binder"
                     AssemblyName = "Castle.Components.Binder"
-                    HintPath = "..\..\Components\General\Binder\bin\Castle.Components.Binder.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Binder.dll"
                 />
             </References>
         </Build>

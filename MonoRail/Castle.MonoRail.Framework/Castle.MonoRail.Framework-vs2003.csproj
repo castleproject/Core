@@ -87,22 +87,22 @@
                 <Reference
                     Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.EmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender"
-                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Binder"
                     AssemblyName = "Castle.Components.Binder"
-                    HintPath = "..\..\Components\General\Binder\bin\Castle.Components.Binder.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Binder.dll"
                 />
             </References>
         </Build>
@@ -374,11 +374,6 @@
                 />
                 <File
                     RelPath = "Attributes\AjaxActionAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Attributes\CacheableAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -869,11 +864,6 @@
                 />
                 <File
                     RelPath = "Services\AbstractViewComponentFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\DefaultCacheManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

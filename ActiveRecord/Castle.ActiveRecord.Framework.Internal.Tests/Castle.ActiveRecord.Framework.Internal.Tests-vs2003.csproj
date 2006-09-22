@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
     >
@@ -82,22 +82,17 @@
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                    HintPath = "..\..\build\net-1.1\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
+                    HintPath = "..\..\build\net-1.1\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.ActiveRecord"
@@ -112,7 +107,12 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll"
+                    HintPath = "C:\Program Files\NUnit 2.2\bin\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

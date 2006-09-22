@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Db4oIntegration", "Castle.Facilities.Db4oIntegration\Castle.Facilities.Db4oIntegration-vs2003.csproj", "{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Db4oIntegration.Tests", "Castle.Facilities.Db4oIntegration.Tests\Castle.Facilities.Db4oIntegration.Tests-vs2003.csproj", "{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}.Debug.ActiveCfg = Debug|.NET
+		{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}.Debug.Build.0 = Debug|.NET
+		{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}.Release.ActiveCfg = Release|.NET
+		{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}.Release.Build.0 = Release|.NET
+		{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}.Debug.ActiveCfg = Debug|.NET
+		{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}.Debug.Build.0 = Debug|.NET
+		{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}.Release.ActiveCfg = Release|.NET
+		{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		default.build = default.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

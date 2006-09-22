@@ -102,22 +102,22 @@
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\ActiveRecord\bin\Nullables.dll"
+                    HintPath = "..\..\build\net-1.1\Nullables.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.EmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender"
-                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\Tools\NVelocity\bin\NVelocity.dll"
+                    HintPath = "..\..\build\net-1.1\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
             </References>
         </Build>

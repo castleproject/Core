@@ -82,22 +82,22 @@
                 <Reference
                     Name = "Castle.MonoRail.Framework"
                     AssemblyName = "Castle.MonoRail.Framework"
-                    HintPath = "..\bin\Castle.MonoRail.Framework.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.MonoRail.Framework.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\bin\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\bin\Castle.MicroKernel.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\bin\Castle.Windsor.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "System.Web"
@@ -122,7 +122,7 @@
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
             </References>
         </Build>

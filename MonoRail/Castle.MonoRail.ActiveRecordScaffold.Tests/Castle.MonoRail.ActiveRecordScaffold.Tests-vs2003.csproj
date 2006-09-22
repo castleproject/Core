@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}"
     >
@@ -82,23 +82,18 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
+                    HintPath = "C:\Program Files\NUnit 2.2\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\ActiveRecord\bin\Castle.Model.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\ActiveRecord\bin\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.ActiveRecord.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.TestSupport"

@@ -78,7 +78,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			if (controller.HasTemplate(templateName))
 			{
-				controller.RenderView(controller.Name, templateName);
+				controller.RenderSharedView(templateName);
 			}
 			else
 			{

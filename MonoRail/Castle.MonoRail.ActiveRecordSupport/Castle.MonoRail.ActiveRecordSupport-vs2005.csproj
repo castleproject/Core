@@ -76,24 +76,24 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\ActiveRecord\bin\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Core\bin\Castle.Core.dll</HintPath>
+    <Reference Include="Castle.Core">
+      <Name>Castle.Core</Name>
+      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\SharedLibs\nhibernate\NHibernate.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Nullables, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\nhibernate\Nullables.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Nullables.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

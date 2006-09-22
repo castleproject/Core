@@ -1,0 +1,333 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.Windsor.Tests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.Windsor.Tests</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINDOWS\assembly\GAC_MSIL\nunit.framework\2.2.8.0__96d09a1eb7f44a77\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">
+      <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
+      <Name>Castle.Core-vs2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2005.csproj">
+      <Project>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</Project>
+      <Name>Castle.MicroKernel.Tests-2-0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj">
+      <Name>Castle.MicroKernel</Name>
+      <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Windsor\Castle.Windsor-vs2005.csproj">
+      <Name>Castle.Windsor</Name>
+      <Project>{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adapters\ComponentModel\ContainerAdapterTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\ComponentModel\TestComponent.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AsyncInitializationContainerTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ChildContainerSupportTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CircularDependencyTests.cs" />
+    <Compile Include="Components\CalculatorService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\CalculatorServiceWithAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\CalculatorServiceWithLifecycle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\CircularDependencyComponents.cs" />
+    <Compile Include="Components\DotNet2Components.cs" />
+    <Compile Include="Components\Employee.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\ICalcService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\IEmployee.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\IReviewableEmployee.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\IReviewer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\MarshalCalculatorService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\ReviewableEmployee.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Reviewer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Robot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration2\ConfigWithStatementsTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration2\IncludesTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration2\Properties\PropertiesTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\AppDomainConfigurationStoreTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ConfigXmlInterpreterTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContainerProblem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DependencyProblem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Content Include="DotNet2Config\ComplexGenericConfig.xml" />
+    <Content Include="DotNet2Config\GenericDecoratorConfig.xml" />
+    <Content Include="DotNet2Config\MissingDecoratorConfig.xml" />
+    <Content Include="DotNet2Config\RecursiveDecoratorConfig.xml" />
+    <Content Include="DotNet2Config\DecoratorConfig.xml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Compile Include="Facilities\EventWiring\EventWiringTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\Model\Handlers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\Model\MultiListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\Model\MultiPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\Model\PublisherListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\Model\SimpleListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\EventWiring\Model\SimplePublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Facilities\SlowlyInitFacility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Installer\InstallerTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InterceptorsTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RealProxyTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportedProblemTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RobotWireTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SmartProxyTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WindsorDotNet2Tests.cs" />
+    <Compile Include="XmlProcessor\XmlProcessorTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Castle.Windsor.Tests.dll.config" />
+    <Content Include="Configuration2\Properties\config_with_missing_properties.xml" />
+    <Content Include="Configuration2\Properties\config_with_properties.xml" />
+    <Content Include="Configuration2\Properties\config_with_properties_and_defines.xml" />
+    <Content Include="Configuration2\Properties\config_with_properties_and_defines2.xml" />
+    <Content Include="Configuration2\Properties\config_with_properties_and_includes.xml" />
+    <Content Include="Configuration2\Properties\config_with_silent_properties.xml" />
+    <Content Include="Configuration2\Properties\properties.xml" />
+    <Content Include="Configuration2\Properties\properties_using_properties.xml" />
+    <Content Include="DotNet2Config\GenericsConfig.xml" />
+    <Content Include="Facilities\EventWiring\config.xml" />
+    <Content Include="installerconfig.xml" />
+    <Content Include="robotwireconfig.xml" />
+    <Content Include="sample_config.xml" />
+    <Content Include="XmlProcessor\TestFiles\AssemblyIncludeTestDisabled.xml" />
+    <Content Include="XmlProcessor\TestFiles\AssemblyIncludeTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\ChooseStatement2Test.xml" />
+    <Content Include="XmlProcessor\TestFiles\ChooseStatement2TestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\ChooseStatementTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\ChooseStatementTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\ComplexPropertiesTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\ComplexPropertiesTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\DefineDebugTestDisabled.xml" />
+    <Content Include="XmlProcessor\TestFiles\DefineDebugTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\DefineDefaultTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\DefineDefaultTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\IfStatementTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\IfStatementTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\InvalidElseWithFlag.xml" />
+    <Content Include="XmlProcessor\TestFiles\InvalidElsifWithNoFlag.xml" />
+    <Content Include="XmlProcessor\TestFiles\InvalidFlag.xml" />
+    <Content Include="XmlProcessor\TestFiles\InvalidIfWithNoFlag.xml" />
+    <Content Include="XmlProcessor\TestFiles\InvalidPropertiesMissing.xml" />
+    <Content Include="XmlProcessor\TestFiles\InvalidUnbalancedIfStatement.xml" />
+    <Content Include="XmlProcessor\TestFiles\MultiInclude2Test.xml" />
+    <Content Include="XmlProcessor\TestFiles\MultiInclude2TestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\MultiIncludeTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\MultiIncludeTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ChooseStatement2Test.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ChooseStatement2TestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ChooseStatementTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ChooseStatementTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ComplexChooseStatementTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-DefineDebugTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-DefineDebugTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-DefineDefaultTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\Pi-DefineDefaultTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\PI-IfStatementTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\PI-IfStatementTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\PropertiesMissingSilentTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\PropertiesMissingSilentTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\PropertiesWithAttributesTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\PropertiesWithAttributesTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\RelativeTest\Include1.xml" />
+    <Content Include="XmlProcessor\TestFiles\RelativeTest\Include2.xml" />
+    <Content Include="XmlProcessor\TestFiles\SimpleInclude.xml" />
+    <Content Include="XmlProcessor\TestFiles\SimplePropertiesTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\SimplePropertiesTestResult.xml" />
+    <Content Include="XmlProcessor\TestFiles\SimpleTest.xml" />
+    <Content Include="XmlProcessor\TestFiles\SimpleTestResult.xml" />
+    <EmbeddedResource Include="Adapters\ComponentModel\TestComponent.resx">
+      <DependentUpon>TestComponent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuration2\config_with_choose_stmt.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_define_debug.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_define_default.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_define_prod.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_define_qa.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_if_stmt.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_include.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_include_relative.xml" />
+    <EmbeddedResource Include="Configuration2\config_with_include_relative2.xml" />
+    <EmbeddedResource Include="Configuration2\include1.xml" />
+    <EmbeddedResource Include="Configuration2\include2.xml" />
+    <EmbeddedResource Include="Configuration2\RelativeTest\rel_include1.xml" />
+    <EmbeddedResource Include="Configuration2\RelativeTest\rel_include2.xml" />
+    <EmbeddedResource Include="Configuration2\resource_config_with_include.xml" />
+    <EmbeddedResource Include="Configuration\sample_config.xml" />
+    <EmbeddedResource Include="XmlProcessor\TestFiles\AssemblyInclude1.xml" />
+    <EmbeddedResource Include="XmlProcessor\TestFiles\AssemblyInclude2.xml" />
+    <EmbeddedResource Include="XmlProcessor\TestFiles\include1.xml" />
+    <EmbeddedResource Include="XmlProcessor\TestFiles\include2.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)\Castle.Windsor.Tests.dll.config $(TargetPath).config</PostBuildEvent>
+  </PropertyGroup>
+</Project>

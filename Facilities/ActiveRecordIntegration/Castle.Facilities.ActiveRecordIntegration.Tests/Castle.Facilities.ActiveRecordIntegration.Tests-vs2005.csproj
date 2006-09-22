@@ -76,35 +76,31 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Facilities.AutomaticTransactionManagement">
       <Name>Castle.Facilities.AutomaticTransactionManagement</Name>
-      <HintPath>..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Model">
-      <Name>Castle.Model</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\..\ActiveRecord\bin\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>

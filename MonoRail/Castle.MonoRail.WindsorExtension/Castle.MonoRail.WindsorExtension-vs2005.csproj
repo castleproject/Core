@@ -76,19 +76,19 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Core\bin\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\InversionOfControl\bin\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\InversionOfControl\bin\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\InversionOfControl\bin\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

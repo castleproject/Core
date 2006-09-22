@@ -92,12 +92,12 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\Tools\NVelocity\bin\NVelocity.dll"
+                    HintPath = "..\..\build\net-1.1\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
             </References>
         </Build>

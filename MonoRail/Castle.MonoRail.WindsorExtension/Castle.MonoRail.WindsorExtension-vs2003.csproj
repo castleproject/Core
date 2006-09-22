@@ -87,12 +87,12 @@
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "System.Data"
@@ -102,12 +102,12 @@
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\Core\bin\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
                 />
             </References>
         </Build>

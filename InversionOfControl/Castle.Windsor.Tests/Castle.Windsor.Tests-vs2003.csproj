@@ -1,0 +1,675 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.6030"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "Castle.Windsor.Tests"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)\Castle.Windsor.Tests.dll.config $(TargetPath).config"
+                RootNamespace = "Castle.Windsor.Tests"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "..\bin2\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\Release\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\build\net-1.1\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\build\net-1.1\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\bin\NUnit 2.2.8\bin\nunit.framework.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AsyncInitializationContainerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Castle.Windsor.Tests.dll.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "ChildContainerSupportTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CircularDependencyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ContainerProblem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DependencyProblem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "installerconfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "InterceptorsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PropertiesInspectionBehaviorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "propertyInspectionBehavior.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "propertyInspectionBehaviorInvalid.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "RealProxyTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReportedProblemTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "robotwireconfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "RobotWireTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sample_config.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "SmartProxyTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\ContainerAdapterTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\TestComponent.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\TestComponent.resx"
+                    DependentUpon = "TestComponent.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Components\CalculatorService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\CalculatorServiceWithAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\CalculatorServiceWithLifecycle.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\CircularDependencyComponents.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\ComponentWithProperties.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Employee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\ICalcService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\IEmployee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\IReviewableEmployee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\IReviewer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\MarshalCalculatorService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\ReviewableEmployee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Reviewer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Robot.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\AppDomainConfigurationStoreTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ConfigXmlInterpreterTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\sample_config.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_choose_stmt.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_debug.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_default.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_prod.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_qa.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_if_stmt.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_include.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_include_relative.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_include_relative2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\ConfigWithStatementsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration2\include1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\include2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\IncludesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration2\resource_config_with_include.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_missing_properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_properties_and_defines.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_properties_and_defines2.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_properties_and_includes.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_silent_properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\properties_using_properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\PropertiesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration2\RelativeTest\rel_include1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\RelativeTest\rel_include2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Facilities\SlowlyInitFacility.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\badconfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\EventWiringTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\multi.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\simple.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\Handlers.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\MultiListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\MultiPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\PublisherListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\SimpleListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\SimplePublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Installer\InstallerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "XmlProcessor\XmlProcessorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyInclude1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyInclude2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyIncludeTestDisabled.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyIncludeTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatement2Test.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatement2TestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ComplexPropertiesTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ComplexPropertiesTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDebugTestDisabled.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDebugTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDefaultTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDefaultTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\IfStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\IfStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\include1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\include2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidElseWithFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidElsifWithNoFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidIfWithNoFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidPropertiesMissing.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidUnbalancedIfStatement.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiInclude2Test.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiInclude2TestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiIncludeTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiIncludeTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatement2Test.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatement2TestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexChooseStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDebugTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDebugTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDefaultTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDefaultTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PI-IfStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PI-IfStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesMissingSilentTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesMissingSilentTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesWithAttributesTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesWithAttributesTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimpleInclude.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimplePropertiesTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimplePropertiesTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimpleTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimpleTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\RelativeTest\Include1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\RelativeTest\Include2.xml"
+                    BuildAction = "Content"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

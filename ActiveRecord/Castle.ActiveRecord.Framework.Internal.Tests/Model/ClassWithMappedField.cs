@@ -36,5 +36,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { return _id;}
 			set { _id = value;}
 		}
+		
+		public string Name1
+		{
+			get { return name1; }
+			set { name1 = value; }
+		}
 	}
 }
