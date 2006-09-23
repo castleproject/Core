@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.ActiveRecord
 {
+	using System;
+
 	/// <summary>
 	/// A key property for a composite key
 	/// </summary>

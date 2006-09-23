@@ -16,13 +16,6 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-	public enum OuterJoinEnum
-	{
-		Auto,
-		True,
-		False
-	}
-
 	/// <summary>
 	/// Defines the cascading behaviour of this association.
 	/// </summary>

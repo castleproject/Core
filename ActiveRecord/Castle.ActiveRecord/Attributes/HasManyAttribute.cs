@@ -16,16 +16,6 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-	[Serializable]
-	public enum ManyRelationCascadeEnum
-	{
-		None,
-		All,
-		SaveUpdate,
-		Delete,
-		AllDeleteOrphan
-	}
-
 	/// <summary>
 	/// Maps a one to many association.
 	/// </summary>

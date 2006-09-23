@@ -615,21 +615,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 			else if (type == RelationType.List)
 			{
 				closingTag = "</list>";
-				this.AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}>", 
-				             MakeAtt("name", name), 
-				             MakeAtt("access", accessString), 
-				             WriteIfNonNull("table", table), 
-				             WriteIfNonNull("schema", schema), 
-				             MakeAtt("lazy", lazy), 
-				             WriteIfTrue("inverse", inverse), 
-				             WriteIfNonNull("cascade", cascade), 
-				             WriteIfNonNull("where", where));
+				AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}>", 
+				        MakeAtt("name", name), 
+				        MakeAtt("access", accessString), 
+				        WriteIfNonNull("table", table), 
+				        WriteIfNonNull("schema", schema), 
+				        MakeAtt("lazy", lazy), 
+				        WriteIfTrue("inverse", inverse), 
+				        WriteIfNonNull("cascade", cascade), 
+				        WriteIfNonNull("where", where));
 			}
 
 
 			Ident();
 
-			WriteCache(cache);
+			WriteJcsCache(cache);
 			if (columnKey == null)
 			{
 				Append("<key>");
@@ -873,6 +873,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		private void WriteCache(CacheEnum cacheEnum)
+		{
+			if (cacheEnum != CacheEnum.Undefined)
+			{
+				AppendF("<cache usage=\"{0}\" />", TranslateCacheEnum(cacheEnum));
+			}
+		}
+
+		private void WriteJcsCache(CacheEnum cacheEnum)
 		{
 			if (cacheEnum != CacheEnum.Undefined)
 			{

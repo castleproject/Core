@@ -14,6 +14,8 @@
 
 namespace Castle.ActiveRecord
 {
+	using System;
+
 	public enum OptimisticLocking
 	{
 		/// <summary>
@@ -49,5 +51,22 @@ namespace Castle.ActiveRecord
 		ReadOnly,
 		ReadWrite,
 		NonStrictReadWrite
+	}
+
+	public enum OuterJoinEnum
+	{
+		Auto,
+		True,
+		False
+	}
+
+	[Serializable]
+	public enum ManyRelationCascadeEnum
+	{
+		None,
+		All,
+		SaveUpdate,
+		Delete,
+		AllDeleteOrphan
 	}
 }

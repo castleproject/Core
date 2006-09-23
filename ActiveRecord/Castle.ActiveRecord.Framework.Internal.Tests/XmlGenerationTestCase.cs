@@ -738,6 +738,37 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			Assert.AreEqual( expected, xml );
 		}
 		
+		[Test]
+		public void CachedClass()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create( typeof(CacheClass) );
+			Assert.IsNotNull( model );
+
+			String xml = Process(builder, model);
+
+			String expected = 
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"CacheClass\" lazy=\"false\">\r\n" +
+				"    <cache usage=\"read-write\" />\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" +
+				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" />\r\n" +
+				"    <bag name=\"SubClasses\" access=\"property\" table=\"CacheClass\" lazy=\"false\">\r\n" +
+				"      <jcs-cache usage=\"read-write\" />\r\n" +
+				"      <key column=\"parent_id\" />\r\n" +
+				"      <one-to-many class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
+				"    </bag>\r\n" +
+				"  </class>\r\n" + 
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+		
 #if DOTNET2
 	    [Test]
 	    public void EnumWithColumnType()
