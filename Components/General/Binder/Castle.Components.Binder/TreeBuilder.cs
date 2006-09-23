@@ -23,8 +23,6 @@ namespace Castle.Components.Binder
 	/// </summary>
 	public class TreeBuilder
 	{
-		// TODO: NameObjectCollection / IDictionary / HttpFileCollection
-		
 		public CompositeNode BuildSourceNode(NameValueCollection nameValueCollection)
 		{
 			CompositeNode root = new CompositeNode("root");
@@ -148,7 +146,13 @@ namespace Castle.Components.Binder
 
 		private CompositeNode GetOrCreateCompositeNode(CompositeNode parent, string nodeName)
 		{
-			CompositeNode node = (CompositeNode) parent.GetChildNode(nodeName);
+			Node node = parent.GetChildNode(nodeName);
+			
+			if (node != null && node.NodeType != NodeType.Composite)
+			{
+				throw new BindingException("Attempt to create or obtain a composite node " + 
+					"named {0}, but a node with the same exists with the type {1}", nodeName, node.NodeType);
+			}
 			
 			if (node == null)
 			{
@@ -156,12 +160,18 @@ namespace Castle.Components.Binder
 				parent.AddChildNode(node);
 			}
 			
-			return node;
+			return (CompositeNode) node;
 		}
 
-		private CompositeNode GetOrCreateIndexedNode(CompositeNode parent, string nodeName)
+		private IndexedNode GetOrCreateIndexedNode(CompositeNode parent, string nodeName)
 		{
-			IndexedNode node = (IndexedNode) parent.GetChildNode(nodeName);
+			Node node = parent.GetChildNode(nodeName);
+			
+			if (node != null && node.NodeType != NodeType.Indexed)
+			{
+				throw new BindingException("Attempt to create or obtain an indexed node " + 
+					"named {0}, but a node with the same exists with the type {1}", nodeName, node.NodeType);
+			}
 			
 			if (node == null)
 			{
@@ -169,7 +179,7 @@ namespace Castle.Components.Binder
 				parent.AddChildNode(node);
 			}
 			
-			return node;
+			return (IndexedNode) node;
 		}
 	}
 }
