@@ -104,7 +104,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
             String expected =
                 "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
                 "<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
-                "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassADynamicInsertUpdate, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" lazy=\"false\" dynamic-update=\"true\" dynamic-insert=\"true\">\r\n" +
+                "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassADynamicInsertUpdate, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" dynamic-update=\"true\" dynamic-insert=\"true\" lazy=\"false\">\r\n" +
                 "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
                 "      <generator class=\"native\">\r\n" +
                 "      </generator>\r\n" +
@@ -118,6 +118,69 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
             Assert.AreEqual(expected, xml);
         }
+
+		[Test]
+		public void SimpleCaseWithKeyPropertiesAndCustomPersister()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClassWithCustomPersister));
+			Assert.IsNotNull(model);
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+            
+			String xml = xmlVisitor.Xml;
+
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithCustomPersister, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" persister=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CustomPersister, Castle.ActiveRecord.Framework.Internal.Tests\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" insert=\"false\" update=\"false\" />\r\n" +
+				"    <property name=\"Name2\" access=\"property\" column=\"Name2\" type=\"String\" unsaved-value=\"hammett\" />\r\n" +
+				"    <property name=\"Name3\" access=\"property\" column=\"Name3\" type=\"String\" not-null=\"true\" unique=\"true\" />\r\n" +
+				"    <property name=\"Text\" access=\"property\" column=\"Text\" type=\"StringClob\" />\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
+		public void SimpleCaseWithBatch_SelectBeforeUpdate_Locking_Polimorphism()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClassWithSomeCustomOptions));
+			Assert.IsNotNull(model);
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+            
+			String xml = xmlVisitor.Xml;
+
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithSomeCustomOptions, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" select-before-update=\"true\" polymorphism=\"explicit\" batch-size=\"10\" optimistic-lock=\"dirty\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" insert=\"false\" update=\"false\" />\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
 
 		[Test]
 		public void AnyAttribute()

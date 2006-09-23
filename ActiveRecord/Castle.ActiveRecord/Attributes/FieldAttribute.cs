@@ -34,15 +34,15 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Field), Serializable]
 	public class FieldAttribute : WithAccessAttribute
 	{
-		private String _column;
-		private String _formula;
-		private String _type;
-		private String _unsavedValue;
-		private int _length;
-		private bool _notNull;
-		private bool _unique;
-		private bool _update = true;
-		private bool _insert = true;
+		private String column;
+		private String formula;
+		private String type;
+		private String unsavedValue;
+		private int length;
+		private bool notNull;
+		private bool unique;
+		private bool update = true;
+		private bool insert = true;
 		
 		public FieldAttribute() 
 		{
@@ -51,72 +51,74 @@ namespace Castle.ActiveRecord
 
 		public FieldAttribute(String column) : this()
 		{
-			_column = column;
+			this.column = column;
 		}
 
 		public FieldAttribute(String column, String type) : this(column)
 		{
-			_type = type;
+			this.type = type;
 		}
 
 		public bool NotNull
 		{
-			get { return _notNull; }
-			set { _notNull = value; }
+			get { return notNull; }
+			set { notNull = value; }
 		}
 
 		public int Length
 		{
-			get { return _length; }
-			set { _length = value; }
+			get { return length; }
+			set { length = value; }
 		}
 
 		public String Column
 		{
-			get { return _column; }
-			set { _column = value; }
+			get { return column; }
+			set { column = value; }
 		}
 
 		/// <summary>
-		/// Set to <c>false</c> to ignore this field when updating entities of this ActiveRecord class.
+		/// Set to <c>false</c> to ignore this 
+		/// field when updating entities of this ActiveRecord class.
 		/// </summary>
 		public bool Update
 		{
-			get { return _update; }
-			set { _update = value; }
+			get { return update; }
+			set { update = value; }
 		}
 
 		/// <summary>
-		/// Set to <c>false</c> to ignore this field when inserting entities of this ActiveRecord class.
+		/// Set to <c>false</c> to ignore this 
+		/// field when inserting entities of this ActiveRecord class.
 		/// </summary>
 		public bool Insert
 		{
-			get { return _insert; }
-			set { _insert = value; }
+			get { return insert; }
+			set { insert = value; }
 		}
 
 		public bool Unique
 		{
-			get { return _unique; }
-			set { _unique = value; }
+			get { return unique; }
+			set { unique = value; }
 		}
 
 		public String Formula
 		{
-			get { return _formula; }
-			set { _formula = value; }
+			get { return formula; }
+			set { formula = value; }
 		}
 
 		public String ColumnType
 		{
-			get { return _type; }
-			set { _type = value; }
+			get { return type; }
+			set { type = value; }
 		}
 
 		public String UnsavedValue
 		{
-			get { return _unsavedValue; }
-			set { _unsavedValue = value; }
+			get { return unsavedValue; }
+			set { unsavedValue = value; }
 		}
 	}
 }

@@ -15,7 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
-
+	
 	/// <summary>
 	/// Associate meta information related to the
 	/// desired table mapping.
@@ -42,9 +42,15 @@ namespace Castle.ActiveRecord
 		private String discriminatorColumn;
 		private String where;
 		private Type proxy;
+		private Type persister;
 		private bool lazy;
 		private bool dynamicUpdate;
 		private bool dynamicInsert;
+		private bool selectBeforeUpdate;
+		private bool mutable = true;
+		private int batchSize = 1;
+		private Polymorphism polymorphism = Polymorphism.Implicit;
+		private OptimisticLocking locking = OptimisticLocking.Version;
 
 		/// <summary>
 		/// Uses the class name as table name
@@ -147,7 +153,10 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Specifies that UPDATE SQL should be generated at runtime and contain only those columns whose values have changed.
+		/// From NHibernate documentation:
+		/// Specifies that UPDATE SQL should be 
+		/// generated at runtime and contain only 
+		/// those columns whose values have changed.
 		/// </summary>
 		public bool DynamicUpdate
 		{
@@ -156,12 +165,80 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Specifies that INSERT SQL should be generated at runtime and contain only the columns whose values are not null.
+		/// From NHibernate documentation:
+		/// Specifies that INSERT SQL should be 
+		/// generated at runtime and contain only 
+		/// the columns whose values are not null.
 		/// </summary>
 		public bool DynamicInsert
 		{
 			get { return dynamicInsert; }
 			set { dynamicInsert = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// Specifies a custom <see cref="NHibernate.Persister.IClassPersister"/>.
+		/// </summary>
+		public Type Persister
+		{
+			get { return persister; }
+			set { persister = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// Specifies that NHibernate should never perform an SQL UPDATE 
+		/// unless it is certain that an object is actually modified. In 
+		/// certain cases (actually, only when a transient object has 
+		/// been associated with a new session using update()), this means 
+		/// that NHibernate will perform an extra SQL SELECT to determine 
+		/// if an UPDATE is actually required.
+		/// </summary>
+		public bool SelectBeforeUpdate
+		{
+			get { return selectBeforeUpdate; }
+			set { selectBeforeUpdate = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// Determines whether implicit or explicit query polymorphism is used.
+		/// </summary>
+		public Polymorphism Polymorphism
+		{
+			get { return polymorphism; }
+			set { polymorphism = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// Specifies that instances of the class are (not) mutable.
+		/// </summary>
+		public bool Mutable
+		{
+			get { return mutable; }
+			set { mutable = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// Specify a "batch size" for fetching instances of 
+		/// this class by identifier.
+		/// </summary>
+		public int BatchSize
+		{
+			get { return batchSize; }
+			set { batchSize = value; }
+		}
+
+		/// <summary>
+		/// Determines the optimistic locking strategy.
+		/// </summary>
+		public OptimisticLocking Locking
+		{
+			get { return locking; }
+			set { locking = value; }
 		}
 	}
 }

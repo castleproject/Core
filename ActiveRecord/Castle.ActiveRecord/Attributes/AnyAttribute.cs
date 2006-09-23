@@ -88,25 +88,25 @@ namespace Castle.ActiveRecord
 		[AttributeUsage(AttributeTargets.Property, AllowMultiple=true), Serializable]
 		public class MetaValueAttribute : Attribute
 		{
-			private string _value;
-			private Type _clazz;
+			private string value;
+			private Type clazz;
 
 			public MetaValueAttribute(string value, Type clazz)
 			{
-				this._value = value;
-				this._clazz = clazz;
+				this.value = value;
+				this.clazz = clazz;
 			}
 
 			public string Value
 			{
-				get { return _value;}
-				set { this._value = value;}
+				get { return value;}
+				set { value = value;}
 			}
 
 			public Type Class
 			{
-				get { return _clazz;}
-				set { _clazz = value;}
+				get { return clazz;}
+				set { clazz = value;}
 			}
 		}
 	}

@@ -1,6 +1,19 @@
 beta 4
 ======
 
+- Resynched ActiveRecordAttribute with NHibernate <class> mapping. Added:
+
+  - SelectBeforeUpdate
+  - Polymorphism
+  - Mutable
+  - BatchSize
+  - Locking
+
+- Fixed AR-31
+  "Create property CustomPersister or Persister (Type) on ActiveRecordAttribute"
+  
+  Added Persister property to ActiveRecordAttribute
+
 - Applied Marc-André's patch fixing AR-79
   "ValidateIsUnique not working with TransactionScope"
 

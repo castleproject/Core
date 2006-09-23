@@ -22,6 +22,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using Iesi.Collections;
 	
 	using Castle.ActiveRecord;
+	using NHibernate.Persister;
 
 	/// <summary>
 	/// Traverse the tree checking the semantics of the relation and
@@ -85,6 +86,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 						throw new ActiveRecordException(String.Format(
 							"A nested type is not allowed to have version or timestamped fields " +
 								"- check type {0}", model.Type.FullName));
+					}
+				}
+				
+				if (model.ActiveRecordAtt != null && model.ActiveRecordAtt.Persister != null)
+				{
+					if (!typeof(IClassPersister).IsAssignableFrom(model.ActiveRecordAtt.Persister))
+					{
+						throw new ActiveRecordException(String.Format(
+							"The type assigned as a custom persister, does not implement IClassPersister " +
+							"- check type {0}", model.Type.FullName));
 					}
 				}
 

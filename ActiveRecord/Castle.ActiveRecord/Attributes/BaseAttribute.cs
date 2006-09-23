@@ -16,14 +16,6 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-	public enum CacheEnum
-	{
-		Undefined,
-		ReadOnly,
-		ReadWrite,
-		NonStrictReadWrite
-	}
-
 	/// <summary>
 	/// Implement common properties shared by some
 	/// attributes

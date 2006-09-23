@@ -72,7 +72,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNodes(model.Imports);
 			if (model.IsJoinedSubClass)
 			{
-				AppendF("<joined-subclass{0}{1}{2}{3}{4}{5}{6}>",
+				AppendF("<joined-subclass{0}{1}{2}{3}{4}{5}{6}{7}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        MakeAtt("table", model.ActiveRecordAtt.Table),
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
@@ -98,10 +98,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else if (model.IsDiscriminatorSubClass)
 			{
-				AppendF("<subclass{0}{1}{2}{3}{4}>",
+				AppendF("<subclass{0}{1}{2}{3}{4}{5}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
-				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        MakeAtt("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
+				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
 				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
 				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
@@ -134,16 +134,22 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				AppendF("<class{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
+				AppendF("<class{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        MakeAtt("table", model.ActiveRecordAtt.Table),
 				        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
+				        WriteIfFalse("mutable", model.ActiveRecordAtt.Mutable),
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
-				        WriteIfNonNull("where", model.ActiveRecordAtt.Where),
-				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
 				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
-				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
+				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert),
+				        WriteIfTrue("select-before-update", model.ActiveRecordAtt.SelectBeforeUpdate),
+				        ConditionalWrite("polymorphism", model.ActiveRecordAtt.Polymorphism.ToString().ToLower(), model.ActiveRecordAtt.Polymorphism != Polymorphism.Implicit),
+				        WriteIfNonNull("where", model.ActiveRecordAtt.Where),
+				        WriteIfNonNull("persister", MakeTypeName(model.ActiveRecordAtt.Persister)),
+				        ConditionalWrite("batch-size", model.ActiveRecordAtt.BatchSize.ToString(), model.ActiveRecordAtt.BatchSize > 1),
+				        ConditionalWrite("optimistic-lock", model.ActiveRecordAtt.Locking.ToString().ToLower(), model.ActiveRecordAtt.Locking != OptimisticLocking.Version),
+				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy));
 				Ident();
 				WriteCache(model.ActiveRecordAtt.Cache);
 				VisitNode(model.PrimaryKey);
@@ -912,6 +918,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 		#endregion
 
 		#region String builder helpers
+		
+		private String ConditionalWrite(string attName, string value, bool condition)
+		{
+			if (condition)
+			{
+				return MakeAtt(attName, value);
+			}
+			return String.Empty;
+		}
 
 		private String WriteIfNonNull(String attName, String value)
 		{
