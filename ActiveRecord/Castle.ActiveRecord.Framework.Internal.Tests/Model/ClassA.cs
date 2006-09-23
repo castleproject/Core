@@ -39,7 +39,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { name1 = value; }
 		}
 
-		[Property(UnsavedValue="hammett")]
+		[Property]
 		public string Name2
 		{
 			get { return name2; }

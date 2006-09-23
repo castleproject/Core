@@ -377,6 +377,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Enums.cs" />
     <Compile Include="Attributes\ImportAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateCreditCardAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateLengthAttribute.cs" />

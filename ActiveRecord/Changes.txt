@@ -1,6 +1,17 @@
 beta 4
 ======
 
+- Fixed AR-53
+  "Unique key on multiple columns"
+
+  Introduced UniqueKey on PropertyAttribute and FieldAttribute
+  
+- Introduced the following properties on PropertyAttribute and FieldAttribute:
+
+  - Index
+  - SqlType
+  - Check
+
 - Fixed AR-78 
   "Allow users to specify autoImport"
   

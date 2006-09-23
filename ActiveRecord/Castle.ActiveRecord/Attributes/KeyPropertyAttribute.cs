@@ -22,5 +22,12 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public class KeyPropertyAttribute : PropertyAttribute
 	{
+		private String unsavedValue;
+
+		public String UnsavedValue
+		{
+			get { return unsavedValue; }
+			set { unsavedValue = value; }
+		}
 	}
 }

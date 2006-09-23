@@ -50,13 +50,13 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class PrimaryKeyAttribute : WithAccessAttribute
 	{
-		private PrimaryKeyType _generator = PrimaryKeyType.Native;
-		private String _column;
-		private String _unsavedValue;
-		private String _sequenceName;
-		private String _type;
+		private PrimaryKeyType generator = PrimaryKeyType.Native;
+		private String column;
+		private String unsavedValue;
+		private String sequenceName;
+		private String type;
 		private String _params;
-		private int _length;
+		private int length;
 
 		public PrimaryKeyAttribute() : this(PrimaryKeyType.Native)
 		{
@@ -64,48 +64,48 @@ namespace Castle.ActiveRecord
 
 		public PrimaryKeyAttribute(PrimaryKeyType generator)
 		{
-			_generator = generator;
+			this.generator = generator;
 		}
 
 		public PrimaryKeyAttribute(PrimaryKeyType generator, String column) : this(generator)
 		{
-			_column = column;
+			this.column = column;
 		}
 
 		public PrimaryKeyType Generator
 		{
-			get { return _generator; }
-			set { _generator = value; }
+			get { return generator; }
+			set { generator = value; }
 		}
 
 		public String Column
 		{
-			get { return _column; }
-			set { _column = value; }
+			get { return column; }
+			set { column = value; }
 		}
 
 		public String UnsavedValue
 		{
-			get { return _unsavedValue; }
-			set { _unsavedValue = value; }
+			get { return unsavedValue; }
+			set { unsavedValue = value; }
 		}
 
 		public String SequenceName
 		{
-			get { return _sequenceName; }
-			set { _sequenceName = value; }
+			get { return sequenceName; }
+			set { sequenceName = value; }
 		}
 
 		public String ColumnType
 		{
-			get { return _type; }
-			set { _type = value; }
+			get { return type; }
+			set { type = value; }
 		}
 
 		public int Length
 		{
-			get { return _length; }
-			set { _length = value; }
+			get { return length; }
+			set { length = value; }
 		}
 
 		/// <summary>

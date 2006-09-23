@@ -46,7 +46,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"assigned\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" />\r\n" + 
+				"    <property name=\"Name1\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"Name1\"/>\r\n" + 
+				"    </property>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -76,48 +78,64 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" insert=\"false\" update=\"false\" />\r\n" + 
-				"    <property name=\"Name2\" access=\"property\" column=\"Name2\" type=\"String\" unsaved-value=\"hammett\" />\r\n" + 
-				"    <property name=\"Name3\" access=\"property\" column=\"Name3\" type=\"String\" not-null=\"true\" unique=\"true\" />\r\n" + 
-				"    <property name=\"Text\" access=\"property\" column=\"Text\" type=\"StringClob\" />\r\n" +
+				"    <property name=\"Name1\" access=\"property\" type=\"String\" insert=\"false\" update=\"false\">\r\n" + 
+				"      <column name=\"Name1\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Name2\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"Name2\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Name3\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"Name3\" not-null=\"true\" unique=\"true\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Text\" access=\"property\" type=\"StringClob\">\r\n" +
+				"      <column name=\"Text\"/>\r\n" + 
+				"    </property>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
 			Assert.AreEqual(expected, xml);
 		}
 
-        [Test]
-        public void SimpleCaseWithKeyPropertiesAndDynamicInsertUpdate()
-        {
-            ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
-            ActiveRecordModel model = builder.Create(typeof(ClassADynamicInsertUpdate));
-            Assert.IsNotNull(model);
+		[Test]
+		public void SimpleCaseWithKeyPropertiesAndDynamicInsertUpdate()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClassADynamicInsertUpdate));
+			Assert.IsNotNull(model);
 
-            SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
-            semanticVisitor.VisitNode(model);
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
 
-            XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
-            xmlVisitor.CreateXml(model);
-            
-            String xml = xmlVisitor.Xml;
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
 
-            String expected =
-                "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-                "<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
-                "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassADynamicInsertUpdate, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" dynamic-update=\"true\" dynamic-insert=\"true\" lazy=\"false\">\r\n" +
-                "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
-                "      <generator class=\"native\">\r\n" +
-                "      </generator>\r\n" +
-                "    </id>\r\n" +
-                "    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" insert=\"false\" update=\"false\" />\r\n" +
-                "    <property name=\"Name2\" access=\"property\" column=\"Name2\" type=\"String\" unsaved-value=\"hammett\" />\r\n" +
-                "    <property name=\"Name3\" access=\"property\" column=\"Name3\" type=\"String\" not-null=\"true\" unique=\"true\" />\r\n" +
-                "    <property name=\"Text\" access=\"property\" column=\"Text\" type=\"StringClob\" />\r\n" +
-                "  </class>\r\n" +
-                "</hibernate-mapping>\r\n";
+			String xml = xmlVisitor.Xml;
 
-            Assert.AreEqual(expected, xml);
-        }
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassADynamicInsertUpdate, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" dynamic-update=\"true\" dynamic-insert=\"true\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"Name1\" access=\"property\" type=\"String\" insert=\"false\" update=\"false\">\r\n" +
+				"      <column name=\"Name1\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Name2\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name2\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Name3\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name3\" not-null=\"true\" unique=\"true\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Text\" access=\"property\" type=\"StringClob\">\r\n" +
+				"      <column name=\"Text\"/>\r\n" + 
+				"    </property>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
 
 		[Test]
 		public void SimpleCaseWithKeyPropertiesAndCustomPersister()
@@ -131,7 +149,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
 			xmlVisitor.CreateXml(model);
-            
+
 			String xml = xmlVisitor.Xml;
 
 			String expected =
@@ -142,10 +160,18 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" insert=\"false\" update=\"false\" />\r\n" +
-				"    <property name=\"Name2\" access=\"property\" column=\"Name2\" type=\"String\" unsaved-value=\"hammett\" />\r\n" +
-				"    <property name=\"Name3\" access=\"property\" column=\"Name3\" type=\"String\" not-null=\"true\" unique=\"true\" />\r\n" +
-				"    <property name=\"Text\" access=\"property\" column=\"Text\" type=\"StringClob\" />\r\n" +
+				"    <property name=\"Name1\" access=\"property\" type=\"String\" insert=\"false\" update=\"false\">\r\n" +
+				"      <column name=\"Name1\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Name2\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name2\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Name3\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name3\" not-null=\"true\" unique=\"true\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Text\" access=\"property\" type=\"StringClob\">\r\n" +
+				"      <column name=\"Text\"/>\r\n" + 
+				"    </property>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -164,7 +190,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
 			xmlVisitor.CreateXml(model);
-            
+
 			String xml = xmlVisitor.Xml;
 
 			String expected =
@@ -175,7 +201,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\" insert=\"false\" update=\"false\" />\r\n" +
+				"    <property name=\"Name1\" access=\"property\" type=\"String\" insert=\"false\" update=\"false\">\r\n" +
+				"      <column name=\"Name1\"/>\r\n" + 
+				"    </property>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -206,48 +234,46 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
 				"    <any name=\"PaymentMethod\" access=\"property\" id-type=\"Int64\" meta-type=\"System.String\" cascade=\"save-update\">\r\n"+
-				// "      <meta-value value=\"CREDIT_CARD\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CreditCard, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
 				"      <meta-value value=\"BANK_ACCOUNT\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BankAccount, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
 				"      <column name=\"BILLING_DETAILS_TYPE\" />\r\n"+
 				"      <column name=\"BILLING_DETAILS_ID\" />\r\n"+
-                "    </any>\r\n"+
+				"    </any>\r\n"+
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
 			Assert.AreEqual(expected, xml);
 		}
 
-        [Test]
-        public void LazyForClass()
-        {
-            ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
-            builder.Create(typeof (ClassWithAnyAttribute));
-            ActiveRecordModel model = builder.Create(typeof(LazyClass));
-            Assert.IsNotNull(model);
+		[Test]
+		public void LazyForClass()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			builder.Create(typeof(ClassWithAnyAttribute));
+			ActiveRecordModel model = builder.Create(typeof(LazyClass));
+			Assert.IsNotNull(model);
 
-            SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
-            semanticVisitor.VisitNode(model);
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
 
-            XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
-            xmlVisitor.CreateXml(model);
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
 
-            String xml = xmlVisitor.Xml;
+			String xml = xmlVisitor.Xml;
 
-            String expected =
-                    "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-                    "<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
-                    "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.LazyClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"LazyClass\" lazy=\"true\">\r\n" +
-                    "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
-                    "      <generator class=\"native\">\r\n" +
-                    "      </generator>\r\n" +
-                    "    </id>\r\n" +
-                    "    <many-to-one name=\"Clazz\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithAnyAttribute, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"Clazz\" />\r\n" +
-                    "  </class>\r\n" +
-                    "</hibernate-mapping>\r\n";
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.LazyClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"LazyClass\" lazy=\"true\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <many-to-one name=\"Clazz\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithAnyAttribute, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"Clazz\" />\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
 
-            Assert.AreEqual(expected, xml); 
-        }
-    
+			Assert.AreEqual(expected, xml);
+		}
 
 		[Test]
 		public void HasManyToAnyAttribute()
@@ -307,39 +333,43 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"name1\" access=\"field\" column=\"MyCustomName\" type=\"String\" />\r\n" + 
-				"    <property name=\"Value\" access=\"CustomAccess\" column=\"Value\" type=\"Int32\" />\r\n"+
+				"    <property name=\"name1\" access=\"field\" type=\"String\">\r\n" + 
+				"      <column name=\"MyCustomName\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"Value\" access=\"CustomAccess\" type=\"Int32\">\r\n"+
+				"      <column name=\"Value\"/>\r\n" + 
+				"    </property>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
 			Assert.AreEqual(expected, xml);
 		}
 
-        [Test]
-        public void SimpleClassWithElementList()
-        {
-            ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
-            ActiveRecordModel model = builder.Create(typeof(ClassWithElementList));
-            Assert.IsNotNull(model);
+		[Test]
+		public void SimpleClassWithElementList()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClassWithElementList));
+			Assert.IsNotNull(model);
 
-            String xml = Process(builder, model);
-            String expected =
-                "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-                "<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
-                "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithElementList, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithElementList\" lazy=\"false\">\r\n" +
-                "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
-                "      <generator class=\"native\">\r\n" +
-                "      </generator>\r\n" +
-                "    </id>\r\n" +
-                "    <bag name=\"Elements\" access=\"property\" table=\"Elements\" lazy=\"false\">\r\n" +
-                "      <key column=\"ClassId\" />\r\n" +
-                "      <element  column=\"Name\"  type=\"System.String, mscorlib\"/>\r\n" +
-                "    </bag>\r\n" +
-                "  </class>\r\n" +
-                "</hibernate-mapping>\r\n";
-            
-            Assert.AreEqual(expected, xml);
-        }
+			String xml = Process(builder, model);
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithElementList, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithElementList\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <bag name=\"Elements\" access=\"property\" table=\"Elements\" lazy=\"false\">\r\n" +
+				"      <key column=\"ClassId\" />\r\n" +
+				"      <element  column=\"Name\"  type=\"System.String, mscorlib\"/>\r\n" +
+				"    </bag>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
 
 		[Test]
 		public void DiscriminatorUse()
@@ -360,9 +390,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <discriminator column=\"type\" type=\"String\" />\r\n" + 
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" + 
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"Name\"/>\r\n" + 
+				"    </property>\r\n" +
 				"    <subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassDiscriminatorA, Castle.ActiveRecord.Framework.Internal.Tests\" discriminator-value=\"A\" lazy=\"false\">\r\n" + 
-				"      <property name=\"Age\" access=\"property\" column=\"Age\" type=\"Int32\" />\r\n" + 
+				"      <property name=\"Age\" access=\"property\" type=\"Int32\">\r\n" + 
+				"        <column name=\"Age\"/>\r\n" + 
+				"      </property>\r\n" +
 				"    </subclass>\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
@@ -390,10 +424,14 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\"/>\r\n" +
+				"    </property>\r\n" +
 				"    <joined-subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.GenClassJoinedSubClassA, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctablea\" lazy=\"false\">\r\n" +
 				"      <key column=\"AId\" />\r\n" +
-				"      <property name=\"Age\" access=\"property\" column=\"Age\" type=\"Int32\" />\r\n" +
+				"      <property name=\"Age\" access=\"property\" type=\"Int32\">\r\n" +
+				"        <column name=\"Age\"/>\r\n" + 
+				"      </property>\r\n" +
 				"    </joined-subclass>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
@@ -419,17 +457,20 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\"/>\r\n" +
+				"    </property>\r\n" +
 				"    <joined-subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.SubClassJoinedClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctablea\" lazy=\"false\">\r\n" +
 				"      <key column=\"AId\" />\r\n" +
-				"      <property name=\"Age\" access=\"property\" column=\"Age\" type=\"Int32\" />\r\n" +
+				"      <property name=\"Age\" access=\"property\" type=\"Int32\">\r\n" +
+				"        <column name=\"Age\"/>\r\n" + 
+				"      </property>\r\n" +
 				"    </joined-subclass>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
 			Assert.AreEqual(expected, xml);
 		}
-
 
 		[Test]
 		public void JoinedSubClassUseWithGenericTypeAndGenericAbstractBase()
@@ -449,10 +490,14 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\"/>\r\n" +
+				"    </property>\r\n" +
 				"    <joined-subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.GenSubClassJoinedClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctablea\" lazy=\"false\">\r\n" +
 				"      <key column=\"AId\" />\r\n" +
-				"      <property name=\"Age\" access=\"property\" column=\"Age\" type=\"Int32\" />\r\n" +
+				"      <property name=\"Age\" access=\"property\" type=\"Int32\">\r\n" +
+				"        <column name=\"Age\"/>\r\n" + 
+				"      </property>\r\n" +
 				"    </joined-subclass>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
@@ -480,10 +525,14 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\"/>\r\n" + 
+				"    </property>\r\n" +
 				"    <joined-subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassJoinedSubClassA, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctablea\" lazy=\"false\">\r\n" +
 				"      <key column=\"AId\" />\r\n" +
-				"      <property name=\"Age\" access=\"property\" column=\"Age\" type=\"Int32\" />\r\n" +
+				"      <property name=\"Age\" access=\"property\" type=\"Int32\">\r\n" +
+				"        <column name=\"Age\"/>\r\n" + 
+				"      </property>\r\n" +
 				"    </joined-subclass>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
@@ -509,7 +558,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <version name=\"Ver\" access=\"property\" column=\"Ver\" type=\"String\" />\r\n" + 
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" + 
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"Name\"/>\r\n" + 
+				"    </property>\r\n" +
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
 
@@ -534,7 +585,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <timestamp name=\"Ts\" access=\"property\" column=\"Ts\" />\r\n" + 
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" + 
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"Name\"/>\r\n" + 
+				"    </property>\r\n" +
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
 
@@ -657,7 +710,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\"/>\r\n" + 
+				"    </property>\r\n" +
 				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Category, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" />\r\n" +
 				"    <bag name=\"SubCategories\" access=\"property\" table=\"Category\" lazy=\"false\">\r\n" +
 				"      <key column=\"parent_id\" />\r\n" +
@@ -711,8 +766,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" + 
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
-				"    <property name=\"FirstName\" access=\"property\" column=\"FirstName\" type=\"String\" />\r\n" + 
-				"    <property name=\"LastName\" access=\"property\" column=\"LastName\" type=\"String\" />\r\n" + 
+				"    <property name=\"FirstName\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"FirstName\"/>\r\n" + 
+				"    </property>\r\n" +
+				"    <property name=\"LastName\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"LastName\"/>\r\n" + 
+				"    </property>\r\n" +
 				"    <one-to-one name=\"Award\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Award, Castle.ActiveRecord.Framework.Internal.Tests\" fetch=\"join\" />\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
@@ -730,7 +789,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"        <param name=\"property\">Employee</param>\r\n" + 
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
-				"    <property name=\"Description\" access=\"property\" column=\"Description\" type=\"String\" />\r\n" + 
+				"    <property name=\"Description\" access=\"property\" type=\"String\">\r\n" + 
+				"      <column name=\"Description\"/>\r\n" + 
+				"    </property>\r\n" +
 				"    <one-to-one name=\"Employee\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Employee, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
@@ -756,7 +817,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\" />\r\n" +
+				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
+				"      <column name=\"Name\"/>\r\n" + 
+				"    </property>\r\n" +
 				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CacheClass, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\" />\r\n" +
 				"    <bag name=\"SubClasses\" access=\"property\" table=\"CacheClass\" lazy=\"false\">\r\n" +
 				"      <jcs-cache usage=\"read-write\" />\r\n" +
@@ -787,9 +850,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
                 "      <generator class=\"native\">\r\n" +
                 "      </generator>\r\n" +
                 "    </id>\r\n" +
-                "    <property name=\"NoColumnType\" access=\"property\" column=\"NoColumnType\" />\r\n" +
-                "    <property name=\"WithColumnType\" access=\"property\" column=\"WithColumnType\" type=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.GenericEnumStringType`1[[Castle.ActiveRecord.Framework.Internal.Tests.Model.EnumVal, Castle.ActiveRecord.Framework.Internal.Tests]], Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
-                "  </class>\r\n" +
+                "    <property name=\"NoColumnType\" access=\"property\">\r\n" +
+				"      <column name=\"NoColumnType\"/>\r\n" +
+				"    </property>\r\n" +
+				"    <property name=\"WithColumnType\" access=\"property\" type=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.GenericEnumStringType`1[[Castle.ActiveRecord.Framework.Internal.Tests.Model.EnumVal, Castle.ActiveRecord.Framework.Internal.Tests]], Castle.ActiveRecord.Framework.Internal.Tests\">\r\n" +
+				"      <column name=\"WithColumnType\"/>\r\n" +
+				"    </property>\r\n" +
+				"  </class>\r\n" +
                 "</hibernate-mapping>\r\n";
 
             Assert.AreEqual(expected, xml);

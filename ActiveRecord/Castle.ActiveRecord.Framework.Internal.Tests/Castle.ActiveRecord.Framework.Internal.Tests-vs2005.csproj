@@ -135,6 +135,7 @@
     <Compile Include="ImportTestCase.cs" />
     <Compile Include="Model\BadCompositeKey.cs" />
     <Compile Include="Model\BaseJoinedClass.cs" />
+    <Compile Include="Model\CacheClass.cs" />
     <Compile Include="Model\ClassKeyAssigned.cs" />
     <Compile Include="Model\ClassWithBadCompositeKey.cs" />
     <Compile Include="Model\ClassWithBadMapping.cs" />
@@ -155,11 +156,13 @@
     </Compile>
     <Compile Include="Model\ClassWithAnyAttribute.cs" />
     <Compile Include="Model\ClassWithCompositeKey.cs" />
+    <Compile Include="Model\ClassWithCustomPersister.cs" />
     <Compile Include="Model\ClassWithElementList.cs" />
     <Compile Include="Model\ClassWithMappedField.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\ClassWithoutPrimaryKey.cs" />
+    <Compile Include="Model\ClassWithSomeCustomOptions.cs" />
     <Compile Include="Model\Company.cs">
       <SubType>Code</SubType>
     </Compile>

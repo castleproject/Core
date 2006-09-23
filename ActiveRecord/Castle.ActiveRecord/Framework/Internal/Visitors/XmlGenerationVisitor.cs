@@ -316,18 +316,22 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitProperty(PropertyModel model)
 		{
-			AppendF("<property{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
-			        MakeAtt("name", model.Property.Name),
-			        MakeAtt("access", model.PropertyAtt.AccessString),
-			        MakeAtt("column", model.PropertyAtt.Column),
-			        MakeTypeAtt(model.Property.PropertyType, model.PropertyAtt.ColumnType),
-			        WriteIfNotZero("length", model.PropertyAtt.Length),
-			        WriteIfNonNull("unsaved-value", model.PropertyAtt.UnsavedValue),
-			        WriteIfTrue("not-null", model.PropertyAtt.NotNull),
-			        WriteIfTrue("unique", model.PropertyAtt.Unique),
-			        WriteIfFalse("insert", model.PropertyAtt.Insert),
-			        WriteIfFalse("update", model.PropertyAtt.Update),
-			        WriteIfNonNull("formula", model.PropertyAtt.Formula));
+			PropertyAttribute att = model.PropertyAtt;
+			
+			WriteProperty(model.Property.Name, model.Property.PropertyType, att.AccessString,
+				att.ColumnType, att.Insert, 
+				att.Update, att.Formula, att.Column, 
+				att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);
+		}
+		
+		public override void VisitField(FieldModel model)
+		{
+			FieldAttribute att = model.FieldAtt;
+			
+			WriteProperty(model.Field.Name, model.Field.FieldType, att.AccessString,
+				att.ColumnType, att.Insert, 
+				att.Update, att.Formula, att.Column, 
+				att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);
 		}
 
 		public override void VisitAny(AnyModel model)
@@ -386,22 +390,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 					MakeAtt("name", att.IdColumn));
 			Dedent();
 			AppendF("</many-to-any>");
-		}
-
-		public override void VisitField(FieldModel model)
-		{
-			AppendF("<property{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
-			        MakeAtt("name", model.Field.Name),
-			        MakeAtt("access", model.FieldAtt.AccessString),
-			        MakeAtt("column", model.FieldAtt.Column),
-			        MakeTypeAtt(model.Field.FieldType, model.FieldAtt.ColumnType),
-			        WriteIfNotZero("length", model.FieldAtt.Length),
-			        WriteIfNonNull("unsaved-value", model.FieldAtt.UnsavedValue),
-			        WriteIfTrue("not-null", model.FieldAtt.NotNull),
-			        WriteIfTrue("unique", model.FieldAtt.Unique),
-			        WriteIfFalse("insert", model.FieldAtt.Insert),
-			        WriteIfFalse("update", model.FieldAtt.Update),
-			        WriteIfNonNull("formula", model.FieldAtt.Formula));
 		}
 
 		public override void VisitVersion(VersionModel model)
@@ -896,6 +884,32 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("column", model.ActiveRecordAtt.DiscriminatorColumn),
 				        WriteIfNonNull("type", model.ActiveRecordAtt.DiscriminatorType));
 			}
+		}
+		
+		private void WriteProperty(String name, Type propType, String accessString, String columnType, 
+		                           bool insert, bool update, String formula, 
+		                           String column, int length, bool notNull, bool unique, 
+		                           String uniqueKey, String sqlType, String index, String check)
+		{
+			AppendF("<property{0}{1}{2}{3}{4}{5}>",
+			        MakeAtt("name", name),
+			        MakeAtt("access", accessString),
+			        MakeTypeAtt(propType, columnType),
+			        WriteIfFalse("insert", insert),
+			        WriteIfFalse("update", update),
+			        WriteIfNonNull("formula", formula));
+			Ident();
+			AppendF("<column{0}{1}{2}{3}{4}{5}{6}{7}/>",
+			        MakeAtt("name", column),
+			        WriteIfNotZero("length", length),
+			        WriteIfTrue("not-null", notNull),
+			        WriteIfTrue("unique", unique),
+			        WriteIfNonNull("unique-key", uniqueKey),
+			        WriteIfNonNull("sql-type", sqlType),
+			        WriteIfNonNull("index", index),
+			        WriteIfNonNull("check", check));
+			Dedent();
+			Append("</property>");
 		}
 
 		#region Xml generations members
