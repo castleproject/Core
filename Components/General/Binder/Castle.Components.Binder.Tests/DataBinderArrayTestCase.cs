@@ -165,7 +165,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual("Mary", sc[1].Name);
 		}
 
-		[Test, Ignore] // Expected Exception
+		[Test, Ignore("Behavior changed")] // Expected Exception
 		public void InvalidData()
 		{
 			string data = @" 
