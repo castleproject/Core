@@ -48,6 +48,7 @@ namespace Castle.ActiveRecord
 		private bool dynamicInsert;
 		private bool selectBeforeUpdate;
 		private bool mutable = true;
+		private bool useAutoImport = true;
 		private int batchSize = 1;
 		private Polymorphism polymorphism = Polymorphism.Implicit;
 		private OptimisticLocking locking = OptimisticLocking.Version;
@@ -233,12 +234,27 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// From NHibernate documentation:
 		/// Determines the optimistic locking strategy.
 		/// </summary>
 		public OptimisticLocking Locking
 		{
 			get { return locking; }
 			set { locking = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// The auto-import attribute lets us use 
+		/// unqualified class names in the query language, 
+		/// by default. The assembly  and namespace attributes 
+		/// specify the assembly where persistent classes 
+		/// are located and the namespace they are declared in.
+		/// </summary>
+		public bool UseAutoImport
+		{
+			get { return useAutoImport; }
+			set { useAutoImport = value; }
 		}
 	}
 }

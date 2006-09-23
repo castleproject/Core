@@ -228,6 +228,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return validators; }
 		}
 
+		public bool UseAutoImport
+		{
+			get 
+			{ 
+				if (arAtt != null)
+				{
+					return arAtt.UseAutoImport;
+				}
+				
+				return true;
+			}
+		}
+
 		/// <summary>
 		/// Internally used
 		/// </summary>

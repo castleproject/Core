@@ -1,6 +1,11 @@
 beta 4
 ======
 
+- Fixed AR-78 
+  "Allow users to specify autoImport"
+  
+  Use the property UseAutoImport on ActiveRecordAttribute to control auto-import
+
 - Resynched ActiveRecordAttribute with NHibernate <class> mapping. Added:
 
   - SelectBeforeUpdate

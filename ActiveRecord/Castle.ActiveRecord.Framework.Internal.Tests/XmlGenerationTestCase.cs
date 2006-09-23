@@ -40,7 +40,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassKeyAssigned, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassKeyAssigned\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"assigned\">\r\n" +
@@ -70,7 +70,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -103,7 +103,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
             String expected =
                 "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-                "<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+                "<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
                 "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassADynamicInsertUpdate, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" dynamic-update=\"true\" dynamic-insert=\"true\" lazy=\"false\">\r\n" +
                 "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
                 "      <generator class=\"native\">\r\n" +
@@ -136,7 +136,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithCustomPersister, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" persister=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CustomPersister, Castle.ActiveRecord.Framework.Internal.Tests\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -169,7 +169,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithSomeCustomOptions, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassA\" select-before-update=\"true\" polymorphism=\"explicit\" batch-size=\"10\" optimistic-lock=\"dirty\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -199,7 +199,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithAnyAttribute, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithAnyAttribute\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"nosetter.camelcase-underscore\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -235,7 +235,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
             String expected =
                     "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-                    "<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+                    "<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
                     "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.LazyClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"LazyClass\" lazy=\"true\">\r\n" +
                     "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
                     "      <generator class=\"native\">\r\n" +
@@ -265,7 +265,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			String xml = xmlVisitor.Xml;
 			String expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClasssWithHasManyToAny, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClasssWithHasManyToAny\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"nosetter.camelcase-underscore\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -301,7 +301,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithMappedField, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithMappedField\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"nosetter.camelcase-underscore\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -325,7 +325,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
             String xml = Process(builder, model);
             String expected =
                 "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-                "<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+                "<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
                 "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithElementList, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithElementList\" lazy=\"false\">\r\n" +
                 "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
                 "      <generator class=\"native\">\r\n" +
@@ -353,7 +353,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassDiscriminatorParent, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctable\" discriminator-value=\"parent\" lazy=\"false\">\r\n" + 
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"native\">\r\n" + 
@@ -384,7 +384,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.GenClassJoinedSubClassParent, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctable\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -413,7 +413,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BaseJoinedClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctable\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -443,7 +443,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.GenBaseJoinedClass`1[[Castle.ActiveRecord.Framework.Internal.Tests.Model.GenSubClassJoinedClass, Castle.ActiveRecord.Framework.Internal.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctable\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -474,7 +474,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassJoinedSubClassParent, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctable\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -502,7 +502,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.VersionedClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"VersionedClass\" lazy=\"false\">\r\n" + 
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"native\">\r\n" + 
@@ -527,7 +527,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.TimestampedClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"TimestampedClass\" lazy=\"false\">\r\n" + 
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"native\">\r\n" + 
@@ -552,7 +552,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.SequenceParamClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"SequenceParamClass\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"sequence\">\r\n" +
@@ -576,7 +576,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BelongsToClassA, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"BelongsToClassA\" lazy=\"false\">\r\n" + 
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"native\">\r\n" + 
@@ -600,7 +600,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BelongsToClassA2, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"BelongsToClassA2\" lazy=\"false\">\r\n" + 
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"native\">\r\n" + 
@@ -624,7 +624,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.HasManyClassA, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"HasManyClassA\" lazy=\"false\">\r\n" + 
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"native\">\r\n" + 
@@ -651,7 +651,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			String expected = 
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Category, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"Category\" lazy=\"false\">\r\n" +
 				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 				"      <generator class=\"native\">\r\n" +
@@ -680,7 +680,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			string expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithCompositeKey, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithCompositeKey\" lazy=\"false\">\r\n" +
 				"    <composite-id name=\"Key\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CompositeKeyForClassWithCompositeKey, Castle.ActiveRecord.Framework.Internal.Tests\" unsaved-value=\"none\" access=\"property\">\r\n" +
 				"      <key-property name=\"KeyA\" access=\"property\" column=\"KeyA\" type=\"String\" />\r\n" +
@@ -705,7 +705,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			string expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Employee, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"Employee\" lazy=\"false\">\r\n" + 
 				"    <id name=\"ID\" access=\"property\" column=\"EmployeeID\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"native\">\r\n" + 
@@ -723,7 +723,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			expected =
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" + 
-				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" + 
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Award, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"Award\" lazy=\"false\">\r\n" + 
 				"    <id name=\"ID\" access=\"property\" column=\"EmployeeID\" type=\"Int32\" unsaved-value=\"0\">\r\n" + 
 				"      <generator class=\"foreign\">\r\n" + 
@@ -750,7 +750,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 	        
             string expected =
                 "<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-                "<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+                "<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
                 "  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.EnumTestClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"EnumTestClass\" lazy=\"false\">\r\n" +
                 "    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
                 "      <generator class=\"native\">\r\n" +
