@@ -188,5 +188,17 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual("hammett@apache.org", ((LeafNode)entries[1]).Value);
 			Assert.AreEqual("hammett@uol.com.br", ((LeafNode)entries[2]).Value);
 		}
+
+		[Test, ExpectedException(typeof(BindingException), "Attempt to create or obtain a composite node named Process, but a node with the same exists with the type Leaf")]
+		public void RepeatedNamesForNodes()
+		{
+			NameValueCollection nameValueColl = new NameValueCollection();
+			
+			nameValueColl.Add("profile.Process", "test");
+			nameValueColl.Add("profile.Process.Id", "1");
+
+			TreeBuilder builder = new TreeBuilder();
+			CompositeNode root = builder.BuildSourceNode(nameValueColl);
+		}
 	}
 }
