@@ -73,7 +73,7 @@ namespace Castle.Components.Binder
 		{
 			int index = name.IndexOf(".");
 			
-			if (index != -1)
+			if (!name2Node.Contains(name) && index != -1)
 			{
 				string firstNodeName = name.Substring(0, index);
 				string remainingName = name.Substring(index + 1);

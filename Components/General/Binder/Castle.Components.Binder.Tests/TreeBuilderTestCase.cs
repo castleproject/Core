@@ -51,7 +51,36 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(NodeType.Leaf, entry.NodeType);
 			Assert.AreEqual(new String[] { "27", "28" }, entry.Value);
 		}
-		
+
+		[Test]
+		public void EntriesStartingWithDotShouldBeConsideredSimple()
+		{
+			NameValueCollection nameValueColl = new NameValueCollection();
+			
+			nameValueColl.Add(".name", "hammett");
+			nameValueColl.Add(".age", "27");
+			
+			TreeBuilder builder = new TreeBuilder();
+			CompositeNode root = builder.BuildSourceNode(nameValueColl);
+			
+			Assert.IsNotNull(root);
+			Assert.AreEqual(2, root.ChildrenCount);
+			
+			LeafNode entry = (LeafNode) root.GetChildNode(".name");
+			Assert.IsNotNull(entry);
+			Assert.IsFalse(entry.IsArray);
+			Assert.AreEqual(".name", entry.Name);
+			Assert.AreEqual(NodeType.Leaf, entry.NodeType);
+			Assert.AreEqual("hammett", entry.Value);
+			
+			entry = (LeafNode) root.GetChildNode(".age");
+			Assert.IsNotNull(entry);
+			Assert.IsFalse(entry.IsArray);
+			Assert.AreEqual(".age", entry.Name);
+			Assert.AreEqual(NodeType.Leaf, entry.NodeType);
+			Assert.AreEqual("27", entry.Value);
+		}
+
 		[Test]
 		public void CompositeEntries()
 		{

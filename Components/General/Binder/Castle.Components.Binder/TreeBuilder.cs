@@ -78,8 +78,8 @@ namespace Castle.Components.Binder
 			}
 			if (name[0] == '.' || name[0] == '[' || name[0] == ']')
 			{
-				// Something went wrong
-				throw new BindingException("Invalid key: " + name);
+				AddLeafNode(node, type, name, value);
+				return;
 			}
 			
 			int dotIndex = name.IndexOf('.');
