@@ -69,9 +69,9 @@ namespace Castle.MonoRail.Framework.Internal
 			
 			for(int i=0; i < names.Length; i++)
 			{
-				String name = names[i];
+				String name = names[i].ToLower();
 
-				if (_namespace != null && name.StartsWith(_namespace))
+				if (_namespace != null && name.StartsWith(_namespace.ToLower()))
 				{
 					if (name[toStripLength] == '.')
 					{
@@ -83,7 +83,7 @@ namespace Castle.MonoRail.Framework.Internal
 					}
 				}
 
-				if (name.StartsWith(dirName))
+				if (name.StartsWith(dirName.ToLower()))
 				{
 					views.Add(name);
 				}
@@ -103,9 +103,9 @@ namespace Castle.MonoRail.Framework.Internal
 	
 			for(int i=0; i < names.Length; i++)
 			{
-				String name = names[i];
+				String name = names[i].ToLower();
 
-				if (_namespace != null && name.StartsWith(_namespace))
+				if (_namespace != null && name.StartsWith(_namespace.ToLower()))
 				{
 					if (name[toStripLength] == '.')
 					{

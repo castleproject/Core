@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied midas's patch fixing MR-113
+  "change collected view name in assembly to lower"
+
 - Applied Don Morrison's patch fixing MR-150
   "Patch to fix problem with ARDataBinder and ARFetcher when dealing with joined subclasses."
 
