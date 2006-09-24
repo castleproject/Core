@@ -54,6 +54,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return name2GenericType[genericArgumentName];
 		}
 
+		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
+		{
+			List<Type> types = new List<Type>();
+
+			foreach(Type genType in genericMethod.GetGenericArguments())
+			{
+				types.Add(name2GenericType[genType.Name]);
+			}
+
+			return types.ToArray();
+		}
+
 		public void CreateDefaultConstructor()
 		{
 			constructors.Add(new ConstructorEmitter(this));
@@ -137,6 +149,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void DefineCustomAttribute(Attribute attribute)
 		{
 			typebuilder.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
+		}
+
+		public void DefineCustomAttributeFor(FieldReference field, Attribute attribute)
+		{
+			field.Reference.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
 		}
 		
 		public ConstructorCollection Constructors

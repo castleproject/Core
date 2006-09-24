@@ -12,24 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Interceptors
+namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	public class ResultModifierInterceptor : StandardInterceptor
+	using System;
+	using System.Reflection.Emit;
+
+	/// <summary>
+	/// Summary description for NewArrayExpression.
+	/// </summary>
+	[CLSCompliant(false)]
+	public class NewArrayExpression : Expression
 	{
-		protected override void PostProceed(IInvocation invocation)
+		private int size;
+		private Type arrayType;
+
+		public NewArrayExpression(int size, Type arrayType)
 		{
-			object returnValue = invocation.ReturnValue;
-			
-			if (returnValue != null && returnValue.GetType() == typeof(int))
-			{
-				int value = (int)returnValue;
-				
-				invocation.ReturnValue = --value;
-			}
-			if (returnValue != null && returnValue.GetType() == typeof(bool))
-			{
-				invocation.ReturnValue = true;
-			}
+			this.size = size;
+			this.arrayType = arrayType;
+		}
+
+		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		{
+			gen.Emit(OpCodes.Ldc_I4, size);
+			gen.Emit(OpCodes.Newarr, arrayType);
 		}
 	}
 }

@@ -34,16 +34,20 @@ namespace Castle.DynamicProxy
 
 		public virtual Type CreateClassProxy(Type theClass, ProxyGenerationOptions options)
 		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope);
+			AssertValidType(theClass);
 
-			return generator.GenerateCode(theClass, null, options);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
+
+			return generator.GenerateCode(null, options);
 		}
 
 		public Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(scope);
+			AssertValidType(theClass);
 
-			return generator.GenerateCode(theClass, interfaces, options);
+			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
+
+			return generator.GenerateCode(interfaces, options);
 		}
 
 //		public Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options)
@@ -57,5 +61,13 @@ namespace Castle.DynamicProxy
 //
 //			return generator.GenerateCode(options);
 //		}
+
+		private static void AssertValidType(Type theClass)
+		{
+			if (!theClass.IsPublic)
+			{
+				throw new GeneratorException("Class is not public, so a proxy cannot be generated. Type: " + theClass.FullName);
+			}
+		}
 	}
 }

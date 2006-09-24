@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Test.Classes
+namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for ServiceClass.
-	/// </summary>
 	public class ServiceClass
 	{
 		public virtual int Sum(int b1, int b2)
@@ -67,6 +64,15 @@ namespace Castle.DynamicProxy.Test.Classes
 		}
 
 		public virtual bool Valid
+		{
+			get { return false; }
+		}
+		
+		public void NonVirtualMethod()
+		{
+		}
+
+		public bool NonVirtualProp
 		{
 			get { return false; }
 		}

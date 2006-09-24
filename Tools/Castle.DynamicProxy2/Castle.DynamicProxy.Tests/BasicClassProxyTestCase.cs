@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Test
+namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using Castle.DynamicProxy.Test.Classes;
-	using Castle.DynamicProxy.Test.Interceptors;
+
+	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Interceptors;
 	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BasicClassProxyTestCase
+	public class BasicClassProxyTestCase : BasePEVerifyTestCase
 	{
 		private ProxyGenerator generator;
 
@@ -50,13 +52,56 @@ namespace Castle.DynamicProxy.Test
 			
 			// The rest aren't changed
 			Assert.AreEqual(45, instance.Sum((byte)20, (byte)25)); // byte
-			Assert.AreEqual(45, instance.Sum((long)20, (long)25)); // long
+			Assert.AreEqual(45, instance.Sum(20L, 25L)); // long
 			Assert.AreEqual(45, instance.Sum((short)20, (short)25)); // short
-			Assert.AreEqual(45, instance.Sum((float)20, (float)25)); // float
-			Assert.AreEqual(45, instance.Sum((double)20, (double)25)); // double
+			Assert.AreEqual(45, instance.Sum(20f, 25f)); // float
+			Assert.AreEqual(45, instance.Sum(20.0, 25.0)); // double
 			Assert.AreEqual(45, instance.Sum((ushort)20, (ushort)25)); // ushort
 			Assert.AreEqual(45, instance.Sum((uint)20, (uint)25)); // uint
 			Assert.AreEqual(45, instance.Sum((ulong)20, (ulong)25)); // ulong
+		}
+
+		[Test, ExpectedException(typeof(GeneratorException), "Class is not public, so a proxy " + 
+			"cannot be generated. Type: Castle.DynamicProxy.Tests.Classes.NonPublicClass")]
+		public void ProxyForNonPublicClass()
+		{
+			object proxy = generator.CreateClassProxy(
+				typeof(NonPublicClass), new StandardInterceptor());
+		}
+		
+		[Test]
+		public void ProxyForClassWithIndexer()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+
+			object proxy = generator.CreateClassProxy(typeof(ClassWithIndexer), logger);
+			
+			Assert.IsNotNull(proxy);
+			Assert.IsInstanceOfType(typeof(ClassWithIndexer), proxy);
+
+			ClassWithIndexer type = (ClassWithIndexer) proxy;
+
+			type["name"] = 10;
+			Assert.AreEqual(10, type["name"]);
+
+			Assert.AreEqual("set_Item get_Item ", logger.LogContents);
+		}
+
+		[Test]
+		public void ClassWithDifferentAccessLevelOnProperties()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+
+			object proxy = generator.CreateClassProxy(typeof(DiffAccessLevelOnProperties), logger);
+
+			Assert.IsNotNull(proxy);
+			Assert.IsInstanceOfType(typeof(DiffAccessLevelOnProperties), proxy);
+
+			DiffAccessLevelOnProperties type = (DiffAccessLevelOnProperties) proxy;
+			
+			type.SetProperties();
+
+			Assert.AreEqual("10 11 12 13 name", type.ToString());
 		}
 
 		[Test]

@@ -15,7 +15,11 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class ProxyGenerationOptions
 	{
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
@@ -23,11 +27,16 @@ namespace Castle.DynamicProxy
 		private IProxyGenerationHook hook;
 		private IInterceptorSelector selector;
 		private bool useSelector;
+		private ArrayList mixins;
 
-		public ProxyGenerationOptions()
+		public ProxyGenerationOptions(IProxyGenerationHook hook)
 		{
-			hook = new AllMethodsHook();
+			this.hook = hook;
 			useSelector = false;
+		}
+
+		public ProxyGenerationOptions() : this(new AllMethodsHook())
+		{
 		}
 
 		public IProxyGenerationHook Hook
@@ -46,6 +55,33 @@ namespace Castle.DynamicProxy
 		{
 			get { return useSelector; }
 			set { useSelector = value; }
+		}
+
+		public void AddMixinInstance(object instance)
+		{
+			if (instance == null)
+			{
+				throw new ArgumentNullException("instance");
+			}
+
+			if (mixins == null)
+			{
+				mixins = new ArrayList();
+			}
+			
+			mixins.Add(instance);
+		}
+
+		public object[] MixinsAsArray()
+		{
+			if (mixins == null) return new object[0];
+			
+			return mixins.ToArray();
+		}
+
+		public bool HasMixins
+		{
+			get { return mixins == null ? false : mixins.Count != 0; }
 		}
 	}
 }

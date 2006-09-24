@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Test
+namespace Castle.DynamicProxy.Tests
 {
-	using Castle.DynamicProxy.Test.Classes;
-	using Castle.DynamicProxy.Test.Interceptors;
+	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Interceptors;
 	
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class AccessLevelTestCase
+	public class AccessLevelTestCase : BasePEVerifyTestCase
 	{
 		[Test]
 		public void ProtectedConstructor()

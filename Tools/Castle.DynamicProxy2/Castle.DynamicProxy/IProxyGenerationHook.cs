@@ -17,12 +17,34 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// Used during the target type inspection process.
+	/// Implementors have a chance to interfere in the
+	/// proxy generation process
+	/// </summary>
 	public interface IProxyGenerationHook
 	{
-		bool ShouldInterceptMethod(Type type, MethodInfo methodIndo);
+		/// <summary>
+		/// Invoked by the generation process to know if
+		/// the specified member should be proxied
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="memberInfo"></param>
+		/// <returns></returns>
+		bool ShouldInterceptMethod(Type type, MethodInfo memberInfo);
 
+		/// <summary>
+		/// Invoked by the generation process to notify that a
+		/// member wasn't marked as virtual.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="memberInfo"></param>
 		void NonVirtualMemberNotification(Type type, MemberInfo memberInfo);
 
+		/// <summary>
+		/// Invoked by the generation process to notify 
+		/// that the whole process is completed.
+		/// </summary>
 		void MethodsInspected();
 	}
 }

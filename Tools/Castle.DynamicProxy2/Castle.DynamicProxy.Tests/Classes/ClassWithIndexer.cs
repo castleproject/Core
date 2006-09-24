@@ -12,24 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Interceptors
+namespace Castle.DynamicProxy.Tests.Classes
 {
-	public class ResultModifierInterceptor : StandardInterceptor
+	using System;
+	using System.Collections;
+
+	public class ClassWithIndexer
 	{
-		protected override void PostProceed(IInvocation invocation)
+		private IDictionary map = new Hashtable();
+		
+		public virtual int this[String key]
 		{
-			object returnValue = invocation.ReturnValue;
-			
-			if (returnValue != null && returnValue.GetType() == typeof(int))
-			{
-				int value = (int)returnValue;
-				
-				invocation.ReturnValue = --value;
-			}
-			if (returnValue != null && returnValue.GetType() == typeof(bool))
-			{
-				invocation.ReturnValue = true;
-			}
+			get { return (int) map[key]; }
+			set { map[key] = value; }
 		}
 	}
 }

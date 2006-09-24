@@ -12,24 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Interceptors
+namespace Castle.DynamicProxy.Tests.GenClasses
 {
-	public class ResultModifierInterceptor : StandardInterceptor
+	using System;
+
+	public class GenClassWithConstraints<T> where T: IComparable
 	{
-		protected override void PostProceed(IInvocation invocation)
+		private bool invoked;
+
+		public bool Invoked
 		{
-			object returnValue = invocation.ReturnValue;
-			
-			if (returnValue != null && returnValue.GetType() == typeof(int))
-			{
-				int value = (int)returnValue;
-				
-				invocation.ReturnValue = --value;
-			}
-			if (returnValue != null && returnValue.GetType() == typeof(bool))
-			{
-				invocation.ReturnValue = true;
-			}
+			get { return invoked; }
+		}
+
+		public virtual void DoSomething()
+		{
+			invoked = true;
 		}
 	}
+
 }

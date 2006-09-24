@@ -12,26 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
-	using System.Reflection;
+	using System.Reflection.Emit;
 
-	public class AllMethodsHook : IProxyGenerationHook
+	[CLSCompliant(false)]
+	public class AssignArrayStatement : Statement
 	{
-		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
+		private Reference targetArray;
+		private int targetPosition;
+		private Expression value;
+
+		public AssignArrayStatement(Reference targetArray, int targetPosition, Expression value)
 		{
-			return methodInfo.DeclaringType != typeof(Object) && 
-			       methodInfo.DeclaringType != typeof(MarshalByRefObject) && 
-			       methodInfo.DeclaringType != typeof(ContextBoundObject);
+			this.targetArray = targetArray;
+			this.targetPosition = targetPosition;
+			this.value = value;
 		}
 
-		public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
+		public override void Emit(IMemberEmitter member, ILGenerator il)
 		{
-		}
+			ArgumentsUtil.EmitLoadOwnerAndReference(targetArray, il);
 
-		public void MethodsInspected()
-		{
+			il.Emit(OpCodes.Ldc_I4, targetPosition);
+
+			value.Emit(member, il);
+
+			il.Emit(OpCodes.Stelem_Ref);
 		}
 	}
 }

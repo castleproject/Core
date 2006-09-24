@@ -15,11 +15,13 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Threading;
-
+	using System.Xml.Serialization;
+	
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -28,14 +30,13 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
-
-		public ClassProxyGenerator(ModuleScope scope) : base(scope)
+		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
 		{
 		}
 
-		public Type GenerateCode(Type targetType, Type[] interfaces, ProxyGenerationOptions options)
+		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
 		{
-			Type type = null;
+			Type type;
 			
 			ReaderWriterLock rwlock = Scope.RWLock;
 
@@ -56,14 +57,24 @@ namespace Castle.DynamicProxy.Generators
 
 			try
 			{
+				generationHook = options.Hook;
+				
 				// String newName = Guid.NewGuid().ToString("N");
-				String newName = "Proxy";
+				String newName = targetType.Name + "Proxy";
 				
 				// Add Interfaces that the proxy implements 
 
-				interfaces = AddDefaultInterfaces(interfaces);
+				ArrayList interfaceList = new ArrayList();
 
-				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaces);
+				if (interfaces != null)
+				{
+					interfaceList.AddRange(interfaces);
+				}
+
+				AddDefaultInterfaces(interfaceList);
+
+				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
+				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 
 				// Custom attributes
 				
@@ -71,23 +82,28 @@ namespace Castle.DynamicProxy.Generators
 				
 				// Implement Interfaces
 
-				ImplementXmlSerializable(targetType, emitter);
+				ImplementProxyTargetAccessor(targetType, emitter);
 
 				// Fields generations
 
 				FieldReference interceptorsField =
 					emitter.CreateField("__interceptors", typeof(IInterceptor[]));
+				
+				emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
 
 				// Collect methods
 
 				PropertyToGenerate[] propsToGenerate;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate);
 
+				options.Hook.MethodsInspected();
+
 				// Constructor
 
 				initCacheMethod = CreateInitializeCacheMethod(targetType, methods, emitter);
 
 				GenerateConstructor(initCacheMethod, emitter, interceptorsField);
+				GenerateParameterlessConstructor(initCacheMethod, emitter, interceptorsField);
 
 				// Implement interfaces
 
@@ -164,7 +180,7 @@ namespace Castle.DynamicProxy.Generators
 					
 					if (propToGen.CanWrite)
 					{
-						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
+						NestedClassEmitter nestedClass = method2Invocation[propToGen.SetMethod];
 
 						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod);
 
@@ -187,7 +203,6 @@ namespace Castle.DynamicProxy.Generators
 				type = emitter.BuildType();
 
 				AddToCache(cacheKey, type);
-
 			}
 			finally
 			{
@@ -199,7 +214,24 @@ namespace Castle.DynamicProxy.Generators
 			return type;
 		}
 
+		private void AddDefaultInterfaces(IList interfaceList)
+		{
+			if (!interfaceList.Contains(typeof(IProxyTargetAccessor)))
+			{
+				interfaceList.Add(typeof(IProxyTargetAccessor));
+			}
+		}
 
+		private void ImplementProxyTargetAccessor(Type targetType, ClassEmitter emitter)
+		{
+			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
+			
+			MethodEmitter methodEmitter = emitter.CreateMethod("DynProxyGetTarget", attributes, 
+			                                                   new ReturnReferenceExpression(typeof(object)));
+			
+			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(
+			                                       	new ConvertExpression(typeof(object), targetType, SelfReference.Self.ToExpression())));
+		}
 
 		protected override Reference GetProxyTargetReference()
 		{

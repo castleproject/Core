@@ -1,11 +1,11 @@
-namespace Castle.DynamicProxy.Test
+namespace Castle.DynamicProxy.Tests
 {
 	using System.IO;
-	using Castle.DynamicProxy.Test.Classes;
+	using Castle.DynamicProxy.Tests.Classes;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class ClassWithAttributesTestCase
+	public class ClassWithAttributesTestCase : BasePEVerifyTestCase
 	{
 		[Test]
 		public void EnsureProxyHasAttributesOnClassAndMethods()

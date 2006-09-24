@@ -169,6 +169,7 @@
     <Compile Include="Generators\Emitters\SimpleAST\ArgumentReference.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\AssignArrayStatement.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\AssignStatement.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -204,6 +205,7 @@
     <Compile Include="Generators\Emitters\SimpleAST\MethodTokenExpression.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\NewArrayExpression.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\NewInstanceExpression.cs">
       <SubType>Code</SubType>
     </Compile>

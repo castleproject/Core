@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Test
+namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Reflection;
@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Test
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class MethodsWithAttributesOnParametersTestCase
+	public class MethodsWithAttributesOnParametersTestCase : BasePEVerifyTestCase
 	{
 		[Test]
 		[ExpectedException(typeof(ArgumentException), "No default value for argument")]

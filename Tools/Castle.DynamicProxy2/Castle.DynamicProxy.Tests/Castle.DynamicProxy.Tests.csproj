@@ -7,8 +7,8 @@
     <ProjectGuid>{FE432670-73A1-499D-A353-28FC902A43C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Castle.DynamicProxy.Test</RootNamespace>
-    <AssemblyName>Castle.DynamicProxy.Test</AssemblyName>
+    <RootNamespace>Castle.DynamicProxy.Tests</RootNamespace>
+    <AssemblyName>Castle.DynamicProxy.Tests</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,15 +35,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
+    <Compile Include="BasePEVerifyTestCase.cs" />
     <Compile Include="BasicClassProxyTestCase.cs" />
+    <Compile Include="BasicInterfaceProxyTestCase.cs" />
     <Compile Include="Classes\AttributedClass.cs" />
     <Compile Include="Classes\ClassToSerialize.cs" />
+    <Compile Include="Classes\ClassWithIndexer.cs" />
+    <Compile Include="Classes\DiffAccessLevelOnProperties.cs" />
+    <Compile Include="Classes\NonPublicClass.cs" />
     <Compile Include="Classes\NonPublicConstructorClass.cs" />
     <Compile Include="Classes\NonPublicMethodsClass.cs" />
     <Compile Include="Classes\ServiceClass.cs" />
+    <Compile Include="Classes\Test.cs" />
     <Compile Include="ClassWithAttributesTestCase.cs" />
+    <Compile Include="GenClasses\ClassWithGenArgs.cs" />
+    <Compile Include="GenClasses\ClassWithIndexer.cs" />
+    <Compile Include="GenClasses\GenClassNameClash.cs" />
+    <Compile Include="GenClasses\GenClassWithConstraints.cs" />
+    <Compile Include="GenClasses\GenClassWithGenMethods.cs" />
+    <Compile Include="GenClasses\GenClassWithGenMethodsConstrained.cs" />
+    <Compile Include="GenClasses\GenClassWithGenReturn.cs" />
+    <Compile Include="GenerationHookTestCase.cs" />
+    <Compile Include="GenericClassProxyTestCase.cs" />
     <Compile Include="Interceptors\LogInvocationInterceptor.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
+    <Compile Include="MixinTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interceptors\ResultModifierInterceptor.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />

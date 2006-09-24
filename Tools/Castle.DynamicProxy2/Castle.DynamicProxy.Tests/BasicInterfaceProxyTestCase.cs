@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BasicInterfaceProxyTestCase
+	public class BasicInterfaceProxyTestCase : BasePEVerifyTestCase
 	{
 	}
 }

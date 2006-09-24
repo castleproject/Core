@@ -17,6 +17,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using System.Xml.Serialization;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public class ClassEmitter : AbstractTypeEmitter
 	{
