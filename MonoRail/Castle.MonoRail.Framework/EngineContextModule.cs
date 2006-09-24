@@ -43,18 +43,34 @@ namespace Castle.MonoRail.Framework
 		
 		/// <summary>Prevents GC to collect the extensions</summary>
 		private IList extensions = new ArrayList();
+		
+		private static object locker = new object();
 
+		/// <summary>
+		/// Configures the framework, starts the services
+		/// and application hooks.
+		/// </summary>
+		/// <param name="context"></param>
 		public void Init(HttpApplication context)
 		{
-			InitConfiguration();
-			
-			MonoRailConfiguration config = ObtainConfiguration();
+			// In some weird circunstances 
+			// IIS 6 worker process seems to initialize the module
+			// more than once. We protect ourselves from this locking
+			// the initialization process
+			lock(locker)
+			{
+				if (initialized) return;
+				
+				InitConfiguration();
 
-			InitExtensions(config);
-			InitServices(config);
-			InitApplicationHooks(context);
+				MonoRailConfiguration config = ObtainConfiguration();
 
-			initialized = true;
+				InitExtensions(config);
+				InitServices(config);
+				InitApplicationHooks(context);
+
+				initialized = true;
+			}
 		}
 
 		public void Dispose()
@@ -156,7 +172,7 @@ namespace Castle.MonoRail.Framework
 			IList instances = new ArrayList();
 			
 			// Builtin services
-			
+
 			foreach(DictionaryEntry entry in services.ServiceImplMap)
 			{
 				Type service = (Type) entry.Key;
