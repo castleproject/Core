@@ -16,6 +16,9 @@ namespace Castle.MonoRail.Framework.Configuration
 {
 	using System;
 	using System.Configuration;
+	#if DOTNET2
+	using System.Web.Configuration;
+	#endif
 	using System.Xml;
 
 	/// <summary>
@@ -23,8 +26,8 @@ namespace Castle.MonoRail.Framework.Configuration
 	/// </summary>
 	public class MonoRailConfiguration : ISerializedConfig
 	{
-		private static readonly String SectionName = "monorail";
-		private static readonly String AlternativeSectionName = "monoRail";
+		private const String SectionName = "monorail";
+		private const String AlternativeSectionName = "monoRail";
 
 		private bool checkClientIsConnected, useWindsorIntegration;
 		private Type customFilterFactory;
@@ -64,14 +67,33 @@ namespace Castle.MonoRail.Framework.Configuration
 		{
 			// TODO: Add .net 2 diffs
 			
-			MonoRailConfiguration config = (MonoRailConfiguration)
-			                               ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
-			
+			MonoRailConfiguration config = null;
+
+			#if DOTNET2
+			if (config == null)
+			{
+				config = (MonoRailConfiguration)
+				         WebConfigurationManager.GetSection(MonoRailConfiguration.SectionName);
+			}
+
+			if (config == null)
+			{
+				config = (MonoRailConfiguration)
+				         WebConfigurationManager.GetSection(MonoRailConfiguration.AlternativeSectionName);
+			}
+			#else
+			if (config == null)
+			{
+				config = (MonoRailConfiguration)
+				         ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
+			}
+
 			if (config == null)
 			{
 				config = (MonoRailConfiguration)
 				         ConfigurationSettings.GetConfig(MonoRailConfiguration.AlternativeSectionName);
 			}
+			#endif
 
 			if (config == null)
 			{
