@@ -53,6 +53,12 @@ namespace Castle.MonoRail.Framework
 
 			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
 
+			if (mrContext == null)
+			{
+				throw new RailsException("IRailsEngineContext is null. Looks like the " + 
+					"EngineContextModule has not run for this request.");
+			}
+
 			return ObtainMonoRailHandler(mrContext);
 		}
 

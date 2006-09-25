@@ -5,9 +5,6 @@ Release Candidate 1
 ===================
 
 - Fixed MR-152 "Error while initializing MonoRail services"
-  As a result, all code from EngineContextModule was extracted to a new class,
-  EngineContextService. EngineContextModule is now used only to honor the IHttpModule
-  interface and instantiate a singleton EngineContextService.
 
 - Applied midas's patch fixing MR-113
   "change collected view name in assembly to lower"
