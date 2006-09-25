@@ -364,8 +364,8 @@ namespace Castle.ActiveRecord
 		/// Saves the instance to the database. If the primary key is unitialized
 		/// it creates the instance on the database. Otherwise it updates it.
 		/// <para>
-		/// If the primary key is assigned, then you must invoke <see cref="Create"/>
-		/// or <see cref="Update"/> instead.
+		/// If the primary key is assigned, then you must invoke <see cref="Create()"/>
+		/// or <see cref="Update()"/> instead.
 		/// </para>
 		/// </summary>
 		/// <param name="instance">The ActiveRecord instance to be saved</param>
@@ -583,6 +583,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Check if the <paramref name="id"/> exists in the database.
 		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
 		/// <param name="id">The id to check on</param>
 		/// <returns><c>true</c> if the ID exists; otherwise <c>false</c>.</returns>
 		protected internal static bool Exists(Type targetType, object id)

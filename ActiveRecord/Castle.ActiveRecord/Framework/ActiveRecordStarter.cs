@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord
 		private static IDictionary registeredTypes;
 		
 		/// <summary>
-		/// This is saved so one can invoke <see cref="RegisterTypes"/> later
+		/// This is saved so one can invoke <c>RegisterTypes</c> later
 		/// </summary>
 		private static IConfigurationSource configSource;
 

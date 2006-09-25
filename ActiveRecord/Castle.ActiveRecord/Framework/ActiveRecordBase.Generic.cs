@@ -94,7 +94,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Deletes all <c>T</c> objects, based on the primary keys
+		/// Deletes all <typeparamref name="T"/> objects, based on the primary keys
 		/// supplied on <paramref name="pkValues" />.
 		/// </summary>
 		/// <returns>The number of objects deleted</returns>
@@ -176,12 +176,12 @@ namespace Castle.ActiveRecord
 		#region Count
 
 		/// <summary>
-		/// Returns the number of records of <c>T</c> in the database
+		/// Returns the number of records of <typeparamref name="T"/> in the database
 		/// </summary>
 		/// <example>
 		/// <code escaped="true">
 		/// [ActiveRecord]
-		/// public class User : ActiveRecordBase<User>
+		/// public class User : ActiveRecordBase&lt;User&gt;
 		/// {
 		///   ...
 		///   
@@ -199,12 +199,12 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Returns the number of records of <c>T</c> in the database
+		/// Returns the number of records of <typeparamref name="T"/> in the database
 		/// </summary>
 		/// <example>
 		/// <code escaped="true">
 		/// [ActiveRecord]
-		/// public class User : ActiveRecordBase<User>
+		/// public class User : ActiveRecordBase&lt;User&gt;
 		/// {
 		///   ...
 		///   
@@ -228,7 +228,7 @@ namespace Castle.ActiveRecord
 		#region Exists
 
 		/// <summary>
-		/// Check if there is any records in the db for <c>T</c>
+		/// Check if there is any records in the db for <typeparamref name="T"/>
 		/// </summary>
 		/// <returns><c>true</c> if there's at least one row</returns>
 		public static bool Exists()
@@ -237,7 +237,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Check if there is any records in the db for <c>T</c>
+		/// Check if there is any records in the db for <typeparamref name="T"/>
 		/// </summary>
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
@@ -264,7 +264,7 @@ namespace Castle.ActiveRecord
 		#region FindAll
 
 		/// <summary>
-		/// Returns all instances found for <c>T</c>
+		/// Returns all instances found for <typeparamref name="T"/>
 		/// </summary>
 		/// <returns></returns>
 		public static T[] FindAll()
@@ -273,7 +273,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Returns all instances found for <c>T</c>
+		/// Returns all instances found for <typeparamref name="T"/>
 		/// using sort orders and criterias.
 		/// </summary>
 		/// <param name="orders"></param>
@@ -285,7 +285,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Returns all instances found for <c>T</c>
+		/// Returns all instances found for <typeparamref name="T"/>
 		/// using criterias.
 		/// </summary>
 		/// <param name="criterias"></param>
@@ -349,7 +349,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Finds an object instance by an unique ID for <c>T</c>
+		/// Finds an object instance by an unique ID for <typeparamref name="T"/>
 		/// </summary>
 		/// <param name="id">ID value</param>
 		/// <returns></returns>
@@ -359,7 +359,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Finds an object instance by a unique ID for <c>T</c>
+		/// Finds an object instance by a unique ID for <typeparamref name="T"/>
 		/// </summary>
 		/// <param name="id">ID value</param>
 		/// <param name="throwOnNotFound"><c>true</c> if you want to catch an exception 
@@ -377,7 +377,7 @@ namespace Castle.ActiveRecord
 		#region FindFirst
 
 		/// <summary>
-		/// Searches and returns the first row for <c>T</c>
+		/// Searches and returns the first row for <typeparamref name="T"/>
 		/// </summary>
 		/// <param name="orders">The sort order - used to determine which record is the first one</param>
 		/// <param name="criterias">The criteria expression</param>
@@ -388,7 +388,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Searches and returns the first row for <c>T</c>
+		/// Searches and returns the first row for <typeparamref name="T"/>
 		/// </summary>
 		/// <param name="criterias">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>

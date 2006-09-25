@@ -42,11 +42,11 @@ namespace Castle.ActiveRecord
 		/// <param name="id">ID value</param>
 		/// <param name="throwOnNotFound"><c>true</c> if you want an exception to be thrown
 		/// if the object is not found</param>
-		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
+		/// <exception cref="NHibernate.ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
 		/// <c>true</c> and the row is not found</exception>
-		public static T FindByPrimaryKey(object id, bool throwIfNotFound)
+		public static T FindByPrimaryKey(object id, bool throwOnNotFound)
 		{
-			return (T) ActiveRecordMediator.FindByPrimaryKey(typeof(T), id, throwIfNotFound);
+			return (T) ActiveRecordMediator.FindByPrimaryKey(typeof(T), id, throwOnNotFound);
 		}
 
 		/// <summary>
