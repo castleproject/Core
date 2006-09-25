@@ -35,7 +35,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	/// </summary>
 	public class ActiveRecordFacility : AbstractFacility
 	{
-		private ILogger log;
+		private ILogger log = NullLogger.Instance;
 		private int sessionFactoryCount, sessionFactoryHolderCount;
 
 		public ActiveRecordFacility()
@@ -44,13 +44,9 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		protected override void Init()
 		{
-			if (Kernel.HasComponent(typeof(ILogger)))
+			if (Kernel.HasComponent(typeof(ILoggerFactory)))
 			{
-				log = (ILogger) Kernel[typeof(ILogger)];
-			}
-			else
-			{
-				log = new NullLogger();
+				log = ((ILoggerFactory) Kernel[typeof(ILoggerFactory)]).Create(GetType());
 			}
 
 			log.Debug("Initializing AR Facility");
