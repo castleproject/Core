@@ -99,8 +99,8 @@ namespace Castle.ActiveRecord
 
 			public string Value
 			{
-				get { return value;}
-				set { value = value;}
+				get { return this.value; }
+				set { this.value = value; }
 			}
 
 			public Type Class
