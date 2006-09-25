@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Added ActiveRecordModel.GetModels(), which returns an array containing every registered ActiveRecordModel.
+
 - Fixed AR-53
   "Unique key on multiple columns"
 

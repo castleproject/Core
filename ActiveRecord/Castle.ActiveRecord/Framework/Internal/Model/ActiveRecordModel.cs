@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	{
 		protected internal static IDictionary type2Model = Hashtable.Synchronized(new Hashtable());
 
-        protected internal static bool isDebug = false;
+		protected internal static bool isDebug = false;
 
 		private readonly Type type;
 
@@ -252,13 +252,23 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
-		/// Internally used
+		/// Gets the <see cref="Framework.Internal.ActiveRecordModel"/> for a given ActiveRecord class.
 		/// </summary>
-		/// <param name="arType"></param>
-		/// <returns></returns>
 		public static Framework.Internal.ActiveRecordModel GetModel(Type arType)
 		{
 			return (Framework.Internal.ActiveRecordModel) type2Model[arType];
+		}
+		
+		/// <summary>
+		/// Gets an array containing the <see cref="Framework.Internal.ActiveRecordModel"/> for every registered ActiveRecord class.
+		/// </summary>
+		public static Framework.Internal.ActiveRecordModel[] GetModels()
+		{
+			Framework.Internal.ActiveRecordModel[] modelArray = new Framework.Internal.ActiveRecordModel[type2Model.Values.Count];
+			
+			type2Model.Values.CopyTo(modelArray, 0);
+			
+			return modelArray;
 		}
 
 		#region IVisitable Members
