@@ -55,13 +55,13 @@ namespace Castle.DynamicProxy
 //			throw new NotImplementedException();
 //		}
 
-		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options)
+		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType, ProxyGenerationOptions options)
 		{
 			AssertValidType(theInterface);
 
 			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface);
 
-			return generator.GenerateCode(targetType, options);
+			return generator.GenerateCode(targetType, interfaces, options);
 		}
 
 		private static void AssertValidType(Type target)

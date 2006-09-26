@@ -69,6 +69,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private bool IsAssemblySigned(Type baseType)
 		{
+			if (baseType == typeof(object) || 
+			    baseType == typeof(MarshalByRefObject) || 
+			    baseType == typeof(ContextBoundObject))
+			{
+				return false;
+			}
+			
 			lock(signedAssemblyCache)
 			{
 				if (signedAssemblyCache.Contains(baseType.Assembly) == false)

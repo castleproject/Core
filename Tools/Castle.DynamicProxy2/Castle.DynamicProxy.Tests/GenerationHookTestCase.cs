@@ -20,7 +20,8 @@ namespace Castle.DynamicProxy.Tests
 	
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
-	
+	using Castle.DynamicProxy.Tests.InterClasses;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -38,7 +39,7 @@ namespace Castle.DynamicProxy.Tests
 		public void HookIsUsedForConcreteClassProxy()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			LogHook hook = new LogHook(typeof(ServiceClass));
+			LogHook hook = new LogHook(typeof(ServiceClass), true);
 			
 			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
 
@@ -55,22 +56,40 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("get_Valid ", logger.LogContents);
 		}
 
-		[Test, Ignore("Not implemented yet")]
+		[Test]
 		public void HookIsUsedForInterfaceProxy()
 		{
-			
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+			LogHook hook = new LogHook(typeof(IService), false);
+
+			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
+
+			IService proxy = (IService)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(IService), new ServiceImpl(), options, logger);
+
+			Assert.IsTrue(hook.Completed);
+			Assert.AreEqual(10, hook.AskedMembers.Count);
+			Assert.AreEqual(0, hook.NonVirtualMembers.Count);
+
+			Assert.AreEqual(3, proxy.Sum(1, 2));
+			Assert.IsFalse(proxy.Valid);
+
+			Assert.AreEqual("Sum get_Valid ", logger.LogContents);
 		}
 
 		class LogHook : IProxyGenerationHook
 		{
 			private readonly Type targetTypeToAssert;
+			private readonly bool screeningEnabled;
 			private IList nonVirtualMembers = new ArrayList();
 			private IList askedMembers = new ArrayList();
 			private bool completed;
 
-			public LogHook(Type targetTypeToAssert)
+			public LogHook(Type targetTypeToAssert, bool screeningEnabled)
 			{
 				this.targetTypeToAssert = targetTypeToAssert;
+				this.screeningEnabled = screeningEnabled;
 			}
 
 			public IList NonVirtualMembers
@@ -94,7 +113,7 @@ namespace Castle.DynamicProxy.Tests
 
 				askedMembers.Add(memberInfo);
 
-				if (memberInfo.Name.StartsWith("Sum"))
+				if (screeningEnabled && memberInfo.Name.StartsWith("Sum"))
 				{
 					return false;
 				}

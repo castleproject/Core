@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 		
-		public Type GenerateCode(Type proxyTargetType, ProxyGenerationOptions options)
+		public Type GenerateCode(Type proxyTargetType, Type[] interfaces, ProxyGenerationOptions options)
 		{
 			Type generatedType;
 
@@ -44,8 +44,7 @@ namespace Castle.DynamicProxy.Generators
 
 			rwlock.AcquireReaderLock(-1);
 
-			// CacheKey cacheKey = new CacheKey(targetType, new Type[] { proxyTargetType }, options);
-			CacheKey cacheKey = new CacheKey(targetType, null, options);
+			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
 
 			Type cacheType = GetFromCache(cacheKey);
 
@@ -71,10 +70,10 @@ namespace Castle.DynamicProxy.Generators
 
 				interfaceList.Add(targetType);
 
-//				if (interfaces != null)
-//				{
-//					interfaceList.AddRange(interfaces);
-//				}
+				if (interfaces != null)
+				{
+					interfaceList.AddRange(interfaces);
+				}
 
 				AddDefaultInterfaces(interfaceList);
 
@@ -89,8 +88,8 @@ namespace Castle.DynamicProxy.Generators
 				FieldReference interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
 				targetField = emitter.CreateField("__target", proxyTargetType);
 
-				////emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
-				////emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute());
+				emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
+				emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute());
 
 				// Implement builtin Interfaces
 
@@ -112,13 +111,13 @@ namespace Castle.DynamicProxy.Generators
 
 				// Implement interfaces
 
-//				if (interfaces != null && interfaces.Length != 0)
-//				{
-//					foreach(Type inter in interfaces)
-//					{
-//						ImplementBlankInterface(targetType, inter, emitter, interceptorsField);
-//					}
-//				}
+				if (interfaces != null && interfaces.Length != 0)
+				{
+					foreach(Type inter in interfaces)
+					{
+						ImplementBlankInterface(targetType, inter, emitter, interceptorsField);
+					}
+				}
 
 				// Create invocation types
 
