@@ -1,5 +1,12 @@
+Change history
+--------------
+
+Release Candidate 1
+===================
+- NVelocityTemplateEngine: Added the option to load a base configuration file, 
+  named 'nvelocity.properties', from the template directory. Inspired by a 
+  similar functionality on MonoRail NVelocityViewEngine.
 
 Alpha Version 1.0.0
+===================
 - First release
-
-Future modifications - after the first release - shall be tracked in this file

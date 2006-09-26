@@ -125,6 +125,16 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 				String expandedTemplateDir = ExpandTemplateDir(templateDir);
 				log.Info("Initializing NVelocityTemplateEngine component using template directory: {0}", expandedTemplateDir);
 				
+				FileInfo propertiesFile = new FileInfo(Path.Combine(expandedTemplateDir, "nvelocity.properties"));
+				if (propertiesFile.Exists)
+				{
+					log.Info("Found 'nvelocity.properties' on template dir, loading as base configuration");
+					using(Stream stream = propertiesFile.OpenRead())
+					{
+						props.Load(stream);
+					}
+				}
+				
 				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "file");
 				props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, expandedTemplateDir);
 				props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, EnableCache.ToString().ToLower() );
