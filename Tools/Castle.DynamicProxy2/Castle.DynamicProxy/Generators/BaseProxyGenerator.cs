@@ -427,10 +427,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 			MethodInfo targetMethod = methodOnTarget != null ? methodOnTarget : methodInfo;
 
-			// Parameters
-
-			// callBackMethod.DefineParameters(parameters);
-
 			// MethodBuild creation
 
 			MethodAttributes atts = MethodAttributes.Family;
@@ -461,9 +457,7 @@ namespace Castle.DynamicProxy.Generators
 
 			callBackMethod.CodeBuilder.AddStatement(
 				new ReturnStatement(
-					new MethodInvocationExpression(SelfReference.Self, targetMethod, exps)));
-
-			// callBackMethod.CodeBuilder.AddStatement(new ReturnStatement());
+					new MethodInvocationExpression(GetProxyTargetReference(), targetMethod, exps)));
 
 			return callBackMethod.MethodBuilder;
 		}
@@ -476,21 +470,19 @@ namespace Castle.DynamicProxy.Generators
 		/// </summary>
 		/// <param name="emitter"></param>
 		/// <param name="targetType"></param>
-		/// <param name="invocationTargetType"></param>
+		/// <param name="dynamicProxyType"></param>
 		/// <param name="methodInfo"></param>
 		/// <param name="callbackMethod"></param>
 		/// <returns></returns>
-		protected NestedClassEmitter BuildInvocationNestedType(ClassEmitter emitter,
-		                                                       Type targetType, Type invocationTargetType,
-		                                                       MethodInfo methodInfo, MethodInfo callbackMethod)
+		protected NestedClassEmitter BuildInvocationNestedType(
+			ClassEmitter emitter, Type targetType, Type targetForInvocation,
+			MethodInfo methodInfo, MethodInfo callbackMethod)
 		{
-			ParameterInfo[] parameters = methodInfo.GetParameters();
-
 			nestedCounter++;
 
-			NestedClassEmitter nested = new NestedClassEmitter(emitter,
-			                                                   "Invocation" + methodInfo.Name + "_" + nestedCounter.ToString(),
-			                                                   typeof(AbstractInvocation), new Type[0]);
+			NestedClassEmitter nested = new NestedClassEmitter(
+				emitter, "Invocation" + methodInfo.Name + "_" + nestedCounter.ToString(), 
+					typeof(AbstractInvocation), new Type[0]);
 
 			Type[] genTypes = TypeUtil.Union(targetType.GetGenericArguments(), methodInfo.GetGenericArguments());
 
@@ -498,22 +490,23 @@ namespace Castle.DynamicProxy.Generators
 
 			// Create the invocation fields
 
-			// FieldReference fieldRef = nested.CreateField("target", emitter.TypeBuilder);
-			FieldReference fieldRef = nested.CreateField("target", invocationTargetType);
+			FieldReference targetRef = nested.CreateField("target", targetForInvocation);
 
 			// Create constructor
 
-			// CreateIInvocationConstructor(emitter.TypeBuilder, nested, fieldRef);
-			CreateIInvocationConstructor(invocationTargetType, nested, fieldRef);
+			CreateIInvocationConstructor(targetForInvocation, nested, targetRef);
 
 			// InvokeMethodOnTarget implementation
+			
 			if (callbackMethod != null)
 			{
-				CreateIInvocationInvokeOnTarget(emitter, nested, parameters, fieldRef, callbackMethod);
+				ParameterInfo[] parameters = methodInfo.GetParameters();
+
+				CreateIInvocationInvokeOnTarget(emitter, nested, parameters, targetRef, callbackMethod);
 			}
 			else
 			{
-				CreateEmptyIInvocationInvokeOnTarget(nested, parameters, fieldRef, callbackMethod);
+				CreateEmptyIInvocationInvokeOnTarget(nested);
 			}
 
 			return nested;
@@ -568,9 +561,7 @@ namespace Castle.DynamicProxy.Generators
 			
 			if (callbackMethod.IsGenericMethod)
 			{
-				// callbackMethod = TypeBuilder.GetMethod(targetTypeEmitter.TypeBuilder, callbackMethod);
-				callbackMethod = 
-					callbackMethod.MakeGenericMethod(nested.GetGenericArgumentsFor(callbackMethod));
+				callbackMethod = callbackMethod.MakeGenericMethod(nested.GetGenericArgumentsFor(callbackMethod));
 			}
 
 			baseMethodInvExp = new MethodInvocationExpression(targetField, callbackMethod, args);
@@ -581,8 +572,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ret_local = method.CodeBuilder.DeclareLocal(callbackMethod.ReturnType);
 
-				method.CodeBuilder.AddStatement(
-					new AssignStatement(ret_local, baseMethodInvExp));
+				method.CodeBuilder.AddStatement(new AssignStatement(ret_local, baseMethodInvExp));
 			}
 			else
 			{
@@ -603,8 +593,7 @@ namespace Castle.DynamicProxy.Generators
 			method.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void CreateEmptyIInvocationInvokeOnTarget(NestedClassEmitter nested, ParameterInfo[] parameters, 
-		                                                    FieldReference targetField, MethodInfo callbackMethod)
+		protected void CreateEmptyIInvocationInvokeOnTarget(NestedClassEmitter nested)
 		{
 			const MethodAttributes methodAtts = MethodAttributes.Public |
 												MethodAttributes.Final |
@@ -624,10 +613,9 @@ namespace Castle.DynamicProxy.Generators
 			method.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void CreateIInvocationConstructor(Type proxyType, NestedClassEmitter nested,
-		                                            FieldReference targetField)
+		protected void CreateIInvocationConstructor(Type targetFieldType, NestedClassEmitter nested, FieldReference targetField)
 		{
-			ArgumentReference cArg0 = new ArgumentReference(proxyType);
+			ArgumentReference cArg0 = new ArgumentReference(targetFieldType);
 			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
 			ArgumentReference cArg2 = new ArgumentReference(typeof(Type));
 			ArgumentReference cArg3 = new ArgumentReference(typeof(MethodInfo));
@@ -637,8 +625,10 @@ namespace Castle.DynamicProxy.Generators
 			ConstructorEmitter constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5);
 
 			constructor.CodeBuilder.AddStatement(new AssignStatement(targetField, cArg0.ToExpression()));
+			
 			constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructor,
 			                                              cArg1, cArg2, cArg3, cArg4, cArg5);
+			
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
@@ -844,7 +834,28 @@ namespace Castle.DynamicProxy.Generators
 		{
 			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement());
 		}
-		
+
+		protected void AddDefaultInterfaces(IList interfaceList)
+		{
+			if (!interfaceList.Contains(typeof(IProxyTargetAccessor)))
+			{
+				interfaceList.Add(typeof(IProxyTargetAccessor));
+			}
+		}
+
+		protected void ImplementProxyTargetAccessor(Type targetType, ClassEmitter emitter)
+		{
+			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
+
+			MethodEmitter methodEmitter = emitter.CreateMethod("DynProxyGetTarget", attributes,
+															   new ReturnReferenceExpression(typeof(object)));
+
+			methodEmitter.CodeBuilder.AddStatement(
+				new ReturnStatement(
+					new ConvertExpression(
+						typeof(object), targetType, GetProxyTargetReference().ToExpression())));
+		}
+
 		#endregion
 
 		protected abstract bool CanOnlyProxyVirtual();

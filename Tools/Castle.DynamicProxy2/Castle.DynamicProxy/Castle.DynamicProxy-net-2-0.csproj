@@ -246,6 +246,7 @@
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
     <Compile Include="IInterceptor.cs">
       <SubType>Code</SubType>

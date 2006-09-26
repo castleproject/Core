@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Tests
 	public abstract class BasePEVerifyTestCase
 	{
 		[TearDown]
-		public void TestGeneratedAssembly()
+		public void RunPEVerifyOnGeneratedAssembly()
 		{
 			Process process = new Process();
 
@@ -37,8 +37,9 @@ namespace Castle.DynamicProxy.Tests
 
 			Console.WriteLine(result);
 
-			if (process.ExitCode < 0)
+			if (process.ExitCode != 0)
 			{
+				Assert.Fail(result);
 			}
 		}
 	}

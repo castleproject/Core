@@ -26,8 +26,9 @@ namespace Castle.DynamicProxy
 
 		private IProxyGenerationHook hook;
 		private IInterceptorSelector selector;
-		private bool useSelector;
 		private ArrayList mixins;
+		private Type baseTypeForInterfaceProxy = typeof(object);
+		private bool useSelector;
 
 		public ProxyGenerationOptions(IProxyGenerationHook hook)
 		{
@@ -82,6 +83,12 @@ namespace Castle.DynamicProxy
 		public bool HasMixins
 		{
 			get { return mixins == null ? false : mixins.Count != 0; }
+		}
+
+		public Type BaseTypeForInterfaceProxy
+		{
+			get { return baseTypeForInterfaceProxy; }
+			set { baseTypeForInterfaceProxy = value; }
 		}
 	}
 }

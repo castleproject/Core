@@ -54,19 +54,21 @@ namespace Castle.DynamicProxy
 //		{
 //			throw new NotImplementedException();
 //		}
-//
-//		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options)
-//		{
-//			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface, targetType);
-//
-//			return generator.GenerateCode(options);
-//		}
 
-		private static void AssertValidType(Type theClass)
+		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type targetType, ProxyGenerationOptions options)
 		{
-			if (!theClass.IsPublic)
+			AssertValidType(theInterface);
+
+			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface);
+
+			return generator.GenerateCode(targetType, options);
+		}
+
+		private static void AssertValidType(Type target)
+		{
+			if (!target.IsPublic)
 			{
-				throw new GeneratorException("Class is not public, so a proxy cannot be generated. Type: " + theClass.FullName);
+				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
 			}
 		}
 	}

@@ -61,7 +61,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(45, instance.Sum((ulong)20, (ulong)25)); // ulong
 		}
 
-		[Test, ExpectedException(typeof(GeneratorException), "Class is not public, so a proxy " + 
+		[Test, ExpectedException(typeof(GeneratorException), "Type is not public, so a proxy " + 
 			"cannot be generated. Type: Castle.DynamicProxy.Tests.Classes.NonPublicClass")]
 		public void ProxyForNonPublicClass()
 		{

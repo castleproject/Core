@@ -79,8 +79,8 @@ namespace Castle.DynamicProxy.Generators
 				// Custom attributes
 				
 				ReplicateNonInheritableAttributes(targetType, emitter);
-				
-				// Implement Interfaces
+
+				// Implement builtin Interfaces
 
 				ImplementProxyTargetAccessor(targetType, emitter);
 
@@ -212,25 +212,6 @@ namespace Castle.DynamicProxy.Generators
 			Scope.SaveAssembly();
 
 			return type;
-		}
-
-		private void AddDefaultInterfaces(IList interfaceList)
-		{
-			if (!interfaceList.Contains(typeof(IProxyTargetAccessor)))
-			{
-				interfaceList.Add(typeof(IProxyTargetAccessor));
-			}
-		}
-
-		private void ImplementProxyTargetAccessor(Type targetType, ClassEmitter emitter)
-		{
-			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
-			
-			MethodEmitter methodEmitter = emitter.CreateMethod("DynProxyGetTarget", attributes, 
-			                                                   new ReturnReferenceExpression(typeof(object)));
-			
-			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(
-			                                       	new ConvertExpression(typeof(object), targetType, SelfReference.Self.ToExpression())));
 		}
 
 		protected override Reference GetProxyTargetReference()

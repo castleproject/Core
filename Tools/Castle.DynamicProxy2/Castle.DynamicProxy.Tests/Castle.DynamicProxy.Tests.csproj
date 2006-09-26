@@ -46,7 +46,6 @@
     <Compile Include="Classes\NonPublicConstructorClass.cs" />
     <Compile Include="Classes\NonPublicMethodsClass.cs" />
     <Compile Include="Classes\ServiceClass.cs" />
-    <Compile Include="Classes\Test.cs" />
     <Compile Include="ClassWithAttributesTestCase.cs" />
     <Compile Include="GenClasses\ClassWithGenArgs.cs" />
     <Compile Include="GenClasses\ClassWithIndexer.cs" />
@@ -57,11 +56,15 @@
     <Compile Include="GenClasses\GenClassWithGenReturn.cs" />
     <Compile Include="GenerationHookTestCase.cs" />
     <Compile Include="GenericClassProxyTestCase.cs" />
+    <Compile Include="GenericInterfaceProxyTestCase.cs" />
     <Compile Include="Interceptors\LogInvocationInterceptor.cs" />
+    <Compile Include="InterClasses\IService.cs" />
+    <Compile Include="InterClasses\ServiceImpl.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interceptors\ResultModifierInterceptor.cs" />
+    <Compile Include="Test.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
