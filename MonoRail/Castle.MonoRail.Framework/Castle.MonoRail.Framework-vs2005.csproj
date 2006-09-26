@@ -378,6 +378,7 @@
     <Compile Include="MonoRailHttpHandlerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MonoRailServiceContainer.cs" />
     <Compile Include="ProcessEngine.cs">
       <SubType>Code</SubType>
     </Compile>

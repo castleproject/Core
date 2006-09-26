@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Web;
 	using System.Web.SessionState;
-	
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Internal;
 

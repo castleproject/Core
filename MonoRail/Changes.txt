@@ -4,6 +4,12 @@ Change history
 Release Candidate 1
 ===================
 
+- Another attempt to MR-152 "Error while initializing MonoRail services"
+
+  Separated container implementation from module. But it's important that 
+  the module subscribe the events, so the container can delegate event invocations 
+  to the extension manager
+
 - Fixed MR-152 "Error while initializing MonoRail services"
 
 - Applied midas's patch fixing MR-113
