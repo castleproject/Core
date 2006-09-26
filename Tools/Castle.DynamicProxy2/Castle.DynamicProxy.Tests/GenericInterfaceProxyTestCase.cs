@@ -14,10 +14,63 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using Castle.DynamicProxy.Tests.GenInterfaces;
+	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class GenericInterfaceProxyTestCase : BasePEVerifyTestCase
 	{
+		private ProxyGenerator generator;
+		private LogInvocationInterceptor logger;
+
+		[SetUp]
+		public void Init()
+		{
+			generator = new ProxyGenerator();
+			logger = new LogInvocationInterceptor();
+		}
+
+		[Test]
+		public void ProxyWithGenericArgument()
+		{
+			GenInterface<int> proxy = 
+				generator.CreateInterfaceProxyWithTarget<GenInterface<int>>(
+					new GenInterfaceImpl<int>(), logger);
+
+			Assert.IsNotNull(proxy);
+
+			Assert.AreEqual(1, proxy.DoSomething(1));
+
+			Assert.AreEqual("DoSomething ", logger.LogContents);
+		}
+
+		[Test]
+		public void ProxyWithGenericArgumentAndGenericMethod()
+		{
+			GenInterfaceWithGenMethods<int> proxy =
+				generator.CreateInterfaceProxyWithTarget<GenInterfaceWithGenMethods<int>>(
+					new GenInterfaceWithGenMethodsImpl<int>(), logger);
+
+			Assert.IsNotNull(proxy);
+
+			proxy.DoSomething<long>(10L, 1);
+
+			Assert.AreEqual("DoSomething ", logger.LogContents);
+		}
+
+		[Test]
+		public void ProxyWithGenericArgumentAndGenericMethodAndGenericReturn()
+		{
+			GenInterfaceWithGenMethodsAndGenReturn<int> proxy =
+				generator.CreateInterfaceProxyWithTarget<GenInterfaceWithGenMethodsAndGenReturn<int>>(
+					new GenInterfaceWithGenMethodsAndGenReturnImpl<int>(), logger);
+
+			Assert.IsNotNull(proxy);
+
+			Assert.AreEqual(10L, proxy.DoSomething<long>(10L, 1));
+
+			Assert.AreEqual("DoSomething ", logger.LogContents);
+		}
 	}
 }

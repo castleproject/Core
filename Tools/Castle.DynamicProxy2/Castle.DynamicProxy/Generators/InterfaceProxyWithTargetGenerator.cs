@@ -125,15 +125,7 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach(MethodInfo method in methods)
 				{
-					ParameterInfo[] parameters = method.GetParameters();
-					Type[] argTypes = new Type[parameters.Length];
-					
-					for(int i=0; i < parameters.Length; i++)
-					{
-						argTypes[i] = parameters[i].ParameterType;
-					}
-					
-					MethodInfo methodOnTarget = proxyTargetType.GetMethod(method.Name, argTypes);
+					MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType);
 
 					method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
 																		  proxyTargetType,
@@ -215,7 +207,107 @@ namespace Castle.DynamicProxy.Generators
 
 			return generatedType;
 		}
-		
+
+		private static MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType)
+		{
+#if DOTNET2
+			// The code below assumes that the target
+			// class uses the same generic arguments
+			// as the interface generic arguments
+
+			MemberInfo[] members = proxyTargetType.FindMembers(MemberTypes.Method,
+												   BindingFlags.Public | BindingFlags.Instance,
+				delegate(MemberInfo mi, object criteria)
+				{
+					if (mi.Name != criteria.ToString()) return false;
+
+					MethodInfo methodInfo = (MethodInfo) mi;
+
+					// Check return type equivalence
+
+					if (methodInfo.ReturnType.IsGenericParameter != methodOnInterface.ReturnType.IsGenericParameter)
+					{
+						return false;
+					}
+
+					if (methodInfo.ReturnType.IsGenericParameter)
+					{
+						if (methodInfo.ReturnType.Name != methodOnInterface.ReturnType.Name)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (methodInfo.ReturnType != methodOnInterface.ReturnType)
+						{
+							return false;
+						}
+					}
+
+					// Check parameters equivalence
+
+					ParameterInfo[] sourceParams = methodOnInterface.GetParameters();
+					ParameterInfo[] targetParams = methodInfo.GetParameters();
+
+					if (sourceParams.Length != targetParams.Length)
+					{
+						return false;
+					}
+
+					for (int i = 0; i < sourceParams.Length; i++)
+					{
+						Type sourceParamType = sourceParams[i].ParameterType;
+						Type targetParamType = targetParams[i].ParameterType;
+
+						if (sourceParamType.IsGenericParameter != targetParamType.IsGenericParameter)
+						{
+							return false;
+						}
+
+						if (sourceParamType.IsGenericParameter)
+						{
+							if (sourceParamType.Name != targetParamType.Name)
+							{
+								return false;
+							}
+						}
+						else
+						{
+							if (sourceParamType != targetParamType)
+							{
+								return false;
+							}
+						}
+					}
+
+					return true;
+				}, methodOnInterface.Name);
+
+			if (members.Length > 1)
+			{
+				throw new GeneratorException("Found more than one method on target " + proxyTargetType.FullName + " matching " + methodOnInterface.Name);
+			}
+			else if (members.Length == 0)
+			{
+				throw new GeneratorException("Could not find a matching method on " + proxyTargetType.FullName + ". Method " + methodOnInterface.Name);
+			}
+
+			return (MethodInfo) members[0];
+
+#else
+			ParameterInfo[] parameters = methodOnInterface.GetParameters();
+			Type[] argTypes = new Type[parameters.Length];
+			
+			for(int i=0; i < parameters.Length; i++)
+			{
+				argTypes[i] = parameters[i].ParameterType;
+			}
+
+			return proxyTargetType.GetMethod(methodOnInterface.Name, argTypes);
+#endif
+		}
+
 		protected override Reference GetProxyTargetReference()
 		{
 			return targetField;

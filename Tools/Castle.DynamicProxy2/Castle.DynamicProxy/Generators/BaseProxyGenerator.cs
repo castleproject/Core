@@ -470,7 +470,7 @@ namespace Castle.DynamicProxy.Generators
 		/// </summary>
 		/// <param name="emitter"></param>
 		/// <param name="targetType"></param>
-		/// <param name="dynamicProxyType"></param>
+		/// <param name="targetForInvocation"></param>
 		/// <param name="methodInfo"></param>
 		/// <param name="callbackMethod"></param>
 		/// <returns></returns>
@@ -570,7 +570,14 @@ namespace Castle.DynamicProxy.Generators
 
 			if (callbackMethod.ReturnType != typeof(void))
 			{
-				ret_local = method.CodeBuilder.DeclareLocal(callbackMethod.ReturnType);
+				if (callbackMethod.ReturnType.IsGenericParameter)
+				{
+					ret_local = method.CodeBuilder.DeclareLocal(nested.GetGenericArgument(callbackMethod.ReturnType.Name));
+				}
+				else
+				{
+					ret_local = method.CodeBuilder.DeclareLocal(callbackMethod.ReturnType);
+				}
 
 				method.CodeBuilder.AddStatement(new AssignStatement(ret_local, baseMethodInvExp));
 			}
@@ -582,10 +589,13 @@ namespace Castle.DynamicProxy.Generators
 			if (callbackMethod.ReturnType != typeof(void))
 			{
 				MethodInvocationExpression setRetVal =
-					new MethodInvocationExpression(SelfReference.Self,
-					                               typeof(AbstractInvocation).GetMethod("set_ReturnValue"),
-					                               new ConvertExpression(typeof(object), callbackMethod.ReturnType,
-					                                                     ret_local.ToExpression()));
+					new MethodInvocationExpression(
+						SelfReference.Self, 
+						typeof(AbstractInvocation).GetMethod("set_ReturnValue"), 
+						new ConvertExpression(
+							typeof(object), 
+							ret_local.Type, 
+							ret_local.ToExpression()));
 
 				method.CodeBuilder.AddStatement(new ExpressionStatement(setRetVal));
 			}
