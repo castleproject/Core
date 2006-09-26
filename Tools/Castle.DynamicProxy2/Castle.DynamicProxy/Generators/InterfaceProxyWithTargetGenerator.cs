@@ -61,8 +61,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				generationHook = options.Hook;
 
-				// String newName = Guid.NewGuid().ToString("N");
-				String newName = "Proxy";
+				String newName = targetType.Name + "Proxy" + Guid.NewGuid().ToString("N");
 
 				// Add Interfaces that the proxy implements 
 

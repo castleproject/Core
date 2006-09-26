@@ -30,10 +30,8 @@ namespace Castle.DynamicProxy.Generators
 	/// <remarks>
 	/// TODO: 
 	/// - Add events so people can hook into the proxy generation and change the generated code
-	/// - Add support for interfaces
 	/// - Add serialization support
 	/// - Add Xml serialization support
-	/// - Support for Interface proxy
 	/// - Allow one to specify the base class for interface proxies
 	/// - Use the interceptor selector if provided
 	/// - Expose parameters of non-parameterless constructors on the generated constructor
@@ -91,15 +89,14 @@ namespace Castle.DynamicProxy.Generators
 
 		#region Cache related
 
-		// TODO: Implement this
 		protected Type GetFromCache(CacheKey key)
 		{
-			return null;
+			return scope.GetFromCache(key);
 		}
 
-		// TODO: Implement this
 		protected void AddToCache(CacheKey key, Type type)
 		{
+			scope.RegisterInCache(key, type);
 		}
 
 		#endregion
