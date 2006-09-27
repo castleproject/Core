@@ -14,8 +14,15 @@
 
 namespace Castle.DynamicProxy
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IProxyTargetAccessor
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		object DynProxyGetTarget();
 	}
 }

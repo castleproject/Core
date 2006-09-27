@@ -22,6 +22,12 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	
+	public enum ConstructorVersion
+	{
+		WithTargetMethod,
+		WithoutTargetMethod
+	}
 
 	/// <summary>
 	/// Base class that exposes the common functionalities
@@ -104,25 +110,19 @@ namespace Castle.DynamicProxy.Generators
 		protected MethodEmitter CreateProxiedMethod(Type targetType, MethodInfo method, ClassEmitter emitter,
 		                                            NestedClassEmitter invocationImpl,
 		                                            FieldReference interceptorsField,
-		                                            Reference targetRef)
+													Reference targetRef, 
+		                                            ConstructorVersion version, MethodInfo methodOnTarget)
 		{
 			MethodAttributes atts = ObtainMethodAttributes(method);
 			MethodEmitter methodEmitter = emitter.CreateMethod(method.Name, atts);
 
 			return ImplementProxiedMethod(targetType, methodEmitter, method, 
-			                              emitter, invocationImpl, interceptorsField, targetRef);
+			                              emitter, invocationImpl, interceptorsField, targetRef, version, methodOnTarget);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="_interface"></param>
 		protected void ImplementBlankInterface(Type targetType, Type _interface, 
 		                                       ClassEmitter emitter, FieldReference interceptorsField)
 		{
-			// TODO: The invocation generated in this case should throw an exception
-			// on the InvokeMethodOnBase as there's no target to call
-
 			PropertyToGenerate[] propsToGenerate;
 			MethodInfo[] methods = CollectMethodsAndProperties(emitter, _interface, false, out propsToGenerate);
 
@@ -135,7 +135,8 @@ namespace Castle.DynamicProxy.Generators
 				
 				method2Invocation[method] = BuildInvocationNestedType(emitter, targetType,
 																	  emitter.TypeBuilder,
-																	  method, null);
+																	  method, null,
+																	  ConstructorVersion.WithoutTargetMethod);
 			}
 			
 			foreach(MethodInfo method in methods)
@@ -149,11 +150,10 @@ namespace Castle.DynamicProxy.Generators
 				NestedClassEmitter nestedClass = method2Invocation[method];
 
 				MethodEmitter newProxiedMethod = CreateProxiedMethod(
-					targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self);
+					targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self, 
+					ConstructorVersion.WithoutTargetMethod, null);
 
 				ReplicateNonInheritableAttributes(method, newProxiedMethod);
-
-				// method2Emitter[method] = newProxiedMethod;
 			}
 
 			foreach(PropertyToGenerate propToGen in propsToGenerate)
@@ -168,7 +168,8 @@ namespace Castle.DynamicProxy.Generators
 
 					ImplementProxiedMethod(targetType, getEmitter,
 										   propToGen.GetMethod, emitter,
-										   nestedClass, interceptorsField, SelfReference.Self);
+										   nestedClass, interceptorsField, SelfReference.Self,
+										   ConstructorVersion.WithoutTargetMethod, null);
 
 					ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
 				}
@@ -183,22 +184,23 @@ namespace Castle.DynamicProxy.Generators
 
 					ImplementProxiedMethod(targetType, setEmitter,
 										   propToGen.SetMethod, emitter,
-										   nestedClass, interceptorsField, SelfReference.Self);
+										   nestedClass, interceptorsField, SelfReference.Self,
+										   ConstructorVersion.WithoutTargetMethod, null);
 
 					ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
 				}
 			}
 		}
 
-		protected MethodEmitter ImplementProxiedMethod(Type targetType, MethodEmitter methodEmitter, MethodInfo method,
+		protected MethodEmitter ImplementProxiedMethod(Type targetType, 
+		                                               MethodEmitter methodEmitter, MethodInfo method,
 		                                               ClassEmitter emitter,
 		                                               NestedClassEmitter invocationImpl,
 		                                               FieldReference interceptorsField,
-		                                               Reference targetRef)
+		                                               Reference targetRef, ConstructorVersion version, 
+		                                               MethodInfo methodOnTarget)
 		{
 			methodEmitter.CopyParametersAndReturnTypeFrom(method, emitter);
-
-			// MethodInfo methodOnTarget = GetMethodOnTarget(method);
 
 			TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(methodEmitter.Arguments);
 
@@ -233,7 +235,7 @@ namespace Castle.DynamicProxy.Generators
 			// TODO: Initialize iinvocation instance 
 			// with ordinary arguments and in and out arguments
 
-			Expression interceptors = null;
+			Expression interceptors;
 
 			// if (useSelector)
 			{
@@ -245,11 +247,7 @@ namespace Castle.DynamicProxy.Generators
 				interceptors = interceptorsField.ToExpression();
 			}
 
-			// TypeTokenExpression typeExp = new TypeTokenExpression(targetType);
-			// MethodTokenExpression methodTokenExp = new MethodTokenExpression(method, targetType);
-
 			Expression typeTokenFieldExp = typeTokenField.ToExpression();
-
 			Expression methodInfoTokenExp;
 			
 			if (method2TokenField.ContainsKey(method)) // Token is in the cache
@@ -270,14 +268,32 @@ namespace Castle.DynamicProxy.Generators
 				constructor = TypeBuilder.GetConstructor(iinvocation, invocationImpl.Constructors[0].Builder);
 			}
 
-			NewInstanceExpression newInvocImpl = new NewInstanceExpression(
-				constructor,
-				targetRef.ToExpression(),
-				interceptors,
-				typeTokenFieldExp,
-				methodInfoTokenExp,
-				NullExpression.Instance,
-				new ReferencesToObjectArrayExpression(dereferencedArguments));
+			NewInstanceExpression newInvocImpl;
+
+			if (version == ConstructorVersion.WithTargetMethod)
+			{
+				MethodTokenExpression methodOnTargetTokenExp = 
+					new MethodTokenExpression(methodOnTarget, methodOnTarget.DeclaringType);
+				
+				newInvocImpl = new NewInstanceExpression(
+					constructor,
+					targetRef.ToExpression(),
+					interceptors,
+					typeTokenFieldExp,
+					methodInfoTokenExp,
+					methodOnTargetTokenExp,
+					new ReferencesToObjectArrayExpression(dereferencedArguments));
+			}
+			else
+			{
+				newInvocImpl = new NewInstanceExpression(
+					constructor,
+					targetRef.ToExpression(),
+					interceptors,
+					typeTokenFieldExp,
+					methodInfoTokenExp,
+					new ReferencesToObjectArrayExpression(dereferencedArguments));
+			}
 
 			methodEmitter.CodeBuilder.AddStatement(
 				new AssignStatement(invocationImplLocal, newInvocImpl));
@@ -473,7 +489,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <returns></returns>
 		protected NestedClassEmitter BuildInvocationNestedType(
 			ClassEmitter emitter, Type targetType, Type targetForInvocation,
-			MethodInfo methodInfo, MethodInfo callbackMethod)
+			MethodInfo methodInfo, MethodInfo callbackMethod, ConstructorVersion version)
 		{
 			nestedCounter++;
 
@@ -491,7 +507,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// Create constructor
 
-			CreateIInvocationConstructor(targetForInvocation, nested, targetRef);
+			CreateIInvocationConstructor(targetForInvocation, nested, targetRef, version);
 
 			// InvokeMethodOnTarget implementation
 			
@@ -513,7 +529,7 @@ namespace Castle.DynamicProxy.Generators
 		                                               NestedClassEmitter nested,
 		                                               ParameterInfo[] parameters,
 		                                               FieldReference targetField,
-		                                               MethodInfo callbackMethod)
+													   MethodInfo callbackMethod)
 		{
 			const MethodAttributes methodAtts = MethodAttributes.Public |
 			                                    MethodAttributes.Final |
@@ -620,21 +636,47 @@ namespace Castle.DynamicProxy.Generators
 			method.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void CreateIInvocationConstructor(Type targetFieldType, NestedClassEmitter nested, FieldReference targetField)
+		protected void CreateIInvocationConstructor(Type targetFieldType, 
+		                                            NestedClassEmitter nested,
+													FieldReference targetField, 
+		                                            ConstructorVersion version)
 		{
 			ArgumentReference cArg0 = new ArgumentReference(targetFieldType);
 			ArgumentReference cArg1 = new ArgumentReference(typeof(IInterceptor[]));
 			ArgumentReference cArg2 = new ArgumentReference(typeof(Type));
 			ArgumentReference cArg3 = new ArgumentReference(typeof(MethodInfo));
-			ArgumentReference cArg4 = new ArgumentReference(typeof(MethodInfo));
+			ArgumentReference cArg4 = null;
+			
+			if (version == ConstructorVersion.WithTargetMethod)
+			{
+				cArg4 = new ArgumentReference(typeof(MethodInfo));
+			}
+			
 			ArgumentReference cArg5 = new ArgumentReference(typeof(object[]));
 
-			ConstructorEmitter constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5);
+			ConstructorEmitter constructor;
+			
+			if (cArg4 == null)
+			{
+				constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg5);
+			}
+			else
+			{
+				constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5);
+			}
 
 			constructor.CodeBuilder.AddStatement(new AssignStatement(targetField, cArg0.ToExpression()));
-			
-			constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructor,
-			                                              cArg1, cArg2, cArg3, cArg4, cArg5);
+
+			if (cArg4 == null)
+			{
+				constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructorWithoutTargetMethod,
+															  cArg1, cArg2, cArg3, cArg5);
+			}
+			else
+			{
+				constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructorWithTargetMethod,
+															  cArg1, cArg2, cArg3, cArg4, cArg5);
+			}
 			
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}

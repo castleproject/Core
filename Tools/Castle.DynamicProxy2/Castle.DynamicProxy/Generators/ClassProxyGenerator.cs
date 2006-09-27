@@ -133,7 +133,8 @@ namespace Castle.DynamicProxy.Generators
 
 					method2Invocation[method] = BuildInvocationNestedType(emitter, targetType,
 					                                                      emitter.TypeBuilder,
-					                                                      method, callbackMethod);
+																		  method, callbackMethod, 
+					                                                      ConstructorVersion.WithoutTargetMethod);
 				}
 
 				// Create methods overrides
@@ -153,7 +154,8 @@ namespace Castle.DynamicProxy.Generators
 					// TODO: Should the targetType be a generic definition or instantiation
 
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(
-						targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self);
+						targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self, 
+						ConstructorVersion.WithoutTargetMethod, null);
 
 					ReplicateNonInheritableAttributes(method, newProxiedMethod);
 					
@@ -172,7 +174,8 @@ namespace Castle.DynamicProxy.Generators
 
 						ImplementProxiedMethod(targetType, getEmitter,
 						                       propToGen.GetMethod, emitter,
-											   nestedClass, interceptorsField, SelfReference.Self);
+											   nestedClass, interceptorsField, SelfReference.Self, 
+						                       ConstructorVersion.WithoutTargetMethod, null);
 
 						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
 					}
@@ -186,8 +189,9 @@ namespace Castle.DynamicProxy.Generators
 						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(atts);
 
 						ImplementProxiedMethod(targetType, setEmitter,
-						                       propToGen.SetMethod, emitter, 
-						                       nestedClass, interceptorsField, SelfReference.Self);
+						                       propToGen.SetMethod, emitter,
+											   nestedClass, interceptorsField, SelfReference.Self, 
+						                       ConstructorVersion.WithoutTargetMethod, null);
 
 						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
 					}
