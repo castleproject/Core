@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}"
     >
@@ -82,6 +82,10 @@
                     RelPath = "AssertUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DynProxy.snk"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ICallable.cs"

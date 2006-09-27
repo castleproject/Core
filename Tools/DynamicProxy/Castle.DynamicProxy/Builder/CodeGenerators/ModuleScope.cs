@@ -119,7 +119,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         private static byte[] GetKeyPair()
         {
             byte[] keyPair;
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+            using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
             {
                 int length = (int)stream.Length;
                 keyPair = new byte[length];
