@@ -291,7 +291,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="sourceType"></param>
 		/// <param name="targetType"></param>
 		/// <returns></returns>
-		private static bool IsTypeEquivalent(Type sourceType, Type targetType)
+		public static bool IsTypeEquivalent(Type sourceType, Type targetType)
 		{
 			if (sourceType.IsGenericParameter)
 			{
@@ -312,6 +312,19 @@ namespace Castle.DynamicProxy.Generators
 					if (sourceType.GetGenericTypeDefinition() != targetType.GetGenericTypeDefinition())
 					{
 						return false;
+					}
+					
+					// Compare generic arguments
+					
+					Type[] sourceGenArgs = sourceType.GetGenericArguments();
+					Type[] targetGenArgs = targetType.GetGenericArguments();
+					
+					for(int i=0; i < sourceGenArgs.Length; i++)
+					{
+						if (!IsTypeEquivalent(sourceGenArgs[i], targetGenArgs[i]))
+						{
+							return false;
+						}
 					}
 				}
 				else if (sourceType != targetType)

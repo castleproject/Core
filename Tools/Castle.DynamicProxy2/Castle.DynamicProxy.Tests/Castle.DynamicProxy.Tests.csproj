@@ -69,6 +69,7 @@
     <Compile Include="MixinTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interceptors\ResultModifierInterceptor.cs" />
+    <Compile Include="TypeEquivalentTestCase.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
