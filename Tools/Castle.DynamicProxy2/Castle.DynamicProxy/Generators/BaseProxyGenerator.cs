@@ -694,83 +694,43 @@ namespace Castle.DynamicProxy.Generators
 
 		#endregion
 
-		protected void CollectMethodsToProxy(ArrayList methodsList, Type type, bool onlyVirtuals)
+		protected void CollectMethodsToProxy(ArrayList methodList, Type type, bool onlyVirtuals)
 		{
-			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
-			MethodInfo[] methods = type.GetMethods(flags);
-
-			foreach(MethodInfo method in methods)
+			CollectMethods(methodList, type, onlyVirtuals);
+			
+			if (type.IsInterface)
 			{
-				if (method.IsSpecialName)
-				{
-					continue;
-				}
+				Type[] typeChain = type.FindInterfaces(new TypeFilter(NoFilter), null);
 
-				if (AcceptMethod(method, onlyVirtuals))
+				foreach(Type interType in typeChain)
 				{
-					methodsList.Add(method);
+					CollectMethods(methodList, interType, onlyVirtuals);
 				}
 			}
 		}
 
-		protected void CollectPropertyMethodsToProxy(ArrayList methodsList, Type type, bool onlyVirtuals,
-		                                             ClassEmitter emitter, out PropertyToGenerate[] propsToGenerate)
+		protected void CollectPropertyMethodsToProxy(ArrayList methodList, Type type, bool onlyVirtuals,
+													 ClassEmitter emitter, out PropertyToGenerate[] propsToGenerate)
 		{
-			ArrayList toGenerateList = new ArrayList();
-
-			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
-			PropertyInfo[] properties = type.GetProperties(flags);
-
-			foreach(PropertyInfo propInfo in properties)
+			if (type.IsInterface)
 			{
-				bool generateReadable, generateWritable;
+				ArrayList toGenerateList = new ArrayList();
 
-				generateWritable = generateReadable = false;
+				toGenerateList.AddRange(CollectProperties(methodList, type, onlyVirtuals, emitter));
+				
+				Type[] typeChain = type.FindInterfaces(new TypeFilter(NoFilter), null);
 
-				MethodInfo setMethod, getMethod;
-				setMethod = getMethod = null;
-
-				if (propInfo.CanRead)
+				foreach(Type interType in typeChain)
 				{
-					getMethod = propInfo.GetGetMethod(true);
-
-					if (IsAccessible(getMethod) && AcceptMethod(getMethod, onlyVirtuals))
-					{
-						methodsList.Add(getMethod);
-						generateReadable = true;
-					}
+					toGenerateList.AddRange(CollectProperties(methodList, interType, onlyVirtuals, emitter));
 				}
-
-				if (propInfo.CanWrite)
-				{
-					setMethod = propInfo.GetSetMethod(true);
-
-					if (IsAccessible(setMethod) &&  AcceptMethod(setMethod, onlyVirtuals))
-					{
-						methodsList.Add(setMethod);
-						generateWritable = true;
-					}
-				}
-
-				if (!generateWritable && !generateReadable)
-				{
-					continue;
-				}
-
-				PropertyAttributes atts = ObtainPropertyAttributes(propInfo);
-
-				PropertyEmitter propEmitter =
-					emitter.CreateProperty(propInfo.Name, atts, propInfo.PropertyType);
-
-				PropertyToGenerate propToGenerate =
-					new PropertyToGenerate(generateReadable, generateWritable, propEmitter, getMethod, setMethod);
-
-				toGenerateList.Add(propToGenerate);
+				
+				propsToGenerate = (PropertyToGenerate[]) toGenerateList.ToArray(typeof(PropertyToGenerate));
 			}
-
-			propsToGenerate = (PropertyToGenerate[]) toGenerateList.ToArray(typeof(PropertyToGenerate));
+			else
+			{
+				propsToGenerate = CollectProperties(methodList, type, onlyVirtuals, emitter);
+			}
 		}
 
 		/// <summary>
@@ -806,8 +766,8 @@ namespace Castle.DynamicProxy.Generators
 			return generationHook.ShouldInterceptMethod(targetType, method); ;
 		}
 
-		protected MethodInfo[] CollectMethodsAndProperties(ClassEmitter emitter, Type targetType, 
-		                                                   out PropertyToGenerate[] propsToGenerate)
+		protected MethodInfo[] CollectMethodsAndProperties(ClassEmitter emitter, Type targetType,
+														   out PropertyToGenerate[] propsToGenerate)
 		{
 			bool onlyVirtuals = CanOnlyProxyVirtual();
 
@@ -831,7 +791,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			object[] attrs = targetType.GetCustomAttributes(false);
 
-			foreach (Attribute attribute in attrs)
+			foreach(Attribute attribute in attrs)
 			{
 				emitter.DefineCustomAttribute(attribute);
 			}
@@ -841,7 +801,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			object[] attrs = method.GetCustomAttributes(false);
 
-			foreach (Attribute attribute in attrs)
+			foreach(Attribute attribute in attrs)
 			{
 				emitter.DefineCustomAttribute(attribute);
 			}
@@ -936,7 +896,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				Type[] genTypes = type.GetGenericArguments();
 
-				foreach (Type genType in genTypes)
+				foreach(Type genType in genTypes)
 				{
 					if (genType.IsGenericParameter)
 					{
@@ -946,6 +906,89 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return false;
+		}
+
+		private bool NoFilter(Type type, object filterCriteria)
+		{
+			return true;
+		}
+
+		private void CollectMethods(ArrayList methodsList, Type type, bool onlyVirtuals)
+		{
+			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+			MethodInfo[] methods = type.GetMethods(flags);
+
+			foreach(MethodInfo method in methods)
+			{
+				if (method.IsSpecialName)
+				{
+					continue;
+				}
+
+				if (AcceptMethod(method, onlyVirtuals))
+				{
+					methodsList.Add(method);
+				}
+			}
+		}
+
+		private PropertyToGenerate[] CollectProperties(ArrayList methodList, Type type, bool onlyVirtuals, ClassEmitter emitter)
+		{
+			ArrayList toGenerateList = new ArrayList();
+
+			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+			PropertyInfo[] properties = type.GetProperties(flags);
+
+			foreach(PropertyInfo propInfo in properties)
+			{
+				bool generateReadable, generateWritable;
+
+				generateWritable = generateReadable = false;
+
+				MethodInfo setMethod, getMethod;
+				setMethod = getMethod = null;
+
+				if (propInfo.CanRead)
+				{
+					getMethod = propInfo.GetGetMethod(true);
+
+					if (IsAccessible(getMethod) && AcceptMethod(getMethod, onlyVirtuals))
+					{
+						methodList.Add(getMethod);
+						generateReadable = true;
+					}
+				}
+
+				if (propInfo.CanWrite)
+				{
+					setMethod = propInfo.GetSetMethod(true);
+
+					if (IsAccessible(setMethod) && AcceptMethod(setMethod, onlyVirtuals))
+					{
+						methodList.Add(setMethod);
+						generateWritable = true;
+					}
+				}
+
+				if (!generateWritable && !generateReadable)
+				{
+					continue;
+				}
+
+				PropertyAttributes atts = ObtainPropertyAttributes(propInfo);
+
+				PropertyEmitter propEmitter =
+					emitter.CreateProperty(propInfo.Name, atts, propInfo.PropertyType);
+
+				PropertyToGenerate propToGenerate =
+					new PropertyToGenerate(generateReadable, generateWritable, propEmitter, getMethod, setMethod);
+
+				toGenerateList.Add(propToGenerate);
+			}
+
+			return (PropertyToGenerate[])toGenerateList.ToArray(typeof(PropertyToGenerate));
 		}
 	}
 }

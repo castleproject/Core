@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 {
 	using System;
 	
-	public class ServiceImpl : IService
+	public class ServiceImpl : IService, IExtendedService
 	{
 		public int Sum(int b1, int b2)
 		{
@@ -66,6 +66,11 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 		public bool Valid
 		{
 			get { return false; }
+		}
+
+		public void DoSomething()
+		{
+			
 		}
 	}
 }

@@ -42,5 +42,19 @@ namespace Castle.DynamicProxy.Tests
 			
 			Assert.AreEqual("Sum ", logger.LogContents);
 		}
+
+		[Test]
+		public void InterfaceInheritance()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+
+			IService service = (IExtendedService)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(IExtendedService), new ServiceImpl(), logger);
+
+			Assert.AreEqual(3, service.Sum(1, 2));
+
+			Assert.AreEqual("Sum ", logger.LogContents);
+		}
 	}
 }

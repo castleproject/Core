@@ -105,6 +105,23 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ClassWithInheritance()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+			
+			object proxy = generator.CreateClassProxy(typeof(ExtendedServiceClass), logger);
+
+			Assert.IsNotNull(proxy);
+
+			ExtendedServiceClass extended = (ExtendedServiceClass) proxy;
+
+			extended.Sum2(1, 2);
+			extended.Sum(1, 2);
+			
+			Assert.AreEqual("Sum2 Sum ", logger.LogContents);
+		}
+		
+		[Test]
 		public void ProxyForClassWithInterfaces()
 		{
 			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new Type[] { typeof(IDisposable) },

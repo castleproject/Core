@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			List<Type> types = new List<Type>();
 
-			foreach (Type genType in genericType.GetGenericArguments())
+			foreach(Type genType in genericType.GetGenericArguments())
 			{
 				types.Add(name2GenericType[genType.Name]);
 			}

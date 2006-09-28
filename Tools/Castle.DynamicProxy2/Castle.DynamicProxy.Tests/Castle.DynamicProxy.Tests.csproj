@@ -63,6 +63,7 @@
     <Compile Include="GenInterfaces\GenInterfaceWithGenMethods.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenMethodsAndGenReturn.cs" />
     <Compile Include="Interceptors\LogInvocationInterceptor.cs" />
+    <Compile Include="InterClasses\IExtendedService.cs" />
     <Compile Include="InterClasses\IService.cs" />
     <Compile Include="InterClasses\ServiceImpl.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
