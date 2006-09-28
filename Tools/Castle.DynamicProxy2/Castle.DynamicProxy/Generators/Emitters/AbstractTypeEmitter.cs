@@ -54,6 +54,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return name2GenericType[genericArgumentName];
 		}
 
+		public Type[] GetGenericArgumentsFor(Type genericType)
+		{
+			List<Type> types = new List<Type>();
+
+			foreach (Type genType in genericType.GetGenericArguments())
+			{
+				types.Add(name2GenericType[genType.Name]);
+			}
+
+			return types.ToArray();
+		}
+		
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
 			List<Type> types = new List<Type>();

@@ -14,6 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Collections.Generic;
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
@@ -71,6 +73,24 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(10L, proxy.DoSomething<long>(10L, 1));
 
 			Assert.AreEqual("DoSomething ", logger.LogContents);
+		}
+		
+		[Test]
+		public void ProxyWithGenInterfaceWithGenericTypes()
+		{
+			GenInterfaceWithGenericTypes proxy =
+				generator.CreateInterfaceProxyWithTarget<GenInterfaceWithGenericTypes>(
+					new GenInterfaceWithGenericTypesImpl(), logger);
+
+			Assert.IsNotNull(proxy);
+
+			Assert.IsNotNull(proxy.Find(""));
+			Assert.IsNotNull(proxy.Find<String>(""));
+			
+			proxy.Populate<String>(new List<String>());
+
+			Assert.AreEqual("Find Find Populate ", logger.LogContents);
+
 		}
 	}
 }

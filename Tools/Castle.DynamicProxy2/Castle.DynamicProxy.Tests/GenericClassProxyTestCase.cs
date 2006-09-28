@@ -163,8 +163,6 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GenericMethodArgumentsAndTypeGenericArgumentsWithSameName()
 		{
-			// GenClassNameClash
-
 			GenClassNameClash<ArrayList, Hashtable> proxy =
 				generator.CreateClassProxy<GenClassNameClash<ArrayList, Hashtable>>(logger);
 
@@ -176,6 +174,20 @@ namespace Castle.DynamicProxy.Tests
 			proxy.DoSomethingZX<long, string>(1L, "b");
 
 			Assert.AreEqual("DoSomethingT DoSomethingZ DoSomethingTX DoSomethingZX ", logger.LogContents);
+		}
+		
+		[Test]
+		public void ClassWithGenMethodOnly()
+		{
+			OnlyGenMethodsClass proxy =
+				generator.CreateClassProxy<OnlyGenMethodsClass>(logger);
+
+			Assert.IsNotNull(proxy);
+
+			proxy.DoSomething(new ArrayList());
+
+			Assert.IsTrue(proxy.Invoked);
+			Assert.AreEqual("DoSomething ", logger.LogContents);
 
 		}
 	}

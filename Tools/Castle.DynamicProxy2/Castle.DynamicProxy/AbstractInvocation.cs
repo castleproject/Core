@@ -27,6 +27,7 @@ namespace Castle.DynamicProxy
 		private object returnValue;
 		private int execIndex = -1;
 		private object[] arguments;
+//		private object[] genArgs;
 
 		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod, object[] arguments)
 		{
@@ -41,6 +42,12 @@ namespace Castle.DynamicProxy
 		{
 			this.interfMethod = interfMethod;
 		}
+
+//		public object[] GenArgs
+//		{
+//			get { return genArgs; }
+//			set { genArgs = value; }
+//		}
 
 		public Type TargetType
 		{

@@ -54,10 +54,12 @@
     <Compile Include="GenClasses\GenClassWithGenMethods.cs" />
     <Compile Include="GenClasses\GenClassWithGenMethodsConstrained.cs" />
     <Compile Include="GenClasses\GenClassWithGenReturn.cs" />
+    <Compile Include="GenClasses\OnlyGenMethodsClass.cs" />
     <Compile Include="GenerationHookTestCase.cs" />
     <Compile Include="GenericClassProxyTestCase.cs" />
     <Compile Include="GenericInterfaceProxyTestCase.cs" />
     <Compile Include="GenInterfaces\GenInterface.cs" />
+    <Compile Include="GenInterfaces\GenInterfaceWithGenericTypes.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenMethods.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenMethodsAndGenReturn.cs" />
     <Compile Include="Interceptors\LogInvocationInterceptor.cs" />

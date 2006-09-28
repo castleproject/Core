@@ -552,7 +552,12 @@ namespace Castle.DynamicProxy.Generators
 				{
 					Type paramType = param.ParameterType;
 
-					if (paramType.IsGenericParameter)
+					if (HasGenericParameters(paramType))
+					{
+						paramType = paramType.GetGenericTypeDefinition().MakeGenericType(
+							nested.GetGenericArgumentsFor(paramType));
+					}
+					else if (paramType.IsGenericParameter)
 					{
 						paramType = nested.GetGenericArgument(paramType.Name);
 					}
@@ -585,7 +590,13 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (callbackMethod.ReturnType.IsGenericParameter)
 				{
-					ret_local = method.CodeBuilder.DeclareLocal(nested.GetGenericArgument(callbackMethod.ReturnType.Name));
+					ret_local = method.CodeBuilder.DeclareLocal(
+						nested.GetGenericArgument(callbackMethod.ReturnType.Name));
+				}
+				else if (HasGenericParameters(callbackMethod.ReturnType))
+				{
+					ret_local = method.CodeBuilder.DeclareLocal(
+						callbackMethod.ReturnType.GetGenericTypeDefinition().MakeGenericType(nested.GetGenericArgumentsFor(callbackMethod.ReturnType)));
 				}
 				else
 				{
@@ -917,6 +928,24 @@ namespace Castle.DynamicProxy.Generators
 		private bool IsAccessible(MethodInfo method)
 		{
 			return method.IsPublic || method.IsFamily || method.IsFamilyAndAssembly || method.IsFamilyOrAssembly;
+		}
+
+		private bool HasGenericParameters(Type type)
+		{
+			if (type.IsGenericType)
+			{
+				Type[] genTypes = type.GetGenericArguments();
+
+				foreach (Type genType in genTypes)
+				{
+					if (genType.IsGenericParameter)
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
 		}
 	}
 }

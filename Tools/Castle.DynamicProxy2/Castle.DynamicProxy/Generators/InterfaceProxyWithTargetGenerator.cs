@@ -231,24 +231,9 @@ namespace Castle.DynamicProxy.Generators
 
 					// Check return type equivalence
 
-					if (methodInfo.ReturnType.IsGenericParameter != methodOnInterface.ReturnType.IsGenericParameter)
+					if (!IsTypeEquivalent(methodInfo.ReturnType, methodOnInterface.ReturnType))
 					{
 						return false;
-					}
-
-					if (methodInfo.ReturnType.IsGenericParameter)
-					{
-						if (methodInfo.ReturnType.Name != methodOnInterface.ReturnType.Name)
-						{
-							return false;
-						}
-					}
-					else
-					{
-						if (methodInfo.ReturnType != methodOnInterface.ReturnType)
-						{
-							return false;
-						}
 					}
 
 					// Check parameters equivalence
@@ -266,24 +251,9 @@ namespace Castle.DynamicProxy.Generators
 						Type sourceParamType = sourceParams[i].ParameterType;
 						Type targetParamType = targetParams[i].ParameterType;
 
-						if (sourceParamType.IsGenericParameter != targetParamType.IsGenericParameter)
+						if (!IsTypeEquivalent(sourceParamType, targetParamType))
 						{
 							return false;
-						}
-
-						if (sourceParamType.IsGenericParameter)
-						{
-							if (sourceParamType.Name != targetParamType.Name)
-							{
-								return false;
-							}
-						}
-						else
-						{
-							if (sourceParamType != targetParamType)
-							{
-								return false;
-							}
 						}
 					}
 
@@ -312,6 +282,45 @@ namespace Castle.DynamicProxy.Generators
 
 			return proxyTargetType.GetMethod(methodOnInterface.Name, argTypes);
 #endif
+		}
+
+		/// <summary>
+		/// Checks whether the given types are the same. This is 
+		/// more complicated than it looks.
+		/// </summary>
+		/// <param name="sourceType"></param>
+		/// <param name="targetType"></param>
+		/// <returns></returns>
+		private static bool IsTypeEquivalent(Type sourceType, Type targetType)
+		{
+			if (sourceType.IsGenericParameter)
+			{
+				if (sourceType.Name != targetType.Name)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (sourceType.IsGenericType != targetType.IsGenericType)
+				{
+					return false;
+				}
+
+				if (sourceType.IsGenericType)
+				{
+					if (sourceType.GetGenericTypeDefinition() != targetType.GetGenericTypeDefinition())
+					{
+						return false;
+					}
+				}
+				else if (sourceType != targetType)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		protected override Reference GetProxyTargetReference()
