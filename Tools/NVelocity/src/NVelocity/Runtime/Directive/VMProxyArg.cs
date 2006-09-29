@@ -120,30 +120,24 @@ namespace NVelocity.Runtime.Directive
 			callerReference = callerRef;
 			type = t;
 
-			/*
-		*  make our AST if necessary
-		*/
+			// make our AST if necessary
 			setup();
 
-			/*
-		*  if we are multi-node tree, then save the size to 
-		*  avoid fn call overhead 
-		*/
+			// if we are multi-node tree, then save the size to 
+			// avoid fn call overhead 
 			if (nodeTree != null)
+			{
 				numTreeChildren = nodeTree.ChildrenCount;
+			}
 
-			/*
-		*  if we are a reference, and 'scalar' (i.e. $foo )
-		*  then get the de-dollared ref so we can
-		*  hit our context directly, avoiding the AST
-		*/
+			// if we are a reference, and 'scalar' (i.e. $foo )
+			// then get the de-dollared ref so we can
+			// hit our context directly, avoiding the AST
 			if (type == ParserTreeConstants.REFERENCE)
 			{
 				if (numTreeChildren == 0)
 				{
-					/*
-			* do this properly and use the Reference node
-			*/
+					// do this properly and use the Reference node
 					singleLevelRef = ((ASTReference) nodeTree).RootString;
 				}
 			}
@@ -215,7 +209,7 @@ namespace NVelocity.Runtime.Directive
 					{
 						((ASTReference) nodeTree).SetValue(context, o);
 					}
-					catch (MethodInvocationException mie)
+					catch(MethodInvocationException mie)
 					{
 						rsvc.Error("VMProxyArg.getObject() : method invocation error setting value : " + mie);
 					}
@@ -244,12 +238,12 @@ namespace NVelocity.Runtime.Directive
 				type = GENERALSTATIC;
 				staticObject = o;
 
-				rsvc.Error("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : " + contextReference + " / " + callerReference);
+				rsvc.Error("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : " + contextReference + " / " +
+				           callerReference);
 			}
 
 			return null;
 		}
-
 
 		/// <summary>  returns the value of the reference.  Generally, this is only
 		/// called for dynamic proxies, as the static ones should have
@@ -332,7 +326,7 @@ namespace NVelocity.Runtime.Directive
 
 						retObject = writer;
 					}
-					catch (Exception e)
+					catch(Exception e)
 					{
 						rsvc.Error("VMProxyArg.getObject() : error rendering reference : " + e);
 					}
@@ -343,12 +337,13 @@ namespace NVelocity.Runtime.Directive
 				}
 				else
 				{
-					rsvc.Error("Unsupported VM arg type : VM arg = " + callerReference + " type = " + type + "( VMProxyArg.getObject() )");
+					rsvc.Error("Unsupported VM arg type : VM arg = " + callerReference + " type = " + type +
+					           "( VMProxyArg.getObject() )");
 				}
 
 				return retObject;
 			}
-			catch (MethodInvocationException mie)
+			catch(MethodInvocationException mie)
 			{
 				/*
 		*  not ideal, but otherwise we propogate out to the 
@@ -369,7 +364,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private void setup()
 		{
-			switch (type)
+			switch(type)
 			{
 				case ParserTreeConstants.INTEGER_RANGE:
 				case ParserTreeConstants.REFERENCE:
@@ -422,14 +417,13 @@ namespace NVelocity.Runtime.Directive
 
 							nodeTree.Init(null, rsvc);
 						}
-						catch (Exception e)
+						catch(Exception e)
 						{
 							rsvc.Error("VMProxyArg.setup() : exception " + callerReference + " : " + StringUtils.StackTrace(e));
 						}
 
 						break;
 					}
-
 
 				case ParserTreeConstants.TRUE:
 					{
@@ -438,14 +432,12 @@ namespace NVelocity.Runtime.Directive
 						break;
 					}
 
-
 				case ParserTreeConstants.FALSE:
 					{
 						constant = true;
 						staticObject = false;
 						break;
 					}
-
 
 				case ParserTreeConstants.NUMBER_LITERAL:
 					{
@@ -454,27 +446,25 @@ namespace NVelocity.Runtime.Directive
 						break;
 					}
 
-
 				case ParserTreeConstants.WORD:
 					{
 						/*
 			*  this is technically an error...
 			*/
 
-						rsvc.Error("Unsupported arg type : " + callerReference + "  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())");
+						rsvc.Error("Unsupported arg type : " + callerReference +
+						           "  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())");
 						constant = true;
 						staticObject = new String(callerReference.ToCharArray());
 
 						break;
 					}
 
-
 				default:
 					{
 						rsvc.Error(" VMProxyArg.setup() : unsupported type : " + callerReference);
 					}
 					break;
-
 			}
 		}
 
@@ -513,7 +503,5 @@ namespace NVelocity.Runtime.Directive
 				}
 			}
 		}
-
-
 	}
 }

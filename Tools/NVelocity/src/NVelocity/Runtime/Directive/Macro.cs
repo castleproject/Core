@@ -40,8 +40,6 @@ namespace NVelocity.Runtime.Directive
 			get { return DirectiveType.BLOCK; }
 		}
 
-		private static bool debugMode = false;
-
 		/// <summary> Return name of this directive.
 		/// </summary>
 		/// <summary> Return type of this directive.
@@ -55,16 +53,6 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, Node node)
-		{
-			base.Init(rs, context, node);
-
-			// again, don't do squat.  We want the AST of the macro 
-	    // block to hang off of this but we don't want to 
-	    // init it... it's useless...
-			return;
-		}
-
 		/// <summary>
 		/// Used by Parser.java to process VMs withing the parsing process
 		///
@@ -76,12 +64,12 @@ namespace NVelocity.Runtime.Directive
 		public static void processAndRegister(IRuntimeServices rs, Node node, String sourceTemplate)
 		{
 			// There must be at least one arg to  #macro,
-	    // the name of the VM.  Note that 0 following 
-	    // args is ok for naming blocks of HTML
+			// the name of the VM.  Note that 0 following 
+			// args is ok for naming blocks of HTML
 			int numArgs = node.ChildrenCount;
 
 			// this number is the # of args + 1.  The + 1
-	    // is for the block tree
+			// is for the block tree
 			if (numArgs < 2)
 			{
 				// error - they didn't name the macro or
@@ -100,18 +88,17 @@ namespace NVelocity.Runtime.Directive
 			// make a big string out of our macro
 			StringBuilder temp = new StringBuilder();
 
-			for (int i = 0; i < macroArray.Count; i++)
+			for(int i = 0; i < macroArray.Count; i++)
 				temp.Append(macroArray[i]);
 
 			String macroBody = temp.ToString();
 
 			// now, try to add it.  The Factory controls permissions, 
-	    // so just give it a whack...
+			// so just give it a whack...
 			rs.AddVelocimacro(argArray[0], macroBody, argArray, sourceTemplate);
 
 			return;
 		}
-
 
 		/// <summary>  creates an array containing the literal
 		/// strings in the macro arguement
@@ -128,7 +115,7 @@ namespace NVelocity.Runtime.Directive
 			int i = 0;
 
 			//  eat the args
-			while (i < numArgs)
+			while(i < numArgs)
 			{
 				argArray[i] = node.GetChild(i).FirstToken.Image;
 
@@ -138,22 +125,24 @@ namespace NVelocity.Runtime.Directive
 				if (i > 0)
 				{
 					if (argArray[i].StartsWith("$"))
+					{
 						argArray[i] = argArray[i].Substring(1, (argArray[i].Length) - (1));
+					}
 				}
 
 				i++;
 			}
 
-			if (debugMode)
-			{
-				Console.Out.WriteLine("Macro.getArgArray() : #args = " + numArgs);
-				Console.Out.Write(argArray[0] + "(");
-
-				for (i = 1; i < numArgs; i++)
-					Console.Out.Write(" " + argArray[i]);
-
-				Console.Out.WriteLine(" )");
-			}
+//			if (debugMode)
+//			{
+//				Console.Out.WriteLine("Macro.getArgArray() : #args = " + numArgs);
+//				Console.Out.Write(argArray[0] + "(");
+//
+//				for (i = 1; i < numArgs; i++)
+//					Console.Out.Write(" " + argArray[i]);
+//
+//				Console.Out.WriteLine(" )");
+//			}
 
 			return argArray;
 		}
@@ -163,17 +152,17 @@ namespace NVelocity.Runtime.Directive
 		private static IList getASTAsStringArray(Node rootNode)
 		{
 			// this assumes that we are passed in the root 
-	    // node of the code block
-			Token t = rootNode.FirstToken;
+			// node of the code block
+			//Token t = rootNode.FirstToken;
 			Token tLast = rootNode.LastToken;
 
 			// now, run down the part of the tree bounded by
-	    // our first and last tokens
+			// our first and last tokens
 			ArrayList list = new ArrayList();
 
-			t = rootNode.FirstToken;
+			Token t = rootNode.FirstToken;
 
-			while (t != tLast)
+			while(t != tLast)
 			{
 				list.Add(NodeUtils.tokenLiteral(t));
 				t = t.Next;
