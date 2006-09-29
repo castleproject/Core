@@ -4,6 +4,9 @@ Change history
 Release Candidate 1
 ===================
 
+- Applied Jochen Grefe's patch fixing NVelocity-3
+  "#include not working for nvelocity"
+
 - Another attempt to MR-152 "Error while initializing MonoRail services"
 
   Separated container implementation from module. But it's important that 

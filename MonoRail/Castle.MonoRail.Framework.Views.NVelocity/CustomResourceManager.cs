@@ -50,7 +50,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (resource == null)
 			{
-				resource = new CustomTemplate();
+				if (resourceType == ResourceType.Content)
+				{
+					resource = new ContentResource();
+				}
+				else
+				{
+					resource = new CustomTemplate();
+				}
 
 				InitializeResource(resource, resourceName, encoding);
 
