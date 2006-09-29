@@ -20,34 +20,43 @@ namespace Castle.DynamicProxy
 	[Serializable]
 	public abstract class AbstractInvocation : IInvocation
 	{
+		private readonly object proxy;
+		private readonly object target;
 		private readonly IInterceptor[] interceptors;
 		private readonly Type targetType;
 		private readonly MethodInfo targetMethod;
-		private MethodInfo interfMethod;
+		private readonly MethodInfo interfMethod;
 		private object returnValue;
-		private int execIndex = -1;
 		private object[] arguments;
-//		private object[] genArgs;
+		private int execIndex = -1;
 
-		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod, object[] arguments)
+		protected AbstractInvocation(object proxy, object target, IInterceptor[] interceptors, 
+		                             Type targetType, MethodInfo targetMethod, object[] arguments)
 		{
+			this.proxy = proxy;
+			this.target = target;
 			this.interceptors = interceptors;
 			this.targetType = targetType;
 			this.targetMethod = targetMethod;
 			this.arguments = arguments;
 		}
 
-		protected AbstractInvocation(IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments) : 
-			this(interceptors, targetType, targetMethod, arguments)
+		protected AbstractInvocation(object proxy, object target, IInterceptor[] interceptors, 
+		                             Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, 
+		                             object[] arguments) : this(proxy, target, interceptors, targetType, targetMethod, arguments)
 		{
 			this.interfMethod = interfMethod;
 		}
 
-//		public object[] GenArgs
-//		{
-//			get { return genArgs; }
-//			set { genArgs = value; }
-//		}
+		public object Proxy
+		{
+			get { return proxy; }
+		}
+
+		public object InvocationTarget
+		{
+			get { return target; }
+		}
 
 		public Type TargetType
 		{

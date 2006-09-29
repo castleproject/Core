@@ -282,7 +282,8 @@ namespace Castle.DynamicProxy.Generators
 					typeTokenFieldExp,
 					methodInfoTokenExp,
 					methodOnTargetTokenExp,
-					new ReferencesToObjectArrayExpression(dereferencedArguments));
+					new ReferencesToObjectArrayExpression(dereferencedArguments), 
+					SelfReference.Self.ToExpression());
 			}
 			else
 			{
@@ -292,7 +293,8 @@ namespace Castle.DynamicProxy.Generators
 					interceptors,
 					typeTokenFieldExp,
 					methodInfoTokenExp,
-					new ReferencesToObjectArrayExpression(dereferencedArguments));
+					new ReferencesToObjectArrayExpression(dereferencedArguments), 
+					SelfReference.Self.ToExpression());
 			}
 
 			methodEmitter.CodeBuilder.AddStatement(
@@ -647,6 +649,14 @@ namespace Castle.DynamicProxy.Generators
 			method.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
+		/// <summary>
+		/// Generates the constructor for the nested class that extends
+		/// <see cref="AbstractInvocation"/>
+		/// </summary>
+		/// <param name="targetFieldType"></param>
+		/// <param name="nested"></param>
+		/// <param name="targetField"></param>
+		/// <param name="version"></param>
 		protected void CreateIInvocationConstructor(Type targetFieldType, 
 		                                            NestedClassEmitter nested,
 													FieldReference targetField, 
@@ -657,6 +667,7 @@ namespace Castle.DynamicProxy.Generators
 			ArgumentReference cArg2 = new ArgumentReference(typeof(Type));
 			ArgumentReference cArg3 = new ArgumentReference(typeof(MethodInfo));
 			ArgumentReference cArg4 = null;
+			ArgumentReference cArg6 = new ArgumentReference(typeof(object));
 			
 			if (version == ConstructorVersion.WithTargetMethod)
 			{
@@ -669,11 +680,11 @@ namespace Castle.DynamicProxy.Generators
 			
 			if (cArg4 == null)
 			{
-				constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg5);
+				constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg5, cArg6);
 			}
 			else
 			{
-				constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5);
+				constructor = nested.CreateConstructor(cArg0, cArg1, cArg2, cArg3, cArg4, cArg5, cArg6);
 			}
 
 			constructor.CodeBuilder.AddStatement(new AssignStatement(targetField, cArg0.ToExpression()));
@@ -681,12 +692,12 @@ namespace Castle.DynamicProxy.Generators
 			if (cArg4 == null)
 			{
 				constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructorWithoutTargetMethod,
-															  cArg1, cArg2, cArg3, cArg5);
+															  cArg0, cArg6, cArg1, cArg2, cArg3, cArg5);
 			}
 			else
 			{
 				constructor.CodeBuilder.InvokeBaseConstructor(Constants.AbstractInvocationConstructorWithTargetMethod,
-															  cArg1, cArg2, cArg3, cArg4, cArg5);
+															  cArg0, cArg6, cArg1, cArg2, cArg3, cArg4, cArg5);
 			}
 			
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());

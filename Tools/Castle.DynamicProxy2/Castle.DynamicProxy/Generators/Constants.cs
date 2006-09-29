@@ -20,13 +20,15 @@ namespace Castle.DynamicProxy.Generators
 	public abstract class Constants
 	{
 		public static ConstructorInfo AbstractInvocationConstructorWithTargetMethod = 
-			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic, 
-				null, new Type[] { typeof(IInterceptor[]), typeof(Type), typeof(MethodInfo), 
+			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance|BindingFlags.NonPublic,
+				null, new Type[] { typeof(object), typeof(object), typeof(IInterceptor[]), 
+				                   typeof(Type), typeof(MethodInfo), 
 				                   typeof(MethodInfo), typeof(object[]) }, null);
 
 		public static ConstructorInfo AbstractInvocationConstructorWithoutTargetMethod =
 			typeof(AbstractInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
-				null, new Type[] { typeof(IInterceptor[]), typeof(Type), typeof(MethodInfo), 
+				null, new Type[] { typeof(object), typeof(object), typeof(IInterceptor[]), 
+				                   typeof(Type), typeof(MethodInfo), 
 				                   typeof(object[]) }, null);
 
 		public static MethodInfo AbstractInvocationProceed =

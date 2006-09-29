@@ -19,9 +19,9 @@ namespace Castle.DynamicProxy
 
 	public interface IInvocation
 	{
-		// object Proxy { get; }
+		object Proxy { get; }
 
-		// object InvocationTarget { get;set; }
+		object InvocationTarget { get; }
 
 		Type TargetType { get; }
 
@@ -37,16 +37,17 @@ namespace Castle.DynamicProxy
 		MethodInfo Method { get; }
 
 		/// <summary>
-		/// 
+		/// For interface proxies, this will point to the
+		/// <see cref="MethodInfo"/> on the target class
 		/// </summary>
-		/// <returns></returns>
-		void Proceed();
+		MethodInfo MethodInvocationTarget { get; }
 
 		object ReturnValue { get; set; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		MethodInfo MethodInvocationTarget { get; }
+		/// <returns></returns>
+		void Proceed();
 	}
 }

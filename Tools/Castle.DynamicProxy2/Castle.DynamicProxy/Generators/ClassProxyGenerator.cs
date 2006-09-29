@@ -143,15 +143,14 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach(MethodInfo method in methods)
 				{
-					if (method.IsSpecialName && 
-					    (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")))
+					if (method.IsSpecialName && (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")))
 					{
 						continue;
 					}
 					
 					NestedClassEmitter nestedClass = method2Invocation[method];
 
-					// TODO: Should the targetType be a generic definition or instantiation
+					// TODO: Should the targetType be a generic definition or instantiation?
 
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(
 						targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self, 
