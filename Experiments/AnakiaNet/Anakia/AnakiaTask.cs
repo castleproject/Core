@@ -165,11 +165,12 @@ namespace Anakia
 
 				siteMapDoc = CreateSiteMap();
 
-				siteMapDoc.Save(@"E:\dev\castleall\trunk\Experiments\Documentation\docs\sitemap.xml");
+				// siteMapDoc.Save(@"E:\dev\castleall\trunk\Experiments\Documentation\docs\sitemap.xml");
 
 				ITreeWalker walker = new BreadthFirstWalker();
 
 				walker.Walk(root, new Act(CreateBreadCrumb));
+				walker.Walk(root, new Act(FixRelativePaths));
 				walker.Walk(root, new Act(CreateHtml));
 
 				foreach(FileToCopy file2Copy in staticFilesToCopy)
@@ -182,7 +183,12 @@ namespace Anakia
 
 					if (File.Exists(targetFile))
 					{
-						continue;
+						if (File.GetLastWriteTime(targetFile) >= File.GetLastWriteTime(file2Copy.SourceFile))
+						{
+							continue;
+						}
+						
+						File.Delete(targetFile);
 					}
 
 					File.Copy(file2Copy.SourceFile, targetFile);
@@ -191,7 +197,7 @@ namespace Anakia
 			catch(Exception ex)
 			{
 				Console.WriteLine(ex);
-				Console.Read();
+				// Console.Read();
 			}
 		}
 
@@ -289,6 +295,7 @@ namespace Anakia
 			context.Put("project", projectDom.DocumentElement);
 			context.Put("folder", node.ParentFolder);
 			context.Put("converter", new SimpleConverter());
+			context.Put("helper", new SimpleHelper());
 
 			String relativePath = String.Empty;
 
@@ -406,6 +413,7 @@ namespace Anakia
 				((XmlElement) parent).SetAttribute("page", node.TargetFilename);
 				((XmlElement) parent).SetAttribute("title", node.Meta.Title);
 				((XmlElement) parent).SetAttribute("issubpage", "true");
+				((XmlElement) parent).SetAttribute("path", node.ParentFolder.Path);
 
 				fragment.AppendChild(parent);
 			}
@@ -418,7 +426,7 @@ namespace Anakia
 
 				XmlElement newSection = node.XmlDoc.CreateElement("section");
 
-				if (sectionId != null)
+				if (sectionId != String.Empty)
 				{
 					newSection.SetAttribute("id", sectionId);
 				}
@@ -434,6 +442,43 @@ namespace Anakia
 			}
 
 			node.ParentFolder.SectionFragments.Add(fragment);
+		}
+		
+		private void FixRelativePaths(DocumentNode node)
+		{
+			if (node.XmlDoc == null) return;
+			
+			int level = node.ParentFolder.Level;
+			
+			XmlNodeList nodes = node.XmlDoc.SelectNodes("//@relative");
+			
+			foreach(XmlAttribute xmlNode in nodes)
+			{
+				XmlElement elem = xmlNode.OwnerElement;
+				
+				String relative = elem.GetAttribute("relative");
+				
+				elem.RemoveAttribute("relative");
+				
+				elem.SetAttribute("src", Relativize(level, relative));
+			}
+		}
+
+		private string Relativize(int level, string relativePath)
+		{
+			String newPath = "./";
+			
+			for(int i=1; i < level; i++)
+			{
+				newPath += "../";
+			}
+			
+			if (relativePath[0] == '/')
+			{
+				return newPath + relativePath.Substring(1);
+			}
+			
+			return newPath + relativePath;
 		}
 
 		private void PrintStructure(Folder folder, int ident)

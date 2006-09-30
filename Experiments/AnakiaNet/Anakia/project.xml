@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project href="http://httpd.apache.org/">
-
+<project>
 <title>Castle Project</title>
 <body>
+<!--
 <group type="dark">
 <menu>
 	<title><a href="">Table of Contents</a></title>
@@ -18,7 +18,7 @@
 	<li><a href="">Docs for version Release Candidate 1 </a></li>
 </menu>
 </group>
-<!--
+-->
 <group type="dark">
 <menu>
 	<title><a href="">Castle</a></title>
@@ -41,36 +41,43 @@
 </menu>
 <menu>
 	<title><a href="">MonoRail</a></title>
-	<li>Getting started</li>
-	<li>Documentation</li>
-	<li>FAQ</li>
-	<li>Recipes</li>
-	<li>External Articles</li>
-	<li>Samples</li>
+	<li><a href="">Getting started</a></li>
+	<li><a href="">Documentation</a></li>
+	<li><a href="">FAQ</a></li>
+	<li><a href="">Recipes</a></li>
+	<li><a href="">External Articles</a></li>
+	<li><a href="">Samples</a></li>
 </menu>
 <menu>
 	<title><a href="">MicroKernel/Windsor</a></title>
-	<li>Getting started</li>
-	<li>Documentation</li>
-	<li>Facilities</li>
-	<li>Services</li>
-	<li>FAQ</li>
-	<li>Recipes</li>
-	<li>External Articles</li>
-	<li>Samples</li>
+	<li><a href="">Getting started</a></li>
+	<li><a href="">Documentation</a></li>
+	<li><a href="">Facilities</a></li>
+	<li><a href="">Services</a></li>
+	<li><a href="">FAQ</a></li>
+	<li><a href="">Recipes</a></li>
+	<li><a href="">External Article</a>s</li>
+	<li><a href="">Samples</a></li>
 </menu>
 <menu>
 	<title><a href="">Aspect#</a></title>
-	<li>Getting started</li>
-	<li>Documentation</li>
-	<li>External Articles</li>
+	<li><a href="">Getting started</a></li>
+	<li><a href="">Documentation</a></li>
+	<li><a href="">External Articles</a></li>
 </menu>
 <menu>
 	<title><a href="">DynamicProxy</a></title>
-	<li>Getting started</li>
-	<li>Documentation</li>
-	<li>FAQ</li>
-	<li>External Articles</li>
+	<li><a href="">Getting started</a></li>
+	<li><a href="">Documentation</a></li>
+	<li><a href="">FAQ</a></li>
+	<li><a href="">External Articles</a></li>
+</menu>
+<menu>
+	<title>Others</title>
+	<li><a href="">Castle Contrib</a></li>
+	<li><a href="">NVelocity</a></li>
+	<li><a href="">Anakia</a></li>
+	<li><a href="">SVN hooks</a></li>
 </menu>
 </group>
 
@@ -84,6 +91,5 @@
 	<li><a href="">Blogs/Articles</a></li>
 </menu>
 </group>
--->
 </body>
 </project>
