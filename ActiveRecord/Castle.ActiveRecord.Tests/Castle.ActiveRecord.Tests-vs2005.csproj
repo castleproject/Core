@@ -140,6 +140,7 @@
     <Compile Include="Config\ConfigurationSource.cs" />
     <Compile Include="JoinedSubClassTestCase.cs" />
     <Compile Include="Model\GenericModel\Entity.cs" />
+    <Compile Include="Model\GenericModel\SurveyAssociation.cs" />
     <Compile Include="NestedClassWithPrefixTestCase.cs" />
     <Compile Include="DifferentDatabaseScopeTestCase.cs" />
     <Compile Include="Model\CompositeModel\Agent.cs" />

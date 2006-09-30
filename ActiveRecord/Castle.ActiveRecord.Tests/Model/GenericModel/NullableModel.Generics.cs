@@ -11,24 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 #if DOTNET2
+
 namespace Castle.ActiveRecord.Tests.Model.GenericModel
 {
 	using System;
-
-	using Nullables;
 
 	[ActiveRecord]
 	public class GenericNullableModel : ActiveRecordBase<GenericNullableModel>
 	{
 		private int id;
-        private Int32? age;
+		private Int32? age;
 		private DateTime? completion;
 		private Boolean? accepted;
 
-        public GenericNullableModel()
-		{
-		}
+		public GenericNullableModel() {}
 
 		[PrimaryKey]
 		public int Id
@@ -45,19 +43,19 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 		}
 
 		[Property]
-        public DateTime? Completion
+		public DateTime? Completion
 		{
 			get { return completion; }
 			set { completion = value; }
 		}
 
 		[Property]
-        public Boolean? Accepted
+		public Boolean? Accepted
 		{
 			get { return accepted; }
 			set { accepted = value; }
 		}
-
 	}
 }
+
 #endif

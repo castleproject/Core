@@ -11,11 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 #if DOTNET2
+
 namespace Castle.ActiveRecord.Tests
 {
-	using System;
-
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model.GenericModel;
@@ -28,8 +28,8 @@ namespace Castle.ActiveRecord.Tests
 		public new void Init()
 		{
 			ActiveRecordStarter.ResetInitializationFlag();
-			
-			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(GenericNullableModel));
+
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(GenericNullableModel), typeof(SurveyAssociation));
 	
 			Recreate();
 		}
@@ -40,14 +40,33 @@ namespace Castle.ActiveRecord.Tests
             GenericNullableModel model = new GenericNullableModel();
 			model.Save();
 
-            Assert.AreEqual(1, GenericNullableModel.FindAll().Length);
+			GenericNullableModel[] models = GenericNullableModel.FindAll();
 
-            model = GenericNullableModel.FindAll()[0];
+			Assert.AreEqual(1, models.Length);
+
+			model = models[0];
 
 			Assert.AreEqual(null, model.Age);
             Assert.AreEqual(null, model.Completion);
             Assert.AreEqual(null, model.Accepted);
 		}
+
+		[Test]
+		public void ProblemReportedOnForum()
+		{
+			SurveyAssociation model = new SurveyAssociation();
+			model.SurveyId = 1;
+			model.Save();
+
+			SurveyAssociation[] models = SurveyAssociation.FindAll();
+
+			Assert.AreEqual(1, models.Length);
+
+			model = models[0];
+
+			Assert.AreEqual(null, model.DepartmentId);
+		}
 	}
 }
+
 #endif
