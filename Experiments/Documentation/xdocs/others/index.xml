@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<document>
+<properties>
+	<title>Other projects</title>
+</properties>
+
+<body>
+
+<intro>
+<p>
+Recently we started a Contrib project so people can have a minimal 
+infrastructure to contribute with additions to Castle. We also decided
+to document and support to some extent internal projects and 
+what we have forked in order to secure our project goals. 
+</p>
+</intro>
+
+<toc/>
+
+<section>
+<title>Contents</title>
+
+<sitemap select="castle/others"/>
+
+</section>
+
+</body>
+</document>

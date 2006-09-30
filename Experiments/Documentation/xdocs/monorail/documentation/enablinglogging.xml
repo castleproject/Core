@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="hammett@gmail.com">Hamilton Verissimo</author>
+    <title>Enabling logging</title>
+  </properties>
+
+  <body>
+
+  <!-- Think about an hierarchical / breadcrumb -->
+  
+<intro>
+<p>
+MonoRail uses a set of services to handle specific tasks. The framework
+is responsible for defining the default implementations, instantiate,
+start and configure them. The services are made available through a combination
+of lifecycle interfaces and an implementation of <tt>IServiceProvider</tt>
+</p>
+</intro>
+
+<toc/>
+
+<section id="enablingLogging">
+<title>How to enable logging MR</title>
+
+<p>
+The Apache HTTP Server Project is an effort to develop and maintain
+an open-source HTTP server for modern operating systems including UNIX
+and Windows NT. The goal of this project is to provide a secure,
+efficient and extensible server that provides HTTP services in sync
+with the current HTTP standards.
+</p>
+
+</section>
+
+
+</body>
+</document>

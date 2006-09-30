@@ -1,113 +1,132 @@
 <?xml version="1.0"?>
 <document>
-  <properties>
-    <author email="docs@httpd.apache.org">Documentation Group</author>
-    <title>Welcome!</title>
-  </properties>
+<properties>
+  <title>Main Page</title>
+</properties>
 <body>
-<section id="Welcome">
-<title>The Number One HTTP Server On The Internet</title>
 
-<p>The Apache HTTP Server Project is an effort to develop and maintain
-an open-source HTTP server for modern operating systems including UNIX
-and Windows NT. The goal of this project is to provide a secure,
-efficient and extensible server that provides HTTP services in sync
-with the current HTTP standards.</p>
-
-<p>Apache has been the most popular web server on the Internet since
-April 1996.  The November 2005 <a 
-href="http://news.netcraft.com/archives/web_server_survey.html">Netcraft Web Server Survey</a>
-found that more than 70% of the web sites on the Internet are using Apache,
-thus making it more widely used than all other web servers combined.</p>
-
-<p>The Apache HTTP Server is a project of the <a
-href="http://www.apache.org/">Apache Software Foundation</a>.</p>
+<section id="introducingcastle">
+<title>Introducing Castle</title>
+<p>
+Castle aspires to simplify the development of enterprise and web applications. Offering a set of tools (working together or independently) and integration with other open source projects, Castle helps you get more done with less code.
+</p>
+<p>
+We're a growing and exciting community, committed to provide good code and through our projects, allow you to focus more on the problem at hand than all technology specific boilerplate code. 
+</p>
 </section>
 
-<section id="2.2.3">
-<title>Apache 2.2.3 Released</title>
-
-<p>The Apache HTTP Server Project is proud to <a
-href="http://www.apache.org/dist/httpd/Announcement2.2.html">announce</a>
-the release of version 2.2.3 of the Apache HTTP Server ("Apache").  In
-addition to a number of bug fixes to release 2.2.3, this release includes
-an 'important' security fix for mod_rewrite.</p>
-
-<p>This version of Apache is a major release and the start of a new stable
-   branch, and represents the best available version of Apache HTTP Server.
-   <a href="docs/2.2/new_features_2_2.html">New features</a> include
-   Smart Filtering, Improved Caching, AJP Proxy, Proxy Load Balancing, 
-   Graceful Shutdown support, Large File Support, the Event MPM, and refactored
-   Authentication/Authorization.</p>
-
-<p align="center">
-<a href="download.cgi">Download</a> | 
-<a href="docs/2.2/new_features_2_2.html">New Features in Apache 2.2</a> |
-<a href="http://www.apache.org/dist/httpd/CHANGES_2.2">ChangeLog for 2.2</a>
+<section>
+<title>Meet our projects</title>
+<p>
+<strong>Rapid Web Application Development</strong>
+<ul>
+  <li>MonoRail</li>
+</ul>
+<strong>Object Relational Database Mapping</strong>
+<ul>
+  <li>ActiveRecord: The enterprise data mapping pattern implemented using [[NHibernate]]
+	<ul><li>ActiveRecord Generator: A desktop application to generate ActiveRecord classes based on database schemas</li></ul>
+  </li>
+</ul>
+<strong>Inversion of Control Container</strong>
+<ul>
+  <li>MicroKernel: A lightweight inversion of control container core</li>
+  <li>Windsor Container: Augments the MicroKernel with features demanded by 
+  most enterprise projects
+	<ul>
+	<li>Facilities: Packaged extension units for the MicroKernel</li>
+	<li>Components: A small library of reusable components</li>
+	<li>Services: enterprise services</li>
+	</ul>
+  </li>
+</ul>
+<strong>General tools</strong>
+<ul>
+  <li>DynamicProxy: A lightweight proxy generator for interfaces and concrete classes used by several .net open source projects</li>
+</ul>
+<strong>Others</strong>
+<ul>
+  <li>Castle Contrib: A reunion for contributions that augments our projects</li>
+  <li>NVelocity: A fork from the official port with several bug fixes and improvements</li>
+  <li>Castle Anakia: An improved port of Apache Anakia</li>
+  <li>Castle SVN hooks: Internal tool used to ensure certain standards on source files per commit</li>
+</ul>
 </p>
-
 </section>
 
-<section id="2.0.59">
-<title>Apache 2.0.59 Released</title>
+<section id="newsandannouncements">
+<title>News &amp; Announcements</title>
+<p>
+<ul>
+<li> <i>August 18th, 2006</i>: You can join our [[IRC channel]] </li>
 
-<p>The Apache HTTP Server Project is proud to 
-   <a href="http://www.apache.org/dist/httpd/Announcement2.0.html">announce</a>
-   the legacy release of version 2.0.59 of the Apache HTTP Server 
-   ("Apache").</p>
+<li> <i>July 25th, 2006</i>: We kicked off a separated [[Contrib]] project.</li>
 
-<p>This version of Apache is principally a security release. In particular,
-   it includes an 'important' security patch to mod_rewrite.</p>
+<li> <i>June, 12th, 2006</i>: [http://www.castleproject.org/~ayende Daily Builds] are up! Thanks to [[User:Ayende Rahien|Ayende Rahien]] for his generous contribution of time and resources for the CI server.</li>
 
-<p>For further details, see the 
-   <a href="http://www.apache.org/dist/httpd/Announcement2.0.html"
-     >announcement</a>.</p>
+<li> <i>March 13th, 2006</i>: [http://fisheye3.cenqua.com/viewrep/castleproject FishEye] is up!</li>
 
-<p align="center">
-<a href="download.cgi">Download</a> | 
-<a href="docs/2.0/new_features_2_0.html">New Features in Apache 2.0</a> |
-<a href="http://www.apache.org/dist/httpd/CHANGES_2.0.59"
-  >ChangeLog for 2.0.59</a> |
-<a href="http://www.apache.org/dist/httpd/CHANGES_2.0"
-  >Complete ChangeLog for 2.0</a>
+<li> <i>January 1st, 2006</i>: Integration with Visual Studio is ready for [[MonoRail:Integration with Visual Studio|MonoRail]] and [[ActiveRecord:Integration with Visual Studio|ActiveRecord]]</li>
+
+<li> <i>January 1st, 2006</i>: We're proud to announce a '''new release''': Check [[Castle:Download | Downloads]]</li>
+
+<li> <i>September 17th, 2005</i>: '''New release''' <br/> Check [[Castle:Download | Downloads ]]</li>
+
+<li> <i>August 31st, 2005</i>: Welcome [[MonoRail:Brail | Brail]]!</li>
+
+<li> <i>January 26th, 2005</i>: ''''Introducing Castle - Part II''''  <br/>  [http://www.codeproject.com/cs/design/introducingcastleii.asp New article]    published on CodeProject.com describing how to use Castle on Rails (now [[MonoRail]]) and the NHibernate Facility.</li>
+
+<li> December 27th, 2004: ''''Introducing Castle - Part I''''  <br/>  [http://www.codeproject.com/cs/design/introducingcastle.asp New article]    published on CodeProject.com describing how inversion of control might benefit   the design of applications, and how Castle Project fits in this scenario. </li>
+</ul>
 </p>
-
 </section>
 
-<section id="1.3.37">
-<title>Apache 1.3.37 Released</title>
+<section id="license">
+<title>License</title>
+<p>
 
-<p>The Apache Group is pleased to announce the
-   <a href="http://www.apache.org/dist/httpd/Announcement1.3.html"
-      >legacy release of the 1.3.37 version of the Apache HTTP Server</a>.
+Castle Project is released under the terms of <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software Foundation License 2.0</a>
+
+<!-- Stats 
+<div style="display: none;">
+<img src="<nowiki>http://m1.nedstatbasic.net/n?id=ADJleAgOsp3pB6l1ClQ2NN6YrgLg</nowiki>">
+</div>
+-->
+
 </p>
-
-<p>This version of Apache is principally a security release. In particular,
-   it includes an 'important' security patch to mod_rewrite.</p>
-
-<p>For further details, see the 
-   <a href="http://www.apache.org/dist/httpd/Announcement1.3.html"
-     >announcement</a>.</p>
-
-<p align="center">
-<a href="download.cgi">Download</a> | 
-<a href="docs/1.3/windows.html">Apache for Win32</a> |
-<a href="docs/1.3/new_features_1_3.html">New Features in Apache 1.3</a> |
-<a href="http://www.apache.org/dist/httpd/CHANGES_1.3">ChangeLog for 1.3.37</a>
-</p>
-
 </section>
 
-<section id="Mirrors">
-<title>Want to try out the Apache HTTP Server?</title>
+<!--
+<section>
+<title>Castle Stack</title>
+<p>
 
-<p>Great!  We have updated our <a href="/download.cgi">download page</a> in
-an effort to better utilize our mirrors.  We hope that by making it easier
-to use our mirrors that we will be able to provide a better download
-experience.</p>
+<div align="center">
+<img relative="/images/castle-stack.png" />
+</div>
 
-<p>Please ensure that you <a href="/download.cgi#verify">verify</a>
-your downloads using PGP or MD5 signatures!</p>
+</p>
+</section>
+-->
+
+<section>
+<title>Thanks</title>
+<p>
+
+<table width="100%">
+<tr>
+<td align="center"><img relative="/images/ref/resharper.gif" /></td>
+<td align="center"><img relative="/images/ref/jira.gif" /></td>
+<td align="center"><img relative="/images/ref/fisheyed.gif" alt="Project Supported by FishEye"/></td>
+</tr>
+<tr>
+<td align="center"><a href="http://www.jetbrains.com/resharper">http://www.jetbrains.com/resharper/</a></td>
+<td align="center"><a href="http://www.atlassian.com/c/JIRA/">http://www.atlassian.com/c/JIRA/</a></td>
+<td align="center"><a href="http://www.cenqua.com/fisheye">http://www.cenqua.com/fisheye</a></td>
+</tr>
+</table>
+
+</p>
 </section>
 
 </body>

@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<document>
+<properties>
+	<title>Generator</title>
+</properties>
+
+<body>
+
+<intro>
+<p>
+The Generator project is a fully customizable code generator written in Boo and templates with ASP style syntax.
+</p>
+<p>
+The scaffold and project generators are heavily inspired by RoR, it generates real code you can modify for the controller, the views, layouts, css and tests. The CRUD views will look similar to current MR scaffold with the difference that the code is live in you project so you can add a field, color, validation, change the workflow without copy-pasting (hurrr...) from the last controller you've done! Plus you already got some running tests!
+<p>
+</p>
+This is a work in progress and considered in early alpha stage so use at your own risk but contributions or comments are welcome. 
+</p>
+</intro>
+
+<section>
+<title>What? I wasn't listening</title>
+<p>
+    * http://video.google.com/videoplay?docid=8788726275243372418 Full MonoRail project generation screencast (With TextMate)
+    * http://nproject.sf.net/GeneratorDemo.wmv ActiveRecord Scaffolding in MonoRail screencast (With Visual Studio) 
+</p>
+</section>
+
+<section>
+<title>Installing it</title>
+<p>
+To install from source:
+
+    * svn co http://svn.castleproject.org/svn/castlecontrib/generator/trunk generator
+    * cd generator
+    * nant install 
+
+Now type generate or monorail from everywhere! EVERYWHERE! 
+</p>
+</section>
+
+<section>
+<title>Available generators</title>
+<p>
+Here's a list of available generators. To run a generator type: generate GeneratorName
+=== Controller ===
+Generates a controller
+=== Generator ===
+Generates a generator skeleton
+=== Model ===
+Generates an ActiveRecord model class
+=== Project ===
+Generates a new MonoRail project
+=== Scaffold ===
+Generates a CRUD actions controller for a specified model.
+</p>
+</section>
+
+<section>
+<title>Configuration</title>
+<p>
+Edit the file Generators\Config.boo to fit your project structure then run generate from your project root folder.
+</p>
+</section>
+
+<section>
+<title>Roadmap</title>
+<p>
+* Add more complete test cases for the generators
+* Document each generator on this wiki page.
+* Document the creation of a new generator on this wiki page.
+* Add a generator to make coffee and add test cases to make sure the coffee is strong enough
+</p>
+</section>
+
+<section>
+<title>Author</title>
+<p>
+Follow this project development on [http://macournoyer.wordpress.com/ Marc-Andre Cournoyer's blog]
+</p>
+</section>
+
+</body>
+</document>

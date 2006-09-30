@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<document>
+  
+  <properties>
+    <author email="hammett@gmail.com">Hamilton Verissimo</author>
+    <title>MonoRail Services Architecture</title>
+	<categories>
+		<category>MonoRail</category>
+	</categories>
+	<audience>intermediate-advanced</audience>
+  </properties>
+
+  <body>
+
+  <!-- Think about an hierarchical / breadcrumb -->
+  
+<intro>
+<p>
+MonoRail uses a set of services to handle specific tasks. The framework
+is responsible for defining the default implementations, instantiate,
+start and configure them. The services are made available through a combination
+of lifecycle interfaces and an implementation of <tt>IServiceProvider</tt>
+</p>
+</intro>
+
+<toc/>
+
+<!-- 
+
+Logging
+  
+-->
+
+<section id="StatingTheProblem">
+<title>Stating the problem</title>
+<p>
+It's impossible to come up with a sophisticated software
+where the default behavior pleases everyone and integrates with everything.
+The usual solution is making the software rely on contracts and
+having the core code as just a coordination of invocations on the contracts
+implementation. An user is thus capable of replacing one or more
+contract implementation.
+</p>
+
+<p>
+The challenging is implementing an architecture where 
+the parts are easily replaced, configurable and can rely (depend) on 
+other parts.
+</p>
+</section>
+
+<section id="AnApproachToThisProblem">
+<title>How MonoRail tackles this problem</title>
+<p>
+The most usual solution to this problem is to use an Inversion of
+Control container. However, things have to be balanced. For MonoRail, 
+an IoC container would introduce dependencies on assemblies
+and an longer initialization. In the end, we wouldn't benefit from
+all IoC container features, so it could be considered too much for our problem.
+</p>
+
+<p>
+Instead, we combined what is already on the .Net library
+and some creative solution. 
+</p>
+
+<p>
+Basically we create two levels of services registries, per application and per request,
+and a simple interfaces that defines lifecycles that services optionally implement.
+This allow the service to start its work when it is supposed to and to 
+gather reference to other services.
+</p>
+</section>
+
+<section id="Flow">
+<title>How it works</title>
+<p>
+When the web application is started, the ASP.Net modules are initialized. 
+MonoRail has a <tt>EngineContextModule</tt> which is in charge of 
+</p>
+<ul>
+  <li>Read the configuration</li>
+  <li>Initialize the services</li>
+  <li>Subscribe to ASP.Net application and request level events</li>
+  <li>Create a request context (which we'll not cover here)</li>
+</ul>
+
+<p>
+Services implementation can be defined in the configuration section. 
+After reading the configuration section MonoRail checks for missing definition
+and register the missing services using the default implementation.
+</p>
+
+<p>
+After that it instantiates every service and runs the lifecycle. If everything
+went well, the framework is properly initialized. All services are registered in 
+the application level container, which happens to be implemented by 
+the <tt>EngineContextModule</tt> class. We call this the parent container.
+</p>
+
+<p>
+When a request starts, MonoRail creates a <tt>DefaultRailsEngineContext</tt> 
+instance, which also is a container for services. MonoRail sets the parent 
+container on it. This allow the user to override services per request, and 
+resolution of services in the parent.
+</p>
+</section>
+
+<section id="Flow">
+<title>The initialization flow</title>
+
+<p>
+<img src="../images/monorail/mr_services_1.png"/>
+</p>
+
+<p>
+<ol>
+  <li>The configuration is read into the <tt>MonoRailConfiguration</tt>. It's also registered as a service</li>
+  <li>The services collected are instantiated and registered</li>
+  <li>The lifecycle is executed</li>
+</ol>
+</p>
+</section>
+
+<section id="Lifecycle">
+<title>Lifecycle interfaces</title>
+
+<p>
+A service might implement a few interfaces to expose to MonoRail
+that it behaves in a specific way or that it needs something 
+from the framework.
+</p>
+
+<section>
+<title>ISupportInitialize (from System.ComponentModel)</title>
+
+  <p>This interface can be implemented if a service wants performs some initialization.</p>
+</section>
+
+<section>
+<title>IInitializable (from Castle.Core)</title>
+
+  <p>This interface can be implemented if a service wants performs some initialization.</p>
+</section>
+
+<section>
+<title>IServiceEnabledComponent (from Castle.Core)</title>
+
+  <p>This interface can be implemented if a service uses other services.</p>
+</section>
+
+<section>
+<title>Invocation order</title>
+
+<p><tt>IServiceEnabledComponent</tt> is the first one to be invoked. This gives a 
+chance to services gather all services references it wants. Then the initialization 
+interface's methods are invoked.
+</p>
+</section>
+
+<section>
+<title>The expected (good) behavior from a service implementation</title>
+
+<p>
+For service that uses <tt>IServiceEnabledComponent</tt> lifecycle, the implementor
+should keep in mind that the initialization lifecycle has not run for any
+service, so it might not be safe to use other services as they might not be properly
+initialized at the moment.
+</p>
+
+<p>
+The order of service registration and instantiation is not guaranted. So the 
+implementor should not make any assumption regarding that.
+</p>
+
+</section>
+
+</section>
+
+
+<section id="Services">
+<title>Built-in services</title>
+
+<p>
+The following is a succint list of services and their roles. You can
+refer to this list to learn more about MonoRail inner workings
+or to use them when developing extensions and new services.
+</p>
+
+	<section>
+	<title>MonoRailConfiguration</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>ExtensionManager</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IViewSourceLoader</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IViewEngine</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IScaffoldingSupport</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IControllerFactory</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IViewComponentFactory</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IFilterFactory</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IResourceFactory</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IEmailSender</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IEmailTemplateService</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IControllerDescriptorProvider</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IResourceDescriptorProvider</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IRescueDescriptorProvider</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>ILayoutDescriptorProvider</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IHelperDescriptorProvider</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IFilterDescriptorProvider</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>IControllerTree</title>
+	<p>Pendent</p>
+	</section>
+
+	<section>
+	<title>ICacheProvider</title>
+	<p>Pendent</p>
+	</section>
+	
+</section>
+
+<section>
+<title>Registering services</title>
+
+<p>
+The ..
+</p>
+
+</section>
+
+
+</body>
+</document>

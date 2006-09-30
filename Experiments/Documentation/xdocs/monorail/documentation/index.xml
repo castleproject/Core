@@ -2,7 +2,7 @@
 <document>
   <properties>
     <author email="docs@httpd.apache.org">Documentation Group</author>
-    <title>MonoRail Index</title>
+    <title>Documentation Index</title>
   </properties>
 
   <body>
@@ -23,21 +23,8 @@ to ActiveRecord:Getting started
 
 <toc/>
 
-<section id="WhyWouldIUseIt">
-<title>Why would I use it?</title>
-
-<p>
-The Apache HTTP Server Project is an effort to develop and maintain
-an open-source HTTP server for modern operating systems including UNIX
-and Windows NT. The goal of this project is to provide a secure,
-efficient and extensible server that provides HTTP services in sync
-with the current HTTP standards.
-</p>
-
-</section>
-
-<section id="WhyWouldIUseIt">
-<title>Why would I <b>not</b> use it?</title>
+<section id="DocIndex">
+<title>Doc index tree</title>
 
 <p>
 The Apache HTTP Server Project is an effort to develop and maintain

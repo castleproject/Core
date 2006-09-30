@@ -2,7 +2,7 @@
 <document>
   <properties>
     <author email="docs@httpd.apache.org">Documentation Group</author>
-    <title>MonoRail Index</title>
+    <title>Inversion of Control Container</title>
   </properties>
 
   <body>
@@ -24,7 +24,7 @@ to ActiveRecord:Getting started
 <toc/>
 
 <section id="WhyWouldIUseIt">
-<title>Why would I use it?</title>
+<title>MicroKernel</title>
 
 <p>
 The Apache HTTP Server Project is an effort to develop and maintain
@@ -37,7 +37,7 @@ with the current HTTP standards.
 </section>
 
 <section id="WhyWouldIUseIt">
-<title>Why would I <b>not</b> use it?</title>
+<title>Windsor</title>
 
 <p>
 The Apache HTTP Server Project is an effort to develop and maintain

@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="hammett@gmail.com">Hamilton Verissimo</author>
+    <title>MonoRail Configuration Reference</title>
+  </properties>
+
+  <body>
+
+  <!-- Think about an hierarchical / breadcrumb -->
+  
+<intro>
+<p>
+MonoRail uses a set of services to handle specific tasks. The framework
+is responsible for defining the default implementations, instantiate,
+start and configure them. The services are made available through a combination
+of lifecycle interfaces and an implementation of <tt>IServiceProvider</tt>
+</p>
+</intro>
+
+<toc/>
+
+<section id="ConfigExplained">
+<title>The formal definition</title>
+
+<p>
+The Apache HTTP Server Project is an effort to develop and maintain
+an open-source HTTP server for modern operating systems including UNIX
+and Windows NT. The goal of this project is to provide a secure,
+efficient and extensible server that provides HTTP services in sync
+with the current HTTP standards.
+</p>
+
+<pre>
+&lt;monorail 
+	useWindsorIntegration="true|false"
+	checkClientIsConnected="true|false"
+	smtpHost="" 
+	smtpUsername="" 
+	smtpPassword=""&gt;
+	
+	&lt;!-- custom Factories/Should be configured on services. Here for backward compatible purposes --&gt;
+	
+	&lt;customControllerFactory type="type name that implements IControllerFactory" /&gt;
+	&lt;customComponentFactory type="type name that implements IComponentFactory" /&gt;
+	&lt;customFilterFactory type="type name that implements IFilterFactory" /&gt;
+
+	&lt;controllers&gt;
+		&lt;assembly&gt;AssemblyName1&lt;/assembly&gt;
+		&lt;assembly&gt;AssemblyName2&lt;/assembly&gt;
+	&lt;/controllers&gt;
+	
+	&lt;viewcomponents&gt;
+		&lt;assembly&gt;AssemblyName1&lt;/assembly&gt;
+		&lt;assembly&gt;AssemblyName2&lt;/assembly&gt;
+	&lt;/viewcomponents&gt;
+	
+	&lt;viewEngine 
+		viewPathRoot="views" 
+		customEngine="ViewEngine.Type.Name, Assembly"&gt;
+		
+		&lt;additionalSources&gt;
+			&lt;assembly name="" namespace="" /&gt;
+			&lt;assembly name="" namespace="" /&gt;
+		&lt;/additionalSources&gt;
+		
+	&lt;/viewEngine&gt;
+
+	&lt;!-- List of services ids:
+
+			Custom
+			ControllerFactory
+			ViewEngine
+			ViewSourceLoader
+			ViewComponentFactory
+			FilterFactory
+			ResourceFactory
+			EmailSender
+			ControllerDescriptorProvider
+			ResourceDescriptorProvider
+			RescueDescriptorProvider
+			LayoutDescriptorProvider
+			HelperDescriptorProvider
+			FilterDescriptorProvider
+			EmailTemplateService
+			ControllerTree
+			CacheProvider
+			ScaffoldingSupport
+	--&gt;
+	
+	&lt;services&gt;
+		&lt;service 
+			id="[see list above]" 
+			type="Service.Type.Name, Assembly"
+			interface="optional" /&gt;
+	&lt;/services&gt;
+	
+	&lt;extensions&gt;
+		&lt;extension type="Extension.Type.Name, Assembly" /&gt;
+		&lt;extension type="Extension.Type.Name, Assembly" /&gt;
+	&lt;/extensions&gt;
+
+	&lt;routing&gt;
+		&lt;rule&gt;
+			&lt;pattern&gt;(/blog/posts/)(\d+)/(\d+)/(.)*$&lt;/pattern&gt;
+			&lt;replace&gt;&lt;![CDATA[ /blog/view.rails?year=$2&amp;month=$3 ]]&gt;&lt;/replace&gt;
+		&lt;/rule&gt;
+		&lt;rule&gt;
+			&lt;pattern&gt;(/news/)(\d+)/(\d+)/(.)*$&lt;/pattern&gt;
+			&lt;replace&gt;&lt;![CDATA[ /news/view.rails?year=$2&amp;month=$3 ]]&gt;&lt;/replace&gt;
+		&lt;/rule&gt;
+	&lt;/routing&gt;
+	
+&lt;/monorail&gt;
+</pre>
+
+</section>
+
+
+</body>
+</document>

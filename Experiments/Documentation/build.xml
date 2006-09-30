@@ -33,7 +33,7 @@
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/"
 			extension=".html" style="./site.vsl"
 			projectFile="navigation.xml"
-			excludes="**/stylesheets/** empty.xml navigation.xml **/test/flood/*"
+			excludes="**/stylesheets/** empty.xml navigation.xml"
 			includes="*.xml"
 			lastModifiedCheck="true"
 			templatePath="${docs.src}/stylesheets">
@@ -43,12 +43,21 @@
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/"
 			extension=".html" style="./site.vsl"
 			projectFile="activerecord/navigation.xml"
-			excludes="**/stylesheets/** empty.xml navigation.xml **/test/flood/*"
+			excludes="**/stylesheets/** empty.xml navigation.xml"
 			includes="activerecord/**/*.xml"
 			lastModifiedCheck="true"
 			templatePath="${docs.src}/stylesheets">
 		</anakia>
 		
+		<!-- MonoRail -->
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/"
+			extension=".html" style="./site.vsl"
+			projectFile="monorail/navigation.xml"
+			excludes="**/stylesheets/** empty.xml navigation.xml"
+			includes="monorail/**/*.xml"
+			lastModifiedCheck="true"
+			templatePath="${docs.src}/stylesheets">
+		</anakia>
 		
 		<!--
         <anakia basedir="${docs.src}" 

@@ -164,3 +164,19 @@ pre
 	padding-top: 5px;
 	padding-left: 10px;
 }
+
+#content ul li 
+{
+	padding: 0;
+	margin: 0px 0px 12px 0px;
+	list-style: square;
+}
+#content ol li 
+{
+	margin: 0px 0px 12px 0px;
+	list-style: decimal;
+}
+
+#content li
+{
+}

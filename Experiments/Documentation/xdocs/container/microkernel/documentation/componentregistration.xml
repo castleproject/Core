@@ -2,29 +2,21 @@
 <document>
   <properties>
     <author email="docs@httpd.apache.org">Documentation Group</author>
-    <title>MonoRail Index</title>
+    <title>Component Registration Flow</title>
   </properties>
 
   <body>
 
 <intro>
 <p>
-Castle ActiveRecord is an implementation of the ActiveRecord pattern for .NET. 
-The ActiveRecord pattern consists on instance methods and properties 
-representing rows in the database, and static methods acting on all rows.
-</p>
-<p>
-Castle ActiveRecord is built on top of NHibernate, but its attribute-based 
-mapping frees the developer of writing XML for database-to-object mapping, 
-which is needed when using NHibernate directly. For more information please refer
-to ActiveRecord:Getting started
+TODO
 </p>
 </intro>
 
 <toc/>
 
 <section id="WhyWouldIUseIt">
-<title>Why would I use it?</title>
+<title>If</title>
 
 <p>
 The Apache HTTP Server Project is an effort to develop and maintain
