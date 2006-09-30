@@ -62,15 +62,23 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		public static MonoRailConfiguration GetConfig()
 		{
-			// TODO: Add .net 2 diffs
-			
-			MonoRailConfiguration config = (MonoRailConfiguration)
-			                               ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
-			
+#if DOTNET2
+			MonoRailConfiguration config =
+				System.Configuration.ConfigurationManager.GetSection(MonoRailConfiguration.SectionName) as MonoRailConfiguration;
+#else
+			MonoRailConfiguration config = 
+				ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName) as MonoRailConfiguration;
+#endif
+
 			if (config == null)
 			{
-				config = (MonoRailConfiguration)
-				         ConfigurationSettings.GetConfig(MonoRailConfiguration.AlternativeSectionName);
+#if DOTNET2
+				config = 
+					System.Configuration.ConfigurationManager.GetSection(MonoRailConfiguration.AlternativeSectionName) as MonoRailConfiguration;
+#else
+				config = 
+					ConfigurationSettings.GetConfig(MonoRailConfiguration.AlternativeSectionName) as MonoRailConfiguration;
+#endif
 			}
 
 			if (config == null)

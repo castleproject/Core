@@ -64,11 +64,33 @@ namespace Castle.MonoRail.Framework
 			context.ReleaseRequestState += new EventHandler(OnReleaseRequestState);
 			context.PreRequestHandlerExecute += new EventHandler(OnPreRequestHandlerExecute);
 			context.PostRequestHandlerExecute += new EventHandler(OnPostRequestHandlerExecute);
+			context.AuthenticateRequest += new EventHandler(OnAuthenticateRequest);
+			context.AuthorizeRequest += new EventHandler(OnAuthorizeRequest);
 			context.Error += new EventHandler(OnError);		    
 		}
 
 		#region Hooks dispatched to extensions
 
+		private void OnAuthenticateRequest(object sender, EventArgs e)
+		{
+			HttpApplication app = (HttpApplication) sender;
+			HttpContext context = app.Context;
+
+			IRailsEngineContext mrContext = CreateRailsEngineContext(context);
+
+			container.extensionManager.RaiseAuthenticateRequest(mrContext);
+		}
+
+		private void OnAuthorizeRequest(object sender, EventArgs e)
+		{
+			HttpApplication app = (HttpApplication)sender;
+			HttpContext context = app.Context;
+
+			IRailsEngineContext mrContext = CreateRailsEngineContext(context);
+
+			container.extensionManager.RaiseAuthorizeRequest(mrContext);
+		}
+		
 		private void OnBeginRequest(object sender, EventArgs e)
 		{
 			HttpApplication app = (HttpApplication) sender;

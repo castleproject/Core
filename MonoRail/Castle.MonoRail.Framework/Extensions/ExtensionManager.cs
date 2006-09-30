@@ -30,6 +30,8 @@ namespace Castle.MonoRail.Framework
 		private static readonly object ReleaseSessionStateEvent = new object();
 		private static readonly object PreProcessEvent = new object();
 		private static readonly object PostProcessEvent = new object();
+		private static readonly object AuthorizeRequestEvent = new object();
+		private static readonly object AuthenticateRequestEvent = new object();
 
 		private EventHandlerList events;
 
@@ -94,6 +96,18 @@ namespace Castle.MonoRail.Framework
 			remove { events.RemoveHandler(PostProcessEvent, value); }
 		}
 
+		public event ExtensionHandler AuthenticateRequest
+		{
+			add { events.AddHandler(AuthenticateRequestEvent, value); }
+			remove { events.RemoveHandler(AuthenticateRequestEvent, value); }
+		}
+
+		public event ExtensionHandler AuthorizeRequest
+		{
+			add { events.AddHandler(AuthorizeRequestEvent, value); }
+			remove { events.RemoveHandler(AuthorizeRequestEvent, value); }
+		}
+
 		internal virtual void RaiseContextCreated(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ContextCreatedEvent];
@@ -139,6 +153,18 @@ namespace Castle.MonoRail.Framework
 		public void RaiseActionError(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ActionExceptionEvent];
+			if (eventDelegate != null) eventDelegate(context);
+		}
+
+		public void RaiseAuthenticateRequest(IRailsEngineContext context)
+		{
+			ExtensionHandler eventDelegate = (ExtensionHandler) events[AuthenticateRequestEvent];
+			if (eventDelegate != null) eventDelegate(context);
+		}
+
+		public void RaiseAuthorizeRequest(IRailsEngineContext context)
+		{
+			ExtensionHandler eventDelegate = (ExtensionHandler) events[AuthorizeRequestEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 	}

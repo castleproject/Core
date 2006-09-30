@@ -4,6 +4,13 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed MR-155
+  "Cast exception with configuration"
+
+- Added two more events to ExtensionManager: Authorize and Authenticate.
+  That allows authentication/authorization extensions to MonoRail that won't
+  rely on filters
+
 - Applied Jochen Grefe's patch fixing NVelocity-3
   "#include not working for nvelocity"
 
