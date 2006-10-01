@@ -207,3 +207,22 @@ body
 {
 	border: none;
 }
+
+div.breadcrumbs 
+{
+	border: dashed #BBB 1px;
+	padding: 5px;
+	margin-left: 5px;
+	margin-right: 250px;
+	font-size: 0.80em;
+}
+
+div.breadcrumbs a.breadcrumbs 
+{
+	text-decoration: none;
+}
+
+div.breadcrumbs span.breadcrumbs 
+{
+	font-weight: bold;
+}

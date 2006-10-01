@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project href="http://httpd.apache.org/">
+<project>
 
 <title>Castle Project</title>
 <body>
 <group type="dark">
 <menu>
-	<title><a href="">Castle</a></title>
-	<li><a href="">Mission</a></li>
-	<li><a href="">Roadmap</a></li>
-	<li><a href="">FAQ</a></li>
-	<li><a href="">History</a></li>
-	<li><a href="">Who is using it</a></li>
+	<title abspath="castle/index.html">Castle</title>
+	<li>Mission</li>
+	<li>Roadmap</li>
+	<li>FAQ</li>
+	<li>History</li>
+	<li>Who is using it</li>
 </menu>
 </group>
 
 <group type="light">
 <menu>
-	<title><a href="activerecord/index.html">ActiveRecord</a></title>
-	<li><a href="">Getting started</a></li>
-	<li><a href="">Documentation</a></li>
-	<li><a href="">FAQ</a></li>
-	<li><a href="">Recipes</a></li>
-	<li><a href="">External Articles</a></li>
+	<title abspath="castle/activerecord/index.html">ActiveRecord</title>
+	<li>Getting started</li>
+	<li>Documentation</li>
+	<li>FAQ</li>
+	<li>Recipes</li>
+	<li>External Articles</li>
 </menu>
 <menu>
-	<title><a href="">MonoRail</a></title>
+	<title>MonoRail</title>
 	<li>Getting started</li>
 	<li>Documentation</li>
 	<li>FAQ</li>
@@ -33,7 +33,7 @@
 	<li>Samples</li>
 </menu>
 <menu>
-	<title><a href="">MicroKernel/Windsor</a></title>
+	<title>MicroKernel/Windsor</title>
 	<li>Getting started</li>
 	<li>Documentation</li>
 	<li>Facilities</li>
@@ -44,28 +44,35 @@
 	<li>Samples</li>
 </menu>
 <menu>
-	<title><a href="">Aspect#</a></title>
+	<title>Aspect#</title>
 	<li>Getting started</li>
 	<li>Documentation</li>
 	<li>External Articles</li>
 </menu>
 <menu>
-	<title><a href="">DynamicProxy</a></title>
+	<title>DynamicProxy</title>
 	<li>Getting started</li>
 	<li>Documentation</li>
 	<li>FAQ</li>
 	<li>External Articles</li>
 </menu>
+<menu>
+	<title>Others</title>
+	<li>Castle Contrib</li>
+	<li>NVelocity</li>
+	<li>Anakia</li>
+	<li>SVN hooks</li>
+</menu>
 </group>
 
 <group type="dark">
 <menu>
-	<title><a href="">Community</a></title>
-	<li><a href="">Get involved</a></li>
-	<li><a href="">Forum</a></li>
-	<li><a href="">Castle Team</a></li>
-	<li><a href="">Reaching us</a></li>
-	<li><a href="">Blogs/Articles</a></li>
+	<title>Community</title>
+	<li>Get involved</li>
+	<li>Forum</li>
+	<li>Castle Team</li>
+	<li>Reaching us</li>
+	<li>Blogs/Articles</li>
 </menu>
 </group>
 </body>

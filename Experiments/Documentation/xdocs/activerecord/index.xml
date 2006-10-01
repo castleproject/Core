@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-    <author email="docs@httpd.apache.org">Documentation Group</author>
     <title>ActiveRecord</title>
   </properties>
 
@@ -9,16 +8,13 @@
 
 <intro>
 <p>
-Castle ActiveRecord is an implementation of the ActiveRecord pattern for .NET. 
-The ActiveRecord pattern consists on instance methods and properties 
-representing rows in the database, and static methods acting on all rows.
+The Castle ActiveRecord project is an implementation of the 
+[http://en.wikipedia.org/wiki/Active_record ActiveRecord pattern] for .NET. The ActiveRecord 
+pattern consists on instance methods and properties representing rows in the database, and 
+static methods acting on all rows.
 </p>
 <p>
-Castle ActiveRecord is built on top of NHibernate, but its attribute-based 
-mapping frees the developer of writing XML for database-to-object mapping, 
-which is needed when using NHibernate directly. For more information please refer
-to ActiveRecord:Getting started
-</p>
+Castle ActiveRecord is built on top of [[NHibernate]], but its attribute-based mapping free the developer of writing XML for database-to-object mapping, which is needed when using NHibernate directly.</p>
 </intro>
 
 <toc/>
@@ -27,24 +23,115 @@ to ActiveRecord:Getting started
 <title>Why would I use it?</title>
 
 <p>
-The Apache HTTP Server Project is an effort to develop and maintain
-an open-source HTTP server for modern operating systems including UNIX
-and Windows NT. The goal of this project is to provide a secure,
-efficient and extensible server that provides HTTP services in sync
-with the current HTTP standards.
+With Castle ActiveRecord you won't have to learn NHibernate mapping schema to have a working data access layer in minutes. For most cases you won't need to deal with <tt>ISession</tt> and 
+<tt>ISessionFactory</tt> either. Most of the complexity is handled by ActiveRecord, but if you want to do something more advanced, you will be able to do it.
 </p>
+
+<p>
+Castle ActiveRecord offers a subset of NHibernate mapping functionality. We focused on covering the regular mappings used by most developers. Mapping is done using class, fields and property level attributes. ActiveRecord is able to infer table and column names.
+</p>
+
+<p>
+Just to give you a taste, the following is an example of an ActiveRecord class.
+</p>
+
+<pre format="cs">
+<![CDATA[
+[ActiveRecord]
+public class Category : ActiveRecordBase
+{
+    private int id;
+    private string name;
+    private Category parent;
+    private IList subcategories;
+
+    [PrimaryKey]
+    public int Id
+    {
+        get { return id; }
+        set { id = value; }
+    }
+
+    [Property]
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+
+    [BelongsTo("parent_id")]
+    public Category Parent
+    {
+        get { return parent; }
+        set { parent = value; }
+    }
+
+    [HasMany(typeof(Category))]
+    public IList SubCategories
+    {
+        get { return subcategories; }
+        set { subcategories = value; }
+    }
+	
+    public static Category[] FindAll()
+    {
+        return (Category[]) ActiveRecordBase.FindAll(typeof(Category));
+    }
+}
+]]>
+</pre>
+
+<p>
+The generic base classes is even better. You can have the most common operations for free. You just need to take care of the mapping. The following is an example using <tt>ActiveRecordBase&lt;&gt;</tt>.
+</p>
+
+<pre format="cs">
+<![CDATA[
+[ActiveRecord]
+public class Blog : ActiveRecordBase<Blog>
+{
+    private int id;
+    private string name;
+    private string author;
+
+    [PrimaryKey]
+    public int Id
+    {
+        get { return id; }
+        set { id = value; }
+    }
+
+    [Property]
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+
+    [Property]
+    public string Author
+    {
+        get { return author; }
+        set { author = value; }
+    }
+}
+]]>
+</pre>
 
 </section>
 
 <section id="WhyWouldIUseIt">
-<title>Why would I <b>not</b> use it?</title>
+<title>Why would I not use it?</title>
 
 <p>
-The Apache HTTP Server Project is an effort to develop and maintain
-an open-source HTTP server for modern operating systems including UNIX
-and Windows NT. The goal of this project is to provide a secure,
-efficient and extensible server that provides HTTP services in sync
-with the current HTTP standards.
+Complex databases structures (legacy databases mostly) usually are not covered by the
+range of mapping features supported by ActiveRecord. In this case you might consider
+using NHibernate.
+</p>
+
+<p>
+Batch operations, like importing or exporting thousands of records, should not rely 
+on ActiveRecord nor on NHibernate. For those situations you might consider using pure ADO.Net.
 </p>
 
 </section>
