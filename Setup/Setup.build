@@ -16,8 +16,8 @@
 			failonerror="false" />
 		<property name="wix.found" value="${wix.found == '0'}" />
 
+		<fail message="ERROR: WiX not found, unable to create MSI" unless="${wix.found}"/>
 		<echo message="Found WiX at ${wix.dir}" if="${wix.found}"/>
-		<echo message="WARNING: WiX not found, unable to create MSI" unless="${wix.found}"/>
 	</target>
 	
 	<target name="build" description="Build ${project::get-name()}" depends="init">
@@ -35,7 +35,7 @@
 				</fileset>
 			</copy>
 			<property name="build.msi.dir"  value="${build.setup.dir}" overwrite="false" />
-			<property name="build.msi.file" value="Castle-${project.major}.${project.minor}.${project.build}.${project.revision}.msi" overwrite="false" />
+			<property name="build.msi.file" value="castleproject-${project.major}.${project.minor}.${project.build}.${project.revision}.msi" overwrite="false" />
 			<property name="build.msi.fullpath" value="${build.msi.dir}/${build.msi.file}" readonly="true" />
 			<exec 
 				program="${wix.dir}/candle.exe"
