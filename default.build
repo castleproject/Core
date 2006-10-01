@@ -60,6 +60,8 @@
 	</target>
 
 	<target name="init" depends="common.init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${testresults.dir}" />
 		<!-- add SVN revision to builds -->
 		<property name="svn.revision" value="0" unless="${property::exists('svn.revision')}"/>
 		<!-- try to update the revision -->
@@ -125,6 +127,7 @@
 		<!-- Prepare build directory -->
 		<delete dir="${build.dir}" failonerror="false" />
 		<mkdir dir="${build.dir}" />
+		<mkdir dir="${testresults.dir}" />
 		<call target="copy-referenced-assemblies" />
 	</target>
 
