@@ -201,15 +201,18 @@
     <Compile Include="Controllers\ResourcedController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\Smart2Controller.cs" />
     <Compile Include="Controllers\SmartController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\SubArea\HomeController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\TestWizardConditionsController.cs" />
     <Compile Include="Controllers\TestWizardController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\TestWizardWithAreaController.cs" />
     <Compile Include="Controllers\UsingComponent2Controller.cs" />
     <Compile Include="Controllers\UsingComponentController.cs">
       <SubType>Code</SubType>
