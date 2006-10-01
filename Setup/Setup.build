@@ -34,14 +34,16 @@
 					<include name="License.rtf" />
 				</fileset>
 			</copy>
-			<property name="msi.name" value="Castle-${project.major}.${project.minor}.${project.build}.${project.revision}.msi"/>
+			<property name="build.msi.dir"  value="${build.setup.dir}" overwrite="false" />
+			<property name="build.msi.file" value="Castle-${project.major}.${project.minor}.${project.build}.${project.revision}.msi" overwrite="false" />
+			<property name="build.msi.fullpath" value="${build.msi.dir}/${build.msi.file}" readonly="true" />
 			<exec 
 				program="${wix.dir}/candle.exe"
 				workingdir="${build.setup.dir}"
 				commandline="-nologo Castle.wxs" />
 			<exec program="${wix.dir}/light.exe"
 				workingdir="${build.setup.dir}" verbose="true"
-				commandline='-wx -out ${msi.name} -loc "${wix.dir}/WixUI_en-us.wxl" Castle.wixobj "${wix.dir}/wixui.wixlib" "${wix.dir}/sca.wixlib"'>
+				commandline='-wx -out ${build.msi.fullpath} -loc "${wix.dir}/WixUI_en-us.wxl" Castle.wixobj "${wix.dir}/wixui.wixlib" "${wix.dir}/sca.wixlib"'>
 			</exec>
 		</if>
 	</target>

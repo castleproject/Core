@@ -194,7 +194,7 @@
 	<target name="package" depends="zip-build"
 		description="Creates Zip files for Release">
 
-		<echo message="Created a '${project.config}' package in file://${build-zipfile}" />
+		<echo message="Created a '${project.config}' package in file://${build.zip.fullpath}" />
 
 	</target>
 
@@ -262,7 +262,9 @@
 	</target>
 	
 	<target name="zip-build" depends="build">
-		<property name="build-zipfile" value="${build.dir}/Castle-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" overwrite="false" dynamic="true" />
+		<property name="build.zip.dir" value="${build.dir}" overwrite="false" />
+		<property name="build.zip.file" value="Castle-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" overwrite="false" dynamic="true" />
+		<property name="build.zip.fullpath" value="${build.zip.dir}/${build.zip.file}" readonly="true" />
 		
 		<delete>
 			<fileset basedir="${root.dir}">
@@ -284,7 +286,7 @@
 		<call target="zip-dependencies" />
 
 		<!-- Create the master zip file with all files included -->
-		<zip zipfile="${build-zipfile}">
+		<zip zipfile="${build.zip.fullpath}">
 			<fileset basedir="${build.dir}" prefix="bin" >
 				<include name="Castle*.*" />
 				<include name="AspectSharp*.*" />
@@ -308,10 +310,6 @@
 		<delete file="${build.base.dir}/castle-sourcecode.zip" failonerror="false" />
 		<delete file="${build.dir}/test-results.zip" failonerror="false" />
 		<delete file="${build.dir}/external-dependencies.zip" failonerror="false" />
-
-		<if test="${property::exists('build.target.dir')}">
-			<copy file="${build-zipfile}" todir="${build.target.dir}" />
-		</if>
 		
 	</target>
 	
