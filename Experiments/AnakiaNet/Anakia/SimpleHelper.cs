@@ -15,6 +15,7 @@
 namespace Anakia
 {
 	using System;
+	using System.Collections;
 
 	public class SimpleHelper
 	{
@@ -29,6 +30,23 @@ namespace Anakia
 				String newPath = path.Substring(offset.Length);
 				return String.Format(".{0}/{1}", newPath, page);
 			}
+		}
+		
+		public Stack CreateStack()
+		{
+			return new Stack();
+		}
+		
+		public int Push(Stack stack)
+		{
+			stack.Push(String.Empty);
+			return stack.Count;
+		}
+		
+		public int Pop(Stack stack)
+		{
+			stack.Pop();
+			return stack.Count;
 		}
 	}
 }

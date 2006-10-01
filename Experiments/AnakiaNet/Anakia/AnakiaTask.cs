@@ -174,7 +174,7 @@ namespace Anakia
 
 				siteMapDoc = CreateSiteMap();
 
-				// siteMapDoc.Save(@"E:\dev\castleall\trunk\Experiments\Documentation\docs\sitemap.xml");
+				siteMapDoc.Save(@"E:\dev\castleall\site\website\generatedsitemap.xml");
 
 				ITreeWalker walker = new BreadthFirstWalker();
 
@@ -268,26 +268,33 @@ namespace Anakia
 
 		private void CreateHtml(DocumentNode node)
 		{
-			EnsureDirExists(node.ParentFolder.Path);
-
-			if (node.NodeType == NodeType.Navigation) return;
-
-			DirectoryInfo targetFolder = new DirectoryInfo(
-				targetDir.FullName + "/" + node.ParentFolder.Path);
-
-			FileInfo htmlFileInTarget = new FileInfo(
-				Path.Combine(targetFolder.FullName, node.TargetFilename));
-
-			if (htmlFileInTarget.Exists)
+			try
 			{
-				htmlFileInTarget.Delete();
+				EnsureDirExists(node.ParentFolder.Path);
+
+				if (node.NodeType == NodeType.Navigation) return;
+
+				DirectoryInfo targetFolder = new DirectoryInfo(
+					targetDir.FullName + "/" + node.ParentFolder.Path);
+
+				FileInfo htmlFileInTarget = new FileInfo(
+					Path.Combine(targetFolder.FullName, node.TargetFilename));
+
+				if (htmlFileInTarget.Exists)
+				{
+					htmlFileInTarget.Delete();
+				}
+
+				IContext ctx = CreateContext(node);
+
+				using(StreamWriter writer = new StreamWriter(htmlFileInTarget.FullName, false))
+				{
+					template.Merge(ctx, writer);
+				}
 			}
-
-			IContext ctx = CreateContext(node);
-
-			using(StreamWriter writer = new StreamWriter(htmlFileInTarget.FullName, false))
+			catch(Exception ex)
 			{
-				template.Merge(ctx, writer);
+				throw new Exception("Error generating html for " + node.TargetFilename, ex);
 			}
 		}
 
@@ -447,9 +454,13 @@ namespace Anakia
 			XmlDocumentFragment fragment = node.XmlDoc.CreateDocumentFragment();
 
 			XmlNode parent = fragment;
+			
+			int level = node.ParentFolder.Level;
 
 			if (node.NodeType == NodeType.Ordinary)
 			{
+				level++;
+				
 				parent = node.XmlDoc.CreateElement(Path.GetFileNameWithoutExtension(node.Filename).Replace(' ', '_'));
 
 				((XmlElement) parent).SetAttribute("level", node.ParentFolder.Level.ToString());
@@ -463,30 +474,51 @@ namespace Anakia
 
 			foreach(XmlElement section in node.XmlDoc.SelectNodes("document/body/section"))
 			{
-				String sectionId = section.GetAttribute("id");
-				XmlNode titleElem = section.SelectSingleNode("title");
-				String title = titleElem.FirstChild.Value;
-
-				XmlElement newSection = node.XmlDoc.CreateElement("section");
-
-				if (sectionId != String.Empty)
-				{
-					newSection.SetAttribute("id", sectionId);
-				}
-				if (title != null)
-				{
-					newSection.SetAttribute("title", title);
-				}
-
-				newSection.SetAttribute("page", node.TargetFilename);
-				newSection.SetAttribute("level", node.ParentFolder.Level.ToString());
-
+				XmlElement newSection = CreateSectionXmlElement(level, node, section);
+				
 				parent.AppendChild(newSection);
+				
+				foreach(XmlElement secSectionLevel in section.SelectNodes("section"))
+				{
+					XmlElement newSectionSecLevel = CreateSectionXmlElement(level + 1, node, secSectionLevel);
+				
+					newSection.AppendChild(newSectionSecLevel);
+					
+					foreach(XmlElement thirdSectionLevel in secSectionLevel.SelectNodes("section"))
+					{
+						XmlElement newSectionThrdLevel = CreateSectionXmlElement(level + 2, node, thirdSectionLevel);
+				
+						newSectionSecLevel.AppendChild(newSectionThrdLevel);
+					}
+				}
 			}
 
 			node.ParentFolder.SectionFragments.Add(fragment);
 		}
-		
+
+		private static XmlElement CreateSectionXmlElement(int level, DocumentNode node, XmlElement section)
+		{
+			String sectionId = section.GetAttribute("id");
+			XmlNode titleElem = section.SelectSingleNode("title");
+			String title = titleElem.FirstChild.Value;
+
+			XmlElement newSection = node.XmlDoc.CreateElement("section");
+
+			if (sectionId != String.Empty)
+			{
+				newSection.SetAttribute("id", sectionId);
+			}
+			if (title != null)
+			{
+				newSection.SetAttribute("title", title);
+			}
+
+			newSection.SetAttribute("page", node.TargetFilename);
+			newSection.SetAttribute("level",level.ToString());
+
+			return newSection;
+		}
+
 		private void FixRelativePaths(DocumentNode node)
 		{
 			if (node.XmlDoc == null) return;
