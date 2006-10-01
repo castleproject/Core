@@ -261,6 +261,7 @@
 		</foreach>	
 	</target>
 	
+	<!-- depends="build" -->
 	<target name="zip-build" depends="build">
 		<property name="build.zip.dir" value="${build.dir}" overwrite="false" />
 		<property name="build.zip.file" value="Castle-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" overwrite="false" dynamic="true" />
@@ -279,9 +280,6 @@
 		<!-- Include a zip file with all source code -->
 		<call target="zip-source" if="${build.debug}" />
 
-		<!-- Include test results on debug builds -->
-		<call target="zip-testresults" if="${build.debug}" />
-
 		<!-- Include a zip file with all dependencies -->
 		<call target="zip-dependencies" />
 
@@ -291,7 +289,6 @@
 				<include name="Castle*.*" />
 				<include name="AspectSharp*.*" />
 				<include name="external-dependencies.zip" />
-				<include name="test-results.zip" />
 				<exclude name="*Tests.*" />
 			</fileset>
 			<fileset basedir="${root.dir}">
@@ -488,14 +485,6 @@
 				<exclude name="Tools/ManagedExtensions/**/*.*" />
 				<exclude name="Tools/Castle.DynamicProxy2/**/*.*" />
 				<exclude name="Tools/DynamicProxy2/**/*.*" />
-			</fileset>
-		</zip>
-	</target>
-	
-	<target name="zip-testresults">
-		<zip zipfile="${build.dir}\test-results.zip">
-			<fileset basedir="${testresults.dir}">
-				<include name="*.xml" />
 			</fileset>
 		</zip>
 	</target>

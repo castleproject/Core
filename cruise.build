@@ -18,7 +18,7 @@
 			<properties> 
 				<property name="nant.settings.currentframework" value="net-1.1" />
 				<property name="project.config" value="debug" />
-				<property name="build.zip.file" value="${build.dir}/castleproject-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.zip" dynamic="true" />
+				<property name="build.zip.file" value="castleproject-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.zip" dynamic="true" />
 			</properties>
 		</nant>
 	</target>
@@ -32,7 +32,7 @@
 			<properties>
 				<property name="nant.settings.currentframework" value="net-2.0" />
 				<property name="project.config" value="debug" />
-				<property name="build.zip.file" value="${build.dir}/castleproject-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.zip" dynamic="true" />
+				<property name="build.zip.file" value="castleproject-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}.zip" dynamic="true" />
 			</properties>
 		</nant>
 	</target>
