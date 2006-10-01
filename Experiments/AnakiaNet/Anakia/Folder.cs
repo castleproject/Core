@@ -25,12 +25,48 @@ namespace Anakia
 		private FolderCollection folders;
 		private ArrayList fragments = new ArrayList();
 		private ArrayList breadCrumbs = new ArrayList();
+		private DocumentNode navigationNode;
 
 		public Folder(String name)
 		{
 			this.name = name;
 			documents = new DocumentNodeCollection(this);
 			folders = new FolderCollection(this);
+		}
+
+		public int NavigationLevel
+		{
+			get
+			{
+				if (navigationNode != null)
+				{
+					return 1;
+				}
+				else if (parent != null)
+				{
+					return 1 + parent.NavigationLevel;
+				}
+				
+				return 0;
+			}
+		}
+		
+		public DocumentNode NavigationNode
+		{
+			get 
+			{
+				if (navigationNode != null)
+				{
+					return navigationNode;
+				}
+				else if (parent != null)
+				{
+					return parent.NavigationNode;
+				}
+				
+				return null;
+			}
+			set { navigationNode = value; }
 		}
 
 		public ArrayList BreadCrumbs

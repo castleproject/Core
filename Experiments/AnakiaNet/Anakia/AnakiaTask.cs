@@ -19,6 +19,7 @@ namespace Anakia
 	using System.IO;
 	using System.Xml;
 	using Commons.Collections;
+	using Manoli.Utils.CSharpFormat;
 	using NAnt.Core;
 	using NAnt.Core.Attributes;
 	using NAnt.Core.Types;
@@ -40,6 +41,14 @@ namespace Anakia
 		private Folder root;
 		private XmlDocument siteMapDoc;
 		private XmlDocument projectDom;
+		
+		// Formatters
+		
+		private CSharpFormat csharpFormatter = new CSharpFormat();
+		private HtmlFormat htmlFormatter = new HtmlFormat();
+		private JavaScriptFormat jsFormatter = new JavaScriptFormat();
+		private TsqlFormat tsqlFormatter = new TsqlFormat();
+		private VisualBasicFormat vbFormatter = new VisualBasicFormat();
 
 		public AnakiaTask()
 		{
@@ -169,6 +178,7 @@ namespace Anakia
 
 				ITreeWalker walker = new BreadthFirstWalker();
 
+				walker.Walk(root, new Act(AssignNavigationDocToFolders));
 				walker.Walk(root, new Act(CreateBreadCrumb));
 				walker.Walk(root, new Act(FixRelativePaths));
 				walker.Walk(root, new Act(CreateHtml));
@@ -197,8 +207,17 @@ namespace Anakia
 			catch(Exception ex)
 			{
 				Console.WriteLine(ex);
-				// Console.Read();
 			}
+		}
+
+		private void AssignNavigationDocToFolders(DocumentNode node)
+		{
+			if (node.NodeType != NodeType.Navigation)
+			{
+				return;
+			}
+			
+			node.ParentFolder.NavigationNode = node;
 		}
 
 		#endregion
@@ -286,6 +305,12 @@ namespace Anakia
 		{
 			VelocityContext context = new VelocityContext();
 
+			context.Put("cs", csharpFormatter);
+			context.Put("html", htmlFormatter);
+			context.Put("js", jsFormatter);
+			context.Put("tsql", tsqlFormatter);
+			context.Put("vb", vbFormatter);
+			
 			context.Put("breadcrumbs", node.BreadCrumbs);
 			context.Put("meta", node.Meta);
 			context.Put("doc", node.XmlDoc);
@@ -296,6 +321,13 @@ namespace Anakia
 			context.Put("folder", node.ParentFolder);
 			context.Put("converter", new SimpleConverter());
 			context.Put("helper", new SimpleHelper());
+			
+			if (node.ParentFolder.NavigationNode != null)
+			{
+				context.Put("navigation", node.ParentFolder.NavigationNode.XmlDoc);
+			}
+			
+			context.Put("navlevel", node.ParentFolder.NavigationLevel);
 
 			String relativePath = String.Empty;
 
@@ -322,6 +354,8 @@ namespace Anakia
 
 			return context;
 		}
+		
+		#region BreadCrumb related operations
 
 		private void CreateBreadCrumb(DocumentNode node)
 		{
@@ -345,9 +379,18 @@ namespace Anakia
 			{
 				folder.BreadCrumbs.AddRange(folder.Parent.BreadCrumbs);
 			}
+			
+			String title = folder.Name;
+			
+			if (folder.Documents.IndexNode != null)
+			{
+				title = folder.Documents.IndexNode.Meta.Title;
+			}
 
-			folder.BreadCrumbs.Add(new BreadCrumb(folder.Path + "/index.html", folder.Name));
+			folder.BreadCrumbs.Add(new BreadCrumb(folder.Path + "/index.html", title));
 		}
+		
+		#endregion
 
 		private XmlDocument CreateSiteMap()
 		{
@@ -481,49 +524,49 @@ namespace Anakia
 			return newPath + relativePath;
 		}
 
-		private void PrintStructure(Folder folder, int ident)
-		{
-			for(int i = 0; i < ident; i++)
-			{
-				Console.Write(' ');
-			}
-
-			Console.Write(folder.Name);
-			Console.WriteLine();
-
-			foreach(Folder f in folder.Folders)
-			{
-				PrintStructure(f, ident + 2);
-			}
-		}
-
-		private void PrintStructure2(Folder folder, int ident)
-		{
-			for(int i = 0; i < ident; i++)
-			{
-				Console.Write(' ');
-			}
-
-			Console.Write(folder.Name);
-			Console.WriteLine();
-
-			foreach(DocumentNode node in folder.Documents)
-			{
-				for(int i = 0; i < ident + 2; i++)
-				{
-					Console.Write(' ');
-				}
-
-				Console.Write("- ");
-				Console.Write(node.Filename);
-				Console.WriteLine();
-			}
-
-			foreach(Folder f in folder.Folders)
-			{
-				PrintStructure2(f, ident + 2);
-			}
-		}
+//		private void PrintStructure(Folder folder, int ident)
+//		{
+//			for(int i = 0; i < ident; i++)
+//			{
+//				Console.Write(' ');
+//			}
+//
+//			Console.Write(folder.Name);
+//			Console.WriteLine();
+//
+//			foreach(Folder f in folder.Folders)
+//			{
+//				PrintStructure(f, ident + 2);
+//			}
+//		}
+//
+//		private void PrintStructure2(Folder folder, int ident)
+//		{
+//			for(int i = 0; i < ident; i++)
+//			{
+//				Console.Write(' ');
+//			}
+//
+//			Console.Write(folder.Name);
+//			Console.WriteLine();
+//
+//			foreach(DocumentNode node in folder.Documents)
+//			{
+//				for(int i = 0; i < ident + 2; i++)
+//				{
+//					Console.Write(' ');
+//				}
+//
+//				Console.Write("- ");
+//				Console.Write(node.Filename);
+//				Console.WriteLine();
+//			}
+//
+//			foreach(Folder f in folder.Folders)
+//			{
+//				PrintStructure2(f, ident + 2);
+//			}
+//		}
 
 		private Folder GetFolderInstance(string[] folders)
 		{
