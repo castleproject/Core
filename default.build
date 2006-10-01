@@ -77,20 +77,7 @@
 		<delete file="_revision.xml" failonerror="false" />
 		<echo message="Using Subversion revision number: ${svn.revision}"/>
 
-		<exec 
-			program="${nunit-console}" 
-			resultproperty="nunit.found"
-			failonerror="false" />
-
-		<echo message="nunit-console invocation result: ${nunit.found}" />
-
-		<property name="tests.disabled" value="false" />
-
-		<if test="${nunit.found!='0'}">
-			<property name="tests.disabled" value="true" />
-		</if>
-
-		<echo message="Tests with nunit-console are disabled?  ${tests.disabled}" />
+		<call target="common.find-nunit" />
 	</target>
 	
 	<target name="clean" description="Deletes current build artifacts" depends="common.init">

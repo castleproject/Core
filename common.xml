@@ -11,17 +11,6 @@
 	<!-- Controls whether tests are run. Setting this is as input to the build disables *all* tests. -->
 	<property name="common.run-tests" value="true" overwrite="false" />
 
-	<!-- Common properties that allow overrides -->
-<!--	
-	<if test="${not property::exists('nunit-console')}">
-	<property name="nunit-console" readonly="false" value="nunit-console.exe" if="${framework::get-target-framework()=='net-1.1'}" />
-	<property name="nunit-console" readonly="false" value="nunit-console-1-1.exe" if="${framework::get-target-framework()=='net-1.1'}" />
-	<property name="nunit-console" readonly="false" value="nunit-console-2-0.exe" if="${framework::get-target-framework()=='net-2.0'}" />
-	</if>
-
-	<echo message="Using ${nunit-console}" />
--->
-
 	<!-- properties used to connect to database for testing -->
 	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />
 	<property name="ar.connection.driver_class" value="NHibernate.Driver.SqlClientDriver" overwrite="false" />
@@ -95,8 +84,11 @@
 			<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of Cast;e." />
 		</if>
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
+
+		<!-- Where is nunit-console.exe ? -->
 		<property name="nunit-console" value="nunit-console.exe" overwrite="false" />
-		<property name="wix.dir" value="C:\Program Files\WiX" overwrite="false" />
+		<!-- Where is WiX? -->
+		<property name="wix.dir" value="C:\Program Files\wix" overwrite="false" />
 	</target>
 
 	<target name="set-net-1.1-framework-configuration">
@@ -144,6 +136,19 @@
 		<resourcefileset id="project.resources" />
 	</target>
 	
+	<target name="common.find-nunit">
+		<if test="${not property::exists('nunit.found')}">
+			<exec 
+				program="${nunit-console}" 
+				resultproperty="nunit.found"
+				failonerror="false" />
+			<property name="nunit.found" value="${nunit.found == '0'}" readonly="true" />
+
+			<echo message="Using nunit-console.exe for running unit tests" if="${nunit.found}"/>
+			<echo message="WARNING: nunit-console not found, using less predictable NAnt &lt;nunit2&gt; task" unless="${nunit.found}"/>
+		</if>
+	</target>
+
 	<script language="C#" prefix="build">
 		<code>
 			<![CDATA[
