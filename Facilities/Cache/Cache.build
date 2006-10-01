@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project 
+	name="Cache-facility"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+    
+	<target name="build" depends="facility" />
+	
+	<target name="facility">
+		<nant buildfile="Castle.Facilities.Cache/Castle.Facilities.Cache.build" />
+		<nant buildfile="Castle.Facilities.Cache.Tests/Castle.Facilities.Cache.Tests.build" />
+	</target>
+	
+</project>

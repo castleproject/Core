@@ -102,12 +102,12 @@
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>

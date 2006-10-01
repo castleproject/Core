@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 
 	[TestFixture]
-	public class ServerUtilityTestCase : AbstractMRTestCase
+	public class ServerUtilityTestCase : AbstractTestCase
 	{
 		[Test]
 		public void UrlEncode()

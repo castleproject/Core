@@ -1,130 +1,54 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="castle-facilities" default="build">
+<project
+	name="castle-facilities"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
 
-	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
-
-	<property name="name" value="Facilities" />
-
-	<target name="build" depends="init, buildlist1, buildlist2, buildlist3" />
+	<target name="build" depends="autotransaction arintegration aspectsharp batchregistration cache db4o dynamicloader nhibernate ibatis logging prevalence" />
 	
-	<target name="buildlist1" depends="autotransaction,arintegration,aspectsharp,batchregistration,cache,db4o" />
-	<target name="buildlist2" depends="dynamicloader,factorysupport,nhibernate,ibatis,logging" />
-	<target name="buildlist3" depends="prevalence,remoting,securitymanagement,typedfactory" />
-	
-	<!-- entlib,x is/are out -->
-	
-	<target name="clean">
-		<nant buildfile="AutomaticTransactionManagement/default.build" inheritall="true" target="clean" />
-		<nant buildfile="ActiveRecordIntegration/default.build" inheritall="true" target="clean" />
-		<nant buildfile="AspectSharp/default.build" inheritall="true" target="clean" />
-		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="clean" />
-		<nant buildfile="Cache/default.build" inheritall="true" target="clean" />
-		<nant buildfile="Db4o/default.build" inheritall="true" target="clean" />
-		<nant buildfile="DynamicLoader/default.build" inheritall="true" target="clean" />
-		<!--<nant buildfile="EnterpriseLibrary/default.build" inheritall="true" target="clean" />-->
-		<nant buildfile="FactorySupport/default.build" inheritall="true" target="clean" />
-		<nant buildfile="IBatisNet/default.build" inheritall="true" target="clean" /> 
-		<nant buildfile="Logging/default.build" inheritall="true" target="clean" /> 
-		<nant buildfile="NHibernateIntegration/default.build" inheritall="true" target="clean" />
-		<nant buildfile="Prevalence/default.build" inheritall="true" target="clean" />
-		<nant buildfile="Remoting/default.build" inheritall="true" target="clean" />
-		<nant buildfile="Security/default.build" inheritall="true" target="clean" />
-		<nant buildfile="TypedFactory/default.build" inheritall="true" target="clean" />
-	</target>
-	
-	<target name="init">
-
-	</target>
-
 	<target name="autotransaction">
-		<nant buildfile="AutomaticTransactionManagement/default.build" inheritall="true" target="build" />
+		<nant buildfile="AutomaticTransactionManagement/AutomaticTransactionManagement.build" />
 	</target>
 
 	<target name="arintegration">
-		<nant buildfile="ActiveRecordIntegration/default.build" inheritall="true" target="build" />
+		<nant buildfile="ActiveRecordIntegration/ActiveRecordIntegration.build" />
 	</target>
 	
 	<target name="aspectsharp">
-		<nant buildfile="AspectSharp/default.build" inheritall="true" target="build" />
+		<nant buildfile="AspectSharp/AspectSharp.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="batchregistration">
-		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="build" />
+		<nant buildfile="BatchRegistration/BatchRegistration.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="cache">
-		<nant buildfile="Cache/default.build" inheritall="true" target="build" />
+		<nant buildfile="Cache/Cache.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="db4o">
-		<nant buildfile="Db4o/default.build" inheritall="true" target="build" />
+		<nant buildfile="Db4o/Db4o.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="dynamicloader">
-		<nant buildfile="DynamicLoader/default.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="entlib">
-		<nant buildfile="EnterpriseLibrary/default.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="factorysupport">
-		<nant buildfile="FactorySupport/default.build" inheritall="true" target="build" />
+		<nant buildfile="DynamicLoader/DynamicLoader.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="ibatis">
-		<nant buildfile="IBatisNet/default.build" inheritall="true" target="build" /> 
+		<nant buildfile="IBatisNet/IBatisNet.build" inheritall="true" target="build" /> 
 	</target>
 
 	<target name="logging">
-		<nant buildfile="Logging/default.build" inheritall="true" target="build" /> 
+		<nant buildfile="Logging/Logging.build" inheritall="true" target="build" /> 
 	</target>
 
 	<target name="nhibernate">
-		<nant buildfile="NHibernateIntegration/default.build" inheritall="true" target="build" />
+		<nant buildfile="NHibernateIntegration/NHibernateIntegration.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="prevalence">
-		<nant buildfile="Prevalence/default.build" inheritall="true" target="build" />
-	</target>
-	
-	<target name="remoting">
-		<nant buildfile="Remoting/default.build" inheritall="true" target="build" />
-	</target>	
-	
-	<target name="securitymanagement">
-		<nant buildfile="Security/default.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="typedfactory">
-		<nant buildfile="TypedFactory/default.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="dist">
-		<nant buildfile="ActiveRecordIntegration/default.build" inheritall="true" target="dist" />
-		<nant buildfile="AspectSharp/default.build"	inheritall="true" target="dist" />
-		<nant buildfile="AutomaticTransactionManagement/default.build" inheritall="true" target="dist" />
-		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="dist" />
-		<nant buildfile="Cache/default.build" inheritall="true" target="dist" />
-		<nant buildfile="Db4o/default.build" inheritall="true" target="dist" />
-		<nant buildfile="DynamicLoader/default.build" inheritall="true" target="dist" />
-		<nant buildfile="EnterpriseLibrary/default.build" inheritall="true" target="dist" />
-		<nant buildfile="EventWiring/default.build" inheritall="true" target="dist" />
-		<nant buildfile="FactorySupport/default.build" inheritall="true" target="dist" />
-		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" /> 
-		<nant buildfile="Logging/default.build" inheritall="true" target="dist" /> 
-		<nant buildfile="NHibernateIntegration/default.build" inheritall="true" target="dist" />
-		<nant buildfile="Prevalence/default.build" inheritall="true" target="dist" />
-		<nant buildfile="Remoting/default.build" inheritall="true" target="dist" />
-		<nant buildfile="Startable/default.build" inheritall="true" target="dist" />
-		<nant buildfile="Security/default.build" inheritall="true" target="dist" />
-		<nant buildfile="TypedFactory/default.build" inheritall="true" target="dist" />
-		
-		<zip zipfile="Facilities.zip">
-			<fileset basedir="${base.dir}">
-				<include name="**/*.zip" />				
-			</fileset>
-		</zip>
+		<nant buildfile="Prevalence/Prevalence.build" inheritall="true" target="build" />
 	</target>
 
 </project>

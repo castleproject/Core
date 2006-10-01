@@ -76,7 +76,7 @@
   <ItemGroup>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -114,13 +114,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="BasicFunctionalityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WindsorMonoRailSectionHandlerTestCase.cs" />
+    <Compile Include="WizardSupportTestCase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

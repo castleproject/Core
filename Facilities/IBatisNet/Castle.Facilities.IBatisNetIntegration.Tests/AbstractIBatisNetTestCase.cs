@@ -36,8 +36,8 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 	public abstract class AbstractIBatisNetTestCase : BaseTest
 	{
 		public const String DATA_MAPPER = "sqlServerSqlMap";
-		public static readonly String ACCESS_SOURCE_FILE = ".." + Path.DirectorySeparatorChar + "Castle.mdb";
-		public static readonly String ACCESS_DESTINATION_FILE = ".." + Path.DirectorySeparatorChar + "Castle_temp.mdb";
+		public static readonly String ACCESS_SOURCE_FILE = ConfigHelper.ResolvePath("../Castle.mdb");
+		public static readonly String ACCESS_DESTINATION_FILE = ConfigHelper.ResolvePath("../Castle_temp.mdb");
 
 		[SetUp]
 		public virtual void InitDb()
@@ -56,8 +56,8 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 			IConfiguration sqlMap = confignode.Children.Add(new MutableConfiguration("sqlMap"));
 			sqlMap.Attributes["id"] = DATA_MAPPER;
-			sqlMap.Attributes["config"] = "sqlMap.config";
-			sqlMap.Attributes["connectionString"] = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../castle_temp.mdb";
+			sqlMap.Attributes["config"] = ConfigHelper.ResolvePath("sqlMap.config");
+			sqlMap.Attributes["connectionString"] = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + ACCESS_DESTINATION_FILE;
 			container.Kernel.ConfigurationStore.AddFacilityConfiguration("IBatisNet", confignode);
 
 			return container;

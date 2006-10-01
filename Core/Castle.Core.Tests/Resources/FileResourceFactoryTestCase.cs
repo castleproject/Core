@@ -26,7 +26,7 @@ namespace Castle.Core.Tests.Resources
 	public class FileResourceFactoryTestCase
 	{
 		private FileResourceFactory resFactory = new FileResourceFactory();
-		private String basePath = "../Castle.Core.Tests/Resources";
+		private String basePath = Path.Combine(System.Configuration.ConfigurationSettings.AppSettings["tests.src"], "Resources");
 
 		[TestFixtureSetUp]
 		public void Init()

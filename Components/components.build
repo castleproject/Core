@@ -1,36 +1,18 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="castle-components" default="build">
+<project
+	name="castle-components"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
 
-	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
-
-	<target name="build" depends="init, general, winforms" />
+	<target name="build" depends="general, winforms" />
 	
-	<target name="clean" >
-		<nant buildfile="General/commoncomponents.build" inheritall="true" target="clean" />
-		<nant buildfile="Winforms/winformscomponents.build" inheritall="true" target="clean" />
-	</target>
-	
-	<target name="init">
-	
-	</target>
-
 	<target name="general">
-		<nant buildfile="General/commoncomponents.build" inheritall="true" target="build" />
+		<nant buildfile="General/General.build" />
 	</target>
 	
 	<target name="winforms">
-		<nant buildfile="Winforms/winformscomponents.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="dist">
-		<nant buildfile="General/commoncomponents.build" inheritall="true" target="dist" />
-		<nant buildfile="Winforms/winformscomponents.build" inheritall="true" target="dist" />
-
-		<zip zipfile="Components.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="**/*.zip" />				
-			</fileset>
-		</zip>
+		<nant buildfile="Winforms/Winforms.build" />
 	</target>
 
 </project>

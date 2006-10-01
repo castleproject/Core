@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+
+<project 
+	name="Castle.Services.Transaction.Tests" 
+	default="test" 
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<property name="assembly.description" value="The Unit Tests for Castle.Services.Transaction." />
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="System.dll" />
+			<include name="log4net.dll" />
+			<include name="nunit.framework.dll"/>
+			<include name="Castle.Services.Transaction.dll" />
+		</assemblyfileset>
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+	</target>
+
+	<target name="put-settings-into-app-config">
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="test" depends="init generate-assemblyinfo common.compile-tests put-settings-into-app-config common.run-tests" description="Runs the tests for ${project::get-name()}" />
+
+</project>

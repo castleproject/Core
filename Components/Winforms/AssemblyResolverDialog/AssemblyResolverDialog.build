@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-assemblyresolver-component"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<target name="build" depends="assemblyresolver" />
+	
+	<target name="assemblyresolver">
+		<nant buildfile="Castle.Components.Winforms.AssemblyResolver/Castle.Components.Winforms.AssemblyResolver.build" />
+		<nant buildfile="Castle.Components.Winforms.AssemblyResolver.Tests/Castle.Components.Winforms.AssemblyResolver.Tests.build" />
+	</target>
+
+</project>

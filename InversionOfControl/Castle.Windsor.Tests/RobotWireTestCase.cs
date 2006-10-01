@@ -32,7 +32,7 @@ namespace Castle.Windsor.Tests
 		[Test]
 		public void WireTest()
 		{
-			container = new WindsorContainer("../Castle.Windsor.Tests/robotwireconfig.xml");
+			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("robotwireconfig.xml"));
 
 			Robot robot = (Robot) container[ typeof(Robot) ];
 			

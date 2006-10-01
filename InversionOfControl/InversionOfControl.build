@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-container"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<target name="build" depends="microkernel,windsor" />
+
+	<target name="microkernel">
+		<nant buildfile="Castle.MicroKernel/Castle.MicroKernel.build" />
+		<nant buildfile="Castle.MicroKernel.Tests/Castle.MicroKernel.Tests.build" />
+	</target>
+
+	<target name="windsor">
+		<nant buildfile="Castle.Windsor/Castle.Windsor.build" />
+		<nant buildfile="Castle.Windsor.Tests/Castle.Windsor.Tests.build" />
+	</target>
+
+</project>

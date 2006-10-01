@@ -28,7 +28,7 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container;
 			
-			container = new WindsorContainer("../Castle.Windsor.Tests/propertyInspectionBehavior.xml");
+			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("propertyInspectionBehavior.xml"));
 			
 			ExtendedComponentWithProperties comp;
 			
@@ -53,7 +53,7 @@ namespace Castle.Windsor.Tests
 		{
 			IWindsorContainer container;
 			
-			container = new WindsorContainer("../Castle.Windsor.Tests/propertyInspectionBehaviorInvalid.xml");
+			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("propertyInspectionBehaviorInvalid.xml"));
 		}
 	}
 }

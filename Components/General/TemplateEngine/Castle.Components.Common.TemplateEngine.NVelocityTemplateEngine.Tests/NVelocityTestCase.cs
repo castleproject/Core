@@ -30,7 +30,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 		{
 			String path = Path.Combine(
 				AppDomain.CurrentDomain.BaseDirectory, 
-			"../Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/templates");
+			Path.Combine(System.Configuration.ConfigurationSettings.AppSettings["tests.src"], "templates"));
 
 			ITemplateEngine engine = new NVelocityTemplateEngine(path);
 			(engine as ISupportInitialize).BeginInit();
@@ -43,7 +43,6 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 		}
 
 		[Test]
-		[Ignore("Not working with NAnt/command line")]
 		public void SimpleTemplateProcessingWithinResource()
 		{
 			NVelocityTemplateEngine engine = new NVelocityTemplateEngine();
@@ -54,9 +53,10 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 
 			StringWriter writer = new StringWriter();
 
+			string templateFile = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/compiledres/simple.vm";
 			Assert.IsTrue( engine.Process(
 				new Hashtable(), 
-				"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/compiledres/simple.vm", 
+				templateFile, 
 				writer) );
 
 			Assert.AreEqual("This is a simple template", writer.GetStringBuilder().ToString());

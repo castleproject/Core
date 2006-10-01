@@ -15,13 +15,13 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-
+	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
 
 	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-	public class RoutingTestCase : AbstractMRTestCase
+	public class RoutingTestCase : AbstractTestCase
 	{		
 		[Test]
 		public void BlogRoutingRule()

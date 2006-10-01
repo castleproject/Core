@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 
 	[TestFixture]
-	public class BasicFunctionalityTestCase : AbstractMRTestCase
+	public class BasicFunctionalityTestCase : AbstractTestCase
 	{
 		[Test]
 		public void SimpleControllerAction()

@@ -80,14 +80,14 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
-                />
-                <Reference
                     Name = "Castle.Core-vs2003"
                     Project = "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
@@ -120,11 +120,6 @@
                 />
                 <File
                     RelPath = "StreamLoggerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Properties\AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

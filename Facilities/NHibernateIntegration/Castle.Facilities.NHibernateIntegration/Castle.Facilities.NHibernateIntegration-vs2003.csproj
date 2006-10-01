@@ -82,32 +82,32 @@
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\..\build\net-1.1\Iesi.Collections.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\..\build\net-1.1\log4net.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Transaction.dll"
                 />
                 <Reference
                     Name = "System.Web"
@@ -117,47 +117,22 @@
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\..\..\build\net-1.1\Nullables.NHibernate.dll"
-                />
-                <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\..\build\net-1.1\Iesi.Collections.dll"
-                />
-                <Reference
-                    Name = "NHibernate"
-                    AssemblyName = "NHibernate"
-                    HintPath = "..\..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Nullables.NHibernate.dll"
                 />
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\..\build\net-1.1\Nullables.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\..\build\net-1.1\log4net.dll"
-                />
-                <Reference
-                    Name = "Castle.Core"
-                    AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Nullables.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "Constants.cs"
                     SubType = "Code"

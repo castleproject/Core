@@ -82,42 +82,42 @@
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "AspectSharp.Lang"
                     AssemblyName = "AspectSharp.Lang"
-                    HintPath = "..\..\..\build\net-1.1\AspectSharp.Lang.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\AspectSharp.Lang.dll"
                 />
                 <Reference
                     Name = "antlr.runtime"
                     AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\build\net-1.1\antlr.runtime.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\antlr.runtime.dll"
                 />
                 <Reference
                     Name = "AopAlliance"
                     AssemblyName = "AopAlliance"
-                    HintPath = "..\..\..\build\net-1.1\AopAlliance.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\AopAlliance.dll"
                 />
                 <Reference
                     Name = "AspectSharp"
                     AssemblyName = "AspectSharp"
-                    HintPath = "..\..\..\build\net-1.1\AspectSharp.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\AspectSharp.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>

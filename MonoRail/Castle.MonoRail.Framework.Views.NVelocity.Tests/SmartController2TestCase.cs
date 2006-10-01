@@ -15,13 +15,13 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-
+	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
 
 	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-	public class SmartController2TestCase : AbstractMRTestCase
+	public class SmartController2TestCase : AbstractTestCase
 	{
 		[Test]
 		public void SimpleBindArray()

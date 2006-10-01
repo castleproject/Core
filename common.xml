@@ -1,7 +1,18 @@
 <?xml version="1.0"?>
-<project name="Common Build Properties">
+<project xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
+	<!-- 
+		Use this to determine if the key file CastleKey.snk should be used to 
+		sign the assemblies. Defaults to true since private key is present
+		in SVN.
+	-->
+	<property name="sign" value="true" overwrite="false" />
+	<property name="key.file" value="${root.dir}/CastleKey.snk" />
+
+	<!-- Controls whether tests are run. Setting this is as input to the build disables *all* tests. -->
+	<property name="common.run-tests" value="true" overwrite="false" />
+
 	<!-- Common properties that allow overrides -->
-	
+<!--	
 	<if test="${not property::exists('nunit-console')}">
 	<property name="nunit-console" readonly="false" value="nunit-console.exe" if="${framework::get-target-framework()=='net-1.1'}" />
 	<property name="nunit-console" readonly="false" value="nunit-console-1-1.exe" if="${framework::get-target-framework()=='net-1.1'}" />
@@ -9,34 +20,7 @@
 	</if>
 
 	<echo message="Using ${nunit-console}" />
-
-	<property name="rootbuild.dir" value="${directory::get-current-directory()}" unless="${property::exists('rootbuild.dir')}"/>
-		
-	<property name="build.dir" value="${rootbuild.dir}/build/${framework::get-target-framework()}" />
-
-	<property name="dotnet.version" value="1" if="${framework::get-target-framework()=='net-1.0'}" />
-	<property name="dotnet.version" value="1" if="${framework::get-target-framework()=='net-1.1'}" />
-	<property name="dotnet.version" value="1" if="${framework::get-target-framework()=='mono-1.0'}" />
-	<property name="dotnet.version" value="2" if="${framework::get-target-framework()=='net-2.0'}" />
-	<property name="dotnet.version" value="2" if="${framework::get-target-framework()=='mono-2.0'}" />
-	<property name="dotnet.version" value="0" unless="${property::exists('dotnet.version')}" />
-	
-	<property name="strong"		value="STRONG"		unless="${property::exists('strong')}" />
-	<property name="debug"		value="false"		unless="${property::exists('debug')}" />
-	<property name="optimize"	value="true"		unless="${property::exists('optimize')}" />
-	<property name="trace"	    value="true"		unless="${property::exists('trace')}" />
-	<property name="doc.dir"	value="${base.dir}/docs" />
-	<property name="nunit.formatter" value="Plain"	unless="${property::exists('nunit.formatter')}" />
-	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
-	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
-	<property name="isMono" value="${string::starts-with(framework::get-target-framework(),'mono')}" />
-
-	<!-- Global compilation defines -->
-	<property name="define"     value="TRACE"               if="${trace}" />
-	<!-- Framework 2.0 defines -->
-	<property name="define"     value="${define};DOTNET2"   if="${framework::get-target-framework()=='net-2.0'}"/>
-	<!-- Make sure the property exists -->
-	<property name="define"     value=""                    unless="${property::exists('define')}" />
+-->
 
 	<!-- properties used to connect to database for testing -->
 	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />
@@ -44,54 +28,135 @@
 	<property name="ar.connection.connection_string.1" value="Server=(local);initial catalog=test;Integrated Security=SSPI" overwrite="false" />
 	<property name="ar.connection.connection_string.2" value="Server=(local);initial catalog=test2;Integrated Security=SSPI" overwrite="false" />
 
-	<!-- find out where gacutil is -->
-
-	<property name="gacutil.framework.file" value="${framework::get-framework-directory( framework::get-target-framework() )}\gacutil.exe"/>
-	<property name="gacutil.sdk.file" value="${framework::get-sdk-directory( framework::get-target-framework() )}\gacutil.exe"/>
-
-	<description>Find "gacutil" and show error message if it was not found.</description>
-	<if test="${( not property::exists( 'gacutil.file' )) and file::exists( gacutil.framework.file )}">
-		<property name="gacutil.file" value="${gacutil.framework.file}"/>
-	</if>
-	<if test="${( not property::exists( 'gacutil.file' )) and file::exists( gacutil.sdk.file )}">
-		<property name="gacutil.file" value="${gacutil.sdk.file}"/>
-	</if>
-	<if test="${not property::exists( 'gacutil.file' )}">
-		<echo>Could not find "gacutil" to install Castle.MonoRail.TestSupport server to GAC.</echo>
-		<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport</echo>
-	</if>
-
-	<!-- set up caspol.exe location -->
-
-	<property name="caspol.file" value="${framework::get-framework-directory( framework::get-target-framework() )}\caspol.exe"/>
-
-	<!-- find out where nunit.framework.dll is -->
-
-	<property name="lib.dir"
-		value="${path::combine(nant::get-base-directory(), 'lib')}"
-		dynamic="true" />
-		
-	<property name="lib.family.dir"
-		value="${path::combine(lib.dir,framework::get-family(framework::get-target-framework()))}"
-		dynamic="true" />
-	
-	<!-- for nant 0.85 rc2 or higher -->
-	
-	<property name="lib.framework.dir"
-		value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}"
-		dynamic="true" />
-
-	<!-- Uncomment this block for nant backward compatibility
-	<property name="lib.framework.dir"
-		value="${path::combine(lib.family.dir, framework::get-version(framework::get-target-framework()))}"
-		dynamic="true" />
+	<!-- 
+		Path to the folder that contain the external assemblies.  For net-1.1 the values will
+		be lib, lib/net, and lib/net/1.1 respectively.
 	-->
-		
-	<property name="nunit.framework.dll" value="${path::combine(build.dir, 'nunit.framework.dll')}" />
-	<!-- Uncomment this to use NAnt's nunit.framework.dll
-	<property name="nunit.framework.dll" value="${path::combine(lib.framework.dir, 'nunit.framework.dll')}" />
+	<property name="lib.dir" value="SharedLibs" dynamic="true" />
+	<property name="lib.family.dir" value="${path::combine(lib.dir, framework::get-family(framework::get-target-framework()))}" dynamic="true" />
+	<property name="lib.framework.dir" value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}" dynamic="true" />
+
+	<!-- 
+		Versioning
 	-->
+	<property name="project.version" 	value="1.0.0.0" overwrite="false" />
+	<property name="project.major" 		value="${version::get-major(version::parse(project.version))}" 		dynamic="true" />
+	<property name="project.minor" 		value="${version::get-minor(version::parse(project.version))}" 		dynamic="true" />
+	<property name="project.build"		value="${version::get-build(version::parse(project.version))}" 		dynamic="true" />
+	<property name="project.revision"	value="${svn.revision}" 											dynamic="true" />
 
-	<property name="nant.tasks.nunit2" value="False" unless="${property::exists('nant.tasks.nunit2')}" />
+	<property name="assembly.major" 	value="${version::get-major(version::parse(assembly.version))}"		dynamic="true" />
+	<property name="assembly.minor" 	value="${version::get-minor(version::parse(assembly.version))}" 	dynamic="true" />
+	<property name="assembly.build"		value="${version::get-build(version::parse(assembly.version))}" 	dynamic="true" />
+	<property name="assembly.revision"	value="${version::get-revision(version::parse(assembly.version))}"	dynamic="true" />
+	
+	<property name="svn.revision" value="0" overwrite="false" />
 
+	<!-- 
+		These are used to set the correct attributes in AssemblyInfo.cs.  
+	-->
+	<property name="project.company" value="Castle Project" />
+
+	<!-- debug|release -->
+	<property name="build.defines" value="TRACE" />
+	<property name="build.defines" value="${build.defines},STRONG" if="${sign}" />
+
+	<!-- platform specific properties. These are the defaults -->
+	<property name="current.build.defines" value="${build.defines}" />
+
+	<!-- named project configurations -->
+	<target name="set-debug-project-configuration" description="Perform a 'debug' build">
+		<property name="build.debug"	value="true" />
+		<property name="build.optimize"	value="false" overwrite="false" />
+	</target>
+	
+	<target name="set-release-project-configuration" description="Perform a 'release' build">
+		<property name="build.debug"	value="false" />
+		<property name="build.optimize" value="true" overwrite="false" />
+	</target>
+
+	<target name="set-project-configuration">
+		<property name="project.config" value="debug" overwrite="false" />
+		<if test="${not(target::exists('set-' + project.config + '-project-configuration'))}">
+			<fail message="Unknown configuration: '${project.config}'" />
+		</if>
+		<call target="set-${project.config}-project-configuration" />
+
+		<property name="src.dir" 			value="${path::get-full-path(project::get-base-directory())}" />
+		<property name="build.base.dir"		value="${root.dir}/build" />
+		<property name="build.family.dir"	value="${build.base.dir}/${nant.settings.currentframework}" />
+		<property name="build.dir" 			value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" />
+		<property name="testresults.dir" 	value="${build.dir}/test-results" />
+		<property name="releasenotes.dir"	value="${build.dir}/ReleaseNotes" />
+	</target>
+
+	<target name="set-framework-configuration">
+		<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
+			<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of Cast;e." />
+		</if>
+		<call target="set-${framework::get-target-framework()}-framework-configuration" />
+		<property name="nunit-console" value="nunit-console.exe" overwrite="false" />
+		<property name="wix.dir" value="C:\Program Files\WiX" overwrite="false" />
+	</target>
+
+	<target name="set-net-1.1-framework-configuration">
+		<property name="nant.settings.currentframework" value="net-1.1" />
+		<property name="current.build.defines" value="${build.defines},NET,DOTNET1" />
+		<property name="link.sdkdoc.version" value="SDK_v1_1" />
+		<property name="merge.targetplatform" value="v1.1" />
+	</target>
+
+	<target name="set-net-2.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="net-2.0" />
+		<property name="current.build.defines" value="${build.defines},NET,DOTNET2" />
+		<property name="link.sdkdoc.version" value="SDK_v2_0" />
+		<property name="merge.targetplatform" value="v2" />
+	</target>
+
+	<target name="set-mono-1.0-framework-configuration">
+		<property name="nant.settings.currentframework" value="mono-1.0" />
+		<property name="current.build.defines" value="${build.defines},MONO,MONO1" />
+		<property name="link.sdkdoc.version" value="MsdnOnline" />
+	</target>
+
+	<target name="display-current-runtime">
+		<echo message="" />
+		<echo message="----------------------------------------------------------" />
+		<echo message=" ${framework::get-description(framework::get-target-framework())}" />
+		<echo message="----------------------------------------------------------" />
+		<echo message="" />
+		<echo message="framework : ${framework::get-target-framework()}" />
+		<echo message="description : ${framework::get-description(framework::get-target-framework())}" />
+		<echo message="sdk directory : ${framework::get-sdk-directory(framework::get-target-framework())}" />
+		<echo message="framework directory : ${framework::get-framework-directory(framework::get-target-framework())}" />
+		<echo message="assembly directory : ${framework::get-assembly-directory(framework::get-target-framework())}" />
+		<echo message="runtime engine : ${framework::get-runtime-engine(framework::get-target-framework())}" />
+		<echo message="" />
+	</target>
+
+	<target name="common.init"
+		depends="set-framework-configuration set-project-configuration"
+		description="Initializes build properties">
+
+		<fileset id="project.sources" failonempty="true">
+			<include name="**/*.cs" />
+		</fileset>
+		<resourcefileset id="project.resources" />
+	</target>
+	
+	<script language="C#" prefix="build">
+		<code>
+			<![CDATA[
+				[Function("path-make-relative")]
+				public static string PathMakeRelative(string fromPath, string toPath)
+				{
+					Uri uri1 = new Uri(Path.GetFullPath(fromPath));
+					Uri uri2 = new Uri(Path.GetFullPath(toPath));
+					return uri1.MakeRelative(uri2);
+				}
+				
+			]]>
+		</code>
+	</script>
+	
 </project>

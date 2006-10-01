@@ -76,27 +76,27 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Logging.Log4netIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Logging.NLogIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\Castle.Services.Logging.NLogIntegration.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Logging.NLogIntegration.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

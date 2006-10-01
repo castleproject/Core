@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{D4E7ED6A-C283-4697-BC76-74EBC84F8455}"
     >
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)\App.config" "$(TargetPath).config"'
                 RootNamespace = "Castle.Facilities.Cache.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -87,29 +87,33 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AssemblyInfo.cs"
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "CacheTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CacheTest.cs"
+                    RelPath = "ConfigHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

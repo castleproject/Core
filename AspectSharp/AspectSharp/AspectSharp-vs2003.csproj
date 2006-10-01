@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{C50C59E8-410B-48C6-8CD0-DB351C0AB75E}"
     >
@@ -97,7 +97,7 @@
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

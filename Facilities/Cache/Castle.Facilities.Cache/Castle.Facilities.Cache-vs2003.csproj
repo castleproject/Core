@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{BECD2438-F285-480D-919E-D295752D92A1}"
     >
@@ -82,27 +82,22 @@
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "CacheAttribute.cs"
                     SubType = "Code"

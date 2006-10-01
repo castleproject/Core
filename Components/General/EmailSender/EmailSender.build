@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-emailsender-component"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+    
+	<target name="build" depends="emailsender,smtpemailsender" />
+
+	<target name="emailsender" >
+		<nant buildfile="Castle.Components.Common.EmailSender/Castle.Components.Common.EmailSender.build" />
+		<nant buildfile="Castle.Components.Common.EmailSender.MockSender/Castle.Components.Common.EmailSender.MockSender.build" />
+		<nant buildfile="Castle.Components.Common.EmailSender.Tests/Castle.Components.Common.EmailSender.Tests.build" />
+	</target>
+
+	<target name="smtpemailsender">
+		<nant buildfile="Castle.Components.Common.EmailSender.SmtpEmailSender/Castle.Components.Common.EmailSender.SmtpEmailSender.build" />
+	</target>
+
+</project>

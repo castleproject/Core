@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="Castle"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="." />
+	<include buildfile="${root.dir}/common.xml" />
+	
+	<target name="build"
+		depends="init copy-referenced-assemblies core services tools container components activerecord monorail aspectsharp facilities samples"
+		description="Builds Castle in the current configuration" />
+
+	<target name="rebuild"
+		depends="init recreate-build-directory build"
+		description="Rebuilds Castle in the current configuration" />
+
+	<target name="activerecord" depends="init">
+		<nant buildfile="ActiveRecord/activerecord.build" target="build" inheritall="true" />
+	</target>
+	
+	<target name="tools" depends="init">
+		<nant buildfile="Tools/Tools.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="container" depends="init">
+		<nant buildfile="InversionOfControl/InversionOfControl.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="services" depends="init">
+		<nant buildfile="Services/services.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="core" depends="init">
+		<nant buildfile="Core/core.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="facilities" depends="init">
+		<nant buildfile="Facilities/facilities.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="components" depends="init">
+		<nant buildfile="Components/components.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="monorail" depends="init">
+		<nant buildfile="MonoRail/monorail.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="aspectsharp" depends="init">
+		<nant buildfile="AspectSharp/aspectsharp.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="samples" depends="init">
+	</target>
+
+	<target name="installer" depends="init createreleasenotes zip-source zip-samples">
+		<nant buildfile="Setup/Setup.build" />
+	</target>
+
+	<target name="init" depends="common.init">
+		<!-- add SVN revision to builds -->
+		<property name="svn.revision" value="0" unless="${property::exists('svn.revision')}"/>
+		<!-- try to update the revision -->
+		<echo message="Retrieving Subversion revision number"/>
+		<exec
+			program="svn"
+			commandline='info "${project::get-base-directory()}" --xml'
+			output="_revision.xml"
+			failonerror="false"/>
+		<xmlpeek
+			file="_revision.xml"
+			xpath="/info/entry/commit/@revision"
+			property="svn.revision"
+			failonerror="false"/>
+		<delete file="_revision.xml" failonerror="false" />
+		<echo message="Using Subversion revision number: ${svn.revision}"/>
+
+		<exec 
+			program="${nunit-console}" 
+			resultproperty="nunit.found"
+			failonerror="false" />
+
+		<echo message="nunit-console invocation result: ${nunit.found}" />
+
+		<property name="tests.disabled" value="false" />
+
+		<if test="${nunit.found!='0'}">
+			<property name="tests.disabled" value="true" />
+		</if>
+
+		<echo message="Tests with nunit-console are disabled?  ${tests.disabled}" />
+	</target>
+	
+	<target name="clean" description="Deletes current build artifacts" depends="common.init">
+		<delete dir="${build.dir}" failonerror="false" />
+	</target>
+		
+    <target name="clean-vs" description="Delete Visual Studio artifacts" depends="common.init">
+        <!-- NB - this target will fail if you have a solution open in Visual Studio -->
+		<echo message="Gathering files for removal..." />
+        <foreach item="File" property="filename">
+            <in>
+                <items basedir=".">
+                    <include name="**/*.suo" />
+                    <include name="*/*.csproj.user" />
+                </items>
+            </in>
+            <do>
+                <delete file="${filename}" />
+            </do>
+        </foreach>
+		<echo message="Gathering folders for removal..." />
+        <foreach item="Folder" property="foldername">
+            <in>
+                <items basedir=".">
+                    <include name="**/obj" />
+                    <include name="**/_ReSharper*" />
+                </items>
+            </in>
+            <do>
+                <delete dir="${foldername}" failonerror="false" />
+            </do>
+        </foreach>
+    </target>
+
+	<target name="cleanall" description="Deletes all build artifacts" depends="common.init">
+		<echo message="Deleting all builds from all configurations" />
+		<delete dir="${build.base.dir}" failonerror="false" />
+		<call target="clean-vs" />
+	</target>
+	
+	<target name="recreate-build-directory">
+		<echo message="Current Directory is ${project::get-base-directory()}" />
+		<echo message="Build Directory is ${build.dir}" />
+
+		<!-- Prepare build directory -->
+		<delete dir="${build.dir}" failonerror="false" />
+		<mkdir dir="${build.dir}" />
+		<call target="copy-referenced-assemblies" />
+	</target>
+
+	<target name="copy-referenced-assemblies">
+		<!-- Copy framework-neutral libraries -->
+		<copy todir="${build.dir}" >
+			<fileset basedir="${lib.dir}">
+				<include name="*.dll" />
+				<include name="*.xml" />
+				<include name="*.license.txt" />
+			</fileset>
+		</copy>
+		
+		<!-- Copy family-specific libraries -->
+		<!-- 
+			The build of log4net works just fine for all versions of .NET.
+			When they do get framework specific extensions then we
+			can just move them to the framework specific section
+		-->
+		<copy todir="${build.dir}">
+			<fileset basedir="${lib.family.dir}">
+				<include name="*.dll" />
+				<include name="*.xml" />
+				<include name="*.license.txt" />
+			</fileset>
+		</copy>
+
+		<!-- Copy framework-specific libraries -->
+		<copy todir="${build.dir}">
+			<fileset basedir="${lib.framework.dir}">
+				<include name="*.dll" />
+				<include name="*.xml" />
+				<include name="*.license.txt" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build-all-frameworks" depends="init">
+		<!-- Save the current framework -->
+		<property name="current.framework.saved" value="${nant.settings.currentframework}" />
+
+		<!-- Execute build for each framework -->
+		<foreach item="String" delim=" " property="framework" in="net-1.1 net-2.0">
+			<call target="set-${framework}-framework-configuration" />
+			<call target="build" />
+		</foreach>
+
+		<!-- Reset the current framework to the saved value -->
+		<call target="set-${current.framework.saved}-framework-configuration" />
+	</target>
+
+	<!-- Packaging related tasks -->
+	
+	<target name="package" depends="zip-build"
+		description="Creates Zip files for Release">
+
+		<echo message="Created a '${project.config}' package in file://${build-zipfile}" />
+
+	</target>
+
+	<target name="createreleasenotes">
+		<mkdir dir="${releasenotes.dir}" />
+		<delete dir="${releasenotes.dir}" />
+		
+		<echo message="Top level projects Release notes" />
+
+		<copy file="ActiveRecord/Changes.txt" tofile="${releasenotes.dir}/ActiveRecord Release Notes.txt" />
+		<copy file="ActiveRecord/License.txt" tofile="${releasenotes.dir}/License.txt" />
+		<copy file="MonoRail/Changes.txt" tofile="${releasenotes.dir}/MonoRail Release Notes.txt" />
+		<copy file="InversionOfControl/Changes.txt" tofile="${releasenotes.dir}/InversionOfControl Release Notes.txt" />
+		<copy file="AspectSharp/Changes.txt" tofile="${releasenotes.dir}/AspectSharp Release Notes.txt" />
+		<copy file="Tools/DynamicProxy/Changes.txt" tofile="${releasenotes.dir}/DynamicProxy Release Notes.txt" />
+		<copy file="Core/Changes.txt" tofile="${releasenotes.dir}/Core Release Notes.txt" />
+
+		<echo message="Components Release notes" />
+		
+		<mkdir dir="${releasenotes.dir}/Components" />
+		<property name="target.folder" value="Components" />
+		<call target="copy-scope-releasednotes" />
+
+		<echo message="Facilities Release notes" />
+
+		<mkdir dir="${releasenotes.dir}/Facilities" />
+		<property name="target.folder" value="Facilities" />
+		<call target="copy-scope-releasednotes" />
+
+		<echo message="Services Release notes" />
+
+		<mkdir dir="${releasenotes.dir}/Services" />
+		<property name="target.folder" value="Services" />
+		<call target="copy-scope-releasednotes" />
+		
+	</target>
+	
+	<target name="copy-scope-releasednotes">
+		<foreach item="File" property="changeLogFile">
+			<in>
+				<items>
+					<include name="${target.folder}/**/Changes.txt"/>
+				</items>
+			</in>
+			<do>
+				<echo message="changeLogFile ${changeLogFile}" />
+
+				<property name="folder" value="${directory::get-parent-directory(changeLogFile)}" />
+				
+				<if test="${platform::is-win32()}">
+					<property name="lastsepindex" value="${string::last-index-of(folder, '\') + 1}" />
+				</if>
+				
+				<if test="${platform::is-unix()}">
+					<property name="lastsepindex" value="${string::last-index-of(folder, '/') + 1}" />
+				</if>
+
+				<property name="length" value="${string::get-length(folder) - int::parse(lastsepindex)}" />
+
+				<property name="project.name" value="${string::substring(folder, lastsepindex, length)}" />
+
+				<copy file="${changeLogFile}" tofile="${releasenotes.dir}/${target.folder}/${project.name} Release Notes.txt" />
+			</do>
+		</foreach>	
+	</target>
+	
+	<target name="zip-build" depends="build">
+		<property name="build-zipfile" value="${build.dir}/Castle-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" overwrite="false" dynamic="true" />
+		
+		<delete>
+			<fileset basedir="${root.dir}">
+				<include name="*.zip" />
+				<include name="${build.dir}/external-dependencies.zip" />
+			</fileset>
+		</delete>
+
+		<!-- Prepare release note files -->
+		<call target="createreleasenotes" />
+
+		<!-- Include a zip file with all source code -->
+		<call target="zip-source" if="${build.debug}" />
+
+		<!-- Include test results on debug builds -->
+		<call target="zip-testresults" if="${build.debug}" />
+
+		<!-- Include a zip file with all dependencies -->
+		<call target="zip-dependencies" />
+
+		<!-- Create the master zip file with all files included -->
+		<zip zipfile="${build-zipfile}">
+			<fileset basedir="${build.dir}" prefix="bin" >
+				<include name="Castle*.*" />
+				<include name="AspectSharp*.*" />
+				<include name="external-dependencies.zip" />
+				<include name="test-results.zip" />
+				<exclude name="*Tests.*" />
+			</fileset>
+			<fileset basedir="${root.dir}">
+				<include name="ASL - Apache Software Foundation License.txt" />
+				<include name="Committers.txt" />
+				<include name="Castle main limitations.txt" />
+			</fileset>
+			<fileset basedir="${build.base.dir}" >
+				<include name="castle-sourcecode.zip" />
+			</fileset>
+			<fileset basedir="${releasenotes.dir}" prefix="ReleaseNotes" >
+				<include name="**/*.txt" />
+			</fileset>
+		</zip>
+		
+		<delete file="${build.base.dir}/castle-sourcecode.zip" failonerror="false" />
+		<delete file="${build.dir}/test-results.zip" failonerror="false" />
+		<delete file="${build.dir}/external-dependencies.zip" failonerror="false" />
+
+		<if test="${property::exists('build.target.dir')}">
+			<copy file="${build-zipfile}" todir="${build.target.dir}" />
+		</if>
+		
+	</target>
+	
+	<target name="zip-dependencies"  >
+		<zip zipfile="${build.dir}/external-dependencies.zip">
+			<fileset basedir="${build.dir}">
+				<include name="*.*" />
+				<exclude name="**/Castle*" />
+				<exclude name="**/AspectSharp*" />
+				<exclude name="**/db4o.dll" />
+				<exclude name="**/EULA.rtf" />
+				<exclude name="**/*.zip" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="zip-doc">
+		<zip zipfile="${root.dir}/Castle-api-doc.zip">
+			<fileset basedir="${root.dir}/docs">
+				<include name="Castle.chm" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="zip-samples">
+		<zip zipfile="${build.base.dir}/ActiveRecord-Samples.zip">
+			<fileset basedir="${root.dir}/Samples/ActiveRecord">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+		</fileset>
+		</zip>
+		<zip zipfile="${build.base.dir}/Facilities-Samples.zip">
+			<fileset basedir="${root.dir}/Samples/Facilities">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${build.base.dir}/InversionOfControl-Samples.zip">
+			<fileset basedir="${root.dir}/Samples/InversionOfControl">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${build.base.dir}/MonoRail-Samples.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.css" />
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.js" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${build.base.dir}/Castle-Samples.zip">
+			<fileset basedir="${root.dir}/Samples/Castle">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="zip-source">
+		<zip zipfile="${build.base.dir}/castle-sourcecode.zip">
+			<fileset basedir="${root.dir}">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.gif" />
+				<include name="**/*.resx" />
+				
+				<exclude name="**/obj/" />
+				<exclude name="**/obj/**/*.*" />
+				<exclude name="**/bin*/**/*.*" />
+				<exclude name="**/temp/**/*.*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/_ReSharper.*" />
+				<exclude name="**/_ReSharper.*/**/*.*" />
+				<exclude name="**/*.suo" />
+				<exclude name="SharedLibs/**/*.*" />
+				<exclude name="Samples/**/*.*" />
+				<exclude name="Experiments/**/*.*" />
+				<exclude name="build/**/*.*" />
+				<exclude name="Rook/**/*.*" />
+				<exclude name="setup/*.*" />
+				<exclude name="Tools/VSNetWizards/**/*.*" />
+				<exclude name="Tools/SubversionHooks/**/*.*" />
+				<exclude name="Tools/ManagedExtensions/**/*.*" />
+				<exclude name="Tools/Castle.DynamicProxy2/**/*.*" />
+				<exclude name="Tools/DynamicProxy2/**/*.*" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="zip-testresults">
+		<zip zipfile="${build.dir}\test-results.zip">
+			<fileset basedir="${testresults.dir}">
+				<include name="*.xml" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<description>Documentation generation.</description><property name="root.dir" value="." />
+	<property name="doc.dir" value="${root.dir}/docs" />
+	<property name="tempBin.dir" value="${doc.dir}/bin"/>
+	<property name="outputDocs.file" value="Castle"/>
+	
+	<description>Docs generation properties.</description>
+	<property name="ShowMissing" value="false"/>
+	<property name="ShowPrivate" value="false"/>
+	<property name="OutputTarget" value="HTMLHelp"/>
+
+	<description>Generates documentation with default properties.</description>
+	<target name="releaseDocs" depends="cleanup">
+		<call target="copyFilesToDocument"/>
+		<call target="generateReleaseDocs"/>
+	</target>
+	
+	<description>Generates documentation for developers, with all missing information indicated and private members visible.</description>
+	<target name="devDocs" depends="cleanup">
+		<property name="ShowMissing" value="true"/>
+		<property name="ShowPrivate" value="true"/>
+		<property name="outputDocs.file" value="CastleDev"/>
+		<call target="copyFilesToDocument"/>
+		<call target="generateReleaseDocs"/>
+	</target>
+	
+	<description>Generates documentation for release.</description>
+	<target name="generateReleaseDocs">
+		<ndoc failonerror="true">
+			<assemblies basedir="${tempBin.dir}">
+				<include name="Castle.*.dll"/>
+			</assemblies>
+			<referencepaths>
+				<include name="ActiveRecord/lib"/>
+				<include name="AspectSharp/bin"/>
+				<include name="Monorail/lib"/>
+				<include name="Tools/DynamicProxy/bin"/>
+				<include name="Tools/NVelocity/bin"/>
+				
+				<!-- Components -->
+				<include name="SharedLibs/Prevalence"/>
+				<include name="SharedLibs/Db4o/net-1.1"/>
+				<include name="SharedLibs/IBatis"/>
+				<include name="SharedLibs/NHibernate"/>
+				<include name="SharedLibs/boo"/>
+				<include name="SharedLibs/cassini"/>
+				<include name="SharedLibs/log4net"/>
+				<include name="SharedLibs/netron"/>
+				<include name="SharedLibs/Nlog"/>
+				<include name="SharedLibs/log4net"/>
+				<include name="SharedLibs/Nvelocity"/>
+			    <include name="SharedLibs/stringtemplate/net-1.1"/> 
+			</referencepaths>
+			<documenters>
+				<documenter name="MSDN">
+					<property name="OutputTarget" value="${OutputTarget}" />
+					<property name="Preliminary" value="true" />
+					<property name="BinaryTOC" value="true" />
+					<property name="CleanIntermediates" value="true" />
+					<property name="SdkLinksOnWeb" value="true" />
+					
+					<property name="OutputDirectory" value="${doc.dir}" />
+					<property name="HtmlHelpName" value="${outputDocs.file}" />
+					<property name="IncludeFavorites" value="True" />
+					<property name="SplitTOCs" value="False" />
+					
+					<property name="Title" value="Castle API documentation" />	
+					<property name="DefaulTOC" value="Castle.MicroKernel" />
+					
+					<property name="ShowVisualBasic" value="True" />
+					<property name="ShowMissingSummaries" value="${ShowMissing}" />
+					<property name="ShowMissingRemarks" value="${ShowMissing}" />
+					<property name="ShowMissingParams" value="${ShowMissing}" />
+					<property name="ShowMissingReturns" value="${ShowMissing}" />
+					<property name="ShowMissingValues" value="${ShowMissing}" />
+					<property name="DocumentEmptyNamespaces" value="${ShowMissing}" />
+					
+					<property name="AutoPropertyBackerSummaries" value="true" />
+					<property name="AutoDocumentConstructors" value="true" />
+					<property name="DocumentProtected" value="True" />
+					<property name="DocumentInternals" value="${ShowPrivate}" />
+					<property name="DocumentPrivates" value="${ShowPrivate}" />
+					
+					<property name="IncludeAssemblyVersion" value="True" />
+					<property name="CopyrightText" value="Copyright 2004,2006 - Castle Project (original author or authors)" />
+					<property name="CopyrightHref" value="http://www.castleproject.org" />
+				</documenter>
+			</documenters>
+		</ndoc>
+	</target>
+	
+	<description>Copies all files to be documented to a single location to speed up the documentation process.</description>
+	<target name="copyFilesToDocument">
+		<foreach item="Folder" property="foldername">
+			<in>
+				<!-- Hardcode projects folders to speed up assemblies search -->
+				<items>
+					<include name="${build.dir}"/>
+				</items>
+			</in>
+			<do>
+			   <echo message="${foldername}" />
+
+				<foreach item="File" property="file">
+					<in>
+						<items>
+							<include name="${foldername}/Castle.*.dll"/>
+							<include name="${foldername}/AspectSharp*.dll"/>
+							<include name="${foldername}/NVelocity.dll"/>
+							<exclude name="Castle.*.Tests.dll"/>
+						</items>
+					</in>
+					<do>
+						<property name="xml.file" value="${path::change-extension( file, 'xml' )}"/>
+						<copy todir="${tempBin.dir}" if="${file::exists( xml.file )}" flatten="true">
+							<fileset>
+								<include name="${file}"/>
+								<include name="${xml.file}"/>
+							</fileset>
+						</copy>
+					</do>
+				</foreach>
+			</do>
+		</foreach>
+	</target>
+	
+	<description>Cleans up prior to documentation generation.</description>
+	<target name="cleanup">
+		<delete>
+			<fileset>
+				<include name="${doc.dir}/**"/>
+				<exclude name="**/*.chm"/>
+			</fileset>
+		</delete>
+	</target>
+
+</project>

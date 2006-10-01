@@ -76,40 +76,40 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Components.Common.EmailSender">
       <Name>Castle.Components.Common.EmailSender</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Components.Common.EmailSender.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.EmailSender.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Components.Common.EmailSender.SmtpEmailSender">
       <Name>Castle.Components.Common.EmailSender.SmtpEmailSender</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Components.Common.TemplateEngine">
       <Name>Castle.Components.Common.TemplateEngine</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Components.Common.TemplateEngine.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.TemplateEngine.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine">
       <Name>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
-      <HintPath>..\..\build\net-2.0\log4net.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\build\net-2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity">
       <Name>NVelocity</Name>
-      <HintPath>..\..\build\net-2.0\NVelocity.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -204,7 +204,6 @@
     <EmbeddedResource Include="global.asax.resx">
       <DependentUpon>global.asax.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="sample.build" />
     <None Include="Views\blogs\newBlog.vm.old" />
     <None Include="Views\layouts\scaffold.vm" />
     <None Include="Views\rescues\DataBinderValidateBadData.vm" />

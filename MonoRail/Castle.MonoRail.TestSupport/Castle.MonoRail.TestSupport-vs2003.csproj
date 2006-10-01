@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = '"C:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\Bin\gacutil.exe" /u $(TargetPath)&#xd;&#xa;"C:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\Bin\gacutil.exe" /i $(TargetPath)'
+                PostBuildEvent = ""
                 RootNamespace = "Castle.MonoRail.TestSupport"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -92,7 +92,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
@@ -102,15 +102,6 @@
                     RelPath = "AbstractMRTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "default.build"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "MonoRailTestWorkerRequest.cs"

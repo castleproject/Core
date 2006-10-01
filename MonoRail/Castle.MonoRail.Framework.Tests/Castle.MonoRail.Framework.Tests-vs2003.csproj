@@ -97,17 +97,22 @@
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AbstractTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "AccessibleThroughTestCase.cs"
                     SubType = "Code"
@@ -116,11 +121,6 @@
                 <File
                     RelPath = "App.config"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "BasicFunctionalityTestCase.cs"

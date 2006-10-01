@@ -76,24 +76,24 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\build\net-2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Nullables, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\Nullables.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Nullables.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -146,7 +146,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Pagination\IARPaginableDataSource.cs" />
-    <None Include="default.build" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

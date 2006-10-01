@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<project
+	name="Castle.MonoRail.Views.Brail"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+	<target name="init" depends="common.init">
+		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.description" value="" />
+
+		<loadtasks assembly="${root.dir}/${lib.framework.dir}/Boo.NAnt.Tasks.dll" />
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**.boo" />
+		</fileset>
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="System.Web.dll"/>
+			<include name="anrControls.Markdown.NET.dll"/>
+			<include name="log4net.dll"/>
+			<include name="Castle.MonoRail.TestSupport.dll"/>
+			<include name="Boo.Lang.Parser.dll"/>
+			<include name="Castle.Core.dll"/>
+			<include name="Castle.MonoRail.Framework.dll"/>
+		</assemblyfileset>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init">
+	</target>
+
+	<target name="build" description="Build ${project::get-name()}" depends="init generate-assemblyinfo">
+		<booc
+			target="library" 
+			debug="${build.debug}" 
+			output="${build.dir}\${project::get-name()}.dll" 
+		>
+
+			<sources refid="project.sources" />
+			<references refid="project.references" />
+			<resources refid="project.resources" />
+		</booc>
+	</target>
+
+</project>

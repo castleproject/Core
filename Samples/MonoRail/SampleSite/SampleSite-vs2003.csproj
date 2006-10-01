@@ -77,22 +77,22 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework"
                     AssemblyName = "Castle.MonoRail.Framework"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework.Views.CompositeView"
                     AssemblyName = "Castle.MonoRail.Framework.Views.CompositeView"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.CompositeView.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.Views.CompositeView.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.Views.NVelocity.dll"
                 />
                 <Reference
                     Name = "System.Web"
@@ -102,12 +102,12 @@
                 <Reference
                     Name = "Castle.Components.Common.EmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
                 />
             </References>
         </Build>

@@ -76,11 +76,11 @@
   <ItemGroup>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity, Version=0.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\build\net-2.0\NVelocity.dll</HintPath>
+      <HintPath>..\..\..\..\build\net-2.0\debug\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -111,6 +111,9 @@
     </Compile>
     <EmbeddedResource Include="compiledres\simple.vm" />
     <EmbeddedResource Include="templates\simple.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

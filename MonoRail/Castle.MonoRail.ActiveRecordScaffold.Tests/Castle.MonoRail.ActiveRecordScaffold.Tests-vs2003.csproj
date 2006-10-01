@@ -82,17 +82,17 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\build\net-1.1\Castle.ActiveRecord.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.ActiveRecord.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.TestSupport"
@@ -111,11 +111,6 @@
                 <File
                     RelPath = "App.config"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "bloglist.txt"

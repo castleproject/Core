@@ -14,12 +14,13 @@
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
+	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
 
 	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-	public class WizardSupportTestCase : AbstractMRTestCase
+	public class WizardSupportTestCase : AbstractTestCase
 	{
 		[Test]
 		public void StartRedirectsToFirstPage()

@@ -15,7 +15,9 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Configuration;
 	using System.Diagnostics;
+	using System.IO;
 	using NUnit.Framework;
 
 	public abstract class BasePEVerifyTestCase
@@ -25,11 +27,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Process process = new Process();
 
-			process.StartInfo.FileName = @"C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\peverify.exe";
+			process.StartInfo.FileName = Path.Combine(ConfigurationSettings.AppSettings["sdkDir"],"peverify.exe");
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = "CastleDynProxy2.dll";
+			process.StartInfo.Arguments = typeof(IInterceptor).Assembly.GetName().Name + ".dll";
 			process.Start();
 			process.WaitForExit();
 

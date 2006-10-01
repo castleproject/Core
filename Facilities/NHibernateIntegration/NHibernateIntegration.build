@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project 
+	name="nhibernate-facility"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+    
+	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
+	<property name="common.run-tests" value="${nhibernate.test}" />
+
+	<target name="build" depends="facility" />
+	
+	<target name="facility">
+		<nant buildfile="Castle.Facilities.NHibernateIntegration/Castle.Facilities.NHibernateIntegration.build" />
+		<nant buildfile="Castle.Facilities.NHibernateIntegration.Tests/Castle.Facilities.NHibernateIntegration.Tests.build" />
+	</target>
+	
+</project>

@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Tests
 	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-	public class FilterTestCase : AbstractMRTestCase
+	public class FilterTestCase : AbstractTestCase
 	{
 		[Test]
 		public void SkipFilter()

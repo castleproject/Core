@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-general-components"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<target name="build" depends="binder, templateengine, emailsender" />
+	
+	<target name="binder">
+		<nant buildfile="Binder/Binder.build" />
+	</target>
+	
+	<target name="templateengine">
+		<nant buildfile="TemplateEngine/TemplateEngine.build" />
+	</target>
+
+	<target name="emailsender">
+		<nant buildfile="EmailSender/EmailSender.build" />
+	</target>
+
+</project>

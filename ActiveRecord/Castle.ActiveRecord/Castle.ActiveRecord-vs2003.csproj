@@ -87,42 +87,37 @@
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
+                    HintPath = "..\..\build\net-1.1\debug\log4net.dll"
                 />
                 <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Nullables.NHibernate.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NHibernate.dll"
                 />
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Nullables.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "Attributes\ActiveRecordAttribute.cs"
                     SubType = "Code"

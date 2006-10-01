@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<project
+	name="Castle CruiseControl.NET Build" 
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"	
+>
+	<!-- 
+		Run the package-* targets one by one (separate nant task blocks in ccnet.config) so they do not interfere with each other (like for instance loadtask commands do).
+	-->
+
+	<fail if="${not property::exists('CCNetLabel')}">This build file is for use with CruiseControl.NET</fail>
+
+	<target name="package-net-1.1">
+		<!--
+			clean is first target executed so we can get rid of
+			any old assemblies
+		-->
+		<nant buildfile="default.build" target="clean package">
+			<properties>
+				<property name="nant.settings.currentframework" value="net-1.1" />
+				<property name="project.config" value="debug" />
+				<property name="build-zipfile" value="${build.dir}/Castle-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
+			</properties>
+		</nant>
+	</target>
+	
+	<target name="package-net-2.0">
+		<!--
+			clean is first target executed so we can get rid of
+			any old assemblies
+		-->
+		<nant buildfile="default.build" target="clean package">
+			<properties>
+				<property name="nant.settings.currentframework" value="net-2.0" />
+				<property name="project.config" value="debug" />
+				<property name="build-zipfile" value="${build.dir}/Castle-build_${CCNetLabel}-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
+			</properties>
+		</nant>
+	</target>
+	
+</project>

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{EF89321E-FB2A-41B6-85B3-794D50A55CF1}"
     >
@@ -87,7 +87,7 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
@@ -95,11 +95,6 @@
             <Include>
                 <File
                     RelPath = "AccessLevelTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

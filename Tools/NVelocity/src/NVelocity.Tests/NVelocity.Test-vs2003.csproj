@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)App.config" "$(TargetPath).config"'
                 RootNamespace = "NVelocity"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -88,13 +88,16 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit\nuni228-net11\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "MultiThreadTestCase.cs"
                     SubType = "Code"
@@ -107,11 +110,6 @@
                 />
                 <File
                     RelPath = "Test\AmbiguousExceptionTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Test\AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

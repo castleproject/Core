@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
     >
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'xcopy "$(ProjectDir)App-vs2003.config" "$(TargetDir)" /y/c&#xd;&#xa;move /y "$(TargetDir)App-vs2003.config" "$(TargetDir)$(TargetFileName).config"'
+                PostBuildEvent = 'copy "$(ProjectDir)App.config" "$(TargetPath).config"'
                 RootNamespace = "Castle.ActiveRecord.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -87,37 +87,37 @@
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\build\net-1.1\Iesi.Collections.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\build\net-1.1\log4net.dll"
+                    HintPath = "..\..\build\net-1.1\debug\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NHibernate.dll"
                 />
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\build\net-1.1\Nullables.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Nullables.dll"
                 />
                 <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\..\build\net-1.1\Nullables.NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Nullables.NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
@@ -149,13 +149,8 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "App-vs2003.config"
+                    RelPath = "App.config"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "BugTestCase.cs"
@@ -164,6 +159,11 @@
                 />
                 <File
                     RelPath = "DifferentDatabaseScopeTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GenericJoinedSubClassTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -183,7 +183,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NestedClassWithPrefixTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NestedClassWithRelationsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NullablesGenericsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -378,6 +388,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\GenericModel\Entity.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\GenericModel\NullableModel.Generics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\GenericModel\Person.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -399,6 +419,11 @@
                 />
                 <File
                     RelPath = "Model\Nested\Operation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Nested\WithPrefix.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -439,6 +464,31 @@
                 />
                 <File
                     RelPath = "Validation\ValidationTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\ValidationTestCase.Generic.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\GenericModel\Blog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\GenericModel\Customer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\GenericModel\Person.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\GenericModel\User.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

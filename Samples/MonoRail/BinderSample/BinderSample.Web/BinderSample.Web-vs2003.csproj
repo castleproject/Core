@@ -87,77 +87,77 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.ActiveRecord.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.ActiveRecord.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.Components.Common.TemplateEngine.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.Components.Common.TemplateEngine.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.ActiveRecordScaffold"
                     AssemblyName = "Castle.MonoRail.ActiveRecordScaffold"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.ActiveRecordScaffold.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.ActiveRecordScaffold.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.ActiveRecordSupport"
                     AssemblyName = "Castle.MonoRail.ActiveRecordSupport"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.ActiveRecordSupport.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.ActiveRecordSupport.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework"
                     AssemblyName = "Castle.MonoRail.Framework"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.Framework.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.Views.NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.WindsorExtension"
                     AssemblyName = "Castle.MonoRail.WindsorExtension"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.WindsorExtension.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.WindsorExtension.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\..\..\build\net-1.1\Iesi.Collections.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\..\..\build\net-1.1\log4net.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\NHibernate.dll"
                 />
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\..\..\build\net-1.1\Nullables.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Nullables.dll"
                 />
                 <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\..\..\..\build\net-1.1\Nullables.NHibernate.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Nullables.NHibernate.dll"
                 />
             </References>
         </Build>

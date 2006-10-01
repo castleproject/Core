@@ -19,9 +19,10 @@ import NUnit.Framework
 import Castle.MonoRail.Framework
 
 import Castle.MonoRail.TestSupport
+import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class DirectRenderTestCase(AbstractMRTestCase):
+class DirectRenderTestCase(AbstractTestCase):
 
 	[Test]
 	def DirectRendering():

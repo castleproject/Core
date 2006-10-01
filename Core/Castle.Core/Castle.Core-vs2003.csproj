@@ -344,11 +344,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Properties\AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Resource\AbstractResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

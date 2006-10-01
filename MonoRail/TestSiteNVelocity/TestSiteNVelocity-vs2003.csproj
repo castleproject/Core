@@ -102,38 +102,29 @@
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\build\net-1.1\Nullables.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Nullables.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.EmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender"
-                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "log4net.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "sample.build"
                     BuildAction = "None"
                 />
                 <File

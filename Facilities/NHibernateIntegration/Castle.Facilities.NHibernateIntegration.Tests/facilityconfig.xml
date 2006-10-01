@@ -19,11 +19,9 @@
 					<item key="hibernate.connection.connection_string">Data Source=.;Initial Catalog=test;Integrated Security=SSPI</item>
 					<item key="hibernate.dialect">NHibernate.Dialect.MsSql2000Dialect</item>
 				</settings>
-				<resources>
-					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/Blog.hbm.xml" />
-					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/BlogItem.hbm.xml" />
-					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/BlogRef.hbm.xml" />
-				</resources>
+                <assemblies>
+                    <assembly>Castle.Facilities.NHibernateIntegration.Tests</assembly>
+                </assemblies>
 			</factory>
 
 			<factory id="sessionFactory2" alias="db2">
@@ -33,10 +31,10 @@
 					<item key="hibernate.connection.connection_string">Data Source=.;Initial Catalog=test2;Integrated Security=SSPI</item>
 					<item key="hibernate.dialect">NHibernate.Dialect.MsSql2000Dialect</item>
 				</settings>
-				<resources>
-					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/Order.hbm.xml" />
-				</resources>
-			</factory>
+                <assemblies>
+                    <assembly>Castle.Facilities.NHibernateIntegration.Tests</assembly>
+                </assemblies>
+            </factory>
 
 			<factory id="sessionFactory3" alias="intercepted">
 				<settings>
@@ -45,10 +43,10 @@
 					<item key="hibernate.connection.connection_string">Data Source=.;Initial Catalog=test2;Integrated Security=SSPI</item>
 					<item key="hibernate.dialect">NHibernate.Dialect.MsSql2000Dialect</item>
 				</settings>
-				<resources>
-					<resource name="../Castle.Facilities.NHibernateIntegration.Tests/Common/Order.hbm.xml" />
-				</resources>
-			</factory>
+                <assemblies>
+                    <assembly>Castle.Facilities.NHibernateIntegration.Tests</assembly>
+                </assemblies>
+            </factory>
 		</facility>
 		
 	</facilities>

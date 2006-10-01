@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder", "Castle.Components.Binder\Castle.Components.Binder-vs2003.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2003", "Castle.Components.Binder\Castle.Components.Binder-vs2003.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder.Tests", "Castle.Components.Binder.Tests\Castle.Components.Binder.Tests-vs2003.csproj", "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder.Tests-vs2003", "Castle.Components.Binder.Tests\Castle.Components.Binder.Tests-vs2003.csproj", "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -11,6 +11,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.ActiveCfg = Debug|.NET
@@ -24,7 +26,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt
-		default.build = default.build
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

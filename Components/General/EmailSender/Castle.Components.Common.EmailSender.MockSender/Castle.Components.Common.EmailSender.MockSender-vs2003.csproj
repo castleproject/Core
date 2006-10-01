@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{1DA92714-7B61-48AB-B0E7-C06A1C6EE04C}"
     >
@@ -88,11 +88,6 @@
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "MockEmailSender.cs"
                     SubType = "Code"

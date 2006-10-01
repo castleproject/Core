@@ -115,12 +115,6 @@
     <Compile Include="App\VelocityEngine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AssemblyVersionInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commons\Collections\CollectionsUtil.cs">
       <SubType>Code</SubType>
     </Compile>

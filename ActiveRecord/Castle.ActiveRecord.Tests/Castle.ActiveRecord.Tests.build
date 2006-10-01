@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+
+<project 
+	name="Castle.ActiveRecord.Tests" 
+	default="test" 
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.sign" value="false" />
+		<property name="assembly.is-cls-compliant" value="false" />
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="nunit.framework.dll"/>
+			<include name="NHibernate.dll" />
+			<include name="Iesi.Collections.dll" />
+			<include name="Nullables.dll" />
+			<include name="Castle.Core.dll" />
+			<include name="Castle.ActiveRecord.dll" />
+		</assemblyfileset>
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+	</target>
+
+	<target name="configure-tests">
+		<property name="app.config" value="${build.dir}/${project::get-name()}.dll.config" />
+		
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.1}" 
+		/>
+		
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.2}" 
+		/>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="test" depends="init generate-assemblyinfo common.compile-tests configure-tests common.run-tests" description="Runs the tests" />
+
+</project>

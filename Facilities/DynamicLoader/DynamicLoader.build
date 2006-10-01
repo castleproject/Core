@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project 
+	name="DynamicLoader-facility"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+    
+	<target name="build" depends="facility" />
+	
+	<target name="facility">
+		<if test="${nant.settings.currentframework=='net-2.0'}">
+			<nant buildfile="Castle.Facilities.DynamicLoader/Castle.Facilities.DynamicLoader.build" />
+			<nant buildfile="Castle.Facilities.DynamicLoader.Tests/Castle.Facilities.DynamicLoader.Tests.build" />
+		</if>
+	</target>
+	
+</project>

@@ -87,12 +87,12 @@
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "System.Data"
@@ -102,30 +102,21 @@
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ContainerAccessorUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "default.build"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "DefaultWizardPageFactory.cs"

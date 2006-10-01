@@ -34,6 +34,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 				typeof(Customer), typeof(Account), 
 				typeof(AccountPermission), typeof(ProductLicense) );
 
+			ActiveRecordStarter.DropSchema();
 			ActiveRecordStarter.CreateSchema();
 
 			using(new SessionScope())

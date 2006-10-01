@@ -204,7 +204,6 @@
     <Content Include="views\SubArea\home\index.aspx" />
     <Content Include="views\uploadfile\index.aspx" />
     <Content Include="views\uploadfile\showuploadfilename.aspx" />
-    <None Include="sample.build" />
     <None Include="web.config" />
     <EmbeddedResource Include="Resources\Language.de.resx" />
     <EmbeddedResource Include="Resources\Language.nl.resx" />

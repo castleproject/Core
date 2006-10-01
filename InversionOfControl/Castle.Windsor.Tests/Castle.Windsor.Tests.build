@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="Castle.Windsor.Tests"
+	default="test"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="nunit.framework.dll" />
+			<include name="Castle.Core.dll" />
+			<include name="Castle.DynamicProxy.dll" />
+			<include name="Castle.MicroKernel.dll" />
+			<include name="Castle.Windsor.dll" />
+		</assemblyfileset>
+		
+		<resourcefileset id="project.resources" basedir="${src.dir}" prefix="${project::get-name()}" dynamicprefix="true">
+			<include name="**/*.xml" />
+			<exclude name="obj/**" />
+		</resourcefileset>
+
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="test" depends="init generate-assemblyinfo common.compile-tests common.run-tests" description="Runs the tests" />
+
+</project>

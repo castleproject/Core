@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{30F513CB-9520-4E43-A845-3185D76F38B9}"
     >
@@ -82,17 +82,17 @@
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine"
-                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.TemplateEngine.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Components.Common.TemplateEngine.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
-                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
                 />
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NVelocity.dll"
                 />
             </References>
         </Build>
@@ -106,15 +106,6 @@
                 <File
                     RelPath = "App.ico"
                     BuildAction = "Content"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "default.build"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "IGenerator.cs"

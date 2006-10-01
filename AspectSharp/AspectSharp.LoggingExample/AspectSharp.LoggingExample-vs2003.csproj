@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{3099B452-9D33-4411-A200-C8F25D6AE26E}"
     >
@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -85,13 +85,13 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "AspectSharp"
-                    Project = "{C50C59E8-410B-48C6-8CD0-DB351C0AB75E}"
+                    Name = "AspectSharp.Lang"
+                    Project = "{6B00E2C0-C58E-4399-A323-A034415E67D4}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "AspectSharp.Lang"
-                    Project = "{6B00E2C0-C58E-4399-A323-A034415E67D4}"
+                    Name = "AspectSharp-vs2003"
+                    Project = "{C50C59E8-410B-48C6-8CD0-DB351C0AB75E}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>

@@ -6,7 +6,7 @@ Everything should compile fine using NAnt 0.85 RC3. Anyway, the following are so
 Where to start the build?
 =========================
 
-Use the all.build in the root directory. It compiles everything in the right order, copies dependencies and so on. 
+Use the default.build in the root directory. It compiles everything in the right order, copies dependencies and so on. 
 
 
 Building for .Net 2.0

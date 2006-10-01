@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}"
     >
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)\App.config" "$(TargetPath).config"'
                 RootNamespace = "Castle.Facilities.Db4oIntegration.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -72,32 +72,32 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "db4o"
                     AssemblyName = "db4o"
-                    HintPath = "..\..\..\build\net-1.1\db4o.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\db4o.dll"
                 />
                 <Reference
                     Name = "Db4oIntegration"
@@ -107,12 +107,12 @@
                 <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Transaction.dll"
                 />
                 <Reference
                     Name = "Castle.Facilities.AutomaticTransactionManagement"
                     AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Facilities.AutomaticTransactionManagement.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Facilities.AutomaticTransactionManagement.dll"
                 />
             </References>
         </Build>
@@ -124,13 +124,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "App.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Castle.Facilities.Db4oIntegration.Tests.config"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "ConfigHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "DaoTestCase.cs"

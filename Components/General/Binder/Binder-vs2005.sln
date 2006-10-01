@@ -1,13 +1,13 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder", "Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2005", "Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder.Tests", "Castle.Components.Binder.Tests\Castle.Components.Binder.Tests-vs2005.csproj", "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder.Tests-vs2005", "Castle.Components.Binder.Tests\Castle.Components.Binder.Tests-vs2005.csproj", "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37DCCFD7-ABD2-4231-8128-758F7E752813}"
 	ProjectSection(SolutionItems) = preProject
+		Binder.build = Binder.build
 		Changes.txt = Changes.txt
-		default.build = default.build
 	EndProjectSection
 EndProject
 Global

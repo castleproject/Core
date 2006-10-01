@@ -76,11 +76,11 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity, Version=0.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\NVelocity.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -131,7 +131,6 @@
     <Compile Include="TemplateKeys.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="default.build" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
     >
@@ -82,37 +82,32 @@
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Transaction.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "IBatisNet.DataMapper"
                     AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\..\..\build\net-1.1\IBatisNet.DataMapper.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\IBatisNet.DataMapper.dll"
                 />
                 <Reference
                     Name = "IBatisNet.Common"
                     AssemblyName = "IBatisNet.Common"
-                    HintPath = "..\..\..\build\net-1.1\IBatisNet.Common.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\IBatisNet.Common.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "AutomaticSessionInspector.cs"
                     SubType = "Code"

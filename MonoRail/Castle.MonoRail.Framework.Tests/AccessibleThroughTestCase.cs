@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Tests
 	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-    public class AccessibleThroughTestCase : AbstractMRTestCase
+	public class AccessibleThroughTestCase : AbstractTestCase
 	{
 		[Test]
         public void AccessibleThroughPostVerbByPost()

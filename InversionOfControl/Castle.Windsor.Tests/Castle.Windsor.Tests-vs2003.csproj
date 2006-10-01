@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)\Castle.Windsor.Tests.dll.config $(TargetPath).config"
+                PostBuildEvent = 'copy "$(ProjectDir)App.config" "$(TargetPath).config"'
                 RootNamespace = "Castle.Windsor.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -80,47 +80,42 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\build\net-1.1\Castle.Windsor.dll"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
                 <Reference
-                    Name = "Castle.Core"
-                    AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    Name = "Castle.MicroKernel-vs2003"
+                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Windsor-vs2003"
+                    Project = "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\build\net-1.1\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "App.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "AsyncInitializationContainerTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Castle.Windsor.Tests.dll.config"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "ChildContainerSupportTestCase.cs"
@@ -129,6 +124,11 @@
                 />
                 <File
                     RelPath = "CircularDependencyTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -193,6 +193,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WindsorDotNet2Tests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Adapters\ComponentModel\ContainerAdapterTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -229,6 +234,11 @@
                 />
                 <File
                     RelPath = "Components\ComponentWithProperties.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\DotNet2Components.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -395,6 +405,30 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "DotNet2Config\ComplexGenericConfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "DotNet2Config\DecoratorConfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "DotNet2Config\GenericDecoratorConfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "DotNet2Config\GenericsConfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "DotNet2Config\MissingDecoratorConfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "DotNet2Config\RecursiveDecoratorConfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Facilities\SlowlyInitFacility.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -505,7 +539,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "XmlProcessor\TestFiles\DefineDefaultTest.xml"
+                    RelPath = "XmlProcessor\TestFiles\DefineDefaultTestDisabled.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -553,7 +587,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "XmlProcessor\TestFiles\MultiInclude2Test.xml"
+                    RelPath = "XmlProcessor\TestFiles\MultiInclude2TestDisabled.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -561,7 +595,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "XmlProcessor\TestFiles\MultiIncludeTest.xml"
+                    RelPath = "XmlProcessor\TestFiles\MultiIncludeTestDisabled.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -593,7 +627,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTest.xml"
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTestDisabled.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -601,7 +635,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDebugTest.xml"
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDebugTestDisabled.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -609,7 +643,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDefaultTest.xml"
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDefaultTestDisabled.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -638,6 +672,14 @@
                 />
                 <File
                     RelPath = "XmlProcessor\TestFiles\PropertiesWithAttributesTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesWithPI-IfStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesWithPI-IfStatementTestResult.xml"
                     BuildAction = "Content"
                 />
                 <File

@@ -31,7 +31,7 @@ namespace NVelocity.Test
 		/// Path for templates. This property will override the
 		/// value in the default velocity properties file.
 		/// </summary>
-		public const String FILE_RESOURCE_LOADER_PATH = "../../test/templates";
+		public static readonly String FILE_RESOURCE_LOADER_PATH = Path.Combine(System.Configuration.ConfigurationSettings.AppSettings["tests.src"], "../../test/templates");
 
 		/// <summary>
 		/// Properties file that lists which template tests to run.

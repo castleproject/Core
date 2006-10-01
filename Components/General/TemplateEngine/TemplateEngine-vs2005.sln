@@ -10,9 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{1B38B402-156C-4E8B-88F3-750781E1345F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NVelocity", "NVelocity", "{D72459EF-7B56-4B9C-BC89-ECCFD2FB55EF}"
-	ProjectSection(SolutionItems) = preProject
-		default.build = default.build
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

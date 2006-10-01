@@ -87,9 +87,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ComponentActivator\AbstractComponentActivator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -415,7 +412,6 @@
     <Compile Include="Util\ReferenceExpressionUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="microkernel.build" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">

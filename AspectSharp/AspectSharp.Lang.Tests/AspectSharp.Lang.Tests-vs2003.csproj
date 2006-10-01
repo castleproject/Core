@@ -85,24 +85,24 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "AspectSharp"
-                    Project = "{C50C59E8-410B-48C6-8CD0-DB351C0AB75E}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "AopAlliance"
                     Project = "{74C3CE90-25AF-4998-9123-61D19041AF68}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "antlr.runtime"
-                    AssemblyName = "antlr.runtime"
-                    HintPath = "..\lib\antlr.runtime.dll"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "antlr.runtime"
+                    AssemblyName = "antlr.runtime"
+                    HintPath = "..\..\build\net-1.1\debug\antlr.runtime.dll"
+                />
+                <Reference
+                    Name = "AspectSharp-vs2003"
+                    Project = "{C50C59E8-410B-48C6-8CD0-DB351C0AB75E}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

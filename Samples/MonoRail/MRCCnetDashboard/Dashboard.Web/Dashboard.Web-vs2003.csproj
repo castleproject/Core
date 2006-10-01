@@ -82,22 +82,22 @@
                 <Reference
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.Views.NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.WindsorExtension"
                     AssemblyName = "Castle.MonoRail.WindsorExtension"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.WindsorExtension.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.WindsorExtension.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework"
                     AssemblyName = "Castle.MonoRail.Framework"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MonoRail.Framework.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.dll"
                 />
                 <Reference
                     Name = "System.Web"
@@ -117,22 +117,22 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>

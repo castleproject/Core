@@ -2,6 +2,7 @@
 
 	// Generate header specific to lexer CSharp file
 	using System;
+	using antlr;
 	using Stream                          = System.IO.Stream;
 	using TextReader                      = System.IO.TextReader;
 	using Hashtable                       = System.Collections.Hashtable;
@@ -110,13 +111,12 @@
 			literals.Add("excludes", 20);
 		}
 		
-		override public Token nextToken()			//throws TokenStreamException
+		override public IToken nextToken()			//throws TokenStreamException
 		{
-			Token theRetToken = null;
+			IToken theRetToken = null;
 tryAgain:
 			for (;;)
 			{
-				Token _token = null;
 				int _ttype = Token.INVALID_TYPE;
 				setCommitToPath(false);
 				resetText();
@@ -277,7 +277,7 @@ tryAgain:
 		
 	public void mALL(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = ALL;
 		
 		match('*');
@@ -291,7 +291,7 @@ tryAgain:
 	
 	public void mCOLON(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = COLON;
 		
 		match(':');
@@ -305,7 +305,7 @@ tryAgain:
 	
 	public void mSEMI(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = SEMI;
 		
 		match(';');
@@ -319,7 +319,7 @@ tryAgain:
 	
 	public void mCOMMA(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = COMMA;
 		
 		match(',');
@@ -333,7 +333,7 @@ tryAgain:
 	
 	public void mOR(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = OR;
 		
 		match('|');
@@ -347,7 +347,7 @@ tryAgain:
 	
 	public void mINHERITS(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = INHERITS;
 		
 		match('<');
@@ -361,7 +361,7 @@ tryAgain:
 	
 	public void mLBRACK(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = LBRACK;
 		
 		match('[');
@@ -375,7 +375,7 @@ tryAgain:
 	
 	public void mRBRACK(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = RBRACK;
 		
 		match(']');
@@ -389,7 +389,7 @@ tryAgain:
 	
 	public void mLCURLY(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = LCURLY;
 		
 		match('(');
@@ -403,7 +403,7 @@ tryAgain:
 	
 	public void mRCURLY(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = RCURLY;
 		
 		match(')');
@@ -417,7 +417,7 @@ tryAgain:
 	
 	public void mDOT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = DOT;
 		
 		match('.');
@@ -431,7 +431,7 @@ tryAgain:
 	
 	public void mCOMMENT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = COMMENT;
 		
 		match("//");
@@ -463,7 +463,7 @@ _loop15_breakloop:			;
 	
 	protected void mDIGIT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = DIGIT;
 		
 		matchRange('0','9');
@@ -477,7 +477,7 @@ _loop15_breakloop:			;
 	
 	public void mINTLIT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = INTLIT;
 		
 		{ // ( ... )+
@@ -507,7 +507,7 @@ _loop19_breakloop:		;
 	
 	public void mCHARLIT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = CHARLIT;
 		
 		int _saveIndex = 0;
@@ -528,7 +528,7 @@ _loop19_breakloop:		;
 	
 	public void mSTRING_LITERAL(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = STRING_LITERAL;
 		
 		int _saveIndex = 0;
@@ -579,7 +579,7 @@ _loop24_breakloop:			;
 	
 	public void mWS(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = WS;
 		
 		{
@@ -639,7 +639,7 @@ _loop24_breakloop:			;
 	
 	public void mID(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
-		int _ttype; Token _token=null; int _begin=text.Length;
+		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = ID;
 		
 		{

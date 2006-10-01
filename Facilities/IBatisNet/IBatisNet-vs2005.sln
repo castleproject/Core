@@ -11,9 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DataBase.config = DataBase.config
 		default.build = default.build
 		License.txt = License.txt
-		bin\providers.config = bin\providers.config
 		Readme.txt = Readme.txt
-		bin\SqlMap.config = bin\SqlMap.config
 		usage.txt = usage.txt
 	EndProjectSection
 EndProject

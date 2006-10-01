@@ -61,7 +61,7 @@
 		
     protected StringBuilder sbuilder = new StringBuilder();
 
-	protected LexicalInfo ToLexicalInfo(antlr.Token token)
+	protected LexicalInfo ToLexicalInfo(antlr.IToken token)
 	{
 		int line = token.getLine();
 		int startColumn = token.getColumn();
@@ -206,7 +206,7 @@ _loop11_breakloop:				;
 	) //throws RecognitionException, TokenStreamException
 {
 		
-		Token  i = null;
+		IToken  i = null;
 		
 				String ns;
 				String assemblyName;
@@ -301,8 +301,8 @@ _loop11_breakloop:				;
 	) //throws RecognitionException, TokenStreamException
 {
 		
-		Token  a = null;
-		Token  aspectId = null;
+		IToken  a = null;
+		IToken  aspectId = null;
 		
 		AspectDefinition aspect = null;
 		TargetTypeDefinition target = null;
@@ -460,8 +460,8 @@ _loop35_breakloop:					;
 {
 		String value;
 		
-		Token  id = null;
-		Token  id2 = null;
+		IToken  id = null;
+		IToken  id2 = null;
 		
 				value = null; sbuilder.Length = 0;
 			
@@ -551,7 +551,7 @@ _loop20_breakloop:						;
 	) //throws RecognitionException, TokenStreamException
 {
 		
-		Token  keyToken = null;
+		IToken  keyToken = null;
 		
 		DefinitionBase definition = null;
 		
@@ -601,7 +601,7 @@ _loop20_breakloop:						;
 {
 		TypeReference type;
 		
-		Token  refTypeToken = null;
+		IToken  refTypeToken = null;
 		
 		type = null;
 		
@@ -643,7 +643,7 @@ _loop20_breakloop:						;
 {
 		TypeReference type;
 		
-		Token  i = null;
+		IToken  i = null;
 		
 		type = new TypeReference();
 		String typeToken = null;
@@ -740,7 +740,7 @@ _loop38_breakloop:				;
 	) //throws RecognitionException, TokenStreamException
 {
 		
-		Token  i = null;
+		IToken  i = null;
 		
 		TypeReference tr = null;
 		MixinDefinition md;
@@ -771,7 +771,7 @@ _loop38_breakloop:				;
 	) //throws RecognitionException, TokenStreamException
 {
 		
-		Token  p = null;
+		IToken  p = null;
 		
 		PointCutDefinition pointcut = null;
 		PointCutFlags flags = PointCutFlags.Unspecified;
@@ -890,7 +890,7 @@ _loop43_breakloop:				;
 	) //throws RecognitionException, TokenStreamException
 {
 		
-		Token  i = null;
+		IToken  i = null;
 		
 		TypeReference tr = null;
 		InterceptorDefinition interDef = null;
@@ -1038,7 +1038,7 @@ _loop43_breakloop:				;
 {
 		String value;
 		
-		Token  id = null;
+		IToken  id = null;
 		
 				value = null; sbuilder.Length = 0;
 			

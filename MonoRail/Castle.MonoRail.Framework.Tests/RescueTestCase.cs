@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 
 	[TestFixture]
-	public class RescueTestCase : AbstractMRTestCase
+	public class RescueTestCase : AbstractTestCase
 	{
 		[Test]
 		public void GeneralRescue()

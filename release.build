@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<project
+	name="Castle Release Build" 
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+	<!-- 
+		Run the package-* targets one by one so they do not interfere with each other (like for instance loadtask commands do).
+	-->
+
+	<!--
+		NAnt -D:project.config=release -D:sign=true -D:vshik.installed=true -D:nunit2report.installed=false clean package >release-package.log
+	-->
+	
+	<target name="package-net-1.1">
+		<!--
+			clean is first target executed so we can get rid of
+			any old assemblies
+		-->
+		<nant buildfile="default.build" target="clean package">
+			<properties>
+				<property name="nant.settings.currentframework" value="net-1.1" />
+				<property name="project.config" value="release" />
+				<property name="sign" value="true" />
+				<property name="vshik.installed" value="true" />
+				<property name="nunit2report.installed" value="false" />
+				<property name="build-zipfile" value="${build.dir}/Castle-1.0-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
+			</properties>
+		</nant>
+	</target>
+	
+	<target name="package-net-2.0">
+		<!--
+			clean is first target executed so we can get rid of
+			any old assemblies
+		-->
+		<nant buildfile="default.build" target="clean package">
+			<properties>
+				<property name="nant.settings.currentframework" value="net-2.0" />
+				<property name="project.config" value="release" />
+				<property name="sign" value="true" />
+				<property name="build-zipfile" value="${build.dir}/Castle-1.0-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
+			</properties>
+		</nant>
+	</target>
+	
+</project>
+

@@ -218,7 +218,7 @@ You must provide an override if a component has a dependency on a service that i
     	public string GetFilePath(string fileName)
 		{
 			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-							   "../Castle.Windsor.Tests/DotNet2Config/" + fileName);
+							   ConfigHelper.ResolveConfigPath("DotNet2Config/" + fileName));
 		}
 	}
 }

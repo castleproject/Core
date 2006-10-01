@@ -48,7 +48,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 		[SetUp]
 		public virtual void Init()
 		{
-			_container = new WindsorContainer("../Castle.Facilities.Db4oIntegration.Tests/Castle.Facilities.Db4oIntegration.Tests.config");	
+			_container = new WindsorContainer(ConfigHelper.ResolvePath("../Castle.Facilities.Db4oIntegration.Tests/Castle.Facilities.Db4oIntegration.Tests.config"));	
 
 			_container.AddFacility("transaction", new TransactionFacility());
 

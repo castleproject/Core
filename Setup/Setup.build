@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-setup"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<!-- Find WiX -->
+		<exec 
+			program="${wix.dir}/candle.exe"
+			resultproperty="wix.found"
+			failonerror="false" />
+		<property name="wix.found" value="${wix.found == '0'}" />
+
+		<echo message="Found WiX at ${wix.dir}" if="${wix.found}"/>
+		<echo message="WARNING: WiX not found, unable to create MSI" unless="${wix.found}"/>
+	</target>
+	
+	<target name="build" description="Build ${project::get-name()}" depends="init">
+		<if test="${wix.found}">
+			<property name="build.setup.dir" value="${path::get-full-path(build.base.dir)}/setup" overwrite="false" />
+			<mkdir dir="${build.setup.dir}" />
+			<call target="wix-location-gen-include" />
+			<call target="wix-version-gen-include" />
+			<copy todir="${build.setup.dir}">
+				<fileset>
+					<include name="${src.dir}/*.txt" />
+					<include name="${src.dir}/*.wxs" />
+					<include name="${src.dir}/*.wxi" />
+					<include name="License.rtf" />
+				</fileset>
+			</copy>
+			<property name="msi.name" value="Castle-${project.major}.${project.minor}.${project.build}.${project.revision}.msi"/>
+			<exec 
+				program="${wix.dir}/candle.exe"
+				workingdir="${build.setup.dir}"
+				commandline="-nologo Castle.wxs" />
+			<exec program="${wix.dir}/light.exe"
+				workingdir="${build.setup.dir}" verbose="true"
+				commandline='-wx -out ${msi.name} -loc "${wix.dir}/WixUI_en-us.wxl" Castle.wixobj "${wix.dir}/wixui.wixlib" "${wix.dir}/sca.wixlib"'>
+			</exec>
+		</if>
+	</target>
+	
+	<target name="wix-location-gen-include">
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="false">&lt;?xml version="1.0" encoding="utf-8"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;Include Id="LocationInclude"&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildBaseDir="${path::get-full-path(build.base.dir)}"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet11Dir="${path::get-full-path(build.base.dir)}\net-1.1\${project.config}"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet20Dir="${path::get-full-path(build.base.dir)}\net-2.0\${project.config}"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define ReleaseNotesDir="${releasenotes.dir}"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;/Include&gt;</echo>
+	</target>
+	
+	<target name="wix-version-gen-include">
+		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="false">&lt;?xml version="1.0" encoding="utf-8"?&gt;</echo>
+		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;Include Id="VersionNumberInclude"&gt;</echo>
+		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MajorVersion="${project.major}"?&gt;</echo>
+		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MinorVersion="${project.minor}"?&gt;</echo>
+		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define MicroVersion="${project.build}"?&gt;</echo>
+		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;?define BuildVersion="${project.revision}"?&gt;</echo>
+		<echo file="${build.setup.dir}/VersionNumberInclude.wxi" append="true">&lt;/Include&gt;</echo>
+	</target>
+
+</project>

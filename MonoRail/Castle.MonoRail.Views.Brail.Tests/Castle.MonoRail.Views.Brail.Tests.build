@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<project
+	name="Castle.MonoRail.Views.Brail.Tests"
+	default="test"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+	<target name="init" depends="common.init">
+		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.description" value="" />
+<!--		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />-->
+
+		<loadtasks assembly="${root.dir}/${lib.framework.dir}/Boo.NAnt.Tasks.dll" verbose="true" />
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.boo" />
+			<exclude name="Views/**.boo" />
+		</fileset>
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="nunit.framework.dll" />
+			<include name="Castle.MonoRail.Views.Brail.dll" />
+			<include name="Castle.Core.dll"/>
+			<include name="Castle.MonoRail.TestSupport.dll"/>
+			<include name="Castle.MonoRail.Framework.Dll"/>
+			<include name="Castle.MonoRail.Framework.Tests.Dll"/>
+		</assemblyfileset>
+
+		<resourcefileset id="project.resources" basedir="${src.dir}\Resources">
+			<include name="**.resources"/>
+			<exclude name="obj/**" />
+		</resourcefileset>
+	</target>
+
+	<target name="compile-tests">
+		<booc
+			target="library" 
+			debug="${build.debug}" 
+			output="${build.dir}\${project::get-name()}.dll" 
+		>
+
+			<sources refid="project.sources" />
+			<references refid="project.references" />
+			<resources refid="project.resources" />
+		</booc>
+		<if test="${file::exists(path::combine(src.dir, 'App.config'))}">
+			<copy 
+				file="${src.dir}/App.config"
+				tofile="${build.dir}/${project::get-name()}.dll.config"
+			/>
+
+			<call target="common.configure-tests" />
+		</if>
+	</target>
+
+	<target name="test" depends="init compile-tests common.run-tests" description="Runs the tests" />
+
+</project>

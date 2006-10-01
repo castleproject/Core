@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
-                />
-                <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\..\..\SharedLibs\log4net\log4net.dll"
@@ -92,42 +87,42 @@
                 <Reference
                     Name = "Castle.Services.Logging.NLogIntegration"
                     AssemblyName = "Castle.Services.Logging.NLogIntegration"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Logging.NLogIntegration.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Logging.NLogIntegration.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Services.Logging.Log4netIntegration"
                     AssemblyName = "Castle.Services.Logging.Log4netIntegration"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Logging.Log4netIntegration.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Logging.Log4netIntegration.dll"
                 />
                 <Reference
                     Name = "Castle.Facilities.Logging-vs2003"
                     Project = "{32D54D33-206F-44EE-8329-8480ABE049B1}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "BaseTest.cs"
                     SubType = "Code"

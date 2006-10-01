@@ -15,7 +15,7 @@ import System.Reflection
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyTitle("Castle.MonoRail.Views.Brail")]
-[assembly: AssemblyKeyFile("../../CastleKey.snk")]
+[assembly: AssemblyKeyFile("../../../CastleKey.snk")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyDescription("Castle.MonoRail.Views.Brail: View Engine for MonoRail using Boo")]
 [assembly: AssemblyCopyright("Copyright (c) 2005, Castle Project http://www.castleproject.org/")]

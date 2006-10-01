@@ -16,6 +16,7 @@ namespace Castle.Facilities.EventWiring.Tests
 {
 	using System;
 	using System.IO;
+	using Castle.Windsor.Tests;
 	using NUnit.Framework;
 	
 	using Castle.Windsor;
@@ -133,7 +134,7 @@ namespace Castle.Facilities.EventWiring.Tests
 
 		private void CreateContainer(String config)
 		{
-			_container = new WindsorContainer(Path.Combine("../Castle.Windsor.Tests/Facilities/EventWiring/", config));
+			_container = new WindsorContainer(Path.Combine(ConfigHelper.ResolveConfigPath("Facilities/EventWiring/"), config));
 	
 			_container.AddFacility("eventwiring", new EventWiringFacility());
 	

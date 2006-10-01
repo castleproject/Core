@@ -76,7 +76,7 @@
   <ItemGroup>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -115,7 +115,6 @@
     <Compile Include="WebAppHost.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="default.build" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

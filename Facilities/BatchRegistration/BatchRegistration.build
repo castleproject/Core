@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project 
+	name="BatchRegistration-facility"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+    
+	<target name="build" depends="facility" />
+	
+	<target name="facility">
+		<nant buildfile="Castle.Facilities.BatchRegistration/Castle.Facilities.BatchRegistration.build" />
+		<nant buildfile="Castle.Facilities.BatchRegistration.Tests/Castle.Facilities.BatchRegistration.Tests.build" />
+	</target>
+	
+</project>

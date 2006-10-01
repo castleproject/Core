@@ -76,19 +76,15 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <Name>Castle.Model</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\build\net-2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
       <AssemblyFolderKey>hklm\dn\nunit.framework</AssemblyFolderKey>
     </Reference>
     <Reference Include="System">
@@ -105,17 +101,9 @@
       <Project>{E572DC59-2A96-482F-BE39-E938AB47EA9D}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\TestScaffolding\TestScaffolding-vs2005.csproj">
-      <Name>TestScaffolding-vs2005</Name>
-      <Project>{C4107B52-109E-4629-A202-58E93917C80B}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ListActionTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-service-transaction"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<target name="build" depends="transactionmanagement" />
+
+	<target name="transactionmanagement">
+		<nant buildfile="Castle.Services.Transaction/Castle.Services.Transaction.build" target="build" />
+		<nant buildfile="Castle.Services.Transaction.Tests/Castle.Services.Transaction.Tests.build" target="test" />
+	</target>
+	
+</project>

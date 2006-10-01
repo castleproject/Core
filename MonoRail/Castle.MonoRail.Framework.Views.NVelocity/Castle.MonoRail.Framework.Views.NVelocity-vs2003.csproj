@@ -92,22 +92,17 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "CustomDirectiveManager.cs"
                     SubType = "Code"
@@ -122,10 +117,6 @@
                     RelPath = "CustomTemplate.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "default.build"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "NVelocityViewContextAdapter.cs"

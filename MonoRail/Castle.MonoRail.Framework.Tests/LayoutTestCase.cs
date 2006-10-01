@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 
 	[TestFixture]
-	public class LayoutTestCase : AbstractMRTestCase
+	public class LayoutTestCase : AbstractTestCase
 	{
 		[Test]
 		public void ContentWithLayout()

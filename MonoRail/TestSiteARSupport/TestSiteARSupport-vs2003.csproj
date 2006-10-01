@@ -102,57 +102,52 @@
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\build\net-1.1\Castle.ActiveRecord.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.ActiveRecord.dll"
                 />
                 <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\..\build\net-1.1\Nullables.NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Nullables.NHibernate.dll"
                 />
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\..\build\net-1.1\Nullables.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Nullables.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\build\net-1.1\debug\NHibernate.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\build\net-1.1\log4net.dll"
+                    HintPath = "..\..\build\net-1.1\debug\log4net.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\build\net-1.1\Iesi.Collections.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Binder"
                     AssemblyName = "Castle.Components.Binder"
-                    HintPath = "..\..\build\net-1.1\Castle.Components.Binder.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Components.Binder.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "global.asax"
                     BuildAction = "Content"
@@ -300,6 +295,30 @@
                 />
                 <File
                     RelPath = "Views\Category\update.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\PersonUser\delete.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\PersonUser\edit.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\PersonUser\insert.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\PersonUser\new.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\PersonUser\removeconfirm.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\PersonUser\update.vm"
                     BuildAction = "None"
                 />
                 <File

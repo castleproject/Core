@@ -82,12 +82,12 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\..\..\build\net-1.1\NVelocity.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine-vs2003"
@@ -103,11 +103,6 @@
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "NVelocityTemplateEngine.cs"
                     SubType = "Code"

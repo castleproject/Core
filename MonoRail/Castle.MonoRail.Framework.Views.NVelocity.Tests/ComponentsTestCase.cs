@@ -15,11 +15,12 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
+	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
 	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-	public class ComponentsTestCase : AbstractMRTestCase
+	public class ComponentsTestCase : AbstractTestCase
 	{
 		[Test]
 		public void CaptureForDirective()

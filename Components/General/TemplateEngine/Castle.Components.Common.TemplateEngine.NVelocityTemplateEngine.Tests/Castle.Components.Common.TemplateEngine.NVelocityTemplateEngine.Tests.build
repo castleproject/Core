@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests"
+	default="test"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../../../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<property name="assembly.description" value="The Unit Tests for Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine" />
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="nunit.framework.dll" />
+			<include name="NVelocity.dll" />
+			<include name="Castle.Core.dll" />
+			<include name="Castle.Components.Common.TemplateEngine.dll" />
+			<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+		</assemblyfileset>
+
+		<resourcefileset id="project.resources" prefix="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests" dynamicprefix="true" basedir="${src.dir}">
+			<include name="**/*.vm" />
+			<exclude name="obj/**" />
+		</resourcefileset>
+
+		</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="test" depends="init generate-assemblyinfo common.compile-tests common.run-tests" description="Runs the tests" />
+
+</project>

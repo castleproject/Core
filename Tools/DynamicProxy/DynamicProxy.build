@@ -1,130 +1,15 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="castle-dynamicproxy" default="build">
+<project
+	name="castle-dynamicProxy"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
 
-	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
-	<property name="bin.dir"  value="${base.dir}/bin" />
+	<target name="build" depends="dynamicproxy" />
 
-	<include buildfile="../../common.xml" />
-
-	<property name="name" value="Castle.DynamicProxy" />
-	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.name" value="${name}.Tests" />
-	<property name="test.assembly.name" value="${test.name}.dll" />
-
-	<property name="src.dir" value="${base.dir}/${name}" />
-	<property name="test.src.dir" value="${base.dir}/${test.name}" />
-
-	<property name="version" value="1.1.5.5" />
-
-	<target name="clean">
-		<delete dir="bin" failonerror="false" />
-		<mkdir dir="bin" />
-	</target>
-
-	<target name="init" depends="clean">
-		<property name="define" value="${define};${strong}"/>
-		<property name="define" value="${define};DEBUG" if="${debug}"/>
-	</target>
-
-	<target name="build" depends="init, tests.run, copytobuilddir" />
-	
-	<target name="copytobuilddir">
-		<copy todir="${build.dir}">
-			<fileset basedir="${bin.dir}">
-				<include name="${assembly.name}" />
-				<include name="${name}.xml" />
-				<include name="${name}.pdb" if="${debug}" />
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="compile" depends="init">
-		<csc 
-			define="${define}"
-			target="library" 
-			debug="${debug}"
-			optimize="${optimize}"
-			output="${bin.dir}/${assembly.name}"
-			doc="${bin.dir}/${name}.xml">
-			
-			<nowarn>
-				<warning number="1591" />
-				<warning number="1572" />
-			</nowarn>
-			
-			<sources basedir="${src.dir}" defaultexcludes="true">
-				<include name="**/*.cs" />
-			</sources>
-			<resources  basedir="${src.dir}" prefix="Castle.DynamicProxy">
-				<include name="DynProxy.snk"/>
-			</resources>
-		</csc>
-	</target>
-
-	<target name="tests.compile" depends="compile" >
-		<csc 
-			target="library" 
-			debug="${debug}" 
-			define="${define}"
-			output="${bin.dir}/${test.assembly.name}">
-			
-			<sources basedir="${test.src.dir}" defaultexcludes="true">
-				<include name="**/*.cs" />
-			</sources>
-
-			<references>
-				<include name="${nunit.framework.dll}" />
-				<include name="${bin.dir}/${assembly.name}" />
-				<include name="System.Data.dll" />
-			</references>
-		</csc>
-	</target>
-	
-	<target name="tests.run" depends="tests.compile">
-		<property name="isMono" value="${string::contains(framework::get-target-framework(),'mono')}" />
-		
-		<nunit2 if="${not isMono}">
-			<formatter type="${nunit.formatter}" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}">
-			</test>
-		</nunit2>
-		
-		<nunit2 if="${isMono}">
-			<formatter type="${nunit.formatter}" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}">
-				<categories>
-					<exclude name="DotNetOnly" if="${isMono}" />
-				</categories>
-			</test>
-		</nunit2>
-	</target>
-	
-	<target name="dist">
-		<zip zipfile="DynamicProxy.bin.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/${assembly.name}" />				
-				<include name="License.txt" />				
-				<include name="Readme.txt" />				
-				<include name="Changes.txt" />				
-			</fileset>
-		</zip>
-		
-		<zip zipfile="DynamicProxy.src.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="License.txt" />				
-				<include name="Readme.txt" />				
-				<include name="Changes.txt" />				
-				<include name="*.build" />
-				<include name="*.sln" />
-				<include name="${src.dir}/**/*.*" />
-				<include name="${test.src.dir}/**/*.*" />
-				
-				<exclude name="**/Debug/*" />
-				<exclude name="**/obj/*" />
-				<exclude name="**/*.user" />
-				<exclude name="**/*.suo" />
-			</fileset>
-		</zip>
+	<target name="dynamicproxy" >
+		<nant buildfile="Castle.DynamicProxy/Castle.DynamicProxy.build" />
+		<nant buildfile="Castle.DynamicProxy.Tests/Castle.DynamicProxy.Tests.build" />
 	</target>
 
 </project>

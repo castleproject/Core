@@ -87,32 +87,27 @@
                 <Reference
                     Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.EmailSender"
                     AssemblyName = "Castle.Components.Common.EmailSender"
-                    HintPath = "..\..\build\net-1.1\Castle.Components.Common.EmailSender.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Binder"
                     AssemblyName = "Castle.Components.Binder"
-                    HintPath = "..\..\build\net-1.1\Castle.Components.Binder.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Components.Binder.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "Constants.cs"
                     SubType = "Code"
@@ -132,10 +127,6 @@
                     RelPath = "ControllerNotFoundException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "default.build"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "DelegateDynamicAction.cs"
@@ -289,6 +280,11 @@
                 />
                 <File
                     RelPath = "MonoRailHttpHandlerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MonoRailServiceContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

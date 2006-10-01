@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Tests.Configuration
+namespace Castle.Windsor.Tests
 {
 	using Castle.Core.Resource;
 	using Castle.Core.Configuration;
@@ -30,7 +30,7 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 
-			XmlInterpreter interpreter = new XmlInterpreter("../Castle.Windsor.Tests/sample_config.xml");
+			XmlInterpreter interpreter = new XmlInterpreter(ConfigHelper.ResolveConfigPath("sample_config.xml"));
 			interpreter.ProcessResource(interpreter.Source, store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
@@ -60,7 +60,7 @@ namespace Castle.Windsor.Tests.Configuration
 		public void CorrectConfigurationMapping()
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
-			XmlInterpreter interpreter = new XmlInterpreter("../Castle.Windsor.Tests/sample_config.xml");
+			XmlInterpreter interpreter = new XmlInterpreter(ConfigHelper.ResolveConfigPath("sample_config.xml"));
 			interpreter.ProcessResource(interpreter.Source, store);
 
 			WindsorContainer container = new WindsorContainer(store);			

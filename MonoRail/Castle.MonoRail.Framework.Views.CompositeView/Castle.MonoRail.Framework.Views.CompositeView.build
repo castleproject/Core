@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project 
+	name="Castle.MonoRail.Framework.Views.CompositeView"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+	<target name="init" depends="common.init">
+		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.description" value="MVC web framework for .NET" />
+
+		<fileset id="project.sources">
+
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="Castle.Core.dll" />
+			<include name="Castle.MonoRail.Framework.dll" />
+			<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+			<include name="NVelocity.dll" />
+		</assemblyfileset>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo common.compile-dll" />
+
+</project>

@@ -72,47 +72,42 @@
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Bamboo.Prevalence"
                     AssemblyName = "Bamboo.Prevalence"
-                    HintPath = "..\..\..\build\net-1.1\Bamboo.Prevalence.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Bamboo.Prevalence.dll"
                 />
                 <Reference
                     Name = "Bamboo.Prevalence.Util"
                     AssemblyName = "Bamboo.Prevalence.Util"
-                    HintPath = "..\..\..\build\net-1.1\Bamboo.Prevalence.Util.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Bamboo.Prevalence.Util.dll"
                 />
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Facilities.Prevalence"
                     AssemblyName = "Castle.Facilities.Prevalence"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Facilities.Prevalence.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Facilities.Prevalence.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "FacilityTestCase.cs"
                     SubType = "Code"

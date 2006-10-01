@@ -1,47 +1,18 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="castle-services" default="build">
+<project
+	name="castle-services"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
 
-	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
-	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="name" value="Services" />
-
-	<target name="build" depends="init, logging, transaction, copytobuilddir" />
-	
-	<target name="clean">
-		<delete dir="${bin.dir}" failonerror="false" />
-	</target>
-	
-	<target name="init">
-		<delete dir="${bin.dir}" failonerror="false" />
-		<mkdir dir="${bin.dir}" />
-	</target>
-	
-	<target name="copytobuilddir">
-		<copy todir="${build.dir}">
-			<fileset basedir="${bin.dir}">
-				<include name="*.dll" />
-				<include name="*.xml" />
-				<include name="*.pdb" if="${debug}" />
-			</fileset>
-		</copy>
-	</target>
+	<target name="build" depends="logging,transaction" />
 	
 	<target name="transaction">
-		<nant buildfile="TransactionMangement/transaction.build" target="build" />
-	</target>
-	
-	<target name="security">
-		<nant buildfile="Security/security.build" target="build" />
+		<nant buildfile="TransactionMangement/TransactionMangement.build" target="build" />
 	</target>
 	
 	<target name="logging">
 		<nant buildfile="Logging/logging.build" target="build" />
-	</target>
-	
-	<target name="dist">
-		<nant buildfile="TransactionMangement/transaction.build" target="dist" />
-		<nant buildfile="Logging/logging.build" target="dist" />
-		<nant buildfile="Security/security.build" target="dist" />
 	</target>
 	
 </project>

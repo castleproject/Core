@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}"
     >
@@ -85,44 +85,44 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
-                />
-                <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\..\..\build\net-1.1\log4net.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.Facilities.NHibernateIntegration"
                     AssemblyName = "Castle.Facilities.NHibernateIntegration"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Facilities.NHibernateIntegration.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Facilities.NHibernateIntegration.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>

@@ -72,32 +72,27 @@
                 <Reference
                     Name = "Bamboo.Prevalence"
                     AssemblyName = "Bamboo.Prevalence"
-                    HintPath = "..\..\..\build\net-1.1\Bamboo.Prevalence.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Bamboo.Prevalence.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Bamboo.Prevalence.Util"
                     AssemblyName = "Bamboo.Prevalence.Util"
-                    HintPath = "..\..\..\build\net-1.1\Bamboo.Prevalence.Util.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Bamboo.Prevalence.Util.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "PrevalenceActivatorOverrider.cs"
                     SubType = "Code"

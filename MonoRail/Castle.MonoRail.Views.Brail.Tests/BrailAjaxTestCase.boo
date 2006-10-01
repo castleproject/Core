@@ -17,9 +17,10 @@ import System
 import System.IO
 import NUnit.Framework
 import Castle.MonoRail.TestSupport
+import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class BrailAjaxTestCase(AbstractMRTestCase):
+class BrailAjaxTestCase(AbstractTestCase):
 	
 	[Test]
 	def JsFunctions():

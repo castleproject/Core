@@ -76,12 +76,12 @@
   <ItemGroup>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
       <AssemblyFolderKey>hklm\dn\nunit.framework</AssemblyFolderKey>
     </Reference>
     <Reference Include="NVelocity">
       <Name>NVelocity</Name>
-      <HintPath>..\..\build\net-2.0\NVelocity.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -118,15 +118,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ComponentsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DynamicActionProviderTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EmailTestCase.cs" />
+    <Compile Include="FormHelperTestCase.cs" />
     <Compile Include="NVelocityBasicFunctionalityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -142,6 +141,7 @@
     <Compile Include="RoutingTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SmartController2TestCase.cs" />
     <Compile Include="SmartControllerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

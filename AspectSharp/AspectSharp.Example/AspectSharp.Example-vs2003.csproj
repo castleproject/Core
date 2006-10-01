@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{AE2B1F00-FB0A-4A76-B57D-FF514B72E898}"
     >
@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "AspectSharp"
-                    Project = "{C50C59E8-410B-48C6-8CD0-DB351C0AB75E}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "AspectSharp.Lang"
                     Project = "{6B00E2C0-C58E-4399-A323-A034415E67D4}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -97,7 +92,17 @@
                 <Reference
                     Name = "antlr.runtime"
                     AssemblyName = "antlr.runtime"
-                    HintPath = "..\lib\antlr.runtime.dll"
+                    HintPath = "..\..\build\net-1.1\debug\antlr.runtime.dll"
+                />
+                <Reference
+                    Name = "AspectSharp-vs2003"
+                    Project = "{C50C59E8-410B-48C6-8CD0-DB351C0AB75E}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

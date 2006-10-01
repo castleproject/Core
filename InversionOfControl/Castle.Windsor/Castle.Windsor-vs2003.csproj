@@ -87,22 +87,17 @@
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "AsyncInitializationContainer.cs"
                     SubType = "Code"
@@ -122,10 +117,6 @@
                     RelPath = "IWindsorContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "windsor.build"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "WindsorContainer.cs"

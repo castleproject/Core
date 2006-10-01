@@ -7,6 +7,6 @@ file in the root of the repository for details.
 
 1. Modify the Connection properties information:
 
-   See file "configuration.xml" for full details.
+   See file "App.config" for full details.
 
 2. That's it.

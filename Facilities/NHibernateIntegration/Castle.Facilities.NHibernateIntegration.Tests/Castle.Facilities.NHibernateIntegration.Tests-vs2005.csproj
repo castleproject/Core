@@ -76,39 +76,39 @@
   <ItemGroup>
     <Reference Include="Castle.Facilities.AutomaticTransactionManagement">
       <Name>Castle.Facilities.AutomaticTransactionManagement</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
-      <HintPath>..\..\..\build\net-2.0\log4net.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\..\build\net-2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -152,6 +152,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common\TestInterceptor.cs" />
+    <Compile Include="ConfigHelper.cs" />
     <Compile Include="Internals\SessionManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -187,10 +188,10 @@
     <Compile Include="Wiring\MyDao.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Content Include="Common\Blog.hbm.xml" />
-    <Content Include="Common\BlogItem.hbm.xml" />
-    <Content Include="Common\BlogRef.hbm.xml" />
-    <Content Include="Common\Order.hbm.xml" />
+    <EmbeddedResource Include="Common\Blog.hbm.xml" />
+    <EmbeddedResource Include="Common\BlogItem.hbm.xml" />
+    <EmbeddedResource Include="Common\BlogRef.hbm.xml" />
+    <EmbeddedResource Include="Common\Order.hbm.xml" />
     <Content Include="facilityconfig.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +199,9 @@
       <Project>{A3135261-0009-4F9C-A339-2900143E20F0}</Project>
       <Name>Castle.Facilities.NHibernateIntegration-vs2005</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

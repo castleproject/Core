@@ -15,11 +15,11 @@
 namespace Castle.Facilities.ActiveRecordIntegration.Tests
 {
 	using System;
-
+	using Castle.Core.Resource;
 	using Castle.Windsor;
 	
 	using Castle.ActiveRecord;
-
+	using Castle.Windsor.Configuration.Interpreters;
 	using NUnit.Framework;
 
 	using Castle.Facilities.ActiveRecordIntegration.Tests.Model;
@@ -33,7 +33,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 		[TestFixtureSetUp]
 		public void Init()
 		{
-			container = new WindsorContainer("configuration.xml");
+			container = new WindsorContainer(new XmlInterpreter(new ConfigResource()));
 
 			container.AddFacility("transactionfacility", new TransactionFacility() );
 			container.AddFacility("arfacility", new ActiveRecordFacility() );

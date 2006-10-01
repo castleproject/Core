@@ -30,7 +30,7 @@ namespace Castle.Windsor.Tests.XmlProcessor
 	[TestFixture]
 	public class XmlProcessorTestCase
 	{
-		String dir = "../Castle.Windsor.Tests/XmlProcessor/TestFiles/";
+		String dir = ConfigHelper.ResolveConfigPath("XmlProcessor/TestFiles/");
 
 		[Test]
 		public void InvalidFiles()

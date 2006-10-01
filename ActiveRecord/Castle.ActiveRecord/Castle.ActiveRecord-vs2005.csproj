@@ -85,23 +85,23 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\log4net.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

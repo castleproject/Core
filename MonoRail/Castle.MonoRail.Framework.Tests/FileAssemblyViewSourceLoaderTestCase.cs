@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Tests
 {
+	using System.IO;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
 
@@ -29,7 +30,7 @@ namespace Castle.MonoRail.Framework.Tests
 		public void SetUp()
 		{
 			loader = new FileAssemblyViewSourceLoader();
-			loader.ViewRootDir = @"../Castle.MonoRail.Framework.Tests";
+			loader.ViewRootDir = Path.GetFullPath(System.Configuration.ConfigurationSettings.AppSettings["tests.src"]);
 			loader.Service(new TestServiceContainer());
 		}
 

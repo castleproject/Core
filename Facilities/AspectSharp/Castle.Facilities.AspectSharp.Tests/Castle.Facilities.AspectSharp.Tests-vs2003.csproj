@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)App.config" "$(TargetPath).config"'
                 RootNamespace = "Castle.Facilities.AspectSharp.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -87,47 +87,51 @@
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "AspectSharp"
                     AssemblyName = "AspectSharp"
-                    HintPath = "..\..\..\build\net-1.1\AspectSharp.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\AspectSharp.dll"
                 />
                 <Reference
                     Name = "antlr.runtime"
                     AssemblyName = "antlr.runtime"
-                    HintPath = "..\..\..\build\net-1.1\antlr.runtime.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\antlr.runtime.dll"
                 />
                 <Reference
                     Name = "AopAlliance"
                     AssemblyName = "AopAlliance"
-                    HintPath = "..\..\..\build\net-1.1\AopAlliance.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\AopAlliance.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "AspectSharpFacilityTestCase.cs"
                     SubType = "Code"
@@ -135,6 +139,11 @@
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

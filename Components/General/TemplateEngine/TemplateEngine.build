@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-templateengine-component"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<target name="build" depends="template-engine" />
+
+	<target name="template-engine">
+		<nant buildfile="Castle.Components.Common.TemplateEngine/Castle.Components.Common.TemplateEngine.build" />
+		<nant buildfile="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.build" />
+		<nant buildfile="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.build" />
+	</target>
+
+</project>

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{5DFDD338-D552-4D1E-B6E7-6E031F00696E}"
     >
@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
-                />
-                <Reference
                     Name = "Castle.Applications.PestControl"
                     Project = "{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -92,32 +87,37 @@
                 <Reference
                     Name = "Bamboo.Prevalence"
                     AssemblyName = "Bamboo.Prevalence"
-                    HintPath = "..\..\..\build\net-1.1\Bamboo.Prevalence.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Bamboo.Prevalence.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.Facilities.Prevalence"
                     AssemblyName = "Castle.Facilities.Prevalence"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Facilities.Prevalence.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Facilities.Prevalence.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>

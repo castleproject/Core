@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.WindsorExtension.Tests
 {
 	using System;
+	using System.Configuration;
 	using System.IO;
 	using System.Xml;
 
@@ -25,7 +26,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 	[TestFixture]
 	public class WindsorMonoRailSectionHandlerTestCase
 	{
-		String dir = "../Castle.MonoRail.WindsorExtension.Tests/ConfigFiles/";
+		String dir = Path.Combine(ConfigurationSettings.AppSettings["tests.src"], "ConfigFiles/");
 
 		[Test]
 		public void SimpleTest()

@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 
 	[TestFixture]
-	public class LocalizationTestCase : AbstractMRTestCase
+	public class LocalizationTestCase : AbstractTestCase
 	{
 		private CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
 		private CultureInfo nl = CultureInfo.CreateSpecificCulture( "nl" );

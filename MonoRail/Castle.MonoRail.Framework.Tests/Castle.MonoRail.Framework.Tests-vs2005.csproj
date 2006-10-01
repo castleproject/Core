@@ -77,11 +77,11 @@
   <ItemGroup>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -109,6 +109,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="contentinfs.vm" />
+    <EmbeddedResource Include="Content\contentinassembly.vm" />
+    <None Include="Content\notinassembly.vm" />
+    <Compile Include="AbstractTestCase.cs" />
     <Compile Include="AccessibleThroughTestCase.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>

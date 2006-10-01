@@ -76,19 +76,19 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -130,7 +130,6 @@
     <Compile Include="WindsorViewComponentFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="default.build" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -16,7 +16,7 @@ namespace Castle.Windsor.Tests.Configuration2
 {
 	using System;
 	using System.IO;
-
+	using Castle.Windsor.Tests;
 	using NUnit.Framework;
 
 	using Castle.Core.Resource;
@@ -30,7 +30,7 @@ namespace Castle.Windsor.Tests.Configuration2
 	[TestFixture]
 	public class IncludesTestCase
 	{
-		String dir = "../Castle.Windsor.Tests/Configuration2/";
+		String dir = ConfigHelper.ResolveConfigPath("Configuration2/");
 
 		private IWindsorContainer container;
 

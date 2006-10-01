@@ -1,0 +1,261 @@
+<?xml version="1.0" ?>
+<project xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
+
+	<description>
+		This file contains common tasks tailored specifically for the Castle
+		build process. The goal was to define all the actions in this file, so
+		that actual project build files only have to configure a few variables
+		and call tasks in this file.
+
+		Usage
+
+		&lt;property name="root.dir" value="..\.." /&gt;
+		&lt;include buildfile="${root.dir}/build-common/common-project.xml" /&gt;
+
+		These lines should be placed at the top level under the &lt;project&gt;
+		element. Property root.dir defines a relative path to the root of the
+		distribution, that is, Castle directory.
+
+		After including the file, a target should be defined to initialize
+		configuration variables according to the project being built.
+		The standard of this target is init (but any other name can be chosen).
+		The init target should depend on (or call) target common.init defined
+		in this file.
+
+		Other predefined targets are:
+
+			- common.compile-tests
+				compile NUnit tests and copy App.config file to the output directory,
+				if it exists.
+
+			- common.compile-dll
+				compile a DLL, generating the documentation and using Clover if enabled.
+
+			- common.generate-assemblyinfo, common.generate-assemblyinfoversion
+				generate an AssemblyInfo.cs or AssemblyInfoVersion.cs file from
+				assembly.* NAnt properties.
+
+			- common.run-tests
+				run compiled NUnit tests.
+
+		All compile/run targets put the output in build.dir. Common.compile*
+		targets use source fileset with id="project.sources", assembly fileset
+		with id="project.references" and resource fileset with id="project.resources"
+		to compile the project. The source and resource filesets are optional.
+
+	</description>
+
+	<include buildfile="common.xml" />
+
+	<target name="common.compile-tests"
+		description="Compile NUnit tests and copy App.config file to the output directory, if it exists.">
+
+		<csc 
+			target="library"
+			define="${current.build.defines}"
+			debug="${build.debug}"
+			output="${build.dir}/${project::get-name()}.dll"
+		>
+			<sources refid="project.sources" />
+			<references refid="project.references" />
+			<resources refid="project.resources" />
+		</csc>
+
+		<if test="${file::exists(path::combine(src.dir, 'App.config'))}">
+			<copy 
+				file="${src.dir}/App.config"
+				tofile="${build.dir}/${project::get-name()}.dll.config"
+			/>
+
+			<call target="common.configure-tests" />
+		</if>
+
+	</target>
+
+	<target name="common.configure-tests"
+		description="Configure tests for running NUnit tests.">
+
+		<property name="app.config" value="${build.dir}\${project::get-name()}.dll.config" />
+
+		<!-- make sure the config file is writable -->
+		<attrib file="${app.config}" readonly="false" />
+		
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/appSettings/add[@key='tests.src']/@value"
+			value="${src.dir}"
+			failonerror="false"
+		/>
+	</target>
+
+ 	<target name="common.compile-dll"
+		description="Compile sources into a DLL">
+
+		<csc
+			target="library" 
+			define="${current.build.defines}" 
+			debug="${build.debug}" 
+			optimize="${build.optimize}"
+			output="${build.dir}\${project::get-name()}.dll" 
+			doc="${build.dir}\${project::get-name()}.xml"
+		>
+			<nowarn>
+				<warning number="1591" /> <!-- No XML comment for publicly visible member -->
+			</nowarn>
+			<sources refid="project.sources" />
+			<references refid="project.references" />
+			<resources refid="project.resources" />
+		</csc>
+	</target>
+
+ 	<target name="common.compile-website">
+		<property name="bin.dir" value="${src.dir}/bin" />
+		<mkdir dir="${bin.dir}" />
+		<delete file="${bin.dir}/${project::get-name()}.pdb" /> <!-- To prevent 1.1 compiler from crashing when switching from a 2.0 build -->
+		<property name="build.dir" value="${bin.dir}" />
+
+		<call target="common.compile-dll" />
+		<call target="common.copy-references" />
+	</target>
+
+ 	<target name="common.copy-references">
+		<foreach item="File" property="reference">
+			<in>
+				<items refid="project.references" />
+			</in>
+			<do>
+				<copy file="${reference}" todir="${bin.dir}" />
+			</do>
+		</foreach>
+	</target>
+
+	<target name="common.compile-exe"
+		description="Compile sources into a console executable">
+
+		<csc
+			target="exe"
+			define="${current.build.defines}" 
+			debug="${build.debug}"
+			optimize="${build.optimize}"
+			output="${build.dir}\${project::get-name()}.exe" 
+		>
+			<nowarn>
+				<warning number="1591" /> <!-- No XML comment for publicly visible member -->
+			</nowarn>
+			<sources refid="project.sources" />
+			<references refid="project.references" />
+			<resources refid="project.resources" />
+		</csc>
+	</target>
+
+	<target name="common.set-assembly-attribute-values">
+		<property overwrite="false" name="assembly.is-cls-compliant" value="true" />
+		<property overwrite="false" name="assembly.allow-partially-trusted-callers" value="false" />
+		<property overwrite="false" name="assembly.description" value="" />
+		<property overwrite="false" name="assembly.product" value="${project::get-name()}" />
+		<property overwrite="false" name="assembly.company" value="${project.company}" />
+		<property overwrite="false" name="assembly.title" value="${project::get-name()} for ${framework::get-description(framework::get-target-framework())}" />
+		<property overwrite="false" name="assembly.version" value="0.0.0.0" />
+		<property overwrite="false" name="assembly.version.informational" value="${assembly.major}.${assembly.minor}.${assembly.build}.${svn.revision}" />
+		<property overwrite="false" name="assembly.copyright" value="Castle Project, original author or authors" />
+		<property overwrite="false" name="assembly.keyfile" value="${key.file}" />
+		<property overwrite="false" name="assembly.sign" value="${sign}" />
+	</target>
+
+	<target name="common.generate-assemblyinfo"
+		depends="common.init common.set-assembly-attribute-values"
+		description="Generate AssemblyInfo.cs using assembly.* properties."
+	>
+		<property name="assemblyinfo.cs" value="${path::combine(src.dir,'AssemblyInfo.cs')}" />
+		<attrib file="${assemblyinfo.cs}" readonly="false" />
+		<asminfo output="${assemblyinfo.cs}" language="CSharp">
+			<imports>
+				<import namespace="System" />
+				<import namespace="System.Reflection" />
+				<import namespace="System.Runtime.CompilerServices" />
+				<import namespace="System.Security" if="${assembly.allow-partially-trusted-callers}" />
+			</imports>
+			<attributes>
+				<attribute type="CLSCompliantAttribute" value="${assembly.is-cls-compliant}" />
+				<attribute type="AssemblyTitleAttribute" value="${assembly.title}" />
+				<attribute type="AssemblyDescriptionAttribute" value="${assembly.description}" />
+				<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />
+				<attribute type="AssemblyProductAttribute" value="${assembly.product}" />
+				<attribute type="AssemblyCopyrightAttribute" value="${assembly.copyright}" />
+				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
+				<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.version.informational}" />
+				<attribute type="AssemblyFileVersionAttribute" value="${assembly.version}" />
+				<attribute type="AssemblyKeyFileAttribute" value="${assembly.keyfile}" if="${assembly.sign}"/>
+				<attribute type="AssemblyDelaySignAttribute" value="false" />
+				
+				<!-- For some reason, NAnt doesn't detect that APTCA has a public no-argument constructor -->
+				<attribute asis="true" type="AllowPartiallyTrustedCallersAttribute" if="${assembly.allow-partially-trusted-callers}" />
+			</attributes>
+		</asminfo>
+	</target>
+
+	<target name="common.run-tests"
+		description="Run NUnit tests">
+
+		<if test="${common.run-tests}">
+			<echo message="Running tests in '${project::get-name()}'" />
+
+			<nunit2>
+				<formatter 
+					type="Xml" 
+					usefile="true" 
+					extension=".xml" 
+					outputdir="${testresults.dir}"
+				/>
+				<test
+					assemblyname="${build.dir}\${project::get-name()}.dll"
+					appconfig="${build.dir}\${project::get-name()}.dll.config" />
+			</nunit2>
+		</if>
+		<if test="${not common.run-tests}">
+			<echo message="Tests are disabled for '${project::get-name()}'" />
+		</if>
+
+	</target>
+
+	<target name="common.run-database-tests"
+		depends="common.put-connection-settings-into-app-config common.run-tests common.remove-connection-settings-from-app-config" />
+
+	<target name="common.put-connection-settings-into-app-config">
+
+		<property name="app.config" value="${build.dir}\${project::get-name()}.dll.config" />
+
+		<!-- make sure the config file is writable -->
+		<attrib file="${app.config}" readonly="false" />
+
+		<!-- 
+			Tell nhibernate how to connect to the test database.
+		-->
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/nhibernate/add[@key='hibernate.dialect']/@value"
+			value="${nhibernate.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.driver_class']/@value"
+			value="${nhibernate.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.connection_string']/@value"
+			value="${nhibernate.connection.connection_string}" 
+		/>
+	</target>
+
+	<target name="common.remove-connection-settings-from-app-config">
+		<property name="app.config" value="${build.dir}\${project::get-name()}.dll.config" />
+
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/nhibernate/add[@key='hibernate.connection.connection_string']/@value"
+			value="conn string here" 
+		/>
+	</target>
+
+</project>

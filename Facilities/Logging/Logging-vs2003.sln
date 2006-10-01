@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Logging", "Castle.Facilities.Logging\Castle.Facilities.Logging-vs2003.csproj", "{32D54D33-206F-44EE-8329-8480ABE049B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Logging-vs2003", "Castle.Facilities.Logging\Castle.Facilities.Logging-vs2003.csproj", "{32D54D33-206F-44EE-8329-8480ABE049B1}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Logging.Tests", "Castle.Facilities.Logging.Tests\Castle.Facilities.Logging.Tests-vs2003.csproj", "{8F649EDC-B84C-4F20-81AD-221ACA465E1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Logging.Tests-vs2003", "Castle.Facilities.Logging.Tests\Castle.Facilities.Logging.Tests-vs2003.csproj", "{8F649EDC-B84C-4F20-81AD-221ACA465E1D}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -11,6 +11,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{32D54D33-206F-44EE-8329-8480ABE049B1}.Debug.ActiveCfg = Debug|.NET
@@ -23,7 +25,6 @@ Global
 		{8F649EDC-B84C-4F20-81AD-221ACA465E1D}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
-		default.build = default.build
 		example_config.xml = example_config.xml
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

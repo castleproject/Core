@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project 
+	name="ibatisnet-facility"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+    
+	<target name="build" depends="facility" />
+	
+	<target name="facility">
+		<nant buildfile="Castle.Facilities.IBatisNetIntegration/Castle.Facilities.IBatisNetIntegration.build" />
+		<nant buildfile="Castle.Facilities.IBatisNetIntegration.Tests/Castle.Facilities.IBatisNetIntegration.Tests.build" unless="${nant.settings.currentframework=='net-1.1'}" />
+	</target>
+	
+</project>

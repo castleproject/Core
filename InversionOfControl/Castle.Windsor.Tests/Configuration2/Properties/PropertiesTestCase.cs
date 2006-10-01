@@ -21,12 +21,13 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 	using Castle.MicroKernel;
 	using Castle.Core.Configuration;
 	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+	using Castle.Windsor.Tests;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class PropertiesTestCase
 	{
-		String dir = "../Castle.Windsor.Tests/Configuration2/Properties/";
+		String dir = ConfigHelper.ResolveConfigPath("Configuration2/Properties/");
 
 		private IWindsorContainer container;
 

@@ -76,15 +76,15 @@
   <ItemGroup>
     <Reference Include="Castle.Components.Common.EmailSender">
       <Name>Castle.Components.Common.EmailSender</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Components.Common.EmailSender.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.EmailSender.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Components.Common.EmailSender.SmtpEmailSender">
       <Name>Castle.Components.Common.EmailSender.SmtpEmailSender</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -438,7 +438,6 @@
     <Compile Include="WizardStepPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="default.build" />
     <EmbeddedResource Include="Controllers\Ajax.resx" />
     <EmbeddedResource Include="Controllers\Behaviour.resx" />
     <EmbeddedResource Include="Controllers\Effects2.resx" />

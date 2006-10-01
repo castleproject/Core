@@ -1,13 +1,13 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.TemplateEngine", "Castle.Components.Common.TemplateEngine\Castle.Components.Common.TemplateEngine-vs2003.csproj", "{9698FE03-CD65-4FBC-B734-7326674A4894}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.TemplateEngine-vs2003", "Castle.Components.Common.TemplateEngine\Castle.Components.Common.TemplateEngine-vs2003.csproj", "{9698FE03-CD65-4FBC-B734-7326674A4894}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.NVelocityTemplateEngine", "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine\Castle.Components.Common.NVelocityTemplateEngine-vs2003.csproj", "{AA95F54F-BEC7-469A-B420-B19D1BBB8C3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.NVelocityTemplateEngine-vs2003", "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine\Castle.Components.Common.NVelocityTemplateEngine-vs2003.csproj", "{AA95F54F-BEC7-469A-B420-B19D1BBB8C3F}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests", "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests-vs2003.csproj", "{F1FF896B-573D-4B67-83FB-EB9CA947188D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests-vs2003", "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests-vs2003.csproj", "{F1FF896B-573D-4B67-83FB-EB9CA947188D}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -15,6 +15,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{9698FE03-CD65-4FBC-B734-7326674A4894}.Debug.ActiveCfg = Debug|.NET
@@ -32,7 +34,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt
-		default.build = default.build
 		License.txt = License.txt
 		Readme.txt = Readme.txt
 	EndGlobalSection

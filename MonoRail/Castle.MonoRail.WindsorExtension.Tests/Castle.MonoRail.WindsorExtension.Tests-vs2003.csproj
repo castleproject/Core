@@ -97,7 +97,12 @@
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\build\net-1.1\debug\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Tests-vs2003"
+                    Project = "{844F5EC4-9224-42A9-986D-CE645AC970F2}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -106,11 +111,6 @@
                 <File
                     RelPath = "App.config"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "BasicFunctionalityTestCase.cs"

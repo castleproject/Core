@@ -76,35 +76,39 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Facilities.AutomaticTransactionManagement">
       <Name>Castle.Facilities.AutomaticTransactionManagement</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\..\build\net-2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -155,6 +159,9 @@
     <Compile Include="TransactionTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

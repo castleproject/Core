@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="Castle.MonoRail.TestSupport"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<property name="assembly.version" value="1.0.0.0" />
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="Castle.MonoRail.Framework.dll" />
+			<include name="nunit.framework.dll" />
+		</assemblyfileset>
+	</target>
+
+	<target name="gac-install">
+		<!-- find out where gacutil is -->
+		<property name="gacutil.framework.file" value="${framework::get-framework-directory( framework::get-target-framework() )}\gacutil.exe"/>
+		<property name="gacutil.sdk.file" value="${framework::get-sdk-directory( framework::get-target-framework() )}\gacutil.exe"/>
+
+		<if test="${( not property::exists( 'gacutil.file' )) and file::exists( gacutil.framework.file )}">
+			<property name="gacutil.file" value="${gacutil.framework.file}"/>
+		</if>
+		<if test="${( not property::exists( 'gacutil.file' )) and file::exists( gacutil.sdk.file )}">
+			<property name="gacutil.file" value="${gacutil.sdk.file}"/>
+		</if>
+		<if test="${not property::exists( 'gacutil.file' )}">
+			<echo>Could not find "gacutil" to install Castle.MonoRail.TestSupport server to GAC.</echo>
+			<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport</echo>
+		</if>
+		<if test="${property::exists( 'gacutil.file' )}">
+			<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${build.dir}">
+				<arg value="/f" />
+				<arg value="/i" />
+				<arg value="Castle.MonoRail.TestSupport.dll" />
+			</exec>
+		</if>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo common.compile-dll gac-install" />
+
+</project>

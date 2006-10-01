@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{8A7E5413-3F2C-4C09-92A7-F5A3AC9F2F93}"
     >
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)\App.config" "$(TargetPath).config"'
                 RootNamespace = "Castle.Facilities.AutomaticTransactionManagement.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -80,39 +80,34 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
-                />
-                <Reference
-                    Name = "Castle.Services.Transaction"
-                    AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                    Name = "Castle.Facilities.AutomaticTransactionManagement"
+                    Project = "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Model.dll"
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Transaction.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilities.AutomaticTransactionManagement"
-                    Project = "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
@@ -124,12 +119,16 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AssemblyInfo.cs"
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "BaseTransactionalComp.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BaseTransactionalComp.cs"
+                    RelPath = "ConfigHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

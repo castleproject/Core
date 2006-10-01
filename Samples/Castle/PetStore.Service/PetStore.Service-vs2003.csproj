@@ -87,22 +87,22 @@
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\..\build\net-1.1\Iesi.Collections.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\..\build\net-1.1\Castle.ActiveRecord.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.ActiveRecord.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\..\build\net-1.1\NHibernate.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\NHibernate.dll"
                 />
             </References>
         </Build>

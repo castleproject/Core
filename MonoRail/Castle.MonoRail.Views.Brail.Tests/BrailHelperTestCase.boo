@@ -19,9 +19,10 @@ import System.IO
 import NUnit.Framework
 
 import Castle.MonoRail.TestSupport
+import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class BrailHelperTestCase(AbstractMRTestCase):
+class BrailHelperTestCase(AbstractTestCase):
 	
 	[Test]
 	def InheritedHelpers():

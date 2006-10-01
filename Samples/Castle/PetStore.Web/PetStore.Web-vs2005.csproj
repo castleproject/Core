@@ -76,79 +76,79 @@
   <ItemGroup>
     <Reference Include="Castle.ActiveRecord">
       <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.ActiveRecord.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.DynamicProxy">
       <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.DynamicProxy.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Facilities.ActiveRecordIntegration">
       <Name>Castle.Facilities.ActiveRecordIntegration</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Facilities.ActiveRecordIntegration.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Facilities.ActiveRecordIntegration.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Facilities.AutomaticTransactionManagement">
       <Name>Castle.Facilities.AutomaticTransactionManagement</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MonoRail.ActiveRecordSupport">
       <Name>Castle.MonoRail.ActiveRecordSupport</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MonoRail.ActiveRecordSupport.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MonoRail.ActiveRecordSupport.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MonoRail.Framework">
       <Name>Castle.MonoRail.Framework</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MonoRail.Framework.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MonoRail.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MonoRail.Framework.Views.CompositeView">
       <Name>Castle.MonoRail.Framework.Views.CompositeView</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MonoRail.Framework.Views.CompositeView.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MonoRail.Framework.Views.CompositeView.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MonoRail.Framework.Views.NVelocity">
       <Name>Castle.MonoRail.Framework.Views.NVelocity</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MonoRail.Framework.Views.NVelocity.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MonoRail.Framework.Views.NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MonoRail.WindsorExtension">
       <Name>Castle.MonoRail.WindsorExtension</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MonoRail.WindsorExtension.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MonoRail.WindsorExtension.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Windsor.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <Name>Iesi.Collections</Name>
-      <HintPath>..\..\..\build\net-2.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
-      <HintPath>..\..\..\build\net-2.0\log4net.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <Name>NHibernate</Name>
-      <HintPath>..\..\..\build\net-2.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Nullables">
       <Name>Nullables</Name>
-      <HintPath>..\..\..\build\net-2.0\Nullables.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Nullables.dll</HintPath>
     </Reference>
     <Reference Include="Nullables.NHibernate">
       <Name>Nullables.NHibernate</Name>
-      <HintPath>..\..\..\build\net-2.0\Nullables.NHibernate.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Nullables.NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity">
       <Name>NVelocity</Name>
-      <HintPath>..\..\..\build\net-2.0\NVelocity.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

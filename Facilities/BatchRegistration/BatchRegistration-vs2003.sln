@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.BatchRegistration", "Castle.Facilities.BatchRegistration\Castle.Facilities.BatchRegistration-vs2003.csproj", "{7ED787A6-E95F-47B2-9FCE-97C43218F69A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.BatchRegistration-vs2003", "Castle.Facilities.BatchRegistration\Castle.Facilities.BatchRegistration-vs2003.csproj", "{7ED787A6-E95F-47B2-9FCE-97C43218F69A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.BatchRegistration.Tests", "Castle.Facilities.BatchRegistration.Tests\Castle.Facilities.BatchRegistration.Tests-vs2003.csproj", "{A17D492E-7254-4161-9303-4E58D2526E6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.BatchRegistration.Tests-vs2003", "Castle.Facilities.BatchRegistration.Tests\Castle.Facilities.BatchRegistration.Tests-vs2003.csproj", "{A17D492E-7254-4161-9303-4E58D2526E6B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -11,6 +11,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{7ED787A6-E95F-47B2-9FCE-97C43218F69A}.Debug.ActiveCfg = Debug|.NET
@@ -24,7 +26,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt
-		default.build = default.build
 		License.txt = License.txt
 		Readme.txt = Readme.txt
 	EndGlobalSection

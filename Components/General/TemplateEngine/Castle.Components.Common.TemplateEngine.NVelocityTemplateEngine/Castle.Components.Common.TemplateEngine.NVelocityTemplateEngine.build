@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../../../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<property name="assembly.version" value="0.0.2.0" />
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="NVelocity.dll" />
+			<include name="Castle.Core.dll" />
+			<include name="Castle.Components.Common.TemplateEngine.dll" />
+		</assemblyfileset>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo common.compile-dll" />
+
+</project>

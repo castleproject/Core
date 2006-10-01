@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.IBatisNetIntegration", "Castle.Facilities.IBatisNetIntegration\Castle.Facilities.IBatisNetIntegration-vs2003.csproj", "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.IBatisNetIntegration-vs2003", "Castle.Facilities.IBatisNetIntegration\Castle.Facilities.IBatisNetIntegration-vs2003.csproj", "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.IBatisNetIntegration.Tests", "Castle.Facilities.IBatisNetIntegration.Tests\Castle.Facilities.IBatisNetIntegration.Tests-vs2003.csproj", "{0C9EE31D-A700-485B-948A-68E4A3614E71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.IBatisNetIntegration.Tests-vs2003", "Castle.Facilities.IBatisNetIntegration.Tests\Castle.Facilities.IBatisNetIntegration.Tests-vs2003.csproj", "{0C9EE31D-A700-485B-948A-68E4A3614E71}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -11,6 +11,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{5CE5406D-92AB-45ED-A4C9-921745E38BE1}.Debug.ActiveCfg = Debug|.NET
@@ -26,9 +28,7 @@ Global
 		Castle.mdb = Castle.mdb
 		Changes.txt = Changes.txt
 		DataBase.config = DataBase.config
-		default.build = default.build
 		License.txt = License.txt
-		bin\providers.config = bin\providers.config
 		Readme.txt = Readme.txt
 		bin\SqlMap.config = bin\SqlMap.config
 		usage.txt = usage.txt

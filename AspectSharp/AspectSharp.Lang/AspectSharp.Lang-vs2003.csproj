@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{6B00E2C0-C58E-4399-A323-A034415E67D4}"
     >
@@ -87,7 +87,7 @@
                 <Reference
                     Name = "antlr.runtime"
                     AssemblyName = "antlr.runtime"
-                    HintPath = "..\lib\antlr.runtime.dll"
+                    HintPath = "..\..\build\net-1.1\debug\antlr.runtime.dll"
                 />
             </References>
         </Build>

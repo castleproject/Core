@@ -74,14 +74,13 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "AssemblyInfo.cs"
+                    RelPath = "AssertUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AssertUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "DynProxy.snk"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "DynProxy.snk"

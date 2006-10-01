@@ -1,17 +1,17 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel", "Castle.MicroKernel\Castle.MicroKernel-vs2003.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel-vs2003", "Castle.MicroKernel\Castle.MicroKernel-vs2003.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests", "Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2003.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests-vs2003", "Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2003.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor", "Castle.Windsor\Castle.Windsor-vs2003.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor-vs2003", "Castle.Windsor\Castle.Windsor-vs2003.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests", "Castle.Windsor.Tests\Castle.Windsor.Tests-vs2003.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests-vs2003", "Castle.Windsor.Tests\Castle.Windsor.Tests-vs2003.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -42,7 +42,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt
-		container.build = container.build
 		Know issues.txt = Know issues.txt
 		License.txt = License.txt
 		Readme.txt = Readme.txt

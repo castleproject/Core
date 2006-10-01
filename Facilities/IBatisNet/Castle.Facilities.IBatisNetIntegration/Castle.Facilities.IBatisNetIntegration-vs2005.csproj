@@ -76,23 +76,23 @@
   <ItemGroup>
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.MicroKernel.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Services.Transaction">
       <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\build\net-2.0\Castle.Services.Transaction.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Transaction.dll</HintPath>
     </Reference>
     <Reference Include="IBatisNet.Common, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\IBatisNet.Common.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\IBatisNet.Common.dll</HintPath>
     </Reference>
     <Reference Include="IBatisNet.DataMapper, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\IBatisNet.DataMapper.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\IBatisNet.DataMapper.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

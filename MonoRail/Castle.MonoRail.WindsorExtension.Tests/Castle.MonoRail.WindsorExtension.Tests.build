@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+
+<project 
+	name="Castle.MonoRail.WindsorExtension.Tests" 
+	default="test" 
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="nunit.framework.dll" />
+			<include name="Castle.Core.dll" />
+			<include name="Castle.MicroKernel.dll" />
+			<include name="Castle.Windsor.dll" />
+			<include name="Castle.MonoRail.Framework.dll" />
+			<include name="Castle.MonoRail.Framework.Tests.dll" />
+			<include name="Castle.MonoRail.TestSupport.dll" />
+			<include name="Castle.MonoRail.WindsorExtension.dll" />
+		</assemblyfileset>
+
+		<fileset id="project.sources">
+			<include name="${src.dir}/**/*.cs" />
+		</fileset>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="test" depends="init generate-assemblyinfo common.compile-tests common.run-tests" description="Runs the tests" />
+
+</project>

@@ -1,17 +1,17 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender", "Castle.Components.Common.EmailSender\Castle.Components.Common.EmailSender-vs2003.csproj", "{CFF1D57F-9FEB-4941-B8FE-8E28F4A8AAC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender-vs2003", "Castle.Components.Common.EmailSender\Castle.Components.Common.EmailSender-vs2003.csproj", "{CFF1D57F-9FEB-4941-B8FE-8E28F4A8AAC7}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.SmtpEmailSender", "Castle.Components.Common.EmailSender.SmtpEmailSender\Castle.Components.Common.EmailSender.SmtpEmailSender-vs2003.csproj", "{41E2E9C8-765B-4DAD-ADB7-5C9C66C1C28D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.SmtpEmailSender-vs2003", "Castle.Components.Common.EmailSender.SmtpEmailSender\Castle.Components.Common.EmailSender.SmtpEmailSender-vs2003.csproj", "{41E2E9C8-765B-4DAD-ADB7-5C9C66C1C28D}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.MockSender", "Castle.Components.Common.EmailSender.MockSender\Castle.Components.Common.EmailSender.MockSender-vs2003.csproj", "{1DA92714-7B61-48AB-B0E7-C06A1C6EE04C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.MockSender-vs2003", "Castle.Components.Common.EmailSender.MockSender\Castle.Components.Common.EmailSender.MockSender-vs2003.csproj", "{1DA92714-7B61-48AB-B0E7-C06A1C6EE04C}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.Tests", "Castle.Components.Common.EmailSender.Tests\Castle.Components.Common.EmailSender.Tests-vs2003.csproj", "{3962C62D-CE40-47D0-AE53-26A4C4AEFA06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.Tests-vs2003", "Castle.Components.Common.EmailSender.Tests\Castle.Components.Common.EmailSender.Tests-vs2003.csproj", "{3962C62D-CE40-47D0-AE53-26A4C4AEFA06}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -19,6 +19,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{CFF1D57F-9FEB-4941-B8FE-8E28F4A8AAC7}.Debug.ActiveCfg = Debug|.NET
@@ -40,7 +42,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt
-		default.build = default.build
 		License.txt = License.txt
 		Readme.txt = Readme.txt
 	EndGlobalSection

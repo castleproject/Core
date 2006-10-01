@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{0C9EE31D-A700-485B-948A-68E4A3614E71}"
     >
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)\App.config" "$(TargetPath).config"'
                 RootNamespace = "Castle.Facilities.IBatisNetIntegration.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -92,42 +92,42 @@
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\build\net-1.1\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Services.Transaction.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Transaction.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Windsor.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\build\net-1.1\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
-                    HintPath = "..\..\..\build\net-1.1\Castle.Core.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
                     Name = "IBatisNet.DataMapper"
                     AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\..\..\build\net-1.1\IBatisNet.DataMapper.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\IBatisNet.DataMapper.dll"
                 />
                 <Reference
                     Name = "IBatisNet.Common"
                     AssemblyName = "IBatisNet.Common"
-                    HintPath = "..\..\..\build\net-1.1\IBatisNet.Common.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\IBatisNet.Common.dll"
                 />
                 <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
-                    HintPath = "..\..\..\build\net-1.1\nunit.framework.dll"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.framework.dll"
                 />
             </References>
         </Build>
@@ -139,12 +139,16 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AssemblyInfo.cs"
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "BaseTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BaseTest.cs"
+                    RelPath = "ConfigHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -164,6 +168,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "providers.config"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Service.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -172,6 +180,10 @@
                     RelPath = "ServiceTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SqlMap.config"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Dao\AccountDao.cs"
@@ -187,6 +199,10 @@
                     RelPath = "Domain\Account.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Maps\Access\OleDb\Account.xml"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

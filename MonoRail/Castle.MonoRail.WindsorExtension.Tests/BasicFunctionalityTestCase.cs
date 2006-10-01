@@ -14,12 +14,12 @@
 
 namespace Castle.MonoRail.WindsorExtension.Tests
 {
-	using Castle.MonoRail.TestSupport;
+	using Castle.MonoRail.Framework.Tests;
 	
 	using NUnit.Framework;
 	
 	[TestFixture]
-	public class WindsorExtensionBasicFunctionalityTestCase : AbstractMRTestCase
+	public class WindsorExtensionBasicFunctionalityTestCase : AbstractTestCase
 	{
 		[Test]
 		public void SimpleControllerAction()

@@ -77,11 +77,12 @@
   <ItemGroup>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
-      <HintPath>..\..\build\net-2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -115,9 +116,6 @@
     <Compile Include="Adapters\ComponentModel\TestComponent.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AsyncInitializationContainerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -135,6 +133,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components\CircularDependencyComponents.cs" />
+    <Compile Include="Components\ComponentWithProperties.cs" />
     <Compile Include="Components\DotNet2Components.cs" />
     <Compile Include="Components\Employee.cs">
       <SubType>Code</SubType>
@@ -163,6 +162,7 @@
     <Compile Include="Components\Robot.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ConfigHelper.cs" />
     <Compile Include="Configuration2\ConfigWithStatementsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -222,6 +222,7 @@
     <Compile Include="InterceptorsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PropertiesInspectionBehaviorTestCase.cs" />
     <Compile Include="RealProxyTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -238,7 +239,6 @@
     <Compile Include="XmlProcessor\XmlProcessorTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Castle.Windsor.Tests.dll.config" />
     <Content Include="Configuration2\Properties\config_with_missing_properties.xml" />
     <Content Include="Configuration2\Properties\config_with_properties.xml" />
     <Content Include="Configuration2\Properties\config_with_properties_and_defines.xml" />
@@ -248,8 +248,12 @@
     <Content Include="Configuration2\Properties\properties.xml" />
     <Content Include="Configuration2\Properties\properties_using_properties.xml" />
     <Content Include="DotNet2Config\GenericsConfig.xml" />
-    <Content Include="Facilities\EventWiring\config.xml" />
+    <Content Include="Facilities\EventWiring\badconfig.xml" />
+    <Content Include="Facilities\EventWiring\multi.xml" />
+    <Content Include="Facilities\EventWiring\simple.xml" />
     <Content Include="installerconfig.xml" />
+    <Content Include="propertyInspectionBehavior.xml" />
+    <Content Include="propertyInspectionBehaviorInvalid.xml" />
     <Content Include="robotwireconfig.xml" />
     <Content Include="sample_config.xml" />
     <Content Include="XmlProcessor\TestFiles\AssemblyIncludeTestDisabled.xml" />
@@ -324,10 +328,14 @@
     <EmbeddedResource Include="XmlProcessor\TestFiles\include1.xml" />
     <EmbeddedResource Include="XmlProcessor\TestFiles\include2.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy $(ProjectDir)\Castle.Windsor.Tests.dll.config $(TargetPath).config</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

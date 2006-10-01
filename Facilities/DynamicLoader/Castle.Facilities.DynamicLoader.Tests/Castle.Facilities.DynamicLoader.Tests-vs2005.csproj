@@ -28,16 +28,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
-	  <Name>nunit.framework</Name>
-	  <HintPath>..\..\..\build\net-2.0\nunit.framework.dll</HintPath>
-	</Reference>
+      <Name>nunit.framework</Name>
+      <HintPath>..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="SimpleTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Sample.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

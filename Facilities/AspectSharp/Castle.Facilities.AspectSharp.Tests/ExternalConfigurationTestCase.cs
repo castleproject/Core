@@ -34,7 +34,7 @@ namespace Castle.Facilities.AspectSharp.Tests
 		[Test]
 		public void ExternalConfigurationUsage()
 		{
-			WindsorContainer container = new WindsorContainer( "../aop_castle_config.xml" );
+			WindsorContainer container = new WindsorContainer( ConfigHelper.ResolvePath("../aop_castle_config.xml") );
 
 			container.AddFacility( "aspectsharp", new AspectSharpFacility() );
 			

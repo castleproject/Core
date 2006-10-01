@@ -7,7 +7,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9C5E4B46-8214-4E26-BAF7-17C325DD6E1E}"
 	ProjectSection(SolutionItems) = preProject
 		Changes.txt = Changes.txt
-		configuration.xml = configuration.xml
 		default.build = default.build
 		License.txt = License.txt
 		Readme.txt = Readme.txt

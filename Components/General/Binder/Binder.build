@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-binder-component"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<target name="build" depends="binder" />
+
+	<target name="binder">
+		<nant buildfile="Castle.Components.Binder/Castle.Components.Binder.build" />
+		<nant buildfile="Castle.Components.Binder.Tests/Castle.Components.Binder.Tests.build" />
+	</target>
+
+</project>
