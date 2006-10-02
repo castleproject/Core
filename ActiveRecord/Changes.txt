@@ -1,5 +1,5 @@
-beta 4
-======
+Release Candidate 1
+===================
 
 - Added ActiveRecordModel.GetModels(), which returns an array containing every registered ActiveRecordModel.
 
