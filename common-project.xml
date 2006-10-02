@@ -163,6 +163,8 @@
 
 	<target name="common.set-assembly-attribute-values">
 		<property overwrite="false" name="assembly.is-cls-compliant" value="true" />
+		<property overwrite="false" name="assembly.is-com-visible" value="false" />
+		<property overwrite="false" name="assembly.guid" value="" />
 		<property overwrite="false" name="assembly.allow-partially-trusted-callers" value="false" />
 		<property overwrite="false" name="assembly.description" value="" />
 		<property overwrite="false" name="assembly.product" value="${project::get-name()}" />
@@ -186,10 +188,13 @@
 				<import namespace="System" />
 				<import namespace="System.Reflection" />
 				<import namespace="System.Runtime.CompilerServices" />
+				<import namespace="System.Runtime.InteropServices" />
 				<import namespace="System.Security" if="${assembly.allow-partially-trusted-callers}" />
 			</imports>
 			<attributes>
 				<attribute type="CLSCompliantAttribute" value="${assembly.is-cls-compliant}" />
+				<attribute type="ComVisibleAttribute" value="${assembly.is-com-visible}" />
+				<attribute type="GuidAttribute" value="${assembly.guid}" if="${assembly.guid != ''}" />
 				<attribute type="AssemblyTitleAttribute" value="${assembly.title}" />
 				<attribute type="AssemblyDescriptionAttribute" value="${assembly.description}" />
 				<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />
