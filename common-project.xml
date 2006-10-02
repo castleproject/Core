@@ -61,9 +61,22 @@
 			<resources refid="project.resources" />
 		</csc>
 
-		<if test="${file::exists(path::combine(src.dir, 'App.config'))}">
+		<!-- Check if there is a framework specific config file and use that -->
+		<property name="app.config.src" value="${src.dir}/App-${framework::get-target-framework()}.config" />
+		<if test="${file::exists(app.config.src)}">
 			<copy 
-				file="${src.dir}/App.config"
+				file="${app.config.src}"
+				tofile="${build.dir}/${project::get-name()}.dll.config"
+			/>
+
+			<call target="common.configure-tests" />
+			<property name="app.config.src.found" value="true" />
+		</if>
+		<!-- In case there was no framework specific config check if there is a framework neutral file and use that. -->
+		<property name="app.config.src" value="${src.dir}/App.config" />
+		<if test="${file::exists(app.config.src)}" unless="${property::exists('app.config.src.found')}">
+			<copy 
+				file="${app.config.src}"
 				tofile="${build.dir}/${project::get-name()}.dll.config"
 			/>
 
