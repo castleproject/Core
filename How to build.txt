@@ -68,12 +68,12 @@ Build options
 Compiling a Debug version
 -------------------------
 
-  > nant -D:debug=true -D:optimize=false
+  > nant -D:project.config=debug
 
 Compiling a version not strongly signed
 ---------------------------------------
 
-  > nant -D:strong=false
+  > nant -D:sign=false
 
 
 More questions? 
