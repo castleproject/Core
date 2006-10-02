@@ -17,9 +17,10 @@ namespace Anakia
 	using System;
 	using System.Collections;
 
-	public class DocumentNodeCollection : CollectionBase
+	public class DocumentNodeCollection : IEnumerable
 	{
 		private readonly Folder owner;
+		private SortedList list = new SortedList(DocumentNodeComparer.Instance);
 		private DocumentNode navNode;
 		private DocumentNode indexNode;
 
@@ -51,7 +52,12 @@ namespace Anakia
 				indexNode = node;
 			}
 			
-			InnerList.Add(node);
+			list.Add(node.Meta.Order, node);
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return list.Values.GetEnumerator();
 		}
 	}
 }

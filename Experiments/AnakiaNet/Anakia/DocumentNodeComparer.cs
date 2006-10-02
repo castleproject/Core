@@ -14,37 +14,18 @@
 
 namespace Anakia
 {
-	using System;
+	using System.Collections;
 
-	public class DocumentMeta
+	public class DocumentNodeComparer : IComparer
 	{
-		private String title;
-		private String[] categories = new String[0];
-		private String audience;
-		private int order;
-
-		public int Order
+		public static DocumentNodeComparer Instance = new DocumentNodeComparer();
+		
+		public int Compare(object x, object y)
 		{
-			get { return order; }
-			set { order = value; }
-		}
-
-		public string Title
-		{
-			get { return title; }
-			set { title = value; }
-		}
-
-		public string[] Categories
-		{
-			get { return categories; }
-			set { categories = value; }
-		}
-
-		public string Audience
-		{
-			get { return audience; }
-			set { audience = value; }
+			int nodeX = (int) x;
+			int nodeY = (int) y;
+			
+			return nodeX - nodeY;
 		}
 	}
 }

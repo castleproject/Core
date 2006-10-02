@@ -49,6 +49,7 @@ namespace Anakia
 		private JavaScriptFormat jsFormatter = new JavaScriptFormat();
 		private TsqlFormat tsqlFormatter = new TsqlFormat();
 		private VisualBasicFormat vbFormatter = new VisualBasicFormat();
+		private int orderCount = 1;
 
 		public AnakiaTask()
 		{
@@ -207,6 +208,7 @@ namespace Anakia
 			catch(Exception ex)
 			{
 				Console.WriteLine(ex);
+				Console.Read();
 			}
 		}
 
@@ -233,6 +235,17 @@ namespace Anakia
 		{
 			DocumentMeta meta = new DocumentMeta();
 
+			XmlNode order = xmlDocument.SelectSingleNode("document/@order");
+			
+			if (order != null)
+			{
+				meta.Order = Convert.ToInt32(order.Value);
+			}
+			else
+			{
+				meta.Order = orderCount++;
+			}
+			
 			XmlNode properties = xmlDocument.SelectSingleNode("document/properties");
 
 			if (properties != null)

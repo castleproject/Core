@@ -32,6 +32,11 @@ namespace Anakia
 			}
 		}
 		
+		public int GetLevels(String path)
+		{
+			return path.Split('/').Length - 1;
+		}
+		
 		public Stack CreateStack()
 		{
 			return new Stack();
