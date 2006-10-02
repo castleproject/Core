@@ -16,7 +16,7 @@
 			clean is first target executed so we can get rid of
 			any old assemblies
 		-->
-		<nant buildfile="default.build" target="clean package">
+		<nant buildfile="default.build" target="clean build installer">
 			<properties>
 				<property name="nant.settings.currentframework" value="net-1.1" />
 				<property name="project.config" value="release" />
@@ -33,7 +33,7 @@
 			clean is first target executed so we can get rid of
 			any old assemblies
 		-->
-		<nant buildfile="default.build" target="clean package">
+		<nant buildfile="default.build" target="clean build installer">
 			<properties>
 				<property name="nant.settings.currentframework" value="net-2.0" />
 				<property name="project.config" value="release" />
