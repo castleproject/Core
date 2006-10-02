@@ -153,6 +153,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "App-net-2.0.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "BugTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

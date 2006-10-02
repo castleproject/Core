@@ -295,13 +295,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App-net-2.0.config" />
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)App-net-2.0.config" "$(TargetPath).config"</PostBuildEvent>
   </PropertyGroup>
 </Project>
