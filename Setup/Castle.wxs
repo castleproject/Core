@@ -215,6 +215,9 @@
 					<!-- DynProxy -->
 					<File Id="n2file35" Name="dynproxy.DLL" LongName="Castle.DynamicProxy.dll"				src="$(var.BuildNet20Dir)\Castle.DynamicProxy.dll" />
 
+					<!-- DynProxy2 -->
+					<File Id="n2file35a" Name="DP2.DLL" LongName="Castle.DynamicProxy2.dll"				src="$(var.BuildNet20Dir)\Castle.DynamicProxy2.dll" />
+
 					<!-- IoC -->
 					<File Id="n2file36" Name="kernel.DLL"  LongName="Castle.MicroKernel.dll"			 	src="$(var.BuildNet20Dir)\Castle.MicroKernel.dll" />
 					<File Id="n2file38" Name="windsor.DLL" LongName="Castle.Windsor.dll"					src="$(var.BuildNet20Dir)\Castle.Windsor.dll" />
