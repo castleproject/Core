@@ -35,7 +35,7 @@ namespace Castle.ActiveRecord
 		
 		protected IList queryModifiers;
 
-		public ActiveRecordBaseQuery(Type type)
+		protected ActiveRecordBaseQuery(Type type)
 		{
 			this.targetType = type;
 		}
@@ -101,7 +101,9 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual object Clone()
 		{
-			return this.MemberwiseClone();
+			ActiveRecordBaseQuery clone = (ActiveRecordBaseQuery) this.MemberwiseClone();
+			clone.queryModifiers = new ArrayList(this.queryModifiers);
+			return clone;
 		}
 
 		/// <summary>
