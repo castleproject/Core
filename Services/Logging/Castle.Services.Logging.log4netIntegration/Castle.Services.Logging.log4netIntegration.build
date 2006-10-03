@@ -9,7 +9,7 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="0.1.0.0" />
+		<property name="assembly.version" value="1.0.0.0" />
 		<property name="assembly.description" value="Castle.Services.Logging implementation for log4net" />
 
 		<fileset id="project.sources">
