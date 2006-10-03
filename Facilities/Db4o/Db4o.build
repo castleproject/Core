@@ -4,7 +4,10 @@
 	default="build"
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
-    
+
+	<property name="db4o.test" value="true" unless="${property::exists('db4o.test')}" />
+	<property name="common.run-tests" value="${db4o.test}" />
+
 	<target name="build" depends="facility" />
 	
 	<target name="facility">

@@ -4,7 +4,10 @@
 	default="build"
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
-    
+   
+	<property name="ibatis.test" value="true" unless="${property::exists('ibatis.test')}" />
+	<property name="common.run-tests" value="${ibatis.test}" />
+ 
 	<target name="build" depends="facility" />
 	
 	<target name="facility">
