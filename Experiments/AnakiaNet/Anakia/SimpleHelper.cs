@@ -19,6 +19,11 @@ namespace Anakia
 
 	public class SimpleHelper
 	{
+		public String RemoveOffset(String offset, String path)
+		{
+			return path.Substring(offset.Length);
+		}
+		
 		public String Relativize(String offset, String path, String page)
 		{
 			if (offset == path)

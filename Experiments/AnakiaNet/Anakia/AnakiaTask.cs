@@ -49,7 +49,7 @@ namespace Anakia
 		private JavaScriptFormat jsFormatter = new JavaScriptFormat();
 		private TsqlFormat tsqlFormatter = new TsqlFormat();
 		private VisualBasicFormat vbFormatter = new VisualBasicFormat();
-		private int orderCount = 1;
+		private int orderCount = int.MinValue;
 
 		public AnakiaTask()
 		{
