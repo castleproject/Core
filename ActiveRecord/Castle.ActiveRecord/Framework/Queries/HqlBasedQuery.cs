@@ -18,13 +18,20 @@ namespace Castle.ActiveRecord.Queries
 	using System.Collections;
 	using System.Text.RegularExpressions;
 
+	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Queries.Modifiers;
 
 	using NHibernate;
 	using NHibernate.Type;
 
+	public enum QueryLanguage
+	{
+		Hql = 0,
+		Sql = 1,
+	}
+	
 	/// <summary>
-	/// Base class for all HQL-based queries.
+	/// Base class for all HQL or SQL-based queries.
 	/// </summary>
 	public class HqlBasedQuery : ActiveRecordBaseQuery
 	{
@@ -32,15 +39,25 @@ namespace Castle.ActiveRecord.Queries
 			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
 			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
-		private String hql;
+		private QueryLanguage queryLanguage;
+		private String query;
 
-		public HqlBasedQuery(Type targetType, string hql) : base(targetType)
+		public HqlBasedQuery(Type targetType, string query) : this(targetType, QueryLanguage.Hql, query)
 		{
-			this.hql = hql;
+		}
+		
+		public HqlBasedQuery(Type targetType, string query, params object[] positionalParameters) : this(targetType, QueryLanguage.Hql, query, positionalParameters)
+		{
+		}
+		
+		public HqlBasedQuery(Type targetType, QueryLanguage queryLanguage, string query) : base(targetType)
+		{
+			this.query = query;
+			this.queryLanguage = queryLanguage;
 		}
 
-		public HqlBasedQuery(Type targetType, string hql, params object[] positionalParameters)
-			: this(targetType, hql)
+		public HqlBasedQuery(Type targetType, QueryLanguage queryLanguage, string query, params object[] positionalParameters)
+			: this(targetType, queryLanguage, query)
 		{
 			if (positionalParameters != null && positionalParameters.Length > 0)
 			{
@@ -55,8 +72,8 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		public string Query
 		{
-			get { return hql; }
-			set { hql = value; }
+			get { return query; }
+			set { query = value; }
 		}
 
 		#region SetParameter and SetParameterList
@@ -97,6 +114,19 @@ namespace Castle.ActiveRecord.Queries
 		
 		#endregion
 		
+		#region AddSqlReturnDefinition
+		
+		/// <summary>
+		/// Adds a SQL query return definition.
+		/// See <see cref="NHibernate.ISession.CreateSQLQuery(string,string[],Type[])"/> for more information.
+		/// </summary>
+		public void AddSqlReturnDefinition(Type returnType, string returnAlias)
+		{
+			AddModifier(new SqlQueryReturnDefinition(returnType, returnAlias));
+		}
+		
+		#endregion
+		
 		/// <summary>
 		/// Tries to obtain the record count for the current query.
 		/// </summary>
@@ -105,7 +135,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			try
 			{
-				ScalarQuery q = new ScalarQuery(Target, PrepareQueryForCount(Query));
+				ScalarQuery q = new ScalarQuery(Target, PrepareQueryForCount(this.Query));
 				
 				if (queryModifiers != null)
 				{
@@ -127,31 +157,61 @@ namespace Castle.ActiveRecord.Queries
 			}
 		}
 		
-		protected virtual String PrepareQueryForCount(String query)
+		protected virtual String PrepareQueryForCount(String countQuery)
 		{
-			query = rxOrderBy.Replace(query, String.Empty);
+			countQuery = rxOrderBy.Replace(countQuery, String.Empty);
 			
-			if (rxNoSelect.IsMatch(query))
+			if (rxNoSelect.IsMatch(countQuery))
 			{
-				query = "select count(*) " + query;
+				countQuery = "select count(*) " + countQuery;
 			}
 			else
 			{
-				query = "select count(*) from (" + query + ")";
+				countQuery = "select count(*) from (" + countQuery + ")";
 			}
 			
-			Log.Debug("Query prepared for count: {0}", query);
+			Log.Debug("Query prepared for count: {0}", countQuery);
 			
-			return query;
+			return countQuery;
 		}
 
 		protected override IQuery CreateQuery(ISession session)
 		{
-			IQuery query = session.CreateQuery(hql);
+			IQuery nhibQuery;
+			
+			switch (queryLanguage)
+			{
+				case QueryLanguage.Hql:
+					nhibQuery = session.CreateQuery(this.Query);
+					break;
+				
+				case QueryLanguage.Sql:
+					ArrayList queryReturnAliases = new ArrayList();
+					ArrayList queryReturnTypes = new ArrayList();
+					if (queryModifiers != null)
+					{
+						foreach (IQueryModifier mod in queryModifiers)
+						{
+							SqlQueryReturnDefinition returnDef = mod as SqlQueryReturnDefinition;
+							if (returnDef == null)
+								continue;
+							
+							queryReturnAliases.Add(returnDef.ReturnAlias);
+							queryReturnTypes.Add(returnDef.ReturnType);
+						}
+					}
+					nhibQuery = session.CreateSQLQuery(this.Query, 
+					                                   (String[]) queryReturnAliases.ToArray(typeof(String)), 
+					                                   (Type[]) queryReturnTypes.ToArray(typeof(Type)));
+					break;
+				
+				default:
+					throw new ActiveRecordException("Query language not supported: " + queryLanguage);
+			}
 
-			ApplyModifiers(query);
+			ApplyModifiers(nhibQuery);
 
-			return query;
+			return nhibQuery;
 		}
 	}
 }

@@ -1,6 +1,9 @@
 Release Candidate 1
 ===================
 
+- Added support for queries using the SQL language instead of HQL, 
+  on classes derived from HqlBasedQuery (SimpleQuery, ScalarQuery, etc).
+
 - Added ActiveRecordModel.GetModels(), which returns an array containing every registered ActiveRecordModel.
 
 - Fixed AR-53

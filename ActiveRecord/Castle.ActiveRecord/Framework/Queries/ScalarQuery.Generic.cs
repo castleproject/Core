@@ -28,33 +28,57 @@ namespace Castle.ActiveRecord.Queries
 	/// <typeparam name="T">The resulting object type</typeparam>
 	public class ScalarQuery<T> : ScalarQuery, IActiveRecordQuery<T>
 	{
-#region Constructors
+		#region Constructors
 		/// <summary>
-		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="hql"/>,
+		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="query"/>,
 		/// using the specified positional <paramref name="positionalParameters"/> and
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecord type</param>
-		/// <param name="hql">The HQL</param>
+		/// <param name="query">The query</param>
 		/// <param name="positionalParameters">The positional positionalParameters</param>
-		public ScalarQuery(Type targetType, String hql, params Object[] positionalParameters)
-			: base(targetType, hql, positionalParameters)
+		public ScalarQuery(Type targetType, String query, params Object[] positionalParameters)
+			: base(targetType, query, positionalParameters)
 		{
 		}
 
 		/// <summary>
-		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="hql"/> and
+		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="query"/> and
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecord type</param>
-		/// <param name="hql">The HQL</param>
-		public ScalarQuery(Type targetType, String hql)
-			: base(targetType, hql)
+		/// <param name="query">The query</param>
+		public ScalarQuery(Type targetType, String query)
+			: base(targetType, query)
+		{
+		}
+
+		/// <summary>
+		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="query"/>,
+		/// using the specified positional <paramref name="positionalParameters"/> and
+		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
+		/// </summary>
+		/// <param name="targetType">The target ActiveRecord type</param>
+		/// <param name="query">The query</param>
+		/// <param name="positionalParameters">The positional positionalParameters</param>
+		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, String query, params Object[] positionalParameters)
+			: base(targetType, queryLanguage, query, positionalParameters)
+		{
+		}
+
+		/// <summary>
+		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="query"/> and
+		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
+		/// </summary>
+		/// <param name="targetType">The target ActiveRecord type</param>
+		/// <param name="query">The query</param>
+		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, String query)
+			: base(targetType, queryLanguage, query)
 		{
 		}
 		#endregion
 
-#region IActiveRecordQuery<T> implementation
+		#region IActiveRecordQuery<T> implementation
 		T IActiveRecordQuery<T>.Execute(ISession session)
 		{
 			return (T) InternalExecute(session);

@@ -34,27 +34,54 @@ namespace Castle.ActiveRecord.Queries
 		#region Constructors
 
 		/// <summary>
-		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
+		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="query"/>,
 		/// using the specified positional <paramref name="positionalParameters"/>.
 		/// The target ActiveRecord type is <typeparamref name="T"/>.
 		/// </summary>
-		/// <param name="hql">The HQL</param>
-		/// <param name="positionalParameters">The positional positionalParameters</param>
-		public SimpleQuery(String hql, params Object[] positionalParameters)
-			: base(typeof(T), hql, positionalParameters)
+		/// <param name="query">The query</param>
+		/// <param name="positionalParameters">The positional parameters</param>
+		public SimpleQuery(String query, params Object[] positionalParameters)
+			: base(typeof(T), query, positionalParameters)
 		{
 		}
 
 		/// <summary>
-		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
+		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="query"/>,
+		/// using the specified positional <paramref name="positionalParameters"/>.
+		/// The target ActiveRecord type is <typeparamref name="T"/>.
+		/// </summary>
+		/// <param name="query">The query</param>
+		/// <param name="queryLanguage">The query language</param>
+		/// <param name="positionalParameters">The positional parameters</param>
+		public SimpleQuery(QueryLanguage queryLanguage, String query, params Object[] positionalParameters)
+			: base(typeof(T), queryLanguage, query, positionalParameters)
+		{
+		}
+
+		/// <summary>
+		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="query"/>,
 		/// using the specified positional <paramref name="positionalParameters"/> and
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecord type</param>
-		/// <param name="hql">The HQL</param>
-		/// <param name="positionalParameters">The positional positionalParameters</param>
-		public SimpleQuery(Type targetType, String hql, params Object[] positionalParameters)
-			: base(targetType, hql, positionalParameters)
+		/// <param name="query">The query</param>
+		/// <param name="positionalParameters">The positional parameters</param>
+		public SimpleQuery(Type targetType, String query, params Object[] positionalParameters)
+			: base(targetType, query, positionalParameters)
+		{
+		}
+
+		/// <summary>
+		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="query"/>,
+		/// using the specified positional <paramref name="positionalParameters"/> and
+		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
+		/// </summary>
+		/// <param name="targetType">The target ActiveRecord type</param>
+		/// <param name="queryLanguage">The query language</param>
+		/// <param name="query">The query</param>
+		/// <param name="positionalParameters">The positional parameters</param>
+		public SimpleQuery(Type targetType, QueryLanguage queryLanguage, String query, params Object[] positionalParameters)
+			: base(targetType, queryLanguage, query, positionalParameters)
 		{
 		}
 

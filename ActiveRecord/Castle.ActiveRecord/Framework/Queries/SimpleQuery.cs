@@ -28,11 +28,13 @@ namespace Castle.ActiveRecord.Queries
 	{
 		private Type returnType;
 
+		#region Constructors
+		
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c>.
 		/// </summary>
-		public SimpleQuery(Type targetType, Type returnType, string hql, params object[] parameters)
-			: base(targetType, hql, parameters)
+		public SimpleQuery(Type targetType, Type returnType, string query, params object[] parameters)
+			: base(targetType, query, parameters)
 		{
 			this.returnType = returnType;
 		}
@@ -40,10 +42,29 @@ namespace Castle.ActiveRecord.Queries
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c>.
 		/// </summary>
-		public SimpleQuery(Type returnType, string hql, params object[] positionalParameters)
-			: this(returnType, returnType, hql, positionalParameters)
+		public SimpleQuery(Type returnType, string query, params object[] positionalParameters)
+			: this(returnType, returnType, query, positionalParameters)
 		{
 		}
+		
+		/// <summary>
+		/// Creates a new <c>SimpleQuery</c>.
+		/// </summary>
+		public SimpleQuery(Type targetType, Type returnType, QueryLanguage queryLanguage, string query, params object[] parameters)
+			: base(targetType, queryLanguage, query, parameters)
+		{
+			this.returnType = returnType;
+		}
+
+		/// <summary>
+		/// Creates a new <c>SimpleQuery</c>.
+		/// </summary>
+		public SimpleQuery(Type returnType, QueryLanguage queryLanguage, string query, params object[] positionalParameters)
+			: this(returnType, returnType, queryLanguage, query, positionalParameters)
+		{
+		}
+		
+		#endregion
 
 		/// <summary>
 		/// Executes the query and converts the results into a strongly-typed

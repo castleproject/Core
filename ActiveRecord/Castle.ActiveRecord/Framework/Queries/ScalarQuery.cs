@@ -23,13 +23,23 @@ namespace Castle.ActiveRecord.Queries
 	{
 		#region Constructors
 		
-		public ScalarQuery(Type targetType, string hql, params Object[] positionalParameters)
-			: base(targetType, hql, positionalParameters)
+		public ScalarQuery(Type targetType, string query, params Object[] positionalParameters)
+			: base(targetType, query, positionalParameters)
 		{
 		}
 
-		public ScalarQuery(Type targetType, string hql)
-			: base(targetType, hql)
+		public ScalarQuery(Type targetType, string query)
+			: base(targetType, query)
+		{
+		}
+		
+		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, string query, params Object[] positionalParameters)
+			: base(targetType, queryLanguage, query, positionalParameters)
+		{
+		}
+
+		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, string query)
+			: base(targetType, queryLanguage, query)
 		{
 		}
 		
