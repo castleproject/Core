@@ -27,6 +27,7 @@ namespace Castle.MonoRail.Framework
 	public class EngineContextModule : IHttpModule 
 	{
 		internal static readonly String RailsContextKey = "rails.context";
+		private static readonly Object initLock = new Object();
 
 		private static MonoRailServiceContainer container;
 			
@@ -37,12 +38,13 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context"></param>
 		public void Init(HttpApplication context)
 		{
-			// Possible race condition here, but not really important
-			if (container == null)
+			lock (initLock)
 			{
-				container = new MonoRailServiceContainer();
-
-				container.Start();
+				if (container == null)
+				{
+					container = new MonoRailServiceContainer();
+					container.Start();
+				}
 			}
 
 			SubscribeToApplicationHooks(context);
