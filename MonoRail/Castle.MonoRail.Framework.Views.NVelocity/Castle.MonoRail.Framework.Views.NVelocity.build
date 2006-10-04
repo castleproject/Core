@@ -12,10 +12,6 @@
 		<property name="assembly.description" value="" />
 		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />

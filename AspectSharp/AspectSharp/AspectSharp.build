@@ -17,10 +17,6 @@
 		<property name="assembly.copyright" value="Copyright (c) Original author or authors" />
 		<property name="assembly.version" value="2.1.1.1" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="antlr.runtime.dll"  />
 			<include name="AopAlliance.dll"  />

@@ -11,11 +11,6 @@
 		<property name="assembly.version" value="1.0.0.0" />
 		<property name="assembly.description" value="MVC web framework for .NET" />
 
-		<fileset id="project.sources">
-
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />

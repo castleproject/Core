@@ -11,10 +11,6 @@
 	<target name="init" depends="common.init">
 		<property name="assembly.version" value="1.0.0.0" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="nunit.framework.dll" />

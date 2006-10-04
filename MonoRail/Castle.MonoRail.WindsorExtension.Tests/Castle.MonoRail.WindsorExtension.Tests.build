@@ -20,10 +20,6 @@
 			<include name="Castle.MonoRail.TestSupport.dll" />
 			<include name="Castle.MonoRail.WindsorExtension.dll" />
 		</assemblyfileset>
-
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

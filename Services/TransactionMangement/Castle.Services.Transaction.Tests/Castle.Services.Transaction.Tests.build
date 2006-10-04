@@ -18,10 +18,6 @@
 			<include name="nunit.framework.dll"/>
 			<include name="Castle.Services.Transaction.dll" />
 		</assemblyfileset>
-
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
 	</target>
 
 	<target name="put-settings-into-app-config">

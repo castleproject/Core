@@ -13,10 +13,6 @@
 		<property name="assembly.is-cls-compliant" value="false" />
 		<property name="assembly.sign" value="false" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
 			<include name="Castle.Components.Binder.dll" />

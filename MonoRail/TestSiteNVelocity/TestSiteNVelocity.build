@@ -12,10 +12,6 @@
 		<property name="assembly.version" value="1.0.0.0" />
 		<property name="assembly.sign" value="false" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />

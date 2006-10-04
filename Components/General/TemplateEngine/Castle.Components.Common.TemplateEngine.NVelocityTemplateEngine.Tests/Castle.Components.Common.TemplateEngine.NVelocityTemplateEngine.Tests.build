@@ -11,10 +11,6 @@
 	<target name="init" depends="common.init">
 		<property name="assembly.description" value="The Unit Tests for Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
 			<include name="NVelocity.dll" />

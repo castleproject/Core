@@ -24,10 +24,6 @@
 			<include name="Castle.ActiveRecord.dll" />
 			<include name="Castle.Facilities.AutomaticTransactionManagement.dll" />
 		</assemblyfileset>
-
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
 	</target>
 
 	<target name="configure-tests">

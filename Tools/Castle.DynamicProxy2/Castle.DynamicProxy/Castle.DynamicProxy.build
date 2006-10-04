@@ -15,10 +15,6 @@
 		<property name="assembly.allow-partially-trusted-callers" value="true" />
 		<property name="assembly.is-cls-compliant" value="false" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 		</assemblyfileset>
 	</target>

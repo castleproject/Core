@@ -27,10 +27,6 @@
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
 		</assemblyfileset>
-
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

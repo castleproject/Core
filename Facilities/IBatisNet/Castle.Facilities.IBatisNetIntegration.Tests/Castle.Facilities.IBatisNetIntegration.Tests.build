@@ -25,10 +25,6 @@
 			<include name="Castle.Facilities.AutomaticTransactionManagement.dll" />
 		</assemblyfileset>
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
 			<include name="${src.dir}/providers.config" />
 			<include name="${src.dir}/Maps/**.xml" />

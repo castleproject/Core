@@ -14,10 +14,6 @@
 		<property name="assembly.copyright" value="Copyright (c) 2004,2005 Castle Project - http://www.castleproject.org" />
 		<property name="assembly.allow-partially-trusted-callers" value="true" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="System.Web.dll" />
 		</assemblyfileset>

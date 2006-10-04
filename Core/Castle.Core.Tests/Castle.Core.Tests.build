@@ -17,10 +17,6 @@
 			<include name="Castle.Core.dll" />
 		</assemblyfileset>
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false" basedir="${src.dir}">
 			<include name="**/*.txt" />
 			<exclude name="obj/**" />

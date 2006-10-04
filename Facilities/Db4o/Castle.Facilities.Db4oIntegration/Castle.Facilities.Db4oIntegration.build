@@ -12,10 +12,6 @@
 		<property name="assembly.version" value="1.0.0.0" />
 		<property overwrite="false" name="assembly.is-cls-compliant" value="false" if="${nant.settings.currentframework=='net-1.1'}" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="db4o.dll" />
 			<include name="Castle.Core.dll" />

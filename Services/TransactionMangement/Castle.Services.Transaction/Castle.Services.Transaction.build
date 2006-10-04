@@ -12,10 +12,6 @@
 		<property name="assembly.version" value="0.1.0.0" />
 		<property name="assembly.description" value="Castle Transaction Services" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
 		</assemblyfileset>

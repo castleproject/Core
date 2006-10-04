@@ -24,10 +24,6 @@
 			<include name="Castle.Facilities.AutomaticTransactionManagement.dll" />
 		</assemblyfileset>
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
 			<include name="${src.dir}/**/*.hbm.xml" />
 			<exclude name="${src.dir}/obj/**" />

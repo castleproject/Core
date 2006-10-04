@@ -12,10 +12,6 @@
 		<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
 		<property name="common.run-tests" value="${activerecord.test}" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
 			<include name="Castle.MonoRail.TestSupport.dll" />

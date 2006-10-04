@@ -13,10 +13,6 @@
 		<property name="assembly.sign" value="false" />
 		<property name="assembly.is-cls-compliant" value="false" />
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="antlr.runtime.dll" />
 			<include name="AopAlliance.dll" />

@@ -17,10 +17,6 @@
 			<include name="Castle.DynamicProxy.dll" />
 		</assemblyfileset>
 
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false">
 			<include name="${src.dir}/**/*.txt" />
 			<exclude name="obj/**" />

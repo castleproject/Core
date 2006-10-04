@@ -24,10 +24,6 @@
 			<include name="Castle.Windsor.dll" />
 			<include name="Castle.Facilities.AutomaticTransactionManagement.dll" />
 		</assemblyfileset>
-
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

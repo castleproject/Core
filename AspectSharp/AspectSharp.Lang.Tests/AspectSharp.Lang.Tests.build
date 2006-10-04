@@ -24,10 +24,6 @@
 			<include name="AspectSharp.dll" />
 			<include name="AspectSharp.Lang.dll" />
 		</assemblyfileset>
-
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

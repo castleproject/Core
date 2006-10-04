@@ -12,10 +12,6 @@
 		<property name="assembly.version" value="0.5.0.0000" />
 		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
 		
-		<fileset id="project.sources" basedir="${src.dir}">
-			<include name="**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="System.Data.dll" />
 		</assemblyfileset>

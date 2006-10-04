@@ -9,10 +9,6 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.cs" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
 			<include name="Castle.Core.dll" />
@@ -25,7 +21,6 @@
 			<include name="**/*.xml" />
 			<exclude name="obj/**" />
 		</resourcefileset>
-
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
