@@ -40,7 +40,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
         /// configuration
         /// </summary>
         /// <param name="type"></param>
-        /// <returns></returns>
+		/// <param name="configuration"></param>
+		/// <returns></returns>
         bool CanHandleType(Type type, IConfiguration configuration);
 
 		/// <summary>

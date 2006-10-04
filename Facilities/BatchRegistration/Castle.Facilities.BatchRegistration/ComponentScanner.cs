@@ -94,7 +94,11 @@ namespace Castle.Facilities.BatchRegistration
 				String message = 
 					String.Format("Could not load the specified assembly {0}", _assemblyName);
 				
+#if DOTNET2
+				throw new ConfigurationErrorsException(message, ex);
+#else
 				throw new ConfigurationException(message, ex);
+#endif
 			}
 		}
 

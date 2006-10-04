@@ -335,7 +335,7 @@ namespace NVelocity.Runtime.Parser
 			bufcolumn = null;
 		}
 
-		/// <summary> Method to adjust line and column numbers for the start of a token.<BR>
+		/// <summary> Method to adjust line and column numbers for the start of a token.<br/>
 		/// </summary>
 		public void AdjustBeginLineColumn(int newLine, int newCol)
 		{

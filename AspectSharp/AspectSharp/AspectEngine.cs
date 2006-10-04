@@ -95,6 +95,7 @@ namespace AspectSharp
 		/// your interceptors must be capable of respoding to them. 
 		/// </summary>
 		/// <param name="classType">Concrete class with a available constructor (public or protected) to be wrapped</param>
+		/// <param name="constructorArgs"></param>
 		/// <returns>A proxy</returns>
 		public virtual object WrapClass(Type classType, params object[] constructorArgs)
 		{

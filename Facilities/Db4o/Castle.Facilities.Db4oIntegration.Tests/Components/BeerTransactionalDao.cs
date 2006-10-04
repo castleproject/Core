@@ -21,7 +21,9 @@ namespace Castle.Facilities.Db4oIntegration.Tests.Components
 	[AutoDb4oTransaction]
 	public class BeerTransactionalDao : BeerDao
 	{
-		public BeerTransactionalDao(ObjectContainer objContainer) : base(objContainer)
+		[CLSCompliant(false)]
+		public BeerTransactionalDao(ObjectContainer objContainer)
+			: base(objContainer)
 		{
 		}
 	}

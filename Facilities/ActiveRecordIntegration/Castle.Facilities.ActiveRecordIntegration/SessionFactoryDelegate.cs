@@ -28,7 +28,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	/// <summary>
 	/// Implements <see cref="ISessionFactory"/> allowing 
 	/// it to be used by the container as an ordinary component.
-	/// However only <see cref="ISessionFactory.OpenSession"/>
+	/// However only <see cref="ISessionFactory.OpenSession(IDbConnection)"/>
 	/// is implemented
 	/// </summary>
 	public sealed class SessionFactoryDelegate : ISessionFactory

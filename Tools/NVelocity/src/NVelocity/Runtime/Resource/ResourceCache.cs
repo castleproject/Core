@@ -65,9 +65,6 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		/// <param name="resourceKey">resource to be removed
 		/// </param>
-		/// <param name="Resource">stored under key
-		///
-		/// </param>
 		Resource remove(Object resourceKey);
 
 		/// <summary>  returns an Iterator of Keys in the cache

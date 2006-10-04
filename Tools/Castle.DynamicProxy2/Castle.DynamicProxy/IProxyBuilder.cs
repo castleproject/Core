@@ -39,20 +39,21 @@ namespace Castle.DynamicProxy
 		/// <returns></returns>
 		Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options);
 
-		/// <summary>
+/*		/// <summary>
 		/// Implementors should return a proxy for the specified interface
 		/// </summary>
 		/// <param name="theInterface"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>
 		// Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options);
-
+*/
 		/// <summary>
 		/// Implementors should return a proxy for the specified
 		/// interface that 'proceeds' executions to the 
 		/// specified target
 		/// </summary>
 		/// <param name="theInterface"></param>
+		/// <param name="interfaces"></param>
 		/// <param name="targetType"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>

@@ -13,6 +13,7 @@
 		<property name="assembly.description" value="Dynamic Proxy Generator for the CLR" />
 		<property name="assembly.copyright" value="Copyright (c) 2004,2005,2006 Castle Project - http://www.castleproject.org" />
 		<property name="assembly.allow-partially-trusted-callers" value="true" />
+		<property name="assembly.is-cls-compliant" value="false" />
 
 		<fileset id="project.sources">
 			<include name="${src.dir}/**/*.cs" />

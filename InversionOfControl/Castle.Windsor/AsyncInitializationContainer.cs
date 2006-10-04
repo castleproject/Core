@@ -259,7 +259,7 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
-		/// Shortcut to the method <see cref="Resolve"/>
+		/// Shortcut to the method <see cref="Resolve(String)"/>
 		/// </summary>
 		public override object this[String key]
 		{
@@ -282,7 +282,7 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
-		/// Shortcut to the method <see cref="Resolve"/>
+		/// Shortcut to the method <see cref="Resolve(Type)"/>
 		/// </summary>
 		public override object this[Type service]
 		{

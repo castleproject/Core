@@ -44,6 +44,7 @@ namespace Castle.Windsor.Proxy
 		/// <param name="callable"></param>
 		/// <param name="proxy"></param>
 		/// <param name="method"></param>
+		/// <param name="fieldTarget"></param>
 		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method, object fieldTarget) : base(callable, proxy, method, fieldTarget)
 		{
 		}

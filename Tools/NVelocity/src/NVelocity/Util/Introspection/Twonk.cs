@@ -7,7 +7,6 @@ namespace NVelocity.Util.Introspection
 	/// </summary>
 	internal class Twonk
 	{
-		public int distance;
 		public int[] vec;
 
 		public Twonk(int size)

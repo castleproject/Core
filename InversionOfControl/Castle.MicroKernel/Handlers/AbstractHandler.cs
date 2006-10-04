@@ -66,7 +66,7 @@ namespace Castle.MicroKernel.Handlers
 
     	/// <summary>
     	/// Saves the kernel instance, subscribes to 
-		/// <see cref="IKernel.AddedAsChildKernel"/> event,
+		/// <see cref="IKernelEvents.AddedAsChildKernel"/> event,
 		/// creates the lifestyle manager instance and computes
 		/// the handler state.
 		/// </summary>
@@ -444,9 +444,10 @@ namespace Castle.MicroKernel.Handlers
 		/// new components registered.
 		/// </summary>
 		/// <remarks>
-		/// Handler for the event <see cref="IKernel.HandlerRegistered"/>
+		/// Handler for the event <see cref="IKernelEvents.HandlerRegistered"/>
 		/// </remarks>
 		/// <param name="handler"></param>
+		/// <param name="stateChanged"></param>
 		protected void DependencySatisfied(IHandler handler, ref bool stateChanged)
 		{
 			// Check within the handler

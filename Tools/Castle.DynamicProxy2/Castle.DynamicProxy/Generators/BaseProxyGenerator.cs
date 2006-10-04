@@ -342,7 +342,7 @@ namespace Castle.DynamicProxy.Generators
 			// TODO: What we should do here is to invoke the initialization method before
 			// Otherwise if the base constructor makes a virtual call, an exception will be bound to happen
 			// However peverify complains with:
-			/**
+			/*
 				[IL]: Error: [E:\dev\castleall\trunk\Tools\Castle.DynamicProxy2\Castle.DynamicProxy.Tests\bin\Debug
 				\CastleDynProxy2.dll : Proxy::.ctor][offset 0x00000008][found <uninitialized> ref ('this' ptr) 'Pro
 				xy'][expected ref 'Proxy'] Unexpected type on the stack.
@@ -488,6 +488,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="targetForInvocation"></param>
 		/// <param name="methodInfo"></param>
 		/// <param name="callbackMethod"></param>
+		/// <param name="version"></param>
 		/// <returns></returns>
 		protected NestedClassEmitter BuildInvocationNestedType(
 			ClassEmitter emitter, Type targetType, Type targetForInvocation,

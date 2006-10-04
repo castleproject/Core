@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.Db4oIntegration.Tests.Components
 {
+	using System;
 	using com.db4o;
 	using com.db4o.query;
 	
@@ -21,6 +22,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests.Components
 	{
 		private readonly ObjectContainer _objContainer;
 
+		[CLSCompliant(false)]
 		public BeerDao(ObjectContainer objContainer)
 		{
 			_objContainer = objContainer;
@@ -53,6 +55,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests.Components
 			}
 		}
 
+		[CLSCompliant(false)]
 		public virtual ObjectSet FindAll()
 		{
 			return _objContainer.Get(typeof(Beer));

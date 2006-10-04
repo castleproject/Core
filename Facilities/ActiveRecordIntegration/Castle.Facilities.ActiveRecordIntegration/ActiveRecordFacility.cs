@@ -235,7 +235,12 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			if (type == null)
 			{
 				String message = String.Format("Could not obtain type from name {0}", typeAtt);
+
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
 				throw new ConfigurationException(message);
+#endif
 			}
 
 			return type;

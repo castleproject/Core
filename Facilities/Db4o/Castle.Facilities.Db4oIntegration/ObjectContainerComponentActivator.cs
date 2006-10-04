@@ -48,6 +48,7 @@ namespace Castle.Facilities.Db4oIntegration
 			}
 		}
 
+		[CLSCompliant(false)]
 		protected virtual ObjectContainer OpenLocal()
 		{
 			string databaseFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (string) Model.ExtendedProperties[Db4oFacility.DatabaseFileKey]);
@@ -57,12 +58,18 @@ namespace Castle.Facilities.Db4oIntegration
 			//TODO: Remove it when db4o's team fix it.
 			if (container == null)
 			{
-				throw new ConfigurationException("The ObjectContainer is null. Check the permissions of your YAP file.");
+				String message = "The ObjectContainer is null. Check the permissions of your YAP file.";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 	
 			return container;
 		}
 
+		[CLSCompliant(false)]
 		protected virtual ObjectContainer OpenClient()
 		{
 			string hostName = (string) Model.ExtendedProperties[Db4oFacility.HostNameKey];

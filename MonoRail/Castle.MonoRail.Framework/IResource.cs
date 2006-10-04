@@ -38,11 +38,11 @@ namespace Castle.MonoRail.Framework
 		object GetObject(String key);
 	}
 
-	/// <summary>
+/*	/// <summary>
 	/// Marker interface that declares that this attribute should
 	/// be used as a definition for a resource in the user ResourceFactory.
 	/// </summary>
 //	public interface IResourceDefinition
 //	{
-//	}
+//	}*/
 }

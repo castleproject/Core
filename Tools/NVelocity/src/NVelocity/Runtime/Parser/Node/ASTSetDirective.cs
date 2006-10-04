@@ -129,11 +129,5 @@ namespace NVelocity.Runtime.Parser.Node
 
 			return true;
 		}
-
-		/// <summary>  returns the ASTReference that is the LHS of the set statememt
-		/// </summary>
-
-		/// <summary>  returns the RHS Node of the set statement
-		/// </summary>
 	}
 }

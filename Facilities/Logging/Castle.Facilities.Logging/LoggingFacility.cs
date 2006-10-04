@@ -133,9 +133,14 @@ namespace Castle.Facilities.Logging
 				case LoggerImplementation.Custom:
 					if (customType == null)
 					{
-						throw new ConfigurationException("If you specify loggingApi='custom' " +
+						String message = "If you specify loggingApi='custom' " +
 							"then you must use the attribute customLoggerFactory to inform the " +
-							"type name of the custom logger factory");
+							"type name of the custom logger factory";
+#if DOTNET2
+						throw new ConfigurationErrorsException(message);
+#else
+						throw new ConfigurationException(message);
+#endif
 					}
 
 					loggerFactoryType = (Type)
@@ -147,9 +152,16 @@ namespace Castle.Facilities.Logging
 							"' does not implement ILoggerFactory");
 					}
 					break;
-				
+
 				default:
-					throw new ConfigurationException("An invalid loggingApi was specified: " + logApi);
+					{
+						String message = "An invalid loggingApi was specified: " + logApi;
+#if DOTNET2
+						throw new ConfigurationErrorsException(message);
+#else
+						throw new ConfigurationException(message);
+#endif
+					}
 			}
 			
 			if (loggerFactoryType == null) // some sanity checking

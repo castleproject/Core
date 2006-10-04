@@ -125,6 +125,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// Try to find a template given a normalized path.
 		/// </summary>
 		/// <param name="path">a normalized path</param>
+		/// <param name="template">filename of template to get</param>
 		/// <returns>InputStream input stream that will be parsed</returns>
 		private Stream FindTemplate(String path, String template)
 		{
@@ -145,7 +146,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				FileInfo file = new FileInfo(filename);
 
-				/**
+				/*
 				 * This is not needed, the call below will error if the file does not exist as well
 				 * as if there are permission errors
 				if (!file.Exists)

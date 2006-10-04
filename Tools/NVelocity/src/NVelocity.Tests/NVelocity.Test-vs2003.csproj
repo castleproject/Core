@@ -39,8 +39,8 @@
                     OutputPath = "..\bin2\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "0"
+                    TreatWarningsAsErrors = "true"
+                    WarningLevel = "4"
                 />
                 <Config
                     Name = "Release"
@@ -59,8 +59,8 @@
                     OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "1"
+                    TreatWarningsAsErrors = "true"
+                    WarningLevel = "4"
                 />
             </Settings>
             <References>

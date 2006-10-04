@@ -10,7 +10,7 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
+		<property name="assembly.is-cls-compliant" value="false" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />

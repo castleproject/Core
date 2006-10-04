@@ -31,8 +31,13 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			if (typeAtt == null || typeAtt.Value == String.Empty)
 			{
-				throw new ConfigurationException("To add a service, please specify the 'type' attribute. " + 
-					"Check the documentation for more information");
+				String message = "To add a service, please specify the 'type' attribute. " + 
+					"Check the documentation for more information";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 		
 			extensionType = TypeLoadUtil.GetType(typeAtt.Value);

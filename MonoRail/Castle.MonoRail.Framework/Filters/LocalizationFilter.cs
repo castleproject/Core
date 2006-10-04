@@ -62,7 +62,12 @@ namespace Castle.MonoRail.Framework.Filters
 			{
 				if ( !(value is LocalizationFilterAttribute) )
 				{
-					throw new ConfigurationException( "LocalizationFilter can only be defined by a LocalizationFilterAttribute." );
+					String message = "LocalizationFilter can only be defined by a LocalizationFilterAttribute.";
+#if DOTNET2
+					throw new ConfigurationErrorsException(message);
+#else
+					throw new ConfigurationException(message);
+#endif
 				}
 
 				setup = value as LocalizationFilterAttribute;

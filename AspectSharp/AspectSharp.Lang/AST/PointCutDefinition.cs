@@ -77,7 +77,7 @@ namespace AspectSharp.Lang.AST
 	
 		public override int GetHashCode()
 		{
-			/// Doh!!
+			// Doh!!
 			return ((int) _flags) ^ Method.GetHashCode();
 		}
 

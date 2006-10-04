@@ -26,10 +26,7 @@ namespace Castle.MonoRail.Framework
 	/// Represents a wizard step. 
 	/// </summary>
 	/// <remarks>
-	/// Implementors are required to implement 
-	/// <see cref="WizardStepPage.Process"/> in order 
-	/// to perform the step processment.
-	/// They can optionally also override <see cref="WizardStepPage.ActionName"/>
+	/// Implementors can optionally override <see cref="WizardStepPage.ActionName"/>
 	/// to customize the accessible action name and 
 	/// <see cref="WizardStepPage.RenderWizardView"/> in order to define which view 
 	/// should be used (defaults to the step name)
@@ -176,7 +173,7 @@ namespace Castle.MonoRail.Framework
 		/// to dictate to where it should go.
 		/// </summary>
 		/// <remarks>
-		/// By default this will invoke <see cref="RedirectToNextStep()"/>
+		/// By default this will invoke <see cref="RedirectToNextStep(IDictionary)"/>
 		/// however you can send a field form <c>navigate.to</c> to customize this.
 		/// The possible values for <c>navigate.to</c> are:
 		/// <list type="bullet">
@@ -198,7 +195,7 @@ namespace Castle.MonoRail.Framework
 		/// to dictate to where it should go.
 		/// </summary>
 		/// <remarks>
-		/// By default this will invoke <see cref="RedirectToNextStep"/>
+		/// By default this will invoke <see cref="RedirectToNextStep(IDictionary)"/>
 		/// however you can send a field form <c>navigate.to</c> to customize this.
 		/// The possible values for <c>navigate.to</c> are:
 		/// <list type="bullet">
@@ -221,7 +218,7 @@ namespace Castle.MonoRail.Framework
 		/// to dictate to where it should go.
 		/// </summary>
 		/// <remarks>
-		/// By default this will invoke <see cref="RedirectToNextStep()"/>
+		/// By default this will invoke <see cref="RedirectToNextStep(IDictionary)"/>
 		/// however you can send a field form <c>navigate.to</c> to customize this.
 		/// The possible values for <c>navigate.to</c> are:
 		/// <list type="bullet">

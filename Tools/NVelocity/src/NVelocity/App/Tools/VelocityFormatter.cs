@@ -10,13 +10,14 @@ namespace NVelocity.App.Tools
 	/// Formatting tool for inserting into the Velocity WebContext.  Can
 	/// format dates or lists of objects.
 	/// 
-	/// <p>Here's an example of some uses:
+	/// <para>Here's an example of some uses:
 	/// <code><pre>
 	/// $formatter.formatShortDate($object.Date)
 	/// $formatter.formatLongDate($db.getRecord(232).getDate())
 	/// $formatter.formatArray($array)
 	/// $formatter.limitLen(30, $object.Description)
 	/// </pre></code>
+	/// </para>
 	/// </summary>
 	/// <author><a href="mailto:sean@somacity.com">Sean Legassick</a></author>
 	/// <author><a href="mailto:dlr@collab.net">Daniel Rall</a></author>
@@ -103,7 +104,7 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="array">An Object.</param>
 		/// <param name="delim">A String.</param>
-		/// <param name="finalDelim">A String.</param>
+		/// <param name="finaldelim">A String.</param>
 		/// <returns>A String.</returns>
 		public String FormatArray(Object array, String delim, String finaldelim)
 		{
@@ -163,7 +164,7 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="list">A list.</param>
 		/// <param name="delim">A String.</param>
-		/// <param name="finalDelim">A String.</param>
+		/// <param name="finaldelim">A String.</param>
 		/// <returns>A String.</returns>
 		public String FormatVector(IList list, String delim, String finaldelim)
 		{
@@ -189,7 +190,7 @@ namespace NVelocity.App.Tools
 		/// curtailed, "..." is appended to it.
 		/// </summary>
 		/// <param name="maxlen">An int with the maximum length.</param>
-		/// <param name="string">A String.</param>
+		/// <param name="value">A String.</param>
 		/// <returns>A String.</returns>
 		public String LimitLen(int maxlen, String value)
 		{
@@ -201,7 +202,7 @@ namespace NVelocity.App.Tools
 		/// curtailed, 'suffix' is appended to it.
 		/// </summary>
 		/// <param name="maxlen">An int with the maximum length.</param>
-		/// <param name="string">A String.</param>
+		/// <param name="value">A String.</param>
 		/// <param name="suffix">A String.</param>
 		/// <returns>A String.</returns>
 		public String LimitLen(int maxlen, String value, String suffix)
@@ -292,7 +293,7 @@ namespace NVelocity.App.Tools
 		/// <summary>
 		/// Makes an alternator object that alternates between two values.
 		/// 
-		/// <p>Example usage in a Velocity template:
+		/// <para>Example usage in a Velocity template:
 		/// 
 		/// <code>
 		/// &lt;table&gt;
@@ -303,6 +304,7 @@ namespace NVelocity.App.Tools
 		/// #end
 		/// &lt;/table&gt;
 		/// </code>
+		/// </para>
 		/// </summary>
 		/// <param name="name">The name for the alternator int the context.</param>
 		/// <param name="alt1">The first alternate.</param>
@@ -317,7 +319,6 @@ namespace NVelocity.App.Tools
 		/// <summary>
 		/// Makes an alternator object that alternates between three values.
 		/// </summary>
-		/// <seealso cref="#makeAlternator(String name, String alt1, String alt2)"/>
 		public String MakeAlternator(String name, String alt1, String alt2, String alt3)
 		{
 			context.Put(name, new VelocityAlternator(alt1, alt2, alt3));
@@ -327,7 +328,6 @@ namespace NVelocity.App.Tools
 		/// <summary>
 		/// Makes an alternator object that alternates between four values.
 		/// </summary>
-		/// <seealso cref="#makeAlternator(String name, String alt1, String alt2)"/>
 		public String MakeAlternator(String name, String alt1, String alt2, String alt3, String alt4)
 		{
 			context.Put(name, new VelocityAlternator(alt1, alt2, alt3, alt4));
@@ -338,7 +338,6 @@ namespace NVelocity.App.Tools
 		/// Makes an alternator object that alternates between two values
 		/// automatically.
 		/// </summary>
-		/// <seealso cref="#makeAlternator(String name, String alt1, String alt2)"/>
 		public String MakeAutoAlternator(String name, String alt1, String alt2)
 		{
 			context.Put(name, new VelocityAutoAlternator(alt1, alt2));

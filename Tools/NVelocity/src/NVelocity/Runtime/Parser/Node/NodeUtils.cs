@@ -17,7 +17,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </version>
 	public class NodeUtils
 	{
-		/// <summary> Collect all the <SPECIAL_TOKEN>s that
+		/// <summary> Collect all the &lt;SPECIAL_TOKEN&gt;s that
 		/// are carried along with a token. Special
 		/// tokens do not participate in parsing but
 		/// can still trigger certain lexical actions.

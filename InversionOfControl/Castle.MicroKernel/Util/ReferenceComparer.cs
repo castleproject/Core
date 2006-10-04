@@ -16,7 +16,7 @@ namespace Castle.MicroKernel.Util
 {
 	using System;
 	using System.Collections;
-	
+
 	/// <summary>
 	/// Compares if the reference of two objects are equals.
 	/// </summary>
@@ -32,4 +32,24 @@ namespace Castle.MicroKernel.Util
 			return object.ReferenceEquals(x, y) ? 0 : 1;
 		}
 	}
+
+#if DOTNET2
+	[Serializable]
+	public class ReferenceEqualityComparer : IEqualityComparer
+	{
+		public new bool Equals(object x, object y)
+		{
+			return ReferenceEquals(x, y);
+		}
+
+		public int GetHashCode(object obj)
+		{
+			if (obj == null)
+			{
+				throw new ArgumentNullException("obj");
+			}
+			return obj.GetHashCode();
+		}
+	}
+#endif
 }

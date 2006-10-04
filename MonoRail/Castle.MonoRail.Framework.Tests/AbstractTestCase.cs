@@ -22,7 +22,11 @@ namespace Castle.MonoRail.Framework.Tests
 	{
 		protected override string GetPhysicalDir()
 		{
+#if DOTNET2
+			return Path.GetFullPath(Path.Combine(ConfigurationManager.AppSettings["tests.src"], ConfigurationManager.AppSettings["web.physical.dir"]));
+#else
 			return Path.GetFullPath(Path.Combine(ConfigurationSettings.AppSettings["tests.src"], ConfigurationSettings.AppSettings["web.physical.dir"]));
+#endif
 		}
 	}
 }

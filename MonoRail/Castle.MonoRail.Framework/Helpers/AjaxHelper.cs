@@ -65,11 +65,11 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <list type="table">
 	/// <item><term>Prototype</term>
 	/// <description>Simplify ajax programming, among other goodies 
-	/// <seealso cref="http://prototype.conio.net/"/>
+	/// See also <a href="http://prototype.conio.net/"/>
 	/// </description></item>
 	/// <item><term>Behaviour</term>
 	/// <description>Uses css selectors to bind javascript code to DOM elements 
-	/// <seealso cref="http://bennolan.com/behaviour/"/>
+	/// See also <a href="http://bennolan.com/behaviour/"/>
 	/// </description></item>
 	/// </list>
 	/// </remarks>
@@ -606,8 +606,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region ObserveForm
 
 		/// <summary>
-		/// Like <see cref="ObserveField"/>, but operates on an entire form identified by the
-		/// DOM ID <c>formId</c>. options are the same as <see cref="ObserveField"/>, except 
+		/// Like <see cref="ObserveField(IDictionary)"/>, but operates on an entire form identified by the
+		/// DOM ID <c>formId</c>. options are the same as <see cref="ObserveField(IDictionary)"/>, except 
 		/// the default value of the <tt>:with</tt> option evaluates to the
 		/// serialized (request String) value of the form.
 		/// </summary>
@@ -630,8 +630,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Like <see cref="ObserveField"/>, but operates on an entire form identified by the
-		/// DOM ID <c>formId</c>. options are the same as <see cref="ObserveField"/>, except 
+		/// Like <see cref="ObserveField(IDictionary)"/>, but operates on an entire form identified by the
+		/// DOM ID <c>formId</c>. options are the same as <see cref="ObserveField(IDictionary)"/>, except 
 		/// the default value of the <tt>:with</tt> option evaluates to the
 		/// serialized (request String) value of the form.
 		/// </summary>
@@ -756,6 +756,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <term>url</term>
 		/// <description>url to to call when the field has changed</description>
 		/// </item>
+		/// </list>
 		/// </summary>
 		public String InputTextWithAutoCompletion(IDictionary parameters, IDictionary tagAttributes)
 		{

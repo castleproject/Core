@@ -285,7 +285,11 @@ namespace NVelocity.Test
 			Assert.AreEqual("Hello Cort $lastName", sw.ToString());
 
 			// create a context based on a case insensitive hashtable
+#if DOTNET2
+			Hashtable ht = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
+#else
 			Hashtable ht = new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer());
+#endif
 			ht.Add("firstName", "Cort");
 			ht.Add("LastName", "Schaefer");
 			c = new VelocityContext(ht);
@@ -297,7 +301,11 @@ namespace NVelocity.Test
 			Assert.AreEqual("Hello Cort Schaefer", sw.ToString());
 
 			// create a context based on a case insensitive hashtable, verify that stuff added to the context after it is created if found case insensitive
+#if DOTNET2
+			ht = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
+#else
 			ht = new Hashtable(new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer());
+#endif
 			ht.Add("firstName", "Cort");
 			c = new VelocityContext(ht);
 			c.Put("LastName", "Schaefer");

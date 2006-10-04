@@ -40,6 +40,7 @@ namespace AspectSharp.Core
 		/// redirecting method invocations to the specifed interceptor.
 		/// </summary>
 		/// <param name="inter">Interface to be implemented.</param>
+		/// <param name="target"></param>
 		/// <param name="mixins">Array of instances (mixins) to be introducted.</param>
 		/// <param name="interceptor">Instance of <see cref="IInterceptor"/>.</param>
 		/// <returns>Proxy Instance.</returns>
@@ -56,6 +57,7 @@ namespace AspectSharp.Core
 		/// <param name="baseClass">Super class</param>
 		/// <param name="mixins">Array of mixins to be implemented by the proxy</param>
 		/// <param name="interceptor">Instance of <see cref="IInterceptor"/></param>
+		/// <param name="constructorArgs"></param>
 		/// <returns>Proxy instance</returns>
 		public object CreateClassProxy(Type baseClass, object[] mixins, IInterceptor interceptor,
 			params object[] constructorArgs)

@@ -32,15 +32,35 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 		{
 		}
 
-		public event TransactionCreationInfoDelegate TransactionCreated;
+		event TransactionCreationInfoDelegate ITransactionManager.TransactionCreated
+		{
+			add { throw new NotImplementedException(); }
+			remove { throw new NotImplementedException(); }
+		}
 
-		public event TransactionCreationInfoDelegate ChildTransactionCreated;
-		
-		public event TransactionDelegate TransactionCommitted;
-		
-		public event TransactionDelegate TransactionRolledback;
-		
-		public event TransactionDelegate TransactionDisposed;
+		event TransactionCreationInfoDelegate ITransactionManager.ChildTransactionCreated
+		{
+			add { throw new NotImplementedException(); }
+			remove { throw new NotImplementedException(); }
+		}
+
+		event TransactionDelegate ITransactionManager.TransactionCommitted
+		{
+			add { throw new NotImplementedException(); }
+			remove { throw new NotImplementedException(); }
+		}
+
+		event TransactionDelegate ITransactionManager.TransactionRolledback
+		{
+			add { throw new NotImplementedException(); }
+			remove { throw new NotImplementedException(); }
+		}
+
+		event TransactionDelegate ITransactionManager.TransactionDisposed
+		{
+			add { throw new NotImplementedException(); }
+			remove { throw new NotImplementedException(); }
+		}
 
 		public ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode)
 		{

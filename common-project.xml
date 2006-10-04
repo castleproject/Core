@@ -54,11 +54,14 @@
 			target="library"
 			define="${current.build.defines}"
 			debug="${build.debug}"
+			warnaserror="${build.warnaserrors}"
 			output="${build.dir}/${project::get-name()}.dll"
 		>
 			<sources refid="project.sources" />
 			<references refid="project.references" />
 			<resources refid="project.resources" />
+			<arg line="${csc.keyfile}" if="${assembly.sign}" />
+			<arg line="${csc.args}" />
 		</csc>
 
 		<!-- Check if there is a framework specific config file and use that -->
@@ -109,6 +112,7 @@
 			define="${current.build.defines}" 
 			debug="${build.debug}" 
 			optimize="${build.optimize}"
+			warnaserror="${build.warnaserrors}"
 			output="${build.dir}\${project::get-name()}.dll" 
 			doc="${build.dir}\${project::get-name()}.xml"
 		>
@@ -118,6 +122,8 @@
 			<sources refid="project.sources" />
 			<references refid="project.references" />
 			<resources refid="project.resources" />
+			<arg line="${csc.keyfile}" if="${assembly.sign}" />
+			<arg line="${csc.args}" />
 		</csc>
 	</target>
 
@@ -150,6 +156,7 @@
 			define="${current.build.defines}" 
 			debug="${build.debug}"
 			optimize="${build.optimize}"
+			warnaserror="${build.warnaserrors}"
 			output="${build.dir}\${project::get-name()}.exe" 
 		>
 			<nowarn>
@@ -158,6 +165,8 @@
 			<sources refid="project.sources" />
 			<references refid="project.references" />
 			<resources refid="project.resources" />
+			<arg line="${csc.keyfile}" if="${assembly.sign}" />
+			<arg line="${csc.args}" />
 		</csc>
 	</target>
 
@@ -203,13 +212,17 @@
 				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
 				<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.version.informational}" />
 				<attribute type="AssemblyFileVersionAttribute" value="${assembly.version}" />
-				<attribute type="AssemblyKeyFileAttribute" value="${assembly.keyfile}" if="${assembly.sign}"/>
 				<attribute type="AssemblyDelaySignAttribute" value="false" />
 				
 				<!-- For some reason, NAnt doesn't detect that APTCA has a public no-argument constructor -->
 				<attribute asis="true" type="AllowPartiallyTrustedCallersAttribute" if="${assembly.allow-partially-trusted-callers}" />
 			</attributes>
 		</asminfo>
+		<if test="${assembly.sign}" >
+			<echo append="true" file="${assemblyinfo.cs}">#if !DOTNET2</echo>
+			<echo append="true" file="${assemblyinfo.cs}">[assembly: AssemblyKeyFileAttribute("${assembly.keyfile}")]</echo>
+			<echo append="true" file="${assemblyinfo.cs}">#endif</echo>
+		</if>
 	</target>
 
 	<target name="common.run-tests"

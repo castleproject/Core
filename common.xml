@@ -69,6 +69,7 @@
 		<if test="${not(target::exists('set-' + project.config + '-project-configuration'))}">
 			<fail message="Unknown configuration: '${project.config}'" />
 		</if>
+		<property name="build.warnaserrors" value="true" overwrite="false" />
 		<call target="set-${project.config}-project-configuration" />
 
 		<property name="src.dir" 			value="${path::get-full-path(project::get-base-directory())}" />
@@ -83,6 +84,8 @@
 		<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
 			<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of Cast;e." />
 		</if>
+		<property name="csc.keyfile" 	value="" />
+		<property name="csc.args" 		value="" />
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
 
 		<!-- Where is nunit-console.exe ? -->
@@ -103,6 +106,7 @@
 		<property name="current.build.defines" value="${build.defines},NET,DOTNET2" />
 		<property name="link.sdkdoc.version" value="SDK_v2_0" />
 		<property name="merge.targetplatform" value="v2" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
 	</target>
 
 	<target name="set-mono-1.0-framework-configuration">

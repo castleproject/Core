@@ -29,6 +29,7 @@ namespace Castle.Facilities.Db4oIntegration
 		private readonly IKernel _kernel;
 		private readonly ObjectContainer _objContainer;
 
+		[CLSCompliant(false)]
 		public AutoCommitInterceptor(IKernel kernel, ObjectContainer objContainer)
 		{
 			_objContainer = objContainer;

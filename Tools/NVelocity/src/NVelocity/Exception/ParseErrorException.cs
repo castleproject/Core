@@ -19,7 +19,7 @@ namespace NVelocity.Exception
 
 	/// <summary>  Application-level exception thrown when a resource of any type
 	/// has a syntax or other error which prevents it from being parsed.
-	/// <br>
+	/// <br/>
 	/// When this resource is thrown, a best effort will be made to have
 	/// useful information in the exception's message.  For complete
 	/// information, consult the runtime log.

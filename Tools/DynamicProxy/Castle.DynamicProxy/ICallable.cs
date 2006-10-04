@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy
 	/// <summary>
 	/// 
 	/// </summary>
-	[CLSCompliant(true)]
 	public interface ICallable
 	{
 		/// <summary>

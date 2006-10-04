@@ -32,7 +32,11 @@ namespace Castle.Components.Common.EmailSender2.Tests
             IEmailSender sender = kernel[typeof(IEmailSender)] as IEmailSender;
 
             Message m = new Message();
-            m.AddAuthentication("castle", "rocks");
+#if DOTNET2
+            m.AddCredentials("castle", "rocks");
+#else
+			m.AddAuthentication("castle", "rocks");
+#endif
             sender.Send(m);
         	
         	// TODO: Where are the assertions?

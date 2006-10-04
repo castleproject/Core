@@ -16,17 +16,17 @@ namespace NVelocity.App
 	/// This class provides  services to the application
 	/// developer, such as :
 	/// <ul>
-	/// <li> Simple Velocity Runtime engine initialization methods.
-	/// <li> Functions to apply the template engine to streams and strings
+	/// <li> Simple Velocity Runtime engine initialization methods.</li>
+	/// <li> Functions to apply the template engine to streams and strings</li>
 	/// to allow embedding and dynamic template generation.
-	/// <li> Methods to access Velocimacros directly.
+	/// <li> Methods to access Velocimacros directly.</li>
 	/// </ul>
-	/// <br><br>
+	/// <br/><br/>
 	/// While the most common way to use NVelocity is via templates, as
 	/// Velocity is a general-purpose template engine, there are other
 	/// uses that NVelocity is well suited for, such as processing dynamically
 	/// created templates, or processing content streams.
-	/// <br><br>
+	/// <br/><br/>
 	/// The methods herein were developed to allow easy access to the NVelocity
 	/// facilities without direct spelunking of the internals.  If there is
 	/// something you feel is necessary to add here, please, send a patch.
@@ -431,7 +431,7 @@ namespace NVelocity.App
 			RuntimeSingleton.RuntimeServices.SetApplicationAttribute(key, value);
 		}
 
-		/// <summary></summary>
+		/// <summary>
 		/// <see>#ResourceExists(String)</see>
 		/// </summary>
 		[Obsolete("Use ResourceExists(String) instead")]

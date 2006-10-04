@@ -90,7 +90,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			String redirectFunction = GetRedirectFunction();
 
+#if DOTNET2
+			Page.ClientScript.RegisterStartupScript(GetType(), "rails.actionTo", String.Format(scriptTag, redirectFunction));
+#else
 			Page.RegisterStartupScript("rails.actionTo", String.Format(scriptTag, redirectFunction));
+#endif
 		}
 
 		private  String GetRedirectFunction()

@@ -31,7 +31,7 @@ namespace NVelocity.Tool
 		/// </param>
 		/// <param name="type">the data type
 		/// </param>
-		/// <param name="value">the data
+		/// <param name="value_">the data
 		///
 		/// </param>
 		public DataInfo(String key, String type, String value_)

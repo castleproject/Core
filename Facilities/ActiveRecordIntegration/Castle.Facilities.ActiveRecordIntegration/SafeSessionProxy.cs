@@ -25,8 +25,8 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 	/// <summary>
 	/// This class implements <see cref="ISession"/>
-	/// and delegates <see cref="ISession.Close"/> and 
-	/// <see cref="ISession.Dispose"/> to <see cref="ISessionFactoryHolder.ReleaseSession"/>
+	/// and delegates <see cref="Close"/> and 
+	/// <see cref="Dispose"/> to <see cref="ISessionFactoryHolder.ReleaseSession"/>
 	/// as the session is in fact managed by ActiveRecord framework
 	/// </summary>
 	public class SafeSessionProxy : ISession, IDisposable

@@ -49,7 +49,12 @@ namespace Castle.Facilities.Db4oIntegration
 		{
 			if (FacilityConfig == null)
 			{
-				throw new ConfigurationException("db4o facility requires an external configuration.");
+				String message = "db4o facility requires an external configuration.";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			Kernel.ComponentModelBuilder.AddContributor(new AutoDb4oTransactionInspector());

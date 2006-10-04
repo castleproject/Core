@@ -41,7 +41,12 @@ namespace Castle.MonoRail.Framework
 			
 			if (viewSourceLoader == null)
 			{
-				throw new ConfigurationException("Could not obtain IViewSourceLoader");
+				string message = "Could not obtain IViewSourceLoader";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 		}
 		

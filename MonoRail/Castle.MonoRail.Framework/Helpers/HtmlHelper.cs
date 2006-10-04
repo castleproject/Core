@@ -96,7 +96,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>Calling <c>Form( "actionArg" )</c> results in:
 		/// <code>&lt;form method=&quot;post&quot; action=&quot;actionArg&quot;&gt;</code>
 		/// </remarks>
-		/// <example>This example shows how to use <see cref="Form"/> together with <see cref="EndForm"/>:
+		/// <example>This example shows how to use <see cref="Form(String)"/> together with <see cref="EndForm"/>:
 		/// <code>
 		/// $HtmlHelper.Form( "actionArg" )
 		/// ...
@@ -208,14 +208,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <code>
 		/// &lt;/form&gt;
 		/// </code>
-		/// <seealso cref="HtmlHelper.Form"/>
+		/// <seealso cref="Form(String)"/>
 		/// </summary>
 		/// <returns>HTML string with form closing tag.</returns>
 		/// <remarks>
 		/// Calling <c>EndForm()</c> results in:
 		/// <code>&lt;/form&gt;</code>
 		/// </remarks>
-		/// <example>This example shows how to use <see cref="Form"/> together with <see cref="EndForm"/>:
+		/// <example>This example shows how to use <see cref="Form(String,String,String,String)"/> together with <see cref="EndForm"/>:
 		/// <code>
 		/// $HtmlHelper.Form( "actionArg", "idArg", "methodArg", "submitHandler()" )
 		/// ...
@@ -345,7 +345,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>Calling <c>LinkTo( "nameArg", "controllerArg", "actionArg", object )</c> results in:
 		/// <code>&lt;a href=&quot;/website/controllerArg/actionArg.rails?id=object&quot;&gt;nameArg&lt;/a&gt;</code>
 		/// <para>
-		/// <see cref="String.Format"/> is used to convert <paramref name="id"/> to the actual <see cref="String"/>.</para>
+		/// <see cref="String.Format(String, object)"/> is used to convert <paramref name="id"/> to the actual <see cref="String"/>.</para>
 		/// </remarks>
 		/// <example>This example shows how to use <b>LinkTo</b>:
 		/// <code>
@@ -398,7 +398,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="name">Name for the link.</param>
 		/// <param name="controller">Controller to link to.</param>
 		/// <param name="action">Action to link to.</param>
-		/// <param name="action">The ID to be passed as a parameter for the action</param>
+		/// <param name="id">The ID to be passed as a parameter for the action</param>
 		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
 		/// <returns>HTML string with anchor to the specified <paramref name="controller"/></returns>
 		/// <remarks>Calling <c>LinkToAttributed( "nameArg", "controllerArg", "actionArg", IDictionary )</c> results in:
@@ -467,7 +467,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>Calling <c>LabelFor( "forIdArg", "labelArg" )</c> results in:
 		/// <code>&lt;label  for=&quot;forIdArg&quot;&gt;labelArg&lt;/label&gt;</code>
 		/// </remarks>
-		/// <example>This example shows how to use <see cref="LabelFor"/>:
+		/// <example>This example shows how to use <see cref="LabelFor(String,String)"/>:
 		/// <code>
 		/// $HtmlHelper.LabelFor( "forIdArg", "labelArg" )
 		/// </code>
@@ -496,7 +496,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <see cref="IDictionary.Keys"/> are used to name attributes.
 		/// <see cref="IDictionary.Values"/> are used to assign those attributes values.
 		/// </para>
-		/// <example>This example shows how to use <see cref="LabelFor"/>:
+		/// <example>This example shows how to use <see cref="LabelFor(String,String,IDictionary)"/>:
 		/// <code>
 		/// $HtmlHelper.LabelFor( "forIdArg", "labelArg", IDictionary )
 		/// </code>
@@ -757,7 +757,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <overloads>This method has three overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the checkbox type.
-		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot id=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;checkbox&quot;name=&quot;nameArg&quot;id=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -772,7 +772,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the checkbox type.
-		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot id=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;checkbox&quot;name=&quot;nameArg&quot;id=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -793,7 +793,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the checkbox type.
-		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot id=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;checkbox&quot;name=&quot;nameArg&quot;id=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -812,7 +812,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the radio type.
-		/// <code>&lt;input type=&quot;radio&quot; name=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;radio&quot;name=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -827,7 +827,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the radio type.
-		/// <code>&lt;input type=&quot;radio&quot; name=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;radio&quot;name=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -846,7 +846,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the file type.
-		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot /&gt;</code>
+		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot;/&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <returns>HTML string with file type <b>input</b> tag.</returns>
@@ -860,7 +860,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the file type.
-		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot /&gt;</code>
+		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot;/&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
@@ -978,6 +978,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates a hidden type input element.
 		/// <code>&lt;input type=&quot;hidden&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
 		public String InputText(String name, String value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2}/>",
@@ -1184,7 +1185,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>Calling <c>EndSelect()</c> results in:
 		/// <code>&lt;/select&gt;</code>
 		/// </remarks>
-		/// <example>This example shows how to use <see cref="Select"/> together with <b>EndSelect</b>:
+		/// <example>This example shows how to use <see cref="Select(String)"/> together with <b>EndSelect</b>:
 		/// <code>
 		/// $HtmlHelper.Select( "nameArg" )
 		/// ...
@@ -1268,7 +1269,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// &lt;option&gt;object&lt;/option&gt;
 		/// </code>
 		/// <para>
-		/// Elements in the array are converted to <see cref="String"/> using <see cref="StringBuilder.AppendFormat"/>.
+		/// Elements in the array are converted to <see cref="String"/> using <see cref="StringBuilder.AppendFormat(String,object)"/>.
 		/// </para>
 		/// </remarks>
 		/// <example>This example shows how to use <b>CreateOptionsFromPrimitiveArray</b>:
@@ -1299,7 +1300,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// &lt;option value=&quot;0&quot;&gt;textProp2&lt;/option&gt;
 		/// &lt;option value=&quot;5&quot;&gt;textProp3&lt;/option&gt;
 		/// </code>
-		/// <seealso cref="CreateOptions"/>
+		/// <seealso cref="CreateOptions(ICollection,String,String)"/>
 		/// </summary>
 		/// <param name="elems">Collection of objects each of which describes an <b>option</b> tag.</param>
 		/// <param name="textProperty">Name of the <paramref name="elems"/>
@@ -1367,7 +1368,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// thrown or options will have unexpected strings.
 		/// </note>
 		/// </para>
-		/// <para><b>CreateOptionsFromArray</b> relies on <see cref="CreateOptions"/> to generate
+		/// <para><b>CreateOptionsFromArray</b> relies on <see cref="CreateOptions(ICollection,String,String)"/> to generate
 		/// all <b>option</b> tags.</para>
 		/// </remarks>
 		/// <example>This example shows how to use <b>CreateOptions</b>:
@@ -1387,7 +1388,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// &lt;option value=&quot;0&quot;&gt;textProp2&lt;/option&gt;
 		/// &lt;option value=&quot;5&quot;&gt;textProp3&lt;/option&gt;
 		/// </code>
-		/// <seealso cref="CreateOptions"/>
+		/// <seealso cref="CreateOptions(ICollection,String,String,object)"/>
 		/// </summary>
 		/// <param name="elems">Collection of objects each of which describes an <b>option</b> tag.</param>
 		/// <param name="textProperty">Name of the <paramref name="elems"/>
@@ -1458,7 +1459,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// thrown or options will have unexpected strings.
 		/// </note>
 		/// </para>
-		/// <para><b>CreateOptionsFromArray</b> relies on <see cref="CreateOptions"/> to generate
+		/// <para><b>CreateOptionsFromArray</b> relies on <see cref="CreateOptions(ICollection,String,String,object)"/> to generate
 		/// all <b>option</b> tags.</para>
 		/// </remarks>
 		/// <example>This example shows how to use <b>CreateOptions</b>:
@@ -1715,9 +1716,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>
 		/// 	<see langword="true"/> if the specified <paramref name="value"/> is selected; otherwise, <see langword="false"/>.
 		/// </returns>
-		/// <remarks>Specified <paramref name="value"/> is selected if it <see cref="Object.Equals"/>
+		/// <remarks>Specified <paramref name="value"/> is selected if it <see cref="Object.Equals(object)"/>
 		/// to the <paramref name="selectedValue"/>. Or if <paramref name="selectedValue"/> is an
-		/// array <paramref name="value"/> is selected if <see cref="Array.IndexOf"/> can find it
+		/// array <paramref name="value"/> is selected if <see cref="Array.IndexOf(Array, object)"/> can find it
 		/// in <paramref name="selectedValue"/>.</remarks>
 		private bool IsSelected(object value, object selectedValue, bool isMultiple)
 		{
@@ -1997,6 +1998,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <code>
 		/// &lt;li class=&quot;itemClassArg&quot;&gt;object&lt;/li&gt;
 		/// </code>
+		/// </para>
 		/// </remarks>
 		/// <example>This example shows how to use <b>BuildListItem</b>:
 		/// <code>

@@ -33,7 +33,12 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			if (loadedType == null && !ignoreError)
 			{
-				throw new ConfigurationException(String.Format("The type {0} could not be found", typeName));
+				String message = String.Format("The type {0} could not be found", typeName);
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 			
 			return loadedType;

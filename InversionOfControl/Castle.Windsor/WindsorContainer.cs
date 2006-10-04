@@ -103,6 +103,7 @@ namespace Castle.Windsor
 		/// <see cref="Proxy.DefaultProxyFactory"/>
 		/// </remarks>
 		/// <param name="kernel"></param>
+		/// <param name="installer"></param>
 		public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
 		{
 			if (kernel == null) throw new ArgumentNullException("kernel");
@@ -268,7 +269,7 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
-		/// Shortcut to the method <see cref="Resolve"/>
+		/// Shortcut to the method <see cref="Resolve(String)"/>
 		/// </summary>
 		public virtual object this[String key]
 		{
@@ -276,7 +277,7 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
-		/// Shortcut to the method <see cref="Resolve"/>
+		/// Shortcut to the method <see cref="Resolve(Type)"/>
 		/// </summary>
 		public virtual object this[Type service]
 		{
@@ -289,6 +290,7 @@ namespace Castle.Windsor
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
+		/// <param name="service"></param>
 		/// <returns></returns>
 		public virtual object Resolve(String key, Type service)
 		{

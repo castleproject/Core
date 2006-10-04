@@ -31,7 +31,11 @@ namespace NVelocity.Test
 		/// Path for templates. This property will override the
 		/// value in the default velocity properties file.
 		/// </summary>
+#if DOTNET2
+		public static readonly String FILE_RESOURCE_LOADER_PATH = Path.Combine(System.Configuration.ConfigurationManager.AppSettings["tests.src"], "../../test/templates");
+#else
 		public static readonly String FILE_RESOURCE_LOADER_PATH = Path.Combine(System.Configuration.ConfigurationSettings.AppSettings["tests.src"], "../../test/templates");
+#endif
 
 		/// <summary>
 		/// Properties file that lists which template tests to run.
@@ -99,7 +103,7 @@ namespace NVelocity.Test
 				{
 					Directory.CreateDirectory(dir.FullName);
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					ok = false;
 				}

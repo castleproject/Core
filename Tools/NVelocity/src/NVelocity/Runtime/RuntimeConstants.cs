@@ -1,6 +1,7 @@
 namespace NVelocity.Runtime
 {
 	using System;
+	using NVelocity.Runtime.Resource;
 
 	/// <summary>
 	/// This class defines the keys that are used in the
@@ -64,12 +65,12 @@ namespace NVelocity.Runtime
 
 		/// <summary>
 		/// The default number of parser instances to create.
-		/// Configurable via the parameter named by the <see cref="#PARSER_POOL_SIZE"/> constant.
+		/// Configurable via the parameter named by the <see cref="PARSER_POOL_SIZE"/> constant.
 		/// </summary>
 		public const int NUMBER_OF_PARSERS = 20;
 
 		/// <summary>
-		/// <see cref="#NUMBER_OF_PARSERS"/>
+		/// <see cref="NUMBER_OF_PARSERS"/>
 		/// </summary>
 		public const String PARSER_POOL_SIZE = "parser.pool.size";
 

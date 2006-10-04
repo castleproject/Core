@@ -31,32 +31,6 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		char ReadChar();
 
-		/// <summary> Returns the column position of the character last read.
-		/// </summary>
-		/// <deprecated>
-		/// </deprecated>
-		/// <seealso cref=" #getEndColumn
-		///
-		/// "/>
-		/// <summary> Returns the line number of the character last read.
-		/// </summary>
-		/// <deprecated>
-		/// </deprecated>
-		/// <seealso cref=" #getEndLine
-		///
-		/// "/>
-		/// <summary> Returns the column number of the last character for current token (being
-		/// matched after the last call to BeginTOken).
-		/// </summary>
-		/// <summary> Returns the line number of the last character for current token (being
-		/// matched after the last call to BeginTOken).
-		/// </summary>
-		/// <summary> Returns the column number of the first character for current token (being
-		/// matched after the last call to BeginTOken).
-		/// </summary>
-		/// <summary> Returns the line number of the first character for current token (being
-		/// matched after the last call to BeginTOken).
-		/// </summary>
 		/// <summary> Backs up the input stream by amount steps. Lexer calls this method if it
 		/// had already read some characters, but could not use them to match a
 		/// (longer) token. So, they will be used again as the prefix of the next

@@ -37,15 +37,25 @@ namespace Castle.MonoRail.Framework.Configuration
 			
 			if (section == null)
 			{
-				throw new ConfigurationException("The 'viewEngine' node is not optional");
+				String message = "The 'viewEngine' node is not optional";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 			
 			XmlAttribute viewPath = section.Attributes["viewPathRoot"];
 
 			if (viewPath == null)
 			{
-				throw new ConfigurationException("The 'viewEngine' node must include a " + 
-					"'viewPathRoot' attribute indicating the root folder that contains the views");
+				String message = "The 'viewEngine' node must include a " + 
+					"'viewPathRoot' attribute indicating the root folder that contains the views";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			viewPathRoot = viewPath.Value;
@@ -65,7 +75,12 @@ namespace Castle.MonoRail.Framework.Configuration
 				}
 				catch (FormatException ex)
 				{
-					throw new ConfigurationException("The xhtmlRendering attribute of the views node must be a boolean value.", ex);
+					String message = "The xhtmlRendering attribute of the views node must be a boolean value.";
+#if DOTNET2
+					throw new ConfigurationErrorsException(message,ex);
+#else
+					throw new ConfigurationException(message,ex);
+#endif
 				}
 			}
 

@@ -21,7 +21,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// Summary description for DataException.
 	/// </summary>
 	/// <remarks>
-	/// Contributed by Steve Degosserie <steve.degosserie@vn.netika.com>
+	/// Contributed by Steve Degosserie &lt;steve.degosserie@vn.netika.com&gt;
 	/// </remarks>
 	[Serializable]
 	public class DataException : ApplicationException

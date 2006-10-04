@@ -28,6 +28,7 @@ namespace Castle.Components.Binder
 		/// 
 		/// </summary>
 		/// <param name="reader"></param>
+		/// <param name="prefix"></param>
 		/// <returns></returns>
 		public CompositeNode BuildSourceNode(IDataReader reader, String prefix)
 		{
@@ -43,6 +44,7 @@ namespace Castle.Components.Binder
 		/// </summary>
 		/// <param name="root"></param>
 		/// <param name="reader"></param>
+		/// <param name="prefix"></param>
 		public void PopulateTree(CompositeNode root, IDataReader reader, String prefix)
 		{
 			string[] fields = GetFields(reader);

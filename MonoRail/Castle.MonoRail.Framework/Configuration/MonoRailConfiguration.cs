@@ -133,7 +133,12 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			if (type == null)
 			{
-				throw new ConfigurationException("The custom filter factory node must specify a 'type' attribute");
+				String message = "The custom filter factory node must specify a 'type' attribute";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			customFilterFactory = TypeLoadUtil.GetType(type.Value);

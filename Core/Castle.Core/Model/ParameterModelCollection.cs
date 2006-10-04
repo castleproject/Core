@@ -16,7 +16,7 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
-
+	using System.Globalization;
 	using Castle.Core.Configuration;
 
 	/// <summary>
@@ -30,8 +30,12 @@ namespace Castle.Core
 		public ParameterModelCollection()
 		{
 			dictionary = new Hashtable(
-				CaseInsensitiveHashCodeProvider.Default, 
+#if DOTNET2
+				StringComparer.CurrentCultureIgnoreCase);
+#else
+				CaseInsensitiveHashCodeProvider.Default,
 				CaseInsensitiveComparer.Default);
+#endif
 		}
 
 		public void Add(String name, String value)

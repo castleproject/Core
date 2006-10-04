@@ -34,8 +34,13 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 			if (mailToAtt == null || mailToAtt.Value == String.Empty)
 			{
-				throw new ConfigurationException("'mailTo' is a required attribute " + 
-					"for EmailHandler (part of ExceptionChaining extension)");
+				String message="'mailTo' is a required attribute " + 
+					"for EmailHandler (part of ExceptionChaining extension)";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			mailTo = mailToAtt.Value;

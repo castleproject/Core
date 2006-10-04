@@ -63,6 +63,7 @@ namespace Castle.Core.Logging
 		/// A Common method to log.
 		/// </summary>
 		/// <param name="level">The level of logging</param>
+		/// <param name="name">The Log name.</param>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
 		protected override void Log(LoggerLevel level, String name, String message, Exception exception)

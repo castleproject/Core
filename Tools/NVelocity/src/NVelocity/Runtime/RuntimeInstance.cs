@@ -839,6 +839,7 @@ namespace NVelocity.Runtime
 		/// is a valid current Velocimacro.
 		/// </summary>
 		/// <param name="vmName">Name of velocimacro requested</param>
+		/// <param name="templateName">Name of template</param>
 		/// <returns>VelocimacroProxy</returns>
 		public Directive.Directive GetVelocimacro(String vmName, String templateName)
 		{
@@ -851,6 +852,7 @@ namespace NVelocity.Runtime
 		/// <param name="name">Name of velocimacro</param>
 		/// <param name="macro">String form of macro body</param>
 		/// <param name="argArray">Array of strings, containing the #macro() arguments.  the 0th is the name.</param>
+		/// <param name="sourceTemplate">Name of template</param>
 		/// <returns>
 		/// True if added, false if rejected for some
 		/// reason (either parameters or permission settings)
@@ -864,6 +866,7 @@ namespace NVelocity.Runtime
 		/// Checks to see if a VM exists
 		/// </summary>
 		/// <param name="vmName">Name of velocimacro</param>
+		/// <param name="templateName">Name of template</param>
 		/// <returns>
 		/// True if VM by that name exists, false if not
 		/// </returns>

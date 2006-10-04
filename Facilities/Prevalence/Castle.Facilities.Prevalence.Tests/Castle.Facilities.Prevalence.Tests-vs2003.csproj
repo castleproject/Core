@@ -39,7 +39,7 @@
                     OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
+                    TreatWarningsAsErrors = "true"
                     WarningLevel = "4"
                 />
                 <Config
@@ -59,7 +59,7 @@
                     OutputPath = "bin\Release\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
+                    TreatWarningsAsErrors = "true"
                     WarningLevel = "4"
                 />
             </Settings>
@@ -100,9 +100,9 @@
                     HintPath = "..\..\..\build\net-1.1\debug\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilities.Prevalence"
-                    AssemblyName = "Castle.Facilities.Prevalence"
-                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Facilities.Prevalence.dll"
+                    Name = "Castle.Facilities.Prevalence-vs2003"
+                    Project = "{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

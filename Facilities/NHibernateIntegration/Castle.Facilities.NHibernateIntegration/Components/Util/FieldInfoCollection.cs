@@ -503,7 +503,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 	/// provides an <see cref="ArrayList"/> that is strongly typed for
 	/// <see cref="FieldInfo"/> elements.
 	/// </para><para>
-	/// The <see cref="FieldInfo.Name"/> property
+	/// The <see cref="MemberInfo.Name"/> property
 	/// of the <see cref="FieldInfo"/> class can be used as a key
 	/// to locate elements in the <b>FieldInfoCollection</b>.
 	/// </para><para>
@@ -1285,10 +1285,10 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 
 		/// <summary>
 		/// Determines whether the <see cref="FieldInfoCollection"/> contains
-		/// the specified <see cref="FieldInfo.Name"/> value.
+		/// the specified <see cref="MemberInfo.Name"/> value.
 		/// </summary>
 		/// <param name="key">
-		/// The <see cref="FieldInfo.Name"/> value to locate
+		/// The <see cref="MemberInfo.Name"/> value to locate
 		/// in the <see cref="FieldInfoCollection"/>.
 		/// This argument may be a null reference.
 		/// </param>
@@ -1299,7 +1299,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <remarks>
 		/// <b>ContainsKey</b> is similar to <see cref="Contains"/> but
 		/// compares the specified <paramref name="key"/> to the value
-		/// of the <see cref="FieldInfo.Name"/> property
+		/// of the <see cref="MemberInfo.Name"/> property
 		/// of each <see cref="FieldInfo"/> element, rather than
 		/// to the element itself.
 		/// </remarks>
@@ -1335,7 +1335,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// the available space in the destination <paramref name="array"/>.
 		/// </exception>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.CopyTo"/> for details.
+		/// Please refer to <see cref="ArrayList.CopyTo(int, Array, int, int)"/> for details.
 		/// </remarks>
 		public void CopyTo(FieldInfo[] array)
 		{
@@ -1374,7 +1374,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// to the end of the destination <paramref name="array"/>.
 		/// </para></exception>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.CopyTo"/> for details.
+		/// Please refer to <see cref="ArrayList.CopyTo(int, Array, int, int)"/> for details.
 		/// </remarks>
 		public void CopyTo(FieldInfo[] array, int arrayIndex)
 		{
@@ -1418,7 +1418,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// cannot be cast automatically to the type of the destination
 		/// <paramref name="array"/>.</exception>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.CopyTo"/> for details.
+		/// Please refer to <see cref="ArrayList.CopyTo(int, Array, int, int)"/> for details.
 		/// </remarks>
 		void ICollection.CopyTo(Array array, int arrayIndex)
 		{
@@ -1433,10 +1433,10 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <summary>
 		/// Gets the <see cref="FieldInfo"/> element
 		/// associated with the first occurrence of the specified
-		/// <see cref="FieldInfo.Name"/> value.
+		/// <see cref="MemberInfo.Name"/> value.
 		/// </summary>
 		/// <param name="key">
-		/// The <see cref="FieldInfo.Name"/>
+		/// The <see cref="MemberInfo.Name"/>
 		/// value whose element to get.
 		/// This argument may be a null reference.
 		/// </param>
@@ -1448,7 +1448,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// </returns>
 		/// <remarks>
 		/// <b>GetByKey</b> compares the specified <paramref name="key"/>
-		/// to the value of the <see cref="FieldInfo.Name"/>
+		/// to the value of the <see cref="MemberInfo.Name"/>
 		/// property of each <see cref="FieldInfo"/> element,
 		/// and returns the first matching element.
 		/// </remarks>
@@ -1472,7 +1472,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <see cref="FieldInfoCollection"/>.
 		/// </returns>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.GetEnumerator"/> for details.
+		/// Please refer to <see cref="ArrayList.GetEnumerator()"/> for details.
 		/// </remarks>
 		public IFieldInfoEnumerator GetEnumerator()
 		{
@@ -1492,7 +1492,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <see cref="FieldInfoCollection"/>.
 		/// </returns>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.GetEnumerator"/> for details.
+		/// Please refer to <see cref="ArrayList.GetEnumerator()"/> for details.
 		/// </remarks>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
@@ -1518,7 +1518,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <paramref name="value"/> in the <see cref="FieldInfoCollection"/>,
 		/// if found; otherwise, -1.</returns>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.IndexOf"/> for details.
+		/// Please refer to <see cref="ArrayList.IndexOf(object)"/> for details.
 		/// </remarks>
 		public int IndexOf(FieldInfo value)
 		{
@@ -1567,7 +1567,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <paramref name="value"/> is not compatible with
 		/// <see cref="FieldInfo"/>.</exception>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.IndexOf"/> for details.
+		/// Please refer to <see cref="ArrayList.IndexOf(object)"/> for details.
 		/// </remarks>
 		int IList.IndexOf(object value)
 		{
@@ -1580,11 +1580,11 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 
 		/// <summary>
 		/// Returns the zero-based index of the first occurrence of the
-		/// specified <see cref="FieldInfo.Name"/> value
+		/// specified <see cref="MemberInfo.Name"/> value
 		/// in the <see cref="FieldInfoCollection"/>.
 		/// </summary>
 		/// <param name="key">
-		/// The <see cref="FieldInfo.Name"/> value
+		/// The <see cref="MemberInfo.Name"/> value
 		/// to locate in the <see cref="FieldInfoCollection"/>.
 		/// This argument may be a null reference.
 		/// </param>
@@ -1595,7 +1595,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <remarks>
 		/// <b>IndexOfKey</b> is similar to <see cref="IndexOf"/> but
 		/// compares  the specified <paramref name="key"/> to the value
-		/// of the <see cref="FieldInfo.Name"/> property
+		/// of the <see cref="MemberInfo.Name"/> property
 		/// of each <see cref="FieldInfo"/> element, rather than
 		/// to the element itself.
 		/// </remarks>
@@ -1734,7 +1734,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// <exception cref="ArgumentNullException">
 		/// <paramref name="collection"/> is a null reference.</exception>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.ReadOnly"/> for details.
+		/// Please refer to <see cref="ArrayList.ReadOnly(IList)"/> for details.
 		/// </remarks>
 		public static FieldInfoCollection ReadOnly(FieldInfoCollection collection)
 		{
@@ -1899,7 +1899,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// The <see cref="FieldInfoCollection"/> is read-only.
 		/// </exception>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.Reverse"/> for details.
+		/// Please refer to <see cref="Array.Reverse(Array, int, int)"/> for details.
 		/// </remarks>
 		public virtual void Reverse()
 		{
@@ -1931,7 +1931,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// The <see cref="FieldInfoCollection"/> is read-only.
 		/// </exception>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.Reverse"/> for details.
+		/// Please refer to <see cref="Array.Reverse(Array, int, int)"/> for details.
 		/// </remarks>
 		public virtual void Reverse(int index, int count)
 		{
@@ -2067,7 +2067,7 @@ namespace Castle.Facilities.NHibernateIntegration.Util
 		/// elements of the <see cref="FieldInfoCollection"/>.
 		/// </returns>
 		/// <remarks>
-		/// Please refer to <see cref="ArrayList.ToArray"/> for details.
+		/// Please refer to <see cref="ArrayList.ToArray()"/> for details.
 		/// </remarks>
 		public FieldInfo[] ToArray()
 		{

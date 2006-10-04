@@ -53,7 +53,11 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 						"to a component (Currently {0})", 
 						value);
 
+#if DOTNET2
+					throw new ConfigurationErrorsException(message);
+#else
 					throw new ConfigurationException(message);
+#endif
 				}
 
 				InterceptorReference interceptorRef = 

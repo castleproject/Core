@@ -109,6 +109,7 @@ namespace Castle.MonoRail.Framework
 		/// means just replacing the instance - than
 		/// creating locks that will affect every single request
 		/// </summary>
+		/// <param name="name"></param>
 		/// <param name="provider"></param>
 		/// <returns></returns>
 		private ILogger CreateLogger(String name, IServiceProvider provider)

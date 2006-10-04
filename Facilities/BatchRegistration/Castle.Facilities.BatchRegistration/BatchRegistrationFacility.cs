@@ -41,8 +41,12 @@ namespace Castle.Facilities.BatchRegistration
 				}
 				else
 				{
-					throw new ConfigurationException("Invalid node inside facility configuration. " + 
-						"Expected assemblyBatch");
+					String message = "Invalid node inside facility configuration. Expected assemblyBatch";
+#if DOTNET2
+					throw new ConfigurationErrorsException(message);
+#else
+					throw new ConfigurationException(message);
+#endif
 				}
 			}
 		}
@@ -53,8 +57,12 @@ namespace Castle.Facilities.BatchRegistration
 
 			if (assemblyName == null || assemblyName.Length == 0)
 			{
-				throw new ConfigurationException("The assemblyBatch node must have a 'name' " + 
-					" attribute with the name of the assembly");
+				String message = "The assemblyBatch node must have a 'name' attribute with the name of the assembly";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			ComponentScanner scanner = new ComponentScanner(assemblyName);
@@ -83,13 +91,21 @@ namespace Castle.Facilities.BatchRegistration
 
 			if (type == null || type.Length == 0)
 			{
-				throw new ConfigurationException("The addFacility node must have a 'type' " + 
-					" attribute with the Type's name");
+				String message = "The addFacility node must have a 'type' attribute with the Type's name";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 			if (id == null || id.Length == 0)
 			{
-				throw new ConfigurationException("The addFacility node must have a 'id' " + 
-					" attribute with facility's key");
+				String message = "The addFacility node must have a 'id' attribute with facility's key";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			Kernel.AddFacility( id, InstatiateFacility( type ) );
@@ -127,8 +143,12 @@ namespace Castle.Facilities.BatchRegistration
 				}
 				else
 				{
-					throw new ConfigurationException("Invalid node inside assemblyBatch " + 
-						"configuration. Expected 'include' or 'exclude'");
+					String message = "Invalid node inside assemblyBatch configuration. Expected 'include' or 'exclude'";
+#if DOTNET2
+					throw new ConfigurationErrorsException(message);
+#else
+					throw new ConfigurationException(message);
+#endif
 				}
 			}
 		}

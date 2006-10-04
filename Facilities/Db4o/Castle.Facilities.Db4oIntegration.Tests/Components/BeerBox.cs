@@ -55,6 +55,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests.Components
 			return _dao.Load(id);
 		}
 
+		[CLSCompliant(false)]
 		public ObjectSet GetAll()
 		{
 			return _dao.FindAll();

@@ -59,6 +59,7 @@ namespace Castle.ActiveRecord.Queries
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecord type</param>
+		/// <param name="queryLanguage">The language of the query</param>
 		/// <param name="query">The query</param>
 		/// <param name="positionalParameters">The positional positionalParameters</param>
 		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, String query, params Object[] positionalParameters)
@@ -71,6 +72,7 @@ namespace Castle.ActiveRecord.Queries
 		/// the target ActiveRecord type specified in <paramref name="targetType"/>.
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecord type</param>
+		/// <param name="queryLanguage">The language of the query</param>
 		/// <param name="query">The query</param>
 		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, String query)
 			: base(targetType, queryLanguage, query)

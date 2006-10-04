@@ -39,9 +39,9 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>
 		/// logical and :
-		/// null && right = false
-		/// left && null = false
-		/// null && null = false
+		/// null &amp;&amp; right = false
+		/// left &amp;&amp; null = false
+		/// null &amp;&amp; null = false
 		/// </summary>
 		public override bool Evaluate(IInternalContextAdapter context)
 		{

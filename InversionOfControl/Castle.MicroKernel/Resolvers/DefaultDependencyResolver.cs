@@ -64,6 +64,8 @@ namespace Castle.MicroKernel.Resolvers
 		/// <summary>
 		/// Returns true if the resolver is able to satisfy the specified dependency.
 		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="parentResolver"></param>
 		/// <param name="model"></param>
 		/// <param name="dependency"></param>
 		/// <returns></returns>
@@ -135,6 +137,8 @@ namespace Castle.MicroKernel.Resolvers
 		/// </description></item>
 		/// </list>
 		/// </remarks>
+		/// <param name="context"></param>
+		/// <param name="parentResolver"></param>
 		/// <param name="model"></param>
 		/// <param name="dependency"></param>
 		/// <returns></returns>
@@ -347,6 +351,7 @@ namespace Castle.MicroKernel.Resolvers
 		/// Extracts the component name from the a ref strings which is
 		/// ${something}
 		/// </summary>
+		/// <param name="name"></param>
 		/// <param name="keyValue"></param>
 		/// <returns></returns>
 		protected virtual String ExtractComponentKey(String keyValue, String name)

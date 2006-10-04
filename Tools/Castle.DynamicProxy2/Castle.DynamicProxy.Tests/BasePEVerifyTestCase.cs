@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Process process = new Process();
 
-			process.StartInfo.FileName = Path.Combine(ConfigurationSettings.AppSettings["sdkDir"],"peverify.exe");
+			process.StartInfo.FileName = Path.Combine(ConfigurationManager.AppSettings["sdkDir"],"peverify.exe");
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;

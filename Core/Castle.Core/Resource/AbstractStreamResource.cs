@@ -179,10 +179,6 @@ namespace Castle.Core.Resource
 			{
 			}
 
-			public void Dispose()
-			{
-			}
-
 			#endregion
 		}
 

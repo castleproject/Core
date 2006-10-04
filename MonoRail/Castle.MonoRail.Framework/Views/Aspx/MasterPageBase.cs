@@ -45,7 +45,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			using(StringWriter writer = new StringWriter())
 			{
 				new LosFormatter().Serialize(writer, viewState);
+#if DOTNET2
+				ClientScript.RegisterHiddenField(ViewStateKey, writer.GetStringBuilder().ToString());
+#else
 				RegisterHiddenField( ViewStateKey, writer.GetStringBuilder().ToString() );
+#endif
 			}
 		}
 	}

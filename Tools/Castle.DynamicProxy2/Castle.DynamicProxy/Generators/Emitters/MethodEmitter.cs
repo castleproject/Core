@@ -74,6 +74,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// accordingly
 		/// </summary>
 		/// <param name="baseMethod"></param>
+		/// <param name="parentEmitter"></param>
 		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
 			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);

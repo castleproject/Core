@@ -16,9 +16,13 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 {
 	using System;
 	using System.Collections;
+#if DOTNET2
+	using System.Net.Mail;
+#else
 	using System.Web.Mail;
-
-	using Castle.Components.Common.EmailSender;
+	using MailMessage=System.Web.Mail.MailMessage;
+	using MailPriority=System.Web.Mail.MailPriority;
+#endif
 
 	/// <summary>
 	/// Uses Smtp to send emails.
@@ -26,6 +30,9 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 	public class SmtpSender : IEmailSender
 	{
 		private readonly String hostname;
+#if DOTNET2
+		private SmtpClient smtpClient;
+#endif
 
 		/// <summary>
 		/// This service implementation requires a host name (valid one, if possible)
@@ -36,7 +43,11 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 		{
 			this.hostname = hostname;
 
+#if DOTNET2
+			this.smtpClient = new SmtpClient(hostname);
+#else
 			SmtpMail.SmtpServer = hostname;
+#endif
 		}
 
 		public String Hostname
@@ -51,14 +62,22 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 			if (subject == null) throw new ArgumentNullException("subject");
 			if (messageText == null) throw new ArgumentNullException("messageText");
 
+#if DOTNET2
+			smtpClient.Send(from, to, subject, messageText);
+#else
 			SmtpMail.Send( from, to, subject, messageText );
+#endif
 		}
 
 		public void Send(Message message)
 		{
 			if (message == null) throw new ArgumentNullException("message");
 
+#if DOTNET2
+			smtpClient.Send(MailMessageFrom(message));
+#else
 			SmtpMail.Send( MailMessageFrom(message) );
+#endif
 		}
 
 		public void Send(Message[] messages)
@@ -69,6 +88,39 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 			}
 		}
 
+#if DOTNET2
+		private MailMessage MailMessageFrom(Message message)
+		{
+			MailMessage mailMessage = new MailMessage(message.From, message.To);
+
+			mailMessage.CC.Add(message.Cc);
+			mailMessage.Bcc.Add(message.Bcc);
+			mailMessage.Subject = message.Subject;
+			mailMessage.Body = message.Body;
+			mailMessage.BodyEncoding = message.Encoding;
+			mailMessage.IsBodyHtml = (message.Format == Format.Html);
+			mailMessage.Priority = (MailPriority) Enum.Parse( typeof(MailPriority), message.Priority.ToString() );
+			
+			foreach(DictionaryEntry entry in message.Headers)
+			{
+				mailMessage.Headers.Add((string)entry.Key, (string)entry.Value);
+			}
+
+//            foreach(DictionaryEntry entry in message.Fields)
+//            {
+//                mailMessage.Fields.Add(entry.Key, entry.Value);
+//            }
+
+			foreach(MessageAttachment attachment in message.Attachments)
+			{
+				Attachment mailAttach = new Attachment(attachment.FileName);
+				
+				mailMessage.Attachments.Add( mailAttach );
+			}
+
+			return mailMessage;
+		}
+#else
 		private MailMessage MailMessageFrom(Message message)
 		{
 			MailMessage mailMessage = new MailMessage();
@@ -104,5 +156,6 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 
 			return mailMessage;
 		}
+#endif
 	}
 }

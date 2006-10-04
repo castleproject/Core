@@ -12,11 +12,11 @@ namespace NVelocity.Context
 	/// *
 	/// Currently, we have two context interfaces which must be supported :
 	/// <ul>
-	/// <li> Context : used for application/template data access
-	/// <li> InternalHousekeepingContext : used for internal housekeeping and caching
+	/// <li> Context : used for application/template data access</li>
+	/// <li> InternalHousekeepingContext : used for internal housekeeping and caching</li>
 	/// <li> InternalWrapperContext : used for getting root cache context and other
-	/// such.
-	/// <li> InternalEventContext : for event handling.
+	/// such.</li>
+	/// <li> InternalEventContext : for event handling.</li>
 	/// </ul>
 	/// *
 	/// This class implements the two interfaces to ensure that all methods are

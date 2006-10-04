@@ -38,13 +38,21 @@ namespace Castle.Core.Resource
 		{
 			this.sectionName = sectionName;
 
+#if DOTNET2
+			XmlNode node = (XmlNode)ConfigurationManager.GetSection(sectionName);
+#else
 			XmlNode node = (XmlNode) ConfigurationSettings.GetConfig(sectionName);
+#endif
 
 			if (node == null)
 			{
 				String message = String.Format(
 					"Could not find section '{0}' in the configuration file associated with this domain.", sectionName);
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
 				throw new ConfigurationException(message);
+#endif
 			}
 
 			// TODO: Check whether it's CData section

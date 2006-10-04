@@ -20,7 +20,7 @@ namespace NVelocity.Exception
 	/// <summary>
 	/// Application-level exception thrown when a reference method is
 	/// invoked and an exception is thrown.
-	/// <br>
+	/// <br/>
 	/// When this exception is thrown, a best effort will be made to have
 	/// useful information in the exception's message.  For complete
 	/// information, consult the runtime log.

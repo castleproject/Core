@@ -90,7 +90,11 @@
 		{
 			caseSensitiveLiterals = true;
 			setCaseSensitive(true);
+#if DOTNET2
+			literals = new Hashtable(100, (float) 0.4, StringComparer.CurrentCulture);
+#else
 			literals = new Hashtable(100, (float) 0.4, null, Comparer.Default);
+#endif
 			literals.Add("assignableFrom", 18);
 			literals.Add("for", 5);
 			literals.Add("method", 14);

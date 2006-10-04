@@ -39,10 +39,10 @@ namespace NVelocity.Util
 		/// </summary>
 		private readonly static String EOL = Environment.NewLine;
 
-		/// <summary> Length of the line separator.
+/*		/// <summary> Length of the line separator.
 		/// </summary>
 		// private static int EOL_LENGTH = Environment.NewLine.Length;
-
+*/
 		/// <summary> Concatenates a list of objects as a String.
 		/// *
 		/// </summary>
@@ -66,7 +66,7 @@ namespace NVelocity.Util
 		/// <summary> Return a package name as a relative path name
 		/// *
 		/// </summary>
-		/// <param name="String">package name to convert to a directory.
+		/// <param name="pckge">package name to convert to a directory.
 		/// </param>
 		/// <returns>String directory path.
 		///
@@ -244,7 +244,7 @@ namespace NVelocity.Util
 		/// A 2 character EOL will count as 1 character.
 		/// *
 		/// </summary>
-		/// <param name="string">String to chop.
+		/// <param name="s">String to chop.
 		/// </param>
 		/// <param name="i">Number of characters to chop.
 		/// </param>
@@ -260,7 +260,7 @@ namespace NVelocity.Util
 		/// A 2 character EOL will count as 1 character.
 		/// *
 		/// </summary>
-		/// <param name="string">String to chop.
+		/// <param name="s">String to chop.
 		/// </param>
 		/// <param name="i">Number of characters to chop.
 		/// </param>
@@ -312,9 +312,9 @@ namespace NVelocity.Util
 		/// in the provided hashtable.
 		/// *
 		/// </summary>
-		/// <param name="String">target string
+		/// <param name="argStr">target string
 		/// </param>
-		/// <param name="Hashtable">name/value pairs used for substitution
+		/// <param name="vars">name/value pairs used for substitution
 		/// </param>
 		/// <returns>String target string with replacements.
 		///
@@ -367,7 +367,7 @@ namespace NVelocity.Util
 		/// a string object.
 		/// *
 		/// </summary>
-		/// <param name="String">path to file.
+		/// <param name="file">path to file.
 		/// </param>
 		/// <returns>String contents of the file.
 		///
@@ -409,7 +409,7 @@ namespace NVelocity.Util
 		/// <summary> Remove/collapse multiple newline characters.
 		/// *
 		/// </summary>
-		/// <param name="String">string to collapse newlines in.
+		/// <param name="argStr">string to collapse newlines in.
 		/// </param>
 		/// <returns>String
 		///
@@ -435,7 +435,7 @@ namespace NVelocity.Util
 		/// <summary> Remove/collapse multiple spaces.
 		/// *
 		/// </summary>
-		/// <param name="String">string to remove multiple spaces from.
+		/// <param name="argStr">string to remove multiple spaces from.
 		/// </param>
 		/// <returns>String
 		///
@@ -462,11 +462,11 @@ namespace NVelocity.Util
 		/// Taken from the Jive forum package.
 		/// *
 		/// </summary>
-		/// <param name="String">original string.
+		/// <param name="line">original string.
 		/// </param>
-		/// <param name="String">string in line to replace.
+		/// <param name="oldString">string in line to replace.
 		/// </param>
-		/// <param name="String">replace oldString with this.
+		/// <param name="newString">replace oldString with this.
 		/// </param>
 		/// <returns>String string with replacements.
 		///
@@ -522,7 +522,7 @@ namespace NVelocity.Util
 				tmpByte.CopyTo(tmpChar, 0);
 				foo = new String(tmpChar);
 			}
-			catch (Exception f)
+			catch (Exception)
 			{
 				// Do nothing.
 			}
@@ -599,11 +599,11 @@ namespace NVelocity.Util
 		/// return the falseString.
 		/// *
 		/// </summary>
-		/// <param name="boolean">
+		/// <param name="state">
 		/// </param>
-		/// <param name="String">trueString
+		/// <param name="trueString">trueString
 		/// </param>
-		/// <param name="String">falseString
+		/// <param name="falseString">falseString
 		///
 		/// </param>
 		public String Select(bool state, String trueString, String falseString)

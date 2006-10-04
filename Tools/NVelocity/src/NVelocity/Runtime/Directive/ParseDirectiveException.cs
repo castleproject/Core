@@ -35,7 +35,7 @@ namespace NVelocity.Runtime.Directive
 						returnStr += " -> ";
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 				}
 

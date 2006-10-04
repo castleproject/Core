@@ -20,7 +20,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// <summary>
 	/// Handles the equivalence operator
 	/// 
-	/// <arg1>  == <arg2>
+	/// &lt;arg1&gt;  == &lt;arg2&gt;
 	/// 
 	/// This operator requires that the LHS and RHS are both of the
 	/// same Class.

@@ -301,7 +301,7 @@ namespace NVelocity.Runtime.Parser
 					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
-			throw new ApplicationException("Missing return statement in function");
+			//throw new ApplicationException("Missing return statement in function");
 		}
 
 		/// <summary> These are the types of statements that
@@ -412,7 +412,7 @@ namespace NVelocity.Runtime.Parser
 		/// <summary>  Used to catch and process escape sequences in grammatical constructs
 		/// as escapes outside of VTL are just characters.  Right now we have both
 		/// this and the EscapeDirective() construction because in the EscapeDirective()
-		/// case, we want to suck in the #<directive> and here we don't.  We just want
+		/// case, we want to suck in the #&lt;directive&gt; and here we don't.  We just want
 		/// the escapes to render correctly
 		/// </summary>
 		public void Escape()
@@ -4895,7 +4895,6 @@ namespace NVelocity.Runtime.Parser
 		private Token jj_scanpos, jj_lastpos;
 		private int jj_la;
 		public bool lookingAhead = false;
-		private bool jj_semLA;
 		private int jj_gen;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_la1 '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
 		//UPGRADE_NOTE: The initialization of  'jj_la1' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'

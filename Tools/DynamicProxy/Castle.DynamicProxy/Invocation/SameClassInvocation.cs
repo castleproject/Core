@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Invocation
 	/// <summary>
 	/// 
 	/// </summary>
-	[CLSCompliant(true)]
 	public class SameClassInvocation : AbstractInvocation
 	{
 		public SameClassInvocation(ICallable callable, object proxy, MethodInfo method, object newtarget) : 

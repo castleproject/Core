@@ -24,7 +24,7 @@ namespace NVelocity.Test
 				Velocity.SetProperty(RuntimeConstants.VM_PERM_INLINE_LOCAL, true);
 				Velocity.Init();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				throw new Exception("Cannot setup VelocimacroTestCase!");
 			}

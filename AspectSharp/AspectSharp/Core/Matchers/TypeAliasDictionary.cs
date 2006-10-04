@@ -24,7 +24,11 @@ namespace AspectSharp.Core.Matchers
 	{
 		private static readonly TypeAliasDictionary _instance = new TypeAliasDictionary();
 
+#if DOTNET2
+		private Hashtable _map = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
+#else
 		private Hashtable _map = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
+#endif
 
 		private TypeAliasDictionary()
 		{

@@ -32,6 +32,8 @@ namespace Castle.MicroKernel
 		/// to throw an exception in the case a non-optional dependency 
 		/// could not be resolved.
 		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="parentResolver"></param>
 		/// <param name="model"></param>
 		/// <param name="dependency"></param>
 		/// <returns></returns>
@@ -40,6 +42,8 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Returns true if the resolver is able to satisfy this dependency.
 		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="parentResolver"></param>
 		/// <param name="model"></param>
 		/// <param name="dependency"></param>
 		/// <returns></returns>

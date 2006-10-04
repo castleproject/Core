@@ -47,7 +47,6 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// through the component <see cref="ISessionManager"/>, which is 
 	/// transaction aware and save you the burden of sharing session
 	/// or using a singleton.
-	/// <
 	/// </para>
 	/// </remarks>
 	/// <example>The following sample illustrates how a component 
@@ -124,8 +123,13 @@ namespace Castle.Facilities.NHibernateIntegration
 
 				if (!typeof(ISessionStore).IsAssignableFrom(sessionStoreType))
 				{
-					throw new ConfigurationException("The specified customStore does " + 
-						"not implement the interface ISessionStore. Type " + customStore);
+					String message = "The specified customStore does " + 
+						"not implement the interface ISessionStore. Type " + customStore;
+#if DOTNET2
+						throw new ConfigurationErrorsException(message);
+#else
+						throw new ConfigurationException(message);
+#endif
 				}
 			}
 
@@ -176,7 +180,12 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				if (!"factory".Equals(factoryConfig.Name))
 				{
-					throw new ConfigurationException("Unexpected node " + factoryConfig.Name);
+					String message = "Unexpected node " + factoryConfig.Name;
+#if DOTNET2
+					throw new ConfigurationErrorsException(message);
+#else
+					throw new ConfigurationException(message);
+#endif
 				}
 
 				ConfigureFactories(factoryConfig, sessionFactoryResolver, firstFactory);
@@ -221,18 +230,28 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			if (id == null || String.Empty.Equals(id))
 			{
-				throw new ConfigurationException("You must provide a " + 
+				String message = "You must provide a " + 
 					"valid 'id' attribute for the 'factory' node. This id is used as key for " + 
-					"the ISessionFactory component registered on the container");
+					"the ISessionFactory component registered on the container";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			String alias = config.Attributes["alias"];
 
 			if (!firstFactory && (alias == null || alias.Length == 0))
 			{
-				throw new ConfigurationException("You must provide a " + 
+				String message = "You must provide a " + 
 					"valid 'alias' attribute for the 'factory' node. This id is used to obtain " + 
-					"the ISession implementation from the SessionManager");
+					"the ISession implementation from the SessionManager";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 			else if (alias == null || alias.Length == 0)
 			{
@@ -325,7 +344,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			catch(Exception ex)
 			{
 				String message = String.Format("The assembly {0} could not be loaded.", assembly);
-				throw new ConfigurationException( message, ex );
+#if DOTNET2
+				throw new ConfigurationErrorsException(message, ex);
+#else
+				throw new ConfigurationException(message, ex);
+#endif
 			}
 		}
 
@@ -335,7 +358,12 @@ namespace Castle.Facilities.NHibernateIntegration
 	
 			if (factoriesConfig == null)
 			{
-				throw new ConfigurationException("You need to configure at least one factory to use the NHibernateFacility");
+				String message = "You need to configure at least one factory to use the NHibernateFacility";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 		}
 
@@ -343,7 +371,12 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (FacilityConfig == null)
 			{
-				throw new ConfigurationException("The NHibernateFacility requires an external configuration");
+				String message = "The NHibernateFacility requires an external configuration";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 		}
 

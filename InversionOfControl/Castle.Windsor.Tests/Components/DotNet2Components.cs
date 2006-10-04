@@ -54,19 +54,19 @@ namespace Castle.Windsor.Tests
         string name;
         ICache<IReviewer> cache;
 
-        public ICache<IReviewer> Cache
+        public new ICache<IReviewer> Cache
         {
             get { return cache; }
             set { cache = value; }
         }
 
-        public string Name
+		public new string Name
         {
             get { return name; }
             set { name = value; }
         }
 
-        public IReviewer Get(int id)
+		public new IReviewer Get(int id)
         {
             return null;
         }

@@ -56,14 +56,24 @@ namespace Castle.MonoRail.Framework.Configuration
 			
 			if (idAtt == null || idAtt.Value == String.Empty)
 			{
-				throw new ConfigurationException("To add a service, please specify the 'id' attribute. " + 
-					"Check the documentation for more information");
+				String message = "To add a service, please specify the 'id' attribute. " + 
+					"Check the documentation for more information";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 
 			if (typeAtt == null || typeAtt.Value == String.Empty)
 			{
-				throw new ConfigurationException("To add a service, please specify the 'type' attribute. " + 
-					"Check the documentation for more information");
+				String message = "To add a service, please specify the 'type' attribute. " + 
+					"Check the documentation for more information";
+#if DOTNET2
+				throw new ConfigurationErrorsException(message);
+#else
+				throw new ConfigurationException(message);
+#endif
 			}
 			
 			try
@@ -73,7 +83,12 @@ namespace Castle.MonoRail.Framework.Configuration
 			}
 			catch(Exception ex)
 			{
-				throw new ConfigurationException("Invalid service id: " + idAtt.Value, ex);
+				String message = "Invalid service id: " + idAtt.Value;
+#if DOTNET2
+				throw new ConfigurationErrorsException(message, ex);
+#else
+				throw new ConfigurationException(message, ex);
+#endif
 			}
 			
 			service = TypeLoadUtil.GetType(typeAtt.Value);

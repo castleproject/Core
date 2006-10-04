@@ -28,6 +28,7 @@ namespace NVelocity.Runtime.Log
 	/// logkit is in the classpath, and try for an AvalonLogSystem
 	/// as a final gasp.  After that, there is nothing we can do.
 	/// </li>
+	/// </ul>
 	/// </summary>
 	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
 	/// <author> <a href="mailto:jon@latchkey.com">Jon S. Stevens</a></author>

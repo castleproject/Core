@@ -30,7 +30,11 @@ namespace Castle.MonoRail.Framework.Tests
 		public void SetUp()
 		{
 			loader = new FileAssemblyViewSourceLoader();
+#if DOTNET2
+			loader.ViewRootDir = Path.GetFullPath(System.Configuration.ConfigurationManager.AppSettings["tests.src"]);
+#else
 			loader.ViewRootDir = Path.GetFullPath(System.Configuration.ConfigurationSettings.AppSettings["tests.src"]);
+#endif
 			loader.Service(new TestServiceContainer());
 		}
 

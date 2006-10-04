@@ -27,7 +27,7 @@ namespace NVelocity.Runtime.Directive
 	/// </summary>
 	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a> </author>
 	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
-	/// <author> <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck<a> </author>
+	/// <author> <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a> </author>
 	/// <version> $Id: Parse.cs,v 1.4 2003/10/27 13:54:10 corts Exp $ </version>
 	public class Parse : Directive
 	{
@@ -142,13 +142,13 @@ namespace NVelocity.Runtime.Directive
             {
                 result = rsvc.GetTemplate(arg, encoding);
             }
-            catch(ResourceNotFoundException rnfe)
+            catch(ResourceNotFoundException)
             {
                 // the arg wasn't found.  Note it and throw
                 rsvc.Error("#parse(): cannot find template '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
                 throw;
             }
-            catch(ParseErrorException pee)
+            catch(ParseErrorException)
             {
                 // the arg was found, but didn't parse - syntax error
                 // note it and throw

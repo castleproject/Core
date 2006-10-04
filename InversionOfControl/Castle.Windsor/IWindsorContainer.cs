@@ -98,6 +98,7 @@ namespace Castle.Windsor
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
+		/// <param name="service"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service);
 
@@ -130,12 +131,12 @@ namespace Castle.Windsor
 		void RemoveChildContainer(IWindsorContainer childContainer);
 
 		/// <summary>
-		/// Shortcut to the method <see cref="Resolve"/>
+		/// Shortcut to the method <see cref="Resolve(string)"/>
 		/// </summary>
 		object this [String key] { get; }
 
 		/// <summary>
-		/// Shortcut to the method <see cref="Resolve"/>
+		/// Shortcut to the method <see cref="Resolve(Type)"/>
 		/// </summary>
 		object this [Type service] { get; }
 

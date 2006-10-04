@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy
 	/// Summary description for StandardInterceptor.
 	/// </summary>
 	[Serializable]
-	[CLSCompliant(true)]
 	public class StandardInterceptor : IInterceptor
 	{
 		public StandardInterceptor()

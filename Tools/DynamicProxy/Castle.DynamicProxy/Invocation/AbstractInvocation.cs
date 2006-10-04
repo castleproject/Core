@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Invocation
 	using System;
 	using System.Reflection;
 
-	[CLSCompliant(true)]
 	public abstract class AbstractInvocation : MarshalByRefObject, IInvocation
 	{
 		protected ICallable callable;

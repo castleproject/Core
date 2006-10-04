@@ -25,7 +25,11 @@ namespace AspectSharp.Builder
 	{
 		public AppDomainConfigurationBuilder()
 		{
+#if DOTNET2
+			Node = (XmlNode) ConfigurationManager.GetSection("aspectsharp");
+#else
 			Node = (XmlNode) ConfigurationSettings.GetConfig("aspectsharp");
+#endif
 		}
 	}
 }

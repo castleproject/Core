@@ -15,6 +15,7 @@
 namespace Castle.Core.Tests.Resources
 {
 	using System;
+	using System.Configuration;
 	using System.IO;
 
 	using NUnit.Framework;
@@ -26,8 +27,11 @@ namespace Castle.Core.Tests.Resources
 	public class FileResourceFactoryTestCase
 	{
 		private FileResourceFactory resFactory = new FileResourceFactory();
-		private String basePath = Path.Combine(System.Configuration.ConfigurationSettings.AppSettings["tests.src"], "Resources");
-
+#if DOTNET2
+		private String basePath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Resources");
+#else
+		private String basePath = Path.Combine(ConfigurationSettings.AppSettings["tests.src"], "Resources");
+#endif
 		[TestFixtureSetUp]
 		public void Init()
 		{

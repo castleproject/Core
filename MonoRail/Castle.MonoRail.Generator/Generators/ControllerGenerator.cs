@@ -212,7 +212,11 @@ namespace Castle.MonoRail.Generator.Generators
 				{
 					CodeGeneratorOptions opts = new CodeGeneratorOptions();
 					opts.BracingStyle = "C";
+#if DOTNET2
+					provider.GenerateCodeFromNamespace(thisNs, sw, opts);
+#else
 					provider.CreateGenerator().GenerateCodeFromNamespace(thisNs, sw, opts);
+#endif
 				}
 			}
 			else
@@ -302,7 +306,11 @@ namespace Castle.MonoRail.Generator.Generators
 				{
 					CodeGeneratorOptions opts = new CodeGeneratorOptions();
 					opts.BracingStyle = "C";
+#if DOTNET2
+					provider.GenerateCodeFromNamespace(nsunit, sw, opts);
+#else
 					provider.CreateGenerator().GenerateCodeFromNamespace(nsunit, sw, opts);
+#endif
 				}
 			}
 			else

@@ -28,7 +28,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// Summary description for GenericDao.
 	/// </summary>
 	/// <remarks>
-	/// Contributed by Steve Degosserie <steve.degosserie@vn.netika.com>
+	/// Contributed by Steve Degosserie &lt;steve.degosserie@vn.netika.com&gt;
 	/// </remarks>
 	public class NHibernateGenericDao : INHibernateGenericDao
 	{

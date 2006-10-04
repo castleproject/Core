@@ -1,5 +1,6 @@
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
+#pragma warning disable 693
 	public class GenClassNameClash<T, Z>
 	{
 		public virtual void DoSomethingT<T>(T t)
@@ -18,4 +19,5 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 		{
 		}
 	}
+#pragma warning restore 693
 }

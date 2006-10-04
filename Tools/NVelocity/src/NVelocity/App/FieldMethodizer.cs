@@ -5,32 +5,32 @@ namespace NVelocity.App
 	using System.Reflection;
 
 	/// <summary>
-	/// <p>This is a small utility class allow easy access to static fields in a class,
+	/// <para>This is a small utility class allow easy access to static fields in a class,
 	/// such as string constants.  Velocity will not introspect for class
 	/// fields (and won't in the future :), but writing setter/getter methods to do
 	/// this really is a pain,  so use this if you really have
-	/// to access fields.
+	/// to access fields.</para>
 	///
-	/// <p>The idea it so enable access to the fields just like you would in Java.
+	/// <para>The idea it so enable access to the fields just like you would in Java.
 	/// For example, in Java, you would access a static field like
 	/// <blockquote><pre>
 	/// MyClass.STRING_CONSTANT
 	/// </pre></blockquote>
-	/// and that is the same thing we are trying to allow here.
+	/// and that is the same thing we are trying to allow here.</para>
 	///
-	/// <p>So to use in your Java code, do something like this :
+	/// <para>So to use in your Java code, do something like this :
 	/// <blockquote><pre>
 	/// context.put("runtime", new FieldMethodizer( "NVelocity.Runtime.Runtime" ));
 	/// </pre></blockquote>
 	/// and then in your template, you can access any of your static fields in this way :
 	/// <blockquote><pre>
 	/// $runtime.RUNTIME_LOG_WARN_STACKTRACE
-	/// </pre></blockquote>
+	/// </pre></blockquote></para>
 	///
-	/// <p>Right now, this class only methodizes <code>public static</code> fields.  It seems
+	/// <para>Right now, this class only methodizes <code>public static</code> fields.  It seems
 	/// that anything else is too dangerous.  This class is for convenience accessing
 	/// 'constants'.  If you have fields that aren't <code>static</code> it may be better
-	/// to handle them by explicitly placing them into the context.
+	/// to handle them by explicitly placing them into the context.</para>
 	/// </summary>
 	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
 	/// </author>
@@ -120,7 +120,7 @@ namespace NVelocity.App
 				if (f != null)
 					return f.GetValue((Type) classHash[fieldName]);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 			}
 			return null;

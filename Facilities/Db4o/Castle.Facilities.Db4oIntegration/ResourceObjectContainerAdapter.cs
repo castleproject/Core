@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.Db4oIntegration
 {
+	using System;
 	using com.db4o;
 
 	using Castle.Services.Transaction;
@@ -22,6 +23,7 @@ namespace Castle.Facilities.Db4oIntegration
 	{
 		private readonly ObjectContainer _objectContainer;
 
+		[CLSCompliant(false)]
 		public ResourceObjectContainerAdapter(ObjectContainer objectContainer)
 		{
 			_objectContainer = objectContainer;

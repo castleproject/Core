@@ -73,14 +73,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsTrue(state is NoIterationState);
 			Assert.IsNull(state.TargetSuffix);
 			
-			bool iterated = false;
-			
-			foreach(SetItem item in state)
-			{
-				iterated = true;
-			}
-			
-			Assert.IsFalse(iterated);
+			Assert.IsFalse(state.MoveNext());
 		}
 		
 		[Test]
@@ -93,14 +86,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsTrue(state is NoIterationState);
 			Assert.IsNull(state.TargetSuffix);
 			
-			bool iterated = false;
-			
-			foreach(SetItem item in state)
-			{
-				iterated = true;
-			}
-			
-			Assert.IsFalse(iterated);
+			Assert.IsFalse(state.MoveNext());
 		}
 
 		[Test]

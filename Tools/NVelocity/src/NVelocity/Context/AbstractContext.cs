@@ -13,11 +13,11 @@ namespace NVelocity.Context
 	/// Also handles / enforces policy on null keys and values :
 	/// *
 	/// <ul>
-	/// <li> Null keys and values are accepted and basically dropped.
+	/// <li> Null keys and values are accepted and basically dropped.</li>
 	/// <li> If you place an object into the context with a null key, it
-	/// will be ignored and logged.
+	/// will be ignored and logged.</li>
 	/// <li> If you try to place a null into the context with any key, it
-	/// will be dropped and logged.
+	/// will be dropped and logged.</li>
 	/// </ul>
 	/// *
 	/// The default implementation of this for application use is
@@ -54,7 +54,7 @@ namespace NVelocity.Context
 
 		///
 		/// <summary>  Implement to return a value from the context storage.
-		/// <br><br>
+		/// <br/><br/>
 		/// The implementation of this method is required for proper
 		/// operation of a Context implementation in general
 		/// Velocity use.
@@ -69,7 +69,7 @@ namespace NVelocity.Context
 
 		///
 		/// <summary>  Implement to put a value into the context storage.
-		/// <br><br>
+		/// <br/><br/>
 		/// The implementation of this method is required for
 		/// proper operation of a Context implementation in
 		/// general Velocity use.
@@ -77,7 +77,7 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key">key with which to associate the value
 		/// </param>
-		/// <param name="value">value to be associated with the key
+		/// <param name="value_">value to be associated with the key
 		/// </param>
 		/// <returns>previously stored value if exists, or null
 		///
@@ -86,7 +86,7 @@ namespace NVelocity.Context
 
 		///
 		/// <summary>  Implement to determine if a key is in the storage.
-		/// <br><br>
+		/// <br/><br/>
 		/// Currently, this method is not used internally by
 		/// the Velocity core.
 		/// *
@@ -101,7 +101,7 @@ namespace NVelocity.Context
 		///
 		/// <summary>  Implement to return an object array of key
 		/// strings from your storage.
-		/// <br><br>
+		/// <br/><br/>
 		/// Currently, this method is not used internally by
 		/// the Velocity core.
 		/// *
@@ -113,7 +113,7 @@ namespace NVelocity.Context
 
 		///
 		/// <summary>  I mplement to remove an item from your storage.
-		/// <br><br>
+		/// <br/><br/>
 		/// Currently, this method is not used internally by
 		/// the Velocity core.
 		/// *
@@ -159,7 +159,7 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key">  The name to key the provided value with.
 		/// </param>
-		/// <param name="value">The corresponding value.
+		/// <param name="value_">The corresponding value.
 		/// </param>
 		/// <returns>Object that was replaced in the the Context if
 		/// applicable or null if not.

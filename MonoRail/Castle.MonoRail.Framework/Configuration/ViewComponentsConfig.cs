@@ -36,8 +36,13 @@ namespace Castle.MonoRail.Framework.Configuration
 				
 				if (typeAtt == null || typeAtt.Value == String.Empty)
 				{
-					throw new ConfigurationException("If the node customComponentFactory is " + 
-						"present, you must specify the 'type' attribute");
+					String message = "If the node customComponentFactory is " + 
+						"present, you must specify the 'type' attribute";
+#if DOTNET2
+					throw new ConfigurationErrorsException(message);
+#else
+					throw new ConfigurationException(message);
+#endif
 				}
 				
 				String typeName = typeAtt.Value;

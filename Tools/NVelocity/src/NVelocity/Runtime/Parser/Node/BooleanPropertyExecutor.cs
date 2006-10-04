@@ -5,12 +5,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 	/// <summary>  Handles discovery and valuation of a
 	/// boolean object property, of the
-	/// form public boolean is<property> when executed.
+	/// form public boolean is&lt;property&gt; when executed.
 	///
 	/// We do this separately as to preserve the current
-	/// quasi-broken semantics of get<as is property>
-	/// get< flip 1st char> get("property") and now followed
-	/// by is<Property>
+	/// quasi-broken semantics of get&lt;as is property&gt;
+	/// get&lt; flip 1st char&gt; get("property") and now followed
+	/// by is&lt;Property&gt;
 	/// </summary>
 	public class BooleanPropertyExecutor : PropertyExecutor
 	{

@@ -82,7 +82,7 @@ namespace Castle.MicroKernel
 		/// Thrown if <paramref name="key"/> or <paramref name="classType"/>
 		/// are <see langword="null"/>.
 		/// </exception>
-		/// <exception cref="ArgumentException">
+		/// <exception cref="ArgumentException" />
 		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
 		void AddComponent(String key, Type classType, LifestyleType lifestyle, bool overwriteLifestyle);
 
@@ -243,6 +243,7 @@ namespace Castle.MicroKernel
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
+		/// <param name="service"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service);
 

@@ -27,10 +27,10 @@ namespace Castle.Core
 		{
 		}
 
-		/// <summary>
-		/// Kind of copy constructor
-		/// </summary>
-		/// <param name="copy"></param>
+//		/// <summary>
+//		/// Kind of copy constructor
+//		/// </summary>
+//		/// <param name="copy"></param>
 //		public GraphNode(GraphNode copy)
 //		{
 //			incoming = new ArrayList(Incoming);

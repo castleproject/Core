@@ -254,7 +254,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private IContext CreateContext(IRailsEngineContext context, Controller controller)
 		{
+#if DOTNET2
+			Hashtable innerContext = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+#else
 			Hashtable innerContext = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
+#endif
 
 			innerContext.Add(TemplateKeys.Controller, controller);
 			innerContext.Add(TemplateKeys.Context,    context);

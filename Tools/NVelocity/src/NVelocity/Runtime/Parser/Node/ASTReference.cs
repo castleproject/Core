@@ -32,7 +32,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
 	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
 	/// <author> <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a></author>
-	/// <author> <a href="mailto:kjohnson@transparent.com>Kent Johnson</a></author>
+	/// <author> <a href="mailto:kjohnson@transparent.com">Kent Johnson</a></author>
 	/// <version> $Id: ASTReference.cs,v 1.4 2003/10/27 13:54:10 corts Exp $ </version>
 	public class ASTReference : SimpleNode
 	{

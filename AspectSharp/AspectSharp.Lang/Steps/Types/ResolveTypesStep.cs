@@ -16,6 +16,9 @@ using AspectSharp.Lang.AST.Visitors;
 namespace AspectSharp.Lang.Steps.Types
 {
 	using System;
+#if DOTNET2
+	using System.IO;
+#endif
 	using System.Reflection;
 	using System.Collections;
 
@@ -57,7 +60,19 @@ namespace AspectSharp.Lang.Steps.Types
 		{
 			try
 			{
+#if DOTNET2
+				Assembly assembly;
+				try
+				{
+					assembly = Assembly.Load(assemblyReference.AssemblyName);
+                }
+                catch(FileNotFoundException)
+                {
+                    assembly = GacHelper.FindAssembly(assemblyReference.AssemblyName);
+                }
+#else
 				Assembly assembly = Assembly.LoadWithPartialName(assemblyReference.AssemblyName);
+#endif
 				assemblyReference.ResolvedAssembly = assembly;
 			}
 			catch(Exception ex)

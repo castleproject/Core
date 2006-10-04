@@ -379,12 +379,12 @@ namespace NVelocity.App
 		/// <summary>
 		/// Determines if a template is accessable via the currently
 		/// configured resource loaders.
-		/// <br><br>
+		/// <br/><br/>
 		/// Note that the current implementation will <b>not</b>
 		/// change the state of the system in any real way - so this
 		/// cannot be used to pre-load the resource cache, as the
 		/// previous implementation did as a side-effect.
-		/// <br><br>
+		/// <br/><br/>
 		/// The previous implementation exhibited extreme lazyness and
 		/// sloth, and the author has been flogged.
 		/// </summary>

@@ -49,6 +49,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 		/// expanded
 		/// </summary>
 		/// <param name="element">The element.</param>
+		/// <param name="engine"></param>
 		private void ProcessAttributes(XmlElement element, IXmlProcessorEngine engine)
 		{
 			ProcessIncludeAttribute(element, engine);

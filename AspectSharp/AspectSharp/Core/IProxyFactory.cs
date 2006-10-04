@@ -42,6 +42,7 @@ namespace AspectSharp.Core
 		/// </summary>
 		/// <param name="classType">The proxy super class</param>
 		/// <param name="aspect">Definitions</param>
+		/// <param name="constructorArgs"></param>
 		/// <returns>The proxy instance</returns>
 		object CreateClassProxy(Type classType, AspectDefinition aspect, params object[] constructorArgs);
 	}

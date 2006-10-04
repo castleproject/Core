@@ -62,7 +62,9 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 	{
 		public override void DoSomething()
 		{
+#pragma warning disable 219
 			int x = 1 + 10; // Just something to fool the compiler 
+#pragma warning restore 219
 			base.DoSomething();
 		}
 	}

@@ -48,6 +48,8 @@ namespace Castle.MonoRail.Framework
 		/// Name of the template to load. 
 		/// Will look in <c>Views/mail</c> for that template file.
 		/// </param>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
 		/// <returns>An instance of <see cref="Message"/></returns>
 		Message RenderMailMessage(String templateName, IRailsEngineContext context, Controller controller);
 	}

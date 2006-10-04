@@ -30,7 +30,11 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 		{
 			String path = Path.Combine(
 				AppDomain.CurrentDomain.BaseDirectory, 
+#if DOTNET2
+			Path.Combine(System.Configuration.ConfigurationManager.AppSettings["tests.src"], "templates"));
+#else
 			Path.Combine(System.Configuration.ConfigurationSettings.AppSettings["tests.src"], "templates"));
+#endif
 
 			ITemplateEngine engine = new NVelocityTemplateEngine(path);
 			(engine as ISupportInitialize).BeginInit();

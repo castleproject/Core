@@ -54,7 +54,7 @@ namespace NVelocity.Runtime.Resource
 		/// initializers, basically properties for a particular
 		/// template stream source. The order in this list
 		/// reflects numbering of the properties i.e.
-		/// <loader-id>.resource.loader.<property> = <value>
+		/// &lt;loader-id&gt;.resource.loader.&lt;property&gt; = &lt;value&gt;
 		/// </summary>
 		private ArrayList sourceInitializerList;
 
@@ -118,7 +118,7 @@ namespace NVelocity.Runtime.Resource
 					Type type = Type.GetType(claz);
 					o = Activator.CreateInstance(type);
 				}
-				catch (Exception cnfe)
+				catch (Exception)
 				{
 					String err = "The specified class for ResourceCache (" + claz + ") does not exist (or is not accessible to the current classloader).";
 					rsvc.Error(err);
@@ -240,7 +240,7 @@ namespace NVelocity.Runtime.Resource
 				{
 					RefreshResource(resource, encoding);
 				}
-				catch (ResourceNotFoundException rnfe)
+				catch (ResourceNotFoundException)
 				{
 					/*
 					 *  something exceptional happened to that resource
@@ -277,7 +277,7 @@ namespace NVelocity.Runtime.Resource
 						globalCache.put(resourceName, resource);
 					}
 				}
-				catch (ResourceNotFoundException rnfe2)
+				catch (ResourceNotFoundException)
 				{
 					rsvc.Error("ResourceManager : unable to find resource '" + resourceName + "' in any resource loader.");
 
@@ -414,6 +414,7 @@ namespace NVelocity.Runtime.Resource
 		/// @throws Exception if a problem in parse
 		///
 		/// </param>
+		/// <param name="encoding"></param>
 		protected internal void RefreshResource(Resource resource, String encoding)
 		{
 			/*
@@ -530,7 +531,7 @@ namespace NVelocity.Runtime.Resource
 						return resourceLoader.GetType().ToString();
 					}
 				}
-				catch (ResourceNotFoundException e)
+				catch (ResourceNotFoundException)
 				{
 					// this isn't a problem.  keep going
 				}
@@ -544,7 +545,7 @@ namespace NVelocity.Runtime.Resource
 						{
 							input.Close();
 						}
-						catch (IOException ioe)
+						catch (IOException)
 						{
 						}
 					}

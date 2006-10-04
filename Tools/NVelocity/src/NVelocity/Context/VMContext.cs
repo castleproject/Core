@@ -178,7 +178,7 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key">name of item to set
 		/// </param>
-		/// <param name="value">object to set to key
+		/// <param name="value_">object to set to key
 		/// </param>
 		/// <returns>old stored object
 		///

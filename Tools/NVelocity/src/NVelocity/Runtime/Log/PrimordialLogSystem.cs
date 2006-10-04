@@ -6,7 +6,7 @@ namespace NVelocity.Runtime.Log
 
 	/// <summary>
 	/// Pre-init logger.  I believe that this was suggested by
-	/// Carsten Ziegeler <cziegeler@sundn.de> and
+	/// Carsten Ziegeler &lt;cziegeler@sundn.de&gt; and
 	/// Jeroen C. van Gelderen.  If this isn't correct, let me
 	/// know as this was a good idea...
 	/// </summary>

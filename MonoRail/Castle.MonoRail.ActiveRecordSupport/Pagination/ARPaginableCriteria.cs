@@ -25,7 +25,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 	/// <summary>
 	/// A paginable criteria.
-	/// Mimics the <see cref="ActiveRecordMediator.FindAll"/> interface.
+	/// Mimics the <see cref="ActiveRecordMediator.FindAll(Type)"/> interface.
 	/// </summary>
 	public class ARPaginableCriteria : IARPaginableDataSource
 	{
