@@ -3,19 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F9A88F20-64E5-442C-8C20-10C69A39EF4C}"
 	ProjectSection(SolutionItems) = preProject
 		Changes.txt = Changes.txt
-		container.build = container.build
 		Know issues.txt = Know issues.txt
 		License.txt = License.txt
 		Readme.txt = Readme.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel-2-0", "Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel-vs2005", "Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor-2-0", "Castle.Windsor\Castle.Windsor-vs2005.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor-vs2005", "Castle.Windsor\Castle.Windsor-vs2005.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests-2-0", "Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2005.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests-vs2005", "Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2005.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests-2-0", "Castle.Windsor.Tests\Castle.Windsor.Tests-vs2005.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests-vs2005", "Castle.Windsor.Tests\Castle.Windsor.Tests-vs2005.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2005", "..\Core\Castle.Core\Castle.Core-vs2005.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
 EndProject

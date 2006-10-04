@@ -3,21 +3,22 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5CE5406D-92AB-45ED-A4C9-921745E38BE1}</ProjectGuid>
+    <ProjectGuid>{8A7E5413-3F2C-4C09-92A7-F5A3AC9F2F93}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Castle.Facilities.IBatisNetIntegration</AssemblyName>
-    <AssemblyOriginatorKeyFile>..\..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyName>Castle.Facilities.AutomaticTransactionManagement.Tests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>Castle.Facilities.IBatisNetIntegration</RootNamespace>
+    <RootNamespace>Castle.Facilities.AutomaticTransactionManagement.Tests</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -25,7 +26,6 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\bin\</OutputPath>
@@ -57,7 +57,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -74,25 +74,25 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core">
-      <Name>Castle.Core</Name>
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.MicroKernel">
-      <Name>Castle.MicroKernel</Name>
+    <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Transaction">
-      <Name>Castle.Services.Transaction</Name>
+    <Reference Include="Castle.Services.Transaction, Version=0.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Transaction.dll</HintPath>
     </Reference>
-    <Reference Include="IBatisNet.Common, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Castle.Windsor, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\IBatisNet.Common.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="IBatisNet.DataMapper, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\IBatisNet.DataMapper.dll</HintPath>
+      <HintPath>..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -106,50 +106,48 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
+    <Compile Include="AnotherCustomerService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AutomaticSessionInspector.cs">
+    <Compile Include="BaseTransactionalComp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AutomaticSessionInterceptor.cs">
+    <Compile Include="ConfigHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataMapperTransactionManager.cs">
+    <Compile Include="ConfiguredComponents.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IBatisNetFacility.cs">
+    <Compile Include="CustomerService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NoSessionAttribute.cs">
+    <Compile Include="ICustomerService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ResourceSqlMapAdapter.cs">
+    <Compile Include="MockTransactionManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SessionAttribute.cs">
+    <Compile Include="TransactionalComp1.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SqlMapActivator.cs">
+    <Compile Include="TransactionalComp3.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SqlMapKeeper.cs">
+    <Compile Include="TransactionTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UsesAutomaticSessionCreationAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\CastleKey.snk">
-      <Link>CastleKey.snk</Link>
-    </None>
+    <ProjectReference Include="..\Castle.Facilities.AutomaticTransactionManagement\Castle.Facilities.AutomaticTransactionManagement-vs2005.csproj">
+      <Project>{9962F772-E75C-4998-A45B-3CD99C2E2903}</Project>
+      <Name>Castle.Facilities.AutomaticTransactionManagement-vs2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)\App.config" "$(TargetPath).config"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -11,7 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Castle.ActiveRecord</AssemblyName>
-    <AssemblyOriginatorKeyFile>CastleKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -389,6 +389,7 @@
     <Compile Include="Framework\Queries\Modifiers\IQueryModifier.cs" />
     <Compile Include="Framework\Queries\Modifiers\QueryRange.cs" />
     <Compile Include="Framework\Queries\Modifiers\QueryParameter.cs" />
+    <Compile Include="Framework\Queries\Modifiers\SqlQueryReturnDefinition.cs" />
     <Compile Include="Framework\Queries\ScalarQuery.Generic.cs" />
     <Compile Include="Framework\Queries\SimpleQuery.Generic.cs" />
     <Compile Include="Framework\Scopes\DifferentDatabaseScope.cs" />
@@ -400,7 +401,9 @@
     <Compile Include="Framework\Validators\LengthValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CastleKey.snk" />
+    <None Include="..\..\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
