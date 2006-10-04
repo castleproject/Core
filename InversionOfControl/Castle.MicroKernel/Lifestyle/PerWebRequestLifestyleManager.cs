@@ -38,7 +38,9 @@ namespace Castle.MicroKernel.Lifestyle
 		public override object Resolve(CreationContext context)
 		{
 			HttpContext current = HttpContext.Current;
-			
+
+			if (current == null) throw new InvalidOperationException("HttpContext.Current is null.  PerWebRequestLifestyle can only be used in ASP.Net");
+
 			if (current.Items[PerRequestObjectID] == null)
 			{
 				if (!PerWebRequestLifestyleModule.Initialized)

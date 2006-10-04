@@ -319,6 +319,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Lifestyle\Components\PerWebRequestComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifestyle\Components\SingletonComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

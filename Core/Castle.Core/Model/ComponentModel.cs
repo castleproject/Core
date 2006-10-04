@@ -51,7 +51,11 @@ namespace Castle.Core
 		/// <summary>
 		/// Any other logic to create/release components.
 		/// </summary>
-		Custom
+		Custom,
+		/// <summary>
+		/// PerWebRequest components are created once per Http Request
+		/// </summary>
+		PerWebRequest
 	}
 	
 	/// <summary>

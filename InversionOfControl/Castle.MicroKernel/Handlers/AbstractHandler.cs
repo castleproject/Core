@@ -325,6 +325,10 @@ namespace Castle.MicroKernel.Handlers
 
 				manager = new Lifestyle.PoolableLifestyleManager(initial, maxSize);
 			}
+			else if (type == LifestyleType.PerWebRequest)
+			{
+				manager = new Lifestyle.PerWebRequestLifestyleManager();
+			}
 
 			manager.Init(activator, Kernel);
 

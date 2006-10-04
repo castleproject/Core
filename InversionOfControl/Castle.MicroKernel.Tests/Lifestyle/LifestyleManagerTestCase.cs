@@ -79,11 +79,13 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.Singleton, false);
 			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.Thread, false);
 			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.Transient, false);
+			TestHandlersLifestyle(typeof(NoInfoComponent), LifestyleType.PerWebRequest, false);
 
 			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Transient, false);
 			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Singleton, false);
 			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Thread, false);
 			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.Transient, false);
+			TestHandlersLifestyleWithService(typeof(NoInfoComponent), LifestyleType.PerWebRequest, false);
 
 			TestLifestyleAndSameness(typeof(PerThreadComponent), LifestyleType.Transient, true, false);
 			TestLifestyleAndSameness(typeof(SingletonComponent), LifestyleType.Transient, true, false);
@@ -152,6 +154,10 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			kernel.AddComponent( "c", typeof(CustomComponent) );
 			handler = kernel.GetHandler("c");
 			Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+
+			kernel.AddComponent("d", typeof(PerWebRequestComponent));
+			handler = kernel.GetHandler("d");
+			Assert.AreEqual(LifestyleType.PerWebRequest, handler.ComponentModel.LifestyleType);
 		}
 
 		[Test]
@@ -177,6 +183,13 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			kernel.AddComponent("c", typeof(NoInfoComponent));
 			handler = kernel.GetHandler("c");
 			Assert.AreEqual(LifestyleType.Thread, handler.ComponentModel.LifestyleType);
+
+			confignode = new MutableConfiguration("component");
+			confignode.Attributes.Add("lifestyle", "perWebRequest");
+			kernel.ConfigurationStore.AddComponentConfiguration("d", confignode);
+			kernel.AddComponent("d", typeof(NoInfoComponent));
+			handler = kernel.GetHandler("d");
+			Assert.AreEqual(LifestyleType.PerWebRequest, handler.ComponentModel.LifestyleType);
 		}
 
 		[Test]

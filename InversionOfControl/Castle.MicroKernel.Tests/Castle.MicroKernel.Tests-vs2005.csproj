@@ -197,6 +197,7 @@
     <Compile Include="Lifecycle\LifecycleTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Lifestyle\Components\PerWebRequestComponent.cs" />
     <Compile Include="Lifestyle\Components\CustomComponent.cs">
       <SubType>Code</SubType>
     </Compile>

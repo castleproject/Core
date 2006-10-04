@@ -78,6 +78,19 @@ namespace Castle.Core
 
 	/// <summary>
 	/// Indicates that the target components wants a
+	/// per web request lifestyle.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+	public class PerWebRequestAttribute : LifestyleAttribute
+	{
+		public PerWebRequestAttribute() : base(LifestyleType.PerWebRequest)
+		{
+
+		}
+	}
+
+	/// <summary>
+	/// Indicates that the target components wants a
 	/// pooled lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
