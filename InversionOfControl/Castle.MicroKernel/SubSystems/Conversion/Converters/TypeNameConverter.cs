@@ -46,7 +46,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 				return type;
 			}
-			catch(ConverterException ex)
+			catch(ConverterException)
 			{
 				throw;
 			}
