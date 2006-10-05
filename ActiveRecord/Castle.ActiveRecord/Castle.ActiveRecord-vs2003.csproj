@@ -569,6 +569,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Queries\ProjectionQuery.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Queries\ScalarQuery.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -590,6 +594,11 @@
                 />
                 <File
                     RelPath = "Framework\Queries\Modifiers\QueryRange.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Queries\Modifiers\SqlQueryReturnDefinition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -74,7 +74,7 @@ namespace Castle.ActiveRecord
 		#endregion
 
 		/// <summary>
-		/// Simply creates the query and then call its <see cref="IQuery.List"/> method.
+		/// Simply creates the query and then call its <see cref="IQuery.List()"/> method.
 		/// </summary>
 		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
 		protected virtual object InternalExecute(ISession session)
@@ -83,7 +83,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Simply creates the query and then call its <see cref="IQuery.Enumerable"/> method.
+		/// Simply creates the query and then call its <see cref="IQuery.Enumerable()"/> method.
 		/// </summary>
 		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
 		protected virtual IEnumerable InternalEnumerate(ISession session)

@@ -117,6 +117,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 			SqlConnection conn = CreateSqlConnection();
 			ISession session1, session2;
+			ITransaction trans1, trans2;
 
 			using(new TransactionScope())
 			{
@@ -126,6 +127,7 @@ namespace Castle.ActiveRecord.Tests
 				blog.Save();
 				
 				session1 = blog.CurrentSession;
+				trans1 = blog.CurrentSession.Transaction;
 				Assert.IsNotNull(session1);
 				Assert.IsNotNull(session1.Transaction);
 				Assert.IsFalse(session1.Transaction.WasCommitted);
@@ -138,6 +140,7 @@ namespace Castle.ActiveRecord.Tests
 					blog.Create();
 
 					session2 = blog.CurrentSession;
+					trans2 = blog.CurrentSession.Transaction;
 					Assert.IsNotNull(session2);
 
 					Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
@@ -150,10 +153,10 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsFalse(session1.IsOpen);
 			Assert.IsFalse(session2.IsOpen);
-			Assert.IsTrue(session1.Transaction.WasCommitted);
-			Assert.IsFalse(session1.Transaction.WasRolledBack);
-			Assert.IsTrue(session2.Transaction.WasCommitted);
-			Assert.IsFalse(session2.Transaction.WasRolledBack);
+			Assert.IsTrue(trans1.WasCommitted);
+			Assert.IsFalse(trans1.WasRolledBack);
+			Assert.IsTrue(trans2.WasCommitted);
+			Assert.IsFalse(trans2.WasRolledBack);
 
 			Blog[] blogs = Blog.FindAll();
 			Assert.IsNotNull( blogs );
@@ -169,6 +172,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 			SqlConnection conn = CreateSqlConnection();
 			ISession session1, session2;
+			ITransaction trans1, trans2;
 
 			using(TransactionScope scope = new TransactionScope())
 			{
@@ -178,6 +182,7 @@ namespace Castle.ActiveRecord.Tests
 				blog.Save();
 				
 				session1 = blog.CurrentSession;
+				trans1 = blog.CurrentSession.Transaction;
 				Assert.IsNotNull(session1);
 				Assert.IsNotNull(session1.Transaction);
 				Assert.IsFalse(session1.Transaction.WasCommitted);
@@ -190,6 +195,7 @@ namespace Castle.ActiveRecord.Tests
 					blog.Create();
 
 					session2 = blog.CurrentSession;
+					trans2 = blog.CurrentSession.Transaction;
 					Assert.IsNotNull(session2);
 
 					Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
@@ -204,10 +210,10 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsFalse(session1.IsOpen);
 			Assert.IsFalse(session2.IsOpen);
-			Assert.IsFalse(session1.Transaction.WasCommitted);
-			Assert.IsTrue(session1.Transaction.WasRolledBack);
-			Assert.IsFalse(session2.Transaction.WasCommitted);
-			Assert.IsTrue(session2.Transaction.WasRolledBack);
+			Assert.IsFalse(trans1.WasCommitted);
+			Assert.IsTrue(trans1.WasRolledBack);
+			Assert.IsFalse(trans2.WasCommitted);
+			Assert.IsTrue(trans2.WasRolledBack);
 
 			Blog[] blogs = Blog.FindAll();
 			Assert.IsNotNull( blogs );
@@ -255,6 +261,7 @@ namespace Castle.ActiveRecord.Tests
 			SqlConnection conn = CreateSqlConnection();
 			ISession session1, session2;
 
+			ITransaction trans1, trans2;
 			using(new SessionScope())
 			{
 				using(TransactionScope scope = new TransactionScope())
@@ -266,9 +273,10 @@ namespace Castle.ActiveRecord.Tests
 					
 					session1 = blog.CurrentSession;
 					Assert.IsNotNull(session1);
-					Assert.IsNotNull(session1.Transaction);
-					Assert.IsFalse(session1.Transaction.WasCommitted);
-					Assert.IsFalse(session1.Transaction.WasRolledBack);
+					trans1 = session1.Transaction;
+					Assert.IsNotNull(trans1);
+					Assert.IsFalse(trans1.WasCommitted);
+					Assert.IsFalse(trans1.WasRolledBack);
 
 					conn.Open();
 
@@ -281,7 +289,7 @@ namespace Castle.ActiveRecord.Tests
 
 						session2 = blog.CurrentSession;
 						Assert.IsNotNull(session2);
-
+						trans2 = session2.Transaction;
 						Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
 
 						Assert.IsNotNull(session2.Transaction);
@@ -310,9 +318,9 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsFalse(session1.IsOpen);
 			Assert.IsFalse(session2.IsOpen);
-			Assert.IsTrue(session1.Transaction.WasCommitted);
-			Assert.IsFalse(session1.Transaction.WasRolledBack);
-			Assert.IsTrue(session2.Transaction.WasCommitted);
+			Assert.IsTrue(trans1.WasCommitted);
+			Assert.IsFalse(trans1.WasRolledBack);
+			Assert.IsTrue(trans2.WasCommitted);
 			Assert.IsFalse(session2.Transaction.WasRolledBack);
 
 			Blog[] blogs = Blog.FindAll();
@@ -330,6 +338,7 @@ namespace Castle.ActiveRecord.Tests
 			SqlConnection conn = CreateSqlConnection();
 			ISession session1, session2;
 
+			ITransaction trans1, trans2;
 			using(new SessionScope())
 			{
 				using(TransactionScope scope = new TransactionScope())
@@ -341,9 +350,10 @@ namespace Castle.ActiveRecord.Tests
 					
 					session1 = blog.CurrentSession;
 					Assert.IsNotNull(session1);
-					Assert.IsNotNull(session1.Transaction);
-					Assert.IsFalse(session1.Transaction.WasCommitted);
-					Assert.IsFalse(session1.Transaction.WasRolledBack);
+					trans1 = session1.Transaction;
+					Assert.IsNotNull(trans1);
+					Assert.IsFalse(trans1.WasCommitted);
+					Assert.IsFalse(trans1.WasRolledBack);
 
 					conn.Open();
 
@@ -356,7 +366,7 @@ namespace Castle.ActiveRecord.Tests
 
 						session2 = blog.CurrentSession;
 						Assert.IsNotNull(session2);
-
+						trans2 = session2.Transaction;
 						Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
 
 						Assert.IsNotNull(session2.Transaction);
@@ -376,9 +386,9 @@ namespace Castle.ActiveRecord.Tests
 
 						Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
 
-						Assert.IsNotNull(session2.Transaction);
-						Assert.IsFalse(session2.Transaction.WasCommitted);
-						Assert.IsFalse(session2.Transaction.WasRolledBack);
+						Assert.IsNotNull(trans2);
+						Assert.IsFalse(trans2.WasCommitted);
+						Assert.IsFalse(trans2.WasRolledBack);
 					}
 				}
 
@@ -395,10 +405,10 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsFalse(session1.IsOpen);
 			Assert.IsFalse(session2.IsOpen);
-			Assert.IsTrue(session1.Transaction.WasCommitted);
-			Assert.IsFalse(session1.Transaction.WasRolledBack);
-			Assert.IsTrue(session2.Transaction.WasCommitted);
-			Assert.IsFalse(session2.Transaction.WasRolledBack);
+			Assert.IsTrue(trans1.WasCommitted);
+			Assert.IsFalse(trans1.WasRolledBack);
+			Assert.IsTrue(trans2.WasCommitted);
+			Assert.IsFalse(trans2.WasRolledBack);
 
 			Blog[] blogs = Blog.FindAll();
 			Assert.IsNotNull( blogs );

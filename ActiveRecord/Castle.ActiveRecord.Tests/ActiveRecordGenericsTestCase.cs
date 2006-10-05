@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord.Tests
 	using System.Text;
 	using System.Reflection;
 	using System.Collections.Generic;
-
+	using Castle.ActiveRecord.Framework.Queries;
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model.GenericModel;
@@ -362,6 +362,37 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(0, blogs.Length);
+		}
+
+		[Test]
+		public void ProjectionQueryTest()
+		{
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			ProjectionQuery<Blog, int> proj = new ProjectionQuery<Blog, int>(Projections.RowCount());
+			int rowCount = proj.Execute();
+			Assert.AreEqual(1, rowCount);
+		}
+
+		[Test]
+		public void UseBlogWithGenericPostCollection()
+		{
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			
+			blog.Save();
+
+			Post p = new Post(blog, "a", "b", "c");
+			blog.Posts.Add(p);
+			
+			p.Save();
+
+			Blog fromDB = Blog.Find(blog.Id);
+			Assert.AreEqual(1, fromDB.Posts.Count);
 		}
 	}
 }

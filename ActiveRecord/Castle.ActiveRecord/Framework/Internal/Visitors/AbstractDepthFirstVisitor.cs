@@ -141,5 +141,22 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public virtual void VisitImport(ImportModel model)
 		{
 		}
+
+		public static Type GuessType(Type type, Type propertyType) {
+			Type otherend = type;
+			if(otherend==null)
+			{
+#if DOTNET2
+				//naive guessing of type if not specified
+				if(propertyType.IsGenericType)
+				{
+					Type[] arguments = propertyType.GetGenericArguments();
+					if(arguments.Length==1)
+						otherend = arguments[0];
+				}
+#endif
+			}
+			return otherend;
+		}
 	}
 }

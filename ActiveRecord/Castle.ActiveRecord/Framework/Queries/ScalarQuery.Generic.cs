@@ -83,7 +83,7 @@ namespace Castle.ActiveRecord.Queries
 		#region IActiveRecordQuery<T> implementation
 		T IActiveRecordQuery<T>.Execute(ISession session)
 		{
-			return (T) InternalExecute(session);
+			return (T)InternalExecute(session);
 		}
 		#endregion
 
@@ -92,7 +92,7 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		public T Execute()
 		{
-			return (T) ActiveRecordMediator.ExecuteQuery(this);
+			return (T)ActiveRecordMediator.ExecuteQuery(this);
 		}
 	}
 }

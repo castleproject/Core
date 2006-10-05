@@ -21,6 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	using NHibernate.Id;
 	using NHibernate.Metadata;
 	using NHibernate.Persister;
+	using NHibernate.Persister.Entity;
 	using NHibernate.Type;
 
 	[ActiveRecord("ClassA", Persister=typeof(CustomPersister))]
@@ -68,9 +69,14 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 	}
 
-	public class CustomPersister : IClassPersister
+	public class CustomPersister : IEntityPersister
 	{
 		public void PostInstantiate(ISessionFactoryImplementor factory)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void PostInstantiate()
 		{
 			throw new NotImplementedException();
 		}
@@ -166,6 +172,25 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public void Delete(object id, object version, object obj, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		///<summary>
+		///
+		///            Update a persistent instance
+		///            
+		///</summary>
+		///
+		///<param name="id">The id.</param>
+		///<param name="fields">The fields.</param>
+		///<param name="dirtyFields">The dirty fields.</param>
+		///<param name="hasDirtyCollection">if set to <c>true</c> [has dirty collection].</param>
+		///<param name="oldFields">The old fields.</param>
+		///<param name="oldVersion">The old version.</param>
+		///<param name="obj">The obj.</param>
+		///<param name="session">The session.</param>
+		public void Update(object id, object[] fields, int[] dirtyFields, bool hasDirtyCollection, object[] oldFields, object oldVersion, object obj, ISessionImplementor session)
 		{
 			throw new NotImplementedException();
 		}
@@ -296,12 +321,41 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { throw new NotImplementedException(); }
 		}
 
+		///<summary>
+		///
+		///            Properties that may be dirty (and thus should be dirty-checked). These
+		///            include all updatable properties and some associations.
+		///            
+		///</summary>
+		///
+		public bool[] PropertyCheckability
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		public bool[] PropertyNullability
 		{
 			get { throw new NotImplementedException(); }
 		}
 
 		public bool[] PropertyInsertability
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		///<summary>
+		///
+		///            Get the "versionability" of the properties of this class (is the property optimistic-locked)
+		///            
+		///</summary>
+		///
+		///<value>
+		///
+		///<c>true</c> if the property is optimistic-locked; otherwise, 
+		///<c>false</c>.
+		///</value>
+		///
+		public bool[] PropertyVersionability
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -342,6 +396,18 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public bool IsBatchLoadable
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		///<summary>
+		///
+		///            Returns an array of objects that identify spaces in which properties of this class are persisted,
+		///            for instances of this class and its subclasses.
+		///            
+		///</summary>
+		///
+		public object[] QuerySpaces
 		{
 			get { throw new NotImplementedException(); }
 		}

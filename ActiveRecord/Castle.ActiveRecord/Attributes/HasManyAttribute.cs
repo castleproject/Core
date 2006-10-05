@@ -37,6 +37,11 @@ namespace Castle.ActiveRecord
 		protected String keyColumn;
 		protected String[] compositeKeyColumns;
 
+		public HasManyAttribute()
+		{
+
+		}
+		
 		public HasManyAttribute(Type mapType)
 		{
 			base.mapType = mapType;

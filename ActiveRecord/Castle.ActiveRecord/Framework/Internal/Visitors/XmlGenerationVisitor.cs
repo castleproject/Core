@@ -371,7 +371,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			HasManyToAnyAttribute att = model.HasManyToAnyAtt;
 
-			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name,
+			Type mapType = GuessType(att.MapType, model.Property.PropertyType);
+			WriteCollection(att.Cascade, mapType, att.RelationType, model.Property.Name,
 			                model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey,null, null, null, null, model.Configuration, att.Index, att.IndexType,
 			                att.Cache);
@@ -473,7 +474,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			HasManyAttribute att = model.HasManyAtt;
 
-			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name,
+			Type mapType = GuessType(att.MapType, model.Property.PropertyType);
+			WriteCollection(att.Cascade, mapType, att.RelationType, model.Property.Name,
 			                model.HasManyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, null, null, null, att.Index, att.IndexType,
 			                att.Cache);
@@ -483,7 +485,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			HasAndBelongsToManyAttribute att = model.HasManyAtt;
 
-			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name,
+			Type mapType = GuessType(att.MapType, model.Property.PropertyType);
+			WriteCollection(att.Cascade, mapType, att.RelationType, model.Property.Name,
 			                att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, att.ColumnRef, 
 			                att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache);

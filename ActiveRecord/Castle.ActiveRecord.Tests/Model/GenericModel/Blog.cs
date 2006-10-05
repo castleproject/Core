@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	using NHibernate;
 
@@ -31,7 +32,7 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 		private int _id;
 		private String _name;
 		private String _author;
-		private IList _posts;
+		private IList<Post> _posts = new List<Post>();
 		private IList _publishedposts;
 		private IList _unpublishedposts;
 		private IList _recentposts;
@@ -57,8 +58,8 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			set { _author = value; }
 		}
 
-		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid")]
-		public IList Posts
+		[HasMany(Table="Posts", ColumnKey="blogid")]
+		public IList<Post> Posts
 		{
 			get { return _posts; }
 			set { _posts = value; }

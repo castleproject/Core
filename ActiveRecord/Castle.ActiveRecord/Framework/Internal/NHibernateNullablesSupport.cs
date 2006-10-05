@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	
 	internal class NHibernateNullablesSupport
 	{
-		private const String NullableAsm = "Nullables, Version=1.0.2.0, Culture=neutral";
+		private const String NullableAsm = "Nullables, Version=1.2.0.2001, Culture=neutral";
 
 		private const String NullableIType = "Nullables.NHibernate.{0}Type, Nullables.NHibernate";
 				
