@@ -23,13 +23,13 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		{
 		}
 
-		public int Id
+		public virtual int Id
 		{
 			get { return _id; }
 			set { _id = value; }
 		}
 
-		public float Value
+		public virtual float Value
 		{
 			get { return _value; }
 			set { _value = value; }

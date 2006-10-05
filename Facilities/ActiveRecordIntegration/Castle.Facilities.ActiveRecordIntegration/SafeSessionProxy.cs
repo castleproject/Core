@@ -144,6 +144,18 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			return innerSession.Load(theType, id);
 		}
 
+#if DOTNET2
+		public T Load<T>(object id, LockMode lockMode)
+		{
+			return innerSession.Load<T>(id, lockMode);
+		}
+
+		public T Load<T>(object id)
+		{
+			return innerSession.Load<T>(id);
+		}
+#endif
+
 		public void Load(object obj, object id)
 		{
 			innerSession.Load(obj, id);
@@ -157,6 +169,33 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public object Get(Type clazz, object id, LockMode lockMode)
 		{
 			return innerSession.Get(clazz, id, lockMode);
+		}
+
+#if DOTNET2
+		public T Get<T>(object id)
+		{
+			return innerSession.Get<T>(id);
+		}
+
+		public T Get<T>(object id, LockMode lockMode)
+		{
+			return innerSession.Get<T>(id, lockMode);
+		}
+#endif
+
+		public IFilter EnableFilter(string filterName)
+		{
+			return innerSession.EnableFilter(filterName);
+		}
+
+		public IFilter GetEnabledFilter(string filterName)
+		{
+			return innerSession.GetEnabledFilter(filterName);
+		}
+
+		public void DisableFilter(string filterName)
+		{
+			innerSession.DisableFilter(filterName);
 		}
 
 		public void Replicate(object obj, ReplicationMode replicationMode)
@@ -206,46 +245,54 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		public IList Find(String query)
 		{
-			return innerSession.Find(query);
+			return innerSession.CreateQuery(query).List();
 		}
 
 		public IList Find(String query, object value, IType type)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Find(query, value, type);
 		}
 
 		public IList Find(String query, object[] values, IType[] types)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Find(query, values, types);
 		}
 
 		public IEnumerable Enumerable(String query)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Enumerable(query);
 		}
 
 		public IEnumerable Enumerable(String query, object value, IType type)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Enumerable(query, value, type);
 		}
 
 		public IEnumerable Enumerable(String query, object[] values, IType[] types)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Enumerable(query, values, types);
 		}
 
 		public ICollection Filter(object collection, String filter)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Filter(collection, filter);
 		}
 
 		public ICollection Filter(object collection, String filter, object value, IType type)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Filter(collection, filter, value, type);
 		}
 
 		public ICollection Filter(object collection, String filter, object[] values, IType[] types)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return innerSession.Filter(collection, filter, values, types);
 		}
 
@@ -312,6 +359,21 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public IQuery GetNamedQuery(String queryName)
 		{
 			return innerSession.GetNamedQuery(queryName);
+		}
+
+		ISQLQuery ISession.CreateSQLQuery(string sql, string returnAlias, Type returnClass)
+		{
+			return innerSession.CreateSQLQuery(sql, returnAlias, returnClass);
+		}
+
+		ISQLQuery ISession.CreateSQLQuery(string sql, string[] returnAliases, Type[] returnClasses)
+		{
+			return innerSession.CreateSQLQuery(sql, returnAliases, returnClasses);
+		}
+
+		public ISQLQuery CreateSQLQuery(string queryString)
+		{
+			return innerSession.CreateSQLQuery(queryString);
 		}
 
 		public IQuery CreateSQLQuery(String sql, String returnAlias, Type returnClass)

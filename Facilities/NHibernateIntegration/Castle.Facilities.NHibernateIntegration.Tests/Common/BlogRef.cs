@@ -22,19 +22,19 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		private Blog blog;
 		private String title;
 
-		public int Id
+		public virtual int Id
 		{
 			get { return id; }
 			set { id = value; }
 		}
 
-		public Blog ParentBlog
+		public virtual Blog ParentBlog
 		{
 			get { return blog; }
 			set { blog = value; }
 		}
 
-		public String Title
+		public virtual String Title
 		{
 			get { return title; }
 			set { title = value; }

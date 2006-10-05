@@ -48,7 +48,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		{
 			using(ISession session = sessManager.OpenSession())
 			{
-				return session.Find("from Blog");
+				return session.CreateQuery("from Blog").List();
 			}
 		}
 

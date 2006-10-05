@@ -19,8 +19,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using System.Data;
 
 	using NHibernate;
+	using NHibernate.Cfg;
 	using NHibernate.Connection;
 	using NHibernate.Dialect;
+	using NHibernate.Engine;
 	using NHibernate.Metadata;
 
 	using Castle.ActiveRecord.Framework;
@@ -124,12 +126,27 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
+		public FilterDefinition GetFilterDefinition(string filterName)
+		{
+			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
+		}
+
 		public IConnectionProvider ConnectionProvider
 		{
 			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}
 
 		public Dialect Dialect
+		{
+			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
+		}
+
+		public ICollection DefinedFilterNames
+		{
+			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
+		}
+
+		public Settings Settings
 		{
 			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}

@@ -144,6 +144,18 @@ namespace Castle.Facilities.NHibernateIntegration
 			return inner.Load(theType, id);
 		}
 
+#if DOTNET2
+		public T Load<T>(object id, LockMode lockMode)
+		{
+			return inner.Load<T>(id, lockMode);
+		}
+
+		public T Load<T>(object id)
+		{
+			return inner.Load<T>(id);
+		}
+#endif
+
 		public void Load(object obj, object id)
 		{
 			inner.Load(obj, id);
@@ -157,6 +169,33 @@ namespace Castle.Facilities.NHibernateIntegration
 		public object Get(Type clazz, object id, LockMode lockMode)
 		{
 			return inner.Get(clazz, id, lockMode);
+		}
+
+#if DOTNET2
+		public T Get<T>(object id)
+		{
+			return inner.Get<T>(id);
+		}
+
+		public T Get<T>(object id, LockMode lockMode)
+		{
+			return inner.Get<T>(id, lockMode);
+		}
+#endif
+
+		public IFilter EnableFilter(string filterName)
+		{
+			return inner.EnableFilter(filterName);
+		}
+
+		public IFilter GetEnabledFilter(string filterName)
+		{
+			return inner.GetEnabledFilter(filterName);
+		}
+
+		public void DisableFilter(string filterName)
+		{
+			inner.DisableFilter(filterName);
 		}
 
 		public void Replicate(object obj, ReplicationMode replicationMode)
@@ -206,46 +245,54 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public IList Find(string query)
 		{
-			return inner.Find(query);
+			return inner.CreateQuery(query).List();
 		}
 
 		public IList Find(string query, object value, IType type)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Find(query, value, type);
 		}
 
 		public IList Find(string query, object[] values, IType[] types)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Find(query, values, types);
 		}
 
 		public IEnumerable Enumerable(string query)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Enumerable(query);
 		}
 
 		public IEnumerable Enumerable(string query, object value, IType type)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Enumerable(query, value, type);
 		}
 
 		public IEnumerable Enumerable(string query, object[] values, IType[] types)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Enumerable(query, values, types);
 		}
 
 		public ICollection Filter(object collection, string filter)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Filter(collection, filter);
 		}
 
 		public ICollection Filter(object collection, string filter, object value, IType type)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Filter(collection, filter, value, type);
 		}
 
 		public ICollection Filter(object collection, string filter, object[] values, IType[] types)
 		{
+			// TODO: This is deprecated. Use ISession.CreateQuery().SetXYZ().List()
 			return inner.Filter(collection, filter, values, types);
 		}
 
@@ -312,6 +359,21 @@ namespace Castle.Facilities.NHibernateIntegration
 		public IQuery GetNamedQuery(string queryName)
 		{
 			return inner.GetNamedQuery(queryName);
+		}
+
+		ISQLQuery ISession.CreateSQLQuery(string sql, string returnAlias, Type returnClass)
+		{
+			return inner.CreateSQLQuery(sql, returnAlias, returnClass);
+		}
+
+		ISQLQuery ISession.CreateSQLQuery(string sql, string[] returnAliases, Type[] returnClasses)
+		{
+			return inner.CreateSQLQuery(sql, returnAliases, returnClasses);
+		}
+
+		public ISQLQuery CreateSQLQuery(string queryString)
+		{
+			return inner.CreateSQLQuery(queryString);
 		}
 
 		public IQuery CreateSQLQuery(string sql, string returnAlias, Type returnClass)

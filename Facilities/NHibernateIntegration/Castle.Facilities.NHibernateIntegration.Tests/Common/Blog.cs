@@ -23,19 +23,19 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		private string name;
 		private IList items;
 
-		public int Id
+		public virtual int Id
 		{
 			get { return id; }
 			set { id = value; }
 		}
 
-		public string Name
+		public virtual string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
-		public IList Items
+		public virtual IList Items
 		{
 			get { return items; }
 			set { items = value; }

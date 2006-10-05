@@ -312,7 +312,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				foreach (object val in ReflectionUtil.GetPropertiesDictionary(instance).Values)
 				{
-					if (val is INHibernateProxy || val is PersistentCollection)
+					if (val is INHibernateProxy || val is IPersistentCollection)
 					{
 						if (!NHibernateUtil.IsInitialized(val))
 						{
@@ -339,7 +339,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				object val = properties[propertyName];
 
-				if (val is INHibernateProxy || val is PersistentCollection)
+				if (val is INHibernateProxy || val is IPersistentCollection)
 				{
 					if (!NHibernateUtil.IsInitialized(val))
 					{

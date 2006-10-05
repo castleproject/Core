@@ -10,6 +10,7 @@
 
 	<target name="init" depends="common.init">
 		<property name="assembly.version" value="1.0.0.0" />
+		<property name="csc.args" value="/nowarn:1591,618" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="NHibernate.dll" />

@@ -25,31 +25,31 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		private String text;
 		private String title;
 
-		public Blog ParentBlog
+		public virtual Blog ParentBlog
 		{
 			get { return blog; }
 			set { blog = value; }
 		}
 
-		public DateTime ItemDate
+		public virtual DateTime ItemDate
 		{
 			get { return dateTime; }
 			set { dateTime = value; }
 		}
 
-		public int Id
+		public virtual int Id
 		{
 			get { return id; }
 			set { id = value; }
 		}
 
-		public String Text
+		public virtual String Text
 		{
 			get { return text; }
 			set { text = value; }
 		}
 
-		public String Title
+		public virtual String Title
 		{
 			get { return title; }
 			set { title = value; }
