@@ -59,6 +59,7 @@
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" />
 		<nant buildfile="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
 		<nant buildfile="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
+		<nant buildfile="TestSiteARSupport/TestSiteARSupport.build" />
 		<!--
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold.Tests/Castle.MonoRail.ActiveRecordScaffold.Tests.build" />
 		-->
