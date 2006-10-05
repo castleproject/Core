@@ -31,6 +31,6 @@ class OutputError(BrailBase):
 		outputStream.Write(exception.ToString())
 		outputStream.Write("</pre></body></html>")
 	
-	override ScriptDirectory:
+	override ScriptDirectory as string:
 		get:
 			return Environment.CurrentDirectory
