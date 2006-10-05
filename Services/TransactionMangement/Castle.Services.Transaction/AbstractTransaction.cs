@@ -32,7 +32,7 @@ namespace Castle.Services.Transaction
 		private HybridDictionary context;
 		private IList synchronizations;
 		private TransactionStatus state = TransactionStatus.NoTransaction;
-		private ILogger logger = new NullLogger();
+		private ILogger logger = NullLogger.Instance;
 
 		internal IList resources;
 
@@ -81,7 +81,7 @@ namespace Castle.Services.Transaction
 
 					logger.Error("Enlisting resource failed", ex);
 
-					throw ex;
+					throw;
 				}
 			}
 
@@ -109,7 +109,7 @@ namespace Castle.Services.Transaction
 
 					logger.Error("Failed to start transaction on resource.", ex);
 
-					throw ex;
+					throw;
 				}
 			}
 		}
