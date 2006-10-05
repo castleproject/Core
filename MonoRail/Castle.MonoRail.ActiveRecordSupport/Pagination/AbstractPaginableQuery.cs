@@ -168,7 +168,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 		/// <summary>
 		/// Override to provide a custom query execution.
-		/// The default behaviour is to just call <see cref="IQuery.List"/>.
+		/// The default behaviour is to just call <see cref="IQuery.List()"/>.
 		/// </summary>
 		/// <param name="query">The query</param>
 		/// <returns>The query results.</returns>
