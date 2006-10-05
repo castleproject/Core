@@ -42,7 +42,6 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 		InitializeConfig("brail")
 		InitializeConfig("Brail") if options is null
 		options = BooViewEngineOptions() if options is null
-		log4net.Config.DOMConfigurator.Configure()
 	
 	static def InitializeConfig(name as string):
 		options = System.Configuration.ConfigurationSettings.GetConfig(name)

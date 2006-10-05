@@ -22,7 +22,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class DirectRenderTestCase(AbstractTestCase):
+class DirectRenderTestCase(AbstractMRTestCase):
 
 	[Test]
 	def DirectRendering():

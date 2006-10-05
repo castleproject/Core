@@ -22,7 +22,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class BrailHelperTestCase(AbstractTestCase):
+class BrailHelperTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def InheritedHelpers():

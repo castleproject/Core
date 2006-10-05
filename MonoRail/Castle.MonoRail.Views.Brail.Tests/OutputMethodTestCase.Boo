@@ -21,7 +21,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class OutputMethodTestCase(AbstractTestCase):
+class OutputMethodTestCase(AbstractMRTestCase):
 
 	[Test]
 	def HtmlAttribute():

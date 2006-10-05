@@ -20,7 +20,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class BrailAjaxTestCase(AbstractTestCase):
+class BrailAjaxTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def JsFunctions():

@@ -16,13 +16,11 @@ namespace Castle.MonoRail.Views.Brail
 import Boo.Lang.Compiler
 import Boo.Lang.Compiler.IO
 import Boo.Lang.Compiler.Steps
-import log4net
 import Castle.MonoRail.Framework
 
 class BrailPreProcessor(AbstractCompilerStep):
 	
 	static Seperators = {"<?brail":"?>",  "<%":"%>"}
-	static logger = LogManager.GetLogger(BrailPreProcessor)
 	
 	override def Run():
 		new = []
@@ -30,9 +28,7 @@ class BrailPreProcessor(AbstractCompilerStep):
 			#if input.Name.Contains("empty"):
 			#	System.Diagnostics.Debugger.Break()
 			using reader=input.Open():
-				code = Booify(reader.ReadToEnd())
-				if logger.IsDebugEnabled:
-					logger.DebugFormat("Transform result for {0}:\n{1}\n-----",input.Name, code)
+				code = Booify(reader.ReadToEnd())				
 				new.Add(StringInput(input.Name, code))
 		self.Parameters.Input.Clear()
 		for input in new:

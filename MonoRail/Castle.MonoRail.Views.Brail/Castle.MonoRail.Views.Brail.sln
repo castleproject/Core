@@ -1,6 +1,8 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 9.00
-# SharpDevelop 2.0.0.1462
+# SharpDevelop 2.0.0.1710
 Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "Castle.MonoRail.Views.Brail", "Castle.MonoRail.Views.Brail.booproj", "{75535AA0-EC07-4908-99A4-5D9741E899B3}"
+EndProject
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "Brail.Tests", "..\Castle.MonoRail.Views.Brail.Tests\Brail.Tests.booproj", "{4FD720F1-84A6-4053-89AE-58E7371BE6EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,13 @@ Global
 		{75535AA0-EC07-4908-99A4-5D9741E899B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75535AA0-EC07-4908-99A4-5D9741E899B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75535AA0-EC07-4908-99A4-5D9741E899B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FD720F1-84A6-4053-89AE-58E7371BE6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FD720F1-84A6-4053-89AE-58E7371BE6EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FD720F1-84A6-4053-89AE-58E7371BE6EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FD720F1-84A6-4053-89AE-58E7371BE6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73EA1662-12D7-46A1-9575-984051D1FA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73EA1662-12D7-46A1-9575-984051D1FA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73EA1662-12D7-46A1-9575-984051D1FA03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73EA1662-12D7-46A1-9575-984051D1FA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 EndGlobal

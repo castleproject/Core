@@ -17,13 +17,12 @@ import System
 import System.IO
 import NUnit.Framework
 import Castle.MonoRail.Framework
-import Castle.MonoRail.Framework.Internal
 import Castle.MonoRail.Views.Brail
 import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class ComponentsTestCase(AbstractTestCase):
+class ComponentsTestCase(AbstractMRTestCase):
 
 	[Test]
 	def SimpleInlineViewComponent():

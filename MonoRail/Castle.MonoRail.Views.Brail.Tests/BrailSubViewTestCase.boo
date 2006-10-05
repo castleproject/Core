@@ -21,7 +21,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class BrailSubViewTestCase(AbstractTestCase):
+class BrailSubViewTestCase(AbstractMRTestCase):
 		
 	[Test]
 	def CanCallSubViews():

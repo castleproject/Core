@@ -31,25 +31,21 @@
       <HintPath>..\bin\Castle.MonoRail.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\SharedLibs\log4net\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="WSABoo.Parser">
-      <HintPath>..\..\SharedLibs\boo\net-2.0\Boo.Lang.Parser.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Web" />
-    <Reference Include="anrControls.Markdown.NET">
-      <HintPath>..\..\SharedLibs\boo\anrControls.Markdown.NET.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="Boo.Lang">
       <HintPath>..\..\SharedLibs\boo\Boo.Lang.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Boo.Lang.Compiler">
       <HintPath>..\..\SharedLibs\boo\Boo.Lang.Compiler.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="anrControls.Markdown.NET">
+      <HintPath>..\..\build\net-2.0\debug\anrControls.Markdown.NET.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>

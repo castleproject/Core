@@ -24,11 +24,15 @@
   <ItemGroup>
     <Reference Include="System.Xml" />
     <Reference Include="Castle.MonoRail.TestSupport">
-      <HintPath>..\bin\Castle.MonoRail.TestSupport.dll</HintPath>
+      <HintPath>..\build\net-2.0\Castle.MonoRail.TestSupport.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Castle.MonoRail.Framework.Tests">
       <HintPath>..\bin\Castle.MonoRail.Framework.Tests.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Castle.MonoRail.Framework">
+      <HintPath>..\bin\Castle.MonoRail.Framework.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
@@ -46,18 +50,19 @@
     <Compile Include="Controllers\HomeController.boo" />
     <EmbeddedResource Include="Resources\Language.he.resources" />
     <EmbeddedResource Include="Resources\Language.resources" />
-    <Compile Include="Views\home\resource.boo" />
-    <Compile Include="Views\home\bag.boo" />
-    <Compile Include="Views\home\display.boo" />
-    <Compile Include="Views\home\index.boo" />
-    <Compile Include="Views\layout\index.boo" />
-    <Compile Include="Views\layout\save.boo" />
-    <Compile Include="Views\layout\update.boo" />
-    <Compile Include="Views\layouts\general.boo" />
-    <Compile Include="Views\layouts\printable.boo" />
+    <None Include="Views\home\resource.boo" />
+    <None Include="Views\home\bag.boo" />
+    <None Include="Views\home\display.boo" />
+    <None Include="Views\home\index.boo" />
+    <None Include="Views\layout\index.boo" />
+    <None Include="Views\layout\save.boo" />
+    <None Include="Views\layout\update.boo" />
+    <None Include="Views\layouts\general.boo" />
+    <None Include="Views\layouts\printable.boo" />
     <Compile Include="LanguageFeatures.boo" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
   </ItemGroup>
+  <Import Project="$(BooBinPath)\Boo.Microsoft.Build.targets" />
 </Project>
