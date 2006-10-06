@@ -172,4 +172,19 @@
 		</if>
 	</target>
 	
+	<script language="C#" prefix="build">
+		<code>
+			<![CDATA[
+				[Function("path-make-relative")]
+				public static string PathMakeRelative(string fromPath, string toPath)
+				{
+					Uri uri1 = new Uri(Path.GetFullPath(fromPath));
+					Uri uri2 = new Uri(Path.GetFullPath(toPath));
+					return uri1.MakeRelative(uri2);
+				}
+				
+			]]>
+		</code>
+	</script>
+	
 </project>

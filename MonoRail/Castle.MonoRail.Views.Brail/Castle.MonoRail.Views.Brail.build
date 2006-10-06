@@ -10,7 +10,9 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 	<target name="init" depends="common.init">
 		<property name="assembly.version" value="1.0.0.0" />
-		<property name="assembly.description" value="" />
+		<property name="assembly.description" value="Castle.MonoRail.Views.Brail: View Engine for MonoRail using Boo" />
+		<!-- The extra .. is there because it looks like there's a bug in booc regarding keyfile paths. -->
+		<property name="assembly.keyfile" value="../${build::path-make-relative(build.dir, path::get-full-path(root.dir))}/CastleKey.snk" />
 
 		<loadtasks assembly="${root.dir}/${lib.framework.dir}/Boo.NAnt.Tasks.dll" />
 
@@ -29,7 +31,31 @@
 		</assemblyfileset>
 	</target>
 
-	<target name="generate-assemblyinfo" depends="init">
+	<target name="generate-assemblyinfo" depends="init common.set-assembly-attribute-values">
+		<property name="assemblyinfo.boo" value="${path::combine(src.dir,'common-asm-info.boo')}" />
+		<attrib file="${assemblyinfo.boo}" readonly="false" />
+		<asminfo output="${assemblyinfo.boo}" language="CSharp">
+			<attributes>
+				<attribute type="System.CLSCompliantAttribute" value="${assembly.is-cls-compliant}" />
+				<attribute type="System.Runtime.InteropServices.ComVisibleAttribute" value="${assembly.is-com-visible}" />
+				<attribute type="System.Runtime.InteropServices.GuidAttribute" value="${assembly.guid}" if="${assembly.guid != ''}" />
+				<attribute type="System.Reflection.AssemblyTitleAttribute" value="${assembly.title}" />
+				<attribute type="System.Reflection.AssemblyDescriptionAttribute" value="${assembly.description}" />
+				<attribute type="System.Reflection.AssemblyCompanyAttribute" value="${assembly.company}" />
+				<attribute type="System.Reflection.AssemblyProductAttribute" value="${assembly.product}" />
+				<attribute type="System.Reflection.AssemblyCopyrightAttribute" value="${assembly.copyright}" />
+				<attribute type="System.Reflection.AssemblyVersionAttribute" value="${assembly.version}" />
+				<attribute type="System.Reflection.AssemblyInformationalVersionAttribute" value="${assembly.version.informational}" />
+				<attribute type="System.Reflection.AssemblyFileVersionAttribute" value="${assembly.version}" />
+				<attribute type="System.Reflection.AssemblyDelaySignAttribute" value="false" />
+				
+				<!-- For some reason, NAnt doesn't detect that APTCA has a public no-argument constructor -->
+				<attribute asis="true" type="AllowPartiallyTrustedCallersAttribute" if="${assembly.allow-partially-trusted-callers}" />
+			</attributes>
+		</asminfo>
+		<if test="${assembly.sign}" >
+			<echo append="true" file="${assemblyinfo.boo}">[assembly: System.Reflection.AssemblyKeyFileAttribute("${assembly.keyfile}")]</echo>
+		</if>
 	</target>
 
 	<target name="build" description="Build ${project::get-name()}" depends="init generate-assemblyinfo">

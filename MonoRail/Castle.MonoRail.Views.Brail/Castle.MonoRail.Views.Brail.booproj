@@ -6,6 +6,10 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{75535AA0-EC07-4908-99A4-5D9741E899B3}</ProjectGuid>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+    <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -28,16 +32,16 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Castle.MonoRail.Framework">
-      <HintPath>..\bin\Castle.MonoRail.Framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.MonoRail.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="Boo.Lang">
-      <HintPath>..\..\SharedLibs\boo\Boo.Lang.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Boo.Lang.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Boo.Lang.Compiler">
-      <HintPath>..\..\SharedLibs\boo\Boo.Lang.Compiler.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Boo.Lang.Compiler.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Castle.Core">

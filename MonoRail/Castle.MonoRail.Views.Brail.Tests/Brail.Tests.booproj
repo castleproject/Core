@@ -28,11 +28,11 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Castle.MonoRail.Framework.Tests">
-      <HintPath>..\bin\Castle.MonoRail.Framework.Tests.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.MonoRail.Framework.Tests.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Castle.MonoRail.Framework">
-      <HintPath>..\bin\Castle.MonoRail.Framework.dll</HintPath>
+      <HintPath>..\..\build\net-2.0\debug\Castle.MonoRail.Framework.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
