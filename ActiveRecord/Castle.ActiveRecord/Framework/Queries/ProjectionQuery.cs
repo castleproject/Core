@@ -54,7 +54,8 @@ namespace Castle.ActiveRecord.Framework.Queries
 			{
 				criteria.Add(criterion);
 			}
-			criteria.SetProjection(projection);
+			//TODO: Next time NHibernate is updated, this should be changed to SetProjection()
+			criteria.Projection = (projection);
 			return (TResult)criteria.UniqueResult();
 		}
 
