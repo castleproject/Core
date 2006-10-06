@@ -54,7 +54,7 @@ namespace Castle.ActiveRecord.Framework.Queries
 			{
 				criteria.Add(criterion);
 			}
-			criteria.Projection = projection;
+			criteria.SetProjection(projection);
 			return (TResult)criteria.UniqueResult();
 		}
 

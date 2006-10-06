@@ -14,8 +14,8 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="NHibernate.dll" />
-			<include name="Nullables.dll" 				if="${framework::get-target-framework()=='net-1.1'}" />
-			<include name="Nullables.NHibernate.dll"	if="${framework::get-target-framework()=='net-1.1'}" />
+			<include name="Nullables.dll"  />
+			<include name="Nullables.NHibernate.dll"/>
 			<include name="log4net.dll" />
 			<include name="Iesi.Collections.dll" />
 			<include name="HashCodeProvider.dll" />
