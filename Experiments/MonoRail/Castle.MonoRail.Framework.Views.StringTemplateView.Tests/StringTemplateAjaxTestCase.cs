@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView.Tests
 		{
 			DoGet("ajax/LinkToFunction.rails");
 
-			String expected = "<a href=\"javascript:void(0);\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>";
+			String expected = "<a href=\"javascript:void(0);\"  onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>";
 
 			AssertReplyEqualTo(expected);
 		}
@@ -59,8 +59,8 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView.Tests
 		{
 			DoGet("ajax/LinkToRemote.rails");
 
-			String expected = "<a href=\"javascript:void(0);\" onclick=\"new " + 
-				"Ajax.Request('/controller/action.rails', {asynchronous:true}); " + 
+			String expected = "<a href=\"javascript:void(0);\"  onclick=\"new " + 
+				"Ajax.Request('/controller/action.rails', {asynchronous:true, evalScripts:true}); " + 
 				"return false;\" ><img src='myimg.gid'></a>";
 
 			AssertReplyEqualTo(expected);
@@ -72,7 +72,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView.Tests
 			DoGet("ajax/BuildFormRemoteTag.rails");
 
 			String expected = "<form  onsubmit=\"new Ajax.Request('url', " +
-				"{asynchronous:true, parameters:Form.serialize(this)}); " + 
+				"{asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); " + 
 				"return false;\" enctype=\"multipart/form-data\">";
 
 			AssertReplyEqualTo(expected);
@@ -85,7 +85,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView.Tests
 			
 			String expected = "<script type=\"text/javascript\">new Form.Element.Observer('myfieldid', 2, " + 
 				"function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', " + 
-				"{asynchronous:true, parameters:newcontent}) })</script>";
+				"{asynchronous:true, evalScripts:true, parameters:newcontent}) })</script>";
 
 			AssertReplyEqualTo(expected);
 		}
@@ -97,7 +97,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView.Tests
 			
 			String expected = "<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, " + 
 				"function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', " + 
-				"{asynchronous:true, parameters:newcontent}) })</script>";
+				"{asynchronous:true, evalScripts:true, parameters:newcontent}) })</script>";
 
 			AssertReplyEqualTo(expected);
 		}

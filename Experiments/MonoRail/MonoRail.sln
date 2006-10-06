@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView", "Castle.MonoRail.Framework.Views.StringTemplateView\Castle.MonoRail.Framework.Views.StringTemplateView.csproj", "{AECBD3E5-110C-4602-B74A-444A61350983}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.Views.StringTemplateView.Tests", "Castle.MonoRail.Framework.Views.StringTemplateView.Tests\Castle.MonoRail.Framework.Views.StringTemplateView.Tests.csproj", "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite.StringTemplate", "TestSite.StringTemplate\TestSite.StringTemplate.csproj", "{824EC872-2992-4518-8C41-4F87640D752A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Debug.ActiveCfg = Debug|.NET
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Debug.Build.0 = Debug|.NET
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Release.ActiveCfg = Release|.NET
+		{AECBD3E5-110C-4602-B74A-444A61350983}.Release.Build.0 = Release|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.ActiveCfg = Debug|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.Build.0 = Debug|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.ActiveCfg = Release|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.Build.0 = Release|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.ActiveCfg = Debug|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.Build.0 = Debug|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Release.ActiveCfg = Release|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

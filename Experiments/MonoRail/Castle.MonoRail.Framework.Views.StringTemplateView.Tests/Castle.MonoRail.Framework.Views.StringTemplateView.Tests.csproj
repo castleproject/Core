@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
     >
@@ -85,23 +85,8 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Framework"
-                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.MonoRail.Framework.Tests"
-                    Project = "{844F5EC4-9224-42A9-986D-CE645AC970F2}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.MonoRail.Framework.Views.StringTemplateView"
                     Project = "{AECBD3E5-110C-4602-B74A-444A61350983}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.MonoRail.TestSupport"
-                    Project = "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
@@ -110,6 +95,31 @@
                     HintPath = "..\..\..\..\Tools\NUnit 2.2.6\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
+                <Reference
+                    Name = "StringTemplate"
+                    AssemblyName = "StringTemplate"
+                    HintPath = "..\..\..\build\net-1.1\debug\StringTemplate.dll"
+                />
+                <Reference
+                    Name = "nunit.core"
+                    AssemblyName = "nunit.core"
+                    HintPath = "..\..\..\build\net-1.1\debug\nunit.core.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.TestSupport"
+                    AssemblyName = "Castle.MonoRail.TestSupport"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MonoRail.TestSupport.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    AssemblyName = "Castle.MonoRail.Framework"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Tests"
+                    AssemblyName = "Castle.MonoRail.Framework.Tests"
+                    HintPath = "..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.Tests.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -117,11 +127,6 @@
                 <File
                     RelPath = "App.config"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ComponentsTestCase.cs"

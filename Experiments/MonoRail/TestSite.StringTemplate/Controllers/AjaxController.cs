@@ -20,17 +20,9 @@ namespace TestSite.StringTemplate.Controllers
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
-	[Helper(typeof(AjaxHelperOld),"ajaxHelperAlias")]
-	// do not remove this is to make sure, you can add the same helper twice with different names
-	[Helper(typeof(AjaxHelperOld))] 
 	[Helper(typeof(AjaxHelper))] 
 	public class AjaxController : SmartDispatcherController
 	{
-		private AjaxHelperOld HelperOld
-		{
-			get { return (AjaxHelperOld) Helpers["ajaxHelperAlias"]; }
-		}
-
 		private AjaxHelper Helper
 		{
 			get { return (AjaxHelper) Helpers["AjaxHelper"]; }
@@ -42,7 +34,7 @@ namespace TestSite.StringTemplate.Controllers
 
 		public void JsFunctions()
 		{
-			RenderText(HelperOld.GetJavascriptFunctions());
+			RenderText(Helper.GetJavascriptFunctions());
 		}
 
 		public void BehaviourFunctions()
@@ -52,28 +44,28 @@ namespace TestSite.StringTemplate.Controllers
 		
 		public void LinkToFunction()
 		{
-			RenderText(HelperOld.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')"));
+			RenderText(Helper.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')"));
 		}
 
 		public void LinkToRemote()
 		{
 			Hashtable options = new Hashtable();
-			RenderText(HelperOld.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options));
+			RenderText(Helper.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options));
 		}
 
 		public void BuildFormRemoteTag()
 		{
-			RenderText(HelperOld.BuildFormRemoteTag("url", null, null));
+			RenderText(Helper.BuildFormRemoteTag("url", null));
 		}
 
 		public void ObserveField()
 		{
-			RenderText(HelperOld.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
+			RenderText(Helper.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
 		}
 
 		public void ObserveForm()
 		{
-			RenderText(HelperOld.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
+			RenderText(Helper.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
 		}
 
 		public void Index()

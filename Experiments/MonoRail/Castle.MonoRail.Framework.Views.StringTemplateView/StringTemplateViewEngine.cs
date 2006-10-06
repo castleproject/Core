@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 	using System.IO;
 	using System.Collections;
 	using System.ComponentModel.Design;
+	using Castle.Core;
 	using Encoding							= System.Text.Encoding;
 	using StringBuilder						= System.Text.StringBuilder;
 	using Castle.MonoRail.Framework;
@@ -40,7 +41,7 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 	/// A MonoRail IViewEngine implementation that uses the StringTemplate 
 	/// library as a view template engine.
 	/// </summary>
-	public class StringTemplateViewEngine : ViewEngineBase
+	public class StringTemplateViewEngine : ViewEngineBase, IInitializable
 	{
 		/// <summary>Maps controllers to [cached] ST groups for locating views templates</summary>
 		protected Hashtable area2templateManager = new Hashtable();
@@ -57,10 +58,8 @@ namespace Castle.MonoRail.Framework.Views.StringTemplateView
 
 		#region IViewEngine Members
 
-		public override void Init(IServiceContainer serviceContainer)
+		public void Initialize()
 		{
-			base.Init(serviceContainer);
-
 			config = STViewEngineConfiguration.GetConfig(ConfigConstants.ELEMENT_stview_sectionname);
 
 			StringTemplateGroup componentGroup = new ViewComponentStringTemplateGroup(
