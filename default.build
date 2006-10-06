@@ -69,6 +69,11 @@
 	
 	<target name="clean" description="Deletes current build artifacts" depends="common.init">
 		<delete dir="${build.dir}" failonerror="false" />
+		<delete>
+			<fileset basedir="${build.base.dir}">
+				<include name="*.*" />
+			</fileset>
+		</delete>
 	</target>
 		
     <target name="clean-vs" description="Delete Visual Studio artifacts" depends="common.init">
@@ -172,6 +177,10 @@
 
 		<echo message="Created a '${project.config}' package in file://${build.zip.fullpath}" />
 
+		<delete file="${build.base.dir}/castle-sourcecode.zip" failonerror="false" />
+		<delete file="${build.dir}/test-results.zip" failonerror="false" />
+		<delete file="${build.dir}/external-dependencies.zip" failonerror="false" />
+		
 	</target>
 
 	<target name="createreleasenotes">
@@ -279,11 +288,6 @@
 				<include name="**/*.txt" />
 			</fileset>
 		</zip>
-		
-		<delete file="${build.base.dir}/castle-sourcecode.zip" failonerror="false" />
-		<delete file="${build.dir}/test-results.zip" failonerror="false" />
-		<delete file="${build.dir}/external-dependencies.zip" failonerror="false" />
-		
 	</target>
 	
 	<target name="zip-dependencies"  >
