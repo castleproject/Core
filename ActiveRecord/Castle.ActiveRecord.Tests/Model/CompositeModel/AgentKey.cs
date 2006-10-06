@@ -16,14 +16,11 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for BlogKey.
-	/// </summary>
-	[CompositeKey, Serializable]
+	[Serializable]
 	public class AgentKey
 	{
-		private string _orgId;
-		private string _name;
+		private string orgId;
+		private string name;
 
 		public AgentKey()
 		{
@@ -31,27 +28,27 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 
 		public AgentKey(string orgId, string name)
 		{
-			this._orgId = orgId;
-			this._name = name;
+			this.orgId = orgId;
+			this.name = name;
 		}
 
 		[KeyProperty]
 		public virtual string OrgId
 		{
-			get { return _orgId; }
-			set { _orgId = value; }
+			get { return orgId; }
+			set { orgId = value; }
 		}
 
 		[KeyProperty]
 		public virtual string Name
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return name; }
+			set { name = value; }
 		}
 
 		public override string ToString()
 		{
-			return String.Join(":", new string[] {_orgId, _name});
+			return String.Join(":", new string[] {orgId, name});
 		}
 
 		public override bool Equals(object obj)
@@ -69,13 +66,13 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 				return false;
 			}
 			AgentKey rhs = (AgentKey) obj;
-			return (this._orgId == rhs._orgId || (this._orgId != null && this._orgId.Equals(rhs._orgId))) &&
-				(this._name == rhs._name || (this._name != null && this._name.Equals(rhs._name)));
+			return (this.orgId == rhs.orgId || (this.orgId != null && this.orgId.Equals(rhs.orgId))) &&
+				(this.name == rhs.name || (this.name != null && this.name.Equals(rhs.name)));
 		}
 
 		public override int GetHashCode()
 		{
-			return (this._orgId.GetHashCode() ^ this._name.GetHashCode());
+			return (this.orgId.GetHashCode() ^ this.name.GetHashCode());
 		}
 	}
 }

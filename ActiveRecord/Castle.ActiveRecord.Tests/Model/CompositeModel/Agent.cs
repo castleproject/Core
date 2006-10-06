@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 			_userKey = key;
 		}
 
-		[PrimaryKey(PrimaryKeyType.Assigned)]
+		[CompositeKey]
 		public AgentKey Key
 		{
 			get { return _userKey; }

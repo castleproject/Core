@@ -157,6 +157,7 @@
     </Compile>
     <Compile Include="Model\ClassWithAnyAttribute.cs" />
     <Compile Include="Model\ClassWithCompositeKey.cs" />
+    <Compile Include="Model\CompositeKeyModels.cs" />
     <Compile Include="Model\ClassWithCustomPersister.cs" />
     <Compile Include="Model\ClassWithElementList.cs" />
     <Compile Include="Model\ClassWithMappedField.cs">

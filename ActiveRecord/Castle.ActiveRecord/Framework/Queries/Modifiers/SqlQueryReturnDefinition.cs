@@ -15,10 +15,8 @@
 namespace Castle.ActiveRecord.Queries.Modifiers
 {
 	using System;
-	using System.Collections;
 
 	using NHibernate;
-	using NHibernate.Type;
 
 	/// <summary>
 	/// Represents a SQL query return definition.
@@ -31,10 +29,8 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 
 		public SqlQueryReturnDefinition(Type returnType, String returnAlias)
 		{
-			if (returnType == null)
-				throw new ArgumentNullException("returnType");
-			if (returnAlias == null)
-				throw new ArgumentNullException("returnAlias");
+			if (returnType == null) throw new ArgumentNullException("returnType");
+			if (returnAlias == null) throw new ArgumentNullException("returnAlias");
 
 			this.returnType = returnType;
 			this.returnAlias = returnAlias;
@@ -51,10 +47,12 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		}
 
 		#region "Apply" method
+		
 		void IQueryModifier.Apply(IQuery query)
 		{
 			// SqlQueryReturnDefinition are not directly applied to queries.
 		}
+		
 		#endregion
 	}
 }

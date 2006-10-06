@@ -12,34 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using Castle.ActiveRecord;
-
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-	[CompositeKey, Serializable]
+	using System;
+
+	[Serializable]
 	public class CompositeKeyForClassWithCompositeKey
 	{
-		private string _keyA;
-		private string _keyB;
+		private string keyA;
+		private string keyB;
 
 		[KeyProperty]
 		public virtual string KeyA
 		{
-			get { return _keyA; }
-			set { _keyA = value; }
+			get { return keyA; }
+			set { keyA = value; }
 		}
 
 		[KeyProperty]
 		public virtual string KeyB
 		{
-			get { return _keyB; }
-			set { _keyB = value; }
+			get { return keyB; }
+			set { keyB = value; }
 		}
 
 		public override string ToString()
 		{
-			return string.Join( ":", new string[] { _keyA, _keyB } );
+			return string.Join( ":", new string[] { keyA, keyB } );
 		}
 
 		public override bool Equals( object obj )
@@ -47,13 +46,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			if( obj == this ) return true;
 			if( obj == null || obj.GetType() != this.GetType() ) return false;
 			CompositeKeyForClassWithCompositeKey test = ( CompositeKeyForClassWithCompositeKey ) obj;
-			return ( _keyA == test.KeyA || (_keyA != null && _keyA.Equals( test.KeyA ) ) ) &&
-				( _keyB == test.KeyB || ( _keyB != null && _keyB.Equals( test.KeyB ) ) );
+			return ( keyA == test.KeyA || (keyA != null && keyA.Equals( test.KeyA ) ) ) &&
+				( keyB == test.KeyB || ( keyB != null && keyB.Equals( test.KeyB ) ) );
 		}
 
 		public override int GetHashCode()
 		{
-			return _keyA.GetHashCode() ^ _keyB.GetHashCode();
+			return keyA.GetHashCode() ^ keyB.GetHashCode();
 		}
 	}
 }

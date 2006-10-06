@@ -17,11 +17,10 @@ namespace Castle.ActiveRecord
 	using System;
 
 	/// <summary>
-	/// Decorates a class that implements <c>Equals()</c> and <c>GetHashCode()</c>,
-	/// is <c>Serializable</c>,
-	/// and has two or more <c>KeyPropertyAttribute</c> properties.
+	/// Defines that the target property is a composite key
+	/// for the scope class
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Property), Serializable]
+	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public class CompositeKeyAttribute : WithAccessAttribute
 	{
 		private string unsavedValue;

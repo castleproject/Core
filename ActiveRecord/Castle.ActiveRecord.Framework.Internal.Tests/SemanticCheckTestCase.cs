@@ -58,10 +58,10 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
         }
 
 		[Test]
-		[ExpectedException( typeof( ActiveRecordException))]
+		[ExpectedException(typeof(ActiveRecordException), "To use type 'BadCompositeKey' as a composite id, you must implement Equals and GetHashCode.")]
 		public void ClassWithBadCompositeKey()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof( ClassWithBadCompositeKey ) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(ClassWithBadCompositeKey));
 		}
 	}
 }

@@ -346,6 +346,50 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
 		[Test]
+		public void SimpleCompositeClass()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClassWithCompositeKey2));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithCompositeKey2, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithCompositeKey2\" lazy=\"false\">\r\n" +
+				"    <composite-id name=\"Key\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CompositeKey2, Castle.ActiveRecord.Framework.Internal.Tests\" unsaved-value=\"none\" access=\"property\">\r\n" +
+				"      <key-property name=\"Key1\" access=\"property\" column=\"Key1\" type=\"Int32\" />\r\n" +
+				"      <key-property name=\"Key2\" access=\"property\" column=\"Key2\" type=\"String\" />\r\n" +
+				"    </composite-id>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test, Ignore("This is not implemented yet")]
+		public void CompositeClassWithBelongsTo()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClassWithCompositeKey3));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithCompositeKey3, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithCompositeKey3\" lazy=\"false\">\r\n" +
+				"    <composite-id name=\"Key\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CompositeKey2, Castle.ActiveRecord.Framework.Internal.Tests\" unsaved-value=\"none\" access=\"property\">\r\n" +
+				"      <key-property name=\"Key1\" access=\"property\" column=\"Key1\" type=\"Int32\" />\r\n" +
+				"      <key-many-to-one name=\"Key2\" access=\"property\" column=\"Key2\" type=\"String\" />\r\n" +
+				"    </composite-id>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+		
+		[Test]
 		public void SimpleClassWithElementList()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();

@@ -12,28 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.ActiveRecord;
-
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-	[CompositeKey]
 	public class BadCompositeKey
 	{
-		private string _keyA;
-		private string _keyB;
+		private string keyA;
+		private string keyB;
 
 		[KeyProperty]
 		public virtual string KeyA
 		{
-			get { return _keyA; }
-			set { _keyA = value; }
+			get { return keyA; }
+			set { keyA = value; }
 		}
 
 		[KeyProperty]
 		public virtual string KeyB
 		{
-			get { return _keyB; }
-			set { _keyB = value; }
+			get { return keyB; }
+			set { keyB = value; }
 		}
 
 		public override int GetHashCode()

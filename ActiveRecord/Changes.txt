@@ -1,6 +1,20 @@
 Release Candidate 1
 ===================
 
+- Refactored: CompositeKey is not a class level attribute anymore
+  (minor breaking change)
+
+  Instead of
+
+    [PrimaryKey]
+    public SomeClass Id { get/set }
+    
+  You must use
+
+    [CompositeKey]
+    public SomeClass Id { get/set }
+  
+
 - Added support for queries using the SQL language instead of HQL, 
   on classes derived from HqlBasedQuery (SimpleQuery, ScalarQuery, etc).
 
