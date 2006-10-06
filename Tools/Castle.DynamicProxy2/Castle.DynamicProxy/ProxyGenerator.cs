@@ -193,5 +193,57 @@ namespace Castle.DynamicProxy
 		{
 			return ProxyBuilder.CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
 		}
+
+		public object CreateInterfaceProxyWithoutTarget(Type theInterface, IInterceptor interceptor)
+		{
+			return CreateInterfaceProxyWithoutTarget(theInterface, new Type[0], 
+			                            ProxyGenerationOptions.Default,
+			                            interceptor);
+		}
+		
+		public object CreateInterfaceProxyWithoutTarget(Type theInterface, Type[] interfaces, params IInterceptor[] interceptors)
+		{
+			return CreateInterfaceProxyWithoutTarget(theInterface, interfaces, ProxyGenerationOptions.Default, interceptors);
+		}
+
+		public object CreateInterfaceProxyWithoutTarget(Type theInterface, Type[] interfaces, ProxyGenerationOptions options, params IInterceptor[] interceptors)
+		{
+			if (theInterface == null) throw new ArgumentNullException("theInterface");
+			if (interceptors == null) throw new ArgumentNullException("interceptors");
+
+			if (!theInterface.IsInterface)
+			{
+				throw new ArgumentException("Specified type is not an interface", "theInterface");
+			}
+
+			if (theInterface.IsGenericTypeDefinition)
+			{
+				throw new ArgumentException("You can't specify a generic interface definition", "theInterface");
+			}
+
+			Type generatedType;
+
+			if (theInterface.IsGenericType)
+			{
+				generatedType = CreateInterfaceProxyTypeWithoutTarget(theInterface.GetGenericTypeDefinition(), interfaces, options);
+			}
+			else
+			{
+				generatedType = CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
+			}
+
+			if (theInterface.IsGenericType)
+			{
+				Type[] args = theInterface.GetGenericArguments();
+				generatedType = generatedType.MakeGenericType(args);
+			}
+
+			return Activator.CreateInstance(generatedType, new object[] { interceptors, new object(),  });
+		}
+
+		public Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces, ProxyGenerationOptions options)
+		{
+			return ProxyBuilder.CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
+		}
 	}
 }

@@ -50,10 +50,15 @@ namespace Castle.DynamicProxy
 			return generator.GenerateCode(interfaces, options);
 		}
 
-//		public Type CreateInterfaceProxyType(Type theInterface, ProxyGenerationOptions options)
-//		{
-//			throw new NotImplementedException();
-//		}
+		public Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces, ProxyGenerationOptions options)
+		{
+			AssertValidType(theInterface);
+
+			InterfaceProxyGeneratorWithoutTarget generatorWithoutTarget = new InterfaceProxyGeneratorWithoutTarget(scope, theInterface);
+
+			return generatorWithoutTarget.GenerateCode(typeof(object), interfaces, options);
+	
+		}
 
 		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType, ProxyGenerationOptions options)
 		{
@@ -66,7 +71,7 @@ namespace Castle.DynamicProxy
 
 		private static void AssertValidType(Type target)
 		{
-			if (!target.IsPublic)
+			if (!target.IsPublic && !target.IsNestedPublic)
 			{
 				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
 			}

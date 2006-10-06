@@ -120,6 +120,14 @@ namespace Castle.DynamicProxy.Tests
 			
 			Assert.AreEqual("Sum2 Sum ", logger.LogContents);
 		}
+
+		[Test]
+		public void ProxyForNestedClass()
+		{
+			object proxy = generator.CreateClassProxy(typeof(ServiceClass.InernalClass), new Type[] { typeof(IDisposable) });
+			Assert.IsNotNull(proxy);
+			Assert.IsTrue(proxy is ServiceClass.InernalClass);
+		}
 		
 		[Test]
 		public void ProxyForClassWithInterfaces()

@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET2 _PHYSICALASSEMBLY</DefineConstants>
     <DocumentationFile>bin\Debug\Castle.DynamicProxy.XML</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -242,6 +242,7 @@
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\InterfaceProxyGeneratorWithoutTarget.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
     <Compile Include="IInterceptor.cs">

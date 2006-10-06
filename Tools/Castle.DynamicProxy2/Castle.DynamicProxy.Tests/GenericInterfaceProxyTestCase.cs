@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -91,6 +92,18 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual("Find Find Populate ", logger.LogContents);
 
+		}
+
+		[Test]
+		[Ignore("This fails with: Could not find a matching method on System.Collections.Generic.List`1. Method CopyTo")]
+		public void ProxyWithGenericTypeThatInheritFromGenericType()
+		{
+			IList<int> list = generator.CreateInterfaceProxyWithTarget<IList<int>>(new List<int>(), logger);
+			list.Add(1);
+			list.Add(2);
+			list.Remove(1);
+			
+			Assert.AreEqual("Add Add Remove", logger.LogContents);
 		}
 	}
 }

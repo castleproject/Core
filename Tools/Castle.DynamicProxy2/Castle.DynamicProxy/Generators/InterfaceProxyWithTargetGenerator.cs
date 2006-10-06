@@ -30,6 +30,9 @@ namespace Castle.DynamicProxy.Generators
 	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		private FieldReference targetField;
+		protected Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
+
+		protected Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
 
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface) : base(scope, theInterface)
 		{
@@ -118,21 +121,10 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				// Create invocation types
-
-				Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
-
-				Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
-
+				
 				foreach(MethodInfo method in methods)
 				{
-					MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType);
-
-					method2methodOnTarget[method] = methodOnTarget;
-
-					method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
-																		  proxyTargetType,
-																		  method, methodOnTarget, 
-					                                                      ConstructorVersion.WithTargetMethod);
+					CreateInvocationForMethod(emitter, method, proxyTargetType);
 				}
 
 				// Create methods overrides
@@ -212,6 +204,18 @@ namespace Castle.DynamicProxy.Generators
 			Scope.SaveAssembly();
 
 			return generatedType;
+		}
+
+		protected virtual void CreateInvocationForMethod(ClassEmitter emitter, MethodInfo method, Type proxyTargetType)
+		{
+			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType);
+
+			method2methodOnTarget[method] = methodOnTarget;
+
+			method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
+			                                                      proxyTargetType,
+			                                                      method, methodOnTarget, 
+			                                                      ConstructorVersion.WithTargetMethod);
 		}
 
 		private static MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType)
@@ -347,3 +351,4 @@ namespace Castle.DynamicProxy.Generators
 		}
 	}
 }
+

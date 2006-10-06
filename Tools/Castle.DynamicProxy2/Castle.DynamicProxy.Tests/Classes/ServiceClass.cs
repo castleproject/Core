@@ -76,6 +76,11 @@ namespace Castle.DynamicProxy.Tests.Classes
 		{
 			get { return false; }
 		}
+		
+		public class InernalClass
+		{
+			
+		}
 	}
 
 	public class ServiceClass2

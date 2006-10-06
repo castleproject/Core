@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				return false;
 			}
-			else if (type == typeof(Enum))
+			else if (type.IsEnum)
 			{
 				return Enum.GetValues(type).GetValue(0);
 			}
