@@ -181,7 +181,7 @@
 		<property overwrite="false" name="assembly.product" value="${project::get-name()}" />
 		<property overwrite="false" name="assembly.company" value="${project.company}" />
 		<property overwrite="false" name="assembly.title" value="${project::get-name()} for ${framework::get-description(framework::get-target-framework())}" />
-		<property overwrite="false" name="assembly.version" value="0.0.0.0" />
+		<property overwrite="false" name="assembly.version" value="${project.major}.${project.minor}.${project.build}.0" />
 		<property overwrite="false" name="assembly.version.informational" value="${assembly.major}.${assembly.minor}.${assembly.build}.${svn.revision}" />
 		<property overwrite="false" name="assembly.copyright" value="Castle Project, original author or authors" />
 		<property overwrite="false" name="assembly.keyfile" value="${key.file}" />

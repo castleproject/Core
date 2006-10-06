@@ -24,7 +24,7 @@
 				<property name="sign" value="true" />
 				<property name="vshik.installed" value="true" />
 				<property name="nunit2report.installed" value="false" />
-				<property name="build-zipfile" value="${build.dir}/Castle-1.0-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
+				<property name="build-zipfile" value="${build.dir}/Castle-${project.major}.${project.minor}.${project.build}-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
 			</properties>
 		</nant>
 	</target>
@@ -40,7 +40,7 @@
 				<property name="nant.settings.currentframework" value="net-2.0" />
 				<property name="project.config" value="release" />
 				<property name="sign" value="true" />
-				<property name="build-zipfile" value="${build.dir}/Castle-1.0-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
+				<property name="build-zipfile" value="${build.dir}/Castle-${project.major}.${project.minor}.${project.build}-${framework::get-target-framework()}-${project.config}-${datetime::get-year(datetime::now())}-${datetime::get-month(datetime::now())}-${datetime::get-day(datetime::now())} (r${svn.revision}).zip" dynamic="true" />
 			</properties>
 		</nant>
 	</target>
