@@ -21,7 +21,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class ResourceTestCase(AbstractMRTestCase):
+class ResourceTestCase(AbstractTestCase):
 	
 	[Test]
 	def GetResources():

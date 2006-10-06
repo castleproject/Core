@@ -21,7 +21,7 @@ import Castle.MonoRail.Views.Brail
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class LanguageFeatures(AbstractMRTestCase):
+class LanguageFeatures(AbstractTestCase):
 
 	[Test]
 	def NullableProperties():

@@ -20,7 +20,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class BrailBasicFunctionality(AbstractMRTestCase):
+class BrailBasicFunctionality(AbstractTestCase):
 
 	[Test]
 	def AppPath():

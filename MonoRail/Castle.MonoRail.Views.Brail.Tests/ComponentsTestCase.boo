@@ -22,7 +22,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class ComponentsTestCase(AbstractMRTestCase):
+class ComponentsTestCase(AbstractTestCase):
 
 	[Test]
 	def SimpleInlineViewComponent():

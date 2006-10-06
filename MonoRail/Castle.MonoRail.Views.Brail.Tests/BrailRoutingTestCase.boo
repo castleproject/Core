@@ -22,7 +22,7 @@ import Castle.MonoRail.TestSupport
 import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
-class BrailRoutingTestCase(AbstractMRTestCase):
+class BrailRoutingTestCase(AbstractTestCase):
 	[Test]
 	def BlogRoutingRule():
 		DoGet("blog/posts/2005/07/")
