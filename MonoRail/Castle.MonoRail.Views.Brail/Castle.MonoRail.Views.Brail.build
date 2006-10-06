@@ -37,6 +37,7 @@
 			target="library" 
 			debug="${build.debug}" 
 			output="${build.dir}\${project::get-name()}.dll" 
+			rebuild="${build.rebuild}"
 		>
 
 			<sources refid="project.sources" />

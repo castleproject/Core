@@ -78,6 +78,7 @@
 		<property name="build.dir" 			value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" />
 		<property name="testresults.dir" 	value="${build.dir}/test-results" />
 		<property name="releasenotes.dir"	value="${build.dir}/ReleaseNotes" />
+		<property name="build.rebuild"		value="false" overwrite="false" />
 	</target>
 
 	<target name="set-framework-configuration">
@@ -140,6 +141,24 @@
 		<resourcefileset id="project.resources" />
 	</target>
 	
+	<target name="common.find-svninfo">
+		<!-- For adding SVN revision to builds -->
+		<property name="svn.revision" value="0" overwrite="false" />
+		<!-- try to update the revision -->
+		<exec
+			program="svn"
+			commandline='info "${project::get-base-directory()}" --xml'
+			output="_revision.xml"
+			failonerror="false"/>
+		<xmlpeek
+			file="_revision.xml"
+			xpath="/info/entry/commit/@revision"
+			property="svn.revision"
+			failonerror="false"/>
+		<delete file="_revision.xml" failonerror="false" />
+		<echo message="INFO: Using Subversion revision number: ${svn.revision}"/>
+	</target>
+
 	<target name="common.find-nunit">
 		<if test="${not property::exists('nunit.found')}">
 			<exec 
@@ -148,24 +167,9 @@
 				failonerror="false" />
 			<property name="nunit.found" value="${nunit.found == '0'}" readonly="true" />
 
-			<echo message="Using nunit-console.exe for running unit tests" if="${nunit.found}"/>
+			<echo message="INFO: Using nunit-console.exe for running unit tests" if="${nunit.found}"/>
 			<echo message="WARNING: nunit-console not found, using less predictable NAnt &lt;nunit2&gt; task" unless="${nunit.found}"/>
 		</if>
 	</target>
-
-	<script language="C#" prefix="build">
-		<code>
-			<![CDATA[
-				[Function("path-make-relative")]
-				public static string PathMakeRelative(string fromPath, string toPath)
-				{
-					Uri uri1 = new Uri(Path.GetFullPath(fromPath));
-					Uri uri2 = new Uri(Path.GetFullPath(toPath));
-					return uri1.MakeRelative(uri2);
-				}
-				
-			]]>
-		</code>
-	</script>
 	
 </project>

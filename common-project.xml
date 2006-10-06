@@ -56,6 +56,7 @@
 			debug="${build.debug}"
 			warnaserror="${build.warnaserrors}"
 			output="${build.dir}/${project::get-name()}.dll"
+			rebuild="${build.rebuild}"
 		>
 			<sources refid="project.sources" />
 			<references refid="project.references" />
@@ -115,6 +116,7 @@
 			warnaserror="${build.warnaserrors}"
 			output="${build.dir}\${project::get-name()}.dll" 
 			doc="${build.dir}\${project::get-name()}.xml"
+			rebuild="${build.rebuild}"
 		>
 			<nowarn>
 				<warning number="1591" /> <!-- No XML comment for publicly visible member -->
@@ -143,7 +145,7 @@
 				<items refid="project.references" />
 			</in>
 			<do>
-				<copy file="${reference}" todir="${bin.dir}" />
+				<copy file="${reference}" todir="${bin.dir}" overwrite="${build.rebuild}" />
 			</do>
 		</foreach>
 	</target>

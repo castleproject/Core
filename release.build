@@ -18,6 +18,7 @@
 		-->
 		<nant buildfile="default.build" target="clean build installer">
 			<properties>
+				<property name="build.rebuild" value="true" />
 				<property name="nant.settings.currentframework" value="net-1.1" />
 				<property name="project.config" value="release" />
 				<property name="sign" value="true" />
@@ -35,6 +36,7 @@
 		-->
 		<nant buildfile="default.build" target="clean build installer">
 			<properties>
+				<property name="build.rebuild" value="true" />
 				<property name="nant.settings.currentframework" value="net-2.0" />
 				<property name="project.config" value="release" />
 				<property name="sign" value="true" />

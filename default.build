@@ -62,23 +62,8 @@
 	<target name="init" depends="common.init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${testresults.dir}" />
-		<!-- add SVN revision to builds -->
-		<property name="svn.revision" value="0" unless="${property::exists('svn.revision')}"/>
-		<!-- try to update the revision -->
-		<echo message="Retrieving Subversion revision number"/>
-		<exec
-			program="svn"
-			commandline='info "${project::get-base-directory()}" --xml'
-			output="_revision.xml"
-			failonerror="false"/>
-		<xmlpeek
-			file="_revision.xml"
-			xpath="/info/entry/commit/@revision"
-			property="svn.revision"
-			failonerror="false"/>
-		<delete file="_revision.xml" failonerror="false" />
-		<echo message="Using Subversion revision number: ${svn.revision}"/>
-
+		
+		<call target="common.find-svninfo" />
 		<call target="common.find-nunit" />
 	</target>
 	
@@ -129,6 +114,7 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${testresults.dir}" />
 		<call target="copy-referenced-assemblies" />
+		<property name="build.rebuild" value="true" />
 	</target>
 
 	<target name="copy-referenced-assemblies">
