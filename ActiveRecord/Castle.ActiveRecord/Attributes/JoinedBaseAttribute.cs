@@ -23,8 +23,6 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
 	public class JoinedBaseAttribute : Attribute
 	{
-		public JoinedBaseAttribute()
-		{
-		}
+		
 	}
 }

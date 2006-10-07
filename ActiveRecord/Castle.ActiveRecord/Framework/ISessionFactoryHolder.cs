@@ -19,6 +19,11 @@ namespace Castle.ActiveRecord.Framework
 	using NHibernate;
 	using NHibernate.Cfg;
 
+	/// <summary>
+	/// Type of delegate that is called when a root type is registered.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="rootType"></param>
 	public delegate void RootTypeHandler(object sender, Type rootType);
 
 	/// <summary>

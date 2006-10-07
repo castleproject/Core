@@ -35,6 +35,9 @@ namespace Castle.ActiveRecord.Framework
 	/// </remarks>
 	public class SessionScopeWebModule : IHttpModule
 	{
+		/// <summary>
+		/// The key used to store the session in the context items
+		/// </summary>
 		protected static readonly String SessionKey = "SessionScopeWebModule.session";
 
 		/// <summary>

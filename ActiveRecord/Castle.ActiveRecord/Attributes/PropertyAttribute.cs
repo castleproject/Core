@@ -60,32 +60,56 @@ namespace Castle.ActiveRecord
 		private bool update = true;
 		private bool insert = true;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertyAttribute"/> class.
+		/// </summary>
 		public PropertyAttribute() 
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertyAttribute"/> class.
+		/// </summary>
+		/// <param name="column">The column.</param>
 		public PropertyAttribute(String column) : this()
 		{
 			this.column = column;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertyAttribute"/> class.
+		/// </summary>
+		/// <param name="column">The column.</param>
+		/// <param name="type">The type.</param>
 		public PropertyAttribute(String column, String type) : this(column)
 		{
 			this.type = type;
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this property allow null.
+		/// </summary>
+		/// <value><c>true</c> if allow null; otherwise, <c>false</c>.</value>
 		public bool NotNull
 		{
 			get { return notNull; }
 			set { notNull = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the length of the property (for strings - nvarchar(50) )
+		/// </summary>
+		/// <value>The length.</value>
 		public int Length
 		{
 			get { return length; }
 			set { length = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the column name
+		/// </summary>
+		/// <value>The column.</value>
 		public String Column
 		{
 			get { return column; }
@@ -110,18 +134,30 @@ namespace Castle.ActiveRecord
 			set { insert = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="PropertyAttribute"/> is unique.
+		/// </summary>
+		/// <value><c>true</c> if unique; otherwise, <c>false</c>.</value>
 		public bool Unique
 		{
 			get { return unique; }
 			set { unique = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the formula used to calculate this property
+		/// </summary>
+		/// <value>The formula.</value>
 		public String Formula
 		{
 			get { return formula; }
 			set { formula = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the type of the column.
+		/// </summary>
+		/// <value>The type of the column.</value>
 		public String ColumnType
 		{
 			get { return type; }

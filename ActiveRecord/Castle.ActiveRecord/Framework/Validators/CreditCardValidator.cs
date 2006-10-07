@@ -39,6 +39,9 @@ namespace Castle.ActiveRecord.Framework.Validators
 		private CardType allowedTypes = CardType.All;
 		private string[] exceptions = new string[] {};
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CreditCardValidator"/> class.
+		/// </summary>
 		public CreditCardValidator() {}
 
 		/// <summary>
@@ -70,6 +73,14 @@ namespace Castle.ActiveRecord.Framework.Validators
 			this.exceptions = exceptions;
 		}
 
+
+		/// <summary>
+		/// Validate that the propety value matches a valid (formatted) credit card
+		/// Note: null values are consider OK always, combine with <see cref="NullCheckValidator"/> if required.
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public override bool Perform(object instance, object fieldValue)
 		{
 			//If the input is null then there's nothing to validate here
@@ -221,22 +232,56 @@ namespace Castle.ActiveRecord.Framework.Validators
 			return false;
 		}
 
+		/// <summary>
+		/// Builds the error message.
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			return String.Format("{0} does not appear to be a valid credit card number, or is of an unsupported type.", Property.Name);
 		}
 
+		/// <summary>
+		/// Define the known card types
+		/// </summary>
 		[Flags, Serializable]
 		public enum CardType
 		{
+			/// <summary>
+			/// MasterCard Card
+			/// </summary>
 			MasterCard = 0x0001,
+			/// <summary>
+			/// VISA Card
+			/// </summary>
 			VISA = 0x0002,
+			/// <summary>
+			/// American Express Card
+			/// </summary>
 			Amex = 0x0004,
+			/// <summary>
+			/// Diners Club Card
+			/// </summary>
 			DinersClub = 0x0008,
+			/// <summary>
+			/// enRoute Card
+			/// </summary>
 			enRoute = 0x0010,
+			/// <summary>
+			/// Discover Card
+			/// </summary>
 			Discover = 0x0020,
+			/// <summary>
+			/// JCB Card
+			/// </summary>
 			JCB = 0x0040,
+			/// <summary>
+			/// Unkown card
+			/// </summary>
 			Unknown = 0x0080,
+			/// <summary>
+			/// All (known) cards
+			/// </summary>
 			All = Amex | DinersClub | Discover | Discover | enRoute | JCB | MasterCard | VISA
 		}
 	}

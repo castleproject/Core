@@ -16,6 +16,10 @@ namespace Castle.ActiveRecord.Framework
 {
 	using System.Collections;
 
+	/// <summary>
+	/// Implementation of this interface provide a way to get the current scope.
+	/// This is used by the rest of the Active Record framework to grab a scope (and from it a session).
+	/// </summary>
 	public interface IThreadScopeInfo
 	{
 		/// <summary>

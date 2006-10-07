@@ -20,6 +20,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	using Castle.ActiveRecord;
 
+	/// <summary>
+	/// Model for [Any] association, a polymorphic assoication without common base class
+	/// </summary>
 	[Serializable]
 	public class AnyModel : IModelNode
 	{
@@ -27,6 +30,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly AnyAttribute anyAtt;
 		private IList metaValues;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AnyModel"/> class.
+		/// </summary>
+		/// <param name="prop">The prop.</param>
+		/// <param name="anyAtt">Any att.</param>
 		public AnyModel(PropertyInfo prop, AnyAttribute anyAtt)
 		{
 			this.prop = prop;
@@ -34,16 +42,28 @@ namespace Castle.ActiveRecord.Framework.Internal
 			metaValues = new ArrayList();
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return prop; }
 		}
 
+		/// <summary>
+		/// Gets the [Any] attribute
+		/// </summary>
+		/// <value>Any att.</value>
 		public AnyAttribute AnyAtt
 		{
 			get { return anyAtt; }
 		}
 
+		/// <summary>
+		/// Gets or sets the meta values.
+		/// </summary>
+		/// <value>The meta values.</value>
 		public IList MetaValues
 		{
 			get { return metaValues; }
@@ -52,6 +72,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitAny(this);

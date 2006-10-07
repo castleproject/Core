@@ -24,15 +24,26 @@ namespace Castle.ActiveRecord
 	{
 		private string _column;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JoinedKeyAttribute"/> class.
+		/// </summary>
 		public JoinedKeyAttribute()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JoinedKeyAttribute"/> class.
+		/// </summary>
+		/// <param name="column">The column.</param>
 		public JoinedKeyAttribute(String column)
 		{
 			_column = column;
 		}
 
+		/// <summary>
+		/// Gets or sets the column name
+		/// </summary>
+		/// <value>The column.</value>
 		public String Column
 		{
 			get { return _column; }

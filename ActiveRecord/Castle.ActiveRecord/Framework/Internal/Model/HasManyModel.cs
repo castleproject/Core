@@ -17,24 +17,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
-
+	/// <summary>
+	/// Model to represent a HasMany ( one to many ) association
+	/// </summary>
 	[Serializable]
 	public class HasManyModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly HasManyAttribute hasManyAtt;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HasManyModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="hasManyAtt">The has many att.</param>
 		public HasManyModel( PropertyInfo propInfo, HasManyAttribute hasManyAtt )
 		{
 			this.hasManyAtt = hasManyAtt;
 			this.propInfo = propInfo;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the has many attribute
+		/// </summary>
+		/// <value>The has many att.</value>
 		public HasManyAttribute HasManyAtt
 		{
 			get { return hasManyAtt; }
@@ -42,6 +57,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitHasMany(this);

@@ -16,21 +16,55 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	/// <summary>
+	/// Defines the values for the generator for the Collection Id values.w
+	/// </summary>
 	[Serializable]
 	public enum CollectionIDType
 	{
+		/// <summary>
+		/// Use Identity column (auto number)
+		/// </summary>
 		Identity,
+		/// <summary>
+		/// Use a sequence
+		/// </summary>
 		Sequence,
+		/// <summary>
+		/// Use the HiLo algorithm to get the next value
+		/// </summary>
 		HiLo,
+		/// <summary>
+		/// Use a sequence and a HiLo algorithm - better performance on Oracle
+		/// </summary>
 		SeqHiLo,
+		/// <summary>
+		/// Use the hex representation of a unique identifier
+		/// </summary>
 		UuidHex,
+		/// <summary>
+		/// Use the string representation of a unique identifier
+		/// </summary>
 		UuidString,
+		/// <summary>
+		/// Generate a Guid for the primary key
+		/// Note: You should prefer using GuidComb over this value.
+		/// </summary>
 		Guid,
+		/// <summary>
+		/// Generate a Guid in sequence, so it will have better insert performance in the DB.
+		/// </summary>
 		GuidComb,
+		/// <summary>
+		/// The key value is always assigned.
+		/// </summary>
 		Assigned,
-		Foreign
-	} 
-
+		/// <summary>
+		/// This is a foreign key to another table
+		/// </summary>
+		Foreign 
+	}
+	
 	/// <summary>
 	/// Used for a collection that requires a collection id.
 	/// </summary>
@@ -54,6 +88,12 @@ namespace Castle.ActiveRecord
 		private String column;
 		private String type;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CollectionIDAttribute"/> class.
+		/// </summary>
+		/// <param name="generator">The generator.</param>
+		/// <param name="column">The column.</param>
+		/// <param name="ColumnType">Type of the column.</param>
 		public CollectionIDAttribute(CollectionIDType generator, String column, String ColumnType)
 		{
 			this.generator = generator;
@@ -61,18 +101,30 @@ namespace Castle.ActiveRecord
 			this.type = ColumnType;
 		}
 
+		/// <summary>
+		/// Gets or sets the generator.
+		/// </summary>
+		/// <value>The generator.</value>
 		public CollectionIDType Generator
 		{
 			get { return generator; }
 			set { generator = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the column name
+		/// </summary>
+		/// <value>The column.</value>
 		public String Column
 		{
 			get { return column; }
 			set { column = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the type of the column.
+		/// </summary>
+		/// <value>The type of the column.</value>
 		public String ColumnType
 		{
 			get { return type; }

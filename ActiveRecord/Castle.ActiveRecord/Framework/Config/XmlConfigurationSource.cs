@@ -27,10 +27,17 @@ namespace Castle.ActiveRecord.Framework.Config
 	/// </summary>
 	public class XmlConfigurationSource : InPlaceConfigurationSource
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlConfigurationSource"/> class.
+		/// </summary>
 		protected XmlConfigurationSource()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlConfigurationSource"/> class.
+		/// </summary>
+		/// <param name="xmlFileName">Name of the XML file.</param>
 		public XmlConfigurationSource(String xmlFileName)
 		{
 			XmlDocument doc = new XmlDocument();
@@ -38,6 +45,10 @@ namespace Castle.ActiveRecord.Framework.Config
 			PopulateSource(doc.DocumentElement);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlConfigurationSource"/> class.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
 		public XmlConfigurationSource(Stream stream)
 		{
 			XmlDocument doc = new XmlDocument();
@@ -45,6 +56,10 @@ namespace Castle.ActiveRecord.Framework.Config
 			PopulateSource(doc.DocumentElement);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlConfigurationSource"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
 		public XmlConfigurationSource(TextReader reader)
 		{
 			XmlDocument doc = new XmlDocument();
@@ -52,6 +67,9 @@ namespace Castle.ActiveRecord.Framework.Config
 			PopulateSource(doc.DocumentElement);
 		}
 
+		/// <summary>
+		/// Populate this instance with values from the given XML node
+		/// </summary>
 		protected void PopulateSource(XmlNode section)
 		{
 			XmlAttribute isWebAtt = section.Attributes["isWeb"];
@@ -136,6 +154,11 @@ namespace Castle.ActiveRecord.Framework.Config
 			}
 		}
 
+		/// <summary>
+		/// Builds the configuration properties.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
 		protected IDictionary BuildProperties(XmlNode node)
 		{
 			HybridDictionary dict = new HybridDictionary();

@@ -16,10 +16,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		private readonly SessionScope parentSimpleScope;
 		private readonly TransactionScope parentTransactionScope;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DifferentDatabaseScope"/> class.
+		/// </summary>
+		/// <param name="connection">The connection.</param>
 		public DifferentDatabaseScope(IDbConnection connection) : this(connection, FlushAction.Auto)
 		{
 		}
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DifferentDatabaseScope"/> class.
+		/// </summary>
+		/// <param name="connection">The connection.</param>
+		/// <param name="flushAction">The flush action.</param>
 		public DifferentDatabaseScope(IDbConnection connection, FlushAction flushAction) : base(flushAction, SessionScopeType.Custom)
 		{
 			if (connection == null) throw new ArgumentNullException("connection");
@@ -47,11 +56,26 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			}
 		}
 
+		/// <summary>
+		/// We want to be in charge of creating the session
+		/// </summary>
+		/// <value></value>
 		public override bool WantsToCreateTheSession
 		{
 			get { return true; }
 		}
 
+		/// <summary>
+		/// This method is invoked when no session was available
+		/// at and the <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
+		/// just created one. So it registers the session created
+		/// within this scope using a key. The scope implementation
+		/// shouldn't make any assumption on what the key
+		/// actually is as we reserve the right to change it
+		/// <seealso cref="IsKeyKnown"/>
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <param name="session">An instance of <c>ISession</c></param>
 		public override void RegisterSession(object key, ISession session)
 		{
 			if (parentTransactionScope != null)
@@ -67,6 +91,18 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			base.RegisterSession(key, session);
 		}
 
+		/// <summary>
+		/// This method is invoked when the
+		/// <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
+		/// instance needs a session instance. Instead of creating one it interrogates
+		/// the active scope for one. The scope implementation must check if it
+		/// has a session registered for the given key.
+		/// <seealso cref="RegisterSession"/>
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <returns>
+		/// 	<c>true</c> if the key exists within this scope instance
+		/// </returns>
 		public override bool IsKeyKnown(object key)
 		{
 			if (parentTransactionScope != null)
@@ -84,6 +120,13 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			return keyKnown ? true : base.IsKeyKnown(key);
 		}
 
+		/// <summary>
+		/// This method should return the session instance associated with the key.
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <returns>
+		/// the session instance or null if none was found
+		/// </returns>
 		public override ISession GetSession(object key)
 		{
 			if (parentTransactionScope != null)
@@ -104,8 +147,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		}
 
 		/// <summary>
+		/// Performs the disposal.
 		/// </summary>
-		/// <param name="sessions"></param>
+		/// <param name="sessions">The sessions.</param>
 		protected override void PerformDisposal(ICollection sessions)
 		{
 			if (parentTransactionScope == null && parentSimpleScope == null)
@@ -114,6 +158,14 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			}
 		}
 
+		/// <summary>
+		/// If the <see cref="WantsToCreateTheSession"/> returned
+		/// <c>true</c> then this method is invoked to allow
+		/// the scope to create a properly configured session
+		/// </summary>
+		/// <param name="sessionFactory">From where to open the session</param>
+		/// <param name="interceptor">the NHibernate interceptor</param>
+		/// <returns>the newly created session</returns>
 		public override ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor)
 		{
 			return sessionFactory.OpenSession(connection, interceptor);

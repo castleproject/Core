@@ -28,10 +28,17 @@ namespace Castle.ActiveRecord.Framework
 	{
 		private static readonly HookDispatcher instance = new HookDispatcher();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HookDispatcher"/> class.
+		/// </summary>
 		protected HookDispatcher()
 		{
 		}
 
+		/// <summary>
+		/// Gets the sole instance.
+		/// </summary>
+		/// <value>The instance.</value>
 		public static HookDispatcher Instance
 		{
 			get { return instance; }

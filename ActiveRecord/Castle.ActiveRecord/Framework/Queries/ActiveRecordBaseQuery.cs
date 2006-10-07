@@ -106,6 +106,7 @@ namespace Castle.ActiveRecord
 
 		/// <summary>
 		/// Simply creates the query and then call its <see cref="IQuery.Enumerable()"/> method.
+		/// Note: Only use when you expect most of the results to be in the second level cache
 		/// </summary>
 		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
 		protected virtual IEnumerable InternalEnumerate(ISession session)

@@ -64,6 +64,9 @@ namespace Castle.ActiveRecord
 		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
 		private CascadeEnum cascade = CascadeEnum.None;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BelongsToAttribute"/> class.
+		/// </summary>
 		public BelongsToAttribute()
 		{
 		}

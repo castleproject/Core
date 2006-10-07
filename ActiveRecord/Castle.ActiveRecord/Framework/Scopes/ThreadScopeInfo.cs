@@ -17,11 +17,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// This <see cref="IThreadScopeInfo"/> implementation will first get the current scope from the current 
+	/// thread. Do NOT use on web scenario (web applications or web services).
+	/// </summary>
 	public sealed class ThreadScopeInfo : AbstractThreadScopeInfo
 	{
 		static readonly Object syncObject = new Object();
 		[ThreadStatic] static Stack stack;
-		
+
+		/// <summary>
+		/// Gets the current stack.
+		/// </summary>
+		/// <value>The current stack.</value>
 		public override Stack CurrentStack
 		{
 			get

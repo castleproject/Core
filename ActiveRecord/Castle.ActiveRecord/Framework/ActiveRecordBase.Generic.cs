@@ -166,6 +166,11 @@ namespace Castle.ActiveRecord
 			return ActiveRecordBase.Execute(typeof(T), call, instance);
 		}
 
+		/// <summary>
+		/// Executes the query and return a strongly typed result
+		/// </summary>
+		/// <param name="query">The query.</param>
+		/// <returns></returns>
 		protected internal static R ExecuteQuery2<R>(IActiveRecordQuery<R> query)
 		{
 			return (R)ActiveRecordBase.ExecuteQuery(query);

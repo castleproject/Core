@@ -17,12 +17,21 @@ namespace Castle.ActiveRecord
 	using System;
 	
 	/// <summary>
-	/// 
+	/// Define the possible fetch option values
 	/// </summary>
 	public enum FetchEnum
 	{
+		/// <summary>
+		/// Let NHibernate decide what to do here
+		/// </summary>
 		Unspecified,
+		/// <summary>
+		/// Use a JOIN to load the data
+		/// </summary>
 		Join, 
+		/// <summary>
+		/// Use a seperate SELECT statement to load the data
+		/// </summary>
 		Select
 	}
 
@@ -117,10 +126,6 @@ namespace Castle.ActiveRecord
 		private Type mapType;
 		private bool constrained;
 
-		public OneToOneAttribute()
-		{
-		}
-		
 		/// <summary>
 		/// Allows one to reference a different type
 		/// than the property type

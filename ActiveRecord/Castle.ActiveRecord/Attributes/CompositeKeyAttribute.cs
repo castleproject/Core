@@ -25,6 +25,10 @@ namespace Castle.ActiveRecord
 	{
 		private string unsavedValue;
 
+		/// <summary>
+		/// Gets or sets the unsaved value.
+		/// </summary>
+		/// <value>The unsaved value.</value>
 		public string UnsavedValue
 		{
 			get { return unsavedValue; }

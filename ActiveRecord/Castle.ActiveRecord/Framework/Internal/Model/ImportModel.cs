@@ -14,20 +14,35 @@
 
 namespace Castle.ActiveRecord.Framework.Internal
 {
+	/// <summary>
+	/// Model for importing classes so HQL queries can use them more easily.
+	/// </summary>
 	public class ImportModel : IModelNode
 	{
 		private readonly ImportAttribute att;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ImportModel"/> class.
+		/// </summary>
+		/// <param name="att">The att.</param>
 		public ImportModel(ImportAttribute att)
 		{
 			this.att = att;
 		}
 
+		/// <summary>
+		/// Gets the import attribute
+		/// </summary>
+		/// <value>The import att.</value>
 		public ImportAttribute ImportAtt
 		{
 			get { return att; }
 		}
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitImport(this);

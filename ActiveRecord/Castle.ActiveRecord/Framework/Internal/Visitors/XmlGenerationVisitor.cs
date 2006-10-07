@@ -29,16 +29,27 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private StringBuilder xmlBuilder = new StringBuilder();
 		private int identLevel = 0;
 
+		/// <summary>
+		/// Resets this instance.
+		/// </summary>
 		public void Reset()
 		{
 			xmlBuilder.Length = 0;
 		}
 
+		/// <summary>
+		/// Gets the XML.
+		/// </summary>
+		/// <value>The XML.</value>
 		public String Xml
 		{
 			get { return xmlBuilder.ToString(); }
 		}
 
+		/// <summary>
+		/// Creates the XML.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public void CreateXml(ActiveRecordModel model)
 		{
 			CreateXmlPI();
@@ -67,6 +78,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the model.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitModel(ActiveRecordModel model)
 		{
 			VisitNodes(model.Imports);
@@ -173,6 +188,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the primary key.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitPrimaryKey(PrimaryKeyModel model)
 		{
 			String unsavedVal = model.PrimaryKeyAtt.UnsavedValue;
@@ -258,6 +277,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Append("</id>");
 		}
 
+		/// <summary>
+		/// Visits the composite primary key.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitCompositePrimaryKey(CompositeKeyModel model)
 		{
 			CompositeKeyAttribute att = model.CompositeKeyAtt;
@@ -307,6 +330,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			AppendF("</composite-id>");
 		}
 
+		/// <summary>
+		/// Visits the import.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitImport(ImportModel model)
 		{
 			AppendF("<import{0}{1} />",
@@ -314,6 +341,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        MakeAtt("rename", model.ImportAtt.Rename));
 		}
 
+		/// <summary>
+		/// Visits the property.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitProperty(PropertyModel model)
 		{
 			PropertyAttribute att = model.PropertyAtt;
@@ -323,7 +354,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 				att.Update, att.Formula, att.Column, 
 				att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);
 		}
-		
+
+		/// <summary>
+		/// Visits the field.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitField(FieldModel model)
 		{
 			FieldAttribute att = model.FieldAtt;
@@ -334,6 +369,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 				att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);
 		}
 
+		/// <summary>
+		/// Visits any.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitAny(AnyModel model)
 		{
 			String cascade = TranslateCascadeEnum(model.AnyAtt.Cascade);
@@ -367,6 +406,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		}
 
+		/// <summary>
+		/// Visits the has many to any.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitHasManyToAny(HasManyToAnyModel model)
 		{
 			HasManyToAnyAttribute att = model.HasManyToAnyAtt;
@@ -378,6 +421,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                att.Cache);
 		}
 
+		/// <summary>
+		/// Visits the has many to any config.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitHasManyToAnyConfig(HasManyToAnyModel.Config model)
 		{
 			HasManyToAnyAttribute att = model.Parent.HasManyToAnyAtt;
@@ -393,6 +440,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			AppendF("</many-to-any>");
 		}
 
+		/// <summary>
+		/// Visits the version.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitVersion(VersionModel model)
 		{
 			String unsavedValue = model.VersionAtt.UnsavedValue;
@@ -405,6 +456,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        WriteIfNonNull("unsaved-value", unsavedValue));
 		}
 
+		/// <summary>
+		/// Visits the timestamp.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitTimestamp(TimestampModel model)
 		{
 			AppendF("<timestamp{0}{1}{2} />",
@@ -413,11 +468,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        MakeAtt("column", model.TimestampAtt.Column));
 		}
 
+		/// <summary>
+		/// Visits the key.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitKey(KeyModel model)
 		{
 			WriteKey(model.JoinedKeyAtt.Column);
 		}
 
+		/// <summary>
+		/// Visits the one to one.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitOneToOne(OneToOneModel model)
 		{
 			String cascade = TranslateCascadeEnum(model.OneToOneAtt.Cascade);
@@ -432,6 +495,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        WriteIfTrue("constrained", model.OneToOneAtt.Constrained));
 		}
 
+		/// <summary>
+		/// Visits the belongs to.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitBelongsTo(BelongsToModel model)
 		{
 			String cascade = TranslateCascadeEnum(model.BelongsToAtt.Cascade);
@@ -470,6 +537,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the has many.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitHasMany(HasManyModel model)
 		{
 			HasManyAttribute att = model.HasManyAtt;
@@ -481,6 +552,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                att.Cache);
 		}
 
+		/// <summary>
+		/// Visits the has and belongs to many.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
 		{
 			HasAndBelongsToManyAttribute att = model.HasManyAtt;
@@ -492,6 +567,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache);
 		}
 
+		/// <summary>
+		/// Visits the nested.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitNested(NestedModel model)
 		{
 			AppendF("<component{0}{1}{2}{3}>",
@@ -505,6 +584,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Append("</component>");
 		}
 
+		/// <summary>
+		/// Visits the collection ID.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitCollectionID(CollectionIDModel model)
 		{
 			AppendF("<collection-id{0}{1}>",
@@ -521,6 +604,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Append("</collection-id>");
 		}
 
+		/// <summary>
+		/// Visits the hilo.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitHilo(HiloModel model)
 		{
 			AppendF("<param name=\"table\">{0}</param>", model.HiloAtt.Table);

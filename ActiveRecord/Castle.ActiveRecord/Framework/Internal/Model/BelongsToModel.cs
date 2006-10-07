@@ -17,24 +17,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
-
+	/// <summary>
+	/// Model for BelongTo - A many to one assoication between persistent entities.
+	/// </summary>
 	[Serializable]
 	public class BelongsToModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly BelongsToAttribute belongsToAtt;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BelongsToModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="belongsToAtt">The belongs to att.</param>
 		public BelongsToModel( PropertyInfo propInfo, BelongsToAttribute belongsToAtt )
 		{
 			this.propInfo = propInfo;
 			this.belongsToAtt = belongsToAtt;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the belongs to attribute
+		/// </summary>
+		/// <value>The belongs to att.</value>
 		public BelongsToAttribute BelongsToAtt
 		{
 			get { return belongsToAtt; }
@@ -42,6 +57,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitBelongsTo(this);

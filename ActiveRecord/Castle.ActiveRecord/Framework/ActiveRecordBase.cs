@@ -36,6 +36,9 @@ namespace Castle.ActiveRecord
 	[Serializable]
 	public abstract class ActiveRecordBase : ActiveRecordHooksBase
 	{
+		/// <summary>
+		/// The global holder for the session factories.
+		/// </summary>
 		protected internal static ISessionFactoryHolder holder;
 
 		/// <summary>
@@ -446,6 +449,12 @@ namespace Castle.ActiveRecord
 
 		#region ExecuteQuery
 
+		/// <summary>
+		/// Enumerates the query
+		/// Note: only use if you expect most of the values to exist on the second level cache.
+		/// </summary>
+		/// <param name="query">The query.</param>
+		/// <returns></returns>
 		protected internal static IEnumerable EnumerateQuery(IActiveRecordQuery query)
 		{
 			Type targetType = query.Target;
@@ -472,6 +481,11 @@ namespace Castle.ActiveRecord
 
 		#region ExecuteQuery
 
+		/// <summary>
+		/// Executes the query.
+		/// </summary>
+		/// <param name="query">The query.</param>
+		/// <returns></returns>
 		public static object ExecuteQuery(IActiveRecordQuery query)
 		{
 			Type targetType = query.Target;
@@ -933,6 +947,11 @@ namespace Castle.ActiveRecord
 
 		#region public override
 
+		/// <summary>
+		/// Return the type of the object with its PK value.
+		/// Useful for logging/debugging
+		/// </summary>
+		/// <returns></returns>
 		public override String ToString()
 		{
 			Framework.Internal.ActiveRecordModel model = GetModel(GetType());

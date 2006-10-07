@@ -30,35 +30,62 @@ namespace Castle.ActiveRecord.Framework.Config
         private Type namingStrategyImplementation;
 		private bool debug = false;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InPlaceConfigurationSource"/> class.
+		/// </summary>
 		public InPlaceConfigurationSource()
 		{
 		}
 
 		#region IConfigurationSource Members
 
+		/// <summary>
+		/// Return a type that implements
+		/// the interface <see cref="IThreadScopeInfo"/>
+		/// </summary>
+		/// <value></value>
 		public Type ThreadScopeInfoImplementation
 		{
 			get { return threadScopeInfoImplementation; }
 			set { threadScopeInfoImplementation = value; }
 		}
 
+		/// <summary>
+		/// Return a type that implements
+		/// the interface <see cref="ISessionFactoryHolder"/>
+		/// </summary>
+		/// <value></value>
 		public Type SessionFactoryHolderImplementation
 		{
 			get { return sessionFactoryHolderImplementation; }
 			set { sessionFactoryHolderImplementation = value; }
 		}
 
+		/// <summary>
+		/// Return a type that implements
+		/// the interface NHibernate.Cfg.INamingStrategy
+		/// </summary>
+		/// <value></value>
 		public Type NamingStrategyImplementation
 		{
 			get { return namingStrategyImplementation; }
 			set { namingStrategyImplementation = value; }
 		}
 
+		/// <summary>
+		/// Return an <see cref="IConfiguration"/> for the specified type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		public IConfiguration GetConfiguration(Type type)
 		{
 			return _type2Config[type] as IConfiguration;
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="IConfigurationSource"/> produce debug information
+		/// </summary>
+		/// <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
 		public bool Debug
 		{
 			get { return debug; }
@@ -76,11 +103,21 @@ namespace Castle.ActiveRecord.Framework.Config
 			Add(type, ConvertToConfiguration(properties));
 		}
 
+		/// <summary>
+		/// Adds the specified type with configuration
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="config">The config.</param>
 		public void Add(Type type, IConfiguration config)
 		{
 			_type2Config[type] = config;
 		}
 
+		/// <summary>
+		/// Sets the type of the thread info.
+		/// </summary>
+		/// <param name="isWeb">if we run in a web context or not</param>
+		/// <param name="customType">Type of the custom implementation</param>
 		protected void SetUpThreadInfoType(bool isWeb, String customType)
 		{
 			Type threadInfoType = null;
@@ -107,6 +144,10 @@ namespace Castle.ActiveRecord.Framework.Config
 			ThreadScopeInfoImplementation = threadInfoType;
 		}
 
+		/// <summary>
+		/// Sets the type of the session factory holder.
+		/// </summary>
+		/// <param name="customType">Custom implementation</param>
 		protected void SetUpSessionFactoryHolderType(String customType)
 		{
 			Type sessionFactoryHolderType = typeof(SessionFactoryHolder);
@@ -128,6 +169,10 @@ namespace Castle.ActiveRecord.Framework.Config
 			SessionFactoryHolderImplementation = sessionFactoryHolderType;
 		}
 
+		/// <summary>
+		/// Sets the type of the naming strategy.
+		/// </summary>
+		/// <param name="customType">Custom implementation type name</param>
 		protected void SetUpNamingStrategyType(String customType) 
 		{
 			if (customType != null && customType != String.Empty) 
@@ -147,6 +192,10 @@ namespace Castle.ActiveRecord.Framework.Config
 			}
 		}
 
+		/// <summary>
+		/// Sets the debug flag.
+		/// </summary>
+		/// <param name="isDebug">if set to <c>true</c> Active Record will produce debug information.</param>
 		protected void SetDebugFlag(bool isDebug)
 		{
 			debug = isDebug;

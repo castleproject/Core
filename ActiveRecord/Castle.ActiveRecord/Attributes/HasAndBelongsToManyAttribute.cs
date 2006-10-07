@@ -44,34 +44,59 @@ namespace Castle.ActiveRecord
 		private String columnKey;
 		private String[] compositeKeyColumnKeys;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HasAndBelongsToManyAttribute"/> class.
+		/// </summary>
+		/// <param name="mapType">Type of the map.</param>
 		public HasAndBelongsToManyAttribute( Type mapType )
 		{
 			this.mapType = mapType;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HasAndBelongsToManyAttribute"/> class.
+		/// </summary>
+		/// <param name="mapType">Type of the map.</param>
+		/// <param name="type">The type.</param>
 		public HasAndBelongsToManyAttribute( Type mapType, RelationType type ) : this(mapType)
 		{
 			base.relType = type;
 		}
 
+		/// <summary>
+		/// Gets or sets the column that represent the other side on the assoication table
+		/// </summary>
+		/// <value>The column ref.</value>
 		public String ColumnRef
 		{
 			get { return columnRef; }
 			set { columnRef = value; }
 		}
-	    
+
+		/// <summary>
+		/// Gets or sets the composite key columns that represent the other side on the assoication table
+		/// </summary>
+		/// <value>The composite key column refs.</value>
 		public String[] CompositeKeyColumnRefs
 		{
 			get { return compositeKeyColumnRefs; }
 			set { compositeKeyColumnRefs = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the key column name
+		/// </summary>
+		/// <value>The column key.</value>
 		public String ColumnKey
 		{
 			get { return columnKey; }
 			set { columnKey = value; }
 		}
-	    
+
+		/// <summary>
+		/// Gets or sets the composite key columns names.
+		/// </summary>
+		/// <value>The composite key column keys.</value>
 		public String[] CompositeKeyColumnKeys
 		{
 			get { return compositeKeyColumnKeys; }

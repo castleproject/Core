@@ -154,21 +154,41 @@ namespace Castle.ActiveRecord
 			return FindAll(targetType, null, criterias);
 		}
 
+		/// <summary>
+		/// Deletes all entities of the specified type (and their inheritors)
+		/// </summary>
+		/// <param name="type">The type.</param>
 		public static void DeleteAll(Type type)
 		{
 			ActiveRecordBase.DeleteAll(type);
 		}
 
+		/// <summary>
+		/// Deletes all entities of specified type that match the HQL where clause
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="where">The where.</param>
 		public static void DeleteAll(Type type, string where)
 		{
 			ActiveRecordBase.DeleteAll(type, where);
 		}
 
+		/// <summary>
+		/// Enumerates the query.
+		/// Note: Only use if you expect most of the values to be on the second level cache
+		/// </summary>
+		/// <param name="q">The query</param>
+		/// <returns></returns>
 		public static IEnumerable EnumerateQuery(IActiveRecordQuery q)
 		{
 			return ActiveRecordBase.EnumerateQuery(q);
 		}
 
+		/// <summary>
+		/// Executes the query
+		/// </summary>
+		/// <param name="q">The query</param>
+		/// <returns></returns>
 		public static object ExecuteQuery(IActiveRecordQuery q)
 		{
 			return ActiveRecordBase.ExecuteQuery(q);

@@ -18,6 +18,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 	using System.Collections;
 
+	/// <summary>
+	/// Bulids an <see cref="ActiveRecordModel"/> from a type and does some inital validation.
+	/// </summary>
 	public class ActiveRecordModelBuilder
 	{
 		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
@@ -28,10 +31,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
-		public ActiveRecordModelBuilder()
-		{
-		}
-
+		/// <summary>
+		/// Creates a <see cref="ActiveRecordModel"/> from the specified type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		public ActiveRecordModel Create(Type type)
 		{
 			if (type == null) throw new ArgumentNullException("type");
@@ -49,11 +53,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return model;
 		}
 
+		/// <summary>
+		/// Gets the models.
+		/// </summary>
+		/// <value>The models.</value>
 		public ActiveRecordModelCollection Models
 		{
 			get { return coll; }
 		}
 
+		/// <summary>
+		/// Populates the model from tye type
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="type">The type.</param>
 		private void PopulateModel(ActiveRecordModel model, Type type)
 		{
 			ProcessActiveRecordAttribute(type, model);

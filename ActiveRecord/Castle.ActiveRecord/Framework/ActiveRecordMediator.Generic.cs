@@ -137,11 +137,17 @@ namespace Castle.ActiveRecord
 			return (T[]) ActiveRecordMediator.FindAll(typeof(T), criterias);
 		}
 
+		/// <summary>
+		/// Deletes all entities of <typeparamref name="T"/>.
+		/// </summary>
 		public static void DeleteAll()
 		{
 			ActiveRecordMediator.DeleteAll(typeof(T));
 		}
 
+		/// <summary>
+		/// Deletes all entities of <typeparamref name="T"/> that match the HQL where clause.
+		/// </summary>
 		public static void DeleteAll(string where)
 		{
 			ActiveRecordMediator.DeleteAll(typeof(T), where);

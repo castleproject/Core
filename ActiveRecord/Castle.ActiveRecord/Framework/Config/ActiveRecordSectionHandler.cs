@@ -24,17 +24,24 @@ namespace Castle.ActiveRecord.Framework.Config
 	/// </summary>
 	public class ActiveRecordSectionHandler : XmlConfigurationSource, IConfigurationSectionHandler
 	{
-		public ActiveRecordSectionHandler()
-		{
-		}
-
+		/// <summary>
+		/// Creates a configuration section handler.
+		/// </summary>
+		/// <param name="parent"></param>
+		/// <param name="configContext">Configuration context object.</param>
+		/// <param name="section"></param>
+		/// <returns>The created section handler object.</returns>
 		public object Create(object parent, object configContext, XmlNode section)
 		{
 			PopulateSource(section);
 			
 			return this;
 		}
-		
+
+		/// <summary>
+		/// Gets the sole instance.
+		/// </summary>
+		/// <value>The instance.</value>
 		public static IConfigurationSource Instance
 		{
 			get

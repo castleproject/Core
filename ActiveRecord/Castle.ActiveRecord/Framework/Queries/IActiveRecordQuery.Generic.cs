@@ -24,6 +24,11 @@ namespace Castle.ActiveRecord
 	/// <typeparam name="T">The resulting object type</typeparam>
 	public interface IActiveRecordQuery<T> : IActiveRecordQuery
 	{
+		/// <summary>
+		/// Executes the query using specified session.
+		/// </summary>
+		/// <param name="session">The session.</param>
+		/// <returns></returns>
 		new T Execute(ISession session);
 	}
 }

@@ -128,6 +128,12 @@ namespace Castle.ActiveRecord.Queries
 
 		#endregion
 
+		/// <summary>
+		/// Simply creates the query and then call its <see cref="IQuery.Enumerable()"/> method.
+		/// Note: Only use when you expect most of the results to be in the second level cache
+		/// </summary>
+		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
+		/// <returns></returns>
 		protected override IEnumerable InternalEnumerate(ISession session)
 		{
 			return GenericEnumerate(session);

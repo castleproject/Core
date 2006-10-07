@@ -49,6 +49,10 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns></returns>
 		IConfiguration GetConfiguration(Type type);
 
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="IConfigurationSource"/> produce debug information
+		/// </summary>
+		/// <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
 		bool Debug { get; }
 	}
 }

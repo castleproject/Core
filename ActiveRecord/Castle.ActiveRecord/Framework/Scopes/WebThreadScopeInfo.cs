@@ -19,13 +19,20 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	using System.Runtime.CompilerServices;
 	using System.Web;
 
+
+
 	/// <summary>
-	/// 
+	/// This <see cref="IThreadScopeInfo"/> implementation will first get the current scope from the current 
+	/// request, thus implementing a Session Per Request pattern.
 	/// </summary>
 	public class WebThreadScopeInfo : AbstractThreadScopeInfo
 	{
         const string ActiveRecordCurrentStack = "activerecord.currentstack";
 
+		/// <summary>
+		/// Gets the current stack.
+		/// </summary>
+		/// <value>The current stack.</value>
 		public override Stack CurrentStack
 		{
 			[MethodImpl(MethodImplOptions.Synchronized)]

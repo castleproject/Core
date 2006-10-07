@@ -17,23 +17,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// Model for a Primary Key
+	/// </summary>
 	[Serializable]
 	public class PrimaryKeyModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly PrimaryKeyAttribute pkAtt;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PrimaryKeyModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="pkAtt">The pk att.</param>
 		public PrimaryKeyModel(PropertyInfo propInfo, PrimaryKeyAttribute pkAtt)
 		{
 			this.propInfo = propInfo;
 			this.pkAtt = pkAtt;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the primary key attribute
+		/// </summary>
+		/// <value>The primary key att.</value>
 		public PrimaryKeyAttribute PrimaryKeyAtt
 		{
 			get { return pkAtt; }
@@ -41,6 +57,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitPrimaryKey(this);

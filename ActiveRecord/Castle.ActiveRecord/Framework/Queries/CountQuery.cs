@@ -19,17 +19,36 @@ namespace Castle.ActiveRecord.Queries
 
 	using NHibernate;
 
+	/// <summary>
+	/// Query the database for a count (using COUNT(*) ) of all the entites of the specified type.
+	/// Optionally using a where clause;
+	/// </summary>
 	public class CountQuery : HqlBasedQuery
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CountQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="filter">The filter.</param>
+		/// <param name="parameters">The parameters.</param>
 		public CountQuery(Type targetType, string filter, params object[] parameters)
 			: base(targetType,  "SELECT COUNT(*) FROM " + targetType.Name + " WHERE " + filter, parameters) 
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CountQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
 		public CountQuery(Type targetType) : this(targetType, "1=1", null) 
 		{
 		}
 
+		/// <summary>
+		/// Simply creates the query and then call its <see cref="IQuery.List()"/> method.
+		/// </summary>
+		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
+		/// <returns></returns>
 		protected override object InternalExecute(ISession session)
 		{
 			IQuery q = base.CreateQuery(session);

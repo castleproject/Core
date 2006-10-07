@@ -72,6 +72,12 @@ namespace Castle.ActiveRecord.Framework.Validators
 			this.maxLength = maxLength;
 		}
 
+		/// <summary>
+		/// Validate that the property value matches the length requirements.
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public override bool Perform(object instance, object fieldValue)
 		{
 			//Do we have a value to work with?
@@ -100,6 +106,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 			}
 		}
 
+		/// <summary>
+		/// Builds the error message.
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			//Are we in exact mode?

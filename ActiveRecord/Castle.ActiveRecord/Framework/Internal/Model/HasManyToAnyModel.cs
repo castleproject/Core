@@ -28,6 +28,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly PropertyInfo prop;
 		private readonly HasManyToAnyAttribute hasManyToAnyAtt;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HasManyToAnyModel"/> class.
+		/// </summary>
+		/// <param name="prop">The prop.</param>
+		/// <param name="hasManyToAnyAtt">The has many to any att.</param>
 		public HasManyToAnyModel(PropertyInfo prop, HasManyToAnyAttribute hasManyToAnyAtt)
 		{
 			this.prop = prop;

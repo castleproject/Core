@@ -18,11 +18,27 @@ namespace Castle.ActiveRecord
 
 	using NHibernate;
 
+	/// <summary>
+	/// Define session scope types
+	/// </summary>
 	public enum SessionScopeType
 	{
+		/// <summary>
+		/// Undefined type of session scope.
+		/// This value probably should never exist
+		/// </summary>
 		Undefined,
+		/// <summary>
+		/// Simple - non transactional session scope
+		/// </summary>
 		Simple,
+		/// <summary>
+		/// Transactional session scope
+		/// </summary>
 		Transactional,
+		/// <summary>
+		/// Custom implementation of session scope.
+		/// </summary>
 		Custom
 	}
 

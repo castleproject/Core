@@ -94,6 +94,9 @@ namespace Castle.ActiveRecord
 
 		#region OnTransactionCompleted event
 
+		/// <summary>
+		/// This event is raised when a transaction is completed
+		/// </summary>
 		public event EventHandler OnTransactionCompleted
 		{
 			add 

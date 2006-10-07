@@ -25,25 +25,34 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public class SessionScope : AbstractScope
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SessionScope"/> class.
+		/// </summary>
+		/// <param name="flushAction">The flush action.</param>
+		/// <param name="type">The type.</param>
 		protected SessionScope(FlushAction flushAction, SessionScopeType type) : base(flushAction, type)
 		{
 		}
 
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="SessionScope"/> class.
 		/// </summary>
 		public SessionScope() : this(FlushAction.Auto)
 		{
 		}
-		
+
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="SessionScope"/> class.
 		/// </summary>
-		/// <param name="flushAction"></param>
+		/// <param name="flushAction">The flush action.</param>
 		public SessionScope(FlushAction flushAction) : base(flushAction, SessionScopeType.Simple)
 		{
 		}
 
+		/// <summary>
+		/// Disposes the specified discard changes.
+		/// </summary>
+		/// <param name="discardChanges">if set to <c>true</c> [discard changes].</param>
 		public void Dispose(bool discardChanges)
 		{
 			ThreadScopeAccessor.Instance.UnRegisterScope(this);
@@ -54,6 +63,10 @@ namespace Castle.ActiveRecord
 			key2Session = null;
 		}
 
+		/// <summary>
+		/// Performs the disposal.
+		/// </summary>
+		/// <param name="sessions">The sessions.</param>
 		protected override void PerformDisposal(ICollection sessions)
 		{
 			if (FlushAction == FlushAction.Never)
@@ -67,8 +80,9 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the current scope
 		/// </summary>
+		/// <value>The current.</value>
 		public static ISessionScope Current
 		{
 			get

@@ -18,6 +18,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 
 
+	/// <summary>
+	/// Model to HasAndBelongsToMany, which is used to model a many to many assoication.
+	/// </summary>
 	[Serializable]
 	public class HasAndBelongsToManyModel : IModelNode
 	{
@@ -25,22 +28,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly HasAndBelongsToManyAttribute hasManyAtt;
 		private CollectionIDModel collectionID;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HasAndBelongsToManyModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="hasManyAtt">The has many att.</param>
 		public HasAndBelongsToManyModel( PropertyInfo propInfo, HasAndBelongsToManyAttribute hasManyAtt )
 		{
 			this.hasManyAtt = hasManyAtt;
 			this.propInfo = propInfo;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the has many attribute
+		/// </summary>
+		/// <value>The has many att.</value>
 		public HasAndBelongsToManyAttribute HasManyAtt
 		{
 			get { return hasManyAtt; }
 		}
 
+		/// <summary>
+		/// Gets or sets the collection ID.
+		/// </summary>
+		/// <value>The collection ID.</value>
 		public CollectionIDModel CollectionID
 		{
 			get { return collectionID; }
@@ -49,6 +69,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitHasAndBelongsToMany(this);

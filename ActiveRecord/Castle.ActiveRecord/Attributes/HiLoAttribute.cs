@@ -40,10 +40,19 @@ namespace Castle.ActiveRecord
 		private String _table;
 		private int _maxlo;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HiloAttribute"/> class.
+		/// </summary>
 		public HiloAttribute() : this("hi_value", "next_value", 100)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HiloAttribute"/> class.
+		/// </summary>
+		/// <param name="table">The table.</param>
+		/// <param name="column">The column.</param>
+		/// <param name="maxlo">The maxlo.</param>
 		public HiloAttribute(string  table, String column, int maxlo)
 		{
 			_column = column;
@@ -51,18 +60,30 @@ namespace Castle.ActiveRecord
 			_maxlo = maxlo;
 		}
 
+		/// <summary>
+		/// Gets or sets the column name
+		/// </summary>
+		/// <value>The column.</value>
 		public String Column
 		{
 			get { return _column; }
 			set { _column = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the table name
+		/// </summary>
+		/// <value>The table.</value>
 		public String Table
 		{
 			get { return _table; }
 			set { _table = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the max low value
+		/// </summary>
+		/// <value>The max lo.</value>
 		public int MaxLo
 		{
 			get { return _maxlo; }
