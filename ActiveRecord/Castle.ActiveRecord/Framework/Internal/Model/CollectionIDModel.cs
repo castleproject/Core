@@ -24,22 +24,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly CollectionIDAttribute collAtt;
 		private HiloModel hilo;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CollectionIDModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="collAtt">The coll att.</param>
 		public CollectionIDModel( PropertyInfo propInfo, CollectionIDAttribute collAtt )
 		{
 			this.collAtt = collAtt;
 			this.propInfo = propInfo;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the collection ID att.
+		/// </summary>
+		/// <value>The collection ID att.</value>
 		public CollectionIDAttribute CollectionIDAtt
 		{
 			get { return collAtt; }
 		}
 
+		/// <summary>
+		/// Gets or sets the hilo.
+		/// </summary>
+		/// <value>The hilo.</value>
 		public HiloModel Hilo
 		{
 			get { return hilo; }
@@ -48,6 +65,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitCollectionID(this);

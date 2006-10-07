@@ -17,24 +17,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
-
+	/// <summary>
+	/// Model for version property on an entity
+	/// </summary>
 	[Serializable]
 	public class VersionModel : IModelNode
 	{
 		private readonly PropertyInfo prop;
 		private readonly VersionAttribute att;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VersionModel"/> class.
+		/// </summary>
+		/// <param name="prop">The prop.</param>
+		/// <param name="att">The att.</param>
 		public VersionModel(PropertyInfo prop, VersionAttribute att)
 		{
 			this.prop = prop;
 			this.att = att;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return prop; }
 		}
 
+		/// <summary>
+		/// Gets the version attribute
+		/// </summary>
+		/// <value>The version att.</value>
 		public VersionAttribute VersionAtt
 		{
 			get { return att; }
@@ -42,6 +57,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitVersion(this);

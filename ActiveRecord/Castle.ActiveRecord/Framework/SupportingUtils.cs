@@ -25,18 +25,27 @@ namespace Castle.ActiveRecord.Framework
 	/// </summary>
 	public abstract class SupportingUtils
 	{
+		/// <summary>
+		/// Obsolete method, use ActiveRecordMediator or ActiveRecordMediator{T} instead
+		/// </summary>
 		[Obsolete("Use ActiveRecordMediator instead")]
 		public static IList FindAll(Type type)
 		{
 			return ActiveRecordMediator.FindAll(type);
 		}
 
+		/// <summary>
+		/// Obsolete method, use ActiveRecordMediator or ActiveRecordMediator{T} instead
+		/// </summary>
 		[Obsolete("Use ActiveRecordMediator instead")]
 		public static object FindByPK(Type type, object id)
 		{
 			return ActiveRecordMediator.FindByPrimaryKey(type, id);
 		}
 
+		/// <summary>
+		/// Obsolete method, use ActiveRecordMediator or ActiveRecordMediator{T} instead
+		/// </summary>
 		[Obsolete("Use ActiveRecordMediator instead")]
 		public static object FindByPK(Type type, object id, bool throwOnNotFound)
 		{
@@ -45,6 +54,12 @@ namespace Castle.ActiveRecord.Framework
 
 		#region BuildArray
 
+		/// <summary>
+		/// Create an array from an IList.
+		/// </summary>
+		/// <param name="targetType">Type of the item in the array.</param>
+		/// <param name="list">The list.</param>
+		/// <returns></returns>
 		public static Array BuildArray(Type targetType, IList list)
 		{
 			Array array = Array.CreateInstance(targetType, list.Count);
@@ -178,14 +193,10 @@ namespace Castle.ActiveRecord.Framework
 		/// Converts the results stored in an <see cref="IEnumerable"/> to an
 		/// strongly-typed array.
 		/// </summary>
+		/// <typeparam name="T">The type of the new array</typeparam>
 		/// <param name="list">The source list</param>
 		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
 		/// <returns>The strongly-typed array</returns>
-		/// <typeparam name="T">
-		/// The class of the object which will be created for each row contained in
-		/// the supplied <paramref name="list" />.
-		/// </typeparam>
-		/// <remarks>A good alternative is to use the new <see cref="ImportAttribute"/></remarks>
 		public static T[] BuildObjectArray<T>(IEnumerable list, bool distinct)
 		{
 			return (T[]) BuildObjectArray(typeof(T), list, distinct);
@@ -195,11 +206,39 @@ namespace Castle.ActiveRecord.Framework
 
 		#region BuildArray
 
+
+		/// <summary>
+		/// Converts the results stored in an <see cref="IEnumerable"/> to a
+		/// strongly-typed array.
+		/// </summary>
+		/// <param name="list">The source list</param>
+		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
+		/// <returns>The strongly-typed array</returns>
+		/// <typeparam name="T">
+		/// The class of the object which will be created for each row contained in
+		/// the supplied <paramref name="list" />.
+		/// </typeparam>
+		/// <remarks>A good alternative is to use the new <see cref="ImportAttribute"/></remarks>
 		public static T[] BuildArray<T>(IEnumerable list, bool distinct)
 		{
 			return (T[]) BuildArray(typeof(T), list, distinct);
 		}
 
+		/// <summary>
+		/// Converts the results stored in an <see cref="IEnumerable"/> to an
+		/// strongly-typed array.
+		/// </summary>
+		/// <typeparam name="T">The type of the new array</typeparam>
+		/// <param name="list">The source list</param>
+		/// <param name="entityIndex">
+		/// If the HQL clause selects more than one field, or a join is performed
+		/// without using <c>fetch join</c>, the contents of the result list will
+		/// be of type <c>object[]</c>. Specify which index in this array should be used to
+		/// compose the new result array. Use <c>-1</c> to ignore this parameter.
+		/// </param>
+		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
+		/// <returns>The strongly-typed array</returns>
+	
 		public static T[] BuildArray<T>(IEnumerable list, int? entityIndex, bool distinct)
 		{
 			return (T[]) BuildArray(typeof(T), list, entityIndex ?? -1, distinct);

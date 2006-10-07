@@ -25,6 +25,9 @@ namespace Castle.ActiveRecord
 	{
 		private CacheEnum cache = CacheEnum.Undefined;
 
+		/// <summary>
+		/// Gets or sets the cache strategy to use for this property
+		/// </summary>
 		public CacheEnum Cache
 		{
 			get { return cache; }

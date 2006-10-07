@@ -21,32 +21,67 @@ namespace Castle.ActiveRecord.Framework.Queries
 	using NHibernate;
 	using NHibernate.Expression;
 
+	/// <summary>
+	/// Perform a projection ( aggeregate ) type of query:
+	/// avg, max, count(*), etc.
+	/// </summary>
+	/// <typeparam name="ARType">The type of the entity we are querying</typeparam>
+	/// <typeparam name="TResult">The type of the result from this query</typeparam>
+	/// <example>
+	/// <code>
+	/// ProjectionQuery&lt;Blog, int&gt; proj = new ProjectionQuery&lt;Blog, int&gt;(Projections.RowCount());
+	/// int rowCount = proj.Execute();
+	/// </code>
+	/// </example>
 	public class ProjectionQuery<ARType,TResult> : IActiveRecordQuery
 	{
 		private readonly IProjection projection;
 		private readonly ICriterion[] criterions;
 
+		/// <summary>
+		/// Gets the target type of this query
+		/// </summary>
+		/// <value></value>
 		public Type Target
 		{
 			get { return typeof(ARType); }
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProjectionQuery&lt;ARType, TResult&gt;"/> class.
+		/// </summary>
+		/// <param name="projection">The projection.</param>
+		/// <param name="criterions">The criterions.</param>
 		public ProjectionQuery(IProjection projection, params ICriterion[] criterions)
 		{
 			this.projection = projection;
 			this.criterions = criterions;
 		}
 
+		/// <summary>
+		/// Executes the specified query and return the results
+		/// </summary>
+		/// <param name="session">The session to execute the query in.</param>
+		/// <returns>the result of the query</returns>
 		object IActiveRecordQuery.Execute(ISession session)
 		{
 			return this.Execute(session);
 		}
 
+		/// <summary>
+		/// Enumerates over the result of the query.
+		/// Always returns a single result
+		/// </summary>
 		public IEnumerable Enumerate(ISession session)
 		{
 			yield return Execute(session);
 		}
 
+		/// <summary>
+		/// Executes the specified query and return the results
+		/// </summary>
+		/// <param name="session">The session to execute the query in.</param>
+		/// <returns>the result of the query</returns>
 		public TResult Execute(ISession session)
 		{
 			ICriteria criteria = session.CreateCriteria(this.Target);
@@ -59,6 +94,10 @@ namespace Castle.ActiveRecord.Framework.Queries
 			return (TResult)criteria.UniqueResult();
 		}
 
+		/// <summary>
+		/// Executes the specified query and return the results
+		/// </summary>
+		/// <returns>the result of the query</returns>
 		public TResult Execute()
 		{
 			return (TResult)ActiveRecordMediator.ExecuteQuery(this);

@@ -27,11 +27,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 		
 		private ActiveRecordModel currentModel;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GraphConnectorVisitor"/> class.
+		/// </summary>
+		/// <param name="arCollection">The ar collection.</param>
 		public GraphConnectorVisitor(ActiveRecordModelCollection arCollection)
 		{
 			this.arCollection = arCollection;
 		}
 
+		/// <summary>
+		/// Visits the model.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitModel(ActiveRecordModel model)
 		{
 			ActiveRecordModel savedModel = currentModel;
@@ -88,6 +96,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the nested.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitNested(NestedModel model)
 		{
 			Type type = model.Property.DeclaringType;
@@ -99,6 +111,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			base.VisitNested(model);
 		}
 
+		/// <summary>
+		/// Visits the collection ID.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitCollectionID(CollectionIDModel model)
 		{
 			// Attempt to find HasAndBelongsToMany for the property
@@ -115,6 +131,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			hasAndBelModel.CollectionID = model;
 		}
 
+		/// <summary>
+		/// Visits the hilo model
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public override void VisitHilo(HiloModel model)
 		{
 			// Attempt to find CollectionID for the property

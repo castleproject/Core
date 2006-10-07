@@ -16,24 +16,38 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	/// <summary>
+	/// Base class that allows specifying an access strategy to get/set the value for an object' property.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class WithAccessAttribute : Attribute
+	public abstract class WithAccessAttribute : Attribute
 	{
 		private PropertyAccess access = PropertyAccess.Property;
 		private string customAccess = null;
 
+		/// <summary>
+		/// Gets or sets the access strategy for this property
+		/// </summary>
 		public PropertyAccess Access
 		{
 			get { return access; }
 			set { access = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the custom access strategy
+		/// </summary>
+		/// <value>The custom access.</value>
 		public string CustomAccess
 		{
 			get { return customAccess;}
 			set { customAccess=value;}
 		}
 
+		/// <summary>
+		/// Gets the access strategy string for NHibernate's mapping.
+		/// </summary>
+		/// <value>The access string.</value>
 		public string AccessString
 		{
 			get

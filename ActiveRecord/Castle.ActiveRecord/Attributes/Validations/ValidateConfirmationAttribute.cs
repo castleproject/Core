@@ -18,14 +18,28 @@ namespace Castle.ActiveRecord
 
 	using Castle.ActiveRecord.Framework.Validators;
 
+	/// <summary>
+	/// This it used when you need to accept two identical inputs from the user, for instnace, 
+	/// a password and its confirmation.
+	/// </summary>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateConfirmationAttribute : AbstractValidationAttribute
 	{
-		public ValidateConfirmationAttribute(String confirmationFieldOrProperty) : 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateConfirmationAttribute"/> class.
+		/// </summary>
+		/// <param name="confirmationFieldOrProperty">The confirmation field or property that should be verified against this one.</param>
+		public ValidateConfirmationAttribute(String confirmationFieldOrProperty)
+			: 
 			base(new ConfirmationValidator(confirmationFieldOrProperty))
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateConfirmationAttribute"/> class.
+		/// </summary>
+		/// <param name="confirmationFieldOrProperty">The confirmation field or property that should be verified against this one.</param>
+		/// <param name="errorMessage">The error message to display if this property and the configuration property are not the same.</param>
 		public ValidateConfirmationAttribute(String confirmationFieldOrProperty, String errorMessage) : 
 			base(new ConfirmationValidator(confirmationFieldOrProperty), errorMessage)
 		{

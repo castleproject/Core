@@ -18,10 +18,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Collections;
 	using System.Collections.Specialized;
 
+	/// <summary>
+	/// Base class for visitors that needs to traverse the entire Active Record Model
+	/// </summary>
 	public abstract class AbstractDepthFirstVisitor : IVisitor
 	{
 		private IDictionary visited = new HybridDictionary(100);
 
+		/// <summary>
+		/// Visits the node.
+		/// </summary>
+		/// <param name="visitable">The visitable.</param>
 		public void VisitNode(IVisitable visitable)
 		{
 			if (visitable == null) return;
@@ -29,6 +36,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			visitable.Accept(this);
 		}
 
+		/// <summary>
+		/// Visits the nodes.
+		/// </summary>
+		/// <param name="nodes">The nodes.</param>
 		public void VisitNodes(IEnumerable nodes)
 		{
 			foreach(IVisitable visitable in nodes)
@@ -37,6 +48,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the model.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitModel(ActiveRecordModel model)
 		{
 			if (!visited.Contains(model))
@@ -68,80 +83,158 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNodes( model.Components );
 		}
 
+		/// <summary>
+		/// Visits the primary key.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitPrimaryKey(PrimaryKeyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the composite primary key.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitCompositePrimaryKey(CompositeKeyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the has many to any.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitHasManyToAny(HasManyToAnyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the property.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitProperty(PropertyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the field.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitField(FieldModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits any.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitAny(AnyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the version.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitVersion(VersionModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the timestamp.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitTimestamp(TimestampModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the key.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitKey(KeyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the belongs to.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitBelongsTo(BelongsToModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the has many.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitHasMany(HasManyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the one to one.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitOneToOne(OneToOneModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the has and belongs to many.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the hilo.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitHilo(HiloModel model)
 		{
 		}
 
+		/// <summary>
+		/// Visits the nested.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitNested(NestedModel model)
 		{
 			VisitNode(model.Model);
 		}
 
+		/// <summary>
+		/// Visits the collection ID.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitCollectionID(CollectionIDModel model)
 		{
 			VisitNode(model.Hilo);
 		}
 
+		/// <summary>
+		/// Visits the has many to any config.
+		/// </summary>
+		/// <param name="hasManyToAnyConfigModel">The has many to any config model.</param>
 		public virtual void VisitHasManyToAnyConfig(HasManyToAnyModel.Config hasManyToAnyConfigModel)
 		{
 		}
 
+		/// <summary>
+		/// Visits the import.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public virtual void VisitImport(ImportModel model)
 		{
 		}
 
+		/// <summary>
+		/// Guesses the type of the other end.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="propertyType">Type of the property.</param>
+		/// <returns></returns>
 		public static Type GuessType(Type type, Type propertyType) {
 			Type otherend = type;
 			if(otherend==null)

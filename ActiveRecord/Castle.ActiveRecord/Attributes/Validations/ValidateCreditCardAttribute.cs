@@ -18,6 +18,22 @@ namespace Castle.ActiveRecord
 
 	using Framework.Validators;
 
+	/// <summary>
+	/// Properties decorated with this attribute will be validated to ensure that they represent a valid
+	/// credit card number.
+	/// <see ref="CreditCardValidator"/> for more details.
+	/// </summary>
+	/// <remarks>
+	/// Note that this merely check the validity of the format of the value, not whatever this it an existing and valid one
+	/// </remarks>
+	/// <example>
+	/// //just validate that this is a credit card of any type
+	/// [ValidateCreditCard("You didn't fill the credit card infomration correctly.")]
+	/// 
+	/// //Validate that this is a VISA or Discover card
+	/// [ValidateCreditCard(CreditCardValidator.CardType.VISA | CreditCardValidator.CardType.Discover, 
+	///		"You need to specify a VISA or Discover card")]
+	/// </example>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateCreditCardAttribute : AbstractValidationAttribute
 	{

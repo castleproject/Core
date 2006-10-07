@@ -16,17 +16,41 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	/// <summary>
+	/// Define the relation type for a relation.
+	/// </summary>
 	[Serializable]
 	public enum RelationType
 	{
+		/// <summary>
+		/// Let Active Record guess what is the type of the relation.
+		/// </summary>
 		Guess,
+		/// <summary>
+		/// An bag of items (allow duplicates)
+		/// </summary>
 		Bag,
+		/// <summary>
+		/// A set of unique items
+		/// </summary>
 		Set,
+		/// <summary>
+		/// A bag of items with id
+		/// </summary>
 		IdBag,
+		/// <summary>
+		/// Map of key/value pairs (IDictionary)
+		/// </summary>
 		Map,
+		/// <summary>
+		/// A list of items - position in the list has meaning
+		/// </summary>
 		List
 	}
 
+	/// <summary>
+	/// Base class to define common relation information
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public abstract class RelationAttribute : BaseAttribute
 	{
@@ -44,54 +68,88 @@ namespace Castle.ActiveRecord
 		internal ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
 		internal RelationType relType = RelationType.Guess;
 
+		/// <summary>
+		/// Gets or sets the type of the relation.
+		/// </summary>
+		/// <value>The type of the relation.</value>
 		public RelationType RelationType
 		{
 			get { return relType; }
 			set { relType = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the type of the map.
+		/// </summary>
+		/// <value>The type of the map.</value>
 		public Type MapType
 		{
 			get { return mapType; }
 			set { mapType = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the table for this relation
+		/// </summary>
+		/// <value>The table.</value>
 		public String Table
 		{
 			get { return table; }
 			set { table = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the schema for this relation (dbo., etc)
+		/// </summary>
+		/// <value>The schema.</value>
 		public String Schema
 		{
 			get { return schema; }
 			set { schema = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="RelationAttribute"/> is lazy.
+		/// </summary>
+		/// <value><c>true</c> if lazy; otherwise, <c>false</c>.</value>
 		public bool Lazy
 		{
 			get { return lazy; }
 			set { lazy = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="RelationAttribute"/> is inverse.
+		/// </summary>
+		/// <value><c>true</c> if inverse; otherwise, <c>false</c>.</value>
 		public bool Inverse
 		{
 			get { return inverse; }
 			set { inverse = value; }
 		}
-	
+
+		/// <summary>
+		/// Gets or sets the cascade options for this <see cref="RelationAttribute"/>
+		/// </summary>
+		/// <value>The cascade.</value>
 		public ManyRelationCascadeEnum Cascade
 		{
 			get { return cascade; }
 			set { cascade = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the order by clause for this relation
+		/// </summary>
 		public String OrderBy
 		{
 			get { return orderBy; }
 			set { orderBy = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the where clause for this relation
+		/// </summary>
 		public String Where
 		{
 			get { return where; }
@@ -108,7 +166,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Only used with maps
+		/// Only used with maps or list
 		/// </summary>
 		public string Index
 		{

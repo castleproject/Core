@@ -27,6 +27,11 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		private readonly Type returnType;
 		private readonly String returnAlias;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlQueryReturnDefinition"/> class.
+		/// </summary>
+		/// <param name="returnType">Type of the return object.</param>
+		/// <param name="returnAlias">Gets the alias for the object</param>
 		public SqlQueryReturnDefinition(Type returnType, String returnAlias)
 		{
 			if (returnType == null) throw new ArgumentNullException("returnType");
@@ -36,18 +41,30 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 			this.returnAlias = returnAlias;
 		}
 
+		/// <summary>
+		/// Gets the type of the returned object
+		/// </summary>
+		/// <value>The type of the return.</value>
 		public Type ReturnType
 		{
 			get { return returnType; }
 		}
 
+		/// <summary>
+		/// Gets the alias for the object
+		/// </summary>
+		/// <value>The return alias.</value>
 		public String ReturnAlias
 		{
 			get { return returnAlias; }
 		}
 
 		#region "Apply" method
-		
+
+		/// <summary>
+		/// Applies this modifier to the query.
+		/// </summary>
+		/// <param name="query">The query</param>
 		void IQueryModifier.Apply(IQuery query)
 		{
 			// SqlQueryReturnDefinition are not directly applied to queries.

@@ -57,11 +57,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private IList notMappedProperties = new ArrayList();
 		private IList validators = new ArrayList();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActiveRecordModel"/> class.
+		/// </summary>
+		/// <param name="type">The type.</param>
 		public ActiveRecordModel(Type type)
 		{
 			this.type = type;
 		}
 
+		/// <summary>
+		/// Gets or sets the parent model
+		/// </summary>
+		/// <value>The parent.</value>
 		public ActiveRecordModel Parent
 		{
 			get { return parent; }
@@ -73,36 +81,70 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return type; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is joined sub class base.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is joined sub class base; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsJoinedSubClassBase
 		{
 			get { return isJoinedSubClassBase; }
 			set { isJoinedSubClassBase = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is discriminator base.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is discriminator base; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsDiscriminatorBase
 		{
 			get { return isDiscriminatorBase; }
 			set { isDiscriminatorBase = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is discriminator sub class.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is discriminator sub class; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsDiscriminatorSubClass
 		{
 			get { return isDiscriminatorSubClass; }
 			set { isDiscriminatorSubClass = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is joined sub class.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is joined sub class; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsJoinedSubClass
 		{
 			get { return isJoinedSubClass; }
 			set { isJoinedSubClass = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is nested type.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is nested type; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsNestedType
 		{
 			get { return isNestedType; }
 			set { isNestedType = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the active record attribute
+		/// </summary>
+		/// <value>The active record att.</value>
 		public ActiveRecordAttribute ActiveRecordAtt
 		{
 			get { return arAtt; }
@@ -118,28 +160,48 @@ namespace Castle.ActiveRecord.Framework.Internal
 			set { key = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the timestamp model
+		/// </summary>
+		/// <value>The timestamp.</value>
 		public TimestampModel Timestamp
 		{
 			get { return timestamp; }
 			set { timestamp = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the version model
+		/// </summary>
+		/// <value>The version.</value>
 		public VersionModel Version
 		{
 			get { return version; }
 			set { version = value; }
 		}
 
+		/// <summary>
+		/// Gets all the imports
+		/// </summary>
+		/// <value>The imports.</value>
 		public IList Imports
 		{
 			get { return imports; }
 		}
 
+		/// <summary>
+		/// Gets all the properties
+		/// </summary>
+		/// <value>The properties.</value>
 		public IList Properties
 		{
 			get { return properties; }
 		}
 
+		/// <summary>
+		/// Gets all the fields
+		/// </summary>
+		/// <value>The fields.</value>
 		public IList Fields
 		{
 			get { return fields; }
@@ -228,6 +290,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return validators; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether to use auto import
+		/// </summary>
+		/// <value><c>true</c> if should use auto import; otherwise, <c>false</c>.</value>
 		public bool UseAutoImport
 		{
 			get 
@@ -273,6 +339,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitModel(this);

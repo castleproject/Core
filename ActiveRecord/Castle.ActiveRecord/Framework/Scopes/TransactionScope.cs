@@ -54,10 +54,17 @@ namespace Castle.ActiveRecord
 		private EventHandlerList events = new EventHandlerList();
 		private bool rollbackOnly;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
+		/// </summary>
 		public TransactionScope() : this(TransactionMode.New)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
+		/// </summary>
+		/// <param name="mode">Whatever to create a new transaction or inherits an existing one</param>
 		public TransactionScope(TransactionMode mode) : base(FlushAction.Auto, SessionScopeType.Transactional)
 		{
 			this.mode = mode;
@@ -115,6 +122,9 @@ namespace Castle.ActiveRecord
 
 		#endregion
 
+		/// <summary>
+		/// Votes to roll back the transaction
+		/// </summary>
 		public void VoteRollBack()
 		{
 			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
@@ -124,6 +134,9 @@ namespace Castle.ActiveRecord
 			rollbackOnly = true;
 		}
 
+		/// <summary>
+		/// Votes to commit the transaction
+		/// </summary>
 		public void VoteCommit()
 		{
 			if (rollbackOnly)

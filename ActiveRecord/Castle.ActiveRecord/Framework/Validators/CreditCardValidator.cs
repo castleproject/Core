@@ -19,8 +19,19 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System.Text.RegularExpressions;
 
 	/// <summary>
-	/// Ensures that a property's string 
-	/// representation is within the desired length limitations.
+	/// This validator validate that the is a valid credit card number in:
+	/// <list type="unordered">
+	/// <item>Amex </item>		
+	/// <item> DinersClub </item>		
+	/// <item> Discover </item>		
+	/// <item> Discover </item>		
+	/// <item> enRoute </item>		
+	/// <item> JCB </item>		
+	/// <item> MasterCard </item>		
+	/// <item> VISA</item>
+	/// </list>
+	/// It is possible to specify more than a single card type.
+	/// You can also specify exceptions for test cards.
 	/// </summary>
 	[Serializable]
 	public class CreditCardValidator : AbstractValidator
@@ -63,11 +74,13 @@ namespace Castle.ActiveRecord.Framework.Validators
 		{
 			//If the input is null then there's nothing to validate here
 			if (fieldValue == null)
+			{
 				return true;
-			
+			}
+
 			//Get the raw string
 			string cardNumberRaw = fieldValue.ToString();
-			
+
 			//Strip any spaces or dashes
 			string cardNumber = string.Empty;
 			foreach (char digit in cardNumberRaw.ToCharArray())
@@ -90,16 +103,24 @@ namespace Castle.ActiveRecord.Framework.Validators
 
 			//Check if it's in the exceptions
 			foreach (string exception in exceptions)
+			{
 				if (cardNumber == exception)
+				{
 					return true;
+				}
+			}
 
 			//Check to see if it's in the allowed types list, has the correct initial digits and has the right number of digits
 			if (! IsValidCardType(cardNumber))
+			{
 				return false;
+			}
 
 			//Check the LUHN output
 			if (! IsLuhnValid(cardNumber))
+			{
 				return false;
+			}
 
 			return true;
 		}
@@ -109,57 +130,93 @@ namespace Castle.ActiveRecord.Framework.Validators
 			int length = cardNumber.Length;
 
 			int sum = 0;
-			int offset = length % 2;
+			int offset = length%2;
 			byte[] digits = new ASCIIEncoding().GetBytes(cardNumber);
 
 			for (int i = 0; i < length; i++)
 			{
 				digits[i] -= 48;
-				if (((i + offset) % 2) == 0)
+				if (((i + offset)%2) == 0)
+				{
 					digits[i] *= 2;
+				}
 
 				sum += (digits[i] > 9) ? digits[i] - 9 : digits[i];
 			}
 
-			return (sum % 10 == 0);
+			return (sum%10 == 0);
 		}
 
 		private bool IsValidCardType(string cardNumber)
 		{
 			if ((allowedTypes & CardType.MasterCard) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(51|52|53|54|55)"))
+				{
 					return (cardNumber.Length == 16);
+				}
+			}
 
 			if ((allowedTypes & CardType.VISA) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(4)"))
+				{
 					return (cardNumber.Length == 13 || cardNumber.Length == 16);
+				}
+			}
 
 			if ((allowedTypes & CardType.Amex) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(34|37)"))
+				{
 					return (cardNumber.Length == 15);
+				}
+			}
 
 			if ((allowedTypes & CardType.DinersClub) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(300|301|302|303|304|305|36|38)"))
+				{
 					return (cardNumber.Length == 14);
+				}
+			}
 
 			if ((allowedTypes & CardType.enRoute) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(2014|2149)"))
+				{
 					return (cardNumber.Length == 15);
+				}
+			}
 
 			if ((allowedTypes & CardType.Discover) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(6011)"))
+				{
 					return (cardNumber.Length == 16);
+				}
+			}
 
 			if ((allowedTypes & CardType.JCB) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(3)"))
+				{
 					return (cardNumber.Length == 16);
+				}
+			}
 
 			if ((allowedTypes & CardType.JCB) != 0)
+			{
 				if (Regex.IsMatch(cardNumber, "^(2131|1800)"))
+				{
 					return (cardNumber.Length == 15);
+				}
+			}
 
 			if ((allowedTypes & CardType.Unknown) != 0)
+			{
 				return true;
+			}
 
 			return false;
 		}

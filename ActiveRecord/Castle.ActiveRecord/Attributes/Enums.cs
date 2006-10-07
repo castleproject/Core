@@ -16,6 +16,10 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	/// <summary>
+	/// Defines the values for optimistic locking
+	/// </summary>
+	[Serializable]
 	public enum OptimisticLocking
 	{
 		/// <summary>
@@ -38,13 +42,16 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		All
 	}
+
 	
+	[Serializable]
 	public enum Polymorphism
 	{
 		Implicit,
 		Explicit
 	}
 
+	[Serializable]
 	public enum CacheEnum
 	{
 		Undefined,
@@ -53,6 +60,7 @@ namespace Castle.ActiveRecord
 		NonStrictReadWrite
 	}
 
+	[Serializable]
 	public enum OuterJoinEnum
 	{
 		Auto,

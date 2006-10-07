@@ -18,15 +18,30 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System.Reflection;
 
 
+	/// <summary>
+	/// Validates that a property and a matching property are the same.
+	/// This it used when you need to accept two identical inputs from the user, for instnace, 
+	/// a password and its confirmation.
+	/// </summary>
 	public class ConfirmationValidator : AbstractValidator
 	{
 		private String _confirmationFieldOrProperty;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ConfirmationValidator"/> class.
+		/// </summary>
+		/// <param name="confirmationFieldOrProperty">The confirmation field or property.</param>
 		public ConfirmationValidator(String confirmationFieldOrProperty)
 		{
 			_confirmationFieldOrProperty = confirmationFieldOrProperty;
 		}
 
+		/// <summary>
+		/// Check that the confirmation property has the same value as this property.
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public override bool Perform(object instance, object fieldValue)
 		{
 			object confValue = GetFieldOrPropertyValue(instance);
@@ -73,6 +88,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 			throw new ValidationException("No public instance field or property named " + _confirmationFieldOrProperty + " for type " + instance.GetType().FullName);
 		}
 
+		/// <summary>
+		/// Builds the default error message.
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			return String.Format("Field {0} doesn't match with confirmation.", Property.Name);

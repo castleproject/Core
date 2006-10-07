@@ -43,8 +43,16 @@ namespace Castle.ActiveRecord.Framework
 		{
 		}
 
+		/// <summary>
+		/// Raised when a root type is registered.
+		/// </summary>
 		public event RootTypeHandler OnRootTypeRegistered;
 
+		/// <summary>
+		/// Associates a Configuration object to a root type
+		/// </summary>
+		/// <param name="rootType"></param>
+		/// <param name="cfg"></param>
 		public void Register(Type rootType, Configuration cfg)
 		{
 			type2Conf.Add(rootType, cfg);
@@ -55,6 +63,9 @@ namespace Castle.ActiveRecord.Framework
 			}
 		}
 
+		/// <summary>
+		/// Requests the Configuration associated to the type.
+		/// </summary>
 		public Configuration GetConfiguration(Type type)
 		{
 			return type2Conf[type] as Configuration;
@@ -63,7 +74,6 @@ namespace Castle.ActiveRecord.Framework
 		/// <summary>
 		/// Pendent
 		/// </summary>
-		/// <returns></returns>
 		public Configuration[] GetAllConfigurations()
 		{
 			HashedSet set = new HashedSet(type2Conf.Values);
@@ -129,6 +139,9 @@ namespace Castle.ActiveRecord.Framework
 			}
 		}
 
+		/// <summary>
+		/// Creates a session for the associated type
+		/// </summary>
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		public ISession CreateSession(Type type)
 		{
@@ -146,6 +159,11 @@ namespace Castle.ActiveRecord.Framework
 			return session;
 		}
 
+		/// <summary>
+		/// Gets the type of the root.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		public Type GetRootType(Type type)
 		{
 			while(type != typeof(object))
@@ -187,6 +205,10 @@ namespace Castle.ActiveRecord.Framework
 			}
 		}
 
+		/// <summary>
+		/// Releases the specified session
+		/// </summary>
+		/// <param name="session"></param>
 		public void ReleaseSession(ISession session)
 		{
 			if (threadScopeInfo.HasInitializedScope)
@@ -199,6 +221,10 @@ namespace Castle.ActiveRecord.Framework
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the implementation of <see cref="IThreadScopeInfo"/>
+		/// </summary>
+		/// <value></value>
 		public IThreadScopeInfo ThreadScopeInfo
 		{
 			get { return threadScopeInfo; }

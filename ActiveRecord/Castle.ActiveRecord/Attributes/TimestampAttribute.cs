@@ -16,21 +16,34 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-
+	/// <summary>
+	/// Specify that this property is used for timestamping this entity
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class TimestampAttribute : WithAccessAttribute
 	{
 		private String column;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimestampAttribute"/> class.
+		/// </summary>
 		public TimestampAttribute()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimestampAttribute"/> class.
+		/// </summary>
+		/// <param name="column">The column name</param>
 		public TimestampAttribute(String column)
 		{
 			this.column = column;
 		}
 
+		/// <summary>
+		/// Gets or sets the column name
+		/// </summary>
+		/// <value>The column.</value>
 		public String Column
 		{
 			get { return column; }

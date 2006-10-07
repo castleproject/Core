@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 
+	
 	public interface IModelNode : IVisitable
 	{
 	}

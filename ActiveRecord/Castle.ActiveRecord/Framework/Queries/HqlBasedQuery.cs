@@ -24,9 +24,18 @@ namespace Castle.ActiveRecord.Queries
 	using NHibernate;
 	using NHibernate.Type;
 
+	/// <summary>
+	/// defines the possible query langauges
+	/// </summary>
 	public enum QueryLanguage
 	{
+		/// <summary>
+		/// Hibernate Query Language
+		/// </summary>
 		Hql = 0,
+		/// <summary>
+		/// Structured Query Language
+		/// </summary>
 		Sql = 1,
 	}
 	
@@ -42,20 +51,44 @@ namespace Castle.ActiveRecord.Queries
 		private QueryLanguage queryLanguage;
 		private String query;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HqlBasedQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="query">The query.</param>
 		public HqlBasedQuery(Type targetType, string query) : this(targetType, QueryLanguage.Hql, query)
 		{
 		}
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HqlBasedQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="query">The query.</param>
+		/// <param name="positionalParameters">The positional parameters.</param>
 		public HqlBasedQuery(Type targetType, string query, params object[] positionalParameters) : this(targetType, QueryLanguage.Hql, query, positionalParameters)
 		{
 		}
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HqlBasedQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="queryLanguage">The query language.</param>
+		/// <param name="query">The query.</param>
 		public HqlBasedQuery(Type targetType, QueryLanguage queryLanguage, string query) : base(targetType)
 		{
 			this.query = query;
 			this.queryLanguage = queryLanguage;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HqlBasedQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="queryLanguage">The query language.</param>
+		/// <param name="query">The query.</param>
+		/// <param name="positionalParameters">The positional parameters.</param>
 		public HqlBasedQuery(Type targetType, QueryLanguage queryLanguage, string query, params object[] positionalParameters)
 			: this(targetType, queryLanguage, query)
 		{
@@ -77,22 +110,44 @@ namespace Castle.ActiveRecord.Queries
 		}
 
 		#region SetParameter and SetParameterList
-		
+
+		/// <summary>
+		/// Sets a parameter with the given name.
+		/// </summary>
+		/// <param name="parameterName">Name of the parameter.</param>
+		/// <param name="value">The value.</param>
 		public void SetParameter(string parameterName, object value)
 		{
 			AddModifier(new QueryParameter(parameterName, value));
 		}
 
+		/// <summary>
+		/// Sets a parameter with the given name and type
+		/// </summary>
+		/// <param name="parameterName">Name of the parameter.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="type">The type.</param>
 		public void SetParameter(string parameterName, object value, IType type)
 		{
 			AddModifier(new QueryParameter(parameterName, value, type));
 		}
 
+		/// <summary>
+		/// Sets a parameter with the given name with a list of values
+		/// </summary>
+		/// <param name="parameterName">Name of the parameter.</param>
+		/// <param name="list">The list.</param>
 		public void SetParameterList(string parameterName, ICollection list)
 		{
 			AddModifier(new QueryParameter(parameterName, list));
 		}
 
+		/// <summary>
+		/// Sets a parameter with the given name with a list of values and type
+		/// </summary>
+		/// <param name="parameterName">Name of the parameter.</param>
+		/// <param name="list">The list.</param>
+		/// <param name="type">The type.</param>
 		public void SetParameterList(string parameterName, ICollection list, IType type)
 		{
 			AddModifier(new QueryParameter(parameterName, list, type));
@@ -101,12 +156,21 @@ namespace Castle.ActiveRecord.Queries
 		#endregion
 
 		#region SetQueryRange
-		
+
+		/// <summary>
+		/// Sets the query range (paging)
+		/// </summary>
+		/// <param name="firstResult">The first result.</param>
+		/// <param name="maxResults">The maximum number of results returned (page size)</param>
 		public void SetQueryRange(int firstResult, int maxResults)
 		{
 			AddModifier(new QueryRange(firstResult, maxResults));
 		}
 
+		/// <summary>
+		/// Sets the query range (maximum number of items returned)
+		/// </summary>
+		/// <param name="maxResults">The maximum number of results.</param>
 		public void SetQueryRange(int maxResults)
 		{
 			AddModifier(new QueryRange(maxResults));
@@ -156,7 +220,12 @@ namespace Castle.ActiveRecord.Queries
 				return -1;
 			}
 		}
-		
+
+		/// <summary>
+		/// Generate the HQL statement from the query parameters
+		/// </summary>
+		/// <param name="countQuery">The count query.</param>
+		/// <returns></returns>
 		protected virtual String PrepareQueryForCount(String countQuery)
 		{
 			countQuery = rxOrderBy.Replace(countQuery, String.Empty);
@@ -175,6 +244,11 @@ namespace Castle.ActiveRecord.Queries
 			return countQuery;
 		}
 
+		/// <summary>
+		/// Creates the <see cref="IQuery"/> instance.
+		/// </summary>
+		/// <param name="session"></param>
+		/// <returns></returns>
 		protected override IQuery CreateQuery(ISession session)
 		{
 			IQuery nhibQuery;

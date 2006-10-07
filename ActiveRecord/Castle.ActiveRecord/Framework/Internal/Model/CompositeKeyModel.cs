@@ -17,12 +17,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// Model for representing a composite key
+	/// </summary>
 	[Serializable]
 	public class CompositeKeyModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly CompositeKeyAttribute pkAtt;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CompositeKeyModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="pkAtt">The pk att.</param>
 		public CompositeKeyModel(PropertyInfo propInfo, CompositeKeyAttribute pkAtt)
 		{
 			if (propInfo == null) throw new ArgumentNullException("propInfo");
@@ -32,11 +40,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 			this.pkAtt = pkAtt;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the composite key att.
+		/// </summary>
+		/// <value>The composite key att.</value>
 		public CompositeKeyAttribute CompositeKeyAtt
 		{
 			get { return pkAtt; }
@@ -44,6 +60,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitCompositePrimaryKey(this);

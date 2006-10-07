@@ -30,8 +30,16 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		
 		private readonly FlushAction flushAction;
 
+		/// <summary>
+		/// Map between a key to its session
+		/// </summary>
 		protected Hashtable key2Session = new Hashtable();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractScope"/> class.
+		/// </summary>
+		/// <param name="flushAction">The flush action.</param>
+		/// <param name="type">The type.</param>
 		public AbstractScope(FlushAction flushAction, SessionScopeType type)
 		{
 			this.flushAction = flushAction;
@@ -70,11 +78,34 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			}
 		}
 
+		/// <summary>
+		/// This method is invoked when the
+		/// <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
+		/// instance needs a session instance. Instead of creating one it interrogates
+		/// the active scope for one. The scope implementation must check if it
+		/// has a session registered for the given key.
+		/// <seealso cref="RegisterSession"/>
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <returns>
+		/// 	<c>true</c> if the key exists within this scope instance
+		/// </returns>
 		public virtual bool IsKeyKnown(object key)
 		{
 			return key2Session.Contains(key);
 		}
 
+		/// <summary>
+		/// This method is invoked when no session was available
+		/// at and the <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
+		/// just created one. So it registers the session created
+		/// within this scope using a key. The scope implementation
+		/// shouldn't make any assumption on what the key
+		/// actually is as we reserve the right to change it
+		/// <seealso cref="IsKeyKnown"/>
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <param name="session">An instance of <c>ISession</c></param>
 		public virtual void RegisterSession(object key, ISession session)
 		{
 			key2Session.Add(key, session);
@@ -82,16 +113,37 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			Initialize(session);
 		}
 
+		/// <summary>
+		/// This method should return the session instance associated with the key.
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <returns>
+		/// the session instance or null if none was found
+		/// </returns>
 		public virtual ISession GetSession(object key)
 		{
 			return key2Session[key] as ISession;
 		}
 
+		/// <summary>
+		/// Implementors should return true if they
+		/// want that their scope implementation
+		/// be in charge of creating the session
+		/// </summary>
+		/// <value></value>
 		public virtual bool WantsToCreateTheSession
 		{
 			get { return true; }
 		}
 
+		/// <summary>
+		/// If the <see cref="WantsToCreateTheSession"/> returned
+		/// <c>true</c> then this method is invoked to allow
+		/// the scope to create a properly configured session
+		/// </summary>
+		/// <param name="sessionFactory">From where to open the session</param>
+		/// <param name="interceptor">the NHibernate interceptor</param>
+		/// <returns>the newly created session</returns>
 		public virtual ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor)
 		{
 			ISession session = sessionFactory.OpenSession(interceptor);
@@ -101,6 +153,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			return session;
 		}
 
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
 		public void Dispose()
 		{
 			ThreadScopeAccessor.Instance.UnRegisterScope(this);
@@ -108,14 +163,28 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			PerformDisposal(key2Session.Values);			
 		}
 
+		/// <summary>
+		/// Initializes the specified session.
+		/// </summary>
+		/// <param name="session">The session.</param>
 		protected virtual void Initialize(ISession session)
 		{
 		}
 
+		/// <summary>
+		/// Performs the disposal.
+		/// </summary>
+		/// <param name="sessions">The sessions.</param>
 		protected virtual void PerformDisposal(ICollection sessions)
 		{
 		}
 
+		/// <summary>
+		/// Performs the disposal.
+		/// </summary>
+		/// <param name="sessions">The sessions.</param>
+		/// <param name="flush">if set to <c>true</c> [flush].</param>
+		/// <param name="close">if set to <c>true</c> [close].</param>
 		protected internal void PerformDisposal(ICollection sessions, bool flush, bool close)
 		{
 			foreach(ISession session in sessions)
@@ -125,6 +194,10 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			}
 		}
 
+		/// <summary>
+		/// Discards the sessions.
+		/// </summary>
+		/// <param name="sessions">The sessions.</param>
 		protected internal virtual void DiscardSessions(ICollection sessions)
 		{
 			foreach(ISession session in sessions)
@@ -133,6 +206,10 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			}
 		}
 
+		/// <summary>
+		/// Sets the flush mode.
+		/// </summary>
+		/// <param name="session">The session.</param>
 		protected void SetFlushMode(ISession session)
 		{
 			if (FlushAction == FlushAction.Auto)
@@ -145,11 +222,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			}
 		}
 
+		/// <summary>
+		/// Gets the sessions.
+		/// </summary>
+		/// <returns></returns>
 		internal ICollection GetSessions()
 		{
 			return key2Session.Values;
 		}
 
+		/// <summary>
+		/// Removes the session.
+		/// </summary>
+		/// <param name="session">The session.</param>
 		private void RemoveSession(ISession session)
 		{
 			foreach(DictionaryEntry entry in key2Session)

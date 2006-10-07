@@ -73,6 +73,11 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="session"></param>
 		void ReleaseSession(ISession session);
 
+		/// <summary>
+		/// Gets the type of the root.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		Type GetRootType(Type type);
 
 		/// <summary>
