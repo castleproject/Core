@@ -3,6 +3,11 @@ Change history
 
 Release Candidate 1
 ===================
+- Fixed Perfomance issue with Brail and sub views due to cache key normalization issues.
+
+- Added logging to Brail, configured using the normal Castle's cofniguration mechansim
+
+- Added support to passing parameters from the view to the layout, enabling a captureFor component in the view to be used in the layout
 
 - Fixed MR-155
   "Cast exception with configuration"
