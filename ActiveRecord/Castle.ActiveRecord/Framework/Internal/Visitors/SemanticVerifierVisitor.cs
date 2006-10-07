@@ -31,8 +31,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	/// <summary>
 	/// Traverse the tree checking the semantics of the relation and
-	/// association. The goal is to raise clear exceptions if tips of how 
+	/// association. The goal is to raise clear exceptions with tips of how 
 	/// to fix any error.
+	/// It also tries to infer as much information from the class / attribute model as possible so it can
+	/// complete the missing infomration without the user needing to specify it.
 	/// </summary>
 	public class SemanticVerifierVisitor : AbstractDepthFirstVisitor
 	{
@@ -40,11 +42,27 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private ActiveRecordModel currentModel;
 		private StringBuilder columnPrefix = new StringBuilder();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SemanticVerifierVisitor"/> class.
+		/// </summary>
+		/// <param name="arCollection">The ar collection.</param>
 		public SemanticVerifierVisitor(ActiveRecordModelCollection arCollection)
 		{
 			this.arCollection = arCollection;
 		}
 
+		/// <summary>
+		/// Visits the model.
+		/// </summary>
+		/// <remarks>
+		/// Check that the model:
+		///  - Define only a discriminator or a join subclass, not both
+		///  - Doesn't specify version/timestamp property on a joined subclass / discriminator subclass
+		///  - Validate that the custom entity persister implements IEntityPersister
+		///  - Validate the joined subclasses has a [JoinedKey] to map back to the parent table
+		///  - Validate that the class has a PK
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitModel(ActiveRecordModel model)
 		{
 			ActiveRecordModel savedModel = currentModel;
@@ -99,7 +117,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					if (!typeof(IEntityPersister).IsAssignableFrom(model.ActiveRecordAtt.Persister))
 					{
 						throw new ActiveRecordException(String.Format(
-							"The type assigned as a custom persister, does not implement IClassPersister " +
+							"The type assigned as a custom persister, does not implement IEntityPersister " +
 							"- check type {0}", model.Type.FullName));
 					}
 				}
@@ -114,6 +132,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the primary key.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name and the reverse property if using [OneToOne]
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitPrimaryKey(PrimaryKeyModel model)
 		{
 			if (model.PrimaryKeyAtt.Column == null)
@@ -148,6 +173,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the composite primary key.
+		/// </summary>
+		/// <remarks>
+		/// Validate that the composite key type is implementing GetHashCode() and Equals(), is mark serializable.
+		/// Validate that the compose key is compose of two or more columns
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitCompositePrimaryKey(CompositeKeyModel model)
 		{
 			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
@@ -188,6 +221,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the property.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name and whatever this propery can be null or not
+		/// Also catch common mistake of try to use [Property] on an entity, instead of [BelongsTo]
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitProperty(PropertyModel model)
 		{
 			if (model.PropertyAtt.Column == null)
@@ -225,6 +266,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the field.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name and nullablity
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitField(FieldModel model)
 		{
 			if (model.FieldAtt.Column == null)
@@ -254,6 +302,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 #endif
 		}
 
+		/// <summary>
+		/// Visits the key.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitKey(KeyModel model)
 		{
 			if (model.JoinedKeyAtt.Column == null)
@@ -265,6 +320,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			model.JoinedKeyAtt.Column = columnPrefix + model.JoinedKeyAtt.Column;
 		}
 
+		/// <summary>
+		/// Visits the version.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitVersion(VersionModel model)
 		{
 			if (model.VersionAtt.Column == null)
@@ -276,6 +338,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			model.VersionAtt.Column = columnPrefix + model.VersionAtt.Column;
 		}
 
+		/// <summary>
+		/// Visits the timestamp.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitTimestamp(TimestampModel model)
 		{
 			if (model.TimestampAtt.Column == null)
@@ -287,6 +356,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			model.TimestampAtt.Column = columnPrefix + model.TimestampAtt.Column;
 		}
 
+		/// <summary>
+		/// Visits the belongs to.
+		/// </summary>
+		/// <remarks>
+		/// Infer column name and type
+		/// Verify that the property is virtual if the class was marked lazy.
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitBelongsTo(BelongsToModel model)
 		{
 			if (currentModel.ActiveRecordAtt != null)
@@ -323,6 +400,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the has many.
+		/// </summary>
+		/// <remarks>
+		/// Guess the type of the relation, if not specified explicitly
+		/// Verify that the assoication is valid on [HasMany]
+		/// Validate that required information is specified
+		/// Infer the other side of the assoication and grab require data from it
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitHasMany(HasManyModel model)
 		{
 			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
@@ -413,6 +500,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the has and belongs to many.
+		/// </summary>
+		/// <remarks>
+		/// Verify that a link table was specified
+		/// Verify that a key was specified and that it is valid 
+		/// Verify that required information was specified
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
 		{
 			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
@@ -496,6 +592,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			base.VisitHasAndBelongsToMany(model);
 		}
 
+		/// <summary>
+		/// Visits the one to one.
+		/// </summary>
+		/// <remarks>
+		/// Infer the type on the other side
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitOneToOne(OneToOneModel model)
 		{
 			if (model.OneToOneAtt.MapType == null)
@@ -506,6 +609,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			base.VisitOneToOne(model);
 		}
 
+		/// <summary>
+		/// Visits the nested model
+		/// </summary>
+		/// <remarks>
+		/// Infer the column name and applies and column prefixes specified
+		/// </remarks>
+		/// <param name="model">The model.</param>
 		public override void VisitNested(NestedModel model)
 		{
 			if (model.NestedAtt.MapType == null)

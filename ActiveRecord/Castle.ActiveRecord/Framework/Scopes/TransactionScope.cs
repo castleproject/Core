@@ -146,6 +146,18 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		/// <summary>
+		/// This method is invoked when the
+		/// <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
+		/// instance needs a session instance. Instead of creating one it interrogates
+		/// the active scope for one. The scope implementation must check if it
+		/// has a session registered for the given key.
+		/// <seealso cref="RegisterSession"/>
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <returns>
+		/// 	<c>true</c> if the key exists within this scope instance
+		/// </returns>
 		public override bool IsKeyKnown(object key)
 		{
 			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
@@ -163,6 +175,17 @@ namespace Castle.ActiveRecord
 			return keyKnown ? true : base.IsKeyKnown(key);
 		}
 
+		/// <summary>
+		/// This method is invoked when no session was available
+		/// at and the <see cref="Castle.ActiveRecord.Framework.ISessionFactoryHolder"/>
+		/// just created one. So it registers the session created
+		/// within this scope using a key. The scope implementation
+		/// shouldn't make any assumption on what the key
+		/// actually is as we reserve the right to change it
+		/// <seealso cref="IsKeyKnown"/>
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <param name="session">An instance of <c>ISession</c></param>
 		public override void RegisterSession(object key, ISession session)
 		{
 			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
@@ -177,6 +200,13 @@ namespace Castle.ActiveRecord
 			base.RegisterSession(key, session);
 		}
 
+		/// <summary>
+		/// This method should return the session instance associated with the key.
+		/// </summary>
+		/// <param name="key">an object instance</param>
+		/// <returns>
+		/// the session instance or null if none was found
+		/// </returns>
 		public override ISession GetSession(object key)
 		{
 			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
@@ -198,6 +228,10 @@ namespace Castle.ActiveRecord
 			return session;
 		}
 
+		/// <summary>
+		/// Ensures that a transaction exist, creating one if neccecary
+		/// </summary>
+		/// <param name="session">The session.</param>
 		protected internal void EnsureHasTransaction(ISession session)
 		{
 			if (!_transactions.Contains(session))
@@ -210,6 +244,10 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		/// <summary>
+		/// Initializes the current transaction scope using the session
+		/// </summary>
+		/// <param name="session">The session.</param>
 		protected override void Initialize(ISession session)
 		{
 			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
@@ -221,6 +259,10 @@ namespace Castle.ActiveRecord
 			EnsureHasTransaction(session);
 		}
 
+		/// <summary>
+		/// Dispose of this scope
+		/// </summary>
+		/// <param name="sessions">The sessions.</param>
 		protected override void PerformDisposal(ICollection sessions)
 		{
 			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
@@ -264,6 +306,10 @@ namespace Castle.ActiveRecord
 			RaiseOnCompleted();
 		}
 
+		/// <summary>
+		/// Discards the sessions.
+		/// </summary>
+		/// <param name="sessions">The sessions.</param>
 		protected internal override void DiscardSessions(ICollection sessions)
 		{
 			if (parentSimpleScope != null)
@@ -272,6 +318,9 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		/// <summary>
+		/// Raises the on completed event
+		/// </summary>
 		private void RaiseOnCompleted()
 		{
 			EventHandler handler = (EventHandler) events[CompletedEvent];

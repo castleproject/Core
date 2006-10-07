@@ -19,25 +19,52 @@ namespace Castle.ActiveRecord.Queries
 
 	using NHibernate;
 
+	/// <summary>
+	/// Query that return a single result
+	/// </summary>
 	public class ScalarQuery : HqlBasedQuery
 	{
 		#region Constructors
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScalarQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="query">The query.</param>
+		/// <param name="positionalParameters">The positional parameters.</param>
 		public ScalarQuery(Type targetType, string query, params Object[] positionalParameters)
 			: base(targetType, query, positionalParameters)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScalarQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="query">The query.</param>
 		public ScalarQuery(Type targetType, string query)
 			: base(targetType, query)
 		{
 		}
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScalarQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="queryLanguage">The query language.</param>
+		/// <param name="query">The query.</param>
+		/// <param name="positionalParameters">The positional parameters.</param>
 		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, string query, params Object[] positionalParameters)
 			: base(targetType, queryLanguage, query, positionalParameters)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScalarQuery"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="queryLanguage">The query language.</param>
+		/// <param name="query">The query.</param>
 		public ScalarQuery(Type targetType, QueryLanguage queryLanguage, string query)
 			: base(targetType, queryLanguage, query)
 		{

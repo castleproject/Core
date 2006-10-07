@@ -17,23 +17,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// Model for a joined key property in a joined subclass
+	/// </summary>
 	[Serializable]
 	public class KeyModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly JoinedKeyAttribute att;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KeyModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="att">The att.</param>
 		public KeyModel(PropertyInfo propInfo, JoinedKeyAttribute att)
 		{
 			this.propInfo = propInfo;
 			this.att = att;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the joined key attribute
+		/// </summary>
+		/// <value>The joined key att.</value>
 		public JoinedKeyAttribute JoinedKeyAtt
 		{
 			get { return att; }
@@ -41,6 +57,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitKey(this);

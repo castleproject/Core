@@ -32,6 +32,11 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		private readonly ParameterFlags flags;
 
 		#region Constructors for Named Parameters
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryParameter"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
 		public QueryParameter(string name, object value)
 		{
 			if (name == null)
@@ -42,6 +47,12 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 			this.value = value;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryParameter"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="type">The type.</param>
 		public QueryParameter(String name, Object value, IType type)
 			: this(name, value)
 		{
@@ -50,6 +61,11 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		#endregion
 
 		#region Constructors for Positional Parameters
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryParameter"/> class.
+		/// </summary>
+		/// <param name="position">The position.</param>
+		/// <param name="value">The value.</param>
 		public QueryParameter(int position, object value)
 		{
 			if (position < 0)
@@ -60,6 +76,12 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 			this.value = value;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryParameter"/> class.
+		/// </summary>
+		/// <param name="position">The position.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="type">The type.</param>
 		public QueryParameter(int position, object value, IType type)
 			: this(position, value)
 		{
@@ -68,12 +90,23 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		#endregion
 
 		#region Constructors for Named List Parameters
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryParameter"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="type">The type.</param>
 		public QueryParameter(String name, ICollection value, IType type)
 			: this(name, (object) value, type)
 		{
 			this.flags |= ParameterFlags.List;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryParameter"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
 		public QueryParameter(String name, ICollection value)
 			: this(name, (object) value)
 		{

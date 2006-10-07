@@ -33,13 +33,24 @@ namespace Castle.ActiveRecord
 		
 		private ILogger log = NullLogger.Instance;
 		
+		/// <summary>
+		/// list of modifiers for the query
+		/// </summary>
 		protected IList queryModifiers;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActiveRecordBaseQuery"/> class.
+		/// </summary>
+		/// <param name="type">The type.</param>
 		protected ActiveRecordBaseQuery(Type type)
 		{
 			this.targetType = type;
 		}
 
+		/// <summary>
+		/// Gets the target type of this query
+		/// </summary>
+		/// <value></value>
 		public Type Target
 		{
 			get { return targetType; }
@@ -62,11 +73,22 @@ namespace Castle.ActiveRecord
 		}
 
 		#region IActiveRecordQuery implementation
+		/// <summary>
+		/// Executes the specified query and return the results
+		/// </summary>
+		/// <param name="session">The session to execute the query in.</param>
+		/// <returns></returns>
 		object IActiveRecordQuery.Execute(ISession session)
 		{
 			return InternalExecute(session);
 		}
 
+		/// <summary>
+		/// Enumerates over the result of the query.
+		/// Note: Only use if you expect most of your values to already exist in the second level cache!
+		/// </summary>
+		/// <param name="session"></param>
+		/// <returns></returns>
 		IEnumerable IActiveRecordQuery.Enumerate(ISession session)
 		{
 			return InternalEnumerate(session);

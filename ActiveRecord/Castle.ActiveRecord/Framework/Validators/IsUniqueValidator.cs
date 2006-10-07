@@ -23,6 +23,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using NHibernate.Expression;
 
 
+	
+	/// <summary>
+	/// Validate that the property's value is unique in the database when saved
+	/// </summary>
 	[Serializable]
 	public class IsUniqueValidator : AbstractValidator
 	{
@@ -31,10 +35,19 @@ namespace Castle.ActiveRecord.Framework.Validators
 		[ThreadStatic]
 		private static PrimaryKeyModel _pkModel;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IsUniqueValidator"/> class.
+		/// </summary>
 		public IsUniqueValidator()
 		{
 		}
 
+		/// <summary>
+		/// Perform the check that the property value is unqiue in the table
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public override bool Perform(object instance, object fieldValue)
 		{
 			Type instanceType = instance.GetType();
@@ -53,7 +66,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 			if (_pkModel == null)
 			{
 				throw new ValidationFailure("We couldn't find the primary key for " + instanceType.FullName + 
-					" so we can't ensure the uniqueness of any field. Validatior failed");
+					" so we can't ensure the uniqueness of any field. Validator failed");
 			}
 			
 			_fieldValue = fieldValue;
@@ -94,6 +107,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 			return criteria.List().Count == 0;
 		}
 
+		/// <summary>
+		/// Builds the error message when the property value is not unique
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			return String.Format("{0} is currently in use. Please pick up a new {0}.", Property.Name);

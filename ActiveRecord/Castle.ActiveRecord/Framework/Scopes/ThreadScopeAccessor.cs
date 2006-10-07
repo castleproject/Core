@@ -28,11 +28,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		private IThreadScopeInfo scopeInfo;
 
+		/// <summary>
+		/// Gets the single instance.
+		/// </summary>
+		/// <value>The instance.</value>
 		public static ThreadScopeAccessor Instance
 		{
 			get { return instance; }
 		}
 
+		/// <summary>
+		/// Gets or sets the scope info.
+		/// </summary>
+		/// <value>The scope info.</value>
 		public IThreadScopeInfo ScopeInfo
 		{
 			get { return scopeInfo; }
@@ -41,11 +49,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		#region IThreadScopeInfo Members
 
+		/// <summary>
+		/// Gets the current stack.
+		/// </summary>
+		/// <value>The current stack.</value>
 		public Stack CurrentStack
 		{
 			get { return scopeInfo.CurrentStack; }
 		}
 
+		/// <summary>
+		/// Gets the registered scope.
+		/// </summary>
+		/// <returns></returns>
 		public ISessionScope GetRegisteredScope()
 		{
 			if (scopeInfo == null)
@@ -56,6 +72,10 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			return scopeInfo.GetRegisteredScope();
 		}
 
+		/// <summary>
+		/// Registers the scope.
+		/// </summary>
+		/// <param name="scope">The scope.</param>
 		public void RegisterScope(ISessionScope scope)
 		{
 			if (scopeInfo == null)
@@ -66,11 +86,21 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			scopeInfo.RegisterScope(scope);
 		}
 
+		/// <summary>
+		/// Unregister the scope.
+		/// </summary>
+		/// <param name="scope">The scope.</param>
 		public void UnRegisterScope(ISessionScope scope)
 		{
 			scopeInfo.UnRegisterScope(scope);
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance has initialized scope.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance has initialized scope; otherwise, <c>false</c>.
+		/// </value>
 		public bool HasInitializedScope
 		{
 			get { return scopeInfo.HasInitializedScope; }

@@ -18,14 +18,23 @@ namespace Castle.ActiveRecord
 
 	using Castle.ActiveRecord.Framework.Validators;
 
-
+	/// <summary>
+	/// Validate that the property is not null or empty (for strings)
+	/// </summary>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateNotEmptyAttribute : AbstractValidationAttribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateNotEmptyAttribute"/> class.
+		/// </summary>
 		public ValidateNotEmptyAttribute() : base(new NullCheckValidator())
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateNotEmptyAttribute"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
 		public ValidateNotEmptyAttribute(String errorMessage) : base(new NullCheckValidator(), errorMessage)
 		{
 		}

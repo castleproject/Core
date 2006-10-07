@@ -77,6 +77,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 		/// <returns><c>true</c> if the field is OK</returns>
 		public abstract bool Perform(object instance, object fieldValue);
 
+		/// <summary>
+		/// Builds the error message.
+		/// </summary>
+		/// <returns></returns>
 		protected abstract string BuildErrorMessage();
 	}
 }

@@ -18,14 +18,36 @@ namespace Castle.ActiveRecord.Framework
 
 	public interface IThreadScopeInfo
 	{
+		/// <summary>
+		/// Gets the current stack.
+		/// </summary>
+		/// <value>The current stack.</value>
 		Stack CurrentStack { get; }
 
+		/// <summary>
+		/// Gets the registered scope.
+		/// </summary>
+		/// <returns></returns>
 		ISessionScope GetRegisteredScope();
 
+		/// <summary>
+		/// Registers the scope.
+		/// </summary>
+		/// <param name="scope">The scope.</param>
 		void RegisterScope(ISessionScope scope);
 
+		/// <summary>
+		/// Unregister the scope.
+		/// </summary>
+		/// <param name="scope">The scope.</param>
 		void UnRegisterScope(ISessionScope scope);
 
+		/// <summary>
+		/// Gets a value indicating whether this instance has initialized scope.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance has initialized scope; otherwise, <c>false</c>.
+		/// </value>
 		bool HasInitializedScope { get; }
 	}
 }

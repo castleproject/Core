@@ -16,7 +16,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 
-	
+	/// <summary>
+	/// Interface for all the nodes in the model.
+	/// </summary>
+	/// <remarks>
+	/// This probably exist for historic reasons.
+	/// </remarks>
 	public interface IModelNode : IVisitable
 	{
 	}

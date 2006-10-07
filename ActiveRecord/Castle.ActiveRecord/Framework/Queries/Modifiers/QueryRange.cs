@@ -24,27 +24,48 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		private readonly int firstResult;
 		private readonly int maxResults;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryRange"/> class.
+		/// </summary>
+		/// <param name="firstResult">The first result.</param>
+		/// <param name="maxResults">The max results.</param>
 		public QueryRange(int firstResult, int maxResults)
 		{
 			this.firstResult = firstResult;
 			this.maxResults = maxResults;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="QueryRange"/> class.
+		/// </summary>
+		/// <param name="maxResults">The max results.</param>
 		public QueryRange(int maxResults)
 			: this(0, maxResults)
 		{
 		}
 
+		/// <summary>
+		/// Gets the first result.
+		/// </summary>
+		/// <value>The first result.</value>
 		public int FirstResult
 		{
 			get { return firstResult; }
 		}
 
+		/// <summary>
+		/// Gets the max results.
+		/// </summary>
+		/// <value>The max results.</value>
 		public int MaxResults
 		{
 			get { return maxResults; }
 		}
 
+		/// <summary>
+		/// Applies this modifier to the query.
+		/// </summary>
+		/// <param name="query">The query</param>
 		public void Apply(IQuery query)
 		{
 			query.SetFirstResult(FirstResult);

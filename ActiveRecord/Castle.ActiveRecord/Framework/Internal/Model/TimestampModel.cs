@@ -17,24 +17,39 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
-
+	/// <summary>
+	/// Model for [Timestamp] properties
+	/// </summary>
 	[Serializable]
 	public class TimestampModel : IModelNode
 	{
 		private readonly PropertyInfo prop;
 		private readonly TimestampAttribute att;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimestampModel"/> class.
+		/// </summary>
+		/// <param name="prop">The prop.</param>
+		/// <param name="att">The att.</param>
 		public TimestampModel(PropertyInfo prop, TimestampAttribute att)
 		{
 			this.prop = prop;
 			this.att = att;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return prop; }
 		}
 
+		/// <summary>
+		/// Gets the timestamp attribute
+		/// </summary>
+		/// <value>The timestamp att.</value>
 		public TimestampAttribute TimestampAtt
 		{
 			get { return att; }
@@ -42,6 +57,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitTimestamp(this);

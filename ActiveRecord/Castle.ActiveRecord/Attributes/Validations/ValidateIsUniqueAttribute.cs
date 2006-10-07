@@ -19,13 +19,23 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Validators;
 
 
+	/// <summary>
+	/// Validate that the property's value is unique in the database when saved
+	/// </summary>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateIsUniqueAttribute : AbstractValidationAttribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateIsUniqueAttribute"/> class.
+		/// </summary>
 		public ValidateIsUniqueAttribute() : base(new IsUniqueValidator())
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateIsUniqueAttribute"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
 		public ValidateIsUniqueAttribute(String errorMessage) : base(new IsUniqueValidator(), errorMessage)
 		{
 		}

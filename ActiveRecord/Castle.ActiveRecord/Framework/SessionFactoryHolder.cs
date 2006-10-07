@@ -39,10 +39,6 @@ namespace Castle.ActiveRecord.Framework
 		private ReaderWriterLock readerWriterLock = new ReaderWriterLock();
 		private IThreadScopeInfo threadScopeInfo;
 		
-		public SessionFactoryHolder()
-		{
-		}
-
 		/// <summary>
 		/// Raised when a root type is registered.
 		/// </summary>

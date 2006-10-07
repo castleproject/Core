@@ -16,33 +16,54 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-
+	/// <summary>
+	/// This attribute is used to specify that a property is the versioning property of the class
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class VersionAttribute : WithAccessAttribute
 	{
 		private String column, type, unsavedValue;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VersionAttribute"/> class.
+		/// </summary>
 		public VersionAttribute()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VersionAttribute"/> class.
+		/// </summary>
+		/// <param name="column">The column.</param>
 		public VersionAttribute(String column)
 		{
 			this.column = column;
 		}
 
+		/// <summary>
+		/// Gets or sets the column name
+		/// </summary>
+		/// <value>The column.</value>
 		public String Column
 		{
 			get { return column; }
 			set { column = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the type of the column (should be an integer of some type)
+		/// </summary>
+		/// <value>The type.</value>
 		public String Type
 		{
 			get { return type; }
 			set { type = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the unsaved value for this column
+		/// </summary>
+		/// <value>The unsaved value.</value>
 		public String UnsavedValue
 		{
 			get { return unsavedValue; }

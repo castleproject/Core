@@ -19,13 +19,26 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Validators;
 
 
+	/// <summary>
+	/// Validate that this email address is a valid one.
+	/// </summary>
+	/// <remarks>
+	/// This only check the format of the email, not if it really exists.
+	/// </remarks>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateEmailAttribute : AbstractValidationAttribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateEmailAttribute"/> class.
+		/// </summary>
 		public ValidateEmailAttribute() : base(new EmailValidator())
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateEmailAttribute"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
 		public ValidateEmailAttribute(String errorMessage) : base(new EmailValidator(), errorMessage)
 		{
 		}

@@ -18,41 +18,55 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 
 
+	/// <summary>
+	/// Model for a simple persistent property
+	/// </summary>
 	[Serializable]
 	public class PropertyModel : IModelNode
 	{
 		private readonly PropertyInfo prop;
 		private readonly PropertyAttribute att;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertyModel"/> class.
+		/// </summary>
 		protected PropertyModel() {}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertyModel"/> class.
+		/// </summary>
+		/// <param name="prop">The prop.</param>
+		/// <param name="att">The att.</param>
 		public PropertyModel(PropertyInfo prop, PropertyAttribute att)
 		{
 			this.prop = prop;
 			this.att = att;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public virtual PropertyInfo Property
 		{
 			get { return prop; }
 		}
 
+		/// <summary>
+		/// Gets the property attribute
+		/// </summary>
+		/// <value>The property att.</value>
 		public virtual PropertyAttribute PropertyAtt
 		{
 			get { return att; }
 		}
 
-		#region IModelNode Members
-
-		public String ToXml()
-		{
-			throw new NotImplementedException();
-		}
-
-		#endregion
-
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitProperty(this);

@@ -28,6 +28,10 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.ActiveRecord.Framework.Internal;
 
+	/// <summary>
+	/// Delegate for use in <see cref="ActiveRecordStarter.SessionFactoryHolderCreated"/>
+	/// </summary>
+	/// <param name="holder"></param>
 	public delegate void SessionFactoryHolderDelegate(ISessionFactoryHolder holder);
 
 	/// <summary>

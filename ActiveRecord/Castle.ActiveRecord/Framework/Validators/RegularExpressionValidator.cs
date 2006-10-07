@@ -17,17 +17,29 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System;
 	using System.Text.RegularExpressions;
 
-
+	/// <summary>
+	/// Validate a property using regular expression
+	/// </summary>
 	[Serializable]
 	public class RegularExpressionValidator : AbstractValidator
 	{
 		private readonly Regex _regexRule;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RegularExpressionValidator"/> class.
+		/// </summary>
+		/// <param name="expression">The expression.</param>
 		public RegularExpressionValidator(String expression)
 		{
-			_regexRule = new Regex(expression);
+			_regexRule = new Regex(expression, RegexOptions.Compiled);
 		}
 
+		/// <summary>
+		/// Validate that the property value match the given regex
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public override bool Perform(object instance, object fieldValue)
 		{
 			if (fieldValue != null)
@@ -38,6 +50,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 			return true;
 		}
 
+		/// <summary>
+		/// Builds the error message.
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			return String.Format("Field {0} is not a valid entry for the expected pattern.", Property.Name);

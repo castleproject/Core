@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 
 
 	/// <summary>
-	/// 
+	/// Validate that this is a valid (formatted) email using regex
 	/// </summary>
 	[Serializable]
 	public class EmailValidator : RegularExpressionValidator
@@ -30,10 +30,17 @@ namespace Castle.ActiveRecord.Framework.Validators
 			 @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" + 
 			 @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EmailValidator"/> class.
+		/// </summary>
 		public EmailValidator() : base(emailRule)
 		{
 		}
 
+		/// <summary>
+		/// Builds the error message.
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			return String.Format("Field {0} doesn't seem like a valid e-mail.", Property.Name);

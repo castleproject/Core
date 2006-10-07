@@ -23,15 +23,21 @@ namespace Castle.ActiveRecord.Framework.Validators
 	[Serializable]
 	public class NullCheckValidator : AbstractValidator
 	{
-		public NullCheckValidator()
-		{
-		}
-
+		/// <summary>
+		/// Check that this property has a value that is not null or empty (if string)
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public override bool Perform(object instance, object fieldValue)
 		{
 			return fieldValue != null && fieldValue.ToString().Length != 0;
 		}
 
+		/// <summary>
+		/// Builds the error message.
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			return String.Format("{0} is not optional.", Property.Name);

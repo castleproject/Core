@@ -34,7 +34,15 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public class HasManyAttribute : RelationAttribute
 	{
+		/// <summary>
+		/// The key column
+		/// Cannot exist if compositeKeyColumns has a value
+		/// </summary>
 		protected String keyColumn;
+		/// <summary>
+		/// The composite columns
+		/// Cannot exist with keyColumn != null
+		/// </summary>
 		protected String[] compositeKeyColumns;
 
 		/// <summary>

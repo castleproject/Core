@@ -66,6 +66,11 @@ namespace Castle.ActiveRecord.Framework.Config
 
 		#endregion
 
+		/// <summary>
+		/// Adds the specified type with the properties
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="properties">The properties.</param>
 		public void Add(Type type, IDictionary properties)
 		{
 			Add(type, ConvertToConfiguration(properties));

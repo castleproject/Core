@@ -17,6 +17,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// This is used in IdBag scenario to specify to collection id.
+	/// </summary>
 	[Serializable]
 	public class CollectionIDModel : IModelNode
 	{

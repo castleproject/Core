@@ -16,12 +16,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Collections;
-
+	
+	/// <summary>
+	/// This model of a full Active Record persistent class.
+	/// </summary>
 	[Serializable]
 	public class ActiveRecordModel : IModelNode
 	{
+		/// <summary>
+		/// The mapping between a type and a model
+		/// </summary>
 		protected internal static IDictionary type2Model = Hashtable.Synchronized(new Hashtable());
 
+		/// <summary>
+		/// Whatever Active Record will generate debug information or not
+		/// </summary>
 		protected internal static bool isDebug = false;
 
 		private readonly Type type;
@@ -76,6 +85,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 			set { parent = value; }
 		}
 
+		/// <summary>
+		/// Gets the type for this model
+		/// </summary>
+		/// <value>The type.</value>
 		public Type Type
 		{
 			get { return type; }
@@ -207,51 +220,91 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return fields; }
 		}
 
+		/// <summary>
+		/// Gets the list of [has many to any] models
+		/// </summary>
+		/// <value>The has many to any.</value>
 		public IList HasManyToAny
 		{
 			get { return hasManyToAny; }
 		}
 
+		/// <summary>
+		/// Gets the list of [any] model
+		/// </summary>
+		/// <value>The anys.</value>
 		public IList Anys
 		{
 			get { return anys; }
 		}
 
+		/// <summary>
+		/// Gets the list of the derived classes
+		/// </summary>
+		/// <value>The classes.</value>
 		public IList Classes
 		{
 			get { return classes; }
 		}
 
+		/// <summary>
+		/// Gets the list of derived joined classes.
+		/// </summary>
+		/// <value>The joined classes.</value>
 		public IList JoinedClasses
 		{
 			get { return joinedclasses; }
 		}
 
+		/// <summary>
+		/// Gets the list of components.
+		/// </summary>
+		/// <value>The components.</value>
 		public IList Components
 		{
 			get { return components; }
 		}
 
+		/// <summary>
+		/// Gets the list of [belongs to] models
+		/// </summary>
+		/// <value>The belongs to.</value>
 		public IList BelongsTo
 		{
 			get { return belongsTo; }
 		}
 
+		/// <summary>
+		/// Gets the list of [has many] models
+		/// </summary>
+		/// <value>The has many.</value>
 		public IList HasMany
 		{
 			get { return hasMany; }
 		}
 
+		/// <summary>
+		/// Gets the list of [has and belongs to many] models
+		/// </summary>
+		/// <value>The has and belongs to many.</value>
 		public IList HasAndBelongsToMany
 		{
 			get { return hasAndBelongsToMany; }
 		}
 
+		/// <summary>
+		/// Gets the list of [one to one] models
+		/// </summary>
+		/// <value>The one to ones.</value>
 		public IList OneToOnes
 		{
 			get { return oneToOne; }
 		}
 
+		/// <summary>
+		/// Gets the list of [collection id] models
+		/// </summary>
+		/// <value>The collection I ds.</value>
 		public IList CollectionIDs
 		{
 			get { return collectionIds; }
@@ -275,16 +328,28 @@ namespace Castle.ActiveRecord.Framework.Internal
 			set { compositeKey = value; }
 		}
 
+		/// <summary>
+		/// Gets the list of [hilo] models
+		/// </summary>
+		/// <value>The hilos.</value>
 		public IList Hilos
 		{
 			get { return hilos; }
 		}
 
+		/// <summary>
+		/// Gets the list of  properties not mapped .
+		/// </summary>
+		/// <value>The not mapped properties.</value>
 		public IList NotMappedProperties
 		{
 			get { return notMappedProperties; }
 		}
 
+		/// <summary>
+		/// Gets the validators.
+		/// </summary>
+		/// <value>The validators.</value>
 		public IList Validators
 		{
 			get { return validators; }
@@ -308,7 +373,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
-		/// Internally used
+		/// Used internally register an assoication between a type and its model
 		/// </summary>
 		/// <param name="arType"></param>
 		/// <param name="model"></param>

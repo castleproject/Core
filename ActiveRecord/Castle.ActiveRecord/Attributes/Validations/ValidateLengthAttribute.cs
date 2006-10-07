@@ -18,6 +18,9 @@ namespace Castle.ActiveRecord
 
 	using Castle.ActiveRecord.Framework.Validators;
 
+	/// <summary>
+	/// Validate that this property has the required length (either exact or in range)
+	/// </summary>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateLengthAttribute : AbstractValidationAttribute
 	{

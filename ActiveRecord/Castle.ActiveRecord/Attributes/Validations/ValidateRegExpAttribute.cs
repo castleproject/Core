@@ -18,14 +18,25 @@ namespace Castle.ActiveRecord
 
 	using Castle.ActiveRecord.Framework.Validators;
 
-
+	/// <summary>
+	/// Validate that the property match the given regular expression
+	/// </summary>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateRegExpAttribute : AbstractValidationAttribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateRegExpAttribute"/> class.
+		/// </summary>
+		/// <param name="pattern">The pattern.</param>
 		public ValidateRegExpAttribute(String pattern) : base(new RegularExpressionValidator(pattern))
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateRegExpAttribute"/> class.
+		/// </summary>
+		/// <param name="pattern">The pattern.</param>
+		/// <param name="errorMessage">The error message.</param>
 		public ValidateRegExpAttribute(String pattern, String errorMessage) : base(new RegularExpressionValidator(pattern), errorMessage)
 		{
 		}

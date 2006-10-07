@@ -17,7 +17,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Reflection;
 
-
+	/// <summary>
+	/// This model is used to represent a nested value type (&lt;component/&gt; - in NHibernate talk).
+	/// </summary>
 	[Serializable]
 	public class NestedModel : IModelNode
 	{
@@ -25,6 +27,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly NestedAttribute nestedAtt;
 		private readonly ActiveRecordModel nestedModel;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NestedModel"/> class.
+		/// </summary>
+		/// <param name="propInfo">The prop info.</param>
+		/// <param name="nestedAtt">The nested att.</param>
+		/// <param name="nestedModel">The nested model.</param>
 		public NestedModel( PropertyInfo propInfo, NestedAttribute nestedAtt, ActiveRecordModel nestedModel )
 		{
 			this.nestedAtt = nestedAtt;
@@ -32,16 +40,28 @@ namespace Castle.ActiveRecord.Framework.Internal
 			this.propInfo = propInfo;
 		}
 
+		/// <summary>
+		/// Gets the model.
+		/// </summary>
+		/// <value>The model.</value>
 		public ActiveRecordModel Model
 		{
 			get { return nestedModel; }
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propInfo; }
 		}
 
+		/// <summary>
+		/// Gets the nested attribute
+		/// </summary>
+		/// <value>The nested att.</value>
 		public NestedAttribute NestedAtt
 		{
 			get { return nestedAtt; }
@@ -49,6 +69,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		#region IVisitable Members
 
+		/// <summary>
+		/// Accepts the specified visitor and call the relevant IVisitor.Visit***() method
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
 		public void Accept(IVisitor visitor)
 		{
 			visitor.VisitNested(this);
