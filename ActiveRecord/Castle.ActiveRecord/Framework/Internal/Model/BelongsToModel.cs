@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model for BelongTo - A many to one assoication between persistent entities.
 	/// </summary>
 	[Serializable]
-	public class BelongsToModel : IModelNode
+	public class BelongsToModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly BelongsToAttribute belongsToAtt;

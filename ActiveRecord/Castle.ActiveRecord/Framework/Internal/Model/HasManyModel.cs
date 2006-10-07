@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model to represent a HasMany ( one to many ) association
 	/// </summary>
 	[Serializable]
-	public class HasManyModel : IModelNode
+	public class HasManyModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly HasManyAttribute hasManyAtt;

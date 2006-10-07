@@ -262,9 +262,6 @@
     <Compile Include="Framework\Internal\Model\HiloModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Framework\Internal\Model\IModelNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Framework\Internal\Model\KeyModel.cs">
       <SubType>Code</SubType>
     </Compile>

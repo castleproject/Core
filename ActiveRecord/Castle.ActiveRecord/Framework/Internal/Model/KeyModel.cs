@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model for a joined key property in a joined subclass
 	/// </summary>
 	[Serializable]
-	public class KeyModel : IModelNode
+	public class KeyModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly JoinedKeyAttribute att;

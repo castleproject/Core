@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model for [Timestamp] properties
 	/// </summary>
 	[Serializable]
-	public class TimestampModel : IModelNode
+	public class TimestampModel : IVisitable
 	{
 		private readonly PropertyInfo prop;
 		private readonly TimestampAttribute att;

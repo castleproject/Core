@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// This model is used to represent a nested value type (&lt;component/&gt; - in NHibernate talk).
 	/// </summary>
 	[Serializable]
-	public class NestedModel : IModelNode
+	public class NestedModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly NestedAttribute nestedAtt;

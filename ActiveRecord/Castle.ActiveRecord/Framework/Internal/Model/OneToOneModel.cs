@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model One To One assoication
 	/// </summary>
 	[Serializable]
-	public class OneToOneModel : IModelNode
+	public class OneToOneModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly OneToOneAttribute att;

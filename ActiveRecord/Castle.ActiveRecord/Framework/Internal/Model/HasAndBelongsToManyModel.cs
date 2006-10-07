@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model to HasAndBelongsToMany, which is used to model a many to many assoication.
 	/// </summary>
 	[Serializable]
-	public class HasAndBelongsToManyModel : IModelNode
+	public class HasAndBelongsToManyModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly HasAndBelongsToManyAttribute hasManyAtt;

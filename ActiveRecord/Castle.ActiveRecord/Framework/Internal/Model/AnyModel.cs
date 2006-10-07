@@ -24,7 +24,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model for [Any] association, a polymorphic assoication without common base class
 	/// </summary>
 	[Serializable]
-	public class AnyModel : IModelNode
+	public class AnyModel : IVisitable
 	{
 		private readonly PropertyInfo prop;
 		private readonly AnyAttribute anyAtt;

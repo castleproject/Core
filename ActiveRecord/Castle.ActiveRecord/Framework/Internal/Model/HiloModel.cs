@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model for HiLo algorithm used to generate primary key values
 	/// </summary>
 	[Serializable]
-	public class HiloModel : IModelNode
+	public class HiloModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly HiloAttribute hiloAtt;

@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model for a Primary Key
 	/// </summary>
 	[Serializable]
-	public class PrimaryKeyModel : IModelNode
+	public class PrimaryKeyModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly PrimaryKeyAttribute pkAtt;

@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// <summary>
 	/// Model for importing classes so HQL queries can use them more easily.
 	/// </summary>
-	public class ImportModel : IModelNode
+	public class ImportModel : IVisitable
 	{
 		private readonly ImportAttribute att;
 

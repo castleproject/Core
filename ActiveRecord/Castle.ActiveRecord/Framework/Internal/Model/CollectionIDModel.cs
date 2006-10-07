@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// This is used in IdBag scenario to specify to collection id.
 	/// </summary>
 	[Serializable]
-	public class CollectionIDModel : IModelNode
+	public class CollectionIDModel : IVisitable
 	{
 		private readonly PropertyInfo propInfo;
 		private readonly CollectionIDAttribute collAtt;

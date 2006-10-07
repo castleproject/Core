@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// This model of a full Active Record persistent class.
 	/// </summary>
 	[Serializable]
-	public class ActiveRecordModel : IModelNode
+	public class ActiveRecordModel : IVisitable
 	{
 		/// <summary>
 		/// The mapping between a type and a model

@@ -621,7 +621,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 																 bool inverse, string orderBy, string where, string sort,
 																 string columnKey, string[] compositeKeyColumnKeys, string element,
 																 string columnRef, string[] compositeKeyColumnRefs,
-																 IModelNode extraModel, string index, string indexType, CacheEnum cache)
+																 IVisitable extraModel, string index, string indexType, CacheEnum cache)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 

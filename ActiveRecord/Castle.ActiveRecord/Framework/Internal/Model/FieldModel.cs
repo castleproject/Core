@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// Model for a persitent property that uses a field to get/set the values.
 	/// </summary>
 	[Serializable]
-	public class FieldModel : IModelNode
+	public class FieldModel : IVisitable
 	{
 		private readonly FieldInfo field;
 		private readonly FieldAttribute att;
