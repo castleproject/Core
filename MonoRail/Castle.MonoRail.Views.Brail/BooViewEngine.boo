@@ -19,6 +19,7 @@ import System.Collections
 import System.ComponentModel.Design
 import Castle.Core
 import Castle.MonoRail.Framework
+import Castle.Core.Logging
 import Boo.Lang.Parser
 import Boo.Lang.Compiler
 import Boo.Lang.Compiler.IO
@@ -28,11 +29,17 @@ import Boo.Lang.Compiler.Pipelines
 # This is the class that is responsible to take a template name and turn it into an
 # executable code that then is piped to the user.
 public class BooViewEngine (ViewEngineBase, IInitializable):
+	
+	# This field holds all the cache of all the compiled types (not instances)
+	# of all the views that Brail nows of.
 	compilations = Hashtable.Synchronized(Hashtable(CaseInsensitiveHashCodeProvider.Default, 
 			CaseInsensitiveComparer.Default))
 	
 	# This is used to add a reference to the common scripts for each compiled scripts
 	common as System.Reflection.Assembly
+	
+	#Brail's logger
+	logger as ILogger
 	
 	static options as BooViewEngineOptions
 	baseSavePath as string
@@ -45,19 +52,27 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 	
 	static def InitializeConfig(name as string):
 		options = System.Configuration.ConfigurationSettings.GetConfig(name)
+			
+	def Log(msg as string):
+		return if not logger or not logger.IsDebugEnabled
+		logger.Debug(msg)
 	
 	def Initialize():
 		InitializeConfig() if options is null
 		baseDir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)
+		Log("Base Directory: ${baseDir}")
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)
+		Log("Base Save Path: ${baseDir}")
 		
 		if options.SaveToDisk and not Directory.Exists(self.baseSavePath):
 			Directory.CreateDirectory(self.baseSavePath)
+			Log("Created directory ${baseSavePath}")
 		
 		CompileCommonScripts()
 		
 		ViewSourceLoader.ViewChanged += def(sender, e as FileSystemEventArgs):
 			if e.FullPath.IndexOf(options.CommonScriptsDirectory)!=-1:
+				Log("Detected a change in commons scripts directory ${options.CommonScriptsDirectory}, recompiling site")
 				# need to invalidate the entire CommonScripts assembly
 				# not worrying about concurrency here, since it is assumed
 				# that changes here are rare. Note, this force recompile of the 
@@ -73,7 +88,10 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 	override def Service(provider as IServiceProvider):
 		super.Service(provider)
 		self.provider = provider
-		
+		loggerFactory as ILoggerFactory =  provider.GetService(typeof(ILoggerFactory));
+		if loggerFactory:
+			logger = loggerFactory.Create(GetType().Name);
+	
 	# Just check if the filename exists, I'm not sure when it's called
 	override def HasTemplate(templateName as string):
 		return ViewSourceLoader.HasTemplate(GetTemplateName(templateName))
@@ -86,6 +104,7 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 		Process(context.Response.Output, context, controller, templateName)
 	
 	override def Process(output as TextWriter, context as IRailsEngineContext, controller as Controller, templateName as string):
+		Log("Starting to process request for ${templateName}")
 		file = GetTemplateName(templateName)
 		view as BrailBase
 		# Output may be the layout's child output if a layout exists
@@ -94,14 +113,19 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 		# Will compile on first time, then save the assembly on the cache.
 		view = GetCompiledScriptInstance(file, viewOutput, context, controller)
 		controller.PreSendView(view)
+		Log("Executing view")
 		view.Run()
-		layout.Run() if layout is not null
+		if layout is not null:
+			layout.SetParent(view)
+			layout.Run() 
+		Log("Finished executing view")
 		controller.PostSendView(view)
 	
 	# Send the contents text directly to the user, only adding the layout if neccecary
 	override def ProcessContents(context as IRailsEngineContext, controller as Controller, contents as string):
 		output as TextWriter, layout as BrailBase = GetOutput(controller.Response.Output, context, controller)
 		output.Write(contents)
+		# here we don't need to pass parameters from the layout to the view, 
 		layout.Run() if layout is not null
 		
 	# Check if a layout has been defined. If it was, then the layout would be created
@@ -131,20 +155,24 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 		output as TextWriter,
 		context as IRailsEngineContext,
 		controller as Controller) as BrailBase:
-			
 		batch as bool = options.BatchCompile
-		if  compilations.ContainsKey(file):
-			type as Type = compilations[file]
+		# normalize filename - replace / or \ to the system path seperator
+		filename = file.Replace(char('/'),Path.DirectorySeparatorChar).Replace(char('\\'),Path.DirectorySeparatorChar) 
+		Log("Getting compiled instnace of ${filename}")
+		if  compilations.ContainsKey(filename):
+			type as Type = compilations[filename]
 			if type is not null:
+				Log("Got compiled instnace of ${filename} from cache")
 				return type(self, output, context, controller)
 			# if file is in compilations and the type is null,
 			# this means that we need to recompile. Since this usually means that 
 			# the file was changed, we'll set batch to false and procceed to compile just
 			# this file.
+			Log("Cache miss! Need to recompile ${filename}")
 			batch = false
-			
-		type = CompileScript(file, batch)
-		raise RailsException("Could not find a view with path ${file}") if type is null
+
+		type = CompileScript(filename, batch)
+		raise RailsException("Could not find a view with path ${filename}") if type is null
 		return type(self, output,context, controller)
 	
 	# Compile a script (or all scripts in a directory), save the compiled result
@@ -152,12 +180,14 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 	# If an error occurs in batch compilation, then an attempt is made to compile just the single
 	# request file.
 	def CompileScript(filename as string, batch as bool) as Type:
-		filename = filename.Replace("/","\\") # normalize filename
+			
 		inputs = GetInput(filename, batch)
 		name = NormalizeName(filename, batch)
+		Log("Compiling ${filename} to ${name} with batch: ${batch}")
 		result = DoCompile(inputs,name)
 		if result.Errors.Count:
 			if not batch:
+				Log("Failed to compile ${filename} because ${result.Errors.ToString(true)}")
 				raise RailsException("Error during compile:\r\n${result.Errors.ToString(true)}\r\n")
 			#error compiling a batch, let's try a single file
 			return CompileScript(filename,false)
@@ -165,6 +195,7 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 		type as Type
 		for input in inputs:
 			type = result.GeneratedAssembly.GetType("${Path.GetFileNameWithoutExtension(input.Name)}_BrailView")
+			Log("Adding ${type.FullName} to the cache")
 			compilations[input.Name] = type
 		type = compilations[filename]
 		return type

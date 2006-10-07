@@ -24,6 +24,25 @@ import Castle.MonoRail.Framework.Tests
 class BrailSubViewTestCase(AbstractTestCase):
 		
 	[Test]
+	def BrailWillCacheSubViewsWhenUsingForwardSlash():
+		DoGet("subview/useLotsOfSubViews.rails")
+		sb = Text.StringBuilder()
+		for i in range(50):
+			sb.Append("real")
+		expected = sb.ToString()
+		AssertReplyEqualTo(expected)
+		
+		# Here we tell the controller to replace the subview with a dummy implementation
+		# if brail doesn't cache it, it will use the real implementation, and the test will fail.
+		sb = Text.StringBuilder()
+		for i in range(50):
+			sb.Append("dummy")
+		DoGet("subview/useLotsOfSubViews.rails","replaceSubView=true")
+		expected = sb.ToString()
+		AssertReplyEqualTo(expected)
+		
+		
+	[Test]
 	def CanCallSubViews():
 		DoGet("subview/index.rails")
 		expected = "View With SubView Content\r\nFrom SubView"

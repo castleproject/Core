@@ -1,0 +1,72 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Brail.Tests</RootNamespace>
+    <AssemblyName>Castle.MonoRail.Views.Brail.Tests</AssemblyName>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4FD720F1-84A6-4053-89AE-58E7371BE6EA}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="Castle.MonoRail.TestSupport">
+      <HintPath>..\build\net-2.0\Castle.MonoRail.TestSupport.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Castle.MonoRail.Framework">
+      <HintPath>..\..\build\net-2.0\debug\Castle.MonoRail.Framework.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Castle.MonoRail.Framework.Tests">
+      <HintPath>..\..\build\net-2.0\debug\Castle.MonoRail.Framework.Tests.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BrailAjaxTestCase.boo" />
+    <Compile Include="BrailBasicFunctionality.boo" />
+    <Compile Include="BrailHelperTestCase.boo" />
+    <Compile Include="BrailRoutingTestCase.boo" />
+    <Compile Include="BrailSubViewTestCase.boo" />
+    <Compile Include="ComponentsTestCase.boo" />
+    <Compile Include="DirectRenderTestCase.boo" />
+    <Compile Include="OutputMethodTestCase.Boo" />
+    <Compile Include="ResourceTestCase.boo" />
+    <Compile Include="Controllers\LayoutController.boo" />
+    <Compile Include="Controllers\HomeController.boo" />
+    <EmbeddedResource Include="Resources\Language.he.resources" />
+    <EmbeddedResource Include="Resources\Language.resources" />
+    <None Include="Views\home\resource.boo" />
+    <None Include="Views\home\bag.boo" />
+    <None Include="Views\home\display.boo" />
+    <None Include="Views\home\index.boo" />
+    <None Include="Views\layout\index.boo" />
+    <None Include="Views\layout\save.boo" />
+    <None Include="Views\layout\update.boo" />
+    <None Include="Views\layouts\general.boo" />
+    <None Include="Views\layouts\printable.boo" />
+    <Compile Include="LanguageFeatures.boo" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(BooBinPath)\Boo.Microsoft.Build.targets" />
+</Project>

@@ -2,7 +2,7 @@
 # SharpDevelop 2.0.0.1710
 Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "Castle.MonoRail.Views.Brail", "Castle.MonoRail.Views.Brail.booproj", "{75535AA0-EC07-4908-99A4-5D9741E899B3}"
 EndProject
-Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "Brail.Tests", "..\Castle.MonoRail.Views.Brail.Tests\Brail.Tests.booproj", "{4FD720F1-84A6-4053-89AE-58E7371BE6EA}"
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "Castle.MonoRail.Views.Brail.Tests", "..\Castle.MonoRail.Views.Brail.Tests\Castle.MonoRail.Views.Brail.Tests.booproj", "{4FD720F1-84A6-4053-89AE-58E7371BE6EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

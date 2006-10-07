@@ -45,3 +45,6 @@ class UsingComponentsController(SmartDispatcherController):
 
 	def CaptureFor():
 		pass
+		
+	def CaptureForWithLayout():
+		LayoutName = "layout_with_captureFor"

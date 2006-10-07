@@ -42,6 +42,9 @@ abstract class BrailBase:
 	controller as Controller
 	
 	viewEngine as BooViewEngine
+	
+	#usually used by the layout to refer to its view
+	parent as BrailBase
 
 	def constructor(viewEngine as BooViewEngine, output as TextWriter, context as IRailsEngineContext, controller as Controller):
 		self.viewEngine = viewEngine
@@ -102,16 +105,20 @@ abstract class BrailBase:
 		val, = GetParameterInternal(name)
 		return val
 		
-	def GetParameterInternal(name as string):
+	def GetParameterInternal(name as string) as (object):
 		if properties.Contains(name):
 			return properties[name], true
 		for dic as IDictionary in self.extendedPropertiesList:
 			if dic.Contains(name):
 				return dic[name], true
+		return parent.GetParameterInternal(name) if parent is not null
 		return null, false
 		
 	def AddProperties(properties as IDictionary):
 		self.extendedPropertiesList.Add(properties)
+	
+	def SetParent(parent as BrailBase):
+		self.parent = parent
 	
 	# Allows to check that a parameter was defined
 	def IsDefined(name as string) as bool:
