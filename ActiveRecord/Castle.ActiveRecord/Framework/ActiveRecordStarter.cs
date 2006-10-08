@@ -95,6 +95,7 @@ namespace Castle.ActiveRecord
 				ActiveRecordBase.holder = holder;
 				ActiveRecordModel.type2Model.Clear();
 				ActiveRecordModel.isDebug = source.Debug;
+				ActiveRecordModel.isLazyByDefault = source.IsLazyByDefault;
 
 				// Sets up base configuration
 				SetUpConfiguration(source, typeof(ActiveRecordBase), holder);

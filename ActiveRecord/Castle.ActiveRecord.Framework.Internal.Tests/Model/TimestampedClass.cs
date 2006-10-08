@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System;
 
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class TimestampedClass : ActiveRecordBase
 	{
 		private int id;

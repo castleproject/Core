@@ -54,5 +54,13 @@ namespace Castle.ActiveRecord.Framework
 		/// </summary>
 		/// <value><c>true</c> if debug; otherwise, <c>false</c>.</value>
 		bool Debug { get; }
+
+		/// <summary>
+		/// Gets a value indicating whether the entities should be lazy by default.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if entities should be lazy by default; otherwise, <c>false</c>.
+		/// </value>
+		bool IsLazyByDefault { get; }
 	}
 }

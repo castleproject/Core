@@ -38,7 +38,7 @@ namespace Castle.ActiveRecord.Tests.Model.RulesModel
     /// <summary>
     /// Base class that is persisted to database, 
     /// </summary>
-    [ActiveRecord(DiscriminatorColumn="discriminator", DiscriminatorValue="0")]
+    [ActiveRecord(DiscriminatorColumn="discriminator", DiscriminatorValue="0", Lazy=false)]
     public abstract class PersistedRule : RuleBase
     {
         int id;
@@ -66,7 +66,7 @@ namespace Castle.ActiveRecord.Tests.Model.RulesModel
         }
     }
 
-    [ActiveRecord(DiscriminatorValue="2")]
+	[ActiveRecord(DiscriminatorValue = "2", Lazy = false)]
     public class WorkDaysRules : EmployeeRule
     {
         int days;

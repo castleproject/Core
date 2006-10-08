@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System;
 
-	[ActiveRecord("Employee")]
+	[ActiveRecord("Employee", Lazy = false)]
 	public class Employee : ActiveRecordBase
 	{
 		private int id;
@@ -53,7 +53,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 	}
 
-	[ActiveRecord("Award")]
+	[ActiveRecord("Award", Lazy = false)]
 	public class Award : ActiveRecordBase
 	{
 		private Employee employee;

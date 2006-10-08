@@ -71,7 +71,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	/// <summary>
 	/// Simplest case for CompositeKey support on AR
 	/// </summary>
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class ClassWithCompositeKey2 : ActiveRecordBase
 	{
 		private CompositeKey2 key;
@@ -140,7 +140,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	/// In this case the composite key has a BelongsTo, which should be supported
 	/// as well (must generate key-many-to-one instead of key-property)
 	/// </summary>
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class ClassWithCompositeKey3 : ActiveRecordBase
 	{
 		private CompositeKey3 key;
@@ -153,7 +153,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 	}
 
-	[ActiveRecord("Product")]
+	[ActiveRecord("Product", Lazy = false)]
 	public class Product : ActiveRecordBase
 	{
 		private int id;

@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	using System;
 	using System.Collections;
 
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class Category : ActiveRecordBase
 	{
 		private int id;

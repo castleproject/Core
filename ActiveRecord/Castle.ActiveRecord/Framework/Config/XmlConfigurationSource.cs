@@ -75,6 +75,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			XmlAttribute isWebAtt = section.Attributes["isWeb"];
 			XmlAttribute threadInfoAtt = section.Attributes["threadinfotype"];
 			XmlAttribute isDebug = section.Attributes["isDebug"];
+			XmlAttribute lazyByDefault = section.Attributes["default-lazy"];
 
 			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value,
 			                    threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
@@ -93,6 +94,9 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			SetDebugFlag(isDebug != null && "true" == isDebug.Value);
 
+			// lazy by default has a default value of true, so not specifying it as the same as true.
+			SetIsLazyByDefault(lazyByDefault == null || lazyByDefault.Value == "true");
+			
 			PopulateConfigNodes(section);
 		}
 

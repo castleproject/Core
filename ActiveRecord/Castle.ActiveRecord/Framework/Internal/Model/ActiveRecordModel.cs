@@ -33,6 +33,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		protected internal static bool isDebug = false;
 
+		/// <summary>
+		/// Whatever types that does not explicitly state that they are lazy should be lazy.
+		/// </summary>
+		protected internal static bool isLazyByDefault = true;
+		
 		private readonly Type type;
 
 		private bool isJoinedSubClassBase;

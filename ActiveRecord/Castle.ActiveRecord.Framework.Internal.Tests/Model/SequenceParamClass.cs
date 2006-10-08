@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	using System;
 
 
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class SequenceParamClass : ActiveRecordBase
 	{
 		private int id;

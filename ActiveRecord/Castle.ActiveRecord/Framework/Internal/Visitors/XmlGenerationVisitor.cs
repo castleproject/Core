@@ -93,7 +93,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
-				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
+				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy, model.ActiveRecordAtt.LazySpecified),
 				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
 				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
@@ -117,7 +117,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        MakeAtt("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
-				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
+				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy, model.ActiveRecordAtt.LazySpecified),
 				        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
 				        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
@@ -164,7 +164,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("persister", MakeTypeName(model.ActiveRecordAtt.Persister)),
 				        ConditionalWrite("batch-size", model.ActiveRecordAtt.BatchSize.ToString(), model.ActiveRecordAtt.BatchSize > 1),
 				        ConditionalWrite("optimistic-lock", model.ActiveRecordAtt.Locking.ToString().ToLower(), model.ActiveRecordAtt.Locking != OptimisticLocking.Version),
-				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy));
+				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy, model.ActiveRecordAtt.LazySpecified));
 				Ident();
 				WriteCache(model.ActiveRecordAtt.Cache);
 				VisitNode(model.PrimaryKey);
@@ -1011,8 +1011,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private void StartMappingNode(bool useAutoImport)
 		{
-			AppendF("<hibernate-mapping {0} xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">", MakeAtt("auto-import", useAutoImport));
+			AppendF("<hibernate-mapping {0}{1} xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">", 
+			        MakeAtt("auto-import", useAutoImport),
+				MakeAtt("default-lazy", ActiveRecordModel.isLazyByDefault));
 		}
 
 		private void EndMappingNode()
@@ -1071,6 +1073,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeAtt(String attName, bool value)
 		{
+			return String.Format(" {0}=\"{1}\"", attName, value.ToString().ToLower());
+		}
+
+		private String MakeAtt(String attName, bool value, bool output)
+		{
+			if(!output)
+				return String.Empty;
 			return String.Format(" {0}=\"{1}\"", attName, value.ToString().ToLower());
 		}
 

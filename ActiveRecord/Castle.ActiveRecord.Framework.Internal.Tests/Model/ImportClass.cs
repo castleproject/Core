@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System;
 
-	[ActiveRecord, Import(typeof(ImportClassRow), "ImportClassRow")]
+	[ActiveRecord(Lazy=false), Import(typeof(ImportClassRow), "ImportClassRow")]
     public class ImportClass : ActiveRecordBase
     {
         private int id;

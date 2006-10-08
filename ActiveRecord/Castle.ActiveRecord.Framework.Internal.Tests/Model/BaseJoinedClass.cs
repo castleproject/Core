@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	
 #if DOTNET2
 
-	[ActiveRecord("disctable"), JoinedBase]
+	[ActiveRecord("disctable", Lazy = false), JoinedBase]
 	public abstract class BaseJoinedClass : ActiveRecordValidationBase<GenClassJoinedSubClassParent>
 	{
 		private int id;
@@ -38,7 +38,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 	}
 
-	[ActiveRecord("disctablea")]
+	[ActiveRecord("disctablea", Lazy = false)]
 	public class SubClassJoinedClass : BaseJoinedClass
 	{
 		private int aid;

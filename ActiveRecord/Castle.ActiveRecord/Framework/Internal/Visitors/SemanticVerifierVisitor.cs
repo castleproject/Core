@@ -368,7 +368,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (currentModel.ActiveRecordAtt != null)
 			{
-				if (currentModel.ActiveRecordAtt.Lazy)
+				if (currentModel.ActiveRecordAtt.Lazy || (currentModel.ActiveRecordAtt.LazySpecified==false && ActiveRecordModel.isLazyByDefault))
 				{
 					//Assuming that a property must have at least a single accessor
 					MethodInfo accessor = model.Property.GetAccessors(true)[0];

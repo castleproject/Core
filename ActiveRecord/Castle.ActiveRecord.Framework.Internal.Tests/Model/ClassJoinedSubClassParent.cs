@@ -14,7 +14,7 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-	[ActiveRecord("disctable"), JoinedBase]
+	[ActiveRecord("disctable", Lazy = false), JoinedBase]
 	public class ClassJoinedSubClassParent : ActiveRecordBase
 	{
 		private int id;
@@ -35,7 +35,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 	}
 
-	[ActiveRecord("disctablea")]
+	[ActiveRecord("disctablea", Lazy = false)]
 	public class ClassJoinedSubClassA : ClassJoinedSubClassParent
 	{
 		private int aid;

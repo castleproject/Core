@@ -14,7 +14,7 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class ClassWithCompositeKey
 	{
 		private CompositeKeyForClassWithCompositeKey _key;

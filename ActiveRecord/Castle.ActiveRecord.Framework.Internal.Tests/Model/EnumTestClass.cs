@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 #if DOTNET2
 	using NHibernate.Type;
 
-	[ActiveRecord]
+	[ActiveRecord(Lazy=false)]
     public class EnumTestClass : ActiveRecordBase
     {
         private int id;

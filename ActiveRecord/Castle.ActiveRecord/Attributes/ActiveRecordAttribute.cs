@@ -53,13 +53,12 @@ namespace Castle.ActiveRecord
 		private int batchSize = 1;
 		private Polymorphism polymorphism = Polymorphism.Implicit;
 		private OptimisticLocking locking = OptimisticLocking.Version;
+		private bool lazySpecified;
 
 		/// <summary>
 		/// Uses the class name as table name
 		/// </summary>
-		public ActiveRecordAttribute()
-		{
-		}
+		public ActiveRecordAttribute() {}
 
 		/// <summary>
 		/// Associates the specified table with the target type
@@ -151,7 +150,21 @@ namespace Castle.ActiveRecord
 		public bool Lazy
 		{
 			get { return lazy; }
-			set { lazy = value; }
+			set
+			{
+				lazySpecified = true;
+				lazy = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether explicit lazy behavior was specified.
+		/// If explicit lazy behavior was not specified, it goes to the configuration to decide if the type should
+		/// be lazy or not.
+		/// </summary>
+		public bool LazySpecified
+		{
+			get { return this.lazySpecified; }
 		}
 
 		/// <summary>

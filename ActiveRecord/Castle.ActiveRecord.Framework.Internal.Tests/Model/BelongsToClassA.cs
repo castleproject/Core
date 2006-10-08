@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System;
 
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class BelongsToClassA : ActiveRecordBase
 	{
 		private int id;
@@ -37,7 +37,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 	}
 
-	[ActiveRecord]
+	[ActiveRecord(Lazy = false)]
 	public class BelongsToClassA2 : ActiveRecordBase
 	{
 		private int id;

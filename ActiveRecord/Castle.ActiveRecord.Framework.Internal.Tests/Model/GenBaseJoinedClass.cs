@@ -38,7 +38,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 	}
 
-	[ActiveRecord("disctablea")]
+	[ActiveRecord("disctablea", Lazy = false)]
 	public class GenSubClassJoinedClass : GenBaseJoinedClass<GenSubClassJoinedClass>
 	{
 		private int aid;
