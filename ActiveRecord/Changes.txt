@@ -1,6 +1,23 @@
 Release Candidate 1
 ===================
 
+- Removed IModelNode since it was no longer of any value.
+
+- Added XML Documentation to all public/ protected methods
+
+- Moved to using NHibernate 1.2 beta 1
+  IEntityPersister instead of IClassPersister
+  I had some issues with Nullables.dll support, but mainly because the hard coded version number.
+  Different DB Tests failed because of the way NHibernate changed transaction handling (more thorough cleansing of them), I manually saved the transaction executed, and they tests pass now.
+  
+  I added type guessing to ISet<> (set), IList<> (bag), ICollection<> (bag), IDictionary<>(map)
+  
+  The nicest new feature IMO is this:
+  
+  ProjectionQuery<Blog, int> proj = new ProjectionQuery<Blog, int>(Projections.RowCount());
+  int rowCount = proj.Execute();
+  Assert.AreEqual(1, rowCount);
+
 - Refactored: CompositeKey is not a class level attribute anymore
   (minor breaking change)
 
