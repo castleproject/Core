@@ -9,6 +9,7 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
+		<property name="build.warnmissingdocs" value="true" />
 		<property name="assembly.version" value="0.0.1.3" />
 		<property name="assembly.description" value="An implementation of the ActiveRecord pattern for .NET" />
 
