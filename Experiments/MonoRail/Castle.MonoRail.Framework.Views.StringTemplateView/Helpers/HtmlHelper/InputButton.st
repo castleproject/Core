@@ -1,1 +1,0 @@
-<input type="button" name="$if(name)$$name$$else$$value$$endif$" id="$if(id)$$id$$else$$if(name)$$name$$else$$value$$endif$$endif$" value="$value$" $if(attrib)$$AbstractHelper/GetAttributes(attrib=attrib)$$endif$ />

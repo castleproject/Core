@@ -1,1 +1,0 @@
-<select name="$name$" id="$if(id)$$id$$else$$name$$endif$" $if(attrib)$$AbstractHelper/GetAttributes(attrib=attrib)$$endif$ />

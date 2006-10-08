@@ -1,1 +1,0 @@
-$elementId:{new Effect.Fade('$it$');}:AbstractHelper/ScriptBlock()$

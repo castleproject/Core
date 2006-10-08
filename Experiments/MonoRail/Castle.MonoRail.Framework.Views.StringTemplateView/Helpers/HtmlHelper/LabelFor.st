@@ -1,1 +1,0 @@
-<label for="$target$">$label$</label>

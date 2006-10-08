@@ -1,1 +1,0 @@
-This is a view used by a component

@@ -1,4 +1,0 @@
-
-<script>
-$scriptContents$
-</script>

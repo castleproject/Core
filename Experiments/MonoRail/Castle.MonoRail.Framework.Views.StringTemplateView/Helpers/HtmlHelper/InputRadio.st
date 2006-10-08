@@ -1,1 +1,0 @@
-<input type="radio" name="$name$" id="$if(id)$$id$$else$$name$$endif$" value="$value$" $if(attrib)$$AbstractHelper/GetAttributes(attrib=attrib)$$endif$ />

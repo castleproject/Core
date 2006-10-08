@@ -1,1 +1,0 @@
-$elementId:{new Effect.SlideDown('$it$');}:AbstractHelper/ScriptBlock()$

@@ -5,7 +5,7 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="autotransaction arintegration aspectsharp batchregistration cache db4o dynamicloader nhibernate ibatis logging prevalence" />
+	<target name="build" depends="autotransaction arintegration aspectsharp batchregistration cache dynamicloader nhibernate ibatis logging prevalence" />
 	
 	<target name="autotransaction">
 		<nant buildfile="AutomaticTransactionManagement/AutomaticTransactionManagement.build" />
@@ -25,10 +25,6 @@
 
 	<target name="cache">
 		<nant buildfile="Cache/Cache.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="db4o">
-		<nant buildfile="Db4o/Db4o.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="dynamicloader">
