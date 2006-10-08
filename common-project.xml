@@ -119,7 +119,7 @@
 			rebuild="${build.rebuild}"
 		>
 			<nowarn>
-				<warning number="1591" /> <!-- No XML comment for publicly visible member -->
+				<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->
 			</nowarn>
 			<sources refid="project.sources" />
 			<references refid="project.references" />
@@ -162,7 +162,7 @@
 			output="${build.dir}\${project::get-name()}.exe" 
 		>
 			<nowarn>
-				<warning number="1591" /> <!-- No XML comment for publicly visible member -->
+				<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->
 			</nowarn>
 			<sources refid="project.sources" />
 			<references refid="project.references" />
