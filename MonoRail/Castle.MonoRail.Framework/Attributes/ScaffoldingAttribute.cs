@@ -16,19 +16,30 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	/// <summary>
+	/// Associates scaffolding support with a controller.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
 	public class ScaffoldingAttribute : Attribute
 	{
-		private readonly Type _model;
+		private readonly Type model;
 
-		public ScaffoldingAttribute( Type model )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScaffoldingAttribute"/> class.
+		/// </summary>
+		/// <param name="model">The model/entity that should be implemented</param>
+		public ScaffoldingAttribute(Type model)
 		{
-			_model = model;
+			this.model = model;
 		}
 
+		/// <summary>
+		/// Gets the model/entity type
+		/// </summary>
+		/// <value>The model/entity type.</value>
 		public Type Model
 		{
-			get { return _model; }
+			get { return model; }
 		}
 	}
 }

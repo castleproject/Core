@@ -18,12 +18,13 @@ namespace Castle.MonoRail.Framework
 
 	/// <summary>
 	/// Declares that for the specific method (action)
-	/// no filter should be applied.
+	/// no filter should be applied -- or an specific filter should be
+	/// skipped.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true), Serializable]
 	public class SkipFilterAttribute : Attribute
 	{
-		private Type _filterType;
+		private Type filterType;
 
 		/// <summary>
 		/// Constructs a SkipFilterAttribute which skips all filters.
@@ -36,20 +37,28 @@ namespace Castle.MonoRail.Framework
 		/// Constructs a SkipFilterAttribute associating 
 		/// the filter type that should be skipped.
 		/// </summary>
-		/// <param name="filterType"></param>
+		/// <param name="filterType">The filter type to be skipped</param>
 		public SkipFilterAttribute(Type filterType)
 		{
-			_filterType = filterType;
+			this.filterType = filterType;
 		}
 
+		/// <summary>
+		/// Gets the type of the filter.
+		/// </summary>
+		/// <value>The type of the filter.</value>
 		public Type FilterType
 		{
-			get { return _filterType; }
+			get { return filterType; }
 		}
 
-		public bool BlanketSkip
+		/// <summary>
+		/// Gets a value indicating whether [blanket skip].
+		/// </summary>
+		/// <value><c>true</c> if [blanket skip]; otherwise, <c>false</c>.</value>
+		internal bool BlanketSkip
 		{
-			get { return _filterType == null; }
+			get { return filterType == null; }
 		}
 	}
 }

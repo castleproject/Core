@@ -23,21 +23,29 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
 	public class DynamicActionProviderAttribute : Attribute
 	{
-		private readonly Type _providerType;
+		private readonly Type providerType;
 
+		/// <summary>
+		/// Constructs a <see cref="DynamicActionProviderAttribute"/>
+		/// associating the supplied type as the action provider.
+		/// </summary>
+		/// <param name="providerType"></param>
 		public DynamicActionProviderAttribute( Type providerType )
 		{
-			if ( !typeof(IDynamicActionProvider).IsAssignableFrom( providerType ) )
+			if (!typeof(IDynamicActionProvider).IsAssignableFrom( providerType ))
 			{
 				throw new ArgumentException( "The specified provider does not implement IDynamicActionProvider" );
 			}
 
-			_providerType = providerType;
+			this.providerType = providerType;
 		}
 
+		/// <summary>
+		/// Gets the provider type
+		/// </summary>
 		public Type ProviderType
 		{
-			get { return _providerType; }
+			get { return providerType; }
 		}
 	}
 }

@@ -23,6 +23,9 @@ namespace Castle.MonoRail.Framework
 	/// (method). The rescue is invoked in response to some exception during the 
 	/// action processing.
 	/// </summary>
+	/// <remarks>
+	/// The view must exist in the <c>rescues</c> folder in your view folder
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=true), Serializable]
 	public class RescueAttribute : Attribute, IRescueDescriptorBuilder
 	{
@@ -32,11 +35,16 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Constructs a RescueAttribute with the template name.
 		/// </summary>
-		/// <param name="viewName"></param>
+		/// <param name="viewName">The view to use in the event of error</param>
 		public RescueAttribute(String viewName) : this(viewName, typeof(Exception))
 		{			
 		}
 
+		/// <summary>
+		/// Constructs a RescueAttribute with the template name and exception type.
+		/// </summary>
+		/// <param name="viewName">The view to use in the event of error</param>
+		/// <param name="exceptionType">The exception to match</param>
 		public RescueAttribute(String viewName, Type exceptionType)
 		{
 			if (viewName == null || viewName.Length == 0)
@@ -53,16 +61,27 @@ namespace Castle.MonoRail.Framework
 			this.exceptionType = exceptionType;
 		}
 
+		/// <summary>
+		/// Gets the view name to use
+		/// </summary>
 		public String ViewName
 		{
 			get { return viewName; }
 		}
 		
+		/// <summary>
+		/// Gets the exception type
+		/// </summary>
 		public Type ExceptionType
 		{
 			get { return exceptionType; }
 		}
 
+		/// <summary>
+		/// <see cref="IRescueDescriptorBuilder"/> implementation. 
+		/// Builds the rescue descriptors.
+		/// </summary>
+		/// <returns></returns>
 		public RescueDescriptor[] BuildRescueDescriptors()
 		{
 			return new RescueDescriptor[] { new RescueDescriptor(viewName, exceptionType) };

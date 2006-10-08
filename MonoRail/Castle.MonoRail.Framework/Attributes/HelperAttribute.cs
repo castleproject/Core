@@ -27,26 +27,51 @@ namespace Castle.MonoRail.Framework
 		private readonly Type helperType;
 		private readonly String name;
 
+		/// <summary>
+		/// Constructs a <see cref="HelperAttribute"/> 
+		/// with the supplied <c>helperType</c>.
+		/// </summary>
+		/// <param name="helperType">The helper type</param>
 		public HelperAttribute(Type helperType) : this(helperType, null)
 		{			
 		}
-		
+
+		/// <summary>
+		/// Constructs a <see cref="HelperAttribute"/> 
+		/// with the supplied <c>helperType</c> and a name to be bound to it.
+		/// </summary>
+		/// <param name="helperType">The helper type</param>
+		/// <param name="name">Name bound to the helper. The name will be
+		/// used on the view to gain access to it</param>
 		public HelperAttribute(Type helperType, String name)
 		{
 			this.helperType = helperType;
 			this.name = (name == null || name.Trim() == String.Empty) ? helperType.Name : name;
 		}
 
+		/// <summary>
+		/// Gets Name bound to the helper. The name will be
+		/// used on the view to gain access to it
+		/// </summary>
 		public String Name
 		{
 			get { return name; }
 		}		
 
+		/// <summary>
+		/// Gets the helper type
+		/// </summary>
 		public Type HelperType
 		{
 			get { return helperType; }
 		}
 
+		/// <summary>
+		/// <see cref="IHelperDescriptorBuilder"/> implementation.
+		/// Gets the <seealso cref="HelperDescriptor"/>
+		/// that describes the helper.
+		/// </summary>
+		/// <returns>The descriptor instance</returns>
 		public HelperDescriptor[] BuildHelperDescriptors()
 		{
 			return new HelperDescriptor[] { new HelperDescriptor(helperType, name) };

@@ -25,21 +25,33 @@ namespace Castle.MonoRail.Framework
 	{
 		private static readonly String DEFAULT_ACTION = "DefaultAction";
 
-		private String _defaultAction;
+		private String defaultAction;
 
+		/// <summary>
+		/// Constructs a <see cref="DefaultActionAttribute"/>
+		/// using <c>DefaultAction</c>
+		/// as the default action name
+		/// </summary>
 		public DefaultActionAttribute()
 		{
-			_defaultAction = DEFAULT_ACTION;
+			defaultAction = DEFAULT_ACTION;
 		}
 
+		/// <summary>
+		/// Constructs a <see cref="DefaultActionAttribute"/>
+		/// using the supplied value as the default action name
+		/// </summary>
 		public DefaultActionAttribute(String action)
 		{
-			_defaultAction = action;
+			defaultAction = action;
 		}
 
+		/// <summary>
+		/// Gets the default action name
+		/// </summary>
 		public String DefaultAction
 		{
-			get { return _defaultAction; }
+			get { return defaultAction; }
 		}
 	}
 }

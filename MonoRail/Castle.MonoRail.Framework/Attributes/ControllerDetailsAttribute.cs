@@ -19,12 +19,15 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// Decorates a controller with a different name
 	/// and optionaly an area which the controller belongs.
+	/// This is used to override the convention for controller
+	/// names and to optionally associate a controller with an 
+	/// area name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class), Serializable]
 	public class ControllerDetailsAttribute : Attribute
 	{
-		private String _name;
-		private String _area = String.Empty;
+		private String name;
+		private String area = String.Empty;
 
 		/// <summary>
 		/// Constructs a ControllerDetailsAttribute
@@ -40,7 +43,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The specified Controller Name</param>
 		public ControllerDetailsAttribute( String name )
 		{
-			_name = name;
+			this.name = name;
 		}
 
 		/// <summary>
@@ -48,7 +51,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public String Name
 		{
-			get { return _name; }
+			get { return name; }
 		}
 
 		/// <summary>
@@ -56,8 +59,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public String Area
 		{
-			get { return _area; }
-			set { _area = value; }
+			get { return area; }
+			set { area = value; }
 		}
 	}
 }

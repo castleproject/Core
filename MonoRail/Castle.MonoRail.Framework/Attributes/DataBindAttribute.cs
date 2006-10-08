@@ -41,6 +41,12 @@ namespace Castle.MonoRail.Framework
 		private String allow = String.Empty;
 		private String prefix;
 
+		/// <summary>
+		/// Creates a <see cref="DataBindAttribute"/>
+		/// with an associated prefix. The prefix must be present 
+		/// in the form data and is used to avoid name clashes.
+		/// </summary>
+		/// <param name="prefix"></param>
 		public DataBindAttribute(String prefix)
 		{
 			this.prefix = prefix;
@@ -94,6 +100,13 @@ namespace Castle.MonoRail.Framework
 			get { return prefix; }
 		}
 
+		/// <summary>
+		/// Implementation of <see cref="IParameterBinder.CalculateParamPoints"/>
+		/// and it is used to give the method a weight when overloads are available.
+		/// </summary>
+		/// <param name="controller">The controller instance</param>
+		/// <param name="parameterInfo">The parameter info</param>
+		/// <returns>Positive value if the parameter can be bound</returns>
 		public int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			CompositeNode node = controller.ObtainParamsNode(From);
@@ -103,6 +116,14 @@ namespace Castle.MonoRail.Framework
 			return binder.CanBindObject(parameterInfo.ParameterType, prefix, node) ? 10 : 0;
 		}
 
+		/// <summary>
+		/// Implementation of <see cref="IParameterBinder.Bind"/>
+		/// and it is used to read the data available and construct the
+		/// parameter type accordingly.
+		/// </summary>
+		/// <param name="controller">The controller instance</param>
+		/// <param name="parameterInfo">The parameter info</param>
+		/// <returns>The bound instance</returns>
 		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			DataBinder binder = controller.Binder;

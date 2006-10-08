@@ -42,11 +42,18 @@ namespace Castle.MonoRail.Framework
 			this.layoutName = layoutName;
 		}
 
+		/// <summary>
+		/// Gets the layout name
+		/// </summary>
 		public String LayoutName
 		{
 			get { return layoutName; }
 		}
 
+		/// <summary>
+		/// <see cref="ILayoutDescriptorBuilder"/> implementation.
+		/// Gets the descriptor that describes the layout.
+		/// </summary>
 		public LayoutDescriptor BuildLayoutDescriptor()
 		{
 			return new LayoutDescriptor(layoutName);

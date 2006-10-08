@@ -15,40 +15,52 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-
 	using Castle.MonoRail.Framework.Filters;
 
+	/// <summary>
+	/// This is an special filter attribute. It is used
+	/// to define from where MonoRail should read the localization information
+	/// to find out the locale of the client. 
+	/// <para>
+	/// For example, it can use the browser, or a cookie, an entry in the 
+	/// query string (or even in the session)
+	/// </para>
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=true), Serializable]
 	public class LocalizationFilterAttribute : FilterAttribute
 	{
-		private bool _failOnError = false, _useBrowser = true;
-		private String _key			= "locale";
-		private RequestStore _requestStore = RequestStore.Cookie;
-		
-		public LocalizationFilterAttribute() : base( ExecuteEnum.BeforeAction, typeof(LocalizationFilter) )
-		{
-		}
+		private bool failOnError = false, useBrowser = true;
+		private String key = "locale";
+		private RequestStore requestStore = RequestStore.Cookie;
+
+		/// <summary>
+		/// Defines that 
+		/// you want to use a cookie named 
+		/// "locale", but if that fails it falls back
+		/// to the client's browser locale.
+		/// </summary>
+		public LocalizationFilterAttribute() : base(ExecuteEnum.BeforeAction, typeof(LocalizationFilter)) {}
 
 		/// <summary>
 		/// Defines a new LocalizationFilter.
 		/// </summary>
 		/// <param name="store">Location where the localization parameter is stored.</param>
 		/// <param name="key">Name of the parameter in the store.</param>
-		public LocalizationFilterAttribute( RequestStore store, String key ) : this()
+		public LocalizationFilterAttribute(RequestStore store, String key) : this()
 		{
-			_key	= key;
-			_requestStore	= store;
+			this.key = key;
+			requestStore = store;
 		}
 
-        #region Properties
+		#region Properties
 
 		/// <summary>
 		/// Key under which the locale value is stored.
 		/// </summary>
 		public String Key
 		{
-			get { return _key; }
-			set { _key = value; }
+			get { return key; }
+			set { key = value; }
 		}
 
 		/// <summary>
@@ -56,8 +68,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public RequestStore Store
 		{
-			get { return _requestStore; }
-			set { _requestStore = value; }
+			get { return requestStore; }
+			set { requestStore = value; }
 		}
 
 		/// <summary>
@@ -66,8 +78,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public bool FailOnError
 		{
-			get { return _failOnError; }
-			set { _failOnError = value; }
+			get { return failOnError; }
+			set { failOnError = value; }
 		}
 
 		/// <summary>
@@ -75,8 +87,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public bool UseBrowser
 		{
-			get { return _useBrowser; }
-			set { _useBrowser = value; }
+			get { return useBrowser; }
+			set { useBrowser = value; }
 		}
 
 		#endregion		

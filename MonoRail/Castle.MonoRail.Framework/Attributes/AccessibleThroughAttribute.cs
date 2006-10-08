@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework
         /// take an action other than just retrieval. 
         /// </remarks>
         /// </summary>
-        Post = 1
+        Post = 1,
     }
 
 	/// <summary>

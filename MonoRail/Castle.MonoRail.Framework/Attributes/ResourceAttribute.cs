@@ -47,36 +47,61 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the Name the of resource that will be available in the PropertyBag.
+		/// </summary>
+		/// <value>The name.</value>
 		public String Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the Fully qualified name of the resource in the sattelite assembly.
+		/// </summary>
+		/// <value>The name of the resource.</value>
 		public String ResourceName
 		{
 			get { return resourceName; }
 			set { resourceName = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the name of the culture.
+		/// </summary>
+		/// <value>The name of the culture.</value>
 		public String CultureName
 		{
 			get { return cultureName; }
 			set { cultureName = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the name of the assembly.
+		/// </summary>
+		/// <value>The name of the assembly.</value>
 		public String AssemblyName
 		{
 			get { return assemblyName; }
 			set { assemblyName = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the type of the resource.
+		/// </summary>
+		/// <value>The type of the resource.</value>
 		public Type ResourceType
 		{
 			get { return resourceType; }
 			set { resourceType = value; }
 		}
 
+		/// <summary>
+		/// <see cref="IResourceDescriptorBuilder"/> implementation.
+		/// Builds the resource descriptors.
+		/// </summary>
+		/// <returns></returns>
 		public ResourceDescriptor[] BuildResourceDescriptors()
 		{
 			return new ResourceDescriptor[] { new ResourceDescriptor(resourceType, name, resourceName, cultureName, assemblyName) };
