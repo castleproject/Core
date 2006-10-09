@@ -36,7 +36,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <summary>
 		/// Whatever types that does not explicitly state that they are lazy should be lazy.
 		/// </summary>
-		protected internal static bool isLazyByDefault = true;
+		protected internal static bool isLazyByDefault = false;
 		
 		private readonly Type type;
 

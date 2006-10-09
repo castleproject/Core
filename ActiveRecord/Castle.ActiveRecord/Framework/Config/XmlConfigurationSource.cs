@@ -94,8 +94,7 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			SetDebugFlag(isDebug != null && "true" == isDebug.Value);
 
-			// lazy by default has a default value of true, so not specifying it as the same as true.
-			SetIsLazyByDefault(lazyByDefault == null || lazyByDefault.Value == "true");
+			SetIsLazyByDefault(lazyByDefault != null && lazyByDefault.Value == "true");
 			
 			PopulateConfigNodes(section);
 		}

@@ -1,15 +1,9 @@
 Release Candidate 1
 ===================
 
-- Wil automatically initialize entities when loading outside of scope.
+- Returned to the default lazy false behavior.
 
-- Note: All properties now must be virtual, or you should specify default-lazy="false" to override lazy behavior
-
-- Potentially breaking change: all classes / associations are now lazy by default. 
-  This is done to match NHibernate 1.2 behavior.
-  This can be turned of by specifying default-lazy="false" in the <activerecord> element in the configuration. (Global flag)
-  Explictly specifying lazy behavior always override the default setting.
-  Modified tests to retain the old behavior.
+- Will automatically initialize entities when loading outside of scope.
 
 - Removed IModelNode since it was no longer of any value.
 
