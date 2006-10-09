@@ -155,7 +155,7 @@ namespace Castle.ActiveRecord
 		/// Maps a specific PropertyInfo to a list of
 		/// error messages. Useful for frameworks.
 		/// </summary>
-		public IDictionary PropertiesValidationErrorMessage
+		public virtual IDictionary PropertiesValidationErrorMessage
 		{
 			get { return __failedProperties; }
 		}
