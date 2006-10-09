@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Tests
 	using System;
 	using System.Collections;
 
-	[ActiveRecord("PostTable")]
+	[ActiveRecord("PostTable", Lazy=true)]
 	public class PostLazy : ActiveRecordBase
 	{
 		private int _id;
@@ -41,49 +41,49 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[PrimaryKey(PrimaryKeyType.Native)]
-		public int Id
+		public virtual int Id
 		{
 			get { return _id; }
 			set { _id = value; }
 		}
 
 		[Property]
-		public String Title
+		public virtual String Title
 		{
 			get { return _title; }
 			set { _title = value; }
 		}
 
 		[Property(ColumnType="StringClob")]
-		public String Contents
+		public virtual String Contents
 		{
 			get { return _contents; }
 			set { _contents = value; }
 		}
 
 		[Property]
-		public String Category
+		public virtual String Category
 		{
 			get { return _category; }
 			set { _category = value; }
 		}
 
 		[BelongsTo("blogid")]
-		public BlogLazy Blog
+		public virtual BlogLazy Blog
 		{
 			get { return _blog; }
 			set { _blog = value; }
 		}
 
 		[Property("created")]
-		public DateTime Created
+		public virtual DateTime Created
 		{
 			get { return _created; }
 			set { _created = value; }
 		}
 
 		[Property("published")]
-		public bool Published
+		public virtual bool Published
 		{
 			get { return _published; }
 			set { _published = value; }
@@ -104,8 +104,13 @@ namespace Castle.ActiveRecord.Tests
 		{
 			return (PostLazy[]) ActiveRecordBase.FindAll( typeof(PostLazy) );
 		}
+		
+		public static PostLazy Find(int id)
+		{
+			return (PostLazy) FindByPrimaryKey(typeof (PostLazy), id);
+		}
 
-		public void SaveWithException()
+		public virtual void SaveWithException()
 		{
 			Save();
 

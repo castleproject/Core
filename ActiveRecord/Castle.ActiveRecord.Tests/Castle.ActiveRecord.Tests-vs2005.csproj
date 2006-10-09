@@ -298,6 +298,9 @@
     <None Include="App-net-2.0.config" />
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LazyTestCase.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

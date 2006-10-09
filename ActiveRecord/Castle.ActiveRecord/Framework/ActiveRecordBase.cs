@@ -737,12 +737,19 @@ namespace Castle.ActiveRecord
 		protected internal static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
 		{
 			EnsureInitialized(targetType);
-
+			bool hasScope = holder.ThreadScopeInfo.HasInitializedScope;
 			ISession session = holder.CreateSession(targetType);
 
 			try
 			{
-				return session.Load(targetType, id);
+				object loaded = session.Load(targetType, id);
+				//If we are not in a scope, we want to initialize the entity eagerly, since other wise the 
+				//user will get an exception when it access the entity's property, and it will try to lazy load itself and find that
+				//it has no session.
+				//If we are in a scope, it is the user responsability to keep the scope alive if he wants to use 
+				if(!hasScope)
+					NHibernateUtil.Initialize(loaded);
+				return loaded;
 			}
 			catch(ObjectNotFoundException ex)
 			{
