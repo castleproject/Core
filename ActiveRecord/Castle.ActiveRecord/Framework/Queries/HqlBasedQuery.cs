@@ -44,7 +44,8 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class HqlBasedQuery : ActiveRecordBaseQuery
 	{
-		static readonly Regex 
+		private static readonly Regex 
+			rxFetchJoin = new Regex(@"fetch\s+join|join\s+fetch", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
 			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
 			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
@@ -229,6 +230,7 @@ namespace Castle.ActiveRecord.Queries
 		protected virtual String PrepareQueryForCount(String countQuery)
 		{
 			countQuery = rxOrderBy.Replace(countQuery, String.Empty);
+			countQuery = rxFetchJoin.Replace(countQuery, "join");
 			
 			if (rxNoSelect.IsMatch(countQuery))
 			{
