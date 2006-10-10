@@ -1,5 +1,7 @@
-Release Candidate 1
+Release Candidate 2
 ===================
+
+- Applied Josh Robb's patch adding a check for isWeb=true on the Session module.
 
 - Returned to the default lazy false behavior.
 
@@ -21,6 +23,10 @@ Release Candidate 1
   ProjectionQuery<Blog, int> proj = new ProjectionQuery<Blog, int>(Projections.RowCount());
   int rowCount = proj.Execute();
   Assert.AreEqual(1, rowCount);
+
+
+Release Candidate 1
+===================
 
 - Refactored: CompositeKey is not a class level attribute anymore
   (minor breaking change)

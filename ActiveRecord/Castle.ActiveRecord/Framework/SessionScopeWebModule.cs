@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Framework
 {
 	using System;
 	using System.Web;
+	using Castle.ActiveRecord.Framework.Scopes;
 
 	/// <summary>
 	/// HttpModule to set up a session for the request lifetime.
@@ -48,6 +49,8 @@ namespace Castle.ActiveRecord.Framework
 		{
 			app.BeginRequest += new EventHandler(OnBeginRequest);
 			app.EndRequest += new EventHandler(OnEndRequest);
+
+			isWebConfigured = (ActiveRecordBase.holder.ThreadScopeInfo is WebThreadScopeInfo);
 		}
 
 		/// <summary>
@@ -65,7 +68,14 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void OnBeginRequest(object sender, EventArgs e)
 		{
-			HttpContext.Current.Items.Add(SessionKey, new SessionScope());
+			if (isWebConfigured) 
+			{
+				HttpContext.Current.Items.Add(SessionKey, new SessionScope());
+			} 
+			else 
+			{
+				throw new ActiveRecordException("Seems that the framework isn't configured properly. (isWeb != true and SessionScopeWebModule is in use) Check the documentation for further information");
+			}
 		}
 
 		/// <summary>
