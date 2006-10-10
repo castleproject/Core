@@ -18,6 +18,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using System.Collections;
 	using System.Text.RegularExpressions;
 	
+	using Castle.ActiveRecord.Queries;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 	
@@ -61,6 +62,51 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		{
 			return new ARPager(pageSize, criteria, ObtainCurrentPage());
 		}
+
+#if DOTNET2
+		/// <summary>
+		/// Paginates using the specified <see cref="SimpleQuery{T}"/>.
+		/// </summary>
+		/// <param name="pageSize">The page size</param>
+		/// <param name="query">The query</param>
+		/// <param name="useEnumerate">If true, calls <see cref="SimpleQuery{T}.Enumerate()"/> instead of <see cref="SimpleQuery{T}.Execute()"/>.</param>
+		public IPaginatedPage CreatePagination<T>(int pageSize, SimpleQuery<T> query, bool useEnumerate)
+		{
+			return CreatePagination(pageSize, new SimpleQueryPaginableWrapper<T>(query, useEnumerate));
+		}
+
+		private class SimpleQueryPaginableWrapper<T> : IARPaginableDataSource
+		{
+			private readonly SimpleQuery<T> query;
+			private readonly bool useEnumerate;
+
+			public SimpleQueryPaginableWrapper(SimpleQuery<T> query, bool useEnumerate)
+			{
+				this.query = query;
+				this.useEnumerate = useEnumerate;
+			}
+
+			public int ObtainCount()
+			{
+				return query.Count();
+			}
+
+			public IEnumerable ListAll()
+			{
+				return query.Execute();
+			}
+
+			public IEnumerable Paginate(int pageSize, int currentPage)
+			{
+				SimpleQuery<T> queryClone = (SimpleQuery<T>) query.Clone();
+				queryClone.SetQueryRange((currentPage - 1) * pageSize, pageSize);
+				if (useEnumerate)
+					return queryClone.Enumerate();
+				else
+					return queryClone.Execute();
+			}
+		}
+#endif
 
 		private static int ObtainCurrentPage()
 		{

@@ -1,6 +1,11 @@
 Change history
 --------------
 
+Release Candidate 2
+===================
+- Introduced ARPagination.CreatePagination<T>(SimpleQuery<T>). Looks like it can be
+  extended later for the non-generic SimpleQuery.
+
 Release Candidate 1
 ===================
 - Fixed Perfomance issue with Brail and sub views due to cache key normalization issues.
