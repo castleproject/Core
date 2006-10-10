@@ -40,6 +40,11 @@ namespace Castle.ActiveRecord.Framework
 		/// The key used to store the session in the context items
 		/// </summary>
 		protected static readonly String SessionKey = "SessionScopeWebModule.session";
+		
+		/// <summary>
+		/// Used to check whether the ThreadScopeInfo being used is suitable for a web environment
+		/// </summary>
+		private static bool isWebConfigured;
 
 		/// <summary>
 		/// Initialize the module.
