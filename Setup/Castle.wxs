@@ -149,7 +149,7 @@
 					<File Id="file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll"				src="$(var.BuildNet11Dir)\Castle.Facilities.AspectSharp.dll" />
 					<File Id="file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll"		src="$(var.BuildNet11Dir)\Castle.Facilities.BatchRegistration.dll" />
 					<File Id="file53" Name="CAB47C_1.DLL" LongName="Castle.Facilities.Cache.dll"					src="$(var.BuildNet11Dir)\Castle.Facilities.Cache.dll" />
-					<File Id="file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll"			src="$(var.BuildNet11Dir)\Castle.Facilities.Db4oIntegration.dll" />
+					<!-- <File Id="file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll"			src="$(var.BuildNet11Dir)\Castle.Facilities.Db4oIntegration.dll" /> -->
 					<File Id="file55" Name="CAD31C_1.DLL" LongName="Castle.Facilities.IBatisNetIntegration.dll"		src="$(var.BuildNet11Dir)\Castle.Facilities.IBatisNetIntegration.dll" />
 					<File Id="file56" Name="CAC9D6_1.DLL" LongName="Castle.Facilities.Logging.dll"					src="$(var.BuildNet11Dir)\Castle.Facilities.Logging.dll" />
 					<File Id="file57" Name="CAC8A0_1.DLL" LongName="Castle.Facilities.NHibernateIntegration.dll"	src="$(var.BuildNet11Dir)\Castle.Facilities.NHibernateIntegration.dll" />
@@ -253,7 +253,7 @@
 					<File Id="n2file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll"				src="$(var.BuildNet20Dir)\Castle.Facilities.AspectSharp.dll" />
 					<File Id="n2file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll"			src="$(var.BuildNet20Dir)\Castle.Facilities.BatchRegistration.dll" />
 					<File Id="n2file53" Name="CAB47C_1.DLL" LongName="Castle.Facilities.Cache.dll"						src="$(var.BuildNet20Dir)\Castle.Facilities.Cache.dll" />
-					<File Id="n2file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll"			src="$(var.BuildNet20Dir)\Castle.Facilities.Db4oIntegration.dll" />
+					<!-- <File Id="n2file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll"			src="$(var.BuildNet20Dir)\Castle.Facilities.Db4oIntegration.dll" /> -->
 					<File Id="n2file55" Name="CAD31C_1.DLL" LongName="Castle.Facilities.IBatisNetIntegration.dll"		src="$(var.BuildNet20Dir)\Castle.Facilities.IBatisNetIntegration.dll" />
 					<File Id="n2file56" Name="CAC9D6_1.DLL" LongName="Castle.Facilities.Logging.dll"					src="$(var.BuildNet20Dir)\Castle.Facilities.Logging.dll" />
 					<File Id="n2file57" Name="CAC8A0_1.DLL" LongName="Castle.Facilities.NHibernateIntegration.dll"		src="$(var.BuildNet20Dir)\Castle.Facilities.NHibernateIntegration.dll" />
