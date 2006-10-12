@@ -35,6 +35,7 @@ namespace Anakia
 		private String navigationFile;
 		private String projectFile;
 		private String templateFile;
+		private String baseGenFolder;
 
 		private VelocityEngine velocity;
 		private Template template;
@@ -56,6 +57,13 @@ namespace Anakia
 		}
 
 		#region Properties
+
+		[TaskAttribute("basefolder")]
+		public string BaseGenFolder
+		{
+			get { return baseGenFolder; }
+			set { baseGenFolder = value; }
+		}
 
 		[TaskAttribute("navigationfile")]
 		public String NavigationFile
@@ -331,6 +339,7 @@ namespace Anakia
 			context.Put("tsql", tsqlFormatter);
 			context.Put("vb", vbFormatter);
 			
+			context.Put("basefolder", BaseGenFolder);
 			context.Put("breadcrumbs", node.BreadCrumbs);
 			context.Put("meta", node.Meta);
 			context.Put("doc", node.XmlDoc);
@@ -546,7 +555,15 @@ namespace Anakia
 				
 				String relative = elem.GetAttribute("relative");
 				
-				elem.RemoveAttribute("relative");
+				if (relative.StartsWith("!"))
+				{
+					relative = relative.Substring(1);
+					elem.SetAttribute("relative", relative);
+				}
+				else
+				{
+					elem.RemoveAttribute("relative");
+				}
 				
 				elem.SetAttribute("src", Relativize(level, relative));
 			}

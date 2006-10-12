@@ -16,9 +16,22 @@ namespace Anakia
 {
 	using System;
 	using System.Collections;
+	using System.IO;
 
 	public class SimpleHelper
 	{
+		public String FileSizeInKBytes(String basePath, String file)
+		{
+			FileInfo info = new FileInfo(Path.Combine(basePath, file));
+			
+			if (info.Exists)
+			{
+				return String.Format("{0:#.##}", info.Length / 1024f).ToString();
+			}
+			
+			return "not found";
+		}
+		
 		public String RemoveOffset(String offset, String path)
 		{
 			return path.Substring(offset.Length);
