@@ -26,12 +26,18 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Renders a Javascript library inside a single script tag.
 		/// </summary>
 		/// <returns></returns>
-		public String GetJavascriptFunctions()
+        public String InstallScripts()
 		{
 			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
 				Controller.Context.ApplicationPath + "/MonoRail/Files/Effects2", 
 				Controller.Context.UrlInfo.Extension);
 		}
+
+        [Obsolete("Please use the preferred InstallScripts function.")]
+        public String GetJavascriptFunctions()
+        {
+            return InstallScripts();
+        }
 
 		/// <summary>
 		/// Make an element appear. If the element was previously set to display:none;  

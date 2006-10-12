@@ -5,6 +5,7 @@ Release Candidate 2
 ===================
 - Introduced ARPagination.CreatePagination<T>(SimpleQuery<T>). Looks like it can be
   extended later for the non-generic SimpleQuery.
+- Made all Helpers that install javascript code use the same signature Helper.InstallScripts(). Should we mandate an interface?
 
 Release Candidate 1
 ===================
