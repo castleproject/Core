@@ -66,6 +66,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		/// </summary>
 		/// <param name="modelType">Type of the model.</param>
 		/// <param name="templateEngine">The template engine.</param>
+		/// <param name="useModelName">Indicates that we should use the model name on urls</param>
+		/// <param name="useDefaultLayout">Whether we should use our layout.</param>
 		public AbstractScaffoldAction(Type modelType, ITemplateEngine templateEngine, 
 		                              bool useModelName, bool useDefaultLayout)
 		{
