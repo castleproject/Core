@@ -5,46 +5,25 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="autotransaction arintegration aspectsharp batchregistration cache dynamicloader nhibernate ibatis logging prevalence" />
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="AutomaticTransactionManagement/AutomaticTransactionManagement.build" />
+		<include name="ActiveRecordIntegration/ActiveRecordIntegration.build" />
+		<include name="AspectSharp/AspectSharp.build" />
+		<include name="BatchRegistration/BatchRegistration.build" />
+		<include name="Cache/Cache.build" />
+		<include name="DynamicLoader/DynamicLoader.build" />
+		<include name="IBatisNet/IBatisNet.build" /> 
+		<include name="Logging/Logging.build" /> 
+		<include name="NHibernateIntegration/NHibernateIntegration.build" />
+		<include name="Prevalence/Prevalence.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
 	
-	<target name="autotransaction">
-		<nant buildfile="AutomaticTransactionManagement/AutomaticTransactionManagement.build" />
-	</target>
-
-	<target name="arintegration">
-		<nant buildfile="ActiveRecordIntegration/ActiveRecordIntegration.build" />
-	</target>
-	
-	<target name="aspectsharp">
-		<nant buildfile="AspectSharp/AspectSharp.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="batchregistration">
-		<nant buildfile="BatchRegistration/BatchRegistration.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="cache">
-		<nant buildfile="Cache/Cache.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="dynamicloader">
-		<nant buildfile="DynamicLoader/DynamicLoader.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="ibatis">
-		<nant buildfile="IBatisNet/IBatisNet.build" inheritall="true" target="build" /> 
-	</target>
-
-	<target name="logging">
-		<nant buildfile="Logging/Logging.build" inheritall="true" target="build" /> 
-	</target>
-
-	<target name="nhibernate">
-		<nant buildfile="NHibernateIntegration/NHibernateIntegration.build" inheritall="true" target="build" />
-	</target>
-
-	<target name="prevalence">
-		<nant buildfile="Prevalence/Prevalence.build" inheritall="true" target="build" />
-	</target>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

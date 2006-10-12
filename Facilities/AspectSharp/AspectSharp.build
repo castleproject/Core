@@ -5,11 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
     
-	<target name="build" depends="facility" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Facilities.AspectSharp/Castle.Facilities.AspectSharp.build" />
+		<include name="Castle.Facilities.AspectSharp.Tests/Castle.Facilities.AspectSharp.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
 	
-	<target name="facility">
-		<nant buildfile="Castle.Facilities.AspectSharp/Castle.Facilities.AspectSharp.build" />
-		<nant buildfile="Castle.Facilities.AspectSharp.Tests/Castle.Facilities.AspectSharp.Tests.build" />
-	</target>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 	
 </project>

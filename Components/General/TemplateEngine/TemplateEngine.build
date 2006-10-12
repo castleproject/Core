@@ -5,12 +5,18 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="template-engine" />
+	<property name="root.dir" value="../../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="template-engine">
-		<nant buildfile="Castle.Components.Common.TemplateEngine/Castle.Components.Common.TemplateEngine.build" />
-		<nant buildfile="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.build" />
-		<nant buildfile="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Components.Common.TemplateEngine/Castle.Components.Common.TemplateEngine.build" />
+		<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.build" />
+		<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

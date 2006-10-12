@@ -36,6 +36,8 @@
 		</resourcefileset>
 	</target>
 
+	<target name="generate-assemblyinfo" />
+
 	<target name="compile-tests">
 		<booc
 			target="library" 

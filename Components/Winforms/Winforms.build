@@ -5,10 +5,16 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="assembly-resolver" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="AssemblyResolverDialog/AssemblyResolverDialog.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
 	
-	<target name="assembly-resolver">
-		<nant buildfile="AssemblyResolverDialog/AssemblyResolverDialog.build" />
-	</target>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

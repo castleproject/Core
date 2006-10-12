@@ -5,11 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="dynamicproxy" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="dynamicproxy" >
-		<nant buildfile="Castle.DynamicProxy/Castle.DynamicProxy.build" />
-		<nant buildfile="Castle.DynamicProxy.Tests/Castle.DynamicProxy.Tests.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.DynamicProxy/Castle.DynamicProxy.build" />
+		<include name="Castle.DynamicProxy.Tests/Castle.DynamicProxy.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

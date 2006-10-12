@@ -5,16 +5,19 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="microkernel,windsor" />
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="microkernel">
-		<nant buildfile="Castle.MicroKernel/Castle.MicroKernel.build" />
-		<nant buildfile="Castle.MicroKernel.Tests/Castle.MicroKernel.Tests.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.MicroKernel/Castle.MicroKernel.build" />
+		<include name="Castle.MicroKernel.Tests/Castle.MicroKernel.Tests.build" />
+		<include name="Castle.Windsor/Castle.Windsor.build" />
+		<include name="Castle.Windsor.Tests/Castle.Windsor.Tests.build" />
+	</fileset>
 
-	<target name="windsor">
-		<nant buildfile="Castle.Windsor/Castle.Windsor.build" />
-		<nant buildfile="Castle.Windsor.Tests/Castle.Windsor.Tests.build" />
-	</target>
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

@@ -8,11 +8,17 @@
 	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
 	<property name="common.run-tests" value="${nhibernate.test}" />
 
-	<target name="build" depends="facility" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Facilities.NHibernateIntegration/Castle.Facilities.NHibernateIntegration.build" />
+		<include name="Castle.Facilities.NHibernateIntegration.Tests/Castle.Facilities.NHibernateIntegration.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
 	
-	<target name="facility">
-		<nant buildfile="Castle.Facilities.NHibernateIntegration/Castle.Facilities.NHibernateIntegration.build" />
-		<nant buildfile="Castle.Facilities.NHibernateIntegration.Tests/Castle.Facilities.NHibernateIntegration.Tests.build" />
-	</target>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 	
 </project>

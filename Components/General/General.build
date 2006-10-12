@@ -5,18 +5,18 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="binder, templateengine, emailsender" />
-	
-	<target name="binder">
-		<nant buildfile="Binder/Binder.build" />
-	</target>
-	
-	<target name="templateengine">
-		<nant buildfile="TemplateEngine/TemplateEngine.build" />
-	</target>
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="emailsender">
-		<nant buildfile="EmailSender/EmailSender.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Binder/Binder.build" />
+		<include name="TemplateEngine/TemplateEngine.build" />
+		<include name="EmailSender/EmailSender.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

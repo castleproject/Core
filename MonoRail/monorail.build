@@ -8,59 +8,33 @@
 	<property name="monorail.test" value="true" unless="${property::exists('monorail.test')}" />
 	<property name="common.run-tests" value="${monorail.test}" />
 
-	<target name="build" depends="framework integration nvelocity brail composite arsupport arscaffold testsupport samples tests generator" />
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="framework">
-		<nant buildfile="Castle.MonoRail.Framework/Castle.MonoRail.Framework.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.MonoRail.Framework/Castle.MonoRail.Framework.build" />
+		<include name="Castle.MonoRail.WindsorExtension/Castle.MonoRail.WindsorExtension.build" />
+		<include name="Castle.MonoRail.Framework.Views.NVelocity/Castle.MonoRail.Framework.Views.NVelocity.build" />
+		<include name="Castle.MonoRail.Views.Brail/Castle.MonoRail.Views.Brail.build" />
+		<include name="Castle.MonoRail.Framework.Views.CompositeView/Castle.MonoRail.Framework.Views.CompositeView.build" />
+		<include name="Castle.MonoRail.ActiveRecordSupport/Castle.MonoRail.ActiveRecordSupport.build" />
+		<include name="Castle.MonoRail.ActiveRecordScaffold/Castle.MonoRail.ActiveRecordScaffold.build" />
+		<include name="Castle.MonoRail.TestSupport/Castle.MonoRail.TestSupport.build" />
+		<include name="TestSite/TestSite.build" />
+		<include name="TestSiteWindsor/TestSiteWindsor.build" />
+		<include name="TestSiteNVelocity/TestSiteNVelocity.build" />
+		<include name="TestSiteBrail/TestSiteBrail.build" />  
+		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" />
+		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" />
+		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
+		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
+		<include name="TestSiteARSupport/TestSiteARSupport.build" />
+		<include name="Castle.MonoRail.Generator/Castle.MonoRail.Generator.build" />
+	</fileset>
 
-	<target name="integration">
-		<nant buildfile="Castle.MonoRail.WindsorExtension/Castle.MonoRail.WindsorExtension.build" />
-	</target>
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
-	<target name="nvelocity">
-		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/Castle.MonoRail.Framework.Views.NVelocity.build" />
-	</target>
-
-	<target name="brail">
-		<nant buildfile="Castle.MonoRail.Views.Brail/Castle.MonoRail.Views.Brail.build" />
-	</target>
-
-	<target name="composite">
-		<nant buildfile="Castle.MonoRail.Framework.Views.CompositeView/Castle.MonoRail.Framework.Views.CompositeView.build" />
-	</target>
-
-	<target name="arsupport">
-		<nant buildfile="Castle.MonoRail.ActiveRecordSupport/Castle.MonoRail.ActiveRecordSupport.build" />
-	</target>
-
-	<target name="arscaffold">
-		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/Castle.MonoRail.ActiveRecordScaffold.build" />
-	</target>
-
-	<target name="testsupport">
-		<nant buildfile="Castle.MonoRail.TestSupport/Castle.MonoRail.TestSupport.build" />
-	</target>
-
-	<target name="samples">
-		<nant buildfile="TestSite/TestSite.build" />
-		<nant buildfile="TestSiteWindsor/TestSiteWindsor.build" />
-		<nant buildfile="TestSiteNVelocity/TestSiteNVelocity.build" />
-		<nant buildfile="TestSiteBrail/TestSiteBrail.build" />  
-		<!--
-		<nant buildfile="TestScaffolding/TestScaffolding.build" />
-		-->
-	</target>
-
-	<target name="tests">
-		<nant buildfile="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" />
-		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" />
-		<nant buildfile="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
-		<nant buildfile="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
-		<nant buildfile="TestSiteARSupport/TestSiteARSupport.build" />
-	</target>
-
-	<target name="generator">
-		<nant buildfile="Castle.MonoRail.Generator/Castle.MonoRail.Generator.build" />
-	</target>
 </project>

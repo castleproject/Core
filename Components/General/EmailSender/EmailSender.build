@@ -5,16 +5,19 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
     
-	<target name="build" depends="emailsender,smtpemailsender" />
+	<property name="root.dir" value="../../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="emailsender" >
-		<nant buildfile="Castle.Components.Common.EmailSender/Castle.Components.Common.EmailSender.build" />
-		<nant buildfile="Castle.Components.Common.EmailSender.MockSender/Castle.Components.Common.EmailSender.MockSender.build" />
-		<nant buildfile="Castle.Components.Common.EmailSender.Tests/Castle.Components.Common.EmailSender.Tests.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Components.Common.EmailSender/Castle.Components.Common.EmailSender.build" />
+		<include name="Castle.Components.Common.EmailSender.MockSender/Castle.Components.Common.EmailSender.MockSender.build" />
+		<include name="Castle.Components.Common.EmailSender.Tests/Castle.Components.Common.EmailSender.Tests.build" />
+		<include name="Castle.Components.Common.EmailSender.SmtpEmailSender/Castle.Components.Common.EmailSender.SmtpEmailSender.build" />
+	</fileset>
 
-	<target name="smtpemailsender">
-		<nant buildfile="Castle.Components.Common.EmailSender.SmtpEmailSender/Castle.Components.Common.EmailSender.SmtpEmailSender.build" />
-	</target>
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

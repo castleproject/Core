@@ -5,11 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="facility" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Facilities.AutomaticTransactionManagement/Castle.Facilities.AutomaticTransactionManagement.build" />
+		<include name="Castle.Facilities.AutomaticTransactionManagement.Tests/Castle.Facilities.AutomaticTransactionManagement.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
 	
-	<target name="facility">
-		<nant buildfile="Castle.Facilities.AutomaticTransactionManagement/Castle.Facilities.AutomaticTransactionManagement.build" />
-		<nant buildfile="Castle.Facilities.AutomaticTransactionManagement.Tests/Castle.Facilities.AutomaticTransactionManagement.Tests.build" />
-	</target>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 	
 </project>

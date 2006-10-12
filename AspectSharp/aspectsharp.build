@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project
 	name="castle-aspectsharp"
-	default="build">
+	default="build"
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="aopalliance aspectsharp.lang aspectsharp tests" />
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="aopalliance">
-		<nant buildfile="AopAlliance/AopAlliance.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="AopAlliance/AopAlliance.build" />
+		<include name="AspectSharp.Lang/AspectSharp.Lang.build" />
+		<include name="AspectSharp/AspectSharp.build" />
+		<include name="AspectSharp.Lang.Tests/AspectSharp.Lang.Tests.build" />
+		<include name="AspectSharp.Tests/AspectSharp.Tests.build" />
+	</fileset>
 
-	<target name="aspectsharp.lang">
-		<nant buildfile="AspectSharp.Lang/AspectSharp.Lang.build" />
-	</target>
+	<target name="build" depends="common.build" />
 	
-	<target name="aspectsharp">
-		<nant buildfile="AspectSharp/AspectSharp.build" />
-	</target>
-	
-	<target name="tests">
-		<nant buildfile="AspectSharp.Lang.Tests/AspectSharp.Lang.Tests.build" />
-		<nant buildfile="AspectSharp.Tests/AspectSharp.Tests.build" />
-	</target>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

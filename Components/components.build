@@ -5,14 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="general, winforms" />
-	
-	<target name="general">
-		<nant buildfile="General/General.build" />
-	</target>
-	
-	<target name="winforms">
-		<nant buildfile="Winforms/Winforms.build" />
-	</target>
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="General/General.build" />
+		<include name="Winforms/Winforms.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

@@ -5,11 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="transactionmanagement" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="transactionmanagement">
-		<nant buildfile="Castle.Services.Transaction/Castle.Services.Transaction.build" target="build" />
-		<nant buildfile="Castle.Services.Transaction.Tests/Castle.Services.Transaction.Tests.build" target="test" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Services.Transaction/Castle.Services.Transaction.build" />
+		<include name="Castle.Services.Transaction.Tests/Castle.Services.Transaction.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 	
 </project>

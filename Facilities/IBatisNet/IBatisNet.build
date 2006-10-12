@@ -8,11 +8,17 @@
 	<property name="ibatis.test" value="true" unless="${property::exists('ibatis.test')}" />
 	<property name="common.run-tests" value="${ibatis.test}" />
  
-	<target name="build" depends="facility" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Facilities.IBatisNetIntegration/Castle.Facilities.IBatisNetIntegration.build" />
+		<include name="Castle.Facilities.IBatisNetIntegration.Tests/Castle.Facilities.IBatisNetIntegration.Tests.build" unless="${nant.settings.currentframework=='net-1.1'}" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
 	
-	<target name="facility">
-		<nant buildfile="Castle.Facilities.IBatisNetIntegration/Castle.Facilities.IBatisNetIntegration.build" />
-		<nant buildfile="Castle.Facilities.IBatisNetIntegration.Tests/Castle.Facilities.IBatisNetIntegration.Tests.build" unless="${nant.settings.currentframework=='net-1.1'}" />
-	</target>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 	
 </project>

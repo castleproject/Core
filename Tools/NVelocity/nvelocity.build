@@ -5,11 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="nvelocity" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="nvelocity">
-		<nant buildfile="src/NVelocity/NVelocity.build" />
-		<nant buildfile="src/NVelocity.Tests/NVelocity.Tests.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="src/NVelocity/NVelocity.build" />
+		<include name="src/NVelocity.Tests/NVelocity.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

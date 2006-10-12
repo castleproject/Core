@@ -5,13 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="dynamicproxy2" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="dynamicproxy2" >
-		<if test="${nant.settings.currentframework=='net-2.0'}">
-			<nant buildfile="Castle.DynamicProxy/Castle.DynamicProxy.build" />
-			<nant buildfile="Castle.DynamicProxy.Tests/Castle.DynamicProxy.Tests.build" />
-		</if>
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.DynamicProxy/Castle.DynamicProxy.build" if="${nant.settings.currentframework=='net-2.0'}" />
+		<include name="Castle.DynamicProxy.Tests/Castle.DynamicProxy.Tests.build" if="${nant.settings.currentframework=='net-2.0'}" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>

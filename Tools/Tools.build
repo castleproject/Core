@@ -5,18 +5,18 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="dynamicproxy dynamicproxy2 nvelocity" />
-	
-	<target name="dynamicproxy">
-		<nant buildfile="DynamicProxy/DynamicProxy.build" target="build" />
-	</target>
-	
-	<target name="dynamicproxy2">
-		<nant buildfile="Castle.DynamicProxy2/Castle.DynamicProxy2.build" target="build" />
-	</target>
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="nvelocity">
-		<nant buildfile="NVelocity/nvelocity.build" target="build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="DynamicProxy/DynamicProxy.build" />
+		<include name="Castle.DynamicProxy2/Castle.DynamicProxy2.build" />
+		<include name="NVelocity/nvelocity.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 	
 </project>

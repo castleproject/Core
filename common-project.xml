@@ -47,6 +47,14 @@
 
 	<include buildfile="common.xml" />
 
+	<target name="common.build">
+
+		<nant>
+			<buildfiles refid="buildfiles.all" />
+		</nant>
+
+	</target>
+
 	<target name="common.compile-tests"
 		description="Compile NUnit tests and copy App.config file to the output directory, if it exists.">
 
@@ -222,9 +230,17 @@
 		</asminfo>
 		<if test="${assembly.sign}" >
 			<echo append="true" file="${assemblyinfo.cs}">#if !DOTNET2</echo>
-			<echo append="true" file="${assemblyinfo.cs}">[assembly: AssemblyKeyFileAttribute("${assembly.keyfile}")]</echo>
+			<echo append="true" file="${assemblyinfo.cs}">[assembly: AssemblyKeyFileAttribute(@"${path::get-full-path(assembly.keyfile)}")]</echo>
 			<echo append="true" file="${assemblyinfo.cs}">#endif</echo>
 		</if>
+	</target>
+	
+	<target name="common.assemblyinfo">
+
+		<nant target="generate-assemblyinfo">
+			<buildfiles refid="buildfiles.all" />
+		</nant>
+
 	</target>
 
 	<target name="common.run-tests"

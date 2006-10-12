@@ -8,52 +8,32 @@
 	<property name="root.dir" value="." />
 	<include buildfile="${root.dir}/common.xml" />
 	
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Core/core.build" />
+		<include name="Services/services.build" />
+		<include name="Tools/Tools.build" />
+		<include name="InversionOfControl/InversionOfControl.build" />
+		<include name="Components/components.build" />
+		<include name="ActiveRecord/activerecord.build" />
+		<include name="MonoRail/monorail.build" />
+		<include name="AspectSharp/aspectsharp.build" />
+		<include name="Facilities/facilities.build" />
+	</fileset>
+
 	<target name="build"
-		depends="init copy-referenced-assemblies core services tools container components activerecord monorail aspectsharp facilities samples"
-		description="Builds Castle in the current configuration" />
+		depends="init copy-referenced-assemblies"
+		description="Builds Castle in the current configuration">
+
+		<nant target="build">
+			<buildfiles refid="buildfiles.all" />
+		</nant>
+
+	</target>
 
 	<target name="rebuild"
 		depends="init recreate-build-directory build"
 		description="Rebuilds Castle in the current configuration" />
-
-	<target name="activerecord" depends="init">
-		<nant buildfile="ActiveRecord/activerecord.build" target="build" inheritall="true" />
-	</target>
-	
-	<target name="tools" depends="init">
-		<nant buildfile="Tools/Tools.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="container" depends="init">
-		<nant buildfile="InversionOfControl/InversionOfControl.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="services" depends="init">
-		<nant buildfile="Services/services.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="core" depends="init">
-		<nant buildfile="Core/core.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="facilities" depends="init">
-		<nant buildfile="Facilities/facilities.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="components" depends="init">
-		<nant buildfile="Components/components.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="monorail" depends="init">
-		<nant buildfile="MonoRail/monorail.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="aspectsharp" depends="init">
-		<nant buildfile="AspectSharp/aspectsharp.build" target="build" inheritall="true" />
-	</target>
-
-	<target name="samples" depends="init">
-	</target>
 
 	<target name="installer" depends="init createreleasenotes zip-source zip-samples">
 		<nant buildfile="Setup/Setup.build" />
@@ -154,6 +134,17 @@
 				<include name="*.license.txt" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="generate-assemblyinfo"
+		depends="init"
+		description="Generate AssemblyInfo files">
+
+		<property name="visual-studio" value="true" />
+		<nant target="generate-assemblyinfo">
+			<buildfiles refid="buildfiles.all" />
+		</nant>
+
 	</target>
 
 	<target name="build-all-frameworks" depends="init">

@@ -5,11 +5,17 @@
 	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
 >
 
-	<target name="build" depends="binder" />
+	<property name="root.dir" value="../../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<target name="binder">
-		<nant buildfile="Castle.Components.Binder/Castle.Components.Binder.build" />
-		<nant buildfile="Castle.Components.Binder.Tests/Castle.Components.Binder.Tests.build" />
-	</target>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Castle.Components.Binder/Castle.Components.Binder.build" />
+		<include name="Castle.Components.Binder.Tests/Castle.Components.Binder.Tests.build" />
+	</fileset>
+
+	<target name="build" depends="common.build" />
+	
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 
 </project>
