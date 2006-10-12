@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="castle-vsnetintegration"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+>
+
+	<target name="build" depends="vsnetwizard" />
+
+	<target name="vsnetwizard" >
+		<if test="${platform::is-win32()}">
+			<nant buildfile="Castle.VSNetIntegration.Shared/shared.build" />
+			<nant buildfile="Castle.VSNetIntegration.CastleWizards/wizards.build" />
+		</if>
+	</target>
+
+</project>

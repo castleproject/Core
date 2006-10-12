@@ -8,11 +8,21 @@ Release Candidate 2
 
 Release Candidate 1
 ===================
+
 - Fixed Perfomance issue with Brail and sub views due to cache key normalization issues.
 
 - Added logging to Brail, configured using the normal Castle's cofniguration mechansim
 
 - Added support to passing parameters from the view to the layout, enabling a captureFor component in the view to be used in the layout
+
+- Started refactoring ARScaffold to rely on FormHelper
+
+- Small refactor on ARScaffold support to make it work with
+  . ARDataBinder
+  . The new Binder implementation
+
+- Changed MonoRailContainer to save the configuration. On mono
+  a copy is created everytime the config is requested, leading a big problems
 
 - Fixed MR-155
   "Cast exception with configuration"

@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.VSNetIntegration.CastleWizards
+namespace Anakia.DocData
 {
 	using System;
-	using System.Windows.Forms;
 
-	public interface ICastleWizardExtension
+	public class EnumDocData : CommonDocData
 	{
-		String[] GetUserFriendlyOptions();
-
-		bool WantsToShowUI(ExtensionContext context);
-
-		Panel BuildPanel(ExtensionContext context);
+		internal string name;
+		internal string id;
+		internal Visibility access;
+		
+		// private FieldDocData[] fields;
+		
 	}
 }

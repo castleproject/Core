@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{5D0ACCAB-2AFD-4FA9-B5DB-6F176046CB45}"
     >
@@ -163,7 +163,7 @@
                 />
                 <File
                     RelPath = "Dialogs\Panels\ARPanel.cs"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File

@@ -22,6 +22,7 @@ Committers
 - G. Richard Bellamy
 - Roelof Blom
 - Ahmed Ghandour 
+- Josh Robb
 
 Managers 
 ========

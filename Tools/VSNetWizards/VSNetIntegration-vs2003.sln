@@ -1,13 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.VSNetIntegration.CastleWizards", "Castle.VSNetIntegration.CastleWizards\Castle.VSNetIntegration.CastleWizards.csproj", "{5D0ACCAB-2AFD-4FA9-B5DB-6F176046CB45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.VSNetIntegration.CastleWizards", "Castle.VSNetIntegration.CastleWizards\Castle.VSNetIntegration.CastleWizards-vs2003.csproj", "{5D0ACCAB-2AFD-4FA9-B5DB-6F176046CB45}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestExtensions2", "TestExtensions2\TestExtensions2.csproj", "{B84FC440-951C-45A0-B8FB-B3120EDCF726}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.VSNetIntegration.Shared", "Castle.VSNetIntegration.Shared\Castle.VSNetIntegration.Shared.csproj", "{BF52CF83-B91B-4CA5-81EB-1424D5988735}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.VSNetIntegration.Shared", "Castle.VSNetIntegration.Shared\Castle.VSNetIntegration.Shared-vs2003.csproj", "{BF52CF83-B91B-4CA5-81EB-1424D5988735}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -16,15 +12,13 @@ Global
 		Debug = Debug
 		Release = Release
 	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{5D0ACCAB-2AFD-4FA9-B5DB-6F176046CB45}.Debug.ActiveCfg = Debug|.NET
 		{5D0ACCAB-2AFD-4FA9-B5DB-6F176046CB45}.Debug.Build.0 = Debug|.NET
 		{5D0ACCAB-2AFD-4FA9-B5DB-6F176046CB45}.Release.ActiveCfg = Release|.NET
 		{5D0ACCAB-2AFD-4FA9-B5DB-6F176046CB45}.Release.Build.0 = Release|.NET
-		{B84FC440-951C-45A0-B8FB-B3120EDCF726}.Debug.ActiveCfg = Debug|.NET
-		{B84FC440-951C-45A0-B8FB-B3120EDCF726}.Debug.Build.0 = Debug|.NET
-		{B84FC440-951C-45A0-B8FB-B3120EDCF726}.Release.ActiveCfg = Release|.NET
-		{B84FC440-951C-45A0-B8FB-B3120EDCF726}.Release.Build.0 = Release|.NET
 		{BF52CF83-B91B-4CA5-81EB-1424D5988735}.Debug.ActiveCfg = Debug|.NET
 		{BF52CF83-B91B-4CA5-81EB-1424D5988735}.Debug.Build.0 = Debug|.NET
 		{BF52CF83-B91B-4CA5-81EB-1424D5988735}.Release.ActiveCfg = Release|.NET

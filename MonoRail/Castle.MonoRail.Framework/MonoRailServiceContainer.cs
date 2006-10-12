@@ -35,6 +35,9 @@ namespace Castle.MonoRail.Framework
 		/// <summary>Prevents GC from collecting the extensions</summary>
 		private IList extensions = new ArrayList();
 
+		/// <summary>Keeps only one copy of the config</summary>
+		private MonoRailConfiguration config;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -178,7 +181,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		private void InitConfiguration()
 		{
-			MonoRailConfiguration config = MonoRailConfiguration.GetConfig();
+			config = ObtainConfiguration();
 
 			RegisterMissingServices(config);
 		}
@@ -326,7 +329,12 @@ namespace Castle.MonoRail.Framework
 
 		private MonoRailConfiguration ObtainConfiguration()
 		{
-			return MonoRailConfiguration.GetConfig();
+			if (config == null)
+			{
+				config = MonoRailConfiguration.GetConfig();
+			}
+
+			return config;
 		}
 
 		private void AssertImplementsService(Type service, Type impl)

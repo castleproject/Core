@@ -17,7 +17,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 
 	using Castle.ActiveRecord;
-	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 
@@ -29,7 +28,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class CreateAction : AbstractScaffoldAction
 	{
-		public CreateAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
+		public CreateAction(Type modelType, ITemplateEngine templateEngine, bool useModelName, bool useDefaultLayout) : 
+			base(modelType, templateEngine, useModelName, useDefaultLayout)
 		{
 		}
 
@@ -40,33 +40,44 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			DataBinder binder = new DataBinder();
-
-			object instance = binder.BindObject(Model.Type, Model.Type.Name, new NameValueCollectionAdapter(controller.Request.Form));
-
-			SessionScope scope = new SessionScope();
-
 			try
 			{
-				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation);
+				AssertIsPost(controller);
 
-				scope.Dispose();
+				object instance = binder.BindObject(Model.Type, Model.Type.Name, 
+				                                    builder.BuildSourceNode(controller.Form));
 
-				controller.Redirect(controller.AreaName, controller.Name, "list" + Model.Type.Name);
+				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation, true);
+
+				SessionScope.Current.Flush();
+
+				if (UseModelName)
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "list" + Model.Type.Name);
+				}
+				else
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "list");
+				}
 			}
 			catch(Exception ex)
 			{
-				errors.Add( "Could not save " + Model.Type.Name + ". " + ex.Message );
-
-				scope.Dispose(true);
+				errors.Add("Could not save " + Model.Type.Name + ". " + ex.Message);
 			}
 
 			if (errors.Count != 0)
 			{
 				controller.Context.Flash["errors"] = errors;
 				
-				controller.Redirect(controller.AreaName, controller.Name, "new" + Model.Type.Name, 
-					controller.Request.Form);
+				if (UseModelName)
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "new" + Model.Type.Name, 
+						controller.Request.Form);
+				}
+				else
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "new", controller.Request.Form);
+				}
 			}
 		}
 

@@ -62,5 +62,10 @@ namespace WizardSampleSite.Model
 			get { return interests; }
 			set { interests = value; }
 		}
+		
+		public bool IsEmpty
+		{
+			get { return name == null || email == null; }
+		}
 	}
 }

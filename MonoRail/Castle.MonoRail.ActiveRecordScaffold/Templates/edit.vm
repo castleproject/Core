@@ -1,6 +1,6 @@
 $ValidationHelper.InstallScripts()
 
-<h2>Edit ${armodel.Type.Name}</h2>
+<h2>Edit ${model.Type.Name}</h2>
 
 #if($flash.errors)
 <ul id="errors">
@@ -12,13 +12,17 @@ $ValidationHelper.InstallScripts()
 
 #set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
 
-$PresentationHelper.Form( "update${armodel.Type.Name}", "scaffoldingform", "post", $validatorForm )
+#if($useModelName)
+$PresentationHelper.Form( "update${model.Type.Name}", "scaffoldingform", "post", $validatorForm )
+#else
+$PresentationHelper.Form( "update", "scaffoldingform", "post", $validatorForm )
+#end
 
-$HtmlHelper.InputHidden("id", ${id})
+$HtmlHelper.InputHidden("${prefix}.${keyprop.Name}", ${id})
 
 <div id="scaffoldmain">
 
-#foreach($model in $HtmlHelper.GetModelHierarchy($armodel, $instance))
+#foreach($model in $HtmlHelper.GetModelHierarchy($model, $instance))
 
 #if($model.IsNestedType)
   $HtmlHelper.FieldSet("${model.Type.Name}:")
@@ -71,7 +75,7 @@ $HtmlHelper.SubmitButton("Save")
 </div>
 
 <p>
-$PresentationHelper.LinkToBack("Back", null) | $PresentationHelper.LinkToList($armodel, "List", null)
+$PresentationHelper.LinkToBack("Back", null) | $PresentationHelper.LinkToList($model, $useModelName, "List", null)
 </p>
 
 $HtmlHelper.EndForm()

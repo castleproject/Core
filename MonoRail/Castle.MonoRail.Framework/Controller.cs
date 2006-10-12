@@ -145,16 +145,30 @@ namespace Castle.MonoRail.Framework
 			get { return metaDescriptor; }
 		}
 
+		/// <summary>
+		/// Gets the actions available in this controller.
+		/// </summary>
+		/// <remarks>It is supposed to be used by MonoRail infrastructure only</remarks>
+		/// <value>The actions.</value>
 		public ICollection Actions
 		{
 			get { return metaDescriptor.Actions.Values; }
 		}
 
+		/// <summary>
+		/// Gets a dicitionary of name/<see cref="IResource"/>
+		/// </summary>
+		/// <remarks>It is supposed to be used by MonoRail infrastructure only</remarks>
+		/// <value>The resources.</value>
 		public ResourceDictionary Resources
 		{
 			get { return resources; }
 		}
 
+		/// <summary>
+		/// Gets a dictionary of name/helper instance
+		/// </summary>
+		/// <value>The helpers.</value>
 		public IDictionary Helpers
 		{
 			get
@@ -226,7 +240,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets the context of this web execution.
+		/// Gets the context of this request execution.
 		/// </summary>
 		public IRailsEngineContext Context
 		{
@@ -522,6 +536,10 @@ namespace Castle.MonoRail.Framework
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="queryStringParameters">list of key/value pairs. Each string is supposed
+		/// to have the format "key=value" that will be converted to a proper 
+		/// query string</param>
 		protected void RedirectToAction(String action, params String[] queryStringParameters)
 		{
 			RedirectToAction(action, DictHelper.Create(queryStringParameters));
@@ -530,6 +548,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="queryStringParameters">Query string entries</param>
 		protected void RedirectToAction(String action, IDictionary queryStringParameters)
 		{
 			if (queryStringParameters != null)
@@ -545,6 +565,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="queryStringParameters">Query string entries</param>
 		protected void RedirectToAction(String action, NameValueCollection queryStringParameters)
 		{
 			if (queryStringParameters != null)
@@ -555,17 +577,6 @@ namespace Castle.MonoRail.Framework
 			{
 				Redirect(AreaName, Name, TransformActionName(action));
 			}
-		}
-
-		/// <summary>
-		/// Gives a chance to subclasses to format the action name properly
-		/// <seealso cref="WizardStepPage"/>
-		/// </summary>
-		/// <param name="action">Raw action name</param>
-		/// <returns>Properly formatted action name</returns>
-		internal virtual String TransformActionName(String action)
-		{
-			return action;
 		}
 
 		#endregion
@@ -597,7 +608,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Redirects to the specified URL. All other Redirects call this one.
+		/// Redirects to the specified URL. 
 		/// </summary>
 		/// <param name="url">Target URL</param>
 		/// <param name="parameters">URL parameters</param>
@@ -1176,6 +1187,17 @@ namespace Castle.MonoRail.Framework
 
 				scaffoldSupport.Process(this);
 			}
+		}
+
+		/// <summary>
+		/// Gives a chance to subclasses to format the action name properly
+		/// <seealso cref="WizardStepPage"/>
+		/// </summary>
+		/// <param name="action">Raw action name</param>
+		/// <returns>Properly formatted action name</returns>
+		internal virtual String TransformActionName(String action)
+		{
+			return action;
 		}
 		
 		#endregion

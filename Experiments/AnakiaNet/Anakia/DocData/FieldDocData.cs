@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.VSNetIntegration.CastleWizards
+namespace Anakia.DocData
 {
 	using System;
 
-	public interface IWizardExtension
+	public class FieldDocData : CommonDocData
 	{
-		void Init(BaseProjectWizard wizard);
+		private String name;
 
-		void Terminate(BaseProjectWizard wizard);
+		public FieldDocData(string name)
+		{
+			this.name = name;
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
 	}
 }

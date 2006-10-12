@@ -1,11 +1,13 @@
-#if($Flash.get_Item("errors"))
+#if($Flash.errors)
 <p>Something is not good. Please correct the following problems first:
 <ul>
-#foreach($error in $Flash.get_Item("errors"))
+#foreach($error in $Flash.errors)
   <li>$error</li>
 #end
 </ul>
 </p>
+#elseif($Flash.error)
+<p style="color:red;">$Flash.error</p>
 #end
 
 <p>
@@ -16,31 +18,30 @@
   
   <tr>
     <td>Full name: </td>
-    <td>$HtmlHelper.InputText("name", $account.name)</td>
+    <td>$FormHelper.TextField("account.name")</td>
   </tr>
 
   <tr>
     <td>User name: </td>
-    <td>$HtmlHelper.InputText("username", $account.username)</td>
+    <td>$FormHelper.TextField("account.username")</td>
   </tr>
 
   <tr>
     <td>E-mail: </td>
-    <td>$HtmlHelper.InputText("email", $account.email)</td>
+    <td>$FormHelper.TextField("account.email")</td>
   </tr>
   
   <tr>
     <td>Password: </td>
-    <td>$HtmlHelper.InputPassword("pwd")</td>
+    <td>$FormHelper.PasswordField("account.pwd")</td>
   </tr>
 
   <tr>
     <td>Confirm: </td>
-    <td>$HtmlHelper.InputPassword("pwdconfirmation")</td>
+    <td>$FormHelper.PasswordField("account.pwdconfirmation")</td>
   </tr>
   
 </table>
-
 
   <!-- 
   

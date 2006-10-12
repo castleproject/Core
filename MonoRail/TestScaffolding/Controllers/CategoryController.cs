@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace WizardSampleSite.Controllers
+namespace TestScaffolding.Controllers
 {
 	using System;
-	
 	using Castle.MonoRail.Framework;
+	using TestScaffolding.Model;
 
-
-	public class HomeController : Controller
+	[Scaffolding(typeof(Category))]
+	public class CategoryController : Controller
 	{
-		public void Index()
-		{
-		}
 	}
 }

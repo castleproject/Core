@@ -12,17 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace WizardSampleSite.Controllers
+namespace TestScaffolding
 {
 	using System;
-	
-	using Castle.MonoRail.Framework;
+	using System.Web;
+	using Castle.ActiveRecord;
+	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Config;
+	using TestScaffolding.Model;
 
-
-	public class HomeController : Controller
+	public class MyHttpApplication : HttpApplication
 	{
-		public void Index()
+		protected void Application_Start(Object sender, EventArgs e)
 		{
+			IConfigurationSource source = ActiveRecordSectionHandler.Instance;
+
+			ActiveRecordStarter.Initialize( 
+				source, 
+				typeof(Blog), typeof(Category), typeof(Person), 
+				typeof(Customer), typeof(Account), 
+				typeof(AccountPermission), typeof(ProductLicense) );
+			
+//			ActiveRecordStarter.DropSchema();
+//			
+//			ActiveRecordStarter.CreateSchema();
 		}
 	}
 }

@@ -12,6 +12,7 @@
 		<property name="assembly.version" value="1.0.0.0" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="System.Web.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.MonoRail.ActiveRecordSupport.dll" />

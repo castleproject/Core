@@ -182,10 +182,11 @@ namespace Castle.VSNetIntegration.Shared.Dialogs
 			// 
 			// pictureBox1
 			// 
+			this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-			this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+			this.pictureBox1.Location = new System.Drawing.Point(0, -64);
 			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(144, 448);
+			this.pictureBox1.Size = new System.Drawing.Size(144, 520);
 			this.pictureBox1.TabIndex = 44;
 			this.pictureBox1.TabStop = false;
 			// 
@@ -194,7 +195,7 @@ namespace Castle.VSNetIntegration.Shared.Dialogs
 			this.AcceptButton = this.buttonFinish;
 			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(624, 438);
+			this.ClientSize = new System.Drawing.Size(624, 436);
 			this.Controls.Add(this.buttonHelp);
 			this.Controls.Add(this.buttonBack);
 			this.Controls.Add(this.buttonFinish);

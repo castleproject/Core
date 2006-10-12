@@ -16,9 +16,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 	using System.Runtime.CompilerServices;
-
 	using Castle.MonoRail.Framework;
-
 	using Castle.Components.Common.TemplateEngine;
 	using Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine;
 
@@ -68,17 +66,49 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		{
 			InitializeTemplateEngine();
 
-			foreach(ScaffoldingAttribute scaffoldAtt in controller.MetaDescriptor.Scaffoldings)
-			{
-				String name = scaffoldAtt.Model.Name;
+			bool useDefaultLayout = controller.MetaDescriptor.Layout == null;
 
-				controller.DynamicActions[ String.Format("new{0}", name) ] = new NewAction( scaffoldAtt.Model, templateEngine ); 
-				controller.DynamicActions[ String.Format("create{0}", name) ] = new CreateAction( scaffoldAtt.Model, templateEngine ); 
-				controller.DynamicActions[ String.Format("edit{0}", name) ] = new EditAction( scaffoldAtt.Model, templateEngine ); 
-				controller.DynamicActions[ String.Format("update{0}", name) ] = new UpdateAction( scaffoldAtt.Model, templateEngine ); 
-				controller.DynamicActions[ String.Format("remove{0}", name) ] = new RemoveAction( scaffoldAtt.Model, templateEngine ); 
-				controller.DynamicActions[ String.Format("confirm{0}", name) ] = new ConfirmRemoveAction( scaffoldAtt.Model, templateEngine ); 
-				controller.DynamicActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model, templateEngine ); 
+			if (controller.MetaDescriptor.Scaffoldings.Count == 1)
+			{
+				ScaffoldingAttribute scaffoldAtt = (ScaffoldingAttribute)
+				                                   controller.MetaDescriptor.Scaffoldings[0];
+
+				controller.DynamicActions["new"] = 
+					new NewAction(scaffoldAtt.Model, templateEngine, false, useDefaultLayout);
+				controller.DynamicActions["create"] = 
+					new CreateAction(scaffoldAtt.Model, templateEngine, false, useDefaultLayout);
+				controller.DynamicActions["edit"] = 
+					new EditAction(scaffoldAtt.Model, templateEngine, false, useDefaultLayout);
+				controller.DynamicActions["update"] = 
+					new UpdateAction(scaffoldAtt.Model, templateEngine, false, useDefaultLayout);
+				controller.DynamicActions["remove"] = 
+					new RemoveAction(scaffoldAtt.Model, templateEngine, false, useDefaultLayout);
+				controller.DynamicActions["confirm"] =
+					new ConfirmRemoveAction(scaffoldAtt.Model, templateEngine, false, useDefaultLayout);
+				controller.DynamicActions["list"] = 
+					new ListAction(scaffoldAtt.Model, templateEngine, false, useDefaultLayout);
+			}
+			else
+			{
+				foreach(ScaffoldingAttribute scaffoldAtt in controller.MetaDescriptor.Scaffoldings)
+				{
+					String name = scaffoldAtt.Model.Name;
+
+					controller.DynamicActions[String.Format("new{0}", name)] =
+						new NewAction(scaffoldAtt.Model, templateEngine, true, useDefaultLayout);
+					controller.DynamicActions[String.Format("create{0}", name)] =
+						new CreateAction(scaffoldAtt.Model, templateEngine, true, useDefaultLayout);
+					controller.DynamicActions[String.Format("edit{0}", name)] =
+						new EditAction(scaffoldAtt.Model, templateEngine, true, useDefaultLayout);
+					controller.DynamicActions[String.Format("update{0}", name)] =
+						new UpdateAction(scaffoldAtt.Model, templateEngine, true, useDefaultLayout);
+					controller.DynamicActions[String.Format("remove{0}", name)] =
+						new RemoveAction(scaffoldAtt.Model, templateEngine, true, useDefaultLayout);
+					controller.DynamicActions[String.Format("confirm{0}", name)] =
+						new ConfirmRemoveAction(scaffoldAtt.Model, templateEngine, true, useDefaultLayout);
+					controller.DynamicActions[String.Format("list{0}", name)] =
+						new ListAction(scaffoldAtt.Model, templateEngine, true, useDefaultLayout);
+				}
 			}
 		}
 
@@ -88,8 +118,9 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			if (templateEngine == null)
 			{
 				NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
+
 #if USE_LOCAL_TEMPLATES
-				nvelTemplateEng.TemplateDir = @"E:\dev\projects\castle\castlesvn\trunk\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
+				nvelTemplateEng.TemplateDir = @"E:\dev\castle\trunk\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
 				nvelTemplateEng.BeginInit();
 				nvelTemplateEng.EndInit();
 #else

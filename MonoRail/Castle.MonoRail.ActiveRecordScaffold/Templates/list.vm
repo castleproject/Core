@@ -1,6 +1,6 @@
 
 <p>
-$PresentationHelper.LinkToNew( $model, "Create a new $model.Type.Name", $DictHelper.CreateDict() )
+$PresentationHelper.LinkToNew( $model, $useModelName, "Create a new $model.Type.Name", $DictHelper.CreateDict() )
 </p>
 
 #set($cols = $properties.Count + 2)
@@ -31,8 +31,8 @@ $PresentationHelper.LinkToNew( $model, "Create a new $model.Type.Name", $DictHel
   #end
   
   <td align="center" nowrap width="1%">
-$PresentationHelper.LinkToEdit( $model, "edit", $rowid, $DictHelper.CreateDict() )
-$PresentationHelper.LinkToConfirm( $model, "remove", $rowid, $DictHelper.CreateDict() )
+$PresentationHelper.LinkToEdit( $model, $useModelName, "edit", $rowid, $DictHelper.CreateDict() )
+$PresentationHelper.LinkToConfirm( $model, $useModelName, "remove", $rowid, $DictHelper.CreateDict() )
   </td>
   </tr>
 #end

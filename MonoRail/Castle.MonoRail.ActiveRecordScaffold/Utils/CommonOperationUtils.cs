@@ -52,7 +52,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		}
 
 		internal static void SaveInstance(object instance, Controller controller, 
-		                                  ArrayList errors, IDictionary prop2Validation)
+		                                  ArrayList errors, IDictionary prop2Validation, bool create)
 		{
 			if (instance is ActiveRecordValidationBase)
 			{
@@ -65,12 +65,26 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				}
 				else
 				{
-					instanceBase.Save();
+					if (create)
+					{
+						instanceBase.Create();
+					}
+					else
+					{
+						instanceBase.Update();
+					}
 				}
 			}
 			else
 			{
-				ActiveRecordMediator.Save(instance);
+				if (create)
+				{
+					ActiveRecordMediator.Create(instance);
+				}
+				else
+				{
+					ActiveRecordMediator.Update(instance);
+				}
 			}
 		}
 

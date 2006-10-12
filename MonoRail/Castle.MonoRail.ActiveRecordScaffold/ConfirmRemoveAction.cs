@@ -30,7 +30,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class ConfirmRemoveAction : AbstractScaffoldAction
 	{
-		public ConfirmRemoveAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
+		public ConfirmRemoveAction(Type modelType, ITemplateEngine templateEngine, bool useModelName, bool useDefaultLayout) : 
+			base(modelType, templateEngine, useModelName, useDefaultLayout)
 		{
 		}
 
@@ -41,13 +42,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
+			base.PerformActionProcess(controller);
+			
 			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
 
 			try
 			{
 				object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
 
-				controller.PropertyBag["armodel"] = Model;
 				controller.PropertyBag["instance"] = instance;
 				controller.PropertyBag["id"] = idVal;
 			}

@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Sets the controller.
 		/// </summary>
 		/// <param name="controller">Current view's <see cref="Controller"/>.</param>
-		public void SetController(Controller controller)
+		public virtual void SetController(Controller controller)
 		{
 			this.controller = controller;
 		}

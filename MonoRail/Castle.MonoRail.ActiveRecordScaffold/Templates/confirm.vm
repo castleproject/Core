@@ -1,11 +1,28 @@
 
-<h2>Remove ${armodel.Type.Name}</h2>
+<h2>Remove ${model.Type.Name}</h2>
 
 <p>
-Do you really want to remove this $armodel.Type.Name ?
+Do you really want to remove this $model.Type.Name ?
 </p>
+
+#set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
+
+#if($useModelName)
+$PresentationHelper.Form( "remove${model.Type.Name}", "scaffoldingform", "post", $validatorForm )
+#else
+$PresentationHelper.Form( "remove", "scaffoldingform", "post", $validatorForm )
+#end
+
+$HtmlHelper.InputHidden("id", ${id})
+
+<input type="submit" value="Yes" />  
+
+<input type="button" value="No" onclick="javascript:history.go(-1);" />
+
+$HtmlHelper.EndForm()
+
 
 <p>
-$PresentationHelper.LinkToRemove($armodel, "Yes", $id, null) | $PresentationHelper.LinkToBack("Cancel", null)
+$PresentationHelper.LinkToBack("Back", null) | 
+$PresentationHelper.LinkToList($model, $useModelName, "List", null)
 </p>
-

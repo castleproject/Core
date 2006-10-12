@@ -18,9 +18,9 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System.IO;
 	using System.Reflection;
 	using System.Collections;
-
+	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
-
+	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
 
 	using Castle.MonoRail.ActiveRecordScaffold.Helpers;
@@ -39,20 +39,53 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		
 		/// <summary>Reference to the template engine instance</summary>
 		protected readonly ITemplateEngine templateEngine;
-		
+
 		/// <summary>A map of PropertyInfo to validation failures</summary>
 		protected IDictionary prop2Validation = new Hashtable();
 		
 		/// <summary>A list of errors that happened during this process</summary>
 		protected ArrayList errors = new ArrayList();
 
+		/// <summary>Constructs the data source for the binder</summary>
+		protected TreeBuilder builder = new TreeBuilder();
+
+		/// <summary>Binder that 'knows' ActiveRecord types</summary>
+		protected ARDataBinder binder = new ARDataBinder();
+
 		/// <summary>The model for the AR type we're dealing with</summary>
 		private ActiveRecordModel model;
 
-		public AbstractScaffoldAction( Type modelType, ITemplateEngine templateEngine )
+		/// <summary>Used to define if the model name should be present on the action name (urls)</summary>
+		private readonly bool useModelName;
+
+		/// <summary>Indicates that the controller has no layout, so we use ours</summary>
+		private readonly bool useDefaultLayout;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractScaffoldAction"/> class.
+		/// </summary>
+		/// <param name="modelType">Type of the model.</param>
+		/// <param name="templateEngine">The template engine.</param>
+		public AbstractScaffoldAction(Type modelType, ITemplateEngine templateEngine, 
+		                              bool useModelName, bool useDefaultLayout)
 		{
 			this.modelType = modelType;
 			this.templateEngine = templateEngine;
+			this.useModelName = useModelName;
+			this.useDefaultLayout = useDefaultLayout;
+
+			// Configures the binder
+			binder.AutoLoad = AutoLoadBehavior.OnlyNested;
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the name of the model should
+		/// be used on the url.
+		/// </summary>
+		/// <value><c>true</c> if yes, otherwise <c>false</c>.</value>
+		public bool UseModelName
+		{
+			get { return useModelName; }
 		}
 
 		/// <summary>
@@ -68,21 +101,39 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		/// <param name="controller"></param>
 		public void Execute(Controller controller)
 		{
-			model = GetARModel();
-
-			SetDefaultLayout(controller);
-
-			PerformActionProcess(controller);
-
-			String templateName = ComputeTemplateName(controller);
-
-			if (controller.HasTemplate(templateName))
+			// We make sure the code is always surrounded by a SessionScope.
+			// If none is found, we create one
+			
+			SessionScope scope = null;
+			
+			if (SessionScope.Current == null)
 			{
-				controller.RenderSharedView(templateName);
+				scope = new SessionScope(FlushAction.Never);
 			}
-			else
+
+			try
 			{
-				RenderStandardHtml( controller );
+				model = GetARModel();
+
+				PerformActionProcess(controller);
+
+				String templateName = ComputeTemplateName(controller);
+
+				if (controller.HasTemplate(templateName))
+				{
+					controller.RenderSharedView(templateName);
+				}
+				else
+				{
+					RenderStandardHtml(controller);
+				}
+			}
+			finally
+			{
+				if (scope != null)
+				{
+					scope.Dispose();
+				}
 			}
 		}
 
@@ -95,19 +146,24 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		protected abstract string ComputeTemplateName(Controller controller);
 
 		/// <summary>
-		/// Implementors should perform the action for the 
-		/// scaffolding, like new or create.
-		/// </summary>
-		/// <param name="controller"></param>
-		protected abstract void PerformActionProcess(Controller controller);
-
-		/// <summary>
 		/// Only invoked if the programmer havent provided
 		/// a custom template for the current action. Implementors
 		/// should create a basic html to present.
 		/// </summary>
 		/// <param name="controller"></param>
 		protected abstract void RenderStandardHtml(Controller controller);
+
+		/// <summary>
+		/// Implementors should perform the action for the 
+		/// scaffolding, like new or create.
+		/// </summary>
+		/// <param name="controller"></param>
+		protected virtual void PerformActionProcess(Controller controller)
+		{
+			controller.PropertyBag["useModelName"] = useModelName;
+			controller.PropertyBag["model"] = Model;
+			controller.PropertyBag["keyprop"] = ObtainPKProperty();
+		}
 
 		/// <summary>
 		/// Gets the current <see cref="ActiveRecordModel"/>
@@ -119,29 +175,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		private ActiveRecordModel GetARModel()
 		{
-			ActiveRecordModel model = ActiveRecordModel.GetModel( modelType );
+			ActiveRecordModel foundModel = ActiveRecordModel.GetModel(modelType);
 	
-			if (model == null)
+			if (foundModel == null)
 			{
-				throw new ScaffoldException("Specified type isn't an ActiveRecord type or the ActiveRecord " + 
-					"framework wasn't started properly. Did you forget about the Initialize method?");
+				throw new ScaffoldException("Specified type is not an ActiveRecord type or the ActiveRecord " + 
+					"framework was not started properly. Did you forget to invoke ActiveRecordStarter.Initialize() ?");
 			}
 
-			return model;
-		}
-
-		/// <summary>
-		/// Checks whether the controller has 
-		/// a layout set up, if it doesn't sets <c>scaffold</c>
-		/// as the layout (which must exists on the view tree)
-		/// </summary>
-		/// <param name="controller"></param>
-		protected void SetDefaultLayout(Controller controller)
-		{
-			if (controller.LayoutName == null)
-			{
-				controller.LayoutName = "scaffold";
-			}
+			return foundModel;
 		}
 
 		/// <summary>
@@ -173,12 +215,27 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				context.Add(entry.Key, entry.Value);
 			}
-
+			
 #if USE_LOCAL_TEMPLATES
 			templateEngine.Process( context, templateName, writer );
 #else
 			templateEngine.Process( context, "Castle.MonoRail.ActiveRecordScaffold/Templates/" + templateName, writer );
 #endif
+
+			if (useDefaultLayout)
+			{
+				StringWriter layoutwriter = new StringWriter();
+				
+				context.Add("childContent", writer.GetStringBuilder().ToString());
+				
+#if USE_LOCAL_TEMPLATES
+				templateEngine.Process(context, "layout.vm", layoutwriter);
+#else
+				templateEngine.Process(context, "Castle.MonoRail.ActiveRecordScaffold/Templates/layout.vm", layoutwriter);
+#endif
+				
+				writer = layoutwriter;
+			}
 
 			controller.DirectRender( writer.GetStringBuilder().ToString() );		
 		}
@@ -201,6 +258,16 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			controller.PropertyBag["ValidationHelper"] = validationHelper;
 			controller.PropertyBag["PresentationHelper"] = presentationHelper;
             controller.PropertyBag["PaginationHelper"] = paginationHelper;
+		}
+		
+		protected static void AssertIsPost(Controller controller)
+		{
+			String method = controller.Context.UnderlyingContext.Request.HttpMethod;
+			
+			if (method != "POST")
+			{
+				throw new Exception("This action cannot be accessed using the verb " + method);
+			}
 		}
 	}
 }

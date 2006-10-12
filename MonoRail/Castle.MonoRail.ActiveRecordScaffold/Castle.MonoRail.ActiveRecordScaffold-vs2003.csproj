@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;USE_LOCAL_TEMPLATES"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -134,6 +134,11 @@
                     AssemblyName = "Castle.Core"
                     HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -199,6 +204,10 @@
                 />
                 <File
                     RelPath = "Templates\edit.vm"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Templates\layout.vm"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

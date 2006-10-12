@@ -47,6 +47,11 @@ namespace TestScaffolding.Model
 			set { _name = value; }
 		}
 
+		public override string ToString()
+		{
+			return _name;
+		}
+
 		public static Category[] FindAll()
 		{
 			return (Category[]) FindAll(typeof(Category));

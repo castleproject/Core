@@ -16,12 +16,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Text;
 	using System.Reflection;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.ActiveRecord.Framework.Validators;
+	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 	using Iesi.Collections;
 
@@ -32,6 +34,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 		private StringBuilder stringBuilder = new StringBuilder(1024);
 
 		private IDictionary model2nestedInstance = new Hashtable();
+		
+		private FormHelper formHelper = new FormHelper();
+
+		public override void SetController(Controller controller)
+		{
+			base.SetController(controller);
+			
+			formHelper.SetController(controller);
+		}
 
 		public ICollection GetModelHierarchy(ActiveRecordModel model, object instance)
 		{
@@ -151,6 +162,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 		private bool CanHandleType(Type type)
 		{
 			return (type.IsPrimitive || 
+					type == typeof(String) || 
 			        type == typeof(Decimal) || 
 			        type == typeof(Single) || 
 			        type == typeof(Double) || 
@@ -183,7 +195,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				if (instance != null) value = fieldInfo.GetValue(instance);
 			}
 
-			String propName = propName = CreatePropName(model, prefix, fieldInfo.Name);
+			String propName = CreatePropName(model, prefix, fieldInfo.Name);
 
 			if (fieldInfo.FieldType == typeof(DateTime))
 			{
@@ -226,7 +238,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				if (instance != null) value = prop.GetValue(instance, null);
 			}
 
-			String propName = propName = CreatePropName(model, prefix, prop.Name);
+			String propName = CreatePropName(model, prefix, prop.Name);
 
 			if (prop.PropertyType == typeof(DateTime))
 			{
@@ -267,7 +279,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				if (instance != null) value = prop.GetValue(instance, null);
 			}
 
-			String propName = propName = CreatePropName(model, prefix, prop.Name);
+			String propName = CreatePropName(model, prefix, prop.Name);
 
 			if (prop.PropertyType == typeof(DateTime))
 			{
@@ -289,6 +301,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			stringBuilder.Length = 0;
 
 			PropertyInfo prop = belongsToModel.Property;
+			
+			prefix += "." + prop.Name;
 
 			ActiveRecordModel otherModel = ActiveRecordModel.GetModel(belongsToModel.BelongsToAtt.Type);
 
@@ -301,32 +315,20 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			object[] items = CommonOperationUtils.FindAll(otherModel.Type);
 
-			String propName = propName = CreatePropName(model, prefix, keyModel.Property.Name);
-
-			object value = null;
-
-			if (instance != null)
-			{
-				if (model.IsNestedType)
-				{
-					instance = model2nestedInstance[model];
-				}
-
-				if (instance != null) value = prop.GetValue(instance, null);
-			}
+			String propName = CreatePropName(model, prefix, keyModel.Property.Name);
 
 			stringBuilder.Append(LabelFor(propName, prop.Name + ": &nbsp;"));
-
-			stringBuilder.Append(Select(propName));
-
+			
+			IDictionary attrs = new HybridDictionary(true);
+			
+			attrs["value"] = keyModel.Property.Name;
+			
 			if (!belongsToModel.BelongsToAtt.NotNull)
 			{
-				stringBuilder.Append(CreateOption("Empty", 0));
+				attrs.Add("firstOption", "Empty");
 			}
 
-			stringBuilder.Append(CreateOptionsFromArray(items, null, keyModel.Property.Name, value));
-
-			stringBuilder.Append(EndSelect());
+			stringBuilder.Append(formHelper.Select(propName, items, attrs));
 
 			return stringBuilder.ToString();
 		}
@@ -336,6 +338,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			stringBuilder.Length = 0;
 
 			PropertyInfo prop = hasManyModel.Property;
+			
+			prefix += "." + prop.Name;
 
 			ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasManyModel.HasManyAtt.MapType);
 
@@ -346,24 +350,25 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				return "Model not found or PK not found";
 			}
 
-			object container = InitializeRelationPropertyIfNull(instance, prop);
+			object[] source = CommonOperationUtils.FindAll(otherModel.Type);
 
-			object value = null;
-
-			if (container != null)
+			stringBuilder.Append(prop.Name + ": &nbsp;");
+			stringBuilder.Append("<br/>\r\n");
+			
+			IDictionary attrs = new HybridDictionary(true);
+			
+			attrs["value"] = keyModel.Property.Name;
+			
+			FormHelper.CheckboxList list = formHelper.CreateCheckboxList(prefix, source, attrs);
+			
+			foreach(object item in list)
 			{
-				value = CreateArrayFromExistingIds(keyModel, container as ICollection);
+				stringBuilder.Append(list.Item());
+				
+				stringBuilder.Append(item.ToString());
+				
+				stringBuilder.Append("<br/>\r\n");
 			}
-
-			object[] items = CommonOperationUtils.FindAll(otherModel.Type, hasManyModel.HasManyAtt.Where);
-
-			String propName = propName = CreatePropName(model, prefix, keyModel.Property.Name);
-
-			stringBuilder.Append(LabelFor(propName, prop.Name + ": &nbsp;"));
-			stringBuilder.Append("<br/>");
-			stringBuilder.Append(Select(propName, new DictHelper().CreateDict("size=6", "multiple")));
-			stringBuilder.Append(CreateOptionsFromArray(items, null, keyModel.Property.Name, value));
-			stringBuilder.Append(EndSelect());
 
 			return stringBuilder.ToString();
 		}
@@ -374,6 +379,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			stringBuilder.Length = 0;
 
 			PropertyInfo prop = hasAndBelongsModel.Property;
+			
+			prefix += "." + prop.Name;
 
 			ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasAndBelongsModel.HasManyAtt.MapType);
 
@@ -384,24 +391,25 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				return "Model not found or PK not found";
 			}
 
-			object container = InitializeRelationPropertyIfNull(instance, prop);
+			object[] source = CommonOperationUtils.FindAll(otherModel.Type);
 
-			object value = null;
-
-			if (container != null)
+			stringBuilder.Append(prop.Name + ": &nbsp;");
+			stringBuilder.Append("<br/>\r\n");
+			
+			IDictionary attrs = new HybridDictionary(true);
+			
+			attrs["value"] = keyModel.Property.Name;
+			
+			FormHelper.CheckboxList list = formHelper.CreateCheckboxList(prefix, source, attrs);
+			
+			foreach(object item in list)
 			{
-				value = CreateArrayFromExistingIds(keyModel, container as ICollection);
+				stringBuilder.Append(list.Item());
+				
+				stringBuilder.Append(item.ToString());
+				
+				stringBuilder.Append("<br/>\r\n");
 			}
-
-			object[] items = CommonOperationUtils.FindAll(otherModel.Type, hasAndBelongsModel.HasManyAtt.Where);
-
-			String propName = propName = CreatePropName(model, prefix, keyModel.Property.Name);
-
-			stringBuilder.Append(LabelFor(propName, prop.Name + ": &nbsp;"));
-			stringBuilder.Append("<br/>");
-			stringBuilder.Append(Select(propName, new DictHelper().CreateDict("size=6", "multiple")));
-			stringBuilder.Append(CreateOptionsFromArray(items, null, keyModel.Property.Name, value));
-			stringBuilder.Append(EndSelect());
 
 			return stringBuilder.ToString();
 		}
@@ -414,8 +422,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 		{
 			IDictionary htmlAttributes = new Hashtable();
 
-			htmlAttributes["validators"] = PopulateCustomValidators(
+			String validators = PopulateCustomValidators(
 				notNull ? "blank" : "bok", propType, property, model.Validators);
+			
+			if (validators != String.Empty)
+			{
+				htmlAttributes["validators"] = validators;
+			}
 
 			if (propType == typeof(String))
 			{
@@ -485,7 +498,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 						}
 						else if (validator is EmailValidator)
 						{
-							list.Add("email|0");
+							list.Add("email|2");
 						}
 						else if (validator is ConfirmationValidator)
 						{

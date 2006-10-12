@@ -1,5 +1,6 @@
+<!-- ================== -->
 <!-- this is the layout -->
-
+<!-- ================== -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -16,9 +17,9 @@ $childContent
 
 <!-- Just for debugging purposes 
 <pre>
-Current index $session.get_Item("wizard.simplewizardcurrentstepindex") <br>
-current step  $session.get_Item("wizard.simplewizardcurrentstep") <br>
-just started  $session.get_Item("wizard.simplewizardjuststarted") <br>
+Current index $session.get_Item("wizard.simplewizardcurrentstepindex") 
+current step  $session.get_Item("wizard.simplewizardcurrentstep") 
+just started  $session.get_Item("wizard.simplewizardjuststarted") 
 </pre>
 -->
 

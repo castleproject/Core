@@ -15,9 +15,7 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-
 	using Castle.ActiveRecord;
-	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 
@@ -29,7 +27,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class EditAction : AbstractScaffoldAction
 	{
-		public EditAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
+		public EditAction(Type modelType, ITemplateEngine templateEngine, bool useModelName, bool useDefaultLayout) : 
+			base(modelType, templateEngine, useModelName, useDefaultLayout)
 		{
 		}
 
@@ -40,18 +39,17 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
+			base.PerformActionProcess(controller);
+			
 			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
 
 			try
 			{
 				object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
-
-				new DataBinder().BindObjectInstance(instance, Model.Type.Name,
-				                                    new NameValueCollectionAdapter(controller.Request.Params));
-
+				
 				controller.PropertyBag["prefix"] = Model.Type.Name;
-				controller.PropertyBag["armodel"] = Model;
 				controller.PropertyBag["instance"] = instance;
+				controller.PropertyBag[Model.Type.Name] = instance;
 				controller.PropertyBag["id"] = idVal;
 			}
 			catch(Exception ex)

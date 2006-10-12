@@ -12,17 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace WizardSampleSite.Controllers
+namespace Anakia.DocData
 {
 	using System;
-	
-	using Castle.MonoRail.Framework;
+	using System.Xml;
 
-
-	public class HomeController : Controller
+	public class CommonDocData
 	{
-		public void Index()
+		internal XmlElement summary;
+		internal XmlElement example;
+		internal XmlElement remarks;
+
+		public XmlElement Summary
 		{
+			get { return summary; }
+		}
+
+		public XmlElement Example
+		{
+			get { return example; }
+		}
+
+		public XmlElement Remarks
+		{
+			get { return remarks; }
 		}
 	}
 }

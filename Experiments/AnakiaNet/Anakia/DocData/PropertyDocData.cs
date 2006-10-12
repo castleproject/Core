@@ -12,17 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace WizardSampleSite.Controllers
+namespace Anakia.DocData
 {
 	using System;
-	
-	using Castle.MonoRail.Framework;
 
-
-	public class HomeController : Controller
+	public class PropertyDocData : CommonDocData
 	{
-		public void Index()
+		private string name, id;
+		private Visibility access;
+		private ParameterDocData[] parameters;
+
+		public PropertyDocData(string name, string id, Visibility access, ParameterDocData[] parameters)
 		{
+			this.name = name;
+			this.id = id;
+			this.access = access;
+			this.parameters = parameters;
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
+
+		public string Id
+		{
+			get { return id; }
+		}
+
+		public Visibility Access
+		{
+			get { return access; }
+		}
+
+		public ParameterDocData[] Parameters
+		{
+			get { return parameters; }
 		}
 	}
 }

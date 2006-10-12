@@ -36,17 +36,18 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class ListAction : AbstractScaffoldAction
 	{
-		public ListAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
+		public ListAction(Type modelType, ITemplateEngine templateEngine, bool useModelName, bool useDefaultLayout) : 
+			base(modelType, templateEngine, useModelName, useDefaultLayout)
 		{
 		}
 
 		protected override void PerformActionProcess(Controller controller)
 		{
+			base.PerformActionProcess(controller);
+			
 			controller.PropertyBag.Add( "items", 
 				PaginationHelper.CreatePagination(PerformFindAll(), 10) );
-
-			controller.PropertyBag["model"] = Model;
-			controller.PropertyBag["keyprop"] = ObtainPKProperty();
+			
 			controller.PropertyBag["properties"] = ObtainListableProperties(Model);
 
 			controller.RenderView(controller.Name, "list" + Model.Type.Name);
@@ -108,7 +109,10 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 #if DOTNET2
             if( !isUnsupportedType && type.IsGenericType ) 
 			{
-                isUnsupportedType = (typeof(System.Collections.Generic.ICollection<>).IsAssignableFrom(type.GetGenericTypeDefinition()) || typeof(System.Collections.Generic.IList<>).IsAssignableFrom(type.GetGenericTypeDefinition()) || typeof(System.Collections.Generic.IDictionary<,>).IsAssignableFrom(type.GetGenericTypeDefinition()));
+                isUnsupportedType = (
+					typeof(System.Collections.Generic.ICollection<>).IsAssignableFrom(type.GetGenericTypeDefinition()) || 
+					typeof(System.Collections.Generic.IList<>).IsAssignableFrom(type.GetGenericTypeDefinition()) || 
+					typeof(System.Collections.Generic.IDictionary<,>).IsAssignableFrom(type.GetGenericTypeDefinition()));
             }
 #endif
 			return isUnsupportedType;

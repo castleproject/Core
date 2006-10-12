@@ -356,6 +356,28 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
+		<zip zipfile="${root.dir}/MonoRail.WizardSample.zip">
+			<fileset basedir="${root.dir}/Samples/ActiveRecord/TableHierarchySample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
 	</target>
 	
 	<target name="zip-samples">

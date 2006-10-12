@@ -145,6 +145,11 @@
                     Project = "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity-vs2003"
+                    Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -154,15 +159,9 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "global.asax.cs"
-                    DependentUpon = "global.asax"
+                    RelPath = "MyHttpApplication.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "global.asax.resx"
-                    DependentUpon = "global.asax.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "web.config"
@@ -194,6 +193,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\CategoryController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\CustomerController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -213,10 +217,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "css\style.css"
-                    BuildAction = "Content"
-                />
+                <Folder RelPath = "css\" />
                 <File
                     RelPath = "Model\Account.cs"
                     SubType = "Code"
@@ -275,10 +276,7 @@
                     RelPath = "Views\home\index.vm"
                     BuildAction = "Content"
                 />
-                <File
-                    RelPath = "Views\layouts\scaffold.vm"
-                    BuildAction = "None"
-                />
+                <Folder RelPath = "Views\layouts\" />
                 <File
                     RelPath = "Views\rescues\DataBinderValidateBadData.vm"
                     BuildAction = "None"

@@ -39,14 +39,21 @@ namespace Anakia
 		
 		public String Relativize(String offset, String path, String page)
 		{
-			if (offset == path)
+			try
 			{
-				return String.Format("./{0}", page);
+				if (offset.Length >= path.Length)
+				{
+					return String.Format("./{0}", page);
+				}
+				else
+				{
+					String newPath = path.Substring(offset.Length);
+					return String.Format(".{0}/{1}", newPath, page);
+				}
 			}
-			else
+			catch(Exception)
 			{
-				String newPath = path.Substring(offset.Length);
-				return String.Format(".{0}/{1}", newPath, page);
+				throw;
 			}
 		}
 		

@@ -17,7 +17,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 
 	using Castle.ActiveRecord;
-	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 
@@ -29,7 +28,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class UpdateAction : AbstractScaffoldAction
 	{
-		public UpdateAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
+		public UpdateAction(Type modelType, ITemplateEngine templateEngine, bool useModelName, bool useDefaultLayout) : 
+			base(modelType, templateEngine, useModelName, useDefaultLayout)
 		{
 		}
 
@@ -40,36 +40,42 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			DataBinder binder = new DataBinder();
-
-			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
-
-			SessionScope scope = new SessionScope();
-
 			try
 			{
-				object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
+				AssertIsPost(controller);
+				
+				object instance = binder.BindObject(Model.Type, Model.Type.Name, builder.BuildSourceNode(controller.Request.Form));
 
-				binder.BindObjectInstance(instance, Model.Type.Name, new NameValueCollectionAdapter(controller.Request.Form));
+				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation, false);
 
-				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation);
-
-				scope.Dispose();
-
-				controller.Redirect(controller.AreaName, controller.Name, "list" + Model.Type.Name);
+				SessionScope.Current.Flush();
+				
+				if (UseModelName)
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "list" + Model.Type.Name);
+				}
+				else
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "list");
+				}
 			}
 			catch(Exception ex)
 			{
 				errors.Add("Could not save " + Model.Type.Name + ". " + ex.Message);
-
-				scope.Dispose(true);
 			}
 
 			if (errors.Count != 0)
 			{
 				controller.Context.Flash["errors"] = errors;
 
-				controller.Redirect(controller.AreaName, controller.Name, "edit" + Model.Type.Name, controller.Request.Form);
+				if (UseModelName)
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "edit" + Model.Type.Name, controller.Request.Form);
+				}
+				else
+				{
+					controller.Redirect(controller.AreaName, controller.Name, "edit", controller.Request.Form);
+				}
 			}
 		}
 

@@ -220,6 +220,13 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
+		/// <summary>
+		/// Implementor should return true only if the 
+		/// <c>name</c> is a known section the view component
+		/// supports.
+		/// </summary>
+		/// <param name="name">section being added</param>
+		/// <returns><see langword="true"/> if section is supported</returns>
 		public virtual bool SupportsSection(string name)
 		{
 			return false;

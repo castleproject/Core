@@ -220,6 +220,8 @@ namespace Anakia
 			}
 		}
 
+		#endregion
+		
 		private void AssignNavigationDocToFolders(DocumentNode node)
 		{
 			if (node.NodeType != NodeType.Navigation)
@@ -229,8 +231,6 @@ namespace Anakia
 			
 			node.ParentFolder.NavigationNode = node;
 		}
-
-		#endregion
 
 		private bool IsStaticFile(string fileName)
 		{
@@ -315,7 +315,8 @@ namespace Anakia
 			}
 			catch(Exception ex)
 			{
-				throw new Exception("Error generating html for " + node.TargetFilename, ex);
+				throw new Exception("Error generating html for " + node.TargetFilename + 
+					" at " + node.ParentFolder.Path, ex);
 			}
 		}
 

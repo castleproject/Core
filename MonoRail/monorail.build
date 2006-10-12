@@ -35,9 +35,7 @@
 	</target>
 
 	<target name="arscaffold">
-	<!--
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/Castle.MonoRail.ActiveRecordScaffold.build" />
-	-->
 	</target>
 
 	<target name="testsupport">
@@ -60,9 +58,6 @@
 		<nant buildfile="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
 		<nant buildfile="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
 		<nant buildfile="TestSiteARSupport/TestSiteARSupport.build" />
-		<!--
-		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold.Tests/Castle.MonoRail.ActiveRecordScaffold.Tests.build" />
-		-->
 	</target>
 
 	<target name="generator">
