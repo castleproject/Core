@@ -90,6 +90,12 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
+		
+		/// <remarks>Needed for NHibernate 1.2 from trunk</remarks>
+		public ISession GetCurrentSession()
+		{
+			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
+		}
 
 		public void Close()
 		{
