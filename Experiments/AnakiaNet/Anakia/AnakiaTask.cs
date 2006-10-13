@@ -129,56 +129,71 @@ namespace Anakia
 
 			root = new Folder("castle");
 
+           
+
 			try
 			{
 				ArrayList staticFilesToCopy = new ArrayList();
 
 				foreach(String fullFileName in sourceFileSet.FileNames)
 				{
-					String dir = Path.GetDirectoryName(fullFileName);
-					String fileName = Path.GetFileName(fullFileName);
-					String nodeName = String.Empty;
+                    string lastProcessedFile = null;
+				    
+				    try
+				    {
+				        lastProcessedFile = fullFileName;
+				    
+				        String dir = Path.GetDirectoryName(fullFileName);
+				        String fileName = Path.GetFileName(fullFileName);
+				        String nodeName = String.Empty;
 
-					Folder folder;
-					String[] folders;
+				        Folder folder;
+				        String[] folders;
 
-					if (basedir.FullName.ToLower() != dir.ToLower())
-					{
-						nodeName = dir.Substring(basedir.FullName.Length + 1);
-					}
+				        if (basedir.FullName.ToLower() != dir.ToLower())
+				        {
+				            nodeName = dir.Substring(basedir.FullName.Length + 1);
+				        }
 
-					if (IsStaticFile(fullFileName))
-					{
-						if (nodeName != String.Empty)
-						{
-							staticFilesToCopy.Add(new FileToCopy(
-							                      	fullFileName, root.Name + "/" + nodeName + "/" + fileName));
-						}
-						else
-						{
-							staticFilesToCopy.Add(new FileToCopy(
-							                      	fullFileName, root.Name + "/" + fileName));
-						}
+				        if (IsStaticFile(fullFileName))
+				        {
+				            if (nodeName != String.Empty)
+				            {
+				                staticFilesToCopy.Add(new FileToCopy(
+				                                          fullFileName, root.Name + "/" + nodeName + "/" + fileName));
+				            }
+				            else
+				            {
+				                staticFilesToCopy.Add(new FileToCopy(
+				                                          fullFileName, root.Name + "/" + fileName));
+				            }
 
-						continue;
-					}
+				            continue;
+				        }
 
-					if (nodeName != String.Empty)
-					{
-						folders = nodeName.Split('\\');
-						folder = GetFolderInstance(folders);
-					}
-					else
-					{
-						folder = root;
-					}
+				        if (nodeName != String.Empty)
+				        {
+				            folders = nodeName.Split('\\');
+				            folder = GetFolderInstance(folders);
+				        }
+				        else
+				        {
+				            folder = root;
+				        }
 
-					XmlDocument doc = new XmlDocument();
+				        XmlDocument doc = new XmlDocument();
 
-					doc.Load(fullFileName);
+				        doc.Load(fullFileName);
 
-					DocumentNode node = new DocumentNode(nodeName, fileName, doc, CreateMeta(doc));
-					folder.Documents.Add(node);
+				        DocumentNode node = new DocumentNode(nodeName, fileName, doc, CreateMeta(doc));
+				        folder.Documents.Add(node);
+				    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("File: {0} \r\n", lastProcessedFile);
+                        Console.WriteLine(ex);
+                        Console.WriteLine("\r\n --------------------------------------------------------");
+                    }
 				}
 
 				siteMapDoc = CreateSiteMap();
