@@ -129,71 +129,71 @@ namespace Anakia
 
 			root = new Folder("castle");
 
-           
+
 
 			try
 			{
 				ArrayList staticFilesToCopy = new ArrayList();
 
-				foreach(String fullFileName in sourceFileSet.FileNames)
+				foreach (String fullFileName in sourceFileSet.FileNames)
 				{
-                    string lastProcessedFile = null;
-				    
-				    try
-				    {
-				        lastProcessedFile = fullFileName;
-				    
-				        String dir = Path.GetDirectoryName(fullFileName);
-				        String fileName = Path.GetFileName(fullFileName);
-				        String nodeName = String.Empty;
+					string lastProcessedFile = null;
 
-				        Folder folder;
-				        String[] folders;
+					try
+					{
+						lastProcessedFile = fullFileName;
 
-				        if (basedir.FullName.ToLower() != dir.ToLower())
-				        {
-				            nodeName = dir.Substring(basedir.FullName.Length + 1);
-				        }
+						String dir = Path.GetDirectoryName(fullFileName);
+						String fileName = Path.GetFileName(fullFileName);
+						String nodeName = String.Empty;
 
-				        if (IsStaticFile(fullFileName))
-				        {
-				            if (nodeName != String.Empty)
-				            {
-				                staticFilesToCopy.Add(new FileToCopy(
-				                                          fullFileName, root.Name + "/" + nodeName + "/" + fileName));
-				            }
-				            else
-				            {
-				                staticFilesToCopy.Add(new FileToCopy(
-				                                          fullFileName, root.Name + "/" + fileName));
-				            }
+						Folder folder;
+						String[] folders;
 
-				            continue;
-				        }
+						if (basedir.FullName.ToLower() != dir.ToLower())
+						{
+							nodeName = dir.Substring(basedir.FullName.Length + 1);
+						}
 
-				        if (nodeName != String.Empty)
-				        {
-				            folders = nodeName.Split('\\');
-				            folder = GetFolderInstance(folders);
-				        }
-				        else
-				        {
-				            folder = root;
-				        }
+						if (IsStaticFile(fullFileName))
+						{
+							if (nodeName != String.Empty)
+							{
+								staticFilesToCopy.Add(new FileToCopy(
+														fullFileName, root.Name + "/" + nodeName + "/" + fileName));
+							}
+							else
+							{
+								staticFilesToCopy.Add(new FileToCopy(
+														fullFileName, root.Name + "/" + fileName));
+							}
 
-				        XmlDocument doc = new XmlDocument();
+							continue;
+						}
 
-				        doc.Load(fullFileName);
+						if (nodeName != String.Empty)
+						{
+							folders = nodeName.Split('\\');
+							folder = GetFolderInstance(folders);
+						}
+						else
+						{
+							folder = root;
+						}
 
-				        DocumentNode node = new DocumentNode(nodeName, fileName, doc, CreateMeta(doc));
-				        folder.Documents.Add(node);
-				    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("File: {0} \r\n", lastProcessedFile);
-                        Console.WriteLine(ex);
-                        Console.WriteLine("\r\n --------------------------------------------------------");
-                    }
+						XmlDocument doc = new XmlDocument();
+
+						doc.Load(fullFileName);
+
+						DocumentNode node = new DocumentNode(nodeName, fileName, doc, CreateMeta(doc));
+						folder.Documents.Add(node);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("File: {0} \r\n", lastProcessedFile);
+						Console.WriteLine(ex);
+						Console.WriteLine("\r\n --------------------------------------------------------");
+					}
 				}
 
 				siteMapDoc = CreateSiteMap();
@@ -207,7 +207,7 @@ namespace Anakia
 				walker.Walk(root, new Act(FixRelativePaths));
 				walker.Walk(root, new Act(CreateHtml));
 
-				foreach(FileToCopy file2Copy in staticFilesToCopy)
+				foreach (FileToCopy file2Copy in staticFilesToCopy)
 				{
 					String dir = Path.GetDirectoryName(file2Copy.TargetFile);
 
@@ -221,14 +221,14 @@ namespace Anakia
 						{
 							continue;
 						}
-						
+
 						File.Delete(targetFile);
 					}
 
 					File.Copy(file2Copy.SourceFile, targetFile);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Console.WriteLine(ex);
 				Console.Read();
