@@ -125,7 +125,8 @@ namespace Castle.ActiveRecord
 		public virtual object Clone()
 		{
 			ActiveRecordBaseQuery clone = (ActiveRecordBaseQuery) this.MemberwiseClone();
-			clone.queryModifiers = new ArrayList(this.queryModifiers);
+			if (this.queryModifiers != null)
+				clone.queryModifiers = new ArrayList(this.queryModifiers);
 			return clone;
 		}
 
