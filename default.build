@@ -163,7 +163,7 @@
 
 	<!-- Packaging related tasks -->
 	
-	<target name="package" depends="zip-build installer"
+	<target name="package" depends="zip-build"
 		description="Creates Zip files for Release">
 
 		<echo message="Created a '${project.config}' package in file://${build.zip.fullpath}" />
