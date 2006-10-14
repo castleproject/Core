@@ -4,6 +4,20 @@ Change history
 Release Candidate 2
 ===================
 
+- Applied patch by Ivan Porto Carrero fixing MR-158
+  "Validation throws errors when using group box."
+  
+  Quoting description:
+  
+	"When validating with the option of using a group box then the valdation routine throws an error.
+	The error is only thrown after the valdation failed for a couple of controls in the form. And when those errors are corrected and the form gets validated again that's when the error occurs
+
+	"I also added functionality to have a header in the group error box. I also added the possibility to have a separate error label to append to.
+	For this I added 2 properties to the config of the validation library.
+	The first property is boxErrorHeadingClass and the second one is errorSelectorCssClass
+
+	"In the core script I added 5 lines or so to add this functionality. "
+
 - Applied patch by Nick Hemsley fixing MR-157
   "add fromNameValueCollection method for creating IDictionary instances from (i.e.) Context.Params, or Request.QueryString"
   
