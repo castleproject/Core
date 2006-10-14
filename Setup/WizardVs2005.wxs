@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<?include Includes.wxi?>
+
+<Fragment Id='FragmentWizardVs2005'>
+
+<DirectoryRef Id="TemplatesVs8Dir">
+
+	<Component 
+		Id="vs2005addin" DiskId="1" 
+		Guid="4C692497-C333-4C7F-9898-D9CC8EED20B2">
+		
+		<File Id="addinfile" 
+			Name="Castle.VSNetIntegration.CastleWizards.dll" 
+			Source="$(var.BuildNet20Dir)\Castle.VSNetIntegration.CastleWizards.dll" />
+
+		<Registry Id="registryvs8_2" Root="HKCR" Key="Castle.MonoRailProjectWizardVS8" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs8_3" Root="HKCR" Key="Castle.MonoRailProjectWizardVS8\CLSID" Value="{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}" Type="string" />
+		<Registry Id="registryvs8_4" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs8_5" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
+		<Registry Id="registryvs8_6" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32" Value="mscoree.dll" Type="string" />
+		<Registry Id="registryvs8_7" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32" Name="ThreadingModel" Value="Both" Type="string" />
+		<Registry Id="registryvs8_8" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs8_9" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs8_10" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32" Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+		<Registry Id="registryvs8_11" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32" Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs8_12" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32\1.0.3.0" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs8_13" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32\1.0.3.0" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs8_14" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32\1.0.3.0" Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+		<Registry Id="registryvs8_15" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\InprocServer32\1.0.3.0" Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs8_16" Root="HKCR" Key="CLSID\{9FF77D9F-E4FC-47EE-8E8B-0079FC2F2478}\ProgId" Value="Castle.MonoRailProjectWizardVS8" Type="string" />
+		
+		<Registry Id="registryvs8_0" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizardVS8" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs8_1" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizardVS8\CLSID" Value="{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}" Type="string" />
+		<Registry Id="registryvs8_17" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs8_18" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
+		<Registry Id="registryvs8_19" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32" Value="mscoree.dll" Type="string" />
+		<Registry Id="registryvs8_20" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32" Name="ThreadingModel" Value="Both" Type="string" />
+		<Registry Id="registryvs8_21" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs8_22" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs8_23" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32" Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+		<Registry Id="registryvs8_24" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32" Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs8_25" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32\1.0.3.0" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs8_26" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32\1.0.3.0" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs8_27" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32\1.0.3.0" Name="RuntimeVersion" Value="v2.0.50727" Type="string" />
+		<Registry Id="registryvs8_28" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\InprocServer32\1.0.3.0" Name="CodeBase" Value="file://[TemplatesVs8Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs8_29" Root="HKCR" Key="CLSID\{1D90721C-B0AA-4F9A-BDE5-A588911E38B6}\ProgId" Value="Castle.ActiveRecordModelProjectWizardVS8" Type="string" />
+		
+		<!--
+		<Registry Id="registryvs8_30" Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string" />
+		-->
+	</Component>
+
+	<Component Id="vs8comp" DiskId="1" Guid="FC67BB99-726E-4EEA-8BCA-B24FC643771C">
+		<Condition>VS2005_SCHEMAS_DIR</Condition>
+
+		<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Castle">
+			<Registry Action="write" Name="vs8templatelocation" Type="string" Value="[TemplatesVs8Dir]" />
+		</Registry>
+		
+		<File 
+			Id="vs8file0" 
+			Name="Castle ActiveRecord Project.vsz" 
+			Source="$(var.WizardDir)\Castle ActiveRecord Project VS8.vsz">
+			
+			<CopyFile Id="vs8file0cp" DestinationProperty="VS2005_SCHEMAS_DIR" />
+		</File>
+		
+		<File 
+			Id="vs8file0a" 
+			Name="Castle ActiveRecord Project.ico" 
+			Source="$(var.WizardDir)\CastlePiecesIcon.ico">
+			
+			<CopyFile Id="vs8file0cpa" DestinationProperty="VS2005_SCHEMAS_DIR" />
+		</File>
+		
+		<File 
+			Id="vs8file1" 
+			Name="Castle MonoRail Project.vsz"     
+			Source="$(var.WizardDir)\Castle MonoRail Project VS8.vsz">
+			
+			<CopyFile Id="vs8file1cp" DestinationProperty="VS2005_SCHEMAS_DIR" />
+		</File>
+		
+		<File 
+			Id="vs8file1a" 
+			Name="Castle MonoRail Project.ico"     
+			Source="$(var.WizardDir)\CastlePiecesIcon.ico">
+			
+			<CopyFile Id="vs8file1cpa" DestinationProperty="VS2005_SCHEMAS_DIR" />
+		</File>
+		
+	</Component>
+
+	<Directory Id="CSharp8" Name="CSharp">
+		<Directory Id="directoryvs8_18" Name="ARProject">
+		<Component Id="componentvs2005_ARProject" DiskId="1" Guid="83339276-5E48-4F9D-93DF-81EE45D89848">
+		  <File Id="filecs8_6" Name="ARProject.csproj" Source="$(var.VSTemplates80)\CSharp\ARProject\ARProject.csproj" />
+		  <File Id="filecs8_7" Name="ARProject.sln" Source="$(var.VSTemplates80)\CSharp\ARProject\ARProject.sln" />
+		  <File Id="filecs8_8" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\ARProject\AssemblyInfo.cs" />
+		  <File Id="filecs8_9" Name="Readme.txt" Source="$(var.VSTemplates80)\CSharp\ARProject\Readme.txt" />
+		  <File Id="filecs8_10" Name="Sample.cs" Source="$(var.VSTemplates80)\CSharp\ARProject\Sample.cs" />
+		</Component>
+		</Directory>
+		<Directory Id="directoryvs8_27" Name="ARProjectTest">
+		<Component Id="componentvs2005_ARProjectTest" DiskId="1" Guid="007A3EA6-D596-4777-BF6F-EA2E5B96E2CD">
+		  <File Id="filecs8_19" Name="AbstractModelTestCase.cs" Source="$(var.VSTemplates80)\CSharp\ARProjectTest\AbstractModelTestCase.cs" />
+		  <File Id="filecs8_20" Name="App.config" Source="$(var.VSTemplates80)\CSharp\ARProjectTest\App.config" />
+		  <File Id="filecs8_21" Name="ARProjectTest.csproj" Source="$(var.VSTemplates80)\CSharp\ARProjectTest\ARProjectTest.csproj" />
+		  <File Id="filecs8_22" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\ARProjectTest\AssemblyInfo.cs" />
+		</Component>
+		</Directory>
+		<Directory Id="directoryvs8_36" Name="MRProject">
+		<Component Id="componentvs2005_MRProject" DiskId="1" Guid="E50E8ADF-D5CB-4B47-9022-576142F70EDC">
+		  <File Id="filecs8_30" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\AssemblyInfo.cs" />
+		  <File Id="filecs8_31" Name="components.config" Source="$(var.VSTemplates80)\CSharp\MRProject\components.config" />
+		  <File Id="filecs8_32" Name="ContainerGlobalApplication.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\ContainerGlobalApplication.cs" />
+		  <File Id="filecs8_33" Name="controllers.config" Source="$(var.VSTemplates80)\CSharp\MRProject\controllers.config" />
+		  <File Id="filecs8_34" Name="default.aspx" Source="$(var.VSTemplates80)\CSharp\MRProject\default.aspx" />
+		  <File Id="filecs8_35" Name="facilities.config" Source="$(var.VSTemplates80)\CSharp\MRProject\facilities.config" />
+		  <File Id="filecs8_36" Name="global.asax" Source="$(var.VSTemplates80)\CSharp\MRProject\global.asax" />
+		  <File Id="filecs8_37" Name="index.aspx" Source="$(var.VSTemplates80)\CSharp\MRProject\index.aspx" />
+		  <File Id="filecs8_38" Name="index.boo" Source="$(var.VSTemplates80)\CSharp\MRProject\index.boo" />
+		  <File Id="filecs8_39" Name="index.vm" Source="$(var.VSTemplates80)\CSharp\MRProject\index.vm" />
+		  <File Id="filecs8_40" Name="logging.config" Source="$(var.VSTemplates80)\CSharp\MRProject\logging.config" />
+		  <File Id="filecs8_41" Name="MRProject.csproj" Source="$(var.VSTemplates80)\CSharp\MRProject\MRProject.csproj" />
+		  <File Id="filecs8_42" Name="MRProject.sln" Source="$(var.VSTemplates80)\CSharp\MRProject\MRProject.sln" />
+		  <File Id="filecs8_43" Name="properties.config" Source="$(var.VSTemplates80)\CSharp\MRProject\properties.config" />
+		  <File Id="filecs8_44" Name="Readme.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Readme.txt" />
+		  <File Id="filecs8_45" Name="SimpleGlobalApplication.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\SimpleGlobalApplication.cs" />
+		  <File Id="filecs8_46" Name="Web.config" Source="$(var.VSTemplates80)\CSharp\MRProject\Web.config" />
+		  <File Id="filecs8_47" Name="WebContainer.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\WebContainer.cs" />
+		</Component>
+		<Directory Id="directoryvs8_72" Name="Controllers">
+		  <Component Id="componentvs2005_MRProject1" DiskId="1" Guid="2978313B-8887-4BD8-8280-CFB06E5B08A6">
+			<File Id="filecs8_76" Name="HomeController.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\Controllers\HomeController.cs" />
+		  </Component>
+		</Directory>
+		<Directory Id="directoryvs8_81" Name="Views">
+		  <Directory Id="directoryvs8_90" Name="Home">
+		  <Component Id="componentvs2005_MRProject2" DiskId="1" Guid="2DC6C695-42C5-437B-BCFF-D3A945821A3C">
+			<File Id="filecs8_77" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
+		  </Component>
+		  </Directory>
+		</Directory>
+		<Directory Id="directoryvs8_82" Name="Content">
+		  <Directory Id="directoryvs8_83" Name="css">
+		  <Component Id="componentvs2005_MRProject3" DiskId="1" Guid="125029A4-3C92-4EB4-AB47-1E280507C38C">
+			<File Id="filecs8_78" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
+		  </Component>
+		  </Directory>
+		  <Directory Id="directoryvs8_84" Name="images">
+		  <Component Id="componentvs2005_MRProject4" DiskId="1" Guid="589DDD73-DCFA-4087-B0C1-FA0E8E1A24A9">
+			<File Id="filecs8_79" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
+		  </Component>
+		  </Directory>
+		</Directory>
+		</Directory>
+		<Directory Id="directoryvs8_99" Name="MRProjectTest">
+		<Component Id="componentvs2005_MRProjectTest" DiskId="1" Guid="89677F0B-CF5A-4FA1-84D0-96A56CEE654F">
+		  <File Id="filecs8_85" Name="App.config" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\App.config" />
+		  <File Id="filecs8_86" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\AssemblyInfo.cs" />
+		  <File Id="filecs8_87" Name="HomeControllerTestCase.cs" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\HomeControllerTestCase.cs" />
+		  <File Id="filecs8_88" Name="MRProjectTest.csproj" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\MRProjectTest.csproj" />
+		</Component>
+		</Directory>	
+	</Directory>
+	
+</DirectoryRef>
+		
+</Fragment>
+</Wix>
+

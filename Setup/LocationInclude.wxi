@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include Id="var">
+	
+	<?define BuildBaseDir="E:\dev\castle\trunk\build"?>
+
+	<?define BuildNet11Dir="E:\dev\castle\trunk\build\net-1.1\debug" ?>
+	<?define BuildNet20Dir="E:\dev\castle\trunk\build\net-2.0\debug" ?>
+	<?define ReleaseNotesDir="E:\dev\castle\trunk\build\net-2.0\debug\ReleaseNotes" ?>
+
+	<?define MajorVersion="1" ?>
+	<?define MinorVersion="1" ?>
+	<?define MicroVersion="1" ?>
+	<?define BuildVersion="2" ?>
+	
+</Include>

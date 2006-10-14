@@ -18,8 +18,8 @@ namespace Castle.VSNetIntegration.Shared
 
 	public interface IWizardExtension
 	{
-		void Init(BaseProjectWizard wizard);
+		void Init(ICastleWizard wizard);
 
-		void Terminate(BaseProjectWizard wizard);
+		void Terminate(ICastleWizard wizard);
 	}
 }

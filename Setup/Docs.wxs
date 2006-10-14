@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<?include Includes.wxi?>
+
+<Fragment Id='FragmentDocs'>
+
+		<DirectoryRef Id="DocsDir">
+			<Component Id="DocsComp" KeyPath="yes" DiskId="1" Guid="CDE4186F-DE83-4E7C-A78B-84649BF99AD9">
+<!--				<File Id="docs0" Name="Castle.chm" src="..\docs\Castle.chm" />-->
+
+				<CreateFolder />
+<!--
+				<Shortcut 
+					Id="ShortcutDoc" 
+					Directory="documentationfolder" 
+					Name="API Documentation" 
+					Target="[docs0]" 
+					Description="Documentation in MSDN format for the public API" 
+					Hotkey="0" Show="normal" />
+					-->
+			</Component>
+		</DirectoryRef>
+		
+</Fragment>
+</Wix>

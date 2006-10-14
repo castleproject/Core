@@ -174,7 +174,7 @@
 		
 	</target>
 
-	<target name="createreleasenotes">
+	<target name="createreleasenotes" depends="init">
 		<mkdir dir="${releasenotes.dir}" />
 		<delete dir="${releasenotes.dir}" />
 		

@@ -1,0 +1,13 @@
+
+<h3>Product Administration</h3>
+
+<p>
+- <a href="new.rails">Create product</a>
+</p>
+
+<p>
+- <a href="edit.rails?id=1">Edit product</a>
+</p>
+	
+<hr noshade="yes" size="1" />
+

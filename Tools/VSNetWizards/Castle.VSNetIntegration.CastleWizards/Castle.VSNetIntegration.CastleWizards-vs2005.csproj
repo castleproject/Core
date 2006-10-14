@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -74,9 +74,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EnvDTE">
-      <Name>envdte</Name>
-    </Reference>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -94,11 +92,7 @@
     </Reference>
     <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="VSLangProj2, Version=7.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <ProjectReference Include="..\Castle.VSNetIntegration.Shared\Castle.VSNetIntegration.Shared-vs2003.csproj">
-      <Name>Castle.VSNetIntegration.Shared</Name>
-      <Project>{BF52CF83-B91B-4CA5-81EB-1424D5988735}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
+    <Reference Include="VSLangProj80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveRecordModelProjectWizard.cs">
@@ -107,6 +101,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseProjectWizard.cs" />
     <Compile Include="Dialogs\Panels\ARIntegrationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -123,6 +118,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Dialogs\Panels\MRPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Panels\MRTestPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Dialogs\Panels\NHIntegrationPanel.cs">
@@ -146,11 +144,23 @@
     <Compile Include="MR\NHIntegrationExtension.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MR\TestProjectExtension.cs" />
     <Compile Include="NHUtil.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Pair.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shared\Constants.cs" />
+    <Compile Include="Shared\Dialogs\WizardDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shared\ExtensionContext.cs" />
+    <Compile Include="Shared\ICastleWizard.cs" />
+    <Compile Include="Shared\IWizardExtension.cs" />
+    <Compile Include="Shared\Utils.cs" />
+    <Compile Include="Shared\WizardPanel.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <EmbeddedResource Include="Dialogs\Panels\ARIntegrationPanel.resx">
       <DependentUpon>ARIntegrationPanel.cs</DependentUpon>
@@ -170,8 +180,20 @@
     <EmbeddedResource Include="Dialogs\Panels\MRPanel.resx">
       <DependentUpon>MRPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Panels\MRTestPanel.resx">
+      <DependentUpon>MRTestPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Panels\NHIntegrationPanel.resx">
       <DependentUpon>NHIntegrationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shared\Dialogs\WizardDialog.resx">
+      <DependentUpon>WizardDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shared\WizardPanel.resx">
+      <DependentUpon>WizardPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

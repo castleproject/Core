@@ -1,12 +1,26 @@
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 {
 	using System;
-	using System.Windows.Forms;
-	using Castle.VSNetIntegration.Shared;
+	using Castle.VSNetIntegration.CastleWizards.Shared;
 
 	/// <summary>
 	/// Summary description for ConnStringPanel.
 	/// </summary>
+	[System.Runtime.InteropServices.ComVisible(false)]
 	public class ConnStringPanel : WizardPanel
 	{
 		private System.Windows.Forms.GroupBox groupBox1;
@@ -117,6 +131,7 @@ namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 			this.database.Name = "database";
 			this.database.Size = new System.Drawing.Size(136, 21);
 			this.database.TabIndex = 45;
+			this.database.SelectedIndexChanged += new System.EventHandler(this.database_SelectedIndexChanged);
 			// 
 			// label1
 			// 
@@ -152,6 +167,26 @@ namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 			return ((bool) context.Properties["enableWindsorIntegration"]) == true &&
 				context.Properties.Contains(DependencyKey) &&
 				((bool) context.Properties[DependencyKey]) == true;
+		}
+
+		private void database_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			int index = database.SelectedIndex;
+			
+			if (index < 0) return;
+			
+			// Show connection string example
+			
+			String selectedDb = Database;
+			
+			foreach(Pair pair in NHUtil.GetSampleConnectionStrings())
+			{
+				if (pair.First.ToString() == selectedDb)
+				{
+					connectionString.Text = pair.Second.ToString();
+					break;
+				}
+			}
 		}
 
 		public String DependencyKey

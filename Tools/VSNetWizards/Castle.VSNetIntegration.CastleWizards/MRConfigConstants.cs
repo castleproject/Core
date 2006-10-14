@@ -16,6 +16,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 {
 	using System;
 
+	[System.Runtime.InteropServices.ComVisible(false)]
 	public class MRConfigConstants
 	{
 		public static readonly String Web = "web.config";

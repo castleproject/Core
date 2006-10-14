@@ -118,8 +118,11 @@ namespace Castle.MonoRail.Framework.Configuration
 			if (useWindsorAtt != null && useWindsorAtt.Value != String.Empty)
 			{
 				useWindsorIntegration = String.Compare(useWindsorAtt.Value, "true", true) == 0;
-				
-				ConfigureWindsorIntegration();
+
+				if (useWindsorIntegration)
+				{
+					ConfigureWindsorIntegration();
+				}
 			}
 		}
 		

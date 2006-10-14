@@ -74,9 +74,9 @@
 		<call target="set-${project.config}-project-configuration" />
 
 		<property name="src.dir" 			value="${path::get-full-path(project::get-base-directory())}" />
-		<property name="build.base.dir"		value="${root.dir}/build" />
+		<property name="build.base.dir"	value="${root.dir}/build" />
 		<property name="build.family.dir"	value="${build.base.dir}/${nant.settings.currentframework}" />
-		<property name="build.dir" 			value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" />
+		<property name="build.dir" 		value="${path::get-full-path(path::combine(build.family.dir,project.config))}" dynamic="true" />
 		<property name="testresults.dir" 	value="${build.dir}/test-results" />
 		<property name="releasenotes.dir"	value="${build.dir}/ReleaseNotes" />
 		<property name="build.rebuild"		value="false" overwrite="false" />
@@ -101,6 +101,16 @@
 		<property name="current.build.defines" value="${build.defines},NET,DOTNET1" />
 		<property name="link.sdkdoc.version" value="SDK_v1_1" />
 		<property name="merge.targetplatform" value="v1.1" />
+		<!-- If DevEnvDir exists, we grab it, otherwise we try if the default location (if it exists) -->
+		<if test="${environment::variable-exists('DevEnvDir')}">
+			<property name="dev.env.dir" value="${environment::get-variable('DevEnvDir')}" />
+		</if>
+		<if test="${not environment::variable-exists('DevEnvDir')}">
+			<property name="default.dev.env.dir" value="C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE" />
+			<if test="${directory::exists(default.dev.env.dir)}">
+				<property name="dev.env.dir" value="${default.dev.env.dir}" />
+			</if>
+		</if>
 	</target>
 
 	<target name="set-net-2.0-framework-configuration">
@@ -108,7 +118,16 @@
 		<property name="current.build.defines" value="${build.defines},NET,DOTNET2" />
 		<property name="link.sdkdoc.version" value="SDK_v2_0" />
 		<property name="merge.targetplatform" value="v2" />
-		<property name="csc.keyfile" value="/keyfile:${key.file}" />
+		<!-- If DevEnvDir exists, we grab it, otherwise we try if the default location (if it exists) -->
+		<if test="${environment::variable-exists('DevEnvDir')}">
+			<property name="dev.env.dir" value="${environment::get-variable('DevEnvDir')}" />
+		</if>
+		<if test="${not environment::variable-exists('DevEnvDir')}">
+			<property name="default.dev.env.dir" value="C:\Program Files\Microsoft Visual Studio 8\Common7\IDE" />
+			<if test="${directory::exists(default.dev.env.dir)}">
+				<property name="dev.env.dir" value="${default.dev.env.dir}" />
+			</if>
+		</if>
 	</target>
 
 	<target name="set-mono-1.0-framework-configuration">

@@ -19,4 +19,16 @@
 	
 	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
 	
+	<target name="dynamicproxy2">
+		<nant buildfile="Castle.DynamicProxy2/Castle.DynamicProxy2.build" target="build" />
+	</target>
+
+	<target name="nvelocity">
+		<nant buildfile="NVelocity/nvelocity.build" target="build" />
+	</target>
+
+	<target name="vsintegration">
+		<nant buildfile="VSNetWizards/VsNetIntegration.build" target="build" />
+	</target>
+	
 </project>

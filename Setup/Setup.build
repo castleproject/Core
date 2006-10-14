@@ -32,6 +32,12 @@
 					<include name="${src.dir}/*.wxs" />
 					<include name="${src.dir}/*.wxi" />
 					<include name="License.rtf" />
+					<exclude name="Status.txt"/>
+				</fileset>
+			</copy>
+			<copy todir="${build.setup.dir}">
+				<fileset>
+					<include name="${src.dir}/Binary/*.*" />
 				</fileset>
 			</copy>
 			<property name="build.msi.dir"  value="${build.setup.dir}" overwrite="false" />
@@ -40,10 +46,10 @@
 			<exec 
 				program="${wix.dir}/candle.exe"
 				workingdir="${build.setup.dir}"
-				commandline="-nologo Castle.wxs" />
+				commandline="-nologo Castle.wxs UI.wxs Bin.wxs Docs.wxs ReleaseNotes.wxs Samples.wxs Sources.wxs WizardVs2003.wxs WizardVs2005.wxs " />
 			<exec program="${wix.dir}/light.exe"
 				workingdir="${build.setup.dir}" verbose="true"
-				commandline='-wx -out ${build.msi.fullpath} -loc "${wix.dir}/WixUI_en-us.wxl" Castle.wixobj "${wix.dir}/wixui.wixlib" "${wix.dir}/sca.wixlib"'>
+				commandline='-wx -out ${build.msi.fullpath} Castle.wixobj UI.wixobj Bin.wixobj Docs.wixobj ReleaseNotes.wixobj Samples.wixobj Sources.wixobj WizardVs2003.wixobj WizardVs2005.wixobj" '>
 			</exec>
 		</if>
 	</target>
@@ -55,6 +61,11 @@
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet11Dir="${path::get-full-path(build.base.dir)}\net-1.1\${project.config}"?&gt;</echo>
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet20Dir="${path::get-full-path(build.base.dir)}\net-2.0\${project.config}"?&gt;</echo>
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define ReleaseNotesDir="${releasenotes.dir}"?&gt;</echo>
+
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define WizardDir="${path::get-full-path(root.dir)}\Tools\VSNetWizards"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define VSTemplates70="${path::get-full-path(root.dir)}\Tools\VSNetWizards\CastleTemplates\VS7"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define VSTemplates80="${path::get-full-path(root.dir)}\Tools\VSNetWizards\CastleTemplates\VS8"?&gt;</echo>
+		
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;/Include&gt;</echo>
 	</target>
 	

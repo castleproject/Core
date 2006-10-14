@@ -18,6 +18,7 @@ namespace Castle.VSNetIntegration.Shared
 {
 	using System;
 	using System.Collections;
+	using System.IO;
 	using System.Xml;
 
 	using EnvDTE;
@@ -120,6 +121,14 @@ namespace Castle.VSNetIntegration.Shared
 			(context.Properties[CastleConstants.ConfigFileList] as IList).Add(file);
 
 			return doc;
+		}
+		
+		public static void EnsureDirExists(string path)
+		{
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
 		}
 	}
 }

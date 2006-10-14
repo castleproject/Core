@@ -15,26 +15,28 @@
 namespace Castle.VSNetIntegration.CastleWizards
 {
 	using System;
-	using System.Collections;
 	using System.Xml;
+
 	using Castle.VSNetIntegration.CastleWizards.Dialogs.Panels;
-	using Castle.VSNetIntegration.Shared;
-	using Castle.VSNetIntegration.Shared.Dialogs;
-
+	using Castle.VSNetIntegration.CastleWizards.Shared;
+	using Castle.VSNetIntegration.CastleWizards.Shared.Dialogs;
 	using EnvDTE;
+	using Constants=Castle.VSNetIntegration.CastleWizards.Shared.Constants;
 
+	
+	[System.Runtime.InteropServices.ComVisible(false)]
 	public class LoggingIntegrationExtension : IWizardExtension
 	{
 		private LoggingPanel panel = new LoggingPanel();
 
-		public void Init(BaseProjectWizard wizard)
+		public void Init(ICastleWizard wizard)
 		{
 			wizard.OnAddPanels += new WizardUIEventHandler(AddPanels);
 			wizard.OnAddReferences += new WizardEventHandler(OnAddReferences);
 			wizard.OnPostProcess += new WizardEventHandler(OnPostProcess);
 		}
 
-		public void Terminate(BaseProjectWizard wizard)
+		public void Terminate(ICastleWizard wizard)
 		{
 			wizard.OnAddPanels -= new WizardUIEventHandler(AddPanels);
 			wizard.OnAddReferences -= new WizardEventHandler(OnAddReferences);
@@ -52,7 +54,6 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 			Project project = context.Projects[Constants.ProjectMain];
 
-			Utils.AddReference(project, "Castle.Services.Logging.dll");
 			Utils.AddReference(project, "Castle.Facilities.Logging.dll");
 
 			if (panel.LogingApi == "Log4net")

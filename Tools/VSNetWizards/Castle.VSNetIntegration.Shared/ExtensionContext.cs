@@ -95,7 +95,11 @@ namespace Castle.VSNetIntegration.Shared
 
 		public String CassiniLocation
 		{
+#if DOTNET2
+			get { return (String) GetCastleReg().GetValue("cassini2location"); }
+#else
 			get { return (String) GetCastleReg().GetValue("cassinilocation"); }
+#endif
 		}
 
 		public DTE DteInstance

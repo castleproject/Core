@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "C:\Program Files\Castle\Wizard Templates\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "true"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -112,11 +112,6 @@
                     HintPath = "C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\VSLangProj2.dll"
                     AssemblyFolderKey = "hklm\publicassemblies"
                 />
-                <Reference
-                    Name = "Castle.VSNetIntegration.Shared"
-                    Project = "{BF52CF83-B91B-4CA5-81EB-1424D5988735}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>
@@ -128,6 +123,11 @@
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BaseProjectWizard.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -212,6 +212,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Dialogs\Panels\MRTestPanel.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Panels\MRTestPanel.resx"
+                    DependentUpon = "MRTestPanel.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Dialogs\Panels\NHIntegrationPanel.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -240,6 +250,56 @@
                     RelPath = "MR\NHIntegrationExtension.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MR\TestProjectExtension.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\Constants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\ExtensionContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\ICastleWizard.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\IWizardExtension.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\Utils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\WizardPanel.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\WizardPanel.resx"
+                    DependentUpon = "WizardPanel.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Shared\Dialogs\WizardDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Shared\Dialogs\WizardDialog.resx"
+                    DependentUpon = "WizardDialog.cs"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

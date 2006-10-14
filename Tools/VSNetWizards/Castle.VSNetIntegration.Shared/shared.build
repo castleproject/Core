@@ -9,13 +9,13 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="2.0.0.0" />
+		<property name="assembly.version" value="1.0.3.0" />
 		<property name="assembly.description" value="Castle Project Visual Studio Integration Shared Lib" />
 		<property name="assembly.copyright" value="Copyright (c) 2004,2005,2006 Castle Project - http://www.castleproject.org" />
 		<property name="assembly.allow-partially-trusted-callers" value="true" />
 		
 		<property name="assembly.is-cls-compliant" value="false" />
-		<property name="assembly.is-com-visible" value="true" />
+		<property name="assembly.is-com-visible" value="false" />
 
 		<if test="${nant.settings.currentframework=='net-1.1'}">
 			<property name="extensibility.dll.dir" value="${environment::get-variable('DevEnvDir')}" />

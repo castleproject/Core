@@ -19,13 +19,22 @@ namespace Castle.VSNetIntegration.CastleWizards
 	using System.Runtime.InteropServices;
 
 	using Castle.VSNetIntegration.CastleWizards.Dialogs.Panels;
+	using Castle.VSNetIntegration.CastleWizards.Shared;
+	using Castle.VSNetIntegration.CastleWizards.Shared.Dialogs;
 	using Castle.VSNetIntegration.Shared;
-	using Castle.VSNetIntegration.Shared.Dialogs;
 
 	using EnvDTE;
+	using Constants=Castle.VSNetIntegration.CastleWizards.Shared.Constants;
 
+#if DOTNET2
+	[Guid("1D90721C-B0AA-4F9A-BDE5-A588911E38B6")]
+	[ProgId("Castle.ActiveRecordModelProjectWizardVS8")]
+	[ComDefaultInterface(typeof(IDTWizard))]
+#else
 	[Guid("50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706")]
-	[ProgId("Castle.ActiveRecordModelProjectWizard")]
+	[ProgId("Castle.ActiveRecordModelProjectWizardVS7")]
+#endif
+	[ComVisibleAttribute(true)]
 	public class ActiveRecordModelProjectWizard : BaseProjectWizard
 	{
 		private ARPanel panel;
@@ -44,14 +53,14 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 		protected override void AddProjects(ExtensionContext context)
 		{
-			String projectFile = context.GetTemplateFileName(@"CSharp\ARProject.csproj");
-			String testProjectFile = context.GetTemplateFileName(@"CSharp\ARProjectTest.csproj");
+			String projectFile = context.GetTemplateFileName(@"CSharp\ARProject\ARProject.csproj");
+			String testProjectFile = context.GetTemplateFileName(@"CSharp\ARProjectTest\ARProjectTest.csproj");
 
 			String localTestProjectPath = Path.Combine(LocalProjectPath, @"..\" + ProjectName + ".Tests");
 			localTestProjectPath = new DirectoryInfo(localTestProjectPath).FullName;
 
-			EnsureDirExists(LocalProjectPath);
-			EnsureDirExists(localTestProjectPath);
+			Utils.EnsureDirExists(LocalProjectPath);
+			Utils.EnsureDirExists(localTestProjectPath);
 
 			Project project = 
 				context.DteInstance.Solution.AddFromTemplate(projectFile, LocalProjectPath, ProjectName + ".csproj", Exclusive);

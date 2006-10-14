@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<?include Includes.wxi?>
+
+<Fragment Id='FragmentBin'>
+
+<DirectoryRef Id="BinDir">
+	<Component Id="ProductComponentGac" DiskId="1" Guid="49ABA8A2-D8C0-456A-8E80-6AEAD79DF1B7">
+		<File Id="file22A" 
+			Name="Castle.MonoRail.TestSupport.dll" 
+			KeyPath="yes" Assembly=".net" AssemblyManifest="file22A"
+			Source="$(var.BuildNet11Dir)\Castle.MonoRail.TestSupport.dll" />
+	</Component>
+	
+	<Directory Id="net11dir" Name="net-1.1">
+		<Component Id="ProductComponent11" DiskId="1" Guid="9809B08F-5717-44F2-A07F-B16C8ADADC39">
+			<!-- <File Id="file300" Name="Assemblies README.txt" Source="Assemblies README.txt" /> -->
+			
+			<!-- Core -->
+			<File Id="file37" Name="Castle.Core.dll"						Source="$(var.BuildNet11Dir)\Castle.Core.dll" />
+
+			<!-- MonoRail -->
+			<File Id="file13" Name="Castle.MonoRail.ActiveRecordScaffold.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.ActiveRecordScaffold.dll" />
+			<File Id="file15" Name="Castle.MonoRail.ActiveRecordSupport.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.ActiveRecordSupport.dll" />
+			<File Id="file17" Name="Castle.MonoRail.Framework.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Framework.dll" />
+			<File Id="file19" Name="Castle.MonoRail.Framework.Views.CompositeView.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Framework.Views.CompositeView.dll" />
+			<File Id="file20" Name="Castle.MonoRail.Framework.Views.NVelocity.dll" Source="$(var.BuildNet11Dir)\Castle.MonoRail.Framework.Views.NVelocity.dll" />
+			<File Id="file23" Name="Castle.MonoRail.WindsorExtension.dll"	Source="$(var.BuildNet11Dir)\Castle.MonoRail.WindsorExtension.dll" />
+			<File Id="file22" Name="Castle.MonoRail.TestSupport.dll" 		Source="$(var.BuildNet11Dir)\Castle.MonoRail.TestSupport.dll" />
+			<File Id="file24" Name="Castle.MonoRail.Views.Brail.dll" 		Source="$(var.BuildNet11Dir)\Castle.MonoRail.Views.Brail.dll" />
+
+			<!-- DynProxy -->
+			<File Id="file35" Name="Castle.DynamicProxy.dll"				Source="$(var.BuildNet11Dir)\Castle.DynamicProxy.dll" />
+
+			<!-- IoC -->
+			<File Id="file36" Name="Castle.MicroKernel.dll"					Source="$(var.BuildNet11Dir)\Castle.MicroKernel.dll" />
+			<File Id="file38" Name="Castle.Windsor.dll"						Source="$(var.BuildNet11Dir)\Castle.Windsor.dll" />
+
+			<!-- Components -->
+			<File Id="file5"  Name="Castle.Components.Binder.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Binder.dll" />
+			<File Id="file6"  Name="Castle.Components.Common.EmailSender.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.EmailSender.dll" />
+			<File Id="file7"  Name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+			<File Id="file8"  Name="Castle.Components.Common.TemplateEngine.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.TemplateEngine.dll" />
+			<File Id="file9"  Name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+			<File Id="file10" Name="Castle.Components.Winforms.AssemblyResolver.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Winforms.AssemblyResolver.dll" />
+
+			<!-- AR -->
+			<File Id="ar1" Name="Castle.ActiveRecord.dll"				Source="$(var.BuildNet11Dir)\Castle.ActiveRecord.dll" />
+<!--
+			<File Id="ar2" Name="AR2.EXE"		  Name="Castle.ActiveRecord.Generator.exe"		Source="$(var.BuildNet11Dir)\Castle.ActiveRecord.Generator.exe" />
+			<File Id="ar3" Name="AR3.DLL"		  Name="Castle.ActiveRecord.Generator.Components.dll" Source="$(var.BuildNet11Dir)\Castle.ActiveRecord.Generator.Components.dll" />
+			<File Id="ar6" Name="AR6.DLL"		  Name="WeifenLuo.WinFormsUI.Docking.dll"		Source="$(var.BuildNet11Dir)\WeifenLuo.WinFormsUI.Docking.dll" />
+			<File Id="ar4" Name="ADODB.DLL"		  Name="ADODB.dll"								Source="$(var.BuildNet11Dir)\ADODB.dll" />
+			<File Id="ar5" Name="MSDASC.DLL"      Name="MSDASC.dll"								Source="$(var.BuildNet11Dir)\MSDASC.dll" />
+-->
+
+			<!-- Aspect# -->
+			<File Id="file44" Name="antlr.runtime.dll"						Source="$(var.BuildNet11Dir)\antlr.runtime.dll" />
+			<File Id="file45" Name="AopAlliance.dll"						Source="$(var.BuildNet11Dir)\AopAlliance.dll" />
+			<File Id="file46" Name="AspectSharp.dll"						Source="$(var.BuildNet11Dir)\AspectSharp.dll" />
+			<File Id="file47" Name="AspectSharp.Lang.dll"					Source="$(var.BuildNet11Dir)\AspectSharp.Lang.dll" />
+
+			<!-- Services -->
+			<File Id="file40" Name="Castle.Services.Logging.Log4netIntegration.dll" Source="$(var.BuildNet11Dir)\Castle.Services.Logging.Log4netIntegration.dll" />
+			<File Id="file41" Name="Castle.Services.Logging.NLogIntegration.dll"	Source="$(var.BuildNet11Dir)\Castle.Services.Logging.NLogIntegration.dll" />
+			<File Id="file43" Name="Castle.Services.Transaction.dll"				Source="$(var.BuildNet11Dir)\Castle.Services.Transaction.dll" />
+
+			<!-- Facilities -->
+			<File Id="file59" Name="Castle.Facilities.ActiveRecordIntegration.dll"	Source="$(var.BuildNet11Dir)\Castle.Facilities.ActiveRecordIntegration.dll" />
+			<File Id="file50" Name="Castle.Facilities.AspectSharp.dll"				Source="$(var.BuildNet11Dir)\Castle.Facilities.AspectSharp.dll" />
+			<File Id="file52" Name="Castle.Facilities.BatchRegistration.dll"		Source="$(var.BuildNet11Dir)\Castle.Facilities.BatchRegistration.dll" />
+			<File Id="file53" Name="Castle.Facilities.Cache.dll"					Source="$(var.BuildNet11Dir)\Castle.Facilities.Cache.dll" />
+<!-- 		<File Id="file54" Name="CA670E_1.DLL" Name="Castle.Facilities.Db4oIntegration.dll"			Source="$(var.BuildNet11Dir)\Castle.Facilities.Db4oIntegration.dll" /> -->
+			<File Id="file55" Name="Castle.Facilities.IBatisNetIntegration.dll"		Source="$(var.BuildNet11Dir)\Castle.Facilities.IBatisNetIntegration.dll" />
+			<File Id="file56" Name="Castle.Facilities.Logging.dll"					Source="$(var.BuildNet11Dir)\Castle.Facilities.Logging.dll" />
+			<File Id="file57" Name="Castle.Facilities.NHibernateIntegration.dll"	Source="$(var.BuildNet11Dir)\Castle.Facilities.NHibernateIntegration.dll" />
+			<File Id="file58" Name="Castle.Facilities.Prevalence.dll"				Source="$(var.BuildNet11Dir)\Castle.Facilities.Prevalence.dll" />
+			<File Id="file51" Name="Castle.Facilities.AutomaticTransactionManagement.dll" Source="$(var.BuildNet11Dir)\Castle.Facilities.AutomaticTransactionManagement.dll" />
+
+			<!-- Distributable Dependencies -->
+			<File Id="file0"  Name="anrControls.Markdown.NET.dll"			Source="$(var.BuildNet11Dir)\anrControls.Markdown.NET.dll" />
+			<File Id="file1"  Name="Boo.Lang.Compiler.dll"				Source="$(var.BuildNet11Dir)\Boo.Lang.Compiler.dll" />
+			<File Id="file2"  Name="Boo.Lang.dll"							Source="$(var.BuildNet11Dir)\Boo.Lang.dll" />
+			<File Id="file3"  Name="Boo.Lang.Parser.dll"					Source="$(var.BuildNet11Dir)\Boo.Lang.Parser.dll" />
+			<File Id="file60" Name="log4net.dll"													Source="$(var.BuildNet11Dir)\log4net.dll" />
+			<File Id="file80" Name="IBatisNet.Common.dll"					Source="$(var.BuildNet11Dir)\IBatisNet.Common.dll" />
+			<File Id="file82" Name="IBatisNet.DataMapper.dll"				Source="$(var.BuildNet11Dir)\IBatisNet.DataMapper.dll" />
+
+			<File Id="file83" Name="NVelocity.dll"						Source="$(var.BuildNet11Dir)\NVelocity.dll" />
+			
+			<File Id="file61" Name="NLog.dll"														Source="$(var.BuildNet11Dir)\NLog.dll" />
+			<File Id="file85" Name="NLog.license.txt"						Source="$(var.BuildNet11Dir)\NLog.license.txt" />
+			<File Id="file63" Name="Bamboo.Prevalence.Collections.dll"	Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.Collections.dll" />
+			<File Id="file64" Name="Bamboo.Prevalence.dll"				Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.dll" />
+			<File Id="file65" Name="Bamboo.Prevalence.Indexing.dll"		Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.Indexing.dll" />
+			<File Id="file66" Name="Bamboo.Prevalence.Util.dll"			Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.Util.dll" />
+			<File Id="file67" Name="Bamboo.Prevalence.XPath.dll"			Source="$(var.BuildNet11Dir)\Bamboo.Prevalence.XPath.dll" />
+			<File Id="file69" Name="Iesi.Collections.dll"					Source="$(var.BuildNet11Dir)\Iesi.Collections.dll" />
+			<File Id="file76" Name="Iesi.Collections.license.txt"			Source="$(var.BuildNet11Dir)\Iesi.Collections.license.txt" />
+			<File Id="file71" Name="NHibernate.dll"						Source="$(var.BuildNet11Dir)\NHibernate.dll" />
+			<File Id="file75" Name="NHibernate.license.txt"				Source="$(var.BuildNet11Dir)\NHibernate.license.txt" />
+			<File Id="file72" Name="Nullables.dll"						Source="$(var.BuildNet11Dir)\Nullables.dll" />
+			<File Id="file73" Name="Nullables.NHibernate.dll"				Source="$(var.BuildNet11Dir)\Nullables.NHibernate.dll" />
+<!--			<File Id="file90" Name="NetronGraphLib.dll"					Source="$(var.BuildNet11Dir)\NetronGraphLib.dll" />
+			<File Id="file91" Name="NetronMaths.dll"						Source="$(var.BuildNet11Dir)\NetronMaths.dll" />
+			-->
+
+			<RegistryKey 
+				Action="createAndRemoveOnUninstall" 
+				Root="HKLM" 
+				Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
+				<RegistryValue Action="write" Type="string" Value="[net11dir]" />
+			</RegistryKey>
+			
+			<!--
+			<Registry Action="createAndRemoveOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
+				<Registry Action="write" Type="string" Value="[net11dir]" />
+			</Registry>
+
+			<Shortcut Id="ShortcutWebSite" Directory="shortcutrootfolder" Name="Castle Project WebSite" Target="http://www.castleproject.org" Description="Source of up to date information" Hotkey="0" Show="normal" />
+			<Shortcut Id="ShortcutForum"   Directory="shortcutrootfolder" Name="Forum" Target="http://forum.castleproject.org" Description="Source of up to date information" Hotkey="0" Show="normal" />
+			<Shortcut Id="ShortcutIssue"   Directory="shortcutrootfolder" Name="Issue tracker" Target="http://support.castleproject.org/jira/" Description="Source of up to date information" Hotkey="0" Show="normal" />
+			-->
+
+		</Component>
+	</Directory>
+
+	<Directory Id="net20dir" Name="net-2.0">
+		<Component Id="ProductComponent20" DiskId="1" Guid="394DE961-2B37-4BC9-A65E-C1F5A5F3B0F7">
+			<!-- <File Id="file3000" Name="Assemblies README.txt" Source="Assemblies README.txt" /> -->
+
+			<!-- Core -->
+			<File Id="n2file37" Name="Castle.Core.dll"						Source="$(var.BuildNet20Dir)\Castle.Core.dll" />
+
+			<!-- MonoRail -->
+			<File Id="n2file13" Name="Castle.MonoRail.ActiveRecordScaffold.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.ActiveRecordScaffold.dll" />
+			<File Id="n2file15" Name="Castle.MonoRail.ActiveRecordSupport.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.ActiveRecordSupport.dll" />
+			<File Id="n2file17" Name="Castle.MonoRail.Framework.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Framework.dll" />
+			<File Id="n2file19" Name="Castle.MonoRail.Framework.Views.CompositeView.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Framework.Views.CompositeView.dll" />
+			<File Id="n2file20" Name="Castle.MonoRail.Framework.Views.NVelocity.dll" Source="$(var.BuildNet20Dir)\Castle.MonoRail.Framework.Views.NVelocity.dll" />
+			<File Id="n2file23" Name="Castle.MonoRail.WindsorExtension.dll"	Source="$(var.BuildNet20Dir)\Castle.MonoRail.WindsorExtension.dll" />
+			<File Id="n2file22" Name="Castle.MonoRail.TestSupport.dll" 		Source="$(var.BuildNet20Dir)\Castle.MonoRail.TestSupport.dll" />
+			<File Id="n2file24" Name="Castle.MonoRail.Views.Brail.dll" 		Source="$(var.BuildNet20Dir)\Castle.MonoRail.Views.Brail.dll" />
+
+			<!-- DynProxy -->
+			<File Id="n2file35" Name="Castle.DynamicProxy.dll"				Source="$(var.BuildNet20Dir)\Castle.DynamicProxy.dll" />
+
+			<!-- DynProxy2 -->
+			<File Id="n2file35a" Name="Castle.DynamicProxy2.dll"				Source="$(var.BuildNet20Dir)\Castle.DynamicProxy2.dll" />
+
+			<!-- IoC -->
+			<File Id="n2file36" Name="Castle.MicroKernel.dll"			 	Source="$(var.BuildNet20Dir)\Castle.MicroKernel.dll" />
+			<File Id="n2file38" Name="Castle.Windsor.dll"					Source="$(var.BuildNet20Dir)\Castle.Windsor.dll" />
+
+			<!-- Components -->
+			<File Id="n2file5"  Name="Castle.Components.Binder.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Binder.dll" />
+			<File Id="n2file6"  Name="Castle.Components.Common.EmailSender.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.EmailSender.dll" />
+			<File Id="n2file7"  Name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+			<File Id="n2file8"  Name="Castle.Components.Common.TemplateEngine.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.TemplateEngine.dll" />
+			<File Id="n2file9"  Name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+			<File Id="n2file10" Name="Castle.Components.Winforms.AssemblyResolver.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Winforms.AssemblyResolver.dll" />
+
+			<!-- AR -->
+			<File Id="n2ar1" Name="Castle.ActiveRecord.dll"				Source="$(var.BuildNet20Dir)\Castle.ActiveRecord.dll" />
+<!--
+			<File Id="n2ar2" Name="AR2.EXE"		  Name="Castle.ActiveRecord.Generator.exe"		Source="$(var.BuildNet20Dir)\Castle.ActiveRecord.Generator.exe" />
+			<File Id="n2ar3" Name="AR3.DLL"		  Name="Castle.ActiveRecord.Generator.Components.dll" Source="$(var.BuildNet20Dir)\Castle.ActiveRecord.Generator.Components.dll" />
+-->
+
+			<!-- Aspect# -->
+			<File Id="n2file46" Name="AspectSharp.dll"						Source="$(var.BuildNet20Dir)\AspectSharp.dll" />
+			<File Id="n2file47" Name="AspectSharp.Lang.dll"					Source="$(var.BuildNet20Dir)\AspectSharp.Lang.dll" />
+
+			<!-- Services -->
+			<File Id="n2file40" Name="Castle.Services.Logging.Log4netIntegration.dll" Source="$(var.BuildNet20Dir)\Castle.Services.Logging.Log4netIntegration.dll" />
+			<File Id="n2file41" Name="Castle.Services.Logging.NLogIntegration.dll"	Source="$(var.BuildNet20Dir)\Castle.Services.Logging.NLogIntegration.dll" />
+<!--
+			<File Id="n2file42" Name="security.DLL" Name="Castle.Services.Security.dll"					Source="$(var.BuildNet20Dir)\Castle.Services.Security.dll" />
+-->
+			<File Id="n2file43" Name="Castle.Services.Transaction.dll"				Source="$(var.BuildNet20Dir)\Castle.Services.Transaction.dll" />
+
+			<!-- Facilities -->
+			<File Id="n2file59" Name="Castle.Facilities.ActiveRecordIntegration.dll"	Source="$(var.BuildNet20Dir)\Castle.Facilities.ActiveRecordIntegration.dll" />
+			<File Id="n2file50" Name="Castle.Facilities.AspectSharp.dll"				Source="$(var.BuildNet20Dir)\Castle.Facilities.AspectSharp.dll" />
+			<File Id="n2file52" Name="Castle.Facilities.BatchRegistration.dll"			Source="$(var.BuildNet20Dir)\Castle.Facilities.BatchRegistration.dll" />
+			<File Id="n2file53" Name="Castle.Facilities.Cache.dll"						Source="$(var.BuildNet20Dir)\Castle.Facilities.Cache.dll" />
+<!--		<File Id="n2file54" Name="CA670E_1.DLL" Name="Castle.Facilities.Db4oIntegration.dll"			Source="$(var.BuildNet20Dir)\Castle.Facilities.Db4oIntegration.dll" /> -->
+			<File Id="n2file55" Name="Castle.Facilities.IBatisNetIntegration.dll"		Source="$(var.BuildNet20Dir)\Castle.Facilities.IBatisNetIntegration.dll" />
+			<File Id="n2file56" Name="Castle.Facilities.Logging.dll"					Source="$(var.BuildNet20Dir)\Castle.Facilities.Logging.dll" />
+			<File Id="n2file57" Name="Castle.Facilities.NHibernateIntegration.dll"		Source="$(var.BuildNet20Dir)\Castle.Facilities.NHibernateIntegration.dll" />
+			<File Id="n2file58" Name="Castle.Facilities.Prevalence.dll"					Source="$(var.BuildNet20Dir)\Castle.Facilities.Prevalence.dll" />
+			<File Id="n2file51" Name="Castle.Facilities.AutomaticTransactionManagement.dll" Source="$(var.BuildNet20Dir)\Castle.Facilities.AutomaticTransactionManagement.dll" />
+
+			<!-- Distributable Dependencies -->
+			<File Id="n2file0"  Name="anrControls.Markdown.NET.dll"			Source="$(var.BuildNet20Dir)\anrControls.Markdown.NET.dll" />
+			<File Id="n2file1"  Name="Boo.Lang.Compiler.dll"				Source="$(var.BuildNet20Dir)\Boo.Lang.Compiler.dll" />
+			<File Id="n2file2"  Name="Boo.Lang.dll"							Source="$(var.BuildNet20Dir)\Boo.Lang.dll" />
+			<File Id="n2file3"  Name="Boo.Lang.Parser.dll"					Source="$(var.BuildNet20Dir)\Boo.Lang.Parser.dll" />
+			<File Id="n2file60" Name="log4net.dll"													Source="$(var.BuildNet20Dir)\log4net.dll" />
+			<File Id="n2file80" Name="IBatisNet.Common.dll"					Source="$(var.BuildNet20Dir)\IBatisNet.Common.dll" />
+			<File Id="n2file82" Name="IBatisNet.DataMapper.dll"				Source="$(var.BuildNet20Dir)\IBatisNet.DataMapper.dll" />
+
+			<File Id="n2file83" Name="NVelocity.dll"						Source="$(var.BuildNet20Dir)\NVelocity.dll" />
+			
+			<File Id="n2file61" Name="NLog.dll"														Source="$(var.BuildNet20Dir)\NLog.dll" />
+			<File Id="n2file85" Name="NLog.license.txt"						Source="$(var.BuildNet20Dir)\NLog.license.txt" />
+			<File Id="n2file63" Name="Bamboo.Prevalence.Collections.dll"	Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.Collections.dll" />
+			<File Id="n2file64" Name="Bamboo.Prevalence.dll"				Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.dll" />
+			<File Id="n2file65" Name="Bamboo.Prevalence.Indexing.dll"		Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.Indexing.dll" />
+			<File Id="n2file66" Name="Bamboo.Prevalence.Util.dll"			Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.Util.dll" />
+			<File Id="n2file67" Name="Bamboo.Prevalence.XPath.dll"			Source="$(var.BuildNet20Dir)\Bamboo.Prevalence.XPath.dll" />
+			<File Id="n2file69" Name="Iesi.Collections.dll"					Source="$(var.BuildNet20Dir)\Iesi.Collections.dll" />
+			<File Id="n2file76" Name="Iesi.Collections.license.txt"			Source="$(var.BuildNet20Dir)\Iesi.Collections.license.txt" />
+			<File Id="n2file71" Name="NHibernate.dll"						Source="$(var.BuildNet20Dir)\NHibernate.dll" />
+			<File Id="n2file75" Name="NHibernate.license.txt"				Source="$(var.BuildNet20Dir)\NHibernate.license.txt" />
+			<File Id="n2file72" Name="Nullables.dll"						Source="$(var.BuildNet20Dir)\Nullables.dll" />
+			<File Id="n2file73" Name="Nullables.NHibernate.dll"				Source="$(var.BuildNet20Dir)\Nullables.NHibernate.dll" />
+<!--			<File Id="n2file90" Name="NETRON1.DLL"	Name="NetronGraphLib.dll"					Source="$(var.BuildNet20Dir)\NetronGraphLib.dll" />
+			<File Id="n2file91" Name="NETRON2.DLL"	Name="NetronMaths.dll"						Source="$(var.BuildNet20Dir)\NetronMaths.dll" />
+			-->
+
+			<RegistryKey 
+				Action="createAndRemoveOnUninstall" 
+				Root="HKLM" 
+				Key="SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\castle">
+				<RegistryValue Action="write" Type="string" Value="[net20dir]" />
+			</RegistryKey>
+
+		</Component>
+	</Directory>
+
+</DirectoryRef>
+
+		
+</Fragment>
+</Wix>

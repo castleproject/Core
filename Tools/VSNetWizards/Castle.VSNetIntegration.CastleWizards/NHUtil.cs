@@ -19,6 +19,18 @@ namespace Castle.VSNetIntegration.CastleWizards
 	public class NHUtil
 	{
 		private NHUtil() { }
+		
+		public static Pair[] GetSampleConnectionStrings()
+		{
+			return new Pair[] {
+				new Pair("Oracle", "Data Source=;User ID=;Password=;"), 
+				new Pair("MS SQLServer", "Server=(local);Initial Catalog=yourdatabase;Integrated Security=SSPI"), 
+				new Pair("MySql", "Database=test;Data Source=IP;User Id=;Password="),
+				new Pair("Firebird", "Server=localhost;Database=c:\file.fdb;User=;password=;ServerType=1;Pooling=false"),
+				new Pair("PostgreSQL", "Server=localhost;initial catalog=dbname;User ID=;Password=;"),
+				new Pair("SQLite", "Data Source=database.name;Version=3"),
+			};
+		}
 
 		public static Pair[] GetGeneralSettings()
 		{
@@ -43,8 +55,8 @@ namespace Castle.VSNetIntegration.CastleWizards
 			{
 				return new Pair[] {
 					new Pair("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect"), 
-					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver"),
-					new Pair("hibernate.query.substitutions", "true 1, false 0, yes 'Y', no 'N'")
+					new Pair("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver")
+					//new Pair("hibernate.query.substitutions", "true 1, false 0, yes 'Y', no 'N'")
 				};
 			}
 			else if (database == "MySql")

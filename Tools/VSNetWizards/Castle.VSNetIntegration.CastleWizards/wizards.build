@@ -9,34 +9,31 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="1.0.0.0" />
+		<property name="assembly.version" value="1.0.3.0" />
 		<property name="assembly.description" value="Castle Project Visual Studio Wizards" />
 		<property name="assembly.copyright" value="Copyright (c) 2004,2005,2006 Castle Project - http://www.castleproject.org" />
 		<property name="assembly.allow-partially-trusted-callers" value="true" />
 
 		<property name="assembly.is-cls-compliant" value="false" />
-		<property name="assembly.is-com-visible" value="true" />
+		<property name="assembly.is-com-visible" value="false" />
 
 		<if test="${nant.settings.currentframework=='net-1.1'}">
-			<property name="extensibility.dll.dir" value="${environment::get-variable('DevEnvDir')}" />
-			<property name="public.dll.dir" value="${environment::get-variable('DevEnvDir')}\PublicAssemblies" />
+			<property name="extensibility.dll.dir" value="${dev.env.dir}" />
+			<property name="public.dll.dir" value="${dev.env.dir}\PublicAssemblies" />
 			<property name="envdte.dll.dir" value="" />
 		</if>
 		
 		<if test="${nant.settings.currentframework=='net-2.0'}">
-			<property name="extensibility.dll.dir" value="${environment::get-variable('DevEnvDir')}" />
-			<property name="public.dll.dir" value="${environment::get-variable('DevEnvDir')}\PublicAssemblies" />
+			<property name="extensibility.dll.dir" value="${dev.env.dir}" />
+			<property name="public.dll.dir" value="${dev.env.dir}\PublicAssemblies" />
 			<property name="envdte.dll.dir" value="${public.dll.dir}\" />
 		</if>
 
 		<fileset id="project.sources">
 			<include name="${src.dir}/**/*.cs" />
-			
-			<exclude name="${src.dir}/CastleTemplates/**/*.cs" />
 		</fileset>
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
-			<include name="Castle.VSNetIntegration.Shared.dll" />
 			<include name="System.Drawing.dll" />
 			<include name="System.Windows.Forms.dll" />
 			<include name="System.Xml.dll" />
@@ -44,14 +41,12 @@
 			<include name="${public.dll.dir}\Extensibility.dll" />
 			<include name="${public.dll.dir}\VSLangProj.dll" />
 			<include name="${public.dll.dir}\VSLangProj2.dll" />
-			
-			<!--
-			C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\EnvDTE.dll
-			C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\Extensibility.dll
-			C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\VSLangProj.dll
-			C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\PublicAssemblies\VSLangProj2.dll
-			-->
 		</assemblyfileset>
+		
+		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
+			<include name="**/*.resx" />
+			<exclude name="obj/**" />
+		</resourcefileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

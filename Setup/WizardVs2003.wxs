@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<?include Includes.wxi?>
+
+<Fragment Id='FragmentWizardVs2003'>
+
+<DirectoryRef Id="TemplatesVs7Dir">
+
+	<Component 
+		Id="vs2003addin" DiskId="1" 
+		Guid="E4A2DCF9-32F1-4692-942D-E8081EB61FD2">
+		
+		<File Id="cs7addinfile" 
+			Name="Castle.VSNetIntegration.CastleWizards.dll" 
+			Source="$(var.BuildNet11Dir)\Castle.VSNetIntegration.CastleWizards.dll">
+		</File>
+
+		<Registry Id="registryvs7_2" Root="HKCR" Key="Castle.MonoRailProjectWizardVS7" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs7_3" Root="HKCR" Key="Castle.MonoRailProjectWizardVS7\CLSID" Value="{43C9796F-E6C8-460D-B722-204A7121A510}" Type="string" />
+		<Registry Id="registryvs7_4" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs7_5" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
+		<Registry Id="registryvs7_6" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Value="mscoree.dll" Type="string" />
+		<Registry Id="registryvs7_7" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="ThreadingModel" Value="Both" Type="string" />
+		<Registry Id="registryvs7_8" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs7_9" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs7_10" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+		<Registry Id="registryvs7_11" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="CodeBase" Value="file://[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs7_12" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+		<Registry Id="registryvs7_13" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs7_14" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+		<Registry Id="registryvs7_15" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="CodeBase" Value="file://[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs7_16" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\ProgId" Value="Castle.MonoRailProjectWizardVS7" Type="string" />
+		
+		<Registry Id="registryvs7_0" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizardVS7" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs7_1" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizardVS7\CLSID" Value="{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" Type="string" />
+		<Registry Id="registryvs7_17" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs7_18" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
+		<Registry Id="registryvs7_19" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Value="mscoree.dll" Type="string" />
+		<Registry Id="registryvs7_20" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="ThreadingModel" Value="Both" Type="string" />
+		<Registry Id="registryvs7_21" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs7_22" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs7_23" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+		<Registry Id="registryvs7_24" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="CodeBase" Value="file://[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs7_25" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+		<Registry Id="registryvs7_26" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" />
+		<Registry Id="registryvs7_27" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+		<Registry Id="registryvs7_28" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="CodeBase" Value="file://[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+		<Registry Id="registryvs7_29" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\ProgId" Value="Castle.ActiveRecordModelProjectWizardVS7" Type="string" />
+		<RegistryValue Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string" Action="write" />
+
+		<!--
+			
+			<Class 
+				Id="{43C9796F-E6C8-460D-B722-204A7121A510}" 
+				Context="InprocServer32" 
+				Description="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" 
+				ThreadingModel="both">
+				
+				<ProgId 
+					Id="Castle.MonoRailProjectWizardVS7" 
+					Description="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" />
+			</Class>
+
+			<Class 
+				Id="{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" 
+				Context="InprocServer32" 
+				Description="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" 
+				ThreadingModel="both">
+				<ProgId Id="Castle.ActiveRecordModelProjectWizardVS7" Description="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" />
+			</Class>
+			
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="RuntimeVersion" Value="v1.1.4322" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.3.0" Name="CodeBase" Value="[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Value="mscoree.dll" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="CodeBase" Value="[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" Action="write" />
+
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="RuntimeVersion" Value="v1.1.4322" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.3.0" Name="CodeBase" Value="[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Value="mscoree.dll" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="CodeBase" Value="[TemplatesVs7Dir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" Action="write" />
+		<RegistryValue Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string" Action="write" />
+
+		-->
+		
+		<!--
+		<Registry Id="registryvs7_30" Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string" />
+		-->
+	</Component>
+
+	<Component Id="vs7comp" DiskId="1" Guid="F28DAF5D-C18D-4F06-8928-CD17D955019F">
+		<Condition>VS2003_SCHEMAS_DIR</Condition>
+
+		<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Castle">
+			<Registry Action="write" Name="vs7templatelocation" Type="string" Value="[TemplatesVs7Dir]" />
+		</Registry>
+		
+		<File 
+			Id="vs7file0" 
+			Name="Castle ActiveRecord Project.vsz" 
+			Source="$(var.WizardDir)\Castle ActiveRecord Project VS7.vsz">
+			
+			<CopyFile Id="vs7file0cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+		</File>
+		
+		<File 
+			Id="vs7file0a" 
+			Name="Castle ActiveRecord Project.ico" 
+			Source="$(var.WizardDir)\CastlePiecesIcon.ico">
+			
+			<CopyFile Id="vs7file0cpa" DestinationProperty="VS2003_SCHEMAS_DIR" />
+		</File>
+		
+		<File 
+			Id="vs7file1" 
+			Name="Castle MonoRail Project.vsz"     
+			Source="$(var.WizardDir)\Castle MonoRail Project VS7.vsz">
+			
+			<CopyFile Id="vs7file1cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+		</File>
+		
+		<File 
+			Id="vs7file1a" 
+			Name="Castle MonoRail Project.ico"     
+			Source="$(var.WizardDir)\CastlePiecesIcon.ico">
+			
+			<CopyFile Id="vs7file1cpa" DestinationProperty="VS2003_SCHEMAS_DIR" />
+		</File>
+		
+	</Component>
+
+	<Directory Id="CSharp7" Name="CSharp">
+		<Directory Id="directoryvs7_18" Name="ARProject">
+		<Component Id="componentvs2003_ARProject" DiskId="1" Guid="D98FC328-F8CE-45C8-A45B-608ADF9ACB4F">
+		  <File Id="filecs7_6" Name="ARProject.csproj" Source="$(var.VSTemplates70)\CSharp\ARProject\ARProject.csproj" />
+		  <File Id="filecs7_7" Name="ARProject.sln" Source="$(var.VSTemplates70)\CSharp\ARProject\ARProject.sln" />
+		  <File Id="filecs7_8" Name="AssemblyInfo.cs" Source="$(var.VSTemplates70)\CSharp\ARProject\AssemblyInfo.cs" />
+		  <File Id="filecs7_9" Name="Readme.txt" Source="$(var.VSTemplates70)\CSharp\ARProject\Readme.txt" />
+		  <File Id="filecs7_10" Name="Sample.cs" Source="$(var.VSTemplates70)\CSharp\ARProject\Sample.cs" />
+		</Component>
+		</Directory>
+		<Directory Id="directoryvs7_27" Name="ARProjectTest">
+		<Component Id="componentvs2003_ARProjectTest" DiskId="1" Guid="1DC25562-BDB5-4319-A0AA-61AA679D03DE">
+		  <File Id="filecs7_19" Name="AbstractModelTestCase.cs" Source="$(var.VSTemplates70)\CSharp\ARProjectTest\AbstractModelTestCase.cs" />
+		  <File Id="filecs7_20" Name="App.config" Source="$(var.VSTemplates70)\CSharp\ARProjectTest\App.config" />
+		  <File Id="filecs7_21" Name="ARProjectTest.csproj" Source="$(var.VSTemplates70)\CSharp\ARProjectTest\ARProjectTest.csproj" />
+		  <File Id="filecs7_22" Name="AssemblyInfo.cs" Source="$(var.VSTemplates70)\CSharp\ARProjectTest\AssemblyInfo.cs" />
+		</Component>
+		</Directory>
+		<Directory Id="directoryvs7_36" Name="MRProject">
+		<Component Id="componentvs2003_MRProject" DiskId="1" Guid="C117D55E-D1E9-418E-9506-9A03162661B4">
+		  <File Id="filecs7_30" Name="AssemblyInfo.cs" Source="$(var.VSTemplates70)\CSharp\MRProject\AssemblyInfo.cs" />
+		  <File Id="filecs7_31" Name="components.config" Source="$(var.VSTemplates70)\CSharp\MRProject\components.config" />
+		  <File Id="filecs7_32" Name="ContainerGlobalApplication.cs" Source="$(var.VSTemplates70)\CSharp\MRProject\ContainerGlobalApplication.cs" />
+		  <File Id="filecs7_33" Name="controllers.config" Source="$(var.VSTemplates70)\CSharp\MRProject\controllers.config" />
+		  <File Id="filecs7_34" Name="default.aspx" Source="$(var.VSTemplates70)\CSharp\MRProject\default.aspx" />
+		  <File Id="filecs7_35" Name="facilities.config" Source="$(var.VSTemplates70)\CSharp\MRProject\facilities.config" />
+		  <File Id="filecs7_36" Name="global.asax" Source="$(var.VSTemplates70)\CSharp\MRProject\global.asax" />
+		  <File Id="filecs7_37" Name="index.aspx" Source="$(var.VSTemplates70)\CSharp\MRProject\index.aspx" />
+		  <File Id="filecs7_38" Name="index.boo" Source="$(var.VSTemplates70)\CSharp\MRProject\index.boo" />
+		  <File Id="filecs7_39" Name="index.vm" Source="$(var.VSTemplates70)\CSharp\MRProject\index.vm" />
+		  <File Id="filecs7_40" Name="logging.config" Source="$(var.VSTemplates70)\CSharp\MRProject\logging.config" />
+		  <File Id="filecs7_41" Name="MRProject.csproj" Source="$(var.VSTemplates70)\CSharp\MRProject\MRProject.csproj" />
+		  <File Id="filecs7_42" Name="MRProject.sln" Source="$(var.VSTemplates70)\CSharp\MRProject\MRProject.sln" />
+		  <File Id="filecs7_43" Name="properties.config" Source="$(var.VSTemplates70)\CSharp\MRProject\properties.config" />
+		  <File Id="filecs7_44" Name="Readme.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Readme.txt" />
+		  <File Id="filecs7_45" Name="SimpleGlobalApplication.cs" Source="$(var.VSTemplates70)\CSharp\MRProject\SimpleGlobalApplication.cs" />
+		  <File Id="filecs7_46" Name="Web.config" Source="$(var.VSTemplates70)\CSharp\MRProject\Web.config" />
+		  <File Id="filecs7_47" Name="WebContainer.cs" Source="$(var.VSTemplates70)\CSharp\MRProject\WebContainer.cs" />
+		</Component>
+		<Directory Id="directoryvs7_72" Name="Controllers">
+		  <Component Id="componentvs2003_MRProject1" DiskId="1" Guid="8EDD2687-1919-4022-ACA4-1EEDDFD345B8">
+			<File Id="filecs7_76" Name="HomeController.cs" Source="$(var.VSTemplates70)\CSharp\MRProject\Controllers\HomeController.cs" />
+		  </Component>
+		</Directory>
+		<Directory Id="directoryvs7_81" Name="Views">
+		  <Directory Id="directoryvs7_90" Name="Home">
+		  <Component Id="componentvs2003_MRProject2" DiskId="1" Guid="135D5706-10AF-4E8F-BEEA-3B22C8F0A6A8">
+			<File Id="filecs7_77" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
+		  </Component>
+		  </Directory>
+		</Directory>
+		<Directory Id="directoryvs7_82" Name="Content">
+		  <Directory Id="directoryvs7_83" Name="css">
+		  <Component Id="componentvs2003_MRProject3" DiskId="1" Guid="16E0D2C9-1432-4DA6-AF49-D6D5755788C8">
+			<File Id="filecs7_78" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
+		  </Component>
+		  </Directory>
+		  <Directory Id="directoryvs7_84" Name="images">
+		  <Component Id="componentvs2003_MRProject4" DiskId="1" Guid="BC3B8D9C-4E68-4E92-BA44-AF6DC540C362">
+			<File Id="filecs7_79" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
+		  </Component>
+		  </Directory>
+		</Directory>
+		</Directory>
+		<Directory Id="directoryvs7_99" Name="MRProjectTest">
+		<Component Id="componentvs2003_MRProjectTest" DiskId="1" Guid="6D7C4B00-0B55-4D42-8824-39AB7B7A0412">
+		  <File Id="filecs7_85" Name="App.config" Source="$(var.VSTemplates70)\CSharp\MRProjectTest\App.config" />
+		  <File Id="filecs7_86" Name="AssemblyInfo.cs" Source="$(var.VSTemplates70)\CSharp\MRProjectTest\AssemblyInfo.cs" />
+		  <File Id="filecs7_87" Name="HomeControllerTestCase.cs" Source="$(var.VSTemplates70)\CSharp\MRProjectTest\HomeControllerTestCase.cs" />
+		  <File Id="filecs7_88" Name="MRProjectTest.csproj" Source="$(var.VSTemplates70)\CSharp\MRProjectTest\MRProjectTest.csproj" />
+		</Component>
+		</Directory>	
+	</Directory>
+	
+</DirectoryRef>
+		
+</Fragment>
+</Wix>
+
