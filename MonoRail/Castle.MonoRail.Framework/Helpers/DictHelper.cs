@@ -61,5 +61,19 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return dict;
 		}
+
+		public IDictionary FromNameValueCollection(NameValueCollection collection)
+		{
+			IDictionary dict = new HybridDictionary(true);
+
+			foreach(string key in collection.AllKeys)
+			{
+				if (key == null) continue;
+				
+				dict[key] = collection[key];
+			}
+			
+			return dict;
+		}
 	}
 }
