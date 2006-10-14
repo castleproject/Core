@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord.Framework.Queries
 	/// int rowCount = proj.Execute();
 	/// </code>
 	/// </example>
-	public class ProjectionQuery<ARType,TResult> : IActiveRecordQuery
+	public class ProjectionQuery<ARType, TResult> : IActiveRecordQuery
 	{
 		private readonly IProjection projection;
 		private readonly ICriterion[] criterions;
@@ -89,8 +89,7 @@ namespace Castle.ActiveRecord.Framework.Queries
 			{
 				criteria.Add(criterion);
 			}
-			//TODO: Next time NHibernate is updated, this should be changed to SetProjection()
-			criteria.Projection = (projection);
+			criteria.SetProjection(projection);
 			return (TResult)criteria.UniqueResult();
 		}
 

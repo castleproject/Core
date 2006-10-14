@@ -609,6 +609,39 @@ namespace Castle.ActiveRecord
 
 		#region FindAll
 
+
+		/// <summary>
+		/// Returns all instances found for the specified type according to the criteria
+		/// </summary>
+		protected static Array FindAll(Type targetType, DetachedCriteria detachedCriteria, params Order[] orders)
+		{
+			EnsureInitialized(targetType);
+
+			ISession session = holder.CreateSession(targetType);
+			try
+			{
+				ICriteria criteria = detachedCriteria.GetExecutableCriteria(session);
+
+				AddOrdersToCriteria(criteria, orders);
+
+				return SupportingUtils.BuildArray(targetType, criteria.List());
+			}
+			catch (ValidationException)
+			{
+				throw;
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+			
+			
+		}
+		
 		/// <summary>
 		/// Returns all instances found for the specified type.
 		/// </summary>
@@ -642,13 +675,7 @@ namespace Castle.ActiveRecord
 					criteria.Add(cond);
 				}
 
-				if (orders != null)
-				{
-					foreach(Order order in orders)
-					{
-						criteria.AddOrder(order);
-					}
-				}
+				AddOrdersToCriteria(criteria, orders);
 
 				return SupportingUtils.BuildArray(targetType, criteria.List());
 			}
@@ -663,6 +690,16 @@ namespace Castle.ActiveRecord
 			finally
 			{
 				holder.ReleaseSession(session);
+			}
+		}
+
+		private static void AddOrdersToCriteria(ICriteria criteria, Order[] orders) {
+			if (orders != null)
+			{
+				foreach(Order order in orders)
+				{
+					criteria.AddOrder(order);
+				}
 			}
 		}
 
@@ -827,6 +864,25 @@ namespace Castle.ActiveRecord
 			return (result.Length == 0) ? null : result.GetValue(0);
 		}
 
+		/// <summary>
+		/// Searches and returns a row. If more than one is found, 
+		/// throws <see cref="ActiveRecordException"/>
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criteria">The criteria</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		protected internal static object FindOne(Type targetType, DetachedCriteria criteria)
+		{
+			Array result = SlicedFindAll(targetType, 0, 2, criteria);
+
+			if (result.Length > 1)
+			{
+				throw new ActiveRecordException(targetType.Name + ".FindOne returned " + result.Length +
+												" rows. Expecting one or none");
+			}
+
+			return (result.Length == 0) ? null : result.GetValue(0);
+		}
 		#endregion
 
 		#region SlicedFindAll
@@ -881,11 +937,52 @@ namespace Castle.ActiveRecord
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
 		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
+													  Order[] orders, DetachedCriteria criteria)
+		{
+			EnsureInitialized(targetType);
+
+			ISession session = holder.CreateSession(targetType);
+
+			try
+			{
+				ICriteria executableCriteria = criteria.GetExecutableCriteria(session);
+				AddOrdersToCriteria(executableCriteria,orders);
+				executableCriteria.SetFirstResult(firstResult);
+				executableCriteria.SetMaxResults(maxResults);
+
+				return SupportingUtils.BuildArray(targetType, executableCriteria.List());
+			}
+			catch (ValidationException)
+			{
+				throw;
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform SlicedFindAll for " + targetType.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+		/// <summary>
+		/// Returns a portion of the query results (sliced)
+		/// </summary>
+		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
 		                                              params ICriterion[] criterias)
 		{
 			return SlicedFindAll(targetType, firstResult, maxResults, null, criterias);
 		}
 
+		/// <summary>
+		/// Returns a portion of the query results (sliced)
+		/// </summary>
+		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
+													  DetachedCriteria criteria)
+		{
+			return SlicedFindAll(targetType, firstResult, maxResults, null, criteria);
+		}
+		
 		#endregion
 
 		#endregion

@@ -137,6 +137,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			throw new NotImplementedException("SessionFactoryDelegate: not implemented");
 		}
 
+		public ISession GetCurrentSession()
+		{
+			throw new NotImplementedException();
+		}
+
 		public IConnectionProvider ConnectionProvider
 		{
 			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }

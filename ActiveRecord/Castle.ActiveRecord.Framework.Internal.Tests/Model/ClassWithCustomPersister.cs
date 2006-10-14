@@ -417,5 +417,10 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		{
 			get { throw new NotImplementedException(); }
 		}
+
+		public ISessionFactoryImplementor Factory
+		{
+			get { throw new NotImplementedException(); }
+		}
 	}
 }
