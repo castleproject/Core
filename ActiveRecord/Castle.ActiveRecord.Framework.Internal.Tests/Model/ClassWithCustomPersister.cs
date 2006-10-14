@@ -71,12 +71,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 
 	public class CustomPersister : IEntityPersister
 	{
-		/// <remarks>Needed for NHibernate 1.2 from trunk</remarks>
-		public ISessionFactoryImplementor Factory
-		{
-			get { throw new NotImplementedException(); }
-		}
-	
 		public void PostInstantiate(ISessionFactoryImplementor factory)
 		{
 			throw new NotImplementedException();
