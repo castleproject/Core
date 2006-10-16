@@ -28,7 +28,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
         public override bool CanHandleType(Type type)
         {
-            return type.IsArray;
+			return type.IsArray;
         }
 
         public override object PerformConversion(String value, Type targetType)

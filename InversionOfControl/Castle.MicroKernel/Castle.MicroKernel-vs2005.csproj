@@ -351,6 +351,9 @@
     <Compile Include="SubSystems\Conversion\Converters\EnumConverter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\Generics\GenericDictionaryConverter.cs" />
+    <Compile Include="SubSystems\Conversion\Converters\Generics\IGenericCollectionConverterHelper.cs" />
+    <Compile Include="SubSystems\Conversion\Converters\Generics\GenericListConverter.cs" />
     <Compile Include="SubSystems\Conversion\Converters\ListConverter.cs">
       <SubType>Code</SubType>
     </Compile>

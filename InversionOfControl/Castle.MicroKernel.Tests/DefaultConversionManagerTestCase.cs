@@ -16,7 +16,9 @@ namespace Castle.MicroKernel.Tests
 {
 	using System;
 	using System.Collections;
-
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 	using NUnit.Framework;
 
 	using Castle.Core.Configuration;
@@ -48,13 +50,13 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(true, conversionMng.PerformConversion("true", typeof(bool)));
 			Assert.AreEqual(false, conversionMng.PerformConversion("false", typeof(bool)));
 		}
-		
+
 		[Test]
 		public void PerformConversionType()
 		{
-			Assert.AreEqual(typeof(DefaultConversionManagerTestCase), 
+			Assert.AreEqual(typeof(DefaultConversionManagerTestCase),
 				conversionMng.PerformConversion(
-					"Castle.MicroKernel.Tests.DefaultConversionManagerTestCase, Castle.MicroKernel.Tests", 
+					"Castle.MicroKernel.Tests.DefaultConversionManagerTestCase, Castle.MicroKernel.Tests",
 					typeof(Type)));
 		}
 
@@ -63,15 +65,15 @@ namespace Castle.MicroKernel.Tests
 		{
 			MutableConfiguration config = new MutableConfiguration("list");
 			config.Attributes["type"] = "System.String";
-			
-			config.Children.Add( new MutableConfiguration("item", "first") );
-			config.Children.Add( new MutableConfiguration("item", "second") );
-			config.Children.Add( new MutableConfiguration("item", "third") );
+
+			config.Children.Add(new MutableConfiguration("item", "first"));
+			config.Children.Add(new MutableConfiguration("item", "second"));
+			config.Children.Add(new MutableConfiguration("item", "third"));
 
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IList)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(ArrayList)));
 
-			IList list = (IList) conversionMng.PerformConversion(config, typeof(IList));
+			IList list = (IList)conversionMng.PerformConversion(config, typeof(IList));
 			Assert.IsNotNull(list);
 			Assert.AreEqual("first", list[0]);
 			Assert.AreEqual("second", list[1]);
@@ -84,10 +86,10 @@ namespace Castle.MicroKernel.Tests
 			MutableConfiguration config = new MutableConfiguration("dictionary");
 			config.Attributes["keyType"] = "System.String";
 			config.Attributes["valueType"] = "System.String";
-			
-			config.Children.Add( new MutableConfiguration("item", "first") ).Attributes["key"] = "key1";
-			config.Children.Add( new MutableConfiguration("item", "second") ).Attributes["key"] = "key2";
-			config.Children.Add( new MutableConfiguration("item", "third") ).Attributes["key"] = "key3";
+
+			config.Children.Add(new MutableConfiguration("item", "first")).Attributes["key"] = "key1";
+			config.Children.Add(new MutableConfiguration("item", "second")).Attributes["key"] = "key2";
+			config.Children.Add(new MutableConfiguration("item", "third")).Attributes["key"] = "key3";
 
 			MutableConfiguration intItem = new MutableConfiguration("item", "40");
 			intItem.Attributes["key"] = "4";
@@ -106,34 +108,80 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IDictionary)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(Hashtable)));
 
-			IDictionary dict = (IDictionary) 
+			IDictionary dict = (IDictionary)
 				conversionMng.PerformConversion(config, typeof(IDictionary));
-			
+
 			Assert.IsNotNull(dict);
-			
+
 			Assert.AreEqual("first", dict["key1"]);
 			Assert.AreEqual("second", dict["key2"]);
 			Assert.AreEqual("third", dict["key3"]);
 			Assert.AreEqual(40, dict[4]);
-			Assert.AreEqual(new DateTime(2005,12,1), dict[new DateTime(2000,1,1)]);
+			Assert.AreEqual(new DateTime(2005, 12, 1), dict[new DateTime(2000, 1, 1)]);
 		}
+#if DOTNET2
 
+
+		[Test]
+		public void GenericPerformConversionList()
+		{
+			MutableConfiguration config = new MutableConfiguration("list");
+			config.Attributes["type"] = "System.Double";
+
+			config.Children.Add(new MutableConfiguration("item", "3.45"));
+			config.Children.Add(new MutableConfiguration("item", "3.147"));
+			config.Children.Add(new MutableConfiguration("item", "9.97"));
+
+			Assert.IsTrue(conversionMng.CanHandleType(typeof(IList<double>)));
+			Assert.IsTrue(conversionMng.CanHandleType(typeof(List<string>)));
+
+			IList<double> list = (IList<double>)conversionMng.PerformConversion(config, typeof(IList<double>));
+			Assert.IsNotNull(list);
+			Assert.AreEqual(3.45d, list[0]);
+			Assert.AreEqual(3.147d, list[1]);
+			Assert.AreEqual(9.97d, list[2]);
+		}
+		
+		
+		[Test]
+		public void GenericDictionary()
+		{
+			MutableConfiguration config = new MutableConfiguration("dictionary");
+			config.Attributes["keyType"] = "System.String";
+			config.Attributes["valueType"] = "System.Int32";
+
+			config.Children.Add(new MutableConfiguration("item", "1")).Attributes["key"] = "key1";
+			config.Children.Add(new MutableConfiguration("item", "2")).Attributes["key"] = "key2";
+			config.Children.Add(new MutableConfiguration("item", "3")).Attributes["key"] = "key3";
+
+			Assert.IsTrue(conversionMng.CanHandleType(typeof(IDictionary<string, string>)));
+			Assert.IsTrue(conversionMng.CanHandleType(typeof(Dictionary<string, int>)));
+
+			IDictionary<string, int> dict = (IDictionary<string, int>)conversionMng.PerformConversion(config, typeof(IDictionary<string, int>));
+
+			Assert.IsNotNull(dict);
+
+			Assert.AreEqual(1, dict["key1"]);
+			Assert.AreEqual(2, dict["key2"]);
+			Assert.AreEqual(3, dict["key3"]);
+		}
+#endif
 		[Test]
 		public void Array()
 		{
 			MutableConfiguration config = new MutableConfiguration("array");
-			
-			config.Children.Add( new MutableConfiguration("item", "first") );
-			config.Children.Add( new MutableConfiguration("item", "second") );
-			config.Children.Add( new MutableConfiguration("item", "third") );
+
+			config.Children.Add(new MutableConfiguration("item", "first"));
+			config.Children.Add(new MutableConfiguration("item", "second"));
+			config.Children.Add(new MutableConfiguration("item", "third"));
 
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(String[])));
 
-			String[] array = (String[]) 
+			String[] array = (String[])
 				conversionMng.PerformConversion(config, typeof(String[]));
-			
+
 			Assert.IsNotNull(array);
-			
+
 			Assert.AreEqual("first", array[0]);
 			Assert.AreEqual("second", array[1]);
 			Assert.AreEqual("third", array[2]);
