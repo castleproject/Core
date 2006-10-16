@@ -118,6 +118,7 @@
 		<property name="current.build.defines" value="${build.defines},NET,DOTNET2" />
 		<property name="link.sdkdoc.version" value="SDK_v2_0" />
 		<property name="merge.targetplatform" value="v2" />
+		<property name="csc.keyfile" value="/keyfile:${key.file}" />
 		<!-- If DevEnvDir exists, we grab it, otherwise we try if the default location (if it exists) -->
 		<if test="${environment::variable-exists('DevEnvDir')}">
 			<property name="dev.env.dir" value="${environment::get-variable('DevEnvDir')}" />
