@@ -126,20 +126,20 @@ namespace Castle.MicroKernel.Tests
 		public void GenericPerformConversionList()
 		{
 			MutableConfiguration config = new MutableConfiguration("list");
-			config.Attributes["type"] = "System.Double";
+			config.Attributes["type"] = "System.Int64";
 
-			config.Children.Add(new MutableConfiguration("item", "3.45"));
-			config.Children.Add(new MutableConfiguration("item", "3.147"));
-			config.Children.Add(new MutableConfiguration("item", "9.97"));
+			config.Children.Add(new MutableConfiguration("item", "345"));
+			config.Children.Add(new MutableConfiguration("item", "3147"));
+			config.Children.Add(new MutableConfiguration("item", "997"));
 
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IList<double>)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(List<string>)));
 
-			IList<double> list = (IList<double>)conversionMng.PerformConversion(config, typeof(IList<double>));
+			IList<long> list = (IList<long>)conversionMng.PerformConversion(config, typeof(IList<long>));
 			Assert.IsNotNull(list);
-			Assert.AreEqual(3.45d, list[0]);
-			Assert.AreEqual(3.147d, list[1]);
-			Assert.AreEqual(9.97d, list[2]);
+			Assert.AreEqual(345L, list[0]);
+			Assert.AreEqual(3147L, list[1]);
+			Assert.AreEqual(997L, list[2]);
 		}
 		
 		
