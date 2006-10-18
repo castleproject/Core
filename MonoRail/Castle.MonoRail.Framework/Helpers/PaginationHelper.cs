@@ -56,6 +56,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				queryStringParams = new Hashtable();
 			}
+			else if (queryStringParams.IsReadOnly || queryStringParams.IsFixedSize)
+			{
+				queryStringParams = new Hashtable(queryStringParams);
+			}
 
 			queryStringParams["page"] = page.ToString();
 
