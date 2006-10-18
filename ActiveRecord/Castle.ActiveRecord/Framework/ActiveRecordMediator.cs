@@ -230,6 +230,15 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordBase.Delete(instance);
 		}
+		
+		/// <summary>
+		/// Refresh the instance from the database.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be reloaded</param>
+		public static void Refresh(object instance)
+		{
+			ActiveRecordBase.Refresh(instance);
+		}
 
 		/// <summary>
 		/// Testing hock only.

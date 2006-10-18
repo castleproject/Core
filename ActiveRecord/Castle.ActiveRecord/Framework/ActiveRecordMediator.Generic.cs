@@ -189,6 +189,15 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordMediator.Delete(instance);
 		}
+
+		/// <summary>
+		/// Refresh the instance from the database.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be reloaded</param>
+		public static void Refresh(T instance)
+		{
+			ActiveRecordMediator.Refresh(instance);
+		}
 	}
 }
 
