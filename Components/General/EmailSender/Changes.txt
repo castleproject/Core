@@ -1,3 +1,11 @@
+Oct 19, 2006
+------------
+- Fixed a bug in the System.Net.Mail (.NET 2.0) version of the SmtpSender, regarding empty CC and BCC fields.
+- Also added some new configurable functionality for .NET 2.0:
+  Ability to send emails asyncronously (AsyncSend property);
+  Configurable SMTP port (Port property);
+  Configurable timeout for syncronous send (Timeout property);
+
 6/6/2006
 - Applied Ernst Naezer patch fixing problem when cc / bcc fields were null
 

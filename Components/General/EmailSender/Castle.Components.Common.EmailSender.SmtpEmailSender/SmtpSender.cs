@@ -32,6 +32,7 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 		private readonly String hostname;
 #if DOTNET2
 		private SmtpClient smtpClient;
+		private bool asyncSend = false;
 #endif
 
 		/// <summary>
@@ -54,6 +55,35 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 		{
 			get { return hostname; }
 		}
+		
+#if DOTNET2
+		/// <summary>
+		/// Gets or sets a value which is used to configure if emails are going to be sent asyncrhonously or not.
+		/// </summary>
+		public bool AsyncSend
+		{
+			get { return asyncSend; }
+			set { asyncSend = value; }
+		}
+		
+		/// <summary>
+		/// Gets or sets the port used for SMTP transactions.
+		/// </summary>
+		public int Port
+		{
+			get { return this.smtpClient.Port; }
+			set { this.smtpClient.Port = value; }
+		}
+		
+		/// <summary>
+		/// Gets or sets a value that specifies the amount of time after which a synchronous Send call times out.
+		/// </summary>
+		public int Timeout
+		{
+			get { return this.smtpClient.Timeout; }
+			set { this.smtpClient.Timeout = value; }
+		}
+#endif
 
 		public void Send(String from, String to, String subject, String messageText)
 		{
@@ -74,9 +104,12 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 			if (message == null) throw new ArgumentNullException("message");
 
 #if DOTNET2
-			smtpClient.Send(MailMessageFrom(message));
+			if (asyncSend)
+				smtpClient.SendAsync(CreateMailMessage(message), message);
+			else
+				smtpClient.Send(CreateMailMessage(message));
 #else
-			SmtpMail.Send( MailMessageFrom(message) );
+			SmtpMail.Send( CreateMailMessage(message) );
 #endif
 		}
 
@@ -89,12 +122,14 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 		}
 
 #if DOTNET2
-		private MailMessage MailMessageFrom(Message message)
+		private MailMessage CreateMailMessage(Message message)
 		{
 			MailMessage mailMessage = new MailMessage(message.From, message.To);
 
-			mailMessage.CC.Add(message.Cc);
-			mailMessage.Bcc.Add(message.Bcc);
+			if (!String.IsNullOrEmpty(message.Cc))
+				mailMessage.CC.Add(message.Cc);
+			if (!String.IsNullOrEmpty(message.Bcc))
+				mailMessage.Bcc.Add(message.Bcc);
 			mailMessage.Subject = message.Subject;
 			mailMessage.Body = message.Body;
 			mailMessage.BodyEncoding = message.Encoding;
@@ -106,11 +141,6 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 				mailMessage.Headers.Add((string)entry.Key, (string)entry.Value);
 			}
 
-//            foreach(DictionaryEntry entry in message.Fields)
-//            {
-//                mailMessage.Fields.Add(entry.Key, entry.Value);
-//            }
-
 			foreach(MessageAttachment attachment in message.Attachments)
 			{
 				Attachment mailAttach = new Attachment(attachment.FileName);
@@ -121,7 +151,7 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 			return mailMessage;
 		}
 #else
-		private MailMessage MailMessageFrom(Message message)
+		private MailMessage CreateMailMessage(Message message)
 		{
 			MailMessage mailMessage = new MailMessage();
 
@@ -140,10 +170,10 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 				mailMessage.Headers.Add(entry.Key, entry.Value);
 			}
 
-            foreach(DictionaryEntry entry in message.Fields)
-            {
-                mailMessage.Fields.Add(entry.Key, entry.Value);
-            }
+			foreach(DictionaryEntry entry in message.Fields)
+			{
+				mailMessage.Fields.Add(entry.Key, entry.Value);
+			}
 
 			foreach(MessageAttachment attachment in message.Attachments)
 			{
