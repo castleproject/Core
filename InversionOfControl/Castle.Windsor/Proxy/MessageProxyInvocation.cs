@@ -108,7 +108,7 @@ namespace Castle.Windsor.Proxy
 
 					if (retMessage.Exception != null)
 					{
-						throw retMessage.Exception;
+						throw new TargetInvocationException(retMessage.Exception);
 					}
 
 					return retMessage.ReturnValue;
