@@ -144,7 +144,9 @@ namespace Castle.MicroKernel
 		/// <returns>A dependency key that can be used to remove the dependency if it was resolved correctly.</returns>
 		public DependencyModel TrackDependency(MemberInfo info, DependencyModel dependencyModel)
 		{
-			if (dependencies.Contains(dependencyModel))
+			DependencyModelExtended trackingKey = new DependencyModelExtended(dependencyModel, info);
+			
+			if (dependencies.Contains(trackingKey))
 			{
 				StringBuilder sb = new StringBuilder("A cycle was detected when trying to resolve a dependency. ");
 				
@@ -171,7 +173,6 @@ namespace Castle.MicroKernel
 				throw new CircularDependecyException(sb.ToString());
 			}
 
-			DependencyModelExtended trackingKey = new DependencyModelExtended(dependencyModel, info);
 			dependencies.Add(trackingKey);
 			return trackingKey;
 		}
@@ -209,6 +210,20 @@ namespace Castle.MicroKernel
 			public MemberInfo Info
 			{
 				get { return info; }
+			}
+
+			public override bool Equals(object obj)
+			{
+				DependencyModelExtended other = obj as DependencyModelExtended;
+				if (other == null)
+					return false;
+				return base.Equals(other) && other.Info == this.Info;
+			}
+			
+			public override int GetHashCode()
+			{
+				int infoHash = 37 ^ Info.GetHashCode();
+				return base.GetHashCode() + infoHash;
 			}
 		}
 

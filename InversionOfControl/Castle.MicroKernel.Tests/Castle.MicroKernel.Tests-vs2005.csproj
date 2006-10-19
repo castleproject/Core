@@ -158,6 +158,7 @@
     <Compile Include="ClassComponents\ICustomer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassComponents\Repository.cs" />
     <Compile Include="Configuration\Components\ClassWithConstructors.cs">
       <SubType>Code</SubType>
     </Compile>
