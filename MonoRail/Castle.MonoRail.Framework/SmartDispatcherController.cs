@@ -27,8 +27,8 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	/// <remarks>
 	/// You don't even need to always use databinding within
-	/// arguments. <see cref="SmartDispatcherController.BindObject"/> 
-	/// and <see cref="SmartDispatcherController.BindObjectInstance"/>
+	/// arguments. <see cref="BindObject(ParamStore,Type,string)"/> 
+	/// and <see cref="BindObjectInstance(object,string)"/>
 	/// provides the same functionality to be used in place.
 	/// </remarks>
 	public abstract class SmartDispatcherController : Controller

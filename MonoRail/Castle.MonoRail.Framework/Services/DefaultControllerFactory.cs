@@ -83,8 +83,13 @@ namespace Castle.MonoRail.Framework.Services
 				
 				if (assemblies == null || assemblies.Length == 0)
 				{
+#if DOTNET2
+					throw new System.Configuration.ConfigurationErrorsException("No assembly was informed on the configuration file. " + 
+						"Unfortunatelly this cannot be infered (we tried)");
+#else
 					throw new ConfigurationException("No assembly was informed on the configuration file. " + 
 						"Unfortunatelly this cannot be infered (we tried)");
+#endif
 				}
 			}
 		}

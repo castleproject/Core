@@ -601,8 +601,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// DOM ID <c>formId</c>. options are the same as <see cref="ObserveField(IDictionary)"/>, except 
 		/// the default value of the <tt>:with</tt> option evaluates to the
 		/// serialized (request String) value of the form.
-		/// Works like the <see cref="ObserveField"/>, but operates on an entire form identified by the
-		/// DOM ID <c>formId</c>. Options are the same as <see cref="ObserveField"/>, except 
+		/// Works like the <see cref="ObserveField(IDictionary)"/>, but operates on an entire form identified by the
+		/// DOM ID <c>formId</c>. Options are the same as <see cref="ObserveField(IDictionary)"/>, except 
 		/// the default value of the <c>with</c> option evaluates to the
 		/// serialized (request String) value of the entire form.
 		/// </summary>
