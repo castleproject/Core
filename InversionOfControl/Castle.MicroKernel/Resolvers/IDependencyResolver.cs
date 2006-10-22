@@ -28,8 +28,16 @@ namespace Castle.MicroKernel
 		/// <param name="resolving">The delegate used to fire the event</param>
 		void Initialize(DependencyDelegate resolving);
 
+		/// <summary>
+		/// Registers a sub resolver instance
+		/// </summary>
+		/// <param name="subResolver">The subresolver instance</param>
 		void AddSubResolver(ISubDependencyResolver subResolver);
 
+		/// <summary>
+		/// Unregisters a sub resolver instance previously registered
+		/// </summary>
+		/// <param name="subResolver">The subresolver instance</param>
 		void RemoveSubResolver(ISubDependencyResolver subResolver);
 	}
 }

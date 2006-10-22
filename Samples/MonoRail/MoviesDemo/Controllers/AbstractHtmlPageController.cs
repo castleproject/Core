@@ -15,17 +15,14 @@
 namespace MoviesDemo.Controllers
 {
 	using System;
-	
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Filters;
-
 	using MoviesDemo.Helpers;
 
-
-	[Layout( "HtmlPage" )]
+	[Layout("HtmlPage")]
 	[Helper(typeof(StringHelper))]
-	[LocalizationFilter( RequestStore.Cookie, "locale" )]
-	[Resource( "commonText", "MoviesDemo.Resources.Common" )]
+	[LocalizationFilter(RequestStore.Cookie, "locale")]
+	[Resource("commonText", "MoviesDemo.Resources.Common")]
 	public abstract class AbstractHtmlPageController : SmartDispatcherController
 	{
 	}

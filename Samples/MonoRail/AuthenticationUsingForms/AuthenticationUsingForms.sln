@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationUsingForms", "AuthenticationUsingForms\AuthenticationUsingForms.csproj", "{A3394130-219D-43BB-B6BB-087DB2FFD9CC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A3394130-219D-43BB-B6BB-087DB2FFD9CC}.Debug.ActiveCfg = Debug|.NET
+		{A3394130-219D-43BB-B6BB-087DB2FFD9CC}.Debug.Build.0 = Debug|.NET
+		{A3394130-219D-43BB-B6BB-087DB2FFD9CC}.Release.ActiveCfg = Release|.NET
+		{A3394130-219D-43BB-B6BB-087DB2FFD9CC}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

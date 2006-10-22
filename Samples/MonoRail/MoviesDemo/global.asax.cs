@@ -18,26 +18,21 @@ namespace MoviesDemo
 	using System.Configuration;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Config;
 	using MoviesDemo.Model;
 
-	/// <summary>
-	/// Summary description for global.
-	/// </summary>
-	public class global : System.Web.HttpApplication
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
 
-		public global()
+	public class Global : System.Web.HttpApplication
+	{
+		public Global()
 		{
-			InitializeComponent();
 		}	
 		
 		protected void Application_Start(Object sender, EventArgs e)
 		{
-			ActiveRecordStarter.Initialize(ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource, typeof(Movie));
+			IConfigurationSource config = ActiveRecordSectionHandler.Instance;
+			
+			ActiveRecordStarter.Initialize(config, typeof(Movie));
 		}
  
 		protected void Session_Start(Object sender, EventArgs e)
@@ -74,17 +69,6 @@ namespace MoviesDemo
 		{
 
 		}
-			
-		#region Web Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{    
-			this.components = new System.ComponentModel.Container();
-		}
-		#endregion
 	}
 }
 

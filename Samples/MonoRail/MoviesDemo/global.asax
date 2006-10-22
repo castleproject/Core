@@ -1,1 +1,1 @@
-<%@ Application Inherits="MoviesDemo.global"  %>
+<%@ Application Inherits="MoviesDemo.Global"  %>

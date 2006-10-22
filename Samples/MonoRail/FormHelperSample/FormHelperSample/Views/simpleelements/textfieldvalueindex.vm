@@ -1,0 +1,13 @@
+
+<h3>TextFieldValue</h3>
+
+<p>
+somekey: $FormHelper.TextFieldValue("somekey", "my value")
+</p>
+
+<p>
+simplevalue: $FormHelper.TextFieldValue("simplevalue", "other value")
+</p>
+
+
+

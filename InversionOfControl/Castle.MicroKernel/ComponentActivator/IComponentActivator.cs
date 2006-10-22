@@ -23,17 +23,19 @@ namespace Castle.MicroKernel
 	/// This interface is provided in order to allow custom components
 	/// to be created using a different logic, such as using a specific factory
 	/// or builder.
-	/// <br/>
-	/// The constructor for implementation have the following signature:
+	/// <para>
+	/// The constructor for implementation has the following signature:
+	/// </para>
 	/// <code>
 	/// ComponentModel model, IKernel kernel, 
 	/// ComponentInstanceDelegate onCreation, 
 	/// ComponentInstanceDelegate onDestruction
 	/// </code>
+	/// <para>
 	/// The Activator should raise the events onCreation and onDestruction
 	/// in order to correctly implement the contract. Usually the best
 	/// way of creating a custom activator is by extending the existing ones.
-	/// 
+	/// </para>
 	/// <seealso cref="ComponentActivator.AbstractComponentActivator"/>
 	/// <seealso cref="ComponentActivator.DefaultComponentActivator"/>
 	/// </remarks>

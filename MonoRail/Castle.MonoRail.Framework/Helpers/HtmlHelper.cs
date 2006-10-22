@@ -757,11 +757,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <overloads>This method has three overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the checkbox type.
-		/// <code>&lt;input type=&quot;checkbox&quot;name=&quot;nameArg&quot;id=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
-		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
-		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
-		/// <returns>HTML string with checkbox type <b>input</b> tag.</returns>
+		/// <param name="name">Value for <c>name</c> and <c>id</c> attributes.</param>
+		/// <param name="value"><see cref="String"/> for <c>value</c> attribute.</param>
+		/// <returns>HTML string with checkbox type <c>input</c> tag.</returns>
 		/// <remarks>Calling <c>InputCheckbox( "name", "1" )</c> results in:
 		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;name&quot; id=&quot;name&quot; value=&quot;1&quot; /&gt;</code>
 		/// </remarks>
@@ -772,7 +772,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the checkbox type.
-		/// <code>&lt;input type=&quot;checkbox&quot;name=&quot;nameArg&quot;id=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -793,7 +793,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the checkbox type.
-		/// <code>&lt;input type=&quot;checkbox&quot;name=&quot;nameArg&quot;id=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -812,7 +812,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the radio type.
-		/// <code>&lt;input type=&quot;radio&quot;name=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;radio&quot; name=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -827,7 +827,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the radio type.
-		/// <code>&lt;input type=&quot;radio&quot;name=&quot;nameArg&quot;value=&quot;valueArg&quot; /&gt;</code>
+		/// <code>&lt;input type=&quot;radio&quot; name=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
@@ -846,7 +846,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the file type.
-		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot;/&gt;</code>
+		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <returns>HTML string with file type <b>input</b> tag.</returns>
@@ -860,7 +860,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Creates an input element of the file type.
-		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot;/&gt;</code>
+		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot; /&gt;</code>
 		/// </summary>
 		/// <param name="name">Value for <b>name</b> attribute.</param>
 		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
@@ -974,7 +974,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{1}\" value=\"{2}\" />", name, id, value);
 		}
 
-		///<overloads>This method has two overloads.</overloads>
+		/// <overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates a hidden type input element.
 		/// <code>&lt;input type=&quot;hidden&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>

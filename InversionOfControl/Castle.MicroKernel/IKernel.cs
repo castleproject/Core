@@ -54,7 +54,7 @@ namespace Castle.MicroKernel
 		/// <see cref="AddComponent(string,Type,LifestyleType,bool)"/> method.
 		/// </remarks>
 		/// <exception cref="ArgumentNullException">
-		/// Thrown if <paramref name="key"/>, <paramref name="serviceType"/>, or <paramref name="classType"/>
+		/// Thrown if <paramref name="key"/>, or <paramref name="classType"/>
 		/// are <see langword="null"/>.
 		/// </exception>
 		/// <exception cref="ArgumentException">

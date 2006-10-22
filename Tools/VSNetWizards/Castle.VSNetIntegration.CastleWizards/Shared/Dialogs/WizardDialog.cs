@@ -35,6 +35,7 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared.Dialogs
 		private wizardResult result = wizardResult.wizardResultCancel;
 		private IList panels = new ArrayList();
 		private int panelIndex;
+		private System.Windows.Forms.PictureBox pictureBox2;
 
 		private System.ComponentModel.Container components = null;
 
@@ -128,12 +129,13 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared.Dialogs
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.pictureBox2 = new System.Windows.Forms.PictureBox();
 			this.SuspendLayout();
 			// 
 			// buttonHelp
 			// 
 			this.buttonHelp.Enabled = false;
-			this.buttonHelp.Location = new System.Drawing.Point(176, 400);
+			this.buttonHelp.Location = new System.Drawing.Point(176, 392);
 			this.buttonHelp.Name = "buttonHelp";
 			this.buttonHelp.Size = new System.Drawing.Size(72, 24);
 			this.buttonHelp.TabIndex = 49;
@@ -142,7 +144,7 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared.Dialogs
 			// buttonBack
 			// 
 			this.buttonBack.Enabled = false;
-			this.buttonBack.Location = new System.Drawing.Point(352, 400);
+			this.buttonBack.Location = new System.Drawing.Point(352, 392);
 			this.buttonBack.Name = "buttonBack";
 			this.buttonBack.Size = new System.Drawing.Size(68, 24);
 			this.buttonBack.TabIndex = 46;
@@ -151,7 +153,7 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared.Dialogs
 			// 
 			// buttonFinish
 			// 
-			this.buttonFinish.Location = new System.Drawing.Point(424, 400);
+			this.buttonFinish.Location = new System.Drawing.Point(424, 392);
 			this.buttonFinish.Name = "buttonFinish";
 			this.buttonFinish.Size = new System.Drawing.Size(68, 24);
 			this.buttonFinish.TabIndex = 47;
@@ -161,7 +163,7 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared.Dialogs
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(536, 400);
+			this.buttonCancel.Location = new System.Drawing.Point(536, 392);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(68, 24);
 			this.buttonCancel.TabIndex = 48;
@@ -172,30 +174,41 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared.Dialogs
 			// 
 			this.label1.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.label1.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(222)));
-			this.label1.ForeColor = System.Drawing.Color.FromArgb(((System.Byte)(0)), ((System.Byte)(0)), ((System.Byte)(192)));
+			this.label1.ForeColor = System.Drawing.Color.Navy;
 			this.label1.Location = new System.Drawing.Point(144, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(479, 40);
+			this.label1.Size = new System.Drawing.Size(432, 40);
 			this.label1.TabIndex = 45;
 			this.label1.Text = "xxxxx";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pictureBox1.BackColor = System.Drawing.Color.Silver;
+			this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-			this.pictureBox1.Location = new System.Drawing.Point(0, -64);
+			this.pictureBox1.Location = new System.Drawing.Point(0, -80);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(144, 520);
 			this.pictureBox1.TabIndex = 44;
 			this.pictureBox1.TabStop = false;
 			// 
+			// pictureBox2
+			// 
+			this.pictureBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.BackgroundImage")));
+			this.pictureBox2.Location = new System.Drawing.Point(568, 0);
+			this.pictureBox2.Name = "pictureBox2";
+			this.pictureBox2.Size = new System.Drawing.Size(56, 40);
+			this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+			this.pictureBox2.TabIndex = 50;
+			this.pictureBox2.TabStop = false;
+			// 
 			// WizardDialog
 			// 
-			this.AcceptButton = this.buttonFinish;
 			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(624, 436);
+			this.ClientSize = new System.Drawing.Size(624, 428);
+			this.Controls.Add(this.pictureBox2);
 			this.Controls.Add(this.buttonHelp);
 			this.Controls.Add(this.buttonBack);
 			this.Controls.Add(this.buttonFinish);
@@ -204,6 +217,8 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared.Dialogs
 			this.Controls.Add(this.pictureBox1);
 			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "WizardDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Castle Wizard";

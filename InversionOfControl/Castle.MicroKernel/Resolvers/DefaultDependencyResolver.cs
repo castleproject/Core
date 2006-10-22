@@ -35,6 +35,10 @@ namespace Castle.MicroKernel.Resolvers
 		private DependencyDelegate dependencyResolvingDelegate;
 		private IList subResolvers = new ArrayList();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultDependencyResolver"/> class.
+		/// </summary>
+		/// <param name="kernel">The kernel.</param>
 		public DefaultDependencyResolver(IKernel kernel)
 		{
 			this.kernel = kernel;
@@ -42,11 +46,19 @@ namespace Castle.MicroKernel.Resolvers
 			converter = (ITypeConverter) kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 		}
 
+		/// <summary>
+		/// Initializes this instance with the specified dependency delegate.
+		/// </summary>
+		/// <param name="dependencyDelegate">The dependency delegate.</param>
 		public void Initialize(DependencyDelegate dependencyDelegate)
 		{
 			dependencyResolvingDelegate = dependencyDelegate;
 		}
 
+		/// <summary>
+		/// Registers a sub resolver instance
+		/// </summary>
+		/// <param name="subResolver">The subresolver instance</param>
 		public void AddSubResolver(ISubDependencyResolver subResolver)
 		{
 			if (subResolver == null) throw new ArgumentNullException("subResolver");
@@ -54,6 +66,10 @@ namespace Castle.MicroKernel.Resolvers
 			subResolvers.Add(subResolver);
 		}
 
+		/// <summary>
+		/// Unregisters a sub resolver instance previously registered
+		/// </summary>
+		/// <param name="subResolver">The subresolver instance</param>
 		public void RemoveSubResolver(ISubDependencyResolver subResolver)
 		{
 			if (subResolver == null) throw new ArgumentNullException("subResolver");
@@ -64,11 +80,11 @@ namespace Castle.MicroKernel.Resolvers
 		/// <summary>
 		/// Returns true if the resolver is able to satisfy the specified dependency.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="parentResolver"></param>
-		/// <param name="model"></param>
-		/// <param name="dependency"></param>
-		/// <returns></returns>
+		/// <param name="context">Creation context, which is a resolver itself</param>
+		/// <param name="parentResolver">Parent resolver</param>
+		/// <param name="model">Model of the component that is requesting the dependency</param>
+		/// <param name="dependency">The dependency model</param>
+		/// <returns><c>true</c> if the dependency can be satisfied</returns>
 		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 		{
 			// 1 - check for the dependency on CreationContext, if present
@@ -137,11 +153,11 @@ namespace Castle.MicroKernel.Resolvers
 		/// </description></item>
 		/// </list>
 		/// </remarks>
-		/// <param name="context"></param>
-		/// <param name="parentResolver"></param>
-		/// <param name="model"></param>
-		/// <param name="dependency"></param>
-		/// <returns></returns>
+		/// <param name="context">Creation context, which is a resolver itself</param>
+		/// <param name="parentResolver">Parent resolver</param>
+		/// <param name="model">Model of the component that is requesting the dependency</param>
+		/// <param name="dependency">The dependency model</param>
+		/// <returns>The dependency resolved value or null</returns>
 		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
 		{
 			object value = null;

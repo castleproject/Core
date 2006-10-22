@@ -434,6 +434,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ModelBuilder\Inspectors\GenericInspector.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ModelBuilder\Inspectors\InterceptorInspector.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

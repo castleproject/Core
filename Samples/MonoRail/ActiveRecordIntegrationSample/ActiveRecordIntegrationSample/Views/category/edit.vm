@@ -1,0 +1,12 @@
+<form action="update.rails" method="post">
+
+  $FormHelper.HiddenField("category.id") 
+
+  <p>
+  Name: 
+  $FormHelper.TextField("category.name") 
+  </p>
+
+  <input type="submit" id="updatebutton" value="Update" />
+
+</form>

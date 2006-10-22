@@ -40,6 +40,7 @@ namespace Anakia.DocData
 		internal ConstructorDocData[] constructors;
 		internal PropertyDocData[] properties;
 		internal MethodDocData[] methods;
+		internal EventDocData[] events;
 
 		public ClassDocData(ClassType classType)
 		{
@@ -79,6 +80,11 @@ namespace Anakia.DocData
 		public MethodDocData[] Methods
 		{
 			get { return methods; }
+		}
+
+		public EventDocData[] Events
+		{
+			get { return events; }
 		}
 	}
 }

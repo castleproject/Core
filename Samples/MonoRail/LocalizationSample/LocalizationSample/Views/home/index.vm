@@ -1,0 +1,17 @@
+<h1>
+$text.welcome
+</h1>
+
+<p>
+$text.intro
+</p>
+
+<hr noshade="yes" size="1"/>
+
+<form method="post" action="SetLanguage.rails" id="form1">
+<select name="langCode" onchange="document.getElementById('form1').submit();">
+	<option value="es">Spanish</option>
+	<option value="pt">Portuguese</option>
+	<option value="en">English</option>
+</select>
+</form>

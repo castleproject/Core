@@ -24,6 +24,9 @@ require 'productlicense'
 require 'account'
 require 'category'
 require 'personuser'
+require 'user'
+require 'conditiontype'
+require 'condition'
 
 # Test cases for MonoRail ActiveRecord support
 
@@ -36,11 +39,49 @@ class AccountPermissionTestCase < Test::Unit::TestCase
 	def test_crud()
 		id = AccountPermission.create($ie, 'account permission 1')
 		
+		AccountPermission.edit($ie, id, 'other name')
+		
+		AccountPermission.edit($ie, id, '')
+		
 		AccountPermission.edit($ie, id, 'new name')
 		
 		AccountPermission.delete($ie, id)
 	end
 
+end
+
+class UserTestCase < Test::Unit::TestCase
+
+	def test_create()
+		user = User.create($ie, 'User name 1')
+		
+		user = User.create($ie, 'User name 2')
+	end
+	
+end
+
+class ConditionTypeTestCase < Test::Unit::TestCase
+
+	def test_create()
+		ConditionType.create($ie, 'Simple 1')
+		
+		ConditionType.create($ie, 'Simple 2')
+	end
+	
+end
+
+class ConditionTestCase < Test::Unit::TestCase
+
+	def test_insert_update()
+		t1 = ConditionType.create($ie, 'Type 1')
+		t2 = ConditionType.create($ie, 'Type 2')
+		
+		# Uses the standard approach to send multiple values (indexed node)
+		id = Condition.create($ie, 'name', t1, "1","2","3","4")
+		
+		Condition.edit($ie, id, 'new name', t2, "1","2","3","4")
+	end
+	
 end
 
 class ProductLicenseTestCase < Test::Unit::TestCase
@@ -123,6 +164,9 @@ end
 class CastleTests
 	def self.suite
 		suite = Test::Unit::TestSuite.new
+		suite << UserTestCase.suite
+		suite << ConditionTypeTestCase.suite
+		suite << ConditionTestCase.suite
 		suite << AccountPermissionTestCase.suite
 		suite << ProductLicenseTestCase.suite
 		suite << AccountTestCase.suite

@@ -1,0 +1,28 @@
+
+<h3>Select</h3>
+
+<form action="process.rails" method="post">
+
+<p>Select one prime number</p>
+
+<p>
+  $FormHelper.Select("oneprime", $primenumbers) <br/> 
+</p>
+
+<p>Select multiple prime number</p>
+
+<p>
+  $FormHelper.Select("multipleprimes", $primenumbers, "%{multiple='true', style='width: 110px; height: 90px;'}") <br/> 
+</p>
+
+<p>Select blog author</p>
+
+<p>
+  $FormHelper.Select("blog.author.id", $authors, "%{value='id', text='Name', firstoption='Please select'}") <br/> 
+</p>
+
+
+<input type="submit" value="Send" />
+
+</form>
+

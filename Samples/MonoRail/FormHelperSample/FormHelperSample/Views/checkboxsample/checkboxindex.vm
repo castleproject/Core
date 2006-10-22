@@ -1,0 +1,24 @@
+
+<h3>Checkbox</h3>
+
+<form action="processcheckbox.rails" method="post">
+
+<p>Using it to pass a 'true' value if checked</p>
+
+<p>
+  $FormHelper.CheckboxField("enabled1") Enable 'something' <br/> 
+</p>
+
+<p>
+Overriding the true and false values with 1 and -1 respectivelly:
+</p>
+
+<p>
+  $FormHelper.CheckboxField("enabled2", "%{trueValue='1', falseValue='-1'}") Enable 'something else' <br/> 
+</p>
+
+
+<input type="submit" value="Send" />
+
+</form>
+

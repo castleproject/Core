@@ -63,13 +63,11 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <remarks>
 	/// The following libraries are exposed:
 	/// <list type="table">
-	/// <item><term>Prototype</term>
-	/// <description>Simplify ajax programming, among other goodies 
-	/// See also <a href="http://prototype.conio.net/"/>
+	/// <item><term> Prototype </term>
+	/// <description> Simplify ajax programming, among other goodies 
 	/// </description></item>
-	/// <item><term>Behaviour</term>
-	/// <description>Uses css selectors to bind javascript code to DOM elements 
-	/// See also <a href="http://bennolan.com/behaviour/"/>
+	/// <item><term> Behaviour </term>
+	/// <description> Uses css selectors to bind javascript code to DOM elements 
 	/// </description></item>
 	/// </list>
 	/// </remarks>
@@ -222,6 +220,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Generates an AJAX JavaScript proxy for the current controller.
 		/// </summary>
+		/// <param name="proxyName">Name of the javascript proxy object</param>
 		public String GenerateJSProxy(string proxyName)
 		{
 			return GenerateJSProxy(proxyName, Controller.AreaName, Controller.Name);
@@ -229,10 +228,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Generates an AJAX JavaScript proxy for a given controller.
-		/// <para>
-		/// TODO: Better documentation
-		/// </para>
 		/// </summary>
+		/// <param name="proxyName">Name of the javascript proxy object</param>
+		/// <param name="controller">Controller which will be target of the proxy</param>
 		public String GenerateJSProxy(string proxyName, string controller)
 		{
 			return GenerateJSProxy(proxyName, null, controller);
@@ -240,10 +238,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		/// <summary>
 		/// Generates an AJAX JavaScript proxy for a given controller.
-		/// <para>
-		/// TODO: Better documentation
-		/// </para>
 		/// </summary>
+		/// <param name="proxyName">Name of the javascript proxy object</param>
+		/// <param name="controller">Controller which will be target of the proxy</param>
+		/// <param name="area">area which the controller belongs to</param>
 		public String GenerateJSProxy(string proxyName, string area, string controller)
 		{
 			String cacheKey = (area + "|" + controller).ToLower();
@@ -330,7 +328,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region LinkToFunction
 		
 		/// <summary>
-		/// Returns a link that'll trigger a javascript +function+ using the 
+		/// Returns a link that will trigger a javascript function using the 
 		/// onclick handler and return false after the fact.
 		/// <code>
 		/// &lt;a href="javascript:void(0);" onclick="functionCodeOrName; return false"&gt;innerContent&lt;/a&gt;
@@ -348,7 +346,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Returns a link that'll trigger a javascript +function+ using the 
+		/// Returns a link that will trigger a javascript function using the 
 		/// onclick handler and return false after the fact.
 		/// </summary>
 		/// <param name="innerContent">Link content</param>
@@ -364,12 +362,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region ButtonToFunction
 		
 		/// <summary>
-		/// Returns a button that'll trigger a javascript +function+ using the 
+		/// Returns a button that will trigger a javascript function using the 
 		/// onclick handler and return false after the fact.
 		/// </summary>
 		/// <param name="innerContent">Button legend</param>
-		/// <param name="functionCodeOrName">Function definition</param>
-		/// <param name="attributes">Attributes to be applied to the html element</param>
+		/// <param name="functionCodeOrName">Function definition or name</param>
+		/// <param name="attributes">Attributes to be applied to the input html element</param>
 		/// <returns></returns>
 		public String ButtonToFunction(String innerContent, String functionCodeOrName, IDictionary attributes) 
 		{
@@ -380,11 +378,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Returns a button that'll trigger a javascript +function+ using the 
+		/// Returns a button that will trigger a javascript function using the 
 		/// onclick handler and return false after the fact.
 		/// </summary>
 		/// <param name="innerContent">Button legend</param>
-		/// <param name="functionCodeOrName">Function definition</param>
+		/// <param name="functionCodeOrName">Function definition or name</param>
 		/// <returns></returns>
 		public String ButtonToFunction(String innerContent, String functionCodeOrName) 
 		{
@@ -400,7 +398,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="innerContent">Button legend</param>
 		/// <param name="url">The URL of the Ajax action</param>
-		/// <param name="options">The options for the Ajax call</param>
+		/// <param name="options">the options for the Ajax invocation</param>
 		/// <returns>The handcrafted input</returns>
 		public String ButtonToRemote(String innerContent, String url, IDictionary options)
 		{
@@ -411,8 +409,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a button that if clicked will fire an Ajax invocation. 
 		/// </summary>
 		/// <param name="innerContent">Button legend</param>
-		/// <param name="url">the url</param>
-		/// <param name="options">the options for the ajax invocations</param>
+		/// <param name="url">the target url</param>
+		/// <param name="options">the options for the Ajax invocation</param>
 		/// <param name="htmloptions">Attributes to be applied to the html element</param>
 		/// <returns>The handcrafted input</returns>
 		public String ButtonToRemote(String innerContent, String url, IDictionary options, IDictionary htmloptions)
@@ -425,25 +423,36 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region LinkToRemote
 
 		/// <summary>
-		/// Returns a link to a remote action defined by <tt>options[:url]</tt> 
-		/// (using the url_for format) that's called in the background using 
+		/// Returns a link to a remote action defined by <c>options["url"]</c> 
+		/// that is called in the background using 
 		/// XMLHttpRequest. The result of that request can then be inserted into a
-		/// DOM object whose id can be specified with <tt>options[:update]</tt>. 
-		/// Usually, the result would be a partial prepared by the controller with
-		/// either render_partial or render_partial_collection. 
+		/// DOM object whose id can be specified with <c>options["update"]</c>. 
+		/// Usually, the result would be a partial prepared by the controller
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="url"></param>
-		/// <param name="options"></param>
-		/// <returns></returns>
-		public String LinkToRemote(String name, String url, IDictionary options)
+		/// <param name="innerContent">Link content</param>
+		/// <param name="url">Target url</param>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>The handcrafted element</returns>
+		public String LinkToRemote(String innerContent, String url, IDictionary options)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(url, options));
+			return LinkToFunction(innerContent, BuildRemoteFunction(url, options));
 		}
 
-		public String LinkToRemote(String name, String url, IDictionary options, IDictionary htmloptions)
+		/// <summary>
+		/// Returns a link to a remote action defined by <c>options["url"]</c> 
+		/// that is called in the background using 
+		/// XMLHttpRequest. The result of that request can then be inserted into a
+		/// DOM object whose id can be specified with <c>options["update"]</c>. 
+		/// Usually, the result would be a partial prepared by the controller
+		/// </summary>
+		/// <param name="innerContent">Link content</param>
+		/// <param name="url">Target url</param>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <param name="htmloptions">Attributes to be applied to the html element</param>
+		/// <returns>The handcrafted element</returns>
+		public String LinkToRemote(String innerContent, String url, IDictionary options, IDictionary htmloptions)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(url, options), htmloptions);
+			return LinkToFunction(innerContent, BuildRemoteFunction(url, options), htmloptions);
 		}
 		
 		#endregion
@@ -453,14 +462,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 
-		///	reloading POST arrangement. Even though it's 
+		///	reloading POST arrangement. Even though it is
 		///	using Javascript to serialize the form elements, the form submission 
 		///	will work just like a regular submission as viewed by the 
-		///	receiving side (all elements available in @params).
-		///	The options for specifying the target with :url and defining 
-		///	callbacks is the same as link_to_remote.
+		///	receiving side (all elements available).
 		/// </summary>
-		/// <returns></returns>
+		/// <param name="url">Target url</param>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>The handcrafted element</returns>
 		public String BuildFormRemoteTag(String url, IDictionary options)
 		{
 			return BuildFormRemoteTag( GetOptions(url, options) );
@@ -469,15 +478,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 
-		///	reloading POST arrangement. Even though it's 
+		///	reloading POST arrangement. Even though it is
 		///	using Javascript to serialize the form elements, the form submission 
 		///	will work just like a regular submission as viewed by the 
-		///	receiving side (all elements available in @params).
-		///	The options for specifying the target with :url and defining 
-		///	callbacks is the same as link_to_remote.
+		///	receiving side (all elements available).
 		/// </summary>
-		/// <param name="options"></param>
-		/// <returns></returns>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>The handcrafted element</returns>
 		public String BuildFormRemoteTag(IDictionary options)
 		{
 			options["form"] = true;
@@ -494,29 +501,22 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region ObserveField
 
 		/// <summary>
-		/// Observes the field with the DOM ID specified by +field_id+ and makes
+		/// Observes the field with the DOM ID specified by <c>fieldId</c> and makes
 		/// an Ajax when its contents have changed.
-		/// 
-		/// Required +options+ are:
-		/// 
-		/// <tt>:frequency</tt>:: The frequency (in seconds) at which changes to
-		///                       this field will be detected.
-		/// <tt>:url</tt>::       +url_for+-style options for the action to call
-		///                       when the field has changed.
-		/// 
-		/// Additional options are:
-		/// <tt>:update</tt>::    Specifies the DOM ID of the element whose 
+		/// </summary>
+		/// <param name="fieldId">Form field to be observed</param>
+		/// <param name="frequency">The frequency (in seconds) at which changes to
+		///                       this field will be detected. (required)</param>
+		/// <param name="url">url for the action to call
+		///                       when the field has changed (required)</param>
+		/// <param name="idOfElementToBeUpdated"> Specifies the DOM ID of the element whose 
 		///                       innerHTML should be updated with the
-		///                       XMLHttpRequest response text.
-		/// <tt>:with</tt>::      A Javascript expression specifying the
+		///                       XMLHttpRequest response text.</param>
+		/// <param name="with">A Javascript expression specifying the
 		///                       parameters for the XMLHttpRequest. This defaults
 		///                       to 'value', which in the evaluated context 
-		///                       refers to the new field value.
-		///
-		/// Additionally, you may specify any of the options documented in
-		/// LinkToRemote
-		/// </summary>
-		/// <returns></returns>
+		///                       refers to the new field value.</param>
+		/// <returns>javascript that activates the observer</returns>
 		public String ObserveField(String fieldId, int frequency, String url, String idOfElementToBeUpdated, String with)
 		{
 			IDictionary options = new HybridDictionary();
@@ -530,33 +530,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Observes the field with the DOM ID specified by +field_id+ and makes
+		/// Observes the field with the DOM ID specified by <c>fieldId</c> and makes
 		/// an Ajax when its contents have changed.
-		/// 
-		/// Required +options+ are:
-		/// 
-		/// <tt>:frequency</tt>:: The frequency (in seconds) at which changes to
-		///                       this field will be detected.
-		/// <tt>:url</tt>::       +url_for+-style options for the action to call
-		///                       when the field has changed.
-		/// 
-		/// Additional options are:
-		/// <tt>:update</tt>::    Specifies the DOM ID of the element whose 
-		///                       innerHTML should be updated with the
-		///                       XMLHttpRequest response text.
-		/// <tt>:with</tt>::      A Javascript expression specifying the
-		///                       parameters for the XMLHttpRequest. This defaults
-		///                       to 'value', which in the evaluated context 
-		///                       refers to the new field value.
-		///
-		/// Additionally, you may specify any of the options documented in
-		/// LinkToRemote
 		/// </summary>
-		/// <param name="fieldId"></param>
-		/// <param name="frequency"></param>
-		/// <param name="url"></param>
-		/// <param name="options"></param>
-		/// <returns></returns>
+		/// <param name="fieldId">Form field to be observed</param>
+		/// <param name="frequency">The frequency (in seconds) at which changes to
+		///                       this field will be detected. (required)</param>
+		/// <param name="url">url for the action to call
+		///                       when the field has changed (required)</param>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>javascript that activates the observer</returns>
 		public String ObserveField(String fieldId, int frequency, String url, IDictionary options)
 		{
 			options["url"] = url;
@@ -602,6 +585,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </item>
 		/// </list>
 		/// </summary>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>javascript that activates the observer</returns>
 		public String ObserveField(IDictionary options)
 		{
 			return BuildObserver("Form.Element.Observer", (String) options["field"], options);
@@ -616,13 +601,24 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// DOM ID <c>formId</c>. options are the same as <see cref="ObserveField(IDictionary)"/>, except 
 		/// the default value of the <tt>:with</tt> option evaluates to the
 		/// serialized (request String) value of the form.
+		/// Works like the <see cref="ObserveField"/>, but operates on an entire form identified by the
+		/// DOM ID <c>formId</c>. Options are the same as <see cref="ObserveField"/>, except 
+		/// the default value of the <c>with</c> option evaluates to the
+		/// serialized (request String) value of the entire form.
 		/// </summary>
-		/// <param name="formId"></param>
-		/// <param name="frequency"></param>
-		/// <param name="idOfElementToBeUpdated"></param>
-		/// <param name="url"></param>
-		/// <param name="with"></param>
-		/// <returns></returns>
+		/// <param name="formId">Form to be observed</param>
+		/// <param name="frequency">The frequency (in seconds) at which changes to
+		///                       this field will be detected. (required)</param>
+		/// <param name="url">url for the action to call
+		///                       when the field has changed (required)</param>
+		/// <param name="idOfElementToBeUpdated"> Specifies the DOM ID of the element whose 
+		///                       innerHTML should be updated with the
+		///                       XMLHttpRequest response text.</param>
+		/// <param name="with">A Javascript expression specifying the
+		///                       parameters for the XMLHttpRequest. This defaults
+		///                       to 'value', which in the evaluated context 
+		///                       refers to the new field value.</param>
+		/// <returns>javascript that activates the observer</returns>
 		public String ObserveForm(String formId, int frequency, String url, String idOfElementToBeUpdated, String with)
 		{
 			IDictionary options = new HybridDictionary();
@@ -638,12 +634,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Like <see cref="ObserveField(IDictionary)"/>, but operates on an entire form identified by the
 		/// DOM ID <c>formId</c>. options are the same as <see cref="ObserveField(IDictionary)"/>, except 
-		/// the default value of the <tt>:with</tt> option evaluates to the
-		/// serialized (request String) value of the form.
+		/// the default value of the <c>with</c> option evaluates to the
+		/// serialized (request String) value of the entire form.
 		/// </summary>
-		/// <param name="formId"></param>
-		/// <param name="options"></param>
-		/// <returns></returns>
+		/// <param name="formId">Form to be observed</param>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>javascript that activates the observer</returns>
 		public String ObserveForm(String formId, IDictionary options)
 		{
 			return BuildObserver("Form.Observer", formId, options);
@@ -688,6 +684,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </item>
 		/// </list>
 		/// </summary>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>javascript that activates the observer</returns>
 		public String ObserveForm(IDictionary options)
 		{
 			String formId = (String) options["form"];
@@ -705,9 +703,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region Periodically Call
 
 		/// <summary>
-		/// Periodically invokes the specified url. You can use the options to 
-		/// override the default frequency (defaults to 10 seconds)
+		/// Periodically invokes the specified <c>url</c>. You can use the options to 
+		/// override the default <c>frequency</c> (defaults to 10 seconds).
 		/// </summary>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>javascript that activates the timer</returns>
 		public String PeriodicallyCallRemote(IDictionary options)
 		{
 			String url = (String) options["url"];
@@ -718,12 +718,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 		
 		/// <summary>
-		/// Periodically invokes the specified url. You can use the options to 
-		/// override the default frequency (defaults to 10 seconds)
+		/// Periodically invokes the specified <c>url</c>. You can use the options to 
+		/// override the default <c>frequency</c> (defaults to 10 seconds).
 		/// </summary>
+		/// <param name="options">the options for the Ajax invocation</param>
 		/// <param name="url">url to be invoked periodically</param>
-		/// <param name="options"></param>
-		/// <returns></returns>
+		/// <returns>javascript that activates the timer</returns>
 		public String PeriodicallyCallRemote(String url, IDictionary options)
 		{
 			if (options == null)
@@ -748,10 +748,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		/// <summary>
 		/// Rendes a input field with Google style autocomplete enabled.
-		/// The specified url is used to gather the contents for the auto complete panel, so 
+		/// The specified <c>url</c> is used to gather the contents 
+		/// for the auto complete panel, so 
 		/// and your action should return filtered and sorted results.
 		/// <para>
-		/// The following entries must exist in the dictionary:
+		/// The following entries must exist in the options:
 		/// </para>
 		/// <list type="bullet">
 		/// <item>
@@ -764,15 +765,21 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </item>
 		/// </list>
 		/// </summary>
-		public String InputTextWithAutoCompletion(IDictionary parameters, IDictionary tagAttributes)
+		/// <remarks>
+		/// it is assumed that the url invoked returns an unordered list.
+		/// </remarks>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <param name="tagAttributes">attributes for the input html element</param>
+		/// <returns>javascript that activates the timer</returns>
+		public String InputTextWithAutoCompletion(IDictionary options, IDictionary tagAttributes)
 		{
-			String input = (String) parameters["input"];
-			String url = (String) parameters["url"];
+			String input = (String) options["input"];
+			String url = (String) options["url"];
 			
-			parameters.Remove("input"); 
-			parameters.Remove("url");
+			options.Remove("input"); 
+			options.Remove("url");
 			
-			return InputTextWithAutoCompletion(input, url, tagAttributes, parameters);
+			return InputTextWithAutoCompletion(input, url, tagAttributes, options);
 		}
 		
 		/// <summary>
@@ -781,6 +788,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// and your action should return filtered and sorted results.
 		/// <seealso cref="AutoCompleteInputText"/>
 		/// </summary>
+		/// <remarks>
+		/// it is assumed that the url invoked returns an unordered list.
+		/// </remarks>
 		/// <param name="inputName">input element id</param>
 		/// <param name="url">url used to gather results</param>
 		/// <param name="tagAttributes">attributes for the input element</param>
@@ -804,17 +814,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Generates an javascript block enabling 
 		/// auto completion for the specified input text id (<c>elementId</c>). 
 		/// You can specify the element to be updated using the options
-		/// dictionary (<c>key 'update'</c>), if you don't we assume 
-		/// <c>elementId + "autocomplete"</c>.
+		/// dictionary (key  <c>update</c>), if you don't we assume 
+		/// <c>elementId+autocomplete</c>.
 		/// </summary>
 		/// <remarks>
-		/// It's assumed that the url invoked returns a unordered list.
+		/// it is assumed that the url invoked returns an unordered list.
 		/// </remarks>
 		/// <param name="elementId">The element id (input type=text)</param>
 		/// <param name="url">The url to be invoked returning results</param>
-		/// <param name="options">Custom options</param>
+		/// <param name="options">the options for the Ajax invocation</param>
 		/// <returns></returns>
-		public String AutoCompleteInputText( String elementId, String url, IDictionary options )
+		public String AutoCompleteInputText(String elementId, String url, IDictionary options)
 		{
 			if (options == null)
 			{
@@ -889,6 +899,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region Supporting methods
 
+		/// <summary>
+		/// Returns a function that makes a remote invocation,
+		/// using the supplied parameters
+		/// </summary>
+		/// <param name="url">Target url</param>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>javascript code</returns>
 		public String BuildRemoteFunction(String url, IDictionary options)
 		{
 			if (options == null)
@@ -901,6 +918,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			return RemoteFunction(options);
 		}
 
+		/// <summary>
+		/// Returns a function that makes a remote invocation,
+		/// using the supplied parameters
+		/// </summary>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>javascript code</returns>
 		public String RemoteFunction(IDictionary options)
 		{
 			IDictionary jsOptions = new HybridDictionary();
@@ -1115,7 +1138,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			return options;
 		}
 
-		public IDictionary GetOptions(String url, String idOfElementToBeUpdated, String with, String loading, String loaded, String complete, String interactive)
+		public IDictionary GetOptions(String url, String idOfElementToBeUpdated, 
+		                              String with, String loading, String loaded, String complete, String interactive)
 		{
 			IDictionary options = new HybridDictionary();
 	

@@ -1,0 +1,14 @@
+<html>
+<body>
+
+#foreach($error in $errorlist)
+  binding error $error.Key $error.Parent $error.Property $error.Exception <br/>
+#end
+
+<span id="newid">$condition.id</span>
+<span id="name">$condition.Name</span>
+<span id="type">$condition.ConditionType.Id</span>
+<span id="comments">#foreach($it in $condition.comments)$it.Id,#end</span>
+
+</body>
+</html>

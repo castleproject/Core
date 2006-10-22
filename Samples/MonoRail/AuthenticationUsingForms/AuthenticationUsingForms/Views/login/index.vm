@@ -1,0 +1,30 @@
+
+#if($Flash.error)
+<p>
+<b><font color="red"> $Flash.error </font></b>
+</p>
+#end
+
+<form method="post" action="login.rails?ReturnUrl=$ReturnUrl">
+
+<fieldset style="width: 400px;">
+	<legend>Authentication</legend>
+	
+	<p>
+	Username: $FormHelper.TextField("username")
+	</p>
+	<p>
+	Password: $FormHelper.PasswordField("password")
+	</p>
+	<p>
+	<label for="remember">Remember Me</label> $FormHelper.CheckboxField("rememberme", "%{id='remember'}") 
+	</p>
+	
+	<hr noshade="true" size="1" />
+	
+	<input type="submit" value="Log in" />
+	
+	
+</fieldset>
+
+</form>

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{466784AE-DE64-4CD4-900C-683921659E73}"
     >
@@ -159,6 +159,11 @@
                     AssemblyName = "Nullables.NHibernate"
                     HintPath = "..\..\..\..\build\net-1.1\debug\Nullables.NHibernate.dll"
                 />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -167,6 +172,10 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.aspx"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "global.asax"

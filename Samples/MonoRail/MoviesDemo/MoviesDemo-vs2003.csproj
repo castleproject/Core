@@ -104,6 +104,35 @@
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\build\net-1.1\debug\NHibernate.dll"
                 />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.Core.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    AssemblyName = "Castle.Components.Binder"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.Components.Binder.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.Components.Common.EmailSender.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
             </References>
         </Build>
         <Files>
@@ -114,7 +143,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "default.htm"
+                    RelPath = "default.aspx"
                     BuildAction = "Content"
                 />
                 <File

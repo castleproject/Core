@@ -104,7 +104,7 @@
 		<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Castle">
 			<Registry Action="write" Name="vs7templatelocation" Type="string" Value="[TemplatesVs7Dir]" />
 		</Registry>
-		
+
 		<File 
 			Id="vs7file0" 
 			Name="Castle ActiveRecord Project.vsz" 
@@ -177,6 +177,12 @@
 		  <File Id="filecs7_45" Name="SimpleGlobalApplication.cs" Source="$(var.VSTemplates70)\CSharp\MRProject\SimpleGlobalApplication.cs" />
 		  <File Id="filecs7_46" Name="Web.config" Source="$(var.VSTemplates70)\CSharp\MRProject\Web.config" />
 		  <File Id="filecs7_47" Name="WebContainer.cs" Source="$(var.VSTemplates70)\CSharp\MRProject\WebContainer.cs" />
+		  <File Id="filecs7_48" Name="layout_default.aspx" Source="$(var.VSTemplates70)\CSharp\MRProject\layout_default.aspx" />
+		  <File Id="filecs7_49" Name="layout_default.boo" Source="$(var.VSTemplates70)\CSharp\MRProject\layout_default.boo" />
+		  <File Id="filecs7_50" Name="layout_default.vm" Source="$(var.VSTemplates70)\CSharp\MRProject\layout_default.vm" />
+		  <File Id="filecs7_51" Name="rescue_default.aspx" Source="$(var.VSTemplates70)\CSharp\MRProject\rescue_default.aspx" />
+		  <File Id="filecs7_52" Name="rescue_default.boo" Source="$(var.VSTemplates70)\CSharp\MRProject\rescue_default.boo" />
+		  <File Id="filecs7_53" Name="rescue_default.vm" Source="$(var.VSTemplates70)\CSharp\MRProject\rescue_default.vm" />
 		</Component>
 		<Directory Id="directoryvs7_72" Name="Controllers">
 		  <Component Id="componentvs2003_MRProject1" DiskId="1" Guid="8EDD2687-1919-4022-ACA4-1EEDDFD345B8">
@@ -184,21 +190,31 @@
 		  </Component>
 		</Directory>
 		<Directory Id="directoryvs7_81" Name="Views">
-		  <Directory Id="directoryvs7_90" Name="Home">
-		  <Component Id="componentvs2003_MRProject2" DiskId="1" Guid="135D5706-10AF-4E8F-BEEA-3B22C8F0A6A8">
-			<File Id="filecs7_77" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
-		  </Component>
-		  </Directory>
+			<Directory Id="directoryvs7_90" Name="Home">
+				<Component Id="componentvs2003_MRProject2" DiskId="1" Guid="135D5706-10AF-4E8F-BEEA-3B22C8F0A6A8">
+					<File Id="filecs7_77" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
+				</Component>
+			</Directory>
+			<Directory Id="directoryvs7_91" Name="rescues">
+				<Component Id="componentvs2003_MRProject5" DiskId="1" Guid="ACDB1D40-8AD8-4F1C-8883-190E04E6CD3E">
+					<File Id="filecs7_78" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\rescues\empty.txt" />
+				</Component>
+			</Directory>
+			<Directory Id="directoryvs7_92" Name="layouts">
+				<Component Id="componentvs2003_MRProject6" DiskId="1" Guid="C5750525-12CA-49FC-8475-4458E43C5665">
+					<File Id="filecs7_79" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\layouts\empty.txt" />
+				</Component>
+			</Directory>
 		</Directory>
 		<Directory Id="directoryvs7_82" Name="Content">
 		  <Directory Id="directoryvs7_83" Name="css">
 		  <Component Id="componentvs2003_MRProject3" DiskId="1" Guid="16E0D2C9-1432-4DA6-AF49-D6D5755788C8">
-			<File Id="filecs7_78" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
+			<File Id="filecs7_80" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
 		  </Component>
 		  </Directory>
 		  <Directory Id="directoryvs7_84" Name="images">
 		  <Component Id="componentvs2003_MRProject4" DiskId="1" Guid="BC3B8D9C-4E68-4E92-BA44-AF6DC540C362">
-			<File Id="filecs7_79" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
+			<File Id="filecs7_81" Name="empty.txt" Source="$(var.VSTemplates70)\CSharp\MRProject\Views\Home\empty.txt" />
 		  </Component>
 		  </Directory>
 		</Directory>

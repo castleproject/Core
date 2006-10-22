@@ -1,0 +1,12 @@
+<form action="update.rails" method="post">
+
+  $FormHelper.HiddenField("apermission.id") 
+
+  <p>
+  Name: 
+  $FormHelper.TextField("apermission.name") 
+  </p>
+
+  <input type="submit" id="updatebutton" value="Update" />
+
+</form>

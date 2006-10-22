@@ -96,7 +96,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 					continue;
 				}
 
-				DependencyModel dependency = null;
+				DependencyModel dependency;
 
 				Type propertyType = property.PropertyType;
 

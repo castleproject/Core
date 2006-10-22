@@ -1,6 +1,8 @@
 Beta 2
 ======
 
+- Fixed bug that wrongly defined empty strings as conversionSucceeded = false
+
 - Fixed COMP-1 "Binder fails on simple MonoRail binding, when using ASP.NET authentication"
   Now the TreeBuilder will add as a leaf entries starting with '.', or '[' or ']'
 

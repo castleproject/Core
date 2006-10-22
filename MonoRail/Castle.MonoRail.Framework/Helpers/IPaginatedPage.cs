@@ -14,33 +14,78 @@
 
 namespace Castle.MonoRail.Framework.Helpers
 {
-	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// Represents a page of a bigger set
+	/// </summary>
+	/// <remarks>
+	/// Indexes are zero based.
+	/// </remarks>
 	public interface IPaginatedPage : IEnumerable
 	{
+		/// <summary>
+		/// The index this page represents
+		/// </summary>
 		int CurrentIndex { get; }
 		
+		/// <summary>
+		/// The last index available on the set
+		/// </summary>
 		int LastIndex { get; }
 		
+		/// <summary>
+		/// The next index (from this page)
+		/// </summary>
 		int NextIndex { get; }
 		
+		/// <summary>
+		/// The previous index (from this page)
+		/// </summary>
 		int PreviousIndex { get; }
-		
+
+		/// <summary>
+		/// The first index
+		/// </summary>
 		int FirstIndex { get; }
 
+		/// <summary>
+		/// The first element (index + 1)
+		/// </summary>
 		int FirstItem { get; }
 
+		/// <summary>
+		/// The last element in the page (count)
+		/// </summary>
 		int LastItem { get; }
 
+		/// <summary>
+		/// The count of all elements on the set
+		/// </summary>
 		int TotalItems { get; }
 
+		/// <summary>
+		/// Returns true if a previous page 
+		/// is accessible from this page
+		/// </summary>
 		bool HasPrevious { get; }
 		
+		/// <summary>
+		/// Returns true if a next page is
+		/// accessible from this page
+		/// </summary>
 		bool HasNext { get; }
 
+		/// <summary>
+		/// Returns true if a first page 
+		/// exists
+		/// </summary>
 		bool HasFirst { get; }
 
+		/// <summary>
+		/// Returns true if a last page 
+		/// exists
+		/// </summary>
 		bool HasLast { get; }
 	}
 }

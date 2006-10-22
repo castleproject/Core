@@ -51,17 +51,23 @@ namespace Castle.MonoRail.Framework.Helpers
 					customSuffix = valueProperty;
 				}
 
-				return new ListDataSourceState(dataSourceType, dataSource, valueProperty, textProperty, customSuffix);
+				return new ListDataSourceState(dataSourceType, dataSource, 
+				                               valueProperty, textProperty, customSuffix);
 			}
 			else if (initialSelectionType == dataSourceType)
 			{
-				return new SameTypeOperationState(dataSourceType, initialSelection, dataSource, valueProperty, textProperty, isInitialSelectionASet);
+				return new SameTypeOperationState(dataSourceType, 
+				                                  initialSelection, dataSource, 
+				                                  valueProperty, textProperty, isInitialSelectionASet);
 			}
 			else // types are different, most complex scenario
 			{
 				String sourceProperty = FormHelper.ObtainEntryAndRemove(attributes, "sourceProperty");
 
-				return new DifferentTypeOperationState(initialSelectionType, dataSourceType, initialSelection, dataSource, sourceProperty, valueProperty, textProperty, isInitialSelectionASet);
+				return new DifferentTypeOperationState(initialSelectionType, 
+				                                       dataSourceType, initialSelection, dataSource, 
+				                                       sourceProperty, valueProperty, textProperty, 
+				                                       isInitialSelectionASet);
 			}
 		}
 

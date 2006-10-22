@@ -239,6 +239,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DocData\EventDocData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DocData\FieldDocData.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -1,0 +1,181 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.6030"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{A3394130-219D-43BB-B6BB-087DB2FFD9CC}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "AuthenticationUsingForms"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "AuthenticationUsingForms"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Core.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    AssemblyName = "Castle.MonoRail.Framework"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    AssemblyName = "Castle.Components.Binder"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Components.Binder.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
+                    AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\NVelocity.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "GlobalApplication.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\LoginController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\layouts\default.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\login\index.vm"
+                    BuildAction = "None"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

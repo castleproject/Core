@@ -1,0 +1,14 @@
+
+<h3>TextArea</h3>
+
+<p>
+somekey: $FormHelper.TextArea("somekey")
+</p>
+
+<p>
+simplevalue: $FormHelper.TextArea("simplevalue", "%{rows='5', cols='40'}")
+</p>
+
+
+
+

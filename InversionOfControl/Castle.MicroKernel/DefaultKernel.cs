@@ -667,21 +667,6 @@ namespace Castle.MicroKernel
 			return handler;
 		}
 
-//        public virtual IHandler GetHandler(String key, Type service)
-//        {
-//            if (key == null) throw new ArgumentNullException("key"); 
-//            if (service == null) throw new ArgumentNullException("service");
-//
-//            IHandler handler = NamingSubSystem.GetHandler(key, service);
-//
-//            if (handler == null && Parent != null)
-//            {
-//                handler = Parent.GetHandler(key, service);
-//            }
-//
-//            return handler;
-//        }
-
 		/// <summary>
 		/// Return handlers for components that 
 		/// implements the specified service.

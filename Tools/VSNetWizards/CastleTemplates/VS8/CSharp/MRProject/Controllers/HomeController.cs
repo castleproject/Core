@@ -4,8 +4,8 @@ namespace !NAMESPACE!.Controllers
 
 	using Castle.MonoRail.Framework;
 
-
-	public class HomeController : Controller
+	[Layout("default"), Rescue("generalerror")]
+	public class HomeController : SmartDispatcherController
 	{
 		public void Index()
 		{

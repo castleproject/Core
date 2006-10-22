@@ -57,6 +57,13 @@ namespace Anakia
 			}
 		}
 		
+		public String GetShortTypeName(String typeName)
+		{
+			String[] parts = typeName.Split('.');
+			
+			return parts[parts.Length - 1];
+		}
+		
 		public int GetLevels(String path)
 		{
 			return path.Split('/').Length - 1;

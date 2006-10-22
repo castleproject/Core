@@ -42,9 +42,9 @@ namespace Anakia
 		private Folder root;
 		private XmlDocument siteMapDoc;
 		private XmlDocument projectDom;
-		
+
 		// Formatters
-		
+
 		private CSharpFormat csharpFormatter = new CSharpFormat();
 		private HtmlFormat htmlFormatter = new HtmlFormat();
 		private JavaScriptFormat jsFormatter = new JavaScriptFormat();
@@ -129,13 +129,11 @@ namespace Anakia
 
 			root = new Folder("castle");
 
-
-
 			try
 			{
 				ArrayList staticFilesToCopy = new ArrayList();
 
-				foreach (String fullFileName in sourceFileSet.FileNames)
+				foreach(String fullFileName in sourceFileSet.FileNames)
 				{
 					string lastProcessedFile = null;
 
@@ -160,12 +158,12 @@ namespace Anakia
 							if (nodeName != String.Empty)
 							{
 								staticFilesToCopy.Add(new FileToCopy(
-														fullFileName, root.Name + "/" + nodeName + "/" + fileName));
+								                      	fullFileName, root.Name + "/" + nodeName + "/" + fileName));
 							}
 							else
 							{
 								staticFilesToCopy.Add(new FileToCopy(
-														fullFileName, root.Name + "/" + fileName));
+								                      	fullFileName, root.Name + "/" + fileName));
 							}
 
 							continue;
@@ -188,7 +186,7 @@ namespace Anakia
 						DocumentNode node = new DocumentNode(nodeName, fileName, doc, CreateMeta(doc));
 						folder.Documents.Add(node);
 					}
-					catch (Exception ex)
+					catch(Exception ex)
 					{
 						Console.WriteLine("File: {0} \r\n", lastProcessedFile);
 						Console.WriteLine(ex);
@@ -207,7 +205,7 @@ namespace Anakia
 				walker.Walk(root, new Act(FixRelativePaths));
 				walker.Walk(root, new Act(CreateHtml));
 
-				foreach (FileToCopy file2Copy in staticFilesToCopy)
+				foreach(FileToCopy file2Copy in staticFilesToCopy)
 				{
 					String dir = Path.GetDirectoryName(file2Copy.TargetFile);
 
@@ -228,7 +226,7 @@ namespace Anakia
 					File.Copy(file2Copy.SourceFile, targetFile);
 				}
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				Console.WriteLine(ex);
 				Console.Read();
@@ -236,14 +234,14 @@ namespace Anakia
 		}
 
 		#endregion
-		
+
 		private void AssignNavigationDocToFolders(DocumentNode node)
 		{
 			if (node.NodeType != NodeType.Navigation)
 			{
 				return;
 			}
-			
+
 			node.ParentFolder.NavigationNode = node;
 		}
 
@@ -259,7 +257,7 @@ namespace Anakia
 			DocumentMeta meta = new DocumentMeta();
 
 			XmlNode order = xmlDocument.SelectSingleNode("document/@order");
-			
+
 			if (order != null)
 			{
 				meta.Order = Convert.ToInt32(order.Value);
@@ -268,7 +266,7 @@ namespace Anakia
 			{
 				meta.Order = orderCount++;
 			}
-			
+
 			XmlNode properties = xmlDocument.SelectSingleNode("document/properties");
 
 			if (properties != null)
@@ -330,8 +328,8 @@ namespace Anakia
 			}
 			catch(Exception ex)
 			{
-				throw new Exception("Error generating html for " + node.TargetFilename + 
-					" at " + node.ParentFolder.Path, ex);
+				throw new Exception("Error generating html for " + node.TargetFilename +
+				                    " at " + node.ParentFolder.Path, ex);
 			}
 		}
 
@@ -354,7 +352,7 @@ namespace Anakia
 			context.Put("js", jsFormatter);
 			context.Put("tsql", tsqlFormatter);
 			context.Put("vb", vbFormatter);
-			
+
 			context.Put("basefolder", BaseGenFolder);
 			context.Put("breadcrumbs", node.BreadCrumbs);
 			context.Put("meta", node.Meta);
@@ -366,12 +364,13 @@ namespace Anakia
 			context.Put("folder", node.ParentFolder);
 			context.Put("converter", new SimpleConverter());
 			context.Put("helper", new SimpleHelper());
-			
+			context.Put("generationdate", DateTime.Now);
+
 			if (node.ParentFolder.NavigationNode != null)
 			{
 				context.Put("navigation", node.ParentFolder.NavigationNode.XmlDoc);
 			}
-			
+
 			context.Put("navlevel", node.ParentFolder.NavigationLevel);
 
 			String relativePath = String.Empty;
@@ -399,7 +398,7 @@ namespace Anakia
 
 			return context;
 		}
-		
+
 		#region BreadCrumb related operations
 
 		private void CreateBreadCrumb(DocumentNode node)
@@ -424,9 +423,9 @@ namespace Anakia
 			{
 				folder.BreadCrumbs.AddRange(folder.Parent.BreadCrumbs);
 			}
-			
+
 			String title = folder.Name;
-			
+
 			if (folder.Documents.IndexNode != null)
 			{
 				title = folder.Documents.IndexNode.Meta.Title;
@@ -434,7 +433,7 @@ namespace Anakia
 
 			folder.BreadCrumbs.Add(new BreadCrumb(folder.Path + "/index.html", title));
 		}
-		
+
 		#endregion
 
 		private XmlDocument CreateSiteMap()
@@ -489,49 +488,56 @@ namespace Anakia
 		{
 			if (node.NodeType == NodeType.Navigation) return;
 
-			XmlDocumentFragment fragment = node.XmlDoc.CreateDocumentFragment();
-
-			XmlNode parent = fragment;
-			
-			int level = node.ParentFolder.Level;
-
-			if (node.NodeType == NodeType.Ordinary)
+			try
 			{
-				level++;
-				
-				parent = node.XmlDoc.CreateElement(Path.GetFileNameWithoutExtension(node.Filename).Replace(' ', '_'));
+				XmlDocumentFragment fragment = node.XmlDoc.CreateDocumentFragment();
 
-				((XmlElement) parent).SetAttribute("level", node.ParentFolder.Level.ToString());
-				((XmlElement) parent).SetAttribute("page", node.TargetFilename);
-				((XmlElement) parent).SetAttribute("title", node.Meta.Title);
-				((XmlElement) parent).SetAttribute("issubpage", "true");
-				((XmlElement) parent).SetAttribute("path", node.ParentFolder.Path);
+				XmlNode parent = fragment;
 
-				fragment.AppendChild(parent);
-			}
+				int level = node.ParentFolder.Level;
 
-			foreach(XmlElement section in node.XmlDoc.SelectNodes("document/body/section"))
-			{
-				XmlElement newSection = CreateSectionXmlElement(level, node, section);
-				
-				parent.AppendChild(newSection);
-				
-				foreach(XmlElement secSectionLevel in section.SelectNodes("section"))
+				if (node.NodeType == NodeType.Ordinary)
 				{
-					XmlElement newSectionSecLevel = CreateSectionXmlElement(level + 1, node, secSectionLevel);
-				
-					newSection.AppendChild(newSectionSecLevel);
-					
-					foreach(XmlElement thirdSectionLevel in secSectionLevel.SelectNodes("section"))
+					level++;
+
+					parent = node.XmlDoc.CreateElement(Path.GetFileNameWithoutExtension(node.Filename).Replace(' ', '_'));
+
+					((XmlElement) parent).SetAttribute("level", node.ParentFolder.Level.ToString());
+					((XmlElement) parent).SetAttribute("page", node.TargetFilename);
+					((XmlElement) parent).SetAttribute("title", node.Meta.Title);
+					((XmlElement) parent).SetAttribute("issubpage", "true");
+					((XmlElement) parent).SetAttribute("path", node.ParentFolder.Path);
+
+					fragment.AppendChild(parent);
+				}
+
+				foreach(XmlElement section in node.XmlDoc.SelectNodes("document/body/section"))
+				{
+					XmlElement newSection = CreateSectionXmlElement(level, node, section);
+
+					parent.AppendChild(newSection);
+
+					foreach(XmlElement secSectionLevel in section.SelectNodes("section"))
 					{
-						XmlElement newSectionThrdLevel = CreateSectionXmlElement(level + 2, node, thirdSectionLevel);
-				
-						newSectionSecLevel.AppendChild(newSectionThrdLevel);
+						XmlElement newSectionSecLevel = CreateSectionXmlElement(level + 1, node, secSectionLevel);
+
+						newSection.AppendChild(newSectionSecLevel);
+
+						foreach(XmlElement thirdSectionLevel in secSectionLevel.SelectNodes("section"))
+						{
+							XmlElement newSectionThrdLevel = CreateSectionXmlElement(level + 2, node, thirdSectionLevel);
+
+							newSectionSecLevel.AppendChild(newSectionThrdLevel);
+						}
 					}
 				}
-			}
 
-			node.ParentFolder.SectionFragments.Add(fragment);
+				node.ParentFolder.SectionFragments.Add(fragment);
+			}
+			catch(Exception ex)
+			{
+				throw new Exception("Error creating site map fragments for " + node.Path + "\\" + node.Filename, ex);
+			}
 		}
 
 		private static XmlElement CreateSectionXmlElement(int level, DocumentNode node, XmlElement section)
@@ -552,7 +558,7 @@ namespace Anakia
 			}
 
 			newSection.SetAttribute("page", node.TargetFilename);
-			newSection.SetAttribute("level",level.ToString());
+			newSection.SetAttribute("level", level.ToString());
 
 			return newSection;
 		}
@@ -560,17 +566,17 @@ namespace Anakia
 		private void FixRelativePaths(DocumentNode node)
 		{
 			if (node.XmlDoc == null) return;
-			
+
 			int level = node.ParentFolder.Level;
-			
+
 			XmlNodeList nodes = node.XmlDoc.SelectNodes("//@relative");
-			
+
 			foreach(XmlAttribute xmlNode in nodes)
 			{
 				XmlElement elem = xmlNode.OwnerElement;
-				
+
 				String relative = elem.GetAttribute("relative");
-				
+
 				if (relative.StartsWith("!"))
 				{
 					relative = relative.Substring(1);
@@ -580,7 +586,7 @@ namespace Anakia
 				{
 					elem.RemoveAttribute("relative");
 				}
-				
+
 				elem.SetAttribute("src", Relativize(level, relative));
 			}
 		}
@@ -588,17 +594,17 @@ namespace Anakia
 		private string Relativize(int level, string relativePath)
 		{
 			String newPath = "./";
-			
-			for(int i=1; i < level; i++)
+
+			for(int i = 1; i < level; i++)
 			{
 				newPath += "../";
 			}
-			
+
 			if (relativePath[0] == '/')
 			{
 				return newPath + relativePath.Substring(1);
 			}
-			
+
 			return newPath + relativePath;
 		}
 

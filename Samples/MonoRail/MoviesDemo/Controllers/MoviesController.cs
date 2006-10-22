@@ -16,10 +16,9 @@ namespace MoviesDemo.Controllers
 {
 	using System;
 	using Castle.MonoRail.Framework;
-
 	using MoviesDemo.Model;
 
-	[Resource( "text", "MoviesDemo.Resources.Movies" )]
+	[Resource("text", "MoviesDemo.Resources.Movies")]
 	public class MoviesController : AbstractHtmlPageController
 	{
 		public void List()
@@ -35,7 +34,7 @@ namespace MoviesDemo.Controllers
 			{
 				movie = Movie.Find(movieId);
 			}
-			else 
+			else
 			{
 				movie = new Movie();
 				movie.Added = DateTime.Today;
@@ -46,7 +45,7 @@ namespace MoviesDemo.Controllers
 
 		public void View(int movieId)
 		{
-			 PropertyBag["movie"] = Movie.Find(movieId);
+			PropertyBag["movie"] = Movie.Find(movieId);
 		}
 
 		public void Save([DataBind("movie")] Movie movie)

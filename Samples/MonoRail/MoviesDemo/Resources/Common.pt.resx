@@ -42,7 +42,7 @@
 	<data name="htmlTitle">
 		<value>Monorail Movies Demonstração</value>
 	</data>
-	<data name="header" mimetype="Cabeça">
+	<data name="header">
 		<value>Movies Demonstração!!! </value>
 	</data>
 </root>

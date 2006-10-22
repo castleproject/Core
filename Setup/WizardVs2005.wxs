@@ -131,6 +131,12 @@
 		  <File Id="filecs8_45" Name="SimpleGlobalApplication.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\SimpleGlobalApplication.cs" />
 		  <File Id="filecs8_46" Name="Web.config" Source="$(var.VSTemplates80)\CSharp\MRProject\Web.config" />
 		  <File Id="filecs8_47" Name="WebContainer.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\WebContainer.cs" />
+		  <File Id="filecs8_48" Name="layout_default.aspx" Source="$(var.VSTemplates80)\CSharp\MRProject\layout_default.aspx" />
+		  <File Id="filecs8_49" Name="layout_default.boo" Source="$(var.VSTemplates80)\CSharp\MRProject\layout_default.boo" />
+		  <File Id="filecs8_50" Name="layout_default.vm" Source="$(var.VSTemplates80)\CSharp\MRProject\layout_default.vm" />
+		  <File Id="filecs8_51" Name="rescue_default.aspx" Source="$(var.VSTemplates80)\CSharp\MRProject\rescue_default.aspx" />
+		  <File Id="filecs8_52" Name="rescue_default.boo" Source="$(var.VSTemplates80)\CSharp\MRProject\rescue_default.boo" />
+		  <File Id="filecs8_53" Name="rescue_default.vm" Source="$(var.VSTemplates80)\CSharp\MRProject\rescue_default.vm" />
 		</Component>
 		<Directory Id="directoryvs8_72" Name="Controllers">
 		  <Component Id="componentvs2005_MRProject1" DiskId="1" Guid="2978313B-8887-4BD8-8280-CFB06E5B08A6">
@@ -138,21 +144,31 @@
 		  </Component>
 		</Directory>
 		<Directory Id="directoryvs8_81" Name="Views">
-		  <Directory Id="directoryvs8_90" Name="Home">
-		  <Component Id="componentvs2005_MRProject2" DiskId="1" Guid="2DC6C695-42C5-437B-BCFF-D3A945821A3C">
-			<File Id="filecs8_77" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
-		  </Component>
-		  </Directory>
+			<Directory Id="directoryvs8_90" Name="Home">
+				<Component Id="componentvs2005_MRProject2" DiskId="1" Guid="2DC6C695-42C5-437B-BCFF-D3A945821A3C">
+					<File Id="filecs8_77" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
+				</Component>
+			</Directory>
+			<Directory Id="directoryvs8_91" Name="rescues">
+				<Component Id="componentvs2005_MRProject5" DiskId="1" Guid="FEE7DB60-4CD9-4722-9AEA-B69941235D0D">
+					<File Id="filecs8_78" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\rescues\empty.txt" />
+				</Component>
+			</Directory>
+			<Directory Id="directoryvs8_92" Name="layouts">
+				<Component Id="componentvs2005_MRProject6" DiskId="1" Guid="0462E327-D99B-4922-B243-5C7AE8D83C5F">
+					<File Id="filecs8_79" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\layouts\empty.txt" />
+				</Component>
+			</Directory>
 		</Directory>
 		<Directory Id="directoryvs8_82" Name="Content">
 		  <Directory Id="directoryvs8_83" Name="css">
 		  <Component Id="componentvs2005_MRProject3" DiskId="1" Guid="125029A4-3C92-4EB4-AB47-1E280507C38C">
-			<File Id="filecs8_78" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
+			<File Id="filecs8_80" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
 		  </Component>
 		  </Directory>
 		  <Directory Id="directoryvs8_84" Name="images">
 		  <Component Id="componentvs2005_MRProject4" DiskId="1" Guid="589DDD73-DCFA-4087-B0C1-FA0E8E1A24A9">
-			<File Id="filecs8_79" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
+			<File Id="filecs8_81" Name="empty.txt" Source="$(var.VSTemplates80)\CSharp\MRProject\Views\Home\empty.txt" />
 		  </Component>
 		  </Directory>
 		</Directory>

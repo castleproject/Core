@@ -1,0 +1,281 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.6030"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{F34401EA-F030-48B4-863F-C57CA65C834D}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "FormHelperSample"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "FormHelperSample"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Core.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    AssemblyName = "Castle.MonoRail.Framework"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.MonoRail.Framework.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    AssemblyName = "Castle.Components.Binder"
+                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Components.Binder.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
+                    AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\NVelocity.dll"
+                    AssemblyFolderKey = "hklm\dn\castle"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "GlobalApplication.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\CheckboxSampleController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\RadioSampleController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\SelectSampleController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\SimpleElementsController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Models\Author.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Models\Blog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Models\Category.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Models\Product.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Models\Supplier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\checkboxsample\checkboxindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\checkboxsample\checkboxlistindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\checkboxsample\ProcessCheckbox.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\checkboxsample\ProcessCheckboxList.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\layouts\default.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\radiosample\radio.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\radiosample\result.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\rescues\generalerror.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\selectsample\process.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\selectsample\selectindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\shared\dump_context.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\simpleelements\hiddenfieldindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\simpleelements\passwordfieldindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\simpleelements\textareaindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\simpleelements\textfieldformatindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\simpleelements\textfieldindex.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\simpleelements\textfieldvalueindex.vm"
+                    BuildAction = "None"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

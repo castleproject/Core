@@ -35,9 +35,14 @@ namespace Castle.MonoRail.Framework.Helpers
 	}
 
 	/// <summary>
-	/// Currently being evaluated
+	/// The FormHelper allows you to output Html Input elements using the 
+	/// conventions necessary to use the DataBinder on the server side. 
+	/// <para>
+	/// It also query the objects available on the context to show property 
+	/// values correctly, saving you the burden of filling text inputs, selects, 
+	/// checkboxes and radios.
+	/// </para>
 	/// </summary>
-	/// <remarks>TODO: Make sure it generates XHTML compliant content</remarks>
 	public class FormHelper : AbstractHelper
 	{
 		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
@@ -45,11 +50,26 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region TextFieldValue
 
+		/// <summary>
+		/// Generates an input text form element
+		/// with the supplied value
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value">Value to supply to the element (instead of querying the target)</param>
+		/// <returns>The generated form element</returns>
 		public String TextFieldValue(String target, object value)
 		{
 			return TextFieldValue(target, value, null);
 		}
 
+		/// <summary>
+		/// Generates an input text form element
+		/// with the supplied value
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value">Value to supply to the element (instead of querying the target)</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String TextFieldValue(String target, object value, IDictionary attributes)
 		{
 			return CreateInputElement("text", target, value, attributes);
@@ -59,11 +79,28 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region TextField
 
+		/// <summary>
+		/// Generates an input text element.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		public String TextField(String target)
 		{
 			return TextField(target, null);
 		}
 
+		/// <summary>
+		/// Generates an input text element.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String TextField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -75,11 +112,28 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region TextArea
 
+		/// <summary>
+		/// Generates a textarea element.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		public String TextArea(String target)
 		{
 			return TextArea(target, null);
 		}
 
+		/// <summary>
+		/// Generates a textarea element.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String TextArea(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -96,11 +150,22 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region PasswordField
 
+		/// <summary>
+		/// Generates a password input field.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		public String PasswordField(String target)
 		{
 			return PasswordField(target, null);
 		}
 
+		/// <summary>
+		/// Generates a password input field.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String PasswordField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -112,11 +177,32 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region TextFieldFormat
 
+		/// <summary>
+		/// Generates an input text element and formats the value
+		/// with the specified format
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="formatString">The format string</param>
+		/// <returns>The generated form element</returns>
 		public String TextFieldFormat(String target, String formatString)
 		{
 			return TextFieldFormat(target, formatString, null);
 		}
 
+		/// <summary>
+		/// Generates an input text element and formats the value
+		/// with the specified format
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="formatString">The format string</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String TextFieldFormat(String target, String formatString, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -138,11 +224,24 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region LabelFor
 
+		/// <summary>
+		/// Generates a label element.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="label">Legend</param>
+		/// <returns>The generated form element</returns>
 		public String LabelFor(String target, String label)
 		{
 			return LabelFor(target, label, null);
 		}
 		
+		/// <summary>
+		/// Generates a label element.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="label">Legend</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String LabelFor(String target, String label, IDictionary attributes)
 		{
 			String id = CreateHtmlId(attributes, target);
@@ -165,6 +264,14 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region HiddenField
 
+		/// <summary>
+		/// Generates a hidden form element.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		public String HiddenField(String target)
 		{
 			object value = ObtainValue(target);
@@ -172,6 +279,15 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CreateInputElement("hidden", target, value, null);
 		}
 		
+		/// <summary>
+		/// Generates a hidden form element.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String HiddenField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -186,12 +302,57 @@ namespace Castle.MonoRail.Framework.Helpers
 		#endregion
 
 		#region CheckboxList
-		
+
+		/// <summary>
+		/// Creates a <see cref="CheckboxList"/> instance
+		/// which is enumerable. For each interaction you can invoke
+		/// <see cref="CheckboxList.Item"/> which will correctly render
+		/// a checkbox input element for the current element on the supplied set (<c>dataSource</c>).
+		/// <para>
+		/// The enumerable item will be an element of the <c>dataSource</c>.
+		/// </para>
+		/// If the <c>dataSource</c>
+		/// elements are complex objects (ie not string or primitives), 
+		/// supply the parameters <c>value</c> and <c>text</c> to the dictionary to make
+		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
+		/// <para>
+		/// Usually both the <c>target</c> and obviously the <c>dataSource</c> are sets
+		/// with multiple items. The element types tend to be the same. If 
+		/// they are not, you might have to specify the <c>suffix</c> parameters on 
+		/// the <c>attributes</c> as it would not be inferred.
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="dataSource">The set of available elements</param>
+		/// <returns>The generated form element</returns>
 		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource)
 		{
 			return CreateCheckboxList(target, dataSource, null);
 		}
 
+		/// <summary>
+		/// Creates a <see cref="CheckboxList"/> instance
+		/// which is enumerable. For each interaction you can invoke
+		/// <see cref="CheckboxList.Item"/> which will correctly render
+		/// a checkbox input element for the current element on the supplied set (<c>dataSource</c>).
+		/// <para>
+		/// The enumerable item will be an element of the <c>dataSource</c>.
+		/// </para>
+		/// If the <c>dataSource</c>
+		/// elements are complex objects (ie not string or primitives), 
+		/// supply the parameters <c>value</c> and <c>text</c> to the dictionary to make
+		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
+		/// <para>
+		/// Usually both the <c>target</c> and obviously the <c>dataSource</c> are sets
+		/// with multiple items. The element types tend to be the same. If 
+		/// they are not, you might have to specify the <c>suffix</c> parameters on 
+		/// the <c>attributes</c> as it would not be inferred.
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="dataSource">The set of available elements</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public CheckboxList CreateCheckboxList(String target, IEnumerable dataSource, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -199,6 +360,15 @@ namespace Castle.MonoRail.Framework.Helpers
 			return new CheckboxList(this, target, value, dataSource, attributes);
 		}
 		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="suffix"></param>
+		/// <param name="item"></param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		internal String CheckboxItem(int index, String target, String suffix, SetItem item, IDictionary attributes)
 		{
 			if (item.IsSelected)
@@ -224,6 +394,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public sealed class CheckboxList : IEnumerable, IEnumerator
 		{
 			private readonly FormHelper helper;
@@ -234,6 +407,14 @@ namespace Castle.MonoRail.Framework.Helpers
 			private bool hasMovedNext, hasItem;
 			private int index = -1;
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="helper"></param>
+			/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+			/// <param name="initialSelectionSet"></param>
+			/// <param name="dataSource">The set of available elements</param>
+			/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 			public CheckboxList(FormHelper helper, String target,
 								object initialSelectionSet, IEnumerable dataSource, IDictionary attributes)
 			{
@@ -247,6 +428,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				enumerator = operationState.GetEnumerator();
 			}
 			
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns>The generated form element</returns>
 			public String Item()
 			{
 				if (!hasMovedNext)
@@ -299,17 +484,33 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		#region CheckboxField
 
+		/// <summary>
+		/// Generates a checkbox field. In fact it generates two as a
+		/// way to send a value if the primary checkbox is not checked.
+		/// This allow the process the be aware of the unchecked value
+		/// and act accordingly.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		public String CheckboxField(String target)
 		{
 			return CheckboxField(target, null);
 		}
 
 		/// <summary>
-		/// Document the entries trueValue and falseValue
+		/// Generates a checkbox field. In fact it generates two as a
+		/// way to send a value if the primary checkbox is not checked.
+		/// This allow the process the be aware of the unchecked value
+		/// and act accordingly.
+		/// <para>
+		/// The checked and unchecked values sent to the server defaults
+		/// to true and false. You can override them using the 
+		/// parameters <c>trueValue</c> and <c>falseValue</c>.
+		/// </para>
 		/// </summary>
-		/// <param name="target"></param>
-		/// <param name="attributes"></param>
-		/// <returns></returns>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String CheckboxField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -325,7 +526,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			else
 			{
 				isChecked = ((value != null && value is bool && ((bool)value)) || 
-					(!(value is bool) && (value != null)));
+				             (!(value is bool) && (value != null)));
 			}
 
 			if (isChecked)
@@ -353,11 +554,30 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region RadioField
 
+		/// <summary>
+		/// Generates a radio input type with the specified 
+		/// value to send to the served in case the element in checked.
+		/// It will automatically check the radio if the target 
+		/// evaluated value is equal to the specified <c>valueToSend</c>.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="valueToSend"></param>
+		/// <returns>The generated form element</returns>
 		public String RadioField(String target, object valueToSend)
 		{
 			return RadioField(target, valueToSend, null);
 		}
 
+		/// <summary>
+		/// Generates a radio input type with the specified 
+		/// value to send to the served in case the element in checked.
+		/// It will automatically check the radio if the target 
+		/// evaluated value is equal to the specified <c>valueToSend</c>.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="valueToSend"></param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String RadioField(String target, object valueToSend, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -381,11 +601,60 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region Select
 
+		/// <summary>
+		/// Creates a <c>select</c> element and its <c>option</c>s based on the <c>dataSource</c>.
+		/// If the <c>dataSource</c>
+		/// elements are complex objects (ie not string or primitives), 
+		/// supply the parameters <c>value</c> and <c>text</c> to the dictionary to make
+		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
+		/// <para>
+		/// You can also specify the attribute <c>firstoption</c> to force the first option be
+		/// something like 'please select'.
+		/// </para>
+		/// <para>
+		/// Usually the <c>target</c> is a single value and the <c>dataSource</c> is obviously 
+		/// a set with multiple items. The element types tend to be the same. If 
+		/// they are not, you might have to specify the <c>suffix</c> parameters on 
+		/// the <c>attributes</c> as it would not be inferred.
+		/// </para>
+		/// <para>
+		/// The target can also be a set. In this case the intersection will be 
+		/// the initially selected elements.
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="dataSource">The set of available elements</param>
+		/// <returns>The generated form element</returns>
 		public String Select(String target, IEnumerable dataSource)
 		{
 			return Select(target, dataSource, null);
 		}
 
+		/// <summary>
+		/// Creates a <c>select</c> element and its <c>option</c>s based on the <c>dataSource</c>.
+		/// If the <c>dataSource</c>
+		/// elements are complex objects (ie not string or primitives), 
+		/// supply the parameters <c>value</c> and <c>text</c> to the dictionary to make
+		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
+		/// <para>
+		/// You can also specify the attribute <c>firstoption</c> to force the first option be
+		/// something like 'please select'.
+		/// </para>
+		/// <para>
+		/// Usually the <c>target</c> is a single value and the <c>dataSource</c> is obviously 
+		/// a set with multiple items. The element types tend to be the same. If 
+		/// they are not, you might have to specify the <c>suffix</c> parameters on 
+		/// the <c>attributes</c> as it would not be inferred.
+		/// </para>
+		/// <para>
+		/// The target can also be a set. In this case the intersection will be 
+		/// the initially selected elements.
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="dataSource">The set of available elements</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String Select(String target, IEnumerable dataSource, IDictionary attributes)
 		{
 			object selectedValue = ObtainValue(target);
@@ -394,19 +663,31 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 		
 		/// <summary>
-		/// Creates a <c>select</c> elements and its <c>option</c>s. If the <c>dataSource</c>
-		/// elements are complex objects, use the params <c>value</c> and <c>text</c> to make
-		/// the helper use the specified properties to extract the <c>option</c> value and text.
+		/// Creates a <c>select</c> element and its <c>option</c>s based on the <c>dataSource</c>.
+		/// If the <c>dataSource</c>
+		/// elements are complex objects (ie not string or primitives), 
+		/// supply the parameters <c>value</c> and <c>text</c> to the dictionary to make
+		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
 		/// <para>
 		/// You can also specify the attribute <c>firstoption</c> to force the first option be
-		/// something like 'please select'
+		/// something like 'please select'.
+		/// </para>
+		/// <para>
+		/// Usually the <c>target</c> is a single value and the <c>dataSource</c> is obviously 
+		/// a set with multiple items. The element types tend to be the same. If 
+		/// they are not, you might have to specify the <c>suffix</c> parameters on 
+		/// the <c>attributes</c> as it would not be inferred.
+		/// </para>
+		/// <para>
+		/// The target can also be a set. In this case the intersection will be 
+		/// the initially selected elements.
 		/// </para>
 		/// </summary>
-		/// <param name="target"></param>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="selectedValue"></param>
-		/// <param name="dataSource"></param>
-		/// <param name="attributes"></param>
-		/// <returns></returns>
+		/// <param name="dataSource">The set of available elements</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		public String Select(String target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
 		{
 			String id = CreateHtmlId(target);
@@ -480,6 +761,16 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region protected members
 
+		/// <summary>
+		/// Creates the specified input element 
+		/// using the specified parameters to supply the name, value, id and others 
+		/// html attributes.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value"></param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		protected String CreateInputElement(String type, String target, Object value, IDictionary attributes)
 		{
 			if (value == null)
@@ -494,6 +785,17 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CreateInputElement(type, id, target, value.ToString(), attributes);
 		}
 
+		/// <summary>
+		/// Creates the specified input element 
+		/// using the specified parameters to supply the name, value, id and others 
+		/// html attributes.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="id"></param>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value"></param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
 		protected string CreateInputElement(String type, String id, String target, String value, IDictionary attributes)
 		{
 			if (Controller.Context != null) // We have a context
@@ -505,11 +807,22 @@ namespace Castle.MonoRail.Framework.Helpers
 			                     type, id, target, value, GetAttributes(attributes));
 		}
 
+		/// <summary>
+		/// Queries the context for the target value
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		protected object ObtainValue(String target)
 		{
 			return ObtainValue(RequestContext.All, target);
 		}
 
+		/// <summary>
+		/// Queries the context for the target value
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		protected object ObtainValue(RequestContext context, String target)
 		{
 			String[] pieces = target.Split(new char[] {'.'});
@@ -544,6 +857,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			return QueryPropertyRecursive(rootInstance, pieces, 1);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="rootInstance"></param>
+		/// <param name="propertyPath"></param>
+		/// <param name="piece"></param>
+		/// <returns>The generated form element</returns>
 		protected object QueryPropertyRecursive(object rootInstance, string[] propertyPath, int piece)
 		{
 			String property = propertyPath[piece]; int index;
@@ -600,6 +920,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			return QueryPropertyRecursive(instance, propertyPath, piece + 1);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
 		protected object ObtainRootInstance(RequestContext context, String target)
 		{
 			object rootInstance = null;
@@ -628,11 +954,25 @@ namespace Castle.MonoRail.Framework.Helpers
 			return rootInstance;
 		}
 
+		
+		/// <summary>
+		/// Creates the HTML id.
+		/// </summary>
+		/// <param name="attributes">The attributes.</param>
+		/// <param name="target">The target.</param>
+		/// <returns>The generated form element</returns>
 		protected static string CreateHtmlId(IDictionary attributes, String target)
 		{
 			return CreateHtmlId(attributes, target, true);
 		}
 		
+		/// <summary>
+		/// Creates the HTML id.
+		/// </summary>
+		/// <param name="attributes">The attributes.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="removeEntry">if set to <c>true</c> [remove entry].</param>
+		/// <returns>The generated form element</returns>
 		protected static string CreateHtmlId(IDictionary attributes, String target, bool removeEntry)
 		{
 			String id;
@@ -654,6 +994,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			return id;
 		}
 
+		/// <summary>
+		/// Obtains the entry.
+		/// </summary>
+		/// <param name="attributes">The attributes.</param>
+		/// <param name="key">The key.</param>
+		/// <returns>The generated form element</returns>
 		protected internal static String ObtainEntry(IDictionary attributes, String key)
 		{
 			if (attributes != null && attributes.Contains(key))
@@ -664,6 +1010,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			return null;
 		}
 
+		/// <summary>
+		/// Obtains the entry and remove it if found.
+		/// </summary>
+		/// <param name="attributes">The attributes.</param>
+		/// <param name="key">The key.</param>
+		/// <param name="defaultValue">The default value.</param>
+		/// <returns>the entry value or the default value</returns>
 		protected internal static String ObtainEntryAndRemove(IDictionary attributes, String key, String defaultValue)
 		{
 			String value = ObtainEntryAndRemove(attributes, key);
@@ -671,6 +1024,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			return value != null ? value : defaultValue;
 		}
 		
+		/// <summary>
+		/// Obtains the entry and remove it if found.
+		/// </summary>
+		/// <param name="attributes">The attributes.</param>
+		/// <param name="key">The key.</param>
+		/// <returns>the entry value or null</returns>
 		protected internal static String ObtainEntryAndRemove(IDictionary attributes, String key)
 		{
 			String value = null;

@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationSample", "LocalizationSample\LocalizationSample.csproj", "{A8A7C6ED-106F-4B8F-9212-15367A3D8525}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Debug.ActiveCfg = Debug|.NET
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Debug.Build.0 = Debug|.NET
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Release.ActiveCfg = Release|.NET
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

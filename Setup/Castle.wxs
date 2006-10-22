@@ -100,7 +100,8 @@
 				
 				<ComponentRef Id="ProductComponent11" />
 				<ComponentRef Id="ProductComponent20" />
-				<ComponentRef Id="ProductComponentGac" />
+				<ComponentRef Id="ProductComponentGac1" />
+				<ComponentRef Id="ProductComponentGac2" />
 			</Feature>
 
 			<!--
@@ -139,6 +140,8 @@
 				<ComponentRef Id='componentvs2003_MRProject2' />
 				<ComponentRef Id='componentvs2003_MRProject3' />
 				<ComponentRef Id='componentvs2003_MRProject4' />
+				<ComponentRef Id='componentvs2003_MRProject5' />
+				<ComponentRef Id='componentvs2003_MRProject6' />
 				<ComponentRef Id='componentvs2003_MRProjectTest' />
 			</Feature>
 
@@ -155,6 +158,8 @@
 				<ComponentRef Id='componentvs2005_MRProject2' />
 				<ComponentRef Id='componentvs2005_MRProject3' />
 				<ComponentRef Id='componentvs2005_MRProject4' />
+				<ComponentRef Id='componentvs2005_MRProject5' />
+				<ComponentRef Id='componentvs2005_MRProject6' />
 				<ComponentRef Id='componentvs2005_MRProjectTest' />
 			</Feature>
 

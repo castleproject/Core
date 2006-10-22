@@ -18,14 +18,16 @@ namespace Anakia.DocData
 
 	public class PropertyDocData : CommonDocData
 	{
-		private string name, id;
-		private Visibility access;
-		private ParameterDocData[] parameters;
+		private readonly string name, id;
+		private readonly string type;
+		private readonly Visibility access;
+		private readonly ParameterDocData[] parameters;
 
-		public PropertyDocData(string name, string id, Visibility access, ParameterDocData[] parameters)
+		public PropertyDocData(string name, string id, string type, Visibility access, ParameterDocData[] parameters)
 		{
 			this.name = name;
 			this.id = id;
+			this.type = type;
 			this.access = access;
 			this.parameters = parameters;
 		}
@@ -33,6 +35,11 @@ namespace Anakia.DocData
 		public string Name
 		{
 			get { return name; }
+		}
+
+		public string PropertyType
+		{
+			get { return type; }
 		}
 
 		public string Id

@@ -1,0 +1,19 @@
+<html>
+<body>
+<form action="update.castle" method="post">
+
+  $FormHelper.HiddenField("condition.id") 
+  <p>
+  Name: 
+  $FormHelper.TextField("condition.name") 
+  </p>
+  <p>
+  Licenses:
+  $FormHelper.Select("condition.ConditionType.id", $types, "%{value='Id', firstoption='Please Select'}")
+  </p>
+
+  <input type="submit" id="updatebutton" value="Update" />
+
+</form>
+</body>
+</html>

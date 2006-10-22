@@ -1,0 +1,1 @@
+<%@ Application Inherits="SendingEmailSample.GlobalApplication"  %>

@@ -61,6 +61,7 @@
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet11Dir="${path::get-full-path(build.base.dir)}\net-1.1\${project.config}"?&gt;</echo>
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define BuildNet20Dir="${path::get-full-path(build.base.dir)}\net-2.0\${project.config}"?&gt;</echo>
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define ReleaseNotesDir="${releasenotes.dir}"?&gt;</echo>
+		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define SharedLibs="${path::get-full-path('${root.dir}\..\..\SharedLibs')}"?&gt;</echo>
 
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define WizardDir="${path::get-full-path(root.dir)}\Tools\VSNetWizards"?&gt;</echo>
 		<echo file="${build.setup.dir}/LocationInclude.wxi" append="true">&lt;?define VSTemplates70="${path::get-full-path(root.dir)}\Tools\VSNetWizards\CastleTemplates\VS7"?&gt;</echo>

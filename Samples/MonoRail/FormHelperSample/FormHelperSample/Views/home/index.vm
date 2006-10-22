@@ -1,0 +1,61 @@
+
+<p>
+The following are samples of FormHelper usage
+</p>
+
+<table width="60%" border="0" cellpadding="5">
+
+<tr>
+<td valign="top">
+<h2>Simple elements</h2>
+
+<ul>
+<li> <a href="../simpleelements/textfieldindex.rails">TextField</a> </li> 
+
+<li> <a href="../simpleelements/textfieldformatindex.rails">TextFieldFormat</a> </li> 
+
+<li> <a href="../simpleelements/textfieldvalueindex.rails">TextFieldValue</a> </li> 
+
+<li> <a href="../simpleelements/textareaindex.rails">TextArea</a> </li> 
+
+<li> <a href="../simpleelements/passwordfieldindex.rails">PasswordField</a> </li> 
+
+<li> <a href="../simpleelements/hiddenfieldindex.rails">HiddenField</a> </li> 
+</ul>
+
+</td>
+
+<td valign="top">
+<h2>Radio</h2>
+
+<ul>
+<li> <a href="../radiosample/radio.rails">RadioField</a> </li> 
+</ul>
+
+
+<h2>Checkboxes</h2>
+
+
+<ul>
+<li> <a href="../checkboxsample/CheckboxIndex.rails">CheckboxField</a> </li> 
+
+<li> <a href="../checkboxsample/CheckboxListIndex.rails">CheckboxList</a> </li> 
+</ul>
+
+
+
+<h2>Select</h2>
+
+<ul>
+<li> <a href="../selectsample/SelectIndex.rails">Select</a> </li> 
+
+</ul>
+
+</td>
+</tr>
+
+</table>
+
+
+
+

@@ -35,19 +35,34 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates a link to navigate to a specific page
 		/// </summary>
-		/// <param name="page"></param>
-		/// <param name="text"></param>
-		/// <returns></returns>
+		/// <param name="page">Page index</param>
+		/// <param name="text">Link text</param>
+		/// <returns>An anchor tag</returns>
 		public String CreatePageLink(int page, String text)
 		{
 			return CreatePageLink(page, text, null, null);
 		}
 
+		/// <summary>
+		/// Creates a link to navigate to a specific page
+		/// </summary>
+		/// <param name="page">Page index</param>
+		/// <param name="text">Link text</param>
+		/// <param name="htmlAttributes">Attributes for the anchor tag</param>
+		/// <returns>An anchor tag</returns>
 		public String CreatePageLink(int page, String text, IDictionary htmlAttributes)
 		{
 			return CreatePageLink(page, text, htmlAttributes, null);
 		}
 
+		/// <summary>
+		/// Creates a link to navigate to a specific page
+		/// </summary>
+		/// <param name="page">Page index</param>
+		/// <param name="text">Link text</param>
+		/// <param name="htmlAttributes">Attributes for the anchor tag</param>
+		/// <param name="queryStringParams">Query string entries for the link</param>
+		/// <returns>An anchor tag</returns>
 		public String CreatePageLink(int page, String text, IDictionary htmlAttributes, IDictionary queryStringParams)
 		{
 			String filePath = CurrentContext.Request.FilePath;
@@ -179,6 +194,12 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		private readonly IList slice = new ArrayList();
 
+		/// <summary>
+		/// Constructs a Page using the specified parameters
+		/// </summary>
+		/// <param name="list">The whole set</param>
+		/// <param name="curPage">The desired page index</param>
+		/// <param name="pageSize">The desired page size</param>
 		public Page(IList list, int curPage, int pageSize)
 		{
 			// Calculate slice indexes
@@ -190,6 +211,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			CalculatePaginationInfo(startIndex, endIndex, list.Count, pageSize, curPage);
 		}
 
+		/// <summary>
+		/// Populates the sliced view of the whole set
+		/// </summary>
+		/// <param name="startIndex">Index to start to</param>
+		/// <param name="endIndex">Last index</param>
+		/// <param name="list">Source set</param>
 		private void CreateSlicedCollection(int startIndex, int endIndex, IList list)
 		{
 			for(int index = startIndex; index < endIndex; index++)
@@ -198,6 +225,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Creates an enumerator for the 
+		/// sliced set
+		/// </summary>
+		/// <returns>An enumerator instance</returns>
 		public override IEnumerator GetEnumerator()
 		{
 			return slice.GetEnumerator();
@@ -237,12 +269,26 @@ namespace Castle.MonoRail.Framework.Helpers
 
 #endif
 	
+	/// <summary>
+	/// Abstract implementation of <see cref="IPaginatedPage"/>
+	/// which performs the standard calculations on 
+	/// <see cref="CalculatePaginationInfo"/>
+	/// </summary>
 	public abstract class AbstractPage : IPaginatedPage
 	{
 		private int firstItem, lastItem, totalItems;
 		private int previousIndex, nextIndex, lastIndex, curIndex;
 		private bool hasPrev, hasNext, hasFirst, hasLast;
 
+		/// <summary>
+		/// Calculate the values of all properties
+		/// based on the specified parameters
+		/// </summary>
+		/// <param name="startIndex">Start index</param>
+		/// <param name="endIndex">Last index</param>
+		/// <param name="count">Total of elements</param>
+		/// <param name="pageSize">Page size</param>
+		/// <param name="curPage">This page index</param>
 		protected void CalculatePaginationInfo(int startIndex, int endIndex, int count, int pageSize, int curPage)
 		{
 			firstItem = count != 0 ? startIndex + 1 : 0;
@@ -265,66 +311,111 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		/// <summary>
+		/// The first index
+		/// </summary>
 		public int FirstIndex
 		{
 			get { return 1; }
 		}
 
+		/// <summary>
+		/// The index this page represents
+		/// </summary>
 		public int CurrentIndex
 		{
 			get { return curIndex; }
 		}
 
+		/// <summary>
+		/// The last index available on the set
+		/// </summary>
 		public int LastIndex
 		{
 			get { return lastIndex; }
 		}
 
+		/// <summary>
+		/// The previous index (from this page)
+		/// </summary>
 		public int PreviousIndex
 		{
 			get { return previousIndex; }
 		}
 
+		/// <summary>
+		/// The next index (from this page)
+		/// </summary>
 		public int NextIndex
 		{
 			get { return nextIndex; }
 		}
-
-		public bool HasPrevious
-		{
-			get { return hasPrev; }
-		}
-
-		public bool HasNext
-		{
-			get { return hasNext; }
-		}
-
-		public bool HasFirst
-		{
-			get { return hasFirst; }
-		}
-
-		public bool HasLast
-		{
-			get { return hasLast; }
-		}
-
+		
+		/// <summary>
+		/// The first element (index + 1)
+		/// </summary>
 		public int FirstItem
 		{
 			get { return firstItem; }
 		}
 
+		/// <summary>
+		/// The last element in the page (count)
+		/// </summary>
 		public int LastItem
 		{
 			get { return lastItem; }
 		}
 
+		/// <summary>
+		/// The count of all elements on the set
+		/// </summary>
 		public int TotalItems
 		{
 			get { return totalItems; }
 		}
 
+		/// <summary>
+		/// Returns true if a previous page 
+		/// is accessible from this page
+		/// </summary>
+		public bool HasPrevious
+		{
+			get { return hasPrev; }
+		}
+
+		/// <summary>
+		/// Returns true if a next page is
+		/// accessible from this page
+		/// </summary>
+		public bool HasNext
+		{
+			get { return hasNext; }
+		}
+
+		/// <summary>
+		/// Returns true if a first page 
+		/// exists
+		/// </summary>
+		public bool HasFirst
+		{
+			get { return hasFirst; }
+		}
+
+		/// <summary>
+		/// Returns true if a last page 
+		/// exists
+		/// </summary>
+		public bool HasLast
+		{
+			get { return hasLast; }
+		}
+
+		/// <summary>
+		/// Returns a enumerator for the contents
+		/// of this page only (not the whole set)
+		/// </summary>
+		/// <returns>Enumerator instance</returns>
 		public abstract IEnumerator GetEnumerator();
 	}
 }

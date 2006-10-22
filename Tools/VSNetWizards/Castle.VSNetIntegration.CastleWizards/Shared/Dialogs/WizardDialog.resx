@@ -115,13 +115,13 @@
   <data name="buttonBack.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Private</value>
   </data>
+  <data name="buttonFinish.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
   <data name="buttonFinish.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </data>
   <data name="buttonFinish.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>Private</value>
-  </data>
-  <data name="buttonFinish.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Private</value>
   </data>
   <data name="buttonCancel.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -1250,6 +1250,53 @@
         dkAh8LS/T9oDl2EoNacE1Px7n/0ngQAE3RVnIehOjVLTyoxW39gEUkBFQsPe6sejYzOKbzggAAA7
 </value>
   </data>
+  <data name="pictureBox2.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="pictureBox2.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="pictureBox2.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="pictureBox2.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        R0lGODlhPAAqAPcAAP///0JajP37/Pn3+P38/f38//r5/PDv8vPy+ePj7u/v9vX1+u3t8vn5+9bX6dvc
+        6fP0+c3Q3d7h7ejq80tblVBfmF9vqFxso2d3rmh3rK+20MnO4MPH1u/x+Ovt9OPl7D5Ri0RWjlNlnVlr
+        pk1cjl5xq1ZnnV9wql5vpVtroFpqnl1toWl6rmZ2qG19r3aFtJCcwaatxL/E1Udaj1NpplNppVBloElc
+        kVVqpk5gllpuqVBilVpupllto11wqVRmmWBzrGF1rVFikVdpmmFzqVlqmlZmlV5womN2qlxtnldnkl1t
+        mGh4pmt7qm5+rHKCsXeGsm9+pnyLuHmItICQvHmGrXaCpouXu46avoqVtaCryrG606qyybvC18HI3Le+
+        0cXL28/U4tLW4tTY5Nnc5D9XkENYj01moz1Rgk5mpVBpp0FViE9opEpflU5knEVYilZtqFlxrEpej0xg
+        klhvp1BkmFZrolxzrFxyqlJlll91rV90qWB1ql9zqFltnmV6rmBzpVptm1prmFhplWh8r2N0oXCDtG6B
+        sXWItnqMt3SDqZWkyJWiwZ2pxpWgvJqlwqWwzTBIfjVMgDdPgztTiEZhn0hjoUpkoUJakEFZjUJZjUJa
+        jUNajkZelEJZi1BppFBqpE9oo0RbjFJrpklhlEdekEZcjlJspVJrpVFqolRtpkpgkVlxqVNqnkxhj1px
+        plxzqV11ql11qVdtn1xzpl52qVJmk1VpmFVqmFRolmJ5rldsmlZrmGB2qVJkjmJ4qWV8rWh/sHKErn6Q
+        uYOUuoGQs36Mrdvh7tfd6uDk7dPW3TlThztUiT1WizxViTtUhjpShD9Zjj5Xij9YikFajkFajEFai0FZ
+        i0Jai0RdjUBWhE5llU1kklt1qV12ql11o1VqlV5znWV6pmp/q2R3nWx9oY2atZijud7h5+jq7ubo7Pf4
+        +m6BpNvg6UNdiU9nkMjP2t/l793i6uLo8ent8OHn6fz///H09OXn5/n6+P39+v/+/fv6+f////7+/vv7
+        +ywAAAAAPAAqAAAI/wABCBxIsKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsSPDdfTS3fNYMZ2DD/zu
+        aWGlSooDfgvIOFBAsiG9K4eoQGIUjE0oVsMaaYHyB9K/mgDuJfNg0N+XUHRwVDpDBxYfWDgsXaITSpeE
+        g0oRTJwXRl6CRi5gyDu2AZk9AP8e1dBxokaqIy1a/DoiokcJOHjGDEy3oR26Riy0xGu34WtDAov0QKFi
+        4cwrKYlOUOkAYAEWFEmS+MlBYdu2NhR+LFFxBMMGgetglEiUyMeZIMOmwKHiryECRKp8sHhC3AUgUIcS
+        AFh35YaIFD1MnGnV6oyNHn5UkCoCRuCHcXNrAf9jgWQPD1RwRjI8MIWFMCbjnDgZPs7QA4EcbPGAg2rU
+        qVH+jdIfCnVEkYxAYzDRQiF2oHDEEoIAssIF+DSUzxUohLNDJzOQUEcSKLwwgUD7RJABKKikqGKKoIzw
+        CBkDqWPFILtUcAMmN+wwyw7kqLdeFs0EkMk1nmAzTRQJ9CYQA3+wseKKoNChAUH+MBAFJQEEUM0mmixj
+        jDoPocOONFmWOU0h7RDUBQ4osvhJm6iEQsw+BKUTzjPYlBnAM+LI81AXOVhT5jVmhNDGFwAIYMACMFzC
+        Ihs14KCGk6h8QogY6/zTGzJ1TEONntdEw8FDXGhSpifZ2JIHKeZs4UgVVfD/4SQoNAyjQReL6PIJKqB0
+        84IwV2gBRiM7+NHJG9WUOQmiDj1yTZnSBFKIKNmUUkoAlGiSyiighDLFB/ro00AX3qCoCiDNSGMKN6uI
+        kssgcjyb5TJcOGSPs2bygss0AVzj7zS57AHKJ3B0gc45xcigQDGUjtDGNNdAnCUJc8iLrSMOFeCIxdPg
+        sq+e0/wARLd8jPHIM5IYEUYjZ6R4hikWT1xxmc5kkfHGZnrM76C7CMzGIWQoIgk0kXwhg6OonFGKoHpS
+        bHHNDzHCMTjg7JylKIG8AgobUoixxCREx8CBJSp2EnMATpfJzDkOLWAOxNdU0/HHZXJyASsDExOBLWBL
+        /2KODGSjUsMqZ6cd8TLmQMCQPubMsE0d23DiTC65WB2AJ4L0MTAj8LjStzFeBJ6G2aDKkYM0m3CTRx62
+        CEPAQg1UwY0JddxSxC3k+GG5NHUA8eYiHMjxOTyBuxEC01qa4kcgKgTywy23uCHIAQsJYM4qQvgCzjeF
+        hEPOEBaXwkSToCyijC9oaON3BIETEYgonmi5RhPdd4/LO0LkUAU/C/mjTgyKWIIQTCEKUShBEXkogzRK
+        gQQMwAIUoMACGAbxBneAwBxgIJsqXNCEJXhCGtQgBzveUUBTCGEJ5XBEPR5yD2V8gQsx4MIXIvAFRhhD
+        EbXQAQ5ooQtiEGMQ2+AGN6bK8Yg79IIIumDFC6qAhUZEQAwvjOEMqaeRfByDGCWABQb60A0iOAEKTxCG
+        C/hAiyAQgQcsgAQDkHIQYoyABeRBwlUscAJaACEWSECCCzKAhy6w8SBkuAIdVPGKOGgtFIjEQSHhoApZ
+        qPGPB+mAF7RAjGAAoxewkIUskPAHQ8BAA2JYACQT0oAF0IMMEQCDKsPQjnsM4HWjjKUsZ0nLWtrylrh0
+        SEAAADs=
+</value>
+  </data>
   <data name="$this.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </data>
@@ -1258,9 +1305,6 @@
   </data>
   <data name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
-  </data>
-  <data name="$this.Name">
-    <value>WizardDialog</value>
   </data>
   <data name="$this.Localizable" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
@@ -1276,6 +1320,9 @@
   </data>
   <data name="$this.SnapToGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </data>
+  <data name="$this.Name">
+    <value>WizardDialog</value>
   </data>
   <data name="$this.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Private</value>

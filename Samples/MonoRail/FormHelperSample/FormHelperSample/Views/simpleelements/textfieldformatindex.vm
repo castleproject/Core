@@ -1,0 +1,16 @@
+
+<h3>TextFieldFormat</h3>
+
+<p>
+Today: $FormHelper.TextFieldFormat("today", "MMMM - dd - yyyy")
+</p>
+
+<p>
+value: $FormHelper.TextFieldFormat("value", "00.000")
+</p>
+
+<p>
+Product.Price: $FormHelper.TextFieldFormat("product.price", "C")
+</p>
+
+

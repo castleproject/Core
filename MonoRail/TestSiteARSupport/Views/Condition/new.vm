@@ -1,0 +1,24 @@
+<html>
+<body>
+<form action="insert.castle" method="post">
+  <p>
+  Name: 
+  $FormHelper.TextField("condition.name") 
+  </p>
+  <p>
+  Licenses:
+  $FormHelper.Select("condition.ConditionType.id", $types, "%{value='Id', firstoption='Please Select'}")
+  </p>
+  <p>
+  Comments:
+#set($list = $FormHelper.CreateCheckboxList("condition.Comments", $comments, "%{value='Id', id='condition_comments'}"))
+#foreach($it in $list)
+  $list.Item() $it
+#end
+  </p>
+
+  <input type="submit" id="insertbutton" value="Insert" />
+
+</form>
+</body>
+</html>

@@ -121,14 +121,12 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			return instance;
 		}
-
+		
 		protected override object BindSpecialObjectInstance(Type instanceType, string prefix, Node node, out bool succeeded)
 		{
 			succeeded = false;
 			
-			object stackInstance = InstanceOnStack;
-			
-			ActiveRecordModel model = ActiveRecordModel.GetModel(stackInstance.GetType());
+			ActiveRecordModel model = CurrentARModel;
 			
 			if (model == null)
 			{
@@ -243,7 +241,30 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				return true;
 			}
 			
+			if (node != null && CurrentARModel != null)
+			{
+				// If it's a belongsTo ref, we need to recreate it 
+				// instead of overwrite its properties, otherwise NHibernate will complain
+
+				foreach(BelongsToModel model in CurrentARModel.BelongsTo)
+				{
+					if (model.Property.Name == prefix)
+					{
+						return true;
+					}
+				}
+			}
+			
 			return base.ShouldRecreateInstance(value, type, prefix, node);
+		}
+		
+		protected ActiveRecordModel CurrentARModel
+		{
+			get 
+			{
+				object stackInstance = InstanceOnStack;
+				return ActiveRecordModel.GetModel(stackInstance.GetType());
+			}
 		}
 
 		#region helpers

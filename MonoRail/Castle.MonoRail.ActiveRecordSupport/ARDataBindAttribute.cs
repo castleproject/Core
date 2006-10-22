@@ -26,7 +26,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public enum AutoLoadBehavior
 	{
 		/// <summary>
-		/// Means that no autoload should be perform on the target
+		/// Means that no autoload should be performed on the target
 		/// type or on nested types.
 		/// </summary>
 		Never,

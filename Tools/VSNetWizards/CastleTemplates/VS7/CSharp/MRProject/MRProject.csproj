@@ -147,6 +147,8 @@
                     BuildAction = "Compile"
                 />
                 <Folder RelPath = "Views\Home\" />
+                <Folder RelPath = "Views\layouts\" />
+                <Folder RelPath = "Views\rescues\" />
             </Include>
         </Files>
     </CSHARP>

@@ -17,16 +17,15 @@ namespace MoviesDemo.Controllers
 	using System;
 	using Castle.MonoRail.Framework;
 
-
 	public class PreferencesController : SmartDispatcherController
 	{
-		public void Locale( string localeId, string refUrl )
+		public void Locale(string localeId, string refUrl)
 		{
 			// Create the cookie
-			Response.CreateCookie( "locale", localeId );
+			Response.CreateCookie("locale", localeId);
 
 			// Go back to where you came from
-			Response.Redirect( refUrl );
+			Response.Redirect(refUrl);
 
 			// Don't render anything
 			CancelView();

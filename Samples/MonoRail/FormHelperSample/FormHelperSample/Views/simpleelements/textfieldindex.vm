@@ -1,0 +1,36 @@
+
+<h3>TextField</h3>
+
+<p>
+somekey: $FormHelper.TextField("somekey")
+</p>
+
+<p>
+simplevalue: $FormHelper.TextField("simplevalue")
+</p>
+
+<p>
+Product.Name: $FormHelper.TextField("product.name")
+</p>
+
+<p>
+Product.Supplier.Name: $FormHelper.TextField("product.supplier.name")
+</p>
+
+<h3>Overriding the elements id</h3>
+
+<p>
+somekey: $FormHelper.TextField("somekey", "%{id='customid'}")
+</p>
+
+<p>
+simplevalue: $FormHelper.TextField("simplevalue", "%{id='otherid'}")
+</p>
+
+<p>
+Product.Name: $FormHelper.TextField("product.name", "%{id='productname'}")
+</p>
+
+
+
+

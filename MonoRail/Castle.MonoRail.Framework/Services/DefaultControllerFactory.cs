@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
+	using System.Configuration;
 	using System.Reflection;
 	
 	using Castle.Core;
@@ -79,6 +80,12 @@ namespace Castle.MonoRail.Framework.Services
 			if (config != null)
 			{
 				assemblies = config.ControllersConfig.Assemblies;
+				
+				if (assemblies == null || assemblies.Length == 0)
+				{
+					throw new ConfigurationException("No assembly was informed on the configuration file. " + 
+						"Unfortunatelly this cannot be infered (we tried)");
+				}
 			}
 		}
 

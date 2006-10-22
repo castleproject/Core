@@ -302,7 +302,7 @@
 		</zip>
 	</target>
 
-	<target name="zip-samples-for-website">
+	<target name="zip-samples-for-website" depends="init">
 		<zip zipfile="${root.dir}/InitializingAndConfiguring.zip">
 			<fileset basedir="${root.dir}/Samples/ActiveRecord/BlogSample">
 				<include name="**/*.build" />
@@ -348,7 +348,7 @@
 			</fileset>
 		</zip>
 		<zip zipfile="${root.dir}/MonoRail.WizardSample.zip">
-			<fileset basedir="${root.dir}/Samples/ActiveRecord/TableHierarchySample">
+			<fileset basedir="${root.dir}/Samples/MonoRail/WizardSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
 				<include name="**/*.cs" />
@@ -360,6 +360,209 @@
 				<include name="**/*.txt" />
 				<include name="**/*.inc" />
 				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.SimpleBindingSample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/SimpleBindingSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.DataBindSample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/DataBindSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.SendingEmailSample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/SendingEmailSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.ViewComponentSample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/ViewComponentSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.AuthenticationUsingFilters.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/AuthenticationUsingFilters">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.AuthenticationUsingForms.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/AuthenticationUsingForms">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.LocalizationSample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/LocalizationSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/MonoRail.FormHelperSample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/FormHelperSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
 				<include name="*.snk" />
 				<exclude name="**/bin/*" />
 				<exclude name="**/bin/Debug/*" />
@@ -385,6 +588,10 @@
 				<include name="**/*.txt" />
 				<include name="**/*.inc" />
 				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="**/*.sql" />
 				<include name="*.snk" />
 				<exclude name="**/bin/*" />
 				<exclude name="**/bin/Debug/*" />

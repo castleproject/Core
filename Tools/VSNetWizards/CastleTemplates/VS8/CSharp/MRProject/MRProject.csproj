@@ -101,6 +101,8 @@
     <Content Include="default.aspx" />
     <Content Include="global.asax" />
     <Content Include="Readme.txt" />
+    <Content Include="Views\layouts\empty.txt" />
+    <Content Include="Views\rescues\empty.txt" />
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

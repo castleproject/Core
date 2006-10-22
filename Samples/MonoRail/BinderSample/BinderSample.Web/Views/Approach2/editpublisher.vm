@@ -9,8 +9,6 @@ $HtmlHelper.InputHidden("publisher.id", $publisher.Id)
 
 Name: $HtmlHelper.InputText("publisher.name", $publisher.Name)
 
-$HtmlHelper.InputHidden("Book@count", $publisher.Books.Count.ToString())
-
 <h4>Books</h4>
 
 <table>

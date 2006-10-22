@@ -1,0 +1,17 @@
+
+<h3>HiddenField - see the source</h3>
+
+
+
+<p>
+somekey: $FormHelper.HiddenField("somekey")
+</p>
+
+<p>
+simplevalue: $FormHelper.HiddenField("simplevalue")
+</p>
+
+
+
+
+

@@ -1,0 +1,34 @@
+
+<h3>Radio</h3>
+
+<form action="process.rails" method="post">
+
+<p>Using with an enum:</p>
+
+<p>
+  FileMode: <br/>
+  
+  $FormHelper.RadioField("mode", "Append") FileMode.Append <br/> 
+  $FormHelper.RadioField("mode", "Create") FileMode.Create <br/> 
+  $FormHelper.RadioField("mode", "CreateNew") FileMode.CreateNew <br/> 
+  $FormHelper.RadioField("mode", "Open") FileMode.Open <br/> 
+  $FormHelper.RadioField("mode", "OpenOrCreate", "%{id='customhtmlid'}") FileMode.OpenOrCreate <br/> 
+  $FormHelper.RadioField("mode", "Truncate") FileMode.Truncate <br/> 
+</p>
+
+<p>
+Kind of license agreement sample:
+</p>
+
+<p>
+
+$FormHelper.RadioField("agreement", true) I have read and agreed with the license <br/>
+
+$FormHelper.RadioField("agreement", false) I do not agree with the license terms <br/>
+
+</p>
+
+<input type="submit" value="Send" />
+
+</form>
+

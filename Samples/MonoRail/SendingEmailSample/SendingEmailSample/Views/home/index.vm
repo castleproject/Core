@@ -1,0 +1,54 @@
+
+<h2>Configure the smtp host first</h2>
+
+<p>
+Before trying anything, change the smtp host on 
+the web.config, node <tt>monorail</tt>.
+</p>
+
+<h3>Simple text email</h3>
+
+<p>
+This example uses <tt>RenderEmailAndSend</tt> and the
+view <tt>simple.vm</tt>.
+</p>
+
+<p>
+The <tt>Message</tt> is configured based on the headers
+on the view template.
+</p>
+
+<form action="SendSimple.rails" method="post">
+
+<p> To: $FormHelper.TextField("to") </p> 
+<p> Subject: $FormHelper.TextFieldValue("subject", "Welcome to Castle MonoRail") </p> 
+
+<hr noshade="SendSimple.rails" size="1" />
+
+<input type="submit" value="Send" />
+
+</form>
+
+<h3>Simple html email</h3>
+
+<p>
+This example uses <tt>RenderMailMessage</tt> and <tt>DeliverEmail</tt>
+and the view <tt>htmlemail.vm</tt>.
+</p>
+
+<p>
+The <tt>Message</tt> is configured manually.
+</p>
+
+<form action="SendHtml.rails" method="post">
+
+<p> To: $FormHelper.TextField("to") </p> 
+<p> Subject: $FormHelper.TextFieldValue("subject", "Welcome to Castle MonoRail") </p> 
+
+<hr noshade="" size="1" />
+
+<input type="submit" value="Send" />
+
+</form>
+
+
