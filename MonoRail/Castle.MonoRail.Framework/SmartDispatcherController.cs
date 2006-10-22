@@ -127,7 +127,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="candidate">The method candidate</param>
 		/// <param name="webParams">Parameter source</param>
 		/// <param name="actionArgs">Extra parameters</param>
-		/// <param name="webParams"></param>
 		/// <returns></returns>
 		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams, params object[] actionArgs)
 		{
