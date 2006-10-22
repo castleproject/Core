@@ -1,6 +1,11 @@
+RC 4
+====
+
+- IOC-32, Support generic collections. 
+  Supported collections are: ICollection<T>, IList<T>, List<T>, IDictionary<K,V>, Dictionary<K,V>, IEnumerable<T> 
+
 RC 3
 ====
- - IOC-32, Support generic collections. Supported collections are: ICollection<T>, IList<T>, List<T>, IDictionary<K,V>, Dictionary<K,V>, IEnumerable<T> 
  
 - Applied patch by William C. Pierce <wcpierce@gmail.com> adding PerWebRequestAttribute
 
