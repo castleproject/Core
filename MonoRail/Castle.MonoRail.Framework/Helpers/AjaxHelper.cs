@@ -128,11 +128,11 @@ namespace Castle.MonoRail.Framework.Helpers
 				Controller.Context.UrlInfo.Extension);
 		}
 
-        [Obsolete("Please use the preferred InstallScripts function.")]
-        public String GetJavascriptFunctions()
-        {
-            return InstallScripts();
-        }
+		[Obsolete("Please use the preferred InstallScripts function.")]
+		public String GetJavascriptFunctions()
+		{
+			return InstallScripts();
+		}
 	    
 		/// <summary>
 		/// Renders a script tag refering the Behaviour library code.
