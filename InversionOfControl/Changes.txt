@@ -1,6 +1,11 @@
 RC 4
 ====
 
+- Fixed IOC-34 
+  "Cannot use types having their own base type as constructor argument"
+
+  See revision r2787
+
 - IOC-32, Support generic collections. 
   Supported collections are: ICollection<T>, IList<T>, List<T>, IDictionary<K,V>, Dictionary<K,V>, IEnumerable<T> 
 
