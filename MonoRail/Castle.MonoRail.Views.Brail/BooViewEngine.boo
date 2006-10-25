@@ -79,6 +79,7 @@ public class BooViewEngine (ViewEngineBase, IInitializable):
 				# whole site.
 				CompileCommonScripts()	
 				return
+			Log("Detected a change in ${e.Name}, removing from complied cache")
 			# Will cause a recompilation
 			compilations[e.Name] = null
 	
