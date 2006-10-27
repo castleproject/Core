@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <project
 	name="Castle CruiseControl.NET Build" 
-	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"	
+	xmlns="http://nant.sf.net/release/0.85/nant.xsd"	
 >
 	<!-- 
 		Run the package-* targets one by one (separate nant task blocks in ccnet.config) so they do not interfere with each other (like for instance loadtask commands do).

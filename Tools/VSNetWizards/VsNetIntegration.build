@@ -2,7 +2,7 @@
 <project
 	name="castle-vsnetintegration"
 	default="build"
-	xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd"
+	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
 	<target name="build" depends="vsnetwizard" />
 
