@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
+<project name="Castle" xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
 
 	<description>
 		This file contains common tasks tailored specifically for the Castle
@@ -140,7 +140,7 @@
  	<target name="common.compile-website">
 		<property name="bin.dir" value="${src.dir}/bin" />
 		<mkdir dir="${bin.dir}" />
-		<delete file="${bin.dir}/${project::get-name()}.pdb" /> <!-- To prevent 1.1 compiler from crashing when switching from a 2.0 build -->
+		<delete file="${bin.dir}/${project::get-name()}.pdb" failonerror="false" /> <!-- To prevent 1.1 compiler from crashing when switching from a 2.0 build -->
 		<property name="build.dir" value="${bin.dir}" />
 
 		<call target="common.compile-dll" />

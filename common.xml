@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
+<project name="Castle" xmlns="http://nant.sf.net/release/0.85-rc4/nant.xsd">
 	<!-- 
 		Use this to determine if the key file CastleKey.snk should be used to 
 		sign the assemblies. Defaults to true since private key is present
