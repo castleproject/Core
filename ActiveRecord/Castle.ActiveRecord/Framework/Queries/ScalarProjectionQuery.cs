@@ -22,11 +22,11 @@ namespace Castle.ActiveRecord.Framework.Queries
 	using NHibernate.Expression;
 
 	/// <summary>
-	/// Perform a projection ( aggeregate ) type of query:
+	/// Perform a scalar projection ( aggeregate ) type of query:
 	/// avg, max, count(*), etc.
 	/// </summary>
 	/// <typeparam name="ARType">The type of the entity we are querying</typeparam>
-	/// <typeparam name="TResult">The type of the result from this query</typeparam>
+	/// <typeparam name="TResult">The type of the scalar from this query</typeparam>
 	/// <example>
 	/// <code>
 	/// ScalarProjectionQuery&lt;Blog, int&gt; proj = new ScalarProjectionQuery&lt;Blog, int&gt;(Projections.RowCount());
@@ -37,6 +37,7 @@ namespace Castle.ActiveRecord.Framework.Queries
 	{
 		private readonly IProjection projection;
 		private readonly ICriterion[] criterions;
+		private readonly DetachedCriteria detachedCirteria;
 
 		/// <summary>
 		/// Gets the target type of this query
@@ -56,6 +57,17 @@ namespace Castle.ActiveRecord.Framework.Queries
 		{
 			this.projection = projection;
 			this.criterions = criterions;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScalarProjectionQuery{ARType,TResult}"/> class.
+		/// </summary>
+		/// <param name="projection">The projection.</param>
+		/// <param name="criteria">The detachedCirteria.</param>
+		public ScalarProjectionQuery(IProjection projection, DetachedCriteria criteria)
+		{
+			this.projection = projection;
+			this.detachedCirteria = criteria;
 		}
 
 		/// <summary>
@@ -84,13 +96,22 @@ namespace Castle.ActiveRecord.Framework.Queries
 		/// <returns>the result of the query</returns>
 		public TResult Execute(ISession session)
 		{
-			ICriteria criteria = session.CreateCriteria(this.Target);
-			foreach (ICriterion criterion in criterions)
+			if (this.detachedCirteria != null)
 			{
-				criteria.Add(criterion);
+				return detachedCirteria.GetExecutableCriteria(session)
+					.SetProjection(projection)
+					.UniqueResult<TResult>();
 			}
-			criteria.SetProjection(projection);
-			return (TResult)criteria.UniqueResult();
+			else
+			{
+				ICriteria criteria = session.CreateCriteria(this.Target);
+				foreach (ICriterion criterion in criterions)
+				{
+					criteria.Add(criterion);
+				}
+				criteria.SetProjection(projection);
+				return criteria.UniqueResult<TResult>();
+			}
 		}
 
 		/// <summary>

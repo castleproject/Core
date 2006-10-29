@@ -1,5 +1,17 @@
 Release Candidate 2
 ===================
+- Added untyped projection support, using just ProjectionQuery<Post>, which uses object[] tuples.
+
+- Added real projection support, which allows the following code:
+ProjectionQuery<Post, PostTitleAndId> proj = new ProjectionQuery<Post, PostTitleAndId>(
+	Projections.Property("Title"), Projections.Property("Id"));
+ICollection<PostTitleAndId> posts = proj.Execute();
+foreach(PostTitleAndId titleAndId in posts)
+{
+	PostsList.Add( new ListItem(titleAndId.Title, titleAndId.Id) );
+	
+}
+
 - Renamed ProjectionQuery<T> ScalarProjectionQuery<T>, in preperation for real projections.
 
 - Added DetachCrietia support in ARBase<T>, which allows integration with NQG, and in general enables taking advantage of the full criteria API.

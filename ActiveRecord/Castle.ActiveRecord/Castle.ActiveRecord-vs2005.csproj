@@ -388,6 +388,7 @@
     <Compile Include="Framework\Queries\Modifiers\IQueryModifier.cs" />
     <Compile Include="Framework\Queries\Modifiers\QueryRange.cs" />
     <Compile Include="Framework\Queries\Modifiers\QueryParameter.cs" />
+    <Compile Include="Framework\Queries\ProjectionQuery.cs" />
     <Compile Include="Framework\Queries\ScalarProjectionQuery.cs" />
     <Compile Include="Framework\Queries\Modifiers\SqlQueryReturnDefinition.cs" />
     <Compile Include="Framework\Queries\ScalarQuery.Generic.cs" />
