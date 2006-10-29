@@ -372,7 +372,7 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "hamilton verissimo";
 			blog.Save();
 
-			ProjectionQuery<Blog, int> proj = new ProjectionQuery<Blog, int>(Projections.RowCount());
+			ScalarProjectionQuery<Blog, int> proj = new ScalarProjectionQuery<Blog, int>(Projections.RowCount());
 			int rowCount = proj.Execute();
 			Assert.AreEqual(1, rowCount);
 		}

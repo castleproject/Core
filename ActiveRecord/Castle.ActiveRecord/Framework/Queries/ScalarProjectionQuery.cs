@@ -29,11 +29,11 @@ namespace Castle.ActiveRecord.Framework.Queries
 	/// <typeparam name="TResult">The type of the result from this query</typeparam>
 	/// <example>
 	/// <code>
-	/// ProjectionQuery&lt;Blog, int&gt; proj = new ProjectionQuery&lt;Blog, int&gt;(Projections.RowCount());
+	/// ScalarProjectionQuery&lt;Blog, int&gt; proj = new ScalarProjectionQuery&lt;Blog, int&gt;(Projections.RowCount());
 	/// int rowCount = proj.Execute();
 	/// </code>
 	/// </example>
-	public class ProjectionQuery<ARType, TResult> : IActiveRecordQuery
+	public class ScalarProjectionQuery<ARType, TResult> : IActiveRecordQuery
 	{
 		private readonly IProjection projection;
 		private readonly ICriterion[] criterions;
@@ -48,11 +48,11 @@ namespace Castle.ActiveRecord.Framework.Queries
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ProjectionQuery&lt;ARType, TResult&gt;"/> class.
+		/// Initializes a new instance of the <see cref="ScalarProjectionQuery{ARType,TResult}"/> class.
 		/// </summary>
 		/// <param name="projection">The projection.</param>
 		/// <param name="criterions">The criterions.</param>
-		public ProjectionQuery(IProjection projection, params ICriterion[] criterions)
+		public ScalarProjectionQuery(IProjection projection, params ICriterion[] criterions)
 		{
 			this.projection = projection;
 			this.criterions = criterions;

@@ -1,5 +1,7 @@
 Release Candidate 2
 ===================
+- Renamed ProjectionQuery<T> ScalarProjectionQuery<T>, in preperation for real projections.
+
 - Added DetachCrietia support in ARBase<T>, which allows integration with NQG, and in general enables taking advantage of the full criteria API.
    Improved methods are FindOne, FindAll, FindFirst
    
