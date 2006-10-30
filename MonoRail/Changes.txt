@@ -28,6 +28,11 @@ Release Candidate 2
 
 - Made all Helpers that install javascript code use the same signature Helper.InstallScripts(). Should we mandate an interface?
 
+- Fixed the GenerateJSProxy(string proxyName, string controller), which was passing a null areaName;
+
+- Fixed the conflict between the Array.reduce function of Prototype e fValidate scripts (MR-166).
+
+
 Release Candidate 1
 ===================
 
