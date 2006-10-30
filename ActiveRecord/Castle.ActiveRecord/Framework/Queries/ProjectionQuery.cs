@@ -15,11 +15,12 @@
 
 #if DOTNET2
 
-namespace Castle.ActiveRecord.Framework.Queries
+namespace Castle.ActiveRecord.Queries
 {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using Castle.ActiveRecord.Framework;
 	using NHibernate;
 	using NHibernate.Expression;
 	using NHibernate.Transform;
@@ -346,21 +347,55 @@ namespace Castle.ActiveRecord.Framework.Queries
 	{
 		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
+		/// At least one projections must be given
+		/// </summary>
+		/// <param name="projections">The projections to use in the query</param>
+		public ProjectionQuery(params IProjection[] projections)
+			:base(projections)
+		{
+		}
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(IProjection projection)
+			: base(new IProjection[] { projection }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(IProjection projection1, IProjection projection2)
+			: base(new IProjection[] { projection1, projection2 }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(IProjection projection1, IProjection projection2, IProjection projection3)
+			: base(new IProjection[] { projection1, projection2, projection3 }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
 		/// At least one projections must be given.
 		/// The DetachedCriteria is mostly used for filtering, although it is possible to use it for ordering, limiting the 
 		/// result set, etc.
 		/// Note: Do not call SetProjection() on the detached criteria, since that is overwritten.
 		/// </summary>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, params IProjection[] projections)
-			: base(detachedCriteria, projections) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
-		/// At least one projections must be given.
-		/// The results will be loaded according to the order specified
-		/// </summary>
-		public ProjectionQuery(Order order, params IProjection[] projections)
-			: base(order, projections) { }
+		/// <param name="detachedCriteria">Criteria to select by</param>
+		/// <param name="orders">The order by which to get the result</param>
+		/// <param name="projections">The projections</param>
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order[] orders, IProjection[] projections)
+			:base(detachedCriteria, orders,projections)
+		{
+		}
 
 		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
@@ -373,7 +408,75 @@ namespace Castle.ActiveRecord.Framework.Queries
 		/// <param name="order">The order by which to get the result</param>
 		/// <param name="projections">The projections</param>
 		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, params IProjection[] projections)
-			: base(detachedCriteria, order, projections) { }
+			:base(detachedCriteria,order, projections)
+		{
+		}
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection)
+			: base(detachedCriteria, order, new IProjection[] { projection }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection1, IProjection projection2)
+			: base(detachedCriteria, order, new IProjection[] { projection1, projection2 }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection1, IProjection projection2, IProjection projection3)
+			: base(detachedCriteria, order, new IProjection[] { projection1, projection2, projection3 }) { }
+
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
+		/// At least one projections must be given.
+		/// The results will be loaded according to the order specified
+		/// </summary>
+		public ProjectionQuery(Order order, IProjection[] projections)
+			:base(order, projections)
+		{
+		}
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(Order order, IProjection projection)
+			: base(order, new IProjection[] { projection }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(Order order, IProjection projection1, IProjection projection2)
+			: base(order, new IProjection[] { projection1, projection2 }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(Order order, IProjection projection1, IProjection projection2, IProjection projection3)
+			: base(order, new IProjection[] { projection1, projection2, projection3 }) { }
+
 
 		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
@@ -382,19 +485,37 @@ namespace Castle.ActiveRecord.Framework.Queries
 		/// result set, etc.
 		/// Note: Do not call SetProjection() on the detached criteria, since that is overwritten.
 		/// </summary>
-		/// <param name="detachedCriteria">Criteria to select by</param>
-		/// <param name="orders">The order by which to get the result</param>
-		/// <param name="projections">The projections</param>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order[] orders, params IProjection[] projections)
-			: base(detachedCriteria, orders, projections) { }
+		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection[] projections)
+			:base(detachedCriteria, projections)
+		{
+		}
 
 		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
-		/// At least one projections must be given
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
 		/// </summary>
-		/// <param name="projections">The projections to use in the query</param>
-		public ProjectionQuery(params IProjection[] projections)
-			: base(projections) { }
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection)
+			: base(detachedCriteria, new IProjection[] { projection }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection1, IProjection projection2)
+			: base(detachedCriteria, new IProjection[] { projection1, projection2 }) { }
+
+		/// <summary>
+		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
+		/// </summary>
+		/// <remarks>
+		/// This is needed to bypass implicit conversion limitations in C# compiler
+		/// </remarks>
+		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection1, IProjection projection2, IProjection projection3)
+			: base(detachedCriteria, new IProjection[] { projection1, projection2, projection3 }) { }
 	}
 }
 

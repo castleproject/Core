@@ -19,7 +19,6 @@ namespace Castle.ActiveRecord.Tests
 	using System.Text;
 	using System.Reflection;
 	using System.Collections.Generic;
-	using Castle.ActiveRecord.Framework.Queries;
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model.GenericModel;

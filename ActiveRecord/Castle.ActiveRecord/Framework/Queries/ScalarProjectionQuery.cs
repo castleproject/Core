@@ -14,7 +14,7 @@
 
 #if DOTNET2
 
-namespace Castle.ActiveRecord.Framework.Queries
+namespace Castle.ActiveRecord.Queries
 {
 	using System;
 	using System.Collections;
