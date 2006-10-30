@@ -61,33 +61,6 @@ namespace Castle.ActiveRecord.Queries
 		}
 
 		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(IProjection projection)
-			: this(new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(IProjection projection1, IProjection projection2)
-			: this(new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(IProjection projection1, IProjection projection2, IProjection projection3)
-			: this(new IProjection[] { projection1, projection2, projection3 }) { }
-
-		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
 		/// At least one projections must be given.
 		/// The DetachedCriteria is mostly used for filtering, although it is possible to use it for ordering, limiting the 
@@ -122,34 +95,6 @@ namespace Castle.ActiveRecord.Queries
 		}
 
 		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection)
-			: this(detachedCriteria, order, new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection1, IProjection projection2)
-			: this(detachedCriteria, order, new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection1, IProjection projection2, IProjection projection3)
-			: this(detachedCriteria, order, new IProjection[] { projection1, projection2, projection3 }) { }
-
-
-		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
 		/// At least one projections must be given.
 		/// The results will be loaded according to the order specified
@@ -160,34 +105,6 @@ namespace Castle.ActiveRecord.Queries
 			this.detachedCriteria = DetachedCriteria.For(Target);
 			this.orders = new Order[] { order };
 		}
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(Order order, IProjection projection)
-			: this(order, new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(Order order, IProjection projection1, IProjection projection2)
-			: this(order, new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(Order order, IProjection projection1, IProjection projection2, IProjection projection3)
-			: this(order, new IProjection[] { projection1, projection2, projection3 }) { }
-
 
 		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
@@ -202,33 +119,6 @@ namespace Castle.ActiveRecord.Queries
 			this.detachedCriteria = detachedCriteria;
 			this.orders = new Order[0];
 		}
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection)
-			: this(detachedCriteria, new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection1, IProjection projection2)
-			: this(detachedCriteria, new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection1, IProjection projection2, IProjection projection3)
-			: this(detachedCriteria, new IProjection[] { projection1, projection2, projection3 }) { }
 
 		/// <summary>
 		/// Gets the target type of this query
@@ -356,33 +246,6 @@ namespace Castle.ActiveRecord.Queries
 		}
 
 		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(IProjection projection)
-			: base(new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(IProjection projection1, IProjection projection2)
-			: base(new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(IProjection projection1, IProjection projection2, IProjection projection3)
-			: base(new IProjection[] { projection1, projection2, projection3 }) { }
-
-		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
 		/// At least one projections must be given.
 		/// The DetachedCriteria is mostly used for filtering, although it is possible to use it for ordering, limiting the 
@@ -413,34 +276,6 @@ namespace Castle.ActiveRecord.Queries
 		}
 
 		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection)
-			: base(detachedCriteria, order, new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection1, IProjection projection2)
-			: base(detachedCriteria, order, new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, IProjection projection1, IProjection projection2, IProjection projection3)
-			: base(detachedCriteria, order, new IProjection[] { projection1, projection2, projection3 }) { }
-
-
-		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
 		/// At least one projections must be given.
 		/// The results will be loaded according to the order specified
@@ -449,34 +284,6 @@ namespace Castle.ActiveRecord.Queries
 			:base(order, projections)
 		{
 		}
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(Order order, IProjection projection)
-			: base(order, new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(Order order, IProjection projection1, IProjection projection2)
-			: base(order, new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(Order order, IProjection projection1, IProjection projection2, IProjection projection3)
-			: base(order, new IProjection[] { projection1, projection2, projection3 }) { }
-
 
 		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
@@ -489,33 +296,6 @@ namespace Castle.ActiveRecord.Queries
 			:base(detachedCriteria, projections)
 		{
 		}
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with a single projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection)
-			: base(detachedCriteria, new IProjection[] { projection }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection1, IProjection projection2)
-			: base(detachedCriteria, new IProjection[] { projection1, projection2 }) { }
-
-		/// <summary>
-		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the specified projections.
-		/// </summary>
-		/// <remarks>
-		/// This is needed to bypass implicit conversion limitations in C# compiler
-		/// </remarks>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection projection1, IProjection projection2, IProjection projection3)
-			: base(detachedCriteria, new IProjection[] { projection1, projection2, projection3 }) { }
 	}
 }
 
