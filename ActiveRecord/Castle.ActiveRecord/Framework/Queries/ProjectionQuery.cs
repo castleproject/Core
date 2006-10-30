@@ -44,7 +44,7 @@ namespace Castle.ActiveRecord.Queries
 	/// </example>
 	public class ProjectionQuery<ARType, TResultItem> : IActiveRecordQuery
 	{
-		IProjection[] projections;
+		ProjectionList projections;
 		DetachedCriteria detachedCriteria;
 		Order[] orders;
 
@@ -53,7 +53,7 @@ namespace Castle.ActiveRecord.Queries
 		/// At least one projections must be given
 		/// </summary>
 		/// <param name="projections">The projections to use in the query</param>
-		public ProjectionQuery(params IProjection[] projections)
+		public ProjectionQuery(ProjectionList projections)
 		{
 			this.projections = projections;
 			this.orders = new Order[0];
@@ -70,7 +70,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="detachedCriteria">Criteria to select by</param>
 		/// <param name="orders">The order by which to get the result</param>
 		/// <param name="projections">The projections</param>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order[] orders, IProjection[] projections)
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order[] orders, ProjectionList projections)
 		{
 			this.projections = projections;
 			this.detachedCriteria = detachedCriteria;
@@ -87,7 +87,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="detachedCriteria">Criteria to select by</param>
 		/// <param name="order">The order by which to get the result</param>
 		/// <param name="projections">The projections</param>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, params IProjection[] projections)
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, ProjectionList projections)
 		{
 			this.projections = projections;
 			this.detachedCriteria = detachedCriteria;
@@ -99,7 +99,7 @@ namespace Castle.ActiveRecord.Queries
 		/// At least one projections must be given.
 		/// The results will be loaded according to the order specified
 		/// </summary>
-		public ProjectionQuery(Order order, IProjection[] projections)
+		public ProjectionQuery(Order order, ProjectionList projections)
 		{
 			this.projections = projections;
 			this.detachedCriteria = DetachedCriteria.For(Target);
@@ -113,7 +113,7 @@ namespace Castle.ActiveRecord.Queries
 		/// result set, etc.
 		/// Note: Do not call SetProjection() on the detached criteria, since that is overwritten.
 		/// </summary>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection[] projections)
+		public ProjectionQuery(DetachedCriteria detachedCriteria, ProjectionList projections)
 		{
 			this.projections = projections;
 			this.detachedCriteria = detachedCriteria;
@@ -135,7 +135,9 @@ namespace Castle.ActiveRecord.Queries
 		/// <returns></returns>
 		object IActiveRecordQuery.Execute(ISession session)
 		{
-			return Execute();
+			ICriteria criteria = CreateCriteria(session);
+			return criteria.List<TResultItem>();
+			
 		}
 
 		/// <summary>
@@ -153,23 +155,14 @@ namespace Castle.ActiveRecord.Queries
 		/// <returns>the result of the query</returns>
 		public IList<TResultItem> Execute()
 		{
-			using (ISession session = GetSession())
-			{
-				ICriteria criteria = CreateCriteria(session);
-				return criteria.List<TResultItem>();
-			}
+			return (IList<TResultItem>) ActiveRecordMediator.ExecuteQuery(this);
 		}
 
 		private ICriteria CreateCriteria(ISession session)
 		{
 			AssertAllArgumentsValid();
-			ProjectionList projectionList = Projections.ProjectionList();
-			foreach (IProjection projection in this.projections)
-			{
-				projectionList.Add(projection);
-			}
 			ICriteria criteria = this.detachedCriteria.GetExecutableCriteria(session);
-			criteria.SetProjection(projectionList);
+			criteria.SetProjection(projections);
 
 			if (typeof(TResultItem) != typeof(object[]))//we are not returning a tuple, so we need the result transformer
 			{
@@ -201,11 +194,6 @@ namespace Castle.ActiveRecord.Queries
 			{
 				throw new ActiveRecordException("Can't use projection query with zero projections!");
 			}
-		}
-
-		private ISession GetSession()
-		{
-			return ActiveRecordBase.holder.GetSessionFactory(this.Target).OpenSession();
 		}
 
 		/// <summary>
@@ -240,7 +228,7 @@ namespace Castle.ActiveRecord.Queries
 		/// At least one projections must be given
 		/// </summary>
 		/// <param name="projections">The projections to use in the query</param>
-		public ProjectionQuery(params IProjection[] projections)
+		public ProjectionQuery(ProjectionList projections)
 			:base(projections)
 		{
 		}
@@ -255,7 +243,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="detachedCriteria">Criteria to select by</param>
 		/// <param name="orders">The order by which to get the result</param>
 		/// <param name="projections">The projections</param>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order[] orders, IProjection[] projections)
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order[] orders, ProjectionList projections)
 			:base(detachedCriteria, orders,projections)
 		{
 		}
@@ -270,7 +258,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="detachedCriteria">Criteria to select by</param>
 		/// <param name="order">The order by which to get the result</param>
 		/// <param name="projections">The projections</param>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, params IProjection[] projections)
+		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, ProjectionList projections)
 			:base(detachedCriteria,order, projections)
 		{
 		}
@@ -280,7 +268,7 @@ namespace Castle.ActiveRecord.Queries
 		/// At least one projections must be given.
 		/// The results will be loaded according to the order specified
 		/// </summary>
-		public ProjectionQuery(Order order, IProjection[] projections)
+		public ProjectionQuery(Order order, ProjectionList projections)
 			:base(order, projections)
 		{
 		}
@@ -292,7 +280,7 @@ namespace Castle.ActiveRecord.Queries
 		/// result set, etc.
 		/// Note: Do not call SetProjection() on the detached criteria, since that is overwritten.
 		/// </summary>
-		public ProjectionQuery(DetachedCriteria detachedCriteria, IProjection[] projections)
+		public ProjectionQuery(DetachedCriteria detachedCriteria, ProjectionList projections)
 			:base(detachedCriteria, projections)
 		{
 		}

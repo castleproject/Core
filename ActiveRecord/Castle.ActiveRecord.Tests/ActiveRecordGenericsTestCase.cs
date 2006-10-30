@@ -385,7 +385,10 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "hamilton verissimo";
 			blog.Save();
 
-			ProjectionQuery<Blog> proj = new ProjectionQuery<Blog>(Projections.Property("Name"), Projections.Property("Author"));
+			ProjectionQuery<Blog> proj = new ProjectionQuery<Blog>(
+				Projections.ProjectionList()
+				.Add(Projections.Property("Name"))
+				.Add(Projections.Property("Author")));
 			IList<object[]> results = proj.Execute();
 			Assert.AreEqual(blog.Name, results[0][0]);
 			Assert.AreEqual(blog.Author, results[0][1]);
@@ -401,7 +404,9 @@ namespace Castle.ActiveRecord.Tests
 			blog.Save();
 
 			ProjectionQuery<Blog, KeyValuePair<string, string>> proj = new ProjectionQuery<Blog, KeyValuePair<string, string>>(
-				Projections.Property("Name"), Projections.Property("Author"));
+				Projections.ProjectionList()
+				.Add(Projections.Property("Name"))
+				.Add(Projections.Property("Author")));
 			IList<KeyValuePair<string, string>> results = proj.Execute();
 			Assert.AreEqual(blog.Name, results[0].Key);
 			Assert.AreEqual(blog.Author, results[0].Value);
