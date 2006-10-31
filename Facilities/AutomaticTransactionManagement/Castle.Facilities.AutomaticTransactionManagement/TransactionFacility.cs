@@ -16,8 +16,15 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 {
 	using Castle.MicroKernel.Facilities;
 
+	/// <summary>
+	/// Augments the kernel to handle transactional components
+	/// </summary>
 	public class TransactionFacility : AbstractFacility
 	{
+		/// <summary>
+		/// Registers the interceptor component, the metainfo store and
+		/// adds a contributor to the ModelBuilder
+		/// </summary>
 		protected override void Init()
 		{
 			Kernel.AddComponent( "transaction.interceptor", typeof(TransactionInterceptor) );

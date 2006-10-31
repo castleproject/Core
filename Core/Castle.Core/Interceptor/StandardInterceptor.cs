@@ -14,8 +14,15 @@
 
 namespace Castle.Core.Interceptor
 {
+	/// <summary>
+	/// Basic implementation of <see cref="IInterceptor"/>
+	/// </summary>
 	public class StandardInterceptor : IInterceptor
 	{
+		/// <summary>
+		/// Intercepts the specified invocation.
+		/// </summary>
+		/// <param name="invocation">The invocation.</param>
 		public void Intercept(IInvocation invocation)
 		{
 			PreProceed(invocation);
@@ -23,10 +30,18 @@ namespace Castle.Core.Interceptor
 			PostProceed(invocation);
 		}
 
+		/// <summary>
+		/// Pre-process the invocation.
+		/// </summary>
+		/// <param name="invocation">The invocation.</param>
 		protected virtual void PreProceed(IInvocation invocation)
 		{
 		}
 
+		/// <summary>
+		/// Post-process the invocation.
+		/// </summary>
+		/// <param name="invocation">The invocation.</param>
 		protected virtual void PostProceed(IInvocation invocation)
 		{
 		}

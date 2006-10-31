@@ -32,7 +32,11 @@ namespace Castle.Core
 		private Type serviceType;
 		private String componentKey;
 
-		public InterceptorReference( String componentKey )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InterceptorReference"/> class.
+		/// </summary>
+		/// <param name="componentKey">The component key.</param>
+		public InterceptorReference(String componentKey)
 		{
 			if (componentKey == null)
 			{
@@ -43,7 +47,11 @@ namespace Castle.Core
 			this.componentKey = componentKey;
 		}
 
-		public InterceptorReference( Type serviceType )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InterceptorReference"/> class.
+		/// </summary>
+		/// <param name="serviceType">Type of the service.</param>
+		public InterceptorReference(Type serviceType)
 		{
 			if (serviceType == null)
 			{
@@ -54,16 +62,28 @@ namespace Castle.Core
 			this.serviceType = serviceType;
 		}
 
+		/// <summary>
+		/// Gets the type of the service.
+		/// </summary>
+		/// <value>The type of the service.</value>
 		public Type ServiceType
 		{
 			get { return serviceType; }
 		}
 
+		/// <summary>
+		/// Gets the interceptor component key.
+		/// </summary>
+		/// <value>The component key.</value>
 		public String ComponentKey
 		{
 			get { return componentKey; }
 		}
 
+		/// <summary>
+		/// Gets the type of the reference.
+		/// </summary>
+		/// <value>The type of the reference.</value>
 		public InterceptorReferenceType ReferenceType
 		{
 			get { return refType; }

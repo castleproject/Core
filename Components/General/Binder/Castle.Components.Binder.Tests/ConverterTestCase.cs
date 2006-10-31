@@ -98,6 +98,9 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual((decimal) 12.22, Convert(typeof(decimal), "12.22"));
 			Assert.IsTrue(convSucceed);
 
+			Assert.AreEqual((decimal) 3000, Convert(typeof(decimal), "3,000.00"));
+			Assert.IsTrue(convSucceed);
+
 			Assert.AreEqual(null, Convert(typeof(decimal), null));
 			Assert.IsFalse(convSucceed);
 

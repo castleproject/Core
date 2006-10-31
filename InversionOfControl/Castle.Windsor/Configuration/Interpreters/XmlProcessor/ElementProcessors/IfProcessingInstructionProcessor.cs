@@ -22,12 +22,12 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 	{
 		Init,
 		Collect,
-		Finished			
+		Finished
 	}
 
 	public class IfProcessingInstructionProcessor : AbstractXmlNodeProcessor
 	{
-		private static readonly XmlNodeType[] acceptNodes = new XmlNodeType[]{ XmlNodeType.ProcessingInstruction };
+		private static readonly XmlNodeType[] acceptNodes = new XmlNodeType[] {XmlNodeType.ProcessingInstruction};
 
 		private static readonly String IfPiName = "if";
 		private static readonly String EndPiName = "end";
@@ -61,29 +61,29 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 
 			RemoveItSelf(nodeList.Current);
 
-			while( nodeList.MoveNext() )
+			while(nodeList.MoveNext())
 			{
-				if( nodeList.Current.NodeType == XmlNodeType.ProcessingInstruction )
+				if (nodeList.Current.NodeType == XmlNodeType.ProcessingInstruction)
 				{
 					XmlProcessingInstruction pi = nodeList.Current as XmlProcessingInstruction;
 
-					if( pi.Name == EndPiName )
+					if (pi.Name == EndPiName)
 					{
 						nestedLevels--;
 
-						if( nestedLevels < 0 )
+						if (nestedLevels < 0)
 						{
 							RemoveItSelf(nodeList.Current);
 							break;
-						}		
+						}
 					}
-					else if ( pi.Name == IfPiName )
+					else if (pi.Name == IfPiName)
 					{
 						nestedLevels++;
 					}
-					else if ( nestedLevels == 0 )
-					{						
-						if( pi.Name == ElsePiName || pi.Name == ElsifPiName )
+					else if (nestedLevels == 0)
+					{
+						if (pi.Name == ElsePiName || pi.Name == ElsifPiName)
 						{
 							ProcessElseElement(pi, engine, ref state);
 							continue;
@@ -91,7 +91,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 					}
 				}
 
-				if( state == StatementState.Collect )
+				if (state == StatementState.Collect)
 				{
 					nodesToProcess.Add(nodeList.Current);
 				}
@@ -101,50 +101,50 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 				}
 			}
 
-			if( nestedLevels != -1 )
+			if (nestedLevels != -1)
 			{
 				throw new XmlProcessorException("Unbalanced pi if element");
 			}
 
-			if( nodesToProcess.Count > 0 )
+			if (nodesToProcess.Count > 0)
 			{
-				engine.DispatchProcessAll( new DefaultXmlProcessorNodeList(nodesToProcess) );
+				engine.DispatchProcessAll(new DefaultXmlProcessorNodeList(nodesToProcess));
 			}
 		}
 
-		private void ProcessElseElement( XmlProcessingInstruction pi, IXmlProcessorEngine engine, ref StatementState state )
+		private void ProcessElseElement(XmlProcessingInstruction pi, IXmlProcessorEngine engine, ref StatementState state)
 		{
 			AssertData(pi, pi.Name == ElsifPiName);
-	
-			if( state == StatementState.Collect )
+
+			if (state == StatementState.Collect)
 			{
 				state = StatementState.Finished;
-			}							
-			else if( pi.Name == ElsePiName || engine.HasFlag(pi.Data) )
+			}
+			else if (pi.Name == ElsePiName || engine.HasFlag(pi.Data))
 			{
-				if( state == StatementState.Init )
+				if (state == StatementState.Init)
 				{
 					state = StatementState.Collect;
 				}
 			}
-	
+
 			RemoveItSelf(pi);
 			return;
 		}
 
-		private void AssertData( XmlProcessingInstruction pi, bool requireData )
+		private void AssertData(XmlProcessingInstruction pi, bool requireData)
 		{
 			String data = pi.Data.Trim();
 
-			if( data == "" && requireData )
+			if (data == "" && requireData)
 			{
 				throw new XmlProcessorException("Element '{0}' must have a flag attribute", pi.Name);
 			}
-			else if( data != "" )
+			else if (data != "")
 			{
-				if( !requireData )
+				if (!requireData)
 				{
-					throw new XmlProcessorException("Element '{0}' cannot have any attributes", pi.Name);	
+					throw new XmlProcessorException("Element '{0}' cannot have any attributes", pi.Name);
 				}
 			}
 		}

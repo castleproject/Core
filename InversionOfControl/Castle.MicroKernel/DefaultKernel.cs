@@ -719,6 +719,7 @@ namespace Castle.MicroKernel
 		public virtual IReleasePolicy ReleasePolicy
 		{
 			get { return releaserPolicy; }
+			set { releaserPolicy = value; }
 		}
 
 		public virtual void AddFacility(String key, IFacility facility)

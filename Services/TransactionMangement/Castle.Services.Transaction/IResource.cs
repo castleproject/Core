@@ -26,10 +26,22 @@ namespace Castle.Services.Transaction
 	/// </summary>
 	public interface IResource
 	{
+		/// <summary>
+		/// Implementors should start the
+		/// transaction on the underlying resource
+		/// </summary>
 		void Start();
 
+		/// <summary>
+		/// Implementors should commit the
+		/// transaction on the underlying resource
+		/// </summary>
 		void Commit();
 
+		/// <summary>
+		/// Implementors should rollback the
+		/// transaction on the underlying resource
+		/// </summary>
 		void Rollback();
 	}
 }

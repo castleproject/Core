@@ -16,11 +16,25 @@ namespace Castle.Services.Transaction
 {
 	using System;
 
-
+	/// <summary>
+	/// Depicts a synchronization contract.
+	/// <para>
+	/// Code can be executed before and after the 
+	/// transaction completes
+	/// </para>
+	/// </summary>
 	public interface ISynchronization
 	{
+		/// <summary>
+		/// Implementors may have code executing
+		/// just before the transaction completes
+		/// </summary>
 		void BeforeCompletion();
 
+		/// <summary>
+		/// Implementors may have code executing
+		/// just after the transaction completes
+		/// </summary>
 		void AfterCompletion();
 	}
 }

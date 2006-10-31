@@ -15,63 +15,62 @@
 namespace MoreComplexSample
 {
 	using System;
-using Castle.ActiveRecord;
-using Iesi.Collections;
+	using Castle.ActiveRecord;
+	using Iesi.Collections;
 
-[ActiveRecord]
-public class Category : ActiveRecordBase
-{
-	private int id;
-	private String name;
-	private Category parent;
-	private ISet children = new HashedSet();
-	private ISet products = new HashedSet();
-
-	public Category()
+	[ActiveRecord]
+	public class Category : ActiveRecordBase
 	{
-	}
+		private int id;
+		private String name;
+		private Category parent;
+		private ISet children = new HashedSet();
+		private ISet products = new HashedSet();
 
-	public Category(string name)
-	{
-		this.name = name;
-	}
+		public Category()
+		{
+		}
 
-	[PrimaryKey]
-	public int Id
-	{
-		get { return id; }
-		set { id = value; }
-	}
+		public Category(string name)
+		{
+			this.name = name;
+		}
 
-	[Property]
-	public string Name
-	{
-		get { return name; }
-		set { name = value; }
-	}
+		[PrimaryKey]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
 
-	[BelongsTo("ParentId")]
-	public Category Parent
-	{
-		get { return parent; }
-		set { parent = value; }
-	}
+		[Property]
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
 
-	[HasMany(typeof(Category), Lazy=true, Inverse=true)]
-	public ISet Children
-	{
-		get { return children; }
-		set { children = value; }
-	}
-	
-	[HasAndBelongsToMany(typeof(Product), 
-		Table="ProductCategory", ColumnKey="CategoryId", ColumnRef="ProductId", 
-		Inverse=true, Lazy=true)]
-	public ISet Products
-	{
-		get { return products; }
-		set { products = value; }
-	}
+		[BelongsTo("ParentId")]
+		public Category Parent
+		{
+			get { return parent; }
+			set { parent = value; }
+		}
 
-}
+		[HasMany(typeof(Category), Lazy=true, Inverse=true)]
+		public ISet Children
+		{
+			get { return children; }
+			set { children = value; }
+		}
+		
+		[HasAndBelongsToMany(typeof(Product), 
+			Table="ProductCategory", ColumnKey="CategoryId", ColumnRef="ProductId", 
+			Inverse=true, Lazy=true)]
+		public ISet Products
+		{
+			get { return products; }
+			set { products = value; }
+		}
+	}
 }

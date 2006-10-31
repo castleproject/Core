@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{83EBB92B-BBAB-45B8-9EDF-C5FBE2DAE98C}"
     >
@@ -116,10 +116,6 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BasicUsage.xml"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Components\IEmailSender.cs"

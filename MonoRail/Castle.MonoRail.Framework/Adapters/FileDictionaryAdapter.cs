@@ -20,19 +20,19 @@ namespace Castle.MonoRail.Framework.Adapters
 
 	public class FileDictionaryAdapter : IDictionary
 	{
-		private HttpFileCollection _fileCollection;
+		private HttpFileCollection fileCollection;
 
-		public FileDictionaryAdapter( HttpFileCollection fileCollection )
+		public FileDictionaryAdapter(HttpFileCollection fileCollection)
 		{
-			_fileCollection = fileCollection;
+			this.fileCollection = fileCollection;
 		}
 
-		public bool Contains( object key )
+		public bool Contains(object key)
 		{
-			return _fileCollection[ (String)key ] != null;
+			return fileCollection[(String) key] != null;
 		}
 
-		public void Add( object key, object value )
+		public void Add(object key, object value)
 		{
 			throw new NotImplementedException();
 		}
@@ -44,17 +44,24 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		IDictionaryEnumerator IDictionary.GetEnumerator()
 		{
-			throw new NotImplementedException();
+			Hashtable copy = new Hashtable();
+			
+			foreach(String key in fileCollection.AllKeys)
+			{
+				copy[key] = fileCollection[key];
+			}
+
+			return copy.GetEnumerator();
 		}
 
-		public void Remove( object key )
+		public void Remove(object key)
 		{
 			throw new NotImplementedException();
 		}
 
 		public ICollection Keys
 		{
-			get { return _fileCollection.Keys; }
+			get { return fileCollection.Keys; }
 		}
 
 		public ICollection Values
@@ -72,20 +79,20 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return true; }
 		}
 
-		public object this[ object key ]
+		public object this[object key]
 		{
-			get { return _fileCollection[ (String)key ]; }
+			get { return fileCollection[(String) key]; }
 			set { throw new NotImplementedException(); }
 		}
 
-		public void CopyTo( Array array, int index )
+		public void CopyTo(Array array, int index)
 		{
 			throw new NotImplementedException();
 		}
 
 		public int Count
 		{
-			get { return _fileCollection.Count; }
+			get { return fileCollection.Count; }
 		}
 
 		public object SyncRoot
@@ -100,7 +107,7 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public IEnumerator GetEnumerator()
 		{
-			return _fileCollection.GetEnumerator();
+			return fileCollection.GetEnumerator();
 		}
 	}
 }

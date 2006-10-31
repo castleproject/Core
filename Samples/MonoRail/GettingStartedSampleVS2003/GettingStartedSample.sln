@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GettingStartedSample", "GettingStartedSample\GettingStartedSample.csproj", "{A4808315-6422-4170-AC27-CE92C324BBC0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GettingStartedSample.Tests", "GettingStartedSample.Tests\GettingStartedSample.Tests.csproj", "{146798DC-3A7C-4C4C-9EC0-64EF375EE5AA}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A4808315-6422-4170-AC27-CE92C324BBC0}.Debug.ActiveCfg = Debug|.NET
+		{A4808315-6422-4170-AC27-CE92C324BBC0}.Debug.Build.0 = Debug|.NET
+		{A4808315-6422-4170-AC27-CE92C324BBC0}.Release.ActiveCfg = Release|.NET
+		{A4808315-6422-4170-AC27-CE92C324BBC0}.Release.Build.0 = Release|.NET
+		{146798DC-3A7C-4C4C-9EC0-64EF375EE5AA}.Debug.ActiveCfg = Debug|.NET
+		{146798DC-3A7C-4C4C-9EC0-64EF375EE5AA}.Debug.Build.0 = Debug|.NET
+		{146798DC-3A7C-4C4C-9EC0-64EF375EE5AA}.Release.ActiveCfg = Release|.NET
+		{146798DC-3A7C-4C4C-9EC0-64EF375EE5AA}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

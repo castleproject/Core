@@ -16,6 +16,9 @@ namespace BasicUsage
 {
 	using System;
 
+	/// <summary>
+	/// Contracts that depicts a newsletter service
+	/// </summary>
 	public interface INewsletterService
 	{
 		void Dispatch(String from, String[] targets, String messageTypeName);

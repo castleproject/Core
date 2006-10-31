@@ -18,41 +18,41 @@ namespace MoreComplexSample
 	using Castle.ActiveRecord;
 	using Iesi.Collections;
 
-[ActiveRecord]
-public class Product : ActiveRecordBase
-{
-	private int id;
-	private String name;
-	private float price;
-	private ISet categories = new HashedSet();
+	[ActiveRecord]
+	public class Product : ActiveRecordBase
+	{
+		private int id;
+		private String name;
+		private float price;
+		private ISet categories = new HashedSet();
 
-	[PrimaryKey]
-	public int Id
-	{
-		get { return id; }
-		set { id = value; }
-	}
+		[PrimaryKey]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
 
-	[Property]
-	public string Name
-	{
-		get { return name; }
-		set { name = value; }
-	}
+		[Property]
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
 
-	[Property]
-	public float Price
-	{
-		get { return price; }
-		set { price = value; }
+		[Property]
+		public float Price
+		{
+			get { return price; }
+			set { price = value; }
+		}
+		
+		[HasAndBelongsToMany(typeof(Category), 
+			Table="ProductCategory", ColumnKey="ProductId", ColumnRef="CategoryId", Lazy=true)]
+		public ISet Categories
+		{
+			get { return categories; }
+			set { categories = value; }
+		}
 	}
-	
-	[HasAndBelongsToMany(typeof(Category), 
-		Table="ProductCategory", ColumnKey="ProductId", ColumnRef="CategoryId", Lazy=true)]
-	public ISet Categories
-	{
-		get { return categories; }
-		set { categories = value; }
-	}
-}
 }

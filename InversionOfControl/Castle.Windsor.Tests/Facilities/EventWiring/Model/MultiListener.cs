@@ -47,18 +47,12 @@ namespace Castle.Facilities.EventWiring.Tests.Model
 
 		public bool Listened
 		{
-			get
-			{
-				return _listened;
-			}
+			get { return _listened; }
 		}
 
 		public object Sender
 		{
-			get
-			{
-				return _sender;
-			}
+			get { return _sender; }
 		}
 	}
 }

@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.AutomaticTransactionManagement", "Castle.Facilities.AutomaticTransactionManagement\Castle.Facilities.AutomaticTransactionManagement-vs2003.csproj", "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.AutomaticTransactionManagement-vs2003", "Castle.Facilities.AutomaticTransactionManagement\Castle.Facilities.AutomaticTransactionManagement-vs2003.csproj", "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.AutomaticTransactionManagement.Tests", "Castle.Facilities.AutomaticTransactionManagement.Tests\Castle.Facilities.AutomaticTransactionManagement.Tests-vs2003.csproj", "{8A7E5413-3F2C-4C09-92A7-F5A3AC9F2F93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.AutomaticTransactionManagement.Tests-vs2003", "Castle.Facilities.AutomaticTransactionManagement.Tests\Castle.Facilities.AutomaticTransactionManagement.Tests-vs2003.csproj", "{8A7E5413-3F2C-4C09-92A7-F5A3AC9F2F93}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -11,6 +11,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{9962F772-E75C-4998-A45B-3CD99C2E2903}.Debug.ActiveCfg = Debug|.NET
@@ -24,9 +26,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt
+		ConfigForServiceWithInterface.xml = ConfigForServiceWithInterface.xml
 		default.build = default.build
+		HasConfiguration.xml = HasConfiguration.xml
+		HasInvalidMethod.xml = HasInvalidMethod.xml
+		HasIsTransactionalButNothingIsConfigured.xml = HasIsTransactionalButNothingIsConfigured.xml
+		IsTransactionalMissing.xml = IsTransactionalMissing.xml
 		License.txt = License.txt
 		Readme.txt = Readme.txt
+		ValidConfigForInheritedMethods.xml = ValidConfigForInheritedMethods.xml
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

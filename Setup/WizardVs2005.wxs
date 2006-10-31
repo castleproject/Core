@@ -113,7 +113,6 @@
 		</Directory>
 		<Directory Id="directoryvs8_36" Name="MRProject">
 		<Component Id="componentvs2005_MRProject" DiskId="1" Guid="E50E8ADF-D5CB-4B47-9022-576142F70EDC">
-		  <File Id="filecs8_30" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\AssemblyInfo.cs" />
 		  <File Id="filecs8_31" Name="components.config" Source="$(var.VSTemplates80)\CSharp\MRProject\components.config" />
 		  <File Id="filecs8_32" Name="ContainerGlobalApplication.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\ContainerGlobalApplication.cs" />
 		  <File Id="filecs8_33" Name="controllers.config" Source="$(var.VSTemplates80)\CSharp\MRProject\controllers.config" />
@@ -138,6 +137,11 @@
 		  <File Id="filecs8_52" Name="rescue_default.boo" Source="$(var.VSTemplates80)\CSharp\MRProject\rescue_default.boo" />
 		  <File Id="filecs8_53" Name="rescue_default.vm" Source="$(var.VSTemplates80)\CSharp\MRProject\rescue_default.vm" />
 		</Component>
+		<Directory Id="directoryvs8_73" Name="Properties">
+		  <Component Id="componentvs2005_MRProject7" DiskId="1" Guid="CB98F3C2-FCC2-403C-B6FE-EE200A3E7F95">
+			<File Id="filecs8_86" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\Properties\AssemblyInfo.cs" />
+		  </Component>
+		</Directory>
 		<Directory Id="directoryvs8_72" Name="Controllers">
 		  <Component Id="componentvs2005_MRProject1" DiskId="1" Guid="2978313B-8887-4BD8-8280-CFB06E5B08A6">
 			<File Id="filecs8_76" Name="HomeController.cs" Source="$(var.VSTemplates80)\CSharp\MRProject\Controllers\HomeController.cs" />
@@ -175,8 +179,8 @@
 		</Directory>
 		<Directory Id="directoryvs8_99" Name="MRProjectTest">
 		<Component Id="componentvs2005_MRProjectTest" DiskId="1" Guid="89677F0B-CF5A-4FA1-84D0-96A56CEE654F">
+		  <File Id="filecs8_89" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\AssemblyInfo.cs" />
 		  <File Id="filecs8_85" Name="App.config" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\App.config" />
-		  <File Id="filecs8_86" Name="AssemblyInfo.cs" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\AssemblyInfo.cs" />
 		  <File Id="filecs8_87" Name="HomeControllerTestCase.cs" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\HomeControllerTestCase.cs" />
 		  <File Id="filecs8_88" Name="MRProjectTest.csproj" Source="$(var.VSTemplates80)\CSharp\MRProjectTest\MRProjectTest.csproj" />
 		</Component>

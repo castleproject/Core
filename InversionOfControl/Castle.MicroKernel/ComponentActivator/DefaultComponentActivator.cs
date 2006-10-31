@@ -121,7 +121,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void ApplyConcerns(object[] steps, object instance)
 		{
-			foreach (ILifecycleConcern concern in steps)
+			foreach(ILifecycleConcern concern in steps)
 			{
 				concern.Apply( Model, instance );
 			}

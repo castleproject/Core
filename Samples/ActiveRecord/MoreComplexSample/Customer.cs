@@ -18,51 +18,51 @@ namespace MoreComplexSample
 	using Castle.ActiveRecord;
 	using Iesi.Collections;
 
-[ActiveRecord("Tb_Customers")]
-public class Customer : ActiveRecordValidationBase
-{
-	private int id;
-	private String name;
-	private String email;
-	private ISet orders = new HashedSet();
-
-	[PrimaryKey(PrimaryKeyType.Native)]
-	public int Id
+	[ActiveRecord("Tb_Customers")]
+	public class Customer : ActiveRecordValidationBase
 	{
-		get { return id; }
-		set { id = value; }
-	}
+		private int id;
+		private String name;
+		private String email;
+		private ISet orders = new HashedSet();
 
-	[Property("cust_Name"), ValidateNotEmpty, ValidateLength(10, 35)]
-	public string Name
-	{
-		get { return name; }
-		set { name = value; }
-	}
+		[PrimaryKey(PrimaryKeyType.Native)]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
 
-	[Property, ValidateNotEmpty, ValidateEmail]
-	public string Email
-	{
-		get { return email; }
-		set { email = value; }
-	}
+		[Property("cust_Name"), ValidateNotEmpty, ValidateLength(10, 35)]
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
 
-	[HasMany(typeof(Order), Lazy=true)]
-	public ISet Orders
-	{
-		get { return orders; }
-		set { orders = value; }
-	}
+		[Property, ValidateNotEmpty, ValidateEmail]
+		public string Email
+		{
+			get { return email; }
+			set { email = value; }
+		}
 
-	public static Customer Find(int id)
-	{
-		return (Customer) FindByPrimaryKey(typeof(Customer), id);
-	}
+		[HasMany(typeof(Order), Lazy=true)]
+		public ISet Orders
+		{
+			get { return orders; }
+			set { orders = value; }
+		}
 
-	public static Customer FindByEmail(String email)
-	{
-		return (Customer) FindOne(typeof(Customer),
-			                        NHibernate.Expression.Expression.Eq("Email", email));
+		public static Customer Find(int id)
+		{
+			return (Customer) FindByPrimaryKey(typeof(Customer), id);
+		}
+
+		public static Customer FindByEmail(String email)
+		{
+			return (Customer) FindOne(typeof(Customer),
+				                        NHibernate.Expression.Expression.Eq("Email", email));
+		}
 	}
-}
 }

@@ -28,22 +28,39 @@ namespace Castle.Core
 		private DependencyModel[] dependencies;
 		private int points;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ConstructorCandidate"/> class.
+		/// </summary>
+		/// <param name="constructorInfo">The constructor info.</param>
+		/// <param name="dependencies">The dependencies.</param>
 		public ConstructorCandidate(ConstructorInfo constructorInfo, params DependencyModel[] dependencies)
 		{
 			this.constructorInfo = constructorInfo;
 			this.dependencies = dependencies;
 		}
 
+		/// <summary>
+		/// Gets the ConstructorInfo (from reflection).
+		/// </summary>
+		/// <value>The constructor.</value>
 		public ConstructorInfo Constructor
 		{
 			get { return constructorInfo; }
 		}
 
+		/// <summary>
+		/// Gets the dependencies this constructor candidate exposes.
+		/// </summary>
+		/// <value>The dependencies.</value>
 		public DependencyModel[] Dependencies
 		{
 			get { return dependencies; }
 		}
 
+		/// <summary>
+		/// Gets or sets the points (used to decided the constructor to use)
+		/// </summary>
+		/// <value>The points.</value>
 		public int Points
 		{
 			get { return points; }

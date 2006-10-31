@@ -28,11 +28,11 @@ namespace Castle.Core
 		private Type service;
 		private String key;
 
-		public CastleComponentAttribute( String key ) : this(key, null)
+		public CastleComponentAttribute(String key) : this(key, null)
 		{
 		}
 
-		public CastleComponentAttribute( String key, Type service ) : base(LifestyleType.Undefined)
+		public CastleComponentAttribute(String key, Type service) : base(LifestyleType.Undefined)
 		{
 			this.key = key;
 			this.service = service;

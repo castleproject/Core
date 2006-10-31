@@ -127,5 +127,29 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(1, transactionManager.CommittedCount);
 			Assert.AreEqual(1, transactionManager.RolledBackCount);
 		}
+		
+		[Test]
+		public void TestBasicOperationsWithConfigComponent()
+		{
+			WindsorContainer container = new WindsorContainer( ConfigHelper.ResolvePath("../HasConfiguration.xml") );
+
+			container.AddComponent( "transactionmanager", 
+				typeof(ITransactionManager), typeof(MockTransactionManager) );
+
+			TransactionalComp1 comp1 = (TransactionalComp1) container.Resolve("mycomp");
+
+			comp1.Create();
+			
+			comp1.Delete();
+			
+			comp1.Save();
+
+			MockTransactionManager transactionManager = (MockTransactionManager) 
+				container["transactionmanager"];
+
+			Assert.AreEqual(3, transactionManager.TransactionCount);
+			Assert.AreEqual(3, transactionManager.CommittedCount);
+			Assert.AreEqual(0, transactionManager.RolledBackCount);
+		}
 	}
 }

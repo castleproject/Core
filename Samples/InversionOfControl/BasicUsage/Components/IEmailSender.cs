@@ -16,6 +16,9 @@ namespace BasicUsage
 {
 	using System;
 
+	/// <summary>
+	/// Contract that depicts an e-mail sender
+	/// </summary>
 	public interface IEmailSender
 	{
 		void Send(String from, String to, String message);

@@ -1,6 +1,10 @@
 
 == Beta 5 ==
 
+- Fixed bug reported on the Forum (when a
+  component was configured using the component's node, no interceptor
+  was being attached)
+
 - Refactored to support configuration and attributes. For example
 
   [Transactional]

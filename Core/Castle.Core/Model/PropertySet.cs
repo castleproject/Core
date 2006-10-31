@@ -26,17 +26,30 @@ namespace Castle.Core
 		private readonly PropertyInfo propertyInfo;
 		private readonly DependencyModel dependency;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertySet"/> class.
+		/// </summary>
+		/// <param name="propertyInfo">The property info.</param>
+		/// <param name="dependency">The dependency.</param>
 		public PropertySet(PropertyInfo propertyInfo, DependencyModel dependency)
 		{
 			this.propertyInfo = propertyInfo;
 			this.dependency = dependency;
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public PropertyInfo Property
 		{
 			get { return propertyInfo; }
 		}
 
+		/// <summary>
+		/// Gets the dependency.
+		/// </summary>
+		/// <value>The dependency.</value>
 		public DependencyModel Dependency
 		{
 			get { return dependency; }

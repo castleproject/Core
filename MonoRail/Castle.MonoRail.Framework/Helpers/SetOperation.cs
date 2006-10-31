@@ -77,6 +77,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				return null;
 			}
+			else if (source is String)
+			{
+				return typeof(String);
+			}
 			else if (source is IEnumerable)
 			{
 				return ExtractType(source as IEnumerable);
@@ -106,7 +110,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private static bool IsSet(object initialSelection)
 		{
-			return (initialSelection is IEnumerable);
+			if (initialSelection == null)
+			{
+				return false;
+			}
+
+			return initialSelection.GetType() != typeof(String) && 
+			       initialSelection is IEnumerable;
 		}
 	}
 

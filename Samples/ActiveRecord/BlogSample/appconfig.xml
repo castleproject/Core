@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 
 <activerecord>
+
   <config>
 	<add 
 		key="hibernate.connection.driver_class"		
@@ -15,4 +16,5 @@
 		key="hibernate.connection.connection_string"	
 		value="Data Source=.;Initial Catalog=test;Integrated Security=SSPI" />
   </config>
+  
 </activerecord>

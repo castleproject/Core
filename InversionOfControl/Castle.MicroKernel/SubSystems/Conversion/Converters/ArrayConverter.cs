@@ -46,7 +46,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
             Array array = Array.CreateInstance(itemType, count);
 
             int index = 0;
-            foreach (IConfiguration itemConfig in configuration.Children)
+            foreach(IConfiguration itemConfig in configuration.Children)
             {
                 object value = Context.Composition.PerformConversion(itemConfig, itemType);
                 array.SetValue(value, index++);

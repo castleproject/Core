@@ -14,7 +14,6 @@
 
 namespace Castle.Core.Interceptor
 {
-	using System;
 	using System.Reflection;
 
 	/// <summary>

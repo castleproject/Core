@@ -48,6 +48,8 @@ foreach(PostTitleAndId titleAndId in posts)
 Release Candidate 1
 ===================
 
+- Changed name of mapping files generated when isDebug=true. They now follow the NHibernate convention of name.hbm.xml
+
 - Refactored: CompositeKey is not a class level attribute anymore
   (minor breaking change)
 

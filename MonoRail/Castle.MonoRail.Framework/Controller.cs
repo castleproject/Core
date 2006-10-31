@@ -1026,7 +1026,7 @@ namespace Castle.MonoRail.Framework
 					}
 				}
 			}
-			catch (ThreadAbortException)
+			catch(ThreadAbortException)
 			{
 				if (logger.IsErrorEnabled)
 				{
@@ -1035,7 +1035,7 @@ namespace Castle.MonoRail.Framework
 
 				hasError = true;
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				hasError = true;
 				

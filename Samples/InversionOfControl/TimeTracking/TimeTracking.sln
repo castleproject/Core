@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracking", "TimeTracking\TimeTracking.csproj", "{018C1222-455D-4767-9731-2E4D5473FEA7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{018C1222-455D-4767-9731-2E4D5473FEA7}.Debug.ActiveCfg = Debug|.NET
+		{018C1222-455D-4767-9731-2E4D5473FEA7}.Debug.Build.0 = Debug|.NET
+		{018C1222-455D-4767-9731-2E4D5473FEA7}.Release.ActiveCfg = Release|.NET
+		{018C1222-455D-4767-9731-2E4D5473FEA7}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

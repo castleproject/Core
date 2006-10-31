@@ -572,6 +572,198 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
+
+		<zip zipfile="${root.dir}/MonoRail.GettingStartedSampleVS2003.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/GettingStartedSampleVS2003">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+
+		<zip zipfile="${root.dir}/MonoRail.GettingStartedSampleVS2005.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/GettingStartedSampleVS2005">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+
+		<zip zipfile="${root.dir}/Windsor.TimeTracking.zip">
+			<fileset basedir="${root.dir}/Samples/InversionOfControl/TimeTracking">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/CustomTypeConverterSample.zip">
+			<fileset basedir="${root.dir}/Samples/InversionOfControl/CustomTypeConverterSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/FacilitySample2.zip">
+			<fileset basedir="${root.dir}/Samples/InversionOfControl/ExtendingSample2">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		
+		<zip zipfile="${root.dir}/KernelInOneEndPoint.Sample.zip">
+			<fileset basedir="${root.dir}/Samples/Facilities/Remoting/KernelInOneEndPoint">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.txt" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/KernelOnBothEndPoints.Sample.zip">
+			<fileset basedir="${root.dir}/Samples/Facilities/Remoting/KernelOnBothEndPoints">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.txt" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		<zip zipfile="${root.dir}/ContainersConnected.Sample.zip">
+			<fileset basedir="${root.dir}/Samples/Facilities/Remoting/ContainersConnected">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.txt" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
 	</target>
 	
 	<target name="zip-samples">
@@ -747,7 +939,7 @@
 	<property name="OutputTarget" value="HTMLHelp"/>
 
 	<description>Generates documentation with default properties.</description>
-	<target name="releaseDocs" depends="cleanup">
+	<target name="releaseDocs" depends="init,cleanup">
 		<call target="copyFilesToDocument"/>
 		<call target="generateReleaseDocs"/>
 	</target>

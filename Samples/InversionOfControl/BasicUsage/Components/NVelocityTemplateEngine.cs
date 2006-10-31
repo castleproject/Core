@@ -17,7 +17,8 @@ namespace BasicUsage.Components
 	using System;
 
 	/// <summary>
-	/// Summary description for NVelocityTemplateEngine.
+	/// Implementation of <see cref="ITemplateEngine"/>
+	/// that "uses" NVelocity
 	/// </summary>
 	public class NVelocityTemplateEngine : ITemplateEngine
 	{

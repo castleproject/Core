@@ -31,7 +31,7 @@ namespace Castle.Core
 		/// <param name="componentKey"></param>
 		public InterceptorAttribute( String componentKey )
 		{
-			this.interceptorRef = new InterceptorReference(componentKey);
+			interceptorRef = new InterceptorReference(componentKey);
 		}
 
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Castle.Core
 		/// <param name="interceptorType"></param>
 		public InterceptorAttribute( Type interceptorType )
 		{
-			this.interceptorRef = new InterceptorReference(interceptorType);
+			interceptorRef = new InterceptorReference(interceptorType);
 		}
 
 		public InterceptorReference Interceptor

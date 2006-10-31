@@ -36,6 +36,11 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		private readonly TransactionMetaInfoStore infoStore;
 		private TransactionMetaInfo metaInfo;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TransactionInterceptor"/> class.
+		/// </summary>
+		/// <param name="kernel">The kernel.</param>
+		/// <param name="infoStore">The info store.</param>
 		public TransactionInterceptor(IKernel kernel, TransactionMetaInfoStore infoStore)
 		{
             this.kernel = kernel;
@@ -44,6 +49,16 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 		#region MarshalByRefObject
 
+		/// <summary>
+		/// Obtains a lifetime service object to control the lifetime policy for this instance.
+		/// </summary>
+		/// <returns>
+		/// An object of type <see cref="T:System.Runtime.Remoting.Lifetime.ILease"/> used to control the
+		/// lifetime policy for this instance. This is the current lifetime service object for
+		/// this instance if one exists; otherwise, a new lifetime service object initialized to the value
+		/// of the <see cref="P:System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime" qualify="true"/> property.
+		/// </returns>
+		/// <exception cref="T:System.Security.SecurityException">The immediate caller does not have infrastructure permission. </exception>
 		public override object InitializeLifetimeService()
 		{
 			return null;
@@ -53,6 +68,10 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 		#region IOnBehalfAware
 
+		/// <summary>
+		/// Sets the intercepted component's ComponentModel.
+		/// </summary>
+		/// <param name="target">The target's ComponentModel</param>
 		public void SetInterceptedComponentModel(ComponentModel target)
 		{
 			metaInfo = infoStore.GetMetaFor(target.Implementation);
@@ -60,6 +79,13 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 		#endregion
 
+		/// <summary>
+		/// Intercepts the specified invocation and creates a transaction
+		/// if necessary.
+		/// </summary>
+		/// <param name="invocation">The invocation.</param>
+		/// <param name="args">The args.</param>
+		/// <returns></returns>
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
 			MethodInfo methodInfo = invocation.MethodInvocationTarget;

@@ -1,6 +1,10 @@
 0.0.1.0
 =======
 
+- Added FindByPropertyInfo to PropertySetCollection
+
+- Made the DependencyModel.IsOptional property writable
+
 - Applied Curtis Schlak's patch fixing IOC-27
   "assembly resource format only works for resources where the assemblies name and default namespace are the same."
   

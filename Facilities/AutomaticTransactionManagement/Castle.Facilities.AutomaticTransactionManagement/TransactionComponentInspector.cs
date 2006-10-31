@@ -27,13 +27,22 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using Castle.Services.Transaction;
 
 	/// <summary>
-	/// Summary description for TransactionComponentInspector.
+	/// Tries to obtain transaction configuration based on 
+	/// the component configuration or (if not available) check
+	/// for the attributes.
 	/// </summary>
 	public class TransactionComponentInspector : MethodMetaInspector
 	{
 		private static readonly String TransactionNodeName = "transaction";
 		private TransactionMetaInfoStore metaStore;
 
+		/// <summary>
+		/// Tries to obtain transaction configuration based on 
+		/// the component configuration or (if not available) check
+		/// for the attributes.
+		/// </summary>
+		/// <param name="kernel">The kernel.</param>
+		/// <param name="model">The model.</param>
 		public override void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (metaStore == null)
@@ -53,31 +62,51 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 			}
 
 			Validate(model, metaStore);
+			
+			AddTransactionInterceptorIfIsTransactional(model, metaStore);
 		}
 
+		/// <summary>
+		/// Tries to configure the ComponentModel based on attributes.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		private void ConfigureBasedOnAttributes(ComponentModel model)
 		{
 			if (model.Implementation.IsDefined(typeof(TransactionalAttribute), true))
 			{
 				metaStore.CreateMetaFromType(model.Implementation);
-
-				model.Dependencies.Add( 
-					new DependencyModel(DependencyType.Service, null, typeof(TransactionInterceptor), false) );
-
-				model.Interceptors.AddFirst( new InterceptorReference(typeof(TransactionInterceptor)) );
 			}
 		}
 
+		/// <summary>
+		/// Obtains the name of the 
+		/// node (overrides MethodMetaInspector.ObtainNodeName)
+		/// </summary>
+		/// <returns>the node name on the configuration</returns>
 		protected override String ObtainNodeName()
 		{
 			return TransactionNodeName;
 		}
 
-		protected override void ProcessMeta(ComponentModel model, MethodInfo[] methods, MethodMetaModel metaModel)
+		/// <summary>
+		/// Processes the meta information available on
+		/// the component configuration. (overrides MethodMetaInspector.ProcessMeta)
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="methods">The methods.</param>
+		/// <param name="metaModel">The meta model.</param>
+		protected override void ProcessMeta(ComponentModel model, 
+		                                    MethodInfo[] methods, 
+		                                    MethodMetaModel metaModel)
 		{
 			metaStore.CreateMetaFromConfig(model.Implementation, methods, metaModel.ConfigNode);
 		}
 
+		/// <summary>
+		/// Validates the type is OK to generate a proxy.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="store">The store.</param>
 		private void Validate(ComponentModel model, TransactionMetaInfoStore store)
 		{
 			if (model.Service == null || model.Service.IsInterface) return;
@@ -108,11 +137,23 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 			}		
 		}
 
+		/// <summary>
+		/// Determines whether the configuration has <c>istransaction="true"</c> attribute.
+		/// </summary>
+		/// <param name="configuration">The configuration.</param>
+		/// <returns>
+		/// <c>true</c> if yes; otherwise, <c>false</c>.
+		/// </returns>
 		private bool IsMarkedWithTransactional(IConfiguration configuration)
 		{
 			return (configuration != null && "true" == configuration.Attributes["isTransactional"]);
 		}
 
+		/// <summary>
+		/// Asserts that if there are transaction behavior
+		/// configured for methods, the component node has <c>istransaction="true"</c> attribute
+		/// </summary>
+		/// <param name="model">The model.</param>
 		private void AssertThereNoTransactionOnConfig(ComponentModel model)
 		{
 			IConfiguration configuration = model.Configuration;
@@ -124,6 +165,23 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 				throw new FacilityException(message);
 			}
+		}
+		
+		/// <summary>
+		/// Associates the transaction interceptor with the ComponentModel.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		private static void AddTransactionInterceptorIfIsTransactional(ComponentModel model, 
+		                                                               TransactionMetaInfoStore store)
+		{
+			TransactionMetaInfo meta = store.GetMetaFor(model.Implementation);
+
+			if (meta == null) return;
+
+			model.Dependencies.Add(
+				new DependencyModel(DependencyType.Service, null, typeof(TransactionInterceptor), false));
+
+			model.Interceptors.AddFirst(new InterceptorReference(typeof(TransactionInterceptor)));
 		}
 	}
 }

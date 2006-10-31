@@ -18,17 +18,27 @@ namespace Castle.Core
 	using System.Collections;
 	using System.Collections.Specialized;
 
-
+	/// <summary>
+	/// Collection of <see cref="MethodMetaModel"/>
+	/// </summary>
 	[Serializable]
 	public class MethodMetaModelCollection : ReadOnlyCollectionBase
 	{
 		private IDictionary methodInfo2Model;
 
+		/// <summary>
+		/// Adds the specified model.
+		/// </summary>
+		/// <param name="model">The model.</param>
 		public void Add(MethodMetaModel model)
 		{
 			InnerList.Add(model);
 		}
 
+		/// <summary>
+		/// Gets the method info2 model.
+		/// </summary>
+		/// <value>The method info2 model.</value>
 		public IDictionary MethodInfo2Model
 		{
 			get

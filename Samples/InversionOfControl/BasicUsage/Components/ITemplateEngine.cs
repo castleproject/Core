@@ -16,6 +16,9 @@ namespace BasicUsage
 {
 	using System;
 
+	/// <summary>
+	/// Contracts that depicts a template engine
+	/// </summary>
 	public interface ITemplateEngine
 	{
 		String Process(String templateName);

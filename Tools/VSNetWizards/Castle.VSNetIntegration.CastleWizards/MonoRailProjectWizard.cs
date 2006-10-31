@@ -188,24 +188,34 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 		private void AddRoutingConfiguration(XmlDocument webConfigDoc, XmlElement mrNode)
 		{
-			if (optionsPanel.EnableRouting)
-			{
-				XmlElement routingElem = webConfigDoc.CreateElement("routing");
-				XmlElement rule1 = webConfigDoc.CreateElement("rule");
-				XmlElement rule1pattern = webConfigDoc.CreateElement("pattern");
-				XmlElement rule1replace = webConfigDoc.CreateElement("replace");
+			if (!optionsPanel.EnableRouting) return;
 
-				routingElem.AppendChild(rule1);
+			XmlElement routingElem = webConfigDoc.CreateElement("routing");
+			XmlElement rule1 = webConfigDoc.CreateElement("rule");
+			XmlElement rule1pattern = webConfigDoc.CreateElement("pattern");
+			XmlElement rule1replace = webConfigDoc.CreateElement("replace");
 
-				rule1.AppendChild(rule1pattern);
-				rule1.AppendChild(rule1replace);
+			routingElem.AppendChild(rule1);
 
-				rule1pattern.AppendChild( webConfigDoc.CreateTextNode(@"(/blog/posts/)(\d+)/(\d+)/(.)*$") );
-				rule1replace.AppendChild( webConfigDoc.CreateCDataSection(" /blog/view.rails?year=$2&month=$3 ") );
+			rule1.AppendChild(rule1pattern);
+			rule1.AppendChild(rule1replace);
 
-				mrNode.AppendChild(webConfigDoc.CreateComment("For more information on routing see http://www.castleproject.org/index.php/Routing"));
-				mrNode.AppendChild(routingElem);
-			}
+			rule1pattern.AppendChild( webConfigDoc.CreateTextNode(@"(/blog/posts/)(\d+)/(\d+)/(.)*$") );
+			rule1replace.AppendChild( webConfigDoc.CreateCDataSection(" /blog/view.rails?year=$2&month=$3 ") );
+
+			mrNode.AppendChild(webConfigDoc.CreateComment("For more information on routing see http://www.castleproject.org/monorail/documentation/trunk/advanced/routing.html"));
+			mrNode.AppendChild(routingElem);
+			
+			// Select Single Node: configuration/system.web/httpModules
+			XmlElement httpModules = (XmlElement) webConfigDoc.DocumentElement.SelectSingleNode("/configuration/system.web/httpModules");
+			
+			// Add <add name="routing" type="Castle.MonoRail.Framework.RoutingModule, Castle.MonoRail.Framework" />
+			XmlElement addRoutingElem = webConfigDoc.CreateElement("add");
+			
+			addRoutingElem.SetAttribute("name", "routing");
+			addRoutingElem.SetAttribute("type", "Castle.MonoRail.Framework.RoutingModule, Castle.MonoRail.Framework");
+			
+			httpModules.AppendChild(addRoutingElem);
 		}
 
 		private void AddViewEngineConfiguration(XmlDocument webConfigDoc, XmlElement mrNode)
@@ -238,7 +248,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			XmlElement castleSectionElem = webConfigDoc.CreateElement("section");
 
 			castleSectionElem.SetAttribute("name", "Brail");
-			castleSectionElem.SetAttribute("type", "Brail.BrailConfigurationSection, Brail");
+			castleSectionElem.SetAttribute("type", "Castle.MonoRail.Views.Brail.BrailConfigurationSection, Castle.MonoRail.Views.Brail");
 
 			configSectionsNode.AppendChild(castleSectionElem);
 

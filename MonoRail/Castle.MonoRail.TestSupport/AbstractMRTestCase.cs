@@ -803,6 +803,11 @@ namespace Castle.MonoRail.TestSupport
 
 			StringWriter writer = new StringWriter(outputBuffer);
 
+			if (Request.Headers["IsTestWorkerRequest"] == null)
+			{
+				Request.Headers.Add("IsTestWorkerRequest", "true");
+			}
+			
 			response = host.Process(Request, writer);
 			
 			writer.Close();

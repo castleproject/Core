@@ -14,6 +14,9 @@
 
 namespace Castle.Core.Interceptor
 {
+	/// <summary>
+	/// New interface that is going to be used by DynamicProxy 2
+	/// </summary>
 	public interface IInterceptor
 	{
 		void Intercept(IInvocation invocation);

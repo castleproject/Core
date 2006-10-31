@@ -25,11 +25,19 @@ namespace Castle.Core
 	{
 		private LifestyleType type;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LifestyleAttribute"/> class.
+		/// </summary>
+		/// <param name="type">The type.</param>
 		protected LifestyleAttribute(LifestyleType type)
 		{
 			this.type = type;
 		}
 
+		/// <summary>
+		/// Gets or sets the lifestyle.
+		/// </summary>
+		/// <value>The lifestyle.</value>
 		public LifestyleType Lifestyle
 		{
 			get { return type; }
@@ -44,6 +52,9 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class SingletonAttribute : LifestyleAttribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SingletonAttribute"/> class.
+		/// </summary>
 		public SingletonAttribute() : base(LifestyleType.Singleton)
 		{
 				
@@ -57,6 +68,9 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class TransientAttribute : LifestyleAttribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TransientAttribute"/> class.
+		/// </summary>
 		public TransientAttribute() : base(LifestyleType.Transient)
 		{
 				
@@ -70,6 +84,9 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class PerThreadAttribute : LifestyleAttribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PerThreadAttribute"/> class.
+		/// </summary>
 		public PerThreadAttribute() : base(LifestyleType.Thread)
 		{
 			
@@ -102,22 +119,38 @@ namespace Castle.Core
 		private readonly int initialPoolSize;
 		private readonly int maxPoolSize;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PooledAttribute"/> class
+		/// using the default initial pool size (5) and the max pool size (15).
+		/// </summary>
 		public PooledAttribute() : this(Initial_PoolSize, Max_PoolSize)
 		{
-			
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PooledAttribute"/> class.
+		/// </summary>
+		/// <param name="initialPoolSize">Initial size of the pool.</param>
+		/// <param name="maxPoolSize">Max pool size.</param>
 		public PooledAttribute(int initialPoolSize, int maxPoolSize) : base(LifestyleType.Pooled)
 		{
 			this.initialPoolSize = initialPoolSize;
 			this.maxPoolSize = maxPoolSize;
 		}
 
+		/// <summary>
+		/// Gets the initial size of the pool.
+		/// </summary>
+		/// <value>The initial size of the pool.</value>
 		public int InitialPoolSize
 		{
 			get { return initialPoolSize; }
 		}
 
+		/// <summary>
+		/// Gets the maximum pool size.
+		/// </summary>
+		/// <value>The size of the max pool.</value>
 		public int MaxPoolSize
 		{
 			get { return maxPoolSize; }
@@ -133,11 +166,19 @@ namespace Castle.Core
 	{
 		private Type lifestyleHandler;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CustomLifestyleAttribute"/> class.
+		/// </summary>
+		/// <param name="lifestyleHandler">The lifestyle handler.</param>
 		public CustomLifestyleAttribute( Type lifestyleHandler ) : base(LifestyleType.Custom)
 		{
 			this.lifestyleHandler = lifestyleHandler;
 		}
 
+		/// <summary>
+		/// Gets the type of the lifestyle handler.
+		/// </summary>
+		/// <value>The type of the lifestyle handler.</value>
 		public Type LifestyleHandlerType
 		{
 			get { return lifestyleHandler; }

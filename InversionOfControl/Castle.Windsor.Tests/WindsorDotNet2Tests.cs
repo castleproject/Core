@@ -29,7 +29,7 @@ namespace Castle.Windsor.Tests
     public class WindsorDotNet2Tests
     {
         [Test]
-        public void ResolveGeneric()
+        public void UsingResolveGenericMethodOverload()
         {
             IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("GenericsConfig.xml")));
             ICalcService svr = container.Resolve<ICalcService>();

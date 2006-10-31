@@ -160,6 +160,7 @@
 				<ComponentRef Id='componentvs2005_MRProject4' />
 				<ComponentRef Id='componentvs2005_MRProject5' />
 				<ComponentRef Id='componentvs2005_MRProject6' />
+				<ComponentRef Id='componentvs2005_MRProject7' />
 				<ComponentRef Id='componentvs2005_MRProjectTest' />
 			</Feature>
 

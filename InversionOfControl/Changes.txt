@@ -14,6 +14,8 @@ RC 3
  
 - Applied patch by William C. Pierce <wcpierce@gmail.com> adding PerWebRequestAttribute
 
+- Added setter to ReleasePolicy property
+
 - Applied Curtis Schlak's patch fixing IOC-30
   "Add overload to Windsor AddComponent to specify the Lifestyle"
 

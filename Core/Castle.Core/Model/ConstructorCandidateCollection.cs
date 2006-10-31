@@ -27,6 +27,10 @@ namespace Castle.Core
 		private ConstructorCandidate fewerArgumentsCandidate;
 		private ConstructorCandidate bestCandidate;
 
+		/// <summary>
+		/// Adds the specified candidate.
+		/// </summary>
+		/// <param name="candidate">The candidate.</param>
 		public void Add(ConstructorCandidate candidate)
 		{
 			if (fewerArgumentsCandidate == null)
@@ -45,17 +49,28 @@ namespace Castle.Core
 			InnerList.Add(candidate);
 		}
 
+		/// <summary>
+		/// Gets the fewer arguments candidate.
+		/// </summary>
+		/// <value>The fewer arguments candidate.</value>
 		public ConstructorCandidate FewerArgumentsCandidate
 		{
 			get { return fewerArgumentsCandidate; }
 		}
 
+		/// <summary>
+		/// Gets or sets the best candidate.
+		/// </summary>
+		/// <value>The best candidate.</value>
 		public ConstructorCandidate BestCandidate
 		{
 			get { return bestCandidate; }
 			set { bestCandidate = value; }
 		}
 
+		/// <summary>
+		/// Clears this instance.
+		/// </summary>
 		public void Clear()
 		{
 			InnerList.Clear();

@@ -26,12 +26,14 @@ namespace BasicUsage
 	{
 		public static void Main()
 		{
-			IWindsorContainer container = new WindsorContainer( new XmlInterpreter("../BasicUsage.xml") );
+			IWindsorContainer container = new WindsorContainer();
 
 			container.AddComponent( "newsletter", 
 				typeof(INewsletterService), typeof(SimpleNewsletterService) );
+			
 			container.AddComponent( "smtpemailsender", 
 				typeof(IEmailSender), typeof(SmtpEmailSender) );
+			
 			container.AddComponent( "templateengine", 
 				typeof(ITemplateEngine), typeof(NVelocityTemplateEngine) );
 

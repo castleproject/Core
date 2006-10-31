@@ -19,7 +19,6 @@ namespace Castle.Components.Binder.Tests
 	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Globalization;
-	using System.Text;
 	using System.Threading;
 
 	using NUnit.Framework;

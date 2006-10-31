@@ -17,23 +17,27 @@ namespace BasicUsage.Components
 	using System;
 
 	/// <summary>
-	/// Summary description for SmtpEmailSender.
+	/// Implementation <see cref="IEmailSender"/>
+	/// that uses the SMTP protocol to send emails (fake)
 	/// </summary>
 	public class SmtpEmailSender : IEmailSender
 	{
-		private String _host;
-		private int _port;
+		private String host = "my.default.host";
+		private int port = 25;
+
+		public SmtpEmailSender()
+		{
+		}
 
 		public SmtpEmailSender(String host, int port)
 		{
-			_host = host;
-			_port = port;
+			this.host = host;
+			this.port = port;
 		}
 
 		public virtual void Send(String from, String to, String message)
 		{
-			Console.WriteLine( "Sending e-mail from {0} to {1} with message '{2}'", 
-				from, to, message );
+			Console.WriteLine("Sending e-mail from {0} to {1} with message '{2}'", from, to, message);
 		}
 	}
 }

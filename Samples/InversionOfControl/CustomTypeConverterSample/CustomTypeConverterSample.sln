@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTypeConverterSample", "CustomTypeConverterSample\CustomTypeConverterSample.csproj", "{2C8C184E-0B55-43CF-B5E0-172C1F8D23AD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{2C8C184E-0B55-43CF-B5E0-172C1F8D23AD}.Debug.ActiveCfg = Debug|.NET
+		{2C8C184E-0B55-43CF-B5E0-172C1F8D23AD}.Debug.Build.0 = Debug|.NET
+		{2C8C184E-0B55-43CF-B5E0-172C1F8D23AD}.Release.ActiveCfg = Release|.NET
+		{2C8C184E-0B55-43CF-B5E0-172C1F8D23AD}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

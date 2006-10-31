@@ -155,24 +155,42 @@ namespace Castle.Core
             set { name = value; }
         }
 
+		/// <summary>
+		/// Gets or sets the service exposed.
+		/// </summary>
+		/// <value>The service.</value>
         public Type Service
         {
             get { return service; }
             set { service = value; }
         }
 
+		/// <summary>
+		/// Gets or sets the component implementation.
+		/// </summary>
+		/// <value>The implementation.</value>
         public Type Implementation
         {
             get { return implementation; }
             set { implementation = value; }
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the component requires generic arguments.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if generic arguments are required; otherwise, <c>false</c>.
+		/// </value>
 		public bool RequiresGenericArguments
 		{
 			get { return requiresGenericArguments; }
 			set { requiresGenericArguments = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the extended properties.
+		/// </summary>
+		/// <value>The extended properties.</value>
         public IDictionary ExtendedProperties
         {
             get
@@ -186,6 +204,10 @@ namespace Castle.Core
             set { extended = value; }
         }
 
+		/// <summary>
+		/// Gets the constructors candidates.
+		/// </summary>
+		/// <value>The constructors.</value>
         public ConstructorCandidateCollection Constructors
         {
             get
@@ -198,6 +220,10 @@ namespace Castle.Core
             }
         }
 
+		/// <summary>
+		/// Gets the properties set.
+		/// </summary>
+		/// <value>The properties.</value>
         public PropertySetCollection Properties
         {
             get
@@ -210,12 +236,20 @@ namespace Castle.Core
             }
         }
 
+		/// <summary>
+		/// Gets or sets the configuration.
+		/// </summary>
+		/// <value>The configuration.</value>
         public IConfiguration Configuration
         {
             get { return configuration; }
             set { configuration = value; }
         }
 
+		/// <summary>
+		/// Gets the lifecycle steps.
+		/// </summary>
+		/// <value>The lifecycle steps.</value>
         public LifecycleStepCollection LifecycleSteps
         {
             get
@@ -228,6 +262,10 @@ namespace Castle.Core
             }
         }
 
+		/// <summary>
+		/// Gets or sets the lifestyle type.
+		/// </summary>
+		/// <value>The type of the lifestyle.</value>
         public LifestyleType LifestyleType
         {
             get { return lifestyleType; }
@@ -245,18 +283,30 @@ namespace Castle.Core
 			set { inspectionBehavior = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the custom lifestyle.
+		/// </summary>
+		/// <value>The custom lifestyle.</value>
 		public Type CustomLifestyle
         {
             get { return customLifestyle; }
             set { customLifestyle = value; }
         }
 
+		/// <summary>
+		/// Gets or sets the custom component activator.
+		/// </summary>
+		/// <value>The custom component activator.</value>
         public Type CustomComponentActivator
         {
             get { return customComponentActivator; }
             set { customComponentActivator = value; }
         }
 
+		/// <summary>
+		/// Gets the interceptors.
+		/// </summary>
+		/// <value>The interceptors.</value>
         public InterceptorReferenceCollection Interceptors
         {
             get
@@ -269,6 +319,10 @@ namespace Castle.Core
             }
         }
 
+		/// <summary>
+		/// Gets the parameter collection.
+		/// </summary>
+		/// <value>The parameters.</value>
         public ParameterModelCollection Parameters
         {
             get

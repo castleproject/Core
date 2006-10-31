@@ -96,9 +96,18 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 			try
 			{
+				ConfigurationSourceAdapter adapter = new ConfigurationSourceAdapter(FacilityConfig);
+				
+				if (log.IsDebugEnabled)
+				{
+					log.Debug("Is Debug enabled {0}", adapter.Debug);
+					log.Debug("ThreadScopeInfo {0}", adapter.ThreadScopeInfoImplementation);
+					log.Debug("NamingStrategy {0}", adapter.NamingStrategyImplementation);
+					log.Debug("SessionFactoryHolder {0}", adapter.SessionFactoryHolderImplementation);
+				}
+				
 				ActiveRecordStarter.Initialize(
-					(Assembly[]) assemblies.ToArray(typeof(Assembly)),
-					new ConfigurationSourceAdapter(FacilityConfig));
+					(Assembly[]) assemblies.ToArray(typeof(Assembly)), adapter);
 			}
 			finally
 			{

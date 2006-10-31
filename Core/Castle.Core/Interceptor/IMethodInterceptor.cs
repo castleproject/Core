@@ -14,8 +14,6 @@
 
 namespace Castle.Core.Interceptor
 {
-	using System;
-
 	/// <summary>
 	/// Interface that should be implemented 
 	/// by any component that wishes to be referenced as interceptor.
