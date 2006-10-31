@@ -171,6 +171,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		/// Associates the transaction interceptor with the ComponentModel.
 		/// </summary>
 		/// <param name="model">The model.</param>
+        /// <param name="store">The meta information store.</param>
 		private static void AddTransactionInterceptorIfIsTransactional(ComponentModel model, 
 		                                                               TransactionMetaInfoStore store)
 		{
