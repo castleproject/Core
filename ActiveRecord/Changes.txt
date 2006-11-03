@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Fixed AR-84:  ActiveRecord TransactionScope should export interface to set IsolationLevel
+  Now you can specify the isolation level when you create a TransactionScope
+
 - Applied Carlos Ble's patch adding Replicate support to ActiveRecordBase
 
 - Moved ProjectionQuery and ScalarProjectionQuery to Castle.ActiveRecord.Queries, with the rest of the queries.

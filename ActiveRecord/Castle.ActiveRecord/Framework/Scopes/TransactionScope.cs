@@ -18,9 +18,8 @@ namespace Castle.ActiveRecord
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.ComponentModel;
-
+	using System.Data;
 	using NHibernate;
-	
 	using Castle.ActiveRecord.Framework.Scopes;
 
 	/// <summary>
@@ -48,6 +47,7 @@ namespace Castle.ActiveRecord
 		private static readonly object CompletedEvent = new object();
 
 		private readonly TransactionMode mode;
+		private readonly IsolationLevel isolationLevel;
 		private IDictionary _transactions = new HybridDictionary();
 		private TransactionScope parentTransactionScope;
 		private AbstractScope parentSimpleScope;
@@ -65,12 +65,23 @@ namespace Castle.ActiveRecord
 		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
 		/// </summary>
 		/// <param name="mode">Whatever to create a new transaction or inherits an existing one</param>
-		public TransactionScope(TransactionMode mode) : base(FlushAction.Auto, SessionScopeType.Transactional)
+		public TransactionScope(TransactionMode mode) : this(mode, IsolationLevel.Unspecified)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TransactionScope"/> class.
+		/// </summary>
+		/// <param name="mode">Whatever to create a new transaction or inherits an existing one</param>
+		/// <param name="isolationLevel">The transaction isolation level.</param>
+		public TransactionScope(TransactionMode mode, IsolationLevel isolationLevel)
+			: base(FlushAction.Auto, SessionScopeType.Transactional)
 		{
 			this.mode = mode;
+			this.isolationLevel = isolationLevel;
 
 			bool preferenceForTransactionScope = mode == TransactionMode.Inherits ? true : false;
-			
+
 			ISessionScope previousScope = ScopeUtil.FindPreviousScope(this, preferenceForTransactionScope);
 
 			if (previousScope != null)
@@ -84,7 +95,7 @@ namespace Castle.ActiveRecord
 					// This is not a safe cast. Reconsider it
 					parentSimpleScope = (AbstractScope) previousScope;
 
-					foreach(ISession session in parentSimpleScope.GetSessions())
+					foreach (ISession session in parentSimpleScope.GetSessions())
 					{
 						EnsureHasTransaction(session);
 					}
@@ -99,8 +110,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public event EventHandler OnTransactionCompleted
 		{
-			add 
-			{ 
+			add
+			{
 				if (parentTransactionScope != null)
 				{
 					parentTransactionScope.OnTransactionCompleted += value;
@@ -144,8 +155,7 @@ namespace Castle.ActiveRecord
 		{
 			if (rollbackOnly)
 			{
-				throw new TransactionException("The transaction was marked as rollback " + 
-					"only - by itself or one of the nested transactions");
+				throw new TransactionException("The transaction was marked as rollback " + "only - by itself or one of the nested transactions");
 			}
 		}
 
@@ -167,7 +177,7 @@ namespace Castle.ActiveRecord
 			{
 				return parentTransactionScope.IsKeyKnown(key);
 			}
-			
+
 			bool keyKnown = false;
 
 			if (parentSimpleScope != null)
@@ -241,7 +251,17 @@ namespace Castle.ActiveRecord
 			{
 				session.FlushMode = FlushMode.Commit;
 
-				ITransaction transaction = session.BeginTransaction();
+				ITransaction transaction;
+
+				if (isolationLevel == IsolationLevel.Unspecified)
+				{
+					transaction = session.BeginTransaction();
+				}
+				else
+				{
+					transaction = session.BeginTransaction(isolationLevel);
+				}
+
 
 				_transactions.Add(session, transaction);
 			}
@@ -299,7 +319,7 @@ namespace Castle.ActiveRecord
 					// Cancel all pending changes 
 					// (not sure whether this is a good idea, it should be scoped
 
-					foreach( ISession session in parentSimpleScope.GetSessions() )
+					foreach (ISession session in parentSimpleScope.GetSessions())
 					{
 						session.Clear();
 					}
