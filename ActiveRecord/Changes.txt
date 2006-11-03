@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Lee Henson's patch fixing AR-86
+  "Expose DetachedCriteria on ActiveRecordBase<T>.SlicedFindAll"
+
 - Fixed AR-84:  ActiveRecord TransactionScope should export interface to set IsolationLevel
   Now you can specify the isolation level when you create a TransactionScope
 

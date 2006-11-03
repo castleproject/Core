@@ -481,13 +481,13 @@ namespace Castle.ActiveRecord
 			return (T[]) ActiveRecordBase.SlicedFindAll(typeof(T), firstResult, maxResults, criterias);
 		}
 
-        /// <summary>
-        /// Returns a portion of the query results (sliced)
-        /// </summary>
-        public static T[] SlicedFindAll(int firstResult, int maxResults, DetachedCriteria criteria, params Order[] orders)
-	    {
-            return (T[]) ActiveRecordBase.SlicedFindAll(typeof (T), firstResult, maxResults, orders, criteria);
-	    }
+		/// <summary>
+		/// Returns a portion of the query results (sliced)
+		/// </summary>
+		public static T[] SlicedFindAll(int firstResult, int maxResults, DetachedCriteria criteria, params Order[] orders)
+		{
+			return (T[]) ActiveRecordBase.SlicedFindAll(typeof (T), firstResult, maxResults, orders, criteria);
+		}
 
 		#endregion
 
