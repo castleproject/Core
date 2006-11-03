@@ -174,6 +174,50 @@ namespace Castle.ActiveRecord
 
 		#endregion
 
+		#region Replicate
+
+		/// <summary>
+		/// From NHibernate documentation: 
+		/// Persist all reachable transient objects, reusing the current identifier 
+		/// values. Note that this will not trigger the Interceptor of the Session.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <param name="replicationMode">The replication mode.</param>
+		protected internal static void Replicate(object instance, ReplicationMode replicationMode)
+		{
+			if (instance == null)
+			{
+				throw new ArgumentNullException("instance");
+			}
+
+			EnsureInitialized(instance.GetType());
+
+			ISession session = holder.CreateSession(instance.GetType());
+
+			try
+			{
+				session.Replicate(instance, replicationMode);
+			}
+			catch (Exception ex)
+			{
+				// NHibernate catches our ValidationException, and as such it is the innerexception here
+				if (ex.InnerException is ValidationException)
+				{
+					throw ex.InnerException;
+				}
+				else
+				{
+					throw new ActiveRecordException("Could not perform Replicate for " + instance.GetType().Name, ex);
+				}
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+		
+		#endregion
+
 		#region Refresh
 
 		/// <summary>

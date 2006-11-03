@@ -1,5 +1,8 @@
 Release Candidate 2
 ===================
+
+- Applied Carlos Ble's patch adding Replicate support to ActiveRecordBase
+
 - Moved ProjectionQuery and ScalarProjectionQuery to Castle.ActiveRecord.Queries, with the rest of the queries.
 
 - Added untyped projection support, using just ProjectionQuery<Post>, which uses object[] tuples.
