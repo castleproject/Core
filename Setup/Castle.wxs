@@ -75,13 +75,13 @@
 				</Directory>
 			</Directory>
 			
-			<!--
-			<Directory Id="ProgramMenuFolder" SourceName="Programs">
-				<Directory Id="shortcutrootfolder" Name="Castle Project">
-					<Directory Id="documentationfolder" Name="Docs" />
+			<Directory Id="ProgramMenuFolder" Name="Programs">
+				<Directory Id="SHORTCUTDIR" Name="Castle Project">
+					<Directory Id="CastleShortCutDIR" Name="Release Candidate 2">
+					</Directory>
 				</Directory>
 			</Directory>
-			-->
+
 		</Directory>
 		
 		<!-- Features -->
@@ -104,14 +104,12 @@
 				<ComponentRef Id="ProductComponentGac2" />
 			</Feature>
 
-			<!--
 			<Feature 
 				Id='Documentation' Title='Documentation' 
 				Description='Castle documentation' Level='1'>
 				
 				<ComponentRef Id='DocsComp' />
 			</Feature>
-			-->
 
 			<Feature 
 				Id='SourceCode' Title='Source Code' 

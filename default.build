@@ -700,6 +700,28 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
+		<zip zipfile="${root.dir}/GettingStartedPart1.zip">
+			<fileset basedir="${root.dir}/Samples/InversionOfControl/GettingStarted/GettingStartedPart1">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.resx" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
 		
 		<zip zipfile="${root.dir}/KernelInOneEndPoint.Sample.zip">
 			<fileset basedir="${root.dir}/Samples/Facilities/Remoting/KernelInOneEndPoint">

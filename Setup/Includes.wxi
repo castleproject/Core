@@ -7,7 +7,7 @@
 	<!-- General ..................................................................... -->
 	<?define VersionNumber="$(var.MajorVersion).$(var.MinorVersion).$(var.MicroVersion).$(var.BuildVersion)" ?>
 	<?define ProductShortName="Castle" ?>
-	<?define ProductName="Castle Project $(var.MajorVersion).$(var.MinorVersion).$(var.MicroVersion)" ?>
+	<?define ProductName="Castle Project RC2 $(var.MajorVersion).$(var.MinorVersion).$(var.MicroVersion)" ?>
 
 	<?define PackageManufacturer="Castle Project Team" ?>
 	<?define HotITemNL="http://www.castleproject.org/"?>

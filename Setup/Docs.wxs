@@ -5,22 +5,69 @@
 
 <Fragment Id='FragmentDocs'>
 
-		<DirectoryRef Id="DocsDir">
-			<Component Id="DocsComp" KeyPath="yes" DiskId="1" Guid="CDE4186F-DE83-4E7C-A78B-84649BF99AD9">
-<!--				<File Id="docs0" Name="Castle.chm" src="..\docs\Castle.chm" />-->
+	<DirectoryRef Id="DocsDir">
 
-				<CreateFolder />
-<!--
+		<Component Id="DocsComp" KeyPath="no" DiskId="1" Guid="2CBC6F9A-2EB0-43A2-97EB-597351275C65">
+		
+			<CreateFolder Directory="SHORTCUTDIR" />
+			<CreateFolder Directory="CastleShortCutDIR" />
+
+			<RemoveFolder 
+				Id="ShortcutDoc_RemoveShortcutFolder" 
+				Directory="SHORTCUTDIR" 
+				On="uninstall" />
+				
+			<RemoveFolder 
+				Id="ShortcutDoc_RemoveShortcutFolder2" 
+				Directory="CastleShortCutDIR" 
+				On="uninstall" />
+
+			<File Id="docs0" Name="ActiveRecord.chm" Source="$(var.BuildBaseDir)\Help\ActiveRecord.chm">
+			
 				<Shortcut 
-					Id="ShortcutDoc" 
-					Directory="documentationfolder" 
-					Name="API Documentation" 
-					Target="[docs0]" 
-					Description="Documentation in MSDN format for the public API" 
-					Hotkey="0" Show="normal" />
-					-->
-			</Component>
-		</DirectoryRef>
+					Id="ShortcutDoc0" 
+					Directory="CastleShortCutDIR" 
+					Name="ActiveRecord API Documentation" 
+					Description="ActiveRecord API Documentation" 
+					Hotkey="0" Show="normal" Advertise="yes"
+					IconIndex="0" />
+
+			</File>
+			
+			<File Id="docs1" Name="MicroKernel-Windsor-Facilities.chm" Source="$(var.BuildBaseDir)\Help\MicroKernel-Windsor-Facilities.chm">
+
+				<Shortcut 
+					Id="ShortcutDoc1" 
+					Directory="CastleShortCutDIR" 
+					Name="MicroKernel, Windsor and Facilities API Documentation" 
+					Description="IoC related API Documentation" 
+					Hotkey="0" Show="normal" Advertise="yes" IconIndex="0"  />
+			
+			</File>
+			
+			<File Id="docs2" Name="MonoRail.chm" Source="$(var.BuildBaseDir)\Help\MonoRail.chm">
+
+				<Shortcut 
+					Id="ShortcutDoc2" 
+					Directory="CastleShortCutDIR" 
+					Name="MonoRail API Documentation" 
+					Description="MonoRail API Documentation" 
+					Hotkey="0" Show="normal" Advertise="yes" IconIndex="0"  />
+			
+			</File>
+
+			<!--
+			<CreateFolder Directory="SHORTCUTDIR" />
+			<CreateFolder Directory="CastleShortCutDIR" />
+			<RemoveFolder 
+			   Id="ShortcutDoc_RemoveShortcutFolder" 
+			   Directory="CastleShortCutDIR" 
+			   On="uninstall" />
+			   -->
+
+		</Component>
+		
+	</DirectoryRef>
 		
 </Fragment>
 </Wix>
