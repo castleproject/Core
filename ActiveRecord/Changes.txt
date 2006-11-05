@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Lee Henson's patch fixing AR-88
+  "Move GetFieldOrPropertyValue from ConfirmationValidator to AbstractValidator"
+
 - Applied Lee Henson's patch fixing AR-86
   "Expose DetachedCriteria on ActiveRecordBase<T>.SlicedFindAll"
 

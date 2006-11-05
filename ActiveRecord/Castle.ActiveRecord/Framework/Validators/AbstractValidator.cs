@@ -27,6 +27,33 @@ namespace Castle.ActiveRecord.Framework.Validators
 		private PropertyInfo property;
 
 		/// <summary>
+		/// Obtains the value of a property or field on a specific instance.
+		/// </summary>
+		/// <param name="instance">The instance to inspect.</param>
+		/// <param name="fieldOrPropertyName">The name of the field or property to inspect.</param>
+		/// <returns></returns>
+		public object GetFieldOrPropertyValue(object instance, string fieldOrPropertyName)
+		{
+			PropertyInfo pi = instance.GetType().GetProperty(fieldOrPropertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+
+			if (pi == null)
+			{
+				FieldInfo fi = instance.GetType().GetField(fieldOrPropertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+
+				if (fi != null)
+				{
+					return fi.GetValue(instance);
+				}
+			}
+			else
+			{
+				return pi.GetValue(instance, null);
+			}
+
+			throw new ValidationException("No public instance field or property named " + fieldOrPropertyName + " for type " + instance.GetType().FullName);
+		}
+
+		/// <summary>
 		/// Implementors should perform any initialization logic
 		/// </summary>
 		/// <param name="property">The target property</param>
@@ -65,7 +92,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 		/// <returns><c>true</c> if the field is OK</returns>
 		public bool Perform(object instance)
 		{
-			return this.Perform( instance, Property.GetValue(instance, null) );
+			return this.Perform(instance, Property.GetValue(instance, null));
 		}
 
 		/// <summary>
