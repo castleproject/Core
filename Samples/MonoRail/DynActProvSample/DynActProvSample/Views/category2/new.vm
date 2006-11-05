@@ -1,0 +1,22 @@
+<h2>New Category</h2>
+
+<form action="create.rails" method="post">
+
+<table border="0" width="300px" cellpadding="3" cellspacing="2">
+<tr>
+	<td>
+	$FormHelper.LabelFor("category.name", "Name:")
+	</td>
+	
+	<td>
+	$FormHelper.TextField("category.name")
+	</td>
+</tr>
+
+</table>
+
+<p>
+	<input type="submit" value="Create" />
+</p>
+
+</form>
