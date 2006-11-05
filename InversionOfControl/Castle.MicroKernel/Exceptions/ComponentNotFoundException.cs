@@ -18,21 +18,36 @@ namespace Castle.MicroKernel
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for ComponentNotFoundException.
+	/// Exception threw when a request for a component
+	/// cannot be satisfied because the component does not
+	/// exist in the container
 	/// </summary>
 	[Serializable]
 	public class ComponentNotFoundException : ApplicationException
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComponentNotFoundException"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
 		public ComponentNotFoundException(String name) : 
 			base( String.Format("No component for key {0} was found", name) )
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComponentNotFoundException"/> class.
+		/// </summary>
+		/// <param name="service">The service.</param>
 		public ComponentNotFoundException(Type service) : 
 			base( String.Format("No component for supporting the service {0} was found", service.FullName) )
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComponentNotFoundException"/> class.
+		/// </summary>
+		/// <param name="info">The object that holds the serialized object data.</param>
+		/// <param name="context">The contextual information about the source or destination.</param>
 		public ComponentNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}

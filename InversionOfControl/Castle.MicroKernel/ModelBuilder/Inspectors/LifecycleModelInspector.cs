@@ -40,6 +40,10 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		/// <param name="model"></param>
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
+			if (model == null)
+			{
+				throw new ArgumentNullException("model");
+			}
 			if (typeof (IInitializable).IsAssignableFrom(model.Implementation))
 			{
 				model.LifecycleSteps.Add( LifecycleStepType.Commission, InitializationConcern.Instance );

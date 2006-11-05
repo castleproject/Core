@@ -52,6 +52,8 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
+			if (model == null) throw new ArgumentNullException("model");
+
 			if (model.Configuration == null || model.Implementation == null) return;
 
 			IConfiguration methodsNode = model.Configuration.Children[ObtainNodeName()];

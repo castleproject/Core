@@ -435,6 +435,7 @@
                 />
                 <File
                     RelPath = "ModelBuilder\Inspectors\GenericInspector.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

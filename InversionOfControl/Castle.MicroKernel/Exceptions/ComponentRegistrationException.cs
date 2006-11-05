@@ -18,15 +18,25 @@ namespace Castle.MicroKernel
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for ComponentRegistrationException.
+	/// Exception threw when there is a problem
+	/// registering a component
 	/// </summary>
 	[Serializable]
 	public class ComponentRegistrationException : ApplicationException
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComponentRegistrationException"/> class.
+		/// </summary>
+		/// <param name="message">The message.</param>
 		public ComponentRegistrationException(string message) : base(message)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComponentRegistrationException"/> class.
+		/// </summary>
+		/// <param name="info">The object that holds the serialized object data.</param>
+		/// <param name="context">The contextual information about the source or destination.</param>
 		public ComponentRegistrationException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
