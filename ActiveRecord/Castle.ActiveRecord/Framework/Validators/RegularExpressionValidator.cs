@@ -29,9 +29,18 @@ namespace Castle.ActiveRecord.Framework.Validators
 		/// Initializes a new instance of the <see cref="RegularExpressionValidator"/> class.
 		/// </summary>
 		/// <param name="expression">The expression.</param>
-		public RegularExpressionValidator(String expression)
+		public RegularExpressionValidator(String expression) : this(expression, RegexOptions.Compiled)
 		{
-			_regexRule = new Regex(expression, RegexOptions.Compiled);
+		}
+		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RegularExpressionValidator"/> class.
+		/// </summary>
+		/// <param name="expression">The expression.</param>
+		/// <param name="options">The regular expression options.</param>
+		public RegularExpressionValidator(String expression, RegexOptions options)
+		{
+			_regexRule = new Regex(expression, options);
 		}
 
 		/// <summary>
