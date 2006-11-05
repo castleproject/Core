@@ -1,6 +1,12 @@
 Change history
 --------------
 
+Release Candidate 3
+===================
+
+- Introduced smtpPort, smtpUsername, smtpPassword configuration to <monorail> node
+
+
 Release Candidate 2
 ===================
 

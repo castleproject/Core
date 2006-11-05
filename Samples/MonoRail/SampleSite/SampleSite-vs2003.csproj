@@ -104,11 +104,6 @@
                     AssemblyName = "Castle.Components.Common.EmailSender"
                     HintPath = "..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.dll"
                 />
-                <Reference
-                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    HintPath = "..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
-                />
             </References>
         </Build>
         <Files>

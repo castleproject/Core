@@ -91,12 +91,6 @@
                     AssemblyFolderKey = "hklm\dn\castle"
                 />
                 <Reference
-                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
-                    AssemblyFolderKey = "hklm\dn\castle"
-                />
-                <Reference
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
                     HintPath = "..\..\..\..\..\..\build\net-1.1\debug\Castle.Core.dll"

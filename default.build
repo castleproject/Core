@@ -303,7 +303,10 @@
 	</target>
 
 	<target name="zip-samples-for-website" depends="init">
-		<zip zipfile="${root.dir}/InitializingAndConfiguring.zip">
+		<delete dir="${root.dir}/samplesforwebsite/" failonerror="false" />
+		<mkdir dir="${root.dir}/samplesforwebsite/" />
+		
+		<zip zipfile="${root.dir}/samplesforwebsite/InitializingAndConfiguring.zip">
 			<fileset basedir="${root.dir}/Samples/ActiveRecord/BlogSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -325,7 +328,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/TableHierarchy.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/TableHierarchy.zip">
 			<fileset basedir="${root.dir}/Samples/ActiveRecord/TableHierarchySample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -347,7 +350,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.WizardSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.WizardSample.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/WizardSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -372,7 +375,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.SimpleBindingSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.SimpleBindingSample.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/SimpleBindingSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -397,7 +400,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.DataBindSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.DataBindSample.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/DataBindSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -422,7 +425,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.SendingEmailSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.SendingEmailSample.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/SendingEmailSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -447,7 +450,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.ViewComponentSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.ViewComponentSample.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/ViewComponentSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -472,7 +475,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.AuthenticationUsingFilters.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.AuthenticationUsingFilters.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/AuthenticationUsingFilters">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -497,7 +500,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.AuthenticationUsingForms.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.AuthenticationUsingForms.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/AuthenticationUsingForms">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -522,7 +525,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.LocalizationSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.LocalizationSample.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/LocalizationSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -547,7 +550,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/MonoRail.FormHelperSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.FormHelperSample.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/FormHelperSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -573,7 +576,7 @@
 			</fileset>
 		</zip>
 
-		<zip zipfile="${root.dir}/MonoRail.GettingStartedSampleVS2003.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.GettingStartedSampleVS2003.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/GettingStartedSampleVS2003">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -599,7 +602,7 @@
 			</fileset>
 		</zip>
 
-		<zip zipfile="${root.dir}/MonoRail.GettingStartedSampleVS2005.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.GettingStartedSampleVS2005.zip">
 			<fileset basedir="${root.dir}/Samples/MonoRail/GettingStartedSampleVS2005">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -625,7 +628,34 @@
 			</fileset>
 		</zip>
 
-		<zip zipfile="${root.dir}/Windsor.TimeTracking.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/MonoRail.DynActProvSample.zip">
+			<fileset basedir="${root.dir}/Samples/MonoRail/DynActProvSample">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="**/*.resx" />
+				<include name="**/*.aspx" />
+				<include name="**/*.asax" />
+				<include name="*.snk" />
+				<exclude name="**/bin/*" />
+				<exclude name="**/bin/Debug/*" />
+				<exclude name="**/bin/Release/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**.user" />
+				<exclude name="**/_Resharper.*/*" />
+			</fileset>
+		</zip>
+		
+
+		<zip zipfile="${root.dir}/samplesforwebsite/Windsor.TimeTracking.zip">
 			<fileset basedir="${root.dir}/Samples/InversionOfControl/TimeTracking">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -650,7 +680,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/CustomTypeConverterSample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/CustomTypeConverterSample.zip">
 			<fileset basedir="${root.dir}/Samples/InversionOfControl/CustomTypeConverterSample">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -675,7 +705,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/FacilitySample2.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/FacilitySample2.zip">
 			<fileset basedir="${root.dir}/Samples/InversionOfControl/ExtendingSample2">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -700,7 +730,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/GettingStartedPart1.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/GettingStartedPart1.zip">
 			<fileset basedir="${root.dir}/Samples/InversionOfControl/GettingStarted/GettingStartedPart1">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -723,7 +753,7 @@
 			</fileset>
 		</zip>
 		
-		<zip zipfile="${root.dir}/KernelInOneEndPoint.Sample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/KernelInOneEndPoint.Sample.zip">
 			<fileset basedir="${root.dir}/Samples/Facilities/Remoting/KernelInOneEndPoint">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -744,7 +774,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/KernelOnBothEndPoints.Sample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/KernelOnBothEndPoints.Sample.zip">
 			<fileset basedir="${root.dir}/Samples/Facilities/Remoting/KernelOnBothEndPoints">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />
@@ -765,7 +795,7 @@
 				<exclude name="**/_Resharper.*/*" />
 			</fileset>
 		</zip>
-		<zip zipfile="${root.dir}/ContainersConnected.Sample.zip">
+		<zip zipfile="${root.dir}/samplesforwebsite/ContainersConnected.Sample.zip">
 			<fileset basedir="${root.dir}/Samples/Facilities/Remoting/ContainersConnected">
 				<include name="**/*.build" />
 				<include name="**/*.sln" />

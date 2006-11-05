@@ -15,14 +15,13 @@
 namespace Castle.MonoRail.Framework.Services
 {
 	using System;
-
 	using Castle.Components.Common.EmailSender;
-	using Castle.Components.Common.EmailSender.SmtpEmailSender;
+	using Castle.Components.Common.EmailSender.Smtp;
 	using Castle.Core;
 	using Castle.MonoRail.Framework.Configuration;
 
 	/// <summary>
-	/// Pendent
+	/// MonoRail internal email sender service
 	/// </summary>
 	public class MonoRailSmtpSender : IEmailSender, IServiceEnabledComponent
 	{
@@ -31,20 +30,24 @@ namespace Castle.MonoRail.Framework.Services
 		public MonoRailSmtpSender()
 		{
 		}
-		
+
 		#region IServiceEnabledComponent implementation
 
 		public void Service(IServiceProvider provider)
 		{
-			MonoRailConfiguration config = (MonoRailConfiguration) 
-				provider.GetService(typeof(MonoRailConfiguration));
-			
-			sender = new SmtpSender(config.SmtpConfig.Host);
+			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
 
-#if DOTNET2
-			// config.SmtpConfig.Username
-			// config.SmtpConfig.Password
-#endif
+			sender = new SmtpSender(config.SmtpConfig.Host);
+			sender.Port = config.SmtpConfig.Port;
+
+			if (config.SmtpConfig.Username != null && config.SmtpConfig.Username != String.Empty)
+			{
+				sender.UserName = config.SmtpConfig.Username;
+			}
+			if (config.SmtpConfig.Password != null && config.SmtpConfig.Password != String.Empty)
+			{
+				sender.Password = config.SmtpConfig.Password;
+			}
 		}
 
 		#endregion

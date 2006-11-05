@@ -23,7 +23,6 @@
 			<include name="Castle.Services.Logging.Log4netIntegration.dll"/>
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
-			<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			<include name="Boo.Lang.dll" />
 			<include name="Boo.Lang.Compiler.dll" />
 			<include name="Boo.Lang.Parser.dll" />

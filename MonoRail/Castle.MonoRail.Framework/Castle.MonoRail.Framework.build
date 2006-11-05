@@ -19,7 +19,6 @@
 			<include name="Castle.Core.dll" />
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
-			<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 		</assemblyfileset>
 		
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">

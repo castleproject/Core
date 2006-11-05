@@ -29,7 +29,7 @@ namespace Anakia
 				return String.Format("{0:#.##}", info.Length / 1024f).ToString();
 			}
 			
-			return "not found";
+			throw new Exception("File " + info.FullName + " was not found");
 		}
 		
 		public String RemoveOffset(String offset, String path)

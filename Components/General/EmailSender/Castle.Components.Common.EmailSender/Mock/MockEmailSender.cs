@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.Common.EmailSender.MockSender
+namespace Castle.Components.Common.EmailSender.Mock
 {
 	using System;
 

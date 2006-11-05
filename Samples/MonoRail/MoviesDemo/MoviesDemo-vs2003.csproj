@@ -127,12 +127,6 @@
                     HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.Components.Common.EmailSender.dll"
                     AssemblyFolderKey = "hklm\dn\castle"
                 />
-                <Reference
-                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
-                    HintPath = "C:\Program Files\CastleProject\Bin\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
-                    AssemblyFolderKey = "hklm\dn\castle"
-                />
             </References>
         </Build>
         <Files>
