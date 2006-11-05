@@ -12,21 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.Common.EmailSender2
+namespace Castle.Components.Common.EmailSender.MockSender
 {
 	using System;
-	using System.Collections;
 
 
-	public class MessageAttachmentCollection : CollectionBase
+	public class MockEmailSender : IEmailSender
 	{
-		public MessageAttachmentCollection()
+		public MockEmailSender()
 		{
 		}
 
-		public void Add(MessageAttachment attachment)
+		public void Send(String from, String to, String subject, String messageText)
 		{
-			InnerList.Add(attachment);
+			
+		}
+
+		public void Send(Message message)
+		{
+			
+		}
+
+		public void Send(Message[] messages)
+		{
+			
 		}
 	}
 }

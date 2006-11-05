@@ -79,10 +79,24 @@
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Castle.Components.Common.EmailSender.build"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "IEmailSender.cs"
                     SubType = "Code"
@@ -100,6 +114,16 @@
                 />
                 <File
                     RelPath = "MessageAttachmentCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Mock\MockEmailSender.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Smtp\SmtpSender.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

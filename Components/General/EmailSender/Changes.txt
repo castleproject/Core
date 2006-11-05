@@ -1,5 +1,14 @@
+Nov 5th, 2006
+-------------
+
+- Applied sradack's patch.
+- Refactored implementation to have just one project
+- Removed EmailSender2, DotNet2Sender, MockSender, MockSender2, SmtpEmailSender and Tests
+
+
 Oct 19, 2006
 ------------
+
 - Fixed a bug in the System.Net.Mail (.NET 2.0) version of the SmtpSender, regarding empty CC and BCC fields.
 - Also added some new configurable functionality for .NET 2.0:
   Ability to send emails asyncronously (AsyncSend property);

@@ -24,22 +24,22 @@ namespace Castle.Components.Common.EmailSender
 		/// <summary>
 		/// Sends a message. 
 		/// </summary>
-		/// <param name="from"></param>
-		/// <param name="to"></param>
-		/// <param name="subject"></param>
-		/// <param name="messageText"></param>
+		/// <param name="from">From field</param>
+		/// <param name="to">To field</param>
+		/// <param name="subject">e-mail's subject</param>
+		/// <param name="messageText">message's body</param>
 		void Send(String from, String to, String subject, String messageText);
 
 		/// <summary>
 		/// Sends a message. 
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param name="message">Message instance</param>
 		void Send(Message message);
 
 		/// <summary>
 		/// Sends multiple messages. 
 		/// </summary>
-		/// <param name="messages"></param>
+		/// <param name="messages">Array of messages</param>
 		void Send(Message[] messages);
 	}
 }

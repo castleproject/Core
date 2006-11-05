@@ -15,25 +15,40 @@
 namespace Castle.Components.Common.EmailSender
 {
 	using System;
+#if DOTNET2
 	using System.IO;
-
+#endif
+	
+#if !DOTNET2
 	public enum AttachmentEncoding
 	{
 		Base64,
 		UUEncode
 	}
-
+#endif
+	
 	/// <summary>
 	/// Represents a file attachment
 	/// </summary>
 	public class MessageAttachment
 	{
-		private readonly AttachmentEncoding encoding;
 		private readonly String fileName;
+#if DOTNET2
+		private readonly String mediaType;
+		private readonly Stream stream;
+#else
+		private AttachmentEncoding encoding;
+#endif
 
-		public MessageAttachment(AttachmentEncoding encoding, String fileName)
+#if DOTNET2
+		/// <summary>
+		/// Creates a new attachment
+		/// </summary>
+		/// <param name="mediaType">Look at System.Net.Mimie.MediaTypeNames for help.</param>
+		/// <param name="fileName">Path to the file.</param>
+		public MessageAttachment(String mediaType, String fileName)
 		{
-			this.encoding = encoding;
+			this.mediaType = mediaType;
 
 			if (fileName == null) throw new ArgumentNullException("fileName");
 
@@ -44,14 +59,76 @@ namespace Castle.Components.Common.EmailSender
 			this.fileName = fileName;
 		}
 
-		public AttachmentEncoding Encoding
+		/// <summary>
+		/// Creates a new attachment
+		/// </summary>
+		/// <param name="mediaType">Look at System.Net.Mime.MediaTypeNames for help.</param>
+		/// <param name="stream">File stream.</param>
+		public MessageAttachment(String mediaType, Stream stream)
 		{
-			get { return encoding; }
+			this.mediaType = mediaType;
+
+			if (stream == null)
+			{
+				throw new ArgumentNullException("stream");
+			}
+
+			this.stream = stream;
 		}
 
+#else
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MessageAttachment"/> class.
+		/// </summary>
+		/// <param name="fileName">The file name.</param>
+		/// <param name="encoding">The encoding.</param>
+		public MessageAttachment(string fileName, AttachmentEncoding encoding)
+		{
+			this.fileName = fileName;
+			this.encoding = encoding;
+		}
+		
+#endif
+		
+		/// <summary>
+		/// Gets the name of the file.
+		/// </summary>
+		/// <value>The name of the file.</value>
 		public String FileName
 		{
 			get { return fileName; }
 		}
+		
+#if DOTNET2
+
+		/// <summary>
+		/// Gets the type of the media.
+		/// </summary>
+		/// <value>The type of the media.</value>
+		public String MediaType
+		{
+			get { return mediaType; }
+		}
+
+		/// <summary>
+		/// Gets the stream.
+		/// </summary>
+		/// <value>The stream.</value>
+		public Stream Stream
+		{
+			get { return stream; }
+		}
+#else
+
+		/// <summary>
+		/// Gets the encoding.
+		/// </summary>
+		/// <value>The encoding.</value>
+		public AttachmentEncoding Encoding
+		{
+			get { return this.encoding; }
+		}
+#endif
 	}
 }

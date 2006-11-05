@@ -15,6 +15,7 @@
 namespace Castle.Components.Common.EmailSender
 {
 	using System;
+	using System.Net;
 	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -24,10 +25,19 @@ namespace Castle.Components.Common.EmailSender
 	/// </summary>
 	public enum Format
 	{
+		/// <summary>
+		/// The body is composed of html content
+		/// </summary>
 		Html,
+		/// <summary>
+		/// The body is pure text
+		/// </summary>
 		Text
 	}
 
+	/// <summary>
+	/// Message priority
+	/// </summary>
 	public enum MessagePriority
 	{
 		Normal,
@@ -35,6 +45,9 @@ namespace Castle.Components.Common.EmailSender
 		Low
 	}
 
+	/// <summary>
+	/// Abstracts an e-mail message
+	/// </summary>
 	public class Message
 	{
 		private String to;
@@ -46,12 +59,30 @@ namespace Castle.Components.Common.EmailSender
 		private Format format = Format.Text;
 		private Encoding encoding = Encoding.ASCII;
 		private IDictionary headers = new HybridDictionary();
-        private IDictionary fields = new HybridDictionary();
+		private IDictionary fields = new HybridDictionary();
 		private MessagePriority priority = MessagePriority.Normal;
 		private MessageAttachmentCollection attachments = new MessageAttachmentCollection();
-
+		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Message"/> class.
+		/// </summary>
 		public Message()
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Message"/> class.
+		/// </summary>
+		/// <param name="from">From header.</param>
+		/// <param name="to">To header.</param>
+		/// <param name="subject">The subject header.</param>
+		/// <param name="body">The message body.</param>
+		public Message(string from, string to, string subject, string body)
+		{
+			this.to = to;
+			this.from = from;
+			this.body = body;
+			this.subject = subject;
 		}
 
 		public String To
@@ -113,21 +144,14 @@ namespace Castle.Components.Common.EmailSender
 			get { return headers; }
 		}
 
-        public IDictionary Fields
-        {
-            get { return fields; }
-        }
+		public IDictionary Fields
+		{
+			get { return fields; }
+		}
 
 		public MessageAttachmentCollection Attachments
 		{
 			get { return attachments; }
 		}
-
-        public void AddAuthentication(string username, string password)
-        {
-            this.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1");
-            this.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", username);
-            this.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", password);
-        }
 	}
 }
