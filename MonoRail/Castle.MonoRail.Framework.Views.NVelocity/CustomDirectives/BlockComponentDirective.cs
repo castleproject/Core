@@ -22,8 +22,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	using System;
 	using System.Collections;
 
-	using Castle.MonoRail.Framework.Internal;
-
 	/// <summary>
 	/// Pendent
 	/// </summary>
@@ -38,13 +36,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
 		{
 			base.Init(rs, context, node);
-
-			foreach(SubSectionDirective section in sectionsCreated)
+		}
+		
+		protected override void ProcessSubSections()
+		{
+			foreach (SubSectionDirective section in sectionsCreated)
 			{
 				if (!Component.SupportsSection(section.Name))
 				{
 					throw new ViewComponentException(
-						String.Format("The section '{0}' is not supported by the ViewComponent '{1}'", 
+						String.Format("The section '{0}' is not supported by the ViewComponent '{1}'",
 							section.Name, ComponentName));
 				}
 

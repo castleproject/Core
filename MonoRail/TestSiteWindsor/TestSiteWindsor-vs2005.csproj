@@ -109,6 +109,14 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\Castle.MonoRail.Framework.Views.CompositeView\Castle.MonoRail.Framework.Views.CompositeView-vs2005.csproj">
+      <Project>{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}</Project>
+      <Name>Castle.MonoRail.Framework.Views.CompositeView-vs2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.MonoRail.Framework.Views.NVelocity\Castle.MonoRail.Framework.Views.NVelocity-vs2005.csproj">
+      <Project>{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}</Project>
+      <Name>Castle.MonoRail.Framework.Views.NVelocity-vs2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.WindsorExtension\Castle.MonoRail.WindsorExtension-vs2005.csproj">
       <Name>Castle.MonoRail.WindsorExtension-vs2005</Name>
       <Project>{6C51A1E3-7F20-4696-BFD6-829134678341}</Project>

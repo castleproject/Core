@@ -20,6 +20,19 @@ namespace TestSiteWindsor.Controllers
 
 	public class MyComponent : ViewComponent
 	{
+		public MyComponent()
+		{
+		}
+		
+		/// <summary>
+		/// Called by the framework once the component instance
+		/// is initialized
+		/// </summary>
+		public override void Initialize()
+		{
+			base.Initialize();
+		}
+
 		/// <summary>
 		/// Called by the framework so the component can 
 		/// render its content

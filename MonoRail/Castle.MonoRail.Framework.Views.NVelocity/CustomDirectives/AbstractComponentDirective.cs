@@ -30,7 +30,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	using System.Collections;
 
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Pendent
@@ -67,14 +66,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				String message = String.Format("Could not obtain component name from the #{0} directive", Name);
 				throw new ViewComponentException(message);
 			}
-
-			component = viewComponentFactory.Create(componentName);
-
-			contextAdapter = new NVelocityViewContextAdapter(componentName, node);
 		}
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
+			component = viewComponentFactory.Create(componentName);
+
+			contextAdapter = new NVelocityViewContextAdapter(componentName, node);
+
+			ProcessSubSections();
+
 			INode bodyNode = null;
 
 			IDictionary componentParams = CreateParameters(context, node);
@@ -101,6 +102,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			}
 
 			return true;
+		}
+
+		protected virtual void ProcessSubSections()
+		{
+			
 		}
 
 		protected virtual IDictionary CreateParameters(IInternalContextAdapter context, INode node)

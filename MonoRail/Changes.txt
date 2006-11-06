@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed problem with view components reported by Ernst Naezer. The problem
+  is that the view component were cached, and instances shared during 
+  template executions.
+
 - Introduced smtpPort, smtpUsername, smtpPassword configuration to <monorail> node
 
 

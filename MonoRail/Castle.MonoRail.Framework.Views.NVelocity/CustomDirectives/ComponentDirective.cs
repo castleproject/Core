@@ -18,8 +18,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
 	using System;
 
-	using Castle.MonoRail.Framework.Internal;
-
 	/// <summary>
 	/// Pendent
 	/// </summary>

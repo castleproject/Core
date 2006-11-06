@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			RegisterCustomDirectives();
 		}
 
-		protected virtual void RegisterCustomDirectives()
+		protected void RegisterCustomDirectives()
 		{
 			RegisterCustomDirective(typeof(BlockComponentDirective));
 			RegisterCustomDirective(typeof(ComponentDirective));
