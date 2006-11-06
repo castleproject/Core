@@ -135,46 +135,44 @@ namespace Castle.MicroKernel.ComponentActivator
 				return null;
 			}
 
-			if (Model.Constructors.BestCandidate != null)
-			{
-				return Model.Constructors.BestCandidate;
-			}
-
 			if (Model.Constructors.Count == 1)
 			{
 				return Model.Constructors.FewerArgumentsCandidate;
 			}
 
-			ConstructorCandidate winnerCandidate = null; 
+			ConstructorCandidate winnerCandidate = null;
 
+			int winnerPoints = 0;
+			
 			foreach(ConstructorCandidate candidate in Model.Constructors)
 			{
+				int candidatePoints = 0;
+				
 				foreach(DependencyModel dep in candidate.Dependencies)
 				{
 					if (CanSatisfyDependency(context, dep))
 					{
-						candidate.Points += 2;
+						candidatePoints += 2;
 					}
 					else
 					{
-						candidate.Points -= 2;
+						candidatePoints -= 2;
 					}
 				}
 
 				if (winnerCandidate == null) winnerCandidate = candidate;
 
-				if (winnerCandidate.Points < candidate.Points)
+				if (winnerPoints < candidatePoints)
 				{
 					winnerCandidate = candidate;
+					winnerPoints = candidatePoints;
 				}
 			}
 
 			if (winnerCandidate == null)
 			{
-				throw new ComponentActivatorException("Could not find eligible constructor.");
+				throw new ComponentActivatorException("Could not find eligible constructor for " + Model.Implementation.FullName);
 			}
-
-			Model.Constructors.BestCandidate = winnerCandidate;
 
 			return winnerCandidate;
 		}

@@ -246,6 +246,7 @@
     <Compile Include="SubContainers\SubContainersTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TransientMultiConstructorTestCase.cs" />
     <Compile Include="UnsatisfiedDependenciesTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

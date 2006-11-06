@@ -1,6 +1,18 @@
 RC 4
 ====
 
+- Fixed IOC-36 
+  "Transient components with multliple constructors throw 
+   unresolved dependency exceptions."
+
+  Removed best candidate reference, as the kernel is dynamic it should
+  not cache best constructors as components can be added or removed
+  at any time
+  
+  Removed Points from candidates, as in a multithreaded scenario
+  this would lead to failures
+  
+
 - Fixed IOC-34 
   "Cannot use types having their own base type as constructor argument"
 
