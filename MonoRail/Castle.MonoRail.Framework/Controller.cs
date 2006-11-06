@@ -180,6 +180,50 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether the request is a post.
+		/// </summary>
+		/// <value>
+		/// <see langword="true"/> if this request is a post; otherwise, <see langword="false"/>.
+		/// </value>
+		public bool IsPost
+		{
+			get { return context.Request.HttpMethod == "POST"; }
+		}
+		
+		/// <summary>
+		/// Gets a value indicating whether the request is a get.
+		/// </summary>
+		/// <value>
+		/// <see langword="true"/> if this request is a get; otherwise, <see langword="false"/>.
+		/// </value>
+		public bool IsGet
+		{
+			get { return context.Request.HttpMethod == "GET"; }
+		}
+		
+		/// <summary>
+		/// Gets a value indicating whether the request is a put.
+		/// </summary>
+		/// <value>
+		/// <see langword="true"/> if this request is a put; otherwise, <see langword="false"/>.
+		/// </value>
+		public bool IsPut
+		{
+			get { return context.Request.HttpMethod == "PUT"; }
+		}
+		
+		/// <summary>
+		/// Gets a value indicating whether the request is a head.
+		/// </summary>
+		/// <value>
+		/// <see langword="true"/> if this request is a head; otherwise, <see langword="false"/>.
+		/// </value>
+		public bool IsHead
+		{
+			get { return context.Request.HttpMethod == "HEAD"; }
+		}
+		
+		/// <summary>
 		/// Gets the controller's name.
 		/// </summary>
 		public String Name

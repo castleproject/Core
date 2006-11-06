@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Adapters
 	/// </summary>
 	public class RequestAdapter : IRequest
 	{
-		internal HttpRequest _request;
+		private HttpRequest _request;
 		private FileDictionaryAdapter _files;
 
 		public RequestAdapter( HttpRequest request )
@@ -44,6 +44,11 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _request.Url.IsLoopback; } 
 		}
 
+		public string HttpMethod
+		{
+			get { return _request.HttpMethod; }
+		}
+		
 		public Uri Uri
 		{
 			get { return _request.Url; }

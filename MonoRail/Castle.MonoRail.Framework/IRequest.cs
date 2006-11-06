@@ -30,6 +30,8 @@ namespace Castle.MonoRail.Framework
 
 		Uri Uri { get; }
 
+		String HttpMethod { get; }
+		
 		String RawUrl { get; }
 
 		String FilePath { get; }

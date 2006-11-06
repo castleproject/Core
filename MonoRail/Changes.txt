@@ -4,6 +4,12 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-158
+  "IRequest/Controller must expose the Http method"
+  
+  Added the following properties to the Controller class:
+    IsPost/IsGet/IsPut/IsHead
+
 - Fixed problem with view components reported by Ernst Naezer. The problem
   is that the view component were cached, and instances shared during 
   template executions.
