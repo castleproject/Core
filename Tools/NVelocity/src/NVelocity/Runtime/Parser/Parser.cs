@@ -145,15 +145,6 @@ namespace NVelocity.Runtime.Parser
 			return sn;
 		}
 
-		/// <summary>  This method sets the directives Hashtable
-		/// </summary>
-		/// <summary>  This method gets a Directive from the directives Hashtable
-		/// </summary>
-		public Directive GetDirective(String directive)
-		{
-			return directives.Create(directive, directiveStack);
-		}
-
 		/// <summary>  This method finds out of the directive exists in the directives
 		/// Hashtable.
 		/// </summary>
