@@ -28,69 +28,41 @@ namespace NVelocity.Runtime.Directive
 		private bool init = false;
 		private String[] callingArgs;
 		private int[] callingArgTypes;
-		private Hashtable proxyArgHash = new Hashtable();
+		private Hashtable proxyArgHash;
+
+		public VelocimacroProxy()
+		{
+			proxyArgHash = new Hashtable();
+		}
 		
 		/// <summary>
-		/// The name of this Velocimacro.
+		/// The major meat of VelocimacroProxy, init() checks the # of arguments, 
+		/// patches the macro body, renders the macro into an AST, and then inits 
+		/// the AST, so it is ready for quick rendering.  Note that this is only 
+		/// AST dependant stuff. Not context.
 		/// </summary>
-		public override String Name
+		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
 		{
-			get { return macroName; }
-			set { macroName = value; }
-		}
+			base.Init(rs, context, node);
 
-		/// <summary>
-		/// Velocimacros are always LINE
-		/// type directives.
-		/// </summary>
-		public override DirectiveType Type
-		{
-			get { return DirectiveType.LINE; }
-		}
+			// how many args did we get?
+			int i = node.ChildrenCount;
 
-		/// <summary>
-		/// Sets the array of arguments specified in the macro definition
-		/// </summary>
-		public String[] ArgArray
-		{
-			set
+			// right number of args?
+			if (NumArgs != i)
 			{
-				argArray = value;
+				rsvc.Error("VM #" + macroName + ": error : too " + ((NumArgs > i) ? "few" : "many") + " arguments to macro. Wanted " +
+					NumArgs + " got " + i);
 
-				// get the arg count from the arg array.  remember that the arg array 
-				// has the macro name as it's 0th element
-				numMacroArgs = argArray.Length - 1;
+				return;
 			}
-		}
 
-		public SimpleNode NodeTree
-		{
-			set { nodeTree = value; }
-		}
+			// get the argument list to the instance use of the VM
+			callingArgs = getArgArray(node);
 
-		/// <summary>
-		/// Returns the number of ars needed for this VM
-		/// </summary>
-		public int NumArgs
-		{
-			get { return numMacroArgs; }
-		}
-
-		/// <summary>
-		/// Sets the orignal macro body.  This is simply the cat of the 
-		/// macroArray, but the Macro object creates this once during parsing, 
-		/// and everyone shares it.
-		/// 
-		/// Note : it must not be modified.
-		/// </summary>
-		public String Macrobody
-		{
-			set { macroBody = value; }
-		}
-
-		public String Namespace
-		{
-			set { this.ns = value; }
+			// now proxy each arg in the context
+			setupMacro(callingArgs, callingArgTypes);
+			return;
 		}
 
 		/// <summary>
@@ -142,42 +114,13 @@ namespace NVelocity.Runtime.Directive
 		}
 
 		/// <summary>
-		/// The major meat of VelocimacroProxy, init() checks the # of arguments, 
-		/// patches the macro body, renders the macro into an AST, and then inits 
-		/// the AST, so it is ready for quick rendering.  Note that this is only 
-		/// AST dependant stuff. Not context.
-		/// </summary>
-		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
-		{
-			base.Init(rs, context, node);
-
-			// how many args did we get?
-			int i = node.ChildrenCount;
-
-			// right number of args?
-			if (NumArgs != i)
-			{
-				rsvc.Error("VM #" + macroName + ": error : too " + ((NumArgs > i) ? "few" : "many") + " arguments to macro. Wanted " +
-				           NumArgs + " got " + i);
-
-				return;
-			}
-
-			// get the argument list to the instance use of the VM
-			callingArgs = getArgArray(node);
-
-			// now proxy each arg in the context
-			setupMacro(callingArgs, callingArgTypes);
-			return;
-		}
-
-		/// <summary>
 		/// basic VM setup.  Sets up the proxy args for this
 		/// use, and parses the tree
 		/// </summary>
 		public bool setupMacro(String[] callArgs, int[] callArgTypes)
 		{
 			setupProxyArgs(callArgs, callArgTypes);
+			
 			parseTree(callArgs);
 
 			return true;
@@ -283,6 +226,69 @@ namespace NVelocity.Runtime.Directive
 				i++;
 			}
 			return args;
+		}
+		
+		/// <summary>
+		/// The name of this Velocimacro.
+		/// </summary>
+		public override String Name
+		{
+			get { return macroName; }
+			set { macroName = value; }
+		}
+
+		/// <summary>
+		/// Velocimacros are always LINE
+		/// type directives.
+		/// </summary>
+		public override DirectiveType Type
+		{
+			get { return DirectiveType.LINE; }
+		}
+
+		/// <summary>
+		/// Sets the array of arguments specified in the macro definition
+		/// </summary>
+		public String[] ArgArray
+		{
+			set
+			{
+				argArray = value;
+
+				// get the arg count from the arg array.  remember that the arg array 
+				// has the macro name as it's 0th element
+				numMacroArgs = argArray.Length - 1;
+			}
+		}
+
+		public SimpleNode NodeTree
+		{
+			set { nodeTree = value; }
+		}
+
+		/// <summary>
+		/// Returns the number of ars needed for this VM
+		/// </summary>
+		public int NumArgs
+		{
+			get { return numMacroArgs; }
+		}
+
+		/// <summary>
+		/// Sets the orignal macro body.  This is simply the cat of the 
+		/// macroArray, but the Macro object creates this once during parsing, 
+		/// and everyone shares it.
+		/// 
+		/// Note : it must not be modified.
+		/// </summary>
+		public String Macrobody
+		{
+			set { macroBody = value; }
+		}
+
+		public String Namespace
+		{
+			set { this.ns = value; }
 		}
 	}
 }
