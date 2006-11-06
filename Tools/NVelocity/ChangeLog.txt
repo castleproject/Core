@@ -1,4 +1,7 @@
 
+- Fixed NVELOCITY-5
+  "Property name look up should not be case sensitive"
+
 - Added support for calling methods and properties defined on the interfaces a class implements.
   The interface member will have lower priority when deciding against plain class members.
 

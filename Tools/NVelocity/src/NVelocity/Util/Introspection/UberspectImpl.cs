@@ -20,6 +20,16 @@ namespace NVelocity.Util.Introspection
 	public class UberspectImpl : IUberspect, UberspectLoggable
 	{
 		/// <summary>
+		/// Our runtime logger.
+		/// </summary>
+		private IRuntimeLogger rlog;
+
+		/// <summary>
+		/// the default Velocity introspector
+		/// </summary>
+		private static Introspector introspector;
+
+		/// <summary>
 		/// Sets the runtime logger - this must be called before anything
 		/// else besides init() as to get the logger.  Makes the pull
 		/// model appealing...
@@ -32,16 +42,6 @@ namespace NVelocity.Util.Introspection
 				introspector = new Introspector(rlog);
 			}
 		}
-
-		/// <summary>
-		/// Our runtime logger.
-		/// </summary>
-		private IRuntimeLogger rlog;
-
-		/// <summary>
-		/// the default Velocity introspector
-		/// </summary>
-		private static Introspector introspector;
 
 		/// <summary>
 		/// init - does nothing - we need to have setRuntimeLogger

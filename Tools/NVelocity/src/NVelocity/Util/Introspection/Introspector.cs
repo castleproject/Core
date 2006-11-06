@@ -2,7 +2,6 @@ namespace NVelocity.Util.Introspection
 {
 	using System;
 	using System.Reflection;
-
 	using NVelocity.Runtime;
 
 	/// <summary> This basic function of this class is to return a Method
@@ -29,11 +28,6 @@ namespace NVelocity.Util.Introspection
 	/// </summary>
 	public class Introspector : IntrospectorBase
 	{
-		/// <summary>  define a public string so that it can be looked for
-		/// if interested
-		/// </summary>
-		public const String CACHEDUMP_MSG = "Introspector : detected classloader change. Dumping cache.";
-
 		/// <summary>  our engine runtime services
 		/// </summary>
 		private IRuntimeLogger rlog = null;
@@ -42,7 +36,7 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public Introspector(IRuntimeLogger r)
 		{
-			this.rlog = r;
+			rlog = r;
 		}
 
 		/// <summary>
@@ -63,12 +57,12 @@ namespace NVelocity.Util.Introspection
 			{
 				return base.GetMethod(c, name, parameters);
 			}
-			catch (AmbiguousException)
+			catch(AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
 				String msg = "Introspection Error : Ambiguous method invocation " + name + "( ";
 
-				for (int i = 0; i < parameters.Length; i++)
+				for(int i = 0; i < parameters.Length; i++)
 				{
 					if (i > 0)
 						msg = msg + ", ";
@@ -98,23 +92,13 @@ namespace NVelocity.Util.Introspection
 			{
 				return base.GetProperty(c, name);
 			}
-			catch (AmbiguousException)
+			catch(AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
 				String msg = "Introspection Error : Ambiguous property invocation " + name + " for class " + c;
 				rlog.Error(msg);
 			}
 			return null;
-		}
-
-
-		/// <summary> Clears the classmap and classname
-		/// caches, and logs that we did so
-		/// </summary>
-		protected internal override void ClearCache()
-		{
-			base.ClearCache();
-			rlog.Info(CACHEDUMP_MSG);
 		}
 	}
 }

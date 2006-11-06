@@ -57,7 +57,7 @@ namespace NVelocity.Util.Introspection
 
 			ClassMap classMap = null;
 
-			lock (classMethodMaps)
+			lock(classMethodMaps)
 			{
 				classMap = (ClassMap) classMethodMaps[c];
 
@@ -81,7 +81,6 @@ namespace NVelocity.Util.Introspection
 			return classMap.FindMethod(name, parameters);
 		}
 
-
 		/// <summary>
 		/// Gets the method defined by <code>name</code>
 		/// for the Class <code>c</code>.
@@ -96,7 +95,7 @@ namespace NVelocity.Util.Introspection
 
 			ClassMap classMap = null;
 
-			lock (classMethodMaps)
+			lock(classMethodMaps)
 			{
 				classMap = (ClassMap) classMethodMaps[c];
 
@@ -106,14 +105,6 @@ namespace NVelocity.Util.Introspection
 
 				if (classMap == null)
 				{
-					if (cachedClassNames.Contains(c.FullName))
-					{
-						// we have a map for a class with same name, but not
-						// this class we are looking at.  This implies a 
-						// classloader change, so dump
-						ClearCache();
-					}
-
 					classMap = CreateClassMap(c);
 				}
 			}
@@ -141,12 +132,12 @@ namespace NVelocity.Util.Introspection
 		protected virtual internal void ClearCache()
 		{
 			// since we are synchronizing on this
-	    // object, we have to clear it rather than
-	    // just dump it.
+			// object, we have to clear it rather than
+			// just dump it.
 			classMethodMaps.Clear();
 
 			// for speed, we can just make a new one
-	    // and let the old one be GC'd
+			// and let the old one be GC'd
 			cachedClassNames = new ArrayList();
 		}
 	}
