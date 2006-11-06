@@ -1,3 +1,20 @@
+- Fixed NVELOCITY-7
+  "Dictionary support should support interpolation"
+
+  Now it works the following way
+
+  key='value' -> value is treated as String
+  key=1       -> value is converted to int
+  key=1.2     -> value is converted to single
+  key='1'     -> value is treated as String
+
+  Interpolation:
+
+  The following is supported:
+
+  $key='value'     -> $key will be evaluated (cannot be evaluated to null)
+  key=$value       -> value is evaluated and the object is added (not converted to string)
+  key='some$value' -> value is evaluated and concatenated with the literal value
 
 - Fixed NVELOCITY-5
   "Property name look up should not be case sensitive"
