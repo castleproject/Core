@@ -6,6 +6,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4FD720F1-84A6-4053-89AE-58E7371BE6EA}</ProjectGuid>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -69,4 +70,7 @@
     <Content Include="App.config" />
   </ItemGroup>
   <Import Project="$(BooBinPath)\Boo.Microsoft.Build.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy /v /y $(MSBuildProjectDirectory)\App.config $(BuildDir)\Castle.MonoRail.Views.Brail.Tests.dll.config</PreBuildEvent>
+  </PropertyGroup>
 </Project>
