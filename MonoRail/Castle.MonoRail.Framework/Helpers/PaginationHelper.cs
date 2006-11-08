@@ -276,7 +276,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public abstract class AbstractPage : IPaginatedPage
 	{
-		private int firstItem, lastItem, totalItems;
+		private int firstItem, lastItem, totalItems, pageSize;
 		private int previousIndex, nextIndex, lastIndex, curIndex;
 		private bool hasPrev, hasNext, hasFirst, hasLast;
 
@@ -304,6 +304,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			previousIndex = curPage - 1;
 			nextIndex = curPage + 1;
 			lastIndex = count == -1 ? -1 : count / pageSize;
+			
+			this.pageSize = pageSize;
 	
 			if (count != -1 && count / (float) pageSize > lastIndex)
 			{
@@ -373,6 +375,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		public int TotalItems
 		{
 			get { return totalItems; }
+		}
+
+		/// <summary>
+		/// Gets the size of the page.
+		/// </summary>
+		/// <value>The size of the page.</value>
+		public int PageSize
+		{
+			get { return this.pageSize; }
 		}
 
 		/// <summary>

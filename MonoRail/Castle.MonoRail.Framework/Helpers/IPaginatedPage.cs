@@ -65,6 +65,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		int TotalItems { get; }
 
 		/// <summary>
+		/// Gets the size of the page.
+		/// </summary>
+		/// <value>The size of the page.</value>
+		int PageSize { get; }
+
+		/// <summary>
 		/// Returns true if a previous page 
 		/// is accessible from this page
 		/// </summary>
