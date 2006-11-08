@@ -16,6 +16,8 @@ Release Candidate 3
 
 - Introduced smtpPort, smtpUsername, smtpPassword configuration to <monorail> node
 
+- Introduced a PageSize property on the IPaginatedPage.
+
 
 Release Candidate 2
 ===================
