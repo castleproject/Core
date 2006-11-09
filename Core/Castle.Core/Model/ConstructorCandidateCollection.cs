@@ -16,7 +16,6 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
-    using System.Reflection;
 
 	/// <summary>
 	/// Collection of <see cref="ConstructorCandidate"/>
@@ -25,7 +24,6 @@ namespace Castle.Core
 	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
 	{
 		private ConstructorCandidate fewerArgumentsCandidate;
-		private ConstructorCandidate bestCandidate;
 
 		/// <summary>
 		/// Adds the specified candidate.
@@ -56,16 +54,6 @@ namespace Castle.Core
 		public ConstructorCandidate FewerArgumentsCandidate
 		{
 			get { return fewerArgumentsCandidate; }
-		}
-
-		/// <summary>
-		/// Gets or sets the best candidate.
-		/// </summary>
-		/// <value>The best candidate.</value>
-		public ConstructorCandidate BestCandidate
-		{
-			get { return bestCandidate; }
-			set { bestCandidate = value; }
 		}
 
 		/// <summary>

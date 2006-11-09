@@ -26,7 +26,6 @@ namespace Castle.Core
 	{
 		private ConstructorInfo constructorInfo;
 		private DependencyModel[] dependencies;
-		private int points;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConstructorCandidate"/> class.
@@ -55,16 +54,6 @@ namespace Castle.Core
 		public DependencyModel[] Dependencies
 		{
 			get { return dependencies; }
-		}
-
-		/// <summary>
-		/// Gets or sets the points (used to decided the constructor to use)
-		/// </summary>
-		/// <value>The points.</value>
-		public int Points
-		{
-			get { return points; }
-			set { points = value; }
 		}
 	}
 }
