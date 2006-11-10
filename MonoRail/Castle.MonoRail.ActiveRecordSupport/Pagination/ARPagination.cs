@@ -70,7 +70,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		/// <param name="pageSize">The page size</param>
 		/// <param name="query">The query</param>
 		/// <param name="useEnumerate">If true, calls <see cref="SimpleQuery{T}.Enumerate()"/> instead of <see cref="SimpleQuery{T}.Execute()"/>.</param>
-		public IPaginatedPage CreatePagination<T>(int pageSize, SimpleQuery<T> query, bool useEnumerate)
+		public static IPaginatedPage CreatePagination<T>(int pageSize, SimpleQuery<T> query, bool useEnumerate)
 		{
 			return CreatePagination(pageSize, new SimpleQueryPaginableWrapper<T>(query, useEnumerate));
 		}
