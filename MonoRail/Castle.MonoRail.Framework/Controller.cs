@@ -19,12 +19,10 @@ namespace Castle.MonoRail.Framework
 	using System.Text;
 	using System.Web;
 	using System.Reflection;
-	using System.Threading;
 	using System.Collections;
 	using System.Collections.Specialized;
 
 	using Castle.Components.Common.EmailSender;
-	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Helpers;
@@ -39,34 +37,24 @@ namespace Castle.MonoRail.Framework
 		#region Fields
 
 		/// <summary>
+		/// Holds the request/context information
+		/// </summary>
+		internal IRailsEngineContext context;
+
+		/// <summary>
 		/// The reference to the <see cref="IViewEngine"/> instance
 		/// </summary>
 		internal IViewEngine viewEngine;
 
 		/// <summary>
-		/// Holds the request/context information
-		/// </summary>
-		internal IRailsEngineContext context;
-		
-		/// <summary>
 		/// Logger instance. Should never be null
 		/// </summary>
-		private ILogger logger = NullLogger.Instance;
+		internal ILogger logger = NullLogger.Instance;
 
 		/// <summary>
 		/// Holds information to pass to the view
 		/// </summary>
 		private IDictionary bag = new HybridDictionary();
-
-		/// <summary>
-		/// Holds the filters associated with the action
-		/// </summary>
-		private FilterDescriptor[] filters;
-
-		/// <summary>
-		/// Reference to the <see cref="IFilterFactory"/> instance
-		/// </summary>
-		internal IFilterFactory filterFactory;
 
 		/// <summary>
 		/// The area name which was used to access this controller
@@ -82,7 +70,7 @@ namespace Castle.MonoRail.Framework
 		/// The view name selected to be rendered after the execution 
 		/// of the action
 		/// </summary>
-		private String _selectedViewName;
+		internal String _selectedViewName;
 
 		/// <summary>
 		/// The layout name that the view engine should use
@@ -97,27 +85,27 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// The helper instances collected
 		/// </summary>
-		private IDictionary helpers = null;
+		internal IDictionary helpers = null;
 
 		/// <summary>
 		/// The resources associated with this controller
 		/// </summary>
-		private ResourceDictionary resources = null;
+		internal ResourceDictionary resources = null;
 
 		/// <summary>
 		/// Reference to the <see cref="IResourceFactory"/> instance
 		/// </summary>
-		private IResourceFactory resourceFactory;
+		// internal IResourceFactory resourceFactory;
 
 		internal IDictionary _dynamicActions = new HybridDictionary(true);
 
-		internal IScaffoldingSupport scaffoldSupport;
+		// internal IScaffoldingSupport scaffoldSupport;
 
 		internal bool directRenderInvoked;
 
-		private ControllerMetaDescriptor metaDescriptor;
+		internal ControllerMetaDescriptor metaDescriptor;
 
-		private IServiceProvider serviceProvider;
+		internal IServiceProvider serviceProvider;
 
 		private bool isPostBack = false;
      
@@ -130,7 +118,6 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public Controller()
 		{
-			
 		}
 
 		#endregion
@@ -171,12 +158,7 @@ namespace Castle.MonoRail.Framework
 		/// <value>The helpers.</value>
 		public IDictionary Helpers
 		{
-			get
-			{
-				if (helpers == null) CreateAndInitializeHelpers();
-
-				return helpers;
-			}
+			get { return helpers; }
 		}
 
 		/// <summary>
@@ -311,7 +293,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets the web context of ASP.NET API.
 		/// </summary>
-		protected HttpContext HttpContext
+		protected internal HttpContext HttpContext
 		{
 			get { return context.UnderlyingContext; }
 		}
@@ -387,7 +369,12 @@ namespace Castle.MonoRail.Framework
 			get { return isPostBack; }
 		}
 
-		private void DetermineIfPostBack()
+		internal void InternalInitialize()
+		{
+			Initialize();
+		}
+
+		internal void DetermineIfPostBack()
 		{
 			NameValueCollection fields = Context.Params;
 			isPostBack = (fields["__VIEWSTATE"] != null) || (fields["__EVENTTARGET"] != null);
@@ -806,41 +793,11 @@ namespace Castle.MonoRail.Framework
 
 		#region Core members
 
-		/// <summary>
-		/// Returns the current controller instance
-		/// </summary>
-		/// <remarks>
-		/// The <see cref="Controller.Process"/> is responsible
-		/// for adding the controller instance.
-		/// </remarks>
-		internal static Controller CurrentController
-		{
-			get { return (Controller) HttpContext.Current.Items["mr.controller"] ; }
-		}
-
-		internal bool ShouldCheckWhetherClientHasDisconnected
-		{
-			get 
-			{ 
-				MonoRailConfiguration conf = (MonoRailConfiguration) 
-					context.GetService(typeof(MonoRailConfiguration)); 
-				return conf.CheckClientIsConnected;
-			}
-		}
-
-		protected internal IServiceProvider ServiceProvider
-		{
-			get { return serviceProvider; }
-		}
-
 		internal void InitializeFieldsFromServiceProvider(IRailsEngineContext context)
 		{
 			serviceProvider = context;
 			
 			viewEngine = (IViewEngine) serviceProvider.GetService(typeof(IViewEngine));
-			filterFactory = (IFilterFactory) serviceProvider.GetService(typeof(IFilterFactory));
-			resourceFactory = (IResourceFactory) serviceProvider.GetService(typeof(IResourceFactory));
-			scaffoldSupport = (IScaffoldingSupport) serviceProvider.GetService(typeof(IScaffoldingSupport));
 
 			IControllerDescriptorProvider controllerDescriptorBuilder = (IControllerDescriptorProvider)
 				serviceProvider.GetService( typeof(IControllerDescriptorProvider) );
@@ -864,46 +821,22 @@ namespace Castle.MonoRail.Framework
 			_controllerName = controllerName;
 		}
 
+		/// <summary>
+		/// Sets the evaluated action.
+		/// </summary>
+		/// <param name="actionName">Name of the action.</param>
 		internal void SetEvaluatedAction(String actionName)
 		{
 			_evaluatedAction = actionName;
 		}
 
 		/// <summary>
-		/// Method invoked by the engine to start 
-		/// the controller process. 
+		/// Gets the service provider.
 		/// </summary>
-		internal void Process(IRailsEngineContext context, 
-		                      String areaName, String controllerName, String actionName)
-		{        
-			InitializeFieldsFromServiceProvider(context);
-
-			InitializeControllerState(areaName, controllerName, actionName);
-
-			HttpContext.Items["mr.controller"] = this;
-
-#if ALLOWTEST
-			HttpContext.Items["mr.flash"] = Flash;
-			HttpContext.Items["mr.session"] = Session;
-			HttpContext.Items["mr.propertybag"] = PropertyBag;
-#endif
-
-			if (metaDescriptor.Filters.Length != 0)
-			{
-				filters = CopyFilterDescriptors();
-			}
-
-			LayoutName = ObtainDefaultLayoutName();
-
-			ProcessScaffoldIfPresent();
-
-			ActionProviderUtil.RegisterActions(this);
-
-			DetermineIfPostBack();
-
-			Initialize();
-
-			InternalSend(actionName, null);
+		/// <value>The service provider.</value>
+		protected internal IServiceProvider ServiceProvider
+		{
+			get { return serviceProvider; }
 		}
 
 		/// <summary>
@@ -950,6 +883,7 @@ namespace Castle.MonoRail.Framework
 		{
 			// If a redirect was sent there's no point in
 			// wasting processor cycles
+			
 			if (Response.WasRedirected) return;
 			
 			if (logger.IsDebugEnabled)
@@ -962,276 +896,19 @@ namespace Castle.MonoRail.Framework
 			// Nothing to do if the peer disconnected
 			if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
 
-			// Record the action
-			SetEvaluatedAction(action);
+			IControllerLifecycleExecutor executor =
+				(IControllerLifecycleExecutor) context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
 
-			// Record the default view for this area/controller/action
-			RenderView(action);
-
-			// If we have an HttpContext available, store the original view name
-			if (HttpContext != null)
+			if (executor.SelectAction(action, Name))
 			{
-				if (!HttpContext.Items.Contains(Constants.OriginalViewKey))
-				{
-					HttpContext.Items[Constants.OriginalViewKey] = _selectedViewName;
-				}
+				executor.PerformErrorHandling();
+
+				return;
 			}
-
-			// Look for the target method
-
-			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, context.Request, actionArgs);
-
-			// If we couldn't find a method for this action, look for a dynamic action
-			IDynamicAction dynAction = null;
 			
-			if (method == null)
-			{
-				dynAction = DynamicActions[action] as IDynamicAction;
-
-				if (dynAction == null)
-				{
-					method = FindOutDefaultMethod(actionArgs);
-
-					if (method == null)
-					{
-						throw new ControllerException(String.Format("Unable to locate action [{0}] on controller [{1}].", action, Name));
-					}
-				}
-			}
-			else
-			{
-				ActionMetaDescriptor actionDesc = MetaDescriptor.GetAction(method);
-
-				// Overrides the current layout, if the action specifies one
-				if (actionDesc.Layout != null)
-				{
-					LayoutName = actionDesc.Layout.LayoutName;
-				}
-
-				if (actionDesc.AccessibleThrough != null)
-				{
-					string verbName = actionDesc.AccessibleThrough.Verb.ToString();
-					string requestType = Context.RequestType;
-
-					if (String.Compare(verbName, requestType, true) != 0)
-					{
-						throw new ControllerException(string.Format("Access to the action [{0}] " + 
-							"on controller [{1}] is not allowed by the http verb [{2}].", 
-							action.ToLower(), Name.ToLower(), requestType));
-					}
-				}
-			}
-
-			HybridDictionary filtersToSkip = new HybridDictionary();
-
-			bool skipFilters = ShouldSkip(method, filtersToSkip);
-			bool hasError = false;
-			Exception exceptionToThrow = null;
-
-			try
-			{
-				// Nothing to do if the peer disconnected
-				if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
-
-				// If we are supposed to run the filters...
-				if (!skipFilters)
-				{
-					// ...run them. If they fail...
-					if (!ProcessFilters(ExecuteEnum.BeforeAction, filtersToSkip))
-					{
-						// Record that they failed.
-						hasError = true;
-					}
-				}
-
-				// If we haven't failed anywhere yet...
-				if (!hasError)
-				{
-					CreateResources(method);
-
-					// Execute the method / dynamic action
-					if (method != null)
-					{
-						InvokeMethod(method, actionArgs);
-					}
-					else
-					{
-						dynAction.Execute(this);
-					}
-
-					if (!skipFilters)
-					{
-						// ...run the AfterAction filters. If they fail...
-						if (!ProcessFilters(ExecuteEnum.AfterAction, filtersToSkip))
-						{
-							// Record that they failed.
-							hasError = true;
-						}
-					}
-				}
-			}
-			catch(ThreadAbortException)
-			{
-				if (logger.IsErrorEnabled)
-				{
-					logger.Error("ThreadAbortException, process aborted");
-				}
-
-				hasError = true;
-			}
-			catch(Exception ex)
-			{
-				hasError = true;
-				
-				if (logger.IsErrorEnabled)
-				{
-					logger.Error("Exception during action process", ex);
-				}
-
-				// Try and perform the rescue
-				if (!PerformRescue(method, ex))
-				{
-					exceptionToThrow = ex;
-				}
-
-				RaiseOnActionExceptionOnExtension();
-			}
-
-			try
-			{
-				// Nothing to do if the peer disconnected
-				if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
-
-				// If we haven't failed anywhere and no redirect was issued
-				if (!hasError && !Response.WasRedirected)
-				{
-					// Render the actual view then cleanup
-					ProcessView();
-				}
-
-				if (exceptionToThrow != null)
-				{
-					throw new RailsException("Unhandled Exception while rendering view", exceptionToThrow);
-				}
-			}
-			finally
-			{
-				// Run the filters if required
-				if (!skipFilters)
-				{
-					ProcessFilters(ExecuteEnum.AfterRendering, filtersToSkip);
-				}
-
-				DisposeFilter();
-
-				ReleaseResources();
-			}
+			executor.ProcessSelectedAction(actionArgs);
 		}
 
-		/// <summary>
-		/// The following lines were added to handle _default processing
-		/// if present look for and load _default action method
-		/// <seealso cref="DefaultActionAttribute"/>
-		/// </summary>
-		private MethodInfo FindOutDefaultMethod(object[] methodArgs)
-		{
-			if (metaDescriptor.DefaultAction != null)
-			{
-				return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, context.Request, methodArgs);
-			}
-
-			return null;
-		}
-
-		protected virtual void CreateAndInitializeHelpers()
-		{
-			helpers = new HybridDictionary();
-			
-			// Custom helpers
-
-			foreach(HelperDescriptor helper in metaDescriptor.Helpers)
-			{
-				object helperInstance = Activator.CreateInstance(helper.HelperType);
-
-				IControllerAware aware = helperInstance as IControllerAware;
-
-				if (aware != null)
-				{
-					aware.SetController(this);
-				}
-
-				PerformAdditionalHelperInitialization(helperInstance);
-
-				if (helpers.Contains(helper.Name))
-				{
-					throw new ControllerException(String.Format("Found a duplicate helper " + 
-						"attribute named '{0}' on controller '{1}'", helper.Name, Name));
-				}
-
-				helpers.Add(helper.Name, helperInstance);
-			}
-
-			CreateStandardHelpers();
-		}
-
-		private void CreateStandardHelpers()
-		{
-			AbstractHelper[] builtInHelpers =
-				new AbstractHelper[]
-					{
-						new AjaxHelper(),
-						new EffectsFatHelper(), new Effects2Helper(),
-						new DateFormatHelper(), new HtmlHelper(),
-						new ValidationHelper(), new DictHelper(),
-						new PaginationHelper(), new FormHelper()
-					};
-
-			foreach(AbstractHelper helper in builtInHelpers)
-			{
-				helper.SetController(this);
-
-				String helperName = helper.GetType().Name;
-
-				if (!helpers.Contains(helperName))
-				{
-					helpers[helperName] = helper;
-				}
-				
-				PerformAdditionalHelperInitialization(helper);
-			}
-		}
-
-		private void PerformAdditionalHelperInitialization(object helperInstance)
-		{
-			IServiceEnabledComponent serviceEnabled = helperInstance as IServiceEnabledComponent;
-
-			if (serviceEnabled != null)
-			{
-				serviceEnabled.Service(serviceProvider);
-			}
-		}
-
-
-		/// <summary>
-		/// Invokes the scaffold support if the controller
-		/// is associated with a scaffold
-		/// </summary>
-		private void ProcessScaffoldIfPresent()
-		{
-			if (metaDescriptor.Scaffoldings.Count != 0)
-			{
-				if (scaffoldSupport == null)
-				{
-					String message = "You must enable scaffolding support on the " +
-						"configuration file, or, to use the standard ActiveRecord support " +
-						"copy the necessary assemblies to the bin folder.";
-
-					throw new RailsException(message);
-				}
-
-				scaffoldSupport.Process(this);
-			}
-		}
 
 		/// <summary>
 		/// Gives a chance to subclasses to format the action name properly
@@ -1243,7 +920,18 @@ namespace Castle.MonoRail.Framework
 		{
 			return action;
 		}
-		
+
+		private bool ShouldCheckWhetherClientHasDisconnected
+		{
+			get
+			{
+				MonoRailConfiguration conf = (MonoRailConfiguration)
+											 context.GetService(typeof(MonoRailConfiguration));
+
+				return conf.CheckClientIsConnected;
+			}
+		}
+
 		#endregion
 
 		#region Action Invocation
@@ -1256,7 +944,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="request"></param>
 		/// <param name="actionArgs"></param>
 		/// <returns></returns>
-		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, 
+		protected internal virtual MethodInfo SelectMethod(String action, IDictionary actions, 
 		                                          IRequest request, params object[] actionArgs)
 		{
 			return actions[action] as MethodInfo;
@@ -1267,7 +955,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="method"></param>
 		/// <param name="methodArgs"></param>
-		private void InvokeMethod(MethodInfo method, object[] methodArgs)
+		protected internal virtual void InvokeMethod(MethodInfo method, object[] methodArgs)
 		{
 			InvokeMethod(method, context.Request, methodArgs);
 		}
@@ -1278,250 +966,21 @@ namespace Castle.MonoRail.Framework
 		/// <param name="method"></param>
 		/// <param name="request"></param>
 		/// <param name="methodArgs"></param>
-		protected virtual void InvokeMethod(MethodInfo method, IRequest request, object[] methodArgs)
+		protected internal virtual void InvokeMethod(MethodInfo method, IRequest request, object[] methodArgs)
 		{
  			method.Invoke(this, new object[0]);
 		}
 	    
 		#endregion
 
-		#region Resources
-
-		protected virtual void CreateResources(MethodInfo method)
-		{
-			resources = new ResourceDictionary();
-
-			Assembly typeAssembly = GetType().Assembly;
-
-			foreach(ResourceDescriptor resource in metaDescriptor.Resources)
-			{
-				resources.Add(resource.Name, resourceFactory.Create(resource, typeAssembly));
-			}
-
-			if (method == null) return;
-
-			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
-
-			foreach(ResourceDescriptor resource in actionMeta.Resources)
-			{
-				resources[resource.Name] = resourceFactory.Create(resource, typeAssembly);
-			}
-		}
-
-		protected virtual void ReleaseResources()
-		{
-			if (resources == null) return;
-
-			foreach(IResource resource in resources.Values)
-			{
-				resourceFactory.Release(resource);
-			}
-		}
-
-		#endregion
-
-		#region Filters
-
-		protected internal bool ShouldSkip(MethodInfo method, IDictionary filtersToSkip)
-		{
-			if (method == null)
-			{
-				// Dynamic Action, run the filters if we have any
-				return (filters == null);
-			}
-
-			if (filters == null)
-			{
-				// No filters, so skip 
-				return true;
-			}
-
-			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
-
-			if (actionMeta.SkipFilters.Count == 0)
-			{
-				// Nothing against filters declared for this action
-				return false;
-			}
-
-			foreach(SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
-			{
-				// SkipAllFilters handling...
-				if (skipfilter.BlanketSkip) return true;
-
-				filtersToSkip[skipfilter.FilterType] = String.Empty;
-			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// Clones all Filter descriptors, in order to get a writable copy.
-		/// </summary>
-		protected internal FilterDescriptor[] CopyFilterDescriptors()
-		{
-			FilterDescriptor[] clone = (FilterDescriptor[]) metaDescriptor.Filters.Clone();
-
-			for (int i=0; i < clone.Length; i++)
-			{
-				clone[i] = (FilterDescriptor) clone[i].Clone();
-			}
-
-			return clone;
-		}
-
-		private bool ProcessFilters(ExecuteEnum when, IDictionary filtersToSkip)
-		{
-			foreach(FilterDescriptor desc in filters)
-			{
-				if (filtersToSkip.Contains(desc.FilterType)) continue;
-
-				if ((desc.When & when) != 0)
-				{
-					if (!ProcessFilter(when, desc))
-					{
-						return false;
-					}
-				}
-			}
-
-			return true;
-		}
-
-		private bool ProcessFilter(ExecuteEnum when, FilterDescriptor desc)
-		{
-			if (desc.FilterInstance == null)
-			{
-				desc.FilterInstance = filterFactory.Create(desc.FilterType);
-
-				IFilterAttributeAware filterAttAware = desc.FilterInstance as IFilterAttributeAware;
-
-				if (filterAttAware != null)
-				{
-					filterAttAware.Filter = desc.Attribute;
-				}
-			}
-
-			return desc.FilterInstance.Perform(when, context, this);
-		}
-
-		private void DisposeFilter()
-		{
-			if (filters == null) return;
-
-			foreach(FilterDescriptor desc in filters)
-			{
-				if (desc.FilterInstance != null)
-				{
-					filterFactory.Release(desc.FilterInstance);
-				}
-			}
-		}
-		#endregion
-
-		#region Views and Layout
-
-		protected virtual String ObtainDefaultLayoutName()
-		{
-			if (metaDescriptor.Layout != null)
-			{
-				return metaDescriptor.Layout.LayoutName;
-			}
-			else
-			{
-				String defaultLayout = String.Format("layouts/{0}", Name);
-				
-				if ( HasTemplate(defaultLayout) )
-				{
-					return Name;
-				}
-			}
-			return null;
-		}
-
-		private void ProcessView()
-		{
-			if (_selectedViewName != null)
-			{
-				viewEngine.Process(context, this, _selectedViewName);
-			}
-		}
-
-		#endregion
-
-		#region Rescue
-
-		protected virtual bool PerformRescue(MethodInfo method, Exception ex)
-		{		
-			context.LastException = (ex is TargetInvocationException) ? ex.InnerException : ex;
-			
-			// Dynamic action 
-			if (method == null) return false;
-
-			Type exceptionType = context.LastException.GetType();
-
-			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
-			
-			if (actionMeta.SkipRescue != null) return false;
-			
-			RescueDescriptor att = GetRescueFor(actionMeta.Rescues, exceptionType);
-			
-			if (att == null)
-			{
-				att = GetRescueFor(metaDescriptor.Rescues, exceptionType);
-
-				if (att == null) return false;
-			}
-				
-			try
-			{
-				_selectedViewName = Path.Combine("rescues", att.ViewName);
-				ProcessView();
-				return true;
-			}
-			catch (Exception exception)
-			{
-				// In this situation, the rescue view could not be found
-				// So we're back to the default error exibition
-				
-				if (logger.IsFatalErrorEnabled)
-				{
-					logger.FatalError("Failed to process rescue view. View name " + _selectedViewName, exception);
-				}
-			}
-
-			return false;
-		}
-
-		protected virtual RescueDescriptor GetRescueFor(IList rescues, Type exceptionType)
-		{
-			if (rescues == null || rescues.Count == 0) return null;
-			
-			RescueDescriptor bestCandidate = null;
-			
-			foreach(RescueDescriptor rescue in rescues)
-			{
-				if (rescue.ExceptionType == exceptionType)
-				{
-					return rescue;
-				}
-				else if (rescue.ExceptionType != null && 
-					rescue.ExceptionType.IsAssignableFrom(exceptionType))
-				{
-					bestCandidate = rescue;
-				}
-			}
-			
-			return bestCandidate;
-		}
-
-		#endregion
-
 		#region Lifecycle (overridables)
 
+		/// <summary>
+		/// Initializes this instance. Implementors 
+		/// can use this method to perform initialization
+		/// </summary>
 		protected virtual void Initialize()
 		{
-			
 		}
 
 		/// <summary>
@@ -1605,18 +1064,6 @@ namespace Castle.MonoRail.Framework
 		{
 			Message message = RenderMailMessage(templateName);
 			DeliverEmail(message);
-		}
-
-		#endregion
-
-		#region Extension
-
-		protected void RaiseOnActionExceptionOnExtension()
-		{
-			ExtensionManager manager = (ExtensionManager) 
-				ServiceProvider.GetService( typeof(ExtensionManager) );
-
-			manager.RaiseActionError(Context);
 		}
 
 		#endregion

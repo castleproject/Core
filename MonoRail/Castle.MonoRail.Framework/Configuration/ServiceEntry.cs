@@ -37,7 +37,8 @@ namespace Castle.MonoRail.Framework.Configuration
 		EmailTemplateService,
 		ControllerTree,
 		CacheProvider,
-		ScaffoldingSupport
+		ScaffoldingSupport,
+		ExecutorFactory
 	}
 
 	public class ServiceEntry : ISerializedConfig

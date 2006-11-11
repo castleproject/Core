@@ -95,12 +95,12 @@ namespace Castle.MonoRail.Framework
 		{
 			_wizardcontroller = wizardController;
 
-			context = wizardController.Context;
-
-			UrlInfo urlInfo = context.UrlInfo;
-
-			InitializeFieldsFromServiceProvider(wizardController.Context);
-			InitializeControllerState(urlInfo.Area, urlInfo.Controller, urlInfo.Action);
+//			context = wizardController.Context;
+//
+//			UrlInfo urlInfo = context.UrlInfo;
+//
+//			InitializeFieldsFromServiceProvider(wizardController.Context);
+//			InitializeControllerState(urlInfo.Area, urlInfo.Controller, urlInfo.Action);
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace Castle.MonoRail.Framework
 			return true;
 		}
 
-		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
+		protected internal override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
 		{
 			if (action == "RenderWizardView")
 			{

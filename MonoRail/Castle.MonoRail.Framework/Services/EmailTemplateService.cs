@@ -88,7 +88,10 @@ namespace Castle.MonoRail.Framework
 
 			IRailsEngineContext context = EngineContextModule.ObtainRailsEngineContext(HttpContext.Current);
 
-			Controller controller = Controller.CurrentController;
+			ControllerLifecycleExecutor executor = 
+				(ControllerLifecycleExecutor) context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
+			
+			Controller controller = executor.Controller;
 
 			if (controller == null)
 			{

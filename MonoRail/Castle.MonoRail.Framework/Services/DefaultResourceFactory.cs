@@ -72,7 +72,8 @@ namespace Castle.MonoRail.Framework.Services
 				             descriptor.Name, descriptor.AssemblyName, descriptor.ResourceName);
 			}
 			
-			ResourceManager rm = new ResourceManager(descriptor.ResourceName, resAssembly, descriptor.ResourceType);
+			ResourceManager rm = new ResourceManager(descriptor.ResourceName, 
+			                                         resAssembly, descriptor.ResourceType);
 
 			return new ResourceFacade(rm.GetResourceSet(culture, true, true));
 		}

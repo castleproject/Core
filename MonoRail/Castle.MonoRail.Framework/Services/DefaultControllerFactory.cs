@@ -38,6 +38,9 @@ namespace Castle.MonoRail.Framework.Services
 
 		private string[] assemblies;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultControllerFactory"/> class.
+		/// </summary>
 		public DefaultControllerFactory()
 		{
 		}
@@ -64,6 +67,11 @@ namespace Castle.MonoRail.Framework.Services
 		
 		#endregion
 
+		/// <summary>
+		/// Invoked by the framework in order to give a chance to
+		/// obtain other services
+		/// </summary>
+		/// <param name="provider">The service proviver</param>
 		public override void Service(IServiceProvider provider)
 		{
 			base.Service(provider);

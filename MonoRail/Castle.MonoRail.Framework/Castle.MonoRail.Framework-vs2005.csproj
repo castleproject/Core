@@ -183,6 +183,7 @@
     <Compile Include="ControllerException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ControllerLifecycleExecutor.cs" />
     <Compile Include="ControllerNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -268,6 +269,8 @@
     </Compile>
     <Compile Include="IControllerDescriptorProvider.cs" />
     <Compile Include="IControllerFactory.cs" />
+    <Compile Include="IControllerLifecycleExecutor.cs" />
+    <Compile Include="IControllerLifecycleExecutorFactory.cs" />
     <Compile Include="IControllerTree.cs" />
     <Compile Include="IFilterFactory.cs" />
     <Compile Include="IMonoRailHttpHandlerProvider.cs" />
@@ -387,6 +390,7 @@
     <Compile Include="Services\DefaultCacheProvider.cs" />
     <Compile Include="Services\DefaultControllerDescriptorProvider.cs" />
     <Compile Include="Services\DefaultControllerFactory.cs" />
+    <Compile Include="Services\DefaultControllerLifecycleExecutorFactory.cs" />
     <Compile Include="Services\DefaultControllerTree.cs" />
     <Compile Include="Services\DefaultFilterFactory.cs" />
     <Compile Include="Services\DefaultResourceFactory.cs" />

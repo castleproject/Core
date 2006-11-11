@@ -22,7 +22,6 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Security.Principal;
 	using System.Collections;
 	using System.Collections.Specialized;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
@@ -43,6 +42,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		private Flash _flash;
 		private UrlInfo _urlInfo;
 		private String _url;
+		private bool customSessionSet;
 
 		public DefaultRailsEngineContext(IServiceContainer parent, HttpContext context) : base(parent)
 		{
@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				Uri referrer = _context.Request.UrlReferrer;
 
-				if ( referrer != null )
+				if (referrer != null)
 				{
 					return referrer.ToString();
 				}
@@ -102,34 +102,13 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get
 			{
-				if ( _session == null )
-				{
-					object session;
-					
-					if( _context.Items["AspSession"] != null )
-					{
-						// Windows and Testing
-						session = _context.Items["AspSession"];
-					}
-					else
-					{
-						// Mono
-						session = _context.Session;
-					}
-
-					if ( session is HttpSessionState )
-					{
-						_session = new SessionAdapter( session as HttpSessionState );
-					}
-					else
-					{
-						_session = (IDictionary) session;
-					}
-				}
-
 				return _session;
 			}
-			set { _session = value; }
+			set
+			{
+				customSessionSet = true;
+				_session = value;
+			}
 		}
 
 		public IRequest Request
@@ -163,14 +142,14 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				if (_flash == null)
 				{
-					_flash = new Flash( (Flash) Session[Flash.FlashKey] );
+					_flash = new Flash((Flash) Session[Flash.FlashKey]);
 				}
 
 				return _flash;
 			}
 		}
 
-		public void Transfer( String path, bool preserveForm )
+		public void Transfer(String path, bool preserveForm)
 		{
 			_context.Server.Transfer(path, preserveForm);
 		}
@@ -185,9 +164,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get
 			{
-				if ( _urlInfo == null )
+				if (_urlInfo == null)
 				{
-					_urlInfo = UrlTokenizer.ExtractInfo( _request.FilePath, ApplicationPath );
+					_urlInfo = UrlTokenizer.ExtractInfo(_request.FilePath, ApplicationPath);
 				}
 				return _urlInfo;
 			}
@@ -202,8 +181,8 @@ namespace Castle.MonoRail.Framework.Adapters
 				if (UnderlyingContext != null)
 				{
 					path = UnderlyingContext.Request.ApplicationPath;
-			
-					if("/".Equals(path))
+
+					if ("/".Equals(path))
 					{
 						path = String.Empty;
 					}
@@ -222,7 +201,35 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		public String ApplicationPhysicalPath
 		{
-			get { return _context.Server.MapPath( "/" ); }
+			get { return _context.Server.MapPath("/"); }
+		}
+		
+		public void ResolveRequestSession()
+		{
+			// Someone set a custom session, so we skip this
+			if (customSessionSet) return;
+			
+			object session;
+
+			if (_context.Items["AspSession"] != null)
+			{
+				// Windows and Testing
+				session = _context.Items["AspSession"];
+			}
+			else
+			{
+				// Mono
+				session = _context.Session;
+			}
+
+			if (session is HttpSessionState)
+			{
+				_session = new SessionAdapter(session as HttpSessionState);
+			}
+			else
+			{
+				_session = (IDictionary) session;
+			}			
 		}
 	}
 }

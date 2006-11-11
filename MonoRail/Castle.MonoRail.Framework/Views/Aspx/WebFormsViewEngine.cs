@@ -131,8 +131,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			Page view = (Page) sender;
 
-			Controller controller = Controller.CurrentController;
-			
+			Controller controller = GetCurrentController();
+
 			ProcessPropertyBag(controller.PropertyBag, view);
 
 			PreSendView(controller, view);
@@ -149,7 +149,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			
 			if (masterPage != null)
 			{
-				Controller controller = Controller.CurrentController;
+				Controller controller = GetCurrentController();
 
 				if (masterPage is IControllerAware)
 				{
@@ -160,7 +160,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		
 		private void FinalizeView(object sender, EventArgs e)
 		{
-			Controller controller = Controller.CurrentController;
+			Controller controller = GetCurrentController();
+			
 			PostSendView(controller,  sender);
 		}
 #endif
@@ -371,6 +372,14 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		}
 
 #if DOTNET2
+
+		private Controller GetCurrentController()
+		{
+			IControllerLifecycleExecutor executor = (IControllerLifecycleExecutor)
+													MonoRailHttpHandler.CurrentContext.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
+
+			return executor.Controller;
+		}
 
 		internal class ExecutePageProvider : IMonoRailHttpHandlerProvider
 		{

@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = '"$(DevEnvDir)..\..\SDK\v1.1\Bin\gacutil.exe" /u $(TargetName) &#xd;&#xa;"$(DevEnvDir)..\..\SDK\v1.1\Bin\gacutil.exe" /i $(TargetPath)'
                 RootNamespace = "Castle.MonoRail.TestSupport"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -100,6 +100,11 @@
             <Include>
                 <File
                     RelPath = "AbstractMRTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

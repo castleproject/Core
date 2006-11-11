@@ -104,6 +104,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CustomDirectiveManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

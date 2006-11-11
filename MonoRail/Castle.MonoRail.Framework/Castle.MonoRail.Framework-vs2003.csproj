@@ -104,6 +104,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Constants.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -115,6 +120,11 @@
                 />
                 <File
                     RelPath = "ControllerException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ControllerLifecycleExecutor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -155,6 +165,16 @@
                 />
                 <File
                     RelPath = "IControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IControllerLifecycleExecutor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IControllerLifecycleExecutorFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -870,6 +890,11 @@
                 />
                 <File
                     RelPath = "Services\DefaultControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\DefaultControllerLifecycleExecutorFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

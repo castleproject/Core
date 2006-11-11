@@ -110,7 +110,13 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualTo("ABIndexABAB");
+			// StartRequest: AB
+			// BeforeAction: AB
+			// Action: Index
+			// AfterAction: AB
+			// AfterRendering: AB
+			
+			AssertReplyEqualTo("ABABIndexABAB");
 		}
 	}
 }

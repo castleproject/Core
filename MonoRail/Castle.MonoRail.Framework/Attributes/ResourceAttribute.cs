@@ -104,7 +104,11 @@ namespace Castle.MonoRail.Framework
 		/// <returns></returns>
 		public ResourceDescriptor[] BuildResourceDescriptors()
 		{
-			return new ResourceDescriptor[] { new ResourceDescriptor(resourceType, name, resourceName, cultureName, assemblyName) };
+			return new ResourceDescriptor[] { new ResourceDescriptor(resourceType, 
+			                                                         name, 
+			                                                         resourceName, 
+			                                                         cultureName, 
+			                                                         assemblyName) };
 		}
 	}
 }

@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	/// <remarks>
 	/// We use the DynamicAction infrastructure to provide 
-	/// wizard support. By doing we dont force 
+	/// wizard support as we dont force 
 	/// the programmer to inherit from a specific Controller 
 	/// which can be quite undesirable in common business projects
 	/// situations. 
@@ -38,22 +38,32 @@ namespace Castle.MonoRail.Framework
 	{
 		private WizardStepPage[] steps;
 		private WizardStepPage currentStepInstance;
+		private IControllerLifecycleExecutor currentStepExecutor;
 		private String rawAction;
 		private String innerAction;
 		private String requestedAction;
 		private UrlInfo urlInfo;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WizardActionProvider"/> class.
+		/// </summary>
 		public WizardActionProvider()
 		{
 		}
 
 		/// <summary>
-		/// 
+		/// Implementation of IDynamicActionProvider.
+		/// <para>
+		/// Grab all steps related to the wizard 
+		/// and register them as dynamic actions.
+		/// </para>
 		/// </summary>
-		/// <param name="controller"></param>
+		/// <param name="controller">Wizard controller (must implement <see cref="IWizardController"/></param>
 		public void IncludeActions(Controller controller)
 		{
 			IRailsEngineContext context = controller.Context;
+			
+			// Primordial assert
 
 			IWizardController wizardController = controller as IWizardController;
 
@@ -62,6 +72,8 @@ namespace Castle.MonoRail.Framework
 				throw new RailsException("The controller {0} must implement the interface " + 
 					"IWizardController to be used as a wizard", controller.Name);
 			}
+			
+			// Grab all Wizard Steps
 
 			steps = wizardController.GetSteps(controller.Context);
 
@@ -71,19 +83,37 @@ namespace Castle.MonoRail.Framework
 			}
 
 			IList stepList = new ArrayList();
+			
+			// Include the "start" dynamic action, which resets the wizard state
 
 			controller.DynamicActions["start"] = this;
 
+			// Find out the action request (and possible inner action)
+			//   Each action will be a step name, or maybe the step name + action (ie Page1-Save)
+			
 			urlInfo = controller.Context.UrlInfo;
 
 			rawAction = urlInfo.Action;
 
 			requestedAction = ObtainRequestedAction(rawAction, out innerAction);
 
+			// If no inner action was found, fallback to 'RenderWizardView'
+			
+			if (innerAction == null || innerAction == String.Empty)
+			{
+				innerAction = "RenderWizardView";
+			}
+			
+			IControllerLifecycleExecutorFactory execFactory = 
+				(IControllerLifecycleExecutorFactory) context.GetService(typeof(IControllerLifecycleExecutorFactory));
+
+			// Initialize all steps and while we are at it, 
+			// discover the current step
+			
 			foreach(WizardStepPage step in steps)
 			{
 				String actionName = step.ActionName;
-
+				
 				if (String.Compare(requestedAction, actionName, true) == 0)
 				{
 					currentStepInstance = step;
@@ -95,22 +125,36 @@ namespace Castle.MonoRail.Framework
 							new DelegateDynamicAction(new ActionDelegate(OnStepActionRequested));
 					}
 				}
-
+				
 				controller.DynamicActions[actionName] = 
 					new DelegateDynamicAction(new ActionDelegate(OnStepActionRequested));
 
 				stepList.Add(actionName);
 
+				IControllerLifecycleExecutor stepExec = execFactory.CreateExecutor(step, context);
+				stepExec.InitializeController(controller.AreaName, controller.Name, innerAction);
 				step.Initialize(controller);
+				
+				if (currentStepInstance == step)
+				{
+					currentStepExecutor = stepExec;
+
+					if (!stepExec.SelectAction(innerAction, controller.Name))
+					{
+						stepExec.PerformErrorHandling();
+							
+						return;
+					}
+					
+					if (!stepExec.RunStartRequestFilters())
+					{
+						return;
+					}
+				}
 			}
 
 			context.UnderlyingContext.Items["wizard.step.list"] = stepList;
 
-			if (currentStepInstance != null && !HasRequiredSessionData(controller))
-			{
-				StartWizard(controller, false);
-			}
-			
 			SetUpWizardHelper(controller);
 			SetUpWizardHelper(currentStepInstance);
 		}
@@ -132,6 +176,11 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller"></param>
 		private void OnStepActionRequested(Controller controller)
 		{
+			if (currentStepInstance != null && !HasRequiredSessionData(controller))
+			{
+				StartWizard(controller, false);
+			}
+			
 			controller.CancelView();
 
 			IRailsEngineContext context = controller.Context;
@@ -151,15 +200,9 @@ namespace Castle.MonoRail.Framework
 			{
 				return;
 			}
-
-			if (innerAction == null || innerAction == String.Empty)
-			{
-				innerAction = "RenderWizardView";
-			}
 			
 			// Initialize step data so instance members can be used
-			currentStepInstance.InitializeFieldsFromServiceProvider(controller.Context);
-			currentStepInstance.InitializeControllerState(urlInfo.Area, urlInfo.Controller, innerAction);
+			// executor.InitializeController(urlInfo.Area, urlInfo.Controller, innerAction);
 
 			// Record the step we're working with
 			WizardUtils.RegisterCurrentStepInfo(controller, currentStepInstance.ActionName);
@@ -173,12 +216,16 @@ namespace Castle.MonoRail.Framework
 			// Dispatch process
 			try
 			{
-				currentStepInstance.Process(controller.Context, 
-					urlInfo.Area, urlInfo.Controller, innerAction);
+				// TODO: Invoke Whole step here
+				// currentStepInstance.Process(controller.Context, 
+				//	urlInfo.Area, urlInfo.Controller, innerAction);
+				currentStepExecutor.ProcessSelectedAction();
 			}
 			finally
 			{
 				wizController.OnAfterStep(wizardName, currentStep, currentStepInstance);
+
+				currentStepExecutor.Dispose();
 			}
 		}
 

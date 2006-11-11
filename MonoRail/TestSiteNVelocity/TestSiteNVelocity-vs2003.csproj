@@ -119,6 +119,18 @@
                     AssemblyName = "Castle.Core"
                     HintPath = "..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\build\net-1.1\debug\log4net.dll"
+                    AssemblyFolderKey = "hklm\dn\castleex"
+                />
+                <Reference
+                    Name = "Castle.Services.Logging.Log4netIntegration"
+                    AssemblyName = "Castle.Services.Logging.Log4netIntegration"
+                    HintPath = "..\..\build\net-1.1\debug\Castle.Services.Logging.Log4netIntegration.dll"
+                    AssemblyFolderKey = "hklm\dn\castleex"
+                />
             </References>
         </Build>
         <Files>

@@ -250,6 +250,8 @@
     <None Include="views\rescues\updateerrormsg.vm" />
     <None Include="views\resourced\getresources.vm" />
     <None Include="views\SubArea\home\index.vm" />
+    <None Include="views\testwizardconditions\InnerAction2.vm" />
+    <None Include="views\testwizardconditions\page1.vm" />
     <None Include="views\testwizard\InnerAction2.vm" />
     <None Include="views\testwizard\page1.vm" />
     <None Include="views\testwizard\page3.vm" />
@@ -274,6 +276,10 @@
     <None Include="views\UsingComponent\index8.vm" />
     <None Include="views\UsingComponent\index9.vm" />
     <None Include="views\validated\default.vm" />
+    <None Include="views\wizard\testwizardwitharea\InnerAction2.vm" />
+    <None Include="views\wizard\testwizardwitharea\page1.vm" />
+    <None Include="views\wizard\testwizardwitharea\page3.vm" />
+    <None Include="views\wizard\testwizardwitharea\page4.vm" />
     <None Include="web.config" />
     <EmbeddedResource Include="Controllers\ResourceFile.resx" />
     <Content Include="views\ajax\autocom.vm" />

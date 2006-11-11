@@ -16,8 +16,11 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Configuration;
+	using System.IO;
+	using System.Xml;
 	using Castle.Core;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
@@ -37,12 +40,25 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>Keeps only one copy of the config</summary>
 		private MonoRailConfiguration config;
+		
+		/// <summary></summary>
+		private IDictionary extension2handler;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MonoRailServiceContainer"/> class.
+		/// </summary>
+		public MonoRailServiceContainer()
+		{
+			extension2handler = new HybridDictionary(true);
+		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		public void Start()
 		{
+			DiscoverHttpHandlerExtensions();
+			
 			InitConfiguration();
 
 			MonoRailConfiguration config = ObtainConfiguration();
@@ -50,6 +66,40 @@ namespace Castle.MonoRail.Framework
 			InitExtensions(config);
 			InitServices(config);
 			// InitApplicationHooks(context);
+		}
+
+		/// <summary>
+		/// Checks whether the specified URL is to be handled by MonoRail
+		/// </summary>
+		/// <param name="url">The URL.</param>
+		/// <returns>
+		/// <see langword="true"/> if it is a MonoRail request; otherwise, <see langword="false"/>.
+		/// </returns>
+		public bool IsMonoRailRequest(String url)
+		{
+			String extension = Path.GetExtension(url);
+			
+			return extension2handler.Contains(extension);
+		}
+
+		private void DiscoverHttpHandlerExtensions()
+		{
+			XmlDocument webConfig = new XmlDocument();
+			webConfig.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web.config"));
+			
+			XmlNodeList addNodes = webConfig.DocumentElement.SelectNodes(
+				"/configuration/system.web/httpHandlers/add");
+			
+			foreach(XmlElement addElem in addNodes)
+			{
+				String type = addElem.GetAttribute("type");
+				
+				if (type.StartsWith("Castle.MonoRail.Framework.MonoRailHttpHandlerFactory"))
+				{
+					String extension = addElem.GetAttribute("path").Substring(1);
+					extension2handler.Add(extension, String.Empty);
+				}
+			}
 		}
 
 		/// <summary>
@@ -61,11 +111,11 @@ namespace Castle.MonoRail.Framework
 		{
 			extensionManager = new ExtensionManager(this);
 
-			foreach (ExtensionEntry entry in config.ExtensionEntries)
+			foreach(ExtensionEntry entry in config.ExtensionEntries)
 			{
 				AssertImplementsService(typeof(IMonoRailExtension), entry.ExtensionType);
 
-				IMonoRailExtension extension = (IMonoRailExtension)ActivateService(entry.ExtensionType);
+				IMonoRailExtension extension = (IMonoRailExtension) ActivateService(entry.ExtensionType);
 
 				extension.SetExtensionConfigNode(entry.ExtensionNode);
 
@@ -99,14 +149,12 @@ namespace Castle.MonoRail.Framework
 		/// <param name="services">List of MonoRail's services</param>
 		private void LifecycleInitialize(IList services)
 		{
-			foreach (object instance in services)
+			foreach(object instance in services)
 			{
 				IInitializable initializable = instance as IInitializable;
 
 				if (initializable != null)
-				{
 					initializable.Initialize();
-				}
 
 				ISupportInitialize suppInitialize = instance as ISupportInitialize;
 
@@ -125,14 +173,12 @@ namespace Castle.MonoRail.Framework
 		/// <param name="services">List of MonoRail's services</param>
 		private void LifecycleService(IList services)
 		{
-			foreach (object instance in services)
+			foreach(object instance in services)
 			{
 				IServiceEnabledComponent serviceEnabled = instance as IServiceEnabledComponent;
 
 				if (serviceEnabled != null)
-				{
 					serviceEnabled.Service(this);
-				}
 			}
 		}
 
@@ -149,8 +195,8 @@ namespace Castle.MonoRail.Framework
 
 			foreach(DictionaryEntry entry in services.ServiceImplMap)
 			{
-				Type service = (Type)entry.Key;
-				Type impl = (Type)entry.Value;
+				Type service = (Type) entry.Key;
+				Type impl = (Type) entry.Value;
 
 				AssertImplementsService(service, impl);
 
@@ -162,7 +208,7 @@ namespace Castle.MonoRail.Framework
 			}
 
 			// Custom services
-			
+
 			foreach(Type type in services.CustomServices)
 			{
 				object instance = ActivateService(type);
@@ -174,7 +220,7 @@ namespace Castle.MonoRail.Framework
 
 			return instances;
 		}
-		
+
 		/// <summary>
 		/// Registers the default implementation of services, if 
 		/// they are not registered
@@ -199,16 +245,14 @@ namespace Castle.MonoRail.Framework
 			if (!services.HasService(ServiceIdentification.ViewSourceLoader))
 			{
 				services.RegisterService(ServiceIdentification.ViewSourceLoader,
-										 typeof(FileAssemblyViewSourceLoader));
+				                         typeof(FileAssemblyViewSourceLoader));
 			}
 			if (!services.HasService(ServiceIdentification.ViewEngine))
 			{
 				Type viewEngineType = config.ViewEngineConfig.CustomEngine;
 
 				if (viewEngineType == null)
-				{
 					viewEngineType = typeof(WebFormsViewEngine);
-				}
 
 				services.RegisterService(ServiceIdentification.ViewEngine, viewEngineType);
 			}
@@ -220,21 +264,19 @@ namespace Castle.MonoRail.Framework
 							"Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold"), true);
 
 				if (defaultScaffoldingType != null)
-				{
 					services.RegisterService(ServiceIdentification.ScaffoldingSupport, defaultScaffoldingType);
-				}
 			}
 			if (!services.HasService(ServiceIdentification.ControllerFactory))
 			{
 				if (config.ControllersConfig.CustomControllerFactory != null)
 				{
 					services.RegisterService(ServiceIdentification.ControllerFactory,
-											 config.ControllersConfig.CustomControllerFactory);
+					                         config.ControllersConfig.CustomControllerFactory);
 				}
 				else
 				{
 					services.RegisterService(ServiceIdentification.ControllerFactory,
-											 typeof(DefaultControllerFactory));
+					                         typeof(DefaultControllerFactory));
 				}
 			}
 			if (!services.HasService(ServiceIdentification.ViewComponentFactory))
@@ -242,12 +284,12 @@ namespace Castle.MonoRail.Framework
 				if (config.ViewComponentsConfig.CustomViewComponentFactory != null)
 				{
 					services.RegisterService(ServiceIdentification.ViewComponentFactory,
-											 config.ViewComponentsConfig.CustomViewComponentFactory);
+					                         config.ViewComponentsConfig.CustomViewComponentFactory);
 				}
 				else
 				{
 					services.RegisterService(ServiceIdentification.ViewComponentFactory,
-											 typeof(DefaultViewComponentFactory));
+					                         typeof(DefaultViewComponentFactory));
 				}
 			}
 			if (!services.HasService(ServiceIdentification.FilterFactory))
@@ -255,58 +297,41 @@ namespace Castle.MonoRail.Framework
 				if (config.CustomFilterFactory != null)
 				{
 					services.RegisterService(ServiceIdentification.FilterFactory,
-											 config.CustomFilterFactory);
+					                         config.CustomFilterFactory);
 				}
 				else
 				{
 					services.RegisterService(ServiceIdentification.FilterFactory,
-											 typeof(DefaultFilterFactory));
+					                         typeof(DefaultFilterFactory));
 				}
 			}
 			if (!services.HasService(ServiceIdentification.ResourceFactory))
-			{
 				services.RegisterService(ServiceIdentification.ResourceFactory, typeof(DefaultResourceFactory));
-			}
 			if (!services.HasService(ServiceIdentification.EmailSender))
-			{
 				services.RegisterService(ServiceIdentification.EmailSender, typeof(MonoRailSmtpSender));
-			}
 			if (!services.HasService(ServiceIdentification.ControllerDescriptorProvider))
 			{
-				services.RegisterService(ServiceIdentification.ControllerDescriptorProvider, typeof(DefaultControllerDescriptorProvider));
+				services.RegisterService(ServiceIdentification.ControllerDescriptorProvider,
+				                         typeof(DefaultControllerDescriptorProvider));
 			}
 			if (!services.HasService(ServiceIdentification.ResourceDescriptorProvider))
-			{
 				services.RegisterService(ServiceIdentification.ResourceDescriptorProvider, typeof(DefaultResourceDescriptorProvider));
-			}
 			if (!services.HasService(ServiceIdentification.RescueDescriptorProvider))
-			{
 				services.RegisterService(ServiceIdentification.RescueDescriptorProvider, typeof(DefaultRescueDescriptorProvider));
-			}
 			if (!services.HasService(ServiceIdentification.LayoutDescriptorProvider))
-			{
 				services.RegisterService(ServiceIdentification.LayoutDescriptorProvider, typeof(DefaultLayoutDescriptorProvider));
-			}
 			if (!services.HasService(ServiceIdentification.HelperDescriptorProvider))
-			{
 				services.RegisterService(ServiceIdentification.HelperDescriptorProvider, typeof(DefaultHelperDescriptorProvider));
-			}
 			if (!services.HasService(ServiceIdentification.FilterDescriptorProvider))
-			{
 				services.RegisterService(ServiceIdentification.FilterDescriptorProvider, typeof(DefaultFilterDescriptorProvider));
-			}
 			if (!services.HasService(ServiceIdentification.EmailTemplateService))
-			{
 				services.RegisterService(ServiceIdentification.EmailTemplateService, typeof(EmailTemplateService));
-			}
 			if (!services.HasService(ServiceIdentification.ControllerTree))
-			{
 				services.RegisterService(ServiceIdentification.ControllerTree, typeof(DefaultControllerTree));
-			}
 			if (!services.HasService(ServiceIdentification.CacheProvider))
-			{
 				services.RegisterService(ServiceIdentification.CacheProvider, typeof(DefaultCacheProvider));
-			}
+			if (!services.HasService(ServiceIdentification.ExecutorFactory))
+				services.RegisterService(ServiceIdentification.ExecutorFactory, typeof(DefaultControllerLifecycleExecutorFactory));
 		}
 
 		private object ActivateService(Type type)
@@ -315,10 +340,10 @@ namespace Castle.MonoRail.Framework
 			{
 				return Activator.CreateInstance(type);
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				String message = String.Format("Initialization Exception: " +
-					"Could not instantiate {0}", type.FullName);
+				                               "Could not instantiate {0}", type.FullName);
 #if DOTNET2
 				throw new ConfigurationErrorsException(message, ex);
 #else
@@ -329,10 +354,7 @@ namespace Castle.MonoRail.Framework
 
 		private MonoRailConfiguration ObtainConfiguration()
 		{
-			if (config == null)
-			{
-				config = MonoRailConfiguration.GetConfig();
-			}
+			if (config == null) config = MonoRailConfiguration.GetConfig();
 
 			return config;
 		}
@@ -342,7 +364,7 @@ namespace Castle.MonoRail.Framework
 			if (!service.IsAssignableFrom(impl))
 			{
 				String message = String.Format("Initialization Exception: " +
-					"Service {0} does not implement or extend {1}", impl.FullName, service.FullName);
+				                               "Service {0} does not implement or extend {1}", impl.FullName, service.FullName);
 #if DOTNET2
 				throw new ConfigurationErrorsException(message);
 #else

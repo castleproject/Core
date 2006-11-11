@@ -131,6 +131,8 @@ namespace Castle.MonoRail.Framework.Configuration
 					return typeof(IViewEngine);
 				case ServiceIdentification.ResourceFactory:
 					return typeof(IResourceFactory);
+				case ServiceIdentification.ExecutorFactory:
+					return typeof(IControllerLifecycleExecutorFactory);
 				default:
 					throw new NotSupportedException("Id not supported " + id.ToString());
 			}

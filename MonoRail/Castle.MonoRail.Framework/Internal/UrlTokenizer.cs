@@ -23,78 +23,78 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public sealed class UrlTokenizer
 	{
-		public static UrlInfo ExtractInfo( String url, String virtualDirectory )
+		public static UrlInfo ExtractInfo(String url, String virtualDirectory)
 		{
-			if ( url == null || url.Length == 0 )
+			if (url == null || url.Length == 0)
 			{
-				throw new UrlTokenizerException( "Invalid url" );
+				throw new UrlTokenizerException("Invalid url");
 			}
 
-			if ( url[0] == '/' )
+			if (url[0] == '/')
 			{
 				url = url.ToLower().Substring(1);
 			}
 
 			// Strip the virtualDirectory from the Url
-			if ( virtualDirectory != null && virtualDirectory != "" )
+			if (virtualDirectory != null && virtualDirectory != "")
 			{
 				virtualDirectory = virtualDirectory.ToLower().Substring(1);
 
-				if ( !url.StartsWith(virtualDirectory) )
+				if (!url.StartsWith(virtualDirectory))
 				{
-					throw new UrlTokenizerException( "Invalid url" );
+					throw new UrlTokenizerException("Invalid url");
 				}
 
-				url = url.Substring( virtualDirectory.Length );
+				url = url.Substring(virtualDirectory.Length);
 			}
 
-			String[] parts = url.Split( '/' );
+			String[] parts = url.Split('/');
 
-			if ( parts.Length < 2 )
+			if (parts.Length < 2)
 			{
-				throw new UrlTokenizerException( "Invalid url" );
+				throw new UrlTokenizerException("Invalid url");
 			}
 
-			String action = parts[ parts.Length - 1 ];
-			
-			int fileNameIndex = action.IndexOf( '.' );
+			String action = parts[parts.Length - 1];
 
-			if ( fileNameIndex != -1 )
+			int fileNameIndex = action.IndexOf('.');
+
+			if (fileNameIndex != -1)
 			{
-				action = action.Substring( 0, fileNameIndex );
+				action = action.Substring(0, fileNameIndex);
 			}
 
-			String controller = parts[ parts.Length - 2 ];
+			String controller = parts[parts.Length - 2];
 
 			String area = String.Empty;
-			
-			if ( parts.Length - 3 == 0 )
+
+			if (parts.Length - 3 == 0)
 			{
-				area = parts[ parts.Length - 3 ];
+				area = parts[parts.Length - 3];
 			}
-			else if ( parts.Length - 3 > 0 ) 
+			else if (parts.Length - 3 > 0)
 			{
 				StringBuilder areaSB = new StringBuilder();
-				
-				for ( int i=0; i <= parts.Length - 3; i++ )
+
+				for(int i = 0; i <= parts.Length - 3; i++)
 				{
-					if ( parts[i] != null && parts[i].Length > 0 )
+					if (parts[i] != null && parts[i].Length > 0)
 					{
-						areaSB.Append( parts[i] ).Append( '/' );
+						areaSB.Append(parts[i]).Append('/');
 					}
 				}
-				
-				if ( areaSB.Length > 0 )
+
+				if (areaSB.Length > 0)
 				{
 					areaSB.Length -= 1;
 				}
-				
+
 				area = areaSB.ToString();
 			}
 
-			String extension = GetExtension( url );
+			String extension = GetExtension(url);
 
-			return new UrlInfo( url, area, controller, action, extension );
+			return new UrlInfo(url, area, controller, action, extension);
 		}
 
 		/// <summary>
@@ -102,9 +102,9 @@ namespace Castle.MonoRail.Framework.Internal
 		/// </summary>
 		/// <param name="url">URL.</param>
 		/// <returns>The page extensino of the provided URL.</returns>
-		public static String GetExtension( String url )
+		public static String GetExtension(String url)
 		{
-			return Path.GetExtension( url ).Substring( 1 );
+			return Path.GetExtension(url).Substring(1);
 		}
 	}
 }

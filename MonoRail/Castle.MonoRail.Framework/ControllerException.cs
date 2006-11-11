@@ -23,11 +23,30 @@ namespace Castle.MonoRail.Framework
 	[Serializable]
 	public class ControllerException : RailsException
 	{
-		public ControllerException( String message ) : base( message )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerException"/> class.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		public ControllerException(String message) : base(message)
 		{
 		}
 
-		public ControllerException( SerializationInfo info, StreamingContext context ) : base( info, context )
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerException"/> class.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		/// <param name="innerException">The inner exception.</param>
+		public ControllerException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ControllerException"/> class.
+		/// </summary>
+		/// <param name="info">The object that holds the serialized object data.</param>
+		/// <param name="context">The contextual information about the source or destination.</param>
+		public ControllerException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

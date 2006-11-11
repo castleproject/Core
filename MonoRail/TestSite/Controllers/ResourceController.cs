@@ -16,36 +16,35 @@ namespace TestSite.Controllers
 {
 	using System.Globalization;
 	using System.Threading;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Filters;
 
 
-	[LocalizationFilter( RequestStore.QueryString, "locale" )]
-	[Resource( "text", "TestSite.Resources.Language" )]
+	[LocalizationFilter(RequestStore.QueryString, "locale")]
+	[Resource("text", "TestSite.Resources.Language")]
 	public class ResourceController : Controller
 	{
 		public ResourceController()
 		{
-			CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
-			Thread.CurrentThread.CurrentCulture	= en;
+			Thread.CurrentThread.CurrentCulture = en;
 			Thread.CurrentThread.CurrentUICulture = en;
 		}
 
 		public void GetResource()
 		{
-			IResource res = Resources[ "text" ];
+			IResource res = Resources["text"];
 
-            RenderText( res[ "language" ].ToString() );
+			RenderText(res["language"].ToString());
 		}
 
-		[Resource( "text", "TestSite.Resources.Language", CultureName="de")]
+		[Resource("text", "TestSite.Resources.Language", CultureName="de")]
 		public void GetResourceByCulture()
 		{
-			IResource res = Resources[ "text" ];
-			
-			RenderText( res[ "language" ].ToString() );
+			IResource res = Resources["text"];
+
+			RenderText(res["language"].ToString());
 		}
 	}
 }

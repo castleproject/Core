@@ -55,7 +55,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			String assemblyName = thisAssembly.GetName().Name;
 			String assemblyFullName = thisAssembly.GetName().FullName;
 			
-			return String.Format("{0}{1}", typeName, assemblyFullName.Substring(assemblyName.Length));
+			return typeName + assemblyFullName.Substring(assemblyName.Length);
 		}
 	}
 }

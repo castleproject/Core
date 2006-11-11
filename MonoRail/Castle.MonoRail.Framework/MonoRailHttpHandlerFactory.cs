@@ -35,15 +35,6 @@ namespace Castle.MonoRail.Framework
 		                                       String requestType, 
 		                                       String url, String pathTranslated)
 		{
-#if ALLOWTEST
-			String isTest = context.Request.Headers["IsTestWorkerRequest"];
-			
-			if ("true" == isTest)
-			{
-				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(context);
-			}
-#endif
-
 			if (!EngineContextModule.Initialized)
 			{
 				throw new RailsException("Looks like you forgot to register the http module " +

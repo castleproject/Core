@@ -4,6 +4,19 @@ Change history
 Release Candidate 3
 ===================
 
+- Modified WizardActionProvider to use ControllerLifecycleExecutor
+
+- Modified EngineContextModule a MonoRailHttpHandler to use ControllerLifecycleExecutor
+
+- Refactored controller. Extracted process to ControllerLifecycleExecutor
+
+- Changed ExecuteEnum.Always to include 'StartRequest'
+
+- Added Filter step: StartRequest
+
+  This step runs on the ResolveRequestCache, and is suitable 
+  for authentication. However, a session will not be available.
+
 - Fixed MR-158
   "IRequest/Controller must expose the Http method"
   

@@ -64,7 +64,7 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
-		protected override void InvokeMethod(MethodInfo method, IRequest request, params object[] actionArgs)
+		protected internal override void InvokeMethod(MethodInfo method, IRequest request, params object[] actionArgs)
 		{
 			ParameterInfo[] parameters = method.GetParameters();
 
@@ -73,7 +73,7 @@ namespace Castle.MonoRail.Framework
 			method.Invoke(this, methodArgs);
 		}
 
-		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
+		protected internal override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
 		{
 			object methods = actions[action];
 

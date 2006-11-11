@@ -26,7 +26,6 @@ namespace TestSiteNVelocity.Controllers
 
 		public void Index()
 		{
-			
 		}
 
 		public void Flash1()

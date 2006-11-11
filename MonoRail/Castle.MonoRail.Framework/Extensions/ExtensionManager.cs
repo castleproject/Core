@@ -32,6 +32,8 @@ namespace Castle.MonoRail.Framework
 		private static readonly object PostProcessEvent = new object();
 		private static readonly object AuthorizeRequestEvent = new object();
 		private static readonly object AuthenticateRequestEvent = new object();
+		private static readonly object ResolveRequestCacheEvent = new object();
+		private static readonly object UpdateRequestCacheEvent = new object();
 
 		private EventHandlerList events;
 
@@ -108,63 +110,87 @@ namespace Castle.MonoRail.Framework
 			remove { events.RemoveHandler(AuthorizeRequestEvent, value); }
 		}
 
-		internal virtual void RaiseContextCreated(IRailsEngineContext context)
+		public event ExtensionHandler ResolveRequestCache
+		{
+			add { events.AddHandler(ResolveRequestCacheEvent, value); }
+			remove { events.RemoveHandler(ResolveRequestCacheEvent, value); }
+		}
+
+		public event ExtensionHandler UpdateRequestCache
+		{
+			add { events.AddHandler(UpdateRequestCacheEvent, value); }
+			remove { events.RemoveHandler(UpdateRequestCacheEvent, value); }
+		}
+
+		internal void RaiseContextCreated(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ContextCreatedEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		internal virtual void RaiseContextDisposed(IRailsEngineContext context)
+		internal void RaiseContextDisposed(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ContextDisposedEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaisePostProcess(IRailsEngineContext context)
+		internal void RaisePostProcess(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[PostProcessEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaisePreProcess(IRailsEngineContext context)
+		internal void RaisePreProcess(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[PreProcessEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaiseReleaseRequestState(IRailsEngineContext context)
+		internal void RaiseReleaseRequestState(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ReleaseSessionStateEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaiseAcquireRequestState(IRailsEngineContext context)
+		internal void RaiseAcquireRequestState(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[AcquireSessionStateEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaiseUnhandledError(IRailsEngineContext context)
+		internal void RaiseUnhandledError(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[UnhandledExceptionEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaiseActionError(IRailsEngineContext context)
+		internal void RaiseActionError(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[ActionExceptionEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaiseAuthenticateRequest(IRailsEngineContext context)
+		internal void RaiseAuthenticateRequest(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[AuthenticateRequestEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 
-		public void RaiseAuthorizeRequest(IRailsEngineContext context)
+		internal void RaiseAuthorizeRequest(IRailsEngineContext context)
 		{
 			ExtensionHandler eventDelegate = (ExtensionHandler) events[AuthorizeRequestEvent];
+			if (eventDelegate != null) eventDelegate(context);
+		}
+
+		internal void RaiseResolveRequestCache(IRailsEngineContext context)
+		{
+			ExtensionHandler eventDelegate = (ExtensionHandler) events[UpdateRequestCacheEvent];
+			if (eventDelegate != null) eventDelegate(context);
+		}
+		
+		internal void RaiseUpdateRequestCache(IRailsEngineContext context)
+		{
+			ExtensionHandler eventDelegate = (ExtensionHandler) events[UpdateRequestCacheEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 	}

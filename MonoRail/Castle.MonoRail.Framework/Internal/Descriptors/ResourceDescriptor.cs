@@ -24,7 +24,8 @@ namespace Castle.MonoRail.Framework.Internal
 		private readonly string cultureName;
 		private readonly string assemblyName;
 
-		public ResourceDescriptor(Type resourceType, string name, string resourceName, string cultureName, string assemblyName)
+		public ResourceDescriptor(Type resourceType, string name, string resourceName, 
+		                          string cultureName, string assemblyName)
 		{
 			this.resourceType = resourceType;
 			this.name = name;

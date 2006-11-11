@@ -71,37 +71,61 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context"></param>
 		public virtual void Process(IRailsEngineContext context)
 		{
-			UrlInfo info = ExtractUrlInfo(context);
+			ControllerLifecycleExecutor executor = 
+				(ControllerLifecycleExecutor) context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
 			
-			if (logger.IsDebugEnabled)
-			{
-				logger.Debug("Starting request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'", 
-				             info.Area, info.Controller, info.Action, info.Extension, info.UrlRaw);
-			}
-
-			IControllerFactory controllerFactory = (IControllerFactory) context.GetService(typeof(IControllerFactory));
-
-			Controller controller = controllerFactory.CreateController(info);
-
-			if (controller == null)
-			{
-				String message = String.Format("No controller for {0}\\{1}", info.Area, info.Controller);
-				
-				if (logger.IsErrorEnabled)
-				{
-					logger.Error(message);
-				}
-
-				throw new RailsException(message);
-			}
-
+			HttpContext httpCtx = context.UnderlyingContext;
+			
+			httpCtx.Items["mr.controller"] = executor.Controller;
+			httpCtx.Items["mr.flash"] = executor.Controller.Flash;
+			httpCtx.Items["mr.propertybag"] = executor.Controller.PropertyBag;
+			httpCtx.Items["mr.session"] = context.Session;
+			
+			// At this point, the before filters were executed. 
+			// So we just need to perform the secondary initialization
+			// and invoke the action
+			
 			try
 			{
-				controller.Process(context, info.Area, info.Controller, info.Action);
+				if (executor.HasError) // Some error happened
+				{
+					executor.PerformErrorHandling();
+				}
+				else
+				{
+					executor.ProcessSelectedAction();
+				}
+			}
+			catch(Exception ex)
+			{
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error("Error processing " + context.Url, ex);
+				}
+
+				throw;
 			}
 			finally
 			{
-				controllerFactory.Release(controller);
+				try
+				{
+					executor.Dispose();
+				}
+				finally
+				{
+					IControllerFactory controllerFactory = 
+						(IControllerFactory) context.GetService(typeof(IControllerFactory));
+				
+					controllerFactory.Release(executor.Controller);
+				}
+				
+				if (logger.IsDebugEnabled)
+				{
+					Controller controller = executor.Controller;
+					
+					logger.Debug("Ending request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'", 
+						controller.AreaName, controller.Name, controller.Action, context.UrlInfo.Extension, context.UrlInfo.UrlRaw);
+				}
 
 				// Remove items from flash before leaving the page
 				context.Flash.Sweep();
@@ -113,12 +137,6 @@ namespace Castle.MonoRail.Framework
 				else if (context.Session.Contains(Flash.FlashKey))
 				{
 					context.Session.Remove(Flash.FlashKey);
-				}
-				
-				if (logger.IsDebugEnabled)
-				{
-					logger.Debug("Ending request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'", 
-						info.Area, info.Controller, info.Action, info.Extension, info.UrlRaw);
 				}
 			}
 		}
