@@ -956,7 +956,10 @@
 				<include name="**/*.vm" />
 				<include name="**/*.gif" />
 				<include name="**/*.resx" />
-				
+				<include name="**/*.boo" />
+				<include name="**/*.booproj" />
+				<include name="**/*.prjx" />
+				<include name="**/*.cmbx" />
 				<exclude name="**/obj/" />
 				<exclude name="**/obj/**/*.*" />
 				<exclude name="**/bin*/**/*.*" />
