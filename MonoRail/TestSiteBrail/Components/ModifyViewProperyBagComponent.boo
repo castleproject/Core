@@ -11,43 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Castle.MonoRail.Views.Brail.Tests.Controllers
+
+namespace Castle.MonoRail.Views.Brail.Tests.Components
 
 import System
 import Castle.MonoRail.Framework
 
-class UsingComponentsController(SmartDispatcherController):
-
-	def Index1():
-		pass
+class ModifyViewProperyBagComponent(ViewComponent):
+	def Render():
+		Context.ContextVars["test"] = "1234"
+		RenderView('mycompview1')
 	
-	def Index2():
-		pass
-	
-	def Index3():
-		pass
 
-	def Index4():
-		pass
-
-	def Index5():
-		pass
-	
-	def Index8():
-		items = [1,2]
-		PropertyBag.Add("items",items)
-	
-	def Index9():
-		pass
-		
-	def Index10():
-		pass
-		
-	def Template():
-		pass
-
-	def CaptureFor():
-		pass
-		
-	def CaptureForWithLayout():
-		LayoutName = "layout_with_captureFor"
