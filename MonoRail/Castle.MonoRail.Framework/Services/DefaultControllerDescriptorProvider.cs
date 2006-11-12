@@ -147,7 +147,7 @@ namespace Castle.MonoRail.Framework.Services
 			CollectActions(controllerType, descriptor);
 
 			CollectActionLevelAttributes(descriptor);
-
+			
 			return descriptor;
 		}
 
@@ -226,6 +226,7 @@ namespace Castle.MonoRail.Framework.Services
 			CollectAccessibleThrough(actionDescriptor, method);
 			CollectSkipRescue(actionDescriptor, method);
 			CollectLayout(actionDescriptor, method);
+			CollectCacheConfigures(actionDescriptor, method);
 			
 			if (method.IsDefined(typeof(AjaxActionAttribute), true))
 			{
@@ -257,7 +258,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			object[] attributes = method.GetCustomAttributes(typeof(SkipFilterAttribute), true);
 			
-			foreach (SkipFilterAttribute attr in attributes)
+			foreach(SkipFilterAttribute attr in attributes)
 			{
 				actionDescriptor.SkipFilters.Add(attr);
 			}
@@ -274,11 +275,12 @@ namespace Castle.MonoRail.Framework.Services
 
 			// try to get the first type which is not a proxy
 			// TODO: skip it in case of mixins
-			while (controllerType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+			while(controllerType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
 			{
 				controllerType = controllerType.BaseType;
 
-				if (controllerType == typeof(SmartDispatcherController) || controllerType == typeof(Controller))
+				if (controllerType == typeof(SmartDispatcherController) || 
+				    controllerType == typeof(Controller))
 				{
 					// oops, it's a pure-proxy controller. just let it go.
 					controllerType = prev;
@@ -343,28 +345,37 @@ namespace Castle.MonoRail.Framework.Services
 
 		private void CollectHelpers(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
-			descriptor.Helpers = 
-				helperDescriptorProvider.CollectHelpers(controllerType);
+			descriptor.Helpers = helperDescriptorProvider.CollectHelpers(controllerType);
 		}
 
 		private void CollectFilters(ControllerMetaDescriptor descriptor, Type controllerType)
 		{
-			descriptor.Filters = 
-				filterDescriptorProvider.CollectFilters(controllerType);
+			descriptor.Filters = filterDescriptorProvider.CollectFilters(controllerType);
 
 			Array.Sort(descriptor.Filters, FilterDescriptorComparer.Instance);
 		}
 
 		private void CollectLayout(BaseMetaDescriptor descriptor, MemberInfo memberInfo)
 		{
-			descriptor.Layout = 
-				layoutDescriptorProvider.CollectLayout(memberInfo);
+			descriptor.Layout = layoutDescriptorProvider.CollectLayout(memberInfo);
 		}
 
 		private void CollectRescues(BaseMetaDescriptor descriptor, MemberInfo memberInfo)
 		{
-			descriptor.Rescues = 
-				rescueDescriptorProvider.CollectRescues(memberInfo);
+			descriptor.Rescues = rescueDescriptorProvider.CollectRescues(memberInfo);
+		}
+
+		private void CollectCacheConfigures(ActionMetaDescriptor descriptor, MemberInfo memberInfo)
+		{
+			object[] configurers = memberInfo.GetCustomAttributes(typeof(ICachePolicyConfigurer), true);
+
+			if (configurers.Length != 0)
+			{
+				foreach(ICachePolicyConfigurer cacheConfigurer in configurers)
+				{
+					descriptor.CacheConfigurers.Add(cacheConfigurer);
+				}
+			}
 		}
 
 		#endregion

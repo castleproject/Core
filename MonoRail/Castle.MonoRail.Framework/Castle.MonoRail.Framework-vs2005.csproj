@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="Attributes\AccessibleThroughAttribute.cs" />
     <Compile Include="Attributes\AjaxActionAttribute.cs" />
+    <Compile Include="Attributes\CacheAttribute.cs" />
     <Compile Include="Attributes\ControllerDetailsAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -151,6 +152,7 @@
     </Compile>
     <Compile Include="Attributes\SkipFilterAttribute.cs" />
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Configuration\ControllersConfig.cs" />
     <Compile Include="Configuration\ExtensionEntry.cs" />
     <Compile Include="Configuration\ExtensionEntryCollection.cs" />

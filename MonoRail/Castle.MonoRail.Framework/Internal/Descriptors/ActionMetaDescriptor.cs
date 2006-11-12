@@ -26,6 +26,7 @@ namespace Castle.MonoRail.Framework.Internal
 		private SkipRescueAttribute skipRescue;
 		private AccessibleThroughAttribute accessibleThrough;
 		private IList skipFilters = new ArrayList();
+		private IList cacheConfigurers = new ArrayList();
 
 		public SkipRescueAttribute SkipRescue
 		{
@@ -42,6 +43,11 @@ namespace Castle.MonoRail.Framework.Internal
 		public IList SkipFilters
 		{
 			get { return skipFilters; }
+		}
+
+		public IList CacheConfigurers
+		{
+			get { return cacheConfigurers; }
 		}
 	}
 }

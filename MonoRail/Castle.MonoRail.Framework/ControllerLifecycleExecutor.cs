@@ -22,7 +22,6 @@ namespace Castle.MonoRail.Framework
 	using System.Threading;
 	using Castle.Core;
 	using Castle.Core.Logging;
-	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -63,8 +62,10 @@ namespace Castle.MonoRail.Framework
 
 		private bool skipFilters;
 		private bool hasError;
+		private bool hasConfiguredCache;
 		private Exception exceptionToThrow;
 		private IDictionary filtersToSkip;
+		private ActionMetaDescriptor actionDesc;
 
 		/// <summary>
 		/// Initializes a new instance of 
@@ -173,7 +174,7 @@ namespace Castle.MonoRail.Framework
 				}
 				else
 				{
-					ActionMetaDescriptor actionDesc = metaDescriptor.GetAction(actionMethod);
+					actionDesc = metaDescriptor.GetAction(actionMethod);
 
 					// Overrides the current layout, if the action specifies one
 					if (actionDesc.Layout != null)
@@ -238,6 +239,21 @@ namespace Castle.MonoRail.Framework
 					else
 					{
 						dynAction.Execute(controller);
+					}
+					
+					if (!hasConfiguredCache && 
+					    !context.Response.WasRedirected &&
+						actionDesc != null &&
+						context.Response.StatusCode == 200)
+					{
+						// We need to prevent that a controller.Send
+						// ends up configuring the cache for a different URL
+						hasConfiguredCache = true;
+						
+						foreach(ICachePolicyConfigurer configurer in actionDesc.CacheConfigurers)
+						{
+							configurer.Configure(context.Response.CachePolicy);
+						}
 					}
 				}
 			}

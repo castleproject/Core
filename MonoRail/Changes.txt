@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Introduced CacheAttribute which can be used on actions to configure 
+  the underlying HttpCachePolicy
+
 - Modified WizardActionProvider to use ControllerLifecycleExecutor
 
 - Modified EngineContextModule a MonoRailHttpHandler to use ControllerLifecycleExecutor

@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework
 
 			SubscribeToApplicationHooks(context);
 
-			context.ResolveRequestCache += new EventHandler(OnStartMonoRailRequest);
+			context.AuthorizeRequest += new EventHandler(OnStartMonoRailRequest);
 			context.PreRequestHandlerExecute += new EventHandler(PrepareMonoRailRequest);
 		}
 
