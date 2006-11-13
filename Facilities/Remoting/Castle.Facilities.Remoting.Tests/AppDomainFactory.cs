@@ -24,18 +24,12 @@ namespace Castle.Facilities.Remoting.Tests
 		{
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 
-			String baseDir = new FileInfo(currentDomain.BaseDirectory).FullName;
-
-			String configFile =  String.Format(
-				"{0}/{1}.config", 
-				baseDir, name); 
-
 			AppDomainSetup setup = new AppDomainSetup();
 
 			setup.ApplicationName = name;
 			setup.ApplicationBase = currentDomain.SetupInformation.ApplicationBase;
 			setup.PrivateBinPath = currentDomain.SetupInformation.PrivateBinPath;
-			setup.ConfigurationFile = configFile;
+			setup.ConfigurationFile = currentDomain.SetupInformation.ConfigurationFile;
 
 			Evidence baseEvidence = currentDomain.Evidence;
 			Evidence evidence = new Evidence(baseEvidence);

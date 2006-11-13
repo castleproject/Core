@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel-vs2003", "..\..\InversionOfControl\Castle.MicroKernel\Castle.MicroKernel-vs2003.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.EventWiring.Tests-vs2003", "Castle.Facilities.EventWiring.Tests\Castle.Facilities.EventWiring.Tests-vs2003.csproj", "{89FC2739-BEAB-4926-9899-5B2CA43A39BB}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor-vs2003", "..\..\InversionOfControl\Castle.Windsor\Castle.Windsor-vs2003.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.ActiveCfg = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.Build.0 = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.ActiveCfg = Release|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.Build.0 = Release|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Debug.ActiveCfg = Debug|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Debug.Build.0 = Debug|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Release.ActiveCfg = Release|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Release.Build.0 = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.ActiveCfg = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.Build.0 = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.ActiveCfg = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

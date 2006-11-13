@@ -28,7 +28,7 @@ namespace Castle.Facilities.Remoting.Tests
 	{
 		protected override String GetServerConfigFile()
 		{
-			return BuildConfigPath("/server_kernelcomponent.xml");
+			return BuildConfigPath("server_kernelcomponent.xml");
 		}
 
 		[Test]

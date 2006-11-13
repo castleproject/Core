@@ -192,27 +192,6 @@
       <SubType>
       </SubType>
     </Content>
-    <Compile Include="Facilities\EventWiring\EventWiringTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facilities\EventWiring\Model\Handlers.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facilities\EventWiring\Model\MultiListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facilities\EventWiring\Model\MultiPublisher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facilities\EventWiring\Model\PublisherListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facilities\EventWiring\Model\SimpleListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Facilities\EventWiring\Model\SimplePublisher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Facilities\SlowlyInitFacility.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -248,9 +227,6 @@
     <Content Include="Configuration2\Properties\properties.xml" />
     <Content Include="Configuration2\Properties\properties_using_properties.xml" />
     <Content Include="DotNet2Config\GenericsConfig.xml" />
-    <Content Include="Facilities\EventWiring\badconfig.xml" />
-    <Content Include="Facilities\EventWiring\multi.xml" />
-    <Content Include="Facilities\EventWiring\simple.xml" />
     <Content Include="installerconfig.xml" />
     <Content Include="propertyInspectionBehavior.xml" />
     <Content Include="propertyInspectionBehaviorInvalid.xml" />

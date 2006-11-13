@@ -29,7 +29,7 @@ namespace Castle.Facilities.Remoting.Tests
 	{
 		protected override String GetServerConfigFile()
 		{
-			return BuildConfigPath("/server_clientactivated.xml");
+			return BuildConfigPath("server_clientactivated.xml");
 		}
 
 		[Test]

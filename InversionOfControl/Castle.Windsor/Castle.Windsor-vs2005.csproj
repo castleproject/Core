@@ -89,7 +89,7 @@
       <Name>Castle.Core-vs2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj">
-      <Name>Castle.MicroKernel</Name>
+      <Name>Castle.MicroKernel-vs2005</Name>
       <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>

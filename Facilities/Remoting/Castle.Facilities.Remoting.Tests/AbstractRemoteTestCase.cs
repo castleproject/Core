@@ -16,6 +16,7 @@ namespace Castle.Facilities.Remoting.Tests
 {
 	using System;
 	using System.Globalization;
+	using System.IO;
 	using System.Reflection;
 	using System.Runtime.Remoting;
 
@@ -79,7 +80,7 @@ namespace Castle.Facilities.Remoting.Tests
 		
 		protected string BuildConfigPath(string configFile)
 		{
-			return "../Castle.Facilities.Remoting.Tests/Configs/" + configFile;
+			return ConfigHelper.ResolvePath(Path.Combine(@"Configs/", configFile));
 		}
 	}
 

@@ -281,11 +281,14 @@ namespace Castle.MicroKernel
 			if (LifestyleType.Undefined == lifestyle) throw new ArgumentException("The specified lifestyle must be Thread, Transient, or Singleton.", "lifestyle");
 
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, serviceType, classType, null);
+			
 			if (overwriteLifestyle || LifestyleType.Undefined == model.LifestyleType)
 			{
 				model.LifestyleType = lifestyle;
 			}
+			
 			RaiseComponentModelCreated(model);
+			
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
 		}
@@ -781,6 +784,7 @@ namespace Castle.MicroKernel
 						UnsubscribeFromParentKernel();
 						RaiseRemovedAsChildKernel();
 					}
+					
 					parentKernel = null;
 				}
 				else
@@ -819,9 +823,9 @@ namespace Castle.MicroKernel
 				{
 					activator = (IComponentActivator)
 						Activator.CreateInstance(model.CustomComponentActivator,
-						    new object[]
-						    {
-						        model, this,
+							new object[] {
+						        model, 
+						        this,
 						        new ComponentInstanceDelegate(RaiseComponentCreated),
 						        new ComponentInstanceDelegate(RaiseComponentDestroyed)
 						    });
@@ -848,7 +852,7 @@ namespace Castle.MicroKernel
 
 				IHandler[] handlers = NamingSubSystem.GetHandlers();
 
-				foreach(IHandler handler in handlers)
+				foreach (IHandler handler in handlers)
 				{
 					nodes[index++] = handler.ComponentModel;
 				}

@@ -26,20 +26,41 @@ namespace Castle.MicroKernel.Facilities
 		private IKernel kernel;
 		private IConfiguration facilityConfig;
 
+		/// <summary>
+		/// Gets the <see cref="IKernel"/> where the facility is registered.
+		/// </summary>
+		/// <value>The <see cref="IKernel"/>.</value>
 		public IKernel Kernel
 		{
 			get { return kernel; }
 		}
 
+		/// <summary>
+		/// Gets the facility configuration.
+		/// </summary>
+		/// <value>The <see cref="IConfiguration"/> representing 
+		/// the facility configuration.</value>
 		public IConfiguration FacilityConfig
 		{
 			get { return facilityConfig; }
 		}
 
+		/// <summary>
+		/// The custom initialization for the Facility.
+		/// </summary>
+		/// <remarks>It must be overriden.</remarks>
 		protected abstract void Init();
 
 		#region IFacility Members
 
+		/// <summary>
+		/// Initializes the facility. First it performs the initialization common for all 
+		/// facilities, setting the <see cref="Kernel"/> and the 
+		/// <see cref="FacilityConfig"/>. After it, the <c>Init</c> method is invoked
+		/// and the custom initilization is perfomed.
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="facilityConfig"></param>
 		public void Init(IKernel kernel, IConfiguration facilityConfig)
 		{
 			this.kernel = kernel;
@@ -48,6 +69,10 @@ namespace Castle.MicroKernel.Facilities
 			Init();
 		}
 
+		/// <summary>
+		/// Terminates the Facility, invokind the <see cref="Dispose"/> and setting 
+		/// the Kernel to a null reference.
+		/// </summary>
 		public void Terminate()
 		{
 			Dispose();
@@ -59,6 +84,11 @@ namespace Castle.MicroKernel.Facilities
 
 		#region IDisposable Members
 
+		/// <summary>
+		/// Performs the tasks associated with freeing, releasing, or resetting 
+		/// the facility resources.
+		/// </summary>
+		/// <remarks>It can be overriden.</remarks>
 		public virtual void Dispose()
 		{
 		}

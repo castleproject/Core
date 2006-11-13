@@ -32,30 +32,87 @@ namespace Castle.Facilities.EventWiring
 	/// </summary>
 	/// <remarks>
 	/// A component that wish to subscribe to an event must use the external configuration
-	/// adding a node <c>subscribes</c>. This node can have multiple entries using the 
-	/// <c>subscribe-to</c> node.
-	/// <para>TODO: Add a configuration sample to this documentation</para>
+	/// adding a node <c>subscribers</c> on the publisher. This node can have multiple entries using the 
+	/// <c>subscriber</c> node.
 	/// </remarks>
+	/// <example>
+	/// <para>This example shows two simple components: one is the event publisher and the other is the 
+	/// subscriber. The subscription will be done by the facility, using the publisher associated configuration.</para>
+	/// <para>The Publisher class:</para>
+	/// <code>
+	/// public class SimplePublisher
+	///	{
+	///		public event PublishEventHandler Event;
+	///
+	///		public void Trigger()
+	///		{
+	///			if (Event != null)
+	///			{
+	///				Event(this, new EventArgs()); 
+	///			}
+	///		}
+	/// }
+	/// </code>
+	/// <para>The Subscriber class:</para>
+	/// <code>
+	/// public class SimpleListener
+	/// {
+	/// 	private bool _listened;
+	/// 	private object _sender;
+	/// 
+	/// 	public void OnPublish(object sender, EventArgs e)
+	/// 	{
+	/// 		_sender = sender; 
+	/// 		_listened = sender != null;
+	/// 	}
+	/// 
+	/// 	public bool Listened
+	/// 	{
+	/// 		get { return _listened;	}
+	/// 	}
+	/// 
+	/// 	public object Sender
+	/// 	{
+	/// 		get { return _sender; }
+	/// 	}
+	/// }
+	/// </code>
+	/// <para>The configuration file:</para>
+	/// <code>
+	/// <![CDATA[
+	/// <?xml version="1.0" encoding="utf-8" ?>
+	/// <configuration>
+	/// 	<facilities>
+	/// 		<facility 
+	/// 			id="event.wiring"
+	/// 			type="Castle.Facilities.EventWiring.EventWiringFacility, Castle.MicroKernel" />
+	/// 	</facilities>
+	/// 
+	/// 	<components>
+	/// 		<component 
+	/// 			id="SimpleListener" 
+	/// 			type="Castle.Facilities.EventWiring.Tests.Model.SimpleListener, Castle.Facilities.EventWiring.Tests" />
+	/// 
+	/// 		<component 
+	/// 			id="SimplePublisher" 
+	/// 			type="Castle.Facilities.EventWiring.Tests.Model.SimplePublisher, Castle.Facilities.EventWiring.Tests" >
+	/// 			<subscribers>
+	/// 				<subscriber id="SimpleListener" event="Event" handler="OnPublish"/>
+	/// 			</subscribers>
+	/// 		</component>
+	/// 	</components>
+	/// </configuration>
+	/// ]]>
+	/// </code>
+	/// </example>
 	public class EventWiringFacility : AbstractFacility
 	{
-		/// <summary>
-		/// Maps a <see cref="ComponentModel"/> to a <see cref="IConfiguration"/> that represents 
-		/// the <c>subscribes</c> node
-		/// </summary>
-		private readonly IDictionary model2SubcribeNode = new HybridDictionary();
+		private const string SubscriberList = "evts.subscriber.list";
 		
 		/// <summary>
-		/// Maps the <see cref="ComponentModel"/> of a subscriber to a list of publishers. The M
+		/// Overriden. Initializes the facility, subscribing to the <see cref="IKernelEvents.ComponentModelCreated"/>,
+		/// <see cref="IKernelEvents.ComponentCreated"/>, <see cref="IKernelEvents.ComponentDestroyed"/> Kernel events.
 		/// </summary>
-		private readonly IDictionary publishers = new HybridDictionary();
-
-		/// <summary>
-		/// Constructs the facility
-		/// </summary>
-		public EventWiringFacility()
-		{
-		}
-
 		protected override void Init()
 		{
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
@@ -63,211 +120,195 @@ namespace Castle.Facilities.EventWiring
 			Kernel.ComponentDestroyed += new ComponentInstanceDelegate(OnComponentDestroyed);
 		}
 
+		#region OnComponentModelCreated
+
+		/// <summary>
+		/// Checks if the component we're dealing is a publisher. If it is, 
+		/// parses the configuration (the subscribers node) getting the event wiring info.
+		/// </summary>
+		/// <param name="model">The component model.</param>
+		/// <exception cref="EventWiringException">Invalid and/or a error in the configuration</exception>
 		private void OnComponentModelCreated(ComponentModel model)
 		{
 			ExtractAndRegisterEventInformation(model);
 		}
-
-		private void OnComponentCreated(ComponentModel model, object instance)
-		{
-			// If the component is a publisher
-			StartAndWireSubscribers(model, instance);
-		}
-
-		private void OnComponentDestroyed(ComponentModel model, object instance)
-		{
-			// TODO: Remove Listener
-		}
-
-		/// <summary>
-		/// Checks whether the component model has, on its configuration, 
-		/// a <c>subscribes</c> node. If so adds it to a hashtable associated
-		/// with the model, and updates the publisher information adding it 
-		/// as a subscriber
-		/// </summary>
-		/// <param name="model"></param>
+		
 		private void ExtractAndRegisterEventInformation(ComponentModel model)
 		{
-			if (model.Configuration == null) return;
+			if (IsNotPublishingEvents(model)) return;
 
-			IConfiguration subscribersNode = model.Configuration.Children["subscribes"];
+			IConfiguration subscribersNode = model.Configuration.Children["subscribers"];
 
-			if (subscribersNode == null) return;
-
-			// TODO: Validate the config.
-
-			model2SubcribeNode.Add(model, subscribersNode);
-
-			foreach (IConfiguration subscriberNode in subscribersNode.Children)
+			if (subscribersNode.Children.Count < 1)
 			{
-				String publisherKey = GetPublisherKey(subscriberNode);
+				throw new EventWiringException(
+					"The subscribers node must have at least an one subsciber child. Check node subscribers of the " 
+					+ model.Name + " component");
+			}
+			
+			IDictionary subscribers2Evts = new HybridDictionary();
+			
+			foreach (IConfiguration subscriber in subscribersNode.Children)
+			{
+				string subscriberKey = GetSubscriberKey(subscriber);
 
-				IList subscriberList = null;
+				AddSubscriberDependecyToModel(subscriberKey, model);
 
-				if (!publishers.Contains(publisherKey))
-				{
-					subscriberList = new ArrayList();
+				ExtractAndAddEventInfo(subscribers2Evts, subscriberKey, subscriber, model);
+			}
 
-					publishers[publisherKey] = subscriberList;
-				}
-				else
-				{
-					subscriberList = (IList) publishers[publisherKey];
-				}
+			model.ExtendedProperties[SubscriberList] = subscribers2Evts;
+		}
 
-				String eventName = subscriberNode.Attributes["event"];
+		private void ExtractAndAddEventInfo(IDictionary subscribers2Evts, string subscriberKey, IConfiguration subscriber, ComponentModel model)
+		{
+			ArrayList wireInfoList = (ArrayList)subscribers2Evts[subscriberKey];
 
-				if (eventName == null || eventName.Length == 0)
-				{
-					throw new EventWiringException("You must supply an 'event' " + 
-						"attribute which is the event name on the publisher you want to subscribe." + 
-						" Check node 'subscribe-to' for component " + model.Name);
-				}
+			if (wireInfoList == null)
+			{
+				wireInfoList = new ArrayList();
+				subscribers2Evts[subscriberKey] = wireInfoList;
+			}
+			
+			string eventName = subscriber.Attributes["event"];
+			if (eventName == null || eventName.Length == 0)
+			{
+				throw new EventWiringException("You must supply an 'event' " +
+					"attribute which is the event name on the publisher you want to subscribe." +
+					" Check node 'subscriber' for component " + model.Name + "and id = " + subscriberKey);
+			}
 
-				String handlerMethodName = subscriberNode.Attributes["handler"];
+			string handlerMethodName = subscriber.Attributes["handler"];
+			if (handlerMethodName == null || handlerMethodName.Length == 0)
+			{
+				throw new EventWiringException("You must supply an 'handler' attribute " +
+					"which is the method on the subscriber that will handle the event." +
+					" Check node 'subscriber' for component " + model.Name + "and id = " + subscriberKey);
+			}
 
-				if (handlerMethodName == null || handlerMethodName.Length == 0)
-				{
-					throw new EventWiringException("You must supply an 'handler' attribute " + 
-						"which is the method on the subscriber that will handle the event." + 
-						" Check node 'subscribe-to' for component " + model.Name);
-				}
+			wireInfoList.Add(new WireInfo(eventName, handlerMethodName));
+		}
 
-				subscriberList.Add(new WireInfo(model, eventName, handlerMethodName));
+		private void AddSubscriberDependecyToModel(string subscriberKey, ComponentModel model)
+		{
+			DependencyModel dp = new DependencyModel(DependencyType.ServiceOverride, subscriberKey, null, false);
+			
+			if (!model.Dependencies.Contains(dp))
+			{
+				model.Dependencies.Add(dp);
 			}
 		}
 
+		private static string GetSubscriberKey(IConfiguration subscriber)
+		{
+			string subscriberKey = subscriber.Attributes["id"];
+			
+			if (subscriberKey == null || subscriberKey.Length == 0)
+			{
+				throw new EventWiringException("The subscriber node must have a valid Id assigned");
+			}
+			
+			return subscriberKey;
+		}
+
+		private bool IsNotPublishingEvents(ComponentModel model)
+		{
+			return (model.Configuration == null) || (model.Configuration.Children["subscribers"] == null);
+		}
+
+		#endregion
+
+		#region OnComponentCreated
+		
 		/// <summary>
 		/// Checks if the component we're dealing is a publisher. If it is, 
-		/// iterates the subscribers starting them.
+		/// iterates the subscribers starting them and wiring the events.
 		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="publisher"></param>
-		private void StartAndWireSubscribers(ComponentModel model, object publisher)
+		/// <param name="model">The component model.</param>
+		/// <param name="instance">The instance representing the component.</param>
+		/// <exception cref="EventWiringException">When the subscriber is not found
+		/// <br /> or <br/>
+		/// The handler method isn't found
+		/// <br /> or <br/>
+		/// The event isn't found
+		/// </exception>
+		private void OnComponentCreated(ComponentModel model, object instance)
 		{
-			IList subscriberList = (IList) publishers[model.Name];
-
-			if (subscriberList == null) return;
-
-			IDictionary createdInstances = new Hashtable();
-
-			foreach(WireInfo wireInfo in subscriberList)
+			if (IsPublisher(model))
 			{
-				String subscriberKey = wireInfo.subscriberModel.Name;
+				WirePublisher(model, instance);
+			}
+		}
+
+		private void WirePublisher(ComponentModel model, object publisher)
+		{
+			StartAndWirePublisherSubscribers(model, publisher);
+		}
+
+		private bool IsPublisher(ComponentModel model)
+		{
+			return model.ExtendedProperties[SubscriberList] != null;
+		}
+
+		private void StartAndWirePublisherSubscribers(ComponentModel model, object publisher)
+		{
+			IDictionary subscribers = (IDictionary)model.ExtendedProperties[SubscriberList];
+
+			if (subscribers == null) return;
+
+			foreach (DictionaryEntry subscriberInfo in subscribers)
+			{
+				string subscriberKey = (string) subscriberInfo.Key;
+				
+				IList wireInfoList = (IList) subscriberInfo.Value;
 
 				IHandler handler = Kernel.GetHandler(subscriberKey);
 
 				AssertValidHandler(handler, subscriberKey);
 
-				object subscriberInstance = createdInstances[handler];
+				object subscriberInstance;
 
 				try
 				{
-					if (subscriberInstance == null)
-					{
-						// TODO: I think there might be a GC issue here
-						// meaning that the subscriber can be collected anytime and we need to
-						// prevent it
-
-						subscriberInstance = handler.Resolve(CreationContext.Empty);
-
-						createdInstances[handler] = subscriberInstance;
-					}
+					subscriberInstance = handler.Resolve(CreationContext.Empty);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new EventWiringException("Failed to start subscriber " + subscriberKey, ex);
 				}
 
 				Type publisherType = model.Implementation;
-
-				String eventName = wireInfo.eventName;
-
-				EventInfo eventInfo = publisherType.GetEvent(eventName, 
-					BindingFlags.Static|BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
-
-				if (eventInfo == null)
+				
+				foreach (WireInfo wireInfo in wireInfoList)
 				{
-					throw new EventWiringException("Could not find event on publisher. Event " + 
-						eventName + " Publisher " + publisherType.FullName);
+					String eventName = wireInfo.EventName;
+
+					//TODO: Caching of EventInfos.
+					EventInfo eventInfo = publisherType.GetEvent(eventName,
+					                                             BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+					if (eventInfo == null)
+					{
+						throw new EventWiringException("Could not find event on publisher. Event " +
+						                               eventName + " Publisher " + publisherType.FullName);
+					}
+
+					MethodInfo handlerMethod = subscriberInstance.GetType().GetMethod(wireInfo.Handler,
+					                                                                  BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+					if (handlerMethod == null)
+					{
+						throw new EventWiringException("Could not find the method '" + wireInfo.Handler +
+						                               "' to handle the event " + eventName + ". Subscriber " 
+						                               + subscriberInstance.GetType().FullName);
+					}
+
+					Delegate delegateHandler = Delegate.CreateDelegate(eventInfo.EventHandlerType,
+					                                                   subscriberInstance, wireInfo.Handler);
+
+					eventInfo.AddEventHandler(publisher, delegateHandler);
 				}
-
-				MethodInfo handlerMethod = subscriberInstance.GetType().GetMethod(wireInfo.handler,
-					BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
-
-				if (handlerMethod == null)
-				{
-					throw new EventWiringException("Could not find the method '" + wireInfo.handler + 
-						"' to handle the event " + eventName + ". Subscriber " + subscriberInstance.GetType().FullName);
-				}
-
-				Delegate delegateHandler = Delegate.CreateDelegate(eventInfo.EventHandlerType, 
-					subscriberInstance, wireInfo.handler);
-
-				eventInfo.AddEventHandler(publisher, delegateHandler);
 			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="instance"></param>
-		private void WireEventsIfNeeded(ComponentModel model, object instance)
-		{
-//			if (model2SubcribeNode.Contains(model))
-//			{
-//				IConfiguration subscribersNode = (IConfiguration) model2SubcribeNode[model];
-//
-//				foreach (IConfiguration subscriberNode in subscribersNode.Children)
-//				{
-//					object publisher = GetPublisherInstance(subscriberNode);
-//
-//					EventInfo eventInfo = GetEventInfo(publisher, subscriberNode);
-//
-//					String handlerMethodName = subscriberNode.Attributes["handler"];
-//					Delegate handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, instance, handlerMethodName);
-//
-//					eventInfo.AddEventHandler(publisher, handler);
-//				}
-//			}
-		}
-
-//		private EventInfo GetEventInfo(object publisher, IConfiguration subscriberNode)
-//		{
-//			String eventName = subscriberNode.Attributes["event"];
-//
-//			Type publisherType = publisher.GetType();
-//
-//			EventInfo eventInfo = publisherType.GetEvent(eventName, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public);
-//
-//			if (eventInfo == null)
-//			{
-//				throw new EventWiringException(String.Format("Event Not Found. Event Name: {0}. Publisher: {1}", eventName, publisherType.FullName));
-//			}
-//
-//			return eventInfo;
-//		}
-//
-//		private object GetPublisherInstance(IConfiguration subscriberNode)
-//		{
-//			String publisherKey = GetPublisherKey(subscriberNode);
-//
-//			//TODO: Check cyclic dependency
-//
-//			try
-//			{
-//				return Kernel[publisherKey];
-//			}
-//			catch (Exception e)
-//			{
-//				throw new EventWiringException("Error resolving publisher", e);
-//			}
-//		}
-
-		private static String GetPublisherKey(IConfiguration subscriberNode)
-		{
-			return subscriberNode.Attributes["publisher"];
 		}
 
 		private static void AssertValidHandler(IHandler handler, string subscriberKey)
@@ -276,28 +317,101 @@ namespace Castle.Facilities.EventWiring
 			{
 				throw new EventWiringException("Publisher tried to start subscriber " + subscriberKey + " that was not found");
 			}
-	
+
 			if (handler.CurrentState == HandlerState.WaitingDependency)
 			{
 				throw new EventWiringException("Publisher tried to start subscriber " + subscriberKey + " that is waiting for a dependency");
 			}
 		}
+
+		#endregion
+
+		private void OnComponentDestroyed(ComponentModel model, object instance)
+		{
+			// TODO: Remove Listener
+		}
 	}
 
 	/// <summary>
-	/// 
+	/// Represents the information about an event.
 	/// </summary>
 	internal class WireInfo
 	{
-		public ComponentModel subscriberModel;
-		public String eventName;
-		public String handler;
+		private String eventName;
+		
+		private String handler;
 
-		public WireInfo(ComponentModel subscriberModel, string eventName, string handler)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WireInfo"/> class.
+		/// </summary>
+		/// <param name="eventName">Name of the event.</param>
+		/// <param name="handler">The name of the handler method.</param>
+		public WireInfo(string eventName, string handler)
 		{
-			this.subscriberModel = subscriberModel;
 			this.eventName = eventName;
 			this.handler = handler;
+		}
+
+		/// <summary>
+		/// Gets the name of the event.
+		/// </summary>
+		/// <value>The name of the event.</value>
+		public string EventName
+		{
+			get { return eventName; }
+		}
+
+		/// <summary>
+		/// Gets the handler method name.
+		/// </summary>
+		/// <value>The handler.</value>
+		public string Handler
+		{
+			get { return handler; }
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current <see cref="T:System.Object"></see>.
+		/// </returns>
+		public override int GetHashCode()
+		{
+			return eventName.GetHashCode() + 29 * handler.GetHashCode();
+		}
+
+		/// <summary>
+		/// Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>.</param>
+		/// <returns>
+		/// true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
+		/// </returns>
+		public override bool Equals(object obj)
+		{
+			if (this == obj)
+			{
+				return true;
+			}
+			
+			WireInfo wireInfo = obj as WireInfo;
+			if (wireInfo == null)
+			{
+				return false;
+			}
+			
+			if (!Equals(eventName, wireInfo.eventName))
+			{
+				return false;
+			}
+			
+			if (!Equals(handler, wireInfo.handler))
+			{
+				return false;
+			}
+			
+			return true;
 		}
 	}
 }
