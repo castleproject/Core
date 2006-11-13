@@ -18,6 +18,7 @@ using AspectSharp.Lang.AST;
 
 namespace Castle.Facilities.AspectSharp
 {
+	using System;
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 
@@ -30,7 +31,7 @@ namespace Castle.Facilities.AspectSharp
 	/// Summary description for AopInterceptor.
 	/// </summary>
 	[Transient]
-	public class AopInterceptor : IMethodInterceptor, IOnBehalfAware
+	public class AopInterceptor : MarshalByRefObject, IMethodInterceptor, IOnBehalfAware
 	{
 		private IKernel _kernel;
 		private AspectEngine _engine;
