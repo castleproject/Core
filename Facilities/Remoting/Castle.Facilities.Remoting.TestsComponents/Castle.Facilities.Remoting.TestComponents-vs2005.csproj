@@ -85,9 +85,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CalcServiceImpl.cs">
       <SubType>Code</SubType>
     </Compile>

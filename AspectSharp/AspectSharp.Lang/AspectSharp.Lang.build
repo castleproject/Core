@@ -9,7 +9,6 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.sign" value="false" />
 		<property name="assembly.is-cls-compliant" value="false" />
 		<property name="assembly.title" value="Castle.AspectSharp.Lang" />
 		<property name="assembly.description" value="Built-in Language to configure aspects using Aspect#" />

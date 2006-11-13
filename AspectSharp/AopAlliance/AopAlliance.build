@@ -9,7 +9,6 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.sign" value="false" />
 		<property name="assembly.title" value="AopAlliance API" />
 		<property name="assembly.description" value="AopAlliance Interfaces" />
 		<property name="assembly.copyright" value="Public Domain" />

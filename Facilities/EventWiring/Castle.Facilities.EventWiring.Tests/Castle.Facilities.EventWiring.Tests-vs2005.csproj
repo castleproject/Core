@@ -90,9 +90,6 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="SingletonStartableTestCase.cs" />
     <Compile Include="WiringTestBase.cs" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SingletonComponentsTestCase.cs" />
     <Compile Include="InvalidConfigTestCase.cs" />
     <Compile Include="Model\Handlers.cs">
