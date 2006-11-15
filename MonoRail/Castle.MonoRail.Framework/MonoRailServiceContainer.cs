@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Views.Aspx;
 
 	/// <summary>
-	/// 
+	/// Parent Service container for the MonoRail framework
 	/// </summary>
 	public class MonoRailServiceContainer : AbstractServiceContainer
 	{
@@ -89,16 +89,39 @@ namespace Castle.MonoRail.Framework
 			
 			XmlNodeList addNodes = webConfig.DocumentElement.SelectNodes(
 				"/configuration/system.web/httpHandlers/add");
-			
-			foreach(XmlElement addElem in addNodes)
+
+			if (addNodes.Count == 0)
 			{
+				// Possibly the web.config configuration node is using a namespace declaration
+
+				XmlElement systemWebElem = webConfig.DocumentElement["system.web"];
+				XmlElement handlers = systemWebElem["httpHandlers"];
+				addNodes = handlers.ChildNodes;
+			}
+
+			bool found = false;
+			
+			foreach(XmlNode addNode in addNodes)
+			{
+				if (addNode.NodeType != XmlNodeType.Element) continue;
+
+				XmlElement addElem = (XmlElement) addNode;
+				
 				String type = addElem.GetAttribute("type");
 				
 				if (type.StartsWith("Castle.MonoRail.Framework.MonoRailHttpHandlerFactory"))
 				{
 					String extension = addElem.GetAttribute("path").Substring(1);
 					extension2handler.Add(extension, String.Empty);
+					found = true;
 				}
+			}
+			
+			if (!found)
+			{
+				throw new RailsException("We inspected the web.config httpHandlers section and " + 
+					"couldn't find an extension that mapped to MonoRailHttpHandlerFactory. " + 
+					"Is your configuration right to use MonoRail?");
 			}
 		}
 
