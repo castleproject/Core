@@ -92,7 +92,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\log4net.dll</HintPath>
     </Reference>

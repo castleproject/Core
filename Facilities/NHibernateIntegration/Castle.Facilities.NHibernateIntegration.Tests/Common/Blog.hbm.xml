@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<hibernate-mapping xmlns="urn:nhibernate-mapping-2.0">
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="Castle.Facilities.NHibernateIntegration.Tests.Blog, Castle.Facilities.NHibernateIntegration.Tests" table="BLOGTABLE2">
 	
 		<id name="Id" type="Int32" column="BLOG_ID">

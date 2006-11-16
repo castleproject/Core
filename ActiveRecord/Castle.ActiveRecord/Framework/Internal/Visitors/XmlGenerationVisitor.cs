@@ -1012,7 +1012,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private void StartMappingNode(bool useAutoImport)
 		{
 			AppendF("<hibernate-mapping {0}{1} xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">", 
+				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">", 
 			        MakeAtt("auto-import", useAutoImport),
 				MakeAtt("default-lazy", ActiveRecordModel.isLazyByDefault));
 		}

@@ -346,6 +346,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			return innerSession.CreateCriteria(persistentClass);
 		}
 
+		public ICriteria CreateCriteria(Type persistentClass, string alias)
+		{
+			return innerSession.CreateCriteria(persistentClass, alias);
+		}
+
 		public IQuery CreateQuery(String queryString)
 		{
 			return innerSession.CreateQuery(queryString);

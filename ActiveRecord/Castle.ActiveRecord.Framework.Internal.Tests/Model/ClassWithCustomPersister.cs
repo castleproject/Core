@@ -195,6 +195,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
+		public object[] GetDatabaseSnapshot(object id, object version, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Update(object id, object[] fields, int[] dirtyFields, object[] oldFields, object oldVersion, object obj,
 		                   ISessionImplementor session)
 		{

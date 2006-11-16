@@ -346,6 +346,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			return inner.CreateCriteria(persistentClass);
 		}
 
+		public ICriteria CreateCriteria(Type persistentClass, string alias)
+		{
+			return inner.CreateCriteria(persistentClass, alias);
+		}
+
 		public IQuery CreateQuery(string queryString)
 		{
 			return inner.CreateQuery(queryString);

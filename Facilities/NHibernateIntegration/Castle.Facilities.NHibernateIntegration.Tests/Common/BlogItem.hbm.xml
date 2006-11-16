@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<hibernate-mapping xmlns="urn:nhibernate-mapping-2.0">
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="Castle.Facilities.NHibernateIntegration.Tests.BlogItem, Castle.Facilities.NHibernateIntegration.Tests" table="BLOG_ITEMS_TABLE2" dynamic-update="true">
 		<id name="Id" type="Int32" column="BLOG_ITEM_ID">
 			<generator class="native" />
@@ -10,4 +10,5 @@
 		<many-to-one name="ParentBlog" column="BLOG_ID" not-null="true" />
 	</class>
 </hibernate-mapping>
+
 
