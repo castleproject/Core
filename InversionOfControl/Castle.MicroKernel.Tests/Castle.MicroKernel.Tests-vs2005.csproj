@@ -110,6 +110,7 @@
     <Compile Include="ClassComponents\ClassWithListConstructor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassComponents\ClassWithTwoParametersWithSameType.cs" />
     <Compile Include="ClassComponents\CommonImpl1.cs">
       <SubType>Code</SubType>
     </Compile>

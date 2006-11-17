@@ -15,7 +15,7 @@
 namespace Castle.MicroKernel.Tests
 {
 	using System;
-
+	using System.Collections;
 	using NUnit.Framework;
 
 	using Castle.MicroKernel.Tests.ClassComponents;
@@ -127,6 +127,16 @@ namespace Castle.MicroKernel.Tests
 		{
 			kernel.AddComponent("key1", typeof(CustomerImpl));
 			object component = kernel[ typeof(IDisposable) ];
+		}
+
+		[Test]
+		public void AddClassThatHasTwoParametersOfSameTypeAndNoOverloads()
+		{
+			kernel.AddComponent("test",typeof(ClassWithTwoParametersWithSameType));
+			kernel.AddComponent("test2",typeof(ICommon),typeof(CommonImpl1));
+			object resolved = this.kernel.Resolve(typeof (ClassWithTwoParametersWithSameType), new Hashtable());
+			Assert.IsNotNull(resolved);
+			                          
 		}
 
 	}
