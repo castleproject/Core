@@ -13,13 +13,13 @@ $PresentationHelper.Form( "remove${model.Type.Name}", "scaffoldingform", "post",
 $PresentationHelper.Form( "remove", "scaffoldingform", "post", $validatorForm )
 #end
 
-$HtmlHelper.InputHidden("id", ${id})
+$HtmlHelper.HiddenField("id")
 
 <input type="submit" value="Yes" />  
 
 <input type="button" value="No" onclick="javascript:history.go(-1);" />
 
-$HtmlHelper.EndForm()
+</form>
 
 
 <p>

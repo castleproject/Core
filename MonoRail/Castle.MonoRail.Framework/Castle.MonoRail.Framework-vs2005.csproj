@@ -440,7 +440,9 @@
     <EmbeddedResource Include="Controllers\Behaviour.resx" />
     <EmbeddedResource Include="Controllers\Effects2.resx" />
     <EmbeddedResource Include="Controllers\EffectsFat.resx" />
-    <EmbeddedResource Include="Controllers\Validation.resx" />
+    <EmbeddedResource Include="Controllers\Validation.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">

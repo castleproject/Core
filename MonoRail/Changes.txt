@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-168 
+  "ValidateEmail attribute does not work properly in Monorail Scarfold"
+
 - Introduced CacheAttribute which can be used on actions to configure 
   the underlying HttpCachePolicy
 

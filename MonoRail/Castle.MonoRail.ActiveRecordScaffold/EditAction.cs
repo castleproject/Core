@@ -45,11 +45,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			try
 			{
-				object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
-				
+				if (!controller.Flash.Contains(Model.Type.Name))
+				{
+					object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
+					controller.PropertyBag["instance"] = instance;
+					controller.PropertyBag[Model.Type.Name] = instance;
+				}
+
 				controller.PropertyBag["prefix"] = Model.Type.Name;
-				controller.PropertyBag["instance"] = instance;
-				controller.PropertyBag[Model.Type.Name] = instance;
 				controller.PropertyBag["id"] = idVal;
 			}
 			catch(Exception ex)

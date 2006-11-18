@@ -40,11 +40,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
+			object instance = null; 
+			
 			try
 			{
 				AssertIsPost(controller);
 
-				object instance = binder.BindObject(Model.Type, Model.Type.Name, 
+				instance = binder.BindObject(Model.Type, Model.Type.Name, 
 				                                    builder.BuildSourceNode(controller.Form));
 
 				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation, true);
@@ -67,16 +69,16 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			if (errors.Count != 0)
 			{
+				controller.Context.Flash[Model.Type.Name] = instance;
 				controller.Context.Flash["errors"] = errors;
 				
 				if (UseModelName)
 				{
-					controller.Redirect(controller.AreaName, controller.Name, "new" + Model.Type.Name, 
-						controller.Request.Form);
+					controller.Redirect(controller.AreaName, controller.Name, "new" + Model.Type.Name);
 				}
 				else
 				{
-					controller.Redirect(controller.AreaName, controller.Name, "new", controller.Request.Form);
+					controller.Redirect(controller.AreaName, controller.Name, "new");
 				}
 			}
 		}

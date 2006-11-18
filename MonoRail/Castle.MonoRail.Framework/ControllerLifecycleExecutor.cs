@@ -317,7 +317,7 @@ namespace Castle.MonoRail.Framework
 
 			if (exceptionToThrow != null)
 			{
-				throw new RailsException("Unhandled Exception while rendering view", exceptionToThrow);
+				throw exceptionToThrow;
 			}
 		}
 
