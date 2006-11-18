@@ -134,10 +134,8 @@ namespace Castle.MicroKernel.Tests
 		{
 			kernel.AddComponent("test",typeof(ClassWithTwoParametersWithSameType));
 			kernel.AddComponent("test2",typeof(ICommon),typeof(CommonImpl1));
-			object resolved = this.kernel.Resolve(typeof (ClassWithTwoParametersWithSameType), new Hashtable());
+			object resolved = kernel.Resolve(typeof (ClassWithTwoParametersWithSameType), new Hashtable());
 			Assert.IsNotNull(resolved);
-			                          
 		}
-
 	}
 }

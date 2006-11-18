@@ -435,11 +435,12 @@ namespace Castle.MicroKernel.Handlers
 
 			if (dependency.DependencyType == DependencyType.Service && dependency.TargetType != null)
 			{
-				if (DependenciesByService.Contains(dependency.TargetType) == false)
+				if (DependenciesByService.Contains(dependency.TargetType))
 				{
-					DependenciesByService.Add(dependency.TargetType, new ArrayList());
+					return;
 				}
-				((IList) DependenciesByService[dependency.TargetType]).Add(dependency);
+				
+				DependenciesByService.Add(dependency.TargetType, dependency);
 			}
 			else
 			{
@@ -648,22 +649,14 @@ namespace Castle.MicroKernel.Handlers
 			ComponentModel.AddDependent(model);
 		}
 
-		/// <summary>
-		/// Return the union of all the depedencies
-		/// </summary>
-		/// <param name="sets">a collection of collection of dependencies</param>
-		/// <param name="secondset">a collection of dependencies</param>
-		/// <returns></returns>
-		private DependencyModel[] Union(ICollection sets, ICollection secondset)
+		private DependencyModel[] Union(ICollection firstset, ICollection secondset)
 		{
-			ArrayList result = new ArrayList();
+			DependencyModel[] result = new DependencyModel[firstset.Count + secondset.Count];
 
-			foreach(ICollection collection in sets)
-			{
-				result.AddRange(collection);
-			}
-			result.AddRange(secondset);
-			return (DependencyModel[]) result.ToArray(typeof(DependencyModel));
+			firstset.CopyTo(result, 0);
+			secondset.CopyTo(result, firstset.Count);
+
+			return result;
 		}
 
 		/// <summary>
