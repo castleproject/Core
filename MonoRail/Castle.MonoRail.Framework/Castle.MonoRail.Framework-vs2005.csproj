@@ -152,6 +152,7 @@
     </Compile>
     <Compile Include="Attributes\SkipFilterAttribute.cs" />
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="ICachePolicyConfigurer.cs" />
     <Compile Include="Configuration\ControllersConfig.cs" />
     <Compile Include="Configuration\ExtensionEntry.cs" />

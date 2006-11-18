@@ -16,8 +16,6 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
-	using Castle.MonoRail.Framework.Internal;
-
 	/// <summary>
 	/// Enum (flag) to indicate when the filter should 
 	/// or is invoked.
