@@ -55,10 +55,10 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		                                  ArrayList errors, ref IDictionary prop2Validation, bool create)
 		{
 			bool isValid = true;
-
-			Type genType = typeof(ActiveRecordValidationBase<>).MakeGenericType(instance.GetType());
 			
 #if DOTNET2
+			Type genType = typeof(ActiveRecordValidationBase<>).MakeGenericType(instance.GetType());
+			
 			if (genType.IsAssignableFrom(instance.GetType()))
 			{
 				MethodInfo isValidMethod = instance.GetType().GetMethod("IsValid");

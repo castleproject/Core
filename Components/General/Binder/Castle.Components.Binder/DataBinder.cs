@@ -72,7 +72,7 @@ namespace Castle.Components.Binder
 			}
 			else if (childNode == null && desiredType == typeof(DateTime))
 			{
-				TrySpecialDateTimeBinding(treeRoot, paramName, out canConvert);
+				TrySpecialDateTimeBinding(desiredType, treeRoot, paramName, out canConvert);
 			}
 			else
 			{
@@ -436,9 +436,9 @@ namespace Castle.Components.Binder
 			
 			Node childNode = parent.GetChildNode(key);
 				
-			if (childNode == null && desiredType == typeof(DateTime))
+			if (childNode == null && IsDateTimeType(desiredType))
 			{
-				return TrySpecialDateTimeBinding(parent, key, out conversionSucceeded);
+				return TrySpecialDateTimeBinding(desiredType, parent, key, out conversionSucceeded);
 			}
 			else if (childNode == null)
 			{
@@ -547,7 +547,8 @@ namespace Castle.Components.Binder
 			return conversionSucceeded ? validItems.ToArray(arrayElemType) : Array.CreateInstance(arrayElemType, 0);
 		}
 
-		private object TrySpecialDateTimeBinding(CompositeNode treeRoot, String paramName, out bool conversionSucceeded)
+		private object TrySpecialDateTimeBinding(Type desiredType, CompositeNode treeRoot, 
+		                                         String paramName, out bool conversionSucceeded)
 		{
 			Node dayNode = treeRoot.GetChildNode(paramName + "day");
 			Node monthNode = treeRoot.GetChildNode(paramName + "month");
@@ -569,7 +570,16 @@ namespace Castle.Components.Binder
 				
 				conversionSucceeded = true;
 					
-				return new DateTime(year, month, day, hour, minute, second);
+				DateTime dt = new DateTime(year, month, day, hour, minute, second);
+
+				if (desiredType.Name == "NullableDateTime")
+				{
+					TypeConverter typeConverter = TypeDescriptor.GetConverter(desiredType);
+
+					return typeConverter.ConvertFrom(dt);
+				}
+				
+				return dt;
 			}
 			
 			conversionSucceeded = false;
@@ -590,6 +600,27 @@ namespace Castle.Components.Binder
 			object result = ConvertLeafNode(desiredType, (LeafNode) node, out conversionSucceeded);
 			
 			return conversionSucceeded ? result : defaultValue;
+		}
+
+		private bool IsDateTimeType(Type desiredType)
+		{
+			if (desiredType == typeof(DateTime))
+			{
+				return true;
+			}
+			else if (desiredType.Name == "NullableDateTime")
+			{
+				return true;
+			}
+#if DOTNET2
+			else if (desiredType.Name == "Nullable`1")
+			{
+				Type[] args = desiredType.GetGenericArguments();
+
+				return (args.Length == 1 && args[0] == typeof(DateTime));
+			}
+#endif
+			return false;
 		}
 		
 		#region Support methods

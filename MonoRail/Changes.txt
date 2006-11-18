@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-165 "DataBind doesn't bind NullableDateTime"
+
 - Fixed MR-169
   "Scarfold record modification results exception Can't edit without 
   the proper id when validation is failed in the defined validation rule"
