@@ -52,30 +52,44 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		}
 
 		internal static void SaveInstance(object instance, Controller controller, 
-		                                  ArrayList errors, IDictionary prop2Validation, bool create)
+		                                  ArrayList errors, ref IDictionary prop2Validation, bool create)
 		{
+			bool isValid = true;
+
+			Type genType = typeof(ActiveRecordValidationBase<>).MakeGenericType(instance.GetType());
+			
+#if DOTNET2
+			if (genType.IsAssignableFrom(instance.GetType()))
+			{
+				MethodInfo isValidMethod = instance.GetType().GetMethod("IsValid");
+
+				isValid = (bool) isValidMethod.Invoke(instance, null);
+				
+				if (!isValid)
+				{
+					MethodInfo getValidationErrorMessages = instance.GetType().GetMethod("get_ValidationErrorMessages");
+					MethodInfo getPropertiesValidationErrorMessage = instance.GetType().GetMethod("get_PropertiesValidationErrorMessage");
+
+					errors.AddRange((ICollection) getValidationErrorMessages.Invoke(instance, null));
+					prop2Validation = (IDictionary) getPropertiesValidationErrorMessage.Invoke(instance, null);
+				}
+			}
+			else
+#endif
 			if (instance is ActiveRecordValidationBase)
 			{
 				ActiveRecordValidationBase instanceBase = instance as ActiveRecordValidationBase;
 
-				if (!instanceBase.IsValid())
+				isValid = instanceBase.IsValid();
+				
+				if (!isValid)
 				{
 					errors.AddRange(instanceBase.ValidationErrorMessages);
 					prop2Validation = instanceBase.PropertiesValidationErrorMessage;
 				}
-				else
-				{
-					if (create)
-					{
-						instanceBase.Create();
-					}
-					else
-					{
-						instanceBase.Update();
-					}
-				}
 			}
-			else
+
+			if (isValid)
 			{
 				if (create)
 				{

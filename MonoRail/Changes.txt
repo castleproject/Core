@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-169
+  "Scarfold record modification results exception Can't edit without 
+  the proper id when validation is failed in the defined validation rule"
+
 - Fixed MR-168 
   "ValidateEmail attribute does not work properly in Monorail Scarfold"
 

@@ -49,7 +49,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				
 				instance = binder.BindObject(Model.Type, Model.Type.Name, builder.BuildSourceNode(controller.Request.Form));
 
-				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation, false);
+				CommonOperationUtils.SaveInstance(instance, controller, errors, ref prop2Validation, false);
 
 				SessionScope.Current.Flush();
 				
