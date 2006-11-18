@@ -15,7 +15,7 @@
 namespace Castle.MicroKernel
 {
 	using System;
-
+	
 	using Castle.Core.Configuration;
 	using Castle.Core.Resource;
 
@@ -29,34 +29,50 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Associates a configuration node with a facility key
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="config"></param>
-		void AddFacilityConfiguration( String key, IConfiguration config );
+		/// <param name="key">item key</param>
+		/// <param name="config">Configuration node</param>
+		void AddFacilityConfiguration(String key, IConfiguration config);
 
 		/// <summary>
 		/// Associates a configuration node with a component key
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="config"></param>
-		void AddComponentConfiguration( String key, IConfiguration config );
+		/// <param name="key">item key</param>
+		/// <param name="config">Configuration node</param>
+		void AddComponentConfiguration(String key, IConfiguration config);
+
+		/// <summary>
+		/// Associates a  configuration node with a bootstrap component key
+		/// </summary>
+		/// <param name="key">item key</param>
+		/// <param name="config">Configuration node</param>
+		void AddBootstrapComponentConfiguration(String key, IConfiguration config);
 
 		/// <summary>
 		/// Returns the configuration node associated with 
 		/// the specified facility key. Should return null
 		/// if no association exists.
 		/// </summary>
-		/// <param name="key"></param>
+		/// <param name="key">item key</param>
 		/// <returns></returns>
-		IConfiguration GetFacilityConfiguration( String key );
+		IConfiguration GetFacilityConfiguration(String key);
 
 		/// <summary>
 		/// Returns the configuration node associated with 
 		/// the specified component key. Should return null
 		/// if no association exists.
 		/// </summary>
-		/// <param name="key"></param>
+		/// <param name="key">item key</param>
 		/// <returns></returns>
-		IConfiguration GetComponentConfiguration( String key );
+		IConfiguration GetComponentConfiguration(String key);
+
+		/// <summary>
+		/// Returns the configuration node associated with 
+		/// the specified component key. Should return null
+		/// if no association exists.
+		/// </summary>
+		/// <param name="key">item key</param>
+		/// <returns></returns>
+		IConfiguration GetBootstrapComponentConfiguration(String key);
 
 		/// <summary>
 		/// Returns all configuration nodes for facilities
@@ -69,6 +85,12 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <returns></returns>
 		IConfiguration[] GetComponents();
+
+		/// <summary>
+		/// Returns all configuration nodes for bootstrap components
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration[] GetBootstrapComponents();
 
 		/// <summary>
 		/// 

@@ -1,6 +1,11 @@
 RC 4
 ====
-- Fixed issue where KeyAlreadyAdded exception would be throw for components accepting two parameters of the same type, without overrides
+
+- Fixed IOC-35 
+  "Add bootstrap section to configuration file"
+
+- Fixed issue where KeyAlreadyAdded exception would be throw for 
+  components accepting two parameters of the same type, without overrides
 
 - Fixed IOC-36 
   "Transient components with multliple constructors throw 

@@ -33,6 +33,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		protected static readonly String FacilitiesNodeName = "facilities";
 		protected static readonly String FacilityNodeName = "facility";
 		protected static readonly String ComponentsNodeName = "components";
+		protected static readonly String BootstrapNodeName = "bootstrap";
 		protected static readonly String ComponentNodeName = "component";
 		protected static readonly String IncludeNodeName = "include";
 		protected static readonly String PropertiesNodeName = "properties";		
@@ -103,12 +104,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 			get { return this.source; }
 		}
 
-//		protected ImportDirectiveCollection Imports
-//		{
-//			get { return this.imports; }
-//			set { this.imports = value; }
-//		}
-
 		#endregion
 
 		#region Helpers to populate IConfigurationStore
@@ -141,6 +136,15 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddComponentConfiguration( id, component );
 		}
 
+		protected void AddBootstrapComponentConfig(String id, IConfiguration component, IConfigurationStore store)
+		{
+			AssertValidId(id);
+
+			// TODO: Use import collection on type and service attribute (if they exist)
+
+			store.AddBootstrapComponentConfiguration(id, component);
+		}
+
 		private void AssertValidId(string id)
 		{
 			if (id == null || id.Length == 0)
@@ -158,7 +162,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		
 		protected void ProcessInclude(String uri, IConfigurationStore store)
 		{
-			IResource resource = store.GetResource( uri, CurrentResource );
+			IResource resource = store.GetResource(uri, CurrentResource);
 
 			if (resource == null)
 			{

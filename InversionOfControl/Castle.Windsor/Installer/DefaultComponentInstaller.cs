@@ -22,18 +22,27 @@ namespace Castle.Windsor.Installer
 	using Castle.MicroKernel;
 
 	/// <summary>
-	/// 
+	/// Default <see cref="IComponentsInstaller"/> implementation.
 	/// </summary>
 	public class DefaultComponentInstaller : IComponentsInstaller
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultComponentInstaller"/> class.
+		/// </summary>
 		public DefaultComponentInstaller()
 		{
 		}
 
 		#region IComponentsInstaller Members
 
+		/// <summary>
+		/// Perform installation.
+		/// </summary>
+		/// <param name="container">Target container</param>
+		/// <param name="store">Configuration store</param>
 		public void SetUp(IWindsorContainer container, IConfigurationStore store)
 		{
+			SetUpComponents(store.GetBootstrapComponents(), container);
 			SetUpFacilities(store.GetFacilities(), container);
 			SetUpComponents(store.GetComponents(), container);
 		}
