@@ -49,7 +49,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public void Remove(ComponentName name)
 		{
-			// Not implemented yet
+			Remove(FindNode(name));
 		}
 
 		public void Add(ComponentName name, IHandler handler)
@@ -190,8 +190,105 @@ namespace Castle.MicroKernel.SubSystems.Naming
 				}
 			}
 		}
-	}
 
+		private void Remove(TreeNode node)
+		{
+			if (node == null) return;
+
+			//A real tree node (this should be better indicated, there is really two types of nodes here)
+			if (node.PreviousSibling == null)
+			{
+				if (node.NextSibling != null)
+				{
+					TreeNode replacement = node.NextSibling;
+					replacement.Right = node.Right;
+					replacement.Left = node.Left;
+					replacement.PreviousSibling = null;
+					ReplaceNode(node, replacement);
+				}
+				else
+				{
+					RemoveBinaryTreeNode(node);
+				}
+			}
+			else
+			{
+				node.PreviousSibling.NextSibling = node.NextSibling;
+			}
+
+			count--;
+		}
+
+		private TreeNode FindSuccessor(TreeNode node)
+		{
+			TreeNode current = node.Right;
+			
+			if (current != null)
+			{
+				while (current.Left != null)
+				{
+					current = current.Left;
+				}
+			}
+
+			return current;
+		}
+
+		private void PromoteNode(TreeNode oldNode, TreeNode promoted)
+		{
+			if (promoted.Right != null || promoted.Left != null)
+			{
+				throw new InvalidOperationException("promoted node can not have child nodes, remove node from tree before promoting");
+			}
+
+			promoted.Right = oldNode.Right;
+			promoted.Left = oldNode.Left;
+
+			if (root == oldNode) root = promoted;
+		}
+
+		private void ReplaceNode(TreeNode oldNode, TreeNode newNode)
+		{
+			TreeNode parent = oldNode.Parent;
+			
+			if(parent == null)
+			{
+				root = newNode;
+			}
+			else if (parent.Right == oldNode)
+			{
+				parent.Right = newNode;
+			}
+			else if (parent.Left == oldNode)
+			{
+				parent.Left = newNode;
+			}
+
+			//throw if wanted
+		}
+
+		private void RemoveBinaryTreeNode(TreeNode node)
+		{
+			if(node.Left != null && node.Right != null)
+			{
+				TreeNode inorderSuccessor = FindSuccessor(node);
+				RemoveBinaryTreeNode(inorderSuccessor); //it has maximum one node to reorder
+				PromoteNode(node, inorderSuccessor);
+			}
+			else if(node.Left == null && node.Right == null)
+			{
+				ReplaceNode(node, null);
+			}
+			else if(node.Left != null)
+			{
+				ReplaceNode(node, node.Left);
+			}
+			else if(node.Right != null)
+			{
+				ReplaceNode(node, node.Right);
+			}
+		}
+	}
 
 	[Serializable]
 	internal class TreeNode
@@ -204,9 +301,13 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		/// <summary>Node's right</summary>
 		private TreeNode right;
+
+		/// <summary>Node's parent</summary>
+		private TreeNode parent;
 		
 		/// <summary>DA Linked List</summary>
 		private TreeNode nextSibling;
+		private TreeNode previousSibling;
 
 		public TreeNode(ComponentName compName, IHandler handler)
 		{
@@ -227,22 +328,52 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			get { return handler; }
 		}
 
+		public TreeNode Parent
+		{
+			get { return parent; }
+			set { parent = value; }
+		}
+
 		public TreeNode Left
 		{
 			get { return left; }
-			set { left = value; }
+			set 
+			{ 
+				left = value;
+				if (left != null)
+				{
+					left.Parent = this;
+				}
+			}
 		}
 
 		public TreeNode Right
 		{
 			get { return right; }
-			set { right = value; }
+			set 
+			{ 
+				right = value;
+				if (right != null)
+				{
+					right.Parent = this;
+				}
+			}
 		}
 
 		public TreeNode NextSibling
 		{
 			get { return nextSibling; }
-			set { nextSibling = value; }
+			set
+			{
+				nextSibling = value;
+				if (nextSibling != null) nextSibling.PreviousSibling = this;
+			}
+		}
+
+		public TreeNode PreviousSibling
+		{
+			get { return previousSibling; }
+			set { previousSibling = value; }
 		}
 
 		public void AddSibling(TreeNode node)
@@ -264,20 +395,46 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public TreeNode FindBestMatch(ComponentName name)
 		{
+			if ("*".Equals(name.LiteralProperties))
+			{
+				return this;
+			}
+			else if(string.IsNullOrEmpty(name.LiteralProperties))
+			{
+				return FindWithEmptyProperties();
+			}
+			else
+			{
+				return FindBestMatchByProperties(name);
+			}
+		}
+
+		private TreeNode FindWithEmptyProperties()
+		{
 			TreeNode current = this;
 
-			while(current != null)
+			while (current != null)
 			{
-				if ("*".Equals(name.LiteralProperties))
-				{
-					break;
-				}
+				if (string.IsNullOrEmpty(current.CompName.LiteralProperties))
+					return current;
 
+				current = current.NextSibling;
+			}
+
+			return this;
+		}
+
+		private TreeNode FindBestMatchByProperties(ComponentName name)
+		{
+			TreeNode current = this;
+
+			while (current != null)
+			{
 				bool selected = true;
 
-				foreach(DictionaryEntry entry in name.Properties)
+				foreach (DictionaryEntry entry in name.Properties)
 				{
-					String value = current.CompName.Properties[ entry.Key ] as String;
+					String value = current.CompName.Properties[entry.Key] as String;
 
 					if (value == null || !value.Equals(entry.Value))
 					{
