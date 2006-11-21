@@ -36,7 +36,6 @@ namespace Castle.VSNetIntegration.CastleWizards
 		{
 			return new Pair[] {
 				new Pair("hibernate.cache.use_query_cache", "true"), 
-				new Pair("hibernate.use_reflection_optimizer", "true"), 
 				new Pair("hibernate.connection.isolation", "ReadCommitted"),
 				new Pair("hibernate.show_sql", "false"),
 			};
