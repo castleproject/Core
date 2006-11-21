@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied patch by Adam Mills fixing IOC-39
+  "Fix for Null Reference when accessing empty BinaryTreeComponentName"
+
 - Fixed IOC-35 
   "Add bootstrap section to configuration file"
 

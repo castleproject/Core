@@ -85,5 +85,13 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreSame( handler3, handlers[0] );
 			Assert.AreSame( handler4, handlers[1] );
 		}
+
+		[Test]
+		public void AccessEmptyTree()
+		{
+			BinaryTreeComponentName tree = new BinaryTreeComponentName();
+			Assert.IsFalse(tree.Contains(new ComponentName("Test")));
+		}
+
 	}
 }

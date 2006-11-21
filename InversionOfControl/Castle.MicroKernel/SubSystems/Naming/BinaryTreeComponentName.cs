@@ -154,6 +154,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		internal TreeNode FindNode(ComponentName name)
 		{
+			if (root == null) return null; 
+
 			TreeNode current = root;
 
 			while(true)
