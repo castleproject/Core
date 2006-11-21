@@ -1,9 +1,6 @@
 RC 4
 ====
 
-- Applied patch by Adam Mills fixing IOC-40
-  "Provided an Implementation for BinaryTreeComponentName.Remove"
-
 - Applied patch by Adam Mills fixing IOC-39
   "Fix for Null Reference when accessing empty BinaryTreeComponentName"
 
