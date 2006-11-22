@@ -86,12 +86,111 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreSame( handler4, handlers[1] );
 		}
 
+       
+	    [Test]
+		public void ComponentNameEmptyProperties()
+	    {
+            BinaryTreeComponentName tree = new BinaryTreeComponentName();
+            DefaultHandler handler1 = new DefaultHandler(new ComponentModel("A", typeof(DefaultHandler), typeof(DefaultHandler)));
+            DefaultHandler handler2 = new DefaultHandler(new ComponentModel("B", typeof(DefaultHandler), typeof(DefaultHandler)));
+            tree.Add(new ComponentName("protocolhandler:key=1"), handler2);
+            tree.Add(new ComponentName("protocolhandler"), handler1);
+
+            Assert.AreEqual(handler1, tree.GetHandler(new ComponentName("protocolhandler")) );
+	    }
+	    
+	    [Test]
+        public void RemoveUnbalancedRoot()
+	    {
+            BinaryTreeComponentName tree = new BinaryTreeComponentName();
+            DefaultHandler handler1 = new DefaultHandler(new ComponentModel("A", typeof(DefaultHandler), typeof(DefaultHandler)));
+            tree.Add(new ComponentName("1000"), handler1);
+            tree.Add(new ComponentName("7500"), handler1);
+            tree.Add(new ComponentName("6000"), handler1);
+            tree.Add(new ComponentName("2000"), handler1);
+
+            tree.Remove(new ComponentName("1000"));
+            assertRemoved(tree, 3, new ComponentName("1000"), new ComponentName("6000"));
+	    }
+
+
+        [Test]
+        public void RemoveBalancedRoot()
+        {
+            BinaryTreeComponentName tree = new BinaryTreeComponentName();
+            DefaultHandler handler1 = new DefaultHandler(new ComponentModel("A", typeof(DefaultHandler), typeof(DefaultHandler)));
+            tree.Add(new ComponentName("1000"), handler1);
+            tree.Add(new ComponentName("0500"), handler1);
+            tree.Add(new ComponentName("6000"), handler1);
+            tree.Add(new ComponentName("2000"), handler1);
+
+            tree.Remove(new ComponentName("1000"));
+            assertRemoved(tree, 3, new ComponentName("1000"), new ComponentName("6000"));
+        }
+
+        [Test]
+        public void RemoveSibling()
+        {
+            BinaryTreeComponentName tree = new BinaryTreeComponentName();
+            DefaultHandler handler1 = new DefaultHandler(new ComponentModel("A", typeof(DefaultHandler), typeof(DefaultHandler)));
+
+            tree.Add(new ComponentName("1000"), handler1);
+            tree.Add(new ComponentName("0500"), handler1);
+            tree.Add(new ComponentName("0500:P=1"), handler1);
+            tree.Add(new ComponentName("0500:p=2"), handler1);
+
+            tree.Remove(new ComponentName("0500:p=2"));
+            assertRemoved(tree, 3, new ComponentName("0500:P=2"), new ComponentName("0500:P=1"));
+        }
+
+	    
+        [Test]
+        public void RemoveLeaf()
+        {
+            BinaryTreeComponentName tree = new BinaryTreeComponentName();
+            DefaultHandler handler1 = new DefaultHandler(new ComponentModel("A", typeof(DefaultHandler), typeof(DefaultHandler)));
+
+            tree.Add(new ComponentName("1000"), handler1);
+            tree.Add(new ComponentName("0500"), handler1);
+
+            tree.Remove(new ComponentName("0500"));
+            assertRemoved(tree, 1, new ComponentName("0500"), new ComponentName("1000"));
+        }
+
+        [Test]
+        public void RemoveNodeWithSiblings()
+        {
+            BinaryTreeComponentName tree = new BinaryTreeComponentName();
+            DefaultHandler handler1 = new DefaultHandler(new ComponentModel("A", typeof(DefaultHandler), typeof(DefaultHandler)));
+
+            tree.Add(new ComponentName("1000"), handler1);
+            tree.Add(new ComponentName("0500"), handler1);
+            tree.Add(new ComponentName("0500:P=1"), handler1);
+            tree.Add(new ComponentName("0500:p=2"), handler1);
+            tree.Add(new ComponentName("0400"), handler1);
+
+            tree.Remove(new ComponentName("0500"));
+            Assert.AreEqual(4, tree.Count);
+            Assert.AreEqual(4, tree.Handlers.Length);
+            Assert.AreEqual(2, tree.GetHandlers(new ComponentName("0500")).Length);
+            Assert.IsNotNull(tree.GetHandler(new ComponentName("0500:p=2")));
+        }
+
+	    
+        private void assertRemoved(BinaryTreeComponentName tree, int expectedCount, ComponentName removed, ComponentName exists)
+	    {
+            Assert.AreEqual(expectedCount, tree.Count);
+            Assert.AreEqual(expectedCount, tree.Handlers.Length);
+            Assert.IsNull(tree.GetHandler(removed));
+            Assert.IsNotNull(tree.GetHandler(exists));
+	    }
+
+
 		[Test]
 		public void AccessEmptyTree()
 		{
 			BinaryTreeComponentName tree = new BinaryTreeComponentName();
 			Assert.IsFalse(tree.Contains(new ComponentName("Test")));
 		}
-
 	}
 }
