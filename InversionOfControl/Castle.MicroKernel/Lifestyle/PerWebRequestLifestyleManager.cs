@@ -47,7 +47,7 @@ namespace Castle.MicroKernel.Lifestyle
 				{
 					string message = "Looks like you forgot to register the http module " +
 						typeof(PerWebRequestLifestyleModule).FullName +
-						"\r\nAdd '<add name=\"PerRequestLifestyle\" type=\"ClientService.RBT.Components.IoC.PerWebRequestLifestyleModule, ClientService.RBT.Components\" />' " +
+						"\r\nAdd '<add name=\"PerRequestLifestyle\" type=\"Castle.MicroKernel.Lifestyle.PerWebRequestLifestyleModule, Castle.MicroKernel\" />' " +
                         "to the <httpModules> section on your web.config";
 #if DOTNET2
 					throw new ConfigurationErrorsException(message);
