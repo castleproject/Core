@@ -17,12 +17,12 @@ using System.Data;
 
 namespace Castle.DynamicProxy.Tests
 {
-	using Castle.DynamicProxy.Tests.Interceptors;
+	using System.Collections.Generic;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BasicInterfcaseProxyWithoutTargetTestCase : BasePEVerifyTestCase
+	public class BasicInterfaceProxyWithoutTargetTestCase : BasePEVerifyTestCase
 	{
 		private ProxyGenerator generator;
 
@@ -63,7 +63,13 @@ namespace Castle.DynamicProxy.Tests
 				typeof(IService), new ThrowingInterceptor());
 
 			service.Sum(2, 2);
-		
+		}
+
+		[Test]
+		public void ProxyWithGenericTypeThatInheritFromGenericType()
+		{
+			// Only PEVerify is enough
+			generator.CreateInterfaceProxyWithoutTarget<IList<int>>(new ThrowingInterceptor());
 		}
 		
 		public class ReturnThreeInterceptor : IInterceptor

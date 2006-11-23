@@ -70,7 +70,41 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(listOfT, listOfZ));
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(listOfZ, listOfT));
 		}
-		
+
+		[Test]
+		public void ArrayTypes()
+		{
+			Array arrayOfInt1 = Array.CreateInstance(typeof(int), 1);
+			Array arrayOfInt2 = Array.CreateInstance(typeof(int), 2);
+			Array arrayOfStr = Array.CreateInstance(typeof(string), 2);
+
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfInt1.GetType(), arrayOfInt1.GetType()));
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfInt1.GetType(), arrayOfInt2.GetType()));
+
+			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfStr.GetType(), arrayOfInt1.GetType()));
+		}
+
+		[Test]
+		public void GenericArrayTypes()
+		{
+			Type[] genericArgs = typeof(Nested<,>).GetGenericArguments();
+
+			Type T = genericArgs[0];
+			Type Z = genericArgs[1];
+
+			Type arrayOfT = T.MakeArrayType();
+			Type arrayOfTDiff = T.MakeArrayType();
+			Type arrayOfT2 = T.MakeArrayType(2);
+			Type arrayOfZ = Z.MakeArrayType();
+
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfT, arrayOfT));
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfT, arrayOfTDiff));
+			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfZ, arrayOfZ));
+
+			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfZ, arrayOfT));
+			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfT, arrayOfT2));
+		}
+
 		public class Nested<T, Z>
 		{
 			

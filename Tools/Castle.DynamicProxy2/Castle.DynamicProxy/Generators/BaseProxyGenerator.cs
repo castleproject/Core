@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
-
+	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	
@@ -47,13 +47,12 @@ namespace Castle.DynamicProxy.Generators
 	public abstract class BaseProxyGenerator
 	{
 		private readonly ModuleScope scope;
-		protected readonly Type targetType;
-
 		private int nestedCounter, callbackCounter;
 		private int fieldCount = 1;
 		private FieldReference typeTokenField;
 		private Dictionary<MethodInfo, FieldReference> method2TokenField = new Dictionary<MethodInfo, FieldReference>();
-		
+
+		protected readonly Type targetType;
 		protected IProxyGenerationHook generationHook;
 		protected MethodEmitter initCacheMethod;
 
@@ -857,7 +856,8 @@ namespace Castle.DynamicProxy.Generators
 				// Aparently we cannot cache generic methods
 				if (method.IsGenericMethod) continue;
 				
-				AddFieldToCacheMethodTokenAndStatementsToInitialize(method, targetType, cacheMethod, classEmitter);
+				// AddFieldToCacheMethodTokenAndStatementsToInitialize(method, targetType, cacheMethod, classEmitter);
+				AddFieldToCacheMethodTokenAndStatementsToInitialize(method, method.DeclaringType, cacheMethod, classEmitter);
 			}
 
 			return cacheMethod;

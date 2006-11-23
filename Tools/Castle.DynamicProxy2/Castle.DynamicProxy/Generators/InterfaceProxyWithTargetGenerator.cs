@@ -218,13 +218,21 @@ namespace Castle.DynamicProxy.Generators
 			                                                      ConstructorVersion.WithTargetMethod);
 		}
 
+		/// <summary>
+		/// Finds the type of the method on target.
+		/// </summary>
+		/// <param name="methodOnInterface">The method on interface.</param>
+		/// <param name="proxyTargetType">Type of the proxy target.</param>
+		/// <returns></returns>
 		private static MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType)
 		{
-#if DOTNET2
+			
+// #if DOTNET2
+			
 			// The code below assumes that the target
 			// class uses the same generic arguments
 			// as the interface generic arguments
-
+			
 			MemberInfo[] members = proxyTargetType.FindMembers(MemberTypes.Method,
 												   BindingFlags.Public | BindingFlags.Instance,
 				delegate(MemberInfo mi, object criteria)
@@ -233,37 +241,36 @@ namespace Castle.DynamicProxy.Generators
 
 					MethodInfo methodInfo = (MethodInfo) mi;
 
-					// Check return type equivalence
-
-					if (!IsTypeEquivalent(methodInfo.ReturnType, methodOnInterface.ReturnType))
-					{
-						return false;
-					}
-
-					// Check parameters equivalence
-
-					ParameterInfo[] sourceParams = methodOnInterface.GetParameters();
-					ParameterInfo[] targetParams = methodInfo.GetParameters();
-
-					if (sourceParams.Length != targetParams.Length)
-					{
-						return false;
-					}
-
-					for (int i = 0; i < sourceParams.Length; i++)
-					{
-						Type sourceParamType = sourceParams[i].ParameterType;
-						Type targetParamType = targetParams[i].ParameterType;
-
-						if (!IsTypeEquivalent(sourceParamType, targetParamType))
-						{
-							return false;
-						}
-					}
-
-					return true;
+					return IsEquivalentMethod(methodInfo, methodOnInterface);
+					
 				}, methodOnInterface.Name);
 
+			
+			if (members.Length == 0)
+			{
+				// Before throwing an exception, we look for an explicit
+				// interface method implementation
+				
+				MethodInfo[] privateMethods = proxyTargetType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+
+				foreach(MethodInfo methodInfo in privateMethods)
+				{
+					// We make sure it is a method used for explicit implementation
+
+					if (!methodInfo.IsFinal || !methodInfo.IsVirtual || !methodInfo.IsHideBySig)
+					{
+						continue;
+					}
+
+					if (IsEquivalentMethod(methodInfo, methodOnInterface))
+					{
+						throw new GeneratorException(String.Format("DynamicProxy cannot create an interface (with target) " +
+							"proxy for '{0}' as the target '{1}' has an explicit implementation of one of the methods exposed by the interface. " + 
+							"The runtime prevents use from invoking the private method on the target. Method {2}", methodOnInterface.DeclaringType.Name, methodInfo.DeclaringType.Name, methodInfo.Name));
+					}
+				}
+			}
+			
 			if (members.Length > 1)
 			{
 				throw new GeneratorException("Found more than one method on target " + proxyTargetType.FullName + " matching " + methodOnInterface.Name);
@@ -275,7 +282,7 @@ namespace Castle.DynamicProxy.Generators
 
 			return (MethodInfo) members[0];
 
-#else
+#if !DOTNET2
 			ParameterInfo[] parameters = methodOnInterface.GetParameters();
 			Type[] argTypes = new Type[parameters.Length];
 			
@@ -310,6 +317,10 @@ namespace Castle.DynamicProxy.Generators
 				{
 					return false;
 				}
+				else if (sourceType.IsArray != targetType.IsArray)
+				{
+					return false;
+				}
 
 				if (sourceType.IsGenericType)
 				{
@@ -331,6 +342,24 @@ namespace Castle.DynamicProxy.Generators
 						}
 					}
 				}
+				else if (sourceType.IsArray)
+				{
+					Type sourceArrayType = sourceType.GetElementType();
+					Type targetArrayType = targetType.GetElementType();
+					
+					if (!IsTypeEquivalent(sourceArrayType, targetArrayType))
+					{
+						return false;
+					}
+					
+					int sourceRank = sourceType.GetArrayRank();
+					int targetRank = targetType.GetArrayRank();
+					
+					if (sourceRank != targetRank)
+					{
+						return false;
+					}
+				}
 				else if (sourceType != targetType)
 				{
 					return false;
@@ -349,6 +378,38 @@ namespace Castle.DynamicProxy.Generators
 		{
 			return false;
 		}
+
+		private static bool IsEquivalentMethod(MethodInfo methodInfo, MethodInfo methodOnInterface)
+		{
+			// Check return type equivalence
+
+			if (!IsTypeEquivalent(methodInfo.ReturnType, methodOnInterface.ReturnType))
+			{
+				return false;
+			}
+
+			// Check parameters equivalence
+
+			ParameterInfo[] sourceParams = methodOnInterface.GetParameters();
+			ParameterInfo[] targetParams = methodInfo.GetParameters();
+
+			if (sourceParams.Length != targetParams.Length)
+			{
+				return false;
+			}
+
+			for (int i = 0; i < sourceParams.Length; i++)
+			{
+				Type sourceParamType = sourceParams[i].ParameterType;
+				Type targetParamType = targetParams[i].ParameterType;
+
+				if (!IsTypeEquivalent(sourceParamType, targetParamType))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
 }
-

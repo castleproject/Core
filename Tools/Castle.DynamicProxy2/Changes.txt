@@ -1,0 +1,19 @@
+
+
+Beta 1 Version 1.0.0.0
+======================
+
+- Fixed DYNPROXY-34
+  "Cant proxy generic interfaces"
+
+
+Alpha Version 1.0.0.0
+=====================
+
+- First release
+
+
+
+
+
+

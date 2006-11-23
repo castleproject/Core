@@ -277,6 +277,12 @@
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">
+      <Project>{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}</Project>
+      <Name>Castle.Core-vs2005</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections.Generic;
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
@@ -95,15 +95,45 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("This fails with: Could not find a matching method on System.Collections.Generic.List`1. Method CopyTo")]
-		public void ProxyWithGenericTypeThatInheritFromGenericType()
+		public void ProxyWithGenInterfaceWithGenericArrays()
 		{
-			IList<int> list = generator.CreateInterfaceProxyWithTarget<IList<int>>(new List<int>(), logger);
-			list.Add(1);
-			list.Add(2);
-			list.Remove(1);
-			
-			Assert.AreEqual("Add Add Remove", logger.LogContents);
+			IGenInterfaceWithGenArray<int> proxy =
+				generator.CreateInterfaceProxyWithTarget<IGenInterfaceWithGenArray<int>>(
+					new GenInterfaceWithGenArray<int>(), logger);
+
+			Assert.IsNotNull(proxy);
+
+			int[] items = new int[] { 1,2,3 };
+			proxy.CopyTo(items);
+			items = proxy.CreateItems();
+			Assert.IsNotNull(items);
+			Assert.AreEqual(3, items.Length);
+
+			Assert.AreEqual("CopyTo CreateItems ", logger.LogContents);
+		}
+
+		[Test]
+		public void ProxyWithGenInterfaceWithBase()
+		{
+			IGenInterfaceHierarchySpecialization<int> proxy =
+				generator.CreateInterfaceProxyWithTarget<IGenInterfaceHierarchySpecialization<int>>(
+					new GenInterfaceHierarchy<int>(), logger);
+
+			Assert.IsNotNull(proxy);
+
+			proxy.Add();
+			proxy.Add(1);
+			Assert.IsNotNull(proxy.FetchAll());
+
+			Assert.AreEqual("Add Add FetchAll ", logger.LogContents);
+		}
+
+		[Test]
+		[ExpectedException(typeof(GeneratorException), "DynamicProxy cannot create an interface (with target) proxy for 'InterfaceWithExplicitImpl`1' as the target 'GenExplicitImplementation`1' has an explicit implementation of one of the methods exposed by the interface. The runtime prevents use from invoking the private method on the target. Method Castle.DynamicProxy.Tests.GenInterfaces.InterfaceWithExplicitImpl<T>.GetEnum1")]
+		public void ProxyWithGenExplicitImplementation()
+		{
+			generator.CreateInterfaceProxyWithTarget<InterfaceWithExplicitImpl<int>>(
+				new GenExplicitImplementation<int>(), logger);
 		}
 	}
 }
