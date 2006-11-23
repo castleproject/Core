@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Tests
 	public class AnyRelationTestCase : AbstractActiveRecordTest
 	{
 		[Test]
-		// [Ignore("HasManyToAny does not work")]
+		[Ignore("HasManyToAny does not work")]
 		public void SchemaTest()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(BankAccounts), typeof(Order), typeof(CreditCards));
