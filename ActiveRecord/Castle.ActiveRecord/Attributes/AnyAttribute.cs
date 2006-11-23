@@ -181,7 +181,7 @@ namespace Castle.ActiveRecord
 			/// <value>The value.</value>
 			public string Value
 			{
-				get { return this.value; }
+				get { return value; }
 				set { this.value = value; }
 			}
 

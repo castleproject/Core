@@ -323,7 +323,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					if (anyModel == null)
 					{
-						throw new ActiveRecordException("You can't specify a Any.MetaValue without specifying the Any attribute. " +
+						throw new ActiveRecordException("You can't specify an Any.MetaValue without specifying the Any attribute. " +
 						                                "Check type " + prop.DeclaringType.FullName);
 					}
 					anyModel.MetaValues = anyMetaValues;
