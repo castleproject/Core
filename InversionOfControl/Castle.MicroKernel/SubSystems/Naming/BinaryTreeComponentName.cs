@@ -202,10 +202,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
 				if (node.NextSibling != null)
 				{
 					TreeNode replacement = node.NextSibling;
-					replacement.Right = node.Right;
-					replacement.Left = node.Left;
 					replacement.PreviousSibling = null;
-					ReplaceNode(node, replacement);
+					PromoteNode(node, replacement);
 				}
 				else
 				{
@@ -218,14 +216,18 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			count--;
 		}
 
+		/// <summary>
+		/// Method finds the next biggest node
+		/// It assumes Add puts lesser nodes on the right
+		/// </summary>
 		private TreeNode FindSuccessor(TreeNode node)
 		{
-			TreeNode current = node.Right;
+			TreeNode current = node.Left;
 			if (current != null)
 			{
-				while (current.Left != null)
+				while (current.Right != null)
 				{
-					current = current.Left;
+					current = current.Right;
 				}
 			}
 
@@ -240,7 +242,10 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			promoted.Right = oldNode.Right;
 			promoted.Left = oldNode.Left;
 
-			if (root == oldNode) root = promoted;
+			if (root == oldNode)
+				root = promoted;
+			else
+				ReplaceNode(oldNode, promoted);
 		}
 
 		private void ReplaceNode(TreeNode oldNode, TreeNode newNode)
@@ -277,10 +282,12 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			else if (node.Left != null)
 			{
 				ReplaceNode(node, node.Left);
+				node.Left = null;
 			}
 			else if (node.Right != null)
 			{
 				ReplaceNode(node, node.Right);
+				node.Right = null;
 			}
 		}
 	}

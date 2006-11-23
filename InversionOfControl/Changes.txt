@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied patch by Adam Mills fixing IOC-41
+  "Bug Fix BinaryTreeComponentName - Assumed Lesser nodes went to left"
+
 - Applied patch by Adam Mills fixing IOC-40
   "Provided an Implementation for BinaryTreeComponentName.Remove"
 
