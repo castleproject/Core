@@ -81,3 +81,7 @@ class ComponentsTestCase(AbstractTestCase):
 	def UsingCaptureForWithLayout():
 		DoGet('usingcomponents/captureForWithLayout.rails')
 		AssertReplyEqualTo("Numbers: 1234\r\n")
+	[Test]
+	def CanPassParametersFromComponentToView():
+		DoGet('usingcomponents/withParams.rails')
+		AssertReplyEqualTo("brail")

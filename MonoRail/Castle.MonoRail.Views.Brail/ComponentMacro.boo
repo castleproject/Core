@@ -99,14 +99,14 @@ class ComponentMacro(AbstractAstMacro):
 			Target: AstUtil.CreateReferenceExpression("component.Render") ) )
 		
 		# if component.ViewToRender is not null:
-		#	OutputSubView("/"+component.ViewToRender)
+		#	OutputSubView("/"+component.ViewToRender, context.CompnentParameters)
 		renderView = Block() 
 		outputSubView = MethodInvocationExpression( 
 			Target: AstUtil.CreateReferenceExpression("OutputSubView"))
 		outputSubView.Arguments.Add(BinaryExpression(Operator: BinaryOperatorType.Addition,
 			Left: StringLiteralExpression('/'),
 			Right: AstUtil.CreateReferenceExpression("componentContext.ViewToRender") ) )
-		
+		outputSubView.Arguments.Add(AstUtil.CreateReferenceExpression("componentContext.ComponentParameters") )
 		renderView.Add( outputSubView )
 		
 		block.Add( IfStatement(Condition: AstUtil.CreateReferenceExpression("componentContext.ViewToRender"),
