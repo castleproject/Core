@@ -107,8 +107,6 @@ namespace Castle.MonoRail.Framework
 
 		internal IServiceProvider serviceProvider;
 
-		private bool isPostBack = false;
-     
 		#endregion
 
 		#region Constructors
@@ -366,18 +364,16 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected bool IsPostBack
 		{
-			get { return isPostBack; }
+			get
+			{
+				NameValueCollection fields = Context.Params;
+				return (fields["__VIEWSTATE"] != null) || (fields["__EVENTTARGET"] != null);
+			}
 		}
 
 		internal void InternalInitialize()
 		{
 			Initialize();
-		}
-
-		internal void DetermineIfPostBack()
-		{
-			NameValueCollection fields = Context.Params;
-			isPostBack = (fields["__VIEWSTATE"] != null) || (fields["__EVENTTARGET"] != null);
 		}
 
 		#endregion
@@ -852,7 +848,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">Action name</param>
 		public void Send(String action)
 		{
-			isPostBack = false;
 			InternalSend(action, null);
 		}
 
@@ -863,7 +858,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actionArgs">Action arguments</param>
 		public void Send(String action, params object[] actionArgs)
 		{
-			isPostBack = false;
 			InternalSend(action, actionArgs);
 		}
 	    

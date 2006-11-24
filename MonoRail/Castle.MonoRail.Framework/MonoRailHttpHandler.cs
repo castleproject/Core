@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 	using System.Web.SessionState;
 	using Castle.Core.Logging;
+	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
@@ -73,7 +74,10 @@ namespace Castle.MonoRail.Framework
 		{
 			ControllerLifecycleExecutor executor = 
 				(ControllerLifecycleExecutor) context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
-			
+
+			DefaultRailsEngineContext contextImpl = (DefaultRailsEngineContext) context;
+			contextImpl.ResolveRequestSession();
+
 			HttpContext httpCtx = context.UnderlyingContext;
 			
 			httpCtx.Items["mr.controller"] = executor.Controller;

@@ -125,7 +125,6 @@ namespace Castle.MonoRail.Framework
 			CreateFiltersDescriptors();
 			ProcessScaffoldIfPresent();
 			ActionProviderUtil.RegisterActions(controller);
-			controller.DetermineIfPostBack();
 
 			// Record the action
 			controller.SetEvaluatedAction(actionName);

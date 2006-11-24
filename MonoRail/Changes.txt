@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Removed DetermineIfPostBack due to side effects when using a custom upload approach
+  Also removed PreRequestHandler setting the session as it wasn't really necessary using
+  this event for that. Moved to the handler.
+
 - Included abstract Filter class, just as a helper to implement filters 
   with a better interface (instead of IFilter.Process)
 

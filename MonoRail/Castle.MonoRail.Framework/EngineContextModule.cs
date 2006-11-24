@@ -60,7 +60,6 @@ namespace Castle.MonoRail.Framework
 			SubscribeToApplicationHooks(context);
 
 			context.AuthorizeRequest += new EventHandler(OnStartMonoRailRequest);
-			context.PreRequestHandlerExecute += new EventHandler(PrepareMonoRailRequest);
 		}
 
 		/// <summary>
@@ -71,27 +70,6 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
-		/// <summary>
-		/// At this point we have a session to set 
-		/// on our context
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void PrepareMonoRailRequest(object sender, EventArgs e)
-		{
-			HttpApplication app = (HttpApplication) sender;
-
-			if (!container.IsMonoRailRequest(app.Context.Request.FilePath))
-			{
-				return;
-			}
-			
-			DefaultRailsEngineContext context = 
-				(DefaultRailsEngineContext) ObtainContextFromApplication(sender);
-			
-			context.ResolveRequestSession();
-		}
-		
 		private void OnStartMonoRailRequest(object sender, EventArgs e)
 		{
 			HttpApplication app = (HttpApplication) sender;
