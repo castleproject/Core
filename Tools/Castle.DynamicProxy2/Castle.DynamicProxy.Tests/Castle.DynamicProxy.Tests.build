@@ -15,6 +15,7 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
 			<include name="Castle.DynamicProxy2.dll" />
+			<include name="Castle.Core.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false">

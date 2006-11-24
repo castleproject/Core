@@ -16,6 +16,7 @@
 		<property name="assembly.is-cls-compliant" value="false" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="Castle.Core.dll" />
 		</assemblyfileset>
 	</target>
 
