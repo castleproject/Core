@@ -19,8 +19,9 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
-	
+	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
+	using ClassWithIndexer=Castle.DynamicProxy.Tests.Classes.ClassWithIndexer;
 
 	[TestFixture]
 	public class BasicClassProxyTestCase : BasePEVerifyTestCase
@@ -156,6 +157,24 @@ namespace Castle.DynamicProxy.Tests
 				Assert.AreEqual("This is a DynamicProxy2 error: the interceptor attempted " + 
 					"to 'Proceed' for a method without a target, for example, an interface method", ex.Message);
 			}
+		}
+
+		[Test]
+		[Ignore("Multi dimensional arrays seems to not work at all")]
+		public void ProxyTypeWithMultiDimentionalArrayAsParameters()
+		{
+			LogInvocationInterceptor log = new LogInvocationInterceptor();
+			
+			ClassWithMultiDimentionalArray proxy = 
+				generator.CreateClassProxy<ClassWithMultiDimentionalArray>(log);
+
+			int[,] x = new int[1, 2];
+
+			proxy.Do(new int[] { 1 });
+			proxy.Do2(x);
+			proxy.Do3(new string[] {"1", "2"});
+			
+			Assert.AreEqual("Do Do2 Do3 ", log.LogContents);
 		}
 	}
 }

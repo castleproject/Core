@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;DOTNET2 _PHYSICALASSEMBLY</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET2 PHYSICALASSEMBLY</DefineConstants>
     <DocumentationFile>bin\Debug\Castle.DynamicProxy.XML</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>

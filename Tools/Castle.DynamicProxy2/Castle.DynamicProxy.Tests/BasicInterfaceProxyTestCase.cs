@@ -58,11 +58,25 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("This fails with: Method 'Do' in type 'IClassWithMultiDimentionalArrayProxye7fb1bb31bc948768a6ed806716353c9' from assembly 'DynamicProxyGenAssembly2, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.")]
-		public void ProxyGenericTypeWithMultiDimentionalArrayAsParameter()
+		public void Indexer()
 		{
-			generator.CreateInterfaceProxyWithTarget<IClassWithMultiDimentionalArray>(new ClassWithMultiDimentionalArray(), new LogInvocationInterceptor());
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
+			InterfaceWithIndexer service = (InterfaceWithIndexer)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(InterfaceWithIndexer), new ClassWithIndexer(), logger);
+
+			Assert.AreEqual(1, service[1]);
+
+			Assert.AreEqual("get_Item ", logger.LogContents);
+		}
+
+		[Test]
+		public void ProxyTypeWithMultiDimentionalArrayAsParameter()
+		{
+			generator.CreateInterfaceProxyWithTarget<IClassWithMultiDimentionalArray>(
+				new ClassWithMultiDimentionalArray(), 
+				new LogInvocationInterceptor());
 		}
 	}
 }

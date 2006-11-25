@@ -76,23 +76,23 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("DoSomething ", logger.LogContents);
 		}
 		
-		[Test]
-		public void ProxyWithGenInterfaceWithGenericTypes()
-		{
-			GenInterfaceWithGenericTypes proxy =
-				generator.CreateInterfaceProxyWithTarget<GenInterfaceWithGenericTypes>(
-					new GenInterfaceWithGenericTypesImpl(), logger);
-
-			Assert.IsNotNull(proxy);
-
-			Assert.IsNotNull(proxy.Find(""));
-			Assert.IsNotNull(proxy.Find<String>(""));
-			
-			proxy.Populate<String>(new List<String>());
-
-			Assert.AreEqual("Find Find Populate ", logger.LogContents);
-
-		}
+//		[Test]
+//		public void ProxyWithGenInterfaceWithGenericTypes()
+//		{
+//			GenInterfaceWithGenericTypes proxy =
+//				generator.CreateInterfaceProxyWithTarget<GenInterfaceWithGenericTypes>(
+//					new GenInterfaceWithGenericTypesImpl(), logger);
+//
+//			Assert.IsNotNull(proxy);
+//
+//			Assert.IsNotNull(proxy.Find(""));
+//			Assert.IsNotNull(proxy.Find<String>(""));
+//			
+//			proxy.Populate<String>(new List<String>());
+//
+//			Assert.AreEqual("Find Find Populate ", logger.LogContents);
+//
+//		}
 
 		[Test]
 		public void ProxyWithGenInterfaceWithGenericArrays()

@@ -129,14 +129,33 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (paramType.IsArray)
 			{
+				int rank = paramType.GetArrayRank();
+				
 				Type underlyingType = paramType.GetElementType();
 
 				if (underlyingType.IsGenericParameter)
 				{
 					GenericTypeParameterBuilder genericType = name2GenericType[underlyingType.Name];
 
-					// newParameters[i] = genericType.MakeArrayType(param.ParameterType.GetArrayRank());
-					return genericType.MakeArrayType();
+					if (rank == 1)
+					{
+						return genericType.MakeArrayType();
+					}
+					else
+					{
+						return genericType.MakeArrayType(rank);
+					}
+				}
+				else
+				{
+					if (rank == 1)
+					{
+						return underlyingType.MakeArrayType();
+					}
+					else
+					{
+						return underlyingType.MakeArrayType(rank);
+					}
 				}
 			}
 

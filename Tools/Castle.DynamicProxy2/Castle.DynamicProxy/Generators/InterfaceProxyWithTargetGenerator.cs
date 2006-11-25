@@ -138,7 +138,8 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach(MethodInfo method in methods)
 				{
-					if (method.IsSpecialName && (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")))
+					if (method.IsSpecialName && 
+					    (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")))
 					{
 						continue;
 					}
@@ -154,6 +155,25 @@ namespace Castle.DynamicProxy.Generators
 					ReplicateNonInheritableAttributes(method, newProxiedMethod);
 
 					method2Emitter[method] = newProxiedMethod;
+
+					ParameterInfo[] parameters = method.GetParameters();
+					// ParameterInfo[] parametersProxy = newProxiedMethod.MethodBuilder.GetParameters();
+					
+					bool useDefineOverride = true;
+
+					for(int i = 0; i < parameters.Length; i++)
+					{
+						ParameterInfo paramInfo = parameters[i];
+						// ParameterInfo paramInfo2 = parametersProxy[i];
+						
+						Console.WriteLine("{0} {1} {2} {3}", paramInfo.Name, paramInfo.ParameterType, paramInfo.Attributes, paramInfo.Position);
+						// Console.WriteLine("{0} {1} {2} {3}", paramInfo2.Name, paramInfo2.ParameterType, paramInfo2.Attributes, paramInfo2.Position);
+					}
+
+					if (useDefineOverride)
+					{
+						// emitter.TypeBuilder.DefineMethodOverride(newProxiedMethod.MethodBuilder, method);
+					}
 				}
 
 				foreach(PropertyToGenerate propToGen in propsToGenerate)
@@ -172,6 +192,8 @@ namespace Castle.DynamicProxy.Generators
 											   ConstructorVersion.WithTargetMethod, method2methodOnTarget[propToGen.GetMethod]);
 
 						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
+
+						// emitter.TypeBuilder.DefineMethodOverride(getEmitter.MethodBuilder, propToGen.GetMethod);
 					}
 
 					if (propToGen.CanWrite)
@@ -188,6 +210,8 @@ namespace Castle.DynamicProxy.Generators
 						                       ConstructorVersion.WithTargetMethod, method2methodOnTarget[propToGen.SetMethod]);
 
 						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
+						
+						// emitter.TypeBuilder.DefineMethodOverride(setEmitter.MethodBuilder, propToGen.SetMethod);
 					}
 				}
 
@@ -198,6 +222,22 @@ namespace Castle.DynamicProxy.Generators
 				// Crosses fingers and build type
 
 				generatedType = emitter.BuildType();
+
+				foreach(MethodInfo m in generatedType.GetMethods())
+				{
+					ParameterInfo[] parameters = m.GetParameters();
+
+					Console.WriteLine(m.Name);
+
+					for (int i = 0; i < parameters.Length; i++)
+					{
+						ParameterInfo paramInfo = parameters[i];
+
+						Console.WriteLine("{0} {1} {2} {3}", paramInfo.Name, paramInfo.ParameterType, paramInfo.Attributes, paramInfo.Position);
+						// Console.WriteLine("{0} {1} {2} {3}", paramInfo2.Name, paramInfo2.ParameterType, paramInfo2.Attributes, paramInfo2.Position);
+					}
+				}
+				
 
 				AddToCache(cacheKey, generatedType);
 			}
