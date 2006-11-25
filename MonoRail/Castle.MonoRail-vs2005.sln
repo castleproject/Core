@@ -50,10 +50,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestScaffolding-vs2005", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordScaffold-vs2005", "Castle.MonoRail.ActiveRecordScaffold\Castle.MonoRail.ActiveRecordScaffold-vs2005.csproj", "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssistedSolutions.SlickUpload", "..\..\..\stronghold\customers\nterface\AssistedSolutions.SlickUpload_Source2\AssistedSolutions.SlickUpload.csproj", "{84471452-53CB-4514-94AB-01BF8179D353}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite", "..\..\..\stronghold\customers\nterface\TestSite\TestSite\TestSite.csproj", "{3AD8216E-E336-493A-A5A0-DD2FD43845AD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,14 +120,6 @@ Global
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84471452-53CB-4514-94AB-01BF8179D353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84471452-53CB-4514-94AB-01BF8179D353}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84471452-53CB-4514-94AB-01BF8179D353}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84471452-53CB-4514-94AB-01BF8179D353}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AD8216E-E336-493A-A5A0-DD2FD43845AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AD8216E-E336-493A-A5A0-DD2FD43845AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AD8216E-E336-493A-A5A0-DD2FD43845AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AD8216E-E336-493A-A5A0-DD2FD43845AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
