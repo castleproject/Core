@@ -57,6 +57,13 @@ namespace Castle.DynamicProxy.Generators
 
 			try
 			{
+				cacheType = GetFromCache(cacheKey);
+
+				if (cacheType != null)
+				{
+					return cacheType;
+				}
+				
 				generationHook = options.Hook;
 				
 				String newName = targetType.Name + "Proxy" + Guid.NewGuid().ToString("N");
