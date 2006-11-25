@@ -4,6 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy-net-2-0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{105EBF2F-B040-4BAA-8D74-115F7735E465}"
 	ProjectSection(SolutionItems) = preProject
+		Changes.txt = Changes.txt
 		Decisions and to dos.txt = Decisions and to dos.txt
 		Serialization topics.txt = Serialization topics.txt
 	EndProjectSection

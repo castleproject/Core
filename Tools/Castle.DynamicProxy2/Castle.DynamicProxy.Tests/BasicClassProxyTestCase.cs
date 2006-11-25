@@ -160,6 +160,16 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ProxyForCharReturnType()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+			object proxy = generator.CreateClassProxy(typeof(ClassWithCharRetType), logger);
+			Assert.IsNotNull(proxy);
+			ClassWithCharRetType classProxy = (ClassWithCharRetType) proxy;
+			Assert.AreEqual('c', classProxy.DoSomething());
+		}
+
+		[Test]
 		[Ignore("Multi dimensional arrays seems to not work at all")]
 		public void ProxyTypeWithMultiDimentionalArrayAsParameters()
 		{

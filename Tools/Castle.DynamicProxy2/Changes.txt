@@ -3,6 +3,9 @@
 Beta 1 Version 1.0.0.0
 ======================
 
+- Fixed DYNPROXY-25
+  "Chars returns are not properly configured"
+
 - Fixed DYNPROXY-24
   "DynamicProxy2: missing locks"
 

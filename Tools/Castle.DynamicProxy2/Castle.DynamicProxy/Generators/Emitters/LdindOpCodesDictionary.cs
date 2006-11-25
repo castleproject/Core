@@ -31,6 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private LdindOpCodesDictionary() : base()
 		{
 			Dictionary[typeof(bool)] = OpCodes.Ldind_I1;
+			Dictionary[typeof(char)] = OpCodes.Ldind_I2;
 			Dictionary[typeof(SByte)] = OpCodes.Ldind_I1;
 			Dictionary[typeof(Int16)] = OpCodes.Ldind_I2;
 			Dictionary[typeof(Int32)] = OpCodes.Ldind_I4;
