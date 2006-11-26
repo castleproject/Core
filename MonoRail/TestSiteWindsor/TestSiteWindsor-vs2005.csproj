@@ -131,6 +131,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\MyComponent.cs" />
+    <Compile Include="Controllers\TestWizardController.cs" />
+    <Compile Include="EmptyInterceptor.cs" />
     <Compile Include="MyHttpApplication.cs">
       <SubType>Code</SubType>
     </Compile>

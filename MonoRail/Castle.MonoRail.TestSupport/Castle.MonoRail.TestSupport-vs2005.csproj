@@ -122,7 +122,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>"$(DevEnvDir)\..\..\SDK\v2.0\Bin\gacutil.exe" /u $(TargetName) 
-"$(DevEnvDir)\..\..\SDK\v2.0\Bin\gacutil.exe" /i $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>"$(DevEnvDir)..\..\SDK\v2.0\Bin\gacutil.exe" /u "$(TargetName)" 
+"$(DevEnvDir)..\..\SDK\v2.0\Bin\gacutil.exe" /i "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

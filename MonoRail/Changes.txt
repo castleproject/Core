@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Properly quote file/directory arguments in Pre/Post Build Events to accomodate
+  names with spaces.
+  Also added some missing files to TestSiteWindsor-vs2005 Project
+
 - Removed DetermineIfPostBack due to side effects when using a custom upload approach
   Also removed PreRequestHandler setting the session as it wasn't really necessary using
   this event for that. Moved to the handler.

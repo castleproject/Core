@@ -125,6 +125,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy $(ProjectDir)\App.config $(TargetPath).config</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)\App.config" "$(TargetPath).config"</PostBuildEvent>
   </PropertyGroup>
 </Project>
