@@ -44,8 +44,6 @@
 <File Id="Castle.ActiveRecord.dll" Name="Castle.ActiveRecord.dll" Source="$(var.BuildNet11Dir)\Castle.ActiveRecord.dll" />
 <File Id="Castle.Components.Binder.dll" Name="Castle.Components.Binder.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Binder.dll" />
 <File Id="Castle.Components.Common.EmailSender.dll" Name="Castle.Components.Common.EmailSender.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.EmailSender.dll" />
-<File Id="Castle.Components.Common.EmailSender.MockSender.dll" Name="Castle.Components.Common.EmailSender.MockSender.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.EmailSender.MockSender.dll" />
-<File Id="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" Name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 <File Id="Castle.Components.Common.TemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.TemplateEngine.dll" />
 <File Id="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 <File Id="Castle.Components.Winforms.AssemblyResolver.dll" Name="Castle.Components.Winforms.AssemblyResolver.dll" Source="$(var.BuildNet11Dir)\Castle.Components.Winforms.AssemblyResolver.dll" />
@@ -186,8 +184,6 @@
 <File Id="N20Castle.ActiveRecord.dll" Name="Castle.ActiveRecord.dll" Source="$(var.BuildNet20Dir)\Castle.ActiveRecord.dll" />
 <File Id="N20Castle.Components.Binder.dll" Name="Castle.Components.Binder.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Binder.dll" />
 <File Id="N20Castle.Components.Common.EmailSender.dll" Name="Castle.Components.Common.EmailSender.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.EmailSender.dll" />
-<File Id="N20Castle.Components.Common.EmailSender.MockSender.dll" Name="Castle.Components.Common.EmailSender.MockSender.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.EmailSender.MockSender.dll" />
-<File Id="N20Castle.Components.Common.EmailSender.SmtpEmailSender.dll" Name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 <File Id="N20Castle.Components.Common.TemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.TemplateEngine.dll" />
 <File Id="N20Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 <File Id="N20Castle.Components.Winforms.AssemblyResolver.dll" Name="Castle.Components.Winforms.AssemblyResolver.dll" Source="$(var.BuildNet20Dir)\Castle.Components.Winforms.AssemblyResolver.dll" />
@@ -233,7 +229,6 @@
 <File Id="N20NVelocity.dll" Name="NVelocity.dll" Source="$(var.BuildNet20Dir)\NVelocity.dll" />
 <File Id="N20nunit.framework.dll" Name="nunit.framework.dll" Source="$(var.BuildNet20Dir)\nunit.framework.dll" />
 			
-
 		</Component>
 	</Directory>
 
