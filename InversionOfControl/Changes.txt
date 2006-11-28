@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied patch by Adam Mills fixing IOC-42
+  "ResolveServices", new method added to IKernel
+
 - Applied patch by Adam Mills fixing IOC-41
   "Bug Fix BinaryTreeComponentName - Assumed Lesser nodes went to left"
 

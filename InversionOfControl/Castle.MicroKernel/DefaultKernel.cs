@@ -552,7 +552,8 @@ namespace Castle.MicroKernel
 
 			return ResolveComponent(handler, arguments);
 		}
-
+		
+		
 		public void RegisterCustomDependencies(Type service, IDictionary dependencies)
 		{
 			IHandler handler = GetHandler(service);
@@ -594,6 +595,20 @@ namespace Castle.MicroKernel
 			IHandler handler = GetHandler(key);
 
 			return ResolveComponent(handler, service);
+		}
+		
+		
+		public TService[] ResolveServices<TService>()
+		{
+			System.Collections.Generic.List<TService> services = new System.Collections.Generic.List<TService>();
+			IHandler[] handlers = GetHandlers(typeof(TService));
+			foreach(IHandler handler in handlers)
+			{
+				if (handler.CurrentState == HandlerState.Valid)
+					services.Add((TService)ResolveComponent(handler));
+			}
+
+			return services.ToArray();
 		}
 
 		#endif

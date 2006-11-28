@@ -137,5 +137,26 @@ namespace Castle.MicroKernel.Tests
 			object resolved = kernel.Resolve(typeof (ClassWithTwoParametersWithSameType), new Hashtable());
 			Assert.IsNotNull(resolved);
 		}
+
+		#if DOTNET2
+		
+		[Test]
+		public void ResolveServices()
+		{
+			kernel.AddComponent("test", typeof(ICommon), typeof(CommonImpl2));
+			kernel.AddComponent("test2", typeof(ICommon), typeof(CommonImpl1));
+			ICommon[] services = kernel.ResolveServices<ICommon>();
+			Assert.AreEqual(2, services.Length);
+		}
+
+		[Test]
+		public void ResolveServicesWaitingOnDependencies()
+		{
+			kernel.AddComponent("test", typeof(ICommon), typeof(CommonImplWithDependancy));
+			ICommon[] services = kernel.ResolveServices<ICommon>();
+			Assert.AreEqual(0, services.Length);
+		}
+
+		#endif
 	}
 }

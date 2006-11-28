@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests-vs2005
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2005", "..\Core\Castle.Core\Castle.Core-vs2005.csproj", "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy-net-2-0", "..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-net-2-0.csproj", "{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy.Tests", "..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy.Tests\Castle.DynamicProxy.Tests.csproj", "{FE432670-73A1-499D-A353-28FC902A43C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,14 @@ Global
 		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE432670-73A1-499D-A353-28FC902A43C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE432670-73A1-499D-A353-28FC902A43C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE432670-73A1-499D-A353-28FC902A43C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE432670-73A1-499D-A353-28FC902A43C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
