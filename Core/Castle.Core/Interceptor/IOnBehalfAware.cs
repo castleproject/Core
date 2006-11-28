@@ -14,8 +14,6 @@
 
 namespace Castle.Core.Interceptor
 {
-	using System;
-
 	/// <summary>
 	/// Interceptors might implement this to receive the
 	/// ComponentModel on behalf of the component where the

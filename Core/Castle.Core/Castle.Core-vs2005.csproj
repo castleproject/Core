@@ -49,9 +49,9 @@
     <Compile Include="Attributes\LifestyleAttributes.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
     <Compile Include="Interceptor\IInvocation.cs" />
-    <Compile Include="Interceptor\IMethodInterceptor.cs" />
-    <Compile Include="Interceptor\IMethodInvocation.cs" />
     <Compile Include="Interceptor\IOnBehalfAware.cs" />
+    <Compile Include="Interceptor\IProxyTargetAccessor.cs" />
+    <Compile Include="Interceptor\StandardInterceptor.cs" />
     <Compile Include="Internal\GraphNode.cs" />
     <Compile Include="Internal\GraphSets.cs" />
     <Compile Include="Internal\IVertex.cs" />
@@ -94,7 +94,6 @@
     <Compile Include="Model\ParameterModelCollection.cs" />
     <Compile Include="Model\PropertySet.cs" />
     <Compile Include="Model\PropertySetCollection.cs" />
-    <Compile Include="Interceptor\StandardInterceptor.cs" />
     <Compile Include="Resource\AbstractResource.cs" />
     <Compile Include="Resource\AbstractStreamResource.cs" />
     <Compile Include="Resource\AssemblyResource.cs" />

@@ -1,6 +1,11 @@
 0.0.1.0
 =======
 
+- Included IProxyTargetAccessor
+
+- Removed IMethodInterceptor and IMethodInvocation, that have been replaced
+  by IInterceptor and IInvocation
+
 - Added FindByPropertyInfo to PropertySetCollection
 
 - Made the DependencyModel.IsOptional property writable

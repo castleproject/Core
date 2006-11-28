@@ -22,40 +22,17 @@ namespace Castle.Core.Interceptor
 	/// </summary>
 	public interface IInvocation
 	{
-		// object Proxy { get; }
+		object Proxy { get; }
 
-		// object InvocationTarget { get;set; }
+		object InvocationTarget { get; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		Type TargetType { get; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		object[] Arguments { get; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		void SetArgumentValue(int index, object value);
 
-		/// <summary>
-		/// 
-		/// </summary>
 		object GetArgumentValue(int index);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		void Proceed();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		object ReturnValue { get; set; }
 
 		/// <summary>
 		/// 
@@ -63,10 +40,17 @@ namespace Castle.Core.Interceptor
 		MethodInfo Method { get; }
 
 		/// <summary>
-		/// Returns the method on the target of invocation, 
-		/// which can be for example the method defined on an
-		/// interface, if dealing with an interface proxy
+		/// For interface proxies, this will point to the
+		/// <see cref="MethodInfo"/> on the target class
 		/// </summary>
 		MethodInfo MethodInvocationTarget { get; }
+
+		object ReturnValue { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		void Proceed();
 	}
 }
