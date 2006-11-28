@@ -126,6 +126,7 @@
     <Compile Include="ClassComponents\ComponentFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassComponents\CommonImplWithDependancy.cs" />
     <Compile Include="ClassComponents\CustomerImpl.cs">
       <SubType>Code</SubType>
     </Compile>

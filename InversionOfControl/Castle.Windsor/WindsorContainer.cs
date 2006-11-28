@@ -110,7 +110,8 @@ namespace Castle.Windsor
 			if (installer == null) throw new ArgumentNullException("installer");
 
 			this.kernel = kernel;
-			this.kernel.ProxyFactory = new Proxy.ProxySmartFactory();
+			// this.kernel.ProxyFactory = new Proxy.ProxySmartFactory();
+			this.kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
 
 			this.installer = installer;
 		}

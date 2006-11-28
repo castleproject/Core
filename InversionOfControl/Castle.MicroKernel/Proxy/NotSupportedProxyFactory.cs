@@ -35,11 +35,17 @@ namespace Castle.MicroKernel.Proxy
 	{
 		#region IProxyFactory Members
 
-		public object Create(IKernel kernel, ComponentModel mode, params object[] constructorArguments)
+		public object Create(IKernel kernel, object instance, ComponentModel mode, params object[] constructorArguments)
 		{
 			throw new NotImplementedException(
 				"You must supply an implementation of IProxyFactory " + 
 				"to use interceptors on the Microkernel");
+		}
+
+
+		public bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
+		{
+			return false;
 		}
 
 		#endregion

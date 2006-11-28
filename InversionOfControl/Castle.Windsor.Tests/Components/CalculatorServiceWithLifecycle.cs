@@ -18,9 +18,6 @@ namespace Castle.Windsor.Tests.Components
 
 	using Castle.Core;
 
-	/// <summary>
-	/// Summary description for CalculatorServiceWithLifecycle.
-	/// </summary>
 	[Transient]
 	public class CalculatorServiceWithLifecycle : MarshalByRefObject, ICalcService, IInitializable, IDisposable
 	{

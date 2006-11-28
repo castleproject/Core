@@ -93,6 +93,10 @@
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core-vs2005</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-net-2-0.csproj">
+      <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
+      <Name>Castle.DynamicProxy-net-2-0</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2005.csproj">
       <Project>{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}</Project>
       <Name>Castle.MicroKernel.Tests-2-0</Name>
@@ -202,9 +206,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropertiesInspectionBehaviorTestCase.cs" />
-    <Compile Include="RealProxyTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ReportedProblemTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -70,10 +70,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -87,6 +83,10 @@
     <ProjectReference Include="..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core-vs2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-net-2-0.csproj">
+      <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
+      <Name>Castle.DynamicProxy-net-2-0</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj">
       <Name>Castle.MicroKernel-vs2005</Name>
@@ -213,25 +213,7 @@
     <Compile Include="Proxy\AbstractProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\ComponentRealProxy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\DefaultMethodInvocation.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Proxy\DefaultProxyFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\InterceptorChain.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\MessageProxyInvocation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\ProxySmartFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxy\RealProxyProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WindsorContainer.cs">

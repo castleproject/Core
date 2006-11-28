@@ -191,29 +191,31 @@ namespace Castle.Windsor.Tests
 		}
 	}
 
-	public class ResultModifierInterceptor : IMethodInterceptor
+	public class ResultModifierInterceptor : IInterceptor
 	{
-		public object Intercept(IMethodInvocation invocation, params object[] args)
+		public void Intercept(IInvocation invocation)
 		{
 			if (invocation.Method.Name.Equals("Sum"))
 			{
-				object result = invocation.Proceed(args);
-				return ((int)result) + 1;
+				invocation.Proceed();
+				object result = invocation.ReturnValue;
+				invocation.ReturnValue = ((int)result) + 1;
+				return;
 			}
 			
-			return invocation.Proceed(args);
+			invocation.Proceed();
 		}
 	}
 
-	public class InterceptorWithOnBehalf : IMethodInterceptor, IOnBehalfAware
+	public class InterceptorWithOnBehalf : IInterceptor, IOnBehalfAware
 	{
 		private static ComponentModel _model;
 
 		#region IMethodInterceptor Members
 
-		public object Intercept(IMethodInvocation invocation, params object[] args)
+		public void Intercept(IInvocation invocation)
 		{
-			return invocation.Proceed(args);
+			invocation.Proceed();
 		}
 
 		#endregion

@@ -18,6 +18,7 @@ namespace Castle.MicroKernel.ComponentActivator
 	using System.Reflection;
 
 	using Castle.Core;
+	using Castle.Core.Interceptor;
 	using Castle.MicroKernel.LifecycleConcerns;
 
 	/// <summary>
@@ -72,35 +73,44 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual object CreateInstance(CreationContext context, object[] arguments, Type[] signature)
 		{
-			object instance;
+			object instance = null;
 
 			Type implType = Model.Implementation;
 
-			if (Model.Interceptors.HasInterceptors)
+			bool createProxy = Model.Interceptors.HasInterceptors;
+			bool createInstance = true;
+			
+			if (createProxy)
 			{
-				try
-				{
-					instance = Kernel.ProxyFactory.Create(Kernel, Model, arguments);
-				}
-				catch(Exception ex)
-				{
-					throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex);
-				}
+				createInstance = Kernel.ProxyFactory.RequiresTargetInstance(Kernel, Model);
 			}
-			else
+
+			if (createInstance)
 			{
 				try
 				{
 					ConstructorInfo cinfo = implType.GetConstructor(
-							BindingFlags.Public|BindingFlags.Instance, null, signature, null);
+							BindingFlags.Public | BindingFlags.Instance, null, signature, null);
 
 					instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
 
 					cinfo.Invoke(instance, arguments);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new ComponentActivatorException("ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex);
+				}
+			}
+
+			if (createProxy)
+			{
+				try
+				{
+					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, arguments);
+				}
+				catch(Exception ex)
+				{
+					throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex);
 				}
 			}
 			
@@ -109,12 +119,14 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void ApplyCommissionConcerns(object instance)
 		{
+			instance = GetUnproxiedInstance(instance);
 			object[] steps = Model.LifecycleSteps.GetCommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
 
 		protected virtual void ApplyDecommissionConcerns(object instance)
 		{
+			instance = GetUnproxiedInstance(instance);
 			object[] steps = Model.LifecycleSteps.GetDecommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
@@ -213,12 +225,14 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void SetUpProperties(object instance, CreationContext context)
 		{
+			instance = GetUnproxiedInstance(instance);
+
 			foreach(PropertySet property in Model.Properties)
 			{
 				DependencyModel dependencyKey = context.TrackDependency(property.Property, property.Dependency);
 				object value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
 
-				//The dependency was resolved successfully, we can stop tracking it.
+				// The dependency was resolved successfully, we can stop tracking it.
 				context.UntrackDependency(dependencyKey);
 
 				if (value == null) continue;
@@ -236,6 +250,18 @@ namespace Castle.MicroKernel.ComponentActivator
 					throw new ComponentActivatorException(message, ex);
 				}
 			}
+		}
+
+		private static object GetUnproxiedInstance(object instance)
+		{
+			IProxyTargetAccessor accessor = instance as IProxyTargetAccessor;
+
+			if (accessor != null)
+			{
+				instance = accessor.DynProxyGetTarget();
+			}
+			
+			return instance;
 		}
 	}
 }

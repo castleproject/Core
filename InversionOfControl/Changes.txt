@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Changed Windsor to use DynamicProxy 2
+
 - Applied patch by Adam Mills fixing IOC-42
   "ResolveServices", new method added to IKernel
 
