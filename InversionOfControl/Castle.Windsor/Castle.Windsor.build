@@ -9,12 +9,12 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="1.0.0.2" />
+		<property name="assembly.version" value="1.0.0.5" />
 		<property name="assembly.description" value="Windsor is an inversion of control container that aggregates the MicroKernel offering a friendly fool-proof interface and options to external configurations" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
-			<include name="Castle.DynamicProxy.dll" />
+			<include name="Castle.DynamicProxy2.dll" />
 			<include name="Castle.MicroKernel.dll" />
 		</assemblyfileset>
 	</target>

@@ -46,7 +46,6 @@ namespace Castle.Windsor.Proxy
 			Init();
 		}
 
-
 		public override object Create(IKernel kernel, object target, ComponentModel model,
 		                              params object[] constructorArguments)
 		{
@@ -56,9 +55,13 @@ namespace Castle.Windsor.Proxy
 
 			if (model.Service.IsInterface)
 			{
-				proxy = generator.CreateInterfaceProxyWithTarget(model.Service, 
-				                                                 CollectInterfaces(model.Implementation), 
-				                                                 target, interceptors);
+				ProxyGenerationOptions options = new ProxyGenerationOptions();
+
+				options.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
+				
+				proxy = generator.CreateInterfaceProxyWithTarget(model.Service,
+																 CollectInterfaces(model.Service, model.Implementation), 
+				                                                 target, options, interceptors);
 			}
 			else
 			{
@@ -124,14 +127,14 @@ namespace Castle.Windsor.Proxy
 //		{
 //		}
 
-		protected Type[] CollectInterfaces(Type implementation)
+		protected Type[] CollectInterfaces(Type serviceInterface, Type implementation)
 		{
-			return implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), null);
+			return implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), serviceInterface);
 		}
 
 		private bool EmptyTypeFilter(Type type, object criteria)
 		{
-			return true;
+			return type != ((Type) criteria);
 		}
 
 		#region IDeserializationCallback
