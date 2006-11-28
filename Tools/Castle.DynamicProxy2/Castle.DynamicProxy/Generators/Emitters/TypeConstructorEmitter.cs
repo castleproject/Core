@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Generators.Emitters
 {
-	using System;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class StandardInterceptor : MarshalByRefObject, IInterceptor
+	
+	public class TypeConstructorEmitter : ConstructorEmitter
 	{
-		public void Intercept(IInvocation invocation)
+		internal TypeConstructorEmitter(AbstractTypeEmitter maintype)
 		{
-			PreProceed(invocation);
-			invocation.Proceed();
-			PostProceed(invocation);
+			this.maintype = maintype;
+			
+			builder = maintype.TypeBuilder.DefineTypeInitializer();
 		}
 
-		protected virtual void PreProceed(IInvocation invocation)
+		public override void EnsureValidCodeBlock()
 		{
-
-		}
-
-		protected virtual void PostProceed(IInvocation invocation)
-		{
-
+			if (CodeBuilder.IsEmpty)
+			{
+				CodeBuilder.AddStatement(new ReturnStatement());
+			}
 		}
 	}
 }

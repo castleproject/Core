@@ -238,6 +238,7 @@
     <Compile Include="Generators\Emitters\StindOpCodesDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\TypeConstructorEmitter.cs" />
     <Compile Include="Generators\Emitters\TypeUtil.cs" />
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
@@ -245,13 +246,7 @@
     <Compile Include="Generators\InterfaceProxyGeneratorWithoutTarget.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
-    <Compile Include="IInterceptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IInterceptorSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IInvocation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IProxyBuilder.cs">
@@ -260,7 +255,6 @@
     <Compile Include="IProxyGenerationHook.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IProxyTargetAccessor.cs" />
     <Compile Include="ModuleScope.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -268,9 +262,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ProxyGenerator.cs" />
-    <Compile Include="StandardInterceptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\CastleKey.snk">

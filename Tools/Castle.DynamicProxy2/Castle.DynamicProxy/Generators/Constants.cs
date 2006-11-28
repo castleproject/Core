@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Reflection;
+	using Castle.Core.Interceptor;
 
 	public abstract class Constants
 	{

@@ -15,7 +15,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
@@ -167,6 +167,27 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNotNull(proxy);
 			ClassWithCharRetType classProxy = (ClassWithCharRetType) proxy;
 			Assert.AreEqual('c', classProxy.DoSomething());
+		}
+		
+		[Test]
+		public void ProxyForClassWithConstructors()
+		{
+			object proxy = generator.CreateClassProxy(
+				typeof(ClassWithConstructors), new IInterceptor[] { new StandardInterceptor() }, 
+				new object[] { "name" } );
+			
+			Assert.IsNotNull(proxy);
+			ClassWithConstructors classProxy = (ClassWithConstructors) proxy;
+			Assert.AreEqual("name", classProxy.Name);
+
+			proxy = generator.CreateClassProxy(
+				typeof(ClassWithConstructors), new IInterceptor[] { new StandardInterceptor() },
+				new object[] { "name", 10 });
+
+			Assert.IsNotNull(proxy);
+			classProxy = (ClassWithConstructors) proxy;
+			Assert.AreEqual("name", classProxy.Name);
+			Assert.AreEqual(10, classProxy.X);
 		}
 
 		[Test]

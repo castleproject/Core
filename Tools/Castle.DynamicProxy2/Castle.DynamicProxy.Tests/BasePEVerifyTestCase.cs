@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Configuration;
 	using System.Diagnostics;
 	using System.IO;
+	using Castle.Core.Interceptor;
 	using NUnit.Framework;
 
 	public abstract class BasePEVerifyTestCase

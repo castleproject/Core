@@ -16,10 +16,10 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Reflection;
+	using Castle.Core.Interceptor;
 
 	public interface IInterceptorSelector
 	{
-		IInterceptor[] SelectInterceptors(Type type, 
-			MethodInfo method, IInterceptor[] interceptors);
+		IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors);
 	}
 }

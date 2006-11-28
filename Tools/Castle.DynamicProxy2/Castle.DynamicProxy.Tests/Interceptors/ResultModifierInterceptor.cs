@@ -14,6 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
+	using Castle.Core.Interceptor;
+
 	public class ResultModifierInterceptor : StandardInterceptor
 	{
 		protected override void PostProceed(IInvocation invocation)

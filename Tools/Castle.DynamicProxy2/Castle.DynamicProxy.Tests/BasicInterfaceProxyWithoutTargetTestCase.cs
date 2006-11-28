@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Data;
-
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
 	using System.Collections.Generic;
+	using System.Data;
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
 

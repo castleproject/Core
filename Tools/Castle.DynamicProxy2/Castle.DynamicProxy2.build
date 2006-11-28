@@ -10,8 +10,8 @@
 
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
-		<include name="Castle.DynamicProxy/Castle.DynamicProxy.build" if="${nant.settings.currentframework=='net-2.0'}" />
-		<include name="Castle.DynamicProxy.Tests/Castle.DynamicProxy.Tests.build" if="${nant.settings.currentframework=='net-2.0'}" />
+		<include name="Castle.DynamicProxy/Castle.DynamicProxy.build" />
+		<include name="Castle.DynamicProxy.Tests/Castle.DynamicProxy.Tests.build" />
 	</fileset>
 
 	<target name="build" depends="common.build" />

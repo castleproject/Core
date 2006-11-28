@@ -1,6 +1,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System.IO;
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Classes;
 	using NUnit.Framework;
 

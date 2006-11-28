@@ -15,16 +15,24 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	[CLSCompliant(false)]
 	public class FieldReference : Reference
 	{
 		private readonly FieldBuilder fieldbuilder;
+		private readonly bool isStatic;
 
 		public FieldReference(FieldBuilder fieldbuilder)
 		{
 			this.fieldbuilder = fieldbuilder;
+			
+			if ((fieldbuilder.Attributes & FieldAttributes.Static) != 0)
+			{
+				isStatic = true;
+				owner = null;
+			}
 		}
 
 		public FieldBuilder Reference
@@ -34,12 +42,26 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void LoadReference(ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldfld, Reference);
+			if (isStatic)
+			{
+				gen.Emit(OpCodes.Ldsfld, Reference);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldfld, Reference);
+			}
 		}
 
 		public override void StoreReference(ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Stfld, Reference);
+			if (isStatic)
+			{
+				gen.Emit(OpCodes.Stsfld, Reference);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Stfld, Reference);
+			}
 		}
 
 		public override void LoadAddressOfReference(ILGenerator gen)

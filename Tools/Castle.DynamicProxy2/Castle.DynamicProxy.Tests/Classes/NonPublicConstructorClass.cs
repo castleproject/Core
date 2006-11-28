@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.DynamicProxy.Tests.Classes
 {
 	public class NonPublicConstructorClass
@@ -21,7 +22,6 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		public virtual void DoSomething()
 		{
-
 		}
 
 		public static NonPublicConstructorClass Create()

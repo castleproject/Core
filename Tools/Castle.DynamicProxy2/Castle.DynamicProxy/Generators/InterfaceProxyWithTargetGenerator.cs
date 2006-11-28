@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 	using System.Threading;
 	using System.Xml.Serialization;
-	
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -82,8 +82,10 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				AddDefaultInterfaces(interfaceList);
+				
+				Type baseType = options.BaseTypeForInterfaceProxy;
 
-				ClassEmitter emitter = BuildClassEmitter(newName, options.BaseTypeForInterfaceProxy, interfaceList);
+				ClassEmitter emitter = BuildClassEmitter(newName, baseType, interfaceList);
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 
 				// Custom attributes
@@ -110,10 +112,11 @@ namespace Castle.DynamicProxy.Generators
 
 				// Constructor
 
-				initCacheMethod = CreateInitializeCacheMethod(targetType, methods, emitter);
+				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
 
-				GenerateConstructor(initCacheMethod, emitter, interceptorsField, targetField);
-				// GenerateParameterlessConstructor(initCacheMethod, emitter, interceptorsField);
+				CreateInitializeCacheMethodBody(targetType, methods, emitter, typeInitializer);
+				GenerateConstructors(emitter, baseType, interceptorsField, targetField);
+				// GenerateParameterlessConstructor(emitter, interceptorsField, baseType);
 
 				// Implement interfaces
 
@@ -121,7 +124,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					foreach(Type inter in interfaces)
 					{
-						ImplementBlankInterface(targetType, inter, emitter, interceptorsField);
+						ImplementBlankInterface(targetType, inter, emitter, interceptorsField, typeInitializer);
 					}
 				}
 
@@ -217,7 +220,7 @@ namespace Castle.DynamicProxy.Generators
 
 				// Complete Initialize 
 
-				CompleteInitCacheMethod(initCacheMethod);
+				CompleteInitCacheMethod(typeInitializer.CodeBuilder);
 
 				// Crosses fingers and build type
 

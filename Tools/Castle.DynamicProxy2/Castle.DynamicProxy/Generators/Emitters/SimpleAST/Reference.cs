@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[CLSCompliant(false)]
 	public abstract class Reference
 	{
-		private Reference owner = SelfReference.Self;
+		protected Reference owner = SelfReference.Self;
 
 		public Reference()
 		{

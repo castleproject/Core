@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Reflection;
+	using Castle.Core.Interceptor;
 
 	[Serializable]
 	public abstract class AbstractInvocation : IInvocation

@@ -90,12 +90,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return member;
 		}
 
-//		public EasyConstructor CreateRuntimeConstructor(params ArgumentReference[] arguments)
-//		{
-//			EasyRuntimeConstructor member = new EasyRuntimeConstructor(this, arguments);
-//			constructors.Add(member);
-//			return member;
-//		}
+		public ConstructorEmitter CreateTypeConstructor()
+		{
+			ConstructorEmitter member = new TypeConstructorEmitter(this);
+			constructors.Add(member);
+			return member;
+		}
 
 		public MethodEmitter CreateMethod(String name, MethodAttributes attributes)
 		{
@@ -132,6 +132,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 //			return member;
 //		}
 
+		public FieldReference CreateStaticField(string name, Type fieldType)
+		{
+			FieldAttributes atts = FieldAttributes.Public | FieldAttributes.Static;
+
+			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
+
+			return new FieldReference(fieldBuilder);
+		}
+		
 		public FieldReference CreateField(string name, Type fieldType)
 		{
 			return CreateField(name, fieldType, true);

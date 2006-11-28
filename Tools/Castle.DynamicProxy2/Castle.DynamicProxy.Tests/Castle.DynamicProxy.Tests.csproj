@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="BasicInterfaceProxyWithoutTargetTestCase.cs" />
     <Compile Include="Classes\ClassWithCharRetType.cs" />
+    <Compile Include="Classes\ClassWithConstructors.cs" />
     <Compile Include="GenInterfaces\GenInterfaceHierarchy.cs" />
     <Compile Include="GenInterfaces\GenExplicitImplementation.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenArray.cs" />

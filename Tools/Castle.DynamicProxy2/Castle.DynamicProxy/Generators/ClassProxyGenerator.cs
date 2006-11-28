@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection.Emit;
 	using System.Threading;
 	using System.Xml.Serialization;
-	
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -106,10 +106,11 @@ namespace Castle.DynamicProxy.Generators
 
 				// Constructor
 
-				initCacheMethod = CreateInitializeCacheMethod(targetType, methods, emitter);
+				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
 
-				GenerateConstructor(initCacheMethod, emitter, interceptorsField);
-				GenerateParameterlessConstructor(initCacheMethod, emitter, interceptorsField);
+				CreateInitializeCacheMethodBody(targetType, methods, emitter, typeInitializer);
+				GenerateConstructors(emitter, targetType, interceptorsField);
+				GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
 
 				// Implement interfaces
 
@@ -117,7 +118,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					foreach(Type inter in interfaces)
 					{
-						ImplementBlankInterface(targetType, inter, emitter, interceptorsField);
+						ImplementBlankInterface(targetType, inter, emitter, interceptorsField, typeInitializer);
 					}
 				}
 
@@ -203,11 +204,11 @@ namespace Castle.DynamicProxy.Generators
 					}
 				}
 				
-				// Complete Initialize 
+				// Complete type initializer code body
 
-				CompleteInitCacheMethod(initCacheMethod);
+				CompleteInitCacheMethod(typeInitializer.CodeBuilder);
 				
-				// Crosses fingers and build type
+				// Build type
 
 				type = emitter.BuildType();
 
