@@ -45,6 +45,7 @@ namespace Castle.DynamicProxy.Generators
 	/// - Add tests and fixes for 'leaking this' problem
 	/// - Mixin support
 	/// </remarks>
+	[CLSCompliant(false)]
 	public abstract class BaseProxyGenerator
 	{
 		private readonly ModuleScope scope;

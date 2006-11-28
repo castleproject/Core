@@ -44,6 +44,20 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void BasicInterfaceProxyWithValidTarget2()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+
+			IService2 service = (IService2)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(IService2), new Service2(), logger);
+
+			service.DoOperation2();
+
+			Assert.AreEqual("DoOperation2 ", logger.LogContents);
+		}
+
+		[Test]
 		public void InterfaceInheritance()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();

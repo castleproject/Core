@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy
 	using System;
 	using Castle.Core.Interceptor;
 
+	[CLSCompliant(true)]
 	public class ProxyGenerator
 	{
 		private readonly IProxyBuilder proxyBuilder;

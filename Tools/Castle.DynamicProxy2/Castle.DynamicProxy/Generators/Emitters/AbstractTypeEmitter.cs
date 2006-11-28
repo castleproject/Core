@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
+	[CLSCompliant(false)]
 	public abstract class AbstractTypeEmitter
 	{
 		protected TypeBuilder typebuilder;

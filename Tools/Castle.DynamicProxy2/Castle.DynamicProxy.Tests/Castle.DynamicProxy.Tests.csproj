@@ -106,6 +106,7 @@
     <Compile Include="InterClasses\ClassWithMultiDimentionalArray.cs" />
     <Compile Include="InterClasses\IClassWithMultiDimentionalArray.cs" />
     <Compile Include="InterClasses\InterfaceWithIndexer.cs" />
+    <Compile Include="InterClasses\IService2.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

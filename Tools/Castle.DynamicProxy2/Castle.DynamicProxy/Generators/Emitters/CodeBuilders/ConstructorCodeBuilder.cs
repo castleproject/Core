@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-
+	[CLSCompliant(false)]
 	public class ConstructorCodeBuilder : AbstractCodeBuilder
 	{
 		private readonly Type baseType;
@@ -40,8 +40,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			AddStatement(new ConstructorInvocationStatement(constructor));
 		}
 
-		public void InvokeBaseConstructor(ConstructorInfo constructor, 
-			params ArgumentReference[] arguments)
+		public void InvokeBaseConstructor(ConstructorInfo constructor, params ArgumentReference[] arguments)
 		{
 			AddStatement(
 				new ConstructorInvocationStatement(constructor,

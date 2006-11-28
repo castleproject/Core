@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	[CLSCompliant(false)]
 	public class ThrowStatement : Statement
 	{
 		private readonly Type exceptionType;

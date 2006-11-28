@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
+	[CLSCompliant(false)]
 	public abstract class ArgumentsUtil
 	{
 		public static void EmitLoadOwnerAndReference(Reference reference, ILGenerator il)

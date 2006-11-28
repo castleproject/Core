@@ -14,10 +14,12 @@
 
 namespace Castle.DynamicProxy.Generators
 {
+	using System;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators.Emitters;
 
+	[CLSCompliant(false)]
 	public class PropertyToGenerate
 	{
 		private readonly bool canRead, canWrite;

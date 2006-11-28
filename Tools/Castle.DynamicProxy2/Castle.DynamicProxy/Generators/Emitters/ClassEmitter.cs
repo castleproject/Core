@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Collections;
 	using System.Reflection;
 
+	[CLSCompliant(false)]
 	public class ClassEmitter : AbstractTypeEmitter
 	{
 		private static IDictionary signedAssemblyCache = new Hashtable();

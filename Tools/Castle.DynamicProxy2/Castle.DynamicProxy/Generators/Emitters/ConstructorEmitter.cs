@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
+	[CLSCompliant(false)]
 	public class ConstructorEmitter : IMemberEmitter
 	{
 		protected ConstructorBuilder builder;

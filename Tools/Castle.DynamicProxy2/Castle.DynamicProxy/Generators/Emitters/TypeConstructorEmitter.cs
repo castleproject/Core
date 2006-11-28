@@ -14,9 +14,10 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters
 {
+	using System;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	
+	[CLSCompliant(false)]
 	public class TypeConstructorEmitter : ConstructorEmitter
 	{
 		internal TypeConstructorEmitter(AbstractTypeEmitter maintype)

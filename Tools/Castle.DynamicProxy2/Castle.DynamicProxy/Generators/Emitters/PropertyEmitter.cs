@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	
+	[CLSCompliant(false)]
 	public class PropertyEmitter : IMemberEmitter
 	{
 		private PropertyBuilder builder;

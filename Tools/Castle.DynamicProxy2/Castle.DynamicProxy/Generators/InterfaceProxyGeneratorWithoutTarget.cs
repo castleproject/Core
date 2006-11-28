@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators.Emitters;
 
+	[CLSCompliant(false)]
 	public class InterfaceProxyGeneratorWithoutTarget : InterfaceProxyWithTargetGenerator
 	{
 		public InterfaceProxyGeneratorWithoutTarget(ModuleScope scope, Type theInterface) : base(scope, theInterface)

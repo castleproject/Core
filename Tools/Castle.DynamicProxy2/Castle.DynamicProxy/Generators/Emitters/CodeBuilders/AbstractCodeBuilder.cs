@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
+	[CLSCompliant(false)]
 	public abstract class AbstractCodeBuilder
 	{
 		private bool isEmpty;
