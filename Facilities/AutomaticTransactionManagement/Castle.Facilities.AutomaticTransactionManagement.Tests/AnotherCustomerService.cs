@@ -18,7 +18,6 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 
 	using Castle.Services.Transaction;
 
-
 	[Transactional]
 	public class AnotherCustomerService : ICustomerService
 	{

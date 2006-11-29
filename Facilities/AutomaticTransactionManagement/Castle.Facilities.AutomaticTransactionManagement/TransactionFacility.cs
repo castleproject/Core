@@ -27,9 +27,9 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		/// </summary>
 		protected override void Init()
 		{
-			Kernel.AddComponent( "transaction.interceptor", typeof(TransactionInterceptor) );
-			Kernel.AddComponent( "transaction.MetaInfoStore", typeof(TransactionMetaInfoStore) );
-			Kernel.ComponentModelBuilder.AddContributor( new TransactionComponentInspector() );
+			Kernel.AddComponent("transaction.interceptor", typeof(TransactionInterceptor));
+			Kernel.AddComponent("transaction.MetaInfoStore", typeof(TransactionMetaInfoStore));
+			Kernel.ComponentModelBuilder.AddContributor(new TransactionComponentInspector());
 		}
 	}
 }

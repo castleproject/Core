@@ -30,7 +30,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	/// method execution. Rollback is invoked if an exception is threw.
 	/// </summary>
 	[Transient]
-	public class TransactionInterceptor : MarshalByRefObject, IMethodInterceptor, IOnBehalfAware
+	public class TransactionInterceptor : IInterceptor, IOnBehalfAware
 	{
 		private readonly IKernel kernel;
 		private readonly TransactionMetaInfoStore infoStore;
@@ -46,25 +46,6 @@ namespace Castle.Facilities.AutomaticTransactionManagement
             this.kernel = kernel;
 			this.infoStore = infoStore;
 		}
-
-		#region MarshalByRefObject
-
-		/// <summary>
-		/// Obtains a lifetime service object to control the lifetime policy for this instance.
-		/// </summary>
-		/// <returns>
-		/// An object of type <see cref="T:System.Runtime.Remoting.Lifetime.ILease"/> used to control the
-		/// lifetime policy for this instance. This is the current lifetime service object for
-		/// this instance if one exists; otherwise, a new lifetime service object initialized to the value
-		/// of the <see cref="P:System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime" qualify="true"/> property.
-		/// </returns>
-		/// <exception cref="T:System.Security.SecurityException">The immediate caller does not have infrastructure permission. </exception>
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
-
-		#endregion
 
 		#region IOnBehalfAware
 
@@ -84,15 +65,15 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		/// if necessary.
 		/// </summary>
 		/// <param name="invocation">The invocation.</param>
-		/// <param name="args">The args.</param>
 		/// <returns></returns>
-		public object Intercept(IMethodInvocation invocation, params object[] args)
+		public void Intercept(IInvocation invocation)
 		{
 			MethodInfo methodInfo = invocation.MethodInvocationTarget;
 
 			if (metaInfo == null || !metaInfo.Contains(methodInfo))
 			{
-				return invocation.Proceed(args);
+				invocation.Proceed();
+				return;
 			}
 			else
 			{
@@ -106,10 +87,9 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 				if (transaction == null)
 				{
-					return invocation.Proceed(args);
+					invocation.Proceed();
+					return;
 				}
-
-				object value = null;
 
 				transaction.Begin();
 
@@ -117,7 +97,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 				try
 				{
-					value = invocation.Proceed(args);
+					invocation.Proceed();
 
 					if (transaction.IsRollbackOnlySet)
 					{
@@ -149,8 +129,6 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 				{
 					manager.Dispose(transaction); 
 				}
-
-				return value;
 			}
 		}
 	}

@@ -15,13 +15,9 @@
 namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 {
 	using System;
-
 	using NUnit.Framework;
-
 	using Castle.MicroKernel.SubSystems.Configuration;
-	
 	using Castle.Windsor;
-
 	using Castle.Services.Transaction;
 
 	/// <summary>
@@ -33,21 +29,21 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 		[Test]
 		public void TestReportedBug()
 		{
-			WindsorContainer container = new WindsorContainer( new DefaultConfigurationStore() );
+			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
-			container.AddFacility( "transactionmanagement", new TransactionFacility() );
+			container.AddFacility("transactionmanagement", new TransactionFacility());
 
-			container.AddComponent( "transactionmanager", 
-				typeof(ITransactionManager), typeof(MockTransactionManager) );
+			container.AddComponent("transactionmanager",
+			                       typeof(ITransactionManager), typeof(MockTransactionManager));
 
-			container.AddComponent( "comp", typeof(SubTransactionalComp) );
+			container.AddComponent("comp", typeof(SubTransactionalComp));
 
 			SubTransactionalComp service = (SubTransactionalComp) container["comp"];
 
 			service.BaseMethod();
 
-			MockTransactionManager transactionManager = (MockTransactionManager) 
-				container["transactionmanager"];
+			MockTransactionManager transactionManager = (MockTransactionManager)
+			                                            container["transactionmanager"];
 
 			Assert.AreEqual(1, transactionManager.TransactionCount);
 			Assert.AreEqual(1, transactionManager.CommittedCount);
@@ -57,21 +53,21 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 		[Test]
 		public void TestBasicOperations()
 		{
-			WindsorContainer container = new WindsorContainer( new DefaultConfigurationStore() );
+			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
-			container.AddFacility( "transactionmanagement", new TransactionFacility() );
+			container.AddFacility("transactionmanagement", new TransactionFacility());
 
-			container.AddComponent( "transactionmanager", 
-				typeof(ITransactionManager), typeof(MockTransactionManager) );
+			container.AddComponent("transactionmanager",
+			                       typeof(ITransactionManager), typeof(MockTransactionManager));
 
-			container.AddComponent( "services.customer", typeof(CustomerService) );
+			container.AddComponent("services.customer", typeof(CustomerService));
 
 			CustomerService service = (CustomerService) container["services.customer"];
 
-			service.Insert( "TestCustomer", "Rua P Leite, 33" );
+			service.Insert("TestCustomer", "Rua P Leite, 33");
 
-			MockTransactionManager transactionManager = (MockTransactionManager) 
-				container["transactionmanager"];
+			MockTransactionManager transactionManager = (MockTransactionManager)
+			                                            container["transactionmanager"];
 
 			Assert.AreEqual(1, transactionManager.TransactionCount);
 			Assert.AreEqual(1, transactionManager.CommittedCount);
@@ -79,7 +75,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 
 			try
 			{
-				service.Delete( 1 );
+				service.Delete(1);
 			}
 			catch(Exception)
 			{
@@ -94,21 +90,19 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 		[Test]
 		public void TestBasicOperationsWithInterfaceService()
 		{
-			WindsorContainer container = new WindsorContainer( new DefaultConfigurationStore() );
+			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
-			container.AddFacility( "transactionmanagement", new TransactionFacility() );
+			container.AddFacility("transactionmanagement", new TransactionFacility());
 
-			container.AddComponent( "transactionmanager", 
-				typeof(ITransactionManager), typeof(MockTransactionManager) );
+			container.AddComponent("transactionmanager", typeof(ITransactionManager), typeof(MockTransactionManager));
 
-			container.AddComponent( "services.customer", typeof(ICustomerService), typeof(AnotherCustomerService) );
+			container.AddComponent("services.customer", typeof(ICustomerService), typeof(AnotherCustomerService));
 
 			ICustomerService service = (ICustomerService) container["services.customer"];
 
-			service.Insert( "TestCustomer", "Rua P Leite, 33" );
+			service.Insert("TestCustomer", "Rua P Leite, 33");
 
-			MockTransactionManager transactionManager = (MockTransactionManager) 
-				container["transactionmanager"];
+			MockTransactionManager transactionManager = (MockTransactionManager) container["transactionmanager"];
 
 			Assert.AreEqual(1, transactionManager.TransactionCount);
 			Assert.AreEqual(1, transactionManager.CommittedCount);
@@ -116,7 +110,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 
 			try
 			{
-				service.Delete( 1 );
+				service.Delete(1);
 			}
 			catch(Exception)
 			{
@@ -127,25 +121,25 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(1, transactionManager.CommittedCount);
 			Assert.AreEqual(1, transactionManager.RolledBackCount);
 		}
-		
+
 		[Test]
 		public void TestBasicOperationsWithConfigComponent()
 		{
-			WindsorContainer container = new WindsorContainer( ConfigHelper.ResolvePath("../HasConfiguration.xml") );
+			WindsorContainer container = new WindsorContainer(ConfigHelper.ResolvePath("../HasConfiguration.xml"));
 
-			container.AddComponent( "transactionmanager", 
-				typeof(ITransactionManager), typeof(MockTransactionManager) );
+			container.AddComponent("transactionmanager",
+			                       typeof(ITransactionManager), typeof(MockTransactionManager));
 
 			TransactionalComp1 comp1 = (TransactionalComp1) container.Resolve("mycomp");
 
 			comp1.Create();
-			
+
 			comp1.Delete();
-			
+
 			comp1.Save();
 
-			MockTransactionManager transactionManager = (MockTransactionManager) 
-				container["transactionmanager"];
+			MockTransactionManager transactionManager = (MockTransactionManager)
+			                                            container["transactionmanager"];
 
 			Assert.AreEqual(3, transactionManager.TransactionCount);
 			Assert.AreEqual(3, transactionManager.CommittedCount);
