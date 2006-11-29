@@ -16,11 +16,11 @@ namespace TestSiteWindsor
 {
 	using Castle.Core.Interceptor;
 
-	public class EmptyInterceptor : IMethodInterceptor
+	public class EmptyInterceptor : IInterceptor
 	{
-		public object Intercept(IMethodInvocation invocation, params object[] args)
+		public void Intercept(IInvocation invocation)
 		{
-			return invocation.Proceed(args);
+			invocation.Proceed();
 		}
 	}
 }

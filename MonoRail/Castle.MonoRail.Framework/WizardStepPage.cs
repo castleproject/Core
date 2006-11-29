@@ -123,7 +123,8 @@ namespace Castle.MonoRail.Framework
 				Type thisType = GetType();
 				
 				// Hack fix for "dynamic proxied" controllers
-				if (thisType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+				if (thisType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen") ||
+					thisType.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2"))
 				{
 					return thisType.BaseType.Name;
 				}
