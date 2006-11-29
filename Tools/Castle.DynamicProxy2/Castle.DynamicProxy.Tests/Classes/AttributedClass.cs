@@ -41,11 +41,13 @@ namespace Castle.DynamicProxy.Tests.Classes
 	}
 	
 	[Serializable]
+	[AttributeUsage(AttributeTargets.All, Inherited=false)]
 	public class NonInheritableAttribute : Attribute
 	{
 	}
 
 	[Serializable]
+	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public class ComplexNonInheritableAttribute : Attribute
 	{
 		public int id, num;

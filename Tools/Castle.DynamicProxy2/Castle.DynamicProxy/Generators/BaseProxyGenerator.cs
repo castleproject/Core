@@ -757,6 +757,8 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach(Attribute attribute in attrs)
 			{
+				if (IsInheritable(attribute)) continue;
+				
 				emitter.DefineCustomAttribute(attribute);
 			}
 		}
@@ -767,6 +769,8 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach(Attribute attribute in attrs)
 			{
+				if (IsInheritable(attribute)) continue;
+				
 				emitter.DefineCustomAttribute(attribute);
 			}
 		}
@@ -1079,6 +1083,20 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return (PropertyToGenerate[])toGenerateList.ToArray(typeof(PropertyToGenerate));
+		}
+
+		private bool IsInheritable(Attribute attribute)
+		{
+			object[] attrs = attribute.GetType().GetCustomAttributes(typeof(AttributeUsageAttribute), true);
+
+			if (attrs.Length != 0)
+			{
+				AttributeUsageAttribute usage = (AttributeUsageAttribute)attrs[0];
+
+				return usage.Inherited;
+			}
+
+			return true;
 		}
 
 		#endregion
