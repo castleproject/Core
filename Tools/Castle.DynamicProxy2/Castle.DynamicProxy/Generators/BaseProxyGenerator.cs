@@ -284,8 +284,8 @@ namespace Castle.DynamicProxy.Generators
 					targetRef.ToExpression(),
 					interceptors,
 					typeTokenFieldExp,
-					methodInfoTokenExp,
 					methodOnTargetTokenExp,
+					methodInfoTokenExp,
 					new ReferencesToObjectArrayExpression(dereferencedArguments), 
 					SelfReference.Self.ToExpression());
 			}

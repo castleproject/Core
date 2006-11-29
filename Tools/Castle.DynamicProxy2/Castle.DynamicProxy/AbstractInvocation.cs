@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy
 		private object[] arguments;
 		private int execIndex = -1;
 
-		protected AbstractInvocation(object proxy, object target, IInterceptor[] interceptors, 
+		protected AbstractInvocation(object target, object proxy, IInterceptor[] interceptors, 
 		                             Type targetType, MethodInfo targetMethod, object[] arguments)
 		{
 			this.proxy = proxy;
@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy
 			this.arguments = arguments;
 		}
 
-		protected AbstractInvocation(object proxy, object target, IInterceptor[] interceptors, 
+		protected AbstractInvocation(object target, object proxy, IInterceptor[] interceptors, 
 		                             Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, 
 		                             object[] arguments) : this(proxy, target, interceptors, targetType, targetMethod, arguments)
 		{
