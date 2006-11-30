@@ -134,8 +134,7 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach(MethodInfo method in methods)
 			{
-				AddFieldToCacheMethodTokenAndStatementsToInitialize(method, _interface,
-																   typeInitializerConstructor, emitter);
+				AddFieldToCacheMethodTokenAndStatementsToInitialize(method, typeInitializerConstructor, emitter);
 				
 				method2Invocation[method] = BuildInvocationNestedType(emitter, targetType,
 																	  emitter.TypeBuilder,
@@ -253,7 +252,7 @@ namespace Castle.DynamicProxy.Generators
 
 			Expression typeTokenFieldExp = typeTokenField.ToExpression();
 			Expression methodInfoTokenExp;
-			
+
 			if (method2TokenField.ContainsKey(method)) // Token is in the cache
 			{
 				methodInfoTokenExp = method2TokenField[method].ToExpression();
@@ -262,7 +261,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				// Not in the cache: generic method
 				
-				methodInfoTokenExp = new MethodTokenExpression(method, targetType);
+				methodInfoTokenExp = new MethodTokenExpression(method);
 			}
 
 			ConstructorInfo constructor = invocationImpl.Constructors[0].Builder;
@@ -276,8 +275,18 @@ namespace Castle.DynamicProxy.Generators
 
 			if (version == ConstructorVersion.WithTargetMethod)
 			{
-				MethodTokenExpression methodOnTargetTokenExp = 
-					new MethodTokenExpression(methodOnTarget, methodOnTarget.DeclaringType);
+				Expression methodOnTargetTokenExp;
+
+				if (method2TokenField.ContainsKey(methodOnTarget)) // Token is in the cache
+				{
+					methodOnTargetTokenExp = method2TokenField[methodOnTarget].ToExpression();
+				}
+				else
+				{
+					// Not in the cache: generic method
+
+					methodOnTargetTokenExp = new MethodTokenExpression(methodOnTarget);
+				}
 				
 				newInvocImpl = new NewInstanceExpression(
 					constructor,
@@ -810,25 +819,27 @@ namespace Castle.DynamicProxy.Generators
 			typeInitializerConstructor.CodeBuilder.AddStatement(
 				new AssignStatement(typeTokenField, new TypeTokenExpression(targetType)));
 
+			CacheMethodTokens(classEmitter, methods, typeInitializerConstructor);
+		}
+
+		protected void CacheMethodTokens(ClassEmitter classEmitter, MethodInfo[] methods, ConstructorEmitter typeInitializerConstructor)
+		{
 			foreach(MethodInfo method in methods)
 			{
 				// Aparently we cannot cache generic methods
 				if (method.IsGenericMethod) continue;
 				
-				// AddFieldToCacheMethodTokenAndStatementsToInitialize(method, targetType, cacheMethod, classEmitter);
-				AddFieldToCacheMethodTokenAndStatementsToInitialize(method, 
-				                                                    method.DeclaringType,
-																	typeInitializerConstructor, classEmitter);
+				AddFieldToCacheMethodTokenAndStatementsToInitialize(method, typeInitializerConstructor, classEmitter);
 			}
 		}
 
-		protected void AddFieldToCacheMethodTokenAndStatementsToInitialize(MethodInfo method, Type targetType,
+		protected void AddFieldToCacheMethodTokenAndStatementsToInitialize(MethodInfo method, 
 																		   ConstructorEmitter typeInitializerConstructor, 
 		                                                                   ClassEmitter classEmitter)
 		{
 			FieldReference fieldCache = classEmitter.CreateStaticField("tokenCache" + fieldCount++, typeof(MethodInfo));
 
-			if(method2TokenField.ContainsKey(method))
+			if (method2TokenField.ContainsKey(method))
 			{
 				throw new ArgumentException(String.Format("Duplicate method {0} on type {1}", 
 				                                          method.ToString(), method.DeclaringType.FullName));
@@ -837,7 +848,7 @@ namespace Castle.DynamicProxy.Generators
 			method2TokenField.Add(method, fieldCache);
 
 			typeInitializerConstructor.CodeBuilder.AddStatement(
-				new AssignStatement(fieldCache, new MethodTokenExpression(method, targetType)));
+				new AssignStatement(fieldCache, new MethodTokenExpression(method)));
 		}
 
 		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)

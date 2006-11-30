@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy
 
 		protected AbstractInvocation(object target, object proxy, IInterceptor[] interceptors, 
 		                             Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, 
-		                             object[] arguments) : this(proxy, target, interceptors, targetType, targetMethod, arguments)
+		                             object[] arguments) : this(target, proxy, interceptors, targetType, targetMethod, arguments)
 		{
 			this.interfMethod = interfMethod;
 		}

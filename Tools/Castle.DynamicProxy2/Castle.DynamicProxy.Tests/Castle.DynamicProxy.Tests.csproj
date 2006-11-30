@@ -102,11 +102,13 @@
     <Compile Include="GenInterfaces\GenInterfaceHierarchy.cs" />
     <Compile Include="GenInterfaces\GenExplicitImplementation.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenArray.cs" />
+    <Compile Include="Interceptors\KeepDataInterceptor.cs" />
     <Compile Include="InterClasses\ClassWithIndexer.cs" />
     <Compile Include="InterClasses\ClassWithMultiDimentionalArray.cs" />
     <Compile Include="InterClasses\IClassWithMultiDimentionalArray.cs" />
     <Compile Include="InterClasses\InterfaceWithIndexer.cs" />
     <Compile Include="InterClasses\IService2.cs" />
+    <Compile Include="InvocationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

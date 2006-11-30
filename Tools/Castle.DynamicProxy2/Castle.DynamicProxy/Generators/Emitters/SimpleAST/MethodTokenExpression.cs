@@ -27,12 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public MethodTokenExpression(MethodInfo method)
 		{
 			this.method = method;
-		}
-
-		public MethodTokenExpression(MethodInfo method, Type declaringType)
-		{
-			this.method = method;
-			this.declaringType = declaringType;
+			this.declaringType = method.DeclaringType;
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)

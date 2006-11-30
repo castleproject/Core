@@ -213,11 +213,6 @@ namespace Castle.DynamicProxy
 			return Activator.CreateInstance(generatedType, new object[] {interceptors, new object(),});
 		}
 
-		public Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces, ProxyGenerationOptions options)
-		{
-			return ProxyBuilder.CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
-		}
-
 		#endregion
 
 		#region CreateClassProxy
@@ -347,6 +342,12 @@ namespace Castle.DynamicProxy
 		                                                  ProxyGenerationOptions options)
 		{
 			return ProxyBuilder.CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
+		}
+
+		protected Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces, 
+		                                                     ProxyGenerationOptions options)
+		{
+			return ProxyBuilder.CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
 		}
 	}
 }

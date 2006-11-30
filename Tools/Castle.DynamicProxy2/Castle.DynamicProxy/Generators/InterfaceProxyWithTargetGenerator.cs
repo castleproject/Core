@@ -32,7 +32,6 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private FieldReference targetField;
 		protected Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
-
 		protected Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
 
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface) : base(scope, theInterface)
@@ -114,8 +113,12 @@ namespace Castle.DynamicProxy.Generators
 				// Constructor
 
 				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
-
-				CreateInitializeCacheMethodBody(targetType, methods, emitter, typeInitializer);
+				
+				CacheMethodTokens(emitter, 
+				                  proxyTargetType.GetMethods(BindingFlags.Public | BindingFlags.Instance), 
+				                  typeInitializer);
+				
+				CreateInitializeCacheMethodBody(proxyTargetType, methods, emitter, typeInitializer);
 				GenerateConstructors(emitter, baseType, interceptorsField, targetField);
 				// GenerateParameterlessConstructor(emitter, interceptorsField, baseType);
 
