@@ -26,6 +26,10 @@ namespace Castle.ActiveRecord.Queries
 	/// of the type <typeparamref name="T"/>.
 	/// </summary>
 	/// <typeparam name="T">The resulting object type</typeparam>
+	/// <remarks>
+	/// If the query result is null, and <typeparamref name="T"/> is a value type,
+	/// the default value for that type will be returned.
+	/// </remarks>
 	public class ScalarQuery<T> : ScalarQuery, IActiveRecordQuery<T>
 	{
 		#region Constructors
@@ -83,7 +87,8 @@ namespace Castle.ActiveRecord.Queries
 		#region IActiveRecordQuery<T> implementation
 		T IActiveRecordQuery<T>.Execute(ISession session)
 		{
-			return (T)InternalExecute(session);
+			object result = InternalExecute(session);
+			return result == null ? default(T) : (T)result;
 		}
 		#endregion
 
