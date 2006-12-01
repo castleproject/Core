@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-180
+  "Url Tokenizer Bug at Turkish Culture Info"
+
 - Properly quote file/directory arguments in Pre/Post Build Events to accomodate
   names with spaces.
   Also added some missing files to TestSiteWindsor-vs2005 Project

@@ -244,7 +244,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="area">area which the controller belongs to</param>
 		public String GenerateJSProxy(string proxyName, string area, string controller)
 		{
-			String cacheKey = (area + "|" + controller).ToLower();
+			String cacheKey = (area + "|" + controller).ToLower(System.Globalization.CultureInfo.InvariantCulture);
 			String result = (String) ajaxProxyCache[cacheKey];
 
 			if (result == null)
@@ -291,15 +291,17 @@ namespace Castle.MonoRail.Framework.Helpers
 					StringBuilder parameters = new StringBuilder("_=");
 					String url = baseUrl + methodName + "." + Controller.Context.UrlInfo.Extension;
 					String functionName = ajaxActionAtt.Name != null ? ajaxActionAtt.Name : methodName;
-					
-					functionName = Char.ToLower(functionName[0]) + (functionName.Length > 0 ? functionName.Substring(1) : null);
+
+					functionName = Char.ToLower(functionName[0], System.Globalization.CultureInfo.InvariantCulture) + 
+					               (functionName.Length > 0 ? functionName.Substring(1) : null);
 
 					functions.AppendFormat(Environment.NewLine + "\t{0}: " + Environment.NewLine + "\tfunction(", functionName);
 					
 					foreach(ParameterInfo pi in ajaxActionMethod.GetParameters())
 					{
 						String paramName = pi.Name;
-						paramName = Char.ToLower(paramName[0]) + (paramName.Length > 0 ? paramName.Substring(1) : null);
+						paramName = Char.ToLower(paramName[0], System.Globalization.CultureInfo.InvariantCulture) + 
+						            (paramName.Length > 0 ? paramName.Substring(1) : null);
 						functions.AppendFormat("{0}, ", paramName);
 						parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
 					}
@@ -1011,7 +1013,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			BuildCallbacks(jsOptions, options);
 
-			jsOptions["asynchronous"] = (!options.Contains("type")).ToString().ToLower();
+			jsOptions["asynchronous"] = (!options.Contains("type")).ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture);
 
 			if (options.Contains("method"))
 			{
@@ -1070,13 +1072,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			
 			foreach(String name in names)
 			{
-				if (!options.Contains(name.ToLower())) continue;
+				if (!options.Contains(name.ToLower(System.Globalization.CultureInfo.InvariantCulture))) continue;
 
 				String callbackFunctionName;
 
 				String function = BuildCallbackFunction( 
-					(CallbackEnum) Enum.Parse( typeof(CallbackEnum), name, true), 
-					options[name.ToLower()] as String, out callbackFunctionName );
+					(CallbackEnum) Enum.Parse( typeof(CallbackEnum), name, true),
+					options[name.ToLower(System.Globalization.CultureInfo.InvariantCulture)] as String, out callbackFunctionName);
 
 				if (function == String.Empty) return;
 

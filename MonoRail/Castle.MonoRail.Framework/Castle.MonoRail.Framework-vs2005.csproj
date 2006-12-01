@@ -437,7 +437,9 @@
     <Compile Include="WizardStepPage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Controllers\Ajax.resx" />
+    <EmbeddedResource Include="Controllers\Ajax.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controllers\Behaviour.resx" />
     <EmbeddedResource Include="Controllers\Effects2.resx" />
     <EmbeddedResource Include="Controllers\EffectsFat.resx" />

@@ -32,13 +32,13 @@ namespace Castle.MonoRail.Framework.Internal
 
 			if (url[0] == '/')
 			{
-				url = url.ToLower().Substring(1);
+				url = url.ToLower(System.Globalization.CultureInfo.InvariantCulture).Substring(1);
 			}
 
 			// Strip the virtualDirectory from the Url
 			if (virtualDirectory != null && virtualDirectory != "")
 			{
-				virtualDirectory = virtualDirectory.ToLower().Substring(1);
+				virtualDirectory = virtualDirectory.ToLower(System.Globalization.CultureInfo.InvariantCulture).Substring(1);
 
 				if (!url.StartsWith(virtualDirectory))
 				{

@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				throw new RailsException("{0} is not a subclass of directive", type.FullName);
 			}
 
-			String name = type.Name.ToLower();
+			String name = type.Name.ToLower(System.Globalization.CultureInfo.InvariantCulture);
 
 			if (name.EndsWith(DirectiveSuffix))
 			{
