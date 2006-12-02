@@ -217,7 +217,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			finally
 			{
-				rwlock.DowngradeFromWriterLock(ref lc);
+				rwlock.ReleaseWriterLock();
 			}
 
 			Scope.SaveAssembly();

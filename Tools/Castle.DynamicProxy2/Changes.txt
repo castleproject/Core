@@ -1,6 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
 
+- Fixed DYNPROXY-39
+  "Deadlock in DynamicProxy2"
+
 - Fixed DYNPROXY-28
   "Virtual methods calls from constructors are not working"
 
