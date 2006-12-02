@@ -28,11 +28,15 @@ namespace Castle.MonoRail.Framework
 	{
 		private bool xhtmlRendering;
 		private IViewSourceLoader viewSourceLoader;
+		
+		protected IServiceProvider serviceProvider;
 
 		#region IServiceEnabledComponent implementation
 		
 		public virtual void Service(IServiceProvider provider)
 		{
+			serviceProvider = provider;
+			
 			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
 			
 			xhtmlRendering = config.ViewEngineConfig.EnableXHtmlRendering;
