@@ -57,10 +57,12 @@ namespace Castle.DynamicProxy.Generators
 				return cacheType;
 			}
 
-			LockCookie lc = rwlock.UpgradeToWriterLock(-1);
+			rwlock.UpgradeToWriterLock(-1);
 
 			try
 			{
+				cacheType = GetFromCache(cacheKey);
+
 				if (cacheType != null)
 				{
 					return cacheType;
