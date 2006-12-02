@@ -22,9 +22,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	using System;
 	using System.IO;
 	using System.Collections;
-	
 	using Castle.Core;
-	
 	using Commons.Collections;
 
 	/// <summary>
@@ -35,19 +33,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		internal const String TemplateExtension = ".vm";
 
 		internal const String ServiceProvider = "service.provider";
-		
-		private const String TemplatePathPattern = "{0}{1}{2}";
+
+		// private const String TemplatePathPattern = "{0}{1}{2}";
 
 		private IServiceProvider provider;
 
 		protected VelocityEngine velocity = new VelocityEngine();
-		
+
 		/// <summary>
 		/// Creates a new <see cref="NVelocityViewEngine"/> instance.
 		/// </summary>
 		public NVelocityViewEngine()
 		{
-			
 		}
 
 		#region IInitializable implementation
@@ -65,7 +62,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 
 			// Set up a custom directive manager
-			props.SetProperty("directive.manager", "Castle.MonoRail.Framework.Views.NVelocity.CustomDirectiveManager; Castle.MonoRail.Framework.Views.NVelocity");
+			props.SetProperty("directive.manager",
+			                  "Castle.MonoRail.Framework.Views.NVelocity.CustomDirectiveManager; Castle.MonoRail.Framework.Views.NVelocity");
 
 			InitializeVelocityProperties(props);
 
@@ -73,18 +71,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			velocity.Init(props);
 		}
-		
+
 		#endregion
-		
+
 		#region IServiceEnabledComponent implementation
 
 		public override void Service(IServiceProvider provider)
 		{
 			base.Service(provider);
-			
+
 			this.provider = provider;
 		}
-		
+
 		#endregion
 
 		#region IViewEngine implementation
@@ -97,7 +95,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
-			
+
 			AdjustContentType(context);
 
 			Template template;
@@ -130,7 +128,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				PostSendView(controller, template);
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				if (hasLayout)
 				{
@@ -155,7 +153,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
-			
+
 			AdjustContentType(context);
 
 			String view = ResolveTemplateName(viewName);
@@ -167,12 +165,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				BeforeMerge(velocity, template, ctx);
 				template.Merge(ctx, output);
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				throw new RailsException("Could not obtain view: " + view, ex);
 			}
 		}
-		
+
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			IContext ctx = CreateContext(context, controller);
@@ -199,8 +197,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <param name="props">The <see cref="ExtendedProperties"/> collection to populate.</param>
 		protected virtual void InitializeVelocityProperties(ExtendedProperties props)
 		{
-			velocity.SetApplicationAttribute(RuntimeConstants.RESOURCE_MANAGER_CLASS, 
-				new CustomResourceManager(ViewSourceLoader));
+			velocity.SetApplicationAttribute(RuntimeConstants.RESOURCE_MANAGER_CLASS,
+			                                 new CustomResourceManager(ViewSourceLoader));
 
 			LoadMacros(props);
 		}
@@ -212,15 +210,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			return templateName + TemplateExtension;
 		}
-		
+
 		/// <summary>
 		/// Resolves the template name into a velocity template file name.
 		/// </summary>
 		protected virtual string ResolveTemplateName(string area, string templateName)
 		{
-			return String.Format(TemplatePathPattern, area, Path.DirectorySeparatorChar, ResolveTemplateName(templateName));
+			return String.Format("{0}{1}{2}", area, Path.DirectorySeparatorChar, ResolveTemplateName(templateName));
 		}
-		
+
 		protected virtual void BeforeMerge(VelocityEngine velocity, Template template, IContext context)
 		{
 		}
@@ -238,7 +236,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				BeforeMerge(velocity, template, ctx);
 				template.Merge(ctx, context.Response.Output);
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				if (context.Request.IsLocal)
 				{
@@ -261,27 +259,27 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 #endif
 
 			innerContext.Add(TemplateKeys.Controller, controller);
-			innerContext.Add(TemplateKeys.Context,    context);
-			innerContext.Add(TemplateKeys.Request,    context.Request);
-			innerContext.Add(TemplateKeys.Response,   context.Response);
-			innerContext.Add(TemplateKeys.Session,    context.Session);
+			innerContext.Add(TemplateKeys.Context, context);
+			innerContext.Add(TemplateKeys.Request, context.Request);
+			innerContext.Add(TemplateKeys.Response, context.Response);
+			innerContext.Add(TemplateKeys.Session, context.Session);
 
 			if (controller.Resources != null)
 			{
 				foreach(String key in controller.Resources.Keys)
 				{
-					innerContext.Add( key, controller.Resources[ key ] );
+					innerContext.Add(key, controller.Resources[key]);
 				}
 			}
 
 			foreach(object key in controller.Helpers.Keys)
 			{
-				innerContext.Add( key, controller.Helpers[ key ] );
+				innerContext.Add(key, controller.Helpers[key]);
 			}
 
 			foreach(String key in context.Params.AllKeys)
 			{
-				if (key == null)  continue; // Nasty bug?
+				if (key == null) continue; // Nasty bug?
 				object value = context.Params[key];
 				if (value == null) continue;
 				innerContext[key] = value;
@@ -320,11 +318,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			String[] macros = ViewSourceLoader.ListViews("macros");
 
 			ArrayList macroList = new ArrayList(macros);
-			
+
 			if (macroList.Count > 0)
 			{
 				object libPropValue = props.GetProperty(RuntimeConstants.VM_LIBRARY);
-				
+
 				if (libPropValue is ICollection)
 				{
 					macroList.AddRange((ICollection) libPropValue);

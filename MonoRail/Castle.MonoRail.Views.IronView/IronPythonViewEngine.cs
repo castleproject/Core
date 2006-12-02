@@ -23,14 +23,14 @@ namespace Castle.MonoRail.Views.IronView
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Views.IronView.ElementProcessor;
 	using IronPython.Hosting;
-	
+
 	/// <summary>
 	/// Pendent
 	/// </summary>
 	public class IronPythonViewEngine : ViewEngineBase, IInitializable
 	{
 		internal const String TemplateExtension = ".pml";
-		
+
 		private PythonEngine engine;
 		private EngineModule globalModule;
 		private IronPythonTemplateParser parser;
@@ -45,11 +45,11 @@ namespace Castle.MonoRail.Views.IronView
 		}
 
 		#region IInitializable
-		
+
 		public void Initialize()
 		{
 			EngineOptions options = new EngineOptions();
-			
+
 			options.ClrDebuggingEnabled = true;
 			options.ExceptionDetail = true;
 			options.ShowClrExceptions = true;
@@ -73,6 +73,8 @@ namespace Castle.MonoRail.Views.IronView
 
 		#endregion
 
+		#region ViewEngineBase overrides
+
 		public override bool HasTemplate(string templateName)
 		{
 			return ViewSourceLoader.HasTemplate(ResolveTemplateName(templateName));
@@ -80,18 +82,99 @@ namespace Castle.MonoRail.Views.IronView
 
 		public override void Process(IRailsEngineContext context, Controller controller, string templateName)
 		{
-			String fileName = ResolveTemplateName(templateName);
+			AdjustContentType(context);
 
-			IViewSource source = ViewSourceLoader.GetViewSource(fileName);
+			bool hasLayout = controller.LayoutName != null;
+
+			TextWriter writer;
+
+			if (hasLayout)
+			{
+				// Because we are rendering within a layout we need to catch it first
+				writer = new StringWriter();
+			}
+			else
+			{
+				// No layout so render direct to the output
+				writer = context.Response.Output;
+			}
+
+			Dictionary<string, object> locals = new Dictionary<string, object>();
+			PopulateLocals(writer, context, controller, locals);
+
+			String fileName = ResolveTemplateName(templateName);
+			ProcessViewTemplate(fileName, context, locals);
+
+			if (hasLayout)
+			{
+				String contents = (writer as StringWriter).GetStringBuilder().ToString();
+				ProcessLayout(contents, controller, context, locals);
+			}
+		}
+
+		/// <summary>
+		/// Need to test this
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="contents"></param>
+		public override void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
+		{
+			Dictionary<string, object> locals = new Dictionary<string, object>();
+
+			PopulateLocals(context.Response.Output, context, controller, locals);
+
+			String script = parser.CreateScriptBlock(
+				new StringReader(contents), "static content", serviceProvider);
+
+			CompiledCode compiledCode = CompileScript(script);
+
+			ExecuteScript(compiledCode, context, locals);
+		}
+
+		#endregion
+
+		protected string ResolveTemplateName(string templateName)
+		{
+			return templateName + TemplateExtension;
+		}
+
+		protected string ResolveTemplateName(string area, string templateName)
+		{
+			return String.Format("{0}{1}{2}", area,
+			                     Path.DirectorySeparatorChar, ResolveTemplateName(templateName));
+		}
+
+		private void ProcessLayout(string innerViewContents, Controller controller,
+		                           IRailsEngineContext context, Dictionary<string, object> locals)
+		{
+			String layout = ResolveTemplateName("layouts", controller.LayoutName);
+
+			locals["childContent"] = innerViewContents;
+			locals["output"] = context.Response.Output;
+
+			ProcessViewTemplate(layout, context, locals);
+		}
+
+		private void ProcessViewTemplate(String templateFile, IRailsEngineContext context,
+		                                 Dictionary<string, object> locals)
+		{
+			IViewSource source = ViewSourceLoader.GetViewSource(templateFile);
 			
+			if (source == null)
+			{
+				throw new RailsException("Could not find view template: " + templateFile);
+			}
+
 			Stream viewSourceStream = source.OpenViewStream();
-			
+
 			using(StreamReader reader = new StreamReader(viewSourceStream))
 			{
-				bool compileView; ViewInfo viewInfo; 
+				bool compileView;
+				ViewInfo viewInfo;
 				CompiledCode compiledCode = null;
 
-				if (name2View.TryGetValue(templateName.ToLower(), out viewInfo))
+				if (name2View.TryGetValue(templateFile.ToLower(), out viewInfo))
 				{
 					compileView = viewInfo.LastModified != source.LastModified;
 					compiledCode = viewInfo.CompiledCode;
@@ -103,41 +186,27 @@ namespace Castle.MonoRail.Views.IronView
 
 				if (compileView)
 				{
-					String script = parser.CreateScriptBlock(reader, fileName, serviceProvider);
+					String script = parser.CreateScriptBlock(reader, templateFile, serviceProvider);
 
 					compiledCode = CompileScript(script);
-					
+
 					viewInfo = new ViewInfo();
 					viewInfo.LastModified = source.LastModified;
 					viewInfo.CompiledCode = compiledCode;
 #if DEBUG
 					viewInfo.Script = script;
 #endif
-					
-					name2View[templateName.ToLower()] = viewInfo;
+
+					name2View[templateFile.ToLower()] = viewInfo;
 				}
-				
+
 #if DEBUG
 				context.Response.Write("<!--\r\n");
 				context.Response.Write(viewInfo.Script);
 				context.Response.Write("\r\n-->");
 #endif
-
-				ExecuteScript(compiledCode, context, controller);
+				ExecuteScript(compiledCode, context, locals);
 			}
-		}
-
-		public override void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Resolves the template name into a velocity template file name.
-		/// </summary>
-		protected virtual string ResolveTemplateName(string templateName)
-		{
-			return templateName + TemplateExtension;
 		}
 
 		private CompiledCode CompileScript(string script)
@@ -145,26 +214,17 @@ namespace Castle.MonoRail.Views.IronView
 			return engine.Compile(script);
 		}
 
-		private void ExecuteScript(CompiledCode script, IRailsEngineContext context, Controller controller)
+		private void ExecuteScript(CompiledCode script,
+		                           IRailsEngineContext context,
+		                           Dictionary<string, object> locals)
 		{
-			Dictionary<string, object> locals = new Dictionary<string, object>();
-
-			locals["controller"] = controller;
-			locals["context"] = context;
-			locals["output"] = context.Response.Output;
-
-			foreach (DictionaryEntry entry in controller.PropertyBag)
-			{
-				locals[entry.Key.ToString()] = entry.Value;
-			}
-
 			NullLocalDecorator decorator = new NullLocalDecorator(locals);
 
 			try
 			{
 				script.Execute(globalModule, decorator);
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				context.Response.Write("<p>");
 				context.Response.Write(ex.Message);
@@ -174,8 +234,56 @@ namespace Castle.MonoRail.Views.IronView
 				context.Response.Write("</pre>");
 			}
 		}
+
+		private static void PopulateLocals(TextWriter output, IRailsEngineContext context,
+		                                   Controller controller,
+		                                   Dictionary<string, object> locals)
+		{
+			locals["controller"] = controller;
+			locals["context"] = context;
+			locals["request"] = context.Request;
+			locals["response"] = context.Response;
+			locals["session"] = context.Session;
+			locals["output"] = output;
+
+			if (controller.Resources != null)
+			{
+				foreach(String key in controller.Resources.Keys)
+				{
+					locals[key] = controller.Resources[key];
+				}
+			}
+
+			foreach(object key in controller.Helpers.Keys)
+			{
+				locals[key.ToString()] = controller.Helpers[key];
+			}
+
+			foreach(DictionaryEntry entry in controller.PropertyBag)
+			{
+				locals[entry.Key.ToString()] = entry.Value;
+			}
+
+			foreach(String key in context.Params.AllKeys)
+			{
+				if (key == null) continue; // Nasty bug?
+				object value = context.Params[key];
+				if (value == null) continue;
+				locals[key] = value;
+			}
+
+			locals[Flash.FlashKey] = context.Flash;
+
+			foreach(DictionaryEntry entry in context.Flash)
+			{
+				if (entry.Value == null) continue;
+				locals[entry.Key.ToString()] = entry.Value;
+			}
+
+			locals["siteroot"] = context.ApplicationPath;
+		}
 	}
-	
+
 	internal class ViewInfo
 	{
 		public long LastModified;
@@ -240,7 +348,7 @@ namespace Castle.MonoRail.Views.IronView
 				value = null;
 				return true;
 			}
-			
+
 			return locals.TryGetValue(key, out value);
 		}
 
