@@ -275,7 +275,8 @@ namespace Castle.MonoRail.Framework.Services
 
 			// try to get the first type which is not a proxy
 			// TODO: skip it in case of mixins
-			while(controllerType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+			
+			while(controllerType.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2") || controllerType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
 			{
 				controllerType = controllerType.BaseType;
 
