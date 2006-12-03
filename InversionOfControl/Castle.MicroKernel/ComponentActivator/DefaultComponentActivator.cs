@@ -208,14 +208,11 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
-				// We track dependencies in order to detect cycled graphs
-				// This prevents a stack overflow
-				DependencyModel dependencyKey = context.TrackDependency(constructor.Constructor, dependency);
-				
-				object value = Kernel.Resolver.Resolve(context, context.Handler, Model, dependency);
-
-				// The dependency was resolved successfully, we can stop tracking it.
-				context.UntrackDependency(dependencyKey);
+				object value;
+				using (new DependencyTrackingScope(context, constructor.Constructor, dependency))
+				{
+					value = Kernel.Resolver.Resolve(context, context.Handler, Model, dependency);
+				}
 				arguments[index] = value;
 				signature[index++] = dependency.TargetType;
 			}
@@ -229,11 +226,11 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			foreach(PropertySet property in Model.Properties)
 			{
-				DependencyModel dependencyKey = context.TrackDependency(property.Property, property.Dependency);
-				object value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
-
-				// The dependency was resolved successfully, we can stop tracking it.
-				context.UntrackDependency(dependencyKey);
+				object value;
+				using (new DependencyTrackingScope(context, property.Property, property.Dependency))
+				{
+					value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
+				}
 
 				if (value == null) continue;
 
@@ -262,6 +259,31 @@ namespace Castle.MicroKernel.ComponentActivator
 			}
 			
 			return instance;
+		}
+	}
+
+	internal class DependencyTrackingScope : IDisposable
+	{
+		private readonly CreationContext creationContext;
+		private readonly DependencyModel dependencyTrackingKey;
+
+		public DependencyTrackingScope(CreationContext creationContext, MemberInfo memberInfo, DependencyModel dependency)
+		{
+			this.creationContext = creationContext;
+
+			if (dependency.TargetType != typeof (IKernel))
+			{
+				// We track dependencies in order to detect cycled graphs
+				// This prevents a stack overflow
+				dependencyTrackingKey = creationContext.TrackDependency(memberInfo, dependency);
+			}
+		}
+
+		public void Dispose()
+		{
+			// The dependency was resolved successfully, we can stop tracking it.
+			if (dependencyTrackingKey != null)
+				creationContext.UntrackDependency(dependencyTrackingKey);
 		}
 	}
 }
