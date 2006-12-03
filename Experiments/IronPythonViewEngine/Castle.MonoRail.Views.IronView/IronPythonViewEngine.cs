@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Views.IronView
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Runtime.Serialization;
+	using System.Web;
 	using Castle.Core;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Views.IronView.ElementProcessor;
@@ -27,9 +28,9 @@ namespace Castle.MonoRail.Views.IronView
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class IronPythonViewEngine : ViewEngineBase, IInitializable
+	public class IronPythonViewEngine : ViewEngineBase, IInitializable, ITemplateEngine
 	{
-		internal const String TemplateExtension = ".pml";
+		public const String TemplateExtension = ".pml";
 
 		private PythonEngine engine;
 		private EngineModule globalModule;
@@ -50,24 +51,30 @@ namespace Castle.MonoRail.Views.IronView
 		{
 			EngineOptions options = new EngineOptions();
 
-			options.ClrDebuggingEnabled = true;
-			options.ExceptionDetail = true;
-			options.ShowClrExceptions = true;
-			options.SkipFirstLine = false;
+			// options.ClrDebuggingEnabled = true;
+			// options.ExceptionDetail = true;
+			// options.ShowClrExceptions = true;
+			// options.SkipFirstLine = false;
 
 			engine = new PythonEngine(options);
+			engine.Import("site");
+			System.IO.FileStream fs = new System.IO.FileStream("scripting-log.txt", System.IO.FileMode.Create);
+			engine.SetStandardOutput(fs);
+			engine.SetStandardError(fs);
 
-			globalModule = engine.CreateModule("viewengine", false);
+			globalModule = engine.CreateModule("mr", false);
 
 			// TODO: processors should be configured
-			// TODO: Create render and viewcomponent processors
 			parser = new IronPythonTemplateParser(new IElementProcessor[]
 			                                      	{
+			                                      		new ContentTag(),
 			                                      		new IfTag(),
 			                                      		new UnlessTag(),
 			                                      		new ForTag(),
 			                                      		new CodeBlock(),
-			                                      		new InlineWrite()
+			                                      		new InlineWrite(),
+			                                      		new RenderPartial(),
+			                                      		new ViewComponentTag(),
 			                                      	});
 		}
 
@@ -120,19 +127,77 @@ namespace Castle.MonoRail.Views.IronView
 		/// <param name="contents"></param>
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
 		{
-			Dictionary<string, object> locals = new Dictionary<string, object>();
-
-			PopulateLocals(context.Response.Output, context, controller, locals);
-
-			String script = parser.CreateScriptBlock(
-				new StringReader(contents), "static content", serviceProvider);
-
-			CompiledCode compiledCode = CompileScript(script);
-
-			ExecuteScript(compiledCode, context, locals);
+//			Dictionary<string, object> locals = new Dictionary<string, object>();
+//
+//			PopulateLocals(context.Response.Output, context, controller, locals);
+//
+//			String script = parser.CreateScriptBlock(
+//				new StringReader(contents), "static content", serviceProvider, this);
+//
+//			compiledCode = engine.Compile(script);
+//
+//			ExecuteScript(compiledCode, context, locals);
 		}
 
 		#endregion
+
+		public CompiledCode CompilePartialTemplate(IViewSource source, string partialViewName, 
+		                                           out string functionName, params String[] parameters)
+		{
+			partialViewName = partialViewName.Replace('/', '_').Replace('\\', '_').Replace('.', '_').ToLowerInvariant();
+			functionName = "render" + partialViewName;
+			
+			ViewInfo viewInfo;
+			bool compileView;
+			CompiledCode compiledCode = null;
+
+			if (name2View.TryGetValue(partialViewName.ToLower(), out viewInfo))
+			{
+				compileView = viewInfo.LastModified != source.LastModified;
+				compiledCode = viewInfo.CompiledCode;
+			}
+			else
+			{
+				compileView = true;
+			}
+
+			Stream viewSourceStream = source.OpenViewStream();
+
+			if (compileView)
+			{
+				using(StreamReader reader = new StreamReader(viewSourceStream))
+				{
+					String script = parser.CreateFunctionScriptBlock(reader, partialViewName,
+					                                                 functionName, serviceProvider, this, parameters);
+
+					compiledCode = engine.Compile("def something(out):\n\tout.Write('hellloo')\n");
+
+					// Evaluates the function
+					compiledCode.Execute(globalModule);
+					// compiledCode.Execute();
+
+					viewInfo = new ViewInfo();
+					viewInfo.LastModified = source.LastModified;
+					viewInfo.CompiledCode = compiledCode;
+#if DEBUG
+					viewInfo.Script = script;
+#endif
+
+					name2View[partialViewName.ToLower()] = viewInfo;
+				}
+
+#if DEBUG
+				HttpContext.Current.Response.Output.Write("<!-- Partial script\r\n");
+				HttpContext.Current.Response.Output.Write(viewInfo.Script);
+				HttpContext.Current.Response.Output.Write("\r\n-->");
+				HttpContext.Current.Response.Output.Flush();
+#endif
+				
+				
+			}
+
+			return compiledCode;
+		}
 
 		protected string ResolveTemplateName(string templateName)
 		{
@@ -160,35 +225,42 @@ namespace Castle.MonoRail.Views.IronView
 		                                 Dictionary<string, object> locals)
 		{
 			IViewSource source = ViewSourceLoader.GetViewSource(templateFile);
-			
+
 			if (source == null)
 			{
 				throw new RailsException("Could not find view template: " + templateFile);
 			}
 
+			CompiledCode compiledCode = CompileTemplate(source, templateFile);
+
+			ExecuteScript(compiledCode, context, locals);
+		}
+
+		private CompiledCode CompileTemplate(IViewSource source, string templateFile)
+		{
+			bool compileView;
+			ViewInfo viewInfo;
+			CompiledCode compiledCode = null;
+
+			if (name2View.TryGetValue(templateFile.ToLower(), out viewInfo))
+			{
+				compileView = viewInfo.LastModified != source.LastModified;
+				compiledCode = viewInfo.CompiledCode;
+			}
+			else
+			{
+				compileView = true;
+			}
+
 			Stream viewSourceStream = source.OpenViewStream();
 
-			using(StreamReader reader = new StreamReader(viewSourceStream))
+			if (compileView)
 			{
-				bool compileView;
-				ViewInfo viewInfo;
-				CompiledCode compiledCode = null;
-
-				if (name2View.TryGetValue(templateFile.ToLower(), out viewInfo))
+				using(StreamReader reader = new StreamReader(viewSourceStream))
 				{
-					compileView = viewInfo.LastModified != source.LastModified;
-					compiledCode = viewInfo.CompiledCode;
-				}
-				else
-				{
-					compileView = true;
-				}
+					String script = parser.CreateScriptBlock(reader, templateFile, serviceProvider, this);
 
-				if (compileView)
-				{
-					String script = parser.CreateScriptBlock(reader, templateFile, serviceProvider);
-
-					compiledCode = CompileScript(script);
+					compiledCode = engine.Compile(script);
 
 					viewInfo = new ViewInfo();
 					viewInfo.LastModified = source.LastModified;
@@ -201,17 +273,14 @@ namespace Castle.MonoRail.Views.IronView
 				}
 
 #if DEBUG
-				context.Response.Write("<!--\r\n");
-				context.Response.Write(viewInfo.Script);
-				context.Response.Write("\r\n-->");
+				HttpContext.Current.Response.Output.Write("<!-- Template script \r\n");
+				HttpContext.Current.Response.Output.Write(viewInfo.Script);
+				HttpContext.Current.Response.Output.Write("\r\n-->");
+				HttpContext.Current.Response.Output.Flush();
 #endif
-				ExecuteScript(compiledCode, context, locals);
 			}
-		}
 
-		private CompiledCode CompileScript(string script)
-		{
-			return engine.Compile(script);
+			return compiledCode;
 		}
 
 		private void ExecuteScript(CompiledCode script,
@@ -229,6 +298,7 @@ namespace Castle.MonoRail.Views.IronView
 				context.Response.Write("<p>");
 				context.Response.Write(ex.Message);
 				context.Response.Write("</p>");
+				context.Response.Write(ex.InnerException);
 				context.Response.Write("<pre>");
 				context.Response.Write(ex.StackTrace);
 				context.Response.Write("</pre>");

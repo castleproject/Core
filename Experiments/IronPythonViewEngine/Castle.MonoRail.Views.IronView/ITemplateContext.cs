@@ -37,6 +37,12 @@ namespace Castle.MonoRail.Views.IronView
 		IServiceProvider ServiceProvider { get; }
 
 		/// <summary>
+		/// Gets the template engine.
+		/// </summary>
+		/// <value>The template engine.</value>
+		ITemplateEngine Engine { get; }
+
+		/// <summary>
 		/// Gets the name of the root view.
 		/// </summary>
 		/// <value>The name of the root view.</value>

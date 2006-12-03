@@ -23,6 +23,7 @@ namespace Castle.MonoRail.Views.IronView
 		private readonly string rootViewName;
 		private readonly XmlReader reader;
 		private readonly IServiceProvider serviceProvider;
+		private readonly ITemplateEngine engine;
 		private int currentElementDepth;
 		private int indentation;
 		private StringBuilder script = new StringBuilder();
@@ -34,11 +35,12 @@ namespace Castle.MonoRail.Views.IronView
 		/// <param name="reader">The reader.</param>
 		/// <param name="serviceProvider">The service provider.</param>
 		public DefaultContext(String rootViewName, XmlReader reader, 
-		                      IServiceProvider serviceProvider)
+		                      IServiceProvider serviceProvider, ITemplateEngine engine)
 		{
 			this.rootViewName = rootViewName;
 			this.reader = reader;
 			this.serviceProvider = serviceProvider;
+			this.engine = engine;
 		}
 
 		public XmlReader Reader
@@ -49,6 +51,11 @@ namespace Castle.MonoRail.Views.IronView
 		public IServiceProvider ServiceProvider
 		{
 			get { return serviceProvider; }
+		}
+
+		public ITemplateEngine Engine
+		{
+			get { return engine; }
 		}
 
 		public string RootViewName

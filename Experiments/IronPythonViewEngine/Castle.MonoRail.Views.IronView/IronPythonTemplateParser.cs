@@ -35,17 +35,52 @@ namespace Castle.MonoRail.Views.IronView
 		}
 
 		public String CreateScriptBlock(TextReader reader, String viewName,
-		                                IServiceProvider serviceProvider)
+		                                IServiceProvider serviceProvider, ITemplateEngine engine)
 		{
 			XmlTextReader xmlReader = new XmlTextReader(reader);
 			xmlReader.Namespaces = false;
 			xmlReader.WhitespaceHandling = WhitespaceHandling.All;
 
-			DefaultContext ctx = new DefaultContext(viewName, xmlReader, serviceProvider);
+			DefaultContext context = new DefaultContext(viewName, xmlReader, serviceProvider, engine);
 
-			ProcessReader(ctx, 0);
+			ProcessReader(context, 0);
 
-			return ctx.Script.ToString();
+			return context.Script.ToString();
+		}
+
+		public string CreateFunctionScriptBlock(StreamReader reader, string partialViewName, string methodName,
+												IServiceProvider provider, ITemplateEngine engine, params String[] parameters)
+		{
+			XmlTextReader xmlReader = new XmlTextReader(reader);
+			xmlReader.Namespaces = false;
+			xmlReader.WhitespaceHandling = WhitespaceHandling.All;
+
+			DefaultContext context = new DefaultContext(partialViewName, xmlReader, provider, engine);
+
+			context.Script.Append("def ");
+			context.Script.Append(methodName);
+			context.Script.Append('(');
+			// context.Script.Append("controller, context, request, response, session, output, flash, siteroot");
+			context.Script.Append("output");
+			foreach(String param in parameters)
+			{
+				context.Script.Append(',');
+				context.Script.Append(param);
+			}
+			context.Script.Append(')');
+			context.Script.AppendLine(":");
+			
+			context.IncreaseIndentation();
+
+			context.AppendLineIndented("print 'hello'");
+			
+			// ProcessReader(context, 0);
+			
+			context.DecreaseIndentation();
+
+			context.Script.AppendLine();
+
+			return context.Script.ToString();
 		}
 
 		#region ITemplateParser
