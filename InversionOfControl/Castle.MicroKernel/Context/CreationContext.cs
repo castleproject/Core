@@ -159,11 +159,11 @@ namespace Castle.MicroKernel
 					if (extendedInfo != null)
 					{
 						sb.AppendFormat("\r\n - {0} for {1} in type {2}",
-							key.ToString(), extendedInfo.Info, extendedInfo.Info.DeclaringType);
+							key, extendedInfo.Info, extendedInfo.Info.DeclaringType);
 					}
 					else
 					{
-						sb.AppendFormat("\r\n - {0}", key.ToString());
+						sb.AppendFormat("\r\n - {0}", key);
 					}
 				}
 
@@ -217,7 +217,7 @@ namespace Castle.MicroKernel
 				DependencyModelExtended other = obj as DependencyModelExtended;
 				if (other == null)
 					return false;
-				return base.Equals(other) && other.Info == this.Info;
+				return other.Info == this.Info && base.Equals(other);
 			}
 			
 			public override int GetHashCode()
