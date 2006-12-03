@@ -82,7 +82,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Creating view component '{0}'", name);
+				logger.DebugFormat("Creating view component '{0}'", name);
 			}
 			
 			Type viewCompType = (Type) components[name];
@@ -148,12 +148,12 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Registering ViewComponent {0} Type {1} ", name, type);
+				logger.DebugFormat("Registering ViewComponent {0} Type {1} ", name, type);
 			}
 			
 			if (!typeof(ViewComponent).IsAssignableFrom(type))
 			{
-				logger.Error("RegisterComponent({0},{1}) failed, components must inherit from ViewComponent", name, type.FullName);
+				logger.ErrorFormat("RegisterComponent({0},{1}) failed, components must inherit from ViewComponent", name, type.FullName);
 				
 				throw new RailsException("RegisterComponent({0},{1}) failed, components must inherit from ViewComponent", name, type.FullName);
 			}

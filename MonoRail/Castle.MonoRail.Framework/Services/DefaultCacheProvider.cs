@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Checking for entry existence with key {0}", key);
+				logger.DebugFormat("Checking for entry existence with key {0}", key);
 			}
 			
 			return Get(key) != null;
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Getting entry with key {0}", key);
+				logger.DebugFormat("Getting entry with key {0}", key);
 			}
 
 			return GetCurrentContext().Cache.Get(key);
@@ -73,7 +73,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Storing entry {0} with data {1}", key, data);
+				logger.DebugFormat("Storing entry {0} with data {1}", key, data);
 			}
 
 			GetCurrentContext().Cache.Insert(key, data);
@@ -83,7 +83,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Deleting entry with key {0}", key);
+				logger.DebugFormat("Deleting entry with key {0}", key);
 			}
 
 			GetCurrentContext().Cache.Remove(key);

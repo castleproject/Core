@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Inspecting assembly {0}", assemblyFileName);
+				logger.DebugFormat("Inspecting assembly {0}", assemblyFileName);
 			}
 			
 			Assembly assembly = Assembly.Load(assemblyFileName);

@@ -127,7 +127,7 @@ namespace Castle.MonoRail.Framework
 				{
 					Controller controller = executor.Controller;
 					
-					logger.Debug("Ending request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'", 
+					logger.DebugFormat("Ending request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'", 
 						controller.AreaName, controller.Name, controller.Action, context.UrlInfo.Extension, context.UrlInfo.UrlRaw);
 				}
 

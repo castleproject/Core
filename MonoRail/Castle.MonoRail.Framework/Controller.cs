@@ -882,7 +882,7 @@ namespace Castle.MonoRail.Framework
 			
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("InternalSend for action '{0}'", action);
+				logger.DebugFormat("InternalSend for action '{0}'", action);
 			}
 
 			bool checkWhetherClientHasDisconnected = ShouldCheckWhetherClientHasDisconnected;

@@ -82,7 +82,7 @@ namespace Castle.Services.Transaction
 
 					RaiseChildTransactionCreated(transaction, transactionMode, isolationMode);
 
-					logger.Debug("Child Transaction {0} created", transaction.GetHashCode());
+					logger.DebugFormat("Child Transaction {0} created", transaction.GetHashCode());
 				}
 			}
 
@@ -94,7 +94,7 @@ namespace Castle.Services.Transaction
 
 				RaiseTransactionCreated(transaction, transactionMode, isolationMode);
 
-				logger.Debug("Transaction {0} created", transaction.GetHashCode());
+				logger.DebugFormat("Transaction {0} created", transaction.GetHashCode());
 			}
 
 			transaction.Logger = logger.CreateChildLogger( transaction.GetType().FullName );
@@ -170,7 +170,7 @@ namespace Castle.Services.Transaction
 
 			RaiseTransactionDisposed(transaction);
 
-			logger.Debug("Transaction {0} disposed successfully", transaction.GetHashCode());
+			logger.DebugFormat("Transaction {0} disposed successfully", transaction.GetHashCode());
 		}
 
 		#endregion

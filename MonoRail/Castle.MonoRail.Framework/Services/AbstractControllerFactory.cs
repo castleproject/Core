@@ -119,14 +119,14 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Creating controller instance. Area '{0}' Name '{1}'", area, name);
+				logger.DebugFormat("Creating controller instance. Area '{0}' Name '{1}'", area, name);
 			}
 
 			Type type = (Type) Tree.GetController(area, name);
 
 			if (type == null)
 			{
-				logger.Error("Controller not found. Area '{0}' Name '{1}'", area, name);
+				logger.ErrorFormat("Controller not found. Area '{0}' Name '{1}'", area, name);
 				
 				throw new ControllerNotFoundException(area, name);
 			}

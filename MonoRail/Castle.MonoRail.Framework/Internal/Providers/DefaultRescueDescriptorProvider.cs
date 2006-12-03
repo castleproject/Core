@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Collecting rescue information for {0}", memberInfo.Name);
+				logger.DebugFormat("Collecting rescue information for {0}", memberInfo.Name);
 			}
 			
 			object[] attributes = memberInfo.GetCustomAttributes(typeof(IRescueDescriptorBuilder), true);
@@ -69,8 +69,8 @@ namespace Castle.MonoRail.Framework.Internal
 				{
 					foreach(RescueDescriptor desc in descs)
 					{
-						logger.Debug("Collected rescue with view name {0} for exception type {1}", 
-						             desc.ViewName, desc.ExceptionType);
+						logger.DebugFormat("Collected rescue with view name {0} for exception type {1}", 
+						                   desc.ViewName, desc.ExceptionType);
 					}
 				}
 				

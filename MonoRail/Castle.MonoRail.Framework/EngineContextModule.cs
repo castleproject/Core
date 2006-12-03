@@ -132,7 +132,7 @@ namespace Castle.MonoRail.Framework
 
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Starting request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'",
+				logger.DebugFormat("Starting request process for '{0}'/'{1}.{2}' Extension '{3}' with url '{4}'",
 					info.Area, info.Controller, info.Action, info.Extension, info.UrlRaw);
 			}
 

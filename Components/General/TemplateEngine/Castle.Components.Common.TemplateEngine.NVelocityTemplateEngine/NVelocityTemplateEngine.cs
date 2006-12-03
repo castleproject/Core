@@ -113,7 +113,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 
 			if (assemblyName != null)
 			{
-				log.Info("Initializing NVelocityTemplateEngine component using Assembly: {0}", assemblyName);
+				log.InfoFormat("Initializing NVelocityTemplateEngine component using Assembly: {0}", assemblyName);
 				
 				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "assembly");
 				props.SetProperty("assembly.resource.loader.class", "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader;NVelocity");
@@ -123,7 +123,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			else
 			{
 				String expandedTemplateDir = ExpandTemplateDir(templateDir);
-				log.Info("Initializing NVelocityTemplateEngine component using template directory: {0}", expandedTemplateDir);
+				log.InfoFormat("Initializing NVelocityTemplateEngine component using template directory: {0}", expandedTemplateDir);
 				
 				FileInfo propertiesFile = new FileInfo(Path.Combine(expandedTemplateDir, "nvelocity.properties"));
 				if (propertiesFile.Exists)
@@ -192,7 +192,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 
 		private String ExpandTemplateDir(String templateDir)
 		{
-			log.Debug("Template directory before expansion: {0}", templateDir);
+			log.DebugFormat("Template directory before expansion: {0}", templateDir);
 			
 			// if nothing to expand, then exit
 			if (templateDir == null)
@@ -209,7 +209,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			// normalizes the path (including ".." notation, for parent directories)
 			templateDir = new DirectoryInfo(templateDir).FullName;
 
-			log.Debug("Template directory after expansion: {0}", templateDir);
+			log.DebugFormat("Template directory after expansion: {0}", templateDir);
 			return templateDir;
 		}
 	}

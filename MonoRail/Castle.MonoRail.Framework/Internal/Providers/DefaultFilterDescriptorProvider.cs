@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Collecting filters for {0}", controllerType);
+				logger.DebugFormat("Collecting filters for {0}", controllerType);
 			}
 			
 			object[] attributes = controllerType.GetCustomAttributes(typeof(IFilterDescriptorBuilder), true);
@@ -68,8 +68,8 @@ namespace Castle.MonoRail.Framework.Internal
 				{
 					foreach(FilterDescriptor desc in descs)
 					{
-						logger.Debug("Collected filter {0} to execute {1} order {2}", 
-						             desc.FilterType, desc.When, desc.ExecutionOrder);
+						logger.DebugFormat("Collected filter {0} to execute {1} order {2}", 
+						                   desc.FilterType, desc.When, desc.ExecutionOrder);
 					}
 				}
 

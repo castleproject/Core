@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Collecting helpers for {0}", controllerType);
+				logger.DebugFormat("Collecting helpers for {0}", controllerType);
 			}
 
 			object[] attributes = controllerType.GetCustomAttributes(typeof(IHelperDescriptorBuilder), true);
@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Internal
 				{
 					foreach(HelperDescriptor desc in descs)
 					{
-						logger.Debug("Collected helper {0} with name {1}", desc.HelperType, desc.Name);
+						logger.DebugFormat("Collected helper {0} with name {1}", desc.HelperType, desc.Name);
 					}
 				}
 				

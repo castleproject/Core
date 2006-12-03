@@ -62,7 +62,7 @@ namespace Castle.Services.Transaction
 
 		public virtual void Enlist(IResource resource)
 		{
-			logger.Debug("Enlisting resource {0}", resource);
+			logger.DebugFormat("Enlisting resource {0}", resource);
 
 			if (resource == null) throw new ArgumentNullException("resource");
 
@@ -87,12 +87,12 @@ namespace Castle.Services.Transaction
 
 			resources.Add(resource);
 
-			logger.Debug("Resource enlisted successfully {0}", resource);
+			logger.DebugFormat("Resource enlisted successfully {0}", resource);
 		}
 
 		public virtual void Begin()
 		{
-			logger.Debug("Transaction {0} Begin", GetHashCode());
+			logger.DebugFormat("Transaction {0} Begin", GetHashCode());
 
 			AssertState(TransactionStatus.NoTransaction);
 			state = TransactionStatus.Active;
@@ -116,7 +116,7 @@ namespace Castle.Services.Transaction
 
 		public virtual void Rollback()
 		{
-			logger.Debug("Transaction {0} Rollback", GetHashCode());
+			logger.DebugFormat("Transaction {0} Rollback", GetHashCode());
 
 			AssertState(TransactionStatus.Active);
 			state = TransactionStatus.RolledBack;
@@ -151,7 +151,7 @@ namespace Castle.Services.Transaction
 
 		public virtual void Commit()
 		{
-			logger.Debug("Transaction {0} Commit", GetHashCode());
+			logger.DebugFormat("Transaction {0} Commit", GetHashCode());
 
 			AssertState(TransactionStatus.Active);
 			state = TransactionStatus.Committed;
@@ -191,13 +191,13 @@ namespace Castle.Services.Transaction
 
 		public virtual void RegisterSynchronization(ISynchronization synchronization)
 		{
-			logger.Debug("Registering Synchronization {0}", synchronization);
+			logger.DebugFormat("Registering Synchronization {0}", synchronization);
 
 			if (synchronization == null) throw new ArgumentNullException("synchronization");
 
 			synchronizations.Add(synchronization);
 
-			logger.Debug("Synchronization registered successfully {0}", synchronization);
+			logger.DebugFormat("Synchronization registered successfully {0}", synchronization);
 		}
 
 		public virtual IDictionary Context

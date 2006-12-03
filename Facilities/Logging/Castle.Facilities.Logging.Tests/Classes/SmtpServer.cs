@@ -41,7 +41,7 @@ namespace Castle.Facilities.Logging.Tests.Classes
 
 		public void InternalSend(String from, String to, String contents)
 		{
-			Logger.Info("InternalSend {0} {1} {2}", from, to, contents);
+			Logger.InfoFormat("InternalSend {0} {1} {2}", from, to, contents);
 		}
 	}
 }

@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Getting entry {0}", key);
+				logger.DebugFormat("Getting entry {0}", key);
 			}
 			
 			WeakReference reference = (WeakReference) entries[key];
@@ -81,7 +81,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Storing entry {0} with value {1}", key, data);
+				logger.DebugFormat("Storing entry {0} with value {1}", key, data);
 			}
 
 			entries[key] = new WeakReference(data);
@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Deleting entry {0}", key);
+				logger.DebugFormat("Deleting entry {0}", key);
 			}
 			
 			entries.Remove(key);

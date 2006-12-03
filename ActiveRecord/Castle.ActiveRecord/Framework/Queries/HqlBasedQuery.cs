@@ -241,7 +241,7 @@ namespace Castle.ActiveRecord.Queries
 				countQuery = "select count(*) from (" + countQuery + ")";
 			}
 			
-			Log.Debug("Query prepared for count: {0}", countQuery);
+			Log.DebugFormat("Query prepared for count: {0}", countQuery);
 			
 			return countQuery;
 		}

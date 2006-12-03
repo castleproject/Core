@@ -137,7 +137,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Building controller descriptor for {0}", controllerType);
+				logger.DebugFormat("Building controller descriptor for {0}", controllerType);
 			}
 
 			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor();
@@ -215,7 +215,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Collection attributes for action {0}", method.Name);
+				logger.DebugFormat("Collection attributes for action {0}", method.Name);
 			}
 
 			ActionMetaDescriptor actionDescriptor = descriptor.GetAction(method);

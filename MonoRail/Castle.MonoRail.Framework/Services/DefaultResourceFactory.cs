@@ -68,8 +68,8 @@ namespace Castle.MonoRail.Framework.Services
 
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Creating resource name {0}, assembly {1}, resource {2}", 
-				             descriptor.Name, descriptor.AssemblyName, descriptor.ResourceName);
+				logger.DebugFormat("Creating resource name {0}, assembly {1}, resource {2}", 
+				                   descriptor.Name, descriptor.AssemblyName, descriptor.ResourceName);
 			}
 			
 			ResourceManager rm = new ResourceManager(descriptor.ResourceName, 
@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Resolving culture {0}", name);
+				logger.DebugFormat("Resolving culture {0}", name);
 			}
 
 			if ("neutral".Equals(name))
@@ -112,7 +112,7 @@ namespace Castle.MonoRail.Framework.Services
 			
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Resolving assembly {0}", name);
+				logger.DebugFormat("Resolving assembly {0}", name);
 			}
 
 			try

@@ -711,7 +711,7 @@ namespace Castle.MonoRail.Framework
 			{
 				if (logger.IsDebugEnabled)
 				{
-					logger.Debug("Running filter {0}/{1}", when, desc.FilterType.FullName);
+					logger.DebugFormat("Running filter {0}/{1}", when, desc.FilterType.FullName);
 				}
 
 				return desc.FilterInstance.Perform(when, context, controller);
@@ -720,7 +720,7 @@ namespace Castle.MonoRail.Framework
 			{
 				if (logger.IsErrorEnabled)
 				{
-					logger.Error("Error processing filter " + desc.FilterType.FullName, ex);
+					logger.ErrorFormat("Error processing filter " + desc.FilterType.FullName, ex);
 				}
 
 				throw;
@@ -814,10 +814,10 @@ namespace Castle.MonoRail.Framework
 				// In this situation, the rescue view could not be found
 				// So we're back to the default error exibition
 
-				if (logger.IsFatalErrorEnabled)
+				if (logger.IsFatalEnabled)
 				{
-					logger.FatalError("Failed to process rescue view. View name " +
-					                  controller._selectedViewName, exception);
+					logger.FatalFormat("Failed to process rescue view. View name " +
+					                   controller._selectedViewName, exception);
 				}
 			}
 

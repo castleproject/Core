@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Collecting resources information for {0}", memberInfo.Name);
+				logger.DebugFormat("Collecting resources information for {0}", memberInfo.Name);
 			}
 			
 			object[] attributes = memberInfo.GetCustomAttributes(typeof(IResourceDescriptorBuilder), true);
@@ -69,8 +69,8 @@ namespace Castle.MonoRail.Framework.Internal
 				{
 					foreach(ResourceDescriptor desc in descs)
 					{
-						logger.Debug("Collected resource {0} Assembly Name {1} Culture {2} ResName {3} ResType {4}",
-						             desc.Name, desc.AssemblyName, desc.CultureName, desc.ResourceName, desc.ResourceType);
+						logger.DebugFormat("Collected resource {0} Assembly Name {1} Culture {2} ResName {3} ResType {4}",
+						                   desc.Name, desc.AssemblyName, desc.CultureName, desc.ResourceName, desc.ResourceType);
 					}
 				}
 				

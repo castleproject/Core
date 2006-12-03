@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug("Collecting layout information for {0}", memberInfo.Name);
+				logger.DebugFormat("Collecting layout information for {0}", memberInfo.Name);
 			}
 			
 			object[] attributes = memberInfo.GetCustomAttributes(typeof(ILayoutDescriptorBuilder), true);
@@ -64,7 +64,7 @@ namespace Castle.MonoRail.Framework.Internal
 				
 				if (logger.IsDebugEnabled)
 				{
-					logger.Debug("Collected layout with name {0}", desc.LayoutName);
+					logger.DebugFormat("Collected layout with name {0}", desc.LayoutName);
 				}
 				
 				return desc;
