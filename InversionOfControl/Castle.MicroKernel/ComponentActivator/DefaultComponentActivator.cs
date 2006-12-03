@@ -209,7 +209,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
 				object value;
-				using (new DependencyTrackingScope(context, constructor.Constructor, dependency))
+				using(new DependencyTrackingScope(context, constructor.Constructor, dependency))
 				{
 					value = Kernel.Resolver.Resolve(context, context.Handler, Model, dependency);
 				}
@@ -227,7 +227,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			foreach(PropertySet property in Model.Properties)
 			{
 				object value;
-				using (new DependencyTrackingScope(context, property.Property, property.Dependency))
+				using(new DependencyTrackingScope(context, property.Property, property.Dependency))
 				{
 					value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
 				}
@@ -262,7 +262,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		}
 	}
 
-	internal class DependencyTrackingScope : IDisposable
+	class DependencyTrackingScope : IDisposable
 	{
 		private readonly CreationContext creationContext;
 		private readonly DependencyModel dependencyTrackingKey;
@@ -271,7 +271,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			this.creationContext = creationContext;
 
-			if (dependency.TargetType != typeof (IKernel))
+			if (dependency.TargetType != typeof(IKernel))
 			{
 				// We track dependencies in order to detect cycled graphs
 				// This prevents a stack overflow
@@ -283,7 +283,9 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			// The dependency was resolved successfully, we can stop tracking it.
 			if (dependencyTrackingKey != null)
+			{
 				creationContext.UntrackDependency(dependencyTrackingKey);
+			}
 		}
 	}
 }
