@@ -45,7 +45,7 @@ namespace Castle.Core.Logging.Tests
 			Assert.IsTrue(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled is not returning true when the level is Debug");
 			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled is not returning true when the level is Debug");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled is not returning true when the level is Debug");
-			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Debug");
+			Assert.IsTrue(logger.IsFatalEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Debug");
 		}
 
 		[Test]
@@ -57,7 +57,7 @@ namespace Castle.Core.Logging.Tests
 			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled is not returning true when the level is Info");
 			Assert.IsTrue(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled is not returning true when the level is Info");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled is not returning true when the level is Info");
-			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Info");
+			Assert.IsTrue(logger.IsFatalEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Info");
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace Castle.Core.Logging.Tests
 			Assert.IsFalse(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled is not returning false when the level is Warn");
 			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled is not returning true when the level is Warn");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled is not returning true when the level is Warn");
-			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Warn");
+			Assert.IsTrue(logger.IsFatalEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Warn");
 		}
 
 		[Test]
@@ -81,7 +81,7 @@ namespace Castle.Core.Logging.Tests
 			Assert.IsFalse(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled is not returning false when the level is Error");
 			Assert.IsFalse(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled is not returning false when the level is Error");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled is not returning true when the level is Error");
-			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Error");
+			Assert.IsTrue(logger.IsFatalEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Error");
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace Castle.Core.Logging.Tests
 			Assert.IsFalse(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled is not returning false when the level is Fatal");
 			Assert.IsFalse(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled is not returning false when the level is Fatal");
 			Assert.IsFalse(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled is not returning false when the level is Fatal");
-			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Fatal");
+			Assert.IsTrue(logger.IsFatalEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning true when the level is Fatal");
 		}
 
 		[Test]
@@ -105,7 +105,7 @@ namespace Castle.Core.Logging.Tests
 			Assert.IsFalse(logger.IsInfoEnabled, "LevelFilteredLogger.IsInfoEnabled is not returning false when the level is Off");
 			Assert.IsFalse(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled is not returning false when the level is Off");
 			Assert.IsFalse(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled is not returning false when the level is Off");
-			Assert.IsFalse(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning false when the level is Off");
+			Assert.IsFalse(logger.IsFatalEnabled, "LevelFilteredLogger.IsFatalErrorEnabled is not returning false when the level is Off");
 		}
 
 		[Test]
@@ -217,7 +217,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Debug;
 			Exception exception = null;
 
-			logger.Debug("{0} {1} {2}", "Debug", "message", 3);
+			logger.DebugFormat("{0} {1} {2}", "Debug", "message", 3);
 
 			ValidateCall(level, message, exception);
 		}
@@ -355,7 +355,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Debug;
 
-			logger.Debug("{0}st", "Te");
+			logger.DebugFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Debug, "Test", null);
 		}
@@ -365,7 +365,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Info;
 
-			logger.Debug("{0}st", "Te");
+			logger.DebugFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -375,7 +375,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Warn;
 
-			logger.Debug("{0}st", "Te");
+			logger.DebugFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -385,7 +385,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Error;
 
-			logger.Debug("{0}st", "Te");
+			logger.DebugFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -395,7 +395,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.Debug("{0}st", "Te");
+			logger.DebugFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -405,7 +405,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Off;
 
-			logger.Debug("{0}st", "Te");
+			logger.DebugFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -445,7 +445,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Info;
 			Exception exception = null;
 
-			logger.Info("{0} {1} {2}", "Info", "message", 3);
+			logger.InfoFormat("{0} {1} {2}", "Info", "message", 3);
 
 			ValidateCall(level, message, exception);
 		}
@@ -584,7 +584,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Debug;
 
-			logger.Info("{0}st", "Te");
+			logger.InfoFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Info, "Test", null);
 		}
@@ -594,7 +594,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Info;
 
-			logger.Info("{0}st", "Te");
+			logger.InfoFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Info, "Test", null);
 		}
@@ -604,7 +604,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Warn;
 
-			logger.Info("{0}st", "Te");
+			logger.InfoFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -614,7 +614,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Error;
 
-			logger.Info("{0}st", "Te");
+			logger.InfoFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -624,7 +624,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.Info("{0}st", "Te");
+			logger.InfoFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -634,7 +634,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Off;
 
-			logger.Info("{0}st", "Te");
+			logger.InfoFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -674,7 +674,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Warn;
 			Exception exception = null;
 
-			logger.Warn("{0} {1} {2}", "Warn", "message", 3);
+			logger.WarnFormat("{0} {1} {2}", "Warn", "message", 3);
 
 			ValidateCall(level, message, exception);
 		}
@@ -813,7 +813,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Debug;
 
-			logger.Warn("{0}st", "Te");
+			logger.WarnFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Warn, "Test", null);
 		}
@@ -823,7 +823,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Info;
 
-			logger.Warn("{0}st", "Te");
+			logger.WarnFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Warn, "Test", null);
 		}
@@ -833,7 +833,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Warn;
 
-			logger.Warn("{0}st", "Te");
+			logger.WarnFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Warn, "Test", null);
 		}
@@ -843,7 +843,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Error;
 
-			logger.Warn("{0}st", "Te");
+			logger.WarnFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -853,7 +853,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.Warn("{0}st", "Te");
+			logger.WarnFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -863,7 +863,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Off;
 
-			logger.Warn("{0}st", "Te");
+			logger.WarnFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -903,7 +903,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Error;
 			Exception exception = null;
 
-			logger.Error("{0} {1} {2}", "Error", "message", 3);
+			logger.ErrorFormat("{0} {1} {2}", "Error", "message", 3);
 
 			ValidateCall(level, message, exception);
 		}
@@ -1041,7 +1041,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Debug;
 
-			logger.Error("{0}st", "Te");
+			logger.ErrorFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Error, "Test", null);
 		}
@@ -1051,7 +1051,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Info;
 
-			logger.Error("{0}st", "Te");
+			logger.ErrorFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Error, "Test", null);
 		}
@@ -1061,7 +1061,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Error;
 
-			logger.Error("{0}st", "Te");
+			logger.ErrorFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Error, "Test", null);
 		}
@@ -1071,7 +1071,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Error;
 
-			logger.Error("{0}st", "Te");
+			logger.ErrorFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Error, "Test", null);
 		}
@@ -1081,7 +1081,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.Error("{0}st", "Te");
+			logger.ErrorFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -1091,7 +1091,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Off;
 
-			logger.Error("{0}st", "Te");
+			logger.ErrorFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}
@@ -1107,7 +1107,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = null;
 
-			logger.FatalError(message);
+			logger.Fatal(message);
 
 			ValidateCall(level, message, exception);
 		}
@@ -1119,7 +1119,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = new Exception();
 
-			logger.FatalError(message, exception);
+			logger.Fatal(message, exception);
 
 			ValidateCall(level, message, exception);
 		}
@@ -1131,7 +1131,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = null;
 
-			logger.FatalError("{0} {1} {2}", "FatalError", "message", 3);
+			logger.FatalFormat("{0} {1} {2}", "FatalError", "message", 3);
 
 			ValidateCall(level, message, exception);
 		}
@@ -1142,7 +1142,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Debug;
 
-			logger.FatalError("Test");
+			logger.Fatal("Test");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1152,7 +1152,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Info;
 
-			logger.FatalError("Test");
+			logger.Fatal("Test");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1162,7 +1162,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Warn;
 
-			logger.FatalError("Test");
+			logger.Fatal("Test");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1172,7 +1172,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.FatalError("Test");
+			logger.Fatal("Test");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1182,7 +1182,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.FatalError("Test");
+			logger.Fatal("Test");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1192,7 +1192,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Off;
 
-			logger.FatalError("Test");
+			logger.Fatal("Test");
 
 			ValidateNoCalls();
 		}
@@ -1204,7 +1204,7 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Debug;
 			Exception exception = new Exception();
 
-			logger.FatalError("Test", exception);
+			logger.Fatal("Test", exception);
 
 			ValidateCall(LoggerLevel.Fatal, "Test", exception);
 		}
@@ -1215,7 +1215,7 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Info;
 			Exception exception = new Exception();
 
-			logger.FatalError("Test", exception);
+			logger.Fatal("Test", exception);
 
 			ValidateCall(LoggerLevel.Fatal, "Test", exception);
 		}
@@ -1226,7 +1226,7 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Fatal;
 			Exception exception = new Exception();
 
-			logger.FatalError("Test", exception);
+			logger.Fatal("Test", exception);
 
 			ValidateCall(LoggerLevel.Fatal, "Test", exception);
 		}
@@ -1237,7 +1237,7 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Fatal;
 			Exception exception = new Exception();
 
-			logger.FatalError("Test", exception);
+			logger.Fatal("Test", exception);
 
 			ValidateCall(LoggerLevel.Fatal, "Test", exception);
 		}
@@ -1248,7 +1248,7 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Fatal;
 			Exception exception = new Exception();
 
-			logger.FatalError("Test", exception);
+			logger.Fatal("Test", exception);
 
 			ValidateCall(LoggerLevel.Fatal, "Test", exception);
 		}
@@ -1259,7 +1259,7 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Off;
 			Exception exception = new Exception();
 
-			logger.FatalError("Test", exception);
+			logger.Fatal("Test", exception);
 
 			ValidateNoCalls();
 		}
@@ -1270,7 +1270,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Debug;
 
-			logger.FatalError("{0}st", "Te");
+			logger.FatalFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1280,7 +1280,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Info;
 
-			logger.FatalError("{0}st", "Te");
+			logger.FatalFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1290,7 +1290,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.FatalError("{0}st", "Te");
+			logger.FatalFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1300,7 +1300,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.FatalError("{0}st", "Te");
+			logger.FatalFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1310,7 +1310,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Fatal;
 
-			logger.FatalError("{0}st", "Te");
+			logger.FatalFormat("{0}st", "Te");
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
@@ -1320,7 +1320,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			logger.Level = LoggerLevel.Off;
 
-			logger.FatalError("{0}st", "Te");
+			logger.FatalFormat("{0}st", "Te");
 
 			ValidateNoCalls();
 		}

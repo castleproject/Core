@@ -45,7 +45,7 @@ namespace Castle.Core.Logging.Tests
 			log.Debug("Some debug message");
 			log.Info("Some info message");
 			log.Error("Some error message");
-			log.FatalError("Some fatal error message");
+			log.Fatal("Some fatal error message");
 			log.Warn("Some warn message");
 
 			String logcontents = outWriter.GetStringBuilder().ToString();
@@ -60,7 +60,7 @@ namespace Castle.Core.Logging.Tests
 			log.Debug("Some debug message");
 			log.Info("Some info message");
 			log.Error("Some error message");
-			log.FatalError("Some fatal error message");
+			log.Fatal("Some fatal error message");
 			log.Warn("Some warn message");
 
 			String logcontents = outWriter.GetStringBuilder().ToString();
@@ -75,7 +75,7 @@ namespace Castle.Core.Logging.Tests
             log.Debug("Some debug message");
             log.Info("Some info message");
             log.Error("Some error message");
-            log.FatalError("Some fatal error message");
+            log.Fatal("Some fatal error message");
             log.Warn("Some warn message");
 
             String logcontents = outWriter.GetStringBuilder().ToString();

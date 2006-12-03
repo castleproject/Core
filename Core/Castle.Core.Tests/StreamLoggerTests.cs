@@ -144,7 +144,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = null;
 			
-			logger.FatalError(message);
+			logger.Fatal(message);
 
 			ValidateCall(level, message, exception);
 		}
@@ -156,7 +156,7 @@ namespace Castle.Core.Logging.Tests
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = new Exception();
 			
-			logger.FatalError(message, exception);
+			logger.Fatal(message, exception);
 
 			ValidateCall(level, message, exception);
 		}

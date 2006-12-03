@@ -24,13 +24,15 @@ namespace Castle.Core.Logging
 	public class NullLogger : ILogger
 	{
 		public static readonly NullLogger Instance = new NullLogger();
-		
+
 		/// <summary>
 		/// Creates a new <c>NullLogger</c>.
 		/// </summary>
 		public NullLogger()
 		{
 		}
+
+		#region Debug
 
 		/// <summary>
 		/// No-op.
@@ -41,10 +43,10 @@ namespace Castle.Core.Logging
 		}
 
 		/// <summary>
-		/// No-op.
+		/// No-op. 
 		/// </summary>
-		/// <param name="message">Ignored</param>
 		/// <param name="exception">Ignored</param>
+		/// <param name="message">Ignored</param>
 		public void Debug(string message, Exception exception)
 		{
 		}
@@ -54,18 +56,63 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Debug(string format, params Object[] args)
+		[Obsolete("Use DebugFormat instead")]
+		public void Debug(string format, params object[] args)
 		{
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
-		/// <value>false</value> 
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void DebugFormat(string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void DebugFormat(Exception exception, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void DebugFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void DebugFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <value>false</value>
 		public bool IsDebugEnabled
 		{
 			get { return false; }
 		}
+
+		#endregion
+
+		#region Info
 
 		/// <summary>
 		/// No-op.
@@ -76,10 +123,10 @@ namespace Castle.Core.Logging
 		}
 
 		/// <summary>
-		/// No-op.
+		/// No-op. 
 		/// </summary>
-		/// <param name="message">Ignored</param>
 		/// <param name="exception">Ignored</param>
+		/// <param name="message">Ignored</param>
 		public void Info(string message, Exception exception)
 		{
 		}
@@ -89,18 +136,63 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Info(string format, params Object[] args)
+		[Obsolete("Use InfoFormat instead")]
+		public void Info(string format, params object[] args)
 		{
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
-		/// <value>false</value> 
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void InfoFormat(string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void InfoFormat(Exception exception, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void InfoFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <value>false</value>
 		public bool IsInfoEnabled
 		{
 			get { return false; }
 		}
+
+		#endregion
+
+		#region Warn
 
 		/// <summary>
 		/// No-op.
@@ -111,10 +203,10 @@ namespace Castle.Core.Logging
 		}
 
 		/// <summary>
-		/// No-op.
+		/// No-op. 
 		/// </summary>
-		/// <param name="message">Ignored</param>
 		/// <param name="exception">Ignored</param>
+		/// <param name="message">Ignored</param>
 		public void Warn(string message, Exception exception)
 		{
 		}
@@ -124,18 +216,63 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Warn(string format, params Object[] args)
+		[Obsolete("Use WarnFormat instead")]
+		public void Warn(string format, params object[] args)
 		{
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
-		/// <value>false</value> 
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void WarnFormat(string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void WarnFormat(Exception exception, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void WarnFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <value>false</value>
 		public bool IsWarnEnabled
 		{
 			get { return false; }
 		}
+
+		#endregion
+
+		#region Error
 
 		/// <summary>
 		/// No-op.
@@ -146,10 +283,10 @@ namespace Castle.Core.Logging
 		}
 
 		/// <summary>
-		/// No-op.
+		/// No-op. 
 		/// </summary>
-		/// <param name="message">Ignored</param>
 		/// <param name="exception">Ignored</param>
+		/// <param name="message">Ignored</param>
 		public void Error(string message, Exception exception)
 		{
 		}
@@ -159,23 +296,149 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Error(string format, params Object[] args)
+		[Obsolete("Use ErrorFormat instead")]
+		public void Error(string format, params object[] args)
 		{
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
-		/// <value>false</value> 
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void ErrorFormat(string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void ErrorFormat(Exception exception, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void ErrorFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void ErrorFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <value>false</value>
 		public bool IsErrorEnabled
 		{
 			get { return false; }
 		}
 
+		#endregion
+
+		#region Fatal
+
 		/// <summary>
 		/// No-op.
 		/// </summary>
 		/// <param name="message">Ignored</param>
+		public void Fatal(string message)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="message">Ignored</param>
+		public void Fatal(string message, Exception exception)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		[Obsolete("Use FatalFormat instead")]
+		public void Fatal(string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void FatalFormat(string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void FatalFormat(Exception exception, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void FatalFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="exception">Ignored</param>
+		/// <param name="formatProvider">Ignored</param>
+		/// <param name="format">Ignored</param>
+		/// <param name="args">Ignored</param>
+		public void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <value>false</value>
+		public bool IsFatalEnabled
+		{
+			get { return false; }
+		}
+
+		#endregion
+
+		#region FatalError (obsolete)
+
+		/// <summary>
+		/// No-op.
+		/// </summary>
+		/// <param name="message">Ignored</param>
+		[Obsolete("Use Fatal instead")]
 		public void FatalError(string message)
 		{
 		}
@@ -185,6 +448,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="message">Ignored</param>
 		/// <param name="exception">Ignored</param>
+		[Obsolete("Use Fatal instead")]
 		public void FatalError(string message, Exception exception)
 		{
 		}
@@ -194,6 +458,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
+		[Obsolete("Use FatalFormat instead")]
 		public void FatalError(string format, params Object[] args)
 		{
 		}
@@ -201,11 +466,14 @@ namespace Castle.Core.Logging
 		/// <summary>
 		/// No-op.
 		/// </summary>
-		/// <value>false</value> 
+		/// <value>false</value>
+		[Obsolete("Use IsFatalEnabled instead")]
 		public bool IsFatalErrorEnabled
 		{
 			get { return false; }
 		}
+
+		#endregion
 
 		/// <summary>
 		/// Returns this <c>NullLogger</c>.
