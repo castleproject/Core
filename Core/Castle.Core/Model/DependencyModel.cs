@@ -42,7 +42,7 @@ namespace Castle.Core
 		/// <param name="dependencyKey">The dependency key.</param>
 		/// <param name="targetType">Type of the target.</param>
 		/// <param name="isOptional">if set to <c>true</c> [is optional].</param>
-		public DependencyModel(DependencyType type, String dependencyKey, 
+		public DependencyModel(DependencyType type, String dependencyKey,
 		                       Type targetType, bool isOptional)
 		{
 			this.dependencyType = type;
@@ -98,11 +98,11 @@ namespace Castle.Core
 		/// <returns>
 		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
 		/// </returns>
-        public override string ToString()
-        {
-            return string.Format("{0} dependency '{1}' type '{2}'", 
-                                 DependencyType, dependencyKey, TargetType);
-        }
+		public override string ToString()
+		{
+			return string.Format("{0} dependency '{1}' type '{2}'",
+			                     DependencyType, dependencyKey, TargetType);
+		}
 
 		/// <summary>
 		/// Serves as a hash function for a particular type, suitable
