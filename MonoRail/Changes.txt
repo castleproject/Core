@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied patch by Andrew Peters fixing MR-182
+  "Adds FormTo and LinkToWithPost methods to HtmlHelper"
+
 - Fixed MR-180
   "Url Tokenizer Bug at Turkish Culture Info"
 
