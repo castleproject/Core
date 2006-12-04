@@ -154,6 +154,7 @@
     <Compile Include="Components\IReviewer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\MailServer.cs" />
     <Compile Include="Components\MarshalCalculatorService.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -188,6 +189,7 @@
     <Compile Include="DependencyProblem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="ignoreprop.xml" />
     <Content Include="DotNet2Config\ComplexGenericConfig.xml" />
     <Content Include="DotNet2Config\GenericDecoratorConfig.xml" />
     <Content Include="DotNet2Config\MissingDecoratorConfig.xml" />
@@ -199,6 +201,7 @@
     <Compile Include="Facilities\SlowlyInitFacility.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IgnoreWireTestCase.cs" />
     <Compile Include="Installer\InstallerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

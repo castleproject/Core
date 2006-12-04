@@ -1,6 +1,12 @@
 RC 4
 ====
 
+- Fixed IOC-43 
+  "Creation of an Attribute in the Kernel that allows one property to be ignored by the dependency builder"
+  
+  Introduced DoNotWireAttribute that marks a property and prevents it
+  from being considered by the container
+
 - Changed Windsor to use DynamicProxy 2
 
 - Applied patch by Adam Mills fixing IOC-42

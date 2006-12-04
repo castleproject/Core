@@ -1,0 +1,15 @@
+<configuration>
+
+	<components>
+
+		<component id="server" 
+			type="Castle.Windsor.Tests.Components.MailServer, Castle.Windsor.Tests">
+			<parameters>
+				<Port>100</Port>
+				<Host>server</Host>
+			</parameters>
+		</component>
+
+	</components>
+
+</configuration>

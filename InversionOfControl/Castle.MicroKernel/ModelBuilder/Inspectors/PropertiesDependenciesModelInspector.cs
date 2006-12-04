@@ -95,6 +95,11 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				{
 					continue;
 				}
+				
+				if (property.IsDefined(typeof(DoNotWireAttribute), true))
+				{
+					continue;
+				}
 
 				DependencyModel dependency;
 

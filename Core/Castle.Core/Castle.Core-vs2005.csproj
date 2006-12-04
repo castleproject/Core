@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attributes\CastleComponent.cs" />
+    <Compile Include="Attributes\DoNotWireAttribute.cs" />
     <Compile Include="Attributes\InterceptorAttribute.cs" />
     <Compile Include="Attributes\LifestyleAttributes.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
