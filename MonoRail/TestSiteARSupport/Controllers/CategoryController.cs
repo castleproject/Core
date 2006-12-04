@@ -30,7 +30,8 @@ namespace TestSiteARSupport.Controllers
 		}
 
 		[AccessibleThrough(Verb.Post)]
-		public void Insert([ARDataBind("category", AutoLoad=AutoLoadBehavior.OnlyNested)] Category category)
+		public void Insert([ARDataBind("category", AutoLoad = AutoLoadBehavior.OnlyNested)] Category category, 
+		                   [DataBind("Partner")] Dummy dummy)
 		{
 			ErrorList errorList = (ErrorList) BoundInstanceErrors[category];
 			

@@ -6,6 +6,8 @@
   $FormHelper.TextField("category.name") 
   </p>
 
+  $FormHelper.TextField("partner.name") 
+
   <input type="submit" id="insertbutton" value="Insert" />
 
 </form>
