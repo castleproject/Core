@@ -36,10 +36,7 @@ namespace Castle.Core
 		/// <param name="dependencies">The dependencies.</param>
 		public DependencyModelCollection(DependencyModelCollection dependencies)
 		{
-			foreach(DependencyModel model in dependencies)
-			{
-				Add(model);
-			}
+			InnerList.AddRange(dependencies);
 		}
 
 		/// <summary>
@@ -48,10 +45,7 @@ namespace Castle.Core
 		/// <param name="dependencies">The dependencies.</param>
 		public DependencyModelCollection(DependencyModel[] dependencies)
 		{
-			foreach(DependencyModel model in dependencies)
-			{
-				Add(model);
-			}
+			InnerList.AddRange(dependencies);
 		}
 
 		/// <summary>

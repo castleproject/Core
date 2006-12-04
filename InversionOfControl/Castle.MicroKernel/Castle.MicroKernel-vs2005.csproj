@@ -93,6 +93,7 @@
     <Compile Include="ComponentActivator\DefaultComponentActivator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\DependencyTrackingScope.cs" />
     <Compile Include="ComponentActivator\ExternalInstanceActivator.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -31,7 +31,12 @@ namespace Castle.MicroKernel
 	[Serializable]
 	public sealed class CreationContext : MarshalByRefObject, ISubDependencyResolver
 	{
-		public readonly static CreationContext Empty = new CreationContext(new DependencyModel[0]);
+		/// <summary>Creates a new, empty <see cref="CreationContext" /> instance.</summary>
+		/// <remarks>A new CreationContext should be created every time, as the contexts keeps some state related to dependency resolution.</remarks>
+		public static CreationContext Empty
+		{
+			get { return new CreationContext(new DependencyModel[0]); }
+		}
 
 		/// <summary>
 		/// 
@@ -138,93 +143,9 @@ namespace Castle.MicroKernel
 
 		#region Cycle detection related members
 
-		/// <summary>
-		/// Track dependencies and guards against circular dependencies.
-		/// </summary>
-		/// <returns>A dependency key that can be used to remove the dependency if it was resolved correctly.</returns>
-		public DependencyModel TrackDependency(MemberInfo info, DependencyModel dependencyModel)
-		{
-			DependencyModelExtended trackingKey = new DependencyModelExtended(dependencyModel, info);
-			
-			if (dependencies.Contains(trackingKey))
-			{
-				StringBuilder sb = new StringBuilder("A cycle was detected when trying to resolve a dependency. ");
-				
-				sb.Append("The dependency graph that resulted in a cycle is:");
-
-				foreach(DependencyModel key in dependencies)
-				{
-					DependencyModelExtended extendedInfo = key as DependencyModelExtended;
-					
-					if (extendedInfo != null)
-					{
-						sb.AppendFormat("\r\n - {0} for {1} in type {2}",
-							key, extendedInfo.Info, extendedInfo.Info.DeclaringType);
-					}
-					else
-					{
-						sb.AppendFormat("\r\n - {0}", key);
-					}
-				}
-
-				sb.AppendFormat("\r\n + {0} for {1} in {2}\r\n",
-				                dependencyModel, info, info.DeclaringType);
-
-				throw new CircularDependecyException(sb.ToString());
-			}
-
-			dependencies.Add(trackingKey);
-			return trackingKey;
-		}
-
-		/// <summary>
-		/// Removes a dependency that was resolved successfully.
-		/// </summary>
-		public void UntrackDependency(DependencyModel model)
-		{
-			dependencies.Remove(model);
-		}
-
 		public DependencyModelCollection Dependencies
 		{
 			get { return dependencies; }
-		}
-
-		/// <summary>
-		/// Extends <see cref="DependencyModel"/> adding <see cref="MemberInfo"/>
-		/// information. This is only useful to provide detailed information 
-		/// on exceptions.
-		/// </summary>
-		[Serializable]
-		internal class DependencyModelExtended : DependencyModel
-		{
-			private readonly MemberInfo info;
-
-			public DependencyModelExtended(DependencyModel inner, MemberInfo info)
-				:
-				base(inner.DependencyType, inner.DependencyKey, inner.TargetType, inner.IsOptional)
-			{
-				this.info = info;
-			}
-
-			public MemberInfo Info
-			{
-				get { return info; }
-			}
-
-			public override bool Equals(object obj)
-			{
-				DependencyModelExtended other = obj as DependencyModelExtended;
-				if (other == null)
-					return false;
-				return other.Info == this.Info && base.Equals(other);
-			}
-			
-			public override int GetHashCode()
-			{
-				int infoHash = 37 ^ Info.GetHashCode();
-				return base.GetHashCode() + infoHash;
-			}
 		}
 
 		#endregion

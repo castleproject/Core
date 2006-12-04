@@ -261,31 +261,4 @@ namespace Castle.MicroKernel.ComponentActivator
 			return instance;
 		}
 	}
-
-	class DependencyTrackingScope : IDisposable
-	{
-		private readonly CreationContext creationContext;
-		private readonly DependencyModel dependencyTrackingKey;
-
-		public DependencyTrackingScope(CreationContext creationContext, MemberInfo memberInfo, DependencyModel dependency)
-		{
-			this.creationContext = creationContext;
-
-			if (dependency.TargetType != typeof(IKernel))
-			{
-				// We track dependencies in order to detect cycled graphs
-				// This prevents a stack overflow
-				dependencyTrackingKey = creationContext.TrackDependency(memberInfo, dependency);
-			}
-		}
-
-		public void Dispose()
-		{
-			// The dependency was resolved successfully, we can stop tracking it.
-			if (dependencyTrackingKey != null)
-			{
-				creationContext.UntrackDependency(dependencyTrackingKey);
-			}
-		}
-	}
 }
