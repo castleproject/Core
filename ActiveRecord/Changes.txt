@@ -1,6 +1,21 @@
 Release Candidate 2
 ===================
 
+- Applied patch by Andrew Peters fixing AR-97
+  "Pluralization of table names"
+  
+  This patch introduces the pluralizeTableNames attribute on the configuration
+  which, if set to true, pluralizes the ActiveRecord types tables where no name
+  was specified.
+  
+  For example:
+  
+  [ActiveRecord]
+  public class Student : ActiveRecordBase<Student>
+  
+  The table name will be infered as 'Students'
+  
+
 - Applied patch by Ernst Naezer fixing AR-93
   "Scaffolding / ARdatabind crash when Typeof is not supplied in the HasMany attribute."
 

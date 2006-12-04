@@ -134,6 +134,7 @@
     </Compile>
     <Compile Include="GraphConnectorTestCase.cs" />
     <Compile Include="ImportTestCase.cs" />
+    <Compile Include="InflectorTestCase.cs" />
     <Compile Include="Model\BadCompositeKey.cs" />
     <Compile Include="Model\BaseJoinedClass.cs" />
     <Compile Include="Model\CacheClass.cs" />

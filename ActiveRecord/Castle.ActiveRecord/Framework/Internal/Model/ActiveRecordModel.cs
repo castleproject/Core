@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Collections;
-	
+
 	/// <summary>
 	/// This model of a full Active Record persistent class.
 	/// </summary>
@@ -37,7 +37,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Whatever types that does not explicitly state that they are lazy should be lazy.
 		/// </summary>
 		protected internal static bool isLazyByDefault = false;
-		
+
+		/// <summary>
+		/// Whether the default inferred table name is plural
+		/// </summary>
+		protected internal static bool pluralizeTableNames = false;
+
 		private readonly Type type;
 
 		private bool isJoinedSubClassBase;
@@ -45,7 +50,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private bool isDiscriminatorSubClass;
 		private bool isJoinedSubClass;
 		private bool isNestedType;
-		
+
 		private ActiveRecordAttribute arAtt;
 		private ActiveRecordModel parent;
 		private PrimaryKeyModel primaryKey;
@@ -53,7 +58,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private KeyModel key;
 		private TimestampModel timestamp;
 		private VersionModel version;
-		
+
 		private IList imports = new ArrayList();
 		private IList hasManyToAny = new ArrayList();
 		private IList anys = new ArrayList();
@@ -366,13 +371,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <value><c>true</c> if should use auto import; otherwise, <c>false</c>.</value>
 		public bool UseAutoImport
 		{
-			get 
-			{ 
+			get
+			{
 				if (arAtt != null)
 				{
 					return arAtt.UseAutoImport;
 				}
-				
+
 				return true;
 			}
 		}
@@ -382,7 +387,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="arType"></param>
 		/// <param name="model"></param>
-		internal static void Register(Type arType, Framework.Internal.ActiveRecordModel model)
+		internal static void Register(Type arType, ActiveRecordModel model)
 		{
 			type2Model[arType] = model;
 		}
@@ -390,20 +395,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <summary>
 		/// Gets the <see cref="Framework.Internal.ActiveRecordModel"/> for a given ActiveRecord class.
 		/// </summary>
-		public static Framework.Internal.ActiveRecordModel GetModel(Type arType)
+		public static ActiveRecordModel GetModel(Type arType)
 		{
-			return (Framework.Internal.ActiveRecordModel) type2Model[arType];
+			return (ActiveRecordModel) type2Model[arType];
 		}
-		
+
 		/// <summary>
 		/// Gets an array containing the <see cref="Framework.Internal.ActiveRecordModel"/> for every registered ActiveRecord class.
 		/// </summary>
-		public static Framework.Internal.ActiveRecordModel[] GetModels()
+		public static ActiveRecordModel[] GetModels()
 		{
-			Framework.Internal.ActiveRecordModel[] modelArray = new Framework.Internal.ActiveRecordModel[type2Model.Values.Count];
-			
+			ActiveRecordModel[] modelArray = new ActiveRecordModel[type2Model.Values.Count];
+
 			type2Model.Values.CopyTo(modelArray, 0);
-			
+
 			return modelArray;
 		}
 

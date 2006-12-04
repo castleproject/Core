@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Config
 {
 	using System;
 	using System.Collections;
-	
+	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.Core.Configuration;
 
 	/// <summary>
@@ -27,9 +27,10 @@ namespace Castle.ActiveRecord.Framework.Config
 		private readonly IDictionary _type2Config = new Hashtable();
 		private Type threadScopeInfoImplementation;
 		private Type sessionFactoryHolderImplementation;
-        private Type namingStrategyImplementation;
+		private Type namingStrategyImplementation;
 		private bool debug = false;
 		private bool isLazyByDefault;
+		private bool pluralizeTableNames;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InPlaceConfigurationSource"/> class.
@@ -100,7 +101,19 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// </value>
 		public bool IsLazyByDefault
 		{
-			get { return this.isLazyByDefault; }
+			get { return isLazyByDefault; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether table names are assumed plural by default. 
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if table names should be pluralized by default; otherwise, <c>false</c>.
+		/// </value>
+		public bool PluralizeTableNames
+		{
+			get { return pluralizeTableNames; }
+			set { pluralizeTableNames = value; }
 		}
 
 		#endregion
@@ -136,7 +149,7 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			if (isWeb)
 			{
-				threadInfoType = typeof(Castle.ActiveRecord.Framework.Scopes.WebThreadScopeInfo);
+				threadInfoType = typeof(WebThreadScopeInfo);
 			}
 
 			if (customType != null && customType != String.Empty)
@@ -185,9 +198,9 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// Sets the type of the naming strategy.
 		/// </summary>
 		/// <param name="customType">Custom implementation type name</param>
-		protected void SetUpNamingStrategyType(String customType) 
+		protected void SetUpNamingStrategyType(String customType)
 		{
-			if (customType != null && customType != String.Empty) 
+			if (customType != null && customType != String.Empty)
 			{
 				String typeName = customType;
 
@@ -212,13 +225,22 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			debug = isDebug;
 		}
-		
+
 		/// <summary>
 		/// Set whatever entities are lazy by default or not.
 		/// </summary>
 		protected void SetIsLazyByDefault(bool lazyByDefault)
 		{
-			this.isLazyByDefault = lazyByDefault;
+			isLazyByDefault = lazyByDefault;
+		}
+
+		/// <summary>
+		/// Sets the pluralizeTableNames flag.
+		/// </summary>
+		/// <param name="pluralize">if set to <c>true</c> Active Record will pluralize inferred table names.</param>
+		protected void SetPluralizeTableNames(bool pluralize)
+		{
+			pluralizeTableNames = pluralize;
 		}
 
 		private IConfiguration ConvertToConfiguration(IDictionary properties)

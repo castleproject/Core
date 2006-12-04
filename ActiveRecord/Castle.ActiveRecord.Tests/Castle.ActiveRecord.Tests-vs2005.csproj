@@ -302,6 +302,8 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="LazyTestCase.cs" />
     <Compile Include="Model\AnyModel\Models.cs" />
+    <Compile Include="Model\Octopus.cs" />
+    <Compile Include="PluralizationTestCase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

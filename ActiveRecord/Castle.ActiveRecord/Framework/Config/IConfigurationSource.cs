@@ -15,7 +15,6 @@
 namespace Castle.ActiveRecord.Framework
 {
 	using System;
-	
 	using Castle.Core.Configuration;
 
 	/// <summary>
@@ -62,5 +61,13 @@ namespace Castle.ActiveRecord.Framework
 		/// 	<c>true</c> if entities should be lazy by default; otherwise, <c>false</c>.
 		/// </value>
 		bool IsLazyByDefault { get; }
+
+		/// <summary>
+		/// Gets a value indicating whether table names are assumed plural by default. 
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if table names should be pluralized by default; otherwise, <c>false</c>.
+		/// </value>
+		bool PluralizeTableNames { get; }
 	}
 }

@@ -20,7 +20,6 @@ namespace Castle.ActiveRecord.Tests.Model
 	using NHibernate;
 	
 	using Castle.ActiveRecord.Framework;
-	using NHibernate.Type;
 
 	[ActiveRecord("BlogTable")]
 	public class Blog : ActiveRecordBase

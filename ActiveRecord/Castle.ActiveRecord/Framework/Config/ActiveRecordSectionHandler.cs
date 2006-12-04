@@ -15,8 +15,8 @@
 namespace Castle.ActiveRecord.Framework.Config
 {
 	using System;
-	using System.Xml;
 	using System.Configuration;
+	using System.Xml;
 
 	/// <summary>
 	/// Reads the configuration from a entry 'activerecord'
@@ -34,7 +34,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		public object Create(object parent, object configContext, XmlNode section)
 		{
 			PopulateSource(section);
-			
+
 			return this;
 		}
 
@@ -49,24 +49,24 @@ namespace Castle.ActiveRecord.Framework.Config
 				IConfigurationSource source;
 #if DOTNET2
 				source =
-					System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
+					ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
 #else
 				source =
 					System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
 #endif
-				
+
 				if (source == null)
 				{
 					String message = "Could not obtain configuration from the AppDomain config file." +
-									 " Sorry, but you have to fill the configuration or provide a " +
-									 "IConfigurationSource instance yourself.";
+					                 " Sorry, but you have to fill the configuration or provide a " +
+					                 "IConfigurationSource instance yourself.";
 #if DOTNET2
-					throw new System.Configuration.ConfigurationErrorsException(message);
+					throw new ConfigurationErrorsException(message);
 #else
 					throw new System.Configuration.ConfigurationException(message);
 #endif
 				}
-				
+
 				return source;
 			}
 		}
