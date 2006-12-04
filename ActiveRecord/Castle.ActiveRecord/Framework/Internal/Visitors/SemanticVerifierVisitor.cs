@@ -401,6 +401,18 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
+		/// Visit the has many to any
+		/// </summary>
+		/// <param name="model">The model.</param>
+		public override void VisitHasManyToAny(HasManyToAnyModel model)
+		{
+			if (model.HasManyToAnyAtt.MapType == null)
+				model.HasManyToAnyAtt.MapType = GuessType(null, model.Property.PropertyType);
+
+			base.VisitHasManyToAny(model);
+		}
+
+		/// <summary>
 		/// Visits the has many.
 		/// </summary>
 		/// <remarks>
@@ -412,6 +424,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public override void VisitHasMany(HasManyModel model)
 		{
+			if (model.HasManyAtt.MapType == null)
+				model.HasManyAtt.MapType = GuessType(null, model.Property.PropertyType);
+
 			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
 
 			if (model.HasManyAtt.RelationType == RelationType.IdBag)
@@ -511,6 +526,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public override void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
 		{
+			if (model.HasManyAtt.MapType == null)
+				model.HasManyAtt.MapType = GuessType(null, model.Property.PropertyType);
+
 			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
 
 			Type otherend = GuessType(model.HasManyAtt.MapType, model.Property.PropertyType);

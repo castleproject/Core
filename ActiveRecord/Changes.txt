@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied patch by aaa fixing AR-93
+  "Scaffolding / ARdatabind crash when Typeof is not supplied in the HasMany attribute."
+
 - Applied Lee Henson's patch fixing AR-88
   "Move GetFieldOrPropertyValue from ConfirmationValidator to AbstractValidator"
 
