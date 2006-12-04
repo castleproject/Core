@@ -39,8 +39,6 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 				alias2Stack = new HybridDictionary(true);
 
 				StoreDictionary(alias2Stack);
-
-				CallContext.SetData(SlotKey, alias2Stack);
 			}
 
 			Stack stack = alias2Stack[alias] as Stack;

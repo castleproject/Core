@@ -1,5 +1,8 @@
 Version beta 3
 
+- Fixed FACILITIES-54
+  "Integrate NHibernate facility with NHibernate 1.2"
+
 - Applied Curtis Schlak's patch fixing FACILITIES-52
   "Factory-Specific IInterceptors"
 

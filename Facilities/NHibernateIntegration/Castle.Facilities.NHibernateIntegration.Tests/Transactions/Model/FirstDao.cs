@@ -40,9 +40,14 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 		[Transaction]
 		public virtual Blog Create(String name)
 		{
+			NHibernate.ITransaction tran;
+			
 			using(ISession session = sessManager.OpenSession())
 			{
+				tran = session.Transaction;
+
 				NUnit.Framework.Assert.IsNotNull(session.Transaction);
+				NUnit.Framework.Assert.IsTrue(session.Transaction.IsActive);
 
 				Blog blog = new Blog();
 				blog.Name = name;
