@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Applied patch by Lee Henson fixing MR-179
+  "Binder doesn't convert empty strings to null."
+
 - Fixed bug that wrongly defined empty strings as conversionSucceeded = false
 
 - Fixed COMP-1 "Binder fails on simple MonoRail binding, when using ASP.NET authentication"

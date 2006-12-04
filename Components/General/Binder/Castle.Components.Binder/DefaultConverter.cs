@@ -47,7 +47,7 @@ namespace Castle.Components.Binder
 			{
 				if (inputType == typeof(String))
 				{
-					if (input == null)
+					if ((input == null) || (((string) input).Length == 0))
 					{
 						conversionSucceeded = false;
 						return null;

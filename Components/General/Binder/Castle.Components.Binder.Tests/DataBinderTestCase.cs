@@ -177,7 +177,7 @@ namespace Castle.Components.Binder.Tests
 			Person person = instance as Person;
 			Assert.IsNotNull(person);
 			Assert.AreEqual(person.Age, age);
-			Assert.AreEqual(person.Name, name);
+			Assert.AreEqual(person.Name, null);
 			Assert.AreEqual(person.Assets, assets);
 		}
 

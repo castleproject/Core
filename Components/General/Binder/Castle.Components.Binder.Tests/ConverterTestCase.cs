@@ -48,6 +48,9 @@ namespace Castle.Components.Binder.Tests
 
 			Assert.AreEqual("\n  \t", Convert(typeof(string), " \n  \t "));
 			Assert.IsTrue(convSucceed);
+			
+			Assert.AreEqual(null, Convert(typeof(string), ""));
+			Assert.IsFalse(convSucceed);
 		}
 
 		[Test]
