@@ -611,6 +611,27 @@ namespace Castle.MicroKernel
 			return services.ToArray();
 		}
 
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="service"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		public virtual object Resolve(String key, Type service, IDictionary arguments)
+		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (service == null) throw new ArgumentNullException("service");
+
+			if (!HasComponent(key))
+			{
+				throw new ComponentNotFoundException(key);
+			}
+
+			IHandler handler = GetHandler(key);
+
+			return ResolveComponent(handler, service, arguments);
+		}
 		#endif
 
 		public virtual void ReleaseComponent(object instance)
@@ -824,7 +845,7 @@ namespace Castle.MicroKernel
 		{
 			if (model == null) throw new ArgumentNullException("model");
 
-			IComponentActivator activator = null;
+			IComponentActivator activator;
 
 			if (model.CustomComponentActivator == null)
 			{

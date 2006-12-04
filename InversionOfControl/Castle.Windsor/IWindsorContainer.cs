@@ -92,6 +92,14 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		object Resolve(String key);
 
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		object Resolve(String key, IDictionary arguments);
+		
 		#if DOTNET2
 
 		/// <summary>
@@ -111,6 +119,14 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		object Resolve(Type service);
 
+		/// <summary>
+		/// Returns a component instance by the service
+		/// </summary>
+		/// <param name="service"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		object Resolve(Type service, IDictionary arguments);
+		
 		/// <summary>
 		/// Releases a component instance
 		/// </summary>
@@ -150,6 +166,14 @@ namespace Castle.Windsor
 		T Resolve<T>();
 
 		/// <summary>
+		/// Returns a component instance by the service
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <param name="arguments"></param>
+		/// <returns>The component instance</returns>
+		T Resolve<T>(IDictionary arguments);
+		
+		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key">Component's key</param>
@@ -157,6 +181,25 @@ namespace Castle.Windsor
 		/// <returns>The Component instance</returns>
 		T Resolve<T>(String key);
 
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <param name="key">Component's key</param>
+		/// <param name="arguments"></param>
+		/// <returns>The Component instance</returns>
+		T Resolve<T>(String key, IDictionary arguments);
+
+		
+		/// <summary>
+		/// Returns a component instance by the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="service"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		object Resolve(String key, Type service, IDictionary arguments);
+		
 		#endif
 
 		/// <summary>

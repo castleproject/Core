@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied patch by Ernst Naezer fixing IOC-37
+  "Resolving with arguments in Windsor"
+
 - Fixed IOC-43 
   "Creation of an Attribute in the Kernel that allows one property to be ignored by the dependency builder"
   
