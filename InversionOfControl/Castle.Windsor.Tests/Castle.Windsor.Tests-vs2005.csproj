@@ -186,6 +186,7 @@
     <Compile Include="ContainerProblem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ContainerProblem2.cs" />
     <Compile Include="DependencyProblem.cs">
       <SubType>Code</SubType>
     </Compile>
