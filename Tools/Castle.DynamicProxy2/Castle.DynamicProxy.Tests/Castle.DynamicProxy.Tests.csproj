@@ -97,6 +97,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicInterfaceProxyWithoutTargetTestCase.cs" />
+    <Compile Include="BugsReportedTestCase.cs" />
+    <Compile Include="BugsReported\Camera.cs" />
     <Compile Include="Classes\ClassWithCharRetType.cs" />
     <Compile Include="Classes\ClassWithConstructors.cs" />
     <Compile Include="GenInterfaces\GenInterfaceHierarchy.cs" />
