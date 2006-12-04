@@ -15,6 +15,7 @@
 namespace Castle.Windsor.Tests
 {
 	using System.Runtime.Remoting;
+	using Castle.Core.Interceptor;
 	using NUnit.Framework;
 
 	using Castle.Windsor.Tests.Components;
@@ -45,32 +46,14 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
-		[Ignore("Just for now")]
-		public void MBRInterfaceProxy()
+		public void InterfaceInheritance()
 		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", typeof(ICalcService), typeof(MarshalCalculatorService)  );
+			_container.AddComponent("interceptor", typeof(StandardInterceptor));
+			_container.AddComponent("key", typeof(ICameraService), typeof(CameraService));
 
-			ICalcService service = (ICalcService) _container.Resolve("key");
+			ICameraService service = (ICameraService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.IsTrue(RemotingServices.IsTransparentProxy(service));
-			Assert.AreEqual( 7, service.Sum(2,2) );
-		}
-
-		[Test]
-		[Ignore("Just for now")]
-		public void MBRConcreteClassProxy()
-		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", typeof(MarshalCalculatorService), typeof(MarshalCalculatorService)  );
-
-			MarshalCalculatorService service = (MarshalCalculatorService) 
-				_container.Resolve("key");
-
-			Assert.IsNotNull(service);
-			Assert.IsTrue(RemotingServices.IsTransparentProxy(service));
-			Assert.AreEqual( 7, service.Sum(2,2) );
 		}
 
 		[Test]

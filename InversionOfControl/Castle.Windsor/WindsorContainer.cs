@@ -320,7 +320,6 @@ namespace Castle.Windsor
 			return kernel[key];
 		}
 
-
 		/// <summary>
 		/// 
 		/// </summary>

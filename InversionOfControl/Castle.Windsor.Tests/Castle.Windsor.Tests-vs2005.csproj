@@ -136,6 +136,7 @@
     <Compile Include="Components\CalculatorServiceWithLifecycle.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\CircularDependencyComponents.cs" />
     <Compile Include="Components\ComponentWithProperties.cs" />
     <Compile Include="Components\DotNet2Components.cs" />

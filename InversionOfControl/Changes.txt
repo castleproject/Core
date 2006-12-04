@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IOC-45
+  "Proxying a component that has an interface that is extended from another interface throws an exception"
+
 - Applied patch by Ernst Naezer fixing IOC-37
   "Resolving with arguments in Windsor"
 

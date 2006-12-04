@@ -77,56 +77,6 @@ namespace Castle.Windsor.Proxy
 			return model.Service.IsInterface;
 		}
 
-//		public override object Create(IKernel kernel, ComponentModel model, params object[] constructorArguments)
-//		{
-//			IInterceptor[] interceptors = ObtainInterceptors(kernel, model);
-//			// IInterceptor interceptorChain = new InterceptorChain(interceptors);
-//
-//			// This is a hack to avoid unnecessary object creation 
-//			// and unecessary delegations.
-//			// We supply our contracts (Interceptor and Invocation)
-//			// and the implementation for Invocation dispatchers
-//			// DynamicProxy should be able to use them as long as the 
-//			// signatures match
-//			// GeneratorContext context = new GeneratorContext();
-//			// context.Interceptor = typeof(IMethodInterceptor);
-//			// context.Invocation = typeof(IMethodInvocation);
-//			// context.SameClassInvocation = typeof(DefaultMethodInvocation);
-//			// context.InterfaceInvocation = typeof(DefaultMethodInvocation);
-//			// CustomizeContext(context, kernel, model, constructorArguments);
-//
-//			object proxy = null;
-//
-//			if (model.Service.IsInterface)
-//			{
-//				Object target = Activator.CreateInstance(model.Implementation, constructorArguments);
-//
-//				proxy = generator.CreateInterfaceProxyWithTarget(model.Service, 
-//				                                                 CollectInterfaces(model.Implementation), 
-//				                                                 target, options, interceptors);
-//			}
-//			else
-//			{
-//				proxy = generator.CreateClassProxy(model.Implementation, 
-//				                                   interceptors, context, 
-//				                                   constructorArguments);
-//			}
-//
-//			CustomizeProxy(proxy, context, kernel, model);
-//
-//			return proxy;
-//		}
-//
-//		protected virtual void CustomizeProxy(object proxy, GeneratorContext context, 
-//		                                      IKernel kernel, ComponentModel model)
-//		{
-//		}
-//
-//		protected virtual void CustomizeContext(GeneratorContext context, IKernel kernel, 
-//		                                        ComponentModel model, object[] arguments)
-//		{
-//		}
-
 		protected Type[] CollectInterfaces(Type serviceInterface, Type implementation)
 		{
 			return implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), serviceInterface);
@@ -134,7 +84,9 @@ namespace Castle.Windsor.Proxy
 
 		private bool EmptyTypeFilter(Type type, object criteria)
 		{
-			return type != ((Type) criteria);
+			Type mainInterface = (Type) criteria;
+
+			return !type.IsAssignableFrom(mainInterface);
 		}
 
 		#region IDeserializationCallback
