@@ -237,6 +237,11 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 					AddBrailCommonConfiguration(webConfigDoc);
 				}
+				else if (optionsPanel.VeWebForms)
+				{
+					viewEngineElem.SetAttribute("customEngine",
+																			"Castle.MonoRail.Framework.Views.Aspx.WebFormsViewEngine, Castle.MonoRail.Framework");
+				}
 
 				mrNode.AppendChild(viewEngineElem);
 			}

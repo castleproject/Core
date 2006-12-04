@@ -1,0 +1,6 @@
+RC 3
+====
+
+- Applied patch by Andrew Peters fixing CASTLE-18
+  "PATCH: VS.NET Create MonoRail Project wizard fails 
+   to add viewEngine config node for WebForms"
