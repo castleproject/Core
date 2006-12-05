@@ -30,6 +30,7 @@ namespace Castle.Components.Binder
 	{
 		private readonly String name;
 		private readonly NodeType nodeType;
+		private Node parent;
 
 		protected Node(String name, NodeType nodeType)
 		{
@@ -45,6 +46,25 @@ namespace Castle.Components.Binder
 		public NodeType NodeType
 		{
 			get { return nodeType; }
+		}
+		
+		public String FullName
+		{
+			get
+			{
+				if (Parent != null)
+				{
+					return string.Format("{0}.{1}", Parent.FullName, Name);
+				}
+				
+				return Name;
+			}
+		}
+
+		public Node Parent
+		{
+			get { return parent; }
+			set { parent = value; }
 		}
 	}
 	
@@ -67,6 +87,7 @@ namespace Castle.Components.Binder
 			
 			name2Node[node.Name] = node;
 			nodeList.Add(node);
+			node.Parent = this;
 		}
 		
 		public Node GetChildNode(String name)

@@ -252,9 +252,11 @@ namespace Castle.Components.Binder
 			// TODO: Good candidate to cache:
 			PropertyInfo[] props = instanceType.GetProperties(PropertiesBindingFlags);
 
+			string nodeFullName = node.FullName;
+
 			foreach(PropertyInfo prop in props)
 			{
-				if (ShouldIgnoreProperty(prop)) continue;
+				if (ShouldIgnoreProperty(prop, nodeFullName)) continue;
 
 				Type propType = prop.PropertyType;
 				String paramName = prop.Name;
@@ -759,23 +761,25 @@ namespace Castle.Components.Binder
 		{
 			for(int i = 0; i < list.Length; i++)
 			{
-				list[i] = list[i].Trim();
+				list[i] = "root." + list[i].Trim();
 			}
 			Array.Sort(list, CaseInsensitiveComparer.Default);
 		}
 
-		private bool ShouldIgnoreProperty(PropertyInfo prop)
+		private bool ShouldIgnoreProperty(PropertyInfo prop, string nodeFullName)
 		{
 			bool allowed = true;
 			bool disallowed = false;
 
+			string propId = string.Format("{0}.{1}", nodeFullName, prop.Name);
+
 			if (allowedPropertyList != null)
 			{
-				allowed = Array.BinarySearch(allowedPropertyList, prop.Name, CaseInsensitiveComparer.Default) >= 0;
+				allowed = Array.BinarySearch(allowedPropertyList, propId, CaseInsensitiveComparer.Default) >= 0;
 			}
 			if (excludedPropertyList != null)
 			{
-				disallowed = Array.BinarySearch(excludedPropertyList, prop.Name, CaseInsensitiveComparer.Default) >= 0;
+				disallowed = Array.BinarySearch(excludedPropertyList, propId, CaseInsensitiveComparer.Default) >= 0;
 			}
 
 			return (!allowed) || (disallowed);

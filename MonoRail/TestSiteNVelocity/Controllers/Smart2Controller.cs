@@ -54,7 +54,7 @@ namespace TestSiteNVelocity.Controllers
 
 		public void ComplexBindExcludePrice()
 		{
-			Order order = (Order) BindObject(ParamStore.Params, typeof(Order), "order", "Price", null);
+			Order order = (Order) BindObject(ParamStore.Params, typeof(Order), "order", "order.Price", null);
 			Person person = (Person) BindObject(typeof(Person), "person");
 
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
@@ -62,7 +62,7 @@ namespace TestSiteNVelocity.Controllers
 
 		public void ComplexBindExcludeName()
 		{
-			Order order = (Order) BindObject(ParamStore.Params, typeof(Order), "order", "Name", null);
+			Order order = (Order) BindObject(ParamStore.Params, typeof(Order), "order", "order.Name", null);
 			Person person = (Person) BindObject(typeof(Person), "person");
 
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));

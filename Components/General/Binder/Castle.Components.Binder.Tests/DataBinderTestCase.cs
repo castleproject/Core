@@ -65,12 +65,54 @@ namespace Castle.Components.Binder.Tests
 			args.Add("person.name", "john");
 			args.Add("person.age", "30");
 			
-			object instance = binder.BindObject(typeof(Person), "person", "Name", null, builder.BuildSourceNode(args));
+			object instance = binder.BindObject(typeof(Person), "person", "person.Name", null, builder.BuildSourceNode(args));
 
+			AssertExcludingProperty(instance);
+
+			instance = binder.BindObject(typeof(Person), "person", null, "person.Age", builder.BuildSourceNode(args));
+
+			AssertExcludingProperty(instance);
+		}
+
+		private static void AssertExcludingProperty(object instance)
+		{
 			Assert.IsNotNull(instance);
-			Person person = (Person) instance;
+			Person person = (Person)instance;
 			Assert.IsNull(person.Name);
 			Assert.AreEqual(30, person.Age);
+		}
+
+		[Test]
+		public void ExcludingNestedObjectProperty()
+		{
+			string data = @"
+				cust.Name = John
+				cust.CustId = 1
+				cust.address.street = r p l
+				cust.address.number = 44
+			";
+
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+
+			object instance = binder.BindObject(typeof(Customer), "cust", "cust.address.street", null, builder.BuildSourceNode(args));
+
+			AssertExcludingNestedObjectProperty(instance);
+
+			instance = binder.BindObject(typeof(Customer), "cust", null, "cust.address, cust.address.number, cust.CustId, cust.Name", builder.BuildSourceNode(args));
+
+			AssertExcludingNestedObjectProperty(instance);
+		}
+
+		private static void AssertExcludingNestedObjectProperty(object instance)
+		{
+			Assert.IsNotNull(instance);
+			Customer cust = instance as Customer;
+			Assert.IsNotNull(cust);
+			Assert.IsTrue(cust.Name == "John");
+			Assert.AreEqual(1, cust.CustId);
+			Assert.IsNotNull(cust.Address);
+			Assert.IsNull(cust.Address.Street);
+			Assert.AreEqual(44, cust.Address.Number);
 		}
 
 		[Test]

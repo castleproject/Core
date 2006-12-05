@@ -59,12 +59,12 @@ namespace TestSiteNVelocity.Controllers
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void ComplexBindExcludePrice([DataBind("order", Exclude="Price")] Order order, [DataBind("person")] Person person)
+		public void ComplexBindExcludePrice([DataBind("order", Exclude="order.Price")] Order order, [DataBind("person")] Person person)
 		{
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void ComplexBindExcludeName([DataBind("order", Exclude="Name")] Order order, [DataBind("person")] Person person)
+		public void ComplexBindExcludeName([DataBind("order", Exclude="order.Name")] Order order, [DataBind("person")] Person person)
 		{
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}

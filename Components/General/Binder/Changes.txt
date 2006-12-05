@@ -1,11 +1,9 @@
-RC 3
+Beta 2
 ======
 
 - Resolved COMP-3: Add support for generic collections.
 
-
-Beta 2
-======
+- Fixed MR-164: Allow and Exclude property acts on all objects, in any depth.
 
 - Applied patch by Lee Henson fixing MR-179
   "Binder doesn't convert empty strings to null."
