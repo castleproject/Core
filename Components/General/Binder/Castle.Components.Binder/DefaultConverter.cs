@@ -15,6 +15,7 @@
 namespace Castle.Components.Binder
 {
 	using System;
+	using System.Collections;
 	using System.ComponentModel;
 	using System.Web;
 
@@ -104,10 +105,6 @@ namespace Castle.Components.Binder
 					
 					return conversionSucceeded ? input.ToString().Trim(' ') : null;
 				}
-//				else if (desiredType == typeof(int))
-//				{
-//					return ConvertInt32(input, ref conversionSucceeded);
-//				}
 				else if (desiredType.IsArray)
 				{
 					return conversionSucceeded ? 
@@ -137,6 +134,13 @@ namespace Castle.Components.Binder
 				{
 					return input;
 				}
+#if DOTNET2
+				else if (desiredType.IsGenericType && typeof(IList).IsAssignableFrom(desiredType))
+				{
+					return conversionSucceeded ? 
+					       ConvertGenericList(desiredType, input, ref conversionSucceeded) : null;
+				}
+#endif
 				else
 				{
 					return ConvertUsingTypeConverter(desiredType, input, ref conversionSucceeded);
@@ -152,6 +156,63 @@ namespace Castle.Components.Binder
 				
 				ThrowInformativeException(desiredType, input, inner); return null;
 			}
+		}
+
+#if DOTNET2		
+		private object ConvertGenericList(Type desiredType, object input, ref bool conversionSucceeded)
+		{
+			Type elemType = desiredType.GetGenericArguments()[0];
+
+			input = FixInputForMonoIfNeeded(elemType, input);
+
+			IList result = (IList) Activator.CreateInstance(desiredType);
+			Array values = input as Array;
+			
+			bool elementConversionSucceeded;
+
+			for (int i = 0; i < values.Length; i++)
+			{
+				result.Add(Convert(elemType, values.GetValue(i), out elementConversionSucceeded));
+
+				// if at least one list element get converted 
+				// we consider the conversion a success
+				if (elementConversionSucceeded && !conversionSucceeded) conversionSucceeded = true;
+			}
+
+			return result;
+		}
+#endif
+		
+		/// <summary>
+		/// Fix for mod_mono issue where array values are passed as a comma seperated String.
+		/// </summary>
+		/// <param name="elemType"></param>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		private static object FixInputForMonoIfNeeded(Type elemType, object input)
+		{
+			if (!input.GetType().IsArray)
+			{
+				if (input.GetType() == typeof(String))
+				{
+					input = NormalizeInput(input);
+
+					if (input.ToString() == String.Empty)
+					{
+						input = Array.CreateInstance(elemType, 0);
+					}
+					else
+					{
+						input = input.ToString().Split(',');
+					}
+				}
+				else
+				{
+					throw new BindingException("Cannot convert to collection of {0} from type {1}", elemType.FullName, input.GetType().FullName);
+				}
+			}
+			
+			return input;
 		}
 
 		private object ConvertGuid(object input, ref bool conversionSucceeded)
@@ -284,28 +345,7 @@ namespace Castle.Components.Binder
 		{
 			Type elemType = desiredType.GetElementType();
 
-			// Fix for mod_mono issue where array values are passed 
-			// as a comma seperated String
-			if (!input.GetType().IsArray)
-			{
-				if (input.GetType() == typeof(String))
-				{
-					input = NormalizeInput(input);
-
-					if (input.ToString() == String.Empty)
-					{
-						input = Array.CreateInstance(elemType, 0);
-					}
-					else
-					{
-						input = input.ToString().Split(',');
-					}
-				}
-				else
-				{
-					throw new BindingException("Cannot convert to array type {0} from type {1}", elemType.FullName, input.GetType().FullName);
-				}
-			}
+			input = FixInputForMonoIfNeeded(elemType, input);
 
 			Array values = input as Array;
 			Array result = Array.CreateInstance(elemType, values.Length);

@@ -15,6 +15,9 @@
 namespace Castle.Components.Binder.Tests
 {
 	using System;
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 	using System.Globalization;
 	using System.Threading;
 	
@@ -256,6 +259,33 @@ namespace Castle.Components.Binder.Tests
 			{
 			}
 		}
+
+#if DOTNET2
+		[Test]
+		public void GenericListConvert()
+		{
+			Type desiredType = typeof(System.Collections.Generic.List<int>);
+
+			List<int> result;
+			
+			result = Convert(desiredType, "1,2,3") as List<int>;
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(3, result.Count);
+			Assert.AreEqual(1, result[0]);
+			Assert.AreEqual(2, result[1]);
+			Assert.AreEqual(3, result[2]);
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(null, Convert(desiredType, null));
+			Assert.IsFalse(convSucceed);
+
+			result = Convert(desiredType, "") as List<int>;
+			Assert.IsNotNull(result);
+			Assert.AreEqual(0, result.Count);
+			Assert.IsTrue(convSucceed);		
+		}
+#endif
 
 		private object Convert(Type desiredType, string input)
 		{

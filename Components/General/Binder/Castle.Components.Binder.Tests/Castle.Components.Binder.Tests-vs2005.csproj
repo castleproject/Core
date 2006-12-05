@@ -109,6 +109,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ConverterTestCase.cs" />
     <Compile Include="DataBinderArrayTestCase.cs" />
+    <Compile Include="DataBinderGenericListTestCase.cs" />
     <Compile Include="DataBinderSingleValueTestCase.cs" />
     <Compile Include="DataBinderTestCase.cs">
       <SubType>Code</SubType>

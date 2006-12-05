@@ -1,3 +1,9 @@
+RC 3
+======
+
+- Resolved COMP-3: Add support for generic collections.
+
+
 Beta 2
 ======
 
