@@ -190,6 +190,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// Represents the sliced data and offers
 	/// a few read only properties to create a pagination bar.
 	/// </summary>
+	[Serializable]
 	public class Page : AbstractPage
 	{
 		private readonly IList slice = new ArrayList();
@@ -274,6 +275,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// which performs the standard calculations on 
 	/// <see cref="CalculatePaginationInfo"/>
 	/// </summary>
+	[Serializable]
 	public abstract class AbstractPage : IPaginatedPage
 	{
 		private int firstItem, lastItem, totalItems, pageSize;
