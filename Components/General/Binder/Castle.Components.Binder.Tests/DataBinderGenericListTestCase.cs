@@ -117,6 +117,33 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual("st1", cust.Addresses[0].Street);
 			Assert.AreEqual("st2", cust.Addresses[1].Street);
 		}
+
+		[Test]
+		public void IListBind()
+		{
+			string data = @"
+				cust.years = 2006
+				cust.years = 2007
+				cust.years = 2008
+				cust.years = 2009
+			";
+
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+
+			object instance = binder.BindObject(typeof(Customer2), "cust", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			Customer2 cust = instance as Customer2;
+			Assert.IsNotNull(cust);
+
+			Assert.IsNotNull(cust.Years);
+			Assert.AreEqual(4, cust.Years.Count);
+
+			Assert.AreEqual(2006, cust.Years[0]);
+			Assert.AreEqual(2007, cust.Years[1]);
+			Assert.AreEqual(2008, cust.Years[2]);
+			Assert.AreEqual(2009, cust.Years[3]);
+		}
 	}
 
 	class Customer2
@@ -124,6 +151,8 @@ namespace Castle.Components.Binder.Tests
 		private List<Address> addresses;
 
 		private List<int> months;
+
+		private List<int> years;
 
 		public List<Address> Addresses
 		{
@@ -135,6 +164,12 @@ namespace Castle.Components.Binder.Tests
 		{
 			get { return months; }
 			set { months = value; }
+		}
+
+		public IList<int> Years
+		{
+			get { return years; }
+			set { years = new List<int>(value); }
 		}
 	}
 	

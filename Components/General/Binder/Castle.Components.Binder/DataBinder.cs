@@ -343,9 +343,25 @@ namespace Castle.Components.Binder
 		
 #if DOTNET2
 		
-		private bool IsGenericList(Type instanceType)
+		internal static bool IsGenericList(Type instanceType)
 		{
-			return instanceType.IsGenericType && typeof(IList).IsAssignableFrom(instanceType);
+			if (!instanceType.IsGenericType )
+			{
+				return false;
+			}
+			if (typeof(IList).IsAssignableFrom(instanceType))
+			{
+				return true;
+			}
+
+			Type[] genericArgs = instanceType.GetGenericArguments();
+			
+			if (genericArgs.Length == 0)
+			{
+				return false;
+			}
+			Type listType = typeof(System.Collections.Generic.IList<>).MakeGenericType(genericArgs[0]);
+			return listType.IsAssignableFrom(instanceType);
 		}
 		
 		private object InternalBindGenericList(Type instanceType, string paramPrefix, Node node, out bool succeeded)
@@ -397,7 +413,15 @@ namespace Castle.Components.Binder
 
 		protected virtual bool ShouldIgnoreType(Type instanceType)
 		{
+#if DOTNET2
+			if (!instanceType.IsGenericType)
+			{
+				return instanceType.IsAbstract;
+			}
+			return instanceType.IsInterface && !IsGenericList(instanceType);
+#else
 			return instanceType.IsAbstract || instanceType.IsInterface;
+#endif
 		}
 
 		protected virtual bool PerformCustomBinding(object instance, string prefix, Node node)

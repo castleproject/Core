@@ -135,7 +135,7 @@ namespace Castle.Components.Binder
 					return input;
 				}
 #if DOTNET2
-				else if (desiredType.IsGenericType && typeof(IList).IsAssignableFrom(desiredType))
+				else if (DataBinder.IsGenericList(desiredType))
 				{
 					return conversionSucceeded ? 
 					       ConvertGenericList(desiredType, input, ref conversionSucceeded) : null;
@@ -165,7 +165,8 @@ namespace Castle.Components.Binder
 
 			input = FixInputForMonoIfNeeded(elemType, input);
 
-			IList result = (IList) Activator.CreateInstance(desiredType);
+			Type listType = typeof(System.Collections.Generic.List<>).MakeGenericType(elemType);
+			IList result = (IList) Activator.CreateInstance(listType);
 			Array values = input as Array;
 			
 			bool elementConversionSucceeded;
