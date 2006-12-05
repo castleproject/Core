@@ -9,11 +9,9 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<loadtasks assembly="${root.dir}/${lib.framework.dir}/Boo.NAnt.Tasks.dll" />
-
+		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
 		<fileset id="project.sources">
-			<include name="${src.dir}/**.boo" />
-			<exclude name="Views/**.boo" />
+			<include name="${src.dir}/**.cs" />
 		</fileset>
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
@@ -39,20 +37,9 @@
 		<mkdir dir="${bin.dir}" />
 	</target>
 
-	<target name="generate-assemblyinfo" depends="init" />
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
 	
-	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo, common.copy-references">
-		<booc
-			target="library" 
-			debug="${build.debug}" 
-			output="${bin.dir}\${project::get-name()}.dll" 
-			rebuild="${build.rebuild}"
-		>
+	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo common.compile-website"/>
 
-			<sources refid="project.sources" />
-			<references refid="project.references" />
-			<resources refid="project.resources" />
-		</booc>
-	</target>
 
 </project>

@@ -1,65 +1,27 @@
-<?xml version="1.0"?>
-<project
-	name="Castle.MonoRail.Views.Brail.Tests"
-	default="test"
+<?xml version="1.0" ?>
+
+<project 
+	name="Castle.MonoRail.Views.Brail.Tests" 
+	default="test" 
 	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
 
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />
+
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="1.0.0.0" />
-		<property name="assembly.description" value="" />
-
-		<property name="booviewengine.test" value="true" overwrite="false" />
-		<property name="common.run-tests" value="${booviewengine.test}" />
-
-		<loadtasks assembly="${root.dir}/${lib.framework.dir}/Boo.NAnt.Tasks.dll" verbose="true" />
-
-		<fileset id="project.sources">
-			<include name="${src.dir}/**/*.boo" />
-			<exclude name="Views/**.boo" />
-		</fileset>
-
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
-			<include name="Castle.MonoRail.Views.Brail.dll" />
-			<include name="Castle.Core.dll"/>
-			<include name="Castle.MonoRail.TestSupport.dll"/>
-			<include name="Castle.MonoRail.Framework.Dll"/>
-			<include name="Castle.MonoRail.Framework.Tests.Dll"/>
+			<include name="Castle.Core.dll" />
+			<include name="${root.dir}/MonoRail/TestSiteBrail/Bin/TestSiteBrail.dll" />
+			<include name="Castle.MonoRail.TestSupport.dll" />
+			<include name="Castle.MonoRail.Framework.dll" />
+			<include name="Castle.MonoRail.Framework.Tests.dll" />
 		</assemblyfileset>
-
-		<resourcefileset id="project.resources" basedir="${src.dir}\Resources">
-			<include name="**.resources"/>
-			<exclude name="obj/**" />
-		</resourcefileset>
 	</target>
 
-	<target name="generate-assemblyinfo" />
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
 
-	<target name="compile-tests">
-		<booc
-			target="library" 
-			debug="${build.debug}" 
-			output="${build.dir}\${project::get-name()}.dll" 
-			rebuild="${build.rebuild}"
-		>
-
-			<sources refid="project.sources" />
-			<references refid="project.references" />
-			<resources refid="project.resources" />
-		</booc>
-		<if test="${file::exists(path::combine(src.dir, 'App.config'))}">
-			<copy 
-				file="${src.dir}/App.config"
-				tofile="${build.dir}/${project::get-name()}.dll.config"
-			/>
-
-			<call target="common.configure-tests" />
-		</if>
-	</target>
-
-	<target name="test" depends="init compile-tests common.run-tests" description="Runs the tests" />
+	<target name="test" depends="init generate-assemblyinfo common.compile-tests common.run-tests" description="Runs the tests" />
 
 </project>
