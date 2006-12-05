@@ -30,6 +30,8 @@ namespace Castle.Facilities.FactorySupport
 
 		private void Kernel_ComponentModelCreated(ComponentModel model)
 		{
+			if (model.Configuration == null) return;
+			
 			String instanceAccessor = model.Configuration.Attributes["instance-accessor"];
 			String factoryId = model.Configuration.Attributes["factoryId"];
 			String factoryCreate = model.Configuration.Attributes["factoryCreate"];
