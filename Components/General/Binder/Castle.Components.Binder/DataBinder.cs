@@ -413,15 +413,14 @@ namespace Castle.Components.Binder
 
 		protected virtual bool ShouldIgnoreType(Type instanceType)
 		{
+			bool ignore = instanceType.IsAbstract || instanceType.IsInterface;
 #if DOTNET2
-			if (!instanceType.IsGenericType)
+			if (ignore && instanceType.IsGenericType)
 			{
-				return instanceType.IsAbstract;
+				ignore = !IsGenericList(instanceType);
 			}
-			return instanceType.IsInterface && !IsGenericList(instanceType);
-#else
-			return instanceType.IsAbstract || instanceType.IsInterface;
 #endif
+			return ignore;
 		}
 
 		protected virtual bool PerformCustomBinding(object instance, string prefix, Node node)
