@@ -1,6 +1,11 @@
 Change history
 --------------
 
+Beta 3
+======
+-  Applied (with added test) patch from Ernst Naezer, fixing FACILITIES-66 ('fix null ref exception when no assemblies entry in the
+   config was found').
+
 Beta 2
 ====== 
 
