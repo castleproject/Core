@@ -24,12 +24,12 @@ namespace AspectSharp.Core.Dispatcher
 	public class InvocationComposite : IMutableMethodInvocation
 	{
 		private IMethodInterceptor[] _interceptors;
-		private Castle.DynamicProxy.IInvocation _innerInvocation;
+		private Castle.Core.Interceptor.IInvocation _innerInvocation;
 		private object[] _arguments;
 		private int _currentIndex;
 
 		public InvocationComposite(IMethodInterceptor[] interceptors,
-		                           Castle.DynamicProxy.IInvocation innerInvocation, object[] arguments)
+								   Castle.Core.Interceptor.IInvocation innerInvocation, object[] arguments)
 		{
 			_interceptors = interceptors;
 			_innerInvocation = innerInvocation;
@@ -71,7 +71,8 @@ namespace AspectSharp.Core.Dispatcher
 			}
 			else
 			{
-				retVal = _innerInvocation.Proceed(_arguments);
+				_innerInvocation.Proceed();
+				retVal = _innerInvocation.ReturnValue;
 			}
 
 			return retVal;

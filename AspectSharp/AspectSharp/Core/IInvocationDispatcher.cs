@@ -14,8 +14,7 @@
 
 namespace AspectSharp.Core
 {
-	using System;
-	using Castle.DynamicProxy;
+	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Summary description for IInvocationDispatcher.

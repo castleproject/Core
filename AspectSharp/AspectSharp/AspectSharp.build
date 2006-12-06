@@ -19,7 +19,8 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="antlr.runtime.dll"  />
 			<include name="AopAlliance.dll"  />
-			<include name="Castle.DynamicProxy.dll"  />
+			<include name="Castle.Core.dll"  />
+			<include name="Castle.DynamicProxy2.dll"  />
 			<include name="AspectSharp.Lang.dll" />
 		</assemblyfileset>
 	</target>

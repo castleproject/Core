@@ -16,6 +16,7 @@ namespace AspectSharp.Core
 {
 	using System;
 	using Castle.DynamicProxy;
+	using IInterceptor=Castle.Core.Interceptor.IInterceptor;
 
 	/// <summary>
 	/// Generates a dynamic proxy. This overrides the .Net proxy requirements 
@@ -46,8 +47,8 @@ namespace AspectSharp.Core
 		/// <returns>Proxy Instance.</returns>
 		public object CreateProxy(Type inter, object target, object[] mixins, IInterceptor interceptor)
 		{
-			GeneratorContext context = CreateGeneratorContext(mixins);
-			return base.CreateCustomProxy(inter, interceptor, target, context);
+			ProxyGenerationOptions options = CreateProxyGenerationOptions(mixins);
+			return CreateInterfaceProxyWithTarget(inter, target, options, interceptor);
 		}
 
 		/// <summary>
@@ -62,8 +63,8 @@ namespace AspectSharp.Core
 		public object CreateClassProxy(Type baseClass, object[] mixins, IInterceptor interceptor,
 			params object[] constructorArgs)
 		{
-			GeneratorContext context = CreateGeneratorContext(mixins);
-			return base.CreateCustomClassProxy(baseClass, interceptor, context, constructorArgs);
+			ProxyGenerationOptions options = CreateProxyGenerationOptions(mixins);
+			return CreateClassProxy(baseClass, null, options, constructorArgs, interceptor);
 		}
 
 		/// <summary>
@@ -72,14 +73,14 @@ namespace AspectSharp.Core
 		/// </summary>
 		/// <param name="mixins">Array of mixins to be registered</param>
 		/// <returns>A GeneratorContext instance</returns>
-		protected GeneratorContext CreateGeneratorContext(object[] mixins)
+		private static ProxyGenerationOptions CreateProxyGenerationOptions(object[] mixins)
 		{
-			GeneratorContext context = new GeneratorContext();
+			ProxyGenerationOptions options = new ProxyGenerationOptions();
 			foreach (object mixin in mixins)
 			{
-				context.AddMixinInstance(mixin);
+				options.AddMixinInstance(mixin);
 			}
-			return context;
+			return options;
 		}
 	}
 }
