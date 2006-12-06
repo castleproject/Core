@@ -57,15 +57,17 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				throw new FacilityException("Sorry, but the ActiveRecord Facility depends on a proper configuration node.");
 			}
 
-			ConfigurationCollection assembliyConfigNodes = FacilityConfig.Children["assemblies"].Children;
+			IConfiguration assemblyConfig = FacilityConfig.Children["assemblies"];
 
-			if (assembliyConfigNodes.Count == 0)
+			if (assemblyConfig == null || assemblyConfig.Children.Count == 0)
 			{
 				log.FatalError("No assembly specified on AR Facility config.");
 
 				throw new FacilityException("You need to specify at least one assembly that contains " +
 					"the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
 			}
+
+			ConfigurationCollection assembliyConfigNodes = assemblyConfig.Children;
 
 			ArrayList assemblies = new ArrayList(assembliyConfigNodes.Count);
 
