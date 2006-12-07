@@ -33,7 +33,7 @@ namespace Castle.Facilities.AspectSharp
 	/// </summary>
 	public class AopProxyFactory : DefaultProxyFactory
 	{
-		protected override void CustomizeContext(GeneratorContext context, IKernel kernel, 
+		protected override void CustomizeOptions(ProxyGenerationOptions context, IKernel kernel, 
 			ComponentModel model, object[] arguments)
 		{
 			AspectDefinition aspect = (AspectDefinition) model.ExtendedProperties["aop.aspect"];
@@ -57,7 +57,7 @@ namespace Castle.Facilities.AspectSharp
 			}
 		}
 
-		protected override void CustomizeProxy(object proxy, GeneratorContext context, IKernel kernel, ComponentModel model)
+		protected override void CustomizeProxy(object proxy, ProxyGenerationOptions context, IKernel kernel, ComponentModel model)
 		{
 			object[] mixins = context.MixinsAsArray();
 

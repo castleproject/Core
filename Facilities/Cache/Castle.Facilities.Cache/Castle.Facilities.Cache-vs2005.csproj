@@ -1,16 +1,16 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0C9EE31D-A700-485B-948A-68E4A3614E71}</ProjectGuid>
+    <ProjectGuid>{BECD2438-F285-480D-919E-D295752D92A1}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Castle.Facilities.IBatisNetIntegration.Tests</AssemblyName>
+    <AssemblyName>Castle.Facilities.Cache</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -18,7 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>Castle.Facilities.IBatisNetIntegration.Tests</RootNamespace>
+    <RootNamespace>Castle.Facilities.Cache</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -28,20 +28,18 @@
     </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>Castle.Facilities.Cache.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>1591</NoWarn>
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -58,13 +56,11 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DOTNET2</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>Castle.Facilities.Cache.xml</DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>1591</NoWarn>
     <Optimize>true</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -78,37 +74,13 @@
       <Name>Castle.Core</Name>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.DynamicProxy2, Version=2.0.0.1, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.DynamicProxy2.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Facilities.AutomaticTransactionManagement">
-      <Name>Castle.Facilities.AutomaticTransactionManagement</Name>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.Facilities.AutomaticTransactionManagement.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.MicroKernel">
       <Name>Castle.MicroKernel</Name>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Transaction">
-      <Name>Castle.Services.Transaction</Name>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.Services.Transaction.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Windsor">
       <Name>Castle.Windsor</Name>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
-    </Reference>
-    <Reference Include="IBatisNet.Common, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\IBatisNet.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="IBatisNet.DataMapper, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\net-2.0\debug\IBatisNet.DataMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <Name>nunit.framework</Name>
-      <HintPath>..\..\..\build\net-2.0\debug\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -120,52 +92,39 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Castle.Facilities.IBatisNetIntegration\Castle.Facilities.IBatisNetIntegration-vs2005.csproj">
-      <Name>Castle.Facilities.IBatisNetIntegration</Name>
-      <Project>{5CE5406D-92AB-45ED-A4C9-921745E38BE1}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractIBatisNetTestCase.cs">
+    <Compile Include="CacheAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseTest.cs">
+    <Compile Include="CacheComponentInspector.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConfigHelper.cs" />
-    <Compile Include="DaoTestCase.cs">
+    <Compile Include="CacheConfig.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Dao\AccountDao.cs">
+    <Compile Include="CacheConfigHolder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Dao\IAccountDao.cs">
+    <Compile Include="CacheFacility.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Domain\Account.cs">
+    <Compile Include="CacheInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IBatisFacilityTestCase.cs">
+    <Compile Include="Manager\DefaultCacheKeyGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IService.cs">
+    <Compile Include="Manager\ICacheKeyGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Service.cs">
+    <Compile Include="Manager\ICacheManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ServiceTestCase.cs">
+    <Compile Include="Manager\MemoryCacheManager.cs">
       <SubType>Code</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <EmbeddedResource Include="providers.config" />
-    <None Include="SqlMap.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Maps\Access\OleDb\Account.xml" />
+    <Content Include="ToDo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

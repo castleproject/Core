@@ -53,11 +53,13 @@ namespace Castle.Windsor.Proxy
 
 			object proxy;
 
+			ProxyGenerationOptions options = new ProxyGenerationOptions();
+
 			if (model.Service.IsInterface)
 			{
-				ProxyGenerationOptions options = new ProxyGenerationOptions();
-
 				options.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
+
+				CustomizeOptions(options, kernel, model, constructorArguments);
 				
 				proxy = generator.CreateInterfaceProxyWithTarget(model.Service,
 																 CollectInterfaces(model.Service, model.Implementation), 
@@ -68,10 +70,21 @@ namespace Castle.Windsor.Proxy
 				proxy = generator.CreateClassProxy(model.Implementation, 
 				                                   interceptors, constructorArguments);
 			}
+			CustomizeProxy(proxy, options, kernel, model);
 
 			return proxy;
 		}
 
+		protected virtual void CustomizeProxy(object proxy, ProxyGenerationOptions options, 
+		                                      IKernel kernel, ComponentModel model)
+		{
+		}
+
+		protected virtual void CustomizeOptions(ProxyGenerationOptions options, IKernel kernel, 
+		                                        ComponentModel model, object[] arguments)
+		{
+		}
+		
 		public override bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
 		{
 			return model.Service.IsInterface;

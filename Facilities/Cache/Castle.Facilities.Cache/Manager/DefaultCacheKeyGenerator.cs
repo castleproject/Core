@@ -27,15 +27,15 @@ namespace Castle.Facilities.Cache.Manager
 		/// Generates the key for a cache entry.
 		/// </summary>
 		/// <param name="invocation">the description of an invocation to the intercepted method.</param>
-		/// <param name="arguments">the arguments of the invocation</param>
 		/// <returns>the key for a cache entry.</returns>
-		public string GenerateKey(IMethodInvocation invocation, object[] arguments)
+		public string GenerateKey(IInvocation invocation)
 		{
 			StringBuilder cacheKey = new StringBuilder();
 			cacheKey.Append(invocation.InvocationTarget.ToString());
 			cacheKey.Append(".");
 			cacheKey.Append(invocation.Method.Name);
 
+			object[] arguments = invocation.Arguments;
 			if ((arguments != null) && (arguments.Length != 0)) 
 			{
 				for (int i=0; i<arguments.Length; i++) 

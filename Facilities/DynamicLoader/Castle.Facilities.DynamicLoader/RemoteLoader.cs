@@ -161,7 +161,7 @@ namespace Castle.Facilities.DynamicLoader
 			{
 				try
 				{
-					instance = Kernel.ProxyFactory.Create(Kernel, model, arguments);
+					instance = Kernel.ProxyFactory.Create(Kernel, null, model, arguments);
 				}
 				catch (Exception ex)
 				{

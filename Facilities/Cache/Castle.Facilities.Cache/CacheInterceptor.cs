@@ -22,7 +22,7 @@ namespace Castle.Facilities.Cache
 	/// <summary>
 	/// Caches the return value of the intercepted method.
 	/// </summary>
-	public class CacheInterceptor : IMethodInterceptor
+	public class CacheInterceptor : IInterceptor
 	{
 		public static readonly object NULL_OBJECT = new Object(); 
 
@@ -40,22 +40,22 @@ namespace Castle.Facilities.Cache
 		/// value is saved in the cached and returned by this method.
 		/// </summary>
 		/// <param name="invocation">the description of the intercepted method.</param>
-		/// <param name="args">the arguments of the intercepted method.</param>
 		/// <returns>the object stored in the cache.</returns>
-		public object Intercept(IMethodInvocation invocation, params object[] args)
+		public void Intercept(IInvocation invocation)
 		{
-			CacheConfig config = _cacheConfigHolder.GetConfig( invocation.Method.DeclaringType );
+			CacheConfig config = _cacheConfigHolder.GetConfig( invocation.MethodInvocationTarget.DeclaringType );
 
-			if (config != null && config.IsMethodCache( invocation.Method ))
+			if (config != null && config.IsMethodCache( invocation.MethodInvocationTarget ))
 			{
-				ICacheManager cacheManager = config.GetCacheManager( invocation.Method );
-				String cacheKey = cacheManager.CacheKeyGenerator.GenerateKey( invocation, args );
+				ICacheManager cacheManager = config.GetCacheManager(invocation.MethodInvocationTarget);
+				String cacheKey = cacheManager.CacheKeyGenerator.GenerateKey( invocation );
 				object result = cacheManager[ cacheKey ];
 
 				if (result == null)
 				{
 					//call target/sub-interceptor
-					result = invocation.Proceed(args);
+					invocation.Proceed();
+					result = invocation.ReturnValue;
 
 					//cache method result
 					if (result == null)
@@ -71,13 +71,12 @@ namespace Castle.Facilities.Cache
 				{ 
 					// convert the marker object back into a null value 
 					result = null; 
-				} 
-
-				return result;
+				}
+				invocation.ReturnValue = result;
 			}
 			else
 			{
-				return invocation.Proceed(args);
+				invocation.Proceed();
 			}
 		}
 	}

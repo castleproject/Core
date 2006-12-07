@@ -34,7 +34,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 	using IBatisNet.DataMapper;
 	using Transaction = Services.Transaction.ITransaction;
 
-	public class AutomaticSessionInterceptor : IMethodInterceptor
+	public class AutomaticSessionInterceptor : IInterceptor
 	{
 		private IKernel _kernel = null;
 		private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -44,13 +44,14 @@ namespace Castle.Facilities.IBatisNetIntegration
 			_kernel = kernel;
 		}
 
-		public object Intercept(IMethodInvocation invocation, params object[] args)
+		public void Intercept(IInvocation invocation)
 		{
 			MethodInfo info = invocation.MethodInvocationTarget;
 
 			if (info.IsDefined(typeof (NoSessionAttribute), true))
 			{
-				return invocation.Proceed(args);
+				invocation.Proceed();
+				return;
 			}
 
 			String key = ObtainSqlMapKeyFor(info);
@@ -59,7 +60,8 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 			if (sqlMap.IsSessionStarted)
 			{
-				return invocation.Proceed(args);
+				invocation.Proceed();
+				return;
 			}
 
 			if (_logger.IsDebugEnabled)
@@ -71,12 +73,14 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 			if (EnlistSessionIfHasTransactionActive(key, sqlMap))
 			{
-				return invocation.Proceed(args);
+				invocation.Proceed();
+				return;
 			}
 
 			try
 			{
-				return invocation.Proceed(args);
+				invocation.Proceed();
+				return;
 			}
 			finally
 			{
