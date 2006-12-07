@@ -3,6 +3,9 @@ Change history
 
 Beta 3
 ======
+
+- Changed to use new Windsor/DynamicProxy 2
+
 -  Applied (with added test) patch from Ernst Naezer, fixing FACILITIES-66 ('fix null ref exception when no assemblies entry in the
    config was found').
 

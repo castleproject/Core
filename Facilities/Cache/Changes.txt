@@ -1,5 +1,4 @@
+Change history
+--------------
 
-Alpha Version 1.0.0
-- First release
-
-Future modifications - after the first release - shall be tracked in this file
+- Changed to use new Windsor/DynamicProxy 2
