@@ -135,12 +135,9 @@
     <Content Include="default.htm" />
     <Content Include="global.asax" />
     <Content Include="views\cookies\index.aspx" />
-    <Content Include="views\home\bag.aspx" />
-    <Content Include="views\home\bag2.aspx" />
-    <Content Include="views\home\display.aspx" />
-    <Content Include="views\home\heyhello.aspx" />
     <Content Include="views\home\index.aspx" />
-    <Content Include="views\home\list.aspx" />
+    <None Include="views\home\ComponentOnLayout.vm" />
+    <None Include="views\home\ComponentTest.vm" />
     <None Include="web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

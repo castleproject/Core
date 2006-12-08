@@ -102,6 +102,7 @@
     <Compile Include="Controllers\CookiesController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\PostBackController.cs" />
     <Compile Include="Controllers\Exception.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -154,6 +155,14 @@
       <DependentUpon>helpme.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="views\postback\customargs.aspx.cs">
+      <DependentUpon>customargs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="views\postback\hello.aspx.cs">
+      <DependentUpon>hello.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="views\registration\actionto.aspx.cs">
       <DependentUpon>actionto.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -186,13 +195,18 @@
     <Content Include="views\layoutable\index.aspx" />
     <Content Include="views\layouts\master.aspx" />
     <Content Include="views\layouts\master2.aspx" />
+    <Content Include="views\postback\customargs.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="views\postback\hello.aspx" />
+    <Content Include="views\postback\index.aspx" />
     <Content Include="views\registration\actionto.aspx">
       <SubType>Form</SubType>
     </Content>
     <Content Include="views\registration\index.aspx" />
     <Content Include="views\registration\list.aspx" />
     <Content Include="views\registration\postback.aspx">
-      <SubType>Form</SubType>
+      <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Content Include="views\registration\success.aspx" />
     <Content Include="views\rescues\general.aspx" />
@@ -210,6 +224,14 @@
     <EmbeddedResource Include="Resources\Language.resx" />
     <EmbeddedResource Include="views\helper\helpme.aspx.resx">
       <DependentUpon>helpme.aspx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\postback\customargs.aspx.resx">
+      <DependentUpon>customargs.aspx.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\postback\hello.aspx.resx">
+      <DependentUpon>hello.aspx.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="views\registration\actionto.aspx.resx">
       <DependentUpon>actionto.aspx.cs</DependentUpon>

@@ -15,6 +15,7 @@
 namespace Castle.Components.Binder.Tests
 {
 	using System;
+	using System.Collections;
 #if DOTNET2
 	using System.Collections.Generic;
 #endif
@@ -260,6 +261,14 @@ namespace Castle.Components.Binder.Tests
 			}
 		}
 
+		[Test]
+		public void InstanceOfConvert()
+		{
+			ArrayList col = new ArrayList();
+			Assert.AreEqual(col, converter.Convert(typeof(ICollection), col, out convSucceed));
+			Assert.IsTrue(convSucceed);
+		}
+		
 #if DOTNET2
 		[Test]
 		public void GenericListConvert()

@@ -1,6 +1,8 @@
 Beta 2
 ======
 
+- Updated to check argument inheritance for conversions.
+
 - Resolved COMP-3: Add support for generic collections.
 
 - Fixed MR-164: Allow and Exclude property acts on all objects, in any depth.

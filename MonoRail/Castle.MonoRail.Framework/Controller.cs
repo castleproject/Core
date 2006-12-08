@@ -83,6 +83,11 @@ namespace Castle.MonoRail.Framework
 		private String _evaluatedAction;
 
 		/// <summary>
+		/// True if any Controller.Send operation was called.
+		/// </summary>
+		private bool _resetIsPostBack;
+		
+		/// <summary>
 		/// The helper instances collected
 		/// </summary>
 		internal IDictionary helpers = null;
@@ -357,15 +362,18 @@ namespace Castle.MonoRail.Framework
 		}
 
  		/// <summary>
-		/// Determines if the current Action resulted from an ASP.NET PostBack.
-		/// As a result, this property is only relavent when using WebForms views.
-		/// It is placed on the base Controller for convenience only to avoid the
-		/// need to extend the Controller or provide additional helper classes.
+		/// Indicates that the current Action resulted from an ASP.NET PostBack.
+		/// As a result, this property is only relavent to controllers using 
+		/// WebForms views.  It is placed on the base Controller for convenience 
+		/// only to avoid the need to extend the Controller or provide additional 
+		/// helper classes.
 		/// </summary>
 		protected bool IsPostBack
 		{
 			get
 			{
+				if (_resetIsPostBack) return false;
+				
 				NameValueCollection fields = Context.Params;
 				return (fields["__VIEWSTATE"] != null) || (fields["__EVENTTARGET"] != null);
 			}
@@ -848,6 +856,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">Action name</param>
 		public void Send(String action)
 		{
+			ResetIsPostback();
 			InternalSend(action, null);
 		}
 
@@ -856,8 +865,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="action">Action name</param>
 		/// <param name="actionArgs">Action arguments</param>
-		public void Send(String action, params object[] actionArgs)
+		public void Send(String action, IDictionary actionArgs)
 		{
+			ResetIsPostback();
 			InternalSend(action, actionArgs);
 		}
 	    
@@ -873,7 +883,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="action">Action name</param>
 		/// <param name="actionArgs">Action arguments</param>
-		protected virtual void InternalSend(String action, object[] actionArgs)
+		protected virtual void InternalSend(String action, IDictionary actionArgs)
 		{
 			// If a redirect was sent there's no point in
 			// wasting processor cycles
@@ -893,10 +903,12 @@ namespace Castle.MonoRail.Framework
 			IControllerLifecycleExecutor executor =
 				(IControllerLifecycleExecutor) context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
 
-			if (executor.SelectAction(action, Name))
+			if (!executor.SelectAction(action, Name, actionArgs))
 			{
 				executor.PerformErrorHandling();
 
+				executor.Dispose();
+				
 				return;
 			}
 			
@@ -926,6 +938,17 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		/// <summary>
+		/// To preserve standard Action semantics when using ASP.NET Views,
+		/// the event handlers in the CodeBehind typically call <see cref="Send(String)"/>.
+		/// As a result, the <see cref="IsPostBack"/> property must be logically 
+		/// cleared to allow the Action to behave as if it was called directly.
+		/// </summary>
+		private void ResetIsPostback()
+		{
+			_resetIsPostBack = true;	
+		}
+		
 		#endregion
 
 		#region Action Invocation
@@ -939,7 +962,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actionArgs"></param>
 		/// <returns></returns>
 		protected internal virtual MethodInfo SelectMethod(String action, IDictionary actions, 
-		                                          IRequest request, params object[] actionArgs)
+		                                          IRequest request, IDictionary actionArgs)
 		{
 			return actions[action] as MethodInfo;
 		}
@@ -949,7 +972,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="method"></param>
 		/// <param name="methodArgs"></param>
-		protected internal virtual void InvokeMethod(MethodInfo method, object[] methodArgs)
+		protected internal virtual void InvokeMethod(MethodInfo method, IDictionary methodArgs)
 		{
 			InvokeMethod(method, context.Request, methodArgs);
 		}
@@ -960,7 +983,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="method"></param>
 		/// <param name="request"></param>
 		/// <param name="methodArgs"></param>
-		protected internal virtual void InvokeMethod(MethodInfo method, IRequest request, object[] methodArgs)
+		protected internal virtual void InvokeMethod(MethodInfo method, IRequest request, IDictionary methodArgs)
 		{
  			method.Invoke(this, new object[0]);
 		}

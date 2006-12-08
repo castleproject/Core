@@ -66,12 +66,6 @@ namespace Castle.Components.Binder
 				}
 			}
 			
-			if (desiredType == inputType) // Not conversion required
-			{
-				conversionSucceeded = true;
-				return input;
-			}
-			
 			return Convert(desiredType, input, out conversionSucceeded);
 		}
 		
@@ -96,7 +90,11 @@ namespace Castle.Components.Binder
 			{
 				conversionSucceeded = (input != null);
 
-				if (desiredType == typeof(String))
+				if (desiredType.IsInstanceOfType(input))
+				{
+					return input;
+				}
+				else if (desiredType == typeof(String))
 				{
 					if (conversionSucceeded && ((String) input) == String.Empty)
 					{

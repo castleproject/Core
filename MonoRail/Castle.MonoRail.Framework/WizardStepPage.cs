@@ -153,7 +153,7 @@ namespace Castle.MonoRail.Framework
 			return true;
 		}
 
-		protected internal override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
+		protected internal override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, IDictionary actionArgs)
 		{
 			if (action == "RenderWizardView")
 			{
@@ -161,7 +161,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				return base.SelectMethod(action, actions, request);
+				return base.SelectMethod(action, actions, request, null);
 			}
 		}
 

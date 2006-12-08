@@ -64,7 +64,7 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
-		protected internal override void InvokeMethod(MethodInfo method, IRequest request, params object[] actionArgs)
+		protected internal override void InvokeMethod(MethodInfo method, IRequest request, IDictionary actionArgs)
 		{
 			ParameterInfo[] parameters = method.GetParameters();
 
@@ -73,7 +73,7 @@ namespace Castle.MonoRail.Framework
 			method.Invoke(this, methodArgs);
 		}
 
-		protected internal override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, params object[] actionArgs)
+		protected internal override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request, IDictionary actionArgs)
 		{
 			object methods = actions[action];
 
@@ -88,7 +88,7 @@ namespace Castle.MonoRail.Framework
 			                           request.Params, actionArgs);
 		}
 
-		protected virtual MethodInfo SelectBestCandidate(MethodInfo[] candidates, NameValueCollection webParams, params object[] actionArgs)
+		protected virtual MethodInfo SelectBestCandidate(MethodInfo[] candidates, NameValueCollection webParams, IDictionary actionArgs)
 		{
 			if (candidates.Length == 1)
 			{
@@ -128,7 +128,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="webParams">Parameter source</param>
 		/// <param name="actionArgs">Extra parameters</param>
 		/// <returns></returns>
-		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams, params object[] actionArgs)
+		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams, IDictionary actionArgs)
 		{
 			int points = 0;
 			int matchCount = 0;
@@ -180,12 +180,10 @@ namespace Castle.MonoRail.Framework
 				// I'm not sure about the following. Seems to be
 				// be fragile regarding the web parameters and the actionArgs array
 				//
-				else if ((actionArgs != null) && (actionArgsIndex < actionArgs.Length))
+				else if ((actionArgs != null) && actionArgs.Contains(requestParameterName))
 				{
-					object actionArg = actionArgs[actionArgsIndex];
+					object actionArg = actionArgs[requestParameterName];
 					
-					if (actionArg == null) continue;
-
 					bool exactMatch;
 					
 					if (binder.Converter.CanConvert(parameterType, actionArg.GetType(), actionArg, out exactMatch))
@@ -225,13 +223,11 @@ namespace Castle.MonoRail.Framework
 		/// <param name="request">The current request, which is the source to obtain the data</param>
 		/// <param name="actionArgs">Extra arguments to pass to the action.</param>
 		/// <returns>An array with the arguments values</returns>
-		protected virtual object[] BuildMethodArguments(ParameterInfo[] parameters, IRequest request, params object[] actionArgs)
+		protected virtual object[] BuildMethodArguments(ParameterInfo[] parameters, IRequest request, IDictionary actionArgs)
 		{
 			object[] args = new object[parameters.Length];
 			String paramName = String.Empty;
 			String value = String.Empty;
-
-			int actionArgsIndex = 0;
 			
 			try
 			{
@@ -244,7 +240,7 @@ namespace Castle.MonoRail.Framework
 					//
 					
 					ParameterInfo param = parameters[argIndex];
-					paramName = param.Name;
+					paramName = GetRequestParameterName(param);
 
 					bool handled = false;
 
@@ -274,15 +270,13 @@ namespace Castle.MonoRail.Framework
 						
 						convertedVal = binder.BindParameter(param.ParameterType, paramName, ParamsNode);
 						
-						if (convertedVal == null && (actionArgs != null) && (actionArgsIndex < actionArgs.Length))
+						if (convertedVal == null && (actionArgs != null) && actionArgs.Contains(paramName))
 						{
-							object actionArg = actionArgs[actionArgsIndex];
+							object actionArg = actionArgs[paramName];
 							
-							if (actionArg == null) continue;
+							Type actionArgType = (actionArg != null) ? actionArg.GetType() : param.ParameterType;
 							
-							convertedVal = binder.Converter.Convert(param.ParameterType, actionArg.GetType(), actionArg, out conversionSucceeded);
-
-							if (conversionSucceeded) actionArgsIndex++;						
+							convertedVal = binder.Converter.Convert(param.ParameterType, actionArgType, actionArg, out conversionSucceeded);
 						}
 						
 						args[argIndex] = convertedVal;

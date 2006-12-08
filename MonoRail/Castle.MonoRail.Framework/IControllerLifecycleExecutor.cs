@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Manages the execution of a controller action.
@@ -49,7 +50,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="area">The area name</param>
 		/// <param name="controller">The controller name</param>
 		void InitializeController(string area, string controller, string action);
-		
+
 		/// <summary>
 		/// Should resolve the action to be executed (method or dynamic
 		/// action) based on the parameters
@@ -58,14 +59,31 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">The controller name</param>
 		/// <returns><c>true</c> if it was able to resolve it</returns>
 		bool SelectAction(string action, string controller);
-		
+	
+		/// <summary>
+		/// Should resolve the action to be executed (method or dynamic
+		/// action) based on the parameters and custom arguments
+		/// </summary>
+		/// <param name="action">The action name</param>
+		/// <param name="controller">The controller name</param>
+		/// <param name="actionArgs">Custom arguments</param>
+		/// <returns><c>true</c> if it was able to resolve it</returns>
+		bool SelectAction(string action, string controller, IDictionary actionArgs);
+
+		/// <summary>
+		/// Runs the action (or the dynamic action),
+		/// process the rescue or the view accordingly 
+		/// to the process result.
+		/// </summary>
+		void ProcessSelectedAction();
+	
 		/// <summary>
 		/// Runs the action (or the dynamic action),
 		/// process the rescue or the view accordingly 
 		/// to the process result.
 		/// </summary>
 		/// <param name="actionArgs">Custom arguments</param>
-		void ProcessSelectedAction(params object[] actionArgs);
+		void ProcessSelectedAction(IDictionary actionArgs);
 
 		/// <summary>
 		/// Should performs the rescue (if available), raise

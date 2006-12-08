@@ -4,6 +4,11 @@ Change history
 Release Candidate 3
 ===================
 
+- Restored property IsPostback checking (For use with WebFormViewEngine).
+
+- Restored support for passing additional arguments to a controller
+  via Send and use a dictionary to supply that information.
+
 - Applied patch by Andrew Peters fixing MR-182
   "Adds FormTo and LinkToWithPost methods to HtmlHelper"
 

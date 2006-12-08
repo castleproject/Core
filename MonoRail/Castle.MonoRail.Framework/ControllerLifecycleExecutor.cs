@@ -146,11 +146,16 @@ namespace Castle.MonoRail.Framework
 
 		public bool SelectAction(string actionName, string controllerName)
 		{
+			return SelectAction(actionName, controllerName, null);
+		}
+		
+		public bool SelectAction(string actionName, string controllerName, IDictionary actionArgs)
+		{
 			try
 			{
 				// Look for the target method
 
-				actionMethod = controller.SelectMethod(actionName, metaDescriptor.Actions, context.Request);
+				actionMethod = controller.SelectMethod(actionName, metaDescriptor.Actions, context.Request, actionArgs);
 
 				// If we couldn't find a method for this action, look for a dynamic action
 				dynAction = null;
@@ -161,7 +166,7 @@ namespace Castle.MonoRail.Framework
 
 					if (dynAction == null)
 					{
-						actionMethod = FindOutDefaultMethod(new object[0]);
+						actionMethod = FindOutDefaultMethod(actionArgs);
 
 						if (actionMethod == null)
 						{
@@ -222,8 +227,16 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Executes the method or the dynamic action
 		/// </summary>
+		public void ProcessSelectedAction()
+		{
+			ProcessSelectedAction(null);
+		}
+		
+		/// <summary>
+		/// Executes the method or the dynamic action with custom arguments
+		/// </summary>
 		/// <param name="actionArgs">The action args.</param>
-		public void ProcessSelectedAction(params object[] actionArgs)
+		public void ProcessSelectedAction(IDictionary actionArgs)
 		{			
 			try
 			{
@@ -864,8 +877,9 @@ namespace Castle.MonoRail.Framework
 		/// The following lines were added to handle _default processing
 		/// if present look for and load _default action method
 		/// <seealso cref="DefaultActionAttribute"/>
+		/// <param name="methodArgs">Method arguments</param>
 		/// </summary>
-		private MethodInfo FindOutDefaultMethod(object[] methodArgs)
+		private MethodInfo FindOutDefaultMethod(IDictionary methodArgs)
 		{
 			if (metaDescriptor.DefaultAction != null)
 			{
