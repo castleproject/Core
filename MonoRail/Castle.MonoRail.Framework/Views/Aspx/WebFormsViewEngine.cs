@@ -257,8 +257,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 						httpContext.Items.Add("rails.child", childPage);
 
 						httpContext.Items["rails.layout.processed"] = true;
-
-						httpContext.Response.RedirectLocation = "foo";
 					}
 
 					ProcessPage(controller, masterHandler, httpContext);

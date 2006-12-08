@@ -55,6 +55,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets or sets the property names to exclude.
 		/// </summary>
+		/// <remarks>The property name should include the <i>prefix</i>.</remarks>
 		/// <value>A comma separated list 
 		/// of property names to exclude from databinding.</value>
 		public String Exclude
@@ -66,6 +67,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets or sets the property names to allow.
 		/// </summary>
+		/// <remarks>The property name should include the <i>prefix</i>.</remarks>
 		/// <value>A comma separated list 
 		/// of property names to allow from databinding.</value>
 		public String Allow
