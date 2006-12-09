@@ -66,11 +66,13 @@
     <Compile Include="BrailConfigurationSection.cs" />
     <Compile Include="BrailPreProcessor.cs" />
     <Compile Include="BrailViewComponentContext.cs" />
-    <Compile Include="ComponentMacro.cs" />
+    <Compile Include="Macros\CodeBuilderHelper.cs" />
+    <Compile Include="Macros\ComponentMacro.cs" />
     <Compile Include="CustomTypeSystem.cs" />
     <Compile Include="IgnoreNull.cs" />
-    <Compile Include="OutputMacro.cs" />
+    <Compile Include="Macros\OutputMacro.cs" />
     <Compile Include="Attributes\OutputMethodAttribute.cs" />
+    <Compile Include="Macros\SectionMacro.cs" />
     <Compile Include="ReplaceUknownWithParameters.cs" />
     <Compile Include="ResourceToDuck.cs" />
     <Compile Include="ReturnValueVisitor.cs" />

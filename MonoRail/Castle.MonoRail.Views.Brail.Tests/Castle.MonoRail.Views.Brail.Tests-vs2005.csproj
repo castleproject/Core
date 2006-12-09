@@ -83,10 +83,6 @@
       <Project>{CC39D6D0-2467-4DD5-A53E-92D580B60038}</Project>
       <Name>Castle.MonoRail.Views.Brail-vs2005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestSiteBrail\TestSiteBrail.csproj">
-      <Project>{C5ED8C19-CF83-43D4-9D5D-2BC6F8DDDAF2}</Project>
-      <Name>TestSiteBrail</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

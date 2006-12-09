@@ -11,9 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.MonoRail.Views.Brail
 {
-	using System.IO;
+    using System;
+    using System.Collections;
+    using System.IO;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.TypeSystem;
@@ -26,7 +29,9 @@ namespace Castle.MonoRail.Views.Brail
 			if (macro.Arguments.Count == 0)
 				throw new RailsException("Component must be called with a name");
 
-			Method method;
+            Block block = new Block();
+
+		    Method method;
 			Node parent = macro.ParentNode;
 			while((parent is Method) == false)
 			{
@@ -38,9 +43,8 @@ namespace Castle.MonoRail.Views.Brail
 
 			MethodInvocationExpression dictionary = CreateParametersDictionary(macro);
 
-			Block block = new Block();
 
-			Expression macroBody = CreateMacroBody(macro);
+			Expression macroBody = CodeBuilderHelper.CreateCallableFromMacroBody(CodeBuilder, macro);
 
 			MethodInvocationExpression initContext = new MethodInvocationExpression();
 			initContext.Target = AstUtil.CreateReferenceExpression("Castle.MonoRail.Views.Brail.BrailViewComponentContext");
@@ -64,8 +68,7 @@ namespace Castle.MonoRail.Views.Brail
 			InternalLocal viewComponentFactoryLocal = CodeBuilder.DeclareLocal(method, "viewComponentFactory",
 			                                                                   TypeSystemServices.Map(
 			                                                                   	typeof(IViewComponentFactory)));
-
-			// viewComponentFactory = MonoRailHttpHandler.CurrentContext.GetService(IViewComponentFactory)
+		    // viewComponentFactory = MonoRailHttpHandler.CurrentContext.GetService(IViewComponentFactory)
 			MethodInvocationExpression callService = new MethodInvocationExpression(
 				AstUtil.CreateReferenceExpression("MonoRailHttpHandler.CurrentContext.GetService"));
 			callService.Arguments.Add(CodeBuilder.CreateTypeofExpression(typeof(IViewComponentFactory)));
@@ -83,14 +86,18 @@ namespace Castle.MonoRail.Views.Brail
 			                               new ReferenceExpression("component"),
 			                               createComponent));
 
+		    
+            AddSections(block, macro);
+		    
+
 			// component.Init(context, componentContext)
 			MethodInvocationExpression initComponent = new MethodInvocationExpression(
 				AstUtil.CreateReferenceExpression("component.Init"));
 			initComponent.Arguments.Extend(
 				new object[] {AstUtil.CreateReferenceExpression("context"), new ReferenceExpression("componentContext")});
 
-			block.Add(initComponent);
-
+			block.Add(initComponent);    
+		    
 			// component.Render()
 			block.Add(new MethodInvocationExpression(
 			          	AstUtil.CreateReferenceExpression("component.Render")));
@@ -113,23 +120,18 @@ namespace Castle.MonoRail.Views.Brail
 			return block;
 		}
 
-		private Expression CreateMacroBody(MacroStatement macro)
-		{
-			// create closure for macro's body or null
-			Expression macroBody = new NullLiteralExpression();
-			if (macro.Block.Statements.Count > 0)
-			{
-				CallableBlockExpression callableExpr = new CallableBlockExpression();
-				callableExpr.Body = macro.Block;
-				callableExpr.Parameters.Add(
-					new ParameterDeclaration("outputStream", CodeBuilder.CreateTypeReference(typeof(TextWriter))));
+	    private static void AddSections(Block block, MacroStatement macro)
+	    {
+	        IDictionary sections = (IDictionary)macro["sections"];
+            if (sections == null)
+                return;
+	        foreach(DictionaryEntry entry in sections)
+	        {
+	            block.Add((Block)entry.Value);
+	        }
+	    }
 
-				macroBody = callableExpr;
-			}
-			return macroBody;
-		}
-
-		private static MethodInvocationExpression CreateParametersDictionary(MacroStatement macro)
+	    private static MethodInvocationExpression CreateParametersDictionary(MacroStatement macro)
 		{
 			// Make sure that hash table is an case insensitive one.
 			MethodInvocationExpression dictionary = new MethodInvocationExpression();

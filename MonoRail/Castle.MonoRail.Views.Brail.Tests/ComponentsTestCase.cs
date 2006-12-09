@@ -97,5 +97,42 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			DoGet("usingcomponents/withParams.rails");
 			AssertReplyEqualTo("brail");
 		}
+
+        [Test]
+        public void ComponentWithInvalidSection()
+        {
+            DoGet("usingcomponent2/ComponentWithInvalidSections.rails");
+
+            AssertReplyContains("The section 'invalidsection' is not supported by the ViewComponent 'GridComponent'");
+        }
+
+        [Test]
+        public void GridComponent1()
+        {
+            DoGet("usingcomponent2/GridComponent1.rails");
+
+            AssertReplyEqualTo(@"<table>
+    <th>EMail</th>
+    <th>Phone</th>
+<tr>
+    <td>hammett</td>
+    <td>111</td>
+</tr><tr>
+    <td>Peter Griffin</td>
+    <td>222</td>
+</tr></table>");
+        }
+	    
+	    [Test]
+        public void GridComponent2()
+	    {
+            DoGet("usingcomponent2/GridComponent2.rails");
+            AssertReplyEqualTo(@"<table>
+    <th>EMail</th>
+    <th>Phone</th>
+<tr>
+<td colspan=2>Nothing here</td>
+</tr></table>");
+	    }
 	}
 }

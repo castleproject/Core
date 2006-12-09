@@ -14,91 +14,101 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-	using System;
-	using System.Collections;
-	using System.IO;
-	using Boo.Lang;
-	using Castle.MonoRail.Framework;
+    using System;
+    using System.Collections;
+    using System.IO;
+    using Boo.Lang;
+    using Castle.MonoRail.Framework;
 
-	public class BrailViewComponentContext : IViewComponentContext
-	{
-		string componentName;
-		IDictionary contextVars = 	new Hashtable(
+    public class BrailViewComponentContext : IViewComponentContext
+    {
+        string componentName;
+        IDictionary contextVars = new Hashtable(
 #if DOTNET2
 StringComparer.InvariantCultureIgnoreCase
 #else
 				CaseInsensitiveHashCodeProvider.Default,
 				CaseInsensitiveComparer.Default
 #endif
-				);
+);
 
-		IDictionary componentParameters;
+        IDictionary componentParameters;
+        IDictionary sections;
+        string viewToRender;
 
-		string viewToRender;
+        ICallable body;
+        private readonly TextWriter default_writer;
 
-		ICallable body;
-		private readonly TextWriter default_writer;
+        public string ComponentName
+        {
+            get { return componentName; }
+        }
 
-		public string ComponentName
-		{
-			get { return componentName; }
-		}
+        public IDictionary ContextVars
+        {
+            get { return contextVars; }
+        }
 
-		public IDictionary ContextVars
-		{
-			get { return contextVars; }
-		}
+        public IDictionary ComponentParameters
+        {
+            get { return componentParameters; }
+        }
 
-		public IDictionary ComponentParameters
-		{
-			get { return componentParameters; }
-		}
+        public string ViewToRender
+        {
+            get { return viewToRender; }
+            set { viewToRender = value; }
+        }
 
-		public string ViewToRender
-		{
-			get { return viewToRender; }
-			set { viewToRender = value; }
-		}
+        public ICallable Body
+        {
+            get { return body; }
+            set { body = value; }
+        }
 
-		public ICallable Body
-		{
-			get { return body; }
-			set { body = value; }
-		}
+        public TextWriter Writer
+        {
+            get { return default_writer; }
+        }
 
-		public TextWriter Writer
-		{
-			get { return default_writer; }
-		}
+        public BrailViewComponentContext(ICallable body, string name, TextWriter text, IDictionary parameters)
+        {
+            this.body = body;
+            this.componentName = name;
+            this.default_writer = text;
+            this.componentParameters = parameters;
+        }
 
-		public BrailViewComponentContext(ICallable body, string name, TextWriter text, IDictionary parameters)
-		{
-			this.body = body;
-			this.componentName = name;
-			this.default_writer = text;
-			this.componentParameters = parameters;
-		}
-		
-		public void RenderBody()
-		{
-			RenderBody(default_writer);
-		}
-		
-		public void RenderBody(TextWriter writer)
-		{
-			if (body == null)
-				throw new RailsException("This component does not have a body content to be rendered");
-			body.Call(new object[] { writer });
-		}
+        public void RenderBody()
+        {
+            RenderBody(default_writer);
+        }
 
-		public bool HasSection(string sectionName)
-		{
-			return false;
-		}
+        public void RenderBody(TextWriter writer)
+        {
+            if (body == null)
+                throw new RailsException("This component does not have a body content to be rendered");
+            body.Call(new object[] { writer });
+        }
 
-		public void RenderSection(string sectionName)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public bool HasSection(string sectionName)
+        {
+            return sections != null && sections.Contains(sectionName);
+        }
+
+        public void RenderSection(string sectionName)
+        {
+            if (HasSection(sectionName) == false)
+                return;//matching the NVelocity behavior, but maybe should throw?
+            ICallable callable = (ICallable)sections[sectionName];
+            callable.Call(new object[] { default_writer });
+        }
+
+        public void RegisterSection(string name, ICallable section)
+        {
+            if (sections == null)
+                sections = new Hashtable();
+            sections[name] = section;
+        }
+    }
 }
