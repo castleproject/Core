@@ -156,6 +156,14 @@ namespace Castle.MonoRail.Views.Brail
 			get { return childOutput;  }
 			set {  childOutput = value;  }
 		}
+	    
+	    internal void ExtendDictionaryWithProperties(IDictionary dictionary)
+	    {
+	        foreach(DictionaryEntry entry in properties)
+	        {
+                dictionary[entry.Key] = entry.Value;
+	        }
+	    }
 
 		// Initialize all the properties that a script may need
 		// One thing to note here is that resources are wrapped in ResourceToDuck wrapper

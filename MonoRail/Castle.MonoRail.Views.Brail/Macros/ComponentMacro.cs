@@ -51,6 +51,7 @@ namespace Castle.MonoRail.Views.Brail
 			initContext.Arguments.Extend(
 				new object[]
 					{
+					    new SelfLiteralExpression(),
 						macroBody, componentName,
 						AstUtil.CreateReferenceExpression("OutputStream"),
 						dictionary

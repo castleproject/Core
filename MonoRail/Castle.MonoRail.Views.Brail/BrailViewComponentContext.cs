@@ -71,8 +71,9 @@ StringComparer.InvariantCultureIgnoreCase
             get { return default_writer; }
         }
 
-        public BrailViewComponentContext(ICallable body, string name, TextWriter text, IDictionary parameters)
+        public BrailViewComponentContext(BrailBase parent, ICallable body, string name, TextWriter text, IDictionary parameters)
         {
+            parent.ExtendDictionaryWithProperties(contextVars);
             this.body = body;
             this.componentName = name;
             this.default_writer = text;
