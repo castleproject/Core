@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework
 		/// Access the Cache associated with this 
 		/// web execution context.
 		/// </summary>
-		Cache Cache { get; }
+		ICacheProvider Cache { get; }
 
 		/// <summary>
 		/// Access a dictionary of volative items.
@@ -123,5 +123,10 @@ namespace Castle.MonoRail.Framework
 		/// Returns an <see cref="IServerUtility"/>.
 		/// </summary>
 		IServerUtility Server { get; }
+
+		/// <summary>
+		/// Returns the Items collection from the current HttpContext.
+		/// </summary>
+		IDictionary Items { get; }
 	}
 }

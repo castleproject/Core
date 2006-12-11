@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Web;
 	using System.Text;
 	using System.Collections;
+	using Castle.MonoRail.Framework.Adapters;
 
 	/// <summary>
 	/// Optional base class for helpers. 
@@ -33,7 +34,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Store's <see cref="Controller"/> for the current view.
 		/// </summary>
 		private Controller controller;
-
+		
 		/// <summary>
 		/// Sets the controller.
 		/// </summary>
@@ -75,10 +76,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 			}
 		}
-
-		protected static HttpContext CurrentContext
+		
+		protected IRailsEngineContext CurrentContext
 		{
-			get { return HttpContext.Current; }
+			get { return this.controller.Context; }
 		}
 
 		#region Helper methods

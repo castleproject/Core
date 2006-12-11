@@ -46,7 +46,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			base.PerformActionProcess(controller);
 			
 			controller.PropertyBag.Add( "items", 
-				PaginationHelper.CreatePagination(PerformFindAll(), 10) );
+				PaginationHelper.CreatePagination(controller, PerformFindAll(), 10) );
 			
 			controller.PropertyBag["properties"] = ObtainListableProperties(Model);
 

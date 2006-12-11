@@ -43,6 +43,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		private UrlInfo _urlInfo;
 		private String _url;
 		private bool customSessionSet;
+		private ICacheProvider _cache;
 
 		public DefaultRailsEngineContext(IServiceContainer parent, HttpContext context) : base(parent)
 		{
@@ -52,6 +53,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			_server = new ServerUtilityAdapter(context.Server);
 			_response = new ResponseAdapter(context.Response, this, ApplicationPath);
 			_url = _context.Request.RawUrl;
+			_cache = parent.GetService(typeof(ICacheProvider)) as ICacheProvider;
 		}
 
 		public Exception LastException
@@ -131,9 +133,9 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _server; }
 		}
 
-		public Cache Cache
+		public ICacheProvider Cache
 		{
-			get { return _context.Cache; }
+			get { return _cache; }
 		}
 
 		public Flash Flash
@@ -230,6 +232,11 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				_session = (IDictionary) session;
 			}			
+		}
+
+		public IDictionary Items
+		{
+			get { return UnderlyingContext.Items; }
 		}
 	}
 }

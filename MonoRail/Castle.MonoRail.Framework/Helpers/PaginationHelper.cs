@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections;
 #if DOTNET2
 	using System.Collections.Generic;
+	using System.Collections.Specialized;
 #endif
 
 	/// <summary>
@@ -86,12 +87,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source
 		/// </summary>
+		/// <param name="controller">the current controller</param>
 		/// <param name="datasource">Data source to be used as target of the pagination</param>
 		/// <param name="pageSize">Page size</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreatePagination(IList datasource, int pageSize)
+		public static IPaginatedPage CreatePagination(Controller controller, IList datasource, int pageSize)
 		{
-			String currentPage = CurrentContext.Request.Params["page"];
+            String currentPage = GetParameter(controller, "page");
 
 			int curPage = 1;
 
@@ -124,12 +126,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source
 		/// </summary>
+        /// <param name="controller">the current controller</param>
 		/// <param name="datasource">Data source to be used as target of the pagination</param>
 		/// <param name="pageSize">Page size</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreatePagination<T>(IList<T> datasource, int pageSize)
+		public static IPaginatedPage CreatePagination<T>(Controller controller, IList<T> datasource, int pageSize)
 		{
-			String currentPage = CurrentContext.Request.Params["page"];
+            String currentPage = GetParameter(controller, "page");
 
 			int curPage = 1;
 
@@ -165,25 +168,34 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// it invokes the <c>dataObtentionCallback</c> and caches the result
 		/// using the specifed <c>cacheKey</c>
 		/// </summary>
+		/// <param name="controller">the current controller</param>
 		/// <param name="cacheKey">Cache key used to query/store the datasource</param>
 		/// <param name="pageSize">Page size</param>
 		/// <param name="dataObtentionCallback">Callback to be used to populate the cache</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreateCachedPagination(String cacheKey, int pageSize, DataObtentionDelegate dataObtentionCallback)
+		public static IPaginatedPage CreateCachedPagination(Controller controller, String cacheKey, int pageSize, DataObtentionDelegate dataObtentionCallback)
 		{
-			IList datasource = (IList) CurrentContext.Cache[cacheKey];
+            IList datasource = (IList)GetCache(controller).Get(cacheKey);
 
 			if (datasource == null)
 			{
 				datasource = dataObtentionCallback();
 
-				CurrentContext.Cache.Insert(
-					cacheKey, datasource, null, 
-					DateTime.MaxValue, TimeSpan.FromSeconds(10));
+                GetCache(controller).Store(cacheKey, datasource);
 			}
 
-			return CreatePagination(datasource, pageSize);
+			return CreatePagination(controller, datasource, pageSize);
 		}
+
+        private static string GetParameter(Controller controller, string parameterName)
+        {
+            return controller.Context.Request.Params[parameterName];
+        }
+	    
+	    private static ICacheProvider GetCache(Controller controller)
+	    {
+	        return controller.Context.Cache;
+	    }
 	}
 
 	/// <summary>
