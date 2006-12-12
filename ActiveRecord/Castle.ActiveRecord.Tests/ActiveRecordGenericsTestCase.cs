@@ -100,6 +100,34 @@ namespace Castle.ActiveRecord.Tests
 
             Assert.IsFalse(Blog.Exists<int>(1000));
         }
+	    
+		[Test]
+		public void ExistsByCriterion()
+		{
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			Assert.IsTrue(blog.Id > 0);
+			Assert.IsTrue(Blog.Exists(
+							Expression.Eq("Name", blog.Name), 
+							Expression.Eq("Author", blog.Author)));
+
+			blog = new Blog();
+			blog.Name = "chad's blog";
+			blog.Author = "chad humphries";
+			blog.Save();
+
+			Assert.IsTrue(Blog.Exists(
+							Expression.Eq("Name", blog.Name),
+							Expression.Eq("Author", blog.Author)));
+		}
 
 		[Test]
 		public void SlicedOperation()

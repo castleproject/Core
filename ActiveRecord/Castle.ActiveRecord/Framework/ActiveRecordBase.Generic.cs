@@ -263,6 +263,16 @@ namespace Castle.ActiveRecord
 			return ActiveRecordBase.Exists(typeof(T), id);
 		}
 
+		/// <summary>
+		/// Check if any instance matches the criteria.
+		/// </summary>
+		/// <returns><c>true</c> if an instance is found; otherwise <c>false</c>.</returns>
+		public static bool Exists(params ICriterion[] criterias)
+		{
+			T[] ar = FindAll(criterias);
+			return ar != null && ar.Length > 0;
+		}
+
 
 		#endregion
 

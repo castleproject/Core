@@ -649,6 +649,16 @@ namespace Castle.ActiveRecord
 			return Exists(targetType, "id=?", id);
 		}
 
+		/// <summary>
+		/// Check if any instance matches the criteria.
+		/// </summary>
+		/// <returns><c>true</c> if an instance is found; otherwise <c>false</c>.</returns>
+		protected internal static bool Exists(Type targetType, params ICriterion[] criterias) {
+			Array ar = FindAll(targetType, criterias);
+			return ar != null && ar.Length > 0;
+		}
+
+
 		#endregion
 
 		#region FindAll

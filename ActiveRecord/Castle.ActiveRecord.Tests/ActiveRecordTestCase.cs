@@ -21,6 +21,7 @@ namespace Castle.ActiveRecord.Tests
 	using Castle.ActiveRecord.Tests.Model;
 	using Castle.ActiveRecord.Tests.Model.CompositeModel;
 
+	using NHibernate.Expression;
 
 	[TestFixture]
 	public class ActiveRecordTestCase : AbstractActiveRecordTest
@@ -665,5 +666,36 @@ namespace Castle.ActiveRecord.Tests
 
             Assert.IsFalse(Blog.Exists(1000));
         }
+
+		[Test]
+		public void ExistsByCriterion() {
+			ActiveRecordStarter.Initialize(GetConfigSource());
+			ActiveRecordStarter.RegisterTypes(typeof(Blog), typeof(Post));
+			Recreate();
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			Assert.IsTrue(blog.Id > 0);
+			Assert.IsTrue(Blog.Exists(
+							Expression.Eq("Name", blog.Name),
+							Expression.Eq("Author", blog.Author)));
+
+			blog = new Blog();
+			blog.Name = "chad's blog";
+			blog.Author = "chad humphries";
+			blog.Save();
+
+			Assert.IsTrue(Blog.Exists(
+							Expression.Eq("Name", blog.Name),
+							Expression.Eq("Author", blog.Author)));
+		}
 	}
 }

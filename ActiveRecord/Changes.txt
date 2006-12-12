@@ -1,6 +1,10 @@
 Release Candidate 2
 ===================
 
+- Applied patch from Drew Burlingame 
+  Add ActiveRecordBase<T>.Exists(params ICriterion[] criterias) 
+  Method also added to ActiveRecordBase.
+
 - Applied patch by Andrew Peters fixing AR-97
   "Pluralization of table names"
   

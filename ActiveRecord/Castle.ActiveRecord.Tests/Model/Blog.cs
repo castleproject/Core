@@ -18,7 +18,8 @@ namespace Castle.ActiveRecord.Tests.Model
 	using System.Collections;
 
 	using NHibernate;
-	
+	using NHibernate.Expression;
+
 	using Castle.ActiveRecord.Framework;
 
 	[ActiveRecord("BlogTable")]
@@ -125,6 +126,10 @@ namespace Castle.ActiveRecord.Tests.Model
 		public static bool Exists(int id)
 		{
 			return ActiveRecordBase.Exists(typeof(Blog), id);
+		}
+
+		public static bool Exists(params ICriterion[] criteria) {
+			return ActiveRecordBase.Exists(typeof(Blog), criteria);
 		}
 
 		public static Blog[] FindByProperty(String property, object value) 
