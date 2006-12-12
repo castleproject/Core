@@ -609,7 +609,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
 		/// <para>
 		/// You can also specify the attribute <c>firstoption</c> to force the first option be
-		/// something like 'please select'.
+		/// something like 'please select'. You can set the value of <c>firstoption</c> by specifying the attribute
+		/// <c>firstoptionvalue</c>. The default value is '0'.
 		/// </para>
 		/// <para>
 		/// Usually the <c>target</c> is a single value and the <c>dataSource</c> is obviously 
@@ -638,7 +639,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
 		/// <para>
 		/// You can also specify the attribute <c>firstoption</c> to force the first option be
-		/// something like 'please select'.
+		/// something like 'please select'. You can set the value of <c>firstoption</c> by specifying the attribute
+		/// <c>firstoptionvalue</c>. The default value is '0'.
 		/// </para>
 		/// <para>
 		/// Usually the <c>target</c> is a single value and the <c>dataSource</c> is obviously 
@@ -670,7 +672,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
 		/// <para>
 		/// You can also specify the attribute <c>firstoption</c> to force the first option be
-		/// something like 'please select'.
+		/// something like 'please select'. You can set the value of <c>firstoption</c> by specifying the attribute
+		/// <c>firstoptionvalue</c>. The default value is '0'.
 		/// </para>
 		/// <para>
 		/// Usually the <c>target</c> is a single value and the <c>dataSource</c> is obviously 
@@ -696,12 +699,14 @@ namespace Castle.MonoRail.Framework.Helpers
 			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
-			String firstOption = null; 
+			String firstOption = null;
+			String firstOptionValue = "0";
 			String name = target;
 
 			if (attributes != null)
 			{
 				firstOption = ObtainEntryAndRemove(attributes, "firstoption");
+				firstOptionValue = ObtainEntryAndRemove(attributes,"firstoptionvalue");
 				
 				if (attributes.Contains("name"))
 				{
@@ -729,7 +734,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (firstOption != null)
 			{
 				writer.WriteBeginTag("option");
-				writer.WriteAttribute("value", "0");
+				writer.WriteAttribute("value", firstOptionValue);
 				writer.Write(HtmlTextWriter.TagRightChar);
 				writer.Write(firstOption);
 				writer.WriteEndTag("option");
