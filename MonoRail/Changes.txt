@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- PaginationHelper.CreatePagination<T>() now accepts ICollection<T> as a parameter.
+
 - New overload to PaginationHelper.CreatePageLink(), accepting a NameValueCollection.
   Now you can supply "$request.queryString" itself as a parameter to CreatePageLink.
 

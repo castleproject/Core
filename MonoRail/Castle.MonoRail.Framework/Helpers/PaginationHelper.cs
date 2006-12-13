@@ -146,7 +146,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="datasource">Data source to be used as target of the pagination</param>
 		/// <param name="pageSize">Page size</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreatePagination<T>(Controller controller, IList<T> datasource, int pageSize)
+		public static IPaginatedPage CreatePagination<T>(Controller controller, ICollection<T> datasource, int pageSize)
 		{
             String currentPage = GetParameter(controller, "page");
 
@@ -168,7 +168,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="pageSize">Page size</param>
 		/// <param name="currentPage">current page index (1 based)</param>
 		/// <returns>A <see cref="Page"/> instance</returns>
-		public static IPaginatedPage CreatePagination<T>(IList<T> datasource, int pageSize, int currentPage)
+		public static IPaginatedPage CreatePagination<T>(ICollection<T> datasource, int pageSize, int currentPage)
 		{
 			if (currentPage <= 0) currentPage = 1;
 
@@ -271,12 +271,13 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// Represents the sliced data and offers
 	/// a few read only properties to create a pagination bar.
 	/// </summary>
+	[Serializable]
 	public class GenericPage<T> : AbstractPage
 	{
 		private readonly int sliceStart, sliceEnd;
-		private readonly IList<T> sourceList;
+		private readonly ICollection<T> sourceList;
 
-		public GenericPage(IList<T> list, int curPage, int pageSize)
+		public GenericPage(ICollection<T> list, int curPage, int pageSize)
 		{
 			// Calculate slice indexes
 			int startIndex = this.sliceStart = (pageSize * curPage) - pageSize;
@@ -289,9 +290,35 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public override IEnumerator GetEnumerator()
 		{
-			for (int i = sliceStart; i < sliceEnd; i++)
+			if (this.sourceList is IList<T>)
 			{
-				yield return this.sourceList[i];
+				IList<T> list = (IList<T>)this.sourceList;
+				for (int i = sliceStart; i < sliceEnd; i++)
+				{
+					yield return list[i];
+				}
+			}
+			else if (this.sourceList is IList)
+			{
+				IList list = (IList)this.sourceList;
+				for (int i = sliceStart; i < sliceEnd; i++)
+				{
+					yield return list[i];
+				}
+			}
+			else
+			{
+				IEnumerator en = this.sourceList.GetEnumerator();
+				for (int i = 0; i < sliceEnd; i++)
+				{
+					if (!en.MoveNext())
+						yield break;
+
+					if (i < sliceStart)
+						continue;
+
+					yield return en.Current;
+				}
 			}
 		}
 	}
