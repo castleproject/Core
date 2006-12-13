@@ -271,12 +271,10 @@ namespace Castle.MonoRail.Views.Brail
 
                     foreach (ICompilerInput input in inputs)
 					{
-						msg.Append("Input (").Append(input.Name).Append(")")
-							.Append(Environment.NewLine)
-							.Append("---");
+                        msg.Append("Input (").Append(input.Name).Append(")")
+                            .Append(Environment.NewLine);
 						msg.Append(result.Processor.GetInputCode(input))
-							.Append(Environment.NewLine)
-							.Append("---"); 
+						    .Append(Environment.NewLine);
 					}
 					throw new RailsException(msg.ToString());
 				}

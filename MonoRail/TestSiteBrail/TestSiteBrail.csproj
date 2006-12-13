@@ -113,6 +113,7 @@
     <Compile Include="Controllers\FilterBadHeader.cs" />
     <Compile Include="Controllers\FilterController.cs" />
     <Compile Include="Controllers\Foo.cs" />
+    <Compile Include="Controllers\HappenedOnTheFieldController.cs" />
     <Compile Include="Controllers\HelperController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Controllers\UsingComponentsController.cs" />
     <Compile Include="Controllers\XmlController.cs" />
     <Compile Include="Helpers\DateFormatHelper.cs" />
+    <None Include="Views\HappenedOnTheField\JustComponent.boo" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Boo.Lang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
