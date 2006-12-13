@@ -21,6 +21,7 @@ namespace Castle.MonoRail.Framework
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Globalization;
 
 	using Castle.Components.Common.EmailSender;
 	using Castle.Core.Logging;
@@ -667,6 +668,30 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Redirects to the specified URL. 
+		/// </summary>
+		/// <param name="url">Target URL</param>
+		/// <param name="parameters">URL parameters</param>
+		public virtual void Redirect(String url, NameValueCollection parameters)
+		{
+			CancelView();
+			
+			if (parameters != null && parameters.Count != 0)
+			{
+				if (url.IndexOf('?') != -1)
+				{
+					url = url + '&' + ToQueryString(parameters);
+				}
+				else
+				{
+					url = url + '?' + ToQueryString(parameters);
+				}
+			}
+
+			context.Response.Redirect(url);
+		}
+
+		/// <summary>
 		/// Redirects to another controller and action.
 		/// </summary>
 		/// <param name="controller">Controller name</param>
@@ -747,15 +772,25 @@ namespace Castle.MonoRail.Framework
 
 		protected String ToQueryString(NameValueCollection parameters)
 		{
+			if (parameters == null || parameters.Count == 0)
+			{
+				return String.Empty;
+			}
+			
 			StringBuilder buffer = new StringBuilder();
 			IServerUtility srv = Context.Server;
 	
 			foreach(String key in parameters.Keys)
 			{
-				buffer.Append( srv.UrlEncode(key) )
-					  .Append('=')
-					  .Append( srv.UrlEncode(parameters[key]) )
-					  .Append('&');
+				if (key == null) continue;
+				
+				foreach(String value in parameters.GetValues(key))
+				{
+					buffer.Append( srv.UrlEncode(key) )
+					      .Append('=')
+					      .Append( srv.UrlEncode(value) )
+					      .Append('&');
+				}
 			}
 
 			if (buffer.Length > 0) // removing extra &
@@ -773,15 +808,27 @@ namespace Castle.MonoRail.Framework
 				return String.Empty;
 			}
 			
+			Object[] singleValueEntry = new Object[1];
 			StringBuilder buffer = new StringBuilder();
 			IServerUtility srv = Context.Server;
 	
 			foreach(DictionaryEntry entry in parameters)
 			{
-				buffer.Append( srv.UrlEncode(Convert.ToString(entry.Key)) )
-					  .Append('=')
-					  .Append( srv.UrlEncode(Convert.ToString(entry.Value)) )
-					  .Append('&');
+				if (entry.Value == null) continue;
+				
+				IEnumerable values = singleValueEntry;
+				if (!(entry.Value is String) && (entry.Value is IEnumerable))
+					values = (IEnumerable) entry.Value;
+				else
+					singleValueEntry[0] = entry.Value;
+				
+				foreach(object value in values)
+				{
+					buffer.Append(srv.UrlEncode(Convert.ToString(entry.Key, CultureInfo.CurrentCulture)))
+					      .Append('=')
+					      .Append(srv.UrlEncode(Convert.ToString(value, CultureInfo.CurrentCulture)))
+					      .Append("&");
+				}
 			}
 			
 			if (buffer.Length > 0)
