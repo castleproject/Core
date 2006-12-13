@@ -33,6 +33,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class PaginationHelper : AbstractHelper
 	{
+		public const string PageParameterName = "page";
+
 		/// <summary>
 		/// Creates a link to navigate to a specific page
 		/// </summary>
@@ -77,7 +79,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				queryStringParams = new Hashtable(queryStringParams);
 			}
 
-			queryStringParams["page"] = page.ToString();
+			queryStringParams[PageParameterName] = page.ToString();
 
 			return String.Format("<a href=\"{0}?{1}\" {2}>{3}</a>",
 			                     filePath, BuildQueryString(queryStringParams), GetAttributes(htmlAttributes), text);
@@ -111,7 +113,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>A <see cref="Page"/> instance</returns>
 		public static IPaginatedPage CreatePagination(Controller controller, IList datasource, int pageSize)
 		{
-			String currentPage = GetParameter(controller, "page");
+			String currentPage = GetParameter(controller, PageParameterName);
 
 			int curPage = 1;
 
@@ -140,17 +142,17 @@ namespace Castle.MonoRail.Framework.Helpers
 
 #if DOTNET2
 
-	/// <summary>
-	/// Creates a <see cref="Page"/> which is a sliced view of
-	/// the data source
-	/// </summary>
-	/// <param name="controller">the current controller</param>
-	/// <param name="datasource">Data source to be used as target of the pagination</param>
-	/// <param name="pageSize">Page size</param>
-	/// <returns>A <see cref="Page"/> instance</returns>
+		/// <summary>
+		/// Creates a <see cref="Page"/> which is a sliced view of
+		/// the data source
+		/// </summary>
+		/// <param name="controller">the current controller</param>
+		/// <param name="datasource">Data source to be used as target of the pagination</param>
+		/// <param name="pageSize">Page size</param>
+		/// <returns>A <see cref="Page"/> instance</returns>
 		public static IPaginatedPage CreatePagination<T>(Controller controller, ICollection<T> datasource, int pageSize)
 		{
-			String currentPage = GetParameter(controller, "page");
+			String currentPage = GetParameter(controller, PageParameterName);
 
 			int curPage = 1;
 
