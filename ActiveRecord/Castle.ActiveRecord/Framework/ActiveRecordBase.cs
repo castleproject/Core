@@ -646,7 +646,7 @@ namespace Castle.ActiveRecord
 		/// <returns><c>true</c> if the ID exists; otherwise <c>false</c>.</returns>
 		protected internal static bool Exists(Type targetType, object id)
 		{
-			return Exists(targetType, "id=?", id);
+			return FindByPrimaryKey(targetType, id, false) != null;
 		}
 
 		/// <summary>
@@ -667,7 +667,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns all instances found for the specified type according to the criteria
 		/// </summary>
-		protected static Array FindAll(Type targetType, DetachedCriteria detachedCriteria, params Order[] orders)
+		protected internal static Array FindAll(Type targetType, DetachedCriteria detachedCriteria, params Order[] orders)
 		{
 			EnsureInitialized(targetType);
 
