@@ -16,9 +16,9 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 #if DOTNET2
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 #endif
 
 	/// <summary>
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>An anchor tag</returns>
 		public String CreatePageLink(int page, String text)
 		{
-			return CreatePageLink(page, text, null, null);
+			return CreatePageLink(page, text, null, (IDictionary) null);
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>An anchor tag</returns>
 		public String CreatePageLink(int page, String text, IDictionary htmlAttributes)
 		{
-			return CreatePageLink(page, text, htmlAttributes, null);
+			return CreatePageLink(page, text, htmlAttributes, (IDictionary) null);
 		}
 
 		/// <summary>
@@ -81,6 +81,22 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return String.Format("<a href=\"{0}?{1}\" {2}>{3}</a>", 
 				filePath, BuildQueryString(queryStringParams), GetAttributes(htmlAttributes), text);
+		}
+
+		/// <summary>
+		/// Creates a link to navigate to a specific page
+		/// </summary>
+		/// <param name="page">Page index</param>
+		/// <param name="text">Link text</param>
+		/// <param name="htmlAttributes">Attributes for the anchor tag</param>
+		/// <param name="queryStringParams">Query string entries for the link</param>
+		/// <returns>An anchor tag</returns>
+		public String CreatePageLink(int page, String text, IDictionary htmlAttributes, NameValueCollection queryStringParams)
+		{
+			IDictionary dictionary = new Hashtable(queryStringParams.Count);
+			foreach (string key in queryStringParams.Keys)
+				dictionary[key] = queryStringParams.GetValues(key);
+			return CreatePageLink(page, text, htmlAttributes, dictionary);
 		}
 
 		/// <summary>

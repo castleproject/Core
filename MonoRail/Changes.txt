@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- New overload to PaginationHelper.CreatePageLink(), accepting a NameValueCollection.
+  Now you can supply "$request.queryString" itself as a parameter to CreatePageLink.
+
 - Enhanced AbstractHelper.BuildQueryString to support multi-value query strings:
   IDictionary dict = new Hashtable();
   dict.Add("id", 5);
