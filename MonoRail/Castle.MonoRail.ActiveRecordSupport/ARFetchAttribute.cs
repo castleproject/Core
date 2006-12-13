@@ -123,14 +123,14 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { required = value; }
 		}
 
-		protected virtual int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		public virtual int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			String paramName = RequestParameterName != null ? RequestParameterName : parameterInfo.Name;
 
 			return controller.Request.Params.Get(paramName) != null ? 10 : 0;
 		}
 
-		protected virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			ARFetcher fetcher = new ARFetcher(controller.Binder.Converter);
 			
