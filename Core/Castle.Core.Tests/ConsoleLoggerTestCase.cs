@@ -67,20 +67,20 @@ namespace Castle.Core.Logging.Tests
 			Assert.AreEqual("[Debug] 'Logger' Some debug message\r\n[Info] 'Logger' Some info message\r\n[Error] 'Logger' Some error message\r\n[Fatal] 'Logger' Some fatal error message\r\n[Warn] 'Logger' Some warn message\r\n", logcontents);
 		}
 
-        [Test]
-        public void WarnLogger() 
-        {
-            ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Warn);
+		[Test]
+		public void WarnLogger()
+		{
+			ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Warn);
 
-            log.Debug("Some debug message");
-            log.Info("Some info message");
-            log.Error("Some error message");
-            log.Fatal("Some fatal error message");
-            log.Warn("Some warn message");
+			log.Debug("Some debug message");
+			log.Info("Some info message");
+			log.Error("Some error message");
+			log.Fatal("Some fatal error message");
+			log.Warn("Some warn message");
 
-            String logcontents = outWriter.GetStringBuilder().ToString();
-            Assert.AreEqual("[Error] 'Logger' Some error message\r\n[Fatal] 'Logger' Some fatal error message\r\n[Warn] 'Logger' Some warn message\r\n", logcontents);            
-        }
+			String logcontents = outWriter.GetStringBuilder().ToString();
+			Assert.AreEqual("[Error] 'Logger' Some error message\r\n[Fatal] 'Logger' Some fatal error message\r\n[Warn] 'Logger' Some warn message\r\n", logcontents);
+		}
 
 		[Test]
 		public void ExceptionLogging()
