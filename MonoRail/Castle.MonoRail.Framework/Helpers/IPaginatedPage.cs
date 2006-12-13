@@ -93,5 +93,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// exists
 		/// </summary>
 		bool HasLast { get; }
+
+		/// <summary>
+		/// Checks whether the specified page exists.
+		/// Useful for Google-like pagination.
+		/// </summary>
+		bool HasPage(int pageNumber);
 	}
 }

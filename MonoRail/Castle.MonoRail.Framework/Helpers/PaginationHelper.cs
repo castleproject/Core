@@ -35,6 +35,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		public const string PageParameterName = "page";
 
+		#region CreatePageLink
+
 		/// <summary>
 		/// Creates a link to navigate to a specific page
 		/// </summary>
@@ -103,6 +105,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CreatePageLink(page, text, htmlAttributes, dictionary);
 		}
 
+		#endregion
+
+		#region CreatePagination
+
 		/// <summary>
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source
@@ -140,16 +146,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			return new Page(datasource, currentPage, pageSize);
 		}
 
+		#endregion
+
+		#region CreatePagination<T>
+
 #if DOTNET2
 
-		/// <summary>
-		/// Creates a <see cref="Page"/> which is a sliced view of
-		/// the data source
-		/// </summary>
-		/// <param name="controller">the current controller</param>
-		/// <param name="datasource">Data source to be used as target of the pagination</param>
-		/// <param name="pageSize">Page size</param>
-		/// <returns>A <see cref="Page"/> instance</returns>
+	/// <summary>
+	/// Creates a <see cref="Page"/> which is a sliced view of
+	/// the data source
+	/// </summary>
+	/// <param name="controller">the current controller</param>
+	/// <param name="datasource">Data source to be used as target of the pagination</param>
+	/// <param name="pageSize">Page size</param>
+	/// <returns>A <see cref="Page"/> instance</returns>
 		public static IPaginatedPage CreatePagination<T>(Controller controller, ICollection<T> datasource, int pageSize)
 		{
 			String currentPage = GetParameter(controller, PageParameterName);
@@ -181,6 +191,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 #endif
 
+		#endregion
+
+		#region CreateCachedPagination
+
 		/// <summary>
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source. This method first looks for the datasource 
@@ -206,6 +220,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return CreatePagination(controller, datasource, pageSize);
 		}
+
+		#endregion
 
 		private static string GetParameter(Controller controller, string parameterName)
 		{
@@ -481,6 +497,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		public bool HasLast
 		{
 			get { return hasLast; }
+		}
+
+		/// <summary>
+		/// Checks whether the specified page exists.
+		/// Useful for Google-like pagination.
+		/// </summary>
+		/// <param name="pageNumber">The page number</param>
+		public bool HasPage(int pageNumber)
+		{
+			return pageNumber <= this.LastIndex;
 		}
 
 		/// <summary>
