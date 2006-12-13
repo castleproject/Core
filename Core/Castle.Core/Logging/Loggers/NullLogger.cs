@@ -56,7 +56,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		[Obsolete("Use DebugFormat instead")]
 		public void Debug(string format, params object[] args)
 		{
 		}
@@ -136,7 +135,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		[Obsolete("Use InfoFormat instead")]
 		public void Info(string format, params object[] args)
 		{
 		}
@@ -216,7 +214,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		[Obsolete("Use WarnFormat instead")]
 		public void Warn(string format, params object[] args)
 		{
 		}
@@ -296,7 +293,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		[Obsolete("Use ErrorFormat instead")]
 		public void Error(string format, params object[] args)
 		{
 		}
@@ -376,7 +372,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		[Obsolete("Use FatalFormat instead")]
 		public void Fatal(string format, params object[] args)
 		{
 		}
@@ -458,7 +453,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		[Obsolete("Use FatalFormat instead")]
+		[Obsolete("Use Fatal or FatalFormat instead")]
 		public void FatalError(string format, params Object[] args)
 		{
 		}

@@ -77,7 +77,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Format string for the message to log</param>
 		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use DebugFormat instead")]
 		void Debug(String format, params Object[] args);
 
 		/// <summary>
@@ -141,7 +140,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Format string for the message to log</param>
 		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use InfoFormat instead")]
 		void Info(String format, params Object[] args);
 
 		/// <summary>
@@ -205,7 +203,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Format string for the message to log</param>
 		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use WarnFormat instead")]
 		void Warn(String format, params Object[] args);
 
 		/// <summary>
@@ -269,7 +266,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Format string for the message to log</param>
 		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use ErrorFormat instead")]
 		void Error(String format, params Object[] args);
 
 		/// <summary>
@@ -333,7 +329,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Format string for the message to log</param>
 		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use FatalFormat instead")]
 		void Fatal(String format, params Object[] args);
 
 		/// <summary>
@@ -399,7 +394,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use FatalFormat instead")]
+		[Obsolete("Use Fatal or FatalFormat instead")]
 		void FatalError(String format, params Object[] args);
 
 		/// <summary>

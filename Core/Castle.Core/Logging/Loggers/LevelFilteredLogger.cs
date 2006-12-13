@@ -163,7 +163,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use DebugFormat instead")]
 		public void Debug(string format, params Object[] args)
 		{
 			if (!IsDebugEnabled) return;
@@ -255,7 +254,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use InfoFormat instead")]
 		public void Info(string format, params Object[] args)
 		{
 			if (!IsInfoEnabled) return;
@@ -347,7 +345,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use WarnFormat instead")]
 		public void Warn(string format, params Object[] args)
 		{
 			if (!IsWarnEnabled) return;
@@ -439,7 +436,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use ErrorFormat instead")]
 		public void Error(string format, params Object[] args)
 		{
 			if (!IsErrorEnabled) return;
@@ -531,7 +527,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use FatalFormat instead")]
 		public void Fatal(string format, params Object[] args)
 		{
 			if (!IsFatalEnabled) return;
@@ -573,7 +568,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use FatalFormat instead")]
+		[Obsolete("Use Fatal or FatalFormat instead")]
 		public void FatalError(string format, params Object[] args)
 		{
 			if (!IsFatalEnabled) return;
