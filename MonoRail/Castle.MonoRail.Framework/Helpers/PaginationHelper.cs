@@ -93,14 +93,18 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="page">Page index</param>
 		/// <param name="text">Link text</param>
 		/// <param name="htmlAttributes">Attributes for the anchor tag</param>
-		/// <param name="queryStringParams">Query string entries for the link</param>
 		/// <returns>An anchor tag</returns>
-		public String CreatePageLink(int page, String text, IDictionary htmlAttributes, NameValueCollection queryStringParams)
+		public String CreatePageLinkWithCurrentQueryString(int page, String text, IDictionary htmlAttributes)
 		{
-			IDictionary dictionary = new Hashtable(queryStringParams.Count);
-			foreach(string key in queryStringParams.Keys)
+			NameValueCollection queryStringParams = Controller.Request.QueryString;
+			IDictionary dictionary = null;
+			if (queryStringParams != null && queryStringParams.Count > 0)
 			{
-				dictionary[key] = queryStringParams.GetValues(key);
+				dictionary = new Hashtable(queryStringParams.Count);
+				foreach(string key in queryStringParams.Keys)
+				{
+					dictionary[key] = queryStringParams.GetValues(key);
+				}
 			}
 			return CreatePageLink(page, text, htmlAttributes, dictionary);
 		}
