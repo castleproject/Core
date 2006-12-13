@@ -294,10 +294,10 @@ namespace Castle.MonoRail.Framework
 				PerformErrorHandling();
 			}
 
-			if (context.Response.WasRedirected) return;
-			
 			RunAfterActionFilters();
 
+			if (context.Response.WasRedirected) return;
+			
 			// If we haven't failed anywhere and no redirect was issued
 			if (!hasError && !context.Response.WasRedirected)
 			{
