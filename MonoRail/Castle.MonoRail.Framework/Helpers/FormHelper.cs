@@ -700,13 +700,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			String firstOption = null;
-			String firstOptionValue = "0";
+			String firstOptionValue = null;
 			String name = target;
 
 			if (attributes != null)
 			{
 				firstOption = ObtainEntryAndRemove(attributes, "firstoption");
-				firstOptionValue = ObtainEntryAndRemove(attributes,"firstoptionvalue");
+				firstOptionValue = ObtainEntryAndRemove(attributes, "firstoptionvalue");
 				
 				if (attributes.Contains("name"))
 				{
@@ -734,7 +734,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (firstOption != null)
 			{
 				writer.WriteBeginTag("option");
-				writer.WriteAttribute("value", firstOptionValue);
+				writer.WriteAttribute("value", (firstOptionValue == null) ? "0" : firstOptionValue);
 				writer.Write(HtmlTextWriter.TagRightChar);
 				writer.Write(firstOption);
 				writer.WriteEndTag("option");
