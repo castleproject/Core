@@ -122,7 +122,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Builds a query string.
 		/// </summary>
 		/// <remarks>
-		/// Supports multi-value connection strings, using any
+		/// Supports multi-value query strings, using any
 		/// <see cref="IEnumerable"/> as a value.
 		/// <example>
 		///	<code>
