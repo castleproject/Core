@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied patch by Luke Melia for MR-192: 
+  "Add TextHelper"
+
 - Introduced IPaginatedPage.HasPage(), useful for Google-like pagination.
 
 - PaginationHelper.CreatePagination<T>() now accepts ICollection<T> as a parameter.
