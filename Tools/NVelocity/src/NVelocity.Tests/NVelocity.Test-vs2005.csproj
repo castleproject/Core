@@ -98,6 +98,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DuckTestCase.cs" />
     <Compile Include="MultiThreadTestCase.cs" />
     <Compile Include="Test\AjaxHelper2.cs" />
     <Compile Include="Test\AmbiguousExceptionTestCase.cs" />

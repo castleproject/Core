@@ -1,3 +1,17 @@
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
@@ -8,8 +22,6 @@ namespace NVelocity.Runtime.Parser.Node
 	using NVelocity.Util.Introspection;
 
 	/// <summary>
-	/// ASTMethod.java
-	///
 	/// Method support for references :  $foo.method()
 	///
 	/// NOTE :
@@ -19,9 +31,6 @@ namespace NVelocity.Runtime.Parser.Node
 	/// Please look at the Parser.jjt file which is
 	/// what controls the generation of this class.
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
-	/// <version> $Id: ASTMethod.cs,v 1.5 2003/10/27 13:54:10 corts Exp $ </version>
 	public class ASTMethod : SimpleNode
 	{
 		private String methodName = "";
@@ -65,79 +74,22 @@ namespace NVelocity.Runtime.Parser.Node
 		}
 
 		/// <summary>
-		/// does the instrospection of the class for the method needed.
-		/// Note, as this calls value() on the args if any, this must
-		/// only be called at execute() / render() time.
-		///
-		/// NOTE: this will try to flip the case of the first character for
-		/// convience (compatability with Java version).  If there are no arguments,
-		/// it will also try to find a property with the same name (also flipping first character).
-		/// </summary>
-		private Object doIntrospection(IInternalContextAdapter context, Type data)
-		{
-			/*
-	    *  Now the parameters have to be processed, there
-	    *  may be references contained within that need
-	    *  to be introspected.
-	    */
-			for (int j = 0; j < paramCount; j++)
-			{
-				parameters[j] = GetChild(j + 1).Value(context);
-			}
-
-			String methodNameUsed = methodName;
-			
-			MethodInfo m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
-			
-			PropertyInfo p = null;
-
-			if (m == null)
-			{
-				methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
-				m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
-				if (m == null)
-				{
-					methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
-					m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
-
-					// if there are no arguments, look for a property
-					if (m == null && paramCount == 0)
-					{
-						methodNameUsed = methodName;
-						p = rsvc.Introspector.GetProperty(data, methodNameUsed);
-						if (p == null)
-						{
-							methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
-							p = rsvc.Introspector.GetProperty(data, methodNameUsed);
-							if (p == null)
-							{
-								methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
-								p = rsvc.Introspector.GetProperty(data, methodNameUsed);
-							}
-						}
-					}
-				}
-			}
-
-			// if a method was found, return it.  Otherwise, return whatever was found with a property, may be null
-			if (m != null)
-			{
-				return m;
-			}
-			else
-			{
-				return p;
-			}
-		}
-
-		/// <summary>
 		/// invokes the method.  Returns null if a problem, the
 		/// actual return if the method returns something, or
 		/// an empty string "" if the method returns void
 		/// </summary>
 		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
-		   /*
+			IDuck duck = o as IDuck;
+
+			Object[] methodArguments = parameters;
+
+			if (duck != null)
+			{
+				return duck.Invoke(methodName, methodArguments);
+			}
+
+			/*
 			*  new strategy (strategery!) for introspection. Since we want 
 			*  to be thread- as well as context-safe, we *must* do it now,
 			*  at execution time.  There can be no in-node caching,
@@ -147,8 +99,6 @@ namespace NVelocity.Runtime.Parser.Node
 			MethodInfo method = null;
 			PropertyInfo property = null;
 			bool preparedAlready = false;
-
-			Object[] methodArguments = parameters;
 
 			try
 			{
@@ -191,7 +141,7 @@ namespace NVelocity.Runtime.Parser.Node
 					* change from visit to visit
 					*/
 
-					for (int j = 0; j < paramCount; j++)
+					for(int j = 0; j < paramCount; j++)
 					{
 						parameters[j] = GetChild(j + 1).Value(context);
 					}
@@ -253,9 +203,10 @@ namespace NVelocity.Runtime.Parser.Node
 			catch(Exception ex)
 			{
 				rsvc.Error("ASTMethod.execute() : exception from introspection : " + ex);
-				
-				throw new RuntimeException(String.Format("Error during object instrospection. " + 
-					"Check inner exception for details. Node literal {0} Line {1} Column {2}", base.Literal, Line, Column), ex);
+
+				throw new RuntimeException(String.Format("Error during object instrospection. " +
+				                                         "Check inner exception for details. Node literal {0} Line {1} Column {2}",
+				                                         base.Literal, Line, Column), ex);
 			}
 
 			try
@@ -292,7 +243,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				return obj;
 			}
-			catch (TargetInvocationException ite)
+			catch(TargetInvocationException ite)
 			{
 				/*
 				*  In the event that the invocation of the method
@@ -315,9 +266,11 @@ namespace NVelocity.Runtime.Parser.Node
 					{
 						return ec.HandleMethodException(o.GetType(), methodName, ite.GetBaseException());
 					}
-					catch (Exception e)
+					catch(Exception e)
 					{
-						throw new MethodInvocationException("Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + e.GetType() + " : " + e.Message, e, methodName);
+						throw new MethodInvocationException(
+							"Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + e.GetType() + " : " +
+							e.Message, e, methodName);
 					}
 				}
 				else
@@ -326,13 +279,81 @@ namespace NVelocity.Runtime.Parser.Node
 					* no event cartridge to override. Just throw
 					*/
 
-					throw new MethodInvocationException("Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + ite.GetBaseException().GetType() + " : " + ite.GetBaseException().Message, ite.GetBaseException(), methodName);
+					throw new MethodInvocationException(
+						"Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " +
+						ite.GetBaseException().GetType() + " : " + ite.GetBaseException().Message, ite.GetBaseException(), methodName);
 				}
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				rsvc.Error("ASTMethod.execute() : exception invoking method '" + methodName + "' in " + o.GetType() + " : " + e);
 				throw e;
+			}
+		}
+
+		/// <summary>
+		/// does the instrospection of the class for the method needed.
+		/// Note, as this calls value() on the args if any, this must
+		/// only be called at execute() / render() time.
+		///
+		/// NOTE: this will try to flip the case of the first character for
+		/// convience (compatability with Java version).  If there are no arguments,
+		/// it will also try to find a property with the same name (also flipping first character).
+		/// </summary>
+		private Object doIntrospection(IInternalContextAdapter context, Type data)
+		{
+			/*
+			 *  Now the parameters have to be processed, there
+			 *  may be references contained within that need
+			 *  to be introspected.
+			 */
+			for(int j = 0; j < paramCount; j++)
+			{
+				parameters[j] = GetChild(j + 1).Value(context);
+			}
+
+			String methodNameUsed = methodName;
+
+			MethodInfo m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
+
+			PropertyInfo p = null;
+
+			if (m == null)
+			{
+				methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
+				m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
+				if (m == null)
+				{
+					methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
+					m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
+
+					// if there are no arguments, look for a property
+					if (m == null && paramCount == 0)
+					{
+						methodNameUsed = methodName;
+						p = rsvc.Introspector.GetProperty(data, methodNameUsed);
+						if (p == null)
+						{
+							methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
+							p = rsvc.Introspector.GetProperty(data, methodNameUsed);
+							if (p == null)
+							{
+								methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
+								p = rsvc.Introspector.GetProperty(data, methodNameUsed);
+							}
+						}
+					}
+				}
+			}
+
+			// if a method was found, return it.  Otherwise, return whatever was found with a property, may be null
+			if (m != null)
+			{
+				return m;
+			}
+			else
+			{
+				return p;
 			}
 		}
 
@@ -345,20 +366,20 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				Type arrayParamType = methodArgs[paramArrayIndex].ParameterType;
 
-				object[] newParams = new object[ methodArgs.Length ];
+				object[] newParams = new object[methodArgs.Length];
 
-				Array.Copy( parameters, newParams, methodArgs.Length - 1 );
+				Array.Copy(parameters, newParams, methodArgs.Length - 1);
 
 				if (parameters.Length < (paramArrayIndex + 1))
 				{
-					newParams[paramArrayIndex] = Array.CreateInstance( 
-						arrayParamType.GetElementType(), 0 );
+					newParams[paramArrayIndex] = Array.CreateInstance(
+						arrayParamType.GetElementType(), 0);
 				}
 				else
 				{
-					Array args = Array.CreateInstance( arrayParamType.GetElementType(), (parameters.Length + 1) - newParams.Length );
+					Array args = Array.CreateInstance(arrayParamType.GetElementType(), (parameters.Length + 1) - newParams.Length);
 
-					Array.Copy( parameters, methodArgs.Length - 1, args, 0, args.Length );
+					Array.Copy(parameters, methodArgs.Length - 1, args, 0, args.Length);
 
 					newParams[paramArrayIndex] = args;
 				}
@@ -372,21 +393,22 @@ namespace NVelocity.Runtime.Parser.Node
 		private object[] BuildMethodArgs(MethodInfo method)
 		{
 			ParameterInfo[] methodArgs = method.GetParameters();
-	
+
 			int indexOfParamArray = -1;
-	
-			for (int i = 0; i < methodArgs.Length; ++i)
+
+			for(int i = 0; i < methodArgs.Length; ++i)
 			{
 				ParameterInfo paramInfo = methodArgs[i];
 
-				if (paramInfo.IsDefined( typeof(ParamArrayAttribute), false ))
+				if (paramInfo.IsDefined(typeof(ParamArrayAttribute), false))
 				{
-					indexOfParamArray = i; break;
+					indexOfParamArray = i;
+					break;
 				}
 			}
-	
+
 			paramArrayIndex = indexOfParamArray;
-	
+
 			return BuildMethodArgs(method, indexOfParamArray);
 		}
 	}

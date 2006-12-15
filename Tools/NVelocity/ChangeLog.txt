@@ -1,3 +1,8 @@
+- Added Duck typing support
+
+  If an instance implements IDuck, methods and properties (get/set) will be dispatched
+  to the IDuck interface instead of going the normal flow
+
 - Fixed NVELOCITY-7
   "Dictionary support should support interpolation"
 

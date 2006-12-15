@@ -14,7 +14,6 @@
 
 namespace NVelocity
 {
-	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Text.RegularExpressions;

@@ -73,12 +73,18 @@ namespace NVelocity.Runtime.Parser.Node
 			return data;
 		}
 
-
 		/// <summary>
 		/// invokes the method on the object passed in
 		/// </summary>
 		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
+			IDuck duck = o as IDuck;
+
+			if (duck != null)
+			{
+				return duck.GetInvoke(identifier);
+			}
+
 			IVelPropertyGet vg = null;
 
 			try

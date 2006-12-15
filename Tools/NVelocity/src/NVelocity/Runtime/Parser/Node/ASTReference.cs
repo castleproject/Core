@@ -458,43 +458,52 @@ namespace NVelocity.Runtime.Parser.Node
 			// 2) ref,put("foo", value ) to parallel the get() map introspection
 			try
 			{
-				// first, we introspect for the set<identifier> setter method
-				Type c = result.GetType();
-				PropertyInfo p = null;
+				IDuck duck = result as IDuck;
 
-
-				try
+				if (duck != null)
 				{
-					p = rsvc.Introspector.GetProperty(c, identifier);
-
-					if (p == null)
-					{
-						throw new MethodAccessException();
-					}
+					duck.SetInvoke(identifier, value);
 				}
-				catch (MethodAccessException)
+				else
 				{
-					StringBuilder sb = new StringBuilder();
-					sb.Append(identifier);
+					// first, we introspect for the set<identifier> setter method
+					Type c = result.GetType();
+					PropertyInfo p;
 
-					if (Char.IsLower(sb[0]))
+					try
 					{
-						sb[0] = Char.ToUpper(sb[0]);
+						p = rsvc.Introspector.GetProperty(c, identifier);
+
+						if (p == null)
+						{
+							throw new MethodAccessException();
+						}
 					}
-					else
+					catch(MethodAccessException)
 					{
-						sb[0] = Char.ToLower(sb[0]);
+						StringBuilder sb = new StringBuilder();
+						sb.Append(identifier);
+
+						if (Char.IsLower(sb[0]))
+						{
+							sb[0] = Char.ToUpper(sb[0]);
+						}
+						else
+						{
+							sb[0] = Char.ToLower(sb[0]);
+						}
+
+						p = rsvc.Introspector.GetProperty(c, sb.ToString());
+
+						if (p == null)
+							throw;
 					}
 
-					p = rsvc.Introspector.GetProperty(c, sb.ToString());
-
-					if (p == null)
-						throw;
+					// and if we get here, getMethod() didn't chuck an exception...
+					Object[] args = new Object[] { };
+					p.SetValue(result, value, args);
 				}
 
-				// and if we get here, getMethod() didn't chuck an exception...
-				Object[] args = new Object[] {};
-				p.SetValue(result, value, args);
 			}
 			catch (MethodAccessException)
 			{

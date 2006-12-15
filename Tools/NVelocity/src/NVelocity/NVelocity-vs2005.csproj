@@ -169,6 +169,7 @@
     <Compile Include="Exception\VelocityException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IDuck.cs" />
     <Compile Include="Runtime\Directive\BlockComponent.cs">
       <SubType>Code</SubType>
     </Compile>

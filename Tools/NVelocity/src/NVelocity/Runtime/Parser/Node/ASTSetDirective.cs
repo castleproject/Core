@@ -5,16 +5,9 @@ namespace NVelocity.Runtime.Parser.Node
 	using NVelocity.App.Events;
 	using NVelocity.Context;
 
-	/// <summary> Node for the #set directive
-	/// *
+	/// <summary> 
+	/// Node for the #set directive
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ASTSetDirective.cs,v 1.4 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
 	public class ASTSetDirective : SimpleNode
 	{
 		private String leftReference = "";
