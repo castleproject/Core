@@ -139,6 +139,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\AbstractHelperTestCase.cs" />
+    <Compile Include="Helpers\TextHelperTestCase.cs" />
     <Compile Include="PostBackTestCase.cs" />
     <Compile Include="DefaultControllerFactoryTestCase.cs">
       <SubType>Code</SubType>
