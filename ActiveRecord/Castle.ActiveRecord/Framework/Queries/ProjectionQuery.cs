@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #if DOTNET2
 
 namespace Castle.ActiveRecord.Queries
@@ -34,19 +33,21 @@ namespace Castle.ActiveRecord.Queries
 	/// <typeparam name="TResultItem">The result value to use: object[] means returning as is</typeparam>
 	/// /// <example>
 	/// <code>
-	/// ProjectionQuery{Post, PostTitleAndId} proj = new ProjectionQuery{Post, PostTitleAndId}(Projections.Property("Title"), Projections.Property("Id"));
-	/// ICollection{PostTitleAndId} posts = proj.Execute();
+	/// <![CDATA[
+	/// ProjectionQuery<Post, PostTitleAndId> proj = new ProjectionQuery<Post, PostTitleAndId>(Projections.Property("Title"), Projections.Property("Id"));
+	/// ICollection<PostTitleAndId> posts = proj.Execute();
 	/// foreach(PostTitleAndId titleAndId in posts)
 	/// {
 	///		//push to site...
 	/// }
+	/// ]]>
 	/// </code>
 	/// </example>
 	public class ProjectionQuery<ARType, TResultItem> : IActiveRecordQuery
 	{
-		ProjectionList projections;
-		DetachedCriteria detachedCriteria;
-		Order[] orders;
+		private ProjectionList projections;
+		private DetachedCriteria detachedCriteria;
+		private Order[] orders;
 
 		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
@@ -229,7 +230,7 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		/// <param name="projections">The projections to use in the query</param>
 		public ProjectionQuery(ProjectionList projections)
-			:base(projections)
+			: base(projections)
 		{
 		}
 

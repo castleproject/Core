@@ -96,8 +96,10 @@ namespace Castle.ActiveRecord.Queries
 			if (positionalParameters != null && positionalParameters.Length > 0)
 			{
 				int i = 0;
-				foreach (object value in positionalParameters)
+				foreach(object value in positionalParameters)
+				{
 					AddModifier(new QueryParameter(i++, value));
+				}
 			}
 		}
 
@@ -200,21 +202,21 @@ namespace Castle.ActiveRecord.Queries
 		{
 			try
 			{
-				ScalarQuery q = new ScalarQuery(Target, PrepareQueryForCount(this.Query));
+				ScalarQuery qry = new ScalarQuery(Target, PrepareQueryForCount(Query));
 				
 				if (queryModifiers != null)
 				{
-					foreach (IQueryModifier mod in queryModifiers)
+					foreach(IQueryModifier mod in queryModifiers)
 					{
 						if (mod is QueryRange) continue;
-						
-						q.AddModifier(mod);
+
+						qry.AddModifier(mod);
 					}
 				}
 
-				return Convert.ToInt32(ActiveRecordMediator.ExecuteQuery(q));
+				return Convert.ToInt32(ActiveRecordMediator.ExecuteQuery(qry));
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				// log the exception and return -1
 				Log.Debug("Error while obtaining count. Will return -1 as result.", ex);
@@ -255,10 +257,10 @@ namespace Castle.ActiveRecord.Queries
 		{
 			IQuery nhibQuery;
 			
-			switch (queryLanguage)
+			switch(queryLanguage)
 			{
 				case QueryLanguage.Hql:
-					nhibQuery = session.CreateQuery(this.Query);
+					nhibQuery = session.CreateQuery(Query);
 					break;
 				
 				case QueryLanguage.Sql:
@@ -266,17 +268,17 @@ namespace Castle.ActiveRecord.Queries
 					ArrayList queryReturnTypes = new ArrayList();
 					if (queryModifiers != null)
 					{
-						foreach (IQueryModifier mod in queryModifiers)
+						foreach(IQueryModifier mod in queryModifiers)
 						{
 							SqlQueryReturnDefinition returnDef = mod as SqlQueryReturnDefinition;
-							if (returnDef == null)
-								continue;
+							
+							if (returnDef == null) continue;
 							
 							queryReturnAliases.Add(returnDef.ReturnAlias);
 							queryReturnTypes.Add(returnDef.ReturnType);
 						}
 					}
-					nhibQuery = session.CreateSQLQuery(this.Query, 
+					nhibQuery = session.CreateSQLQuery(Query, 
 					                                   (String[]) queryReturnAliases.ToArray(typeof(String)), 
 					                                   (Type[]) queryReturnTypes.ToArray(typeof(Type)));
 					break;
