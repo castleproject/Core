@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Views.IronView.ElementProcessor
 {
 	using System;
-	using System.IO;
 	using System.Xml;
 	using Castle.MonoRail.Framework;
 
@@ -57,11 +56,9 @@ namespace Castle.MonoRail.Views.IronView.ElementProcessor
 			context.Engine.CompilePartialTemplate(source, view, out functionName);
 
 			context.Script.AppendLine();
-			// context.AppendIndented(functionName);
-			context.AppendIndented("something");
+			context.AppendIndented(functionName);
 			context.Script.Append('(');
-			// context.Script.Append("controller, context, request, response, session, output, flash, siteroot");
-			context.Script.Append("output");
+			context.Script.Append("controller, context, request, response, session, output, flash, siteroot");
 			context.Script.Append(')');
 			context.Script.AppendLine();
 		}

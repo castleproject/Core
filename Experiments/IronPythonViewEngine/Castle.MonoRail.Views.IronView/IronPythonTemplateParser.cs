@@ -60,8 +60,8 @@ namespace Castle.MonoRail.Views.IronView
 			context.Script.Append("def ");
 			context.Script.Append(methodName);
 			context.Script.Append('(');
-			// context.Script.Append("controller, context, request, response, session, output, flash, siteroot");
-			context.Script.Append("output");
+			context.Script.Append("controller, context, request, response, session, output, flash, siteroot");
+			// context.Script.Append("output");
 			foreach(String param in parameters)
 			{
 				context.Script.Append(',');
@@ -72,9 +72,9 @@ namespace Castle.MonoRail.Views.IronView
 			
 			context.IncreaseIndentation();
 
-			context.AppendLineIndented("print 'hello'");
+			// context.AppendLineIndented("print 'hello'");
 			
-			// ProcessReader(context, 0);
+			ProcessReader(context, 0);
 			
 			context.DecreaseIndentation();
 

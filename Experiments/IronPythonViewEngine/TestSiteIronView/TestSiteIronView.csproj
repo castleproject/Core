@@ -4,7 +4,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{26AA3359-6571-4575-845D-ED05E4EDB586}</ProjectGuid>
+    <ProjectGuid>{8416A2A3-B4E8-438A-BED8-1742FE36CD5E}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -66,7 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
+    <ProjectReference Include="..\..\..\MonoRail\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
       <Name>Castle.MonoRail.Framework-vs2005</Name>
     </ProjectReference>

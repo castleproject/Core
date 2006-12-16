@@ -82,6 +82,21 @@ namespace Castle.MonoRail.Views.IronView
 
 		#region ViewEngineBase overrides
 
+		public override bool SupportsJSGeneration
+		{
+			get { return true; }
+		}
+
+		public override string ViewFileExtension
+		{
+			get { return TemplateExtension; }
+		}
+
+		public override string JSGeneratorFileExtension
+		{
+			get { return ".py"; }
+		}
+
 		public override bool HasTemplate(string templateName)
 		{
 			return ViewSourceLoader.HasTemplate(ResolveTemplateName(templateName));
@@ -117,6 +132,29 @@ namespace Castle.MonoRail.Views.IronView
 				String contents = (writer as StringWriter).GetStringBuilder().ToString();
 				ProcessLayout(contents, controller, context, locals);
 			}
+		}
+
+		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller,
+		                             string templateName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller,
+		                                    string partialName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
+		                                string templateName)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -170,8 +208,10 @@ namespace Castle.MonoRail.Views.IronView
 					String script = parser.CreateFunctionScriptBlock(reader, partialViewName,
 					                                                 functionName, serviceProvider, this, parameters);
 
-					compiledCode = engine.Compile("def something(out):\n\tout.Write('hellloo')\n");
+					// compiledCode = engine.Compile("def something(out):\n\tout.Write('hellloo')\n");
 
+					compiledCode = engine.Compile(script);
+					
 					// Evaluates the function
 					compiledCode.Execute(globalModule);
 					// compiledCode.Execute();
@@ -192,8 +232,6 @@ namespace Castle.MonoRail.Views.IronView
 				HttpContext.Current.Response.Output.Write("\r\n-->");
 				HttpContext.Current.Response.Output.Flush();
 #endif
-				
-				
 			}
 
 			return compiledCode;
@@ -287,11 +325,11 @@ namespace Castle.MonoRail.Views.IronView
 		                           IRailsEngineContext context,
 		                           Dictionary<string, object> locals)
 		{
-			NullLocalDecorator decorator = new NullLocalDecorator(locals);
+			// NullLocalDecorator decorator = new NullLocalDecorator(locals);
 
 			try
 			{
-				script.Execute(globalModule, decorator);
+				script.Execute(globalModule, locals);
 			}
 			catch(Exception ex)
 			{
