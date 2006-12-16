@@ -107,43 +107,79 @@ namespace Castle.ActiveRecord
 	/// <summary>
 	/// Defines the cascading behaviour of this association.
 	/// </summary>
+	/// <remarks>
+	/// Entities has associations to other objects, this may be an association to a single item (<see cref="BelongsToAttribute" />)
+	/// or an association to a collection (<see cref="HasManyAttribute" />, <see cref="HasManyToAnyAttribute" />).
+	/// At any rate, you are able to tell NHibernate to automatically traverse an entity's associations, and act according 
+	/// to the cascade option. For instance, adding an unsaved entity to a collection with <see cref="CascadeEnum.SaveUpdate" />
+	/// cascade will cause it to be saved along with its parent object, without any need for explicit instructions on our side.
+	/// </remarks>
 	public enum CascadeEnum
 	{
-		/// <summary> No cascading. This is the default. </summary>
+		/// <summary>
+		/// No cascading. This is the default.
+		/// The cascade should be handled manually.
+		/// </summary>
 		None,
-		/// <summary> Cascade save, update and delete. </summary>
+		/// <summary>
+		/// Cascade save, update and delete.
+		/// When the object is saved, updated or deleted, the associations will be checked
+		/// and the objects found will also be saved, updated or deleted.
+		/// </summary>
 		All,
-		/// <summary> Cascade save and update. </summary>
+		/// <summary>
+		/// Cascade save and update.
+		/// When the object is saved or updated, the associations will be checked and any object that requires
+		/// will be saved or updated (including saving or updating the associations in many-to-many scenario).
+		/// </summary>
 		SaveUpdate,
-		/// <summary> Cascade delete. </summary>
+		/// <summary>
+		/// Cascade delete.
+		/// When the object is deleted, all the objects in the association will be deleted as well.
+		/// </summary>
 		Delete
 	}
 
 	/// <summary>
-	/// Define relation cascade options
+	/// Defines the cascading behaviour of this association.
 	/// </summary>
+	/// <remarks>
+	/// Entities has associations to other objects, this may be an association to a single item (<see cref="BelongsToAttribute" />)
+	/// or an association to a collection (<see cref="HasManyAttribute" />, <see cref="HasManyToAnyAttribute" />).
+	/// At any rate, you are able to tell NHibernate to automatically traverse an entity's associations, and act according 
+	/// to the cascade option. For instance, adding an unsaved entity to a collection with <see cref="CascadeEnum.SaveUpdate" />
+	/// cascade will cause it to be saved along with its parent object, without any need for explicit instructions on our side.
+	/// </remarks>
 	[Serializable]
 	public enum ManyRelationCascadeEnum
 	{
 		/// <summary>
-		/// No cascading will be done
+		/// No cascading. This is the default.
+		/// The cascade should be handled manually.
 		/// </summary>
 		None,
 		/// <summary>
-		/// Cascade save/update/delete operation
+		/// Cascade save, update and delete.
+		/// When the object is saved, updated or deleted, the associations will be checked
+		/// and the objects found will also be saved, updated or deleted.
 		/// </summary>
 		All,
 		/// <summary>
-		/// Cascade save/update operation
+		/// Cascade save and update.
+		/// When the object is saved or updated, the associations will be checked and any object that requires
+		/// will be saved or updated (including saving or updating the associations in many-to-many scenario).
 		/// </summary>
 		SaveUpdate,
 		/// <summary>
-		/// Cascade delete operation
+		/// Cascade delete.
+		/// When the object is deleted, all the objects in the association will be deleted as well.
 		/// </summary>
 		Delete,
 		/// <summary>
-		/// Cascade save/update/delete operation, and remove an orphan children
-		/// when deleting.
+		/// Cascade save, update and delete, removing orphan children.
+		/// When an object is saved, updated or deleted, the associations will be checked and all objects found
+		/// will be saved, updated or deleted as well.
+		/// In additional to that, when an object is removed from the association and not associated with another object (orphaned), it will also be deleted.
 		/// </summary>
 		AllDeleteOrphan
 	}
