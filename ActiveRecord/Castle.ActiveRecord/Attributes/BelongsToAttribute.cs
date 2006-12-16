@@ -17,21 +17,6 @@ namespace Castle.ActiveRecord
 	using System;
 
 	/// <summary>
-	/// Defines the cascading behaviour of this association.
-	/// </summary>
-	public enum CascadeEnum
-	{
-		/// <summary> No cascading. This is the default. </summary>
-		None,
-		/// <summary> Cascade save, update and delete. </summary>
-		All,
-		/// <summary> Cascade save and update. </summary>
-		SaveUpdate,
-		/// <summary> Cascade delete. </summary>
-		Delete
-	}
-
-	/// <summary>
 	/// Maps a one to one association.
 	/// </summary>
 	/// <example>
