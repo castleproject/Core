@@ -86,6 +86,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 			if (duck != null)
 			{
+				for (int j = 0; j < paramCount; j++)
+				{
+					parameters[j] = GetChild(j + 1).Value(context);
+				}
+
 				return duck.Invoke(methodName, methodArguments);
 			}
 
@@ -117,25 +122,6 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (icd != null && icd.ContextData == c)
 				{
-					// We blindly assume that if there's an array, 
-					// we're dealing with a "params array[] args" and 
-					// if so, we create an array with an appropriate size
-
-//					int arrayArg = paramArrayIndex == -1 ? int.MaxValue : paramArrayIndex;
-
-//					for (int j = 0; j < paramCount; j++)
-//					{
-//						if (parameters[j] != null && parameters[j].GetType().IsArray)
-//						{
-//							Array array = Array.CreateInstance( 
-//								parameters[j].GetType().GetElementType(), paramCount - j );
-//							
-//							parameters[j] = array;
-//							
-//							arrayArg = j; break;
-//						}
-//					}
-
 					/*
 					* sadly, we do need recalc the values of the args, as this can 
 					* change from visit to visit

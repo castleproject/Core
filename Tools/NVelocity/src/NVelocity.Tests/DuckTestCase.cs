@@ -36,7 +36,14 @@ namespace NVelocity
 
 		public object Invoke(string method, params object[] args)
 		{
-			return "invoked " + method;
+			String arguments = string.Empty;
+
+			foreach(object arg in args)
+			{
+				arguments += arg + " ";
+			}
+
+			return "invoked " + method + " " + arguments;
 		}
 	}
 
@@ -126,7 +133,9 @@ namespace NVelocity
 		[Test]
 		public void MethodInvocations()
 		{
-			Assert.AreEqual("invoked some", Evaluate("$duck1.some()"));
+			Assert.AreEqual("invoked some arg1 arg2 ", Evaluate("$duck1.some('arg1', 'arg2')"));
+			Assert.AreEqual("invoked some arg1 ", Evaluate("$duck1.some('arg1')"));
+			Assert.AreEqual("invoked some ", Evaluate("$duck1.some()"));
 			Evaluate("$duck2.set()");
 			Assert.AreEqual("invoked set_0\r\n", duck2.ToString());
 		}
