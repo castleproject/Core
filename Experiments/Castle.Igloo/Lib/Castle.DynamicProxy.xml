@@ -1,0 +1,687 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Castle.DynamicProxy</name>
+    </assembly>
+    <members>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.AddressOfReferenceExpression">
+            <summary>
+            Summary description for ReferenceExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.Expression">
+            <summary>
+            Summary description for Expression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.IEmitter">
+            <summary>
+            Summary description for IEmitter.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ArgumentReference">
+            <summary>
+            Summary description for ArgumentReference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.TypeReference">
+            <summary>
+            Summary description for TypeReference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.Reference">
+            <summary>
+            Summary description for Reference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.AssignArrayStatement">
+            <summary>
+            Summary description for AssignArrayStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.Statement">
+            <summary>
+            Summary description for Statement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.AssignStatement">
+            <summary>
+            Summary description for AssignStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.BinaryExpression">
+            <summary>
+            Summary description for BinaryExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ConditionExpression">
+            <summary>
+            Summary description for ConditionExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ConstructorInvocationExpression">
+            <summary>
+            Summary description for ConstructorInvocationExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ConvertExpression">
+            <summary>
+            Summary description for ConvertExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ExpressionStatement">
+            <summary>
+            Summary description for ExpressionStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.FieldReference">
+            <summary>
+            Summary description for FieldReference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.FixedReference">
+            <summary>
+            Summary description for FixedReference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.GotoStatement">
+            <summary>
+            Summary description for GotoStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.IndirectReference">
+            <summary>
+            Wraps a reference that is passed ByRef and provides indirect load/store facilities.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.LabelReference">
+            <summary>
+            Summary description for LabelReference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.LoadRefArrayElementExpression">
+            <summary>
+            Summary description for LoadRefArrayElementExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.LocalReference">
+            <summary>
+            Summary description for LocalReference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.LockBlockExpression">
+            <summary>
+            Summary description for LockBlockExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.MarkBranchStatement">
+            <summary>
+            Summary description for MarkBranchStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.MethodInvocationExpression">
+            <summary>
+            Summary description for MethodInvocationExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.MethodPointerExpression">
+            <summary>
+            Summary description for MethodPointerExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.MethodTokenExpression">
+            <summary>
+            Summary description for MethodTokenExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.NewArrayExpression">
+            <summary>
+            Summary description for NewArrayExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.NewInstanceExpression">
+            <summary>
+            Summary description for NewInstanceExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.NopStatement">
+            <summary>
+            Summary description for NopStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.NullExpression">
+            <summary>
+            Summary description for NullExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.PopValueFromStackStatement">
+            <summary>
+            Summary description for PopValueFromStackStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ReferenceExpression">
+            <summary>
+            Summary description for ReferenceExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ReferencesToObjectArrayExpression">
+            <summary>
+            Summary description for ReferencesToObjectArrayExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ReturnReferenceExpression">
+            <summary>
+            Summary description for ReturnReferenceExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.ReturnStatement">
+            <summary>
+            Summary description for ReturnStatement.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.SelfReference">
+            <summary>
+            Summary description for SelfReference.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.TypeTokenExpression">
+            <summary>
+            Summary description for TypeTokenExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.VirtualMethodInvocationExpression">
+            <summary>
+            Summary description for VirtualMethodInvocationExpression.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.Utils.ArgumentsUtil">
+            <summary>
+            Summary description for ArgumentsUtil.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.Utils.LdcOpCodesDictionary">
+            <summary>
+            Provides appropriate Ldc.X opcode for the type of primitive value to be loaded.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.Utils.LdindOpCodesDictionary">
+            <summary>
+            Provides appropriate Ldind.X opcode for 
+            the type of primitive value to be loaded indirectly.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.Utils.StindOpCodesDictionary">
+            <summary>
+            Provides appropriate Stind.X opcode 
+            for the type of primitive value to be stored indirectly.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.Utils.OpCodeUtil">
+            <summary>
+            Summary description for OpCodeUtil.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeBuilder.Utils.OpCodeUtil.EmitLoadOpCodeForConstantValue(System.Reflection.Emit.ILGenerator,System.Object)">
+            <summary>
+            Emits a load opcode of the appropriate kind for a constant string or
+            primitive value.
+            </summary>
+            <param name="gen"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeBuilder.Utils.OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(System.Reflection.Emit.ILGenerator,System.Type)">
+            <summary>
+            Emits a load opcode of the appropriate kind for the constant default value of a
+            type, such as 0 for value types and null for reference types.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeBuilder.Utils.OpCodeUtil.EmitLoadIndirectOpCodeForType(System.Reflection.Emit.ILGenerator,System.Type)">
+            <summary>
+            Emits a load indirect opcode of the appropriate type for a value or object reference.
+            Pops a pointer off the evaluation stack, dereferences it and loads
+            a value of the specified type.
+            </summary>
+            <param name="gen"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeBuilder.Utils.OpCodeUtil.EmitStoreIndirectOpCodeForType(System.Reflection.Emit.ILGenerator,System.Type)">
+            <summary>
+            Emits a store indirectopcode of the appropriate type for a value or object reference.
+            Pops a value of the specified type and a pointer off the evaluation stack, and
+            stores the value.
+            </summary>
+            <param name="gen"></param>
+            <param name="type"></param>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.AbstractCodeBuilder">
+            <summary>
+            Summary description for AbstractCodeBuilder.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.AbstractEasyType">
+            <summary>
+            Summary description for AbstractEasyType.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.ConstructorCodeBuilder">
+            <summary>
+            Summary description for ConstructorCodeBuilder.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.ConstructorCollection">
+            <summary>
+            Summary description for ConstructorCollection.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyCallable">
+            <summary>
+            Summary description for EasyCallable.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyNested">
+            <summary>
+            Summary description for EasyNested.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyConstructor">
+            <summary>
+            Summary description for EasyConstructor.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.IEasyMember">
+            <summary>
+            Summary description for IEasyBuilder.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyDefaultConstructor">
+            <summary>
+            Summary description for EasyDefaultConstructor.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyEvent">
+            <summary>
+            Summary description for EasyEvent.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyMethod">
+            <summary>
+            Summary description for EasyMethod.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyProperty">
+            <summary>
+            Summary description for EasyProperty.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyRuntimeConstructor">
+            <summary>
+            Summary description for EasyRuntimeConstructor.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyRuntimeMethod">
+            <summary>
+            Summary description for EasyRuntimeMethod.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyType">
+            <summary>
+            Summary description for EasyType.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.EventsCollection">
+            <summary>
+            Summary description for EventsCollection.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.MethodCodeBuilder">
+            <summary>
+            Summary description for MethodCodeBuilder.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.MethodCollection">
+            <summary>
+            Summary description for MethodCollection.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.NestedTypeCollection">
+            <summary>
+            Summary description for NestedTypeCollection.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeBuilder.PropertiesCollection">
+            <summary>
+            Summary description for PropertiesCollection.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeGenerators.Set">
+            <summary>
+            Summary description for Set.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator">
+            <summary>
+            Summary description for BaseCodeGenerator.
+            </summary>
+        </member>
+        <member name="F:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator._cachedFields">
+            <summary>
+            Holds instance fields which points to delegates instantiated
+            </summary>
+        </member>
+        <member name="F:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator._method2Delegate">
+            <summary>
+            MethodInfo => Callable delegate
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.GenerateConstructor">
+            <summary>
+            Generates one public constructor receiving 
+            the <see cref="T:Castle.DynamicProxy.IInterceptor"/> instance and instantiating a hashtable
+            </summary>
+            <remarks>
+            Should be overrided to provided specific semantics, if necessary
+            </remarks>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.GenerateConstructorCode(Castle.DynamicProxy.Builder.CodeBuilder.ConstructorCodeBuilder,Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.Reference,Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.Reference,Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST.Reference)">
+            <summary>
+            Common initializatio code for the default constructor
+            </summary>
+            <param name="codebuilder"></param>
+            <param name="interceptorArg"></param>
+            <param name="targetArgument"></param>
+            <param name="mixinArray"></param>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.GenerateInterfaceImplementation(System.Type[])">
+            <summary>
+            
+            </summary>
+            <param name="interfaces"></param>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.GenerateTypeImplementation(System.Type,System.Boolean)">
+            <summary>
+            Iterates over the interfaces and generate implementation 
+            for each method in it.
+            </summary>
+            <param name="type">Type class</param>
+            <param name="ignoreInterfaces">if true, we inspect the 
+            type for implemented interfaces</param>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.NormalizeNamespaceName(System.String)">
+            <summary>
+            Naive implementation, but valid for long namespaces
+            Works by using only the last piece of the namespace
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.GetTypeName(System.Type)">
+            <summary>
+            Gets the name of a type, taking into consideration nested types.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.CreateProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Generate property implementation
+            </summary>
+            <param name="property"></param>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.GenerateMethodImplementation(System.Reflection.MethodInfo,Castle.DynamicProxy.Builder.CodeBuilder.EasyProperty[])">
+            <summary>
+            Generates implementation for each method.
+            </summary>
+            <param name="method"></param>
+            <param name="properties"></param>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.BaseCodeGenerator.WriteInterceptorInvocationMethod(System.Reflection.MethodInfo,Castle.DynamicProxy.Builder.CodeBuilder.EasyMethod)">
+            <summary>
+            Writes the method implementation. This 
+            method generates the IL code for property get/set method and
+            ordinary methods.
+            </summary>
+            <param name="method">The method to implement.</param>
+            <param name="builder"><see cref="T:Castle.DynamicProxy.Builder.CodeBuilder.EasyMethod"/> being constructed.</param>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeGenerators.CallableField">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeGenerators.ClassProxyGenerator">
+            <summary>
+            Summary description for ClassProxyGenerator.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.ClassProxyGenerator.GenerateConstructor(System.Reflection.ConstructorInfo)">
+            <summary>
+            Generates one public constructor receiving 
+            the <see cref="T:Castle.DynamicProxy.IInterceptor"/> instance and instantiating a hashtable
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeGenerators.InterfaceProxyGenerator">
+            <summary>
+            Summary description for InterfaceProxyGenerator.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.InterfaceProxyGenerator.GetCorrectMethod(System.Reflection.MethodInfo)">
+            <summary>
+            From an interface method (abstract) look up 
+            for a matching method on the target
+            </summary>
+            <param name="method"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.DynamicProxy.Builder.CodeGenerators.InterfaceProxyGenerator.GenerateConstructor">
+            <summary>
+            Generates one public constructor receiving 
+            the <see cref="T:Castle.DynamicProxy.IInterceptor"/> instance and instantiating a HybridCollection
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeGenerators.ModuleScope">
+            <summary>
+            Summary description for ModuleScope.
+            </summary>
+        </member>
+        <member name="F:Castle.DynamicProxy.Builder.CodeGenerators.ModuleScope._moduleBuilderWithStrongName">
+            <summary>
+            Avoid leaks caused by non disposal of generated types.
+            </summary>
+        </member>
+        <member name="F:Castle.DynamicProxy.Builder.CodeGenerators.ModuleScope._typeCache">
+            <summary>
+            Keep track of generated types
+            </summary>
+        </member>
+        <member name="F:Castle.DynamicProxy.Builder.CodeGenerators.ModuleScope._lockobj">
+            <summary>
+            Used to lock the module builder creation
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.CodeGenerators.ProxyGenerationException">
+            <summary>
+            Summary description for ProxyGenerationException.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.DefaultProxyBuilder">
+            <summary>
+            Summary description for DefaultProxyBuilder.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Builder.IProxyBuilder">
+            <summary>
+            Summary description for IProxyBuilder.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.GeneratorContext">
+            <summary>
+            Summary description for GeneratorContext.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.GeneratorContext.ShouldCreateNewSlot(System.Reflection.MethodInfo)">
+            <summary>
+            Checks if the method has the same signature as a method that was marked as
+            one that should generate a new vtable slot.
+            </summary>
+        </member>
+        <member name="P:Castle.DynamicProxy.GeneratorContext.ProxyObjectReference">
+            <summary>
+            The implementor of IObjectReference responsible for 
+            the deserialization and reconstruction of the proxy object
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.IInvocation">
+            <summary>
+            Proceed with, manipulate or find more information about the call that 
+            is being intercepted
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.IInvocation.Proceed(System.Object[])">
+            <summary>
+            Proceed with the call that was intercepted.
+            </summary>
+            <param name="args">The arguments that will be passed onto the method.</param>
+            <returns>The argument returned from the method.</returns>
+        </member>
+        <member name="P:Castle.DynamicProxy.IInvocation.Proxy">
+            <summary>
+            Get the dynamic proxy that intercepted this call.
+            </summary>
+        </member>
+        <member name="P:Castle.DynamicProxy.IInvocation.InvocationTarget">
+            <summary>
+            Get or set target that will be invoked when Process() is called.  		
+            </summary>
+            <remarks>
+            Changing InvocationTarget only effects this call.  Any call made after
+            this will invoke the original target of the proxy.
+            </remarks>
+        </member>
+        <member name="P:Castle.DynamicProxy.IInvocation.Method">
+            <summary>
+            Get the method that is being invoked.
+            </summary>
+        </member>
+        <member name="P:Castle.DynamicProxy.IInvocation.MethodInvocationTarget">
+            <summary>
+            Get the method on the target object that is being invoked.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Invocation.SameClassInvocation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.Serialization.ProxyObjectReference">
+            <summary>
+            Handles the deserialization of proxies.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.Serialization.ProxyObjectReference.ResetScope">
+            <summary>
+            Usefull for test cases
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.AssertUtil">
+            <summary>
+            Summary description for AssertUtil.
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.ICallable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.ICallable.Call(System.Object[])">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Castle.DynamicProxy.ICallable.Target">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.IInterceptor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Castle.DynamicProxy.ProxyGenerator">
+            <summary>
+            Generates a Java style proxy. This overrides the .Net proxy requirements 
+            that forces one to extend MarshalByRefObject or (for a different purpose)
+            ContextBoundObject to have a Proxiable class.
+            </summary>
+            <remarks>
+            The <see cref="T:Castle.DynamicProxy.ProxyGenerator"/> should be used to generate a class 
+            implementing the specified interfaces. The dynamic implementation will 
+            only calls the internal <see cref="T:Castle.DynamicProxy.IInterceptor"/> instance.
+            </remarks>
+            <remarks>
+            Please note that this proxy implementation currently doesn't not supports ref and out arguments 
+            in methods.
+            Also note that only virtual methods can be proxied in a class.
+            </remarks>
+            <example>
+            <code>
+            MyInvocationHandler interceptor = ...
+            ProxyGenerator generator = new ProxyGenerator();
+            IInterfaceExposed proxy = 
+            	generator.CreateProxy( new Type[] { typeof(IInterfaceExposed) }, interceptor );
+            </code>
+            </example>
+        </member>
+        <member name="M:Castle.DynamicProxy.ProxyGenerator.CreateProxy(System.Type,Castle.DynamicProxy.IInterceptor,System.Object)">
+            <summary>
+            Generates a proxy implementing all the specified interfaces and
+            redirecting method invocations to the specifed interceptor.
+            </summary>
+            <param name="theInterface">Interface to be implemented</param>
+            <param name="interceptor">instance of <see cref="T:Castle.DynamicProxy.IInterceptor"/></param>
+            <param name="target">The proxy target.</param>
+            <returns>Proxy instance</returns>
+        </member>
+        <member name="M:Castle.DynamicProxy.ProxyGenerator.CreateProxy(System.Type[],Castle.DynamicProxy.IInterceptor,System.Object)">
+            <summary>
+            Generates a proxy implementing all the specified interfaces and
+            redirecting method invocations to the specifed interceptor.
+            </summary>
+            <param name="interfaces">Array of interfaces to be implemented</param>
+            <param name="interceptor">instance of <see cref="T:Castle.DynamicProxy.IInterceptor"/></param>
+            <param name="target">The proxy target.</param>
+            <returns>Proxy instance</returns>
+        </member>
+        <member name="M:Castle.DynamicProxy.ProxyGenerator.CreateCustomProxy(System.Type,Castle.DynamicProxy.IInterceptor,System.Object,Castle.DynamicProxy.GeneratorContext)">
+            <summary>
+            
+            </summary>
+            <param name="theInterface"></param>
+            <param name="interceptor"></param>
+            <param name="context"></param>
+            <param name="target">The proxy target.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Castle.DynamicProxy.ProxyGenerator.CreateCustomProxy(System.Type[],Castle.DynamicProxy.IInterceptor,System.Object,Castle.DynamicProxy.GeneratorContext)">
+            <summary>
+            
+            </summary>
+            <param name="interfaces"></param>
+            <param name="interceptor"></param>
+            <param name="context"></param>
+            <param name="target">The proxy target.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Castle.DynamicProxy.StandardInterceptor">
+            <summary>
+            Summary description for StandardInterceptor.
+            </summary>
+        </member>
+        <member name="M:Castle.DynamicProxy.StandardInterceptor.Intercept(Castle.DynamicProxy.IInvocation,System.Object[])">
+            <summary>
+            
+            </summary>
+            <param name="invocation"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
