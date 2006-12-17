@@ -26,15 +26,19 @@
 		viewPathRoot="views" 
 		customEngine="ViewEngine.Type.Name, Assembly">
 
-		<add type="ViewEngine.Type.Name1, Assembly" xhtml="false" />
-		<add type="ViewEngine.Type.Name2, Assembly" xhtml="false" />
-
 		<additionalSources>
 			<assembly name="" namespace="" />
 			<assembly name="" namespace="" />
 		</additionalSources>
 		
 	</viewEngine>
+
+	<viewEngines viewPathRoot="views">
+
+		<add type="ViewEngine.Type.Name1, Assembly" xhtml="false" />
+		<add type="ViewEngine.Type.Name2, Assembly" xhtml="false" />
+
+	</viewEngines>
 
 	<!-- List of services ids:
 
