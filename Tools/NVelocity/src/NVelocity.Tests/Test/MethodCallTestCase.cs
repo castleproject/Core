@@ -50,7 +50,23 @@ namespace NVelocity.Test
 			Assert.AreEqual("55", Eval("$test.justDoIt($num)"));
 		}
 
-		[Test, Ignore("While somebody fixes it, I need the build passing")]
+		[Test]
+		public void HasExactSignatureWithCorrectCase()
+		{
+			double num = 55.0;
+			c.Put("num", num);
+			Assert.AreEqual("55", Eval("$test.JustDoIt($num)"));
+		}
+
+		[Test]
+		public void HasExactSignatureWithMessedUpCase()
+		{
+			double num = 55.0;
+			c.Put("num", num);
+			Assert.AreEqual("55", Eval("$test.jUStDoIt($num)"));
+		}
+
+		[Test]
 		public void HasCompatibleSignature()
 		{
 			int num = 99;
@@ -58,13 +74,31 @@ namespace NVelocity.Test
 			Assert.AreEqual("99", Eval("$test.justDoIt($num)"));
 		}
 
-		[Test, Ignore("While somebody fixes it, I need the build passing")]
+		[Test]
 		public void HasRelaxedSignature()
 		{
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
 			DirectoryInfo di = new DirectoryInfo(path);
 			c.Put("di", di);
 			Assert.AreEqual(path, Eval("$test.justDoIt($di)"));
+		}
+
+		[Test]
+		public void HasRelaxedSignatureWithCorrectCase()
+		{
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+			DirectoryInfo di = new DirectoryInfo(path);
+			c.Put("di", di);
+			Assert.AreEqual(path, Eval("$test.JustDoIt($di)"));
+		}
+
+		[Test]
+		public void HasRelaxedSignatureWithMessedUpCase()
+		{
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+			DirectoryInfo di = new DirectoryInfo(path);
+			c.Put("di", di);
+			Assert.AreEqual(path, Eval("$test.juSTDOIt($di)"));
 		}
 
 		public class TestClass

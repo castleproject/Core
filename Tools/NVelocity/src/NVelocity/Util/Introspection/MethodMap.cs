@@ -2,6 +2,7 @@ namespace NVelocity.Util.Introspection
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Text;
@@ -9,7 +10,7 @@ namespace NVelocity.Util.Introspection
 	public class MethodMap
 	{
 		/// <summary> Keep track of all methods with the same name.</summary>
-		internal IDictionary methodByNameMap = new Hashtable();
+		internal IDictionary methodByNameMap = new HybridDictionary(true);
 
 		private const int MORE_SPECIFIC = 0;
 		private const int LESS_SPECIFIC = 1;
