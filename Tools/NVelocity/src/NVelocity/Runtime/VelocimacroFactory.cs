@@ -567,9 +567,9 @@ namespace NVelocity.Runtime
 
 		/// <summary>  tells the vmManager to dump the specified namespace
 		/// </summary>
-		public bool DumpVMNamespace(String namespace_Renamed)
+		public bool DumpVMNamespace(String ns)
 		{
-			return vmManager.DumpNamespace(namespace_Renamed);
+			return vmManager.DumpNamespace(ns);
 		}
 
 		/// <summary>  sets permission to have VMs local in scope to their declaring template

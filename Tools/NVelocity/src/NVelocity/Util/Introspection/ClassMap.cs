@@ -65,9 +65,9 @@ namespace NVelocity.Util.Introspection
 		/// <returns>
 		/// the class object whose methods are cached by this map.
 		/// </returns>
-		public MethodInfo FindMethod(String name, Object[] params_Renamed)
+		public MethodInfo FindMethod(String name, Object[] parameters)
 		{
-			String methodKey = MakeMethodKey(name, params_Renamed);
+			String methodKey = MakeMethodKey(name, parameters);
 			Object cacheEntry = methodCache[methodKey];
 
 			if (cacheEntry == CACHE_MISS)
@@ -79,7 +79,7 @@ namespace NVelocity.Util.Introspection
 			{
 				try
 				{
-					cacheEntry = methodMap.Find(name, params_Renamed);
+					cacheEntry = methodMap.Find(name, parameters);
 				}
 				catch(AmbiguousException)
 				{

@@ -99,7 +99,7 @@ namespace NVelocity.Util
 		public static String RemoveUnderScores(String data)
 		{
 			String temp = null;
-			StringBuilder out_Renamed = new StringBuilder();
+			StringBuilder output = new StringBuilder();
 			temp = data;
 
 			SupportClass.Tokenizer st = new SupportClass.Tokenizer(temp, "_");
@@ -107,10 +107,10 @@ namespace NVelocity.Util
 			while (st.HasMoreTokens())
 			{
 				String element = (String) st.NextToken();
-				out_Renamed.Append(FirstLetterCaps(element));
+				output.Append(FirstLetterCaps(element));
 			}
 
-			return out_Renamed.ToString();
+			return output.ToString();
 		}
 
 		/// <summary> <p>
@@ -161,7 +161,7 @@ namespace NVelocity.Util
 		public static String RemoveAndHump(String data, String replaceThis)
 		{
 			String temp = null;
-			StringBuilder out_Renamed = new StringBuilder();
+			StringBuilder output = new StringBuilder();
 			temp = data;
 
 			SupportClass.Tokenizer st = new SupportClass.Tokenizer(temp, replaceThis);
@@ -169,10 +169,10 @@ namespace NVelocity.Util
 			while (st.HasMoreTokens())
 			{
 				String element = (String) st.NextToken();
-				out_Renamed.Append(CapitalizeFirstLetter(element));
+				output.Append(CapitalizeFirstLetter(element));
 			} //while
 
-			return out_Renamed.ToString();
+			return output.ToString();
 		}
 
 		/// <summary> <p>

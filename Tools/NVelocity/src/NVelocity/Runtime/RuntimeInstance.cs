@@ -880,9 +880,9 @@ namespace NVelocity.Runtime
 		/// This is to support clearing the VM list when in 
 		/// <c>inline-VM-local-scope</c> mode.
 		/// </summary>
-		public bool DumpVMNamespace(String namespace_Renamed)
+		public bool DumpVMNamespace(String ns)
 		{
-			return vmFactory.DumpVMNamespace(namespace_Renamed);
+			return vmFactory.DumpVMNamespace(ns);
 		}
 
 		/* --------------------------------------------------------------------

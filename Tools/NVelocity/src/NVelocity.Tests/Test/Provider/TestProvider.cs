@@ -339,16 +339,16 @@ namespace NVelocity.Test.Provider
 		/// <summary> Chop i characters off the end of a string.
 		/// *
 		/// </summary>
-		/// <param name="string">String to chop.
+		/// <param name="str">String to chop.
 		/// </param>
 		/// <param name="i">Number of characters to chop.
 		/// </param>
 		/// <returns>String with processed answer.
 		///
 		/// </returns>
-		public virtual String chop(String string_Renamed, int i)
+		public virtual String chop(String str, int i)
 		{
-			return (string_Renamed.Substring(0, (string_Renamed.Length - i) - (0)));
+			return (str.Substring(0, (str.Length - i) - (0)));
 		}
 
 		public virtual bool allEmpty(Object[] list)

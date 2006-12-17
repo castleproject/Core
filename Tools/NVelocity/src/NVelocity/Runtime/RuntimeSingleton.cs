@@ -383,9 +383,9 @@ namespace NVelocity.Runtime
 		/// This is to support clearing the VM list when in 
 		/// inline-VM-local-scope mode
 		/// </summary>
-		public static bool DumpVMNamespace(String namespace_Renamed)
+		public static bool DumpVMNamespace(String ns)
 		{
-			return ri.DumpVMNamespace(namespace_Renamed);
+			return ri.DumpVMNamespace(ns);
 		}
 
 		/* --------------------------------------------------------------------
