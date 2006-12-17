@@ -41,10 +41,17 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		private String componentName;
 		private ViewComponent component;
 		private NVelocityViewContextAdapter contextAdapter;
+		private IViewEngine viewEngine;
 
-		public AbstractComponentDirective(IViewComponentFactory viewComponentFactory)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractComponentDirective"/> class.
+		/// </summary>
+		/// <param name="viewComponentFactory">The view component factory.</param>
+		/// <param name="viewEngine">The view engine instance</param>
+		public AbstractComponentDirective(IViewComponentFactory viewComponentFactory, IViewEngine viewEngine)
 		{
 			this.viewComponentFactory = viewComponentFactory;
+			this.viewEngine = viewEngine;
 		}
 
 		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
@@ -72,7 +79,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			component = viewComponentFactory.Create(componentName);
 
-			contextAdapter = new NVelocityViewContextAdapter(componentName, node);
+			contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine);
 
 			ProcessSubSections();
 

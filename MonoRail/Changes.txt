@@ -4,6 +4,48 @@ Change history
 Release Candidate 3
 ===================
 
+- Added UpdatePage and UpdatePageTag ViewComponents. Both allow you to have a "page"
+  which is a JS generator. It evaluates the view component body to generate the JS.
+  
+  Example:
+  
+#blockcomponent(UpdatePageTag)
+$page.el('products').style.bgcolor.set('"white"')
+#end
+
+
+#blockcomponent(UpdatePage)
+$page.el('products').style.bgcolor.set('"white"')
+#end
+
+- Added FormHelper.NumberField() which renders a 'input text' with a javascript that
+  prevents chars other than numbers (and period) from being entered.
+
+	You can optionally pass an <c>exceptions</c> value through the dictionary.
+	It must be a comma separated list of chars that can be accepted on the field. 
+
+- Added FormHelper scripts:
+
+  View must use FormHelper.InstallScripts()
+
+- Refactored generation of script blocks
+
+- Created stub for UrlForHelper
+
+- Helpers are added with a less verbose name 
+  FormHelper and Form, AjaxHelper and Ajax are made available to the view
+
+- Added AuthenticatedContent ViewComponent that allows context to be 
+  render based on the user state (authenticated or anonymous)
+
+- Removed CompositeViewEngine as it's useless now that we support multiple view engines
+
+- Multiple view engine support:
+  Configuration schema changed, see monorail_configuration_ref.txt for more information
+
+- Introduced IViewEngineManager that sits between the controller and the view engines
+  deciding which view engine will be used output the contents
+
 - Applied patch by Luke Melia for MR-192: 
   "Add TextHelper"
 

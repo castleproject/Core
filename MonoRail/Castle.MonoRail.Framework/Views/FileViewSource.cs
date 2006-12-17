@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Views
 {
-	using System;
 	using System.IO;
 
 	/// <summary>

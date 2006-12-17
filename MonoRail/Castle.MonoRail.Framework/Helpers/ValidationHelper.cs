@@ -15,9 +15,7 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
-	using System.IO;
 	using System.Collections;
-	using Castle.MonoRail.Framework;
 
 	/// <summary>
 	/// Helper that provides client-side validation.
@@ -26,12 +24,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// fValidate(http://www.peterbailey.net/fValidate/).</remarks>
 	public class ValidationHelper : AbstractHelper
 	{
-		private const String AutoIncludeTag = "<script type=\"text/javascript\" src=\"{0}/{1}.{2}\"></script>\r\n";
-		private const String UserIncludeTag = "<script type=\"text/javascript\" src=\"{0}\"></script>\r\n";
-
-		private String _virtualDir;
 		private IDictionary _submitOptions;
-		private String _extension;
 
 		/// <summary>
 		/// Constructor.
@@ -44,6 +37,18 @@ namespace Castle.MonoRail.Framework.Helpers
 			_submitOptions["disable"] = false;
 			_submitOptions["groupError"] = false;
 			_submitOptions["errorMode"] = 0;
+		}
+
+		/// <summary>
+		/// Automatic Script installer.
+		/// </summary>
+		/// <returns></returns>
+		public String InstallScripts()
+		{
+			return RenderScriptBlockToSource("/MonoRail/Files/ValidateConfig") + Environment.NewLine +
+				   RenderScriptBlockToSource("/MonoRail/Files/ValidateCore") + Environment.NewLine +
+				   RenderScriptBlockToSource("/MonoRail/Files/ValidateValidators") + Environment.NewLine +
+				   RenderScriptBlockToSource("/MonoRail/Files/ValidateLang") + Environment.NewLine;
 		}
 
 		/// <summary>
@@ -70,109 +75,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			_submitOptions["disable"] = disable;
 			_submitOptions["groupError"] = groupError;
 			_submitOptions["errorMode"] = errorMode;
-		}
-
-		/// <summary>
-		/// Gets or Sets the Virtual Directory the scripts are in.
-		/// </summary>
-		/// <remarks>The default is <see cref="IRailsEngineContext.ApplicationPath"/>.</remarks>
-		public virtual String VirtualDir
-		{
-			get
-			{
-				if (_virtualDir == null)
-				{
-					return Controller.Context.ApplicationPath;
-				}
-
-				return _virtualDir;
-			}
-			set { _virtualDir = value; }
-		}
-
-		protected String Extension
-		{
-			get
-			{
-				if (_extension == null)
-				{
-					if (Controller != null)
-					{
-						_extension = Controller.Context.UrlInfo.Extension;
-					}
-					else
-					{
-						_extension = "rails";
-					}
-				}
-
-				return _extension;
-			}
-		}
-
-		/// <summary>
-		/// Automatic Script installer.
-		/// </summary>
-		/// <returns></returns>
-		public String InstallScripts()
-		{
-			String baseDir = VirtualDir + @"/MonoRail/Files";
-
-			return BuildScriptInclude(baseDir, "ValidateConfig", Extension) +
-				BuildScriptInclude(baseDir, "ValidateCore", Extension) +
-				BuildScriptInclude(baseDir, "ValidateValidators", Extension) +
-				BuildScriptInclude(baseDir, "ValidateLang", Extension);
-		}
-
-		protected virtual String BuildScriptInclude(String baseDir, String js, String extension)
-		{
-			return String.Format(AutoIncludeTag, baseDir, js, extension);
-		}
-
-		/// <summary>
-		/// Install the script with a custom message file(based on the fValidate I18N file).
-		/// </summary>
-		/// <param name="scriptFilePath">A <see cref="string"/> represeting the path and file name</param>
-		/// <returns></returns>
-		public String InstallWithCustomMsg(String scriptFilePath)
-		{
-			String baseDir = VirtualDir + @"/MonoRail/Files";
-
-			return BuildScriptInclude(baseDir, "ValidateConfig", Extension) +
-				BuildScriptInclude(baseDir, "ValidateCore", Extension) +
-				BuildScriptInclude(baseDir, "ValidateValidators", Extension) +
-				String.Format(UserIncludeTag, scriptFilePath);
-		}
-
-		/// <summary>
-		/// Manual Script Installer.
-		/// </summary>
-		/// <param name="baseDir">The virtual path of the dir where the fValidate are.</param>
-		/// <remarks>You'll need to have the files physically</remarks>
-		/// <returns></returns>
-		public String InstallScripts(String baseDir)
-		{
-			return InstallScripts(baseDir, "enUS");
-		}
-
-		/// <summary>
-		/// Manual Script Installer.
-		/// </summary>
-		/// <param name="baseDir">The virtual path of the dir where the fValidate are.</param>
-		/// <param name="lang">The language of the messages.</param>
-		/// <remarks>You'll need to have the files physically</remarks>
-		/// <returns></returns>
-		public String InstallScripts(String baseDir, String lang)
-		{
-			return BuildScriptInclude(baseDir, "fValidate.config.js") +
-				BuildScriptInclude(baseDir, "fValidate.core.js") +
-				BuildScriptInclude(baseDir, "fValidate.validators.js") +
-				BuildScriptInclude(baseDir, "fValidate.lang-" + lang + ".js");
-		}
-
-		private String BuildScriptInclude(String baseDir, String js)
-		{
-			return String.Format(UserIncludeTag, Path.Combine(baseDir, js).Replace('\\', '/'));
 		}
 
 		/// <summary>

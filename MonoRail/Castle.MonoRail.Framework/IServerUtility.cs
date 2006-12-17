@@ -20,11 +20,11 @@ namespace Castle.MonoRail.Framework
 	public interface IServerUtility
 	{
 		/// <summary>
-		/// Returns the physical path for the 
+		/// Returns the physical path for the
 		/// specified virtual path.
 		/// </summary>
-		/// <param name="virtualPath"></param>
-		/// <returns></returns>
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <returns>The mapped path</returns>
 		String MapPath(String virtualPath);
 
 		/// <summary>
@@ -51,6 +51,9 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Escapes JavaScript with Url encoding and returns the encoded string.  
 		/// </summary>
+		/// <remarks>
+		/// Converts quotes, single quotes and CR/LFs to their representation as an escape character.
+		/// </remarks>
 		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
 		String JavaScriptEscape(String content);

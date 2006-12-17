@@ -19,7 +19,6 @@ namespace Castle.MonoRail.Framework
 	using System.IO;
 	
 	using Castle.Core;
-	using Castle.MonoRail.Framework.Configuration;
 
 	/// <summary>
 	/// Abstract base class for View Engines.
@@ -28,7 +27,6 @@ namespace Castle.MonoRail.Framework
 	{
 		private bool xhtmlRendering;
 		private IViewSourceLoader viewSourceLoader;
-		
 		protected IServiceProvider serviceProvider;
 
 		#region IServiceEnabledComponent implementation
@@ -36,10 +34,6 @@ namespace Castle.MonoRail.Framework
 		public virtual void Service(IServiceProvider provider)
 		{
 			serviceProvider = provider;
-			
-			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
-			
-			xhtmlRendering = config.ViewEngineConfig.EnableXHtmlRendering;
 			
 			viewSourceLoader = (IViewSourceLoader) provider.GetService(typeof(IViewSourceLoader));
 			
@@ -57,6 +51,37 @@ namespace Castle.MonoRail.Framework
 		#endregion
 
 		/// <summary>
+		/// Gets a value indicating whether the view engine
+		/// support the generation of JS.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if JS generation is supported; otherwise, <c>false</c>.
+		/// </value>
+		public abstract bool SupportsJSGeneration { get; }
+
+		/// <summary>
+		/// Gets the view file extension.
+		/// </summary>
+		/// <value>The view file extension.</value>
+		public abstract string ViewFileExtension { get; }
+
+		/// <summary>
+		/// Gets the JS generator file extension.
+		/// </summary>
+		/// <value>The JS generator file extension.</value>
+		public abstract string JSGeneratorFileExtension { get; }
+
+		/// <summary>
+		/// Gets/sets whether rendering should aim 
+		/// to be XHTML compliant, obtained from the configuration.
+		/// </summary>
+		public bool XHtmlRendering
+		{
+			get { return xhtmlRendering; }
+			set { xhtmlRendering = value; }
+		}
+
+		/// <summary>
 		/// Evaluates whether the specified template exists.
 		/// </summary>
 		/// <returns><c>true</c> if it exists</returns>
@@ -69,21 +94,26 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public abstract void Process(IRailsEngineContext context, Controller controller, String templateName);
 
-		/// <summary>
-		/// Wraps the specified content in the layout using the 
-		/// context to output the result.
-		/// </summary>
-		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
-
 		///<summary>
 		/// Processes the view - using the templateName 
 		/// to obtain the correct template
 		/// and writes the results to the System.IO.TextWriter.
 		/// </summary>
-		public virtual void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName)
-		{
-			throw new NotImplementedException();
-		}
+		public abstract void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
+
+		public abstract void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, string partialName);
+
+		public abstract object CreateJSGenerator(IRailsEngineContext context);
+
+		public abstract void GenerateJS(IRailsEngineContext context, Controller controller, string templateName);
+
+		public abstract void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller, string templateName);
+
+		/// <summary>
+		/// Wraps the specified content in the layout using the 
+		/// context to output the result.
+		/// </summary>
+		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 
 		protected virtual void PreSendView(Controller controller, object view)
 		{
@@ -93,15 +123,6 @@ namespace Castle.MonoRail.Framework
 		protected virtual void PostSendView(Controller controller, object view)
 		{
 			controller.PostSendView(view);
-		}
-
-		/// <summary>
-		/// Gets/sets whether rendering should aim to be XHTML compliant, obtained from the configuration.
-		/// </summary>
-		public bool XhtmlRendering
-		{
-			get { return xhtmlRendering; }
-			set { xhtmlRendering = value; }
 		}
 
 		protected IViewSourceLoader ViewSourceLoader
@@ -117,7 +138,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected virtual void AdjustContentType(IRailsEngineContext context)
 		{
-			if (XhtmlRendering)
+			if (xhtmlRendering)
 			{
 				//Find out what they'll accept
 				String httpAccept = context.Request.Headers["Accept"];
@@ -147,6 +168,14 @@ namespace Castle.MonoRail.Framework
 				//Just use HTML
 				context.Response.ContentType = "text/html";
 			}
+		}
+
+		/// <summary>
+		/// Sets the HTTP Content-Type header to <c>text/javascript</c>
+		/// </summary>
+		protected void AdjustJavascriptContentType(IRailsEngineContext context)
+		{
+			context.Response.ContentType = "text/javascript";
 		}
 
 		#endregion

@@ -219,9 +219,15 @@
     <Content Include="views\uploadfile\index.aspx" />
     <Content Include="views\uploadfile\showuploadfilename.aspx" />
     <None Include="web.config" />
-    <EmbeddedResource Include="Resources\Language.de.resx" />
-    <EmbeddedResource Include="Resources\Language.nl.resx" />
-    <EmbeddedResource Include="Resources\Language.resx" />
+    <EmbeddedResource Include="Resources\Language.de.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Language.nl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Language.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="views\helper\helpme.aspx.resx">
       <DependentUpon>helpme.aspx.cs</DependentUpon>
     </EmbeddedResource>

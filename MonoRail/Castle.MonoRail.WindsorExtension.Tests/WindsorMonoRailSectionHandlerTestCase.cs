@@ -64,7 +64,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 			Assert.AreEqual( "secret", config.SmtpConfig.Password);
 			Assert.AreEqual( "JoeDoe", config.SmtpConfig.Username);
 			Assert.AreEqual( "Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine", 
-			                 config.ViewEngineConfig.CustomEngine.FullName );			
+			                 config.ViewEngineConfig.ViewEngines[0].Engine.FullName );			
 			Assert.AreEqual( "MoviesDemo", config.ControllersConfig.Assemblies[0] );
 	
 			Assert.IsTrue( config.ViewEngineConfig.ViewPathRoot.EndsWith("views") );

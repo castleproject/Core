@@ -12,45 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace Castle.MonoRail.Framework.ViewComponents
 {
-	using Castle.MonoRail.Framework;
+	using System.IO;
 
-	public class FormHelperController : SmartDispatcherController
+	/// <summary>
+	/// 
+	/// </summary>
+	public class UpdatePage : ViewComponent
 	{
-		public void Index()
+		/// <summary>
+		/// Called by the framework so the component can
+		/// render its content
+		/// </summary>
+		public override void Render()
 		{
-			PropertyBag.Add("model", new TestModel());
-		}
-		
-		public void Save([DataBind("model")] TestModel model)
-		{
-			RenderText(model.hasSet.ToString() + " " + model.SubscribeMe);
-		}
-		
-		public void UseParamsToFillInputs()
-		{
+			Context.Writer.WriteLine(GenerateJS());
 		}
 
-		public void NumbersOnly()
+		protected string GenerateJS()
 		{
+			object generator = Context.ViewEngine.CreateJSGenerator(RailsContext);
+
+			PropertyBag["page"] = generator;
+
+			Context.RenderBody(new StringWriter());
 			
-		}
-	}
-	
-	public class TestModel
-	{
-		private bool subscribeme;
-		internal bool hasSet = false;
+			PropertyBag.Remove("page");
 
-		public bool SubscribeMe
-		{
-			get { return subscribeme; }
-			set
-			{
-				hasSet = true;
-				subscribeme = value;
-			}
+			return generator.ToString();
 		}
 	}
 }

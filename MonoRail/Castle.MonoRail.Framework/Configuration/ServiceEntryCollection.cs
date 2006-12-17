@@ -127,8 +127,8 @@ namespace Castle.MonoRail.Framework.Configuration
 					return typeof(IViewSourceLoader);
 				case ServiceIdentification.ScaffoldingSupport:
 					return typeof(IScaffoldingSupport);
-				case ServiceIdentification.ViewEngine:
-					return typeof(IViewEngine);
+				case ServiceIdentification.ViewEngineManager:
+					return typeof(IViewEngineManager);
 				case ServiceIdentification.ResourceFactory:
 					return typeof(IResourceFactory);
 				case ServiceIdentification.ExecutorFactory:

@@ -29,7 +29,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	{
 		private IList sectionsCreated = new ArrayList();
 
-		public BlockComponentDirective(IViewComponentFactory viewComponentFactory) : base(viewComponentFactory)
+		public BlockComponentDirective(IViewComponentFactory viewComponentFactory, IViewEngine viewEngine)
+			: base(viewComponentFactory, viewEngine)
 		{
 		}
 

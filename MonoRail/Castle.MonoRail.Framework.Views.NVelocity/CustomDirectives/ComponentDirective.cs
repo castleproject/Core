@@ -23,7 +23,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	/// </summary>
 	public class ComponentDirective : AbstractComponentDirective
 	{
-		public ComponentDirective(IViewComponentFactory viewComponentFactory) : base(viewComponentFactory)
+		public ComponentDirective(IViewComponentFactory viewComponentFactory, IViewEngine viewEngine)
+			: base(viewComponentFactory, viewEngine)
 		{
 		}
 

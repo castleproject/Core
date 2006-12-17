@@ -26,62 +26,111 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 	using Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives;
 
+	/// <summary>
+	/// <see cref="IViewComponentContext"/>'s implementation for
+	/// NVelocity
+	/// </summary>
 	public class NVelocityViewContextAdapter : IViewComponentContext
 	{
 		private readonly String componentName;
 		private readonly INode parentNode;
+		private readonly IViewEngine viewEngine;
 
-		private InternalContextAdapter context;
-		private INode bodyNode;
-		private TextWriter writer;
-		private IDictionary componentParams;
 		private String viewToRender;
+		private TextWriter writer;
+		private INode bodyNode;
 		private IDictionary sections;
+		private IDictionary componentParams;
+		private InternalContextAdapter context;
 
-		public NVelocityViewContextAdapter(String componentName, INode parentNode)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NVelocityViewContextAdapter"/> class.
+		/// </summary>
+		/// <param name="componentName">Name of the component.</param>
+		/// <param name="parentNode">The parent node.</param>
+		/// <param name="viewEngine">The view engine.</param>
+		public NVelocityViewContextAdapter(String componentName, INode parentNode, IViewEngine viewEngine)
 		{
 			this.componentName = componentName;
 			this.parentNode = parentNode;
+			this.viewEngine = viewEngine;
 		}
 
 		#region IViewComponentContext
 
+		/// <summary>
+		/// Gets the name of the component.
+		/// </summary>
+		/// <value>The name of the component.</value>
 		public String ComponentName
 		{
 			get { return componentName; }
 		}
 
+		/// <summary>
+		/// Gets the dictionary that holds variables for the
+		/// view and for the view component
+		/// </summary>
+		/// <value>The context vars.</value>
 		public IDictionary ContextVars
 		{
 			get { return context as IDictionary; }
 		}
 
+		/// <summary>
+		/// Gets the component parameters that the view has passed
+		/// to the component
+		/// </summary>
+		/// <value>The component parameters.</value>
 		public IDictionary ComponentParameters
 		{
 			get { return componentParams; }
 		}
 
+		/// <summary>
+		/// Gets or sets the view to render.
+		/// </summary>
+		/// <value>The view to render.</value>
 		public String ViewToRender
 		{
 			get { return viewToRender; }
 			set { viewToRender = value; }
 		}
 
+		/// <summary>
+		/// Gets the writer used to render the component
+		/// </summary>
+		/// <value>The writer.</value>
 		public TextWriter Writer
 		{
 			get { return writer; }
 		}
 
+		/// <summary>
+		/// Determines whether the current component declaration on the view
+		/// has the specified section.
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified section exists; otherwise, <c>false</c>.
+		/// </returns>
 		public bool HasSection(String sectionName)
 		{
 			return sections != null && sections.Contains(sectionName);
 		}
 
+		/// <summary>
+		/// Renders the component body.
+		/// </summary>
 		public void RenderBody()
 		{
 			RenderBody(writer);
 		}
 
+		/// <summary>
+		/// Renders the the specified section
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
 		public void RenderSection(String sectionName)
 		{
 			if (HasSection(sectionName))
@@ -90,10 +139,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				directive.Render(context, writer, parentNode);
 			}
-
-			// Shall we throw exception?
 		}
 
+		/// <summary>
+		/// Renders the body into the specified <see cref="TextWriter"/>
+		/// </summary>
+		/// <param name="writer">The writer.</param>
 		public void RenderBody(TextWriter writer)
 		{
 			if (bodyNode == null)
@@ -102,6 +153,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 
 			bodyNode.Render(context, writer);
+		}
+
+		/// <summary>
+		/// Gets the view engine instance.
+		/// </summary>
+		/// <value>The view engine.</value>
+		public IViewEngine ViewEngine
+		{
+			get { return viewEngine; }
 		}
 
 		#endregion

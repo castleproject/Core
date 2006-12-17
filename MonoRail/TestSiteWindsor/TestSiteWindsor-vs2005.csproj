@@ -105,10 +105,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Castle.MonoRail.Framework.Views.CompositeView\Castle.MonoRail.Framework.Views.CompositeView-vs2005.csproj">
-      <Project>{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}</Project>
-      <Name>Castle.MonoRail.Framework.Views.CompositeView-vs2005</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.Framework.Views.NVelocity\Castle.MonoRail.Framework.Views.NVelocity-vs2005.csproj">
       <Project>{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}</Project>
       <Name>Castle.MonoRail.Framework.Views.NVelocity-vs2005</Name>
@@ -134,11 +130,18 @@
     </Compile>
     <Content Include="default.htm" />
     <Content Include="global.asax" />
-    <Content Include="views\cookies\index.aspx" />
     <Content Include="views\home\index.aspx" />
     <None Include="views\home\ComponentOnLayout.vm" />
     <None Include="views\home\ComponentTest.vm" />
+    <None Include="views\layouts\layout.vm" />
+    <None Include="views\testwizard\InnerAction2.vm" />
+    <None Include="views\testwizard\page1.vm" />
+    <None Include="views\testwizard\page3.vm" />
+    <None Include="views\testwizard\page4.vm" />
     <None Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="views\cookies\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

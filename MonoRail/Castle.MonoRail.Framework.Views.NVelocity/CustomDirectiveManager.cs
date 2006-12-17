@@ -19,19 +19,49 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 {
 	using System;
 	using System.Collections;
-
-	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class CustomDirectiveManager : DirectiveManager
 	{
 		private static readonly String DirectiveSuffix = "directive";
 
 		private Hashtable directives = new Hashtable();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CustomDirectiveManager"/> class.
+		/// </summary>
 		public CustomDirectiveManager()
 		{
 			RegisterCustomDirectives();
+		}
+
+		public override bool Contains(string name)
+		{
+			return directives.Contains(name) ? true : base.Contains(name);
+		}
+
+		public override Directive Create(string name, Stack directiveStack)
+		{
+			Type customDirective = directives[name] as Type;
+
+			if (customDirective != null)
+			{
+				object[] args = null;
+
+				if (typeof(AbstractComponentDirective).IsAssignableFrom(customDirective))
+				{
+					args = new object[] { GetViewComponentFactory(), GetViewEngine() };
+				}
+
+				return Activator.CreateInstance(customDirective, args) as Directive;
+			}
+			else
+			{
+				return base.Create(name, directiveStack);
+			}
 		}
 
 		protected void RegisterCustomDirectives()
@@ -58,32 +88,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			directives.Add(name, type);
 		}
 
-		public override bool Contains(string name)
-		{
-			return directives.Contains(name) ? true : base.Contains(name);
-		}
-
-		public override Directive Create(string name, Stack directiveStack)
-		{
-			Type customDirective = directives[name] as Type;
-
-			if (customDirective != null)
-			{
-				object[] args = null;
-
-				if (typeof(AbstractComponentDirective).IsAssignableFrom(customDirective))
-				{
-					args = new object[] { GetViewComponentFactory() };
-				}
-
-				return Activator.CreateInstance(customDirective, args) as Directive;
-			}
-			else
-			{
-				return base.Create(name, directiveStack);
-			}
-		}
-
 		private IViewComponentFactory GetViewComponentFactory()
 		{
 			IViewComponentFactory compFactory = (IViewComponentFactory) 
@@ -95,6 +99,19 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 
 			return compFactory;
+		}
+
+		private IViewEngine GetViewEngine()
+		{
+			IViewEngine viewEngine = (IViewEngine)
+				MonoRailHttpHandler.CurrentContext.GetService(typeof(IViewEngine));
+
+			if (viewEngine == null)
+			{
+				throw new RailsException("NVelocityViewEngine: could not obtain ViewEngine instance");
+			}
+
+			return viewEngine;
 		}
 	}
 }

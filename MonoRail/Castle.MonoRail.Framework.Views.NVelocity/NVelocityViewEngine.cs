@@ -23,6 +23,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	using System.IO;
 	using System.Collections;
 	using Castle.Core;
+	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Views.NVelocity.JSGeneration;
 	using Commons.Collections;
 
 	/// <summary>
@@ -31,10 +33,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	public class NVelocityViewEngine : ViewEngineBase, IInitializable
 	{
 		internal const String TemplateExtension = ".vm";
+		internal const String JsTemplateExtension = ".njs";
 
 		internal const String ServiceProvider = "service.provider";
-
-		// private const String TemplatePathPattern = "{0}{1}{2}";
 
 		private IServiceProvider provider;
 
@@ -87,6 +88,21 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		#region IViewEngine implementation
 
+		public override bool SupportsJSGeneration
+		{
+			get { return true; }
+		}
+
+		public override string ViewFileExtension
+		{
+			get { return ".vm"; }
+		}
+
+		public override string JSGeneratorFileExtension
+		{
+			get { return ".njs"; }
+		}
+
 		public override bool HasTemplate(String templateName)
 		{
 			return ViewSourceLoader.HasTemplate(ResolveTemplateName(templateName));
@@ -97,8 +113,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			IContext ctx = CreateContext(context, controller);
 
 			AdjustContentType(context);
-
-			Template template;
 
 			bool hasLayout = controller.LayoutName != null;
 
@@ -117,27 +131,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			String view = ResolveTemplateName(viewName);
 
-			try
-			{
-				template = velocity.GetTemplate(view);
+			Template template = velocity.GetTemplate(view);
 
-				PreSendView(controller, template);
+			PreSendView(controller, template);
 
-				BeforeMerge(velocity, template, ctx);
-				template.Merge(ctx, writer);
+			BeforeMerge(velocity, template, ctx);
+			template.Merge(ctx, writer);
 
-				PostSendView(controller, template);
-			}
-			catch(Exception)
-			{
-				if (hasLayout)
-				{
-					// Restore original writer
-					writer = context.Response.Output;
-				}
-
-				throw;
-			}
+			PostSendView(controller, template);
 
 			if (hasLayout)
 			{
@@ -168,6 +169,63 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			catch(Exception ex)
 			{
 				throw new RailsException("Could not obtain view: " + view, ex);
+			}
+		}
+
+		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, 
+		                                    Controller controller, string partialName)
+		{
+			IContext ctx = CreateContext(context, controller);
+			String view = ResolveTemplateName(partialName);
+
+			try
+			{
+				Template template = velocity.GetTemplate(view);
+				template.Merge(ctx, output);
+			}
+			catch(Exception ex)
+			{
+				throw new RailsException("Could not obtain view: " + view, ex);
+			}
+		}
+
+		public override object CreateJSGenerator(IRailsEngineContext context)
+		{
+			return new JSGeneratorDuck(new PrototypeHelper.JSGenerator(context.Server));
+		}
+
+		public override void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
+		{
+			GenerateJS(context.Response.Output, context, controller, templateName);
+		}
+
+		public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
+		                                string templateName)
+		{
+			IContext ctx = CreateContext(context, controller);
+
+			object generator = CreateJSGenerator(context);
+
+			ctx.Put("page", generator);
+
+			AdjustJavascriptContentType(context);
+
+			String view = ResolveJSTemplateName(templateName);
+
+			try
+			{
+				Template template = velocity.GetTemplate(view);
+
+				template.Merge(ctx, output);
+
+				output.WriteLine();
+				output.WriteLine();
+
+				output.WriteLine(generator);
+			}
+			catch(Exception ex)
+			{
+				throw new RailsException("Error generating JS. Template " + templateName, ex);
 			}
 		}
 
@@ -206,20 +264,44 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <summary>
 		/// Resolves the template name into a velocity template file name.
 		/// </summary>
-		protected virtual string ResolveTemplateName(string templateName)
+		protected string ResolveTemplateName(string templateName)
 		{
-			return templateName + TemplateExtension;
+			if (Path.HasExtension(templateName))
+			{
+				return templateName;
+			}
+			else
+			{
+				return templateName + TemplateExtension;
+			}
+		}
+
+		/// <summary>
+		/// Resolves the template name into a velocity JS template file name.
+		/// </summary>
+		protected string ResolveJSTemplateName(string templateName)
+		{
+			if (Path.HasExtension(templateName))
+			{
+				return templateName;
+			}
+			else
+			{
+				return templateName + JsTemplateExtension;
+			}
 		}
 
 		/// <summary>
 		/// Resolves the template name into a velocity template file name.
 		/// </summary>
-		protected virtual string ResolveTemplateName(string area, string templateName)
+		protected string ResolveTemplateName(string area, string templateName)
 		{
-			return String.Format("{0}{1}{2}", area, Path.DirectorySeparatorChar, ResolveTemplateName(templateName));
+			return String.Format("{0}{1}{2}",
+			                     area, Path.DirectorySeparatorChar,
+			                     ResolveTemplateName(templateName));
 		}
 
-		protected virtual void BeforeMerge(VelocityEngine velocity, Template template, IContext context)
+		protected virtual void BeforeMerge(VelocityEngine velocityEngine, Template template, IContext context)
 		{
 		}
 

@@ -28,7 +28,9 @@
 		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" />
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" />
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
+		<!--
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
+		-->
 		<include name="TestSiteARSupport/TestSiteARSupport.build" />
 		<include name="Castle.MonoRail.Generator/Castle.MonoRail.Generator.build" />
 	</fileset>

@@ -18,16 +18,15 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Collections.Specialized;
 	using System.Text;
 	using System.Web;
-
 	using Castle.MonoRail.Framework;
-	
+
 	public class ServerUtilityAdapter : IServerUtility
 	{
-		private readonly HttpServerUtility _server;
+		private readonly HttpServerUtility server;
 
-		public ServerUtilityAdapter( HttpServerUtility server )
+		public ServerUtilityAdapter(HttpServerUtility server)
 		{
-			_server = server;
+			this.server = server;
 		}
 
 		/// <summary>
@@ -35,19 +34,22 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="content">The text string to HTML encode.</param>
 		/// <returns>The HTML encoded text.</returns>
-		public String HtmlEncode( String content )
+		public String HtmlEncode(String content)
 		{
-			return _server.HtmlEncode( content );
+			return server.HtmlEncode(content);
 		}
 
 		/// <summary>
 		/// Escapes JavaScript with Url encoding and returns the encoded string.  
 		/// </summary>
+		/// <remarks>
+		/// Converts quotes, single quotes and CR/LFs to their representation as an escape character.
+		/// </remarks>
 		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
-		public String JavaScriptEscape( String content )
+		public String JavaScriptEscape(String content)
 		{
-			return _server.UrlEncode( content ).Replace( "'", @"\'" ); 
+			return content.Replace("\'", "\\'").Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' ');
 		}
 
 		/// <summary>
@@ -55,16 +57,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="args">NameValueCollection with the params to be constructed</param>
 		/// <returns>URL safe params name1=value1[&amp;name2=value2&amp;...]</returns>
-		public String BuildWebParams( NameValueCollection args )
+		public String BuildWebParams(NameValueCollection args)
 		{
 			if (args == null) return String.Empty;
 
 			StringBuilder sb = new StringBuilder();
 
-			foreach( String key in args.Keys )
+			foreach(String key in args.Keys)
 			{
-				if ( key == null ) continue;
-				sb.AppendFormat( "{0}={1}&", UrlEncode(key), UrlEncode(args[key]) );
+				if (key == null) continue;
+				sb.AppendFormat("{0}={1}&", UrlEncode(key), UrlEncode(args[key]));
 			}
 
 			sb.Length -= 1; // removing extra &
@@ -76,30 +78,30 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
 		/// <returns>The URL encoded text.</returns>
-		public String UrlEncode( String content )
+		public String UrlEncode(String content)
 		{
-			return _server.UrlEncode( content );
+			return server.UrlEncode(content);
 		}
-		
+
 		/// <summary>
 		/// URL encodes the path portion of a URL string and returns the encoded string.  
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
 		/// <returns>The URL encoded text.</returns>
-		public String UrlPathEncode( String content )
+		public String UrlPathEncode(String content)
 		{
-			return _server.UrlPathEncode( content );
+			return server.UrlPathEncode(content);
 		}
 
 		/// <summary>
 		/// Returns the physical path for the 
 		/// specified virtual path.
 		/// </summary>
-		/// <param name="virtualPath"></param>
-		/// <returns></returns>
-		public String MapPath( String virtualPath )
+		/// <param name="virtualPath">The virtual path.</param>
+		/// <returns>The mapped path</returns>
+		public String MapPath(String virtualPath)
 		{
-			return _server.MapPath( virtualPath );
+			return server.MapPath(virtualPath);
 		}
 	}
 }

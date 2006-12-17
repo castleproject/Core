@@ -22,7 +22,6 @@ namespace Castle.MonoRail.Framework.Configuration
 	{
 		Custom,
 		ControllerFactory,
-		ViewEngine,
 		ViewComponentFactory,
 		ViewSourceLoader,
 		FilterFactory,
@@ -38,7 +37,8 @@ namespace Castle.MonoRail.Framework.Configuration
 		ControllerTree,
 		CacheProvider,
 		ScaffoldingSupport,
-		ExecutorFactory
+		ExecutorFactory, 
+		ViewEngineManager
 	}
 
 	public class ServiceEntry : ISerializedConfig

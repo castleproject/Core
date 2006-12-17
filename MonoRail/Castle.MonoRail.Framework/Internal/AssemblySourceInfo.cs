@@ -27,6 +27,11 @@ namespace Castle.MonoRail.Framework.Internal
 		private readonly IDictionary entries = new HybridDictionary(true);
 		private Assembly loadedAssembly;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AssemblySourceInfo"/> class.
+		/// </summary>
+		/// <param name="assemblyName">Name of the assembly.</param>
+		/// <param name="_namespace">The _namespace.</param>
 		public AssemblySourceInfo(string assemblyName, string _namespace)
 		{
 			this.assemblyName = assemblyName;
@@ -37,11 +42,19 @@ namespace Castle.MonoRail.Framework.Internal
 			RegisterEntries();
 		}
 
+		/// <summary>
+		/// Gets the name of the assembly.
+		/// </summary>
+		/// <value>The name of the assembly.</value>
 		public string AssemblyName
 		{
 			get { return assemblyName; }
 		}
 
+		/// <summary>
+		/// Gets the namespace.
+		/// </summary>
+		/// <value>The namespace.</value>
 		public string Namespace
 		{
 			get { return _namespace; }

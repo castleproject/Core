@@ -21,7 +21,6 @@ namespace Castle.MonoRail.Views.Brail
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Text;
-	using System.Web;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.Pipelines;
@@ -30,12 +29,13 @@ namespace Castle.MonoRail.Views.Brail
 	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Views;
 
     public class BooViewEngine : ViewEngineBase, IInitializable
 	{
-		// This field holds all the cache of all the compiled types (not instances)
-		// of all the views that Brail nows of.
+		/// <summary>
+		/// This field holds all the cache of all the 
+		/// compiled types (not instances) of all the views that Brail nows of.
+		/// </summary>
 		private Hashtable compilations = Hashtable.Synchronized(
 			new Hashtable(
 #if DOTNET2
@@ -46,45 +46,24 @@ namespace Castle.MonoRail.Views.Brail
 #endif
 				));
 
-		// used to hold the constructors of types, so we can avoid using
-		// Activator (which takes a long time
+		/// <summary>
+		/// used to hold the constructors of types, so we can avoid using
+		/// Activator (which takes a long time
+		/// </summary>
 		private Hashtable constructors = new Hashtable();
 
-		// This is used to add a reference to the common scripts for each compiled scripts
+		/// <summary>
+		/// This is used to add a reference to the common scripts for each compiled scripts
+		/// </summary>
 		private Assembly common;
 		private ILogger logger;
 		private static BooViewEngineOptions options;
 		private string baseSavePath;
 
-		private static void InitializeConfig()
-		{
-			InitializeConfig("brail");
-			if (options == null)
-				InitializeConfig("Brail");
-			if (options == null)
-				options = new BooViewEngineOptions();
-		}
-
-		private static void InitializeConfig(string sectionName)
-		{
-#if DOTNET2
-			options = ConfigurationManager.GetSection(sectionName) as BooViewEngineOptions;
-#else
-			options = System.Configuration.ConfigurationSettings.GetConfig(sectionName) as BooViewEngineOptions;
-#endif
-		}
-
-		private void Log(string msg, params object[] items)
-		{
-			if (logger == null || logger.IsDebugEnabled == false)
-				return;
-			logger.DebugFormat(msg, items);
-		}
-
 		public void Initialize()
 		{
-			if (options == null)
-				InitializeConfig();
+			if (options == null) InitializeConfig();
+			
 			string baseDir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
 			Log("Base Directory: " + baseDir);
 			baseSavePath = Path.Combine(baseDir, options.SaveDirectory);
@@ -101,7 +80,90 @@ namespace Castle.MonoRail.Views.Brail
 			ViewSourceLoader.ViewChanged += new FileSystemEventHandler(OnViewChanged);
 		}
 
-		private void OnViewChanged(object sender, FileSystemEventArgs e)
+    	public override bool SupportsJSGeneration
+    	{
+			get { return true; }
+    	}
+
+    	public override string ViewFileExtension
+    	{
+    		get { return ".boo"; }
+    	}
+
+    	public override string JSGeneratorFileExtension
+    	{
+    		get { return ".boojs"; }
+    	}
+
+		public override bool HasTemplate(string templateName)
+		{
+			return ViewSourceLoader.HasTemplate(GetTemplateName(templateName));
+		}
+
+		// Process a template name and output the results to the user
+		// This may throw if an error occured and the user is not local (which would 
+		// cause the yellow screen of death)
+		public override void Process(IRailsEngineContext context, Controller controller, string templateName)
+		{
+			Process(context.Response.Output, context, controller, templateName);
+		}
+
+		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller,
+									 string templateName)
+		{
+			Log("Starting to process request for {0}", templateName);
+			string file = GetTemplateName(templateName);
+			BrailBase view;
+			// Output may be the layout's child output if a layout exists
+			// or the context.Response.Output if the layout is null
+			LayoutViewOutput layoutViewOutput = GetOutput(output, context, controller);
+			// Will compile on first time, then save the assembly on the cache.
+			view = GetCompiledScriptInstance(file, layoutViewOutput.Output, context, controller);
+			controller.PreSendView(view);
+			Log("Executing view {0}", templateName);
+			view.Run();
+			if (layoutViewOutput.Layout != null)
+			{
+				layoutViewOutput.Layout.SetParent(view);
+				layoutViewOutput.Layout.Run();
+			}
+			Log("Finished executing view {0}", templateName);
+			controller.PostSendView(view);
+		}
+
+		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller,
+									string partialName)
+		{
+			throw new NotImplementedException();
+		}
+
+    	public override object CreateJSGenerator(IRailsEngineContext context)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	public override void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
+    	                                string templateName)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	// Send the contents text directly to the user, only adding the layout if neccecary
+		public override void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
+		{
+			LayoutViewOutput layoutViewOutput = GetOutput(controller.Response.Output, context, controller);
+			layoutViewOutput.Output.Write(contents);
+			// here we don't need to pass parameters from the layout to the view, 
+			if (layoutViewOutput.Layout != null)
+				layoutViewOutput.Layout.Run();
+		}
+
+    	private void OnViewChanged(object sender, FileSystemEventArgs e)
 		{
 			if (e.FullPath.IndexOf(options.CommonScriptsDirectory) != -1)
 			{
@@ -127,52 +189,6 @@ namespace Castle.MonoRail.Views.Brail
 			ILoggerFactory loggerFactory = serviceProvider.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
 			if (loggerFactory == null)
 				logger = loggerFactory.Create(GetType().Name);
-		}
-
-		public override bool HasTemplate(string templateName)
-		{
-			return ViewSourceLoader.HasTemplate(GetTemplateName(templateName));
-		}
-
-		// Process a template name and output the results to the user
-		// This may throw if an error occured and the user is not local (which would 
-		// cause the yellow screen of death)
-		public override void Process(IRailsEngineContext context, Controller controller, string templateName)
-		{
-			Process(context.Response.Output, context, controller, templateName);
-		}
-
-		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller,
-		                             string templateName)
-		{
-			Log("Starting to process request for {0}", templateName);
-			string file = GetTemplateName(templateName);
-			BrailBase view;
-			// Output may be the layout's child output if a layout exists
-			// or the context.Response.Output if the layout is null
-			LayoutViewOutput layoutViewOutput = GetOutput(output, context, controller);
-			// Will compile on first time, then save the assembly on the cache.
-			view = GetCompiledScriptInstance(file, layoutViewOutput.Output, context, controller);
-			controller.PreSendView(view);
-			Log("Executing view {0}", templateName);
-			view.Run();
-			if (layoutViewOutput.Layout != null)
-			{
-				layoutViewOutput.Layout.SetParent(view);
-				layoutViewOutput.Layout.Run();
-			}
-			Log("Finished executing view {0}", templateName);
-			controller.PostSendView(view);
-		}
-
-		// Send the contents text directly to the user, only adding the layout if neccecary
-		public override void ProcessContents(IRailsEngineContext context, Controller controller, string contents)
-		{
-			LayoutViewOutput layoutViewOutput = GetOutput(controller.Response.Output, context, controller);
-			layoutViewOutput.Output.Write(contents);
-			// here we don't need to pass parameters from the layout to the view, 
-			if (layoutViewOutput.Layout != null)
-				layoutViewOutput.Layout.Run();
 		}
 
 		// Check if a layout has been defined. If it was, then the layout would be created
@@ -438,6 +454,37 @@ namespace Castle.MonoRail.Views.Brail
 			get { return options; }
 		}
 
+		private static void InitializeConfig()
+		{
+			InitializeConfig("brail");
+
+			if (options == null)
+			{
+				InitializeConfig("Brail");
+			}
+
+			if (options == null)
+			{
+				options = new BooViewEngineOptions();
+			}
+		}
+
+		private static void InitializeConfig(string sectionName)
+		{
+#if DOTNET2
+			options = ConfigurationManager.GetSection(sectionName) as BooViewEngineOptions;
+#else
+			options = System.Configuration.ConfigurationSettings.GetConfig(sectionName) as BooViewEngineOptions;
+#endif
+		}
+
+		private void Log(string msg, params object[] items)
+		{
+			if (logger == null || logger.IsDebugEnabled == false)
+				return;
+			logger.DebugFormat(msg, items);
+		}
+    	
 		private class LayoutViewOutput
 		{
 			private BrailBase layout;

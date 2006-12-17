@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			DoGet("ServerUtility/JavaScriptEscape.rails", "content=some js \" content \"");
 
-			AssertReplyEqualTo("some+js+%22+content+%22");
+			AssertReplyEqualTo("some js \\\" content \\\"");
 		}
 	}
 }

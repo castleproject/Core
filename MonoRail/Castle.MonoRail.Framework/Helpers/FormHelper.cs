@@ -48,6 +48,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
 		protected static readonly BindingFlags FieldFlags = BindingFlags.GetField|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
 
+		/// <summary>
+		/// Renders a Javascript library inside a single script tag.
+		/// </summary>
+		/// <returns></returns>
+		public String InstallScripts()
+		{
+			return RenderScriptBlockToSource("/MonoRail/Files/FormHelperScript");
+		}
+
 		#region TextFieldValue
 
 		/// <summary>
@@ -104,6 +113,56 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String TextField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
+
+			return CreateInputElement("text", target, value, attributes);
+		}
+
+		#endregion
+
+		#region NumberField
+
+		/// <summary>
+		/// Generates an input text element with a javascript that prevents
+		/// chars other than numbers from being entered.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
+		public String NumberField(String target)
+		{
+			return NumberField(target, null);
+		}
+
+		/// <summary>
+		/// Generates an input text element with a javascript that prevents
+		/// chars other than numbers from being entered.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// <para>
+		/// You can optionally pass an <c>exceptions</c> value through the dictionary.
+		/// It must be a comma separated list of chars that can be accepted on the field. 
+		/// For example:
+		/// </para>
+		/// <code>
+		/// FormHelper.NumberField("product.price", {exceptions='13,10,11'})
+		/// </code>
+		/// In this case the key codes 13, 10 and 11 will be accepted on the field.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		public String NumberField(String target, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+
+			attributes = attributes != null ? attributes : new Hashtable();
+
+			String list = ObtainEntryAndRemove(attributes, "exceptions", String.Empty);
+
+			attributes["onKeyPress"] = "return monorail_formhelper_numberonly(event, [" + list + "]);";
 
 			return CreateInputElement("text", target, value, attributes);
 		}

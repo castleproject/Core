@@ -154,6 +154,8 @@
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
+    <Compile Include="Helpers\PrototypeHelper.cs" />
+    <Compile Include="Helpers\UrlForHelper.cs" />
     <Compile Include="ICachePolicyConfigurer.cs" />
     <Compile Include="Configuration\ControllersConfig.cs" />
     <Compile Include="Configuration\ExtensionEntry.cs" />
@@ -338,6 +340,7 @@
     <Compile Include="Internal\UrlTokenizerException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\ViewEngineInfo.cs" />
     <Compile Include="Internal\WizardUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -367,6 +370,7 @@
     </Compile>
     <Compile Include="IViewComponentFactory.cs" />
     <Compile Include="IViewEngine.cs" />
+    <Compile Include="IViewEngineManager.cs" />
     <Compile Include="IViewSource.cs" />
     <Compile Include="IViewSourceLoader.cs" />
     <Compile Include="IWizardController.cs">
@@ -399,6 +403,7 @@
     <Compile Include="Services\DefaultFilterFactory.cs" />
     <Compile Include="Services\DefaultResourceFactory.cs" />
     <Compile Include="Services\DefaultViewComponentFactory.cs" />
+    <Compile Include="Services\DefaultViewEngineManager.cs" />
     <Compile Include="Services\EmailTemplateService.cs" />
     <Compile Include="Services\MonoRailSmtpSender.cs" />
     <Compile Include="Services\Utils\ControllerInspectionUtil.cs" />
@@ -410,9 +415,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewComponentException.cs" />
+    <Compile Include="ViewComponents\AuthenticatedContent.cs" />
     <Compile Include="ViewComponents\CaptureFor.cs" />
     <Compile Include="ViewComponents\ChildContentComponent.cs" />
     <Compile Include="ViewComponents\SecurityComponent.cs" />
+    <Compile Include="ViewComponents\UpdatePage.cs" />
+    <Compile Include="ViewComponents\UpdatePageTag.cs" />
     <Compile Include="Views\Aspx\ActionTo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -441,9 +449,18 @@
     <EmbeddedResource Include="Controllers\Ajax.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\Behaviour.resx" />
-    <EmbeddedResource Include="Controllers\Effects2.resx" />
-    <EmbeddedResource Include="Controllers\EffectsFat.resx" />
+    <EmbeddedResource Include="Controllers\Behaviour.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\Effects2.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\EffectsFat.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\FormHelper.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controllers\Validation.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

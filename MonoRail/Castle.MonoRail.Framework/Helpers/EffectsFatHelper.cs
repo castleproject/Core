@@ -42,9 +42,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String InstallScripts()
 		{
-			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
-				Controller.Context.ApplicationPath + "/MonoRail/Files/EffectsFatScripts", 
-				Controller.Context.UrlInfo.Extension);
+			return RenderScriptBlockToSource("/MonoRail/Files/EffectsFatScripts");
 		}
 
 		[Obsolete("Please use the preferred InstallScripts function.")]

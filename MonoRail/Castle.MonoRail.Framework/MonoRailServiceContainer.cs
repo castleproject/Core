@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>Keeps only one copy of the config</summary>
 		private MonoRailConfiguration config;
-		
+
 		/// <summary></summary>
 		private IDictionary extension2handler;
 
@@ -53,12 +53,12 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// 
+		/// Initializes the container state and its services
 		/// </summary>
 		public void Start()
 		{
 			DiscoverHttpHandlerExtensions();
-			
+
 			InitConfiguration();
 
 			MonoRailConfiguration config = ObtainConfiguration();
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework
 		public bool IsMonoRailRequest(String url)
 		{
 			String extension = Path.GetExtension(url);
-			
+
 			return extension2handler.Contains(extension);
 		}
 
@@ -86,7 +86,7 @@ namespace Castle.MonoRail.Framework
 		{
 			XmlDocument webConfig = new XmlDocument();
 			webConfig.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web.config"));
-			
+
 			XmlNodeList addNodes = webConfig.DocumentElement.SelectNodes(
 				"/configuration/system.web/httpHandlers/add");
 
@@ -100,15 +100,18 @@ namespace Castle.MonoRail.Framework
 			}
 
 			bool found = false;
-			
+
 			foreach(XmlNode addNode in addNodes)
 			{
-				if (addNode.NodeType != XmlNodeType.Element) continue;
+				if (addNode.NodeType != XmlNodeType.Element)
+				{
+					continue;
+				}
 
 				XmlElement addElem = (XmlElement) addNode;
-				
+
 				String type = addElem.GetAttribute("type");
-				
+
 				if (type.StartsWith("Castle.MonoRail.Framework.MonoRailHttpHandlerFactory"))
 				{
 					String extension = addElem.GetAttribute("path").Substring(1);
@@ -116,12 +119,12 @@ namespace Castle.MonoRail.Framework
 					found = true;
 				}
 			}
-			
+
 			if (!found)
 			{
-				throw new RailsException("We inspected the web.config httpHandlers section and " + 
-					"couldn't find an extension that mapped to MonoRailHttpHandlerFactory. " + 
-					"Is your configuration right to use MonoRail?");
+				throw new RailsException("We inspected the web.config httpHandlers section and " +
+				                         "couldn't find an extension that mapped to MonoRailHttpHandlerFactory. " +
+				                         "Is your configuration right to use MonoRail?");
 			}
 		}
 
@@ -177,7 +180,9 @@ namespace Castle.MonoRail.Framework
 				IInitializable initializable = instance as IInitializable;
 
 				if (initializable != null)
+				{
 					initializable.Initialize();
+				}
 
 				ISupportInitialize suppInitialize = instance as ISupportInitialize;
 
@@ -201,7 +206,9 @@ namespace Castle.MonoRail.Framework
 				IServiceEnabledComponent serviceEnabled = instance as IServiceEnabledComponent;
 
 				if (serviceEnabled != null)
+				{
 					serviceEnabled.Service(this);
+				}
 			}
 		}
 
@@ -265,20 +272,24 @@ namespace Castle.MonoRail.Framework
 		{
 			ServiceEntryCollection services = config.ServiceEntries;
 
+			services.RegisterService(ServiceIdentification.ViewEngineManager,
+			                         typeof(DefaultViewEngineManager));
+
+
 			if (!services.HasService(ServiceIdentification.ViewSourceLoader))
 			{
 				services.RegisterService(ServiceIdentification.ViewSourceLoader,
 				                         typeof(FileAssemblyViewSourceLoader));
 			}
-			if (!services.HasService(ServiceIdentification.ViewEngine))
-			{
-				Type viewEngineType = config.ViewEngineConfig.CustomEngine;
-
-				if (viewEngineType == null)
-					viewEngineType = typeof(WebFormsViewEngine);
-
-				services.RegisterService(ServiceIdentification.ViewEngine, viewEngineType);
-			}
+//			if (!services.HasService(ServiceIdentification.ViewEngine))
+//			{
+//				Type viewEngineType = config.ViewEngineConfig.CustomEngine;
+//
+//				if (viewEngineType == null)
+//					viewEngineType = typeof(WebFormsViewEngine);
+//
+//				services.RegisterService(ServiceIdentification.ViewEngine, viewEngineType);
+//			}
 			if (!services.HasService(ServiceIdentification.ScaffoldingSupport))
 			{
 				Type defaultScaffoldingType =
@@ -287,7 +298,9 @@ namespace Castle.MonoRail.Framework
 							"Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold"), true);
 
 				if (defaultScaffoldingType != null)
+				{
 					services.RegisterService(ServiceIdentification.ScaffoldingSupport, defaultScaffoldingType);
+				}
 			}
 			if (!services.HasService(ServiceIdentification.ControllerFactory))
 			{
@@ -329,32 +342,54 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 			if (!services.HasService(ServiceIdentification.ResourceFactory))
+			{
 				services.RegisterService(ServiceIdentification.ResourceFactory, typeof(DefaultResourceFactory));
+			}
 			if (!services.HasService(ServiceIdentification.EmailSender))
+			{
 				services.RegisterService(ServiceIdentification.EmailSender, typeof(MonoRailSmtpSender));
+			}
 			if (!services.HasService(ServiceIdentification.ControllerDescriptorProvider))
 			{
 				services.RegisterService(ServiceIdentification.ControllerDescriptorProvider,
 				                         typeof(DefaultControllerDescriptorProvider));
 			}
 			if (!services.HasService(ServiceIdentification.ResourceDescriptorProvider))
+			{
 				services.RegisterService(ServiceIdentification.ResourceDescriptorProvider, typeof(DefaultResourceDescriptorProvider));
+			}
 			if (!services.HasService(ServiceIdentification.RescueDescriptorProvider))
+			{
 				services.RegisterService(ServiceIdentification.RescueDescriptorProvider, typeof(DefaultRescueDescriptorProvider));
+			}
 			if (!services.HasService(ServiceIdentification.LayoutDescriptorProvider))
+			{
 				services.RegisterService(ServiceIdentification.LayoutDescriptorProvider, typeof(DefaultLayoutDescriptorProvider));
+			}
 			if (!services.HasService(ServiceIdentification.HelperDescriptorProvider))
+			{
 				services.RegisterService(ServiceIdentification.HelperDescriptorProvider, typeof(DefaultHelperDescriptorProvider));
+			}
 			if (!services.HasService(ServiceIdentification.FilterDescriptorProvider))
+			{
 				services.RegisterService(ServiceIdentification.FilterDescriptorProvider, typeof(DefaultFilterDescriptorProvider));
+			}
 			if (!services.HasService(ServiceIdentification.EmailTemplateService))
+			{
 				services.RegisterService(ServiceIdentification.EmailTemplateService, typeof(EmailTemplateService));
+			}
 			if (!services.HasService(ServiceIdentification.ControllerTree))
+			{
 				services.RegisterService(ServiceIdentification.ControllerTree, typeof(DefaultControllerTree));
+			}
 			if (!services.HasService(ServiceIdentification.CacheProvider))
+			{
 				services.RegisterService(ServiceIdentification.CacheProvider, typeof(DefaultCacheProvider));
+			}
 			if (!services.HasService(ServiceIdentification.ExecutorFactory))
+			{
 				services.RegisterService(ServiceIdentification.ExecutorFactory, typeof(DefaultControllerLifecycleExecutorFactory));
+			}
 		}
 
 		private object ActivateService(Type type)
@@ -377,7 +412,10 @@ namespace Castle.MonoRail.Framework
 
 		private MonoRailConfiguration ObtainConfiguration()
 		{
-			if (config == null) config = MonoRailConfiguration.GetConfig();
+			if (config == null)
+			{
+				config = MonoRailConfiguration.GetConfig();
+			}
 
 			return config;
 		}

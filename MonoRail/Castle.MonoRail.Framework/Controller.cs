@@ -43,9 +43,9 @@ namespace Castle.MonoRail.Framework
 		internal IRailsEngineContext context;
 
 		/// <summary>
-		/// The reference to the <see cref="IViewEngine"/> instance
+		/// The reference to the <see cref="IViewEngineManager"/> instance
 		/// </summary>
-		internal IViewEngine viewEngine;
+		internal IViewEngineManager viewEngineManager;
 
 		/// <summary>
 		/// Logger instance. Should never be null
@@ -446,7 +446,7 @@ namespace Castle.MonoRail.Framework
 				basePath = Path.Combine(_areaName, _controllerName);
 			}
 
-			viewEngine.Process(output, Context, this, Path.Combine(basePath, name));			
+			viewEngineManager.Process(output, Context, this, Path.Combine(basePath, name));			
 		}
 
 		/// <summary>
@@ -482,7 +482,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The name of the view to process.</param>
 		public void InPlaceRenderSharedView(TextWriter output, String name)
 		{
-			viewEngine.Process(output, Context, this, name);
+			viewEngineManager.Process(output, Context, this, name);
 		}
 
 		/// <summary>
@@ -546,7 +546,7 @@ namespace Castle.MonoRail.Framework
 
 			directRenderInvoked = true;
 
-			viewEngine.ProcessContents(context, this, contents);
+			viewEngineManager.ProcessContents(context, this, contents);
 		}
 
 		/// <summary>
@@ -555,7 +555,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="templateName"></param>
 		public bool HasTemplate(String templateName)
 		{
-			return viewEngine.HasTemplate(templateName);
+			return viewEngineManager.HasTemplate(templateName);
 		}
 
 		#region RedirectToAction
@@ -847,8 +847,8 @@ namespace Castle.MonoRail.Framework
 		internal void InitializeFieldsFromServiceProvider(IRailsEngineContext context)
 		{
 			serviceProvider = context;
-			
-			viewEngine = (IViewEngine) serviceProvider.GetService(typeof(IViewEngine));
+
+			viewEngineManager = (IViewEngineManager) serviceProvider.GetService(typeof(IViewEngineManager));
 
 			IControllerDescriptorProvider controllerDescriptorBuilder = (IControllerDescriptorProvider)
 				serviceProvider.GetService( typeof(IControllerDescriptorProvider) );

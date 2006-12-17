@@ -28,15 +28,23 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	{
 		private bool shouldRender;
 
+		/// <summary>
+		/// Called by the framework once the component instance
+		/// is initialized
+		/// </summary>
 		public override void Initialize()
 		{
 			String role = (String) ComponentParams["role"];
 
 			if (role == null) throw new RailsException("SecurityComponent: you must supply a role parameter");
 
-			shouldRender = RailsContext.CurrentUser.IsInRole(role);
+			shouldRender = RailsContext.CurrentUser != null && RailsContext.CurrentUser.IsInRole(role);
 		}
 
+		/// <summary>
+		/// Called by the framework so the component can
+		/// render its content
+		/// </summary>
 		public override void Render()
 		{
 			if (shouldRender)

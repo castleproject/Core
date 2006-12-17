@@ -123,9 +123,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String InstallScripts()
 		{
-			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
-				Controller.Context.ApplicationPath + "/MonoRail/Files/AjaxScripts", 
-				Controller.Context.UrlInfo.Extension);
+			return RenderScriptBlockToSource("/MonoRail/Files/AjaxScripts");
 		}
 
 		[Obsolete("Please use the preferred InstallScripts function.")]
@@ -140,9 +138,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String GetBehaviourFunctions()
 		{
-			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
-				Controller.Context.ApplicationPath + "/MonoRail/Files/BehaviourScripts", 
-				Controller.Context.UrlInfo.Extension);
+			return RenderScriptBlockToSource("/MonoRail/Files/BehaviourScripts");
 		}
 		
 		#region Behaviour library related

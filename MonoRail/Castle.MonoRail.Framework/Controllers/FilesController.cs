@@ -28,30 +28,13 @@ namespace Castle.MonoRail.Framework.Controllers
 	[Resource("Effects2", "Castle.MonoRail.Framework.Controllers.Effects2", CultureName="neutral")]
 	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat", CultureName="neutral")]
 	[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation", CultureName="neutral")]
+	[Resource("FormHelper", "Castle.MonoRail.Framework.Controllers.FormHelper", CultureName="neutral")]
 	public sealed class FilesController : Controller
 	{
-		private string _jsContentType = "application/x-javascript";
-		private string _jsCacheControl = "max-age=86400"; // cache valid for 1 day
-
-		public FilesController()
-		{
-		}
-
-		public string JavascriptContentType
-		{
-			get { return _jsContentType; }
-			set { _jsContentType = value; }
-		}
-
-		public string JavascriptCacheControl
-		{
-			get { return _jsCacheControl; }
-			set { _jsCacheControl = value; }
-		}
-
 		/// <summary>
 		/// Script used by <see cref="AjaxHelper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration=86400)] // 1 day
 		public void AjaxScripts()
 		{	
 			RenderJavascriptFile( "Ajax", "jsfunctions" );
@@ -113,23 +96,24 @@ namespace Castle.MonoRail.Framework.Controllers
 			RenderJavascriptFile( "Validation", "fValidateLang" );
 		}
 
-		private String GetResourceValue( String resName, String resKey )
+		/// <summary>
+		/// Script used by <see cref="AjaxHelper"/>.
+		/// </summary>
+		public void FormHelperScript()
 		{
-			return (String)(Resources[resName])[resKey];
+			RenderJavascriptFile("FormHelper", "jsfunctions");
 		}
 
 		private void RenderJavascriptFile( String resourceName, String resourceKey )
 		{
-			Response.ContentType = JavascriptContentType;
-			Response.AppendHeader("Cache-Control", JavascriptCacheControl);
-			// Response.CacheControlHeader = JavascriptCacheControl;
-			RenderFile( resourceName, resourceKey );
+			Response.ContentType = "text/javascript";
+			String fileContent = GetResourceValue(resourceName, resourceKey);
+			RenderText(fileContent);
 		}
 
-		private void RenderFile( String resourceName, String resourceKey )
+		private String GetResourceValue(String resName, String resKey)
 		{
-			String fileContent = GetResourceValue( resourceName, resourceKey );
-			RenderText( fileContent );
+			return (String)(Resources[resName])[resKey];
 		}
 	}
 }

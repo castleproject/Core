@@ -105,6 +105,11 @@ StringComparer.InvariantCultureIgnoreCase
             callable.Call(new object[] { default_writer });
         }
 
+		public IViewEngine ViewEngine
+		{
+			get { throw new NotImplementedException(); }
+		}
+
         public void RegisterSection(string name, ICallable section)
         {
             if (sections == null)
