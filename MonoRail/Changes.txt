@@ -4,6 +4,12 @@ Change history
 Release Candidate 3
 ===================
 
+- Added ScriptaculousHelper, deprecated Effects2Helper
+
+- Extract Behaviour related operations from AjaxHelper into BehaviourHelper
+
+- Added BehaviourHelper
+
 - Added UpdatePage and UpdatePageTag ViewComponents. Both allow you to have a "page"
   which is a JS generator. It evaluates the view component body to generate the JS.
   

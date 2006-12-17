@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Helpers
 {
+
 	public class UrlForHelper : AbstractHelper
 	{
 	}

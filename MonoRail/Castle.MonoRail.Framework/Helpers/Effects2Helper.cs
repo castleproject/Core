@@ -20,23 +20,12 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// Exposes the effect script from Thomas Fuchs 
 	/// (http://script.aculo.us, http://mir.aculo.us)
 	/// </summary>
-	public class Effects2Helper : AbstractHelper
+	/// <remarks>
+	/// Before using it, you must install the scripts. See <see cref="ScriptaculousHelper.InstallScripts"/>
+	/// </remarks>
+	[Obsolete("Use ScriptaculousHelper instead")]
+	public class Effects2Helper : ScriptaculousHelper
 	{
-		/// <summary>
-		/// Renders a Javascript library inside a single script tag.
-		/// </summary>
-		/// <returns></returns>
-		public String InstallScripts()
-		{
-			return RenderScriptBlockToSource("/MonoRail/Files/Effects2");
-		}
-
-		[Obsolete("Please use the preferred InstallScripts function.")]
-		public String GetJavascriptFunctions()
-		{
-			return InstallScripts();
-		}
-
 		/// <summary>
 		/// Make an element appear. If the element was previously set to display:none;  
 		/// inside the style attribute of the element, the effect will automatically 

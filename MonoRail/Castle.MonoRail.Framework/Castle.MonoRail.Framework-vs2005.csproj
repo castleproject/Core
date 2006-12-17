@@ -153,6 +153,8 @@
     <Compile Include="Attributes\SkipFilterAttribute.cs" />
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="Helpers\BehaviourHelper.cs" />
+    <Compile Include="Helpers\ScriptaculousHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\PrototypeHelper.cs" />
     <Compile Include="Helpers\UrlForHelper.cs" />

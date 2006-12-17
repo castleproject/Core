@@ -90,8 +90,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		private IControllerDescriptorProvider controllerDescriptorBuilder;
 
-		private bool behaviourCommaNeeded;
-
 		#region IServiceEnabledComponent implementation
 		
 		/// <summary>
@@ -117,6 +115,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region Scripts
+
 		/// <summary>
 		/// Renders a Javascript library inside a single script tag.
 		/// </summary>
@@ -131,88 +131,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return InstallScripts();
 		}
-	    
-		/// <summary>
-		/// Renders a script tag refering the Behaviour library code.
-		/// </summary>
-		/// <returns></returns>
-		public String GetBehaviourFunctions()
-		{
-			return RenderScriptBlockToSource("/MonoRail/Files/BehaviourScripts");
-		}
-		
-		#region Behaviour library related
-		
-		/// <summary>
-		/// Renders a script block invoking <c>Behaviour.apply()</c>
-		/// </summary>
-		public String ReApply()
-		{
-			return "<script type=\"text/javascript\">Behaviour.apply();</script>";
-		}
-		
-		/// <summary>
-		/// Renders a script block invoking <c>Behaviour.addLoadEvent(loadFunctionName);</c>
-		/// </summary>
-		/// <param name="loadFunctionName">The name of the js function to be invoked when the body is loaded</param>
-		public String AddLoadEvent(String loadFunctionName)
-		{
-			return "<script type=\"text/javascript\">" + Environment.NewLine + 
-				"Behaviour.addLoadEvent(" + loadFunctionName + ");" + Environment.NewLine + 
-				"</script>";
-		}
-		
-		/// <summary>
-		/// Renders a script block starting the association of events to selector rules
-		/// <seealso cref="Register"/>
-		/// <seealso cref="EndBehaviourRegister"/>
-		/// </summary>
-		public String StartBehaviourRegister()
-		{
-			behaviourCommaNeeded = false;
-			
-			return "<script type=\"text/javascript\">" + Environment.NewLine + 
-				"Behaviour.register({" + Environment.NewLine;
-		}
-
-		/// <summary>
-		/// Adds a entry to a registration array. Invoking it 
-		/// with <c>#form</c>, <c>onsubmit</c> and <c>validate</c> will produce
-		/// <c>'#form' : function(e){ e.onsubmit = validate; },</c>
-		/// <seealso cref="StartBehaviourRegister"/>
-		/// <seealso cref="EndBehaviourRegister"/>
-		/// </summary>
-		/// <param name="selector">The css selector rule</param>
-		/// <param name="eventName">The name of the event on the element</param>
-		/// <param name="jsFunctionName">The function to be invoked in response to the event</param>
-		public String Register(String selector, String eventName, String jsFunctionName)
-		{
-			String val = behaviourCommaNeeded ? "," : String.Empty + 
-					"\t'" + selector + "' : function(e){ e." + eventName + " = " + jsFunctionName + "; }" + 
-			       Environment.NewLine;
-			
-			if (!behaviourCommaNeeded)
-			{
-				behaviourCommaNeeded = true;
-			}
-			
-			return val;
-		}
-
-		/// <summary>
-		/// Renders the end of a script block that associated events to selector rules
-		/// <seealso cref="StartBehaviourRegister"/>
-		/// <seealso cref="Register"/>
-		/// </summary>
-		public String EndBehaviourRegister()
-		{
-			return Environment.NewLine + "});" + Environment.NewLine + "</script>";
-		}
 
 		#endregion
 
 		#region GenerateJSProxy overloads
-		
+
 		/// <summary>
 		/// Generates an AJAX JavaScript proxy for the current controller.
 		/// </summary>
@@ -1040,26 +963,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			return JavascriptOptions(jsOptions);
-		}
-
-		private String JavascriptOptions(IDictionary jsOptions)
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.Append("{");
-			bool comma = false;
-	
-			foreach(DictionaryEntry entry in jsOptions)
-			{
-				if (!comma)
-					comma = true;
-				else
-					sb.Append(", ");
-
-				sb.Append( String.Format("{0}:{1}", entry.Key, entry.Value) );
-			}
-	
-			sb.Append("}");
-			return sb.ToString();
 		}
 
 		private void BuildCallbacks(IDictionary jsOptions, IDictionary options)

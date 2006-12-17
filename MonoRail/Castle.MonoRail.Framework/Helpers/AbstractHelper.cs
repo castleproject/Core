@@ -264,6 +264,36 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Builds a JS associative array based on the specified dictionary instance.
+		/// <para>
+		/// For example: <c>{name: value, other: 'another'}</c>
+		/// </para>
+		/// </summary>
+		/// <param name="jsOptions">The js options.</param>
+		/// <returns>An associative array in javascript</returns>
+		public static String JavascriptOptions(IDictionary jsOptions)
+		{
+			if (jsOptions == null || jsOptions.Count == 0)
+			{
+				return "{}";
+			}
+
+			StringBuilder sb = new StringBuilder(jsOptions.Count * 10);
+			sb.Append("{");
+			bool comma = false;
+
+			foreach (DictionaryEntry entry in jsOptions)
+			{
+				if (!comma) comma = true; else sb.Append(", ");
+
+				sb.Append(String.Format("{0}:{1}", entry.Key, entry.Value));
+			}
+
+			sb.Append("}");
+			return sb.ToString();
+		}
+
+		/// <summary>
 		/// Generates script block.
 		/// <code>
 		/// &lt;script type=\"text/javascript\"&gt;
@@ -273,9 +303,29 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="scriptContents">The script contents.</param>
 		/// <returns><paramref name="scriptContents"/> placed inside <b>script</b> tags.</returns>
-		protected internal static String ScriptBlock(String scriptContents)
+		public static String ScriptBlock(String scriptContents)
 		{
 			return "\r\n<script type=\"text/javascript\">\r\n" + scriptContents + "</script>\r\n";
+		}
+
+		/// <summary>
+		/// Quotes the specified string with single quotes
+		/// </summary>
+		/// <param name="content">The content.</param>
+		/// <returns>A quoted string</returns>
+		public static string Quote(string content)
+		{
+			return "'" + content + "'";
+		}
+
+		/// <summary>
+		/// Quotes the specified string with double quotes
+		/// </summary>
+		/// <param name="content">The content.</param>
+		/// <returns>A quoted string</returns>
+		public static string DQuote(string content)
+		{
+			return "\"" + content + "\"";
 		}
 
 		#endregion 

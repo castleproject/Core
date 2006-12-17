@@ -183,11 +183,6 @@ namespace Castle.MonoRail.Framework.Helpers
 				return serverUtility.JavaScriptEscape(content);
 			}
 
-			private static string Quote(string content)
-			{
-				return "'" + content + "'";
-			}
-
 			#endregion
 		}
 	}
