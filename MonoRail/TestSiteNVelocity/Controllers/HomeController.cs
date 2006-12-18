@@ -66,10 +66,5 @@ namespace TestSiteNVelocity.Controllers
 			PropertyBag.Add( "CustomerName", "hammett" );
 			PropertyBag.Add( "List", new String[] { "1", "2", "3" } );
 		}
-
-		public void JS()
-		{
-			RenderView("elaccess.njs");
-		}
 	}
 }

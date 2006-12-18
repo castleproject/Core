@@ -24,6 +24,10 @@ namespace Castle.MonoRail.Framework.Adapters
 	{
 		private readonly HttpServerUtility server;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ServerUtilityAdapter"/> class.
+		/// </summary>
+		/// <param name="server">The server.</param>
 		public ServerUtilityAdapter(HttpServerUtility server)
 		{
 			this.server = server;
@@ -49,7 +53,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
 		public String JavaScriptEscape(String content)
 		{
-			return content.Replace("\'", "\\'").Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' ');
+			// TODO: Replace by a regular expression, which should be much more efficient
+
+			return content.Replace("\'", "\\'").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
 		}
 
 		/// <summary>

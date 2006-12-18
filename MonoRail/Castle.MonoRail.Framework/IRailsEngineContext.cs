@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.ComponentModel.Design;
 	using System.Web;
-	using System.Web.Caching;
 	using System.Security.Principal;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -36,7 +35,7 @@ namespace Castle.MonoRail.Framework
 		String RequestType { get; }
 
 		/// <summary>
-		/// Gets the URL.
+		/// Gets the request URL.
 		/// </summary>
 		String Url { get; }
 
@@ -128,5 +127,11 @@ namespace Castle.MonoRail.Framework
 		/// Returns the Items collection from the current HttpContext.
 		/// </summary>
 		IDictionary Items { get; }
+
+		/// <summary>
+		/// Gets or sets the current controller.
+		/// </summary>
+		/// <value>The current controller.</value>
+		Controller CurrentController { get; set; }
 	}
 }

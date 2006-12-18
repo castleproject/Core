@@ -80,7 +80,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		protected IRailsEngineContext CurrentContext
 		{
-			get { return this.controller.Context; }
+			get { return controller.Context; }
 		}
 
 		#region Helper methods

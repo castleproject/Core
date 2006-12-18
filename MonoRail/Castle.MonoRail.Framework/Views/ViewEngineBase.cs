@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework
 	using System.IO;
 	
 	using Castle.Core;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// Abstract base class for View Engines.
@@ -27,10 +28,15 @@ namespace Castle.MonoRail.Framework
 	{
 		private bool xhtmlRendering;
 		private IViewSourceLoader viewSourceLoader;
+		private ILogger logger = NullLogger.Instance;
 		protected IServiceProvider serviceProvider;
 
 		#region IServiceEnabledComponent implementation
-		
+
+		/// <summary>
+		/// Services the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
 		public virtual void Service(IServiceProvider provider)
 		{
 			serviceProvider = provider;
@@ -46,9 +52,18 @@ namespace Castle.MonoRail.Framework
 				throw new ConfigurationException(message);
 #endif
 			}
+
+			ILoggerFactory loggerFactory = (ILoggerFactory)provider.GetService(typeof(ILoggerFactory));
+
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(GetType());
+			}
 		}
 		
 		#endregion
+
+		#region IViewEngine implementation
 
 		/// <summary>
 		/// Gets a value indicating whether the view engine
@@ -115,6 +130,10 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 
+		#endregion
+
+		#region Pre/Post send view
+
 		protected virtual void PreSendView(Controller controller, object view)
 		{
 			controller.PreSendView(view);
@@ -125,11 +144,22 @@ namespace Castle.MonoRail.Framework
 			controller.PostSendView(view);
 		}
 
+		#endregion
+
+		#region Useful properties
+
 		protected IViewSourceLoader ViewSourceLoader
 		{
 			get { return viewSourceLoader; }
 			set { viewSourceLoader = value; }
 		}
+
+		protected ILogger Logger
+		{
+			get { return logger; }
+		}
+
+		#endregion
 
 		#region Render Helpers
 

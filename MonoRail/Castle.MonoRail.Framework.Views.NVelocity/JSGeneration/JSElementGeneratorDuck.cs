@@ -22,17 +22,22 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 	/// <summary>
 	/// 
 	/// </summary>
-	public class JSGeneratorDuck : IDuck
+	public class JSElementGeneratorDuck : IDuck
 	{
-		private readonly PrototypeHelper.JSGenerator generator;
+		private readonly PrototypeHelper.JSElementGenerator generator;
+		private readonly PrototypeHelper.JSGenerator parentGenerator;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JSGeneratorDuck"/> class.
+		/// Initializes a new instance of the <see cref="JSElementGeneratorDuck"/> class.
 		/// </summary>
 		/// <param name="generator">The generator.</param>
-		public JSGeneratorDuck(PrototypeHelper.JSGenerator generator)
+		/// <param name="root">The root.</param>
+		public JSElementGeneratorDuck(PrototypeHelper.JSElementGenerator generator, string root)
 		{
 			this.generator = generator;
+			parentGenerator = generator.ParentGenerator;
+
+			PrototypeHelper.JSGenerator.Record(parentGenerator, "$('" + root + "')");
 		}
 
 		#region IDuck
@@ -44,7 +49,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object GetInvoke(string propName)
 		{
-			return Invoke(propName, new object[0]);
+			PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
+			PrototypeHelper.JSGenerator.Record(parentGenerator, propName);
+
+			return this;
 		}
 
 		/// <summary>
@@ -65,40 +73,31 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object Invoke(string method, params object[] args)
 		{
-			if (method == "el")
+			if (method == "set")
 			{
-				if (args == null || args.Length != 1)
-				{
-					throw new ArgumentException("el() method must be invoked with the element name as an argument");
-				}
-				if (args[0] == null)
-				{
-					throw new ArgumentNullException("el() method null invoked with a null argument");
-				}
+				PrototypeHelper.JSGenerator.RemoveTail(parentGenerator);
 
-				return new JSElementGeneratorDuck(
-					new PrototypeHelper.JSElementGenerator(generator), args[0].ToString());
+				PrototypeHelper.JSGenerator.Record(parentGenerator, " = " + args[0]);
+
+				return null;
 			}
-
-			if (generator.IsGeneratorMethod(method))
+			else
 			{
-				generator.Dispatch(method, args);
-			}
+				PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
 
-			return null;
+				if (generator.IsGeneratorMethod(method))
+				{
+					generator.Dispatch(method, args);
+				}
+				else
+				{
+					parentGenerator.Call(method, args);
+				}
+
+				return this;
+			}
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Delegates to the generator
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-		/// </returns>
-		public override string ToString()
-		{
-			return generator.ToString();
-		}
 	}
 }

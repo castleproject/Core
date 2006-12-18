@@ -14,9 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
-	using System;
 	using Castle.MonoRail.Framework.Tests;
-	using Castle.MonoRail.TestSupport;
 	using NUnit.Framework;
 
 	[TestFixture]

@@ -126,6 +126,7 @@
     </Compile>
     <Compile Include="EmailTestCase.cs" />
     <Compile Include="FormHelperTestCase.cs" />
+    <Compile Include="JSGenerationTestCase.cs" />
     <Compile Include="NVelocityBasicFunctionalityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

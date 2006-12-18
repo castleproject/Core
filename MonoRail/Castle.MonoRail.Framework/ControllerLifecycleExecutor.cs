@@ -116,6 +116,14 @@ namespace Castle.MonoRail.Framework
 
 		#region IControllerLifecycleExecutor
 
+		/// <summary>
+		/// Should bring the controller to an usable
+		/// state by populating its fields with values that
+		/// represent the current request
+		/// </summary>
+		/// <param name="areaName">The area name</param>
+		/// <param name="controllerName">The controller name</param>
+		/// <param name="actionName">The action name</param>
 		public void InitializeController(string areaName, string controllerName, string actionName)
 		{
 			InitializeControllerFieldsFromServiceProvider();
@@ -142,13 +150,28 @@ namespace Castle.MonoRail.Framework
 					controller.HttpContext.Items[Constants.OriginalViewKey] = controller._selectedViewName;
 				}
 			}
+
+			context.CurrentController = controller;
 		}
 
+		/// <summary>
+		/// Selects the action to execute based on the url information
+		/// </summary>
+		/// <param name="controllerName">The controller name</param>
+		/// <param name="actionName">The action name</param>
+		/// <returns></returns>
 		public bool SelectAction(string actionName, string controllerName)
 		{
 			return SelectAction(actionName, controllerName, null);
 		}
-		
+
+		/// <summary>
+		/// Selects the action to execute based on the url information
+		/// </summary>
+		/// <param name="controllerName">The controller name</param>
+		/// <param name="actionName">The action name</param>
+		/// <param name="actionArgs">The action arguments.</param>
+		/// <returns></returns>
 		public bool SelectAction(string actionName, string controllerName, IDictionary actionArgs)
 		{
 			try
@@ -794,7 +817,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Performs the rescue.
 		/// </summary>
-		/// <param name="method">The action (can be null).</param>
+		/// <param name="method">The action (can be null in the case of dynamic actions).</param>
 		/// <param name="ex">The exception.</param>
 		/// <returns></returns>
 		protected bool PerformRescue(MethodInfo method, Exception ex)
