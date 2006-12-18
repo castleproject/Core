@@ -4,6 +4,19 @@ Change history
 Release Candidate 3
 ===================
 
+- Added formatting support to SetOperations (affects FormHelper.Select, Checkboxlist)
+  
+  Example:
+  
+  $Form.Select("price", [1..100], "%{textformat='C'}")
+  
+  This will render a select with options like
+  
+  <option value="1">$1.00</option>
+  <option value="2">$2.00</option>
+  <option value="3">$3.00</option>
+  ...
+
 - Added ScriptaculousHelper, deprecated Effects2Helper
 
 - Extract Behaviour related operations from AjaxHelper into BehaviourHelper

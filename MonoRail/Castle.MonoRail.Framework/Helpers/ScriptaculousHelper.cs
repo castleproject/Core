@@ -86,7 +86,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <para>
 		/// Common options includes <c>duration</c>, 
 		/// <c>transition</c>, <c>fps</c>, <c>sync</c>, 
-		/// <c>from</c>, <c>to</c>, <c>delay</c>, <c>queue</c>
+		/// <c>from</c>, <c>to</c>, <c>delay</c>, <c>queue</c>, 
+		/// <c>startcolor</c>, <c>endcolor</c>.
+		/// </para>
+		/// <para>
+		/// Callbacks:
+		/// <c>beforeStart</c>, <c>beforeUpdate</c>, <c>afterUpdate</c>, <c>afterFinish</c>
 		/// </para>
 		/// </summary>
 		/// <remarks>

@@ -148,7 +148,7 @@ namespace Castle.MonoRail.Framework
 					
 					if (!stepExec.RunStartRequestFilters())
 					{
-						return;
+						context.UnderlyingContext.Response.End();
 					}
 				}
 			}

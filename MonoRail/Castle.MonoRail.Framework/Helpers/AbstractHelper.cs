@@ -319,6 +319,25 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Quotes the specified string with single quotes
+		/// </summary>
+		/// <param name="items">Items to quote</param>
+		/// <returns>A quoted string</returns>
+		public static string[] Quote(string[] items)
+		{
+			string[] quotedItems = new string[items.Length];
+
+			int index = 0;
+
+			foreach(string item in items)
+			{
+				quotedItems[index++] = Quote(item);
+			}
+
+			return quotedItems;
+		}
+
+		/// <summary>
 		/// Quotes the specified string with double quotes
 		/// </summary>
 		/// <param name="content">The content.</param>

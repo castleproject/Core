@@ -260,10 +260,14 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="actionArgs">The action args.</param>
 		public void ProcessSelectedAction(IDictionary actionArgs)
-		{			
+		{
+			bool actionSucceeded = false;
+
 			try
 			{
-				if (RunBeforeActionFilters())
+				bool canProceed = RunBeforeActionFilters();
+
+				if (canProceed)
 				{
 					PrepareResources();
 					
@@ -275,6 +279,8 @@ namespace Castle.MonoRail.Framework
 					{
 						dynAction.Execute(controller);
 					}
+
+					actionSucceeded = true;
 					
 					if (!hasConfiguredCache && 
 					    !context.Response.WasRedirected &&
@@ -300,32 +306,39 @@ namespace Castle.MonoRail.Framework
 				}
 
 				hasError = true;
+
+				return;
 			}
 			catch(Exception ex)
 			{
 				exceptionToThrow = ex;
 
 				hasError = true;
-
-				if (logger.IsErrorEnabled)
-				{
-					logger.Error("Exception during action process", ex);
-				}
-
-				if (context.Response.WasRedirected) return;
-				
-				PerformErrorHandling();
 			}
 
 			RunAfterActionFilters();
 
-			if (context.Response.WasRedirected) return;
-			
-			// If we haven't failed anywhere and no redirect was issued
-			if (!hasError && !context.Response.WasRedirected)
+			if (hasError && exceptionToThrow != null)
 			{
-				// Render the actual view then cleanup
-				ProcessView();
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error("Error processing action", exceptionToThrow);
+				}
+
+				if (context.Response.WasRedirected) return;
+
+				PerformErrorHandling();
+			}
+			else if (actionSucceeded)
+			{
+				if (context.Response.WasRedirected) return;
+
+				// If we haven't failed anywhere and no redirect was issued
+				if (!hasError && !context.Response.WasRedirected)
+				{
+					// Render the actual view then cleanup
+					ProcessView();
+				}
 			}
 			
 			RunAfterRenderFilters();
@@ -374,7 +387,7 @@ namespace Castle.MonoRail.Framework
 					if (!ProcessFilters(ExecuteEnum.StartRequest))
 					{
 						// Record that they failed.
-						hasError = true;
+						return false;
 					}
 				}
 			}
@@ -490,8 +503,7 @@ namespace Castle.MonoRail.Framework
 					// ...run them. If they fail...
 					if (!ProcessFilters(ExecuteEnum.BeforeAction))
 					{
-						// Record that they failed.
-						hasError = true;
+						return false;
 					}
 				}
 			}
@@ -526,7 +538,17 @@ namespace Castle.MonoRail.Framework
 		{
 			if (skipFilters) return;
 
-			ProcessFilters(ExecuteEnum.AfterAction);
+			try
+			{
+				ProcessFilters(ExecuteEnum.AfterAction);
+			}
+			catch(Exception ex)
+			{
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error("Error executing AfterAction filter(s)", ex);
+				}
+			}
 		}
 
 		/// <summary>
@@ -536,7 +558,17 @@ namespace Castle.MonoRail.Framework
 		{
 			if (skipFilters) return;
 
-			ProcessFilters(ExecuteEnum.AfterRendering);
+			try
+			{
+				ProcessFilters(ExecuteEnum.AfterRendering);
+			}
+			catch(Exception ex)
+			{
+				if (logger.IsErrorEnabled)
+				{
+					logger.Error("Error executing AfterRendering filter(s)", ex);
+				}
+			}
 		}
 
 		private void CreateFiltersDescriptors()

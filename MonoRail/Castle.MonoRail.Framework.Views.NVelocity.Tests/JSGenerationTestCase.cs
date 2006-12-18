@@ -57,6 +57,29 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertReplyContains(@"new Insertion.Before('aa','new content');");
 		}
 
+		[Test]
+		public void VisualEffect()
+		{
+			DoGet("jsgeneration/visualeffect.rails");
+			AssertSuccess();
+			AssertReplyContains(@"Effect.Highlight('element1', {});");
+			AssertReplyContains(@"Effect.Highlight('element1', {duration:4});");
+		}
+
+		[Test]
+		public void ShowHideToggleRemove()
+		{
+			DoGet("jsgeneration/multipleactions.rails");
+			AssertSuccess();
+			AssertReplyContains(@"Element.show('a');");
+			AssertReplyContains(@"Element.show('a','b','c');");
+			AssertReplyContains(@"Element.hide('a');");
+			AssertReplyContains(@"Element.hide('a','b','c');");
+			AssertReplyContains(@"Element.toggle('a');");
+			AssertReplyContains(@"Element.toggle('a','b','c');");
+			AssertReplyContains(@"['a','b','c'].each(Element.remove);");
+		}
+
 		#endregion
 
 		#region Element related

@@ -131,32 +131,37 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// TODO: Implement and document this one
 			/// </summary>
 			/// <param name="ids"></param>
-			public void Show(params object[] ids)
+			public void Show(params string[] ids)
 			{
+				Call("Element.show", Quote(ids));
 			}
 
 			/// <summary>
 			/// TODO: Implement and document this one
 			/// </summary>
 			/// <param name="ids"></param>
-			public void Hide(params object[] ids)
+			public void Hide(params string[] ids)
 			{
+				Call("Element.hide", Quote(ids));
 			}
 
 			/// <summary>
 			/// TODO: Implement and document this one
 			/// </summary>
 			/// <param name="ids"></param>
-			public void Toggle(params object[] ids)
+			public void Toggle(params string[] ids)
 			{
+				Call("Element.toggle", Quote(ids));
 			}
 
 			/// <summary>
 			/// TODO: Implement and document this one
 			/// </summary>
 			/// <param name="ids"></param>
-			public void Remove(params object[] ids)
+			public void Remove(params string[] ids)
 			{
+				// record "#{javascript_object_for(ids)}.each(Element.remove)"
+				Record(this, "[" + BuildJSArguments(Quote(ids)) + "].each(Element.remove)");
 			}
 
 			/// <summary>
@@ -165,6 +170,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="message"></param>
 			public void Alert(String message)
 			{
+				// call 'alert', message
 			}
 
 			/// <summary>
@@ -173,7 +179,37 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="url"></param>
 			public void RedirectTo(String url)
 			{
-				
+			}
+
+			/// <summary>
+			/// Re-apply Behaviour css' rules.
+			/// </summary>
+			public void ReApply()
+			{
+				Call("Behaviour.apply");
+			}
+
+			/// <summary>
+			/// TODO: Implement and document this one
+			/// </summary>
+			/// <param name="name">The name.</param>
+			/// <param name="element">The element.</param>
+			/// <param name="options">The options.</param>
+			public void VisualEffect(String name, String element, IDictionary options)
+			{
+				Write(new ScriptaculousHelper().VisualEffect(name, element, options));
+				Write(Environment.NewLine);
+			}
+
+			/// <summary>
+			/// TODO: Implement and document this one
+			/// </summary>
+			/// <param name="element">The element.</param>
+			/// <param name="options">The options.</param>
+			public void VisualEffectDropOut(String element, IDictionary options)
+			{
+				Write(new ScriptaculousHelper().VisualEffectDropOut(element, options));
+				Write(Environment.NewLine);
 			}
 
 			/// <summary>
@@ -183,7 +219,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="expression"></param>
 			public void Assign(String variable, String expression)
 			{
-
 			}
 
 			/// <summary>
@@ -245,6 +280,24 @@ namespace Castle.MonoRail.Framework.Helpers
 				return Quote(JsEscape(renderOptions.ToString()));
 			}
 
+			/// <summary>
+			/// Writes the content specified to the generator instance
+			/// </summary>
+			/// <param name="content">The content.</param>
+			public void Write(String content)
+			{
+				lines.Append(content);
+			}
+
+			/// <summary>
+			/// Writes the content specified to the generator instance
+			/// </summary>
+			/// <param name="content">The content.</param>
+			public void AppendLine(String content)
+			{
+				Record(this, content);
+			}
+
 			#endregion
 
 			#region Result generation (ToString)
@@ -267,17 +320,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			public static void Record(JSGenerator gen, string line)
 			{
 				gen.lines.AppendFormat("{0};\r\n", line);
-			}
-
-			/// <summary>
-			/// Writes the content specified to the generator instance
-			/// </summary>
-			/// <param name="generator">The generator.</param>
-			/// <param name="content">The content.</param>
-			/// <returns></returns>
-			public static void Write(JSGenerator generator, String content)
-			{
-				generator.lines.Append(content);
 			}
 
 			public static string BuildJSArguments(object[] args)
@@ -498,22 +540,78 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public void Dispatch(string method, params object[] args)
 		{
-			MethodInfo methInfo = (MethodInfo) GeneratorMethods[method];
+			MethodInfo methodInfo = (MethodInfo) GeneratorMethods[method];
 
-			int expectedParameterCount = methInfo.GetParameters().Length;
+			ParameterInfo[] parameters = methodInfo.GetParameters();
 
-			if (args.Length < expectedParameterCount)
+			int paramArrayIndex = -1;
+
+			for(int i=0; i < parameters.Length; i++)
 			{
-				// Complete with nulls, assuming that parameters are optional
+				ParameterInfo paramInfo = parameters[i];
 
-				object[] newArgs = new object[expectedParameterCount];
-
-				Array.Copy(args, newArgs, args.Length);
-
-				args = newArgs;
+				if (paramInfo.IsDefined(typeof(ParamArrayAttribute), true))
+				{
+					paramArrayIndex = i;
+				}
 			}
 
-			methInfo.Invoke(this, args);
+			try
+			{
+				methodInfo.Invoke(this, BuildMethodArgs(methodInfo, args, paramArrayIndex));
+			}
+			catch(Exception ex)
+			{
+				throw new RailsException("Error invoking method on generator. " + 
+					"Method invoked [" + method + "] with " + args.Length + " argument(s)", ex);
+			}
+		}
+
+		private object[] BuildMethodArgs(MethodInfo method, object[] methodArguments, int paramArrayIndex)
+		{
+			ParameterInfo[] methodArgs = method.GetParameters();
+
+			if (paramArrayIndex != -1)
+			{
+				Type arrayParamType = methodArgs[paramArrayIndex].ParameterType;
+
+				object[] newParams = new object[methodArgs.Length];
+
+				Array.Copy(methodArguments, newParams, methodArgs.Length - 1);
+
+				if (methodArguments.Length < (paramArrayIndex + 1))
+				{
+					newParams[paramArrayIndex] = Array.CreateInstance(
+						arrayParamType.GetElementType(), 0);
+				}
+				else
+				{
+					Array args = Array.CreateInstance(arrayParamType.GetElementType(), (methodArguments.Length + 1) - newParams.Length);
+
+					Array.Copy(methodArguments, methodArgs.Length - 1, args, 0, args.Length);
+
+					newParams[paramArrayIndex] = args;
+				}
+
+				methodArguments = newParams;
+			}
+			else
+			{
+				int expectedParameterCount = methodArgs.Length;
+
+				if (methodArguments.Length < expectedParameterCount)
+				{
+					// Complete with nulls, assuming that parameters are optional
+
+					object[] newArgs = new object[expectedParameterCount];
+
+					Array.Copy(methodArguments, newArgs, methodArguments.Length);
+
+					methodArguments = newArgs;
+				}
+			}
+
+			return methodArguments;
 		}
 	}
 

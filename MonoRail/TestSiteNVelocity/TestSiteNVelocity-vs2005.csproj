@@ -234,6 +234,7 @@
     <Content Include="views\jsgeneration\_partial1.vm" />
     <None Include="views\jsgeneration\collectionaccess.njs" />
     <None Include="views\jsgeneration\collectionfirstlast.njs" />
+    <None Include="views\jsgeneration\multipleactions.njs" />
     <None Include="views\jsgeneration\replace.njs" />
     <None Include="views\jsgeneration\InsertHtml.njs" />
     <None Include="views\jsgeneration\replacehtml.njs" />
@@ -247,6 +248,7 @@
     <None Include="views\jsgeneration\elementaccess.njs" />
     <None Include="views\home\heyhello.vm" />
     <None Include="views\home\index.vm" />
+    <None Include="views\jsgeneration\visualeffect.njs" />
     <None Include="views\layoutable\changelayout.vm" />
     <None Include="views\layoutable\index.vm" />
     <None Include="views\layouts\master.vm" />
