@@ -19,14 +19,11 @@ namespace TestSiteNVelocity.Controllers
 	[DefaultAction("Default")]
 	public class JSGenerationController : SmartDispatcherController
 	{
-		public void RenderingPartials()
+		public void Default()
 		{
 			PropertyBag["Name"] = "hammett";
 			PropertyBag["list"] = new string[] { "a", "b" };
-		}
 
-		public void Default()
-		{
 			RenderView(Action);
 		}
 	}

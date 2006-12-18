@@ -20,6 +20,47 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	[TestFixture]
 	public class JSGenerationTestCase : AbstractTestCase
 	{
+		#region Stock operations
+
+		[Test]
+		public void ReplaceHtml()
+		{
+			DoGet("jsgeneration/replacehtml.rails");
+			AssertSuccess();
+			AssertReplyContains(@"Element.update('aa','new content');");
+		}
+
+		[Test]
+		public void ReplaceHtmlUsingPartial()
+		{
+			DoGet("jsgeneration/replacehtmlwithpartial.rails");
+			AssertSuccess();
+			AssertReplyContains(@"Element.update('aa','You\'re hammett <br> [ a ][ b ]')");
+		}
+
+		[Test]
+		public void Replace()
+		{
+			DoGet("jsgeneration/replace.rails");
+			AssertSuccess();
+			AssertReplyContains(@"Element.replace('aa','new content')");
+		}
+
+		[Test]
+		public void InsertHtml()
+		{
+			DoGet("jsgeneration/InsertHtml.rails");
+			AssertSuccess();
+			AssertReplyContains(@"new Insertion.Top('aa','new content');");
+			AssertReplyContains(@"new Insertion.Bottom('aa','new content');");
+			AssertReplyContains(@"new Insertion.After('aa','new content');");
+			AssertReplyContains(@"new Insertion.Before('aa','new content');");
+		}
+
+		#endregion
+
+		#region Element related
+
 		[Test]
 		public void SimpleElementAccess()
 		{
@@ -75,5 +116,28 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertReplyContains("$('aa').replace('new content')");
 		}
+
+		#endregion
+
+		#region Select related
+
+		[Test]
+		public void SimpleCollectionAccess()
+		{
+			DoGet("jsgeneration/collectionaccess.rails");
+			AssertSuccess();
+			AssertReplyContains(@"$$('aa');");
+		}
+
+		[Test]
+		public void CollectionFirstLast()
+		{
+			DoGet("jsgeneration/collectionfirstlast.rails");
+			AssertSuccess();
+			AssertReplyContains(@"$$('p.welcome b').first().hide();");
+			AssertReplyContains(@"$$('p.welcome b').last().show();");
+		}
+
+		#endregion
 	}
 }

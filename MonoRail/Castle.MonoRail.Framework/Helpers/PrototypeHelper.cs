@@ -32,6 +32,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		public class JSGenerator : DynamicDispatchSupport
 		{
+			enum Position
+			{
+				Top,
+				Bottom,
+				Before,
+				After
+			}
+
 			private readonly static IDictionary DispMethods;
 
 			private readonly IRailsEngineContext context;
@@ -68,22 +76,35 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			#endregion
 
+			#region DynamicDispatchSupport overrides
+
+			/// <summary>
+			/// Gets the generator methods.
+			/// </summary>
+			/// <value>The generator methods.</value>
 			protected override IDictionary GeneratorMethods
 			{
 				get { return DispMethods; }
 			}
 
+			#endregion
+
 			#region Dispatchable operations
 
 			/// <summary>
 			/// TODO: Implement and document this one
+			/// <para>
+			/// Top, After, Before, Bottom
+			/// </para>
 			/// </summary>
 			/// <param name="position"></param>
 			/// <param name="id"></param>
 			/// <param name="renderOptions"></param>
 			public void InsertHtml(string position, string id, object renderOptions)
 			{
-				Call(this, "new Insertion." + position, Quote(id), Render(renderOptions));
+				position = Enum.Parse(typeof(Position), position, true).ToString();
+
+				Call("new Insertion." + position, Quote(id), Render(renderOptions));
 			}
 
 			/// <summary>
@@ -93,7 +114,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="renderOptions"></param>
 			public void ReplaceHtml(String id, object renderOptions)
 			{
-				Call(this, "Element.update", Quote(id), Render(renderOptions));
+				Call("Element.update", Quote(id), Render(renderOptions));
 			}
 
 			/// <summary>
@@ -103,7 +124,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="renderOptions"></param>
 			public void Replace(String id, object renderOptions)
 			{
-				Call(this, "Element.replace", Quote(id), Render(renderOptions));
+				Call("Element.replace", Quote(id), Render(renderOptions));
 			}
 
 			/// <summary>
@@ -315,6 +336,66 @@ namespace Castle.MonoRail.Framework.Helpers
 			#endregion
 		}
 
+		public class JSCollectionGenerator : DynamicDispatchSupport
+		{
+			private readonly static IDictionary DispMethods;
+
+			private readonly JSGenerator generator;
+
+			#region Type Constructor
+
+			/// <summary>
+			/// Collects the public methods
+			/// </summary>
+			static JSCollectionGenerator()
+			{
+				DispMethods = new HybridDictionary(true);
+
+				BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+
+				MethodInfo[] methods = typeof(JSCollectionGenerator).GetMethods(flags);
+
+				PopulateAvailableMethods(DispMethods, methods);
+			}
+
+			#endregion
+
+			#region Constructor
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="JSCollectionGenerator"/> class.
+			/// </summary>
+			/// <param name="generator">The generator.</param>
+			public JSCollectionGenerator(JSGenerator generator)
+			{
+				this.generator = generator;
+			}
+
+			#endregion
+
+			/// <summary>
+			/// Gets the parent generator.
+			/// </summary>
+			/// <value>The parent generator.</value>
+			public JSGenerator ParentGenerator
+			{
+				get { return generator; }
+			}
+
+			#region DynamicDispatchSupport overrides
+
+			/// <summary>
+			/// Gets the generator methods.
+			/// </summary>
+			/// <value>The generator methods.</value>
+			protected override IDictionary GeneratorMethods
+			{
+				get { return DispMethods; }
+			}
+
+			#endregion
+		}
+
 		public class JSElementGenerator : DynamicDispatchSupport
 		{
 			private readonly static IDictionary DispMethods;
@@ -361,10 +442,18 @@ namespace Castle.MonoRail.Framework.Helpers
 				get { return generator; }
 			}
 
+			#region DynamicDispatchSupport overrides
+
+			/// <summary>
+			/// Gets the generator methods.
+			/// </summary>
+			/// <value>The generator methods.</value>
 			protected override IDictionary GeneratorMethods
 			{
 				get { return DispMethods; }
 			}
+
+			#endregion
 
 			#region Dispatchable operations
 
