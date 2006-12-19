@@ -74,7 +74,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <value>The context vars.</value>
 		public IDictionary ContextVars
 		{
-			get { return context as IDictionary; }
+			get { return context; }
 		}
 
 		/// <summary>
@@ -136,6 +136,21 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			if (HasSection(sectionName))
 			{
 				Directive directive = (Directive) sections[sectionName];
+
+				directive.Render(context, writer, parentNode);
+			}
+		}
+
+		/// <summary>
+		/// Renders the the specified section
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <param name="writer">The writer.</param>
+		public void RenderSection(string sectionName, TextWriter writer)
+		{
+			if (HasSection(sectionName))
+			{
+				Directive directive = (Directive)sections[sectionName];
 
 				directive.Render(context, writer, parentNode);
 			}

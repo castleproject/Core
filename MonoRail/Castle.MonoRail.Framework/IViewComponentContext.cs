@@ -57,6 +57,13 @@ namespace Castle.MonoRail.Framework
 		void RenderSection(String sectionName);
 
 		/// <summary>
+		/// Renders the the specified section
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <param name="writer">The writer.</param>
+		void RenderSection(String sectionName, TextWriter writer);
+
+		/// <summary>
 		/// Gets the writer used to render the component
 		/// </summary>
 		/// <value>The writer.</value>

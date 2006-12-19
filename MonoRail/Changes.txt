@@ -4,6 +4,13 @@ Change history
 Release Candidate 3
 ===================
 
+- Added DiggStylePagination ViewComponent, based on Alex Henderson work. 
+  See http://blog.bittercoder.com/CategoryView,category,castle.aspx
+
+- Added PaginationHelper.CreateCustomPage
+  
+  This is only useful if the application code takes care of slicing (select top and etc)
+
 - Added formatting support to SetOperations (affects FormHelper.Select, Checkboxlist)
   
   Example:

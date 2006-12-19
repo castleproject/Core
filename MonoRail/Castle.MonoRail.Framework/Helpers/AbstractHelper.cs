@@ -163,7 +163,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		/// </remarks>
 		/// <param name="parameters">The parameters</param>
-		protected String BuildQueryString(IDictionary parameters)
+		public String BuildQueryString(IDictionary parameters)
 		{
 			if (parameters == null) return String.Empty;
 
