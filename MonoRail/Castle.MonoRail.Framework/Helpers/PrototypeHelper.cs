@@ -20,6 +20,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+	using System.Text.RegularExpressions;
 
 	/// <summary>
 	/// Pendent
@@ -310,7 +311,7 @@ namespace Castle.MonoRail.Framework.Helpers
 					"catch(e)\n" +
 					"{\n" +
 					"alert('JS error ' + e.toString());\n" +
-					"alert(\"Generated content: \\n' + '" + JsEscape(lines.ToString()) + "\");\n}";
+					"alert('Generated content: \\n" + JsEscapeWithSQuotes(lines.ToString()) + "');\n}";
 			}
 
 			#endregion
@@ -372,7 +373,14 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			private string JsEscape(string content)
 			{
-				return context.Server.JavaScriptEscape(content);
+				content = Regex.Replace(content, "(\r\n)|(\r)|(\n)", "\\n", RegexOptions.Multiline);
+				content = Regex.Replace(content, "\\\"", "\\\"", RegexOptions.Multiline);
+				return content;
+			}
+
+			private string JsEscapeWithSQuotes(string content)
+			{
+				return Regex.Replace(JsEscape(content), "(\')", "\\'", RegexOptions.Multiline);
 			}
 
 			#endregion
