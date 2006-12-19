@@ -581,6 +581,16 @@
             NLog configuration section handler class for configuring NLog from App.config
             </summary>
         </member>
+        <member name="T:NLog.Config.DefaultParameterAttribute">
+            <summary>
+            Attribute used to mark the default parameters for layout renderers.
+            </summary>
+        </member>
+        <member name="M:NLog.Config.DefaultParameterAttribute.#ctor">
+            <summary>
+            Creates a new DefaultParameterAttribute object.
+            </summary>
+        </member>
         <member name="T:NLog.Config.LoggingConfiguration">
             <summary>
             Keeps logging configuration and provides simple API
@@ -878,6 +888,36 @@
             Returns the current object.
             </summary>
         </member>
+        <member name="T:NLog.Config.NLogConfigurationException">
+            <summary>
+            Exception during configuration
+            </summary>
+        </member>
+        <member name="M:NLog.Config.NLogConfigurationException.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Config.NLogConfigurationException"/>.
+            </summary>
+        </member>
+        <member name="M:NLog.Config.NLogConfigurationException.#ctor(System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Config.NLogConfigurationException"/>.
+            </summary>
+            <param name="desc">Error message</param>
+        </member>
+        <member name="M:NLog.Config.NLogConfigurationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Config.NLogConfigurationException"/>.
+            </summary>
+            <param name="desc">Error message</param>
+            <param name="inner">Inner exception</param>
+        </member>
+        <member name="M:NLog.Config.NLogConfigurationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Config.NLogConfigurationException"/>.
+            </summary>
+            <param name="info">Serialization info</param>
+            <param name="context">Streaming context</param>
+        </member>
         <member name="T:NLog.Config.NotSupportedRuntimeAttribute">
             <summary>
             Marks classes and properties as NOT supporting particular runtime framework 
@@ -1086,6 +1126,14 @@
             </summary>
             <param name="fileName">Configuration file to be read.</param>
         </member>
+        <member name="M:NLog.Config.XmlLoggingConfiguration.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructs a new instance of <see cref="T:NLog.Config.XmlLoggingConfiguration"/>
+            class and reads the configuration from the specified config file.
+            </summary>
+            <param name="fileName">Configuration file to be read.</param>
+            <param name="ignoreErrors">Ignore any errors during configuration.</param>
+        </member>
         <member name="M:NLog.Config.XmlLoggingConfiguration.#ctor(System.Xml.XmlElement,System.String)">
             <summary>
             Constructs a new instance of <see cref="T:NLog.Config.XmlLoggingConfiguration"/>
@@ -1093,6 +1141,15 @@
             </summary>
             <param name="configElement"><see cref="T:System.Xml.XmlElement"/> containing the configuration section.</param>
             <param name="fileName">Name of the file that contains the element (to be used as a base for including other files).</param>
+        </member>
+        <member name="M:NLog.Config.XmlLoggingConfiguration.#ctor(System.Xml.XmlElement,System.String,System.Boolean)">
+            <summary>
+            Constructs a new instance of <see cref="T:NLog.Config.XmlLoggingConfiguration"/>
+            class and reads the configuration from the specified XML element.
+            </summary>
+            <param name="configElement"><see cref="T:System.Xml.XmlElement"/> containing the configuration section.</param>
+            <param name="fileName">Name of the file that contains the element (to be used as a base for including other files).</param>
+            <param name="ignoreErrors">Ignore any errors during configuration.</param>
         </member>
         <member name="M:NLog.Config.XmlLoggingConfiguration.Reload">
             <summary>
@@ -1206,7 +1263,7 @@
             <summary>
             Determines whether stack trace information should be gathered
             during log event processing. By default it calls <see cref="M:NLog.Layout.NeedsStackTrace"/> on
-            <see cref="P:NLog.Target.CompiledLayout"/>.
+            <see cref="P:NLog.TargetWithLayout.CompiledLayout"/>.
             </summary>
             <returns>0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace</returns>
         </member>
@@ -1366,11 +1423,6 @@
             (global named mutex is used for this)
             </remarks>
         </member>
-        <member name="T:NLog.Internal.NetworkSenders.HttpNetworkSender">
-            <summary>
-            Sends one-way messages over the HTTP protocol.
-            </summary>
-        </member>
         <member name="T:NLog.Internal.NetworkSenders.NetworkSender">
             <summary>
             A base class for all network senders. Supports one-way sending of messages
@@ -1398,7 +1450,6 @@
             <remarks>
             If the url starts with <c>tcp://</c> - a new <see cref="T:NLog.Internal.NetworkSenders.TcpNetworkSender"/> is created.<br/>
             If the url starts with <c>udp://</c> - a new <see cref="T:NLog.Internal.NetworkSenders.UdpNetworkSender"/> is created.<br/>
-            If the url starts with <c>http://</c> or <c>https://</c>- a new <see cref="T:NLog.Internal.NetworkSenders.HttpNetworkSender"/> is created.<br/>
             </remarks>
         </member>
         <member name="M:NLog.Internal.NetworkSenders.NetworkSender.Close">
@@ -1411,17 +1462,21 @@
             Flushes any buffers.
             </summary>
         </member>
-        <member name="M:NLog.Internal.NetworkSenders.NetworkSender.Send(System.String)">
+        <member name="M:NLog.Internal.NetworkSenders.NetworkSender.Send(System.Byte[],System.Int32,System.Int32)">
             <summary>
             Send the given text over the specified protocol.
             </summary>
-            <param name="text">Text to be sent.</param>
+            <param name="bytes">Bytes to be sent.</param>
+            <param name="offset">Offset in buffer</param>
+            <param name="length">Number of bytes to send</param>
         </member>
-        <member name="M:NLog.Internal.NetworkSenders.NetworkSender.DoSend(System.String)">
+        <member name="M:NLog.Internal.NetworkSenders.NetworkSender.DoSend(System.Byte[],System.Int32,System.Int32)">
             <summary>
             Actually sends the given text over the specified protocol.
             </summary>
-            <param name="text">The text to be sent.</param>
+            <param name="bytes">The bytes to be sent.</param>
+            <param name="offset">Offset in buffer</param>
+            <param name="length">Number of bytes to send</param>
             <remarks>To be overridden in inheriting classes.</remarks>
         </member>
         <member name="M:NLog.Internal.NetworkSenders.NetworkSender.Dispose">
@@ -1433,20 +1488,6 @@
             <summary>
             The address of the network endpoint.
             </summary>
-        </member>
-        <member name="M:NLog.Internal.NetworkSenders.HttpNetworkSender.#ctor(System.String)">
-            <summary>
-            Creates a new instance of <see cref="T:NLog.Internal.NetworkSenders.HttpNetworkSender"/> and initializes
-            it with the specified URL.
-            </summary>
-            <param name="url">URL. Must start with http:// or https://</param>
-        </member>
-        <member name="M:NLog.Internal.NetworkSenders.HttpNetworkSender.DoSend(System.String)">
-            <summary>
-            Sends the given text over HTTP.
-            </summary>
-            <param name="text">The text to be sent.</param>
-            <remarks>The method uses HTTP <c>POST</c> method to connect to the server.</remarks>
         </member>
         <member name="T:NLog.Internal.NetworkSenders.TcpNetworkSender">
             <summary>
@@ -1460,11 +1501,14 @@
             </summary>
             <param name="url">URL. Must start with tcp://</param>
         </member>
-        <member name="M:NLog.Internal.NetworkSenders.TcpNetworkSender.DoSend(System.String)">
+        <member name="M:NLog.Internal.NetworkSenders.TcpNetworkSender.DoSend(System.Byte[],System.Int32,System.Int32)">
             <summary>
             Sends the specified text over the connected socket.
             </summary>
-            <param name="text"></param>
+            <param name="bytes">The bytes to be sent.</param>
+            <param name="offset">Offset in buffer</param>
+            <param name="length">Number of bytes to send</param>
+            <remarks>To be overridden in inheriting classes.</remarks>
         </member>
         <member name="M:NLog.Internal.NetworkSenders.TcpNetworkSender.Close">
             <summary>
@@ -1483,11 +1527,14 @@
             </summary>
             <param name="url">URL. Must start with udp://</param>
         </member>
-        <member name="M:NLog.Internal.NetworkSenders.UdpNetworkSender.DoSend(System.String)">
+        <member name="M:NLog.Internal.NetworkSenders.UdpNetworkSender.DoSend(System.Byte[],System.Int32,System.Int32)">
             <summary>
             Sends the specified text as a UDP datagram.
             </summary>
-            <param name="text"></param>
+            <param name="bytes">The bytes to be sent.</param>
+            <param name="offset">Offset in buffer</param>
+            <param name="length">Number of bytes to send</param>
+            <remarks>To be overridden in inheriting classes.</remarks>
         </member>
         <member name="M:NLog.Internal.NetworkSenders.UdpNetworkSender.Close">
             <summary>
@@ -1676,6 +1723,46 @@
             <summary>
             Gets a collection containing the values in this FilterDictionary.
             </summary>
+        </member>
+        <member name="T:NLog.Internal.FormHelper">
+            <summary>
+            Form helper
+            </summary>
+        </member>
+        <member name="M:NLog.Internal.FormHelper.FindControl(System.String,System.Windows.Forms.Control)">
+            <summary>
+            Finds control embended on searchControl
+            </summary>
+            <param name="name">name of Control</param>
+            <param name="searchControl">Control in which we're searching for control</param>
+            <returns>null if no control has been found</returns>
+        </member>
+        <member name="M:NLog.Internal.FormHelper.FindControl(System.String,System.Windows.Forms.Control,System.Type)">
+            <summary>
+            Finds control of specified type embended on searchControl
+            </summary>
+            <param name="name">name of Control</param>
+            <param name="searchControl">Control in which we're searching for control</param>
+            <param name="controlType">Type of control to search</param>
+            <returns>null if no control has been found</returns>
+        </member>
+        <member name="M:NLog.Internal.FormHelper.CreateForm(System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Creates Form
+            </summary>
+            <param name="name">Name of form</param>
+            <param name="width">Width of form</param>
+            <param name="height">Height of form</param>
+            <param name="show">Auto show form</param>
+            <returns>Created form</returns>
+        </member>
+        <member name="M:NLog.Internal.FormHelper.CreateRichTextBox(System.String,System.Windows.Forms.Form)">
+            <summary>
+            Creates RichTextBox and docks in parentForm
+            </summary>
+            <param name="name">Name of RichTextBox</param>
+            <param name="parentForm">Form to dock RichTextBox</param>
+            <returns>Created RichTextBox</returns>
         </member>
         <member name="T:NLog.Internal.InternalLogger">
             <summary>
@@ -1968,7 +2055,7 @@
         </member>
         <member name="T:NLog.Internal.LogEventInfoBuffer">
             <summary>
-            A cyclick buffer of <see cref="T:NLog.LogEventInfo"/> object.
+            A cyclic buffer of <see cref="T:NLog.LogEventInfo"/> object.
             </summary>
         </member>
         <member name="M:NLog.Internal.LogEventInfoBuffer.#ctor(System.Int32,System.Boolean,System.Int32)">
@@ -2593,7 +2680,7 @@
             <summary>
             Determines whether stack trace information should be gathered
             during log event processing. By default it calls <see cref="M:NLog.Layout.NeedsStackTrace"/> on
-            <see cref="P:NLog.Target.CompiledLayout"/>.
+            <see cref="P:NLog.TargetWithLayout.CompiledLayout"/>.
             </summary>
             <returns>0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace</returns>
         </member>
@@ -2644,6 +2731,16 @@
             of the layout renderer be precalculated and inserted as a literal
             in the resulting layout string.</returns>
         </member>
+        <member name="M:NLog.LayoutRenderer.Initialize">
+            <summary>
+            Initializes the layout renderer.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderer.Close">
+            <summary>
+            Closes the layout renderer.
+            </summary>
+        </member>
         <member name="P:NLog.LayoutRenderer.Padding">
             <summary>
             Padding value.
@@ -2676,8 +2773,18 @@
         </member>
         <member name="P:NLog.LayoutRenderer.Culture">
             <summary>
-            The culture name to be used for rendering.
+            The culture name to be used for rendering. 
             </summary>
+            <example>
+            The format for culture names is described in <a href="http://rfc.net/rfc1766.html">RFC 1766</a> and at <a href="http://msdn2.microsoft.com/en-us/library/system.globalization.cultureinfo.cultureinfo.aspx">MSDN</a>. 
+            Some examples of valid culture names are:
+            <ul>
+            <li><b>en-US</b> - English (United States)</li>
+            <li><b>en-UK</b> - English (United Kingdom)</li>
+            <li><b>pl-PL</b> - Polish</li>
+            <li><b>ar-SA</b> - Arabic (Saudi Arabia)</li>
+            </ul>
+            </example>
         </member>
         <member name="P:NLog.LayoutRenderer.CultureInfo">
             <summary>
@@ -3106,6 +3213,36 @@
             Name of the environment variable.
             </summary>
         </member>
+        <member name="T:NLog.LayoutRenderers.EventContextLayoutRenderer">
+            <summary>
+            Log event context data
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.EventContextLayoutRenderer.GetEstimatedBufferSize(NLog.LogEventInfo)">
+            <summary>
+            Returns the estimated number of characters that are needed to
+            hold the rendered value for the specified logging event.
+            </summary>
+            <param name="logEvent">Logging event information.</param>
+            <returns>The number of characters.</returns>
+            <remarks>
+            If the exact number is not known or
+            expensive to calculate this function should return a rough estimate
+            that's big enough in most cases, but not too big, in order to conserve memory.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.EventContextLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the specified log event context item and appends it to the specified <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="P:NLog.LayoutRenderers.EventContextLayoutRenderer.Item">
+            <summary>
+            Name of the item.
+            </summary>
+        </member>
         <member name="T:NLog.LayoutRenderers.ExceptionLayoutRenderer">
             <summary>
             Exception information provided through 
@@ -3147,6 +3284,107 @@
         <member name="P:NLog.LayoutRenderers.ExceptionLayoutRenderer.Separator">
             <summary>
             The separator used to concatenate parts specified in the Format.
+            </summary>
+        </member>
+        <member name="T:NLog.LayoutRenderers.FileContentsLayoutRenderer">
+            <summary>
+            Contents of the specified file.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.FileContentsLayoutRenderer.GetEstimatedBufferSize(NLog.LogEventInfo)">
+            <summary>
+            Returns the estimated number of characters that are needed to
+            hold the rendered value for the specified logging event.
+            </summary>
+            <param name="logEvent">Logging event information.</param>
+            <returns>The number of characters.</returns>
+            <remarks>
+            If the exact number is not known or
+            expensive to calculate this function should return a rough estimate
+            that's big enough in most cases, but not too big, in order to conserve memory.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.FileContentsLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the contents of the specified file and appends it to the specified <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="P:NLog.LayoutRenderers.FileContentsLayoutRenderer.FileName">
+            <summary>
+            Name of the file.
+            </summary>
+        </member>
+        <member name="P:NLog.LayoutRenderers.FileContentsLayoutRenderer.Encoding">
+            <summary>
+            File encoding.
+            </summary>
+            <value>The encoding.</value>
+        </member>
+        <member name="T:NLog.LayoutRenderers.GCLayoutRenderer">
+            <summary>
+            The information about the garbage collector.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.GCLayoutRenderer.GetEstimatedBufferSize(NLog.LogEventInfo)">
+            <summary>
+            Returns the estimated number of characters that are needed to
+            hold the rendered value for the specified logging event.
+            </summary>
+            <param name="logEvent">Logging event information.</param>
+            <returns>The number of characters.</returns>
+            <remarks>
+            If the exact number is not known or
+            expensive to calculate this function should return a rough estimate
+            that's big enough in most cases, but not too big, in order to conserve memory.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.GCLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the selected process information.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="P:NLog.LayoutRenderers.GCLayoutRenderer.Property">
+            <summary>
+            The property to retrieve.
+            </summary>
+        </member>
+        <member name="T:NLog.LayoutRenderers.GCLayoutRenderer.GCProperty">
+            <summary>
+            The property of System.GC to retrieve
+            </summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.GCLayoutRenderer.GCProperty.TotalMemory">
+            <summary>
+            Total memory allocated
+            </summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.GCLayoutRenderer.GCProperty.TotalMemoryForceCollection">
+            <summary>
+            Total memory allocated (perform full garbage collection first)
+            </summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.GCLayoutRenderer.GCProperty.CollectionCount0">
+            <summary>
+            Number of Gen0 collections.
+            </summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.GCLayoutRenderer.GCProperty.CollectionCount1">
+            <summary>
+            Number of Gen1 collections.
+            </summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.GCLayoutRenderer.GCProperty.CollectionCount2">
+            <summary>
+            Number of Gen2 collections.
+            </summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.GCLayoutRenderer.GCProperty.MaxGeneration">
+            <summary>
+            Maximum generation number supported by GC.
             </summary>
         </member>
         <member name="T:NLog.LayoutRenderers.GDCLayoutRenderer">
@@ -3729,6 +3967,171 @@
             </summary>
             <returns><see langword="true"/></returns>
         </member>
+        <member name="T:NLog.LayoutRenderers.ProcessInfoLayoutRenderer">
+            <summary>
+            The information about the running process.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.GetEstimatedBufferSize(NLog.LogEventInfo)">
+            <summary>
+            Returns the estimated number of characters that are needed to
+            hold the rendered value for the specified logging event.
+            </summary>
+            <param name="logEvent">Logging event information.</param>
+            <returns>The number of characters.</returns>
+            <remarks>
+            If the exact number is not known or
+            expensive to calculate this function should return a rough estimate
+            that's big enough in most cases, but not too big, in order to conserve memory.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the selected process information.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="M:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.Initialize">
+            <summary>
+            Initializes the layout renderer.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.Close">
+            <summary>
+            Closes the layout renderer.
+            </summary>
+        </member>
+        <member name="P:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.Property">
+            <summary>
+            The property to retrieve.
+            </summary>
+        </member>
+        <member name="T:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty">
+            <summary>
+            The property of System.Diagnostics.Process to retrieve
+            </summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.BasePriority">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.ExitCode">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.ExitTime">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.Handle">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.HandleCount">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.HasExited">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.Id">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.MachineName">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.MainModule">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.MainWindowHandle">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.MainWindowTitle">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.MaxWorkingSet">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.MinWorkingSet">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.NonpagedSystemMemorySize">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.NonpagedSystemMemorySize64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PagedMemorySize">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PagedMemorySize64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PagedSystemMemorySize">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PagedSystemMemorySize64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PeakPagedMemorySize">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PeakPagedMemorySize64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PeakVirtualMemorySize">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PeakVirtualMemorySize64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PeakWorkingSet">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PeakWorkingSet64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PriorityBoostEnabled">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PriorityClass">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PrivateMemorySize">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PrivateMemorySize64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.PrivilegedProcessorTime">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.ProcessName">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.Responding">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.SessionId">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.StartTime">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.TotalProcessorTime">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.UserProcessorTime">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.VirtualMemorySize">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.VirtualMemorySize64">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.WorkingSet">
+            <summary></summary>
+        </member>
+        <member name="F:NLog.LayoutRenderers.ProcessInfoLayoutRenderer.ProcessInfoProperty.WorkingSet64">
+            <summary></summary>
+        </member>
         <member name="T:NLog.LayoutRenderers.ProcessNameLayoutRenderer">
             <summary>
             The name of the current process.
@@ -3843,6 +4246,56 @@
             Align decimal point (emit non-significant zeros)
             </summary>
         </member>
+        <member name="T:NLog.LayoutRenderers.Rot13LayoutRenderer">
+            <summary>
+            Decodes text "encrypted" with ROT-13.
+            </summary>
+            <remarks>
+            See <a href="http://en.wikipedia.org/wiki/ROT13">http://en.wikipedia.org/wiki/ROT13</a>.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Rot13LayoutRenderer.GetEstimatedBufferSize(NLog.LogEventInfo)">
+            <summary>
+            Returns the estimated number of characters that are needed to
+            hold the rendered value for the specified logging event.
+            </summary>
+            <param name="logEvent">Logging event information.</param>
+            <returns>The number of characters.</returns>
+            <remarks>
+            If the exact number is not known or
+            expensive to calculate this function should return a rough estimate
+            that's big enough in most cases, but not too big, in order to conserve memory.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Rot13LayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the inner message, decrypts it with ROT-13 and appends it to the specified <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Rot13LayoutRenderer.NeedsStackTrace">
+            <summary>
+            Determines whether stack trace information should be gathered
+            during log event processing. By default it calls <see cref="M:NLog.Layout.NeedsStackTrace"/> on
+            <see cref="P:NLog.TargetWithLayout.CompiledLayout"/>.
+            </summary>
+            <returns>
+            0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace
+            </returns>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Rot13LayoutRenderer.DecodeRot13(System.String)">
+            <summary>
+            Encodes/Decodes ROT-13-encoded string.
+            </summary>
+            <param name="s">The string to be encoded/decoded</param>
+            <returns>Encoded/Decoded text</returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.Rot13LayoutRenderer.Text">
+            <summary>
+            The text to be decoded.
+            </summary>
+        </member>
         <member name="T:NLog.LayoutRenderers.ShortDateLayoutRenderer">
             <summary>
             The short date in a sortable format yyyy-MM-dd
@@ -3867,6 +4320,66 @@
             </summary>
             <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
             <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="T:NLog.LayoutRenderers.SpecialFolderLayoutRenderer">
+            <summary>
+            System special folder path (includes My Documents, My Music, Program Files, Desktop, and more)
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.SpecialFolderLayoutRenderer.GetEstimatedBufferSize(NLog.LogEventInfo)">
+            <summary>
+            Returns the estimated number of characters that are needed to
+            hold the rendered value for the specified logging event.
+            </summary>
+            <param name="logEvent">Logging event information.</param>
+            <returns>The number of characters.</returns>
+            <remarks>
+            If the exact number is not known or
+            expensive to calculate this function should return a rough estimate
+            that's big enough in most cases, but not too big, in order to conserve memory.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.SpecialFolderLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the directory where NLog is located and appends it to the specified <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="M:NLog.LayoutRenderers.SpecialFolderLayoutRenderer.IsAppDomainFixed">
+            <summary>
+            Determines whether the value produced by the layout renderer
+            is fixed per current app-domain.
+            </summary>
+            <returns><see langword="true"/></returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.SpecialFolderLayoutRenderer.Folder">
+            <summary>
+            System special folder.
+            </summary>
+            <remarks>
+            Full list of options is available at <a href="http://msdn2.microsoft.com/en-us/system.environment.specialfolder.aspx">MSDN</a>.
+            The most common ones are:
+            <ul>
+            <li><b>ApplicationData</b> - roaming application data for current user.</li>
+            <li><b>CommonApplicationData</b> - application data for all users.</li>
+            <li><b>MyDocuments</b> - My Documents</li>
+            <li><b>DesktopDirectory</b> - Desktop directory</li>
+            <li><b>LocalApplicationData</b> - non roaming application data</li>
+            <li><b>Personal</b> - user profile directory</li>
+            <li><b>System</b> - System directory</li>
+            </ul>
+            </remarks>
+        </member>
+        <member name="P:NLog.LayoutRenderers.SpecialFolderLayoutRenderer.File">
+            <summary>
+            The name of the file to be Path.Combine()'d with the directory name.
+            </summary>
+        </member>
+        <member name="P:NLog.LayoutRenderers.SpecialFolderLayoutRenderer.Dir">
+            <summary>
+            The name of the directory to be Path.Combine()'d with the directory name.
+            </summary>
         </member>
         <member name="T:NLog.LayoutRenderers.StackTraceFormat">
             <summary>
@@ -3932,6 +4445,48 @@
         <member name="P:NLog.LayoutRenderers.StackTraceLayoutRenderer.Separator">
             <summary>
             Stack frame separator string.
+            </summary>
+        </member>
+        <member name="T:NLog.LayoutRenderers.TempDirLayoutRenderer">
+            <summary>
+            A temporary directory.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.TempDirLayoutRenderer.GetEstimatedBufferSize(NLog.LogEventInfo)">
+            <summary>
+            Returns the estimated number of characters that are needed to
+            hold the rendered value for the specified logging event.
+            </summary>
+            <param name="logEvent">Logging event information.</param>
+            <returns>The number of characters.</returns>
+            <remarks>
+            If the exact number is not known or
+            expensive to calculate this function should return a rough estimate
+            that's big enough in most cases, but not too big, in order to conserve memory.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutRenderers.TempDirLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the directory where NLog is located and appends it to the specified <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="M:NLog.LayoutRenderers.TempDirLayoutRenderer.IsAppDomainFixed">
+            <summary>
+            Determines whether the value produced by the layout renderer
+            is fixed per current app-domain.
+            </summary>
+            <returns><see langword="true"/></returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.TempDirLayoutRenderer.File">
+            <summary>
+            The name of the file to be Path.Combine()'d with the directory name.
+            </summary>
+        </member>
+        <member name="P:NLog.LayoutRenderers.TempDirLayoutRenderer.Dir">
+            <summary>
+            The name of the directory to be Path.Combine()'d with the directory name.
             </summary>
         </member>
         <member name="T:NLog.LayoutRenderers.ThreadIDLayoutRenderer">
@@ -4009,6 +4564,652 @@
             <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
             <param name="logEvent">Logging event.</param>
         </member>
+        <member name="T:NLog.Layouts.CsvColumn">
+            <summary>
+            A column in the CSV
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumn.#ctor">
+            <summary>
+            Constructs a new instance of <see cref="T:NLog.Layouts.CsvColumn"/>.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumn.#ctor(System.String,System.String)">
+            <summary>
+            Constructs a new instance of <see cref="T:NLog.Layouts.CsvColumn"/> and
+            initializes Name and Layout properties.
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvColumn.Name">
+            <summary>
+            The name of the column.
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvColumn.Layout">
+            <summary>
+            The layout that should be written in the column.
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvColumn.CompiledLayout">
+            <summary>
+            The compiled layout that should be written in the column.
+            </summary>
+        </member>
+        <member name="T:NLog.Layouts.CsvColumnCollection">
+            <summary>
+            A collection of elements of type CsvFileColumn
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.#ctor">
+            <summary>
+            Initializes a new empty instance of the CsvFileColumnCollection class.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.#ctor(NLog.Layouts.CsvColumn[])">
+            <summary>
+            Initializes a new instance of the CsvFileColumnCollection class, containing elements
+            copied from an array.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the new CsvFileColumnCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.#ctor(NLog.Layouts.CsvColumnCollection)">
+            <summary>
+            Initializes a new instance of the CsvFileColumnCollection class, containing elements
+            copied from another instance of CsvFileColumnCollection
+            </summary>
+            <param name="items">
+            The CsvFileColumnCollection whose elements are to be added to the new CsvFileColumnCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.AddRange(NLog.Layouts.CsvColumn[])">
+            <summary>
+            Adds the elements of an array to the end of this CsvFileColumnCollection.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the end of this CsvFileColumnCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.AddRange(NLog.Layouts.CsvColumnCollection)">
+            <summary>
+            Adds the elements of another CsvFileColumnCollection to the end of this CsvFileColumnCollection.
+            </summary>
+            <param name="items">
+            The CsvFileColumnCollection whose elements are to be added to the end of this CsvFileColumnCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.Add(NLog.Layouts.CsvColumn)">
+            <summary>
+            Adds an instance of type CsvFileColumn to the end of this CsvFileColumnCollection.
+            </summary>
+            <param name="value">
+            The CsvFileColumn to be added to the end of this CsvFileColumnCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.Contains(NLog.Layouts.CsvColumn)">
+            <summary>
+            Determines whether a specfic CsvFileColumn value is in this CsvFileColumnCollection.
+            </summary>
+            <param name="value">
+            The CsvFileColumn value to locate in this CsvFileColumnCollection.
+            </param>
+            <returns>
+            true if value is found in this CsvFileColumnCollection;
+            false otherwise.
+            </returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.IndexOf(NLog.Layouts.CsvColumn)">
+            <summary>
+            Return the zero-based index of the first occurrence of a specific value
+            in this CsvFileColumnCollection
+            </summary>
+            <param name="value">
+            The CsvFileColumn value to locate in the CsvFileColumnCollection.
+            </param>
+            <returns>
+            The zero-based index of the first occurrence of the _ELEMENT value if found;
+            -1 otherwise.
+            </returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.Insert(System.Int32,NLog.Layouts.CsvColumn)">
+            <summary>
+            Inserts an element into the CsvFileColumnCollection at the specified index
+            </summary>
+            <param name="index">
+            The index at which the CsvFileColumn is to be inserted.
+            </param>
+            <param name="value">
+            The CsvFileColumn to insert.
+            </param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.Remove(NLog.Layouts.CsvColumn)">
+            <summary>
+            Removes the first occurrence of a specific CsvFileColumn from this CsvFileColumnCollection.
+            </summary>
+            <param name="value">
+            The CsvFileColumn value to remove from this CsvFileColumnCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that can iterate through the elements of this CsvFileColumnCollection.
+            </summary>
+            <returns>
+            An object that implements System.Collections.IEnumerator.
+            </returns>        
+        </member>
+        <member name="P:NLog.Layouts.CsvColumnCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the CsvFileColumn at the given index in this CsvFileColumnCollection.
+            </summary>
+        </member>
+        <member name="T:NLog.Layouts.CsvColumnCollection.Enumerator">
+            <summary>
+            Type-specific enumeration class, used by CsvFileColumnCollection.GetEnumerator.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.Enumerator.#ctor(NLog.Layouts.CsvColumnCollection)">
+            <summary>
+            
+            </summary>
+            <param name="collection"></param>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.Enumerator.MoveNext">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvColumnCollection.Enumerator.Reset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvColumnCollection.Enumerator.Current">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvColumnCollection.Enumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:NLog.Layouts.CsvLayout">
+            <summary>
+            A specialized layout that renders CSV-formatted events.
+            </summary>
+        </member>
+        <member name="T:NLog.ILayout">
+            <summary>
+            Abstract interface that layouts must implement.
+            </summary>
+        </member>
+        <member name="M:NLog.ILayout.GetFormattedMessage(NLog.LogEventInfo)">
+            <summary>
+            Renders the layout for the specified logging event by invoking layout renderers.
+            </summary>
+            <param name="logEvent">The logging event.</param>
+            <returns>The rendered layout.</returns>
+        </member>
+        <member name="M:NLog.ILayout.NeedsStackTrace">
+            <summary>
+            Returns the value indicating whether a stack trace and/or the source file
+            information should be gathered during layout processing.
+            </summary>
+            <returns>0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace</returns>
+        </member>
+        <member name="M:NLog.ILayout.IsVolatile">
+            <summary>
+            Returns the value indicating whether this layout includes any volatile 
+            layout renderers.
+            </summary>
+            <returns><see langword="true"/> when the layout includes at least 
+            one volatile renderer, <see langword="false"/> otherwise.</returns>
+            <remarks>
+            Volatile layout renderers are dependent on information not contained 
+            in <see cref="T:NLog.LogEventInfo"/> (such as thread-specific data, MDC data, NDC data).
+            </remarks>
+        </member>
+        <member name="M:NLog.ILayout.Precalculate(NLog.LogEventInfo)">
+            <summary>
+            Precalculates the layout for the specified log event and stores the result
+            in per-log event cache.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <remarks>
+            Calling this method enables you to store the log event in a buffer
+            and/or potentially evaluate it in another thread even though the 
+            layout may contain thread-dependent renderer.
+            </remarks>
+        </member>
+        <member name="M:NLog.ILayout.Initialize">
+            <summary>
+            Initializes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.ILayout.Close">
+            <summary>
+            Closes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.ILayout.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Add this layout and all sub-layouts to the specified collection..
+            </summary>
+            <param name="layouts">The collection of layouts.</param>
+        </member>
+        <member name="T:NLog.ILayoutWithHeaderAndFooter">
+            <summary>
+            Layout with header and footer.
+            </summary>
+        </member>
+        <member name="P:NLog.ILayoutWithHeaderAndFooter.Layout">
+            <summary>
+            Main layout (can be repeated multiple times)
+            </summary>
+        </member>
+        <member name="P:NLog.ILayoutWithHeaderAndFooter.Header">
+            <summary>
+            Header
+            </summary>
+        </member>
+        <member name="P:NLog.ILayoutWithHeaderAndFooter.Footer">
+            <summary>
+            Footer
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Layouts.CsvLayout"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.GetFormattedMessage(NLog.LogEventInfo)">
+            <summary>
+            Formats the log event for write.
+            </summary>
+            <param name="logEvent">The log event to be formatted.</param>
+            <returns>A string representation of the log event.</returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.Initialize">
+            <summary>
+            Initializes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.NeedsStackTrace">
+            <summary>
+            Returns the value indicating whether a stack trace and/or the source file
+            information should be gathered during layout processing.
+            </summary>
+            <returns>0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace</returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.IsVolatile">
+            <summary>
+            Returns the value indicating whether this layout includes any volatile 
+            layout renderers.
+            </summary>
+            <returns><see langword="true"/> when the layout includes at least 
+            one volatile renderer, <see langword="false"/> otherwise.</returns>
+            <remarks>
+            Volatile layout renderers are dependent on information not contained 
+            in <see cref="T:NLog.LogEventInfo"/> (such as thread-specific data, MDC data, NDC data).
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.Precalculate(NLog.LogEventInfo)">
+            <summary>
+            Precalculates the layout for the specified log event and stores the result
+            in per-log event cache.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <remarks>
+            Calling this method enables you to store the log event in a buffer
+            and/or potentially evaluate it in another thread even though the 
+            layout may contain thread-dependent renderer.
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.Close">
+            <summary>
+            Closes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.GetHeader(NLog.LogEventInfo)">
+            <summary>
+            Gets the header.
+            </summary>
+            <param name="logEvent">The log event to be formatted.</param>
+            <returns>A string representation of the log event.</returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Add this layout and all sub-layouts to the specified collection..
+            </summary>
+            <param name="layouts">The collection of layouts.</param>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.Columns">
+            <summary>
+            Array of parameters to be passed.
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.WithHeader">
+            <summary>
+            Whether CVS should include header.
+            </summary>
+            <value><c>true</c> if CVS should include header; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.Delimiter">
+            <summary>
+            Column delimiter.
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.Quoting">
+            <summary>
+            Quoting mode.
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.QuoteChar">
+            <summary>
+            Quote Character
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.CustomColumnDelimiter">
+            <summary>
+            Custom column delimiter value (valid when ColumnDelimiter is set to 'Custom')
+            </summary>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.Layout">
+            <summary>
+            Main layout (can be repeated multiple times)
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.Header">
+            <summary>
+            Header
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NLog.Layouts.CsvLayout.Footer">
+            <summary>
+            Footer
+            </summary>
+            <remarks>CSV has no footer.</remarks>
+        </member>
+        <member name="T:NLog.Layouts.CsvLayout.ColumnDelimiterMode">
+            <summary>
+            Specifies allowed column delimiters.
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvLayout.ColumnDelimiterMode.Auto">
+            <summary>
+            Automatically detect from regional settings.
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvLayout.ColumnDelimiterMode.Comma">
+            <summary>
+            Comma (ASCII 44)
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvLayout.ColumnDelimiterMode.Semicolon">
+            <summary>
+            Semicolon (ASCII 59)
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvLayout.ColumnDelimiterMode.Tab">
+            <summary>
+            Tab character (ASCII 9)
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvLayout.ColumnDelimiterMode.Pipe">
+            <summary>
+            Pipe character (ASCII 124)
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvLayout.ColumnDelimiterMode.Space">
+            <summary>
+            Space character (ASCII 32)
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvLayout.ColumnDelimiterMode.Custom">
+            <summary>
+            Custom string, specified by the CustomDelimiter
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.#ctor(NLog.Layouts.CsvLayout)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Layouts.CsvLayout.CsvHeaderLayout"/> class.
+            </summary>
+            <param name="parent">The parent.</param>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.GetFormattedMessage(NLog.LogEventInfo)">
+            <summary>
+            Renders the layout for the specified logging event by invoking layout renderers.
+            </summary>
+            <param name="logEvent">The logging event.</param>
+            <returns>The rendered layout.</returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.NeedsStackTrace">
+            <summary>
+            Returns the value indicating whether a stack trace and/or the source file
+            information should be gathered during layout processing.
+            </summary>
+            <returns>
+            0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace
+            </returns>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.IsVolatile">
+            <summary>
+            Returns the value indicating whether this layout includes any volatile
+            layout renderers.
+            </summary>
+            <returns>
+            	<see langword="true"/> when the layout includes at least
+            one volatile renderer, <see langword="false"/> otherwise.
+            </returns>
+            <remarks>
+            Volatile layout renderers are dependent on information not contained
+            in <see cref="T:NLog.LogEventInfo"/> (such as thread-specific data, MDC data, NDC data).
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.Precalculate(NLog.LogEventInfo)">
+            <summary>
+            Precalculates the layout for the specified log event and stores the result
+            in per-log event cache.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <remarks>
+            Calling this method enables you to store the log event in a buffer
+            and/or potentially evaluate it in another thread even though the
+            layout may contain thread-dependent renderer.
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.Initialize">
+            <summary>
+            Initializes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.Close">
+            <summary>
+            Closes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.CsvLayout.CsvHeaderLayout.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Add this layout and all sub-layouts to the specified collection..
+            </summary>
+            <param name="layouts">The collection of layouts.</param>
+        </member>
+        <member name="T:NLog.Layouts.CsvQuotingMode">
+            <summary>
+            Specifies allowes CSV quoting modes.
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvQuotingMode.All">
+            <summary>
+            Quote all column.
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvQuotingMode.Nothing">
+            <summary>
+            Quote nothing.
+            </summary>
+        </member>
+        <member name="F:NLog.Layouts.CsvQuotingMode.Auto">
+            <summary>
+            Quote only whose values contain the quote symbol or
+            the separator.
+            </summary>
+        </member>
+        <member name="T:NLog.Layouts.LayoutWithHeaderAndFooter">
+            <summary>
+            A specialized layout that supports header and footer.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Layouts.LayoutWithHeaderAndFooter"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.GetFormattedMessage(NLog.LogEventInfo)">
+            <summary>
+            Renders the layout for the specified logging event by invoking layout renderers.
+            </summary>
+            <param name="logEvent">The logging event.</param>
+            <returns>The rendered layout.</returns>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.NeedsStackTrace">
+            <summary>
+            Returns the value indicating whether a stack trace and/or the source file
+            information should be gathered during layout processing.
+            </summary>
+            <returns>
+            0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace
+            </returns>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.IsVolatile">
+            <summary>
+            Returns the value indicating whether this layout includes any volatile
+            layout renderers.
+            </summary>
+            <returns>
+            	<see langword="true"/> when the layout includes at least
+            one volatile renderer, <see langword="false"/> otherwise.
+            </returns>
+            <remarks>
+            Volatile layout renderers are dependent on information not contained
+            in <see cref="T:NLog.LogEventInfo"/> (such as thread-specific data, MDC data, NDC data).
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.Precalculate(NLog.LogEventInfo)">
+            <summary>
+            Precalculates the layout for the specified log event and stores the result
+            in per-log event cache.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <remarks>
+            Calling this method enables you to store the log event in a buffer
+            and/or potentially evaluate it in another thread even though the
+            layout may contain thread-dependent renderer.
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.Initialize">
+            <summary>
+            Initializes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.Close">
+            <summary>
+            Closes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Add this layout and all sub-layouts to the specified collection..
+            </summary>
+            <param name="layouts">The collection of layouts.</param>
+        </member>
+        <member name="P:NLog.Layouts.LayoutWithHeaderAndFooter.Layout">
+            <summary>
+            Main layout (can be repeated multiple times)
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NLog.Layouts.LayoutWithHeaderAndFooter.Header">
+            <summary>
+            Header
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:NLog.Layouts.LayoutWithHeaderAndFooter.Footer">
+            <summary>
+            Footer
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:NLog.Layouts.Log4JXmlEventLayout">
+            <summary>
+            A specialized layout that renders Log4j-compatible XML events.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.Log4JXmlEventLayout.GetFormattedMessage(NLog.LogEventInfo)">
+            <summary>
+            Renders the layout for the specified logging event by invoking layout renderers.
+            </summary>
+            <param name="logEvent">The logging event.</param>
+            <returns>The rendered layout.</returns>
+        </member>
+        <member name="M:NLog.Layouts.Log4JXmlEventLayout.NeedsStackTrace">
+            <summary>
+            Returns the value indicating whether a stack trace and/or the source file
+            information should be gathered during layout processing.
+            </summary>
+            <returns>0 - don't include stack trace<br/>1 - include stack trace without source file information<br/>2 - include full stack trace</returns>
+        </member>
+        <member name="M:NLog.Layouts.Log4JXmlEventLayout.IsVolatile">
+            <summary>
+            Returns the value indicating whether this layout includes any volatile 
+            layout renderers.
+            </summary>
+            <returns><see langword="true"/> when the layout includes at least 
+            one volatile renderer, <see langword="false"/> otherwise.</returns>
+            <remarks>
+            Volatile layout renderers are dependent on information not contained 
+            in <see cref="T:NLog.LogEventInfo"/> (such as thread-specific data, MDC data, NDC data).
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.Log4JXmlEventLayout.Precalculate(NLog.LogEventInfo)">
+            <summary>
+            Precalculates the layout for the specified log event and stores the result
+            in per-log event cache.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <remarks>
+            Calling this method enables you to store the log event in a buffer
+            and/or potentially evaluate it in another thread even though the 
+            layout may contain thread-dependent renderer.
+            </remarks>
+        </member>
+        <member name="M:NLog.Layouts.Log4JXmlEventLayout.Initialize">
+            <summary>
+            Initializes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.Log4JXmlEventLayout.Close">
+            <summary>
+            Closes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layouts.Log4JXmlEventLayout.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Add this layout and all sub-layouts to the specified collection..
+            </summary>
+            <param name="layouts">The collection of layouts.</param>
+        </member>
+        <member name="P:NLog.Layouts.Log4JXmlEventLayout.Renderer">
+            <summary>
+            Returns the <see cref="T:NLog.LayoutRenderers.Log4JXmlEventLayoutRenderer"/> instance that renders log events.
+            </summary>
+        </member>
         <member name="T:NLog.Targets.Compound.CompoundTargetBase">
             <summary>
             A base class for targets which wrap other (multiple) targets
@@ -4031,11 +5232,11 @@
         </member>
         <member name="M:NLog.Target.GetLayouts">
             <summary>
-            Gets the collection of <see cref="P:NLog.Target.Layout"/> objects that are used
+            Gets the collection of <see cref="T:NLog.Layout"/> objects that are used
             by this target.
             </summary>
             <returns>A <see cref="T:NLog.LayoutCollection"/> object which is a typed collection
-            of <see cref="P:NLog.Target.Layout"/> objects. The collection is cached and accumulated 
+            of <see cref="T:NLog.Layout"/> objects. The collection is cached and accumulated 
             by calling <see cref="M:NLog.Target.PopulateLayouts(NLog.LayoutCollection)"/>.</returns>
         </member>
         <member name="M:NLog.Target.InvalidateLayouts">
@@ -4101,7 +5302,7 @@
             </summary>
             <param name="logEvent">The log event.</param>
             <remarks>
-            A layout is volatile if it contains at least one <see cref="P:NLog.Target.Layout"/> for 
+            A layout is volatile if it contains at least one <see cref="T:NLog.Layout"/> for 
             which <see cref="M:NLog.LayoutRenderer.IsVolatile"/> returns true.
             </remarks>
         </member>
@@ -4120,16 +5321,6 @@
         <member name="P:NLog.Target.Name">
             <summary>
             The name of the target.
-            </summary>
-        </member>
-        <member name="P:NLog.Target.Layout">
-            <summary>
-            The text to be rendered.
-            </summary>
-        </member>
-        <member name="P:NLog.Target.CompiledLayout">
-            <summary>
-            The compiled layout to be rendered.
             </summary>
         </member>
         <member name="M:NLog.Targets.Compound.CompoundTargetBase.#ctor">
@@ -5010,6 +6201,190 @@
             to the wrapped target.
             </summary>
         </member>
+        <member name="T:NLog.Targets.Wrappers.ImpersonatingTargetWrapper">
+            <summary>
+            A target wrapper that impersonates another user for the duration of the write.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.Wrappers.ImpersonatingTargetWrapper"/>.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.#ctor(NLog.Target)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.Wrappers.ImpersonatingTargetWrapper"/> 
+            and initializes the <see cref="P:NLog.Targets.Wrappers.WrapperTargetBase.WrappedTarget"/> to the specified <see cref="T:NLog.Target"/> value.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.Write(NLog.LogEventInfo)">
+            <summary>
+            Changes the security context, forwards the call to the <see cref="P:NLog.Targets.Wrappers.WrapperTargetBase.WrappedTarget"/>.Write()
+            and switches the context back to original.
+            </summary>
+            <param name="logEvent">The log event.</param>
+        </member>
+        <member name="M:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.Write(NLog.LogEventInfo[])">
+            <summary>
+            Changes the security context, forwards the call to the <see cref="P:NLog.Targets.Wrappers.WrapperTargetBase.WrappedTarget"/>.Write()
+            and switches the context back to original.
+            </summary>
+            <param name="logEvents">Log events.</param>
+        </member>
+        <member name="M:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.Initialize">
+            <summary>
+            Initializes the impersonation context.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.Close">
+            <summary>
+            Closes the impersonation context.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.Username">
+            <summary>
+            Username to change context to
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.Domain">
+            <summary>
+            Windows domain name to change context to.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.LogonType">
+            <summary>
+            Logon Type.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.LogonProvider">
+            <summary>
+            Logon Provider.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.ImpersonationLevel">
+            <summary>
+            Impersonation level.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.RevertToSelf">
+            <summary>
+            Revert to the credentials of the process instead of impersonating another user.
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityImpersonationLevel">
+            <summary>
+            Impersonation level.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityImpersonationLevel.Anonymous">
+            <summary>
+            Anonymous
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityImpersonationLevel.Identification">
+            <summary>
+            Identification
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityImpersonationLevel.Impersonation">
+            <summary>
+            Impersonation
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityImpersonationLevel.Delegation">
+            <summary>
+            Delegation
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityLogonType">
+            <summary>
+            Logon type.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityLogonType.Interactive">
+            <summary>
+            Interactive Logon
+            </summary>
+            <remarks>
+            This logon type is intended for users who will be interactively using the computer, such as a user being logged on  
+            by a terminal server, remote shell, or similar process.
+            This logon type has the additional expense of caching logon information for disconnected operations;
+            therefore, it is inappropriate for some client/server applications,
+            such as a mail server.
+            </remarks>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityLogonType.Network">
+            <summary>
+            Network Logon
+            </summary>
+            <remarks>
+            This logon type is intended for high performance servers to authenticate plaintext passwords.
+            The LogonUser function does not cache credentials for this logon type.
+            </remarks>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityLogonType.Batch">
+            <summary>
+            Batch Logon
+            </summary>
+            <remarks>
+            This logon type is intended for batch servers, where processes may be executing on behalf of a user without
+            their direct intervention. This type is also for higher performance servers that process many plaintext
+            authentication attempts at a time, such as mail or Web servers.
+            The LogonUser function does not cache credentials for this logon type.
+            </remarks>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityLogonType.Service">
+            <summary>
+            Logon as a Service
+            </summary>
+            <remarks>
+            Indicates a service-type logon. The account provided must have the service privilege enabled.
+            </remarks>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityLogonType.NetworkClearText">
+            <summary>
+            Network Clear Text Logon
+            </summary>
+            <remarks>
+            This logon type preserves the name and password in the authentication package, which allows the server to make
+            connections to other network servers while impersonating the client. A server can accept plaintext credentials
+            from a client, call LogonUser, verify that the user can access the system across the network, and still
+            communicate with other servers.
+            NOTE: Windows NT:  This value is not supported.
+            </remarks>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.SecurityLogonType.NewCredentials">
+            <summary>
+            New Network Credentials
+            </summary>
+            <remarks>
+            This logon type allows the caller to clone its current token and specify new credentials for outbound connections.
+            The new logon session has the same local identifier but uses different credentials for other network connections.
+            NOTE: This logon type is supported only by the LOGON32_PROVIDER_WINNT50 logon provider.
+            NOTE: Windows NT:  This value is not supported.
+            </remarks>
+        </member>
+        <member name="T:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.LogonProviderType">
+            <summary>
+            Logon provider.
+            
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.Wrappers.ImpersonatingTargetWrapper.LogonProviderType.Default">
+            <summary>
+            Use the standard logon provider for the system.
+            </summary>
+            <remarks>
+            The default security provider is negotiate, unless you pass NULL for the domain name and the user name
+            is not in UPN format. In this case, the default provider is NTLM.
+            NOTE: Windows 2000/NT:   The default security provider is NTLM.
+            </remarks>
+        </member>
         <member name="T:NLog.Targets.Wrappers.PostFilteringTargetWrapper">
             <summary>
             A target wrapper that filters buffered log entries based on a set of conditions
@@ -5207,6 +6582,37 @@
             <p/>
             </example>
         </member>
+        <member name="T:NLog.TargetWithLayout">
+            <summary>
+            Represents target that supports string formatting using layouts.
+            </summary>
+        </member>
+        <member name="M:NLog.TargetWithLayout.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.TargetWithLayout"/>
+            </summary>
+        </member>
+        <member name="M:NLog.TargetWithLayout.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Adds all layouts used by this target to the specified collection.
+            </summary>
+            <param name="layouts">The collection to add layouts to.</param>
+        </member>
+        <member name="M:NLog.TargetWithLayout.Initialize">
+            <summary>
+            Initializes the target.
+            </summary>
+        </member>
+        <member name="P:NLog.TargetWithLayout.Layout">
+            <summary>
+            The text to be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.TargetWithLayout.CompiledLayout">
+            <summary>
+            The compiled layout, can be an instance of <see cref="P:NLog.TargetWithLayout.Layout"/> or other layout type.
+            </summary>
+        </member>
         <member name="M:NLog.Targets.ASPNetTraceTarget.Write(NLog.LogEventInfo)">
             <summary>
             Writes the specified logging event to the ASP.NET Trace facility. Log entries
@@ -5307,12 +6713,12 @@
             </p>
             </example>
         </member>
-        <member name="M:NLog.Targets.NetworkTarget.NetworkSend(System.String,System.String)">
+        <member name="M:NLog.Targets.NetworkTarget.NetworkSend(System.String,System.Byte[])">
             <summary>
             Sends the provided text to the specified address.
             </summary>
-            <param name="address">The address. Can be tcp://host:port, udp://host:port, http://host:port or https://host:port</param>
-            <param name="text">The text to be sent.</param>
+            <param name="address">The address. Can be tcp://host:port, udp://host:port, http://host:port</param>
+            <param name="bytes">The bytes to be sent.</param>
         </member>
         <member name="M:NLog.Targets.NetworkTarget.Flush(System.TimeSpan)">
             <summary>
@@ -5338,10 +6744,20 @@
             </summary>
             <param name="logEvent">The logging event.</param>
         </member>
+        <member name="M:NLog.Targets.NetworkTarget.GetBytesToWrite(NLog.LogEventInfo)">
+            <summary>
+            Gets the bytes to be written.
+            </summary>
+            <param name="logEvent">Log event</param>
+            <returns>Byte array.</returns>
+        </member>
         <member name="P:NLog.Targets.NetworkTarget.Address">
             <summary>
-            The network address. Can be tcp://host:port, udp://host:port, http://host:port or https://host:port
+            The network address. Can be tcp://host:port or udp://host:port
             </summary>
+            <remarks>
+            For HTTP Support use the WebService target.
+            </remarks>
         </member>
         <member name="P:NLog.Targets.NetworkTarget.AddressLayout">
             <summary>
@@ -5356,6 +6772,45 @@
         <member name="P:NLog.Targets.NetworkTarget.NewLine">
             <summary>
             Append newline at the end of log message.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.NetworkTarget.MaxMessageSize">
+            <summary>
+            Maximum message size in bytes.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.NetworkTarget.OnOverflow">
+            <summary>
+            Action that should be taken if the message is larger than
+            maxMessageSize
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.NetworkTarget.Encoding">
+            <summary>
+            Encoding
+            </summary>
+            <remarks>
+            Can be any encoding name supported by System.Text.Encoding.GetEncoding() e.g. <c>windows-1252</c>, <c>iso-8859-2</c>.
+            </remarks>
+        </member>
+        <member name="T:NLog.Targets.NetworkTarget.OverflowAction">
+            <summary>
+            Action that should be taken if the message overflows.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.NetworkTarget.OverflowAction.Error">
+            <summary>
+            Report an error.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.NetworkTarget.OverflowAction.Split">
+            <summary>
+            Split the message into smaller pieces.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.NetworkTarget.OverflowAction.Discard">
+            <summary>
+            Discard the entire message
             </summary>
         </member>
         <member name="M:NLog.Targets.NLogViewerTarget.#ctor">
@@ -5376,11 +6831,10 @@
             </summary>
             <returns>2 - when IncludeSourceInfo is set, 1 when IncludeCallSite is set, 0 otherwise</returns>
         </member>
-        <member name="M:NLog.Targets.NLogViewerTarget.Write(NLog.LogEventInfo)">
+        <member name="P:NLog.Targets.NLogViewerTarget.Layout">
             <summary>
-            Constructs an XML packet including the logging event information and sends it over the network.
+            An instance of <see cref="T:NLog.Layouts.Log4JXmlEventLayout"/> that is used to format log messages.
             </summary>
-            <param name="logEvent">Logging event information.</param>
         </member>
         <member name="P:NLog.Targets.NLogViewerTarget.IncludeNLogData">
             <summary>
@@ -5414,8 +6868,8 @@
         </member>
         <member name="P:NLog.Targets.NLogViewerTarget.Parameters">
             <summary>
-            The collection of paramters. Each parameter contains a mapping
-            between NLog layout and a database named or positional parameter.
+            The collection of parameters. Each parameter contains a mapping
+            between NLog layout and a named parameter.
             </summary>
         </member>
         <member name="M:NLog.Targets.ChainsawTarget.#ctor">
@@ -5444,6 +6898,66 @@
             <code lang="C#" src="examples/targets/Configuration API/Console/Simple/Example.cs" />
             </example>
         </member>
+        <member name="T:NLog.TargetWithLayoutHeaderAndFooter">
+            <summary>
+            Represents target that supports string formatting using layouts.
+            </summary>
+        </member>
+        <member name="M:NLog.TargetWithLayoutHeaderAndFooter.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.TargetWithLayout"/>
+            </summary>
+        </member>
+        <member name="M:NLog.TargetWithLayoutHeaderAndFooter.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Adds all layouts used by this target to the specified collection.
+            </summary>
+            <param name="layouts">The collection to add layouts to.</param>
+        </member>
+        <member name="M:NLog.TargetWithLayoutHeaderAndFooter.Initialize">
+            <summary>
+            Initializes the target.
+            </summary>
+        </member>
+        <member name="P:NLog.TargetWithLayoutHeaderAndFooter.Layout">
+            <summary>
+            The text to be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.TargetWithLayoutHeaderAndFooter.Header">
+            <summary>
+            Header
+            </summary>
+        </member>
+        <member name="P:NLog.TargetWithLayoutHeaderAndFooter.Footer">
+            <summary>
+            Footer
+            </summary>
+        </member>
+        <member name="P:NLog.TargetWithLayoutHeaderAndFooter.CompiledHeader">
+            <summary>
+            Compiled header.
+            </summary>
+            <value>The compiled header.</value>
+            <remarks>
+            The header can be of any layout type.
+            </remarks>
+        </member>
+        <member name="P:NLog.TargetWithLayoutHeaderAndFooter.CompiledFooter">
+            <summary>
+            Compiled footer.
+            </summary>
+            <value>The compiled footer.</value>
+            <remarks>
+            The header can be of any layout type.
+            </remarks>
+        </member>
+        <member name="P:NLog.TargetWithLayoutHeaderAndFooter.CompiledLayoutWithHeaderAndFooter">
+            <summary>
+            Gets the compiled layout with header and footer.
+            </summary>
+            <value>The compiled layout with header and footer.</value>
+        </member>
         <member name="M:NLog.Targets.ConsoleTarget.Write(NLog.LogEventInfo)">
             <summary>
             Writes the specified logging event to the Console.Out or
@@ -5454,702 +6968,19 @@
             Note that the Error option is not supported on .NET Compact Framework.
             </remarks>
         </member>
-        <member name="P:NLog.Targets.ConsoleTarget.Error">
-            <summary>
-            Send the logging messages to the standard error instead of the standard output.
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.CsvFileTarget">
-            <summary>
-            File target that can produce *.csv (Comma Separated Values) files.
-            This is an extension to the <a href="target.File.html">File</a> Target.
-            </summary>
-            <example>
-            <p>
-            To set up the target in the <a href="config.html">configuration file</a>, 
-            use the following syntax:
-            </p>
-            <code lang="XML" src="examples/targets/Configuration File/CSVFile/NLog.config" />
-            <p>
-            This assumes just one target and a single rule. More configuration
-            options are described <a href="config.html">here</a>.
-            </p>
-            <p>
-            To set up the log target programmatically use code like this:
-            </p>
-            <code lang="C#" src="examples/targets/Configuration API/CSVFile/Simple/Example.cs" />
-            <p>More examples can be found in <a href="target.File.html">File</a> Target reference.</p>
-            </example>
-        </member>
-        <member name="T:NLog.Targets.FileTarget">
-            <summary>
-            Writes logging messages to one or more files.
-            </summary>
-            <example>
-            <p>
-            To set up the target in the <a href="config.html">configuration file</a>, 
-            use the following syntax:
-            </p>
-            <code lang="XML" src="examples/targets/Configuration File/File/Simple/NLog.config" />
-            <p>
-            You can use a single target to write to multiple files. The following
-            example writes each log message to a file named after its log level, so
-            it will create:
-            <c>Trace.log</c>, <c>Debug.log</c>, <c>Info.log</c>, <c>Warn.log</c>, 
-            <c>Error.log</c>, <c>Fatal.log</c>
-            </p>
-            <code lang="XML" src="examples/targets/Configuration File/File/Multiple/NLog.config" />
-            <p>
-            The file names can be quite complex for the most demanding scenarios. This
-            example shows a way to create separate files for each day, user and log level.
-            As you can see, the possibilities are endless.
-            </p>
-            <code lang="XML" src="examples/targets/Configuration File/File/Multiple2/NLog.config" />
-            <p>
-            Depending on your usage scenario it may be useful to add an <a href="target.AsyncWrapper.html">asynchronous target wrapper</a>
-            around the file target. This way all your log messages
-            will be written in a separate thread so your main thread can finish
-            your work more quickly. Asynchronous logging is recommended
-            for multi-threaded server applications which run for a long time and
-            is not recommended for quickly-finishing command line applications.
-            </p>
-            <code lang="XML" src="examples/targets/Configuration File/File/Asynchronous/NLog.config" />
-            <p>
-            The above examples assume just one target and a single rule. See below for
-            a programmatic configuration that's equivalent to the above config file:
-            </p>
-            <code lang="C#" src="examples/targets/Configuration API/File/Asynchronous/Example.cs" />
-            <p>
-            More configuration options are described <a href="config.html">here</a>.
-            </p>
-            <p>
-            To set up the log target programmatically use code like this:
-            </p>
-            <code lang="C#" src="examples/targets/Configuration API/File/Simple/Example.cs" />
-            <p>
-            File target can also do file archiving, meaning that the log file is automatically
-            moved to another place based on its size and time. This example demonstrates 
-            file archiving based on size. Files after 10000 bytes are moved to a separate folder
-            and renamed log.00000.txt, log.00001.txt and so on.
-            </p>
-            <code lang="C#" src="examples/targets/Configuration API/File/Archive1/Example.cs" />
-            <p>
-            File archiving can also be done on date/time changes. For example, to create a new 
-            archive file every minute use this code:
-            </p>
-            <code lang="C#" src="examples/targets/Configuration API/File/Archive2/Example.cs" />
-            <p>
-            You can combine both methods as demonstrated here:
-            </p>
-            <code lang="C#" src="examples/targets/Configuration API/File/Archive3/Example.cs" />
-            <p>
-            Note that file archiving works even when you use a single target instance
-            to write to multiple files, such as putting each log level in a separate place:
-            </p>
-            <code lang="C#" src="examples/targets/Configuration API/File/Archive4/Example.cs" />
-            </example>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.#ctor">
-            <summary>
-            Creates a new instance of <see cref="T:NLog.Targets.FileTarget"/>.
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.PopulateLayouts(NLog.LayoutCollection)">
-            <summary>
-            Adds all layouts used by this target to the specified collection.
-            </summary>
-            <param name="layouts">The collection to add layouts to.</param>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.GetFormattedMessage(NLog.LogEventInfo)">
-            <summary>
-            Formats the log event for write.
-            </summary>
-            <param name="logEvent">The log event to be formatted.</param>
-            <returns>A string representation of the log event.</returns>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.Write(NLog.LogEventInfo)">
-            <summary>
-            Writes the specified logging event to a file specified in the FileName 
-            parameter.
-            </summary>
-            <param name="logEvent">The logging event.</param>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.Write(NLog.LogEventInfo[])">
-            <summary>
-            Writes the specified array of logging events to a file specified in the FileName 
-            parameter.
-            </summary>
-            <param name="logEvents">An array of <see cref="T:NLog.LogEventInfo"/> objects.</param>
-            <remarks>
-            This function makes use of the fact that the events are batched by sorting 
-            the requests by filename. This optimizes the number of open/close calls
-            and can help improve performance.
-            </remarks>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.Initialize">
-            <summary>
-            Initializes file logging by creating data structures that
-            enable efficient multi-file logging.
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.TransformBytes(System.Byte[])">
-            <summary>
-            Modifies the specified byte array before it gets sent to a file.
-            </summary>
-            <param name="bytes">The byte array</param>
-            <returns>The modified byte array. The function can do the modification in-place.</returns>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.Flush(System.TimeSpan)">
-            <summary>
-            Flushes all pending file operations.
-            </summary>
-            <param name="timeout">The timeout</param>
-            <remarks>
-            The timeout parameter is ignored, because file APIs don't provide
-            the needed functionality.
-            </remarks>
-        </member>
-        <member name="M:NLog.Targets.FileTarget.Close">
-            <summary>
-            Closes the file(s) opened for writing.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.FileName">
-            <summary>
-            The name of the file to write to.
-            </summary>
-            <remarks>
-            This FileName string is a layout which may include instances of layout renderers.
-            This lets you use a single target to write to multiple files.
-            </remarks>
-            <example>
-            The following value makes NLog write logging events to files based on the log level in the directory where
-            the application runs.
-            <code>${basedir}/${level}.log</code>
-            All <c>Debug</c> messages will go to <c>Debug.log</c>, all <c>Info</c> messages will go to <c>Info.log</c> and so on.
-            You can combine as many of the layout renderers as you want to produce an arbitrary log file name.
-            </example>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.CreateDirs">
-            <summary>
-            Create directories if they don't exist.
-            </summary>
-            <remarks>
-            Setting this to false may improve performance a bit, but you'll receive an error
-            when attempting to write to a directory that's not present.
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.OpenFileCacheSize">
-            <summary>
-            The number of files to be kept open. Setting this to a higher value may improve performance
-            in a situation where a single File target is writing to many files
-            (such as splitting by level or by logger).
-            </summary>
-            <remarks>
-            The files are managed on a LRU (least recently used) basis, which flushes
-            the files that have not been used for the longest period of time should the
-            cache become full. As a rule of thumb, you shouldn't set this parameter to 
-            a very high value. A number like 10-15 shouldn't be exceeded, because you'd
-            be keeping a large number of files open which consumes system resources.
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.OpenFileCacheTimeout">
-            <summary>
-            Maximum number of seconds that files are kept open.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.DeleteOldFileOnStartup">
-            <summary>
-            Delete old log file on startup.
-            </summary>
-            <remarks>
-            This option works only when the "fileName" parameter denotes a single file.
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ReplaceFileContentsOnEachWrite">
-            <summary>
-            Replace file contents on each write instead of appending log message at the end.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.KeepFileOpen">
-            <summary>
-            Keep log file open instead of opening and closing it on each logging event.
-            </summary>
-            <remarks>
-            Setting this property to <c>True</c> helps improve performance.
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.EnableFileDelete">
-            <summary>
-            Enable log file(s) to be deleted.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.FileAttributes">
-            <summary>
-            File attributes (Windows only).
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.NewLineChars">
-            <summary>
-            Gets the characters that are appended after each line.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.LineEnding">
-            <summary>
-            Line ending mode.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.AutoFlush">
-            <summary>
-            Automatically flush the file buffers after each log message.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.BufferSize">
-            <summary>
-            Log file buffer size in bytes.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.Encoding">
-            <summary>
-            File encoding.</summary>
-            <remarks>
-            Can be any encoding name supported by System.Text.Encoding.GetEncoding() e.g. <c>windows-1252</c>, <c>iso-8859-2</c>.
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ConcurrentWrites">
-            <summary>
-            Enables concurrent writes to the log file by multiple processes on the same host.
-            </summary>
-            <remarks>
-            This makes multi-process logging possible. NLog uses a special technique
-            that lets it keep the files open for writing.
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.NetworkWrites">
-            <summary>
-            Disables open-fi
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ConcurrentWriteAttempts">
-            <summary>
-            The number of times the write is appended on the file before NLog
-            discards the log message.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ArchiveAboveSize">
-            <summary>
-            Automatically archive log files that exceed the specified size in bytes.
-            </summary>
-            <remarks>
-            Caution: Enabling this option can considerably slow down your file 
-            logging in multi-process scenarios. If only one process is going to
-            be writing to the file, consider setting <c>ConcurrentWrites</c>
-            to <c>false</c> for maximum performance.
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ArchiveEvery">
-            <summary>
-            Automatically archive log files every time the specified time passes.
-            Possible options are: <c>year</c>, <c>month</c>, <c>day</c>, <c>hour</c>, <c>minute</c>. Files are 
-            moved to the archive as part of the write operation if the current period of time changes. For example
-            if the current <c>hour</c> changes from 10 to 11, the first write that will occur
-            on or after 11:00 will trigger the archiving.
-            </summary>
-            <remarks>
-            <p>
-            Caution: Enabling this option can considerably slow down your file 
-            logging in multi-process scenarios. If only one process is going to
-            be writing to the file, consider setting <c>ConcurrentWrites</c>
-            to <c>false</c> for maximum performance.
-            </p>
-            </remarks>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ArchiveFileName">
-            <summary>
-            The name of the file to be used for an archive. 
-            It may contain a special placeholder {#####}
-            that will be replaced with a sequence of numbers depending on 
-            the archiving strategy. The number of hash characters used determines
-            the number of numerical digits to be used for numbering files.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ConcurrentWriteAttemptDelay">
-            <summary>
-            The delay in milliseconds to wait before attempting to write to the file again.
-            </summary>
-            <remarks>
-            The actual delay is a random value between 0 and the value specified
-            in this parameter. On each failed attempt the delay base is doubled
-            up to <see cref="P:NLog.Targets.FileTarget.ConcurrentWriteAttempts"/> times.
-            </remarks>
-            <example>
-            Assuming that ConcurrentWriteAttemptDelay is 10 the time to wait will be:<p/>
-            a random value between 0 and 10 milliseconds - 1st attempt<br/>
-            a random value between 0 and 20 milliseconds - 2nd attempt<br/>
-            a random value between 0 and 40 milliseconds - 3rd attempt<br/>
-            a random value between 0 and 80 milliseconds - 4th attempt<br/>
-            ...<p/>
-            and so on.
-            </example>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.MaxArchiveFiles">
-            <summary>
-            Maximum number of archive files that should be kept.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.FileTarget.ArchiveNumbering">
-            <summary>
-            Determines the way file archives are numbered. 
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.FileTarget.ArchiveNumberingMode">
-            <summary>
-            Specifies the way archive numbering is performed.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveNumberingMode.Sequence">
-            <summary>
-            Sequence style numbering. The most recent archive has the highest number.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveNumberingMode.Rolling">
-            <summary>
-            Rolling style numbering (the most recent is always #0 then #1, ..., #N
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.FileTarget.ArchiveEveryMode">
-            <summary>
-            Modes of archiving files based on time.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.None">
-            <summary>
-            Don't archive based on time.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Year">
-            <summary>
-            Archive every year.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Month">
-            <summary>
-            Archive every month.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Day">
-            <summary>
-            Archive daily.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Hour">
-            <summary>
-            Archive every hour.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Minute">
-            <summary>
-            Archive every minute.
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.FileTarget.LineEndingMode">
-            <summary>
-            Line ending mode.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.LineEndingMode.Default">
-            <summary>
-            Insert platform-dependent end-of-line sequence after each line.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.LineEndingMode.CRLF">
-            <summary>
-            Insert CR LF sequence (ASCII 13, ASCII 10) after each line.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.LineEndingMode.CR">
-            <summary>
-            Insert CR character (ASCII 13) after each line.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.LineEndingMode.LF">
-            <summary>
-            Insert LF character (ASCII 10) after each line.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.FileTarget.LineEndingMode.None">
-            <summary>
-            Don't insert any line ending.
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.CsvFileTarget.GetFormattedMessage(NLog.LogEventInfo)">
-            <summary>
-            Formats the log event for write.
-            </summary>
-            <param name="logEvent">The log event to be formatted.</param>
-            <returns>A string representation of the log event.</returns>
-        </member>
-        <member name="M:NLog.Targets.CsvFileTarget.Initialize">
+        <member name="M:NLog.Targets.ConsoleTarget.Initialize">
             <summary>
             Initializes the target.
             </summary>
         </member>
-        <member name="P:NLog.Targets.CsvFileTarget.Columns">
+        <member name="M:NLog.Targets.ConsoleTarget.Close">
             <summary>
-            Array of parameters to be passed.
+            Closes the target and releases any unmanaged resources.
             </summary>
         </member>
-        <member name="P:NLog.Targets.CsvFileTarget.Delimiter">
+        <member name="P:NLog.Targets.ConsoleTarget.Error">
             <summary>
-            Column delimiter.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileTarget.Quoting">
-            <summary>
-            Quoting mode.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileTarget.QuoteChar">
-            <summary>
-            Quote Character
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileTarget.CustomColumnDelimiter">
-            <summary>
-            Custom column delimiter value (valid when ColumnDelimiter is set to 'Custom')
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.CsvFileTarget.ColumnDelimiterMode">
-            <summary>
-            Specifies allowed column delimiters.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvFileTarget.ColumnDelimiterMode.Auto">
-            <summary>
-            Automatically detect from regional settings.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvFileTarget.ColumnDelimiterMode.Comma">
-            <summary>
-            Comma (ASCII 44)
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvFileTarget.ColumnDelimiterMode.Semicolon">
-            <summary>
-            Semicolon (ASCII 59)
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvFileTarget.ColumnDelimiterMode.Tab">
-            <summary>
-            Tab character (ASCII 9)
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvFileTarget.ColumnDelimiterMode.Pipe">
-            <summary>
-            Pipe character (ASCII 124)
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvFileTarget.ColumnDelimiterMode.Space">
-            <summary>
-            Space character (ASCII 32)
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvFileTarget.ColumnDelimiterMode.Custom">
-            <summary>
-            Custom string, specified by the CustomDelimiter
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.CsvFileColumn">
-            <summary>
-            A column in the CSV File
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumn.#ctor">
-            <summary>
-            Constructs a new instance of <see cref="T:NLog.Targets.CsvFileColumn"/>.
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumn.#ctor(System.String,System.String)">
-            <summary>
-            Constructs a new instance of <see cref="T:NLog.Targets.CsvFileColumn"/> and
-            initializes Name and Layout properties.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileColumn.Name">
-            <summary>
-            The name of the column.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileColumn.Layout">
-            <summary>
-            The layout that should be written in the column.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileColumn.CompiledLayout">
-            <summary>
-            The compiled layout that should be written in the column.
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.CsvFileColumnCollection">
-            <summary>
-            A collection of elements of type CsvFileColumn
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.#ctor">
-            <summary>
-            Initializes a new empty instance of the CsvFileColumnCollection class.
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.#ctor(NLog.Targets.CsvFileColumn[])">
-            <summary>
-            Initializes a new instance of the CsvFileColumnCollection class, containing elements
-            copied from an array.
-            </summary>
-            <param name="items">
-            The array whose elements are to be added to the new CsvFileColumnCollection.
-            </param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.#ctor(NLog.Targets.CsvFileColumnCollection)">
-            <summary>
-            Initializes a new instance of the CsvFileColumnCollection class, containing elements
-            copied from another instance of CsvFileColumnCollection
-            </summary>
-            <param name="items">
-            The CsvFileColumnCollection whose elements are to be added to the new CsvFileColumnCollection.
-            </param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.AddRange(NLog.Targets.CsvFileColumn[])">
-            <summary>
-            Adds the elements of an array to the end of this CsvFileColumnCollection.
-            </summary>
-            <param name="items">
-            The array whose elements are to be added to the end of this CsvFileColumnCollection.
-            </param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.AddRange(NLog.Targets.CsvFileColumnCollection)">
-            <summary>
-            Adds the elements of another CsvFileColumnCollection to the end of this CsvFileColumnCollection.
-            </summary>
-            <param name="items">
-            The CsvFileColumnCollection whose elements are to be added to the end of this CsvFileColumnCollection.
-            </param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.Add(NLog.Targets.CsvFileColumn)">
-            <summary>
-            Adds an instance of type CsvFileColumn to the end of this CsvFileColumnCollection.
-            </summary>
-            <param name="value">
-            The CsvFileColumn to be added to the end of this CsvFileColumnCollection.
-            </param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.Contains(NLog.Targets.CsvFileColumn)">
-            <summary>
-            Determines whether a specfic CsvFileColumn value is in this CsvFileColumnCollection.
-            </summary>
-            <param name="value">
-            The CsvFileColumn value to locate in this CsvFileColumnCollection.
-            </param>
-            <returns>
-            true if value is found in this CsvFileColumnCollection;
-            false otherwise.
-            </returns>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.IndexOf(NLog.Targets.CsvFileColumn)">
-            <summary>
-            Return the zero-based index of the first occurrence of a specific value
-            in this CsvFileColumnCollection
-            </summary>
-            <param name="value">
-            The CsvFileColumn value to locate in the CsvFileColumnCollection.
-            </param>
-            <returns>
-            The zero-based index of the first occurrence of the _ELEMENT value if found;
-            -1 otherwise.
-            </returns>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.Insert(System.Int32,NLog.Targets.CsvFileColumn)">
-            <summary>
-            Inserts an element into the CsvFileColumnCollection at the specified index
-            </summary>
-            <param name="index">
-            The index at which the CsvFileColumn is to be inserted.
-            </param>
-            <param name="value">
-            The CsvFileColumn to insert.
-            </param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.Remove(NLog.Targets.CsvFileColumn)">
-            <summary>
-            Removes the first occurrence of a specific CsvFileColumn from this CsvFileColumnCollection.
-            </summary>
-            <param name="value">
-            The CsvFileColumn value to remove from this CsvFileColumnCollection.
-            </param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.GetEnumerator">
-            <summary>
-            Returns an enumerator that can iterate through the elements of this CsvFileColumnCollection.
-            </summary>
-            <returns>
-            An object that implements System.Collections.IEnumerator.
-            </returns>        
-        </member>
-        <member name="P:NLog.Targets.CsvFileColumnCollection.Item(System.Int32)">
-            <summary>
-            Gets or sets the CsvFileColumn at the given index in this CsvFileColumnCollection.
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.CsvFileColumnCollection.Enumerator">
-            <summary>
-            Type-specific enumeration class, used by CsvFileColumnCollection.GetEnumerator.
-            </summary>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.Enumerator.#ctor(NLog.Targets.CsvFileColumnCollection)">
-            <summary>
-            
-            </summary>
-            <param name="collection"></param>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.Enumerator.MoveNext">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:NLog.Targets.CsvFileColumnCollection.Enumerator.Reset">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileColumnCollection.Enumerator.Current">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.CsvFileColumnCollection.Enumerator.System#Collections#IEnumerator#Current">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:NLog.Targets.CsvQuotingMode">
-            <summary>
-            Specifies allowes quoting modes when writing to CSV files.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvQuotingMode.All">
-            <summary>
-            Quote all column.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvQuotingMode.Nothing">
-            <summary>
-            Quote nothing.
-            </summary>
-        </member>
-        <member name="F:NLog.Targets.CsvQuotingMode.Auto">
-            <summary>
-            Quote only whose values contain the quote symbol or
-            the separator.
+            Send the logging messages to the standard error instead of the standard output.
             </summary>
         </member>
         <member name="T:NLog.Targets.DatabaseTarget">
@@ -6556,6 +7387,493 @@
             </summary>
             <param name="logEvent">The logging event.</param>
         </member>
+        <member name="M:NLog.Targets.DebuggerTarget.Initialize">
+            <summary>
+            Initializes the target.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.DebuggerTarget.Close">
+            <summary>
+            Closes the target and releases any unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.FileTarget">
+            <summary>
+            Writes logging messages to one or more files.
+            </summary>
+            <example>
+            <p>
+            To set up the target in the <a href="config.html">configuration file</a>, 
+            use the following syntax:
+            </p>
+            <code lang="XML" src="examples/targets/Configuration File/File/Simple/NLog.config" />
+            <p>
+            You can use a single target to write to multiple files. The following
+            example writes each log message to a file named after its log level, so
+            it will create:
+            <c>Trace.log</c>, <c>Debug.log</c>, <c>Info.log</c>, <c>Warn.log</c>, 
+            <c>Error.log</c>, <c>Fatal.log</c>
+            </p>
+            <code lang="XML" src="examples/targets/Configuration File/File/Multiple/NLog.config" />
+            <p>
+            The file names can be quite complex for the most demanding scenarios. This
+            example shows a way to create separate files for each day, user and log level.
+            As you can see, the possibilities are endless.
+            </p>
+            <code lang="XML" src="examples/targets/Configuration File/File/Multiple2/NLog.config" />
+            <p>
+            Depending on your usage scenario it may be useful to add an <a href="target.AsyncWrapper.html">asynchronous target wrapper</a>
+            around the file target. This way all your log messages
+            will be written in a separate thread so your main thread can finish
+            your work more quickly. Asynchronous logging is recommended
+            for multi-threaded server applications which run for a long time and
+            is not recommended for quickly-finishing command line applications.
+            </p>
+            <code lang="XML" src="examples/targets/Configuration File/File/Asynchronous/NLog.config" />
+            <p>
+            The above examples assume just one target and a single rule. See below for
+            a programmatic configuration that's equivalent to the above config file:
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/File/Asynchronous/Example.cs" />
+            <p>
+            More configuration options are described <a href="config.html">here</a>.
+            </p>
+            <p>
+            To set up the log target programmatically use code like this:
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/File/Simple/Example.cs" />
+            <p>
+            File target can also do file archiving, meaning that the log file is automatically
+            moved to another place based on its size and time. This example demonstrates 
+            file archiving based on size. Files after 10000 bytes are moved to a separate folder
+            and renamed log.00000.txt, log.00001.txt and so on.
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/File/Archive1/Example.cs" />
+            <p>
+            File archiving can also be done on date/time changes. For example, to create a new 
+            archive file every minute use this code:
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/File/Archive2/Example.cs" />
+            <p>
+            You can combine both methods as demonstrated here:
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/File/Archive3/Example.cs" />
+            <p>
+            Note that file archiving works even when you use a single target instance
+            to write to multiple files, such as putting each log level in a separate place:
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/File/Archive4/Example.cs" />
+            <p>
+            You can write texts using alternative layouts, such as CSV (comma-separated values).
+            This example writes files which are properly CSV-quoted (can handle messages with line breaks
+            and quotes)
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/File/CSV/Example.cs" />
+            <para>
+            This is the configuration file version:
+            </para>
+            <code lang="XML" src="examples/targets/Configuration File/File/CSV/NLog.config" />
+            </example>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.FileTarget"/>.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Adds all layouts used by this target to the specified collection.
+            </summary>
+            <param name="layouts">The collection to add layouts to.</param>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.GetFormattedMessage(NLog.LogEventInfo)">
+            <summary>
+            Formats the log event for write.
+            </summary>
+            <param name="logEvent">The log event to be formatted.</param>
+            <returns>A string representation of the log event.</returns>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.GetBytesToWrite(NLog.LogEventInfo)">
+            <summary>
+            Gets the bytes to be written to the file.
+            </summary>
+            <param name="logEvent">log event</param>
+            <returns>array of bytes that are ready to be written</returns>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.Write(NLog.LogEventInfo)">
+            <summary>
+            Writes the specified logging event to a file specified in the FileName 
+            parameter.
+            </summary>
+            <param name="logEvent">The logging event.</param>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.Write(NLog.LogEventInfo[])">
+            <summary>
+            Writes the specified array of logging events to a file specified in the FileName 
+            parameter.
+            </summary>
+            <param name="logEvents">An array of <see cref="T:NLog.LogEventInfo"/> objects.</param>
+            <remarks>
+            This function makes use of the fact that the events are batched by sorting 
+            the requests by filename. This optimizes the number of open/close calls
+            and can help improve performance.
+            </remarks>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.Initialize">
+            <summary>
+            Initializes file logging by creating data structures that
+            enable efficient multi-file logging.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.TransformBytes(System.Byte[])">
+            <summary>
+            Modifies the specified byte array before it gets sent to a file.
+            </summary>
+            <param name="bytes">The byte array</param>
+            <returns>The modified byte array. The function can do the modification in-place.</returns>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.CleanupInitializedFiles">
+            <summary>
+            Removes records of initialized files that have not been 
+            accessed in the last two days.
+            </summary>
+            <remarks>
+            Files are marked 'initialized' for the purpose of writing footers when the logging finishes.
+            </remarks>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.CleanupInitializedFiles(System.DateTime)">
+            <summary>
+            Removes records of initialized files that have not been 
+            accessed after the specified date.
+            </summary>
+            <remarks>
+            Files are marked 'initialized' for the purpose of writing footers when the logging finishes.
+            </remarks>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.Flush(System.TimeSpan)">
+            <summary>
+            Flushes all pending file operations.
+            </summary>
+            <param name="timeout">The timeout</param>
+            <remarks>
+            The timeout parameter is ignored, because file APIs don't provide
+            the needed functionality.
+            </remarks>
+        </member>
+        <member name="M:NLog.Targets.FileTarget.Close">
+            <summary>
+            Closes the file(s) opened for writing.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.FileName">
+            <summary>
+            The name of the file to write to.
+            </summary>
+            <remarks>
+            This FileName string is a layout which may include instances of layout renderers.
+            This lets you use a single target to write to multiple files.
+            </remarks>
+            <example>
+            The following value makes NLog write logging events to files based on the log level in the directory where
+            the application runs.
+            <code>${basedir}/${level}.log</code>
+            All <c>Debug</c> messages will go to <c>Debug.log</c>, all <c>Info</c> messages will go to <c>Info.log</c> and so on.
+            You can combine as many of the layout renderers as you want to produce an arbitrary log file name.
+            </example>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.CreateDirs">
+            <summary>
+            Create directories if they don't exist.
+            </summary>
+            <remarks>
+            Setting this to false may improve performance a bit, but you'll receive an error
+            when attempting to write to a directory that's not present.
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.OpenFileCacheSize">
+            <summary>
+            The number of files to be kept open. Setting this to a higher value may improve performance
+            in a situation where a single File target is writing to many files
+            (such as splitting by level or by logger).
+            </summary>
+            <remarks>
+            The files are managed on a LRU (least recently used) basis, which flushes
+            the files that have not been used for the longest period of time should the
+            cache become full. As a rule of thumb, you shouldn't set this parameter to 
+            a very high value. A number like 10-15 shouldn't be exceeded, because you'd
+            be keeping a large number of files open which consumes system resources.
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.OpenFileCacheTimeout">
+            <summary>
+            Maximum number of seconds that files are kept open. If this number is negative.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.DeleteOldFileOnStartup">
+            <summary>
+            Delete old log file on startup.
+            </summary>
+            <remarks>
+            This option works only when the "fileName" parameter denotes a single file.
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ReplaceFileContentsOnEachWrite">
+            <summary>
+            Replace file contents on each write instead of appending log message at the end.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.KeepFileOpen">
+            <summary>
+            Keep log file open instead of opening and closing it on each logging event.
+            </summary>
+            <remarks>
+            Setting this property to <c>True</c> helps improve performance.
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.EnableFileDelete">
+            <summary>
+            Enable log file(s) to be deleted.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.FileAttributes">
+            <summary>
+            File attributes (Windows only).
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.NewLineChars">
+            <summary>
+            Gets the characters that are appended after each line.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.LineEnding">
+            <summary>
+            Line ending mode.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.AutoFlush">
+            <summary>
+            Automatically flush the file buffers after each log message.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.BufferSize">
+            <summary>
+            Log file buffer size in bytes.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.Encoding">
+            <summary>
+            File encoding.</summary>
+            <remarks>
+            Can be any encoding name supported by System.Text.Encoding.GetEncoding() e.g. <c>windows-1252</c>, <c>iso-8859-2</c>.
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ConcurrentWrites">
+            <summary>
+            Enables concurrent writes to the log file by multiple processes on the same host.
+            </summary>
+            <remarks>
+            This makes multi-process logging possible. NLog uses a special technique
+            that lets it keep the files open for writing.
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.NetworkWrites">
+            <summary>
+            Disables open-fi
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ConcurrentWriteAttempts">
+            <summary>
+            The number of times the write is appended on the file before NLog
+            discards the log message.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ArchiveAboveSize">
+            <summary>
+            Automatically archive log files that exceed the specified size in bytes.
+            </summary>
+            <remarks>
+            Caution: Enabling this option can considerably slow down your file 
+            logging in multi-process scenarios. If only one process is going to
+            be writing to the file, consider setting <c>ConcurrentWrites</c>
+            to <c>false</c> for maximum performance.
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ArchiveEvery">
+            <summary>
+            Automatically archive log files every time the specified time passes.
+            Possible options are: <c>year</c>, <c>month</c>, <c>day</c>, <c>hour</c>, <c>minute</c>. Files are 
+            moved to the archive as part of the write operation if the current period of time changes. For example
+            if the current <c>hour</c> changes from 10 to 11, the first write that will occur
+            on or after 11:00 will trigger the archiving.
+            </summary>
+            <remarks>
+            <p>
+            Caution: Enabling this option can considerably slow down your file 
+            logging in multi-process scenarios. If only one process is going to
+            be writing to the file, consider setting <c>ConcurrentWrites</c>
+            to <c>false</c> for maximum performance.
+            </p>
+            </remarks>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ArchiveFileName">
+            <summary>
+            The name of the file to be used for an archive. 
+            It may contain a special placeholder {#####}
+            that will be replaced with a sequence of numbers depending on 
+            the archiving strategy. The number of hash characters used determines
+            the number of numerical digits to be used for numbering files.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ConcurrentWriteAttemptDelay">
+            <summary>
+            The delay in milliseconds to wait before attempting to write to the file again.
+            </summary>
+            <remarks>
+            The actual delay is a random value between 0 and the value specified
+            in this parameter. On each failed attempt the delay base is doubled
+            up to <see cref="P:NLog.Targets.FileTarget.ConcurrentWriteAttempts"/> times.
+            </remarks>
+            <example>
+            Assuming that ConcurrentWriteAttemptDelay is 10 the time to wait will be:<p/>
+            a random value between 0 and 10 milliseconds - 1st attempt<br/>
+            a random value between 0 and 20 milliseconds - 2nd attempt<br/>
+            a random value between 0 and 40 milliseconds - 3rd attempt<br/>
+            a random value between 0 and 80 milliseconds - 4th attempt<br/>
+            ...<p/>
+            and so on.
+            </example>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.MaxArchiveFiles">
+            <summary>
+            Maximum number of archive files that should be kept.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FileTarget.ArchiveNumbering">
+            <summary>
+            Determines the way file archives are numbered. 
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.FileTarget.ArchiveNumberingMode">
+            <summary>
+            Specifies the way archive numbering is performed.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveNumberingMode.Sequence">
+            <summary>
+            Sequence style numbering. The most recent archive has the highest number.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveNumberingMode.Rolling">
+            <summary>
+            Rolling style numbering (the most recent is always #0 then #1, ..., #N
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.FileTarget.ArchiveEveryMode">
+            <summary>
+            Modes of archiving files based on time.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.None">
+            <summary>
+            Don't archive based on time.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Year">
+            <summary>
+            Archive every year.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Month">
+            <summary>
+            Archive every month.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Day">
+            <summary>
+            Archive daily.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Hour">
+            <summary>
+            Archive every hour.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.ArchiveEveryMode.Minute">
+            <summary>
+            Archive every minute.
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.FileTarget.LineEndingMode">
+            <summary>
+            Line ending mode.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.LineEndingMode.Default">
+            <summary>
+            Insert platform-dependent end-of-line sequence after each line.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.LineEndingMode.CRLF">
+            <summary>
+            Insert CR LF sequence (ASCII 13, ASCII 10) after each line.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.LineEndingMode.CR">
+            <summary>
+            Insert CR character (ASCII 13) after each line.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.LineEndingMode.LF">
+            <summary>
+            Insert LF character (ASCII 10) after each line.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.FileTarget.LineEndingMode.None">
+            <summary>
+            Don't insert any line ending.
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.FormControlTarget">
+            <summary>
+            Log text to Windows.Forms.Control.Text property control of specified Name
+            </summary>
+            <example>
+            <p>
+            To set up the target in the <a href="config.html">configuration file</a>, 
+            use the following syntax:
+            </p>
+            <code lang="XML" src="examples/targets/Configuration File/FormControl/NLog.config" />
+            <p>
+            The result is:
+            </p>
+            <img src="examples/targets/Screenshots/FormControl/FormControl.gif" />
+            <p>
+            To set up the log target programmatically similar to above use code like this:
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/FormControl/Form1.cs" />,
+            </example>
+        </member>
+        <member name="M:NLog.Targets.FormControlTarget.Write(NLog.LogEventInfo)">
+            <summary>
+            Log message to control
+            </summary>
+            <param name="logEvent">The logging event.</param>
+        </member>
+        <member name="P:NLog.Targets.FormControlTarget.ControlName">
+            <summary>
+            Name of control to which Nlog will log
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FormControlTarget.Append">
+            <summary>
+            Setting to tell to append or overwrite the Text property of control
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.FormControlTarget.FormName">
+            <summary>
+            Name of the Form on which the control is located.
+            </summary>
+        </member>
         <member name="T:NLog.Targets.MailTarget">
             <summary>
             Sends logging messages by email using SMTP protocol.
@@ -6632,19 +7950,15 @@
             BCC email addresses separated by semicolons (e.g. john@domain.com;jane@domain.com)
             </summary>
         </member>
+        <member name="P:NLog.Targets.MailTarget.AddNewLines">
+            <summary>
+            Whether to add new lines between log entries.
+            </summary>
+            <value><c>true</c> if new lines should be added; otherwise, <c>false</c>.</value>
+        </member>
         <member name="P:NLog.Targets.MailTarget.Subject">
             <summary>
             Mail subject.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.MailTarget.Header">
-            <summary>
-            Header of the mail message body.
-            </summary>
-        </member>
-        <member name="P:NLog.Targets.MailTarget.Footer">
-            <summary>
-            Footer of the mail message body.
             </summary>
         </member>
         <member name="P:NLog.Targets.MailTarget.Body">
@@ -7245,6 +8559,468 @@
             Perform layout calculation.
             </summary>
         </member>
+        <member name="T:NLog.Targets.RichTextBoxTarget">
+            <summary>
+            Log text to Text property of  RichTextBox of specified Name
+            </summary>
+            <example>
+            <p>
+            To set up the target in the <a href="config.html">configuration file</a>, 
+            use the following syntax:
+            </p>
+            <code lang="XML" src="examples/targets/Configuration File/RichTextBox/Simple/NLog.config" />
+            <p>
+            The result is:
+            </p>
+            <img src="examples/targets/Screenshots/RichTextBox/Simple.gif" />
+            <p>
+            To set up the target with coloring rules in the <a href="config.html">configuration file</a>, 
+            use the following syntax:
+            </p>
+            <code lang="XML" src="examples/targets/Configuration File/RichTextBox/RowColoring/NLog.config" />
+            <code lang="XML" src="examples/targets/Configuration File/RichTextBox/WordColoring/NLog.config" />
+            <p>
+            The result is:
+            </p>
+            <img src="examples/targets/Screenshots/RichTextBox/RowColoring.gif" />
+            <img src="examples/targets/Screenshots/RichTextBox/WordColoring.gif" />
+            <p>
+            To set up the log target programmatically similar to above use code like this:
+            </p>
+            <code lang="C#" src="examples/targets/Configuration API/RichTextBox/Simple/Form1.cs" />,
+            <code lang="C#" src="examples/targets/Configuration API/RichTextBox/RowColoring/Form1.cs" /> for RowColoring,
+            <code lang="C#" src="examples/targets/Configuration API/RichTextBox/WordColoring/Form1.cs" /> for WordColoring
+            </example>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxTarget.Write(NLog.LogEventInfo)">
+            <summary>
+            Log message to RichTextBox
+            </summary>
+            <param name="logEvent">The logging event.</param>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxTarget.ControlName">
+            <summary>
+            Name of RichTextBox to which Nlog will log
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxTarget.FormName">
+            <summary>
+            Name of the Form on which the control is located. 
+            If there is no open form of a specified name than NLog will create a new one.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxTarget.UseDefaultRowColoringRules">
+            <summary>
+            Use default coloring rules
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxTarget.RowColoringRules">
+            <summary>
+            Row coloring rules.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxTarget.WordColoringRules">
+            <summary>
+            Word highlighting rules.
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.RichTextBoxRowColoringRule">
+            <summary>
+            The row-coloring condition.
+            </summary>
+        </member>
+        <member name="F:NLog.Targets.RichTextBoxRowColoringRule.Default">
+            <summary>
+            Default highlighting rule. Doesn't change the color.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxRowColoringRule.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.RichTextBoxRowColoringRule"/>
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxRowColoringRule.#ctor(System.String,System.String,System.String,System.Drawing.FontStyle)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.RichTextBoxRowColoringRule"/> and
+            assigns Condition, FontColor and FontStyle properties.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxRowColoringRule.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.RichTextBoxRowColoringRule"/> and
+            assigns Condition and FontColor properties with regular style of font
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxRowColoringRule.CheckCondition(NLog.LogEventInfo)">
+            <summary>
+            Checks whether the specified log event matches the condition (if any)
+            </summary>
+            <param name="logEvent">log event</param>
+            <returns><see langword="true"/> if the condition is not defined or 
+            if it matches, <see langword="false"/> otherwise</returns>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxRowColoringRule.Condition">
+            <summary>
+            The condition that must be met in order to set the specified font color.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxRowColoringRule.FontColor">
+            <summary>
+            The font color.
+            Names are identical with KnownColor enum extended with Empty value which means that background color won't be changed
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxRowColoringRule.BackgroundColor">
+            <summary>
+            The background color. 
+            Names are identical with KnownColor enum extended with Empty value which means that background color won't be changed
+            Background color will be set only in .net 2.0
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxRowColoringRule.Style">
+            <summary>
+            Font style of matched text. 
+            Possible values are the same as in <c>FontStyle</c> enum in <c>System.Drawing</c>
+            </summary>
+        </member>
+        <member name="T:NLog.RichTextBoxRowColoringRuleCollection">
+            <summary>
+            A collection of elements of type RichTextBoxRowColoringRule
+            </summary>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.#ctor">
+            <summary>
+            Initializes a new empty instance of the RichTextBoxRowColoringRuleCollection class.
+            </summary>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.#ctor(NLog.Targets.RichTextBoxRowColoringRule[])">
+            <summary>
+            Initializes a new instance of the RichTextBoxRowColoringRuleCollection class, containing elements
+            copied from an array.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the new RichTextBoxRowColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.#ctor(NLog.RichTextBoxRowColoringRuleCollection)">
+            <summary>
+            Initializes a new instance of the RichTextBoxRowColoringRuleCollection class, containing elements
+            copied from another instance of RichTextBoxRowColoringRuleCollection
+            </summary>
+            <param name="items">
+            The RichTextBoxRowColoringRuleCollection whose elements are to be added to the new RichTextBoxRowColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.AddRange(NLog.Targets.RichTextBoxRowColoringRule[])">
+            <summary>
+            Adds the elements of an array to the end of this RichTextBoxRowColoringRuleCollection.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the end of this RichTextBoxRowColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.AddRange(NLog.RichTextBoxRowColoringRuleCollection)">
+            <summary>
+            Adds the elements of another RichTextBoxRowColoringRuleCollection to the end of this RichTextBoxRowColoringRuleCollection.
+            </summary>
+            <param name="items">
+            The RichTextBoxRowColoringRuleCollection whose elements are to be added to the end of this RichTextBoxRowColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.Add(NLog.Targets.RichTextBoxRowColoringRule)">
+            <summary>
+            Adds an instance of type RichTextBoxWordColoringRule to the end of this RichTextBoxRowColoringRuleCollection.
+            </summary>
+            <param name="value">
+            The RichTextBoxRowColoringRule to be added to the end of this RichTextBoxRowColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.Contains(NLog.Targets.RichTextBoxRowColoringRule)">
+            <summary>
+            Determines whether a specfic RichTextBoxRowColoringRule value is in this RichTextBoxRowColoringRuleCollection.
+            </summary>
+            <param name="value">
+            The RichTextBoxRowColoringRule value to locate in this RichTextBoxRowColoringRuleCollection.
+            </param>
+            <returns>
+            true if value is found in this RichTextBoxRowColoringRuleCollection;
+            false otherwise.
+            </returns>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.IndexOf(NLog.Targets.RichTextBoxRowColoringRule)">
+            <summary>
+            Return the zero-based index of the first occurrence of a specific value
+            in this RichTextBoxRowColoringRuleCollection
+            </summary>
+            <param name="value">
+            The RichTextBoxRowColoringRule value to locate in the RichTextBoxRowColoringRuleCollection.
+            </param>
+            <returns>
+            The zero-based index of the first occurrence of the _ELEMENT value if found;
+            -1 otherwise.
+            </returns>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.Insert(System.Int32,NLog.Targets.RichTextBoxRowColoringRule)">
+            <summary>
+            Inserts an element into the RichTextBoxRowColoringRuleCollection at the specified index
+            </summary>
+            <param name="index">
+            The index at which the RichTextBoxRowColoringRule is to be inserted.
+            </param>
+            <param name="value">
+            The RichTextBoxRowColoringRule to insert.
+            </param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.Remove(NLog.Targets.RichTextBoxRowColoringRule)">
+            <summary>
+            Removes the first occurrence of a specific RichTextBoxRowColoringRule from this RichTextBoxRowColoringRuleCollection.
+            </summary>
+            <param name="value">
+            The RichTextBoxRowColoringRule value to remove from this RichTextBoxRowColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that can iterate through the elements of this RichTextBoxRowColoringRuleCollection.
+            </summary>
+            <returns>
+            An object that implements System.Collections.IEnumerator.
+            </returns>        
+        </member>
+        <member name="P:NLog.RichTextBoxRowColoringRuleCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the RichTextBoxRowColoringRule at the given index in this RichTextBoxRowColoringRuleCollection.
+            </summary>
+        </member>
+        <member name="T:NLog.RichTextBoxRowColoringRuleCollection.Enumerator">
+            <summary>
+            Type-specific enumeration class, used by RichTextBoxRowColoringRuleCollection.GetEnumerator.
+            </summary>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.Enumerator.#ctor(NLog.RichTextBoxRowColoringRuleCollection)">
+            <summary>
+            
+            </summary>
+            <param name="collection"></param>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.Enumerator.MoveNext">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.RichTextBoxRowColoringRuleCollection.Enumerator.Reset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:NLog.RichTextBoxRowColoringRuleCollection.Enumerator.Current">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.RichTextBoxWordColoringRule">
+            <summary>
+            Highlighting rule for Win32 colorful console.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRule.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.RichTextBoxWordColoringRule"/>
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRule.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.RichTextBoxWordColoringRule"/>
+            and sets Text, BackgroundColor and ForegroundColor properties.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRule.#ctor(System.String,System.String,System.String,System.Drawing.FontStyle)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.Targets.RichTextBoxWordColoringRule"/>
+            and sets Text, BackgroundColor, FontColor and Style properties.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.Regex">
+            <summary>
+            The regular expression to be matched. You must specify either <c>text</c> or <c>regex</c>.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.Text">
+            <summary>
+            The text to be matched. You must specify either <c>text</c> or <c>regex</c>.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.Style">
+            <summary>
+            Font style of matched text. 
+            Possible values are the same as in <c>FontStyle</c> enum in <c>System.Drawing</c>
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.WholeWords">
+            <summary>
+            Match whole words only.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.IgnoreCase">
+            <summary>
+            Ignore case when comparing texts.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.CompiledRegex">
+            <summary>
+            Compiled regular expression that matches either Text or Regex property.
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.FontColor">
+            <summary>
+            The font color.
+            Names are identical with KnownColor enum extended with Empty value which means that font color won't be changed
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRule.BackgroundColor">
+            <summary>
+            The background color. 
+            Names are identical with KnownColor enum extended with Empty value which means that background color won't be changed
+            Background color will be set only in .net 2.0
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.RichTextBoxWordColoringRuleCollection">
+            <summary>
+            A collection of elements of type RichTextBoxWordColoringRule
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.#ctor">
+            <summary>
+            Initializes a new empty instance of the RichTextBoxWordColoringRuleCollection class.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.#ctor(NLog.Targets.RichTextBoxWordColoringRule[])">
+            <summary>
+            Initializes a new instance of the RichTextBoxWordColoringRuleCollection class, containing elements
+            copied from an array.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the new RichTextBoxWordColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.#ctor(NLog.Targets.RichTextBoxWordColoringRuleCollection)">
+            <summary>
+            Initializes a new instance of the RichTextBoxWordColoringRuleCollection class, containing elements
+            copied from another instance of RichTextBoxWordColoringRuleCollection
+            </summary>
+            <param name="items">
+            The RichTextBoxWordColoringRuleCollection whose elements are to be added to the new RichTextBoxWordColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.AddRange(NLog.Targets.RichTextBoxWordColoringRule[])">
+            <summary>
+            Adds the elements of an array to the end of this RichTextBoxWordColoringRuleCollection.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the end of this RichTextBoxWordColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.AddRange(NLog.Targets.RichTextBoxWordColoringRuleCollection)">
+            <summary>
+            Adds the elements of another RichTextBoxWordColoringRuleCollection to the end of this RichTextBoxWordColoringRuleCollection.
+            </summary>
+            <param name="items">
+            The RichTextBoxWordColoringRuleCollection whose elements are to be added to the end of this RichTextBoxWordColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.Add(NLog.Targets.RichTextBoxWordColoringRule)">
+            <summary>
+            Adds an instance of type RichTextBoxWordColoringRule to the end of this RichTextBoxWordColoringRuleCollection.
+            </summary>
+            <param name="value">
+            The RichTextBoxWordColoringRule to be added to the end of this RichTextBoxWordColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.Contains(NLog.Targets.RichTextBoxWordColoringRule)">
+            <summary>
+            Determines whether a specfic RichTextBoxWordColoringRule value is in this RichTextBoxWordColoringRuleCollection.
+            </summary>
+            <param name="value">
+            The RichTextBoxWordColoringRule value to locate in this RichTextBoxWordColoringRuleCollection.
+            </param>
+            <returns>
+            true if value is found in this RichTextBoxWordColoringRuleCollection;
+            false otherwise.
+            </returns>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.IndexOf(NLog.Targets.RichTextBoxWordColoringRule)">
+            <summary>
+            Return the zero-based index of the first occurrence of a specific value
+            in this RichTextBoxWordColoringRuleCollection
+            </summary>
+            <param name="value">
+            The RichTextBoxWordColoringRule value to locate in the RichTextBoxWordColoringRuleCollection.
+            </param>
+            <returns>
+            The zero-based index of the first occurrence of the _ELEMENT value if found;
+            -1 otherwise.
+            </returns>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.Insert(System.Int32,NLog.Targets.RichTextBoxWordColoringRule)">
+            <summary>
+            Inserts an element into the RichTextBoxWordColoringRuleCollection at the specified index
+            </summary>
+            <param name="index">
+            The index at which the RichTextBoxWordColoringRule is to be inserted.
+            </param>
+            <param name="value">
+            The RichTextBoxWordColoringRule to insert.
+            </param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.Remove(NLog.Targets.RichTextBoxWordColoringRule)">
+            <summary>
+            Removes the first occurrence of a specific RichTextBoxWordColoringRule from this RichTextBoxWordColoringRuleCollection.
+            </summary>
+            <param name="value">
+            The RichTextBoxWordColoringRule value to remove from this RichTextBoxWordColoringRuleCollection.
+            </param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that can iterate through the elements of this RichTextBoxWordColoringRuleCollection.
+            </summary>
+            <returns>
+            An object that implements System.Collections.IEnumerator.
+            </returns>        
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRuleCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the RichTextBoxWordColoringRule at the given index in this RichTextBoxWordColoringRuleCollection.
+            </summary>
+        </member>
+        <member name="T:NLog.Targets.RichTextBoxWordColoringRuleCollection.Enumerator">
+            <summary>
+            Type-specific enumeration class, used by RichTextBoxWordColoringRuleCollection.GetEnumerator.
+            </summary>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.Enumerator.#ctor(NLog.Targets.RichTextBoxWordColoringRuleCollection)">
+            <summary>
+            
+            </summary>
+            <param name="collection"></param>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.Enumerator.MoveNext">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.Targets.RichTextBoxWordColoringRuleCollection.Enumerator.Reset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:NLog.Targets.RichTextBoxWordColoringRuleCollection.Enumerator.Current">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:NLog.Targets.TraceTarget">
             <summary>
             Sends logging messages through System.Diagnostics.Trace
@@ -7633,6 +9409,16 @@
             and words based on a set of defined rules.
             </summary>
             <param name="logEvent">Log event.</param>
+        </member>
+        <member name="M:NLog.Win32.Targets.ColoredConsoleTarget.Initialize">
+            <summary>
+            Initializes the target.
+            </summary>
+        </member>
+        <member name="M:NLog.Win32.Targets.ColoredConsoleTarget.Close">
+            <summary>
+            Closes the target and releases any unmanaged resources.
+            </summary>
         </member>
         <member name="P:NLog.Win32.Targets.ColoredConsoleTarget.ErrorStream">
             <summary>
@@ -8174,11 +9960,6 @@
             </p>
             <code lang="C#" src="examples/targets/Configuration API/EventLog/Simple/Example.cs" />
             </example>
-            <remarks>
-            Currently there's no way to pass EventID or Category 
-            event log parameters. This issue may be addressed
-            in future releases.
-            </remarks>
         </member>
         <member name="M:NLog.Win32.Targets.EventLogTarget.#ctor">
             <summary>
@@ -8194,6 +9975,16 @@
         <member name="P:NLog.Win32.Targets.EventLogTarget.MachineName">
             <summary>
             Machine name on which Event Log service is running.
+            </summary>
+        </member>
+        <member name="P:NLog.Win32.Targets.EventLogTarget.EventID">
+            <summary>
+            Layout that renders event ID.
+            </summary>
+        </member>
+        <member name="P:NLog.Win32.Targets.EventLogTarget.Category">
+            <summary>
+            Layout that renders event Category.
             </summary>
         </member>
         <member name="P:NLog.Win32.Targets.EventLogTarget.Source">
@@ -8671,6 +10462,16 @@
             The message should not be logged.
             </summary>
         </member>
+        <member name="F:NLog.FilterResult.LogFinal">
+            <summary>
+            The message should be logged and processing should be finished.
+            </summary>
+        </member>
+        <member name="F:NLog.FilterResult.IgnoreFinal">
+            <summary>
+            The message should not be logged and processing should be finished.
+            </summary>
+        </member>
         <member name="T:NLog.GDC">
             <summary>
             Global Diagnostics Context - a dictionary structure to hold per-application-instance values.
@@ -8789,15 +10590,45 @@
         <member name="M:NLog.Layout.Evaluate(System.String)">
             <summary>
             Evaluates the specified text by expadinging all layout renderers
-            in <see cref="F:NLog.LogEventInfo.Empty"/> context.
+            in new <see cref="T:NLog.LogEventInfo"/> context.
             </summary>
             <param name="text">The text to be evaluated.</param>
             <returns>The input text with all occurences of ${} replaced with
             values provided by the appropriate layout renderers.</returns>
         </member>
+        <member name="M:NLog.Layout.Initialize">
+            <summary>
+            Initializes the layout.
+            </summary>
+        </member>
+        <member name="M:NLog.Layout.Close">
+            <summary>
+            Closes the layout;
+            </summary>
+        </member>
+        <member name="M:NLog.Layout.PopulateLayouts(NLog.LayoutCollection)">
+            <summary>
+            Add this layout and all sub-layouts to the specified collection..
+            </summary>
+            <param name="layouts">The collection of layouts.</param>
+        </member>
+        <member name="M:NLog.Layout.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+            </returns>
+        </member>
         <member name="P:NLog.Layout.Text">
             <summary>
             The layout text
+            </summary>
+        </member>
+        <member name="P:NLog.Layout.IsAppDomainFixed">
+            <summary>
+            Returns true if this layout produces a value that doesn't change for a particular
+            AppDomain.
             </summary>
         </member>
         <member name="P:NLog.Layout.Renderers">
@@ -8805,9 +10636,26 @@
             A collection of <see cref="T:NLog.LayoutRenderer"/> objects that make up this layout.
             </summary>
         </member>
+        <member name="T:NLog.LayoutAttribute">
+            <summary>
+            Marks class as a layout renderer and assigns a format string to it.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutAttribute.#ctor(System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.LayoutAttribute"/>
+            and assigns the <see cref="P:NLog.LayoutAttribute.Name"/> to the specified value.
+            </summary>
+            <param name="name">layout name</param>
+        </member>
+        <member name="P:NLog.LayoutAttribute.Name">
+            <summary>
+            The layout name.
+            </summary>
+        </member>
         <member name="T:NLog.LayoutCollection">
             <summary>
-            A collection of elements of type Layout
+            A collection of elements of type ILayout
             </summary>
         </member>
         <member name="M:NLog.LayoutCollection.#ctor">
@@ -8815,7 +10663,7 @@
             Initializes a new empty instance of the LayoutCollection class.
             </summary>
         </member>
-        <member name="M:NLog.LayoutCollection.#ctor(NLog.Layout[])">
+        <member name="M:NLog.LayoutCollection.#ctor(NLog.ILayout[])">
             <summary>
             Initializes a new instance of the LayoutCollection class, containing elements
             copied from an array.
@@ -8833,7 +10681,7 @@
             The LayoutCollection whose elements are to be added to the new LayoutCollection.
             </param>
         </member>
-        <member name="M:NLog.LayoutCollection.AddRange(NLog.Layout[])">
+        <member name="M:NLog.LayoutCollection.AddRange(NLog.ILayout[])">
             <summary>
             Adds the elements of an array to the end of this LayoutCollection.
             </summary>
@@ -8849,56 +10697,56 @@
             The LayoutCollection whose elements are to be added to the end of this LayoutCollection.
             </param>
         </member>
-        <member name="M:NLog.LayoutCollection.Add(NLog.Layout)">
+        <member name="M:NLog.LayoutCollection.Add(NLog.ILayout)">
             <summary>
-            Adds an instance of type Layout to the end of this LayoutCollection.
+            Adds an instance of type ILayout to the end of this LayoutCollection.
             </summary>
             <param name="value">
-            The Layout to be added to the end of this LayoutCollection.
+            The ILayout to be added to the end of this LayoutCollection.
             </param>
         </member>
-        <member name="M:NLog.LayoutCollection.Contains(NLog.Layout)">
+        <member name="M:NLog.LayoutCollection.Contains(NLog.ILayout)">
             <summary>
-            Determines whether a specfic Layout value is in this LayoutCollection.
+            Determines whether a specfic ILayout value is in this LayoutCollection.
             </summary>
             <param name="value">
-            The Layout value to locate in this LayoutCollection.
+            The ILayout value to locate in this LayoutCollection.
             </param>
             <returns>
             true if value is found in this LayoutCollection;
             false otherwise.
             </returns>
         </member>
-        <member name="M:NLog.LayoutCollection.IndexOf(NLog.Layout)">
+        <member name="M:NLog.LayoutCollection.IndexOf(NLog.ILayout)">
             <summary>
             Return the zero-based index of the first occurrence of a specific value
             in this LayoutCollection
             </summary>
             <param name="value">
-            The Layout value to locate in the LayoutCollection.
+            The ILayout value to locate in the LayoutCollection.
             </param>
             <returns>
             The zero-based index of the first occurrence of the _ELEMENT value if found;
             -1 otherwise.
             </returns>
         </member>
-        <member name="M:NLog.LayoutCollection.Insert(System.Int32,NLog.Layout)">
+        <member name="M:NLog.LayoutCollection.Insert(System.Int32,NLog.ILayout)">
             <summary>
             Inserts an element into the LayoutCollection at the specified index
             </summary>
             <param name="index">
-            The index at which the Layout is to be inserted.
+            The index at which the ILayout is to be inserted.
             </param>
             <param name="value">
-            The Layout to insert.
+            The ILayout to insert.
             </param>
         </member>
-        <member name="M:NLog.LayoutCollection.Remove(NLog.Layout)">
+        <member name="M:NLog.LayoutCollection.Remove(NLog.ILayout)">
             <summary>
-            Removes the first occurrence of a specific Layout from this LayoutCollection.
+            Removes the first occurrence of a specific ILayout from this LayoutCollection.
             </summary>
             <param name="value">
-            The Layout value to remove from this LayoutCollection.
+            The ILayout value to remove from this LayoutCollection.
             </param>
         </member>
         <member name="M:NLog.LayoutCollection.GetEnumerator">
@@ -8911,7 +10759,7 @@
         </member>
         <member name="P:NLog.LayoutCollection.Item(System.Int32)">
             <summary>
-            Gets or sets the Layout at the given index in this LayoutCollection.
+            Gets or sets the ILayout at the given index in this LayoutCollection.
             </summary>
         </member>
         <member name="T:NLog.LayoutCollection.Enumerator">
@@ -8944,6 +10792,48 @@
         <member name="P:NLog.LayoutCollection.Enumerator.System#Collections#IEnumerator#Current">
             <summary>
             
+            </summary>
+        </member>
+        <member name="T:NLog.LayoutFactory">
+            <summary>
+            A factory for layouts. Creates new layout instances based on their names.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutFactory.Clear">
+            <summary>
+            Removes all layout information from the factory.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutFactory.AddLayoutsFromAssembly(System.Reflection.Assembly,System.String)">
+            <summary>
+            Scans the specified assembly for types marked with <see cref="T:NLog.LayoutAttribute"/> and adds
+            them to the factory. Optionally it prepends the specified text to layout names to avoid
+            naming collisions.
+            </summary>
+            <param name="theAssembly">The assembly to be scanned for layouts.</param>
+            <param name="prefix">The prefix to be prepended to layout names.</param>
+        </member>
+        <member name="M:NLog.LayoutFactory.AddLayout(System.String,System.Type)">
+            <summary>
+            Registers the specified layout type to the factory under a specified name.
+            </summary>
+            <param name="name">The name of the layout (e.g. <code>XML</code>, <code>CSV</code> or <code>HTML</code>)</param>
+            <param name="t">The type of the new layout</param>
+            <remarks>
+            The name specified in the name parameter can then be used
+            to reference layouts.
+            </remarks>
+        </member>
+        <member name="M:NLog.LayoutFactory.CreateLayout(System.String)">
+            <summary>
+            Creates the layout renderer object based on its layout renderer name and sets its properties from parameters string.
+            </summary>
+            <param name="name">The name of the layout renderer (e.g. <code>message</code> or <code>aspnet-request</code>)</param>
+            <returns>A new instance of the <see cref="T:NLog.ILayout"/> object.</returns>
+        </member>
+        <member name="P:NLog.LayoutFactory.LayoutTypes">
+            <summary>
+            Collection of layout types added to the factory.
             </summary>
         </member>
         <member name="T:NLog.LayoutRendererAttribute">
@@ -9164,16 +11054,16 @@
             The date of the first log event created.
             </summary>
         </member>
-        <member name="F:NLog.LogEventInfo.Empty">
-            <summary>
-            An empty event - for rendering layouts where logging
-            event is not otherwise available.
-            </summary>
-        </member>
         <member name="M:NLog.LogEventInfo.#ctor">
             <summary>
             Creates a new instance of <see cref="T:NLog.LogEventInfo"/>.
             </summary>
+        </member>
+        <member name="M:NLog.LogEventInfo.CreateNullEvent">
+            <summary>
+            Creates the null event.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:NLog.LogEventInfo.#ctor(NLog.LogLevel,System.String,System.String)">
             <summary>
@@ -9272,9 +11162,9 @@
             Returns the formatted message.
             </summary>
         </member>
-        <member name="P:NLog.LogEventInfo.CallContext">
+        <member name="P:NLog.LogEventInfo.Context">
             <summary>
-            Gets the dictionary of call context properties.
+            Gets the dictionary of per-event context properties.
             </summary>
         </member>
         <member name="P:NLog.LogEventInfo.SequenceID">
@@ -9282,6 +11172,164 @@
             The unique identifier of log event which is automatically generated
             and monotonously increasing.
             </summary>
+        </member>
+        <member name="T:NLog.LoggingConfigurationChanged">
+            <summary>
+            Represents a method that's invoked each time a logging configuration changes.
+            </summary>
+        </member>
+        <member name="T:NLog.LoggingConfigurationReloaded">
+            <summary>
+            Represents a method that's invoked each time a logging configuration gets reloaded
+            to signal either success or failure.
+            </summary>
+        </member>
+        <member name="T:NLog.LogFactory">
+            <summary>
+            Creates and manages instances of <see cref="T:NLog.Logger" /> objects.
+            </summary>
+        </member>
+        <member name="M:NLog.LogFactory.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.LogFactory"/>
+            </summary>
+        </member>
+        <member name="M:NLog.LogFactory.#ctor(NLog.Config.LoggingConfiguration)">
+            <summary>
+            Creates a new instance of <see cref="T:NLog.LogFactory"/> and sets the initial configuration.
+            </summary>
+        </member>
+        <member name="M:NLog.LogFactory.CreateNullLogger">
+            <summary>
+            Creates a logger that discards all log messages.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.LogFactory.GetCurrentClassLogger">
+            <summary>
+            Gets the logger named after the currently-being-initialized class.
+            </summary>
+            <returns>The logger.</returns>
+            <remarks>This is a slow-running method. 
+            Make sure you're not doing this in a loop.</remarks>
+        </member>
+        <member name="M:NLog.LogFactory.GetCurrentClassLogger(System.Type)">
+            <summary>
+            Gets the logger named after the currently-being-initialized class.
+            </summary>
+            <param name="loggerType">type of the logger to create. The type must inherit from NLog.Logger</param>
+            <returns>The logger.</returns>
+            <remarks>This is a slow-running method. 
+            Make sure you're not doing this in a loop.</remarks>
+        </member>
+        <member name="M:NLog.LogFactory.GetLogger(System.String)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">name of the logger</param>
+            <returns>The logger reference. Multiple calls to <c>GetLogger</c> with the same argument aren't guaranteed to return the same logger reference.</returns>
+        </member>
+        <member name="M:NLog.LogFactory.GetLogger(System.String,System.Type)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">name of the logger</param>
+            <param name="loggerType">type of the logger to create. The type must inherit from NLog.Logger</param>
+            <returns>The logger reference. Multiple calls to <c>GetLogger</c> with the 
+            same argument aren't guaranteed to return the same logger reference.</returns>
+        </member>
+        <member name="M:NLog.LogFactory.ReconfigExistingLoggers">
+            <summary>
+            Loops through all loggers previously returned by GetLogger
+            and recalculates their target and filter list. Useful after modifying the configuration programmatically
+            to ensure that all loggers have been properly configured.
+            </summary>
+        </member>
+        <member name="M:NLog.LogFactory.Flush">
+            <summary>
+            Flush any pending log messages (in case of asynchronous targets).
+            </summary>
+        </member>
+        <member name="M:NLog.LogFactory.Flush(System.TimeSpan)">
+            <summary>
+            Flush any pending log messages (in case of asynchronous targets).
+            </summary>
+            <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
+        </member>
+        <member name="M:NLog.LogFactory.Flush(System.Int32)">
+            <summary>
+            Flush any pending log messages (in case of asynchronous targets).
+            </summary>
+            <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
+        </member>
+        <member name="M:NLog.LogFactory.DisableLogging">
+            <summary>Decreases the log enable counter and if it reaches -1 
+            the logs are disabled.</summary>
+            <remarks>Logging is enabled if the number of <see cref="M:NLog.LogFactory.EnableLogging"/> calls is greater 
+            than or equal to <see cref="M:NLog.LogFactory.DisableLogging"/> calls.</remarks>
+            <returns>An object that iplements IDisposable whose Dispose() method
+            reenables logging. To be used with C# <c>using ()</c> statement.</returns>
+        </member>
+        <member name="M:NLog.LogFactory.EnableLogging">
+            <summary>Increases the log enable counter and if it reaches 0 the logs are disabled.</summary>
+            <remarks>Logging is enabled if the number of <see cref="M:NLog.LogFactory.EnableLogging"/> calls is greater 
+            than or equal to <see cref="M:NLog.LogFactory.DisableLogging"/> calls.</remarks>
+        </member>
+        <member name="M:NLog.LogFactory.IsLoggingEnabled">
+            <summary>
+            Returns <see langword="true"/> if logging is currently enabled.
+            </summary>
+            <returns><see langword="true"/> if logging is currently enabled, 
+            <see langword="false"/> otherwise.</returns>
+            <remarks>Logging is enabled if the number of <see cref="M:NLog.LogFactory.EnableLogging"/> calls is greater 
+            than or equal to <see cref="M:NLog.LogFactory.DisableLogging"/> calls.</remarks>
+        </member>
+        <member name="E:NLog.LogFactory.ConfigurationChanged">
+            <summary>
+            Occurs when logging <see cref="P:NLog.LogFactory.Configuration"/> changes.
+            </summary>
+        </member>
+        <member name="E:NLog.LogFactory.ConfigurationReloaded">
+            <summary>
+            Occurs when logging <see cref="P:NLog.LogFactory.Configuration"/> gets reloaded.
+            </summary>
+        </member>
+        <member name="P:NLog.LogFactory.ThrowExceptions">
+            <summary>
+            Specified whether NLog should throw exceptions. By default exceptions
+            are not thrown under any circumstances.
+            </summary>
+        </member>
+        <member name="P:NLog.LogFactory.Configuration">
+            <summary>
+            Gets or sets the current logging configuration.
+            </summary>
+        </member>
+        <member name="P:NLog.LogFactory.GlobalThreshold">
+            <summary>
+            Global log threshold. Log events below this threshold are not logged.
+            </summary>
+        </member>
+        <member name="T:NLog.LogFactory`1">
+            <summary>
+            Specialized LogFactory that can return instances of custom logger types.
+            </summary>
+            <typeparam name="LoggerType">The type of the logger to be returned. Must inherit from <see cref="T:NLog.Logger"/>.</typeparam>
+        </member>
+        <member name="M:NLog.LogFactory`1.GetLogger(System.String)">
+            <summary>
+            Gets the logger.
+            </summary>
+            <param name="name">The name.</param>
+            <returns>An instance of <typeparamref name="LoggerType"/>.</returns>
+        </member>
+        <member name="M:NLog.LogFactory`1.GetCurrentClassLogger">
+            <summary>
+            Gets the logger named after the currently-being-initialized class.
+            </summary>
+            <returns>The logger.</returns>
+            <remarks>This is a slow-running method. 
+            Make sure you're not doing this in a loop.</remarks>
         </member>
         <member name="T:NLog.LoggerReconfiguredDelegate">
             <summary>
@@ -9297,6 +11345,11 @@
         <member name="T:NLog.Logger">
             <summary>
             Provides logging interface and utility functions.
+            </summary>
+        </member>
+        <member name="M:NLog.Logger.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Logger"/> class.
             </summary>
         </member>
         <member name="M:NLog.Logger.IsEnabled(NLog.LogLevel)">
@@ -11163,6 +13216,11 @@
             Gets the name of the logger.
             </summary>
         </member>
+        <member name="P:NLog.Logger.Factory">
+            <summary>
+            Gets the factory that created this logger.
+            </summary>
+        </member>
         <member name="P:NLog.Logger.IsTraceEnabled">
             <summary>
             Determines if logging is enabled for the <c>Trace</c> level.
@@ -11324,17 +13382,6 @@
             Gets the name of the logger in lower case.
             </summary>
         </member>
-        <member name="T:NLog.LoggingConfigurationChanged">
-            <summary>
-            Represents a method that's invoked each time a logging configuration changes.
-            </summary>
-        </member>
-        <member name="T:NLog.LoggingConfigurationReloaded">
-            <summary>
-            Represents a method that's invoked each time a logging configuration gets reloaded
-            to signal either success or failure.
-            </summary>
-        </member>
         <member name="T:NLog.LogManager">
             <summary>
             Creates and manages instances of <see cref="T:NLog.Logger" /> objects.
@@ -11344,6 +13391,15 @@
             <summary>
             Gets the logger named after the currently-being-initialized class.
             </summary>
+            <returns>The logger.</returns>
+            <remarks>This is a slow-running method. 
+            Make sure you're not doing this in a loop.</remarks>
+        </member>
+        <member name="M:NLog.LogManager.GetCurrentClassLogger(System.Type)">
+            <summary>
+            Gets the logger named after the currently-being-initialized class.
+            </summary>
+            <param name="loggerType">the logger class. The class must inherit from <see cref="T:NLog.Logger"/></param>
             <returns>The logger.</returns>
             <remarks>This is a slow-running method. 
             Make sure you're not doing this in a loop.</remarks>
@@ -11361,9 +13417,17 @@
             <param name="name">name of the logger</param>
             <returns>The logger reference. Multiple calls to <c>GetLogger</c> with the same argument aren't guaranteed to return the same logger reference.</returns>
         </member>
+        <member name="M:NLog.LogManager.GetLogger(System.String,System.Type)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">name of the logger</param>
+            <param name="loggerType">the logger class. The class must inherit from <see cref="T:NLog.Logger"/></param>
+            <returns>The logger reference. Multiple calls to <c>GetLogger</c> with the same argument aren't guaranteed to return the same logger reference.</returns>
+        </member>
         <member name="M:NLog.LogManager.ReconfigExistingLoggers">
             <summary>
-            Loops through all loggers previously returned by <see cref="M:NLog.LogManager.GetLogger(System.String)"/>
+            Loops through all loggers previously returned by GetLogger.
             and recalculates their target and filter list. Useful after modifying the configuration programmatically
             to ensure that all loggers have been properly configured.
             </summary>
