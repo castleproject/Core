@@ -1,6 +1,11 @@
 Release Candidate 2
 ===================
 
+- Included PrimaryKeyType.Custom and property CustomGenerator:Type
+  allowing one to supply its own generator
+
+- Included PrimaryKeyType.Counter and PrimaryKeyType.Increment
+
 - Applied patch from Drew Burlingame 
   Add ActiveRecordBase<T>.Exists(params ICriterion[] criterias) 
   Method also added to ActiveRecordBase.

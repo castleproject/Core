@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 #endif
 
 	using Castle.ActiveRecord;
-	using NHibernate.Persister;
+	using NHibernate.Id;
 	using NHibernate.Persister.Entity;
 
 	/// <summary>
@@ -169,6 +169,23 @@ namespace Castle.ActiveRecord.Framework.Internal
 					{
 						model.PrimaryKeyAtt.Params += "," + param;
 					}
+				}
+			}
+			else if (model.PrimaryKeyAtt.Generator == PrimaryKeyType.Custom)
+			{
+				if (model.PrimaryKeyAtt.CustomGenerator == null)
+				{
+					throw new ActiveRecordException(String.Format(
+						"A type defined that its primary key would use a custom generator, " +
+						"but apparently forgot to define the custom generator using PrimaryKeyAttribute.CustomGenerator property. " +
+						"Check type {0}", currentModel.Type.FullName));
+				}
+
+				if (!typeof(IIdentifierGenerator).IsAssignableFrom(model.PrimaryKeyAtt.CustomGenerator))
+				{
+					throw new ActiveRecordException(
+						"The custom generator associated with the PK for the type " + currentModel.Type.FullName + 
+						"does not implement interface NHibernate.Id.IIdentifierGenerator");
 				}
 			}
 		}

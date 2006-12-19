@@ -69,7 +69,27 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// This is a foreign key to another table
 		/// </summary>
-		Foreign
+		Foreign,
+		/// <summary>
+		/// Returns a <c>Int64</c> constructed from the system
+		/// time and a counter value.
+		/// </summary>
+		/// <remarks>
+		/// Not safe for use in a clustser
+		/// </remarks>
+		Counter,
+		/// <summary>
+		/// Returns a <c>Int64</c>, constructed by counting from 
+		/// the maximum primary key value at startup. 
+		/// </summary>
+		/// <remarks>
+		/// Not safe for use in a cluster
+		/// </remarks>
+		Increment,
+		/// <summary>
+		/// A custom generator will be provided. See <see cref="PrimaryKeyAttribute.CustomGenerator"/>
+		/// </summary>
+		Custom
 	}
 
 	/// <summary>
@@ -91,6 +111,7 @@ namespace Castle.ActiveRecord
 	public class PrimaryKeyAttribute : WithAccessAttribute
 	{
 		private PrimaryKeyType generator = PrimaryKeyType.Native;
+		private Type customGenerator;
 		private String column;
 		private String unsavedValue;
 		private String sequenceName;
@@ -108,6 +129,16 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PrimaryKeyAttribute"/> class.
 		/// </summary>
+		/// <param name="customGenerator">A custom identifier 
+		/// generator (that implements <see cref="NHibernate.Id.IIdentifierGenerator"/>).</param>
+		public PrimaryKeyAttribute(Type customGenerator) : this(PrimaryKeyType.Custom)
+		{
+			this.customGenerator = customGenerator;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PrimaryKeyAttribute"/> class.
+		/// </summary>
 		/// <param name="generator">The generator.</param>
 		public PrimaryKeyAttribute(PrimaryKeyType generator)
 		{
@@ -118,8 +149,17 @@ namespace Castle.ActiveRecord
 		/// Initializes a new instance of the <see cref="PrimaryKeyAttribute"/> class.
 		/// </summary>
 		/// <param name="generator">The generator.</param>
-		/// <param name="column">The column.</param>
+		/// <param name="column">The PK column.</param>
 		public PrimaryKeyAttribute(PrimaryKeyType generator, String column) : this(generator)
+		{
+			this.column = column;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PrimaryKeyAttribute"/> class.
+		/// </summary>
+		/// <param name="column">The PK column.</param>
+		public PrimaryKeyAttribute(string column)
 		{
 			this.column = column;
 		}
@@ -182,6 +222,17 @@ namespace Castle.ActiveRecord
 		{
 			get { return length; }
 			set { length = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the custom generator. 
+		/// The generator must implement <see cref="NHibernate.Id.IIdentifierGenerator"/>
+		/// </summary>
+		/// <value>The custom generator type.</value>
+		public Type CustomGenerator
+		{
+			get { return customGenerator; }
+			set { customGenerator = value; }
 		}
 
 		/// <summary>

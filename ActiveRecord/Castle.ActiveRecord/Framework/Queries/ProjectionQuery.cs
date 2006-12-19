@@ -137,8 +137,8 @@ namespace Castle.ActiveRecord.Queries
 		object IActiveRecordQuery.Execute(ISession session)
 		{
 			ICriteria criteria = CreateCriteria(session);
-			return criteria.List<TResultItem>();
 			
+			return criteria.List<TResultItem>();
 		}
 
 		/// <summary>
@@ -170,7 +170,7 @@ namespace Castle.ActiveRecord.Queries
 				criteria.SetResultTransformer(new TypedResultTransformer<TResultItem>());
 			}
 
-			foreach (Order order in this.orders)
+			foreach(Order order in orders)
 			{
 				criteria.AddOrder(order);
 			}
@@ -179,19 +179,19 @@ namespace Castle.ActiveRecord.Queries
 
 		private void AssertAllArgumentsValid()
 		{
-			if (this.projections == null)
+			if (projections == null)
 			{
 				throw new ArgumentNullException("projections");
 			}
-			if (this.orders == null)
+			if (orders == null)
 			{
 				throw new ArgumentNullException("orders");
 			}
-			if (this.detachedCriteria == null)
+			if (detachedCriteria == null)
 			{
 				throw new ArgumentNullException("detachedCriteria");
 			}
-			if (this.projections.Length == 0)
+			if (projections.Length == 0)
 			{
 				throw new ActiveRecordException("Can't use projection query with zero projections!");
 			}

@@ -37,16 +37,7 @@ namespace Castle.ActiveRecord.Queries
 	{
 		private readonly IProjection projection;
 		private readonly ICriterion[] criterions;
-		private readonly DetachedCriteria detachedCirteria;
-
-		/// <summary>
-		/// Gets the target type of this query
-		/// </summary>
-		/// <value></value>
-		public Type Target
-		{
-			get { return typeof(ARType); }
-		}
+		private readonly DetachedCriteria detachedCriteria;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ScalarProjectionQuery{ARType,TResult}"/> class.
@@ -63,11 +54,20 @@ namespace Castle.ActiveRecord.Queries
 		/// Initializes a new instance of the <see cref="ScalarProjectionQuery{ARType,TResult}"/> class.
 		/// </summary>
 		/// <param name="projection">The projection.</param>
-		/// <param name="criteria">The detachedCirteria.</param>
+		/// <param name="criteria">The detached criteria.</param>
 		public ScalarProjectionQuery(IProjection projection, DetachedCriteria criteria)
 		{
 			this.projection = projection;
-			this.detachedCirteria = criteria;
+			detachedCriteria = criteria;
+		}
+
+		/// <summary>
+		/// Gets the target type of this query
+		/// </summary>
+		/// <value></value>
+		public Type Target
+		{
+			get { return typeof(ARType); }
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <returns>the result of the query</returns>
 		object IActiveRecordQuery.Execute(ISession session)
 		{
-			return this.Execute(session);
+			return Execute(session);
 		}
 
 		/// <summary>
@@ -96,16 +96,16 @@ namespace Castle.ActiveRecord.Queries
 		/// <returns>the result of the query</returns>
 		public TResult Execute(ISession session)
 		{
-			if (this.detachedCirteria != null)
+			if (detachedCriteria != null)
 			{
-				return detachedCirteria.GetExecutableCriteria(session)
+				return detachedCriteria.GetExecutableCriteria(session)
 					.SetProjection(projection)
 					.UniqueResult<TResult>();
 			}
 			else
 			{
-				ICriteria criteria = session.CreateCriteria(this.Target);
-				foreach (ICriterion criterion in criterions)
+				ICriteria criteria = session.CreateCriteria(Target);
+				foreach(ICriterion criterion in criterions)
 				{
 					criteria.Add(criterion);
 				}
@@ -120,7 +120,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <returns>the result of the query</returns>
 		public TResult Execute()
 		{
-			return (TResult)ActiveRecordMediator.ExecuteQuery(this);
+			return (TResult) ActiveRecordMediator.ExecuteQuery(this);
 		}
 	}
 }
