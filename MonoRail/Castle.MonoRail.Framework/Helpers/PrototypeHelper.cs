@@ -305,12 +305,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			public override string ToString()
 			{
 				return @"try " +
-					"\r\n{\r\n" + lines +
-					"}\r\n" +
-					"catch(e)\r\n" +
-					"{\r\n" +
-					"alert('Generated javascript threw an error: ' + e.toString() + '\\r\\n\\r\\n" +
-					"Generated content: \\r\\n' + '" + JsEscape(lines.ToString()) + "');\r\n}";
+					"\n{\n" + lines +
+					"}\n" +
+					"catch(e)\n" +
+					"{\n" +
+					"alert('JS error ' + e.toString());\n" +
+					"alert(\"Generated content: \\n' + '" + JsEscape(lines.ToString()) + "\");\n}";
 			}
 
 			#endregion

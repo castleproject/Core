@@ -272,9 +272,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				template.Merge(ctx, writer); 
 
-				output.WriteLine();
-				output.WriteLine();
-
 				output.WriteLine(generator);
 			}
 			catch(Exception ex)

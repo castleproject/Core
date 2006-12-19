@@ -232,8 +232,10 @@
     <None Include="views\helper\DictHelperUsage.vm" />
     <None Include="views\home\display.vm" />
     <Content Include="views\jsgeneration\_partial1.vm" />
+    <None Include="views\jsgeneration\CheckCNPJ.njs" />
     <None Include="views\jsgeneration\collectionaccess.njs" />
     <None Include="views\jsgeneration\collectionfirstlast.njs" />
+    <None Include="views\jsgeneration\index.vm" />
     <None Include="views\jsgeneration\multipleactions.njs" />
     <None Include="views\jsgeneration\replace.njs" />
     <None Include="views\jsgeneration\InsertHtml.njs" />

@@ -19,6 +19,12 @@ namespace TestSiteNVelocity.Controllers
 	[DefaultAction("Default")]
 	public class JSGenerationController : SmartDispatcherController
 	{
+		public void CheckCNPJ(string cnpj)
+		{
+			PropertyBag["isValid"] = cnpj != null;
+			PropertyBag["exists"] = cnpj == "123456";
+		}
+
 		public void Default()
 		{
 			PropertyBag["Name"] = "hammett";
