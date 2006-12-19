@@ -408,9 +408,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// Initializes a new instance of the <see cref="JSCollectionGenerator"/> class.
 			/// </summary>
 			/// <param name="generator">The generator.</param>
-			public JSCollectionGenerator(JSGenerator generator)
+			/// <param name="root">The root</param>
+			public JSCollectionGenerator(JSGenerator generator, String root)
 			{
 				this.generator = generator;
+
+				JSGenerator.Record(generator, "$$('" + root + "')");
 			}
 
 			#endregion
@@ -468,9 +471,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// Initializes a new instance of the <see cref="JSElementGenerator"/> class.
 			/// </summary>
 			/// <param name="generator">The generator.</param>
-			public JSElementGenerator(JSGenerator generator)
+			/// <param name="root">The root.</param>
+			public JSElementGenerator(JSGenerator generator, String root)
 			{
 				this.generator = generator;
+
+				JSGenerator.Record(generator, "$('" + root + "')");
 			}
 
 			#endregion

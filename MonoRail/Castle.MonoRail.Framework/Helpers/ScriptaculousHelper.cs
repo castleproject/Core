@@ -109,13 +109,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (name.ToLowerInvariant().StartsWith("toggle"))
 			{
-				return "Effect.toggle(" + Quote(elementId) + ", " + 
-					Quote(name.Substring("toggle".Length).ToLowerInvariant()) + 
+				return "Effect.toggle(" + SQuote(elementId) + ", " + 
+					SQuote(name.Substring("toggle".Length).ToLowerInvariant()) + 
 					", " + JavascriptOptions(options) + ");";
 			}
 			else
 			{
-				return "Effect." + name + "(" + Quote(elementId) + ", " + JavascriptOptions(options) + ");";
+				return "Effect." + name + "(" + SQuote(elementId) + ", " + JavascriptOptions(options) + ");";
 			}
 		}
 
@@ -136,11 +136,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (queue == null || queue.Count == 0)
 			{
-				return "Effect.DropOut(" + Quote(elementId) + ", {queue:'end'});";
+				return "Effect.DropOut(" + SQuote(elementId) + ", {queue:'end'});";
 			}
 			else
 			{
-				return "Effect.DropOut(" + Quote(elementId) + ", " + JavascriptOptions(queue) + ");";
+				return "Effect.DropOut(" + SQuote(elementId) + ", " + JavascriptOptions(queue) + ");";
 			}
 		}
 	}

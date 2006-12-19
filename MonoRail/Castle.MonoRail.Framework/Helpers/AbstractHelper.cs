@@ -309,17 +309,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Quotes the specified string with single quotes
+		/// Quotes the specified string with double quotes
 		/// </summary>
 		/// <param name="content">The content.</param>
 		/// <returns>A quoted string</returns>
 		public static string Quote(string content)
 		{
-			return "'" + content + "'";
+			return "\"" + content + "\"";
 		}
 
 		/// <summary>
-		/// Quotes the specified string with single quotes
+		/// Quotes the specified string with singdoublele quotes
 		/// </summary>
 		/// <param name="items">Items to quote</param>
 		/// <returns>A quoted string</returns>
@@ -342,9 +342,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="content">The content.</param>
 		/// <returns>A quoted string</returns>
-		public static string DQuote(string content)
+		public static string SQuote(string content)
 		{
-			return "\"" + content + "\"";
+			return "\'" + content + "\'";
 		}
 
 		#endregion 

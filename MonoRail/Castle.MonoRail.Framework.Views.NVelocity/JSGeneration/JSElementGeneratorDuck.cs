@@ -31,13 +31,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// Initializes a new instance of the <see cref="JSElementGeneratorDuck"/> class.
 		/// </summary>
 		/// <param name="generator">The generator.</param>
-		/// <param name="root">The root.</param>
-		public JSElementGeneratorDuck(PrototypeHelper.JSElementGenerator generator, string root)
+		public JSElementGeneratorDuck(PrototypeHelper.JSElementGenerator generator)
 		{
 			this.generator = generator;
 			parentGenerator = generator.ParentGenerator;
-
-			PrototypeHelper.JSGenerator.Record(parentGenerator, "$('" + root + "')");
 		}
 
 		#region IDuck

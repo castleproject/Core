@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/replacehtml.rails");
 			AssertSuccess();
-			AssertReplyContains(@"Element.update('aa','new content');");
+			AssertReplyContains("Element.update(\"aa\",\"new content\");");
 		}
 
 		[Test]
@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/replacehtmlwithpartial.rails");
 			AssertSuccess();
-			AssertReplyContains(@"Element.update('aa','You\'re hammett <br> [ a ][ b ]')");
+			AssertReplyContains("Element.update(\"aa\",\"You\'re hammett <br> [ a ][ b ]\")");
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/replace.rails");
 			AssertSuccess();
-			AssertReplyContains(@"Element.replace('aa','new content')");
+			AssertReplyContains("Element.replace(\"aa\",\"new content\")");
 		}
 
 		[Test]
@@ -51,10 +51,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/InsertHtml.rails");
 			AssertSuccess();
-			AssertReplyContains(@"new Insertion.Top('aa','new content');");
-			AssertReplyContains(@"new Insertion.Bottom('aa','new content');");
-			AssertReplyContains(@"new Insertion.After('aa','new content');");
-			AssertReplyContains(@"new Insertion.Before('aa','new content');");
+			AssertReplyContains("new Insertion.Top(\"aa\",\"new content\");");
+			AssertReplyContains("new Insertion.Bottom(\"aa\",\"new content\");");
+			AssertReplyContains("new Insertion.After(\"aa\",\"new content\");");
+			AssertReplyContains("new Insertion.Before(\"aa\",\"new content\");");
 		}
 
 		[Test]
@@ -62,8 +62,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/visualeffect.rails");
 			AssertSuccess();
-			AssertReplyContains(@"Effect.Highlight('element1', {});");
-			AssertReplyContains(@"Effect.Highlight('element1', {duration:4});");
+			AssertReplyContains("Effect.Highlight('element1', {});");
+			AssertReplyContains("Effect.Highlight('element1', {duration:4});");
 		}
 
 		[Test]
@@ -71,13 +71,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/multipleactions.rails");
 			AssertSuccess();
-			AssertReplyContains(@"Element.show('a');");
-			AssertReplyContains(@"Element.show('a','b','c');");
-			AssertReplyContains(@"Element.hide('a');");
-			AssertReplyContains(@"Element.hide('a','b','c');");
-			AssertReplyContains(@"Element.toggle('a');");
-			AssertReplyContains(@"Element.toggle('a','b','c');");
-			AssertReplyContains(@"['a','b','c'].each(Element.remove);");
+			AssertReplyContains("Element.show(\"a\");");
+			AssertReplyContains("Element.show(\"a\",\"b\",\"c\");");
+			AssertReplyContains("Element.hide(\"a\");");
+			AssertReplyContains("Element.hide(\"a\",\"b\",\"c\");");
+			AssertReplyContains("Element.toggle(\"a\");");
+			AssertReplyContains("Element.toggle(\"a\",\"b\",\"c\");");
+			AssertReplyContains("[\"a\",\"b\",\"c\"].each(Element.remove);");
 		}
 
 		#endregion
@@ -89,7 +89,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/elementaccess.rails");
 			AssertSuccess();
-			AssertReplyContains(@"$('aa');");
+			AssertReplyContains("$('aa');");
 		}
 
 		[Test]
@@ -129,7 +129,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/elementreplacehtml.rails");
 			AssertSuccess();
-			AssertReplyContains("$('aa').update('new content')");
+			AssertReplyContains("$('aa').update(\"new content\")");
 		}
 
 		[Test]
@@ -137,7 +137,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/elementreplace.rails");
 			AssertSuccess();
-			AssertReplyContains("$('aa').replace('new content')");
+			AssertReplyContains("$('aa').replace(\"new content\")");
 		}
 
 		#endregion
@@ -149,7 +149,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/collectionaccess.rails");
 			AssertSuccess();
-			AssertReplyContains(@"$$('aa');");
+			AssertReplyContains("$$('aa');");
 		}
 
 		[Test]
@@ -157,8 +157,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("jsgeneration/collectionfirstlast.rails");
 			AssertSuccess();
-			AssertReplyContains(@"$$('p.welcome b').first().hide();");
-			AssertReplyContains(@"$$('p.welcome b').last().show();");
+			AssertReplyContains("$$('p.welcome b').first().hide();");
+			AssertReplyContains("$$('p.welcome b').last().show();");
 		}
 
 		#endregion

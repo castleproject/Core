@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 				}
 
 				return new JSElementGeneratorDuck(
-					new PrototypeHelper.JSElementGenerator(generator), args[0].ToString());
+					new PrototypeHelper.JSElementGenerator(generator, args[0].ToString()));
 			}
 			else if (method == "select")
 			{
@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 				}
 
 				return new JSCollectionGeneratorDuck(
-					new PrototypeHelper.JSCollectionGenerator(generator), args[0].ToString());
+					new PrototypeHelper.JSCollectionGenerator(generator, args[0].ToString()));
 			}
 
 			if (generator.IsGeneratorMethod(method))

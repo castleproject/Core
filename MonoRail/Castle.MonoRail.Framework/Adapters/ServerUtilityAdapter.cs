@@ -55,7 +55,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			// TODO: Replace by a regular expression, which should be much more efficient
 
-			return content.Replace("\'", "\\'").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
+			return content.Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
 		}
 
 		/// <summary>
