@@ -103,7 +103,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				dictionary = new Hashtable(queryStringParams.Count);
 				foreach(string key in queryStringParams.Keys)
 				{
-					dictionary[key] = queryStringParams.GetValues(key);
+					if (key != null)
+					{
+						dictionary[key] = queryStringParams.GetValues(key);
+					}
 				}
 			}
 			return CreatePageLink(page, text, htmlAttributes, dictionary);
