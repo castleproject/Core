@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Views.Brail
 {
     using System;
     using System.Collections;
+	using System.Collections.Specialized;
     using System.IO;
     using Boo.Lang;
     using Castle.MonoRail.Framework;
@@ -23,14 +24,7 @@ namespace Castle.MonoRail.Views.Brail
     public class BrailViewComponentContext : IViewComponentContext
     {
         string componentName;
-        IDictionary contextVars = new Hashtable(
-#if DOTNET2
-StringComparer.InvariantCultureIgnoreCase
-#else
-				CaseInsensitiveHashCodeProvider.Default,
-				CaseInsensitiveComparer.Default
-#endif
-);
+    	private IDictionary contextVars = new HybridDictionary(true);
 
         IDictionary componentParameters;
         IDictionary sections;
@@ -38,6 +32,24 @@ StringComparer.InvariantCultureIgnoreCase
 
         ICallable body;
         private readonly TextWriter default_writer;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BrailViewComponentContext"/> class.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
+		/// <param name="body">The body.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="text">The text.</param>
+		/// <param name="parameters">The parameters.</param>
+		public BrailViewComponentContext(BrailBase parent, ICallable body,
+		                                 string name, TextWriter text, IDictionary parameters)
+		{
+			parent.ExtendDictionaryWithProperties(contextVars);
+			this.body = body;
+			componentName = name;
+			default_writer = text;
+			componentParameters = parameters;
+		}
 
         public string ComponentName
         {
@@ -71,15 +83,6 @@ StringComparer.InvariantCultureIgnoreCase
             get { return default_writer; }
         }
 
-        public BrailViewComponentContext(BrailBase parent, ICallable body, string name, TextWriter text, IDictionary parameters)
-        {
-            parent.ExtendDictionaryWithProperties(contextVars);
-            this.body = body;
-            this.componentName = name;
-            this.default_writer = text;
-            this.componentParameters = parameters;
-        }
-
         public void RenderBody()
         {
             RenderBody(default_writer);
@@ -88,7 +91,9 @@ StringComparer.InvariantCultureIgnoreCase
         public void RenderBody(TextWriter writer)
         {
             if (body == null)
-                throw new RailsException("This component does not have a body content to be rendered");
+            {
+            	throw new RailsException("This component does not have a body content to be rendered");
+            }
             body.Call(new object[] { writer });
         }
 
@@ -105,7 +110,17 @@ StringComparer.InvariantCultureIgnoreCase
             callable.Call(new object[] { default_writer });
         }
 
-		public IViewEngine ViewEngine
+    	/// <summary>
+    	/// Renders the the specified section
+    	/// </summary>
+    	/// <param name="sectionName">Name of the section.</param>
+    	/// <param name="writer">The writer.</param>
+    	public void RenderSection(string sectionName, TextWriter writer)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	public IViewEngine ViewEngine
 		{
 			get { throw new NotImplementedException(); }
 		}
