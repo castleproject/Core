@@ -13,22 +13,27 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// <c>adjacents</c>: number of links to show around the current page <br/>
 	/// <c>page</c> (required): <see cref="IPaginatedPage"/> instance (<see cref="PaginationHelper"/>) <br/>
 	/// <c>url</c>: url to link to<br/>
+	/// <c>useInlineStyle</c>: defines if the outputted content will use inline style or css classnames (defaults to true)<br/>
 	/// </para>
 	/// 
 	/// <para>
 	/// Supported sections: <br/>
-	/// <c>link</c>: invoked with <c>pageIndex</c>, <c>url</c> and <c>text</c>
-	/// so you can build a custom link
+	/// <c>start</c>: invoked with <c>page</c> <br/>
+	/// <c>end</c>: invoked with <c>page</c> <br/>
+	/// <c>link</c>: invoked with <c>pageIndex</c>, <c>url</c> and <c>text</c> 
+	/// so you can build a custom link <br/>
 	/// </para>
 	/// </summary>
 	/// 
 	/// <remarks>
 	/// Based on Alex Henderson work. See 
-	/// http://blog.bittercoder.com/CategoryView,category,castle.aspx
+	/// (Monorail Pagination with Base4.Net)
+	/// http://blog.bittercoder.com/PermaLink,guid,579711a8-0b16-481b-b52b-ebdfa1a7e225.aspx
 	/// </remarks>
 	public class DiggStylePagination : ViewComponent
 	{
 		private int adjacents = 2;
+		private bool useInlineStyle = true;
 		private string url;
 		private IPaginatedPage page;
 		private IDictionary queryString = null;
@@ -71,55 +76,44 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Render()
 		{
+			PropertyBag["page"] = page;
+
 			StringWriter writer = new StringWriter();
 
 			StartBlock(writer);
-
 			WritePrev(writer);
 
 			if (page.LastIndex < (4 + (adjacents * 2))) // not enough links to make it worth breaking up
 			{
-				WriteNumberedLinks(writer, page, 1, page.LastIndex, queryString);
+				WriteNumberedLinks(writer, 1, page.LastIndex);
 			}
 			else
 			{
 				if ((page.LastIndex - (adjacents * 2) > page.CurrentIndex) && // in the middle
 				    (page.CurrentIndex > (adjacents * 2)))
 				{
-					WriteNumberedLinks(writer, page, 1, 2, queryString);
-
+					WriteNumberedLinks(writer, 1, 2);
 					WriteElipsis(writer);
-
-					WriteNumberedLinks(writer, page, page.CurrentIndex - adjacents, page.CurrentIndex + adjacents, queryString);
-
+					WriteNumberedLinks(writer, page.CurrentIndex - adjacents, page.CurrentIndex + adjacents);
 					WriteElipsis(writer);
-
-					WriteNumberedLinks(writer, page, page.LastIndex - 1, page.LastIndex, queryString);
+					WriteNumberedLinks(writer, page.LastIndex - 1, page.LastIndex);
 				}
-
 				else if (page.CurrentIndex < (page.LastIndex / 2))
 				{
-					WriteNumberedLinks(writer, page, 1, 2 + (adjacents * 2), queryString);
-
+					WriteNumberedLinks(writer, 1, 2 + (adjacents * 2));
 					WriteElipsis(writer);
-
-					WriteNumberedLinks(writer, page, page.LastIndex - 1, page.LastIndex, queryString);
+					WriteNumberedLinks(writer, page.LastIndex - 1, page.LastIndex);
 				}
-
 				else // at the end
 				{
-					WriteNumberedLinks(writer, page, 1, 2, queryString);
-
+					WriteNumberedLinks(writer, 1, 2);
 					WriteElipsis(writer);
-
-					WriteNumberedLinks(writer, page, page.LastIndex - (2 + (adjacents * 2)), page.LastIndex, queryString);
+					WriteNumberedLinks(writer, page.LastIndex - (2 + (adjacents * 2)), page.LastIndex);
 				}
 			}
 
 			WriteNext(writer);
-
 			EndBlock(writer);
-
 			RenderText(writer.ToString());
 		}
 
@@ -135,12 +129,34 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void StartBlock(StringWriter writer)
 		{
-			writer.Write("<div class=\"pagination\">\r\n");
+			if (Context.HasSection("start"))
+			{
+				Context.RenderSection("start", writer);
+			}
+			else
+			{
+				if (useInlineStyle)
+				{
+					writer.Write("<div style=\"padding: 3px; margin: 3px; text-align: right; \">\r\n");
+				}
+				else
+				{
+					writer.Write("<div class=\"pagination\">\r\n");
+				}
+			}
 		}
 
 		private void EndBlock(StringWriter writer)
 		{
-			writer.Write("\r\n</div>\r\n");
+			if (Context.HasSection("end"))
+			{
+				Context.RenderSection("end", writer);
+			}
+			else
+			{
+				writer.Write("\r\n</div>\r\n");
+			}
+			
 		}
 
 		private void WriteElipsis(TextWriter writer)
@@ -148,12 +164,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			writer.Write("...");
 		}
 
-		private void WriteNumberedLinks(TextWriter writer, IPaginatedPage page, int startIndex, int endIndex,
-		                                IDictionary queryString)
+		private void WriteNumberedLinks(TextWriter writer, int startIndex, int endIndex)
 		{
 			for(int i = startIndex; i <= endIndex; i++)
 			{
-				WriteNumberedLink(writer, page, i, queryString);
+				WriteNumberedLink(writer, i);
 			}
 		}
 
@@ -161,22 +176,34 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (disabled)
 			{
-				writer.Write(String.Format("<span class=\"disabled\">{0}</span>", text));
+				if (useInlineStyle)
+				{
+					writer.Write(String.Format("<span style=\"color: #DDD; padding: 2px 5px 2px 5px; margin: 2px; border: 1px solid #EEE;\">{0}</span>", text));
+				}
+				else
+				{
+					writer.Write(String.Format("<span class=\"disabled\">{0}</span>", text));
+				}
 			}
-
 			else
 			{
 				WritePageLink(writer, index, text, null, queryString);
 			}
 		}
 
-		private void WriteNumberedLink(TextWriter writer, IPaginatedPage page, int index, IDictionary queryString)
+		private void WriteNumberedLink(TextWriter writer, int index)
 		{
 			if (index == page.CurrentIndex)
 			{
-				writer.Write(String.Format("\r\n<span class=\"current\">{0}</span>\r\n", index));
+				if (useInlineStyle)
+				{
+					writer.Write(String.Format("\r\n<span class=\"font-weight: bold; background-color: #000099; color: #FFF; padding: 2px 5px 2px 5px; margin: 2px; border: 1px solid #000099;\">{0}</span>\r\n", index));
+				}
+				else
+				{
+					writer.Write(String.Format("\r\n<span class=\"current\">{0}</span>\r\n", index));
+				}
 			}
-
 			else
 			{
 				WritePageLink(writer, index, index.ToString(), null, queryString);
@@ -196,7 +223,14 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 			else
 			{
-				writer.Write(String.Format("<a href=\"{0}?page={1}\">{2}</a>\r\n", url, pageIndex, text));
+				if (useInlineStyle)
+				{
+					writer.Write(String.Format("<a style=\"color: #000099;text-decoration: none;padding: 2px 5px 2px 5px;margin: 2px;border: 1px solid #AAAFEE;\" href=\"{0}?page={1}\">{2}</a>\r\n", url, pageIndex, text));
+				}
+				else
+				{
+					writer.Write(String.Format("<a href=\"{0}?page={1}\">{2}</a>\r\n", url, pageIndex, text));
+				}
 			}
 		}
 	}
