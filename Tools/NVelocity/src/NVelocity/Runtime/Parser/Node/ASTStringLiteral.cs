@@ -72,8 +72,7 @@ namespace NVelocity.Runtime.Parser.Node
 			*  can  interpolate.  Otherwise, don't bother.
 			*/
 
-			interpolate = rsvc.GetBoolean(RuntimeConstants.INTERPOLATE_STRINGLITERALS, true) && 
-			              FirstToken.Image.StartsWith("\"") &&
+			interpolate = FirstToken.Image.StartsWith("\"") &&
 			              ((FirstToken.Image.IndexOf('$') != - 1) ||
 			               (FirstToken.Image.IndexOf('#') != - 1));
 

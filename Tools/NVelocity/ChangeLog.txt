@@ -1,3 +1,12 @@
+- Added to_quote and to_squote identifiers special treatment
+
+  usage:
+  
+  $message.to_quote  returns "message contents"
+  $message.to_squote returns 'message contents'
+  
+  Note that this is not a method invocation.
+
 - Added Duck typing support
 
   If an instance implements IDuck, methods and properties (get/set) will be dispatched

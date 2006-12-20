@@ -140,6 +140,19 @@ namespace NVelocity
 			Assert.AreEqual("invoked set_0\r\n", duck2.ToString());
 		}
 
+		[Test]
+		public void ArgumentsAreEvaluated()
+		{
+			Assert.AreEqual("invoked some message 1 message 2 ", Evaluate("$duck1.some($msg1, $msg2)"));
+		}
+
+		[Test]
+		public void Quoting()
+		{
+			Assert.AreEqual("invoked some \"message 1\" \"message 2\" ", Evaluate("$duck1.some($msg1.to_quote, $msg2.to_quote)"));
+			Assert.AreEqual("invoked some 'message 1' 'message 2' ", Evaluate("$duck1.some($msg1.to_squote, $msg2.to_squote)"));
+		}
+
 		private string Evaluate(string toEvaluate)
 		{
 			StringWriter sw = new StringWriter();
@@ -149,6 +162,8 @@ namespace NVelocity
 			c.Put("duck1", duck1);
 			c.Put("duck2", duck2);
 			c.Put("test", new Test1());
+			c.Put("msg1", "message 1");
+			c.Put("msg2", "message 2");
 
 			Assert.IsTrue(ve.Evaluate(c, sw, "eval1", toEvaluate));
 
