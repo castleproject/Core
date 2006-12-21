@@ -28,6 +28,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// <c>page</c> (required): <see cref="IPaginatedPage"/> instance (<see cref="PaginationHelper"/>) <br/>
 	/// <c>url</c>: url to link to<br/>
 	/// <c>useInlineStyle</c>: defines if the outputted content will use inline style or css classnames (defaults to true)<br/>
+	/// <c>paginatefunction</c>: a javascript function name to invoke on the page links (instead of a URL)<br/>
 	/// </para>
 	/// 
 	/// <para>
@@ -49,8 +50,12 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private int adjacents = 2;
 		private bool useInlineStyle = true;
 		private string url;
+		private string paginatefunction;
 		private IPaginatedPage page;
-		private IDictionary queryString = null;
+		// private IDictionary queryString = null;
+
+
+		
 
 		/// <summary>
 		/// Called by the framework once the component instance
@@ -58,6 +63,16 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Initialize()
 		{
+			page = (IPaginatedPage) ComponentParams["page"];
+
+			if (page == null)
+			{
+				throw new ViewComponentException("The DiggStylePagination requires a view component " + 
+					"parameter named 'page' which should contain 'IPaginatedPage' instance");
+			}
+
+			paginatefunction = (string) ComponentParams["paginatefunction"];
+
 			if (ComponentParams.Contains("adjacents"))
 			{
 				adjacents = Convert.ToInt32(ComponentParams["adjacents"]);
@@ -72,14 +87,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				url = RailsContext.Request.FilePath;
 			}
 
-			page = (IPaginatedPage) ComponentParams["page"];
-
-			if (page == null)
-			{
-				throw new ViewComponentException("The DiggStylePagination requires a view component " + 
-					"parameter named 'page' which should contain 'IPaginatedPage' instance");
-			}
-
 			// So when we render the blocks, the user might access the page
 			PropertyBag["page"] = page;
 		}
@@ -90,8 +97,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Render()
 		{
-			PropertyBag["page"] = page;
-
 			StringWriter writer = new StringWriter();
 
 			StartBlock(writer);
@@ -131,14 +136,26 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			RenderText(writer.ToString());
 		}
 
+		/// <summary>
+		/// Implementor should return true only if the 
+		/// <c>name</c> is a known section the view component
+		/// supports.
+		/// </summary>
+		/// <param name="name">section being added</param>
+		/// <returns><see langword="true"/> if section is supported</returns>
+		public override bool SupportsSection(string name)
+		{
+			return "start" == name || "end" == name || "link" == name;
+		}
+
 		private void WritePrev(StringWriter writer)
 		{
-			WriteLink(writer, page.PreviousIndex, "« prev", !page.HasPrevious, queryString);
+			WriteLink(writer, page.PreviousIndex, "« prev", !page.HasPrevious);
 		}
 
 		private void WriteNext(StringWriter writer)
 		{
-			WriteLink(writer, page.NextIndex, "next »", !page.HasNext, queryString);
+			WriteLink(writer, page.NextIndex, "next »", !page.HasNext);
 		}
 
 		private void StartBlock(StringWriter writer)
@@ -186,7 +203,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 		}
 
-		private void WriteLink(TextWriter writer, int index, string text, bool disabled, IDictionary queryString)
+		private void WriteLink(TextWriter writer, int index, string text, bool disabled)
 		{
 			if (disabled)
 			{
@@ -201,7 +218,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 			else
 			{
-				WritePageLink(writer, index, text, null, queryString);
+				WritePageLink(writer, index, text, null);
 			}
 		}
 
@@ -220,12 +237,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 			else
 			{
-				WritePageLink(writer, index, index.ToString(), null, queryString);
+				WritePageLink(writer, index, index.ToString(), null);
 			}
 		}
 
-		protected void WritePageLink(TextWriter writer, int pageIndex, String text,
-		                             IDictionary htmlAttributes, IDictionary queryString)
+		protected void WritePageLink(TextWriter writer, int pageIndex, String text, IDictionary htmlAttributes)
 		{
 			if (Context.HasSection("link"))
 			{
@@ -237,13 +253,24 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 			else
 			{
-				if (useInlineStyle)
+				String href;
+
+				if (paginatefunction != null)
 				{
-					writer.Write(String.Format("<a style=\"color: #000099;text-decoration: none;padding: 2px 5px 2px 5px;margin: 2px;border: 1px solid #AAAFEE;\" href=\"{0}?page={1}\">{2}</a>\r\n", url, pageIndex, text));
+					href = "javascript:" + paginatefunction + "(" + pageIndex + ");void(0);";
 				}
 				else
 				{
-					writer.Write(String.Format("<a href=\"{0}?page={1}\">{2}</a>\r\n", url, pageIndex, text));
+					href = url + "?page=" + pageIndex;
+				}
+
+				if (useInlineStyle)
+				{
+					writer.Write(String.Format("<a style=\"color: #000099;text-decoration: none;padding: 2px 5px 2px 5px;margin: 2px;border: 1px solid #AAAFEE;\" href=\"{0}\">{1}</a>\r\n", href, text));
+				}
+				else
+				{
+					writer.Write(String.Format("<a href=\"{0}\">{1}</a>\r\n", href, text));
 				}
 			}
 		}

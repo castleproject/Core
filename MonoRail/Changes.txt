@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Added ColumnRenderer view component
+
 - Added DiggStylePagination ViewComponent, based on Alex Henderson work. 
   See http://blog.bittercoder.com/CategoryView,category,castle.aspx
 
