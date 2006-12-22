@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Data;
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
@@ -1256,7 +1257,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="isMultiple"><c>true</c> if the initial selection is a set</param>
 		/// <returns><c>true</c> if it's selected</returns>
 		protected internal static bool IsPresent(object value, object initialSetValue, 
-		                                         PropertyInfo propertyOnInitialSet, bool isMultiple)
+		                                         ValueGetter propertyOnInitialSet, bool isMultiple)
 		{
 			if (!isMultiple)
 			{
@@ -1264,7 +1265,8 @@ namespace Castle.MonoRail.Framework.Helpers
 				
 				if (propertyOnInitialSet != null)
 				{
-					valueToCompare = propertyOnInitialSet.GetValue(initialSetValue, null);
+					// propertyOnInitialSet.GetValue(initialSetValue, null);
+					valueToCompare = propertyOnInitialSet.GetValue(initialSetValue); 
 				}
 				
 				return AreEqual(value, valueToCompare);
@@ -1277,7 +1279,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 					if (propertyOnInitialSet != null)
 					{
-						valueToCompare = propertyOnInitialSet.GetValue(item, null);
+						// valueToCompare = propertyOnInitialSet.GetValue(item, null);
+						valueToCompare = propertyOnInitialSet.GetValue(item); 
 					}
 
 					if (AreEqual(value, valueToCompare))
@@ -1290,28 +1293,28 @@ namespace Castle.MonoRail.Framework.Helpers
 			return false;
 		}
 		
-		/// <summary>
-		/// Gets the property get method.
-		/// </summary>
-		/// <param name="elem">Object specifying the type for which to get the method.</param>
-		/// <param name="property">Property name.</param>
-		/// <returns><see cref="MethodInfo"/> to be used to retrieve the property value.
-		/// If <paramref name="property"/> is <c>null</c> <c>null</c> is returned.</returns>
-		/// <remarks>This method is used to get the <see cref="MethodInfo"/> to retrieve
-		/// specified property from the specified type.</remarks>
-		/// <exception cref="ArgumentNullException">Thrown is <paramref name="elem"/> is <c>null</c>.</exception>
-		protected internal static PropertyInfo GetMethod(object elem, String property)
-		{
-			if (elem == null) throw new ArgumentNullException("elem");
-			if (property == null) return null;
-
-			return GetMethod(elem.GetType(), property);
-		}
-
-		protected internal static PropertyInfo GetMethod(Type type, String property)
-		{
-			return type.GetProperty(property, PropertyFlags);
-		}
+		// <summary>
+		// Gets the property get method.
+		// </summary>
+		// <param name="elem">Object specifying the type for which to get the method.</param>
+		// <param name="property">Property name.</param>
+		// <returns><see cref="MethodInfo"/> to be used to retrieve the property value.
+		// If <paramref name="property"/> is <c>null</c> <c>null</c> is returned.</returns>
+		// <remarks>This method is used to get the <see cref="MethodInfo"/> to retrieve
+		// specified property from the specified type.</remarks>
+		// <exception cref="ArgumentNullException">Thrown is <paramref name="elem"/> is <c>null</c>.</exception>
+//		protected internal static PropertyInfo GetMethoda(object elem, String property)
+//		{
+//			if (elem == null) throw new ArgumentNullException("elem");
+//			if (property == null) return null;
+//
+//			return GetMethod(elem.GetType(), property);
+//		}
+//
+//		protected internal static PropertyInfo GetMethoda(Type type, String property)
+//		{
+//			return type.GetProperty(property, PropertyFlags);
+//		}
 
 		private static void AddChecked(IDictionary attributes)
 		{
@@ -1353,7 +1356,94 @@ namespace Castle.MonoRail.Framework.Helpers
 			return sb.ToString();
 		}
 
-		#endregion
+		public abstract class ValueGetter
+		{
+			public abstract string Name { get; }
 
+			public abstract object GetValue(object instance);
+		}
+
+		public class ReflectionValueGetter : ValueGetter
+		{
+			private PropertyInfo propInfo;
+
+			public ReflectionValueGetter(PropertyInfo propInfo)
+			{
+				this.propInfo = propInfo;
+			}
+
+			public override string Name
+			{
+				get { return propInfo.Name; }
+			}
+
+			public override object GetValue(object instance)
+			{
+				return propInfo.GetValue(instance, null);
+			}
+		}
+
+		public class DataRowValueGetter : ValueGetter
+		{
+			private readonly string columnName;
+
+			public DataRowValueGetter(string columnName)
+			{
+				this.columnName = columnName;
+			}
+
+			public override string Name
+			{
+				get { return columnName; }
+			}
+
+			public override object GetValue(object instance)
+			{
+				DataRow row = (DataRow) instance;
+
+				return row[columnName];
+			}
+		}
+
+		public class NoActionGetter : ValueGetter
+		{
+			public override string Name
+			{
+				get { return string.Empty; }
+			}
+
+			public override object GetValue(object instance)
+			{
+				return null;
+			}
+		}
+
+		public class ValueGetterAbstractFactory
+		{
+			public static ValueGetter Create(Type targetType, String keyName)
+			{
+				if (targetType == null)
+				{
+					return new NoActionGetter();
+				}
+				else if (targetType == typeof(DataRow))
+				{
+					return new DataRowValueGetter(keyName);
+				}
+				else
+				{
+					PropertyInfo info = targetType.GetProperty(keyName, PropertyFlags);
+					
+					if (info != null)
+					{
+						return new ReflectionValueGetter(info);
+					}
+
+					return null;
+				}
+			}
+		}
+
+		#endregion
 	}
 }

@@ -14,10 +14,12 @@
 
 namespace Castle.MonoRail.Framework.Tests.Helpers
 {
+	using System;
 	using System.Collections;
 #if DOTNET2
 	using System.Collections.Generic;
 #endif
+	using System.Data;
 	using System.Globalization;
 	using System.IO;
 	using System.Threading;
@@ -36,6 +38,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private Subscription subscription;
 		private Month[] months;
 		private Contact contact;
+		private DataTable workTable;
 
 		[SetUp]
 		public void Init()
@@ -64,6 +67,21 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			controller.PropertyBag.Add("subscription", subscription);
 			controller.PropertyBag.Add("months", months);
 			controller.PropertyBag.Add("contact", contact);
+
+			workTable = new DataTable("Customers");
+			DataColumn workCol = workTable.Columns.Add("CustID", typeof(Int32));
+			workCol.AllowDBNull = false;
+			workCol.Unique = true;
+			workTable.Columns.Add("Name", typeof(String));
+
+			DataRow row = workTable.NewRow();
+			row[0] = 1;
+			row[1] = "chris rocks";
+			workTable.Rows.Add(row);
+			row = workTable.NewRow();
+			row[0] = 2;
+			row[1] = "will ferrell";
+			workTable.Rows.Add(row);
 
 			helper.SetController(controller);
 		}
@@ -211,6 +229,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
 				"<option selected=\"selected\" value=\"role1\">role1</option>\r\n<option selected=\"selected\" value=\"role2\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list));
+		}
+
+		[Test]
+		public void UsingDataTable()
+		{
+			Assert.AreEqual(
+				"<select id=\"user_id\" name=\"user.id\" >\r\n" +
+				"<option value=\"1\">chris rocks</option>\r\n<option value=\"2\">will ferrell</option>\r\n</select>",
+				helper.Select("user.id", workTable.Rows, DictHelper.Create("value=custid", "text=name", "sourceProperty=id")));
 		}
 
 #if DOTNET2

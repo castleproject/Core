@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Refactored FormHelper to support other approaches to extract values from instance.
+  Now it supports DataRows and reflection
+
 - Added ColumnRenderer view component
 
 - Added DiggStylePagination ViewComponent, based on Alex Henderson work. 

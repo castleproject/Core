@@ -160,8 +160,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	public abstract class OperationState : IEnumerable, IEnumerator
 	{
 		protected readonly Type type;
-		protected readonly PropertyInfo valuePropInfo;
-		protected readonly PropertyInfo textPropInfo;
+		protected readonly FormHelper.ValueGetter valuePropInfo;
+		protected readonly FormHelper.ValueGetter textPropInfo;
 		protected readonly String textFormat;
 		protected IEnumerator enumerator;
 
@@ -178,12 +178,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (valueProperty != null)
 			{
-				valuePropInfo = FormHelper.GetMethod(type, valueProperty);
+				valuePropInfo = FormHelper.ValueGetterAbstractFactory.Create(type, valueProperty); // FormHelper.GetMethod(type, valueProperty);
 			}
 
 			if (textProperty != null)
 			{
-				textPropInfo = FormHelper.GetMethod(type, textProperty);
+				textPropInfo = FormHelper.ValueGetterAbstractFactory.Create(type, textProperty); // FormHelper.GetMethod(type, textProperty);
 			}
 		}
 
@@ -289,12 +289,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (valuePropInfo != null)
 			{
-				value = valuePropInfo.GetValue(current, null);
+				value = valuePropInfo.GetValue(current); // valuePropInfo.GetValue(current, null);
 			}
 
 			if (textPropInfo != null)
 			{
-				text = textPropInfo.GetValue(current, null);
+				text = textPropInfo.GetValue(current); // textPropInfo.GetValue(current, null);
 			}
 
 			FormatText(ref text);
@@ -328,12 +328,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (valuePropInfo != null)
 			{
-				value = valuePropInfo.GetValue(current, null);
+				value = valuePropInfo.GetValue(current);
 			}
 
 			if (textPropInfo != null)
 			{
-				text = textPropInfo.GetValue(current, null);
+				text = textPropInfo.GetValue(current);
 			}
 
 			FormatText(ref text);
@@ -348,7 +348,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		private readonly object initialSelection;
 		private readonly bool isInitialSelectionASet;
-		private readonly PropertyInfo sourcePropInfo;
+		private readonly FormHelper.ValueGetter sourcePropInfo;
 
 		public DifferentTypeOperationState(Type initialSelectionType, Type dataSourceType, 
 			object initialSelection, IEnumerable dataSource, 
@@ -361,11 +361,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (sourceProperty != null)
 			{
-				sourcePropInfo = FormHelper.GetMethod(initialSelectionType, sourceProperty);
+				sourcePropInfo = FormHelper.ValueGetterAbstractFactory.Create(initialSelectionType, sourceProperty); // FormHelper.GetMethod(initialSelectionType, sourceProperty);
 			}
 			else if (valueProperty != null)
 			{
-				sourcePropInfo = FormHelper.GetMethod(initialSelectionType, valueProperty);
+				sourcePropInfo = FormHelper.ValueGetterAbstractFactory.Create(initialSelectionType, valueProperty); // FormHelper.GetMethod(initialSelectionType, valueProperty);
 			}
 		}
 
@@ -381,12 +381,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (valuePropInfo != null)
 			{
-				value = valuePropInfo.GetValue(current, null);
+				value = valuePropInfo.GetValue(current);
 			}
 
 			if (textPropInfo != null)
 			{
-				text = textPropInfo.GetValue(current, null);
+				text = textPropInfo.GetValue(current);
 			}
 
 			FormatText(ref text);
