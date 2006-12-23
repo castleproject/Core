@@ -43,6 +43,15 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// values correctly, saving you the burden of filling text inputs, selects, 
 	/// checkboxes and radios.
 	/// </para>
+	/// <para>
+	/// <b>Mask support</b>. 
+	/// For most elements, you can use 
+	/// the entries <c>mask</c> and optionally <c>mask_separator</c> to define a 
+	/// mask for your inputs. Credits to mordechai Sandhaus - 52action.com
+	/// </para>
+	/// <para>
+	/// For example: mask='2,5',mask_separator='/' will mask the content to '12/34/1234'
+	/// </para>
 	/// </summary>
 	public class FormHelper : AbstractHelper
 	{
@@ -131,6 +140,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
 		public String NumberField(String target)
 		{
 			return NumberField(target, null);
@@ -151,19 +163,29 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// FormHelper.NumberField("product.price", {exceptions='13,10,11'})
 		/// </code>
 		/// In this case the key codes 13, 10 and 11 will be accepted on the field.
+		/// <para>
+		/// You can aslo optionally pass an <c>forbid</c> value through the dictionary.
+		/// It must be a comma separated list of chars that cannot be accepted on the field. 
+		/// For example:
+		/// </para>
+		/// <code>
+		/// FormHelper.NumberField("product.price", {forbid='46'})
+		/// </code>
+		/// In this case the key code 46 (period) will not be accepted on the field.
 		/// </summary>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
 		public String NumberField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
 
 			attributes = attributes != null ? attributes : new Hashtable();
 
-			String list = ObtainEntryAndRemove(attributes, "exceptions", String.Empty);
-
-			attributes["onKeyPress"] = "return monorail_formhelper_numberonly(event, [" + list + "]);";
+			ApplyNumberOnlyOptions(attributes);
 
 			return CreateInputElement("text", target, value, attributes);
 		}
@@ -229,6 +251,69 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String PasswordField(String target, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
+
+			return CreateInputElement("password", target, value, attributes);
+		}
+
+		#endregion
+
+		#region PasswordNumberField
+
+		/// <summary>
+		/// Generates an input password element with a javascript that prevents
+		/// chars other than numbers from being entered.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <returns>The generated form element</returns>
+		public String PasswordNumberField(String target)
+		{
+			return PasswordNumberField(target, null);
+		}
+
+		/// <summary>
+		/// Generates an input password element with a javascript that prevents
+		/// chars other than numbers from being entered.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// <para>
+		/// You can optionally pass an <c>exceptions</c> value through the dictionary.
+		/// It must be a comma separated list of chars that can be accepted on the field. 
+		/// For example:
+		/// </para>
+		/// <code>
+		/// FormHelper.NumberField("product.price", {exceptions='13,10,11'})
+		/// </code>
+		/// In this case the key codes 13, 10 and 11 will be accepted on the field.
+		/// <para>
+		/// You can aslo optionally pass an <c>forbid</c> value through the dictionary.
+		/// It must be a comma separated list of chars that cannot be accepted on the field. 
+		/// For example:
+		/// </para>
+		/// <code>
+		/// FormHelper.NumberField("product.price", {forbid='46'})
+		/// </code>
+		/// In this case the key code 46 (period) will not be accepted on the field.
+		/// </summary>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		public String PasswordNumberField(String target, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+
+			attributes = attributes != null ? attributes : new Hashtable();
+
+			ApplyNumberOnlyOptions(attributes);
 
 			return CreateInputElement("password", target, value, attributes);
 		}
@@ -867,6 +952,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				value = HtmlEncode(value);
 			}
+
+			if (attributes != null && attributes.Contains("mask"))
+			{
+				String mask = ObtainEntryAndRemove(attributes, "mask");
+				String maskSep = ObtainEntryAndRemove(attributes, "mask_separator", "-");
+
+				String onBlur = ObtainEntryAndRemove(attributes, "onBlur", "");
+				String onKeyUp = ObtainEntryAndRemove(attributes, "onKeyUp", "");
+
+				String js = "javascript:return monorail_formhelper_mask(this,'" + mask + "','" + maskSep + "');";
+
+				attributes["onBlur"] = js + onBlur;
+				attributes["onKeyUp"] = js + onKeyUp;
+			}
 			
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
 			                     type, id, target, value, GetAttributes(attributes));
@@ -1112,6 +1211,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		#endregion
 
 		#region private helpers
+
+		private static void ApplyNumberOnlyOptions(IDictionary attributes)
+		{
+			String list = ObtainEntryAndRemove(attributes, "exceptions", String.Empty);
+			String forbid = ObtainEntryAndRemove(attributes, "forbid", String.Empty);
+
+			attributes["onKeyPress"] = "return monorail_formhelper_numberonly(event, [" + list + "], [" + forbid + "]);";
+		}
 
 		private void AssertIsValidArray(object instance, string property, int index)
 		{

@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Added mask support to FormHelper field elements
+
+- Added FormHelper.PasswordNumberField
+
 - Refactored FormHelper to support other approaches to extract values from instance.
   Now it supports DataRows and reflection
 

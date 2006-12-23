@@ -60,17 +60,43 @@
   </resheader>
   <data name="jsfunctions" xml:space="preserve">
     <value><![CDATA[
-function monorail_formhelper_numberonly(e, exceptions)
+function monorail_formhelper_numberonly(e, exceptions, forbidalso)
 {
-	if (!exceptions) exceptions = [];
 	exceptions = exceptions.concat([8,9,13,37,38,39,40,46]);
 	var code = e.charCode;
 	if (!code) code = e.keyCode;
 	if (e.ctrlKey || e.altKey) return true;
+	for(var i=0; i < forbidalso.length; i++) if (forbidalso[i] == code) return false;
 	for(var i=0; i < exceptions.length; i++) if (exceptions[i] == code) return true;
 	if (code <= 47 || code > 57) return false;
 	return true; 
 }
+
+/* 
+ The scripts on this page was produced by mordechai Sandhaus - 52action.com,
+ and is copyrighted . If you like this script, we encourage you to use it,
+ provided that  include this note, and link to 52action.com. 
+ */
+
+function monorail_formhelper_mask(elem,loc,delim)
+{
+	var locs = loc.split(',');
+	var str = elem.value;
+	for (var i = 0; i <= locs.length; i++)
+	{
+		for (var k = 0; k <= str.length; k++)
+		{
+			if (k == locs[i])
+			{
+				if (str.substring(k, k+1) != delim)
+				{
+					str = str.substring(0,k) + delim + str.substring(k,str.length)
+				}
+			}
+		}
+	}
+	elem.value = str
+} 
 
 ]]>
     </value>
