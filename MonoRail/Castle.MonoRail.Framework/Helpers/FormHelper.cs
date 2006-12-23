@@ -958,13 +958,13 @@ namespace Castle.MonoRail.Framework.Helpers
 				String mask = ObtainEntryAndRemove(attributes, "mask");
 				String maskSep = ObtainEntryAndRemove(attributes, "mask_separator", "-");
 
-				String onBlur = ObtainEntryAndRemove(attributes, "onBlur", "");
-				String onKeyUp = ObtainEntryAndRemove(attributes, "onKeyUp", "");
+				String onBlur = ObtainEntryAndRemove(attributes, "onBlur", "void(0)");
+				String onKeyUp = ObtainEntryAndRemove(attributes, "onKeyUp", "void(0)");
 
-				String js = "javascript:return monorail_formhelper_mask(this,'" + mask + "','" + maskSep + "');";
+				String js = "return monorail_formhelper_mask(event,this,'" + mask + "','" + maskSep + "');";
 
-				attributes["onBlur"] = js + onBlur;
-				attributes["onKeyUp"] = js + onKeyUp;
+				attributes["onBlur"] = "javascript:" + onBlur + ";" + js;
+				attributes["onKeyUp"] = "javascript:" + onKeyUp + ";" + js;
 			}
 			
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 

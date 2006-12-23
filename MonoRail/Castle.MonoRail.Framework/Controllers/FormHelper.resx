@@ -78,10 +78,53 @@ function monorail_formhelper_numberonly(e, exceptions, forbidalso)
  provided that  include this note, and link to 52action.com. 
  */
 
-function monorail_formhelper_mask(elem,loc,delim)
+function monorail_formhelper_getkeycode(e)
 {
+	if( typeof( e.keyCode ) == 'number'  ) 
+	{
+		return e.keyCode;
+	} 
+	else if( typeof( e.which ) == 'number' ) 
+	{
+		return e.which;
+	} 
+	else if( typeof( e.charCode ) == 'number'  ) 
+	{
+		return e.charCode;
+	} 
+	else 
+	{
+		return null;
+	}
+}
+
+function monorail_formhelper_getevent(e)
+{
+	if (!e)
+	{
+		if (window.event)
+		{
+			return window.event;
+		} 
+		else 
+		{
+			return null;
+		}
+	}
+	else
+	{
+		return e;
+	}
+}
+ 
+function monorail_formhelper_mask(e, elem,loc,delim)
+{
+	e = monorail_formhelper_getevent(e);
+	var keycode = monorail_formhelper_getkeycode(e);
+
 	var locs = loc.split(',');
 	var str = elem.value;
+	
 	for (var i = 0; i <= locs.length; i++)
 	{
 		for (var k = 0; k <= str.length; k++)
@@ -90,7 +133,10 @@ function monorail_formhelper_mask(elem,loc,delim)
 			{
 				if (str.substring(k, k+1) != delim)
 				{
-					str = str.substring(0,k) + delim + str.substring(k,str.length)
+					if (keycode != 8)
+					{
+						str = str.substring(0,k) + delim + str.substring(k,str.length);
+					}
 				}
 			}
 		}

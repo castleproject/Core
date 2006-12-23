@@ -161,7 +161,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="ids"></param>
 			public void Remove(params string[] ids)
 			{
-				// record "#{javascript_object_for(ids)}.each(Element.remove)"
 				Record(this, "[" + BuildJSArguments(Quote(ids)) + "].each(Element.remove)");
 			}
 
@@ -171,7 +170,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="message"></param>
 			public void Alert(String message)
 			{
-				// call 'alert', message
+				Call("alert", Quote(message));
 			}
 
 			/// <summary>
@@ -180,6 +179,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="url"></param>
 			public void RedirectTo(String url)
 			{
+				Assign("window.location.href", Quote(url));
 			}
 
 			/// <summary>
@@ -220,6 +220,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="expression"></param>
 			public void Assign(String variable, String expression)
 			{
+				Record(this, variable + " = " + expression);
 			}
 
 			/// <summary>
