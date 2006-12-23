@@ -115,7 +115,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else
 			{
-				return "Effect." + name + "(" + SQuote(elementId) + ", " + JavascriptOptions(options) + ");";
+				return "new Effect." + name + "(" + SQuote(elementId) + ", " + JavascriptOptions(options) + ");";
 			}
 		}
 
@@ -136,11 +136,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (queue == null || queue.Count == 0)
 			{
-				return "Effect.DropOut(" + SQuote(elementId) + ", {queue:'end'});";
+				return "new Effect.DropOut(" + SQuote(elementId) + ", {queue:'end'});";
 			}
 			else
 			{
-				return "Effect.DropOut(" + SQuote(elementId) + ", " + JavascriptOptions(queue) + ");";
+				return "new Effect.DropOut(" + SQuote(elementId) + ", " + JavascriptOptions(queue) + ");";
 			}
 		}
 	}

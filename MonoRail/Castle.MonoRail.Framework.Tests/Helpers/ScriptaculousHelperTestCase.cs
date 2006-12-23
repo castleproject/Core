@@ -33,10 +33,10 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void VisualEffect()
 		{
-			Assert.AreEqual("Effect.Highlight('el1', {});", helper.VisualEffect("Highlight", "el1"));
-			Assert.AreEqual("Effect.Fade('el1', {});", helper.VisualEffect("Fade", "el1"));
-			Assert.AreEqual("Effect.Shake('el1', {});", helper.VisualEffect("Shake", "el1"));
-			Assert.AreEqual("Effect.DropOut('el1', {});", helper.VisualEffect("DropOut", "el1"));
+			Assert.AreEqual("new Effect.Highlight('el1', {});", helper.VisualEffect("Highlight", "el1"));
+			Assert.AreEqual("new Effect.Fade('el1', {});", helper.VisualEffect("Fade", "el1"));
+			Assert.AreEqual("new Effect.Shake('el1', {});", helper.VisualEffect("Shake", "el1"));
+			Assert.AreEqual("new Effect.DropOut('el1', {});", helper.VisualEffect("DropOut", "el1"));
 		}
 	}
 }

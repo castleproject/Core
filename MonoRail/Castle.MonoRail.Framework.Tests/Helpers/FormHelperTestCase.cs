@@ -126,7 +126,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void MaskedNumberField()
 		{
 			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" onKeyPress=\"return monorail_formhelper_numberonly(event, [], []);\" " +
-				"onBlur=\"javascript:return monorail_formhelper_mask(this,'2,5','-');\" onKeyUp=\"javascript:return monorail_formhelper_mask(this,'2,5','-');\" />",
+				"onBlur=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" onKeyUp=\"javascript:void(0);return monorail_formhelper_mask(event,this,'2,5','-');\" />",
 				helper.NumberField("product.quantity", DictHelper.Create("mask=2,5")));
 		}
 
