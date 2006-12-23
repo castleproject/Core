@@ -1512,6 +1512,28 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		public class DataRowViewValueGetter : ValueGetter
+		{
+			private readonly string columnName;
+
+			public DataRowViewValueGetter(string columnName)
+			{
+				this.columnName = columnName;
+			}
+
+			public override string Name
+			{
+				get { return columnName; }
+			}
+
+			public override object GetValue(object instance)
+			{
+				DataRowView row = (DataRowView)instance;
+
+				return row[columnName];
+			}
+		}
+
 		public class NoActionGetter : ValueGetter
 		{
 			public override string Name
@@ -1536,6 +1558,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				else if (targetType == typeof(DataRow))
 				{
 					return new DataRowValueGetter(keyName);
+				}
+				else if (targetType == typeof(DataRowView))
+				{
+					return new DataRowViewValueGetter(keyName);
 				}
 				else
 				{
