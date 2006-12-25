@@ -152,7 +152,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void TextFieldFormat()
 		{
 			Assert.AreEqual("<input type=\"text\" id=\"product_price\" name=\"product.price\" value=\"$12.30\" />", 
-				helper.TextFieldFormat("product.price", "C"));
+				helper.TextField("product.price", DictHelper.Create("textformat=C")));
 		}
 
 		[Test]

@@ -332,6 +332,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="formatString">The format string</param>
 		/// <returns>The generated form element</returns>
+		[Obsolete("Use the attribute 'textformat' instead")]
 		public String TextFieldFormat(String target, String formatString)
 		{
 			return TextFieldFormat(target, formatString, null);
@@ -348,6 +349,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="formatString">The format string</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
+		[Obsolete("Use the attribute 'textformat' instead")]
 		public String TextFieldFormat(String target, String formatString, IDictionary attributes)
 		{
 			object value = ObtainValue(target);
@@ -928,11 +930,30 @@ namespace Castle.MonoRail.Framework.Helpers
 				value = ObtainEntryAndRemove(attributes, "defaultValue");
 			}
 
-			value = value == null ? "" : value;
-
 			string id = CreateHtmlId(attributes, target);
 
-			return CreateInputElement(type, id, target, value.ToString(), attributes);
+			return CreateInputElement(type, id, target, FormatIfNecessary(value, attributes), attributes);
+		}
+
+		protected string FormatIfNecessary(object value, IDictionary attributes)
+		{
+			string formatString = ObtainEntryAndRemove(attributes, "textformat");
+
+			if (value != null && formatString != null)
+			{
+				IFormattable formattable = value as IFormattable;
+
+				if (formattable != null)
+				{
+					value = formattable.ToString(formatString, null);
+				}
+			}
+			else if (value == null)
+			{
+				value = String.Empty;
+			}
+
+			return value.ToString();
 		}
 
 		/// <summary>

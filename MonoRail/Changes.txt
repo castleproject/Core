@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Added 'textformat' support to the all FormHelper operations (that create input elements).
+
 - Added BrailJS Support, allowing to generate javascript via brail scripts.
  Note; BrailJS scripts do not need <?brail ?> and any output statements there will be ignored.
   They are used strictly to create the generator.
