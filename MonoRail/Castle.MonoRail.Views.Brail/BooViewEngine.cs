@@ -87,12 +87,12 @@ namespace Castle.MonoRail.Views.Brail
 
     	public override string ViewFileExtension
     	{
-    		get { return ".boo"; }
+    		get { return ".brail"; }
     	}
 
     	public override string JSGeneratorFileExtension
     	{
-    		get { return ".boojs"; }
+			get { return ".brailjs"; }
     	}
 
 		public override bool HasTemplate(string templateName)
@@ -210,7 +210,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		public string GetTemplateName(string templateName)
 		{
-			return templateName + options.Extention;
+			return templateName + ViewFileExtension;
 		}
 
 		// This takes a filename and return an instance of the view ready to be used.
@@ -406,7 +406,7 @@ namespace Castle.MonoRail.Views.Brail
 				return false;
 
 			// the demi.boo is stripped, but GetInput require it.
-			string demiFile = Path.Combine(options.CommonScriptsDirectory, "demi.boo");
+			string demiFile = Path.Combine(options.CommonScriptsDirectory, "demi.brail");
 			ICompilerInput[] inputs = GetInput(demiFile, true);
 			BooCompiler compiler = SetupCompiler(inputs);
 			string outputFile = Path.Combine(baseSavePath, "CommonScripts.dll");

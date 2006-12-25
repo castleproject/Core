@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Changed Brail extention from Boo to Brail / BrailJS
+
 - Added mask support to FormHelper field elements
 
 - Added FormHelper.PasswordNumberField
@@ -14,7 +16,7 @@ Release Candidate 3
 - Added ColumnRenderer view component
 
 - Added DiggStylePagination ViewComponent, based on Alex Henderson work. 
-  See http://blog.bittercoder.com/CategoryView,category,castle.aspx
+  See http://blog.bittercoder.com/PermaLink,guid,579711a8-0b16-481b-b52b-ebdfa1a7e225.aspx
 
 - Added PaginationHelper.CreateCustomPage
   

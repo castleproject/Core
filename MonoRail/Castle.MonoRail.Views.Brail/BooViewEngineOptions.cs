@@ -28,7 +28,6 @@ namespace Castle.MonoRail.Views.Brail
 		string commonScriptsDirectory = "CommonScripts";
 		string saveDirectory = "Brail_Generated_Code";
 		IList assembliesToReference = new ArrayList();
-		private string extention = ".boo";
 
 		public bool Debug
 		{
@@ -63,12 +62,6 @@ namespace Castle.MonoRail.Views.Brail
 		public IList AssembliesToReference
 		{
 			get { return assembliesToReference; }
-		}
-
-		public string Extention
-		{
-			get { return extention; }
-			set { extention = value;}
 		}
 
 		public BooViewEngineOptions()

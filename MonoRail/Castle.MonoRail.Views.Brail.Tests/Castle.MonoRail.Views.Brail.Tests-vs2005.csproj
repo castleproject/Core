@@ -54,17 +54,17 @@
     <EmbeddedResource Include="Resources\Language.resources" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Views\components\SimpleInlineViewComponent2\mycompview1.boo" />
-    <None Include="Views\components\SimpleInlineViewComponent3\default.boo" />
-    <None Include="Views\home\bag.boo" />
-    <None Include="Views\home\display.boo" />
-    <None Include="Views\home\index.boo" />
-    <None Include="Views\home\resource.boo" />
-    <None Include="Views\layouts\general.boo" />
-    <None Include="Views\layouts\printable.boo" />
-    <None Include="Views\layout\index.boo" />
-    <None Include="Views\layout\save.boo" />
-    <None Include="Views\layout\update.boo" />
+    <None Include="Views\components\SimpleInlineViewComponent2\mycompview1.brail" />
+    <None Include="Views\components\SimpleInlineViewComponent3\default.brail" />
+    <None Include="Views\home\bag.brail" />
+    <None Include="Views\home\display.brail" />
+    <None Include="Views\home\index.brail" />
+    <None Include="Views\home\resource.brail" />
+    <None Include="Views\layouts\general.brail" />
+    <None Include="Views\layouts\printable.brail" />
+    <None Include="Views\layout\index.brail" />
+    <None Include="Views\layout\save.brail" />
+    <None Include="Views\layout\update.brail" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>

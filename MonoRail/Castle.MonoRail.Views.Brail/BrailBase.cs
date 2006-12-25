@@ -85,7 +85,7 @@ namespace Castle.MonoRail.Views.Brail
 			//absolute path from Views directory
 			if (subviewName[0] == '/')
 				return viewEngine.GetTemplateName(subviewName.Substring(1));
-			return Path.Combine(ScriptDirectory, subviewName) + viewEngine.Options.Extention;
+			return Path.Combine(ScriptDirectory, subviewName) + viewEngine.ViewFileExtension;
 		}
 
 		// this is called by ReplaceUnknownWithParameters step to create a more dynamic experiance

@@ -28,8 +28,6 @@ namespace Castle.MonoRail.Views.Brail
 				options.SaveToDisk = bool.Parse(section.Attributes["saveToDisk"].Value);
 			if (section.Attributes["debug"] != null)
 				options.Debug = bool.Parse(section.Attributes["debug"].Value);
-			if (section.Attributes["extention"] != null)
-				options.Extention = section.Attributes["extention"].Value;
 			if (section.Attributes["saveDirectory"] != null)
 				options.SaveDirectory = section.Attributes["saveDirectory"].Value;
 			if (section.Attributes["commonScriptsDirectory"] != null)
