@@ -116,6 +116,7 @@
     <Compile Include="Controllers\HappenedOnTheFieldController.cs" />
     <Compile Include="Controllers\HelperController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JSGenerationController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\OutputMethodsController.cs" />
@@ -128,6 +129,24 @@
     <Compile Include="Controllers\XmlController.cs" />
     <Compile Include="Helpers\DateFormatHelper.cs" />
     <None Include="Views\HappenedOnTheField\JustComponent.brail" />
+    <None Include="Views\jsgeneration\CheckCNPJ.brailjs" />
+    <None Include="Views\jsgeneration\collectionaccess.brailjs" />
+    <None Include="Views\jsgeneration\collectionfirstlast.brailjs" />
+    <None Include="Views\jsgeneration\elementaccess.brailjs" />
+    <None Include="Views\jsgeneration\elementattribute.brailjs" />
+    <None Include="Views\jsgeneration\elementattributedepth.brailjs" />
+    <None Include="Views\jsgeneration\elementmethod.brailjs" />
+    <None Include="Views\jsgeneration\elementmethoddepth.brailjs" />
+    <None Include="Views\jsgeneration\elementreplace.brailjs" />
+    <None Include="Views\jsgeneration\elementreplacehtml.brailjs" />
+    <None Include="Views\jsgeneration\index.brail" />
+    <None Include="Views\jsgeneration\InsertHtml.brailjs" />
+    <None Include="Views\jsgeneration\multipleactions.brailjs" />
+    <None Include="Views\jsgeneration\replace.brailjs" />
+    <None Include="Views\jsgeneration\replacehtml.brailjs" />
+    <None Include="Views\jsgeneration\replacehtmlwithpartial.brailjs" />
+    <None Include="Views\jsgeneration\visualeffect.brailjs" />
+    <None Include="Views\jsgeneration\_partial1.brail" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Boo.Lang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
@@ -137,6 +156,10 @@
     <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.Log4netIntegration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Services.Logging.Log4netIntegration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

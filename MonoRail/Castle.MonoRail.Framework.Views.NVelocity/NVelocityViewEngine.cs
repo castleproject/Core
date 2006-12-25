@@ -246,11 +246,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			return new JSGeneratorDuck(new PrototypeHelper.JSGenerator(context));
 		}
 
-		public override void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
-		{
-			GenerateJS(context.Response.Output, context, controller, templateName);
-		}
-
 		public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
 		                                string templateName)
 		{

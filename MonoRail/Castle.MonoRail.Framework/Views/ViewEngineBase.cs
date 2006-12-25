@@ -120,7 +120,10 @@ namespace Castle.MonoRail.Framework
 
 		public abstract object CreateJSGenerator(IRailsEngineContext context);
 
-		public abstract void GenerateJS(IRailsEngineContext context, Controller controller, string templateName);
+		public virtual void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
+		{
+            GenerateJS(context.Response.Output, context, controller, templateName);
+		}
 
 		public abstract void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller, string templateName);
 

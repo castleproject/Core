@@ -45,16 +45,18 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 
         public void useLotsOfSubViews()
         {
-            BooViewEngine engine1 = (BooViewEngine) this.ServiceProvider.GetService(typeof(IViewEngine));
+            //this is ugly, but the other way is to open up things that really shouldn't be opened...
+            IViewEngineManager viewEngineManager = (IViewEngineManager)this.ServiceProvider.GetService(typeof(IViewEngineManager));
+            IViewEngine engine1 = (IViewEngine)viewEngineManager.GetType().GetMethod("ResolveEngine", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(viewEngineManager, new object[] { "dummy.brail" });
             Hashtable hashtable1 = (Hashtable) typeof(BooViewEngine).GetField("compilations", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(engine1);
             Hashtable hashtable2 = (Hashtable) typeof(BooViewEngine).GetField("constructors", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(engine1);
             if (this.Context.Request.QueryString["replaceSubView"] == "reset")
             {
-                hashtable1[@"subview\listItem.boo"] = null;
+                hashtable1[@"subview\listItem.brail"] = null;
             }
             else if (this.Context.Request.QueryString["replaceSubView"] == "true")
             {
-                hashtable1[@"subview\listItem.boo"] = typeof(DummySubView);
+                hashtable1[@"subview\listItem.brail"] = typeof(DummySubView);
                 Type[] typeArray1 = new Type[] { typeof(BooViewEngine), typeof(TextWriter), typeof(IRailsEngineContext), typeof(Controller) };
                 hashtable2[typeof(DummySubView)] = typeof(DummySubView).GetConstructor(typeArray1);
             }

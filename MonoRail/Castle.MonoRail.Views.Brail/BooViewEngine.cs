@@ -14,21 +14,22 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-	using System;
-	using System.Collections;
-	using System.Configuration;
-	using System.IO;
-	using System.Reflection;
-	using System.Runtime.Serialization;
-	using System.Text;
-	using Boo.Lang.Compiler;
-	using Boo.Lang.Compiler.IO;
-	using Boo.Lang.Compiler.Pipelines;
-	using Boo.Lang.Compiler.Steps;
-	using Boo.Lang.Parser;
-	using Castle.Core;
-	using Castle.Core.Logging;
-	using Castle.MonoRail.Framework;
+    using System;
+    using System.Collections;
+    using System.Configuration;
+    using System.IO;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+    using System.Text;
+    using Boo.Lang.Compiler;
+    using Boo.Lang.Compiler.IO;
+    using Boo.Lang.Compiler.Pipelines;
+    using Boo.Lang.Compiler.Steps;
+    using Boo.Lang.Parser;
+    using Castle.Core;
+    using Castle.Core.Logging;
+    using Castle.MonoRail.Framework;
+    using Castle.MonoRail.Framework.Helpers;
 
     public class BooViewEngine : ViewEngineBase, IInitializable
 	{
@@ -97,7 +98,9 @@ namespace Castle.MonoRail.Views.Brail
 
 		public override bool HasTemplate(string templateName)
 		{
-			return ViewSourceLoader.HasTemplate(GetTemplateName(templateName));
+            if(Path.HasExtension(templateName))
+			    return ViewSourceLoader.HasTemplate(templateName);
+		    return ViewSourceLoader.HasTemplate(templateName + ViewFileExtension);
 		}
 
 		// Process a template name and output the results to the user
@@ -112,7 +115,7 @@ namespace Castle.MonoRail.Views.Brail
 									 string templateName)
 		{
 			Log("Starting to process request for {0}", templateName);
-			string file = GetTemplateName(templateName);
+			string file = templateName + ViewFileExtension;
 			BrailBase view;
 			// Output may be the layout's child output if a layout exists
 			// or the context.Response.Output if the layout is null
@@ -134,23 +137,62 @@ namespace Castle.MonoRail.Views.Brail
 		public override void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller,
 									string partialName)
 		{
-			throw new NotImplementedException();
+            Log("Generating partial for {0}", partialName);
+
+            try
+            {
+                string file = ResolveTemplateName(partialName, ViewFileExtension);
+                BrailBase view = GetCompiledScriptInstance(file, output, context, controller);
+                Log("Executing partial view {0}", partialName);
+                view.Run();
+                Log("Finished executing partial view {0}", partialName);
+            }
+            catch (Exception ex)
+            {
+                if (Logger != null && Logger.IsErrorEnabled)
+                {
+                    Logger.Error("Could not generate JS", ex);
+                }
+
+                throw new RailsException("Error generating partial: " + partialName, ex);
+            }
 		}
 
     	public override object CreateJSGenerator(IRailsEngineContext context)
     	{
-    		throw new NotImplementedException();
-    	}
-
-    	public override void GenerateJS(IRailsEngineContext context, Controller controller, string templateName)
-    	{
-    		throw new NotImplementedException();
+    	    return new BrailJSGenerator(new PrototypeHelper.JSGenerator(context));
     	}
 
     	public override void GenerateJS(TextWriter output, IRailsEngineContext context, Controller controller,
     	                                string templateName)
     	{
-    		throw new NotImplementedException();
+            Log("Generating JS for {0}", templateName);
+
+            try
+            {
+                object generator = CreateJSGenerator(context);
+                AdjustJavascriptContentType(context);
+                string file = ResolveTemplateName(templateName, JSGeneratorFileExtension);
+                BrailBase view = GetCompiledScriptInstance(file,
+                    //we use the script just to build the generator, not to output to the user
+                    new StringWriter(),
+                    context, controller);
+                Log("Executing JS view {0}", templateName);
+                view.AddProperty("page", generator);
+                view.Run();
+
+                output.WriteLine(generator);
+                Log("Finished executing JS view {0}", templateName);
+            }
+            catch (Exception ex)
+            {
+                if (Logger!=null && Logger.IsErrorEnabled)
+                {
+                    Logger.Error("Could not generate JS", ex);
+                }
+
+                throw new RailsException("Error generating JS. Template: " + templateName, ex);
+            }
     	}
 
     	// Send the contents text directly to the user, only adding the layout if neccecary
@@ -191,6 +233,21 @@ namespace Castle.MonoRail.Views.Brail
 				logger = loggerFactory.Create(GetType().Name);
 		}
 
+        /// <summary>
+        /// Resolves the template name into a  file name.
+        /// </summary>
+        protected static string ResolveTemplateName(string templateName, string extention)
+        {
+            if (Path.HasExtension(templateName))
+            {
+                return templateName;
+            }
+            else
+            {
+                return templateName + extention;
+            }
+        }
+
 		// Check if a layout has been defined. If it was, then the layout would be created
 		// and will take over the output, otherwise, the context.Reposne.Output is used, 
 		// and layout is null
@@ -200,17 +257,12 @@ namespace Castle.MonoRail.Views.Brail
 			if (controller.LayoutName != null)
 			{
 				string layoutTemplate = "layouts\\" + controller.LayoutName;
-				string layoutFilename = GetTemplateName(layoutTemplate);
+				string layoutFilename = layoutTemplate + ViewFileExtension;
 				layout = GetCompiledScriptInstance(layoutFilename, output,
 				                                   context, controller);
 				output = layout.ChildOutput = new StringWriter();
 			}
 			return new LayoutViewOutput(output, layout);
-		}
-
-		public string GetTemplateName(string templateName)
-		{
-			return templateName + ViewFileExtension;
 		}
 
 		// This takes a filename and return an instance of the view ready to be used.
@@ -372,7 +424,7 @@ namespace Castle.MonoRail.Views.Brail
 			if (common != null)
 				compiler.Parameters.References.Add(common);
 			// pre procsssor needs to run before the parser
-			BrailPreProcessor processor = new BrailPreProcessor();
+			BrailPreProcessor processor = new BrailPreProcessor(this);
 			compiler.Parameters.Pipeline.Insert(0, processor);
 			// inserting the add class step after the parser
 			compiler.Parameters.Pipeline.Insert(2, new TransformToBrailStep());
@@ -528,5 +580,10 @@ namespace Castle.MonoRail.Views.Brail
 				this.processor = processor;
 			}
 		}
+
+        public bool ShouldPreProcessView(string name)
+        {
+            return Path.GetExtension(name) == ViewFileExtension;
+        }
 	}
 }

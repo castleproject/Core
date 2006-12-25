@@ -310,6 +310,9 @@
     <Compile Include="Internal\Descriptors\LayoutDescriptor.cs" />
     <Compile Include="Internal\Descriptors\RescueDescriptor.cs" />
     <Compile Include="Internal\Descriptors\ResourceDescriptor.cs" />
+    <Compile Include="Internal\JSCollectionGeneratorBase.cs" />
+    <Compile Include="Internal\JSElementGeneratorBase.cs" />
+    <Compile Include="Internal\JSGeneratorBase.cs" />
     <Compile Include="Internal\Providers\DefaultFilterDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultHelperDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultLayoutDescriptorProvider.cs" />

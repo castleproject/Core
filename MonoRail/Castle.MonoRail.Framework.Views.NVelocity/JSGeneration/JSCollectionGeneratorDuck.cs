@@ -18,26 +18,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 {
 	using System;
 	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Internal;
 
-	/// <summary>
+    /// <summary>
 	/// Pendent
 	/// </summary>
-	public class JSCollectionGeneratorDuck : IDuck
+    public class JSCollectionGeneratorDuck : JSCollectionGeneratorBase, IDuck
 	{
-		private readonly PrototypeHelper.JSCollectionGenerator generator;
-		private readonly PrototypeHelper.JSGenerator parentGenerator;
+        public JSCollectionGeneratorDuck(PrototypeHelper.JSCollectionGenerator generator) : base(generator)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="JSCollectionGeneratorDuck"/> class.
-		/// </summary>
-		/// <param name="generator">The generator.</param>
-		public JSCollectionGeneratorDuck(PrototypeHelper.JSCollectionGenerator generator)
-		{
-			this.generator = generator;
-			parentGenerator = generator.ParentGenerator;
-		}
-
-		#region IDuck
+        #region IDuck
 
 		/// <summary>
 		/// Defines the behavior when a property is read
@@ -46,9 +38,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object GetInvoke(string propName)
 		{
-			PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
-			PrototypeHelper.JSGenerator.Record(parentGenerator, propName);
-
+		    InternalGet(propName);
 			return this;
 		}
 
@@ -70,29 +60,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object Invoke(string method, params object[] args)
 		{
-			if (method == "set")
-			{
-				PrototypeHelper.JSGenerator.RemoveTail(parentGenerator);
-
-				PrototypeHelper.JSGenerator.Record(parentGenerator, " = " + args[0]);
-
-				return null;
-			}
-			else
-			{
-				PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
-
-				if (generator.IsGeneratorMethod(method))
-				{
-					generator.Dispatch(method, args);
-				}
-				else
-				{
-					parentGenerator.Call(method, args);
-				}
-
-				return this;
-			}
+		    return InternalInvoke(method, args);
 		}
 
 		#endregion

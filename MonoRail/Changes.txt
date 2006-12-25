@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Added BrailJS Support, allowing to generate javascript via brail scripts.
+ Note; BrailJS scripts do not need <?brail ?> and any output statements there will be ignored.
+  They are used strictly to create the generator.
+
 - Changed Brail extention from Boo to Brail / BrailJS
 
 - Added mask support to FormHelper field elements

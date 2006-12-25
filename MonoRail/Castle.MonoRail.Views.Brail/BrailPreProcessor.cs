@@ -22,11 +22,17 @@ namespace Castle.MonoRail.Views.Brail
 
 	public class BrailPreProcessor : AbstractCompilerStep
 	{
+	    
 		private static IDictionary Seperators = CreateSeperators();
-
+        private BooViewEngine booViewEngine;
 		IDictionary inputToCode = new Hashtable();
-		
-		private static IDictionary CreateSeperators()
+
+	    public BrailPreProcessor(BooViewEngine booViewEngine)
+	    {
+	        this.booViewEngine = booViewEngine;
+	    }
+
+	    private static IDictionary CreateSeperators()
 		{
 			Hashtable seperators = new Hashtable();
 			seperators.Add("<?brail", "?>");
@@ -48,7 +54,9 @@ namespace Castle.MonoRail.Views.Brail
 				//	System.Diagnostics.Debugger.Break()
 				using(TextReader reader = input.Open())
 				{
-					string code = Booify(reader.ReadToEnd());
+				    string code = reader.ReadToEnd();
+                    if(this.booViewEngine.ShouldPreProcessView(input.Name))
+                        code = Booify(code);
 					StringInput newInput = new StringInput(input.Name, code);
 					inputToCode.Add(input, code);
 					processed.Add(newInput);

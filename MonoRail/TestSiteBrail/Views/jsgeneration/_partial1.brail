@@ -1,0 +1,5 @@
+You're ${Name} <br> <?brail 
+for element in list: 
+	output "[ ${element} ]"
+	end 
+?>

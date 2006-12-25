@@ -83,8 +83,8 @@ namespace Castle.MonoRail.Views.Brail
 		public string GetSubViewFilename(string subviewName)
 		{
 			//absolute path from Views directory
-			if (subviewName[0] == '/')
-				return viewEngine.GetTemplateName(subviewName.Substring(1));
+            if (subviewName[0] == '/')
+                return subviewName.Substring(1) + viewEngine.ViewFileExtension;
 			return Path.Combine(ScriptDirectory, subviewName) + viewEngine.ViewFileExtension;
 		}
 
@@ -164,6 +164,14 @@ namespace Castle.MonoRail.Views.Brail
                 dictionary[entry.Key] = entry.Value;
 	        }
 	    }
+
+        /// <summary>
+        /// Note that this will overwrite any existing property.
+        /// </summary>
+        public void AddProperty(string name, object item)
+        {
+            properties[name] = item;
+        }
 
 		// Initialize all the properties that a script may need
 		// One thing to note here is that resources are wrapped in ResourceToDuck wrapper

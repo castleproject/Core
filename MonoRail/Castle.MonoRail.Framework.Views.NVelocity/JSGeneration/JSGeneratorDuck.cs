@@ -18,21 +18,19 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 {
 	using System;
 	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Internal;
 
-	/// <summary>
+    /// <summary>
 	/// 
 	/// </summary>
-	public class JSGeneratorDuck : IDuck
+    public class JSGeneratorDuck : JSGeneratorBase, IDuck
 	{
-		private readonly PrototypeHelper.JSGenerator generator;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JSGeneratorDuck"/> class.
 		/// </summary>
 		/// <param name="generator">The generator.</param>
-		public JSGeneratorDuck(PrototypeHelper.JSGenerator generator)
+		public JSGeneratorDuck(PrototypeHelper.JSGenerator generator) : base(generator)
 		{
-			this.generator = generator;
 		}
 
 		#region IDuck
@@ -65,54 +63,24 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object Invoke(string method, params object[] args)
 		{
-			if (method == "el")
-			{
-				if (args == null || args.Length != 1)
-				{
-					throw new ArgumentException("el() method must be invoked with the element name as an argument");
-				}
-				if (args[0] == null)
-				{
-					throw new ArgumentNullException("el() method invoked with a null argument");
-				}
-
-				return new JSElementGeneratorDuck(
-					new PrototypeHelper.JSElementGenerator(generator, args[0].ToString()));
-			}
-			else if (method == "select")
-			{
-				if (args == null || args.Length != 1)
-				{
-					throw new ArgumentException("select() method must be invoked with the element/css selection rule name as an argument");
-				}
-				if (args[0] == null)
-				{
-					throw new ArgumentNullException("select() method invoked with a null argument");
-				}
-
-				return new JSCollectionGeneratorDuck(
-					new PrototypeHelper.JSCollectionGenerator(generator, args[0].ToString()));
-			}
-
-			if (generator.IsGeneratorMethod(method))
-			{
-				generator.Dispatch(method, args);
-			}
-
-			return null;
+		    return InternalInvoke(method, args);
 		}
 
 		#endregion
 
-		/// <summary>
-		/// Delegates to the generator
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-		/// </returns>
-		public override string ToString()
-		{
-			return generator.ToString();
-		}
+		protected override object CreateNullGenerator()
+        {
+            return null;
+        }
+
+        protected override object CreateJSCollectionGenerator(PrototypeHelper.JSCollectionGenerator collectionGenerator)
+        {
+            return new JSCollectionGeneratorDuck(collectionGenerator);
+        }
+
+        protected override object CreateJSElementGenerator(PrototypeHelper.JSElementGenerator elementGenerator)
+        {
+            return new JSElementGeneratorDuck(elementGenerator);
+        }
 	}
 }
