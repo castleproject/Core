@@ -24,13 +24,13 @@ $PresentationHelper.LinkToNew( $model, $useModelName, "Create a new $model.Type.
 #set ($rowid = $keyprop.GetValue($row, null) )
   $PresentationHelper.StartAlternateTR($velocityCount, "scaffoldrow", "scaffoldaltrow")
   
-  <td width="1%" nowrap align="$PresentationHelper.BestAlignFor( $keyprop.PropertyType )">$rowid</td>
+  <td width="1%" nowrap="nowrap" align="$PresentationHelper.BestAlignFor( $keyprop.PropertyType )">$rowid</td>
   
   #foreach($prop in $properties)
   <td align="$PresentationHelper.BestAlignFor( $prop.PropertyType )">$!prop.GetValue($row, null)</td>
   #end
   
-  <td align="center" nowrap width="1%">
+  <td align="center" nowrap="nowrap" width="1%">
 $PresentationHelper.LinkToEdit( $model, $useModelName, "edit", $rowid, $DictHelper.CreateDict() )
 $PresentationHelper.LinkToConfirm( $model, $useModelName, "remove", $rowid, $DictHelper.CreateDict() )
   </td>
