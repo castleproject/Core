@@ -168,21 +168,21 @@ namespace Castle.DynamicProxy.Generators
 					ParameterInfo[] parameters = method.GetParameters();
 					// ParameterInfo[] parametersProxy = newProxiedMethod.MethodBuilder.GetParameters();
 					
-					bool useDefineOverride = true;
+					// bool useDefineOverride = true;
 
 					for(int i = 0; i < parameters.Length; i++)
 					{
-						ParameterInfo paramInfo = parameters[i];
+						// ParameterInfo paramInfo = parameters[i];
 						// ParameterInfo paramInfo2 = parametersProxy[i];
 						
-						Console.WriteLine("{0} {1} {2} {3}", paramInfo.Name, paramInfo.ParameterType, paramInfo.Attributes, paramInfo.Position);
+						// Console.WriteLine("{0} {1} {2} {3}", paramInfo.Name, paramInfo.ParameterType, paramInfo.Attributes, paramInfo.Position);
 						// Console.WriteLine("{0} {1} {2} {3}", paramInfo2.Name, paramInfo2.ParameterType, paramInfo2.Attributes, paramInfo2.Position);
 					}
 
-					if (useDefineOverride)
-					{
+					// if (useDefineOverride)
+					// {
 						// emitter.TypeBuilder.DefineMethodOverride(newProxiedMethod.MethodBuilder, method);
-					}
+					// }
 				}
 
 				foreach(PropertyToGenerate propToGen in propsToGenerate)

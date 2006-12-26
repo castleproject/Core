@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
@@ -41,6 +42,23 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(3, service.Sum(1, 2));
 			
 			Assert.AreEqual("Sum ", logger.LogContents);
+		}
+
+		[Test]
+		public void Caching()
+		{
+			IService service = (IService)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(IService), new ServiceImpl(), new StandardInterceptor());
+			service = (IService)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(IService), new ServiceImpl(), new StandardInterceptor());
+			service = (IService)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(IService), new ServiceImpl(), new StandardInterceptor());
+			service = (IService)
+				generator.CreateInterfaceProxyWithTarget(
+					typeof(IService), new ServiceImpl(), new StandardInterceptor());
 		}
 
 		[Test]

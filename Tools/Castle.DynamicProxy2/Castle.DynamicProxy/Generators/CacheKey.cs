@@ -22,6 +22,12 @@ namespace Castle.DynamicProxy.Generators
 		private readonly Type[] interfaces;
 		private readonly ProxyGenerationOptions options;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CacheKey"/> class.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="interfaces">The interfaces.</param>
+		/// <param name="options">The options.</param>
 		public CacheKey(Type targetType, Type[] interfaces, ProxyGenerationOptions options)
 		{
 			this.targetType = targetType;
@@ -32,11 +38,12 @@ namespace Castle.DynamicProxy.Generators
 		public override int GetHashCode()
 		{
 			int result = targetType.GetHashCode();
-			// result = 29 * result + (interfaces != null ? interfaces.GetHashCode() : 0);
 			if (interfaces != null)
 			{
 				foreach (Type inter in interfaces)
+				{
 					result += 29 + inter.GetHashCode();
+				}
 			}
 			result = 29 * result + options.GetHashCode();
 			return result;
@@ -48,7 +55,6 @@ namespace Castle.DynamicProxy.Generators
 			CacheKey cacheKey = obj as CacheKey;
 			if (cacheKey == null) return false;
 			if (!Equals(targetType, cacheKey.targetType)) return false;
-			// if (!Equals(interfaces, cacheKey.interfaces)) return false;
 			if (interfaces != null && cacheKey.interfaces == null) return false;
 			if (interfaces == null && cacheKey.interfaces != null) return false;
 			if (interfaces != null && interfaces.Length != cacheKey.interfaces.Length) return false;

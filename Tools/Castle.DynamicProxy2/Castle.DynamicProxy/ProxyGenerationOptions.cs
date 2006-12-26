@@ -90,5 +90,28 @@ namespace Castle.DynamicProxy
 			get { return baseTypeForInterfaceProxy; }
 			set { baseTypeForInterfaceProxy = value; }
 		}
+
+		public override bool Equals(object obj)
+		{
+			if (this == obj) return true;
+			ProxyGenerationOptions proxyGenerationOptions = obj as ProxyGenerationOptions;
+			if (proxyGenerationOptions == null) return false;
+			if (!Equals(hook, proxyGenerationOptions.hook)) return false;
+			if (!Equals(selector, proxyGenerationOptions.selector)) return false;
+			if (!Equals(mixins, proxyGenerationOptions.mixins)) return false;
+			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
+			if (!Equals(useSelector, proxyGenerationOptions.useSelector)) return false;
+			return true;
+		}
+
+		public override int GetHashCode()
+		{
+			int result = hook != null ? hook.GetHashCode() : 0;
+			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
+			result = 29 * result + (mixins != null ? mixins.GetHashCode() : 0);
+			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
+			result = 29 * result + useSelector.GetHashCode();
+			return result;
+		}
 	}
 }

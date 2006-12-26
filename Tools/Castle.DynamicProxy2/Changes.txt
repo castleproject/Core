@@ -1,6 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
 
+- Fixed DYNPROXY-41
+  "Invalid state exception on DP2"
+
 - Fixed DYNPROXY-39
   "Deadlock in DynamicProxy2"
 
