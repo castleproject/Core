@@ -14,7 +14,11 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Diagnostics;
+	using System.Reflection;
 	using Castle.Core.Interceptor;
+	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
@@ -109,6 +113,26 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateInterfaceProxyWithTarget<IClassWithMultiDimentionalArray>(
 				new ClassWithMultiDimentionalArray(), 
 				new LogInvocationInterceptor());
+		}
+
+		/// <summary>
+		/// See http://support.castleproject.org/browse/DYNPROXY-43
+		/// </summary>
+		[Test]
+		public void MethodParamNamesAreReplicated()
+		{
+			// Try with interface proxy (with target)
+			IMyInterface i = generator.CreateInterfaceProxyWithTarget(typeof(IMyInterface), new MyClass(),
+				new StandardInterceptor()) as IMyInterface;
+
+			ParameterInfo[] methodParams = GetMyTestMethodParams(i.GetType());
+			Assert.AreEqual("myParam", methodParams[0].Name);
+		}
+
+		private ParameterInfo[] GetMyTestMethodParams(Type type)
+		{
+			MethodInfo methodInfo = type.GetMethod("MyTestMethod");
+			return methodInfo.GetParameters();
 		}
 	}
 }

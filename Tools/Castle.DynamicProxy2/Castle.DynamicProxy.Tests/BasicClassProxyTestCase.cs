@@ -15,8 +15,10 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Reflection;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
@@ -203,6 +205,17 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(10, classProxy.X);
 		}
 
+		/// <summary>
+		/// See http://support.castleproject.org/browse/DYNPROXY-43
+		/// </summary>
+		[Test]
+		public void MethodParamNamesAreReplicated()
+		{
+			MyClass mc = generator.CreateClassProxy<MyClass>(new StandardInterceptor());
+			ParameterInfo[] methodParams = GetMyTestMethodParams(mc.GetType());
+			Assert.AreEqual("myParam", methodParams[0].Name);
+		}
+
 		[Test]
 		[Ignore("Multi dimensional arrays seems to not work at all")]
 		public void ProxyTypeWithMultiDimentionalArrayAsParameters()
@@ -219,6 +232,12 @@ namespace Castle.DynamicProxy.Tests
 			proxy.Do3(new string[] {"1", "2"});
 			
 			Assert.AreEqual("Do Do2 Do3 ", log.LogContents);
+		}
+
+		private ParameterInfo[] GetMyTestMethodParams(Type type)
+		{
+			MethodInfo methodInfo = type.GetMethod("MyTestMethod");
+			return methodInfo.GetParameters();
 		}
 	}
 }

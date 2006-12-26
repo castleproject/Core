@@ -1,6 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
 
+- Fixed DYNPROXY-43
+  "DP2 : Missing ParameterInfo 'Name' for Proxied methods"
+
 - Fixed DYNPROXY-41
   "Invalid state exception on DP2"
 

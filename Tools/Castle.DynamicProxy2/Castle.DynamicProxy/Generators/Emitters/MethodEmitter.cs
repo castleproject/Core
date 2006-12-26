@@ -1,4 +1,4 @@
- // Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -31,15 +30,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private MethodCodeBuilder codebuilder;
 		private AbstractTypeEmitter maintype;
 		private GenericTypeParameterBuilder[] genericTypeParams;
-		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>();
+
+		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
+			new Dictionary<string, GenericTypeParameterBuilder>();
 
 		protected internal MethodEmitter()
 		{
 		}
-		
+
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
 		                       ReturnReferenceExpression returnRef, params ArgumentReference[] arguments) :
-		                       	this(maintype, name, MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public, returnRef, arguments)
+		                       	this(
+		                       	maintype, name,
+		                       	MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public, returnRef,
+		                       	arguments)
 		{
 		}
 
@@ -49,15 +53,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			builder = maintype.TypeBuilder.DefineMethod(name, attrs);
 		}
-		
+
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
-		                       MethodAttributes attrs, ReturnReferenceExpression returnRef, 
+		                       MethodAttributes attrs, ReturnReferenceExpression returnRef,
 		                       params ArgumentReference[] arguments) : this(maintype, name, attrs)
 		{
-			SetReturnType(returnRef.Type);
 			SetParameters(ArgumentsUtil.InitializeAndConvert(arguments));
+			SetReturnType(returnRef.Type);
 		}
-		
+
 		public void SetReturnType(Type returnType)
 		{
 			builder.SetReturnType(returnType);
@@ -73,8 +77,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// and set the return type and the parameters
 		/// accordingly
 		/// </summary>
-		/// <param name="baseMethod"></param>
-		/// <param name="parentEmitter"></param>
 		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
 			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);
@@ -84,31 +86,30 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, builder, name2GenericType);
 
 			// Bind parameter types
-			
+
 			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
 
 			SetParameters(GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType));
-
-			// TODO: uncomment this later
-			// DefineParameters(baseMethodParameters);
 
 			// TODO: check if the return type is a generic
 			// definition for the method
 
 			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
+
+			DefineParameters(baseMethodParameters);
 		}
-		
+
 		public void SetParameters(Type[] paramTypes)
 		{
 			builder.SetParameters(paramTypes);
 
 			arguments = new ArgumentReference[paramTypes.Length];
-			
-			for(int i=0; i < paramTypes.Length; i++)
+
+			for(int i = 0; i < paramTypes.Length; i++)
 			{
 				arguments[i] = new ArgumentReference(paramTypes[i]);
 			}
-			
+
 			ArgumentsUtil.InitializeArgumentsByPosition(arguments);
 		}
 
@@ -159,17 +160,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void DefineParameters(ParameterInfo[] info)
+		public void DefineCustomAttribute(Attribute attribute)
+		{
+			builder.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
+		}
+
+		private void DefineParameters(ParameterInfo[] info)
 		{
 			foreach(ParameterInfo parameterInfo in info)
 			{
 				builder.DefineParameter(parameterInfo.Position + 1, parameterInfo.Attributes, parameterInfo.Name);
+				// builder.DefineGenericParameters()
 			}
-		}
-
-		public void DefineCustomAttribute(Attribute attribute)
-		{
-			builder.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
 		}
 	}
 }
