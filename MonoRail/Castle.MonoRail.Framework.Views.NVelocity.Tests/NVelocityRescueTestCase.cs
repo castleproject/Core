@@ -90,8 +90,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void AccessibleThroughAndRescues()
 		{
-			DoGet("rescuable2/OnlyPost.rails");
-			AssertReplyEqualTo("An error happened during save");
+			DoGet("rescuable/OnlyPost.rails");
+			AssertReplyEqualTo("An error happened");
 		}
 	}
 }

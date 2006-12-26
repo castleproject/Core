@@ -37,11 +37,6 @@ namespace TestSiteNVelocity.Controllers
 		{
 			throw new ApplicationException();
 		}
-
-		[AccessibleThrough(Verb.Post)]
-		public void OnlyPost()
-		{
-		}
 	}
 
 	[Rescue("general")]
@@ -104,6 +99,11 @@ namespace TestSiteNVelocity.Controllers
 				throw new ArgumentException("argException");
 				
 			throw new Exception();
-		}		
+		}
+
+		[AccessibleThrough(Verb.Post)]
+		public void OnlyPost()
+		{
+		}
 	}
 }
