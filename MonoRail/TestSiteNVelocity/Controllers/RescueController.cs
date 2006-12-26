@@ -21,7 +21,6 @@ namespace TestSiteNVelocity.Controllers
 	[Rescue("general")]
 	public abstract class BaseController : SmartDispatcherController
 	{
-		
 	}
 
 	[Rescue("saveerror")]
@@ -38,8 +37,12 @@ namespace TestSiteNVelocity.Controllers
 		{
 			throw new ApplicationException();
 		}
-	}
 
+		[AccessibleThrough(Verb.Post)]
+		public void OnlyPost()
+		{
+		}
+	}
 
 	[Rescue("general")]
 	[ControllerDetails("rescuable")]

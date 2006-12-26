@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
+	using System;
 	using System.Reflection;
 
 	/// <summary>
@@ -32,8 +33,17 @@ namespace Castle.MonoRail.Framework.Internal
 		/// and return descriptors instances, or an empty array if none 
 		/// was found.
 		/// </summary>
-		/// <param name="memberInfo">The controller type or the action (MethodInfo)</param>
+		/// <param name="memberInfo">The controller type</param>
 		/// <returns>An array of <see cref="RescueDescriptor"/></returns>
-		RescueDescriptor[] CollectRescues(MemberInfo memberInfo);
+		RescueDescriptor[] CollectRescues(Type memberInfo);
+
+		/// <summary>
+		/// Implementors should collect the rescue information
+		/// and return descriptors instances, or an empty array if none 
+		/// was found.
+		/// </summary>
+		/// <param name="memberInfo">The action (MethodInfo)</param>
+		/// <returns>An array of <see cref="RescueDescriptor"/></returns>
+		RescueDescriptor[] CollectRescues(MethodInfo memberInfo);
 	}
 }

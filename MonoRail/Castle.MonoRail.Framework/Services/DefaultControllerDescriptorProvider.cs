@@ -365,9 +365,14 @@ namespace Castle.MonoRail.Framework.Services
 			descriptor.Layout = layoutDescriptorProvider.CollectLayout(memberInfo);
 		}
 
-		private void CollectRescues(BaseMetaDescriptor descriptor, MemberInfo memberInfo)
+		private void CollectRescues(BaseMetaDescriptor descriptor, MethodInfo memberInfo)
 		{
 			descriptor.Rescues = rescueDescriptorProvider.CollectRescues(memberInfo);
+		}
+
+		private void CollectRescues(BaseMetaDescriptor descriptor, Type type)
+		{
+			descriptor.Rescues = rescueDescriptorProvider.CollectRescues(type);
 		}
 
 		private void CollectCacheConfigures(ActionMetaDescriptor descriptor, MemberInfo memberInfo)

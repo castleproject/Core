@@ -201,7 +201,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get
 			{
-				if (_flash == null)
+				if (_flash == null && Session != null)
 				{
 					_flash = new Flash((Flash) Session[Flash.FlashKey]);
 				}

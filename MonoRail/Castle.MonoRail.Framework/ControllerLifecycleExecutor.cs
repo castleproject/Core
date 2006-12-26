@@ -216,9 +216,13 @@ namespace Castle.MonoRail.Framework
 
 						if (String.Compare(verbName, requestType, true) != 0)
 						{
-							throw new ControllerException(string.Format("Access to the action [{0}] " +
+							exceptionToThrow = new ControllerException(string.Format("Access to the action [{0}] " +
 							                                            "on controller [{1}] is not allowed by the http verb [{2}].",
 							                                            actionName, controllerName, requestType));
+
+							hasError = true;
+
+							return false;
 						}
 					}
 				}

@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertReplyEqualTo( "methodDefaultException" );
 		}
 
-		[Test]
+		[Test, Ignore("Attributes order cannot be guaranted")]
 		public void RescueAndConrollerInheritance1()
 		{
 			DoGet("rescuable2/Save.rails");
@@ -85,6 +85,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			DoGet("rescuable2/Save2.rails");
 			AssertReplyEqualTo("An error happened during update");
+		}
+
+		[Test]
+		public void AccessibleThroughAndRescues()
+		{
+			DoGet("rescuable2/OnlyPost.rails");
+			AssertReplyEqualTo("An error happened during save");
 		}
 	}
 }

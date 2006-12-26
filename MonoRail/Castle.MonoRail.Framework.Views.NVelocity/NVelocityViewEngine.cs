@@ -420,18 +420,24 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			// Adding flash as a collection and each individual item
 
-			innerContext[Flash.FlashKey] = context.Flash;
-
-			foreach(DictionaryEntry entry in context.Flash)
+			if (context.Flash != null)
 			{
-				if (entry.Value == null) continue;
-				innerContext[entry.Key] = entry.Value;
+				innerContext[Flash.FlashKey] = context.Flash;
+
+				foreach (DictionaryEntry entry in context.Flash)
+				{
+					if (entry.Value == null) continue;
+					innerContext[entry.Key] = entry.Value;
+				}
 			}
 
-			foreach(DictionaryEntry entry in controller.PropertyBag)
+			if (controller.PropertyBag != null)
 			{
-				if (entry.Value == null) continue;
-				innerContext[entry.Key] = entry.Value;
+				foreach (DictionaryEntry entry in controller.PropertyBag)
+				{
+					if (entry.Value == null) continue;
+					innerContext[entry.Key] = entry.Value;
+				}
 			}
 
 			innerContext[TemplateKeys.SiteRoot] = context.ApplicationPath;

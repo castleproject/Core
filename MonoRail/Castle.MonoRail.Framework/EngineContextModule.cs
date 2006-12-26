@@ -100,10 +100,6 @@ namespace Castle.MonoRail.Framework
 			{
 				// Could not even select the action, stop here
 				
-				executor.PerformErrorHandling();
-				
-				executor.Dispose();
-				
 				return;
 			}
 

@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-197
+  "Exception thrown by AccessibleThrough are not caught by rescues"
+
 - Added 'textformat' support to the all FormHelper operations (that create input elements).
 
 - Added BrailJS Support, allowing to generate javascript via brail scripts.
