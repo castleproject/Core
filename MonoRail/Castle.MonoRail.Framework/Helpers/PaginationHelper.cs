@@ -264,7 +264,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			int curPage = 1;
 
-			if (currentPage != null)
+			if (currentPage != null && currentPage != String.Empty)
 			{
 				curPage = Int32.Parse(currentPage);
 			}
