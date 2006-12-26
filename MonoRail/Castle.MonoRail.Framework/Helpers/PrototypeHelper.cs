@@ -27,7 +27,6 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class PrototypeHelper : AbstractHelper
 	{
-
 		/// <summary>
 		/// Pendent
 		/// </summary>
@@ -168,7 +167,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// TODO: Implement and document this one
 			/// </summary>
 			/// <param name="message"></param>
-			public void Alert(String message)
+			public void Alert(object message)
 			{
 				Call("alert", Quote(message));
 			}
@@ -265,14 +264,21 @@ namespace Castle.MonoRail.Framework.Helpers
 							"entry with the template name to render");
 					}
 
-					IViewEngineManager viewEngineManager = (IViewEngineManager)
-						context.GetService(typeof(IViewEngineManager));
+					try
+					{
+						IViewEngineManager viewEngineManager = (IViewEngineManager)
+							context.GetService(typeof(IViewEngineManager));
 
-					StringWriter writer = new StringWriter();
+						StringWriter writer = new StringWriter();
 
-					viewEngineManager.ProcessPartial(writer, context, context.CurrentController, partialName);
+						viewEngineManager.ProcessPartial(writer, context, context.CurrentController, partialName);
 
-					renderOptions = writer.ToString();
+						renderOptions = writer.ToString();
+					}
+					catch(Exception ex)
+					{
+						throw new RailsException("Could not process partial " + partialName, ex);
+					}
 				}
 				else
 				{
@@ -332,7 +338,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				bool comma = false;
 
-				foreach (String arg in args)
+				foreach(object arg in args)
 				{
 					if (comma) tempBuffer.Append(',');
 

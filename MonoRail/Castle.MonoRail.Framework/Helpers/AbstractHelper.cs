@@ -175,10 +175,15 @@ namespace Castle.MonoRail.Framework.Helpers
 				if (entry.Value == null) continue;
 
 				IEnumerable values = singleValueEntry;
+				
 				if (!(entry.Value is String) && (entry.Value is IEnumerable))
+				{
 					values = (IEnumerable) entry.Value;
+				}
 				else
+				{
 					singleValueEntry[0] = entry.Value;
+				}
 
 				foreach(object value in values)
 				{
@@ -313,7 +318,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="content">The content.</param>
 		/// <returns>A quoted string</returns>
-		public static string Quote(string content)
+		public static string Quote(object content)
 		{
 			return "\"" + content + "\"";
 		}
@@ -323,7 +328,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="items">Items to quote</param>
 		/// <returns>A quoted string</returns>
-		public static string[] Quote(string[] items)
+		public static string[] Quote(object[] items)
 		{
 			string[] quotedItems = new string[items.Length];
 
@@ -342,7 +347,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="content">The content.</param>
 		/// <returns>A quoted string</returns>
-		public static string SQuote(string content)
+		public static string SQuote(object content)
 		{
 			return "\'" + content + "\'";
 		}

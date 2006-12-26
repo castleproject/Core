@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Added 'valueformat' to SetOperations (affects FormHelper.Select, Checkboxlist)
+
 - Fixed MR-197
   "Exception thrown by AccessibleThrough are not caught by rescues"
 
