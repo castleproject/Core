@@ -83,7 +83,12 @@ namespace NVelocity
 	public class Test1
 	{
 		private string name;
+		private decimal amount = (decimal) 0.2200;
 
+		public decimal Amount
+		{
+			get { return amount; }
+		}
 
 		public string Name
 		{
@@ -149,6 +154,8 @@ namespace NVelocity
 		[Test]
 		public void Quoting()
 		{
+			Assert.AreEqual("invoked some '0,22' ", Evaluate("$duck1.some($test.Amount.to_squote)"));
+			Assert.AreEqual("invoked some \"0,22\" ", Evaluate("$duck1.some($test.Amount.to_quote)"));
 			Assert.AreEqual("invoked some \"message 1\" \"message 2\" ", Evaluate("$duck1.some($msg1.to_quote, $msg2.to_quote)"));
 			Assert.AreEqual("invoked some 'message 1' 'message 2' ", Evaluate("$duck1.some($msg1.to_squote, $msg2.to_squote)"));
 		}
