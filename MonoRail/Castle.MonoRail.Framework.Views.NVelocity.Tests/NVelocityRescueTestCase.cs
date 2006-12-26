@@ -14,11 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
-	using System;
-	using System.IO;
-
 	using NUnit.Framework;
-
 	using Castle.MonoRail.Framework.Tests;
 
 	[TestFixture]
@@ -79,6 +75,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 
 			AssertReplyEqualTo( "methodDefaultException" );
-		}		
+		}
+
+		[Test]
+		public void RescueAndConrollerInheritance1()
+		{
+			DoGet("rescuable2/Save.rails");
+			AssertReplyEqualTo("An error happened during save");
+
+			DoGet("rescuable2/Save2.rails");
+			AssertReplyEqualTo("An error happened during update");
+		}
 	}
 }

@@ -19,6 +19,29 @@ namespace TestSiteNVelocity.Controllers
 	using Castle.MonoRail.Framework;
 
 	[Rescue("general")]
+	public abstract class BaseController : SmartDispatcherController
+	{
+		
+	}
+
+	[Rescue("saveerror")]
+	[Rescue("updateerror", typeof(ApplicationException))]
+	[ControllerDetails("rescuable2")]
+	public class RescueExtendedController : BaseController
+	{
+		public void Save()
+		{
+			throw new Exception();
+		}
+
+		public void Save2()
+		{
+			throw new ApplicationException();
+		}
+	}
+
+
+	[Rescue("general")]
 	[ControllerDetails("rescuable")]
 	public class RescueController : SmartDispatcherController
 	{
