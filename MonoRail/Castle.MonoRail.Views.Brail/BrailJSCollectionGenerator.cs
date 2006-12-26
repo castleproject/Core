@@ -21,13 +21,13 @@ namespace Castle.MonoRail.Views.Brail
 
     public class BrailJSCollectionGenerator : JSCollectionGeneratorBase, IQuackFu
     {
-        public object QuackGet(string name)
+        public object QuackGet(string name, object[] parameters)
         {
             base.InternalGet(name);
             return this;
         }
 
-        public object QuackSet(string name, object value)
+        public object QuackSet(string name,object[] parameters, object value)
         {
             throw new NotSupportedException("Can't call property set on generator");
         }

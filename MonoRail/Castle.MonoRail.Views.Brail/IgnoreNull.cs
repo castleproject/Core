@@ -27,24 +27,24 @@ namespace Castle.MonoRail.Views.Brail
 			this.target = target;
 		}
 
-		public object QuackGet(string name)
+		public object QuackGet(string name, object[] parameters)
 		{
 			if (target == null)
 				return null;
 			PropertyInfo property = target.GetType().GetProperty(name);
 			if (property == null)
 				throw new RailsException("Could not find property " + name + " on " + target.GetType().FullName);
-			return property.GetValue(target, null);
+            return property.GetValue(target, parameters);
 		}
 
-		public object QuackSet(string name, object obj)
+		public object QuackSet(string name, object[] parameters, object obj)
 		{
 			if (target == null)
 				return null;
 			PropertyInfo property = target.GetType().GetProperty(name);
 			if (property == null)
 				throw new RailsException("Could not find property " + name + " on " + target.GetType().FullName);
-			property.SetValue(target, obj, null);
+			property.SetValue(target, obj, parameters);
 			return null;
 		}
 

@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 
-		public object QuackGet(string name)
+        public object QuackGet(string name, object[] parameters)
 		{
 			object val = resource.GetObject(name);
 			if(val==null)
@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Views.Brail
 			return val;
 		}
 
-		public object QuackSet(string name, object value)
+		public object QuackSet(string name, object[] parameters, object value)
 		{
 			throw new RailsException("You cannnot set resource "+name);
 		}

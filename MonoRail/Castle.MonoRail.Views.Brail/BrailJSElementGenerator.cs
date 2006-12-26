@@ -21,15 +21,16 @@ namespace Castle.MonoRail.Views.Brail
 
     public class BrailJSElementGenerator : JSElementGeneratorBase, IQuackFu
     {
-        public object QuackGet(string name)
+        public object QuackGet(string name, object[] parameters)
         {
             base.InternalGet(name);
             return this;
         }
 
-        public object QuackSet(string name, object value)
+        public object QuackSet(string name, object[] parameters, object value)
         {
-            throw new NotSupportedException("Can't set property on generator");
+            InternalGet(name);//get the current element and then set it
+            return InternalInvoke("set", parameters);
         }
 
         public object QuackInvoke(string name, params object[] args)

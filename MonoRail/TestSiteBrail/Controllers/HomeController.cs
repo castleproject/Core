@@ -48,6 +48,11 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
         {
         }
 
+        public void WithNothingAfterTheLastSeperator()
+        {
+            
+        }
+
         public void NullableProperties()
         {
             Foo[] fooArray1 = new Foo[] { new Foo("Bar"), new Foo(null), new Foo("Baz") };

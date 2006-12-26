@@ -29,24 +29,24 @@ namespace Castle.MonoRail.Views.Brail
         {
         }
 
-        #region IDuck
-
         /// <summary>
         /// Defines the behavior when a property is read
         /// </summary>
         /// <param name="propName">Property name.</param>
+        /// <param name="parameters">Parameters for indexers</param>
         /// <returns>value back to the template</returns>
-        public object QuackGet(string propName)
+        public object QuackGet(string propName, object[] parameters)
         {
-            return QuackInvoke(propName, new object[0]);
+            return QuackInvoke(propName, parameters);
         }
 
         /// <summary>
         /// Defines the behavior when a property is written
         /// </summary>
         /// <param name="propName">Property name.</param>
+        /// <param name="parameters">Parameters for indexers</param>
         /// <param name="value">The value to assign.</param>
-        public object QuackSet(string propName, object value)
+        public object QuackSet(string propName, object[]parameters, object value)
         {
             throw new NotSupportedException("You can't set properties on the generator");
         }
@@ -59,10 +59,10 @@ namespace Castle.MonoRail.Views.Brail
         /// <returns>value back to the template</returns>
         public object QuackInvoke(string method, params object[] args)
         {
+            if (method == "get_Item")
+                method = "el";
             return InternalInvoke(method, args);
         }
-
-        #endregion
 
         /// <summary>
         /// Delegates to the generator
@@ -75,13 +75,9 @@ namespace Castle.MonoRail.Views.Brail
             return generator.ToString();
         }
 
-        /// <summary>
-        /// This tells Brail to output the contents to the browser
-        /// </summary>
-        /// <returns></returns>
         protected override object CreateNullGenerator()
         {
-            return ToString();
+            return null;
         }
 
         protected override object CreateJSCollectionGenerator(PrototypeHelper.JSCollectionGenerator collectionGenerator)

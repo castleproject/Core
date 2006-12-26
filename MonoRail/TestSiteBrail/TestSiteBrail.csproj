@@ -129,6 +129,7 @@
     <Compile Include="Controllers\XmlController.cs" />
     <Compile Include="Helpers\DateFormatHelper.cs" />
     <None Include="Views\HappenedOnTheField\JustComponent.brail" />
+    <None Include="Views\home\WithNothingAfterTheLastSeperator.brail" />
     <None Include="Views\jsgeneration\CheckCNPJ.brailjs" />
     <None Include="Views\jsgeneration\collectionaccess.brailjs" />
     <None Include="Views\jsgeneration\collectionfirstlast.brailjs" />
