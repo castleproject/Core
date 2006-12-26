@@ -168,6 +168,7 @@
     <Compile Include="Classes\SubSimpleClass.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassInterfaces\Bug1.cs" />
     <Compile Include="ClassInterfaces\IMyInterface.cs">
       <SubType>Code</SubType>
     </Compile>

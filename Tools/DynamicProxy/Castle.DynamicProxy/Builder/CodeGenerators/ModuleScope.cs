@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	public class ModuleScope
 	{
 		public static readonly String FILE_NAME = "GeneratedAssembly.dll";
-        public static readonly String ASSEMBLY_NAME = "DynamicAssemblyProxyGen";
+		public static readonly String ASSEMBLY_NAME = "DynamicAssemblyProxyGen";
         
 		/// <summary>
 		/// Avoid leaks caused by non disposal of generated types.

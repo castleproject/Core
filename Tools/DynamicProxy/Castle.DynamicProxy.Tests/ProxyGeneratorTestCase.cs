@@ -567,6 +567,22 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual("DoSomethingElse", interceptor.Invocations[3]);
 		}
 
+		/// <summary>
+		/// See http://support.castleproject.org/browse/DYNPROXY-42
+		/// </summary>
+		[Test]
+		public void NameBugReportedTest()
+		{
+			ProxyGenerator proxyGenerator = new ProxyGenerator();
+			Castle.DynamicProxy.Test.ClassInterfaces.A.B.C.IBubu bubuC = (Castle.DynamicProxy.Test.ClassInterfaces.A.B.C.IBubu)
+				proxyGenerator.CreateProxy(typeof(Castle.DynamicProxy.Test.ClassInterfaces.A.B.C.IBubu), new SimpleInterceptor(), new object());
+			bubuC.OperationA();
+			
+			Castle.DynamicProxy.Test.ClassInterfaces.A.B.D.IBubu bubuD = (Castle.DynamicProxy.Test.ClassInterfaces.A.B.D.IBubu)
+				proxyGenerator.CreateProxy(typeof(Castle.DynamicProxy.Test.ClassInterfaces.A.B.D.IBubu), new SimpleInterceptor(), new object());
+			bubuD.OperationB();
+		}
+
 		[Test]
 		public void IDataReaderProxyGeneration()
 		{
