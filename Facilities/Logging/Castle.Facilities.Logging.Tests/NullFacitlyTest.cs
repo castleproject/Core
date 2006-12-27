@@ -14,36 +14,37 @@
 
 namespace Castle.Facilities.Logging.Tests
 {
-    using Castle.Windsor;
-    using NUnit.Framework;
+	using Castle.Facilities.Logging.Tests.Classes;
+	using Castle.Windsor;
+	using NUnit.Framework;
 
-    /// <summary>
+	/// <summary>
 	/// Summary description for ConsoleFacitlyTest.
 	/// </summary>
 	[TestFixture]
 	public class NullFacitlyTest : BaseTest
 	{
-        private IWindsorContainer container;
+		private IWindsorContainer container;
 
-        [SetUp]
-        public void Setup()
-        {
-            container = base.CreateConfiguredContainer(LoggerImplementation.Null);
-        }
+		[SetUp]
+		public void Setup()
+		{
+			container = base.CreateConfiguredContainer(LoggerImplementation.Null);
+		}
 
-        [TearDown]
-        public void Teardown()
-        {
-            container.Dispose();
-        }
+		[TearDown]
+		public void Teardown()
+		{
+			container.Dispose();
+		}
 
-        [Test]
-        public void SimpleTest() 
-        {
-			container.AddComponent("component", typeof(Classes.LoggingComponent));
-			Classes.LoggingComponent test = container["component"] as Classes.LoggingComponent;
+		[Test]
+		public void SimpleTest()
+		{
+			container.AddComponent("component", typeof(LoggingComponent));
+			LoggingComponent test = container["component"] as LoggingComponent;
 
-            test.DoSomething();
-        }
+			test.DoSomething();
+		}
 	}
 }

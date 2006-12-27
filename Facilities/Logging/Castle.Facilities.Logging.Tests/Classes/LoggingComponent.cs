@@ -36,6 +36,6 @@ namespace Castle.Facilities.Logging.Tests.Classes
 		public ILogger Logger
 		{
 			get { return _logger; }
-		}		
+		}
 	}
 }

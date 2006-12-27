@@ -15,7 +15,6 @@
 namespace Castle.Facilities.Logging
 {
 	using System;
-	
 	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MicroKernel;
@@ -36,9 +35,10 @@ namespace Castle.Facilities.Logging
 			this.loggerFactory = loggerFactory;
 		}
 
-		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		                      DependencyModel dependency)
 		{
-			if (CanResolve(context,  parentResolver, model, dependency))
+			if (CanResolve(context, parentResolver, model, dependency))
 			{
 				return loggerFactory.Create(model.Implementation);
 			}
@@ -46,7 +46,8 @@ namespace Castle.Facilities.Logging
 			return null;
 		}
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		                       DependencyModel dependency)
 		{
 			return dependency.TargetType == typeof(ILogger);
 		}

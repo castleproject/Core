@@ -16,9 +16,7 @@ namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
 	using System.IO;
-
 	using Castle.Core.Logging;
-
 	using NLog;
 	using NLog.Config;
 

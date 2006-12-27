@@ -16,7 +16,6 @@ namespace Castle.Facilities.Logging.Tests.Classes
 {
 	using System;
 
-
 	public interface ISmtpServer
 	{
 		void Start();

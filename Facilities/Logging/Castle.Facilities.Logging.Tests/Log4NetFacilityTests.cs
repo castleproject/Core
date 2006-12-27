@@ -14,52 +14,51 @@
 
 namespace Castle.Facilities.Logging.Tests
 {
-    using System;
-    using System.IO;
-
-    using Castle.Windsor;
-    
+	using System;
+	using System.IO;
+	using Castle.Facilities.Logging.Tests.Classes;
+	using Castle.Windsor;
 	using NUnit.Framework;
 
-    /// <summary>
+	/// <summary>
 	/// Summary description for Log4NetFacilityTests.
 	/// </summary>
 	[TestFixture, Ignore("Dont think we are able to hook Console Output here")]
 	public class Log4NetFacilityTests : BaseTest
 	{
-        private IWindsorContainer container;
-        private StringWriter outWriter = new StringWriter();
-        private StringWriter errorWriter = new StringWriter();
+		private IWindsorContainer container;
+		private StringWriter outWriter = new StringWriter();
+		private StringWriter errorWriter = new StringWriter();
 
-        [SetUp]
-        public void Setup()
-        {
-            container = base.CreateConfiguredContainer(LoggerImplementation.Log4net);            
+		[SetUp]
+		public void Setup()
+		{
+			container = base.CreateConfiguredContainer(LoggerImplementation.Log4net);
 
-            outWriter.GetStringBuilder().Length = 0;
-            errorWriter.GetStringBuilder().Length = 0;
+			outWriter.GetStringBuilder().Length = 0;
+			errorWriter.GetStringBuilder().Length = 0;
 
-            Console.SetOut(outWriter);
-            Console.SetError(errorWriter);
-        }
+			Console.SetOut(outWriter);
+			Console.SetError(errorWriter);
+		}
 
-        [TearDown]
-        public void Teardown()
-        {
-            container.Dispose();
-        }
+		[TearDown]
+		public void Teardown()
+		{
+			container.Dispose();
+		}
 
-        [Test]
-        public void SimpleTest() 
-        {
-            container.AddComponent("component", typeof(Classes.LoggingComponent));
-            Classes.LoggingComponent test = container["component"] as Classes.LoggingComponent;
+		[Test]
+		public void SimpleTest()
+		{
+			container.AddComponent("component", typeof(LoggingComponent));
+			LoggingComponent test = container["component"] as LoggingComponent;
 
-            test.DoSomething();
+			test.DoSomething();
 
-			String expectedLogOutput = String.Format("[Info] '{0}' Hello world\r\n", typeof(Classes.LoggingComponent).FullName);
+			String expectedLogOutput = String.Format("[Info] '{0}' Hello world\r\n", typeof(LoggingComponent).FullName);
 			String actualLogOutput = outWriter.GetStringBuilder().ToString();
-            Assert.AreEqual(expectedLogOutput, actualLogOutput);
-        }
+			Assert.AreEqual(expectedLogOutput, actualLogOutput);
+		}
 	}
 }

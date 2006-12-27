@@ -16,7 +16,6 @@ namespace Castle.Facilities.Logging
 {
 	using System;
 	using System.Configuration;
-
 	using Castle.Core.Logging;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
@@ -44,13 +43,13 @@ namespace Castle.Facilities.Logging
 	{
 		private static readonly String Log4NetLoggerFactoryTypeName =
 			"Castle.Services.Logging.Log4netIntegration.Log4netFactory," +
-				"Castle.Services.Logging.Log4netIntegration,Version=1.0.0.0, Culture=neutral," +
-				"PublicKeyToken=407dd0808d44fbdc";
+			"Castle.Services.Logging.Log4netIntegration,Version=1.0.0.0, Culture=neutral," +
+			"PublicKeyToken=407dd0808d44fbdc";
 
 		private static readonly String NLogLoggerFactoryTypeName =
 			"Castle.Services.Logging.NLogIntegration.NLogFactory," +
-				"Castle.Services.Logging.NLogIntegration,Version=1.0.0.0, Culture=neutral," +
-				"PublicKeyToken=407dd0808d44fbdc";
+			"Castle.Services.Logging.NLogIntegration,Version=1.0.0.0, Culture=neutral," +
+			"PublicKeyToken=407dd0808d44fbdc";
 
 		private ITypeConverter converter;
 		private ILoggerFactory factory;
@@ -96,7 +95,7 @@ namespace Castle.Facilities.Logging
 			if (typeAtt != null)
 			{
 				logApi = (LoggerImplementation)
-					converter.PerformConversion(typeAtt, typeof(LoggerImplementation));
+				         converter.PerformConversion(typeAtt, typeof(LoggerImplementation));
 			}
 
 			CreateProperLoggerFactory(logApi, customAtt, configFileAtt);
@@ -107,8 +106,8 @@ namespace Castle.Facilities.Logging
 		private void CreateProperLoggerFactory(LoggerImplementation logApi, String customType, String configFile)
 		{
 			Type loggerFactoryType = null;
-			
-			switch (logApi)
+
+			switch(logApi)
 			{
 				case LoggerImplementation.Null:
 					loggerFactoryType = typeof(NullLogFactory);
@@ -132,8 +131,8 @@ namespace Castle.Facilities.Logging
 					if (customType == null)
 					{
 						String message = "If you specify loggingApi='custom' " +
-							"then you must use the attribute customLoggerFactory to inform the " +
-							"type name of the custom logger factory";
+						                 "then you must use the attribute customLoggerFactory to inform the " +
+						                 "type name of the custom logger factory";
 #if DOTNET2
 						throw new ConfigurationErrorsException(message);
 #else
@@ -142,12 +141,12 @@ namespace Castle.Facilities.Logging
 					}
 
 					loggerFactoryType = (Type)
-						converter.PerformConversion(customType, typeof(Type));
+					                    converter.PerformConversion(customType, typeof(Type));
 
 					if (!typeof(ILoggerFactory).IsAssignableFrom(loggerFactoryType))
 					{
 						throw new FacilityException("The specified type '" + customType +
-							"' does not implement ILoggerFactory");
+						                            "' does not implement ILoggerFactory");
 					}
 					break;
 
@@ -177,7 +176,7 @@ namespace Castle.Facilities.Logging
 		private void SetUpTypeConverter()
 		{
 			converter = Kernel.GetSubSystem(
-				SubSystemConstants.ConversionManagerKey) as IConversionManager;
+			            	SubSystemConstants.ConversionManagerKey) as IConversionManager;
 		}
 	}
 }

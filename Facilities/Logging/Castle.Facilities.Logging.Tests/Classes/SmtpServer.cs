@@ -15,9 +15,7 @@
 namespace Castle.Facilities.Logging.Tests.Classes
 {
 	using System;
-
 	using Castle.Core.Logging;
-
 
 	public class SmtpServer : ISmtpServer
 	{

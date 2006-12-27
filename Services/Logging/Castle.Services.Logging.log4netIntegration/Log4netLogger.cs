@@ -25,7 +25,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 	{
 		private static Type declaringType = typeof(Log4netLogger);
 
-		private log4net.Core.ILogger _logger;
+		private ILogger _logger;
 		private Log4netFactory _factory;
 
 		internal Log4netLogger(ILog log, Log4netFactory factory) : this(log.Logger, factory)
