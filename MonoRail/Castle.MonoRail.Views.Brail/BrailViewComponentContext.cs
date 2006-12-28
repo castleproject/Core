@@ -32,8 +32,9 @@ namespace Castle.MonoRail.Views.Brail
 
         ICallable body;
         private readonly TextWriter default_writer;
+    	private BrailBase parent;
 
-		/// <summary>
+    	/// <summary>
 		/// Initializes a new instance of the <see cref="BrailViewComponentContext"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
@@ -44,6 +45,7 @@ namespace Castle.MonoRail.Views.Brail
 		public BrailViewComponentContext(BrailBase parent, ICallable body,
 		                                 string name, TextWriter text, IDictionary parameters)
 		{
+			this.parent = parent;
 			parent.ExtendDictionaryWithProperties(contextVars);
 			this.body = body;
 			componentName = name;
@@ -104,10 +106,7 @@ namespace Castle.MonoRail.Views.Brail
 
         public void RenderSection(string sectionName)
         {
-            if (HasSection(sectionName) == false)
-                return;//matching the NVelocity behavior, but maybe should throw?
-            ICallable callable = (ICallable)sections[sectionName];
-            callable.Call(new object[] { default_writer });
+			RenderSection(sectionName, default_writer);
         }
 
     	/// <summary>
@@ -117,12 +116,15 @@ namespace Castle.MonoRail.Views.Brail
     	/// <param name="writer">The writer.</param>
     	public void RenderSection(string sectionName, TextWriter writer)
     	{
-    		throw new NotImplementedException();
+			if (HasSection(sectionName) == false)
+				return;//matching the NVelocity behavior, but maybe should throw?
+			ICallable callable = (ICallable)sections[sectionName];
+			callable.Call(new object[] { writer });
     	}
 
     	public IViewEngine ViewEngine
 		{
-			get { throw new NotImplementedException(); }
+			get { return parent.ViewEngine; }
 		}
 
         public void RegisterSection(string name, ICallable section)
