@@ -18,29 +18,21 @@ namespace Castle.Facilities.Logging.Tests
 	using System.IO;
 	using Castle.Facilities.Logging.Tests.Classes;
 	using Castle.Windsor;
+	using NLog.Targets;
 	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for NLogFacilityTestts.
 	/// </summary>
-	[TestFixture, Ignore("Dont think we are able to hook Console Output here")]
+	[TestFixture]
 	public class NLogFacilityTests : BaseTest
 	{
 		private IWindsorContainer container;
-		private StringWriter outWriter = new StringWriter();
-		private StringWriter errorWriter = new StringWriter();
 
 		[SetUp]
 		public void Setup()
 		{
 			container = base.CreateConfiguredContainer(LoggerImplementation.NLog);
-
-
-			outWriter.GetStringBuilder().Length = 0;
-			errorWriter.GetStringBuilder().Length = 0;
-
-			Console.SetOut(outWriter);
-			Console.SetError(errorWriter);
 		}
 
 		[TearDown]
@@ -52,13 +44,14 @@ namespace Castle.Facilities.Logging.Tests
 		[Test]
 		public void SimpleTest()
 		{
-			container.AddComponent("component", typeof(LoggingComponent));
-			LoggingComponent test = container["component"] as LoggingComponent;
+			container.AddComponent("component", typeof(SimpleLoggingComponent));
+			SimpleLoggingComponent test = container["component"] as SimpleLoggingComponent;
 
 			test.DoSomething();
 
-			String expectedLogOutput = String.Format("[Info] '{0}' Hello world\r\n", typeof(LoggingComponent).FullName);
-			String actualLogOutput = outWriter.GetStringBuilder().ToString();
+			String expectedLogOutput = String.Format("|INFO|{0}|Hello world", typeof(SimpleLoggingComponent).FullName);
+			String actualLogOutput = (NLog.LogManager.Configuration.FindTargetByName("memory") as MemoryTarget).Logs[0].ToString();
+			actualLogOutput = actualLogOutput.Substring(actualLogOutput.IndexOf('|'));
 			Assert.AreEqual(expectedLogOutput, actualLogOutput);
 		}
 	}

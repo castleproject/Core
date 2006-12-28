@@ -20,25 +20,39 @@ namespace Castle.Services.Logging.NLogIntegration
 
 	public class NLogLogger : ILogger
 	{
-		private Logger _log;
-		private NLogFactory _factory;
-		private String _loggerName;
+		private Logger logger;
+		private NLogFactory factory;
 
-		public NLogLogger(Logger log, NLogFactory factory, String loggerName)
+		internal NLogLogger()
 		{
-			_log = log;
-			_factory = factory;
-			_loggerName = loggerName;
+		}
+
+		public NLogLogger(Logger logger, NLogFactory factory)
+		{
+			Logger = logger;
+			Factory = factory;
 		}
 
 		public ILogger CreateChildLogger(String name)
 		{
-			return _factory.Create(_loggerName + "." + name);
+			return Factory.Create(Logger.Name + "." + name);
+		}
+
+		protected internal Logger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
+
+		protected internal NLogFactory Factory
+		{
+			get { return factory; }
+			set { factory = value; }
 		}
 
 		public override string ToString()
 		{
-			return _log.ToString();
+			return Logger.ToString();
 		}
 
 		#region Debug
@@ -49,8 +63,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Debug(string message)
 		{
-			if (_log.IsDebugEnabled)
-				_log.Debug(message);
+			if (Logger.IsDebugEnabled)
+				Logger.Debug(message);
 		}
 
 		/// <summary>
@@ -60,8 +74,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Debug(string message, Exception exception)
 		{
-			if (_log.IsDebugEnabled)
-				_log.DebugException(message, exception);
+			if (Logger.IsDebugEnabled)
+				Logger.DebugException(message, exception);
 		}
 
 		/// <summary>
@@ -72,8 +86,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		[Obsolete("Use DebugFormat instead")]
 		public void Debug(string format, params object[] args)
 		{
-			if (_log.IsDebugEnabled)
-				_log.Debug(format, args);
+			if (Logger.IsDebugEnabled)
+				Logger.Debug(format, args);
 		}
 
 		/// <summary>
@@ -83,8 +97,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void DebugFormat(string format, params object[] args)
 		{
-			if (_log.IsDebugEnabled)
-				_log.Debug(format, args);
+			if (Logger.IsDebugEnabled)
+				Logger.Debug(format, args);
 		}
 
 		/// <summary>
@@ -95,8 +109,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void DebugFormat(Exception exception, string format, params object[] args)
 		{
-			if (_log.IsDebugEnabled)
-				_log.DebugException(String.Format(format, args), exception);
+			if (Logger.IsDebugEnabled)
+				Logger.DebugException(String.Format(format, args), exception);
 		}
 
 		/// <summary>
@@ -107,8 +121,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void DebugFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsDebugEnabled)
-				_log.Debug(formatProvider, format, args);
+			if (Logger.IsDebugEnabled)
+				Logger.Debug(formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -120,8 +134,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void DebugFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsDebugEnabled)
-				_log.DebugException(String.Format(formatProvider, format, args), exception);
+			if (Logger.IsDebugEnabled)
+				Logger.DebugException(String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -134,8 +148,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Info(string message)
 		{
-			if (_log.IsInfoEnabled)
-				_log.Info(message);
+			if (Logger.IsInfoEnabled)
+				Logger.Info(message);
 		}
 
 		/// <summary>
@@ -145,8 +159,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Info(string message, Exception exception)
 		{
-			if (_log.IsInfoEnabled)
-				_log.InfoException(message, exception);
+			if (Logger.IsInfoEnabled)
+				Logger.InfoException(message, exception);
 		}
 
 		/// <summary>
@@ -157,8 +171,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		[Obsolete("Use InfoFormat instead")]
 		public void Info(string format, params object[] args)
 		{
-			if (_log.IsInfoEnabled)
-				_log.Info(format, args);
+			if (Logger.IsInfoEnabled)
+				Logger.Info(format, args);
 		}
 
 		/// <summary>
@@ -168,8 +182,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void InfoFormat(string format, params object[] args)
 		{
-			if (_log.IsInfoEnabled)
-				_log.Info(format, args);
+			if (Logger.IsInfoEnabled)
+				Logger.Info(format, args);
 		}
 
 		/// <summary>
@@ -180,8 +194,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void InfoFormat(Exception exception, string format, params object[] args)
 		{
-			if (_log.IsInfoEnabled)
-				_log.InfoException(String.Format(format, args), exception);
+			if (Logger.IsInfoEnabled)
+				Logger.InfoException(String.Format(format, args), exception);
 		}
 
 		/// <summary>
@@ -192,8 +206,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void InfoFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsInfoEnabled)
-				_log.Info(formatProvider, format, args);
+			if (Logger.IsInfoEnabled)
+				Logger.Info(formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -205,8 +219,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsInfoEnabled)
-				_log.InfoException(String.Format(formatProvider, format, args), exception);
+			if (Logger.IsInfoEnabled)
+				Logger.InfoException(String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -219,8 +233,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Warn(string message)
 		{
-			if (_log.IsWarnEnabled)
-				_log.Warn(message);
+			if (Logger.IsWarnEnabled)
+				Logger.Warn(message);
 		}
 
 		/// <summary>
@@ -230,8 +244,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Warn(string message, Exception exception)
 		{
-			if (_log.IsWarnEnabled)
-				_log.WarnException(message, exception);
+			if (Logger.IsWarnEnabled)
+				Logger.WarnException(message, exception);
 		}
 
 		/// <summary>
@@ -242,8 +256,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		[Obsolete("Use WarnFormat instead")]
 		public void Warn(string format, params object[] args)
 		{
-			if (_log.IsWarnEnabled)
-				_log.Warn(format, args);
+			if (Logger.IsWarnEnabled)
+				Logger.Warn(format, args);
 		}
 
 		/// <summary>
@@ -253,8 +267,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void WarnFormat(string format, params object[] args)
 		{
-			if (_log.IsWarnEnabled)
-				_log.Warn(format, args);
+			if (Logger.IsWarnEnabled)
+				Logger.Warn(format, args);
 		}
 
 		/// <summary>
@@ -265,8 +279,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void WarnFormat(Exception exception, string format, params object[] args)
 		{
-			if (_log.IsWarnEnabled)
-				_log.WarnException(String.Format(format, args), exception);
+			if (Logger.IsWarnEnabled)
+				Logger.WarnException(String.Format(format, args), exception);
 		}
 
 		/// <summary>
@@ -277,8 +291,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void WarnFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsWarnEnabled)
-				_log.Warn(formatProvider, format, args);
+			if (Logger.IsWarnEnabled)
+				Logger.Warn(formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -290,8 +304,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsWarnEnabled)
-				_log.WarnException(String.Format(formatProvider, format, args), exception);
+			if (Logger.IsWarnEnabled)
+				Logger.WarnException(String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -304,8 +318,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Error(string message)
 		{
-			if (_log.IsErrorEnabled)
-				_log.Error(message);
+			if (Logger.IsErrorEnabled)
+				Logger.Error(message);
 		}
 
 		/// <summary>
@@ -315,8 +329,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Error(string message, Exception exception)
 		{
-			if (_log.IsErrorEnabled)
-				_log.ErrorException(message, exception);
+			if (Logger.IsErrorEnabled)
+				Logger.ErrorException(message, exception);
 		}
 
 		/// <summary>
@@ -327,8 +341,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		[Obsolete("Use ErrorFormat instead")]
 		public void Error(string format, params object[] args)
 		{
-			if (_log.IsErrorEnabled)
-				_log.Error(format, args);
+			if (Logger.IsErrorEnabled)
+				Logger.Error(format, args);
 		}
 
 		/// <summary>
@@ -338,8 +352,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void ErrorFormat(string format, params object[] args)
 		{
-			if (_log.IsErrorEnabled)
-				_log.Error(format, args);
+			if (Logger.IsErrorEnabled)
+				Logger.Error(format, args);
 		}
 
 		/// <summary>
@@ -350,8 +364,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void ErrorFormat(Exception exception, string format, params object[] args)
 		{
-			if (_log.IsErrorEnabled)
-				_log.ErrorException(String.Format(format, args), exception);
+			if (Logger.IsErrorEnabled)
+				Logger.ErrorException(String.Format(format, args), exception);
 		}
 
 		/// <summary>
@@ -362,8 +376,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void ErrorFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsErrorEnabled)
-				_log.Error(formatProvider, format, args);
+			if (Logger.IsErrorEnabled)
+				Logger.Error(formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -375,8 +389,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void ErrorFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsErrorEnabled)
-				_log.ErrorException(String.Format(formatProvider, format, args), exception);
+			if (Logger.IsErrorEnabled)
+				Logger.ErrorException(String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -389,8 +403,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Fatal(string message)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(message);
+			if (Logger.IsFatalEnabled)
+				Logger.Fatal(message);
 		}
 
 		/// <summary>
@@ -400,8 +414,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message">The message to log</param>
 		public void Fatal(string message, Exception exception)
 		{
-			if (_log.IsFatalEnabled)
-				_log.FatalException(message, exception);
+			if (Logger.IsFatalEnabled)
+				Logger.FatalException(message, exception);
 		}
 
 		/// <summary>
@@ -412,8 +426,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		[Obsolete("Use FatalFormat instead")]
 		public void Fatal(string format, params object[] args)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(format, args);
+			if (Logger.IsFatalEnabled)
+				Logger.Fatal(format, args);
 		}
 
 		/// <summary>
@@ -423,8 +437,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void FatalFormat(string format, params object[] args)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(format, args);
+			if (Logger.IsFatalEnabled)
+				Logger.Fatal(format, args);
 		}
 
 		/// <summary>
@@ -435,8 +449,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void FatalFormat(Exception exception, string format, params object[] args)
 		{
-			if (_log.IsFatalEnabled)
-				_log.FatalException(String.Format(format, args), exception);
+			if (Logger.IsFatalEnabled)
+				Logger.FatalException(String.Format(format, args), exception);
 		}
 
 		/// <summary>
@@ -447,8 +461,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void FatalFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(formatProvider, format, args);
+			if (Logger.IsFatalEnabled)
+				Logger.Fatal(formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -460,8 +474,8 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args">Format arguments for the message to log</param>
 		public void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (_log.IsFatalEnabled)
-				_log.FatalException(String.Format(formatProvider, format, args), exception);
+			if (Logger.IsFatalEnabled)
+				Logger.FatalException(String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -471,22 +485,22 @@ namespace Castle.Services.Logging.NLogIntegration
 		[Obsolete("Use FatalFormat instead")]
 		public void FatalError(String format, params object[] args)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(format, args);
+			if (Logger.IsFatalEnabled)
+				Logger.Fatal(format, args);
 		}
 
 		[Obsolete("Use Fatal instead")]
 		public void FatalError(String message, Exception exception)
 		{
-			if (_log.IsFatalEnabled)
-				_log.FatalException(message, exception);
+			if (Logger.IsFatalEnabled)
+				Logger.FatalException(message, exception);
 		}
 
 		[Obsolete("Use Fatal instead")]
 		public void FatalError(String message)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(message);
+			if (Logger.IsFatalEnabled)
+				Logger.Fatal(message);
 		}
 
 		#endregion
@@ -499,7 +513,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <value>True if "debug" messages will be logged.</value> 
 		public bool IsDebugEnabled
 		{
-			get { return _log.IsDebugEnabled; }
+			get { return Logger.IsDebugEnabled; }
 		}
 
 		/// <summary>
@@ -508,7 +522,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <value>True if "info" messages will be logged.</value> 
 		public bool IsInfoEnabled
 		{
-			get { return _log.IsInfoEnabled; }
+			get { return Logger.IsInfoEnabled; }
 		}
 
 		/// <summary>
@@ -517,7 +531,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <value>True if "warn" messages will be logged.</value> 
 		public bool IsWarnEnabled
 		{
-			get { return _log.IsWarnEnabled; }
+			get { return Logger.IsWarnEnabled; }
 		}
 
 		/// <summary>
@@ -526,7 +540,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <value>True if "error" messages will be logged.</value> 
 		public bool IsErrorEnabled
 		{
-			get { return _log.IsErrorEnabled; }
+			get { return Logger.IsErrorEnabled; }
 		}
 
 		/// <summary>
@@ -535,13 +549,13 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <value>True if "fatal" messages will be logged.</value> 
 		public bool IsFatalEnabled
 		{
-			get { return _log.IsFatalEnabled; }
+			get { return Logger.IsFatalEnabled; }
 		}
 
 		[Obsolete("Use IsFatalEnabled instead")]
 		public bool IsFatalErrorEnabled
 		{
-			get { return _log.IsFatalEnabled; }
+			get { return Logger.IsFatalEnabled; }
 		}
 
 		#endregion

@@ -14,12 +14,20 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll"/>
+			<include name="log4net.dll" />
+			<include name="NLog.dll" />
 			<include name="Castle.Facilities.Logging.dll" />
-
 			<include name="Castle.Core.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
 		</assemblyfileset>
+
+		<copy	todir="${build.dir}">
+			<fileset basedir="${src.dir}">
+				<include name="*.config" />
+			</fileset>
+		</copy>
+		
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />

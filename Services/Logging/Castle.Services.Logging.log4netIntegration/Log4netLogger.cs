@@ -25,8 +25,12 @@ namespace Castle.Services.Logging.Log4netIntegration
 	{
 		private static Type declaringType = typeof(Log4netLogger);
 
-		private ILogger _logger;
-		private Log4netFactory _factory;
+		private ILogger logger;
+		private Log4netFactory factory;
+
+		internal Log4netLogger()
+		{
+		}
 
 		internal Log4netLogger(ILog log, Log4netFactory factory) : this(log.Logger, factory)
 		{
@@ -34,18 +38,30 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 		public Log4netLogger(ILogger logger, Log4netFactory factory)
 		{
-			_logger = logger;
-			_factory = factory;
+			Logger = logger;
+			Factory = factory;
 		}
 
 		public Logger CreateChildLogger(String name)
 		{
-			return _factory.Create(_logger.Name + "." + name);
+			return Factory.Create(Logger.Name + "." + name);
+		}
+
+		protected internal ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
+
+		protected internal Log4netFactory Factory
+		{
+			get { return factory; }
+			set { factory = value; }
 		}
 
 		public override string ToString()
 		{
-			return _logger.ToString();
+			return Logger.ToString();
 		}
 
 		#region Debug
@@ -54,7 +70,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-				_logger.Log(declaringType, Level.Debug, message, null);
+				Logger.Log(declaringType, Level.Debug, message, null);
 			}
 		}
 
@@ -62,7 +78,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-				_logger.Log(declaringType, Level.Debug, message, exception);
+				Logger.Log(declaringType, Level.Debug, message, exception);
 			}
 		}
 
@@ -70,7 +86,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-				_logger.Log(declaringType, Level.Debug, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Debug, String.Format(format, args), null);
 			}
 		}
 
@@ -78,7 +94,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-				_logger.Log(declaringType, Level.Debug, String.Format(format, args), exception);
+				Logger.Log(declaringType, Level.Debug, String.Format(format, args), exception);
 			}
 		}
 
@@ -86,7 +102,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-				_logger.Log(declaringType, Level.Debug, String.Format(formatProvider, format, args), null);
+				Logger.Log(declaringType, Level.Debug, String.Format(formatProvider, format, args), null);
 			}
 		}
 
@@ -94,7 +110,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-				_logger.Log(declaringType, Level.Debug, String.Format(formatProvider, format, args), exception);
+				Logger.Log(declaringType, Level.Debug, String.Format(formatProvider, format, args), exception);
 			}
 		}
 
@@ -103,7 +119,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-				_logger.Log(declaringType, Level.Debug, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Debug, String.Format(format, args), null);
 			}
 		}
 
@@ -115,7 +131,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsInfoEnabled)
 			{
-				_logger.Log(declaringType, Level.Info, message, null);
+				Logger.Log(declaringType, Level.Info, message, null);
 			}
 		}
 
@@ -123,7 +139,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsInfoEnabled)
 			{
-				_logger.Log(declaringType, Level.Info, message, exception);
+				Logger.Log(declaringType, Level.Info, message, exception);
 			}
 		}
 
@@ -131,7 +147,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsInfoEnabled)
 			{
-				_logger.Log(declaringType, Level.Info, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Info, String.Format(format, args), null);
 			}
 		}
 
@@ -139,7 +155,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsInfoEnabled)
 			{
-				_logger.Log(declaringType, Level.Info, String.Format(format, args), exception);
+				Logger.Log(declaringType, Level.Info, String.Format(format, args), exception);
 			}
 		}
 
@@ -147,7 +163,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsInfoEnabled)
 			{
-				_logger.Log(declaringType, Level.Info, String.Format(formatProvider, format, args), null);
+				Logger.Log(declaringType, Level.Info, String.Format(formatProvider, format, args), null);
 			}
 		}
 
@@ -155,7 +171,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsInfoEnabled)
 			{
-				_logger.Log(declaringType, Level.Info, String.Format(formatProvider, format, args), exception);
+				Logger.Log(declaringType, Level.Info, String.Format(formatProvider, format, args), exception);
 			}
 		}
 
@@ -164,7 +180,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsInfoEnabled)
 			{
-				_logger.Log(declaringType, Level.Info, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Info, String.Format(format, args), null);
 			}
 		}
 
@@ -176,7 +192,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsWarnEnabled)
 			{
-				_logger.Log(declaringType, Level.Warn, message, null);
+				Logger.Log(declaringType, Level.Warn, message, null);
 			}
 		}
 
@@ -184,7 +200,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsWarnEnabled)
 			{
-				_logger.Log(declaringType, Level.Warn, message, exception);
+				Logger.Log(declaringType, Level.Warn, message, exception);
 			}
 		}
 
@@ -192,7 +208,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsWarnEnabled)
 			{
-				_logger.Log(declaringType, Level.Warn, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Warn, String.Format(format, args), null);
 			}
 		}
 
@@ -200,7 +216,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsWarnEnabled)
 			{
-				_logger.Log(declaringType, Level.Warn, String.Format(format, args), exception);
+				Logger.Log(declaringType, Level.Warn, String.Format(format, args), exception);
 			}
 		}
 
@@ -208,7 +224,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsWarnEnabled)
 			{
-				_logger.Log(declaringType, Level.Warn, String.Format(formatProvider, format, args), null);
+				Logger.Log(declaringType, Level.Warn, String.Format(formatProvider, format, args), null);
 			}
 		}
 
@@ -216,7 +232,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsWarnEnabled)
 			{
-				_logger.Log(declaringType, Level.Warn, String.Format(formatProvider, format, args), exception);
+				Logger.Log(declaringType, Level.Warn, String.Format(formatProvider, format, args), exception);
 			}
 		}
 
@@ -225,7 +241,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsWarnEnabled)
 			{
-				_logger.Log(declaringType, Level.Warn, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Warn, String.Format(format, args), null);
 			}
 		}
 
@@ -237,7 +253,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Error, message, null);
+				Logger.Log(declaringType, Level.Error, message, null);
 			}
 		}
 
@@ -245,7 +261,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Error, message, exception);
+				Logger.Log(declaringType, Level.Error, message, exception);
 			}
 		}
 
@@ -253,7 +269,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Error, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Error, String.Format(format, args), null);
 			}
 		}
 
@@ -261,7 +277,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Error, String.Format(format, args), exception);
+				Logger.Log(declaringType, Level.Error, String.Format(format, args), exception);
 			}
 		}
 
@@ -269,7 +285,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Error, String.Format(formatProvider, format, args), null);
+				Logger.Log(declaringType, Level.Error, String.Format(formatProvider, format, args), null);
 			}
 		}
 
@@ -277,7 +293,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Error, String.Format(formatProvider, format, args), exception);
+				Logger.Log(declaringType, Level.Error, String.Format(formatProvider, format, args), exception);
 			}
 		}
 
@@ -286,7 +302,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Error, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Error, String.Format(format, args), null);
 			}
 		}
 
@@ -298,7 +314,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, message, null);
+				Logger.Log(declaringType, Level.Fatal, message, null);
 			}
 		}
 
@@ -306,7 +322,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, message, exception);
+				Logger.Log(declaringType, Level.Fatal, message, exception);
 			}
 		}
 
@@ -314,7 +330,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Fatal, String.Format(format, args), null);
 			}
 		}
 
@@ -322,7 +338,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, String.Format(format, args), exception);
+				Logger.Log(declaringType, Level.Fatal, String.Format(format, args), exception);
 			}
 		}
 
@@ -330,7 +346,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, String.Format(formatProvider, format, args), null);
+				Logger.Log(declaringType, Level.Fatal, String.Format(formatProvider, format, args), null);
 			}
 		}
 
@@ -338,7 +354,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, String.Format(formatProvider, format, args), exception);
+				Logger.Log(declaringType, Level.Fatal, String.Format(formatProvider, format, args), exception);
 			}
 		}
 
@@ -347,7 +363,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Fatal, String.Format(format, args), null);
 			}
 		}
 
@@ -360,7 +376,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, String.Format(format, args), null);
+				Logger.Log(declaringType, Level.Fatal, String.Format(format, args), null);
 			}
 		}
 
@@ -369,7 +385,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, message, exception);
+				Logger.Log(declaringType, Level.Fatal, message, exception);
 			}
 		}
 
@@ -378,7 +394,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsFatalErrorEnabled)
 			{
-				_logger.Log(declaringType, Level.Fatal, message, null);
+				Logger.Log(declaringType, Level.Fatal, message, null);
 			}
 		}
 
@@ -388,33 +404,33 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 		public bool IsErrorEnabled
 		{
-			get { return _logger.IsEnabledFor(Level.Error); }
+			get { return Logger.IsEnabledFor(Level.Error); }
 		}
 
 		public bool IsWarnEnabled
 		{
-			get { return _logger.IsEnabledFor(Level.Warn); }
+			get { return Logger.IsEnabledFor(Level.Warn); }
 		}
 
 		public bool IsDebugEnabled
 		{
-			get { return _logger.IsEnabledFor(Level.Debug); }
+			get { return Logger.IsEnabledFor(Level.Debug); }
 		}
 
 		public bool IsFatalEnabled
 		{
-			get { return _logger.IsEnabledFor(Level.Fatal); }
+			get { return Logger.IsEnabledFor(Level.Fatal); }
 		}
 
 		[Obsolete("Use IsFatalEnabled instead")]
 		public bool IsFatalErrorEnabled
 		{
-			get { return _logger.IsEnabledFor(Level.Fatal); }
+			get { return Logger.IsEnabledFor(Level.Fatal); }
 		}
 
 		public bool IsInfoEnabled
 		{
-			get { return _logger.IsEnabledFor(Level.Info); }
+			get { return Logger.IsEnabledFor(Level.Info); }
 		}
 
 		#endregion

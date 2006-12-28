@@ -74,7 +74,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
@@ -108,6 +108,7 @@
     <None Include="..\..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <None Include="Sample.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

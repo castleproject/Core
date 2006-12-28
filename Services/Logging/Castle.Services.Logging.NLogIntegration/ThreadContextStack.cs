@@ -12,36 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Services.Logging.NLogIntegration
+namespace Castle.Services.Logging.NLogtIntegration
 {
 	using System;
-	using System.IO;
 	using Castle.Core.Logging;
-	using NLog;
-	using NLog.Config;
 
-	public class NLogFactory : AbstractLoggerFactory
+	public class ThreadContextStack : IContextStack
 	{
-		public NLogFactory()
-			: this("nlog.config")
+
+		#region IContextStack Members
+
+		public int Count
 		{
+			get { throw new NotImplementedException("NLog does not implement a Count of it's stack."); }
 		}
 
-		public NLogFactory(string configFile)
+		public void Clear()
 		{
-			FileInfo file = GetConfigFile(configFile);
-			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
+			NLog.NDC.Clear();
 		}
 
-		public override ILogger Create(String name)
+		public string Pop()
 		{
-			Logger log = LogManager.GetLogger(name);
-			return new NLogLogger(log, this);
+			return NLog.NDC.Pop();
 		}
 
-		public override ILogger Create(String name, LoggerLevel level)
+		public IDisposable Push(string message)
 		{
-			throw new NotImplementedException("Logger levels cannot be set at runtime. Please review your configuration file.");
+			return NLog.NDC.Push(message);
 		}
+
+		#endregion
 	}
 }

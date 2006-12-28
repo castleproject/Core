@@ -12,36 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Services.Logging.NLogIntegration
+namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
-	using System.IO;
 	using Castle.Core.Logging;
-	using NLog;
-	using NLog.Config;
 
-	public class NLogFactory : AbstractLoggerFactory
+	public class ThreadContextStack : IContextStack
 	{
-		public NLogFactory()
-			: this("nlog.config")
+		private log4net.Util.ThreadContextStack log4netStack;
+		public ThreadContextStack(log4net.Util.ThreadContextStack log4netStack)
 		{
+			this.log4netStack = log4netStack;
 		}
 
-		public NLogFactory(string configFile)
+		#region IContextStack Members
+
+		public int Count
 		{
-			FileInfo file = GetConfigFile(configFile);
-			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
+			get { return log4netStack.Count; }
 		}
 
-		public override ILogger Create(String name)
+		public void Clear()
 		{
-			Logger log = LogManager.GetLogger(name);
-			return new NLogLogger(log, this);
+			log4netStack.Clear();
 		}
 
-		public override ILogger Create(String name, LoggerLevel level)
+		public string Pop()
 		{
-			throw new NotImplementedException("Logger levels cannot be set at runtime. Please review your configuration file.");
+			return log4netStack.Pop();
 		}
+
+		public IDisposable Push(string message)
+		{
+			return log4netStack.Push(message);
+		}
+
+		#endregion
 	}
 }

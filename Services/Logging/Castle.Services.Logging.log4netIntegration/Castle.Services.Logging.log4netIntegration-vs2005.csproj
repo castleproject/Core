@@ -74,7 +74,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
@@ -96,12 +96,18 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GlobalContextProperties.cs" />
+    <Compile Include="ExtendedLog4netFactory.cs" />
+    <Compile Include="ExtendedLog4netLogger.cs" />
     <Compile Include="Log4netFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Log4netLogger.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ThreadContextProperties.cs" />
+    <Compile Include="ThreadContextStack.cs" />
+    <Compile Include="ThreadContextStacks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\CastleKey.snk">

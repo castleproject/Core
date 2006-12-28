@@ -26,7 +26,8 @@ namespace Castle.Facilities.Logging
 	/// </summary>
 	public class LoggerResolver : ISubDependencyResolver
 	{
-		public ILoggerFactory loggerFactory;
+		private ILoggerFactory loggerFactory;
+		private IExtendedLoggerFactory extendedLoggerFactory;
 
 		public LoggerResolver(ILoggerFactory loggerFactory)
 		{
@@ -35,12 +36,30 @@ namespace Castle.Facilities.Logging
 			this.loggerFactory = loggerFactory;
 		}
 
+		public LoggerResolver(IExtendedLoggerFactory extendedLoggerFactory)
+		{
+			if (extendedLoggerFactory == null) throw new ArgumentNullException("extendedLoggerFactory");
+
+			this.extendedLoggerFactory = extendedLoggerFactory;
+		}
+
 		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
 		                      DependencyModel dependency)
 		{
 			if (CanResolve(context, parentResolver, model, dependency))
 			{
-				return loggerFactory.Create(model.Implementation);
+				if (extendedLoggerFactory != null)
+        {
+        	return extendedLoggerFactory.Create(model.Implementation);
+        }
+				else if (loggerFactory != null)
+				{
+					return loggerFactory.Create(model.Implementation);
+				}
+				else
+				{
+					throw new LoggerException("Unable to resolve proper LoggerFactory for Logger.");
+				}
 			}
 
 			return null;
@@ -49,7 +68,7 @@ namespace Castle.Facilities.Logging
 		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
 		                       DependencyModel dependency)
 		{
-			return dependency.TargetType == typeof(ILogger);
+			return dependency.TargetType == typeof(ILogger) || dependency.TargetType == typeof(IExtendedLogger);
 		}
 	}
 }

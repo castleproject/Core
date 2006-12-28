@@ -74,7 +74,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
@@ -93,6 +93,14 @@
     <Reference Include="Castle.Windsor, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\debug\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\debug\NLog.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
@@ -120,10 +128,11 @@
     <Compile Include="BaseTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\ComplexLoggingComponent.cs" />
     <Compile Include="Classes\ISmtpServer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\LoggingComponent.cs">
+    <Compile Include="Classes\SimpleLoggingComponent.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\SmtpServer.cs">
@@ -132,6 +141,8 @@
     <Compile Include="ConsoleFacitlyTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ExtendedNLogFacilityTests.cs" />
+    <Compile Include="ExtendedLog4NetFacilityTests.cs" />
     <Compile Include="NullFacitlyTest.cs" />
     <Compile Include="Log4NetFacilityTests.cs">
       <SubType>Code</SubType>
@@ -139,8 +150,8 @@
     <Compile Include="NLogFacilityTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="log4net.config" />
-    <None Include="NLog.config" />
+    <None Include="log4net.facilities.test.config" />
+    <None Include="NLog.facilities.test.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

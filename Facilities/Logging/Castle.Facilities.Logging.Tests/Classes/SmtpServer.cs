@@ -19,9 +19,9 @@ namespace Castle.Facilities.Logging.Tests.Classes
 
 	public class SmtpServer : ISmtpServer
 	{
-		private ILogger logger;
+		private IExtendedLogger logger;
 
-		public ILogger Logger
+		public IExtendedLogger Logger
 		{
 			get { return logger; }
 			set { logger = value; }

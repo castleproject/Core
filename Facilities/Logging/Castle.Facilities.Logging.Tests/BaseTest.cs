@@ -36,7 +36,34 @@ namespace Castle.Facilities.Logging.Tests
 			MutableConfiguration confignode = new MutableConfiguration("facility");
 
 			confignode.Attributes.Add("loggingApi", loggerApi.ToString());
-			confignode.Attributes.Add("customLoggerFactory", custom);
+			switch (loggerApi)
+			{
+				case LoggerImplementation.Custom:
+					{
+						confignode.Attributes.Add("customLoggerFactory", custom);
+						break;
+					}
+				case LoggerImplementation.Log4net:
+					{
+						confignode.Attributes.Add("configFile", "log4net.facilities.test.config");
+						break;
+					}
+				case LoggerImplementation.NLog:
+					{
+						confignode.Attributes.Add("configFile", "NLog.facilities.test.config");
+						break;
+					}
+				case LoggerImplementation.ExtendedLog4net:
+					{
+						confignode.Attributes.Add("configFile", "log4net.facilities.test.config");
+						break;
+					}
+				case LoggerImplementation.ExtendedNLog:
+					{
+						confignode.Attributes.Add("configFile", "NLog.facilities.test.config");
+						break;
+					}
+			}
 
 			container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);
 

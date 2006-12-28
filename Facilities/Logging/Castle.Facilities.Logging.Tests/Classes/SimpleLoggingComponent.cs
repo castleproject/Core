@@ -12,36 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Services.Logging.NLogIntegration
+namespace Castle.Facilities.Logging.Tests.Classes
 {
-	using System;
-	using System.IO;
 	using Castle.Core.Logging;
-	using NLog;
-	using NLog.Config;
 
-	public class NLogFactory : AbstractLoggerFactory
+	/// <summary>
+	/// Summary description for SimpleLoggingComponent.
+	/// </summary>
+	public class SimpleLoggingComponent
 	{
-		public NLogFactory()
-			: this("nlog.config")
+		private ILogger logger;
+
+		public SimpleLoggingComponent(ILogger logger)
 		{
+			this.logger = logger;
 		}
 
-		public NLogFactory(string configFile)
+		public void DoSomething()
 		{
-			FileInfo file = GetConfigFile(configFile);
-			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
+			Logger.Info("Hello world");
 		}
 
-		public override ILogger Create(String name)
+		public ILogger Logger
 		{
-			Logger log = LogManager.GetLogger(name);
-			return new NLogLogger(log, this);
-		}
-
-		public override ILogger Create(String name, LoggerLevel level)
-		{
-			throw new NotImplementedException("Logger levels cannot be set at runtime. Please review your configuration file.");
+			get { return logger; }
 		}
 	}
 }
