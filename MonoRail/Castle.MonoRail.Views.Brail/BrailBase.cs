@@ -56,6 +56,12 @@ namespace Castle.MonoRail.Views.Brail
 			get { return viewEngine.ViewRootDir; }
 		}
 
+
+		public BooViewEngine ViewEngine
+		{
+			get { return viewEngine; }
+		}
+
 		// Output the subview to the client, this is either a relative path "SubView" which
 		// is relative to the current /script/ or an "absolute" path "/home/menu" which is
 		// actually relative to ViewDirRoot
