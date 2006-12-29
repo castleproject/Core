@@ -48,7 +48,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		List
 	}
-
+	
 	/// <summary>
 	/// Base class to define common relation information
 	/// </summary>
@@ -69,6 +69,7 @@ namespace Castle.ActiveRecord
 		internal bool inverse;
 		internal ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
 		internal RelationType relType = RelationType.Guess;
+		internal NotFoundBehaviour notFoundBehaviour = NotFoundBehaviour.Default;
 
 		/// <summary>
 		/// Gets or sets the type of the relation.
@@ -201,6 +202,16 @@ namespace Castle.ActiveRecord
 		{
 			get { return element; }
 			set { element = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the way broken relations are handled.
+		/// </summary>
+		/// <value>The behaviour.</value>
+		public NotFoundBehaviour NotFoundBehaviour
+		{
+			get { return notFoundBehaviour; }
+			set { notFoundBehaviour = value; }
 		}
 	}
 }

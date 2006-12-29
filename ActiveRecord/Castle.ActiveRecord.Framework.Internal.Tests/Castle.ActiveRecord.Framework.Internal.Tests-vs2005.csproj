@@ -182,6 +182,7 @@
     <Compile Include="Model\ImportClass.cs" />
     <Compile Include="Model\LazyClass.cs" />
     <Compile Include="Model\LazyClassWithoutVirtualPropertyOnBelongsTo.cs" />
+    <Compile Include="Model\NotFoundBehaviourClass.cs" />
     <Compile Include="Model\Person.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -17,6 +17,30 @@ namespace Castle.ActiveRecord
 	using System;
 
 	/// <summary>
+	/// Define how broken relations should be handled.
+	/// </summary>
+	[Serializable]
+	public enum NotFoundBehaviour
+	{
+		/// <summary>
+		/// Throw an exception when the relation is broken.
+		/// </summary>
+		Default,
+		
+		/// <summary>
+		/// Throw an exception when the relation is broken.
+		/// </summary>
+		/// <remarks>this is the default behaviour</remarks>
+		Exception,
+
+		/// <summary>
+		/// Ignore the broken relation and update
+		/// the FK to null on the next save.
+		/// </summary>
+		Ignore
+	}
+	
+	/// <summary>
 	/// Maps a one to one association.
 	/// </summary>
 	/// <example>
@@ -48,6 +72,7 @@ namespace Castle.ActiveRecord
 		private bool unique;
 		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
 		private CascadeEnum cascade = CascadeEnum.None;
+		private NotFoundBehaviour notFoundBehaviour = NotFoundBehaviour.Default;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BelongsToAttribute"/> class.
@@ -144,6 +169,16 @@ namespace Castle.ActiveRecord
 		{
 			get { return unique; }
 			set { unique = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the way broken relations are handled.
+		/// </summary>
+		/// <value>The behaviour.</value>
+		public NotFoundBehaviour NotFoundBehaviour
+		{
+			get { return notFoundBehaviour; }
+			set { notFoundBehaviour = value; }
 		}
 	}
 }
