@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using System.Text;
+
 namespace Castle.MonoRail.Views.Brail
 {
 	using System;
@@ -23,7 +26,7 @@ namespace Castle.MonoRail.Views.Brail
 	// resources usage, etc.
 	public abstract class BrailBase
 	{
-		protected TextWriter outputStream;
+		private TextWriter outputStream;
 
 		// This is used by layout scripts only, for outputing the child's content
 		protected TextWriter childOutput;
@@ -55,7 +58,6 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			get { return viewEngine.ViewRootDir; }
 		}
-
 
 		public BooViewEngine ViewEngine
 		{
@@ -157,6 +159,17 @@ namespace Castle.MonoRail.Views.Brail
 			get { return outputStream; }
 		}
 
+		/// <summary>
+		/// This is required because we may want to replace the output stream and get the correct
+		/// behavior from components call RenderText() or RenderSection()
+		/// </summary>
+		public IDisposable SetOutputStream(TextWriter newOutputStream)
+		{
+			ReturnOutputStreamToInitialWriter disposable = new ReturnOutputStreamToInitialWriter(OutputStream, this);
+			this.outputStream = newOutputStream;
+			return disposable;
+		}
+
 		public TextWriter ChildOutput
 		{
 			get { return childOutput;  }
@@ -249,6 +262,23 @@ namespace Castle.MonoRail.Views.Brail
 			{
 				this.found = found;
 				this.value = value;
+			}
+		}
+
+		private class ReturnOutputStreamToInitialWriter : IDisposable
+		{
+			private TextWriter initialWriter;
+			private BrailBase parent;
+
+			public ReturnOutputStreamToInitialWriter(TextWriter initialWriter, BrailBase parent)
+			{
+				this.initialWriter = initialWriter;
+				this.parent = parent;
+			}
+
+			public void Dispose()
+			{
+				parent.outputStream = initialWriter;
 			}
 		}
 	}

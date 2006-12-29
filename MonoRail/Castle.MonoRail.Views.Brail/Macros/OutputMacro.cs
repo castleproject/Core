@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Views.Brail
 	//  outputStream.Write("something")
 	public class OutputMacro : AbstractPrintMacro
 	{
-		private static ReferenceExpression output = AstUtil.CreateReferenceExpression("outputStream.Write");
+		private static ReferenceExpression output = AstUtil.CreateReferenceExpression("OutputStream.Write");
 
 		public override Statement Expand(MacroStatement macro)
 		{

@@ -581,9 +581,9 @@ namespace Castle.MonoRail.Views.Brail
 			}
 		}
 
-        public bool ShouldPreProcessView(string name)
+        public bool ConditionalPreProcessingOnly(string name)
         {
-            return Path.GetExtension(name) == ViewFileExtension;
+            return Path.GetExtension(name) == JSGeneratorFileExtension;
         }
 	}
 }

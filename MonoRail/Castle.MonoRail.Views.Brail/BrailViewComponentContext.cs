@@ -14,27 +14,27 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-    using System;
-    using System.Collections;
+	using System;
+	using System.Collections;
 	using System.Collections.Specialized;
-    using System.IO;
-    using Boo.Lang;
-    using Castle.MonoRail.Framework;
+	using System.IO;
+	using Boo.Lang;
+	using Castle.MonoRail.Framework;
 
-    public class BrailViewComponentContext : IViewComponentContext
-    {
-        string componentName;
-    	private IDictionary contextVars = new HybridDictionary(true);
+	public class BrailViewComponentContext : IViewComponentContext
+	{
+		string componentName;
+		private IDictionary contextVars = new HybridDictionary(true);
 
-        IDictionary componentParameters;
-        IDictionary sections;
-        string viewToRender;
+		IDictionary componentParameters;
+		IDictionary sections;
+		string viewToRender;
 
-        ICallable body;
-        private readonly TextWriter default_writer;
-    	private BrailBase parent;
+		ICallable body;
+		private readonly TextWriter default_writer;
+		private BrailBase parent;
 
-    	/// <summary>
+		/// <summary>
 		/// Initializes a new instance of the <see cref="BrailViewComponentContext"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
@@ -43,7 +43,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="text">The text.</param>
 		/// <param name="parameters">The parameters.</param>
 		public BrailViewComponentContext(BrailBase parent, ICallable body,
-		                                 string name, TextWriter text, IDictionary parameters)
+										 string name, TextWriter text, IDictionary parameters)
 		{
 			this.parent = parent;
 			parent.ExtendDictionaryWithProperties(contextVars);
@@ -53,85 +53,88 @@ namespace Castle.MonoRail.Views.Brail
 			componentParameters = parameters;
 		}
 
-        public string ComponentName
-        {
-            get { return componentName; }
-        }
+		public string ComponentName
+		{
+			get { return componentName; }
+		}
 
-        public IDictionary ContextVars
-        {
-            get { return contextVars; }
-        }
+		public IDictionary ContextVars
+		{
+			get { return contextVars; }
+		}
 
-        public IDictionary ComponentParameters
-        {
-            get { return componentParameters; }
-        }
+		public IDictionary ComponentParameters
+		{
+			get { return componentParameters; }
+		}
 
-        public string ViewToRender
-        {
-            get { return viewToRender; }
-            set { viewToRender = value; }
-        }
+		public string ViewToRender
+		{
+			get { return viewToRender; }
+			set { viewToRender = value; }
+		}
 
-        public ICallable Body
-        {
-            get { return body; }
-            set { body = value; }
-        }
+		public ICallable Body
+		{
+			get { return body; }
+			set { body = value; }
+		}
 
-        public TextWriter Writer
-        {
-            get { return default_writer; }
-        }
+		public TextWriter Writer
+		{
+			get { return default_writer; }
+		}
 
-        public void RenderBody()
-        {
-            RenderBody(default_writer);
-        }
+		public void RenderBody()
+		{
+			RenderBody(default_writer);
+		}
 
-        public void RenderBody(TextWriter writer)
-        {
-            if (body == null)
-            {
-            	throw new RailsException("This component does not have a body content to be rendered");
-            }
-            body.Call(new object[] { writer });
-        }
+		public void RenderBody(TextWriter writer)
+		{
+			if (body == null)
+			{
+				throw new RailsException("This component does not have a body content to be rendered");
+			}
+			using (parent.SetOutputStream(writer))
+			{
+				body.Call(new object[] { writer });
+			}
+		}
 
-        public bool HasSection(string sectionName)
-        {
-            return sections != null && sections.Contains(sectionName);
-        }
+		public bool HasSection(string sectionName)
+		{
+			return sections != null && sections.Contains(sectionName);
+		}
 
-        public void RenderSection(string sectionName)
-        {
+		public void RenderSection(string sectionName)
+		{
 			RenderSection(sectionName, default_writer);
-        }
+		}
 
-    	/// <summary>
-    	/// Renders the the specified section
-    	/// </summary>
-    	/// <param name="sectionName">Name of the section.</param>
-    	/// <param name="writer">The writer.</param>
-    	public void RenderSection(string sectionName, TextWriter writer)
-    	{
+		/// <summary>
+		/// Renders the the specified section
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <param name="writer">The writer.</param>
+		public void RenderSection(string sectionName, TextWriter writer)
+		{
 			if (HasSection(sectionName) == false)
 				return;//matching the NVelocity behavior, but maybe should throw?
 			ICallable callable = (ICallable)sections[sectionName];
 			callable.Call(new object[] { writer });
-    	}
+		}
 
-    	public IViewEngine ViewEngine
+		public IViewEngine ViewEngine
 		{
 			get { return parent.ViewEngine; }
 		}
 
-        public void RegisterSection(string name, ICallable section)
-        {
-            if (sections == null)
-                sections = new Hashtable();
-            sections[name] = section;
-        }
-    }
+		public void RegisterSection(string name, ICallable section)
+		{
+			if (sections == null)
+				sections = new Hashtable();
+			sections[name] = section;
+		}
+	}
 }

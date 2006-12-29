@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Views.Brail
                 CallableBlockExpression callableExpr = new CallableBlockExpression();
                 callableExpr.Body = macro.Block;
                 callableExpr.Parameters.Add(
-                    new ParameterDeclaration("outputStream", builder.CreateTypeReference(typeof(TextWriter))));
+                    new ParameterDeclaration("OutputStream", builder.CreateTypeReference(typeof(TextWriter))));
 
                 macroBody = callableExpr;
             }
