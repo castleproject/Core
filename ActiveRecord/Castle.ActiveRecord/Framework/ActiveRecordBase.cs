@@ -646,7 +646,21 @@ namespace Castle.ActiveRecord
 		/// <returns><c>true</c> if the ID exists; otherwise <c>false</c>.</returns>
 		protected internal static bool Exists(Type targetType, object id)
 		{
-			return FindByPrimaryKey(targetType, id, false) != null;
+			EnsureInitialized(targetType);
+			ISession session = holder.CreateSession(targetType);
+			
+			try
+			{
+				return session.Get(targetType, id) != null;	
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Exists for " + targetType.Name + ". Id: " + id, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
 		}
 
 		/// <summary>

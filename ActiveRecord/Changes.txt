@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Fixed AR-115 Exists always returns True for lazily-proxied classes
+  patch from Lee Henson to change Exists() implementation from Load() to Get()
+
 - Included PrimaryKeyType.Custom and property CustomGenerator:Type
   allowing one to supply its own generator
 
