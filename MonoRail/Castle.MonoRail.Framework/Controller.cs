@@ -248,6 +248,7 @@ namespace Castle.MonoRail.Framework
 		public ILogger Logger
 		{
 			get { return logger; }
+			set { logger = value; }
 		}
 
 		/// <summary>
