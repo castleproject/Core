@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+	using Castle.ActiveRecord.Framework.Internal;
 
 	/// <summary>
 	/// Define the relation type for a relation.
@@ -64,6 +65,7 @@ namespace Castle.ActiveRecord
 		internal String indexType;
 		internal String element;
 		internal bool lazy;
+		internal bool lazySpecified = false;
 		internal bool inverse;
 		internal ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
 		internal RelationType relType = RelationType.Guess;
@@ -114,8 +116,17 @@ namespace Castle.ActiveRecord
 		/// <value><c>true</c> if lazy; otherwise, <c>false</c>.</value>
 		public bool Lazy
 		{
-			get { return lazy; }
-			set { lazy = value; }
+			get
+			{
+				if(lazySpecified)
+					return lazy;
+				return ActiveRecordModel.isLazyByDefault;
+			}
+			set
+			{
+				lazy = value;
+				lazySpecified = true;
+			}
 		}
 
 		/// <summary>

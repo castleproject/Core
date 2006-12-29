@@ -434,6 +434,8 @@ namespace Castle.ActiveRecord
 		private static Configuration CreateConfiguration(IConfiguration config)
 		{
 			// hammett comments: I'm gonna test this off for a while
+			// ayende comment:	removing this means that tests that using generic entities as base class will break
+			//					NH do not support generic entities at the moemnt
 			Environment.UseReflectionOptimizer = false;
 
 			Configuration cfg = new Configuration();
