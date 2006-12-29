@@ -233,7 +233,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <any name=\"PaymentMethod\" access=\"property\" id-type=\"Int64\" meta-type=\"System.String\" cascade=\"save-update\">\r\n"+
+				"    <any name=\"PaymentMethod\" access=\"property\" id-type=\"Int64\" meta-type=\"System.String\" cascade=\"save-update\" not-null=\"true\">\r\n"+
 				"      <meta-value value=\"BANK_ACCOUNT\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BankAccount, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
 				"      <column name=\"BILLING_DETAILS_TYPE\" />\r\n"+
 				"      <column name=\"BILLING_DETAILS_ID\" />\r\n"+

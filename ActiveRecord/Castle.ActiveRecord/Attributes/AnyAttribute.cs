@@ -58,6 +58,7 @@ namespace Castle.ActiveRecord
 		private string typeColumn, idColumn;
 		private string index;
 		private bool insert = true, update = true;
+		private bool notNull = false;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AnyAttribute"/> class.
@@ -146,6 +147,17 @@ namespace Castle.ActiveRecord
 		{
 			get { return update; }
 			set { update = value; }
+		}
+
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this property cannot be null.
+		/// </summary>
+		/// <value><c>true</c> if this property cannot be null; otherwise, <c>false</c>.</value>
+		public bool NotNull
+		{
+			get { return notNull; }
+			set { notNull = value; }
 		}
 	}
 

@@ -29,7 +29,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { return _id; }
 		}
 
-		[Any(typeof (long), MetaType=typeof (string),
+		[Any(typeof (long), MetaType=typeof (string),NotNull = true,
 			TypeColumn="BILLING_DETAILS_TYPE",
 			IdColumn="BILLING_DETAILS_ID",
 			Cascade=CascadeEnum.SaveUpdate)]

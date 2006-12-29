@@ -387,7 +387,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			String cascade = TranslateCascadeEnum(model.AnyAtt.Cascade);
 
-			AppendF("<any{0}{1}{2}{3}{4}{5}{6}{7}>",
+			AppendF("<any{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.AnyAtt.AccessString),
 			        MakeCustomTypeAtt("id-type", model.AnyAtt.IdType),
@@ -395,7 +395,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        WriteIfFalse("insert", model.AnyAtt.Insert),
 			        WriteIfFalse("update", model.AnyAtt.Update),
 			        WriteIfNonNull("index", model.AnyAtt.Index),
-			        WriteIfNonNull("cascade", cascade));
+			        WriteIfNonNull("cascade", cascade),
+					WriteIfTrue("not-null",model.AnyAtt.NotNull));
 			Ident();
 			foreach(Any.MetaValueAttribute meta in model.MetaValues)
 			{
