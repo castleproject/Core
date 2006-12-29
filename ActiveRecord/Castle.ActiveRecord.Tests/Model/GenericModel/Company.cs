@@ -17,13 +17,14 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 {
 	using System;
 	using System.Collections;
+	using Iesi.Collections.Generic;
 
 	[ActiveRecord( "Companies", DiscriminatorColumn = "type", DiscriminatorType = "String", DiscriminatorValue = "company" )]
 	public class Company : ActiveRecordBase<Company>
 	{
 		private int id;
 		private String name;
-		private IList _people;
+		private ISet<Person> _people = new HashedSet<Person>();
 		private PostalAddress _address;
 
 		public Company()
@@ -56,9 +57,9 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			set { _address = value; }
 		}
 
-		[HasAndBelongsToMany( typeof( Person ), RelationType.Bag,
-			 Table = "PeopleCompanies", ColumnRef = "person_id", ColumnKey = "company_id" )]
-		public IList People
+		[HasAndBelongsToMany(Table = "PeopleCompanies", 
+			ColumnRef = "person_id", ColumnKey = "company_id" )]
+		public ISet<Person> People
 		{
 			get { return _people; }
 			set { _people = value; }

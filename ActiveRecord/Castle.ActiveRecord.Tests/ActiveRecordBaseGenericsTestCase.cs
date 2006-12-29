@@ -129,6 +129,27 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
+		public void HasManyAndBelongsToMany()
+		{
+			Company company = new Company("Castle Corp.");
+			company.Address = new PostalAddress(
+				"Embau St., 102", "Sao Paulo", "SP", "040390-060");
+			company.Save();
+
+			Person person = new Person();
+			person.Name = "ayende";
+			person.Companies.Add(company);
+			company.People.Add(person);
+
+			person.Save();
+
+			Company fromDB = Company.FindFirst();
+			Assert.AreEqual(1, fromDB.People.Count);
+
+			Assert.AreEqual("ayende", new List<Person>(fromDB.People)[0].Name);
+		}
+
+		[Test]
 		public void ComponentAttribute()
 		{
 			Company company = new Company("Castle Corp.");

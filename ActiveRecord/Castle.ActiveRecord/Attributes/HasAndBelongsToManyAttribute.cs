@@ -53,6 +53,14 @@ namespace Castle.ActiveRecord
 			this.mapType = mapType;
 		}
 
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HasAndBelongsToManyAttribute"/> class.
+		/// </summary>
+		public HasAndBelongsToManyAttribute()
+		{
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HasAndBelongsToManyAttribute"/> class.
 		/// </summary>
