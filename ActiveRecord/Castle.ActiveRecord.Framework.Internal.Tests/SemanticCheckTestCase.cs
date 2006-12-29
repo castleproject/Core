@@ -21,7 +21,22 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 	[TestFixture]
 	public class SemanticCheckTestCase : AbstractActiveRecordTest
-	{			
+	{
+		[Test]
+		[ExpectedException(typeof(ActiveRecordException), "MetaType is a required attribute of AnyAttribute on Castle.ActiveRecord.Framework.Internal.Tests.Model.BadClassWithAnyAttribute.PaymentMethod.")]
+		public void UsingAnyWithoutSpecifyingTheMetaType()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(BadClassWithAnyAttribute));
+			Assert.IsNotNull(model);
+
+			Assert.IsNotNull(model);
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
+	
+		}
+
 		[Test]
 		[ExpectedException( typeof(ActiveRecordException), "Unfortunatelly you can't have a discriminator class and a joined subclass at the same time - check type Castle.ActiveRecord.Framework.Internal.Tests.Model.Company" )]
 		public void JoinedAndDiscriminatorClass()
