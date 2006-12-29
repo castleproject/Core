@@ -39,6 +39,20 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
+		public void IOC_50_AddTwoComponentWithSameService_RequestFirstByKey_RemoveFirst_RequestByService_ShouldReturnSecond()
+		{
+			kernel.AddComponent("key", typeof(ICustomer), typeof(CustomerImpl));
+			kernel.AddComponent("key2", typeof(ICustomer), typeof(CustomerImpl));
+			object result = kernel["key"];
+			Assert.IsNotNull(result);
+
+			kernel.RemoveComponent("key");
+
+			result = kernel[typeof(ICustomer)];
+			Assert.IsNotNull(result);
+		}
+
+		[Test]
 		public void AddClassComponentWithInterface()
 		{
 			kernel.AddComponent("key", typeof(CustomerImpl));
