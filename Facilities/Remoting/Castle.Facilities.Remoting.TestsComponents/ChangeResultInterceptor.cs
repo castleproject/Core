@@ -14,26 +14,22 @@
 
 namespace Castle.Facilities.Remoting.TestComponents
 {
-	using System;
-
 	using Castle.Core.Interceptor;
 
-	public class ChangeResultInterceptor : IMethodInterceptor
+	public class ChangeResultInterceptor : IInterceptor
 	{
-		public ChangeResultInterceptor()
+		public void Intercept(IInvocation invocation)
 		{
-		}
+			invocation.Proceed();
 
-		public object Intercept(IMethodInvocation invocation, params object[] args)
-		{
-			object result = invocation.Proceed(args);
+			object result = invocation.ReturnValue;
 
 			if (result is int)
 			{
-				return ((int) result) + 10;
+				result = ((int) result) + 10;
 			}
 
-			return result;
+			invocation.ReturnValue = result;
 		}
 	}
 }

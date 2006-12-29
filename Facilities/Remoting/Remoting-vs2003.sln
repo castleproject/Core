@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Remoting.TestComponents", "Castle.Facilities.Remoting.TestComponents\Castle.Facilities.Remoting.TestComponents.csproj", "{07B01B42-54DC-4A99-B856-0EA5515684AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Remoting.TestComponents", "Castle.Facilities.Remoting.TestComponents\Castle.Facilities.Remoting.TestComponents-vs2003.csproj", "{07B01B42-54DC-4A99-B856-0EA5515684AC}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Remoting.Tests", "Castle.Facilities.Remoting.Tests\Castle.Facilities.Remoting.Tests.csproj", "{19F55512-3F9D-4032-B195-223E51F47635}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Remoting.Tests", "Castle.Facilities.Remoting.Tests\Castle.Facilities.Remoting.Tests-vs2003.csproj", "{19F55512-3F9D-4032-B195-223E51F47635}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

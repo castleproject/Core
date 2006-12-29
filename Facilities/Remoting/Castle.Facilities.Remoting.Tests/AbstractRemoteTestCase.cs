@@ -80,7 +80,7 @@ namespace Castle.Facilities.Remoting.Tests
 		
 		protected string BuildConfigPath(string configFile)
 		{
-			return ConfigHelper.ResolvePath(Path.Combine(@"Configs/", configFile));
+			return ConfigHelper.ResolveConfigPath(Path.Combine(@"Configs/", configFile));
 		}
 	}
 
