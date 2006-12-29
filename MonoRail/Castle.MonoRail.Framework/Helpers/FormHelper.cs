@@ -425,6 +425,20 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return CreateInputElement("hidden", target, value, null);
 		}
+
+		/// <summary>
+		/// Generates a hidden form element.
+		/// <para>
+		/// The value is extracted from the target (if available)
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value">The value for the hidden field</param>
+		/// <returns>The generated form element</returns>
+		public String HiddenField(String target, object value)
+		{
+			return CreateInputElement("hidden", target, value, null);
+		}
 		
 		/// <summary>
 		/// Generates a hidden form element.

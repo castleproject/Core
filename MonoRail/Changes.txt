@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Added FormHelper.HiddenField("key", value) overload
+
 - Added 'valueformat' to SetOperations (affects FormHelper.Select, Checkboxlist)
 
 - Fixed MR-197
