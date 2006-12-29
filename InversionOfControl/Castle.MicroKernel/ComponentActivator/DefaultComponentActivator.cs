@@ -209,7 +209,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
 				object value;
-				using(new DependencyTrackingScope(context, constructor.Constructor, dependency))
+				using(new DependencyTrackingScope(context, Model, constructor.Constructor, dependency))
 				{
 					value = Kernel.Resolver.Resolve(context, context.Handler, Model, dependency);
 				}
@@ -227,7 +227,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			foreach(PropertySet property in Model.Properties)
 			{
 				object value;
-				using(new DependencyTrackingScope(context, property.Property, property.Dependency))
+				using(new DependencyTrackingScope(context, Model, property.Property, property.Dependency))
 				{
 					value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
 				}

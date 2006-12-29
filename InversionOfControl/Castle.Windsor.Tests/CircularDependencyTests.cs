@@ -14,6 +14,8 @@
 
 namespace Castle.Windsor.Tests
 {
+	using System;
+	using System.Reflection;
 	using Castle.MicroKernel.Exceptions;
 	using Castle.Windsor.Tests.Components;
 	using NUnit.Framework;
@@ -75,5 +77,52 @@ Services:
 
 			container.Resolve("compA");
 		}
+
+		[Test]
+		public void ShouldNotGetCircularDepencyExceptionWhenResolvingTypeOnItselfWithDifferentModels()
+		{
+			WindsorContainer container = new WindsorContainer(ConfigHelper.ResolveConfigPath("IOC-51.xml"));
+			object o = container[ "path.fileFinder" ];
+			Assert.IsNotNull(o);
+		}
+	}
+
+	namespace IOC51
+	{
+
+		public interface IPathProvider
+		{
+			string Path
+			{
+				get;
+			}
+		}
+		public class AssemblyPath : IPathProvider
+		{
+			public string Path
+			{
+				get
+				{
+					Uri uriPath = new Uri(Assembly.GetExecutingAssembly().GetName(false).CodeBase);
+					return uriPath.LocalPath;
+				}
+			}
+		}
+		public class RelativeFilePath : IPathProvider
+		{
+			public RelativeFilePath(IPathProvider basePathProvider, string extensionsPath)
+			{
+				this._path = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
+			}
+
+			public string Path
+			{
+				get
+				{
+					return this._path;
+				}
+			}
+			private string _path;
+		} 
 	}
 }

@@ -25,7 +25,7 @@ namespace Castle.MicroKernel
 		private readonly DependencyModel dependencyTrackingKey;
 		private DependencyModelCollection dependencies;
 
-		public DependencyTrackingScope(CreationContext creationContext, MemberInfo info, DependencyModel dependencyModel)
+		public DependencyTrackingScope(CreationContext creationContext, ComponentModel model, MemberInfo info, DependencyModel dependencyModel)
 		{
 			if (dependencyModel.TargetType != typeof (IKernel))
 			{
@@ -33,7 +33,7 @@ namespace Castle.MicroKernel
 
 				// We track dependencies in order to detect cycled graphs
 				// This prevents a stack overflow
-				this.dependencyTrackingKey = TrackDependency(info, dependencyModel);
+				this.dependencyTrackingKey = TrackDependency(model, info, dependencyModel);
 			}
 		}
 
@@ -47,9 +47,9 @@ namespace Castle.MicroKernel
 			}
 		}
 
-		private DependencyModelExtended TrackDependency(MemberInfo info, DependencyModel dependencyModel)
+		private DependencyModelExtended TrackDependency(ComponentModel model, MemberInfo info, DependencyModel dependencyModel)
 		{
-			DependencyModelExtended trackingKey = new DependencyModelExtended(dependencyModel, info);
+			DependencyModelExtended trackingKey = new DependencyModelExtended(model, dependencyModel, info);
 
 			if (dependencies.Contains(trackingKey))
 			{
@@ -91,19 +91,23 @@ namespace Castle.MicroKernel
 		#region DependencyModelExtended
 
 		/// <summary>
-		/// Extends <see cref="DependencyModel"/> adding <see cref="MemberInfo"/>
-		/// information. This is only useful to provide detailed information 
-		/// on exceptions.
+		/// Extends <see cref="DependencyModel"/> adding <see cref="MemberInfo"/> and <see cref="ComponentModel"/>
+		/// information. Th MemberInfo is only useful to provide detailed information 
+		/// on exceptions. 
+		/// The ComponentModel is required so we can get resolve an object that takes as a parameter itself, but
+		/// with difference model. (See IoC 51 for the details)
 		/// </summary>
 		[Serializable]
 		internal class DependencyModelExtended : DependencyModel
 		{
+			private readonly ComponentModel model;
 			private readonly MemberInfo info;
 
-			public DependencyModelExtended(DependencyModel inner, MemberInfo info)
+			public DependencyModelExtended(ComponentModel model, DependencyModel inner, MemberInfo info)
 				:
 					base(inner.DependencyType, inner.DependencyKey, inner.TargetType, inner.IsOptional)
 			{
+				this.model = model;
 				this.info = info;
 			}
 
@@ -117,7 +121,9 @@ namespace Castle.MicroKernel
 				DependencyModelExtended other = obj as DependencyModelExtended;
 				if (other == null)
 					return false;
-				return other.Info == this.Info && base.Equals(other);
+				return other.Info == this.Info  &&
+					other.model == model &&
+					base.Equals(other);
 			}
 
 			public override int GetHashCode()
