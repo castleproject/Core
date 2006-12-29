@@ -426,6 +426,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			if (model.HasManyToAnyAtt.MapType == null)
 				model.HasManyToAnyAtt.MapType = GuessType(null, model.Property.PropertyType);
 
+			model.HasManyToAnyAtt.RelationType = GuessRelation(model.Property, model.HasManyToAnyAtt.RelationType);
+
 			base.VisitHasManyToAny(model);
 		}
 

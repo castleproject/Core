@@ -299,7 +299,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"    </id>\r\n" +
 				"    <set name=\"PaymentMethod\" access=\"property\" table=\"payments_table\" lazy=\"false\">\r\n" +
 				"      <key column=\"pay_id\" />\r\n" +
-				"      <many-to-any id-type=\"Int32\">\r\n" +
+				"      <many-to-any id-type=\"Int32\" meta-type=\"Int32\">\r\n" +
 				"        <column name=\"payment_type\" />\r\n" +
 				"        <column name=\"payment_method_id\" />\r\n" +
 				"      </many-to-any>\r\n" +

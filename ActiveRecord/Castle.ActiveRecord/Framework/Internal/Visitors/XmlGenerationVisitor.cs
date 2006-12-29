@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
+	using System.Collections;
 	using System.Globalization;
 	using System.Reflection;
 	using System.Text;
@@ -437,10 +438,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public override void VisitHasManyToAnyConfig(HasManyToAnyModel.Config model)
 		{
 			HasManyToAnyAttribute att = model.Parent.HasManyToAnyAtt;
-			AppendF("<many-to-any{0}>",
+			AppendF("<many-to-any{0}{1}>",
 					MakeCustomTypeAtt("id-type", att.IdType),
 					MakeCustomTypeAttIfNotNull("meta-type", att.MetaType));
 			Ident();
+
+			// This is here so the XmlGenerationVisitor will always
+			// output the meta-values in consistent order, to aid the tests,
+			// MetaValueAttribute implements IComparable
+			ArrayList sortedMetaValues = new ArrayList(model.Parent.MetaValues);
+			sortedMetaValues.Sort();
+			foreach (Any.MetaValueAttribute meta in sortedMetaValues)
+			{
+				AppendF("<meta-value{0}{1} />",
+						MakeAtt("value", meta.Value),
+						MakeCustomTypeAtt("class", meta.Class)
+					);
+			}
+			
 			AppendF("<column{0} />",
 					MakeAtt("name", att.TypeColumn));
 			AppendF("<column{0} />",
@@ -635,6 +650,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 
 			String closingTag = null;
+
+			if (type == RelationType.Guess)
+				throw new ActiveRecordException(string.Format("Failed to guess the relation for {0}", name));
 
 			if (type == RelationType.Bag)
 			{

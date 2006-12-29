@@ -16,8 +16,8 @@ namespace Castle.ActiveRecord.Tests.Model.AnyModel
 {
 	using System;
 	using System.Collections;
-
-	[ActiveRecord]
+		
+	[ActiveRecord("Orders")]
 	public class Order : ActiveRecordBase
 	{
 		private int id;
@@ -63,7 +63,7 @@ namespace Castle.ActiveRecord.Tests.Model.AnyModel
 			set { id = value; }
 		}
 
-		[BelongsTo]
+		[BelongsTo("ref_order")]
 		public Order Order
 		{
 			get { return _order; }
@@ -97,7 +97,7 @@ namespace Castle.ActiveRecord.Tests.Model.AnyModel
 			set { id = value; }
 		}
 
-		[BelongsTo]
+		[BelongsTo("ref_order")]
 		public Order Order
 		{
 			get { return _order; }
@@ -123,5 +123,19 @@ namespace Castle.ActiveRecord.Tests.Model.AnyModel
 	{
 		int Id { get; set; }
 		Order Order { get; set; }
+	}
+
+	[ActiveRecord]
+	public class ModelWithInCorrectMapping : ActiveRecordBase
+	{
+		private string payment;
+		
+		[Any.MetaValue("CREDIT_CARD", typeof(CreditCards))]
+		[Any.MetaValue("BANK_ACCOUNT", typeof(BankAccounts))]
+		public string Payment
+		{
+			get { return payment; }
+			set { payment = value; }
+		}
 	}
 }

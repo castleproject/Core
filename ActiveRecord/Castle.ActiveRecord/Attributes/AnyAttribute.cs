@@ -159,7 +159,7 @@ namespace Castle.ActiveRecord
 		/// Any.MetaValue is used to connect a value (such as "CREDIT_CARD") to its type ( typeof(CreditCard) ).
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Property, AllowMultiple=true), Serializable]
-		public class MetaValueAttribute : Attribute
+		public class MetaValueAttribute : Attribute, IComparable
 		{
 			private string value;
 			private Type clazz;
@@ -193,6 +193,16 @@ namespace Castle.ActiveRecord
 			{
 				get { return clazz; }
 				set { clazz = value; }
+			}
+
+			/// <summary>
+			/// This is here so the XmlGenerationVisitor will always
+			/// output the meta-values in consistent order, to aid the tests.
+			/// </summary>
+			int IComparable.CompareTo(object obj)
+			{
+				MetaValueAttribute other = (MetaValueAttribute)obj;
+				return Class.FullName.CompareTo(other.Class.FullName);
 			}
 		}
 	}
