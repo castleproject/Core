@@ -3,6 +3,10 @@ Change history
 
 Release Candidate 3
 ===================
+ - Brail now has Ruby's like symbols, using @symbol.
+	For instnace, component DiggStylePagination, ${ @useInlineStyle : true }
+	
+- Brail can now accept " inside a ${ }, which used to break the parser previously.
 
 - Added IViewComponentContext.RenderView(name, textwriter)
 
