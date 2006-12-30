@@ -17,6 +17,8 @@ namespace Castle.MonoRail.Views.Brail
 {
 	using System.Collections;
 	using System.IO;
+	using System.Text;
+	using System.Text.RegularExpressions;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.Steps;
@@ -24,7 +26,20 @@ namespace Castle.MonoRail.Views.Brail
 
 	public class BrailPreProcessor : AbstractCompilerStep
 	{
-	    
+		// This will find any occurances of ${ expression } inside a string
+		// note that I do not try to solve the general case, only valid Boo code ones.
+		static Regex findExpressions = new Regex
+(@"\$\{		# starting ${
+(?:						# non capture of 
+	([^'\{]*)			# either any charater except begining {
+	|					# or, for complex expressions
+	([^'\{]*)			# any charater except begining {
+	(?<quoted>'[^']*')	# quoted string, such as '{0}'
+	([^'\{]*)			# any charater except begining {
+)*						# any amount of times
+\}						# closing }
+",
+			RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);   
 		private static IDictionary Seperators = CreateSeperators();
         private BooViewEngine booViewEngine;
 		IDictionary inputToCode = new Hashtable();
@@ -113,8 +128,18 @@ namespace Castle.MonoRail.Views.Brail
 			return buffer.ToString();
 		}
 
-		private static void Output(StringWriter buffer, string code)
+		private static void Output(StringWriter buffer, string codeToOutput)
 		{
+			StringBuilder code = new StringBuilder(codeToOutput);
+			// remove " from inside ${ }, which breaks the parser
+			foreach(Match match in findExpressions.Matches(codeToOutput))
+			{
+				foreach(Capture capture in match.Captures)
+				{
+					code.Replace('"', '\'', capture.Index, capture.Length);
+				}
+			}
+			
 			if (code.Length == 0)
 				return;
 			buffer.WriteLine();
