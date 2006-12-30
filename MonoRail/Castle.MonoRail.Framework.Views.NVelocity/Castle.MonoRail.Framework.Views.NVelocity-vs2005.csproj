@@ -113,7 +113,7 @@
     <Compile Include="CustomDirectives\ComponentDirective.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CustomDirectives\HtmlDirective.cs" />
+    <Compile Include="CustomDirectives\IViewRenderer.cs" />
     <Compile Include="CustomDirectives\SubSectionDirective.cs" />
     <Compile Include="CustomResourceManager.cs" />
     <Compile Include="CustomTemplate.cs" />

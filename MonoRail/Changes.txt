@@ -4,6 +4,11 @@ Change history
 Release Candidate 3
 ===================
 
+- Added IViewComponentContext.RenderView(name, textwriter)
+
+- Fixed MR-201
+  "DiggStylePagination.Initialize() doesn't check useInlineStyle parameter"
+
 - Added FormHelper.HiddenField("key", value) overload
 
 - Added 'valueformat' to SetOperations (affects FormHelper.Select, Checkboxlist)

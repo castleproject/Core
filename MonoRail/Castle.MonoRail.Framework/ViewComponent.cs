@@ -41,8 +41,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Invoked by the framework.
 		/// </summary>
-		/// <param name="railsContext"></param>
-		/// <param name="context"></param>
+		/// <param name="railsContext">Request context</param>
+		/// <param name="context">ViewComponent context</param>
 		public void Init(IRailsEngineContext railsContext, IViewComponentContext context)
 		{
 			this.railsContext = railsContext;
@@ -61,7 +61,6 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public virtual void Initialize()
 		{
-			
 		}
 
 		/// <summary>
@@ -71,6 +70,18 @@ namespace Castle.MonoRail.Framework
 		public virtual void Render()
 		{
 			RenderView("default");
+		}
+
+		/// <summary>
+		/// Implementor should return true only if the 
+		/// <c>name</c> is a known section the view component
+		/// supports.
+		/// </summary>
+		/// <param name="name">section being added</param>
+		/// <returns><see langword="true"/> if section is supported</returns>
+		public virtual bool SupportsSection(string name)
+		{
+			return false;
 		}
 
 		#endregion
@@ -204,6 +215,55 @@ namespace Castle.MonoRail.Framework
 			context.Writer.Write(content);
 		}
 
+		/// <summary>
+		/// Determines whether the current component declaration on the view
+		/// has the specified section.
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <returns>
+		/// <c>true</c> if the specified section exists; otherwise, <c>false</c>.
+		/// </returns>
+		protected bool HasSection(String sectionName)
+		{
+			return context.HasSection(sectionName);
+		}
+
+		/// <summary>
+		/// Renders the component body.
+		/// </summary>
+		protected void RenderBody()
+		{
+			context.RenderBody();
+		}
+
+		/// <summary>
+		/// Renders the body into the specified <see cref="TextWriter"/>
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		protected void RenderBody(TextWriter writer)
+		{
+			context.RenderBody(writer);
+		}
+
+		/// <summary>
+		/// Renders the the specified section
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		protected void RenderSection(String sectionName)
+		{
+			context.RenderSection(sectionName);
+		}
+
+		/// <summary>
+		/// Renders the the specified section
+		/// </summary>
+		/// <param name="sectionName">Name of the section.</param>
+		/// <param name="writer">The writer.</param>
+		protected void RenderSection(String sectionName, TextWriter writer)
+		{
+			context.RenderSection(sectionName, writer);
+		}
+
 		#endregion
 
 		#region private helper methods
@@ -219,17 +279,5 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Implementor should return true only if the 
-		/// <c>name</c> is a known section the view component
-		/// supports.
-		/// </summary>
-		/// <param name="name">section being added</param>
-		/// <returns><see langword="true"/> if section is supported</returns>
-		public virtual bool SupportsSection(string name)
-		{
-			return false;
-		}
 	}
 }

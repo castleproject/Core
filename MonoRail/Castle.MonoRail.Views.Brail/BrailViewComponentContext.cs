@@ -102,6 +102,16 @@ namespace Castle.MonoRail.Views.Brail
 			}
 		}
 
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="writer"></param>
+		public void RenderView(string name, TextWriter writer)
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool HasSection(string sectionName)
 		{
 			return sections != null && sections.Contains(sectionName);

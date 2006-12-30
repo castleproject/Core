@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public abstract class AbstractComponentDirective : Directive
+	public abstract class AbstractComponentDirective : Directive, IViewRenderer
 	{
 		private readonly IViewComponentFactory viewComponentFactory;
 
@@ -79,7 +79,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			component = viewComponentFactory.Create(componentName);
 
-			contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine);
+			ASTDirective directiveNode = (ASTDirective) node;
+			IViewRenderer renderer = (IViewRenderer) directiveNode.Directive;
+
+			contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
 
 			ProcessSubSections();
 
@@ -105,15 +108,32 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 			if (contextAdapter.ViewToRender != null)
 			{
-				return RenderComponentView(context, writer, contextAdapter);
+				return RenderComponentView(context, contextAdapter.ViewToRender, writer, contextAdapter);
 			}
 
 			return true;
 		}
 
+		public bool RenderComponentView(IInternalContextAdapter context, String viewToRender, TextWriter writer, NVelocityViewContextAdapter contextAdapter)
+		{
+			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
+			{
+				context.Put(entry.Key.ToString(), entry.Value);
+			}
+
+			viewToRender = viewToRender + NVelocityViewEngine.TemplateExtension;
+
+			CheckTemplateStack(context);
+
+			String encoding = SetUpEncoding(context);
+
+			Template template = GetTemplate(viewToRender, encoding);
+
+			return RenderView(context, viewToRender, template, writer);
+		}
+
 		protected virtual void ProcessSubSections()
 		{
-			
 		}
 
 		protected virtual IDictionary CreateParameters(IInternalContextAdapter context, INode node)
@@ -257,40 +277,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			}
 
 			return null;
-		}
-
-		private bool RenderComponentView(IInternalContextAdapter context, TextWriter writer, 
-		                                 NVelocityViewContextAdapter contextAdapter)
-		{
-			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
-			{
-				context.Put(entry.Key.ToString(), entry.Value);
-			}
-
-			try
-			{
-				String viewToRender = contextAdapter.ViewToRender;
-
-				viewToRender = viewToRender + NVelocityViewEngine.TemplateExtension;
-
-				CheckTemplateStack(context);
-
-				String encoding = SetUpEncoding(context);
-
-				Template template = GetTemplate(viewToRender, encoding);
-
-				return RenderView(context, viewToRender, template, writer);
-			}
-			finally
-			{
-				// WTF!!
-				// this might make sense when contextAdapter was a copy of the context,
-				// but not now.
-				//foreach(DictionaryEntry entry in contextAdapter.ContextVars)
-				//{
-				//	context.Remove( entry.Key );
-				//}
-			}
 		}
 
 		private bool RenderView(IInternalContextAdapter context,

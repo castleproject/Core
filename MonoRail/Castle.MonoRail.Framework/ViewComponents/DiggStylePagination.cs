@@ -52,10 +52,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private string url;
 		private string paginatefunction;
 		private IPaginatedPage page;
-		// private IDictionary queryString = null;
-
-
-		
 
 		/// <summary>
 		/// Called by the framework once the component instance
@@ -76,6 +72,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			if (ComponentParams.Contains("adjacents"))
 			{
 				adjacents = Convert.ToInt32(ComponentParams["adjacents"]);
+			}
+
+			if (ComponentParams.Contains("useInlineStyle"))
+			{
+				useInlineStyle = Convert.ToBoolean(ComponentParams["useInlineStyle"]);
 			}
 
 			if (ComponentParams.Contains("url"))

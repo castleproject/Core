@@ -35,6 +35,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		private readonly String componentName;
 		private readonly INode parentNode;
 		private readonly IViewEngine viewEngine;
+		private readonly IViewRenderer renderer;
 
 		private String viewToRender;
 		private TextWriter writer;
@@ -49,11 +50,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="parentNode">The parent node.</param>
 		/// <param name="viewEngine">The view engine.</param>
-		public NVelocityViewContextAdapter(String componentName, INode parentNode, IViewEngine viewEngine)
+		/// <param name="renderer">The view renderer.</param>
+		public NVelocityViewContextAdapter(String componentName, INode parentNode, IViewEngine viewEngine, IViewRenderer renderer)
 		{
 			this.componentName = componentName;
 			this.parentNode = parentNode;
 			this.viewEngine = viewEngine;
+			this.renderer = renderer;
 		}
 
 		#region IViewComponentContext
@@ -125,6 +128,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public void RenderBody()
 		{
 			RenderBody(writer);
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="writer"></param>
+		public void RenderView(string name, TextWriter writer)
+		{
+			renderer.RenderComponentView(context, name, writer, this);
 		}
 
 		/// <summary>
