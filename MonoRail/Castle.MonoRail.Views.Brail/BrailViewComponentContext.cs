@@ -24,7 +24,6 @@ namespace Castle.MonoRail.Views.Brail
 	public class BrailViewComponentContext : IViewComponentContext
 	{
 		string componentName;
-		private IDictionary contextVars = new HybridDictionary(true);
 
 		IDictionary componentParameters;
 		IDictionary sections;
@@ -46,7 +45,6 @@ namespace Castle.MonoRail.Views.Brail
 										 string name, TextWriter text, IDictionary parameters)
 		{
 			this.parent = parent;
-			parent.ExtendDictionaryWithProperties(contextVars);
 			this.body = body;
 			componentName = name;
 			default_writer = text;
@@ -60,7 +58,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		public IDictionary ContextVars
 		{
-			get { return contextVars; }
+			get { return parent.Properties; }
 		}
 
 		public IDictionary ComponentParameters

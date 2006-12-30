@@ -31,8 +31,6 @@ namespace Castle.MonoRail.Views.Brail
 		// This is used by layout scripts only, for outputing the child's content
 		protected TextWriter childOutput;
 		private Hashtable properties;
-		// list of dictionaries where additional properties can be stored.
-		private ArrayList extendedProperties = new ArrayList();
 
 		protected IRailsEngineContext context;
 		protected Controller controller;
@@ -101,7 +99,7 @@ namespace Castle.MonoRail.Views.Brail
 		// This mean that when an uknonwn identifier is in the script, it will only be found on runtime.
 		public object GetParameter(string name)
 		{
-			ParameterSearch search = GetParameterInternal(name);
+				ParameterSearch search = GetParameterInternal(name);
 			if (search.Found == false)
 				throw new RailsException("Parameter '" + name + "' was not found!");
 			return search.Value;
@@ -119,21 +117,14 @@ namespace Castle.MonoRail.Views.Brail
 
 		private ParameterSearch GetParameterInternal(string name)
 		{
+			//temporary syntax to turn @variable to varaible, imitating :symbol in ruby
+			if (name.StartsWith("@"))
+				return new ParameterSearch(name.Substring(1), true);
 			if (properties.Contains(name))
 				return new ParameterSearch(properties[name], true);
-			foreach(IDictionary extendedProperty in extendedProperties)
-			{
-				if (extendedProperty.Contains(name))
-					return new ParameterSearch(extendedProperty[name], true);
-			}
 			if (parent != null)
 				return parent.GetParameterInternal(name);
 			return new ParameterSearch(null, false);
-		}
-
-		public void AddProperties(IDictionary moreProperties)
-		{
-			extendedProperties.Add(moreProperties);
 		}
 
 		public void SetParent(BrailBase myParent)
@@ -166,7 +157,7 @@ namespace Castle.MonoRail.Views.Brail
 		public IDisposable SetOutputStream(TextWriter newOutputStream)
 		{
 			ReturnOutputStreamToInitialWriter disposable = new ReturnOutputStreamToInitialWriter(OutputStream, this);
-			this.outputStream = newOutputStream;
+			outputStream = newOutputStream;
 			return disposable;
 		}
 
@@ -175,16 +166,13 @@ namespace Castle.MonoRail.Views.Brail
 			get { return childOutput;  }
 			set {  childOutput = value;  }
 		}
-	    
-	    internal void ExtendDictionaryWithProperties(IDictionary dictionary)
-	    {
-	        foreach(DictionaryEntry entry in properties)
-	        {
-                dictionary[entry.Key] = entry.Value;
-	        }
-	    }
 
-        /// <summary>
+		public IDictionary Properties
+		{
+			get { return properties; }
+		}
+
+		/// <summary>
         /// Note that this will overwrite any existing property.
         /// </summary>
         public void AddProperty(string name, object item)

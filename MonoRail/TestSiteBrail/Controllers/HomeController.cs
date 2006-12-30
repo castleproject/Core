@@ -98,6 +98,11 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
             this.RenderView("heyhello");
         }
 
+		public void Repeater()
+		{
+			
+		}
+
     }
 }
 

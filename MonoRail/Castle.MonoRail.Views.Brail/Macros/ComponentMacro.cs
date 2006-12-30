@@ -61,11 +61,6 @@ namespace Castle.MonoRail.Views.Brail
 			block.Add(new BinaryExpression(BinaryOperatorType.Assign,
 			                               new ReferenceExpression("componentContext"), initContext));
 
-			// AddProperties( compilerContext.ContextVars )
-			MethodInvocationExpression addProperties = new MethodInvocationExpression(AstUtil.CreateReferenceExpression("AddProperties"));
-			addProperties.Arguments.Add(AstUtil.CreateReferenceExpression("componentContext.ContextVars"));
-			block.Add(addProperties);
-
 			InternalLocal viewComponentFactoryLocal = CodeBuilder.DeclareLocal(method, "viewComponentFactory",
 			                                                                   TypeSystemServices.Map(
 			                                                                   	typeof(IViewComponentFactory)));
