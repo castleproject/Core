@@ -889,7 +889,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				Type[] typeChain = type.FindInterfaces(new TypeFilter(NoFilter), null);
 
-				foreach (Type interType in typeChain)
+				foreach(Type interType in typeChain)
 				{
 					CollectMethods(methodList, interType, onlyVirtuals);
 				}

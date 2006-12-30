@@ -110,6 +110,37 @@ namespace Castle.DynamicProxy.Generators
 				PropertyToGenerate[] propsToGenerate;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate);
 
+				if (interfaces != null && interfaces.Length != 0)
+				{
+					interfaceList.Clear();
+					interfaceList.AddRange(interfaces);
+
+					foreach(Type inter in interfaces)
+					{
+						if (inter.IsAssignableFrom(proxyTargetType))
+						{
+							PropertyToGenerate[] tempPropsToGenerate;
+							MethodInfo[] methodsTemp = CollectMethodsAndProperties(emitter, inter, out tempPropsToGenerate);
+
+							PropertyToGenerate[] newPropsToGenerate = new PropertyToGenerate[tempPropsToGenerate.Length + propsToGenerate.Length];
+							MethodInfo[] newMethods = new MethodInfo[methodsTemp.Length + methods.Length];
+
+							Array.Copy(methods, newMethods, methods.Length);
+							Array.Copy(methodsTemp, 0, newMethods, methods.Length, methodsTemp.Length);
+
+							Array.Copy(propsToGenerate, newPropsToGenerate, propsToGenerate.Length);
+							Array.Copy(tempPropsToGenerate, 0, newPropsToGenerate, propsToGenerate.Length, tempPropsToGenerate.Length);
+
+							methods = newMethods;
+							propsToGenerate = newPropsToGenerate;
+
+							interfaceList.Remove(inter);
+						}
+					}
+
+					interfaces = (Type[]) interfaceList.ToArray(typeof(Type));
+				}
+
 				options.Hook.MethodsInspected();
 
 				// Constructor

@@ -70,6 +70,7 @@ namespace Castle.Windsor.Proxy
 				proxy = generator.CreateClassProxy(model.Implementation, 
 				                                   interceptors, constructorArguments);
 			}
+
 			CustomizeProxy(proxy, options, kernel, model);
 
 			return proxy;
