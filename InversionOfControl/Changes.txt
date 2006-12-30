@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied AndyD's patch fixing IOC-52
+  "Remote access to generic components"
+
 - Fixed IOC-45
   "Proxying a component that has an interface that is extended from another interface throws an exception"
 

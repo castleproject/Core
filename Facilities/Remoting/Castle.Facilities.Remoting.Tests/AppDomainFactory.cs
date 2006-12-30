@@ -15,7 +15,6 @@
 namespace Castle.Facilities.Remoting.Tests
 {
 	using System;
-	using System.IO;
 	using System.Security.Policy;
 
 	public class AppDomainFactory

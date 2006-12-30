@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -57,7 +57,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -94,9 +94,12 @@
     <Compile Include="ConsumerComp.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomToStringService.cs" />
+    <Compile Include="GenericToStringServiceImpl.cs" />
     <Compile Include="ICalcService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IGenericHashService.cs" />
     <Compile Include="InterceptableCalcService.cs">
       <SubType>Code</SubType>
     </Compile>

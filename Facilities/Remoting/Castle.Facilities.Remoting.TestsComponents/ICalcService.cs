@@ -14,8 +14,6 @@
 
 namespace Castle.Facilities.Remoting.TestComponents
 {
-	using System;
-
 	public interface ICalcService
 	{
 		int Sum(params int[] args);

@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\bin\</OutputPath>
@@ -57,7 +58,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DOTNET2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -85,6 +86,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -99,10 +101,9 @@
       <Project>{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}</Project>
       <Name>Castle.MicroKernel-vs2005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\InversionOfControl\Castle.Windsor\Castle.Windsor-vs2003.csproj">
-      <Name>Castle.Windsor-vs2003</Name>
+    <ProjectReference Include="..\..\..\InversionOfControl\Castle.Windsor\Castle.Windsor-vs2005.csproj">
       <Project>{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>Castle.Windsor-vs2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-net-2-0.csproj">
       <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
@@ -124,6 +125,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="RemoteGenericComponentTestCase.cs" />
     <Compile Include="FacilityLifeCycle.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +152,8 @@
     <Content Include="Configs\client_kernelcomponent.xml" />
     <Content Include="Configs\client_kernelcomponent_recover.xml" />
     <Content Include="Configs\client_simple_scenario.xml" />
+    <Content Include="Configs\client_kernelgenericcomponent.xml" />
+    <Content Include="Configs\server_kernelgenericcomponent.xml" />
     <Content Include="Configs\server_clientactivated.xml" />
     <Content Include="Configs\server_client_kernelcomponent.xml" />
     <Content Include="Configs\server_kernelcomponent.xml" />
