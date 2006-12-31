@@ -229,7 +229,7 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			base.Service(serviceProvider);
 			ILoggerFactory loggerFactory = serviceProvider.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
-			if (loggerFactory == null)
+			if (loggerFactory != null)
 				logger = loggerFactory.Create(GetType().Name);
 		}
 
