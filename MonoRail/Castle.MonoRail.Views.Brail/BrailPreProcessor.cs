@@ -16,6 +16,7 @@ using System;
 namespace Castle.MonoRail.Views.Brail
 {
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
 	using System.Text.RegularExpressions;
@@ -26,20 +27,6 @@ namespace Castle.MonoRail.Views.Brail
 
 	public class BrailPreProcessor : AbstractCompilerStep
 	{
-		// This will find any occurances of ${ expression } inside a string
-		// note that I do not try to solve the general case, only valid Boo code ones.
-		static Regex findExpressions = new Regex
-(@"\$\{		# starting ${
-(?:						# non capture of 
-	([^'\{]*)			# either any charater except begining {
-	|					# or, for complex expressions
-	([^'\{]*)			# any charater except begining {
-	(?<quoted>'[^']*')	# quoted string, such as '{0}'
-	([^'\{]*)			# any charater except begining {
-)*						# any amount of times
-\}						# closing }
-",
-			RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);   
 		private static IDictionary Seperators = CreateSeperators();
         private BooViewEngine booViewEngine;
 		IDictionary inputToCode = new Hashtable();
@@ -128,24 +115,85 @@ namespace Castle.MonoRail.Views.Brail
 			return buffer.ToString();
 		}
 
-		private static void Output(StringWriter buffer, string codeToOutput)
+		private static void Output(StringWriter buffer, string code)
 		{
-			StringBuilder code = new StringBuilder(codeToOutput);
-			// remove " from inside ${ }, which breaks the parser
-			foreach(Match match in findExpressions.Matches(codeToOutput))
-			{
-				foreach(Capture capture in match.Captures)
-				{
-					code.Replace('"', '\'', capture.Index, capture.Length);
-				}
-			}
-			
 			if (code.Length == 0)
 				return;
+			code = RemoveDoubleQuotesFromExpressions(code);
 			buffer.WriteLine();
 			buffer.Write("output \"\"\"");
 			buffer.Write(code);
 			buffer.WriteLine("\"\"\"");
+		}
+
+		/// <summary>
+		/// This will replace any " inside a ${ } expressions with a ', because it breaks the parser
+		/// otherwise.
+		/// This is a very stupid scanner, but it is replacing a regex that had performance issues.
+		/// </summary>
+		/// <param name="code"></param>
+		private static string RemoveDoubleQuotesFromExpressions(string code)
+		{
+			Stack<BrachMatchingInfo> bracesPositions = new Stack<BrachMatchingInfo>();
+			bool prevCharWasDollary = false;
+			for (int index = 0; index < code.Length;index++ )
+			{
+				if (code[index] == '{')
+				{
+					bracesPositions.Push(new BrachMatchingInfo(index, -1, prevCharWasDollary));
+				}
+				// Note that here there is an implicit check for ${   }   }
+				// it will match the last }
+				if (code[index] == '}' && bracesPositions.Count > 0)
+				{
+					bracesPositions.Peek().End = index;
+				}
+				prevCharWasDollary = code[index] == '$';
+			}
+			if(bracesPositions.Count==0)
+				return code;
+			StringBuilder sb = new StringBuilder(code);
+			foreach(BrachMatchingInfo matchingInfo in bracesPositions)
+			{
+				//probably a malf-formed expression, or not part of an ${ }, we will ignore that and let
+				// the parser shout at the user
+				if (matchingInfo.End== -1 || matchingInfo.PrevCharWasDollar==false)
+					continue;
+				sb.Replace('"', '\'', matchingInfo.Start, matchingInfo.End - matchingInfo.Start);
+			}
+			return sb.ToString();
+		}
+
+		private class BrachMatchingInfo
+		{
+			private int start, end;
+
+			public int Start
+			{
+				get { return start; }
+				set { start = value; }
+			}
+
+			public int End
+			{
+				get { return end; }
+				set { end = value; }
+			}
+
+			public bool PrevCharWasDollar
+			{
+				get { return prevCharWasDollar; }
+				set { prevCharWasDollar = value; }
+			}
+
+			public BrachMatchingInfo(int start, int end, bool prevCharWasDollar)
+			{
+				this.start = start;
+				this.end = end;
+				this.prevCharWasDollar = prevCharWasDollar;
+			}
+
+			private bool prevCharWasDollar;
 		}
 
 		private static DictionaryEntry GetSeperators(string code)

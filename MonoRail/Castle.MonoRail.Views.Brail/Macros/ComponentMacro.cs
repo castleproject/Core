@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Views.Brail
 
 			// AddViewComponentProperties( compilerContext.ComponentParams )
 			MethodInvocationExpression addProperties = new MethodInvocationExpression(AstUtil.CreateReferenceExpression("AddViewComponentProperties"));
-			addProperties.Arguments.Add(AstUtil.CreateReferenceExpression("componentContext.ComponentParams"));
+			addProperties.Arguments.Add(AstUtil.CreateReferenceExpression("componentContext.ComponentParameters"));
 			block.Add(addProperties);
 
 			InternalLocal viewComponentFactoryLocal = CodeBuilder.DeclareLocal(method, "viewComponentFactory",
@@ -120,7 +120,7 @@ namespace Castle.MonoRail.Views.Brail
 
 			// RemoveViewComponentProperties( compilerContext.ComponentParams )
 			MethodInvocationExpression removeProperties = new MethodInvocationExpression(AstUtil.CreateReferenceExpression("RemoveViewComponentProperties"));
-			removeProperties.Arguments.Add(AstUtil.CreateReferenceExpression("componentContext.ComponentParams"));
+			removeProperties.Arguments.Add(AstUtil.CreateReferenceExpression("componentContext.ComponentParameters"));
 			block.Add(removeProperties);
 
 			block.Add(removeProperties);
