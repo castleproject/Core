@@ -23,6 +23,7 @@
 		
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
 			<include name="**/*.resx" />
+			<include name="**/*.gif" />
 			<exclude name="obj/**" />
 		</resourcefileset>
 	</target>

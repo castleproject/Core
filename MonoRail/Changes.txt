@@ -3,6 +3,9 @@ Change history
 
 Release Candidate 3
 ===================
+ - Added ControllerBinder Extender Control for WebForm views to eliminate the
+   need to add event handlers in the codebehind that call Controller.Send
+
  - Brail now has Ruby's like symbols, using @symbol.
 	For instnace, component DiggStylePagination, ${ @useInlineStyle : true }
 	

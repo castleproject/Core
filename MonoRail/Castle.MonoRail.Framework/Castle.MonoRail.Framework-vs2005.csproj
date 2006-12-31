@@ -85,9 +85,12 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web">
       <Name>System.Web</Name>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -434,6 +437,42 @@
     <Compile Include="Views\Aspx\Contents.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Aspx\ControllerBinder\AbstractBindingComponent.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\AbstractBindingScope.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ActionArgument.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ActionArgumentCollection.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ActionBinding.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ActionBindingCollection.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ActionBindingTypeConverter.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\BindingContext.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\CommandBinding.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\CommandBindingCollection.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\CommandEventHandlerDelegate.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ControllerBinder.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ControllerBinding.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ControllerBindingCollection.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\AbstractEventScope.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\Design\ActionArgumentsPropertyGridAdapter.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\BindableControlIDConverter.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\Design\ControllerActionBinderDesigner.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\ActionListConverter.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\Design\StandardTarget.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\Design\DesignUtil.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\Design\ActionArgumentsEditor.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\Design\ActionArgumentsEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Aspx\ControllerBinder\Design\ActionArgumentsEditorForm.designer.cs">
+      <DependentUpon>ActionArgumentsEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Aspx\ControllerBinder\Design\ITarget.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\EventHandlerDelegate.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\EventHandlerFactory.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\EventListConverter.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\IBindingScope.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\IControllerBinder.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\TypedCollection.cs" />
+    <Compile Include="Views\Aspx\EventUtil.cs" />
     <Compile Include="Views\Aspx\InvokeHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -441,6 +480,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Views\Aspx\WebFormsViewEngine.cs" />
+    <Compile Include="Views\Aspx\WebFormUtils.cs" />
     <Compile Include="Views\EmbeddedResourceViewSource.cs" />
     <Compile Include="Views\FileAssemblyViewSourceLoader.cs" />
     <Compile Include="Views\FileViewSource.cs" />
@@ -482,6 +522,14 @@
     <None Include="..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\Castle.gif" />
+    <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\MonoRail.gif" />
+    <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\ActionArgumentsEditorForm.resx">
+      <DependentUpon>ActionArgumentsEditorForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Internal\Graph\" />

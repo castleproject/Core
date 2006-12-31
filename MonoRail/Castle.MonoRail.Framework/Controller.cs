@@ -368,9 +368,9 @@ namespace Castle.MonoRail.Framework
 		/// As a result, this property is only relavent to controllers using 
 		/// WebForms views.  It is placed on the base Controller for convenience 
 		/// only to avoid the need to extend the Controller or provide additional 
-		/// helper classes.
+		/// helper classes.  It is marked virtual to better support testing.
 		/// </summary>
-		protected bool IsPostBack
+		protected virtual bool IsPostBack
 		{
 			get
 			{
