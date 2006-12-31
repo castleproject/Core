@@ -217,7 +217,7 @@ namespace Castle.MonoRail.Views.Brail
 				CompileCommonScripts();
 				return;
 			}
-			Log("Detected a change in ${e.Name}, removing from complied cache");
+			Log("Detected a change in {0}, removing from complied cache", e.Name);
 			// Will cause a recompilation
 			compilations[e.Name] = null;
 		}
@@ -330,7 +330,7 @@ namespace Castle.MonoRail.Views.Brail
 				if (batch == false)
 				{
 					string errors = result.Context.Errors.ToString(true);
-					Log("Failed to compile ${0} because ${1}", filename, errors);
+					Log("Failed to compile {0} because {1}", filename, errors);
 					StringBuilder msg = new StringBuilder();
 					msg.Append("Error during compile:")
 						.Append(Environment.NewLine)
@@ -354,7 +354,7 @@ namespace Castle.MonoRail.Views.Brail
 			{
 				string typeName = Path.GetFileNameWithoutExtension(input.Name) + "_BrailView";
 				type = result.Context.GeneratedAssembly.GetType(typeName);
-				Log("Adding ${type.FullName} to the cache");
+                Log("Adding {0} to the cache", type.FullName);
                 compilations[input.Name] = type;
 				constructors[type] = type.GetConstructor(new Type[]
 				                                         	{
