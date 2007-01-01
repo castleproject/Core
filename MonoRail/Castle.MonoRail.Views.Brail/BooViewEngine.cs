@@ -288,7 +288,7 @@ namespace Castle.MonoRail.Views.Brail
 				type = (Type) compilations[filename];
 				if (type != null)
 				{
-					Log("Got compiled instnace of ${filename} from cache");
+					Log("Got compiled instance of {0} from cache",filename);
 					return CreateBrailBase(context, controller, output, type);
 				}
 				// if file is in compilations and the type is null,
