@@ -19,8 +19,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 
 	public class StandardTarget : ITarget
 	{
+		private readonly Type type;
 		private readonly string name;
-		private readonly string[] propertyNames;
+		private string[] propertyNames;
 
 		public StandardTarget(string name)
 		{
@@ -30,7 +31,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 			}
 
 			this.name = name;
-			propertyNames = new string[0];
 		}
 
 		public StandardTarget(Type type, string name)
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 				throw new ArgumentNullException("type");
 			}
 
-			propertyNames = CollectPropertyNames(type);
+			this.type = type;
 		}
 
 		public StandardTarget(object instance, string name)
@@ -52,12 +52,19 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 				throw new ArgumentNullException("instance");
 			}
 
-			propertyNames = CollectPropertyNames(instance.GetType());
+			type = instance.GetType();
 		}
 
 		public string[] PropertyNames
 		{
-			get { return propertyNames; }
+			get
+			{
+				if (propertyNames == null)
+				{
+					propertyNames = CollectPropertyNames(type);
+				}
+				return propertyNames;
+			}
 		}
 
 		public override string ToString()
@@ -67,6 +74,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 
 		protected virtual string[] CollectPropertyNames(Type type)
 		{
+			if (type == null) return new string[0];
+
 			PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(type);
 
 			string[] propertyDescNames = new string[properties.Count];

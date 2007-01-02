@@ -84,8 +84,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 			cell3.VAlign = "middle";
 			cell3.Attributes["style"] = "font-family: verdana, tahoma, arial, sans-serif; font-size: 0.9em; color:#5266A6";
 			LiteralControl caption = new LiteralControl();
-			caption.Text = string.Format("<b>Controller Binder</b> - {0} binding(s)",
-			                             binder.ControllerBindings.Count);
+			int bindingCount = binder.ControllerBindings.Count;
+			caption.Text = string.Format("<b>Controller Binder</b> - {0} binding{1}",
+				bindingCount, bindingCount != 1 ? "s" : "");
 			cell3.Controls.Add(caption);
 			row.Cells.Add(cell3);
 

@@ -30,6 +30,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		ControllerBinding AddBinding(Control control);
 
+		Control FindControlWithID(string controlID);
+
 		string[] GetControllerActions();
 	}
 }

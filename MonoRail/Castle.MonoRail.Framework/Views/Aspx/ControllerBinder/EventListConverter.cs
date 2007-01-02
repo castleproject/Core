@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 {
 	using System;
 	using System.ComponentModel;
-	using System.ComponentModel.Design;
 	using System.Web.UI;
 
 	public class EventListConverter : StringConverter
@@ -31,7 +30,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 				string[] eventNames = new string[events.Count];
 
-				for(int i = 0; i < events.Count; ++i)
+				for (int i = 0; i < events.Count; ++i)
 				{
 					eventNames[i] = events[i].Name;
 				}
@@ -69,60 +68,46 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			if (control != null && parent != null)
 			{
 				return EventUtil.GetCompatibleEvents(control,
-				                                     delegate(EventDescriptor eventDescriptor)
-				                                     	{
-				                                     		string eventName = eventDescriptor.Name;
-				                                     		return parent.ActionBindings[eventName] == null;
-				                                     	});
+					 delegate(EventDescriptor eventDescriptor)
+					 {
+						 string eventName = eventDescriptor.Name;
+						 return parent.ActionBindings[eventName] == null;
+					 });
 			}
 
 			return new EventDescriptorCollection(null, true);
 		}
 
 		private Control ObtainTargetControl(ITypeDescriptorContext context,
-		                                    out ControllerBinding parent)
+											out ControllerBinding parent)
 		{
 			parent = null;
+			Control control = null;
+
 			ActionBinding binding = context.Instance as ActionBinding;
 
-			if (binding != null)
+			if (binding != null && binding.Parent != null)
 			{
 				parent = binding.Parent;
+				control = parent.ControlInstance;
 
-				if (parent == null) return null;
-
-				if (parent.ControlInstance != null)
-					return parent.ControlInstance;
+				if (control == null)
+				{
+					control = FindControlInContainer(context, parent);
+				}
 			}
 
-			return FindControlInContainer(context, parent);
+			return control;
 		}
 
 		private Control FindControlInContainer(ITypeDescriptorContext context,
-		                                       ControllerBinding parent)
+											   ControllerBinding parent)
 		{
-			IDesignerHost host = (IDesignerHost) context.GetService(typeof(IDesignerHost));
-			if (host == null) return null;
+			IControllerBinder binder = (IControllerBinder)context.GetService(typeof(IControllerBinder));
 
-			IContainer container = host.Container;
-
-			if (container == null && parent.Binder != null &&
-			    parent.Binder.Site != null)
+			if (binder != null)
 			{
-				container = parent.Binder.Site.Container;
-			}
-
-			if (container == null) return null;
-
-			foreach(IComponent component in container.Components)
-			{
-				Control control = component as Control;
-
-				if ((control != null) && (control != host.RootComponent) &&
-				    (control.ID == parent.ControlID))
-				{
-					return control;
-				}
+				return binder.FindControlWithID(parent.ControlID);
 			}
 
 			return null;

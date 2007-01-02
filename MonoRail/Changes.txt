@@ -3,6 +3,8 @@ Change history
 
 Release Candidate 3
 ===================
+ - Retrieve target properties on demand for ControllerBinders ActionArgument editor
+
  - Added ControllerBinder Extender Control for WebForm views to eliminate the
    need to add event handlers in the codebehind that call Controller.Send
 

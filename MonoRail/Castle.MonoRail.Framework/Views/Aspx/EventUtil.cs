@@ -116,7 +116,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 
 			if (eventDescriptor.ComponentType == typeof(Control) ||
-			    eventDescriptor.ComponentType == typeof(WebControl))
+			    eventDescriptor.ComponentType == typeof(WebControl) ||
+				eventDescriptor.ComponentType == typeof(TemplateControl))
 			{
 				return false;
 			}

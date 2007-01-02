@@ -196,6 +196,18 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return newBinding;
 		}
 
+		public Control FindControlWithID(string controlID)
+		{
+			if (DesignMode)
+			{
+				return FindControlAtDesignTime(controlID);	
+			}
+			else
+			{
+				return FindControlAtRunTime(controlID);
+			}
+		}
+
 		public string[] GetControllerActions()
 		{
 			return new string[0];
@@ -205,26 +217,40 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			if (!(control is IDataSource))
 			{
-				return control.GetType().GetCustomAttributes(
-				       	typeof(NonVisualControlAttribute), true).Length == 0;
+				return !TypeDescriptor.GetAttributes(control).Contains(
+					NonVisualControlAttribute.NonVisual);
+			}
+			return false;
+		}
+
+		private Control FindControlAtDesignTime(string controlID)
+		{
+			IContainer container = GetContainer();
+
+			if (container != null)
+			{
+				foreach(IComponent component in container.Components)
+				{
+					Control control = component as Control;
+
+					if ((control != null) && (control.ID == controlID))
+					{
+						return control;
+					}
+				}
 			}
 
-			return false;
+			return null;
+		}
+
+		private Control FindControlAtRunTime(string controlID)
+		{
+			return WebFormUtils.FindControlRecursive(Page, controlID);
 		}
 
 		#endregion
 
 		#region Designer Support
-
-		private T GetService<T>(IComponent context)
-		{
-			if (context.Site != null)
-			{
-				return (T) Site.GetService(typeof(T));
-			}
-
-			return default(T);
-		}
 
 		void ISupportInitialize.BeginInit()
 		{
@@ -235,6 +261,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			if (!initialized && DesignMode)
 			{
 				RegisterBinderServices();
+				FillMissingControlInstances();
 
 				IComponentChangeService changes = GetService<IComponentChangeService>(this);
 
@@ -265,6 +292,17 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			if (services != null)
 			{
 				services.RemoveService(typeof(IControllerBinder));
+			}
+		}
+
+		private void FillMissingControlInstances()
+		{
+			foreach (ControllerBinding binding in ControllerBindings)
+			{
+				if (binding.ControlInstance == null && !string.IsNullOrEmpty(binding.ControlID))
+				{
+					binding.ControlInstance = FindControlWithID(binding.ControlID);
+				}
 			}
 		}
 
@@ -311,6 +349,35 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 					}
 				}
 			}
+		}
+
+		private T GetService<T>(IComponent context)
+		{
+			if (context.Site != null)
+			{
+				return (T)Site.GetService(typeof(T));
+			}
+
+			return default(T);
+		}
+
+		private IContainer GetContainer()
+		{
+			IContainer container = null;
+
+			IDesignerHost host = GetService<IDesignerHost>(this);
+
+			if (host != null)
+			{
+				container = host.Container;
+
+				if (container == null && Site != null)
+				{
+					container = Site.Container;
+				}
+			}
+
+			return container;
 		}
 
 		/// <summary>
@@ -377,7 +444,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			{
 				if (binding.IsValid() && binding.ActionBindings.Count > 0)
 				{
-					Control control = WebFormUtils.FindControlRecursive(Page, binding.ControlID);
+					Control control = FindControlAtRunTime(binding.ControlID);
 
 					if (IsBindableControl(control))
 					{

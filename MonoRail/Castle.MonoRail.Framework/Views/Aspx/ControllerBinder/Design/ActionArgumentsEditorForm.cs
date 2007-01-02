@@ -157,6 +157,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 					{
 						cbTarget.Items.Add(new StandardTarget(activeEvent, "event"));
 					}
+					else
+					{
+						cbTarget.Items.Add(new StandardTarget("event"));
+					}
 				}
 			}
 		}

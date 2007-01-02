@@ -105,7 +105,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		public override string ToString()
 		{
-			return controlID;
+			int actionCount = ActionBindings.Count;
+
+			return string.Format("{0} ({1} action{2})",
+				controlID, actionCount, actionCount != 1 ? "s" : "");
 		}
 	}
 }
