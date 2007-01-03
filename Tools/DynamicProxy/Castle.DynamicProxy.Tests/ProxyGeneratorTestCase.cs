@@ -574,12 +574,12 @@ namespace Castle.DynamicProxy.Test
 		public void NameBugReportedTest()
 		{
 			ProxyGenerator proxyGenerator = new ProxyGenerator();
-			Castle.DynamicProxy.Test.ClassInterfaces.A.B.C.IBubu bubuC = (Castle.DynamicProxy.Test.ClassInterfaces.A.B.C.IBubu)
-				proxyGenerator.CreateProxy(typeof(Castle.DynamicProxy.Test.ClassInterfaces.A.B.C.IBubu), new SimpleInterceptor(), new object());
+			Castle.DynamicProxy.Test.ClassInterfaces.C.IBubu bubuC = (Castle.DynamicProxy.Test.ClassInterfaces.C.IBubu)
+				proxyGenerator.CreateProxy(typeof(Castle.DynamicProxy.Test.ClassInterfaces.C.IBubu), new SimpleInterceptor(), new object());
 			bubuC.OperationA();
 			
-			Castle.DynamicProxy.Test.ClassInterfaces.A.B.D.IBubu bubuD = (Castle.DynamicProxy.Test.ClassInterfaces.A.B.D.IBubu)
-				proxyGenerator.CreateProxy(typeof(Castle.DynamicProxy.Test.ClassInterfaces.A.B.D.IBubu), new SimpleInterceptor(), new object());
+			Castle.DynamicProxy.Test.ClassInterfaces.D.IBubu bubuD = (Castle.DynamicProxy.Test.ClassInterfaces.D.IBubu)
+				proxyGenerator.CreateProxy(typeof(Castle.DynamicProxy.Test.ClassInterfaces.D.IBubu), new SimpleInterceptor(), new object());
 			bubuD.OperationB();
 		}
 

@@ -8,7 +8,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		}
 	}
 
-	namespace A.B.C
+	namespace C
 	{
 		public interface IBubu
 		{
@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		}
 	}
 
-	namespace A.B.D
+	namespace D
 	{
 		public interface IBubu
 		{
