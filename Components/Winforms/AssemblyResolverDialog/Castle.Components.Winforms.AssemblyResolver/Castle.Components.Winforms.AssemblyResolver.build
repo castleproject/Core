@@ -13,6 +13,8 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
+			<include name="System.Windows.Forms.dll" />
+			<include name="System.Drawing.dll" />
 		</assemblyfileset>
 	</target>
 

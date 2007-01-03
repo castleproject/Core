@@ -17,6 +17,7 @@
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.DynamicProxy.dll" />
 			<include name="Castle.Windsor.dll" />
+			<include name="System.Web.dll" />
 		</assemblyfileset>
 	</target>
 

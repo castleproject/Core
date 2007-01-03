@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
+#if DOTNET2 && !MONO
 
 namespace Castle.Windsor.Tests
 {

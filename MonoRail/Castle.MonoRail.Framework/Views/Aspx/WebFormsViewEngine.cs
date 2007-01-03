@@ -81,7 +81,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			
 			if (processedBefore)
 			{
-#if DOTNET2
+#if DOTNET2 && !MONO
 				ProcessExecuteView(context, controller, viewName);
 				return;
 #else
@@ -138,7 +138,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			ProcessPropertyBag(controller.PropertyBag, childPage);
 
-#if DOTNET2		
+#if DOTNET2 && !MONO		
 			Page page = childPage as Page;
 
 			if (page != null)
@@ -152,7 +152,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessLayoutIfNeeded(controller, httpContext, childPage);			
 		}
 
-#if DOTNET2
+#if DOTNET2 && !MONO
 		private void ProcessExecuteView(IRailsEngineContext context, Controller controller, String viewName)
 		{				
 			HttpContext httpContext = context.UnderlyingContext;
@@ -349,7 +349,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			Page masterHandler;
 			String layout = "layouts/" + controller.LayoutName;
 
-#if DOTNET2
+#if DOTNET2 && !MONO
 			masterHandler = (Page)httpContext.Items["wfv.masterPage"];
 
 			if (masterHandler != null)
@@ -359,7 +359,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 #endif
 			masterHandler = (Page) GetCompiledPageInstance(layout, httpContext);
-#if DOTNET2
+#if DOTNET2 && !MONO
 			masterHandler.Items["wfv.masterLayout"] = layout;
 #endif
 
@@ -411,7 +411,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
-#if DOTNET2
+#if DOTNET2 && !MONO
 
 		private Controller GetCurrentController()
 		{

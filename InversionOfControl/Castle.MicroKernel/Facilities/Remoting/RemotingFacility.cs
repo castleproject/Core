@@ -102,7 +102,7 @@ namespace Castle.Facilities.Remoting
 #endif
 			}
 
-#if DOTNET2
+#if DOTNET2 && !MONO
 			RemotingConfiguration.Configure(configurationFile, false);
 #else
 			RemotingConfiguration.Configure(configurationFile);

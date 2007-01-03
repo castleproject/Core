@@ -73,7 +73,7 @@ namespace Castle.Core.Resource
 		{
 			int comma = identifier.IndexOf(':');
 
-			if (comma == -1 && !(identifier[0] == '\\' && identifier[1] == '\\'))
+			if (comma == -1 && !(identifier[0] == '\\' && identifier[1] == '\\') && !(identifier[0] == '/'))
 			{
 				throw new ArgumentException("Invalid Uri: no scheme delimiter found on " + identifier);
 			}

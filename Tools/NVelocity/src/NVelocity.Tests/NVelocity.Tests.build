@@ -15,6 +15,7 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
 			<include name="NVelocity.dll" />
+			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 	</target>
 

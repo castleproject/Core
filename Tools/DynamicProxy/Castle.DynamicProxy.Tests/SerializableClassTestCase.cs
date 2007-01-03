@@ -124,7 +124,9 @@ namespace Castle.DynamicProxy.Test
 			Assert.IsTrue( otherProxy is IMarkerInterface );
 		}
 
+#if !MONO
 		[Test]
+#endif
 		[Category("DotNetOnly")]
 		public void MixinSerialization()
 		{

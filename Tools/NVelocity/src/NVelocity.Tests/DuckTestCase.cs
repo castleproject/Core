@@ -70,7 +70,7 @@ namespace NVelocity
 
 		private void Log(string call)
 		{
-			sb.AppendLine(call);
+			sb.Append(call + Environment.NewLine);
 		}
 
 		public override string ToString()
@@ -124,7 +124,11 @@ namespace NVelocity
 			
 			Evaluate("$duck2.style.border");
 
-			Assert.AreEqual("get invoked style\r\nget invoked border\r\n", duck2.ToString());
+			StringBuilder expected = new StringBuilder();
+			expected.Append("get invoked style" + Environment.NewLine);
+			expected.Append("get invoked border" + Environment.NewLine);
+			
+			Assert.AreEqual(expected.ToString(), duck2.ToString());
 		}
 
 		[Test]
@@ -132,7 +136,10 @@ namespace NVelocity
 		{
 			Evaluate("#set($duck2.Name = 'aaa')");
 
-			Assert.AreEqual("set invoked Name aaa\r\n", duck2.ToString());
+			StringBuilder expected = new StringBuilder();
+			expected.Append("set invoked Name aaa" + Environment.NewLine);
+			
+			Assert.AreEqual(expected.ToString(), duck2.ToString());
 		}
 
 		[Test]
@@ -142,7 +149,11 @@ namespace NVelocity
 			Assert.AreEqual("invoked some arg1 ", Evaluate("$duck1.some('arg1')"));
 			Assert.AreEqual("invoked some ", Evaluate("$duck1.some()"));
 			Evaluate("$duck2.set()");
-			Assert.AreEqual("invoked set_0\r\n", duck2.ToString());
+			
+			StringBuilder expected = new StringBuilder();
+			expected.Append("invoked set_0" + Environment.NewLine);
+			
+			Assert.AreEqual(expected.ToString(), duck2.ToString());
 		}
 
 		[Test]

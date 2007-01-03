@@ -97,8 +97,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			list.Add("cat1");
 			list.Add("cat2");
 
-			Assert.AreEqual("<select id=\"something\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"cat1\">cat1</option>\r\n<option value=\"cat2\">cat2</option>\r\n</select>",
+			Assert.AreEqual("<select id=\"something\" name=\"product.category.id\" >" + Environment.NewLine +
+				"<option value=\"cat1\">cat1</option>" + Environment.NewLine + "<option value=\"cat2\">cat2</option>" + Environment.NewLine + "</select>",
 				helper.Select("product.category.id", list, DictHelper.Create("id=something")));
 		}
 

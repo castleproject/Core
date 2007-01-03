@@ -18,6 +18,7 @@
 			<include name="Castle.Services.Transaction.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
+			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 	</target>
 

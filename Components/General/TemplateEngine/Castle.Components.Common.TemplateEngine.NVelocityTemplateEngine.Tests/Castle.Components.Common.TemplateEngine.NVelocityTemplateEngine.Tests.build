@@ -17,6 +17,7 @@
 			<include name="Castle.Core.dll" />
 			<include name="Castle.Components.Common.TemplateEngine.dll" />
 			<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests" dynamicprefix="true" basedir="${src.dir}">

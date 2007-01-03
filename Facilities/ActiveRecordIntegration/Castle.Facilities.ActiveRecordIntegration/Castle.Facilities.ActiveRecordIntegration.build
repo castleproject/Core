@@ -18,6 +18,8 @@
 			<include name="Castle.Services.Transaction.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.ActiveRecord.dll" />
+			<include name="System.Data.dll" />
+			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 	</target>
 

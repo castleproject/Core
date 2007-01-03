@@ -15,6 +15,7 @@
 			<include name="Castle.DynamicProxy2.dll" />
 			<include name="Castle.MicroKernel.dll" />
 			<include name="Castle.Windsor.dll" />
+			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 		
 		<resourcefileset id="project.resources" basedir="${src.dir}" prefix="${project::get-name()}" dynamicprefix="true">

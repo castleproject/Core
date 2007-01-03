@@ -85,6 +85,9 @@ namespace Castle.Facilities.Prevalence.Tests
 		}
 
 		[Test]
+#if MONO
+		[Ignore("Test depending on KERNEL32.DLL")]
+#endif
 		public void TestWithSnapshot()
 		{
 			IKernel kernel = CreateConfiguredSnapshotKernel();

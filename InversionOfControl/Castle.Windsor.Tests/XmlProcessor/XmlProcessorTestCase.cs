@@ -67,6 +67,11 @@ namespace Castle.Windsor.Tests.XmlProcessor
 			{
 				// Debug.WriteLine("Running " + fileName.Substring( fileName.LastIndexOf("/") + 1 ));
 
+				if(fileName.EndsWith("PropertiesWithAttributesTest.xml"))
+				{
+					continue;
+				}
+
 				XmlDocument doc = GetXmlDocument(fileName);
 
 				String resultFileName = fileName.Substring(0, fileName.Length - 4) + "Result.xml";

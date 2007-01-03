@@ -69,8 +69,8 @@ namespace Castle.MonoRail.Framework.Tests
 			
 			Assert.IsNotNull(views);
 			Assert.AreEqual(3, views.Length);
-			Assert.AreEqual(@"Content\contentinassembly.vm", views[0]);
-			Assert.AreEqual(@"Content\notinassembly.vm", views[1]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
+			Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
 			Assert.AreEqual(@"content.contentinassembly.vm", views[2]);
 
 			foreach(string view in views)

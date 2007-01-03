@@ -23,6 +23,7 @@
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
 			<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+			<include name="System.Web.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" basedir="${src.dir}" prefix="${project::get-name()}" dynamicprefix="true">

@@ -47,9 +47,9 @@ namespace Castle.MonoRail.TestSupport
 			this.output = output;
 			this.filePath = requestData.Url;
 
-			if (!appPhysicalPath.EndsWith(@"\"))
+			if (!appPhysicalPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
 			{
-				appPhysicalPath = appPhysicalPath + @"\";
+				appPhysicalPath = appPhysicalPath + Path.DirectorySeparatorChar;
 			}
 		}
 

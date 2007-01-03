@@ -53,7 +53,7 @@ namespace Castle.Facilities.Logging.Tests
 
 			test.DoSomething();
 
-			String expectedLogOutput = String.Format("[INFO ] [{0}] - Hello world\r\n", typeof(SimpleLoggingComponent).FullName);
+			String expectedLogOutput = String.Format("[INFO ] [{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
 			MemoryAppender memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 			TextWriter actualLogOutput = new StringWriter();
 			PatternLayout patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
@@ -68,7 +68,7 @@ namespace Castle.Facilities.Logging.Tests
 			smtpServer.InternalSend("rbellamy@pteradigm.com", "jobs@castlestronghold.com", "We're looking for a few good porgrammars.");
 			smtpServer.Stop();
 
-			expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.SmtpServer] - Stopped\r\n", typeof(SimpleLoggingComponent).FullName);
+			expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.SmtpServer] - Stopped" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
 			memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 			actualLogOutput = new StringWriter();
 			patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");
@@ -89,7 +89,7 @@ namespace Castle.Facilities.Logging.Tests
 
 			complexLoggingComponent.DoSomeContextual();
 
-			String expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom.\r\n", typeof(SimpleLoggingComponent).FullName);
+			String expectedLogOutput = String.Format("[DEBUG] [Castle.Facilities.Logging.Tests.Classes.ComplexLoggingComponent] [Outside Inside0] [bar] [flam] - Bim, bam boom." + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
 			MemoryAppender memoryAppender = ((Hierarchy)LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 			TextWriter actualLogOutput = new StringWriter();
 			PatternLayout patternLayout = new PatternLayout("[%-5level] [%logger] [%properties{NDC}] [%properties{foo}] [%properties{flim}] - %message%newline");

@@ -9,7 +9,7 @@
 
 		Usage
 
-		&lt;property name="root.dir" value="..\.." /&gt;
+		&lt;property name="root.dir" value="../.." /&gt;
 		&lt;include buildfile="${root.dir}/build-common/common-project.xml" /&gt;
 
 		These lines should be placed at the top level under the &lt;project&gt;
@@ -100,7 +100,7 @@
 	<target name="common.configure-tests"
 		description="Configure tests for running NUnit tests.">
 
-		<property name="app.config" value="${build.dir}\${project::get-name()}.dll.config" />
+		<property name="app.config" value="${build.dir}/${project::get-name()}.dll.config" />
 
 		<!-- make sure the config file is writable -->
 		<attrib file="${app.config}" readonly="false" />
@@ -122,8 +122,8 @@
 			debug="${build.debug}" 
 			optimize="${build.optimize}"
 			warnaserror="${build.warnaserrors}"
-			output="${build.dir}\${project::get-name()}.dll" 
-			doc="${build.dir}\${project::get-name()}.xml"
+			output="${build.dir}/${project::get-name()}.dll" 
+			doc="${build.dir}/${project::get-name()}.xml"
 			rebuild="${build.rebuild}"
 		>
 			<nowarn>
@@ -167,7 +167,7 @@
 			debug="${build.debug}"
 			optimize="${build.optimize}"
 			warnaserror="${build.warnaserrors}"
-			output="${build.dir}\${project::get-name()}.exe" 
+			output="${build.dir}/${project::get-name()}.exe" 
 		>
 			<nowarn>
 				<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->
@@ -229,7 +229,7 @@
 			</attributes>
 		</asminfo>
 		<if test="${assembly.sign}" >
-			<echo append="true" file="${assemblyinfo.cs}">#if !DOTNET2</echo>
+			<echo append="true" file="${assemblyinfo.cs}">#if !DOTNET2 || MONO</echo>
 			<echo append="true" file="${assemblyinfo.cs}">[assembly: AssemblyKeyFileAttribute(@"${path::get-full-path(assembly.keyfile)}")]</echo>
 			<echo append="true" file="${assemblyinfo.cs}">#endif</echo>
 		</if>
@@ -255,7 +255,7 @@
 			<exec if="${nunit.found}"
 				program="${nunit-console}" 
 				workingdir="${build.dir}" 
-				commandline="${build.dir}\${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config=${build.dir}\${project::get-name()}.dll.config /nologo"
+				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo"
 				 />
 
 			<nunit2 unless="${nunit.found}">
@@ -266,8 +266,8 @@
 					outputdir="${testresults.dir}"
 				/>
 				<test
-					assemblyname="${build.dir}\${project::get-name()}.dll"
-					appconfig="${build.dir}\${project::get-name()}.dll.config" />
+					assemblyname="${build.dir}/${project::get-name()}.dll"
+					appconfig="${build.dir}/${project::get-name()}.dll.config" />
 			</nunit2>
 		</if>
 		<if test="${not common.run-tests}">
@@ -281,7 +281,7 @@
 
 	<target name="common.put-connection-settings-into-app-config">
 
-		<property name="app.config" value="${build.dir}\${project::get-name()}.dll.config" />
+		<property name="app.config" value="${build.dir}/${project::get-name()}.dll.config" />
 
 		<!-- make sure the config file is writable -->
 		<attrib file="${app.config}" readonly="false" />
@@ -307,7 +307,7 @@
 	</target>
 
 	<target name="common.remove-connection-settings-from-app-config">
-		<property name="app.config" value="${build.dir}\${project::get-name()}.dll.config" />
+		<property name="app.config" value="${build.dir}/${project::get-name()}.dll.config" />
 
 		<xmlpoke
 			file="${app.config}"

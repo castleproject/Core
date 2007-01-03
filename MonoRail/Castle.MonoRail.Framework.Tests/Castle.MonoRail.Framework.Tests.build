@@ -15,6 +15,7 @@
 			<include name="Castle.Core.dll" />
 			<include name="Castle.MonoRail.TestSupport.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
+			<include name="System.Data.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true" >

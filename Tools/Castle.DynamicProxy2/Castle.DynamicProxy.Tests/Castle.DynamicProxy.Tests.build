@@ -8,6 +8,9 @@
 
 	<property name="root.dir" value="../../.." />
 	<include buildfile="${root.dir}/common-project.xml" />
+	
+	<property name="dp2.test" value="true" unless="${property::exists('dp2.test')}" />
+	<property name="common.run-tests" value="${dp2.test}" />
 
 	<target name="init" depends="common.init">
 		<property name="assembly.is-cls-compliant" value="false" />
@@ -16,6 +19,8 @@
 			<include name="nunit.framework.dll" />
 			<include name="Castle.DynamicProxy2.dll" />
 			<include name="Castle.Core.dll" />
+			<include name="System.Configuration.dll" />
+			<include name="System.Data.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false">
@@ -26,7 +31,7 @@
 
 	<target name="configure-tests">
 
-		<property name="app.config" value="${build.dir}\${project::get-name()}.dll.config" />
+		<property name="app.config" value="${build.dir}/${project::get-name()}.dll.config" />
 
 		<!-- make sure the config file is writable -->
 		<attrib file="${app.config}" readonly="false" />

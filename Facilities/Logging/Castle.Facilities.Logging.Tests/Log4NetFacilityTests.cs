@@ -52,7 +52,7 @@ namespace Castle.Facilities.Logging.Tests
 
 			test.DoSomething();
 
-			String expectedLogOutput = String.Format("[INFO ] [{0}] - Hello world\r\n", typeof(SimpleLoggingComponent).FullName);
+			String expectedLogOutput = String.Format("[INFO ] [{0}] - Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
 			MemoryAppender memoryAppender = ((Hierarchy) LogManager.GetRepository()).Root.GetAppender("memory") as MemoryAppender;
 			TextWriter actualLogOutput = new StringWriter();
 			PatternLayout patternLayout = new PatternLayout("[%-5level] [%logger] - %message%newline");

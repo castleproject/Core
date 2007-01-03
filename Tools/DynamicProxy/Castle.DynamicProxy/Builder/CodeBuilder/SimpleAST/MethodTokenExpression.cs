@@ -34,13 +34,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, _method);
-#if DOTNET2 // Needed to support generics
+#if DOTNET2 && !MONO // Needed to support generics
 			gen.Emit(OpCodes.Ldtoken, _method.DeclaringType);
 #endif
 			MethodInfo minfo = typeof(MethodBase).GetMethod(
 				"GetMethodFromHandle", BindingFlags.Static|BindingFlags.Public, null, 
 				new Type[] { typeof(RuntimeMethodHandle), 
-#if DOTNET2 // Needed to support generics
+#if DOTNET2 && !MONO // Needed to support generics
 					typeof(RuntimeTypeHandle) 
 #endif
 				}, null);

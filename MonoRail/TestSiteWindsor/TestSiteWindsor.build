@@ -25,6 +25,7 @@
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
 			<include name="log4net.dll" />
+			<include name="System.Web.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" basedir="${src.dir}" prefix="${project::get-name()}" dynamicprefix="true">

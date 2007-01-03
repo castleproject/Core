@@ -54,7 +54,7 @@ namespace Castle.Facilities.Logging.Tests
 			container.AddComponent("component", typeof(SimpleLoggingComponent));
 			SimpleLoggingComponent test = container["component"] as SimpleLoggingComponent;
 
-			String expectedLogOutput = String.Format("[Info] '{0}' Hello world\r\n", typeof(SimpleLoggingComponent).FullName);
+			String expectedLogOutput = String.Format("[Info] '{0}' Hello world" + Environment.NewLine, typeof(SimpleLoggingComponent).FullName);
 			String actualLogOutput = "";
 
 			test.DoSomething();

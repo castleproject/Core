@@ -15,6 +15,7 @@
 			<include name="log4net.dll" />
 			<include name="nunit.framework.dll"/>
 			<include name="Castle.Core.dll" />
+			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false" basedir="${src.dir}">

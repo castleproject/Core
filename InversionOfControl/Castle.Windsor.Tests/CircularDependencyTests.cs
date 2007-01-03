@@ -25,21 +25,26 @@ namespace Castle.Windsor.Tests
 	public class CircularDependencyTests
 	{
 		[Test]
-		[
-			ExpectedException(typeof(CircularDependecyException),
-				@"A cycle was detected when trying to resolve a dependency. The dependency graph that resulted in a cycle is:
- - Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in type Castle.Windsor.Tests.Components.Controller
- - Service dependency 'Controller' type 'Castle.Windsor.Tests.Components.IController' for Castle.Windsor.Tests.Components.IController Controller in type Castle.Windsor.Tests.Components.View
- + Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in Castle.Windsor.Tests.Components.Controller
-"
-				)]
 		public void ThrowsACircularDependencyException()
 		{
 			IWindsorContainer container = new WindsorContainer();
 			container.AddComponent("controller", typeof(IController), typeof(Controller));
 			container.AddComponent("view", typeof(IView), typeof(View));
+			try
+			{
+				container.Resolve("controller");
 
-			container.Resolve("controller");
+				throw new Exception(
+				@"A cycle was detected when trying to resolve a dependency. The dependency graph that resulted in a cycle is:
+ - Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in type Castle.Windsor.Tests.Components.Controller
+ - Service dependency 'Controller' type 'Castle.Windsor.Tests.Components.IController' for Castle.Windsor.Tests.Components.IController Controller in type Castle.Windsor.Tests.Components.View
+ + Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in Castle.Windsor.Tests.Components.Controller
+"
+				);
+			}
+			catch(CircularDependecyException)
+			{
+			}
 		}
 
 		[Test]
