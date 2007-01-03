@@ -138,6 +138,7 @@
 		<property name="link.sdkdoc.version" value="MsdnOnline" />
 		<!-- mono puts gacutil on PATH -->
 		<property name="gacutil.file" value="gacutil" />
+		<property name="build.warnaserrors" value="false" />
 	</target>
 	
 	<target name="set-mono-2.0-framework-configuration">
@@ -146,6 +147,7 @@
 		<property name="link.sdkdoc.version" value="MsdnOnline" />
 		<!-- mono puts gacutil on PATH -->
 		<property name="gacutil.file" value="gacutil" />
+		<property name="build.warnaserrors" value="false" />
 	</target>
 
 	<target name="display-current-runtime">
