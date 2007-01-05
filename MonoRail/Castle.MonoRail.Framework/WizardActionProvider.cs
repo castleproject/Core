@@ -124,6 +124,8 @@ namespace Castle.MonoRail.Framework
 						controller.DynamicActions[rawAction] = 
 							new DelegateDynamicAction(new ActionDelegate(OnStepActionRequested));
 					}
+					
+					context.CurrentController = step;
 				}
 				
 				controller.DynamicActions[actionName] = 
