@@ -1,6 +1,11 @@
 Release Candidate 2
 ===================
 
+- Fixed AR-110 "Support rollback on TransactionScope Dispose without commit."
+  
+  Now you can create a TransactionScope defining the behavior
+  if the dispose is reached and neither a votecommit nor voterollback was called
+
 - Applied Andrew Peters' (see AR-105) with the following changes
 
 	- [breaking change] Renames ActiveRecordBase.CountAll to ActiveRecordBase.Count 
@@ -19,7 +24,7 @@ Release Candidate 2
 	- Reformatted code. 
 
 - Fixed AR-115 Exists always returns True for lazily-proxied classes
-  Chacged FindByPK to use Get/Load according to its parameters.
+  Changed FindByPK to use Get/Load according to its parameters.
 
 - Included PrimaryKeyType.Custom and property CustomGenerator:Type
   allowing one to supply its own generator
