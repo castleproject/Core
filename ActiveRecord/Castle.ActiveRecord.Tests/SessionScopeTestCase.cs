@@ -193,11 +193,6 @@ namespace Castle.ActiveRecord.Tests
 			product.Categories.Add( new CategoryLazy("y") );
 			product.Categories.Add( new CategoryLazy("z") );
 
-			foreach(CategoryLazy cat in product.Categories)
-			{
-				cat.Save();
-			}
-
 			product.Save();
 
 			using(new SessionScope())

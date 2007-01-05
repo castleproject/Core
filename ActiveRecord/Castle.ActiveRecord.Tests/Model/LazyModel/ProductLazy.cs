@@ -36,7 +36,7 @@ namespace Castle.ActiveRecord.Tests.Model.LazyModel
 			set { id = value; }
 		}
 
-		[HasMany( typeof(CategoryLazy), Lazy=true )]
+		[HasMany( typeof(CategoryLazy), Lazy=true, Cascade=ManyRelationCascadeEnum.All )]
 		public ISet Categories
 		{
 			get { return categories; }
