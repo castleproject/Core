@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export MONO_MANAGED_WATCHER=1
+booi script/server.boo xsp2 restart --root public $*

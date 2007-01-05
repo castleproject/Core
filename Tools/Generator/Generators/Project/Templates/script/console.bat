@@ -1,0 +1,1 @@
+@booi script\console.boo %*
