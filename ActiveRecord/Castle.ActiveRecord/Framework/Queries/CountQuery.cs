@@ -41,8 +41,7 @@ namespace Castle.ActiveRecord.Queries
 		/// Initializes a new instance of the <see cref="CountQuery"/> class.
 		/// </summary>
 		/// <param name="targetType">The target type.</param>
-		public CountQuery(Type targetType)
-			: this(targetType, "1=1", null)
+		public CountQuery(Type targetType) : this(targetType, "1=1", null)
 		{
 		}
 
@@ -51,8 +50,7 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		/// <param name="targetType">The target type.</param>
 		/// <param name="criterias">Criteria applied to the query</param>
-		public CountQuery(Type targetType, ICriterion[] criterias)
-			: this(targetType, string.Empty, null)
+		public CountQuery(Type targetType, ICriterion[] criterias) : this(targetType, string.Empty, null)
 		{
 			this.criterias = criterias;
 		}

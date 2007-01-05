@@ -44,11 +44,6 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class HqlBasedQuery : ActiveRecordBaseQuery
 	{
-		private static readonly Regex 
-			rxFetchJoin = new Regex(@"fetch\s+join|join\s+fetch", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
-			rxOrderBy = new Regex(@"\s+order\s+by\s+.*", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase),
-			rxNoSelect = new Regex(@"^\s*from\s+", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase);
-
 		private QueryLanguage queryLanguage;
 		private String query;
 
@@ -193,60 +188,6 @@ namespace Castle.ActiveRecord.Queries
 		}
 		
 		#endregion
-		
-		/// <summary>
-		/// Tries to obtain the record count for the current query.
-		/// </summary>
-		/// <returns>The record count for the current query, or <c>-1</c> if failed.</returns>
-		public virtual int Count()
-		{
-			try
-			{
-				ScalarQuery qry = new ScalarQuery(Target, PrepareQueryForCount(Query));
-				
-				if (queryModifiers != null)
-				{
-					foreach(IQueryModifier mod in queryModifiers)
-					{
-						if (mod is QueryRange) continue;
-
-						qry.AddModifier(mod);
-					}
-				}
-
-				return Convert.ToInt32(ActiveRecordMediator.ExecuteQuery(qry));
-			}
-			catch(Exception ex)
-			{
-				// log the exception and return -1
-				Log.Debug("Error while obtaining count. Will return -1 as result.", ex);
-				return -1;
-			}
-		}
-
-		/// <summary>
-		/// Generate the HQL statement from the query parameters
-		/// </summary>
-		/// <param name="countQuery">The count query.</param>
-		/// <returns></returns>
-		protected virtual String PrepareQueryForCount(String countQuery)
-		{
-			countQuery = rxOrderBy.Replace(countQuery, String.Empty);
-			countQuery = rxFetchJoin.Replace(countQuery, "join");
-			
-			if (rxNoSelect.IsMatch(countQuery))
-			{
-				countQuery = "select count(*) " + countQuery;
-			}
-			else
-			{
-				countQuery = "select count(*) from (" + countQuery + ")";
-			}
-			
-			Log.DebugFormat("Query prepared for count: {0}", countQuery);
-			
-			return countQuery;
-		}
 
 		/// <summary>
 		/// Creates the <see cref="IQuery"/> instance.

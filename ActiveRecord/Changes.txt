@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Removed HqlBasedQuery.Count operation as it didn't work for complex queries
+
 - Fixed AR-110 "Support rollback on TransactionScope Dispose without commit."
   
   Now you can create a TransactionScope defining the behavior
