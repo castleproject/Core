@@ -95,6 +95,25 @@ namespace Castle.ActiveRecord
 		/// <param name="instance">The ActiveRecord instance to be created on the database</param>
 		protected internal static void Create(object instance)
 		{
+			InternalCreate(instance, false);
+		}
+
+		/// <summary>
+		/// Creates (Saves) a new instance to the database and flushes the session.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be created on the database</param>
+		protected internal static void CreateAndFlush(object instance)
+		{
+			InternalCreate(instance, true);
+		}
+
+		/// <summary>
+		/// Creates (Saves) a new instance to the database.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be created on the database</param>
+		/// <param name="flush">if set to <c>true</c>, the operation will be followed by a session flush.</param>
+		private static void InternalCreate(object instance, bool flush)
+		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
 			EnsureInitialized(instance.GetType());
@@ -105,9 +124,12 @@ namespace Castle.ActiveRecord
 			{
 				session.Save(instance);
 
-				session.Flush();
+				if (flush)
+				{
+					session.Flush();
+				}
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
 				if (ex.InnerException is ValidationException)
@@ -135,6 +157,25 @@ namespace Castle.ActiveRecord
 		/// <param name="instance">The ActiveRecord instance to be deleted</param>
 		protected internal static void Delete(object instance)
 		{
+			InternalDelete(instance, false);
+		}
+
+		/// <summary>
+		/// Deletes the instance from the database and flushes the session.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be deleted</param>
+		protected internal static void DeleteAndFlush(object instance)
+		{
+			InternalDelete(instance, true);
+		}
+
+		/// <summary>
+		/// Deletes the instance from the database.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be deleted</param>
+		/// <param name="flush">if set to <c>true</c>, the operation will be followed by a session flush.</param>
+		private static void InternalDelete(object instance, bool flush)
+		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
 			EnsureInitialized(instance.GetType());
@@ -145,9 +186,12 @@ namespace Castle.ActiveRecord
 			{
 				session.Delete(instance);
 
-				session.Flush();
+				if (flush)
+				{
+					session.Flush();
+				}
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
 				if (ex.InnerException is ValidationException)
@@ -370,6 +414,27 @@ namespace Castle.ActiveRecord
 		/// <param name="instance">The ActiveRecord instance to be updated on the database</param>
 		protected internal static void Update(object instance)
 		{
+			InternalUpdate(instance, false);
+		}
+
+		/// <summary>
+		/// Persists the modification on the instance
+		/// state to the database and flushes the session.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be updated on the database</param>
+		protected internal static void UpdateAndFlush(object instance)
+		{
+			InternalUpdate(instance, true);
+		}
+
+		/// <summary>
+		/// Persists the modification on the instance
+		/// state to the database.
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be updated on the database</param>
+		/// <param name="flush">if set to <c>true</c>, the operation will be followed by a session flush.</param>
+		private static void InternalUpdate(object instance, bool flush)
+		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
 			EnsureInitialized(instance.GetType());
@@ -380,7 +445,10 @@ namespace Castle.ActiveRecord
 			{
 				session.Update(instance);
 
-				session.Flush();
+				if (flush)
+				{
+					session.Flush();
+				}
 			}
 			catch (ValidationException)
 			{
@@ -411,6 +479,35 @@ namespace Castle.ActiveRecord
 		/// <param name="instance">The ActiveRecord instance to be saved</param>
 		protected internal static void Save(object instance)
 		{
+			InternalSave(instance, false);
+		}
+
+		/// <summary>
+		/// Saves the instance to the database and flushes the session. If the primary key is unitialized
+		/// it creates the instance on the database. Otherwise it updates it.
+		/// <para>
+		/// If the primary key is assigned, then you must invoke <see cref="Create()"/>
+		/// or <see cref="Update()"/> instead.
+		/// </para>
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be saved</param>
+		protected internal static void SaveAndFlush(object instance)
+		{
+			InternalSave(instance, true);
+		}
+
+		/// <summary>
+		/// Saves the instance to the database. If the primary key is unitialized
+		/// it creates the instance on the database. Otherwise it updates it.
+		/// <para>
+		/// If the primary key is assigned, then you must invoke <see cref="Create()"/>
+		/// or <see cref="Update()"/> instead.
+		/// </para>
+		/// </summary>
+		/// <param name="instance">The ActiveRecord instance to be saved</param>
+		/// <param name="flush">if set to <c>true</c>, the operation will be followed by a session flush.</param>
+		private static void InternalSave(object instance, bool flush)
+		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
 			EnsureInitialized(instance.GetType());
@@ -421,9 +518,12 @@ namespace Castle.ActiveRecord
 			{
 				session.SaveOrUpdate(instance);
 
-				session.Flush();
+				if (flush)
+				{
+					session.Flush();
+				}
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
 				if (ex.InnerException is ValidationException)
@@ -440,6 +540,8 @@ namespace Castle.ActiveRecord
 				holder.ReleaseSession(session);
 			}
 		}
+		
+		
 
 		#endregion
 
@@ -1101,34 +1203,109 @@ namespace Castle.ActiveRecord
 		/// May Create or Update the instance depending 
 		/// on whether it has a valid ID.
 		/// </summary>
+		/// <remarks>
+		/// If within a <see cref="SessionScope"/> the operation
+		/// is going to be on hold until NHibernate (or you) decides to flush
+		/// the session.
+		/// </remarks>
 		public virtual void Save()
 		{
 			Save(this);
 		}
 
 		/// <summary>
+		/// Saves the instance information to the database.
+		/// May Create or Update the instance depending 
+		/// on whether it has a valid ID.
+		/// </summary>
+		/// <remarks>
+		/// Even within a <see cref="SessionScope"/> the operation
+		/// is going to be flushed immediately. This might have side effects such as
+		/// flushing (persisting) others operations that were on hold.
+		/// </remarks>
+		public virtual void SaveAndFlush()
+		{
+			SaveAndFlush(this);
+		}
+
+		/// <summary>
 		/// Creates (Saves) a new instance to the database.
 		/// </summary>
+		/// <remarks>
+		/// If within a <see cref="SessionScope"/> the operation
+		/// is going to be on hold until NHibernate (or you) decides to flush
+		/// the session.
+		/// </remarks>
 		public virtual void Create()
 		{
 			Create(this);
 		}
 
 		/// <summary>
+		/// Creates (Saves) a new instance to the database.
+		/// </summary>
+		/// <remarks>
+		/// Even within a <see cref="SessionScope"/> the operation
+		/// is going to be flushed immediately. This might have side effects such as
+		/// flushing (persisting) others operations that were on hold.
+		/// </remarks>
+		public virtual void CreateAndFlush()
+		{
+			CreateAndFlush(this);
+		}
+
+		/// <summary>
 		/// Persists the modification on the instance
 		/// state to the database.
 		/// </summary>
+		/// <remarks>
+		/// If within a <see cref="SessionScope"/> the operation
+		/// is going to be on hold until NHibernate (or you) decides to flush
+		/// the session.
+		/// </remarks>
 		public virtual void Update()
 		{
 			Update(this);
 		}
 
 		/// <summary>
+		/// Persists the modification on the instance
+		/// state to the database.
+		/// </summary>
+		/// <remarks>
+		/// Even within a <see cref="SessionScope"/> the operation
+		/// is going to be flushed immediately. This might have side effects such as
+		/// flushing (persisting) others operations that were on hold.
+		/// </remarks>
+		public virtual void UpdateAndFlush()
+		{
+			UpdateAndFlush(this);
+		}
+
+		/// <summary>
 		/// Deletes the instance from the database.
 		/// </summary>
+		/// <remarks>
+		/// If within a <see cref="SessionScope"/> the operation
+		/// is going to be on hold until NHibernate (or you) decides to flush
+		/// the session.
+		/// </remarks>
 		public virtual void Delete()
 		{
 			Delete(this);
+		}
+
+		/// <summary>
+		/// Deletes the instance from the database.
+		/// </summary>
+		/// <remarks>
+		/// Even within a <see cref="SessionScope"/> the operation
+		/// is going to be flushed immediately. This might have side effects such as
+		/// flushing (persisting) others operations that were on hold.
+		/// </remarks>
+		public virtual void DeleteAndFlush()
+		{
+			DeleteAndFlush(this);
 		}
 
 		/// <summary>

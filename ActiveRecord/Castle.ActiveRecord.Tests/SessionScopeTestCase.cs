@@ -233,5 +233,62 @@ namespace Castle.ActiveRecord.Tests
 				}
 			}
 		}
+
+		[Test]
+		public void SessionScopeFlushModeNever()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(new SessionScope(FlushAction.Never))
+			{
+				Blog blog = new Blog();					
+				blog.Author = "hammett";
+				blog.Name = "some name";
+				
+				//This gets flushed automatically because of the identity field
+				blog.Save();
+
+				Blog[] blogs = Blog.FindAll();
+				Assert.AreEqual(1, blogs.Length);
+
+				//This change won't be saved to the db
+				blog.Author = "A New Author";
+				blog.Save();
+
+				//The change should not be in the db
+				blogs = Blog.FindByProperty("Author", "A New Author");
+				Assert.AreEqual(0, blogs.Length);
+								
+				SessionScope.Current.Flush();
+
+				//The change should now be in the db
+				blogs = Blog.FindByProperty("Author", "A New Author");
+				Assert.AreEqual(1, blogs.Length);
+
+				//This change will be save to the db because it uses the SaveNow method
+				blog.Name = "A New Name";
+				blog.SaveAndFlush();
+
+				//The change should now be in the db
+				blogs = Blog.FindByProperty("Name", "A New Name");
+				Assert.AreEqual(1, blogs.Length);
+
+				//This deletion should not get to the db
+				blog.Delete();
+
+				blogs = Blog.FindAll();
+				Assert.AreEqual(1, blogs.Length);
+				
+				SessionScope.Current.Flush();
+
+				//The deletion should now be in the db
+				blogs = Blog.FindAll();
+				Assert.AreEqual(0, blogs.Length);
+			}
+		}
 	}
 }

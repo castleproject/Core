@@ -1,6 +1,11 @@
 Release Candidate 2
 ===================
 
+- Fixed AR-117 "ActiveRecordBase CRUD Methods Ignore SessionScope FlushMode"
+
+    The operations Save, Create, Delete, Update will not flush the session anymore
+    The operations SaveAndFlush, CreateAndFlush, DeleteAndFlush, UpdateAndFlush will
+
 - Removed HqlBasedQuery.Count operation as it didn't work for complex queries
 
 - Fixed AR-110 "Support rollback on TransactionScope Dispose without commit."
