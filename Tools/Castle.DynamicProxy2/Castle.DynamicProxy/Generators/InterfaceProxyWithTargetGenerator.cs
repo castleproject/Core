@@ -267,13 +267,13 @@ namespace Castle.DynamicProxy.Generators
 				{
 					ParameterInfo[] parameters = m.GetParameters();
 
-					Console.WriteLine(m.Name);
+					// Console.WriteLine(m.Name);
 
 					for (int i = 0; i < parameters.Length; i++)
 					{
 						ParameterInfo paramInfo = parameters[i];
 
-						Console.WriteLine("{0} {1} {2} {3}", paramInfo.Name, paramInfo.ParameterType, paramInfo.Attributes, paramInfo.Position);
+						// Console.WriteLine("{0} {1} {2} {3}", paramInfo.Name, paramInfo.ParameterType, paramInfo.Attributes, paramInfo.Position);
 						// Console.WriteLine("{0} {1} {2} {3}", paramInfo2.Name, paramInfo2.ParameterType, paramInfo2.Attributes, paramInfo2.Position);
 					}
 				}
