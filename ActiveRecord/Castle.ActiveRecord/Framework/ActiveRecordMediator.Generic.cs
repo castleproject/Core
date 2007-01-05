@@ -225,9 +225,9 @@ namespace Castle.ActiveRecord
 		/// type in the database
 		/// </summary>
 		/// <returns>The count result</returns>
-		public static int CountAll()
+		public static int Count()
 		{
-			return ActiveRecordBase.CountAll(typeof(T));
+			return ActiveRecordBase.Count(typeof(T));
 		}
 
 		/// <summary>
@@ -237,9 +237,9 @@ namespace Castle.ActiveRecord
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
 		/// <returns>The count result</returns>
-		public static int CountAll(string filter, params object[] args)
+		public static int Count(string filter, params object[] args)
 		{
-			return ActiveRecordBase.CountAll(typeof(T), filter, args);
+			return ActiveRecordBase.Count(typeof(T), filter, args);
 		}
 
 		/// <summary>

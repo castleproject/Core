@@ -16,11 +16,9 @@ namespace Castle.ActiveRecord.Tests.Model
 {
 	using System;
 	using System.Collections;
-
+	using Castle.ActiveRecord.Framework;
 	using NHibernate;
 	using NHibernate.Expression;
-
-	using Castle.ActiveRecord.Framework;
 
 	[ActiveRecord("BlogTable")]
 	public class Blog : ActiveRecordBase
@@ -62,21 +60,21 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { _posts = value; }
 		}
 
-		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid", Where="published = 1")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 1")]
 		public IList PublishedPosts
 		{
 			get { return _publishedposts; }
 			set { _publishedposts = value; }
 		}
 
-		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid", Where="published = 0")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 0")]
 		public IList UnPublishedPosts
 		{
 			get { return _unpublishedposts; }
 			set { _unpublishedposts = value; }
 		}
 
-		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid", OrderBy="created desc")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", OrderBy="created desc")]
 		public IList RecentPosts
 		{
 			get { return _recentposts; }
@@ -85,59 +83,65 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		public static void DeleteAll()
 		{
-			ActiveRecordMediator.DeleteAll(typeof (Blog));
+			ActiveRecordMediator.DeleteAll(typeof(Blog));
 		}
 
 		public static void DeleteAll(string where)
 		{
-			ActiveRecordMediator.DeleteAll(typeof (Blog), where);
+			ActiveRecordMediator.DeleteAll(typeof(Blog), where);
 		}
 
 		public static Blog[] FindAll()
 		{
-			return (Blog[]) ActiveRecordMediator.FindAll(typeof (Blog));
+			return (Blog[]) ActiveRecordMediator.FindAll(typeof(Blog));
 		}
 
 		public static Blog Find(int id)
 		{
-			return (Blog) ActiveRecordMediator.FindByPrimaryKey(typeof (Blog), id);
+			return (Blog) ActiveRecordMediator.FindByPrimaryKey(typeof(Blog), id);
 		}
 
 		public static int FetchCount()
 		{
-			return ActiveRecordBase.CountAll(typeof(Blog));
+			return Count(typeof(Blog));
 		}
 
 		public static int FetchCount(string filter, params object[] args)
 		{
-			return ActiveRecordBase.CountAll(typeof(Blog), filter, args);
+			return Count(typeof(Blog), filter, args);
+		}
+
+		public static int FetchCount(params ICriterion[] criterias)
+		{
+			return Count(typeof(Blog), criterias);
 		}
 
 		public static bool Exists()
 		{
-			return ActiveRecordBase.Exists(typeof(Blog));
+			return Exists(typeof(Blog));
 		}
 
 		public static bool Exists(string filter, params object[] args)
 		{
-			return ActiveRecordBase.Exists(typeof(Blog), filter, args);
+			return Exists(typeof(Blog), filter, args);
 		}
 
 		public static bool Exists(int id)
 		{
-			return ActiveRecordBase.Exists(typeof(Blog), id);
+			return Exists(typeof(Blog), id);
 		}
 
-		public static bool Exists(params ICriterion[] criteria) {
-			return ActiveRecordBase.Exists(typeof(Blog), criteria);
+		public static bool Exists(params ICriterion[] criteria)
+		{
+			return Exists(typeof(Blog), criteria);
 		}
 
-		public static Blog[] FindByProperty(String property, object value) 
+		public static Blog[] FindByProperty(String property, object value)
 		{
 			return (Blog[]) FindAllByProperty(typeof(Blog), property, value);
 		}
 
-		public static Blog[] FindByProperty(String property, String orderByColumn, object value) 
+		public static Blog[] FindByProperty(String property, String orderByColumn, object value)
 		{
 			return (Blog[]) FindAllByProperty(typeof(Blog), orderByColumn, property, value);
 		}
@@ -198,22 +202,22 @@ namespace Castle.ActiveRecord.Tests.Model
 		{
 			get
 			{
-				return (ISession) 
-					ActiveRecordMediator.Execute(typeof(Blog), new NHibernateDelegate(GrabSession), this);
+				return (ISession)
+				       ActiveRecordMediator.Execute(typeof(Blog), new NHibernateDelegate(GrabSession), this);
 			}
 		}
 
-		private object GrabSession(ISession session, object instance)
+		private static object GrabSession(ISession session, object instance)
 		{
 			return session;
 		}
 
 		public void CustomAction()
 		{
-			ActiveRecordMediator.Execute(typeof (Blog), new NHibernateDelegate(MyCustomMethod), this);
+			ActiveRecordMediator.Execute(typeof(Blog), new NHibernateDelegate(MyCustomMethod), this);
 		}
 
-		private object MyCustomMethod(ISession session, object blogInstance)
+		private static object MyCustomMethod(ISession session, object blogInstance)
 		{
 			session.Delete(blogInstance);
 			session.Flush();

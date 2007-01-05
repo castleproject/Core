@@ -278,18 +278,18 @@ namespace Castle.ActiveRecord
 		/// {
 		///   ...
 		///   
-		///   public static int CountAllUsers()
+		///   public static int CountUsers()
 		///   {
-		///     return CountAll(typeof(User));
+		///     return Count(typeof(User));
 		///   }
 		/// }
 		/// </code>
 		/// </example>
 		/// <param name="targetType">Type of the target.</param>
 		/// <returns>The count result</returns>
-		protected internal static int CountAll(Type targetType)
+		protected internal static int Count(Type targetType)
 		{
-			return ActiveRecordBase.CountAll(targetType);
+			return ActiveRecordBase.Count(targetType);
 		}
 
 		/// <summary>
@@ -303,9 +303,9 @@ namespace Castle.ActiveRecord
 		/// {
 		///   ...
 		///   
-		///   public static int CountAllUsersLocked()
+		///   public static int CountUsersLocked()
 		///   {
-		///     return CountAll(typeof(User), "IsLocked = ?", true);
+		///     return Count(typeof(User), "IsLocked = ?", true);
 		///   }
 		/// }
 		/// </code>
@@ -314,9 +314,9 @@ namespace Castle.ActiveRecord
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
 		/// <returns>The count result</returns>
-		public static int CountAll(Type targetType, string filter, params object[] args)
+		public static int Count(Type targetType, string filter, params object[] args)
 		{
-			return ActiveRecordBase.CountAll(targetType, filter, args);
+			return ActiveRecordBase.Count(targetType, filter, args);
 		}
 
 		/// <summary>

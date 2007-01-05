@@ -49,8 +49,8 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 		[Version(UnsavedValue="negative")]
 		public int Version
 		{
-			get{ return _version; }
-			set{ _version = value; }
+			get { return _version; }
+			set { _version = value; }
 		}
 
 		[Property(ColumnType="StringClob")]
@@ -61,8 +61,8 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 		}
 
 		[HasMany(typeof(Agent),
-			 Inverse=true,
-			 Lazy=true)]
+			Inverse=true,
+			Lazy=true)]
 		public IList Agents
 		{
 			get { return _agents; }
@@ -84,27 +84,27 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll( typeof(Org) );
+			DeleteAll(typeof(Org));
 		}
 
 		public static Org[] FindAll()
 		{
-			return (Org[]) ActiveRecordBase.FindAll( typeof(Org) );
+			return (Org[]) FindAll(typeof(Org));
 		}
 
 		public static Org Find(string id)
 		{
-			return (Org) ActiveRecordBase.FindByPrimaryKey( typeof(Org), id );
+			return (Org) FindByPrimaryKey(typeof(Org), id);
 		}
 
 		public static int FetchCount()
 		{
-			return ActiveRecordBase.CountAll(typeof(Org));
+			return Count(typeof(Org));
 		}
 
 		public static int FetchCount(string filter, params object[] args)
 		{
-			return ActiveRecordBase.CountAll(typeof(Org), filter, args);
+			return Count(typeof(Org), filter, args);
 		}
 
 		public void SaveWithException()

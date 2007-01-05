@@ -1,6 +1,23 @@
 Release Candidate 2
 ===================
 
+- Applied Andrew Peters' (see AR-105) with the following changes
+
+	- [breaking change] Renames ActiveRecordBase.CountAll to ActiveRecordBase.Count 
+	  as several overloads are by criteria and IMHO Count is a better, more general name.
+
+	- Adds an overload of Count that accepts an ICriterion[] - Modified CountQuery 
+	  to use NHibernate 1.2 Projections
+
+	- Reimplements (http://support.castleproject.org//browse/AR-100) so that it uses 
+	  the new Count overload instead of FindAll.
+
+	- Filled in as many missing doc comments as I could before my eyes hurt :-)
+
+	- Renamed "criterias" to "criteria" in method signatures - "criterias" is not a word.
+
+	- Reformatted code. 
+
 - Fixed AR-115 Exists always returns True for lazily-proxied classes
   Chacged FindByPK to use Get/Load according to its parameters.
 

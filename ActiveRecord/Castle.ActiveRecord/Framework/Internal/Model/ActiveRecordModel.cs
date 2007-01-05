@@ -383,7 +383,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
-		/// Used internally register an assoication between a type and its model
+		/// Used internally register an association between a type and its model
 		/// </summary>
 		/// <param name="arType"></param>
 		/// <param name="model"></param>

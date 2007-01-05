@@ -16,9 +16,8 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 {
 	using System;
 	using System.Collections;
-	using NHibernate;
 	using Castle.ActiveRecord.Framework;
-	using NHibernate.Type;
+	using NHibernate;
 
 	[ActiveRecord("Groups")]
 	public class Group : ActiveRecordBase
@@ -49,14 +48,16 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 			set { _name = value; }
 		}
 
-		[HasAndBelongsToMany(typeof (Agent), Table = "GroupAgents", CompositeKeyColumnRefs = new String[] {"OrgId", "Name"}, ColumnKey = "GroupId", Lazy = true, Inverse=true, Cascade = ManyRelationCascadeEnum.SaveUpdate)]
+		[HasAndBelongsToMany(typeof(Agent), Table = "GroupAgents", CompositeKeyColumnRefs = new String[] {"OrgId", "Name"},
+			ColumnKey = "GroupId", Lazy = true, Inverse=true, Cascade = ManyRelationCascadeEnum.SaveUpdate)]
 		public IList Agents
 		{
 			get { return _agents; }
 			set { _agents = value; }
 		}
 
-		[HasAndBelongsToMany(typeof (Group), Table = "GroupOrgs", ColumnRef = "GroupId", ColumnKey = "OrgId", Lazy = true, Inverse=true, Cascade = ManyRelationCascadeEnum.SaveUpdate)]
+		[HasAndBelongsToMany(typeof(Group), Table = "GroupOrgs", ColumnRef = "GroupId", ColumnKey = "OrgId", Lazy = true,
+			Inverse=true, Cascade = ManyRelationCascadeEnum.SaveUpdate)]
 		public IList Groups
 		{
 			get { return _groups; }
@@ -65,42 +66,42 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 
 		public static void DeleteAll()
 		{
-			ActiveRecordMediator.DeleteAll(typeof (Group));
+			ActiveRecordMediator.DeleteAll(typeof(Group));
 		}
 
 		public static void DeleteAll(string where)
 		{
-			ActiveRecordMediator.DeleteAll(typeof (Group), where);
+			ActiveRecordMediator.DeleteAll(typeof(Group), where);
 		}
 
 		public static Group[] FindAll()
 		{
-			return (Group[]) ActiveRecordMediator.FindAll(typeof (Group));
+			return (Group[]) ActiveRecordMediator.FindAll(typeof(Group));
 		}
 
 		public static Group Find(int id)
 		{
-			return (Group) ActiveRecordMediator.FindByPrimaryKey(typeof (Group), id);
+			return (Group) ActiveRecordMediator.FindByPrimaryKey(typeof(Group), id);
 		}
 
 		public static int FetchCount()
 		{
-			return ActiveRecordBase.CountAll(typeof (Group));
+			return Count(typeof(Group));
 		}
 
 		public static int FetchCount(string filter, params object[] args)
 		{
-			return ActiveRecordBase.CountAll(typeof (Group), filter, args);
+			return Count(typeof(Group), filter, args);
 		}
 
 		public static bool Exists()
 		{
-			return ActiveRecordBase.Exists(typeof (Group));
+			return Exists(typeof(Group));
 		}
 
 		public static bool Exists(string filter, params object[] args)
 		{
-			return ActiveRecordBase.Exists(typeof (Group), filter, args);
+			return Exists(typeof(Group), filter, args);
 		}
 
 		/// <summary>
@@ -157,7 +158,7 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 
 		public ISession CurrentSession
 		{
-			get { return (ISession) ActiveRecordMediator.Execute(typeof (Group), new NHibernateDelegate(GrabSession), this); }
+			get { return (ISession) ActiveRecordMediator.Execute(typeof(Group), new NHibernateDelegate(GrabSession), this); }
 		}
 
 		private object GrabSession(ISession session, object instance)
@@ -167,7 +168,7 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeModel
 
 		public void CustomAction()
 		{
-			ActiveRecordMediator.Execute(typeof (Group), new NHibernateDelegate(MyCustomMethod), this);
+			ActiveRecordMediator.Execute(typeof(Group), new NHibernateDelegate(MyCustomMethod), this);
 		}
 
 		private object MyCustomMethod(ISession session, object blogInstance)

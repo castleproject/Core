@@ -16,8 +16,8 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
-
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.ActiveRecord.Queries;
 
 	using NHibernate;
@@ -40,13 +40,6 @@ namespace Castle.ActiveRecord
 		/// The global holder for the session factories.
 		/// </summary>
 		protected internal static ISessionFactoryHolder holder;
-
-		/// <summary>
-		/// Constructs an ActiveRecordBase subclass.
-		/// </summary>
-		public ActiveRecordBase()
-		{
-		}
 
 		#region internal static
 
@@ -71,21 +64,21 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Internally used
 		/// </summary>
-		/// <param name="arType"></param>
-		/// <param name="model"></param>
-		internal static void Register(Type arType, Framework.Internal.ActiveRecordModel model)
+		/// <param name="arType">The type.</param>
+		/// <param name="model">The model.</param>
+		internal static void Register(Type arType, ActiveRecordModel model)
 		{
-			Framework.Internal.ActiveRecordModel.Register(arType, model);
+			ActiveRecordModel.Register(arType, model);
 		}
 
 		/// <summary>
 		/// Internally used
 		/// </summary>
-		/// <param name="arType"></param>
-		/// <returns></returns>
-		internal static Framework.Internal.ActiveRecordModel GetModel(Type arType)
+		/// <param name="arType">The type.</param>
+		/// <returns>An <see cref="ActiveRecordModel"/></returns>
+		internal static ActiveRecordModel GetModel(Type arType)
 		{
-			return Framework.Internal.ActiveRecordModel.GetModel(arType);
+			return ActiveRecordModel.GetModel(arType);
 		}
 
 		#endregion
@@ -198,7 +191,7 @@ namespace Castle.ActiveRecord
 			{
 				session.Replicate(instance, replicationMode);
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
 				if (ex.InnerException is ValidationException)
@@ -356,7 +349,7 @@ namespace Castle.ActiveRecord
 					}
 					else
 					{
-						ActiveRecordBase.Delete(obj);
+						Delete(obj);
 					}
 
 					counter++;
@@ -498,7 +491,7 @@ namespace Castle.ActiveRecord
 		/// Note: only use if you expect most of the values to exist on the second level cache.
 		/// </summary>
 		/// <param name="query">The query.</param>
-		/// <returns></returns>
+		/// <returns>An <see cref="IEnumerable"/></returns>
 		protected internal static IEnumerable EnumerateQuery(IActiveRecordQuery query)
 		{
 			Type targetType = query.Target;
@@ -529,7 +522,7 @@ namespace Castle.ActiveRecord
 		/// Executes the query.
 		/// </summary>
 		/// <param name="query">The query.</param>
-		/// <returns></returns>
+		/// <returns>The query result.</returns>
 		public static object ExecuteQuery(IActiveRecordQuery query)
 		{
 			Type targetType = query.Target;
@@ -569,14 +562,14 @@ namespace Castle.ActiveRecord
 		///   
 		///   public static int CountAllUsers()
 		///   {
-		///     return CountAll(typeof(User));
+		///     return Count(typeof(User));
 		///   }
 		/// }
 		/// </code>
 		/// </example>
-		/// <param name="targetType">Type of the target.</param>
+		/// <param name="targetType">The target type.</param>
 		/// <returns>The count result</returns>
-		protected internal static int CountAll(Type targetType)
+		protected internal static int Count(Type targetType)
 		{
 			CountQuery query = new CountQuery(targetType);
 
@@ -596,20 +589,34 @@ namespace Castle.ActiveRecord
 		///   
 		///   public static int CountAllUsersLocked()
 		///   {
-		///     return CountAll(typeof(User), "IsLocked = ?", true);
+		///     return Count(typeof(User), "IsLocked = ?", true);
 		///   }
 		/// }
 		/// </code>
 		/// </example>
-		/// <param name="targetType">Type of the target.</param>
+		/// <param name="targetType">The target type.</param>
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
 		/// <returns>The count result</returns>
-		protected internal static int CountAll(Type targetType, string filter, params object[] args)
+		protected internal static int Count(Type targetType, string filter, params object[] args)
 		{
 			CountQuery query = new CountQuery(targetType, filter, args);
 
 			return (int)ExecuteQuery(query);
+		}
+
+		/// <summary>
+		/// Returns the number of records of the specified 
+		/// type in the database
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The count result</returns>
+		protected internal static int Count(Type targetType, ICriterion[] criteria)
+		{
+			CountQuery query = new CountQuery(targetType, criteria);
+
+			return (int) ExecuteQuery(query);
 		}
 
 		#endregion
@@ -619,29 +626,29 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Check if there is any records in the db for the target type
 		/// </summary>
-		/// <param name="targetType">Type of the target.</param>
+		/// <param name="targetType">The target type.</param>
 		/// <returns><c>true</c> if there's at least one row</returns>
 		protected internal static bool Exists(Type targetType)
 		{
-			return CountAll(targetType) != 0;
+			return Count(targetType) > 0;
 		}
 
 		/// <summary>
 		/// Check if there is any records in the db for the target type
 		/// </summary>
-		/// <param name="targetType">Type of the target.</param>
+		/// <param name="targetType">The target type.</param>
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
 		/// <returns><c>true</c> if there's at least one row</returns>
 		protected internal static bool Exists(Type targetType, string filter, params object[] args)
 		{
-			return CountAll(targetType, filter, args) != 0;
+			return Count(targetType, filter, args) > 0;
 		}
 
 		/// <summary>
 		/// Check if the <paramref name="id"/> exists in the database.
 		/// </summary>
-		/// <param name="targetType">Type of the target.</param>
+		/// <param name="targetType">The target type.</param>
 		/// <param name="id">The id to check on</param>
 		/// <returns><c>true</c> if the ID exists; otherwise <c>false</c>.</returns>
 		protected internal static bool Exists(Type targetType, object id)
@@ -650,29 +657,33 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Check if any instance matches the criteria.
+		/// Check if any instance matching the criteria exists in the database.
 		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="criteria">The criteria expression</param>		
 		/// <returns><c>true</c> if an instance is found; otherwise <c>false</c>.</returns>
-		protected internal static bool Exists(Type targetType, params ICriterion[] criterias)
+		protected internal static bool Exists(Type targetType, params ICriterion[] criteria)
 		{
-			Array ar = FindAll(targetType, criterias);
-			return ar != null && ar.Length > 0;
+			return Count(targetType, criteria) > 0;
 		}
-
 
 		#endregion
 
 		#region FindAll
 
-
 		/// <summary>
 		/// Returns all instances found for the specified type according to the criteria
 		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="detachedCriteria">The criteria.</param>
+		/// <param name="orders">An <see cref="Array"/> of <see cref="Order"/> objects.</param>
+		/// <returns>The <see cref="Array"/> of results.</returns>
 		protected internal static Array FindAll(Type targetType, DetachedCriteria detachedCriteria, params Order[] orders)
 		{
 			EnsureInitialized(targetType);
 
 			ISession session = holder.CreateSession(targetType);
+			
 			try
 			{
 				ICriteria criteria = detachedCriteria.GetExecutableCriteria(session);
@@ -681,11 +692,11 @@ namespace Castle.ActiveRecord
 
 				return SupportingUtils.BuildArray(targetType, criteria.List());
 			}
-			catch (ValidationException)
+			catch(ValidationException)
 			{
 				throw;
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
 			}
@@ -693,15 +704,13 @@ namespace Castle.ActiveRecord
 			{
 				holder.ReleaseSession(session);
 			}
-
-
 		}
 
 		/// <summary>
 		/// Returns all instances found for the specified type.
 		/// </summary>
-		/// <param name="targetType"></param>
-		/// <returns></returns>
+		/// <param name="targetType">The target type.</param>
+		/// <returns>The <see cref="Array"/> of results</returns>
 		protected internal static Array FindAll(Type targetType)
 		{
 			return FindAll(targetType, (Order[])null);
@@ -709,13 +718,13 @@ namespace Castle.ActiveRecord
 
 		/// <summary>
 		/// Returns all instances found for the specified type 
-		/// using sort orders and criterias.
+		/// using sort orders and criteria.
 		/// </summary>
-		/// <param name="targetType"></param>
-		/// <param name="orders"></param>
-		/// <param name="criterias"></param>
-		/// <returns></returns>
-		protected internal static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
+		/// <param name="targetType">The The target type.</param>
+		/// <param name="orders">An <see cref="Array"/> of <see cref="Order"/> objects.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The <see cref="Array"/> of results.</returns>
+		protected internal static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criteria)
 		{
 			EnsureInitialized(targetType);
 
@@ -723,16 +732,16 @@ namespace Castle.ActiveRecord
 
 			try
 			{
-				ICriteria criteria = session.CreateCriteria(targetType);
+				ICriteria sessionCriteria = session.CreateCriteria(targetType);
 
-				foreach (ICriterion cond in criterias)
+				foreach(ICriterion cond in criteria)
 				{
-					criteria.Add(cond);
+					sessionCriteria.Add(cond);
 				}
 
-				AddOrdersToCriteria(criteria, orders);
+				AddOrdersToCriteria(sessionCriteria, orders);
 
-				return SupportingUtils.BuildArray(targetType, criteria.List());
+				return SupportingUtils.BuildArray(targetType, sessionCriteria.List());
 			}
 			catch (ValidationException)
 			{
@@ -761,14 +770,14 @@ namespace Castle.ActiveRecord
 
 		/// <summary>
 		/// Returns all instances found for the specified type 
-		/// using criterias.
+		/// using criteria.
 		/// </summary>
-		/// <param name="targetType"></param>
-		/// <param name="criterias"></param>
-		/// <returns></returns>
-		protected internal static Array FindAll(Type targetType, params ICriterion[] criterias)
+		/// <param name="targetType">The target type.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The <see cref="Array"/> of results.</returns>
+		protected internal static Array FindAll(Type targetType, params ICriterion[] criteria)
 		{
-			return FindAll(targetType, null, criterias);
+			return FindAll(targetType, null, criteria);
 		}
 
 		#endregion
@@ -781,7 +790,7 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType">The target type</param>
 		/// <param name="property">A property name (not a column name)</param>
 		/// <param name="value">The value to be equals to</param>
-		/// <returns></returns>
+		/// <returns>The <see cref="Array"/> of results.</returns>
 		protected internal static Array FindAllByProperty(Type targetType, String property, object value)
 		{
 			ICriterion criteria = (value == null) ? Expression.IsNull(property) : Expression.Eq(property, value);
@@ -795,11 +804,11 @@ namespace Castle.ActiveRecord
 		/// <param name="orderByColumn">The column name to be ordered ASC</param>
 		/// <param name="property">A property name (not a column name)</param>
 		/// <param name="value">The value to be equals to</param>
-		/// <returns></returns>
+		/// <returns>The <see cref="Array"/> of results.</returns>
 		protected internal static Array FindAllByProperty(Type targetType, String orderByColumn, String property, object value)
 		{
 			ICriterion criteria = (value == null) ? Expression.IsNull(property) : Expression.Eq(property, value);
-			return FindAll(targetType, new Order[] { Order.Asc(orderByColumn) }, criteria);
+			return FindAll(targetType, new Order[] {Order.Asc(orderByColumn)}, criteria);
 		}
 
 		#endregion
@@ -811,7 +820,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="targetType">The AR subclass type</param>
 		/// <param name="id">ID value</param>
-		/// <returns></returns>
+		/// <returns>The object instance.</returns>
 		protected internal static object FindByPrimaryKey(Type targetType, object id)
 		{
 			return FindByPrimaryKey(targetType, id, true);
@@ -824,7 +833,7 @@ namespace Castle.ActiveRecord
 		/// <param name="id">ID value</param>
 		/// <param name="throwOnNotFound"><c>true</c> if you want to catch an exception 
 		/// if the object is not found</param>
-		/// <returns></returns>
+		/// <returns>The object instance.</returns>
 		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
 		/// <c>true</c> and the row is not found</exception>
 		protected internal static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
@@ -880,11 +889,11 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="targetType">The target type</param>
 		/// <param name="orders">The sort order - used to determine which record is the first one</param>
-		/// <param name="criterias">The criteria expression</param>
+		/// <param name="criteria">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		protected internal static object FindFirst(Type targetType, Order[] orders, params ICriterion[] criterias)
+		protected internal static object FindFirst(Type targetType, Order[] orders, params ICriterion[] criteria)
 		{
-			Array result = SlicedFindAll(targetType, 0, 1, orders, criterias);
+			Array result = SlicedFindAll(targetType, 0, 1, orders, criteria);
 			return (result != null && result.Length > 0 ? result.GetValue(0) : null);
 		}
 
@@ -892,11 +901,11 @@ namespace Castle.ActiveRecord
 		/// Searches and returns the first row.
 		/// </summary>
 		/// <param name="targetType">The target type</param>
-		/// <param name="criterias">The criteria expression</param>
+		/// <param name="criteria">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		protected internal static object FindFirst(Type targetType, params ICriterion[] criterias)
+		protected internal static object FindFirst(Type targetType, params ICriterion[] criteria)
 		{
-			return FindFirst(targetType, null, criterias);
+			return FindFirst(targetType, null, criteria);
 		}
 
 		#endregion
@@ -908,11 +917,11 @@ namespace Castle.ActiveRecord
 		/// throws <see cref="ActiveRecordException"/>
 		/// </summary>
 		/// <param name="targetType">The target type</param>
-		/// <param name="criterias">The criteria expression</param>
+		/// <param name="criteria">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		protected internal static object FindOne(Type targetType, params ICriterion[] criterias)
+		protected internal static object FindOne(Type targetType, params ICriterion[] criteria)
 		{
-			Array result = SlicedFindAll(targetType, 0, 2, criterias);
+			Array result = SlicedFindAll(targetType, 0, 2, criteria);
 
 			if (result.Length > 1)
 			{
@@ -937,11 +946,12 @@ namespace Castle.ActiveRecord
 			if (result.Length > 1)
 			{
 				throw new ActiveRecordException(targetType.Name + ".FindOne returned " + result.Length +
-												" rows. Expecting one or none");
+				                                " rows. Expecting one or none");
 			}
 
 			return (result.Length == 0) ? null : result.GetValue(0);
 		}
+
 		#endregion
 
 		#region SlicedFindAll
@@ -949,8 +959,14 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="firstResult">The number of the first row to retrieve.</param>
+		/// <param name="maxResults">The maximum number of results retrieved.</param>
+		/// <param name="orders">An <see cref="Array"/> of <see cref="Order"/> objects.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The sliced query results.</returns>
 		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
-													  Order[] orders, params ICriterion[] criterias)
+		                                              Order[] orders, params ICriterion[] criteria)
 		{
 			EnsureInitialized(targetType);
 
@@ -958,25 +974,25 @@ namespace Castle.ActiveRecord
 
 			try
 			{
-				ICriteria criteria = session.CreateCriteria(targetType);
+				ICriteria sessionCriteria = session.CreateCriteria(targetType);
 
-				foreach (ICriterion cond in criterias)
+				foreach(ICriterion cond in criteria)
 				{
-					criteria.Add(cond);
+					sessionCriteria.Add(cond);
 				}
 
 				if (orders != null)
 				{
 					foreach (Order order in orders)
 					{
-						criteria.AddOrder(order);
+						sessionCriteria.AddOrder(order);
 					}
 				}
 
-				criteria.SetFirstResult(firstResult);
-				criteria.SetMaxResults(maxResults);
+				sessionCriteria.SetFirstResult(firstResult);
+				sessionCriteria.SetMaxResults(maxResults);
 
-				return SupportingUtils.BuildArray(targetType, criteria.List());
+				return SupportingUtils.BuildArray(targetType, sessionCriteria.List());
 			}
 			catch (ValidationException)
 			{
@@ -995,8 +1011,14 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="firstResult">The number of the first row to retrieve.</param>
+		/// <param name="maxResults">The maximum number of results retrieved.</param>
+		/// <param name="orders">An <see cref="Array"/> of <see cref="Order"/> objects.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The sliced query results.</returns>
 		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
-													  Order[] orders, DetachedCriteria criteria)
+		                                              Order[] orders, DetachedCriteria criteria)
 		{
 			EnsureInitialized(targetType);
 
@@ -1011,11 +1033,11 @@ namespace Castle.ActiveRecord
 
 				return SupportingUtils.BuildArray(targetType, executableCriteria.List());
 			}
-			catch (ValidationException)
+			catch(ValidationException)
 			{
 				throw;
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				throw new ActiveRecordException("Could not perform SlicedFindAll for " + targetType.Name, ex);
 			}
@@ -1024,20 +1046,31 @@ namespace Castle.ActiveRecord
 				holder.ReleaseSession(session);
 			}
 		}
+
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="firstResult">The number of the first row to retrieve.</param>
+		/// <param name="maxResults">The maximum number of results retrieved.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The sliced query results.</returns>
 		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
-													  params ICriterion[] criterias)
+		                                              params ICriterion[] criteria)
 		{
-			return SlicedFindAll(targetType, firstResult, maxResults, null, criterias);
+			return SlicedFindAll(targetType, firstResult, maxResults, null, criteria);
 		}
 
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="firstResult">The number of the first row to retrieve.</param>
+		/// <param name="maxResults">The maximum number of results retrieved.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The sliced query results.</returns>
 		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxResults,
-													  DetachedCriteria criteria)
+		                                              DetachedCriteria criteria)
 		{
 			return SlicedFindAll(targetType, firstResult, maxResults, null, criteria);
 		}
@@ -1070,7 +1103,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Save()
 		{
-			ActiveRecordBase.Save(this);
+			Save(this);
 		}
 
 		/// <summary>
@@ -1078,7 +1111,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Create()
 		{
-			ActiveRecordBase.Create(this);
+			Create(this);
 		}
 
 		/// <summary>
@@ -1087,7 +1120,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Update()
 		{
-			ActiveRecordBase.Update(this);
+			Update(this);
 		}
 
 		/// <summary>
@@ -1095,7 +1128,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Delete()
 		{
-			ActiveRecordBase.Delete(this);
+			Delete(this);
 		}
 
 		/// <summary>
@@ -1103,7 +1136,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Refresh()
 		{
-			ActiveRecordBase.Refresh(this);
+			Refresh(this);
 		}
 
 		#endregion
@@ -1114,17 +1147,17 @@ namespace Castle.ActiveRecord
 		/// Return the type of the object with its PK value.
 		/// Useful for logging/debugging
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A string representation of this object.</returns>
 		public override String ToString()
 		{
-			Framework.Internal.ActiveRecordModel model = GetModel(GetType());
+			ActiveRecordModel model = GetModel(GetType());
 
 			if (model == null || model.PrimaryKey == null)
 			{
 				return base.ToString();
 			}
 
-			Framework.Internal.PrimaryKeyModel pkModel = model.PrimaryKey;
+			PrimaryKeyModel pkModel = model.PrimaryKey;
 
 			object pkVal = pkModel.Property.GetValue(this, null);
 
