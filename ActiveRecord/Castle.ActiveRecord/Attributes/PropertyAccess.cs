@@ -109,14 +109,14 @@ namespace Castle.ActiveRecord
 		/// </example>
 		NosetterCamelcase,
 		/// <summary>
-		/// Use the property' getter to get the value, and use the field with the same name and in camle case
+		/// Use the property' getter to get the value, and use the field with the same name and in camel case
 		/// with initial "_" in order to set it.
 		/// </summary>
 		/// <example>
 		/// <code>
 		/// string _userName;//this will be use to set the value
 		/// 
-		/// [Property(Access=PropertyAccess.NosetterPascalcaseMUndersc)]
+		/// [Property(Access=PropertyAccess.NosetterCamelcaseUnderscore)]
 		/// public string UserName { get {... } set { ... } } // this will be used just to get the value
 		/// </code>
 		/// </example>
@@ -136,17 +136,30 @@ namespace Castle.ActiveRecord
 		NosetterPascalcaseMUndersc,
 		/// <summary>
 		/// Use the property' getter to get the value, and use the field with the same name and in lower case
+		/// with initial "_" in order to set it.
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// string _username;//this will be use to set the value
+		/// 
+		/// [Property(Access=PropertyAccess.NosetterLowercaseUnderscore)]
+		/// public string UserName { get {... } set { ... } } // this will be used just to get the value
+		/// </code>
+		/// </example>
+		NosetterLowercaseUnderscore,
+		/// <summary>
+		/// Use the property' getter to get the value, and use the field with the same name and in lower case
 		/// in order to set it.
 		/// </summary>
 		/// <example>
 		/// <code>
 		/// string username;//this will be use to set the value
 		/// 
-		/// [Property(Access=PropertyAccess.NosetterPascalcaseMUndersc)]
+		/// [Property(Access=PropertyAccess.NosetterLowercase)]
 		/// public string UserName { get {... } set { ... } } // this will be used just to get the value
 		/// </code>
 		/// </example>
-		NosetterLowercaseUnderscore
+		NosetterLowercase
 	}
 	
 	/// <summary>
@@ -182,6 +195,8 @@ namespace Castle.ActiveRecord
 					return "nosetter.pascalcase-m-underscore";
 				case PropertyAccess.NosetterLowercaseUnderscore:
 					return "nosetter.lowercase-underscore";
+				case PropertyAccess.NosetterLowercase:
+					return "nosetter.lowercase";
 				default:
 					throw new InvalidOperationException("Invalid value for PropertyAccess");
 			}
