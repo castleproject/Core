@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- AR-118 added NoSetter.LoweCase property access option.
+
 - Fixed AR-117 "ActiveRecordBase CRUD Methods Ignore SessionScope FlushMode"
 
     The operations Save, Create, Delete, Update will not flush the session anymore
