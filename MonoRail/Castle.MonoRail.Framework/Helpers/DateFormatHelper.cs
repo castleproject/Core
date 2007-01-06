@@ -109,19 +109,55 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+#if DOTNET2
 		/// <summary>
 		/// Formats to short date
 		/// </summary>
 		/// <param name="date"></param>
-		/// <returns></returns>
-		public String FormatDate(DateTime date)
+		/// <returns>Short date, or <c>String.Empty</c> if <paramref name="date"/> is <c>null</c>.</returns>
+		public String ToShortDate(DateTime? date)
+		{
+			return date.HasValue ? date.Value.ToShortDateString() : string.Empty;
+		}
+#else
+		/// <summary>
+		/// Formats to short date
+		/// </summary>
+		/// <param name="date"></param>
+		/// <returns>Short date</returns>
+		public String ToShortDate(DateTime date)
 		{
 			return date.ToShortDateString();
 		}
 
+		[Obsolete("Use ToShortDate instead")]
+		public String FormatDate(DateTime date)
+		{
+			return ToShortDate(date);
+		}
+#endif
+		
+#if DOTNET2
+		/// <summary>
+		/// Formats to short date
+		/// </summary>
+		/// <param name="date"></param>
+		/// <returns>Short date and time, or <c>String.Empty</c> if <paramref name="date"/> is <c>null</c>.</returns>
+		public String ToShortDateTime(DateTime? date)
+		{
+			return date.HasValue ? date.Value.ToShortDateString() + " " + date.Value.ToShortTimeString() : string.Empty;
+		}
+#else
+		/// <summary>
+		/// Formats to short date
+		/// </summary>
+		/// <param name="date"></param>
+		/// <returns>Short date and time</returns>
 		public String ToShortDateTime(DateTime date)
 		{
 			return date.ToShortDateString() + " " + date.ToShortTimeString();
 		}
+#endif
+		
 	}
 }

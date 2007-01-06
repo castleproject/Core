@@ -97,5 +97,31 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			Assert.AreEqual("4 months ago", helper.AlternativeFriendlyFormatFromNow( DateTime.Now.AddDays(-120) ));
 		}
+
+		[Test]
+		public void ToShortDate()
+		{
+			DateTime now = DateTime.Now;
+
+			string expected = now.ToShortDateString();
+			Assert.AreEqual(expected, helper.ToShortDate(now));
+
+#if DOTNET2
+			Assert.AreEqual(String.Empty, helper.ToShortDate(null));
+#endif
+		}
+
+		[Test]
+		public void ToShortDateTime()
+		{
+			DateTime now = DateTime.Now;
+
+			string expected = now.ToShortDateString() + " " + now.ToShortTimeString();
+			Assert.AreEqual(expected, helper.ToShortDateTime(now));
+
+#if DOTNET2
+			Assert.AreEqual(String.Empty, helper.ToShortDateTime(null));
+#endif
+		}
 	}
 }
