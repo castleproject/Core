@@ -103,7 +103,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 				}
 			}
 
+#if MONO
+			return new EventDescriptorCollection(matches.ToArray());
+#else
 			return new EventDescriptorCollection(matches.ToArray(), true);
+#endif
 		}
 
 		private static bool IsCompatibleEvent(EventDescriptor eventDescriptor,

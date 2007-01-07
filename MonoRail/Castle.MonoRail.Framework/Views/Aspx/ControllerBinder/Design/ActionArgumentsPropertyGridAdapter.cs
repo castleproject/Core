@@ -13,7 +13,7 @@
 // limitations under the License.
 
 
-#if DOTNET2
+#if DOTNET2,NET
 
 namespace Castle.MonoRail.Framework.Views.Aspx.Design
 {

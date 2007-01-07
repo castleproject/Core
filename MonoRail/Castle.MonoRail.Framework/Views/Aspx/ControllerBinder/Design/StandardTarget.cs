@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if DOTNET2,NET
+
 namespace Castle.MonoRail.Framework.Views.Aspx.Design
 {
 	using System;
@@ -89,3 +91,5 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 		}
 	}
 }
+
+#endif
