@@ -22,5 +22,11 @@ namespace Castle.Components.Validator
 		public const string LengthTooShortMessage = "length_tooshort";
 		public const string LenghtInRangeMessage = "length_invalidrange";
 		public const string InvalidEmailMessage = "email";
+		public const string InvalidIntegerMessage = "integer_invalid";
+		public const string InvalidDateMessage = "date_invalid";
+		public const string InvalidDoubleMessage = "double_invalid";
+		public const string InvalidSingleMessage = "single_invalid";
+		public const string InvalidTimeMessage = "time_invalid";
+		public const string InvalidDecimalMessage = "decimal_invalid";
 	}
 }

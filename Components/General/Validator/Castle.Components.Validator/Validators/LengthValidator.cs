@@ -39,7 +39,7 @@ namespace Castle.Components.Validator
 				throw new ArgumentOutOfRangeException("The exactLength parameter must be set to a non-negative number.");
 			}
 
-			exactLength = exactLength;
+			this.exactLength = exactLength;
 		}
 
 		/// <summary>

@@ -22,12 +22,15 @@ namespace Castle.Components.Validator
 	[Serializable, CLSCompliant(false)]
 	public class ValidateRegExpAttribute : AbstractValidationAttribute
 	{
+		private readonly string pattern;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateRegExpAttribute"/> class.
 		/// </summary>
 		/// <param name="pattern">The pattern.</param>
-		public ValidateRegExpAttribute(String pattern) : base(new RegularExpressionValidator(pattern))
+		public ValidateRegExpAttribute(String pattern)
 		{
+			this.pattern = pattern;
 		}
 
 		/// <summary>
@@ -35,8 +38,18 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="pattern">The pattern.</param>
 		/// <param name="errorMessage">The error message.</param>
-		public ValidateRegExpAttribute(String pattern, String errorMessage) : base(new RegularExpressionValidator(pattern), errorMessage)
+		public ValidateRegExpAttribute(String pattern, String errorMessage) : base(errorMessage)
 		{
+			this.pattern = pattern;
+		}
+
+		public override IValidator Build()
+		{
+			IValidator validator = new RegularExpressionValidator(pattern);
+
+			ConfigureValidatorMessage(validator);
+
+			return validator;
 		}
 	}
 }

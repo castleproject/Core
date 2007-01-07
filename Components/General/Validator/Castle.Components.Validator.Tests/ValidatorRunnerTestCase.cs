@@ -12,26 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.Validator
+namespace Castle.Components.Validator.Tests
 {
-	public interface IWebValidationGenerator
+	using NUnit.Framework;
+
+	[TestFixture]
+	public class ValidatorRunnerTestCase
 	{
-		void SetDigitsOnly(string violationMessage);
-
-		void SetNumberOnly(string violationMessage);
-
-		void SetAsRequired(string violationMessage);
-
-		void SetRegExp(string regExp, string violationMessage);
-
-		void SetEmail(string violationMessage);
-		
-		void SetExactLength(int length);
-
-		void SetMinLength(int minLength);
-		
-		void SetMaxLength(int maxLength);
-
-		void SetLengthRange(int minLength, int maxLength);
 	}
 }

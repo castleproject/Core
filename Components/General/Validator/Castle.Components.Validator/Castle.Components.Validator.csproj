@@ -30,12 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ValidateEmailAttribute.cs" />
+    <Compile Include="Attributes\ValidateLengthAttribute.cs" />
+    <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Messages.pt.Designer.cs">
       <DependentUpon>Messages.pt.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -52,17 +55,22 @@
     </Compile>
     <Compile Include="PropertyBasedRegistry.cs" />
     <Compile Include="ValidationException.cs" />
-    <Compile Include="Validator.cs" />
+    <Compile Include="ValidatorRunner.cs" />
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
+    <Compile Include="Validators\DateValidator.cs" />
+    <Compile Include="Validators\DecimalValidator.cs" />
+    <Compile Include="Validators\DoubleValidator.cs" />
     <Compile Include="Validators\EmailValidator.cs" />
+    <Compile Include="Validators\IntegerValidator.cs" />
     <Compile Include="Validators\LengthValidator.cs" />
-    <Compile Include="Validators\NullCheckValidator.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\NonEmptyValidator.cs" />
     <Compile Include="Attributes\AbstractValidationAttribute.cs" />
-    <Compile Include="Attributes\ValidateNotEmptyAttribute.cs" />
+    <Compile Include="Attributes\ValidateNonEmptyAttribute.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="Validators\RegularExpressionValidator.cs" />
+    <Compile Include="Validators\SingleValidator.cs" />
+    <Compile Include="Validators\TimeValidator.cs" />
     <Compile Include="WebValidationConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CastleKey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

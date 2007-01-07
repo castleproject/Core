@@ -24,12 +24,15 @@ namespace Castle.Components.Validator
 	[Serializable, CLSCompliant(false)]
 	public class ValidateLengthAttribute : AbstractValidationAttribute
 	{
+		private readonly IValidator validator;
+
 		/// <summary>
 		/// Initializes a new exact length validator.
 		/// </summary>
 		/// <param name="exactLength">The exact length required.</param>
-		public ValidateLengthAttribute(int exactLength) : base(new LengthValidator(exactLength))
+		public ValidateLengthAttribute(int exactLength)
 		{
+			validator = new LengthValidator(exactLength);
 		}
 
 		/// <summary>
@@ -37,8 +40,9 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="exactLength">The exact length required.</param>
 		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
-		public ValidateLengthAttribute(int exactLength, String errorMessage) : base(new LengthValidator(exactLength), errorMessage)
+		public ValidateLengthAttribute(int exactLength, String errorMessage) : base(errorMessage)
 		{
+			validator = new LengthValidator(exactLength);
 		}
 
 		/// <summary>
@@ -46,8 +50,9 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="minLength">The minimum length, or <c>int.MinValue</c> if this should not be tested.</param>
 		/// <param name="maxLength">The maximum length, or <c>int.MaxValue</c> if this should not be tested.</param>
-		public ValidateLengthAttribute(int minLength, int maxLength) : base(new LengthValidator(minLength, maxLength))
+		public ValidateLengthAttribute(int minLength, int maxLength)
 		{
+			validator = new LengthValidator(minLength, maxLength);
 		}
 
 		/// <summary>
@@ -56,8 +61,16 @@ namespace Castle.Components.Validator
 		/// <param name="minLength">The minimum length, or <c>int.MinValue</c> if this should not be tested.</param>
 		/// <param name="maxLength">The maximum length, or <c>int.MaxValue</c> if this should not be tested.</param>
 		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
-		public ValidateLengthAttribute(int minLength, int maxLength, String errorMessage) : base(new LengthValidator(minLength, maxLength), errorMessage)
+		public ValidateLengthAttribute(int minLength, int maxLength, String errorMessage) : base(errorMessage)
 		{
+			validator = new LengthValidator(minLength, maxLength);
+		}
+
+		public override IValidator Build()
+		{
+			ConfigureValidatorMessage(validator);
+
+			return validator;
 		}
 	}
 }

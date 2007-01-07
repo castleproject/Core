@@ -61,6 +61,33 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field value is invalid (not a valid date).
+        /// </summary>
+        internal static string date_invalid {
+            get {
+                return ResourceManager.GetString("date_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field value is invalid (not a valid decimal).
+        /// </summary>
+        internal static string decimal_invalid {
+            get {
+                return ResourceManager.GetString("decimal_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field value is invalid (not a valid double).
+        /// </summary>
+        internal static string double_invalid {
+            get {
+                return ResourceManager.GetString("double_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field does not seem as a valid e-mail.
         /// </summary>
         internal static string email {
@@ -75,6 +102,15 @@ namespace Castle.Components.Validator {
         internal static string exactlength {
             get {
                 return ResourceManager.GetString("exactlength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field value is invalid (not a valid integer).
+        /// </summary>
+        internal static string integer_invalid {
+            get {
+                return ResourceManager.GetString("integer_invalid", resourceCulture);
             }
         }
         
@@ -111,6 +147,24 @@ namespace Castle.Components.Validator {
         internal static string length_tooshort {
             get {
                 return ResourceManager.GetString("length_tooshort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field value is invalid (not a valid single).
+        /// </summary>
+        internal static string single_invalid {
+            get {
+                return ResourceManager.GetString("single_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field value is invalid (not a valid time).
+        /// </summary>
+        internal static string time_invalid {
+            get {
+                return ResourceManager.GetString("time_invalid", resourceCulture);
             }
         }
     }

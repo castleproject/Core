@@ -22,26 +22,26 @@ namespace Castle.Components.Validator
 	/// Validate that the property is not null or empty (for strings)
 	/// </summary>
 	[Serializable]
-	public class ValidateNotEmptyAttribute : AbstractValidationAttribute
+	public class ValidateNonEmptyAttribute : AbstractValidationAttribute
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ValidateNotEmptyAttribute"/> class.
+		/// Initializes a new instance of the <see cref="ValidateNonEmptyAttribute"/> class.
 		/// </summary>
-		public ValidateNotEmptyAttribute()
+		public ValidateNonEmptyAttribute()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ValidateNotEmptyAttribute"/> class.
+		/// Initializes a new instance of the <see cref="ValidateNonEmptyAttribute"/> class.
 		/// </summary>
 		/// <param name="errorMessage">The error message.</param>
-		public ValidateNotEmptyAttribute(String errorMessage) : base(errorMessage)
+		public ValidateNonEmptyAttribute(String errorMessage) : base(errorMessage)
 		{
 		}
 
 		public override IValidator Build()
 		{
-			IValidator validator = new NullCheckValidator();
+			IValidator validator = new NonEmptyValidator();
 			
 			ConfigureValidatorMessage(validator);
 			

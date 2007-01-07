@@ -39,11 +39,6 @@ namespace Castle.Components.Validator
 		/// <value>The name.</value>
 		string FriendlyName { get; set; }
 
-		bool SupportWebValidation { get; }
-
-		void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                        IWebValidationGenerator generator, IDictionary attributes);
-
 		/// <summary>
 		/// Implementors should perform any initialization logic
 		/// </summary>
@@ -66,5 +61,24 @@ namespace Castle.Components.Validator
 		/// <param name="fieldValue"></param>
 		/// <returns><c>true</c> if the field is OK</returns>
 		bool IsValid(object instance, object fieldValue);
+
+		/// <summary>
+		/// Gets a value indicating whether this validator supports web validation.
+		/// </summary>
+		/// <value>
+		/// <see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// </value>
+		bool SupportWebValidation { get; }
+
+		/// <summary>
+		/// Applies the web validation by setting up one or 
+		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// </summary>
+		/// <param name="config">The config.</param>
+		/// <param name="inputType">Type of the input.</param>
+		/// <param name="generator">The generator.</param>
+		/// <param name="attributes">The attributes.</param>
+		void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
+								IWebValidationGenerator generator, IDictionary attributes);
 	}
 }
