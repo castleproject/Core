@@ -32,37 +32,52 @@
 	</target>
 
 	<target name="configure-tests">
-		<property name="app.config" value="${build.dir}/facilityconfig.xml" />
-		<copy file="${src.dir}/facilityconfig.xml" tofile="${app.config}" />
+		<property name="app.config" value="${build.dir}/${project::get-name()}.dll.config" />
+
 		<xmlpoke
 			file="${app.config}"
-			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.dialect']"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.dialect']"
 			value="${ar.dialect}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.dialect']"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.dialect']"
 			value="${ar.dialect}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.connection.driver_class']"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory3']/settings/item[@key='hibernate.dialect']"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.connection.driver_class']"
 			value="${ar.connection.driver_class}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.connection.driver_class']"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.connection.driver_class']"
 			value="${ar.connection.driver_class}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.connection.connection_string']"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory3']/settings/item[@key='hibernate.connection.driver_class']"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.connection.connection_string']"
 			value="${ar.connection.connection_string.1}" 
 		/>
 		<xmlpoke
 			file="${app.config}"
-			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.connection.connection_string']"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.connection.connection_string']"
 			value="${ar.connection.connection_string.2}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory3']/settings/item[@key='hibernate.connection.connection_string']"
+			value="${ar.connection.connection_string.1}" 
 		/>
 	</target>
 

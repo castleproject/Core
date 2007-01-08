@@ -15,7 +15,8 @@
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
-
+	using Castle.Core.Resource;
+	using Castle.Windsor.Configuration.Interpreters;
 	using NHibernate.Cfg;
 	using NHibernate.Tool.hbm2ddl;
 	
@@ -31,7 +32,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		[SetUp]
 		public void Init()
 		{
-			container = new WindsorContainer( GetContainerConfig() );
+			container = new WindsorContainer(new XmlInterpreter(new ConfigResource()));
 
 			// Reset tables
 
@@ -67,11 +68,6 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			container.Dispose();
 
 			container = null;
-		}
-
-		protected virtual String GetContainerConfig()
-		{
-			return ConfigHelper.ResolvePath("facilityconfig.xml");
 		}
 	}
 }

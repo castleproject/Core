@@ -194,7 +194,6 @@
     <EmbeddedResource Include="Common\BlogItem.hbm.xml" />
     <EmbeddedResource Include="Common\BlogRef.hbm.xml" />
     <EmbeddedResource Include="Common\Order.hbm.xml" />
-    <Content Include="facilityconfig.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Facilities.NHibernateIntegration\Castle.Facilities.NHibernateIntegration-vs2005.csproj">
