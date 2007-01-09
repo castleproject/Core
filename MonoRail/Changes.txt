@@ -4,16 +4,19 @@ Change history
 Release Candidate 3
 ===================
 
+- Added better ControllerBinder support for indexed property expressions.
+   This allows you to pass DataKeys as your action arguments
+
 - Applied Freyr Magnússon's patch fixing MR-206 
   "ARBadaBinder does not resolve primary key for discriminator subclass from parent"
 
- - Retrieve target properties on demand for ControllerBinders ActionArgument editor
+- Retrieve target properties on demand for ControllerBinders ActionArgument editor
 
- - Added ControllerBinder Extender Control for WebForm views to eliminate the
+- Added ControllerBinder Extender Control for WebForm views to eliminate the
    need to add event handlers in the codebehind that call Controller.Send
 
- - Brail now has Ruby's like symbols, using @symbol.
-	For instnace, component DiggStylePagination, ${ @useInlineStyle : true }
+- Brail now has Ruby's like symbols, using @symbol.
+    For instnace, component DiggStylePagination, ${ @useInlineStyle : true }
 	
 - Brail can now accept " inside a ${ }, which used to break the parser previously.
 

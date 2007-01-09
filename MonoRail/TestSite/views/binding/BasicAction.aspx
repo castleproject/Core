@@ -53,10 +53,16 @@
 				</mr:ControllerBinding>
 				<mr:ControllerBinding controlID="ddlSelectMe">
 					<mr:ActionBinding EventName="SelectedIndexChanged" ActionName="SelectMe">
+						<ActionArguments>
+							<mr:ActionArgument Expression="$this.Text" Name="selection" />
+						</ActionArguments>
 					</mr:ActionBinding>
 				</mr:ControllerBinding>
 				<mr:ControllerBinding controlID="txtChangeMe">
 					<mr:ActionBinding ActionName="ChangeMe" EventName="TextChanged">
+						<ActionArguments>
+							<mr:ActionArgument Expression="$this.Text" Name="text" />
+						</ActionArguments>
 					</mr:ActionBinding>
 				</mr:ControllerBinding>
 				<mr:ControllerBinding controlID="lbtnClickMe">

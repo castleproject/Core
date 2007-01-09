@@ -20,13 +20,13 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
-	using System.Web.UI;
 
 	public class BindingContext : AbstractBindingScope
 	{
-		private ActionBinding action;
-		private ControllerBinder binder;
+		private readonly ActionBinding action;
+		private readonly ControllerBinder binder;
 		private Stack<IBindingScope> scopes;
+		private static readonly IExpressionEvaluator evaluator = new DataBindingEvaluator();
 
 		internal BindingContext(ControllerBinder binder, ActionBinding action)
 		{
@@ -106,6 +106,24 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			}
 		}
 
+		public object ResolveSymbol(string symbolName, bool throwIfNotFound)
+		{
+			object value = null;
+
+			foreach(IBindingScope scope in scopes)
+			{
+				value = scope.ResolveSymbol(symbolName);
+				if (value != null) break;
+			}
+
+			if (value == null && throwIfNotFound)
+			{
+				throw new InvalidOperationException("Unable to resolve symbol " + symbolName);
+			}
+
+			return value;
+		}
+
 		protected override void AddActionArguments(BindingContext context,
 		                                           IDictionary resolvedActionArgs)
 		{
@@ -118,99 +136,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			if (value == null || value is string)
 			{
-				bool ignoreErrors;
 				string expression = value as string;
 
 				if (expression == null)
 					expression = actionArg.Expression;
 
-				if (IsDataBindingExpression(ref expression, out ignoreErrors))
-				{
-					value = PerformDataBinding(expression, ignoreErrors);
-				}
-				else
-				{
-					value = expression;
-				}
-			}
-
-			return value;
-		}
-
-		private bool IsDataBindingExpression(ref string expression, out bool ignoreErrors)
-		{
-			ignoreErrors = false;
-
-			if (!string.IsNullOrEmpty(expression) && expression.StartsWith("$"))
-			{
-				int start = 1;
-				bool isDataBind;
-
-				if (expression.StartsWith("$!"))
-				{
-					++start;
-					ignoreErrors = true;
-					isDataBind = true;
-				}
-				else
-				{
-					isDataBind = !expression.StartsWith("$$");
-				}
-
-				expression = expression.Substring(start);
-
-				return isDataBind;
-			}
-
-			return false;
-		}
-
-		private object PerformDataBinding(string expression, bool ignoreErrors)
-		{
-			object value;
-			int index = expression.IndexOf('.');
-
-			if (index > 0)
-			{
-				string symbolName = expression.Substring(0, index);
-
-				value = ResolveSymbolFromScopes(symbolName);
-
-				if (value != null)
-				{
-					expression = expression.Substring(index + 1);
-
-					try
-					{
-						value = DataBinder.Eval(value, expression);
-					}
-					catch
-					{
-						value = null;
-						if (!ignoreErrors) throw;
-					}
-				}
-				else if (!ignoreErrors)
-				{
-					throw new InvalidOperationException("Unable to resolve symbol " + symbolName);
-				}
-			}
-			else
-			{
-				value = ResolveSymbolFromScopes(expression);
-			}
-
-			return value;
-		}
-
-		private object ResolveSymbolFromScopes(string symbol)
-		{
-			object value = null;
-
-			foreach(IBindingScope scope in scopes)
-			{
-				value = scope.ResolveSymbol(symbol);
-				if (value != null) break;
+				value = evaluator.Evaluate(expression, this);
 			}
 
 			return value;

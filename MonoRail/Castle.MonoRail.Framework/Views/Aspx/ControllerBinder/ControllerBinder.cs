@@ -494,30 +494,49 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			if (actionDispatched) return;
 
-			Controller controller = GetCurrentController();
+			IDictionary actionArgs = context.ResolveActionArguments();
 
-			if (controller != null && !string.IsNullOrEmpty(actionName))
+			if (OnBeforeAction(context.Action, actionArgs))
 			{
-				IDictionary actionArgs = context.ResolveActionArguments();
-
-				if (OnBeforeAction(context.Action, actionArgs))
+				try
 				{
-					try
-					{
-						actionDispatched = true;
+					ContinueAction(actionName, actionArgs);
 
-						controller.Send(actionName, actionArgs);
-
-						OnAfterAction(context.Action, actionArgs);
-					}
-					catch(Exception ex)
+					OnAfterAction(context.Action, actionArgs);
+				}
+				catch (Exception ex)
+				{
+					if (!OnActionError(context.Action, ex))
 					{
-						if (!OnActionError(context.Action, ex))
-						{
-							throw;
-						}
+						throw;
 					}
 				}
+			}
+		}
+
+		public void ContinueAction(string actionName, IDictionary actionArgs)
+		{
+			if (actionDispatched)
+			{
+				throw new InvalidOperationException("An action has already been dispatched");
+			}
+
+			if (string.IsNullOrEmpty(actionName))
+			{
+				throw new ArgumentException("actionName is null or empty");
+			}
+
+			Controller controller = GetCurrentController();
+
+			if (controller != null)
+			{
+				actionDispatched = true;
+				controller.Send(actionName, actionArgs);
+			}
+			else
+			{
+				throw new InvalidOperationException(
+					"A Controller is not present for the current context");
 			}
 		}
 

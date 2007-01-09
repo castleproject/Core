@@ -35,14 +35,14 @@ namespace TestSite.Controllers
 			RenderText(string.Format("Button was clicked (\"{0}\" / \"{1}\")", selection, text));
 		}
 
-		public void SelectMe()
+		public void SelectMe(string selection)
 		{
-			RenderText("List was selected");
+			RenderText("'{0}' was selected", selection);
 		}
 
-		public void ChangeMe()
+		public void ChangeMe(string text)
 		{
-			RenderText("Text was changed");
+			RenderText("Text was changed to '{0}'", text);
 		}
 
 		public void CheckMe(bool isChecked)
@@ -77,9 +77,9 @@ namespace TestSite.Controllers
 			}	
 		}
 
-		public void SelectRow(string argument)
+		public void SelectRow(string argument, int id, string name)
 		{
-			RenderText(string.Format("Row {0} was selected", argument));
+			RenderText(string.Format("Row {0} Employee {1} ({2}) was selected", argument, name, id));
 		}
 
 		public void EditRow(string argument)

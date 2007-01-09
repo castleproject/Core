@@ -212,9 +212,14 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 
 			if (target != null)
 			{
-				foreach(string propertyName in target.PropertyNames)
+				if (target.PropertyNames.Length > 0)
 				{
-					cbPropertyOrValue.Items.Add(propertyName);
+					cbPropertyOrValue.Items.Add(string.Empty);
+
+					foreach (string propertyName in target.PropertyNames)
+					{
+						cbPropertyOrValue.Items.Add(propertyName);
+					}
 				}
 			}
 
@@ -253,6 +258,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 		private void cbTarget_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			PopulatePropertyNames(cbTarget.SelectedItem as ITarget);
+		}
+
+		private void cbPropertyOrValue_SelectedIndexChanged(object sender, EventArgs e)
+		{
 		}
 
 		private void pgActionArguments_SelectedGridItemChanged(

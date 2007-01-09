@@ -452,6 +452,7 @@
     <Compile Include="Views\Aspx\ControllerBinder\ControllerBinding.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\ControllerBindingCollection.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\AbstractEventScope.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\DataBindingEvaluator.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\Design\ActionArgumentsPropertyGridAdapter.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\BindableControlIDConverter.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\Design\ControllerActionBinderDesigner.cs" />
@@ -471,6 +472,7 @@
     <Compile Include="Views\Aspx\ControllerBinder\EventListConverter.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\IBindingScope.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\IControllerBinder.cs" />
+    <Compile Include="Views\Aspx\ControllerBinder\IExpressionEvaluator.cs" />
     <Compile Include="Views\Aspx\ControllerBinder\TypedCollection.cs" />
     <Compile Include="Views\Aspx\EventUtil.cs" />
     <Compile Include="Views\Aspx\InvokeHelper.cs">

@@ -64,6 +64,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 				if (propertyNames == null)
 				{
 					propertyNames = CollectPropertyNames(type);
+					Array.Sort(propertyNames);
 				}
 				return propertyNames;
 			}

@@ -164,6 +164,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx.Design
 			this.cbPropertyOrValue.Name = "cbPropertyOrValue";
 			this.cbPropertyOrValue.Size = new System.Drawing.Size(111, 21);
 			this.cbPropertyOrValue.TabIndex = 7;
+			this.cbPropertyOrValue.SelectedIndexChanged += new System.EventHandler(this.cbPropertyOrValue_SelectedIndexChanged);
 			// 
 			// cbTarget
 			// 
