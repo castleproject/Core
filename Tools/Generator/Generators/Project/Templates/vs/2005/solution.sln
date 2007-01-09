@@ -1,9 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("<%= AppGuid %>") = "App", "app\app.csproj", "<%= AppGuid %>"
+Project("{FAE04EC1-301F-11D3-BF4B-00C04F79EFBC}") = "App", "app\app.csproj", "<%= AppGuid %>"
 EndProject
-Project("<%= TestGuid %>") = "Test", "test\test.csproj", "<%= TestGuid %>"
-ProjectSection(ProjectDependencies) = postProject
+Project("{FAE04EC1-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "test\test.csproj", "<%= TestGuid %>"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

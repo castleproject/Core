@@ -7,8 +7,8 @@ class ProjectGenerator(NamedGeneratorBase):
 	[Property(VSFiles), Option('vs', 'v', 'Generates Visual Studio project files [BETA]')]
 	_vsFiles as bool
 	
-	[Property(AppGuid)] _appGuid = Guid.NewGuid()
-	[Property(TestGuid)] _testGuid = Guid.NewGuid()
+	[Property(AppGuid)] _appGuid = "{${Guid.NewGuid().ToString().ToUpper()}}"
+	[Property(TestGuid)] _testGuid = "{${Guid.NewGuid().ToString().ToUpper()}}"
 	
 	def Run():
 		MkDir(Name)
