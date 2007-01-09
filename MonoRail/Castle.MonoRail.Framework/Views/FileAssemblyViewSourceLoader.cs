@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class FileAssemblyViewSourceLoader : IViewSourceLoader, IServiceEnabledComponent
 	{
-		private readonly IList additionalSources = new ArrayList();
+		private IList additionalSources = new ArrayList();
 		private String viewRootDir;
 		private bool enableCache = true;
 		private FileSystemWatcher viewFolderWatcher;
@@ -42,6 +42,7 @@ namespace Castle.MonoRail.Framework
 			if (config != null)
 			{
 				viewRootDir = config.ViewEngineConfig.ViewPathRoot;
+				additionalSources = config.ViewEngineConfig.Sources;
 			}
 		}
 
