@@ -21,6 +21,7 @@
 using System;
 using System.Configuration;
 using System.Web;
+using Castle.Igloo.Contexts;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;
 using Castle.MicroKernel.Lifestyle;
@@ -34,7 +35,20 @@ namespace Castle.Igloo.LifestyleManager
     [Serializable]
     public sealed class ScopeWebRequestLifestyleManager : AbstractLifestyleManager
     {
-        
+        private IRequestScope _requestScope = null;
+
+        /// <summary>
+        /// Inits the specified component activator.
+        /// </summary>
+        /// <param name="componentActivator">The component activator.</param>
+        /// <param name="kernel">The kernel.</param>
+        public override void Init(IComponentActivator componentActivator, IKernel kernel)
+        {
+            base.Init(componentActivator, kernel);
+
+            _requestScope = Kernel[typeof(IRequestScope)] as IRequestScope;
+        }
+
         #region ILifestyleManager Members
 
         /// <summary>
@@ -44,16 +58,14 @@ namespace Castle.Igloo.LifestyleManager
         /// <returns></returns>
         public override object Resolve(CreationContext context)
         {
-            HttpContext current = HttpContext.Current;
-
-            if (current == null)
+            if (HttpContext.Current == null)
             {
-                throw new InvalidOperationException("HttpContext.Current is null.  PerWebRequestLifestyle can only be used in ASP.Net");
+                throw new InvalidOperationException("HttpContext.Current is null. ScopeWebRequestLifestyleManager can only be used in ASP.NET");
             }
             
             string name = (ComponentActivator as AbstractComponentActivator).Model.Name;
-            
-            if (current.Items[name] == null)
+
+            if (_requestScope[name] == null)
             {
                 if (!ScopeLifestyleModule.Initialized)
                 {
@@ -68,11 +80,12 @@ namespace Castle.Igloo.LifestyleManager
                 }
 
                 object instance = base.Resolve(context);
-                current.Items[name] = instance;
-                ScopeLifestyleModule.RegisterForRequestEviction(this, instance);
+
+                _requestScope.Add(name, instance);
+                ScopeLifestyleModule.RegisterForRequestEviction(this, name, instance);
             }
 
-            return current.Items[name];
+            return _requestScope[name];
         }
 
         /// <summary>
@@ -86,16 +99,17 @@ namespace Castle.Igloo.LifestyleManager
             // to ensure the component is available during the duration of 
             // the web request.  An internal Evict method is provided to
             // allow the actual releasing of the component at the end of
-            // the web request.
+            // the web session.
         }
 
         /// <summary>
         /// Evicts the specified instance.
         /// </summary>
-        /// <param name="instance">The instance.</param>
-        internal void Evict(object instance)
+        /// <param name="candidate">The candidate.</param>
+        internal void Evict(Candidate candidate)
         {
-            base.Release(instance);
+            base.Release(candidate.Component);
+            _requestScope.Remove(candidate.Name);
         }
 
         /// <summary>

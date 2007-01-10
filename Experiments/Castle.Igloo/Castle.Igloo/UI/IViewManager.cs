@@ -31,9 +31,9 @@ namespace Castle.Igloo.UI
         /// <summary>
         /// Gets the next view.
         /// </summary>
-        /// <param name="navigationContext">The navigation context.</param>
+        /// <param name="navigationState">The navigation state.</param>
         /// <returns>The view id</returns>
-	    string GetNextView(NavigationContext navigationContext);
+	    string GetNextView(NavigationState navigationState);
 	    
         /// <summary>
         /// Activates a specified view.

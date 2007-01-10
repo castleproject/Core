@@ -34,7 +34,7 @@ namespace Castle.Igloo.Interceptors
     public class NavigationInterceptor : IMethodInterceptor, IOnBehalfAware 
     {
         private readonly INavigator _navigator = null;
-        private IDictionary<string, NoNavigationAttribute> _noNavigationMembers = null;
+        private IDictionary<string, SkipNavigationAttribute> _noNavigationMembers = null;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationInterceptor"/> class.
@@ -77,7 +77,7 @@ namespace Castle.Igloo.Interceptors
         /// <param name="target">The target.</param>
         public void SetInterceptedComponentModel(ComponentModel target)
         {
-            _noNavigationMembers = (IDictionary<string, NoNavigationAttribute>)target.ExtendedProperties[ControllerInspector.NO_NAVIGATION];
+            _noNavigationMembers = (IDictionary<string, SkipNavigationAttribute>)target.ExtendedProperties[ControllerInspector.SKIP_NAVIGATION];
         }
 
         #endregion

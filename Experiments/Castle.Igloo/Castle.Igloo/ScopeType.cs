@@ -23,37 +23,58 @@ namespace Castle.Igloo
     /// <summary>
     /// Enumeration of the differents scope
     /// </summary>
-    public enum ScopeType : int
+    public class ScopeType 
     {
         /// <summary>
-        /// The request context. Spans a http request.
-        /// The request scope is not propagate.
+        /// Constant identifying the application scope (HttpApplication context.)
         /// </summary>
-        Request,
+        /// <remarks>
+        /// Only valid in web context.
+        /// </remarks>
+        public const string Application = "Application";
+        
         /// <summary>
-        /// The page context. Begins during the first invocation of a page, and lasts 
-        /// until the beginning of any invocation of an http request originating from that page.
-        /// </summary>
-        Page,
-        /// <summary>
-        /// The conversation context. Spans multiple requests from
+        /// Constant identifying the conversation scope. Spans multiple requests from
         /// the same browser window, demarcated by Begin and End
-        /// methods. A conversation context is propagated by
+        /// methods. A conversation scope is propagated by
         /// any web request, or by any request that specifies
         /// a conversation id as a request parameter. 
         /// </summary>
-        Conversation,
+        public const string Conversation = "Conversation";
+        
         /// <summary>
-        /// The session context. (An Http session.)
+        /// Constant identifying the page scope. Begins during the first invocation of a page, and lasts 
+        /// until the beginning of any invocation of an http request originating from that page.
         /// </summary>
-        Session,
+        /// <remarks>
+        /// Only valid in web context.
+        /// </remarks>        
+        public const string Page = "Page";
+        
         /// <summary>
-        ///  The application context (HttpApplication context.)
-        /// </summary>
-        Application,
+        /// Constant identifying the request scope. Spans a http request.
+        /// The request scope is not propagate.
+        /// </summary>    
+        /// <remarks>
+        /// Only valid in web context.
+        /// </remarks>
+        public const string Request = "Request";
+        
         /// <summary>
-        /// Indicates that the scope is implied.
+        /// Constant identifying the session scope. (An Http session.)
         /// </summary>
-        UnSpecified
+        /// <remarks>
+        /// Only valid in web context.
+        /// </remarks>
+        public const string Session = "Session";
+
+        /// <summary>
+        /// Constant indicates that the scope is implied.
+        /// </summary>
+        /// <remarks>
+        /// Only valid in web context.
+        /// </remarks>
+        public const string UnSpecified = "UnSpecified";
+
     }
 }

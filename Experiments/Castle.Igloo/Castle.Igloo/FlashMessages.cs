@@ -19,15 +19,17 @@
 #endregion
 
 using System.Collections.Generic;
+using Castle.Igloo.Attributes;
 
 namespace Castle.Igloo
 {
     /// <summary>
     /// Holds context request messages.
     /// </summary>
-    public sealed class Messages : Dictionary<string, string>
+    [Scope(Scope = ScopeType.Request)]
+    public sealed class FlashMessages : Dictionary<string, string>
     {
-        public const string REQUEST_MESSAGES = "_REQUEST_MESSAGES_";
+        public const string FLASH_MESSAGES = "_FLASH_MESSAGES_";
 
     }
 }

@@ -69,7 +69,7 @@ namespace Castle.Igloo
         {
             PropertyInfo[] properties = model.Implementation.GetProperties(BINDING_FLAGS_SET);
 
-            IDictionary<string, InjectAttribute> inMembers = new Dictionary<string, InjectAttribute>();
+            IDictionary<InjectAttribute, PropertyInfo> inMembers = new Dictionary<InjectAttribute, PropertyInfo>();
 
             for (int i = 0; i < properties.Length; i++)
             {
@@ -80,13 +80,13 @@ namespace Castle.Igloo
                     {
                         injectAttribute.Name = properties[i].Name;
                     }
-                    inMembers.Add(properties[i].Name, injectAttribute);
+                    inMembers.Add(injectAttribute, properties[i]);
                 }
             }
-            if (inMembers.Count > 0)
-            {
+            //if (inMembers.Count > 0)
+            //{
                 model.ExtendedProperties[IN_MEMBERS] = inMembers;
-            }
+            //}
         }
 
     }

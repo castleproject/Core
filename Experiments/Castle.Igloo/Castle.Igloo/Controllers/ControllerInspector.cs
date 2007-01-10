@@ -38,7 +38,7 @@ namespace Castle.Igloo.Controllers
         /// <summary>
         /// No navigation members token
         /// </summary>
-        public const string NO_NAVIGATION = "_NO_NAVIGATION_MEMBERS_";
+        public const string SKIP_NAVIGATION = "_SKIP_NAVIGATION_MEMBERS_";
         
         /// <summary>
         /// Binding token
@@ -72,13 +72,13 @@ namespace Castle.Igloo.Controllers
 
         private void RetrieveNoNavigationMethod(ComponentModel model)
         {
-            IDictionary<string, NoNavigationAttribute> noNavigationMembers = new Dictionary<string, NoNavigationAttribute>();
+            IDictionary<string, SkipNavigationAttribute> skipNavigationMembers = new Dictionary<string, SkipNavigationAttribute>();
             bool markedAllWithNoNavigation = false;
-            NoNavigationAttribute noNavigationAttribute;
+            SkipNavigationAttribute skipNavigationAttribute;
             
             // First, checks on Class
-            noNavigationAttribute = AttributeUtil.GetNoNavigationAttribute(model.Implementation.GetType());
-            if (noNavigationAttribute != null)
+            skipNavigationAttribute = AttributeUtil.GetSkipNavigationAttribute(model.Implementation.GetType());
+            if (skipNavigationAttribute != null)
             {
                 markedAllWithNoNavigation = true;
             }
@@ -89,10 +89,10 @@ namespace Castle.Igloo.Controllers
                 MethodInfo[] methods = model.Implementation.GetMethods(BINDING_FLAGS_SET);
                 for (int i = 0; i < methods.Length; i++)
                 {
-                    noNavigationAttribute = AttributeUtil.GetNoNavigationAttribute(methods[i]);
-                    if (noNavigationAttribute != null)
+                    skipNavigationAttribute = AttributeUtil.GetSkipNavigationAttribute(methods[i]);
+                    if (skipNavigationAttribute != null)
                     {
-                        noNavigationMembers.Add(methods[i].Name, noNavigationAttribute);
+                        skipNavigationMembers.Add(methods[i].Name, skipNavigationAttribute);
                     }
                 }
             }
@@ -102,12 +102,12 @@ namespace Castle.Igloo.Controllers
                 MethodInfo[] methods = model.Implementation.GetMethods(BINDING_FLAGS_SET);
                 for (int i = 0; i < methods.Length; i++)
                 {
-                    NoNavigationAttribute attribute = new NoNavigationAttribute();
-                    noNavigationMembers.Add(methods[i].Name, attribute);
+                    SkipNavigationAttribute attribute = new SkipNavigationAttribute();
+                    skipNavigationMembers.Add(methods[i].Name, attribute);
                 }
             }
 
-            model.ExtendedProperties[NO_NAVIGATION] = noNavigationMembers;
+            model.ExtendedProperties[SKIP_NAVIGATION] = skipNavigationMembers;
         }
     }
 }

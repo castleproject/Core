@@ -21,6 +21,7 @@
 using System;
 using System.Web;
 using Castle.Core;
+using Castle.Igloo.Interceptors;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Util;
 using Castle.MicroKernel;
@@ -61,16 +62,31 @@ namespace Castle.Igloo
                 {
                     model.LifestyleType = LifestyleType.Custom;
                     model.CustomLifestyle = typeof(ScopeWebRequestLifestyleManager);
+
+                    // Add the scope interceptor
+                    model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
                 }
                 else if (scopeAttribute.Scope == ScopeType.Session)
                 {
                     model.LifestyleType = LifestyleType.Custom;
                     model.CustomLifestyle = typeof(ScopeWebSessionLifestyleManager);
+                    
+                    // Add the scope interceptor
+                    model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
+                }
+                else if (scopeAttribute.Scope == ScopeType.Application)
+                {
+                    model.LifestyleType = LifestyleType.Custom;
+                    model.CustomLifestyle = typeof(ScopeWebApplicationLifestyleManager);
+
+                    // Add the scope interceptor
+                    model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
                 }
                 else
                 {
                     throw new NotImplementedException("To do, other scope such as Session, Page");
                 }
+
             }
             else
             {

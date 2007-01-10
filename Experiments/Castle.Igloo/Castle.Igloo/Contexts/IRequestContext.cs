@@ -18,26 +18,9 @@
  ********************************************************************************/
 #endregion
 
-using Castle.Core;
-using Castle.Igloo.Attributes;
-using Castle.MicroKernel.Lifestyle;
-
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Contexts
 {
-    /// <summary>
-    /// Gives access to IContext
-    /// </summary>
-    [Scope(Scope = ScopeType.Request)]
-    public sealed class WebContexts : BaseContexts
+    public interface IRequestScope : IScope
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Contexts"/> class.
-        /// </summary>
-        /// <param name="conversationManager">The conversation manager.</param>
-        /// <param name="processContext">The process context.</param>
-        public WebContexts(IConversationManager conversationManager, IProcessContext processContext)
-            : base(conversationManager, processContext)
-        {
-        }
     }
 }

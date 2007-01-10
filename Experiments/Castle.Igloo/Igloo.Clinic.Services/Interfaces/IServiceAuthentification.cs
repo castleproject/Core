@@ -31,5 +31,13 @@ namespace Igloo.Clinic.Services.Interfaces
         /// <param name="passwd">The passwd.</param>
         /// <returns></returns>
         Doctor Validate(string login, string passwd);
+
+        /// <summary>
+        /// Registers a user.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="login">The login.</param>
+        /// <param name="passwd">The passwd.</param>
+        void Register(string name, string login, string passwd);
     }
 }

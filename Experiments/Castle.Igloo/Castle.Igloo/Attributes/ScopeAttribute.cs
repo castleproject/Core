@@ -28,12 +28,12 @@ namespace Castle.Igloo.Attributes
     [AttributeUsageAttribute(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class ScopeAttribute : Attribute 
     {
-        private ScopeType _scope = ScopeType.UnSpecified;
+        private string _scope = ScopeType.UnSpecified;
 
         /// <summary>S
         /// The component scope.
         /// </summary>
-        public ScopeType Scope
+        public string Scope
         {
             get { return _scope; }
             set { _scope = value; }

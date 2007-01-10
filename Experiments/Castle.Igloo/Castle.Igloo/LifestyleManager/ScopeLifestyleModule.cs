@@ -20,9 +20,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web;
 using System.Web.UI;
 using Castle.Igloo.Contexts;
+using Castle.Igloo.Contexts.Web;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Util;
 
@@ -61,13 +63,12 @@ namespace Castle.Igloo.LifestyleManager
             //if (module.GetType() == typeof(SessionStateModule))
             //{
             //    SessionStateModule stateModule = (SessionStateModule)module;
-            //    stateModule.End += new EventHandler(OnSessionEnd);
+            //    stateModule.End += new EventHandler(ReleaseSessionScopeComponent);
             //}
             
-            // Attach to process Request end event
-            context.EndRequest += new EventHandler(OnRequestEnd);
-            context.AcquireRequestState += new EventHandler(OnAcquireRequestState);
-
+            // Attach to events
+            context.EndRequest += new EventHandler(ReleaseRequestScopeComponent);
+            context.PostRequestHandlerExecute += new EventHandler(ReleasePageScopeComponent);
         }
 
         #endregion
@@ -87,19 +88,22 @@ namespace Castle.Igloo.LifestyleManager
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="instance">The instance.</param>
-        internal static void RegisterForRequestEviction(ScopeWebRequestLifestyleManager manager, object instance)
+        internal static void RegisterForRequestEviction(
+            ScopeWebRequestLifestyleManager manager,
+            string name, object instance)
         {
-            HttpContext context = HttpContext.Current;
+            HttpContext httpContext = HttpContext.Current;
 
-            IDictionary<ScopeWebRequestLifestyleManager, object> candidates = (Dictionary<ScopeWebRequestLifestyleManager, object>)context.Items[PER_REQUEST_EVICT];
+            IDictionary<ScopeWebRequestLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebRequestLifestyleManager, Candidate>)httpContext.Items[PER_REQUEST_EVICT];
 
             if (candidates == null)
             {
-                candidates = new Dictionary<ScopeWebRequestLifestyleManager, object>();
-                context.Items[PER_REQUEST_EVICT] = candidates;
+                candidates = new Dictionary<ScopeWebRequestLifestyleManager, Candidate>();
+                httpContext.Items[PER_REQUEST_EVICT] = candidates;
             }
+            Candidate candidate = new Candidate(name, instance);
 
-            candidates.Add(manager, instance);
+            candidates.Add(manager, candidate);
         }
 
         /// <summary>
@@ -107,16 +111,18 @@ namespace Castle.Igloo.LifestyleManager
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        internal void OnRequestEnd(Object sender, EventArgs e)
+        internal void ReleaseRequestScopeComponent(Object sender, EventArgs e)
         {
+            Trace.WriteLine("<<< End web request");
+            
             HttpApplication application = (HttpApplication)sender;
             HttpContext httpContext = application.Context;
 
-            IDictionary<ScopeWebRequestLifestyleManager, object> candidates = (Dictionary<ScopeWebRequestLifestyleManager, object>)httpContext.Items[PER_REQUEST_EVICT];
+            IDictionary<ScopeWebRequestLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebRequestLifestyleManager, Candidate>)httpContext.Items[PER_REQUEST_EVICT];
 
             if (candidates != null)
             {
-                foreach (KeyValuePair<ScopeWebRequestLifestyleManager, object> kvp in candidates)
+                foreach (KeyValuePair<ScopeWebRequestLifestyleManager, Candidate> kvp in candidates)
                 {
                     ScopeWebRequestLifestyleManager manager = kvp.Key;
                     manager.Evict(kvp.Value);
@@ -124,6 +130,7 @@ namespace Castle.Igloo.LifestyleManager
 
                 httpContext.Items.Remove(PER_REQUEST_EVICT);
             }
+
         }
         #endregion
 
@@ -135,19 +142,20 @@ namespace Castle.Igloo.LifestyleManager
         /// <param name="instance">The instance.</param>
         internal static void RegisterForSessionEviction(
             ScopeWebSessionLifestyleManager manager,
+            string name,
             object instance)
         {
             HttpContext context = HttpContext.Current;
 
-            IDictionary<ScopeWebSessionLifestyleManager, object> candidates = (Dictionary<ScopeWebSessionLifestyleManager, object>)context.Session[PER_SESSION_EVICT];
+            IDictionary<ScopeWebSessionLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebSessionLifestyleManager, Candidate>)context.Session[PER_SESSION_EVICT];
 
             if (candidates == null)
             {
-                candidates = new Dictionary<ScopeWebSessionLifestyleManager, object>();
+                candidates = new Dictionary<ScopeWebSessionLifestyleManager, Candidate>();
                 context.Session[PER_SESSION_EVICT] = candidates;
             }
-
-            candidates.Add(manager, instance);
+            Candidate candidate = new Candidate(name, instance);
+            candidates.Add(manager, candidate);
         }
         
         /// <summary>
@@ -155,15 +163,15 @@ namespace Castle.Igloo.LifestyleManager
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
-        public static void OnSessionEnd(Object sender, EventArgs e)
+        public static void ReleaseSessionScopeComponent(Object sender, EventArgs e)
         {
             HttpApplication application = (HttpApplication)sender;
 
-            IDictionary<ScopeWebSessionLifestyleManager, object> candidates = (Dictionary<ScopeWebSessionLifestyleManager, object>)application.Session[PER_SESSION_EVICT];
+            IDictionary<ScopeWebSessionLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebSessionLifestyleManager, Candidate>)application.Session[PER_SESSION_EVICT];
 
             if (candidates != null)
             {
-                foreach (KeyValuePair<ScopeWebSessionLifestyleManager, object> kvp in candidates) 
+                foreach (KeyValuePair<ScopeWebSessionLifestyleManager, Candidate> kvp in candidates) 
                 {
                     ScopeWebSessionLifestyleManager manager = kvp.Key;
                     manager.Evict(kvp.Value);
@@ -175,20 +183,32 @@ namespace Castle.Igloo.LifestyleManager
         #endregion
 
         #region Page scope garbage
+        
         /// <summary>
         /// Handles the PostRequestHandlerExecute event of the Application control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected void OnAcquireRequestState(Object sender, EventArgs e)
+        protected void ReleasePageScopeComponent(Object sender, EventArgs e)
         {
             if (IsAspxPage)
             {
                 if (!IsSamePage)
                 {
-                    IContexts contexts = ContainerWebAccessorUtil.Container.Resolve<IContexts>();
-                    contexts.PageContext.Flush();
+                    IPageScope pageScope = ContainerWebAccessorUtil.Container.Resolve<IPageScope>();
+                    pageScope.Flush();
                 }
+                
+                // Process end of session
+                HttpContext httpContext = HttpContext.Current;
+                bool? isSessionInvalid = (bool?)httpContext.Session[WebSessionScope.SESSION_INVALID];
+
+                if ((isSessionInvalid != null) && (isSessionInvalid == true))
+                {
+                    ReleaseSessionScopeComponent(sender, null);
+                    httpContext.Session.Abandon();
+                }                
+                
             }
         }
 
@@ -220,6 +240,7 @@ namespace Castle.Igloo.LifestyleManager
             }
         }
         #endregion
+        
         
     }
 }

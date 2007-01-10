@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using Castle.Core;
 using Castle.Core.Configuration;
@@ -151,23 +152,30 @@ namespace Castle.Igloo.UIComponents
         {
             if (NeedsInjection)
             {
-                IContexts contexts = _kernel[typeof(IContexts)] as IContexts;
+                Trace.WriteLine("injecting dependencies of : " + _name);
+
+                IScopeRegistry scopeRegistry = _kernel[typeof(IScopeRegistry)] as IScopeRegistry;
 
                 foreach (KeyValuePair<InjectAttribute, PropertyInfo> kvp in InMembers)
                 {                   
                     PropertyInfo propertyInfo = kvp.Value;
-                    object inject = null;
+                    object instanceToInject = scopeRegistry.GetFromScopes(kvp.Key);
 
-                    // First try to find in IContext(s)
-                    if (contexts.IsInContexts(kvp.Key.Name))
+                    if (instanceToInject == null)
                     {
-                        inject = contexts.GetFromContexts(kvp.Key);
+                        if (kvp.Key.Create)
+                        {
+                            instanceToInject = Activator.CreateInstance(propertyInfo.PropertyType);
+
+                            IScope scope = scopeRegistry[kvp.Key.Scope];
+                            scope.Add(kvp.Key.Name, instanceToInject);
+                        }
+                        else
+                        {
+                            // do log / use  kvp.Key.Required
+                        }
                     }
-                    else
-                    {
-                        // do log / use  kvp.Key.Required
-                    }
-                    propertyInfo.SetValue(instance, inject, null);
+                    propertyInfo.SetValue(instance, instanceToInject, null);
                 }
             }
         }
@@ -197,7 +205,7 @@ namespace Castle.Igloo.UIComponents
         }
         
         /// <summary>
-        /// Retrieves the injected user IContext component and
+        /// Retrieves the injected user IScope component and
         /// the injected IController component on a view component
         /// </summary>
         /// <remarks>

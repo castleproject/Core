@@ -31,17 +31,17 @@ namespace Castle.Igloo.Navigation
 	public class DefaultNavigator : INavigator
 	{
 		private IViewManager _viewManager = null;
-        private NavigationContext _navigationContext = null;
+        private NavigationState _navigationState = null;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="viewManager">A view manager</param>
-        public DefaultNavigator( IViewManager viewManager )
+        public DefaultNavigator(IViewManager viewManager)
 		{
             AssertUtils.ArgumentNotNull(viewManager, "viewManager");
 		    
-			_viewManager = viewManager;
+			_viewManager = viewManager;		    
 		}
 
 		#region INavigator members
@@ -51,11 +51,11 @@ namespace Castle.Igloo.Navigation
         /// The current Navigation Context.
         /// </summary>
         /// <value></value>
-        [Inject(Name = NavigationContext.NAVIGATION_CONTEXT, Scope = ScopeType.Request)]
-        public NavigationContext NavigationContext
+        [Inject(Name = NavigationState.NAVIGATION_STATE, Scope = ScopeType.Request, Create = true)]
+        public NavigationState NavigationState
         {
-            get { return _navigationContext; }
-            set { _navigationContext = value; }
+            get { return _navigationState; }
+            set { _navigationState = value; }
         }
 
 		/// <summary>
@@ -63,16 +63,16 @@ namespace Castle.Igloo.Navigation
 		/// </summary>
 		public void Navigate()
 		{
-            _navigationContext.PreviousView = NavigationContext.CurrentView;
+            _navigationState.PreviousView = NavigationState.CurrentView;
 
-            if (_navigationContext.Action != NavigationContext.NO_NAVIGATION)
+            if (_navigationState.Action != Castle.Igloo.Navigation.NavigationState.NO_NAVIGATION)
             {
-                _navigationContext.NextView = _viewManager.GetNextView(NavigationContext);
+                _navigationState.NextView = _viewManager.GetNextView(NavigationState);
 			    _viewManager.ActivateView(this);                
             }
 		    else
 		    {
-                _navigationContext.NextView = _navigationContext.CurrentView;
+                _navigationState.NextView = _navigationState.CurrentView;
 		    }
 		}
 

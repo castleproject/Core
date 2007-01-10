@@ -18,22 +18,12 @@
  ********************************************************************************/
 #endregion
 
-namespace Castle.Igloo.Contexts.Windows
+namespace Castle.Igloo.Contexts
 {
     /// <summary>
-    /// Gives access to IContext
+    /// The application scope
     /// </summary>
-    public sealed class WindowsContexts : BaseContexts 
+    public interface IApplicationScope : IScope
     {
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Contexts"/> class.
-        /// </summary>
-        /// <param name="conversationManager">The conversation manager.</param>
-        /// <param name="processContext">The process context.</param>
-        public WindowsContexts(IConversationManager conversationManager, IProcessContext processContext)
-            : base(conversationManager, processContext)
-        {
-        }
     }
 }

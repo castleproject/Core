@@ -27,9 +27,9 @@ namespace Castle.Igloo.Navigation
 	{
 
         /// <summary>
-        /// The current Navigation Context.
+        /// The current Navigation Context.set;
         /// </summary>
-        NavigationContext NavigationContext { get; set;}
+        NavigationState NavigationState { set; get; }
 
 		/// <summary>
 		/// Natvigate to the next view.

@@ -18,25 +18,30 @@
  ********************************************************************************/
 #endregion
 
-using Castle.Igloo.Navigation;
-
-namespace Castle.Igloo.UI
+namespace Castle.Igloo.LifestyleManager
 {
-	/// <summary>
-	/// Represents a view used in Web or Windows applications.
-	/// </summary>
-	public interface IView
-	{
-        /// <summary>
-        /// Gets the Navigation Context.
-        /// </summary>
-        NavigationState NavigationState { get; set;  }
+    /// <summary>
+    /// Represents a component candidate for context eviction
+    /// </summary>
+    public class Candidate
+    {
+        private string _name = string.Empty;
+        private object _component = null;
 
-        /// <summary>
-        /// Holds context request flashMessages.
-        /// </summary>
-        FlashMessages FlashMessages { get; set;  }
+        public string Name
+        {
+            get { return _name; }
+        }
 
-	}
+        public object Component
+        {
+            get { return _component; }
+        }
 
+        public Candidate(string name, object component)
+        {
+            _name = name;
+            _component = component;
+        }
+    }
 }

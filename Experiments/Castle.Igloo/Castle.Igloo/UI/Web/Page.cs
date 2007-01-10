@@ -33,8 +33,8 @@ namespace Castle.Igloo.UI.Web
     [Scope(Scope=ScopeType.Request)]
     public class Page : System.Web.UI.Page, IView
 	{
-	    private NavigationContext _navigationContext = null;
-        private Messages _messages = null;
+	    private NavigationState _navigationState = null;
+        private FlashMessages _messages = null;
 
 		#region Constructor
 
@@ -53,19 +53,19 @@ namespace Castle.Igloo.UI.Web
         /// <summary>
         /// Gets the current NavigationContext.
         /// </summary>
-        [Inject(Name = NavigationContext.NAVIGATION_CONTEXT, Scope = ScopeType.Request)]
-        public NavigationContext NavigationContext
+        [Inject(Name = NavigationState.NAVIGATION_STATE, Scope = ScopeType.Request, Create = true)]
+        public NavigationState NavigationState
         {
-            get { return _navigationContext; }
-            set { _navigationContext = value; }
+            get { return _navigationState; }
+            set { _navigationState = value; }
         }
 
         /// <summary>
-        /// Holds context request messages.
+        /// Holds context request flashMessages.
         /// </summary>
         /// <value></value>
-        [Inject(Name = Messages.REQUEST_MESSAGES, Scope = ScopeType.Request)]
-        public Messages Messages
+        [Inject(Name = FlashMessages.FLASH_MESSAGES, Scope = ScopeType.Request, Create = true)]
+        public FlashMessages FlashMessages
         {
             get { return _messages; }
             set { _messages = value; }

@@ -40,6 +40,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Castle.Igloo\Castle.Igloo.csproj">
+      <Project>{8C3E14B8-8154-4FC4-9BF3-EF63F74B69D3}</Project>
+      <Name>Castle.Igloo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Igloo.Clinic.Domain\Igloo.Clinic.Domain.csproj">
       <Project>{7CF4C9C8-776D-4327-8CCA-F72A4AC3401E}</Project>
       <Name>Igloo.Clinic.Domain</Name>

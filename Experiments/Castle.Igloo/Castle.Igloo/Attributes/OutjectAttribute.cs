@@ -32,7 +32,7 @@ namespace Castle.Igloo.Attributes
         private string _name = string.Empty;
         private bool _needInstanciation = false;
         private bool _isRequired = false;
-        private ScopeType _scope = ScopeType.UnSpecified;
+        private string _scope = ScopeType.UnSpecified;
 
         /// <summary>
         /// The context variable name. Defaults to the name of
@@ -57,7 +57,7 @@ namespace Castle.Igloo.Attributes
         /// <summary>S
         /// Specifies the scope to outject to.
         /// </summary>
-        public ScopeType Scope
+        public string Scope
         {
             get { return _scope; }
             set { _scope = value; }

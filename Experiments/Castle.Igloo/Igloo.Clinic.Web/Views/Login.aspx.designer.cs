@@ -12,9 +12,10 @@ namespace Igloo.Clinic.Web.Views {
     
     public partial class Login {
         protected System.Web.UI.HtmlControls.HtmlForm form1;
-        protected System.Web.UI.WebControls.TextBox login;
-        protected System.Web.UI.WebControls.TextBox password;
+        protected System.Web.UI.WebControls.TextBox TextBoxLogin;
+        protected System.Web.UI.WebControls.TextBox TextBoxPassword;
         protected System.Web.UI.WebControls.Button ButtonLogin;
+        protected System.Web.UI.WebControls.HyperLink HyperLinkRegister;
         protected System.Web.UI.WebControls.Literal LiteralMessage;
     }
 }

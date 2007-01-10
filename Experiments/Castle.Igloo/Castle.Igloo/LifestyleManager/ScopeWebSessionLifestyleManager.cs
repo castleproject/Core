@@ -21,6 +21,7 @@
 using System;
 using System.Configuration;
 using System.Web;
+using Castle.Igloo.Contexts;
 using Castle.Igloo.LifestyleManager;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;
@@ -31,30 +32,47 @@ namespace Castle.Igloo.LifestyleManager
     /// <summary>
     /// Implements a Lifestyle Manager for Web Apps that
     /// create at most one object per web session.
+    /// 
+    /// ScopeWebSessionLifestyleManager tries to lookup component by name 
+    /// in http session. 
+    /// If not found, it tries to instantiate new bean and attaches it to said session.
     /// </summary>
     [Serializable]
     public sealed class ScopeWebSessionLifestyleManager : AbstractLifestyleManager
     {
-       
+        private ISessionScope _sessionScope = null;
+
+        /// <summary>
+        /// Inits the specified component activator.
+        /// </summary>
+        /// <param name="componentActivator">The component activator.</param>
+        /// <param name="kernel">The kernel.</param>
+        public override void Init(IComponentActivator componentActivator, IKernel kernel)
+        {
+            base.Init(componentActivator, kernel);
+
+            _sessionScope = Kernel[typeof(ISessionScope)] as ISessionScope;
+        }
+
         #region ILifestyleManager Members
 
         /// <summary>
-        /// Resolves the specified context.
+        /// Find a component by name in session scoped storage implementation. 
+        /// If not found, try to instantiate new one by the <see cref="IKernel"/>.
+        /// Then found component will be attached to session store implementation.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns></returns>
+        /// <returns>The component</returns>
         public override object Resolve(CreationContext context)
         {
-            HttpContext current = HttpContext.Current;
-
-            if (current == null)
+            if (HttpContext.Current == null)
             {
-                throw new InvalidOperationException("HttpContext.Current is null.  PerWebRequestLifestyle can only be used in ASP.Net");
+                throw new InvalidOperationException("HttpContext.Current is null. ScopeWebSessionLifestyleManager can only be used in ASP.NET.");
             }
             
             string name = (ComponentActivator as AbstractComponentActivator).Model.Name;
 
-            if (current.Session[name] == null)
+            if (_sessionScope[name] == null)
             {
                 if (!ScopeLifestyleModule.Initialized)
                 {
@@ -69,11 +87,11 @@ namespace Castle.Igloo.LifestyleManager
                 }
 
                 object instance = base.Resolve(context);
-                current.Session[name] = instance;
-                ScopeLifestyleModule.RegisterForSessionEviction(this, instance);
+                _sessionScope.Add(name, instance);
+                ScopeLifestyleModule.RegisterForSessionEviction(this, name, instance);
             }
 
-            return current.Session[name];
+            return _sessionScope[name];
         }
 
         public override void Release(object instance)
@@ -81,14 +99,15 @@ namespace Castle.Igloo.LifestyleManager
             // Since this method is called by the kernel when an external
             // request to release the component is made, it must do nothing
             // to ensure the component is available during the duration of 
-            // the web request.  An internal Evict method is provided to
+            // the web session.  An internal Evict method is provided to
             // allow the actual releasing of the component at the end of
-            // the web request.
+            // the web session.
         }
 
-        public void Evict(object instance)
+        public void Evict(Candidate candidate)
         {
-            base.Release(instance);
+            base.Release(candidate.Component);
+            _sessionScope.Remove(candidate.Name);
         }
 
         public override void Dispose()

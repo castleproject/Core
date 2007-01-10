@@ -10,6 +10,12 @@
 
 namespace Igloo.Clinic.Web.Views {
     
-    public partial class WebForm1 {
+    public partial class Register {
+        protected System.Web.UI.HtmlControls.HtmlForm form1;
+        protected System.Web.UI.WebControls.TextBox TextBoxName;
+        protected System.Web.UI.WebControls.TextBox TextBoxLogin;
+        protected System.Web.UI.WebControls.TextBox TextBoxPassword;
+        protected System.Web.UI.WebControls.Button ButtonRegister;
+        protected System.Web.UI.WebControls.Literal LiteralMessage;
     }
 }

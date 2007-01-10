@@ -48,7 +48,7 @@ namespace Castle.Igloo.Interceptors
 
             try
             {
-                //Trace.Write("Current view : " + controller.Navigator.NavigationContext.CurrentView + "\n");
+                //Trace.Write("Current view : " + controller.Navigator.NavigationState.CurrentView + "\n");
                 traceOutput = ExtractTraceInfo(invocation, args);
                 Trace.Write(traceOutput);
             }

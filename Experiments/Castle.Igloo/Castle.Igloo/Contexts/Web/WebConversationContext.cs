@@ -20,38 +20,49 @@
 
 using System;
 using System.Collections;
+using Castle.Igloo.Attributes;
 
-namespace Castle.Igloo.Contexts
+namespace Castle.Igloo.Contexts.Web
 {
     /// <summary>
     /// A conversation context is a logical context that lasts longer than 
     /// a request but shorter than a login session.
     /// </summary>
-    public sealed class ConversationContext : IContext
+    //[Scope(Scope = ScopeType.Application)]
+    public sealed class WebConversationScope : IScope
     {
         private IConversationManager _conversationManager = null;
-        private IContext _sessionContext = null;
+        private ISessionScope _sessionScope = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConversationContext"/> class.
+        /// Initializes a new instance of the <see cref="WebConversationScope"/> class.
         /// </summary>
         /// <param name="conversationManager">The conversation manager.</param>
-        /// <param name="sessionContext">The session context.</param>
-        public ConversationContext(IConversationManager conversationManager, IContext sessionContext)
+        /// <param name="sessionScope">The session context.</param>
+        public WebConversationScope(IConversationManager conversationManager, ISessionScope sessionScope)
         {
             _conversationManager = conversationManager;
-            _sessionContext = sessionContext;
+            _sessionScope = sessionScope;
+        }
+
+        #region IScope Members
+
+        /// <summary>
+        /// Gets a value indicating whether this context is active.
+        /// </summary>
+        /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
+        public bool IsActive
+        {
+            get { return false; }
         }
         
-        #region IContext Members
-
         /// <summary>
         /// Gets the <see cref="Object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public object this[string name]
         {
-            get { return _sessionContext[_conversationManager.CurrentConversationId + "." + name]; }
+            get { return _sessionScope[_conversationManager.CurrentConversationId + "." + name]; }
         }
 
         /// <summary>
@@ -64,36 +75,36 @@ namespace Castle.Igloo.Contexts
         }
 
         /// <summary>
-        /// Adds an element with the provided key and value to the IContext object.
+        /// Adds an element with the provided key and value to the IScope object.
         /// </summary>
         /// <param name="name">The name of the element to add.</param>
         /// <param name="value">The Object to use as the value of the element to add.</param>
         public void Add(string name, object value)
         {
-            _sessionContext.Add(_conversationManager.CurrentConversationId + "." + name, value);
+            _sessionScope.Add(_conversationManager.CurrentConversationId + "." + name, value);
         }
 
         /// <summary>
-        /// Removes the element with the specified name from the IContext object.
+        /// Removes the element with the specified name from the IScope object.
         /// </summary>
         /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
-            _sessionContext.Remove(_conversationManager.CurrentConversationId + "." + name);
+            _sessionScope.Remove(_conversationManager.CurrentConversationId + "." + name);
         }
 
         /// <summary>
         /// Determines whether the IDictionary object contains an element with the specified name.
         /// </summary>
-        /// <param name="name">The name to locate in the IContext object.</param>
+        /// <param name="name">The name to locate in the IScope object.</param>
         /// <returns></returns>
         public bool Contains(string name)
         {
-            return _sessionContext.Contains(_conversationManager.CurrentConversationId + "." + name);
+            return _sessionScope.Contains(_conversationManager.CurrentConversationId + "." + name);
         }
 
         /// <summary>
-        /// Gets All the objects names contain in the IContext object.
+        /// Gets All the objects names contain in the IScope object.
         /// </summary>
         /// <value>The names.</value>
         public ICollection Names
@@ -102,31 +113,24 @@ namespace Castle.Igloo.Contexts
         }
 
         /// <summary>
-        /// Removes all the elementfrom the IContext object.
+        /// Removes all the elementfrom the IScope object.
         /// </summary>
         public void Flush()
         {
             throw new Exception("TO DO.");
         }
 
-        /// <summary>
-        /// Abandons the current session.
-        /// </summary>
-        public void Abandon()
-        {
-            Flush();
-        }
+
 
         /// <summary>
         /// Gets the type of the scope.
         /// </summary>
         /// <value>The type of the scope.</value>
-        public ScopeType ScopeType
+        public string ScopeType
         {
-            get { return ScopeType.Conversation; }
+            get { return Igloo.ScopeType.Conversation; }
         }
 
         #endregion
     }
 }
-

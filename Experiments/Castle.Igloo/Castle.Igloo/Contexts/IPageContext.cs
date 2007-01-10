@@ -18,17 +18,9 @@
  ********************************************************************************/
 #endregion
 
-using System.Web;
-
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Contexts
 {
-    public interface IHttpContextAccessor
+    public interface IPageScope : IScope
     {
-        /// <summary>
-        /// Gets the HTTP context.
-        /// </summary>
-        /// <value>The HTTP context.</value>
-        HttpContext HttpContext { get; }
-        
     }
 }

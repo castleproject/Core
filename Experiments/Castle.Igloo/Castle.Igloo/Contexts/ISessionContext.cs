@@ -18,31 +18,14 @@
  ********************************************************************************/
 #endregion
 
-using System.Collections;
-
 namespace Castle.Igloo.Contexts
 {
-    /// <summary>
-    /// Defines an object that represents the processing context for request-level operations.
-    /// </summary>
-    public interface IProcessContext
+    public interface ISessionScope : IScope
     {
-        /// <summary>
-        /// Gets the items.
-        /// </summary>
-        /// <value>The items.</value>
-        IDictionary Items { get; }
 
         /// <summary>
-        /// Gets the session.
+        /// Abandons the current session.
         /// </summary>
-        /// <value>The session.</value>
-        ISessionState Session { get; }
-
-        /// <summary>
-        /// Gets the state of the application.
-        /// </summary>
-        /// <value>The state of the application.</value>
-        IApplicationState ApplicationState { get; }
+        void Abandon();
     }
 }

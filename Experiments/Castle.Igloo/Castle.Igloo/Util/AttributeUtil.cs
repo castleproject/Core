@@ -30,31 +30,31 @@ namespace Castle.Igloo.Util
     public sealed class AttributeUtil
     {
         /// <summary>
-        /// Gets the <see cref="NoNavigationAttribute"/> on class.
+        /// Gets the <see cref="SkipNavigationAttribute"/> on class.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>The attribute</returns>
-        public static NoNavigationAttribute GetNoNavigationAttribute(Type type)
+        public static SkipNavigationAttribute GetSkipNavigationAttribute(Type type)
         {
-            NoNavigationAttribute attribute = Attribute.GetCustomAttribute(type, typeof(NoNavigationAttribute)) as NoNavigationAttribute;
+            SkipNavigationAttribute attribute = Attribute.GetCustomAttribute(type, typeof(SkipNavigationAttribute)) as SkipNavigationAttribute;
             if (attribute==null)
             {
-                attribute = Attribute.GetCustomAttribute(type, typeof(NoNavigationAttribute), true) as NoNavigationAttribute;
+                attribute = Attribute.GetCustomAttribute(type, typeof(SkipNavigationAttribute), true) as SkipNavigationAttribute;
             }
             return attribute;
         }
 
         /// <summary>
-        /// Gets the <see cref="NoNavigationAttribute"/> on method.
+        /// Gets the <see cref="SkipNavigationAttribute"/> on method.
         /// </summary>
         /// <param name="memberInfo">The <see cref="MemberInfo"/>.</param>
         /// <returns>The attribute</returns>
-        public static NoNavigationAttribute GetNoNavigationAttribute(MemberInfo memberInfo)
+        public static SkipNavigationAttribute GetSkipNavigationAttribute(MemberInfo memberInfo)
         {
-            NoNavigationAttribute attribute = Attribute.GetCustomAttribute(memberInfo, typeof(NoNavigationAttribute)) as NoNavigationAttribute;
+            SkipNavigationAttribute attribute = Attribute.GetCustomAttribute(memberInfo, typeof(SkipNavigationAttribute)) as SkipNavigationAttribute;
             if (attribute == null)
             {
-                attribute = Attribute.GetCustomAttribute(memberInfo, typeof(NoNavigationAttribute), true) as NoNavigationAttribute;
+                attribute = Attribute.GetCustomAttribute(memberInfo, typeof(SkipNavigationAttribute), true) as SkipNavigationAttribute;
             }
             return attribute;
         }

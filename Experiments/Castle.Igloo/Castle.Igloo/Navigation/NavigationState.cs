@@ -25,13 +25,13 @@ using Castle.Igloo.Configuration;
 namespace Castle.Igloo.Navigation
 {
     /// <summary>
-    /// Holds all the data to do the navigation
+    /// Contains data for processing navigation
     /// </summary>
     [Scope(Scope = ScopeType.Request)]
-    public sealed class NavigationContext
+    public sealed class NavigationState 
     {
         public const string NO_NAVIGATION = "\002NO_NAVIGATION\002";
-        public const string NAVIGATION_CONTEXT = "_NAVIGATION_CONTEXT_";
+        public const string NAVIGATION_STATE = "_NAVIGATION_STATE_";
 
         private string _currentView = string.Empty;
         private string _previousView = string.Empty;
@@ -39,9 +39,9 @@ namespace Castle.Igloo.Navigation
         private string _action = NO_NAVIGATION;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationContext"/> class.
+        /// Initializes a new instance of the <see cref="NavigationState"/> class.
         /// </summary>
-        public NavigationContext()
+        public NavigationState()
         {
             HttpContext currentContext = HttpContext.Current;
             if (currentContext != null)

@@ -45,11 +45,11 @@ namespace Castle.Igloo.Mock
         /// <summary>
         /// Gets the next view.
         /// </summary>
-        /// <param name="navigationContext">The navigation context.</param>
+        /// <param name="navigationState">The navigation context.</param>
         /// <returns>The view id</returns>
-        public string GetNextView(NavigationContext navigationContext)
+        public string GetNextView(NavigationState navigationState)
         {
-            return ConfigUtil.Settings.GetNextView(navigationContext.CurrentView, navigationContext.Action);
+            return ConfigUtil.Settings.GetNextView(navigationState.CurrentView, navigationState.Action);
         }
 
         #endregion

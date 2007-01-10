@@ -19,14 +19,17 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
-
+using System.Web;
 using Castle.Core.Configuration;
+using Castle.Igloo.Contexts;
+using Castle.Igloo.Contexts.Web;
 using Castle.Igloo.UI;
+using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
 using Castle.Igloo.UIComponents;
-using Castle.Igloo.Contexts;
 using Castle.Igloo.Controllers;
 using Castle.Igloo.Interceptors;
 
@@ -39,7 +42,7 @@ namespace Castle.Igloo
 	public class IglooFacility : AbstractFacility
 	{
 		private Assembly _assembly = null;
-
+        private IList<IHandler> _waitListHandlers = new List<IHandler>();
 
 		#region IFacility Members
 
@@ -61,25 +64,100 @@ namespace Castle.Igloo
 			{
 				_assembly =  Assembly.Load(factoriesConfig.Value) ;	
 			}
+
+            RegisterContributor();
+            Kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
+
+            // Added a Scope Registry to track scope instance
+            Kernel.AddComponent("scope.repository", typeof(IScopeRegistry),typeof(ScopeRegistry));
 			
             // Added a UIComponent Repository to track it
             Kernel.AddComponent("component.repository", typeof(UIComponentRepository));
-
-            // Added the navigation interceptor
-            Kernel.AddComponent("navigation.interceptor", typeof(NavigationInterceptor));
-
-            Kernel.ComponentModelBuilder.AddContributor(new ControllerInspector());
-            Kernel.ComponentModelBuilder.AddContributor(new ScopeInspector());
-            Kernel.ComponentModelBuilder.AddContributor(new BijectionInspector());
-
-            RegisterSubResolver();
             
+            RegisterInternaleScopes();
+            
+            // Added interceptors
+            Kernel.AddComponent("navigation.interceptor", typeof(NavigationInterceptor));
+            Kernel.AddComponent("bijection.interceptor", typeof(BijectionInterceptor));
+
             RegisterViewComponent();            
 		}
 
 		#endregion
 
-        private void RegisterViewComponent()
+        private void OnComponentRegistered(string key, IHandler handler)
+        {
+            bool isScope = typeof(IScope).IsAssignableFrom(handler.ComponentModel.Service);
+
+            if (isScope)
+            {
+                if (handler.CurrentState == HandlerState.WaitingDependency)
+                {
+                    _waitListHandlers.Add(handler);
+                }
+                else
+                {
+                    RegisterScope(handler.ComponentModel.Name);
+                }
+            }
+
+            CheckWaitingList();
+        }
+
+        /// For each new component registered,
+        /// some components in the WaitingDependency
+        /// state may have became valid, so we check them
+        private void CheckWaitingList()
+        {
+            IList<IHandler> handlersToRemove = new List<IHandler>();
+
+            foreach (IHandler handler in _waitListHandlers)
+            {
+                if (handler.CurrentState == HandlerState.Valid)
+                {
+                    RegisterScope(handler.ComponentModel.Name);
+                    handlersToRemove.Add(handler);
+                }
+            }
+            foreach (IHandler handler in handlersToRemove)
+            {
+               _waitListHandlers.Remove(handler);
+            }
+        }
+
+        private void RegisterScope(string scopeName)
+        {
+            IScopeRegistry scopeRegistry = (IScopeRegistry)Kernel[typeof(IScopeRegistry)];
+            IScope scope = (IScope)Kernel[scopeName];
+            scopeRegistry.RegisterScope(scopeName, scope);
+        }
+
+	    private void RegisterInternaleScopes()
+        {
+            // For unit test
+            HttpContext current = HttpContext.Current;
+            if (current != null)
+            {
+                Kernel.AddComponent(ScopeType.Application, typeof (IApplicationScope), typeof (WebApplicationScope));
+                Kernel.AddComponent(ScopeType.Page, typeof(IPageScope), typeof(WebPageScope));
+                Kernel.AddComponent(ScopeType.Request, typeof(IRequestScope), typeof(WebRequestScope));
+                Kernel.AddComponent(ScopeType.Session, typeof(ISessionScope), typeof(WebSessionScope));
+            }
+            else
+            {
+                // To do register Mock
+            }
+        }
+
+        private void RegisterContributor()
+        {
+            Kernel.ComponentModelBuilder.AddContributor(new ControllerInspector());
+            Kernel.ComponentModelBuilder.AddContributor(new ScopeInspector());
+            Kernel.ComponentModelBuilder.AddContributor(new BijectionInspector());
+            //Kernel.ComponentModelBuilder.AddContributor(new ScopeRegisterInspector());
+        }
+        
+	    private void RegisterViewComponent()
 		{
             UIComponentRepository repository = (UIComponentRepository)Kernel[typeof(UIComponentRepository)];
 
@@ -98,12 +176,6 @@ namespace Castle.Igloo
 				}				
 			}
 		}
-
-        private void RegisterSubResolver()
-        {
-            Kernel.Resolver.AddSubResolver(new ContextsResolver(Kernel));
-            Kernel.Resolver.AddSubResolver(new ContextResolver(Kernel));
-        }
 
 	}
 }

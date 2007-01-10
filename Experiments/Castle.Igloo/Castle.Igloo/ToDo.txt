@@ -3,6 +3,10 @@
 
 To Do
 ========
+- Gérer le ISessionContext comme des proxys de base et ne plus passer par IContexts
+- Faire un ScoppeInterceptor comme Spring
+- Permettre de rajouter des custom Scope et faire un bootsrap pour les ajouter comme spring
+
 - Gérer les Outject attribute
 - Renumer Iglu --> Iglue ?
 

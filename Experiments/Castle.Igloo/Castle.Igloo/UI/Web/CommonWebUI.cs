@@ -39,8 +39,6 @@ namespace Castle.Igloo.UI.Web
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         public static void WebUI_InjectComponent(object sender, EventArgs e)
         {
-            //Control control = (Control) sender;
-
             IWindsorContainer container = ContainerWebAccessorUtil.Container;
             UIComponentRepository repository = container.Resolve<UIComponentRepository>();
 
@@ -100,7 +98,7 @@ namespace Castle.Igloo.UI.Web
                     | BindingFlags.NonPublic);
                 StateBag statebag = propertyInfo.GetValue(webControl, null) as StateBag;
 
-                (control as IView).NavigationContext.Action = statebag["CommandName"] as string;
+                (control as IView).NavigationState.Action = statebag["CommandName"] as string;
             }
         }
 

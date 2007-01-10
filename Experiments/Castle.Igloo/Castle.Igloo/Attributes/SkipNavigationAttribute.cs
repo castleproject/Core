@@ -6,7 +6,7 @@ namespace Castle.Igloo.Attributes
     /// Specifies that a controller méthod must not declench a navigation to another view.
     /// </summary>
     [AttributeUsageAttribute( AttributeTargets.Class | AttributeTargets.Method )]
-    public class NoNavigationAttribute : Attribute 
+    public class SkipNavigationAttribute : Attribute 
     {
     }
 }

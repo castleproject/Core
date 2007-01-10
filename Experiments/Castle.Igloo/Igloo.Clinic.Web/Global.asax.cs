@@ -74,7 +74,7 @@ namespace Igloo.Clinic.Web
 
 		protected void Session_End(Object sender, EventArgs e)
 		{
-		    ScopeLifestyleModule.OnSessionEnd(this, e);
+            ScopeLifestyleModule.ReleaseSessionScopeComponent(this, e);
 		}
 
 		protected void Application_End(Object sender, EventArgs e)
