@@ -10,13 +10,13 @@ namespace Igloo.Clinic.Application
     public class PatientController : BaseController
     {
         private Doctor _doctor = null;
-        private IContext _pageContext = null;
-        private IList<Patient> _patients =null;
+        private IPageScope _pageScope = null;
+        private IList<Patient> _patients = null;
         private IPatientService _patientService = null;
-        
-        public IContext PageContext
+
+        public IPageScope PageScope
         {
-            set { _pageContext = value; }
+            set { _pageScope = value; }
         }
 
         [Inject(Name = "doctor")]
@@ -44,12 +44,12 @@ namespace Igloo.Clinic.Application
         /// Gets doctor's patient
         /// </summary>
         /// <returns></returns>
-        [NoNavigation]
+        [SkipNavigation]
         public virtual IList<Patient> RetrievePatients()
         {
             IList<Patient> patients = _patientService.RetrievePatients(_doctor);
-            
-            _pageContext.Add("Patients", patients);
+
+            _pageScope.Add("Patients", patients);
 
             return patients;
         }

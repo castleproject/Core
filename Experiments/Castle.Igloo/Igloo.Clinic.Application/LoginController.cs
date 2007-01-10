@@ -29,12 +29,12 @@ namespace Igloo.Clinic.Application
 {
     public class LoginController : BaseController
 	{
-        private IContext _sessionContext = null;
+        private ISessionScope _sessionScope = null;
         private IServiceAuthentification _serviceAuthentification = null;
 
-        public IContext SessionContext
+        public ISessionScope SessionScope
         {
-            set { _sessionContext = value; }
+            set { _sessionScope = value; }
         }
 
         /// <summary>
@@ -53,19 +53,34 @@ namespace Igloo.Clinic.Application
             {
                 // Add an object in the session context under the name "doctor"
                 // this object will be inject later
-                _sessionContext.Add("doctor", doctor);               
+                _sessionScope.Add("doctor", doctor);               
             }
             else
             {
-               navigationContext.Action = Castle.Igloo.Navigation.NavigationContext.NO_NAVIGATION;
-               messages.Add("unknown", "Unknown login or bad password");
+                navigationState.Action = Castle.Igloo.Navigation.NavigationState.NO_NAVIGATION;
+                flashMessages.Add("unknown", "Unknown login or bad password");
             }
             return (doctor != null);
 		}
-        
+
         public virtual void LogOut()
         {
-            _sessionContext.Abandon();
+            _sessionScope.Abandon();
+        }
+
+        public virtual bool Register(string name, string login, string passwd)
+        {
+            Doctor doctor = _serviceAuthentification.Validate(login, passwd);
+            if (doctor == null)
+            {
+                _serviceAuthentification.Register(name, login, passwd);
+            }
+            else
+            {
+                navigationState.Action = Castle.Igloo.Navigation.NavigationState.NO_NAVIGATION;
+                flashMessages.Add("ALREADY", "login already exists.");
+            }
+            return (doctor == null);
         }
 	}
 }
