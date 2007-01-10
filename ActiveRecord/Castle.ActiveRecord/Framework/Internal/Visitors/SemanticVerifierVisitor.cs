@@ -459,6 +459,25 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
 
+#if DOTNET2
+			// Guess the details about a map relation if needed
+			if (model.HasManyAtt.RelationType == RelationType.Map)
+			{
+				if (model.HasManyAtt.Table == null || model.HasManyAtt.Table == string.Empty)
+				{
+					model.HasManyAtt.Table = string.Format("{0}_{1}", model.Property.ReflectedType.Name, model.Property.Name);
+				}
+				if(model.HasManyAtt.IndexType == null)
+				{
+					model.HasManyAtt.IndexType = GetIndexTypeFromDictionary(model.Property.PropertyType).Name;
+				}
+				if (model.HasManyAtt.MapType == null)
+				{
+					model.HasManyAtt.MapType = GetMapTypeFromDictionary(model.Property.PropertyType);
+				}
+			}
+#endif
+
 			if (model.HasManyAtt.RelationType == RelationType.IdBag)
 			{
 				throw new ActiveRecordException(String.Format(
@@ -480,14 +499,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			String keyColumn = model.HasManyAtt.ColumnKey;
 			String[] compositeKeyColumnKeys = model.HasManyAtt.CompositeKeyColumnKeys;
 
-			Type type = GuessType(model.HasManyAtt.MapType, model.Property.PropertyType);
+			Type type = model.HasManyAtt.MapType;
 			ActiveRecordModel target = arCollection[type];
 
 			if ((table == null || (keyColumn == null && compositeKeyColumnKeys == null)) && target == null)
 			{
 				throw new ActiveRecordException(String.Format(
 					"ActiveRecord tried to infer details about the relation {0}.{1} but " +
-						"it could not find information about the specified target type {2}",
+						"it could not find information about the specified target type {2}. If you have mapped a Dictionary of value types, please make sure you have specified the Table property.",
 					model.Property.DeclaringType.Name, model.Property.Name, type));
 			}
 
@@ -762,6 +781,58 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			Type underlyingType = Nullable.GetUnderlyingType(type);
 			return underlyingType.AssemblyQualifiedName;
+		}
+#endif
+
+#if DOTNET2
+		/// <summary>
+		/// Gets the index type of a mapped dictionary.
+		/// </summary>
+		/// <param name="propertyType">Type of the property.</param>
+		/// <returns>The index type of a map element</returns>
+		public static Type GetIndexTypeFromDictionary(Type propertyType)
+			{
+			if (propertyType == null)
+				throw new ArgumentNullException("propertyType");
+
+			if (propertyType.IsGenericType == false)
+				throw new ArgumentException("The specified propertyType {0} is not generic", propertyType.Name);
+
+			if (typeof(IDictionary<,>).IsAssignableFrom(propertyType.GetGenericTypeDefinition()) == false)
+			{
+				throw new ArgumentException(
+					"ActiveRecord tried to infer details about the mapped property {0} but this isn't of the expected IDictionary<,> type.",
+					propertyType.Name);
+			}
+
+			Type[] arguments = propertyType.GetGenericArguments();
+			return arguments[0];
+		}
+#endif
+
+#if DOTNET2
+		/// <summary>
+		/// Gets the index type of a mapped dictionary.
+		/// </summary>
+		/// <param name="propertyType">Type of the property.</param>
+		/// <returns>The index type of a map element</returns>
+		public static Type GetMapTypeFromDictionary(Type propertyType)
+		{
+			if (propertyType == null)
+				throw new ArgumentNullException("propertyType");
+
+			if (propertyType.IsGenericType == false)
+				throw new ArgumentException("The specified propertyType {0} is not generic", propertyType.Name);
+
+			if (typeof(IDictionary<,>).IsAssignableFrom(propertyType.GetGenericTypeDefinition()) == false)
+			{
+				throw new ArgumentException(
+				"ActiveRecord tried to infer details about the mapped property {0} but this isn't of the expected IDictionary<,> type.",
+					propertyType.Name);
+			}
+
+			Type[] arguments = propertyType.GetGenericArguments();
+			return arguments[1];
 		}
 #endif
 	}
