@@ -41,5 +41,10 @@ namespace TestSiteNVelocity.Controllers
 		{
 			
 		}
+
+		public void StaticHelpers()
+		{
+			
+		}
 	}
 }

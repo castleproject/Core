@@ -348,8 +348,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		protected string ResolveTemplateName(string area, string templateName)
 		{
 			return String.Format("{0}{1}{2}",
-			                     area, Path.DirectorySeparatorChar,
-			                     ResolveTemplateName(templateName));
+								area, Path.DirectorySeparatorChar,
+								ResolveTemplateName(templateName));
 		}
 
 		protected virtual void BeforeMerge(VelocityEngine velocityEngine, Template template, IContext context)
@@ -409,6 +409,36 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				innerContext.Add(key, controller.Helpers[key]);
 			}
+
+#if DOTNET2
+			// list from : http://msdn2.microsoft.com/en-us/library/hfa3fa08.aspx
+			object[] builtInHelpers =
+				new object[]
+					{
+						new StaticAccessorHelper<Byte>(),
+						new StaticAccessorHelper<SByte>(),
+						new StaticAccessorHelper<Int16>(),
+						new StaticAccessorHelper<Int32>(),
+						new StaticAccessorHelper<Int64>(),
+						new StaticAccessorHelper<UInt16>(),
+						new StaticAccessorHelper<UInt32>(),
+						new StaticAccessorHelper<UInt64>(),
+						new StaticAccessorHelper<Single>(),
+						new StaticAccessorHelper<Double>(),
+						new StaticAccessorHelper<Boolean>(),
+						new StaticAccessorHelper<Char>(),
+						new StaticAccessorHelper<Decimal>(),
+//						new StaticAccessorHelper<IntPtr>(),
+//						new StaticAccessorHelper<UIntPtr>(),
+//						new StaticAccessorHelper<Object>(),
+						new StaticAccessorHelper<String>()
+					};
+
+			foreach (object helper in builtInHelpers)
+			{
+				innerContext.Add(helper.GetType().GetGenericArguments()[0].Name, helper);
+			}
+#endif
 
 			foreach(String key in context.Params.AllKeys)
 			{

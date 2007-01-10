@@ -4,6 +4,12 @@ Change history
 Release Candidate 3
 ===================
 
+- Added static accessor support to NVelocity view engine. Default helpers are 
+  the Common System Types in dotnet (i.e. Double, String, Decimal, etc.)
+  
+    In your template: $String.Concat("foo","bar","me","please:",$Double.Epsilon)
+    (dotnet 2 only.)
+
 - Added better ControllerBinder support for indexed property expressions.
    This allows you to pass DataKeys as your action arguments
 

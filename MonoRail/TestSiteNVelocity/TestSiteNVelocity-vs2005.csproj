@@ -229,6 +229,7 @@
     <None Include="views\formhelper\index.vm" />
     <None Include="views\formhelper\numbersonly.vm" />
     <None Include="views\formhelper\useparamstofillinputs.vm" />
+    <None Include="views\helper\StaticHelpers.vm" />
     <None Include="views\helper\DictHelperUsage.vm" />
     <None Include="views\home\display.vm" />
     <Content Include="views\jsgeneration\_partial1.vm" />

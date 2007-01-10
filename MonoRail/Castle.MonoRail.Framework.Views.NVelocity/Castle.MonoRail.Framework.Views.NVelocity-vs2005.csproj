@@ -117,6 +117,7 @@
     <Compile Include="CustomDirectives\SubSectionDirective.cs" />
     <Compile Include="CustomResourceManager.cs" />
     <Compile Include="CustomTemplate.cs" />
+    <Compile Include="Helpers\StaticAccessorHelper.cs" />
     <Compile Include="JSGeneration\JSCollectionGeneratorDuck.cs" />
     <Compile Include="JSGeneration\JSElementGeneratorDuck.cs" />
     <Compile Include="JSGeneration\JSGeneratorDuck.cs" />
