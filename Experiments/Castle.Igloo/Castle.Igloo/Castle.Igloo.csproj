@@ -112,18 +112,18 @@
     <Compile Include="Attributes\OutjectAttribute.cs" />
     <Compile Include="Attributes\ScopeAttribute.cs" />
     <Compile Include="BijectionInspector.cs" />
-    <Compile Include="Contexts\IApplicationContext.cs" />
-    <Compile Include="Contexts\IPageContext.cs" />
-    <Compile Include="Contexts\IRequestContext.cs" />
+    <Compile Include="Contexts\IApplicationScope.cs" />
+    <Compile Include="Contexts\IPageScope.cs" />
+    <Compile Include="Contexts\IRequestScope.cs" />
     <Compile Include="Contexts\IScopeRegistry.cs" />
-    <Compile Include="Contexts\ISessionContext.cs" />
+    <Compile Include="Contexts\ISessionScope.cs" />
     <Compile Include="Contexts\ScopeRegisterInspector.cs" />
     <Compile Include="Contexts\ScopeRegistry.cs" />
-    <Compile Include="Contexts\Web\WebApplicationContext.cs" />
-    <Compile Include="Contexts\Web\WebConversationContext.cs" />
-    <Compile Include="Contexts\Web\WebPageContext.cs" />
-    <Compile Include="Contexts\Web\WebRequestContext.cs" />
-    <Compile Include="Contexts\Web\WebSessionContext.cs" />
+    <Compile Include="Contexts\Web\WebApplicationScope.cs" />
+    <Compile Include="Contexts\Web\WebConversationScope.cs" />
+    <Compile Include="Contexts\Web\WebPageScope.cs" />
+    <Compile Include="Contexts\Web\WebRequestScope.cs" />
+    <Compile Include="Contexts\Web\WebSessionScope.cs" />
     <Compile Include="IglooFacility.cs" />
     <Compile Include="Interceptors\BijectionInterceptor.cs" />
     <Compile Include="LifestyleManager\Candidate.cs" />
@@ -146,7 +146,7 @@
     </Compile>
     <Compile Include="Contexts\Web\WebConversationManager.cs" />
     <Compile Include="Contexts\IConversationManager.cs" />
-    <Compile Include="Contexts\IContext.cs" />
+    <Compile Include="Contexts\IScope.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControllerInspector.cs" />
     <Compile Include="Controllers\IController.cs">
