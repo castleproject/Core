@@ -15,6 +15,7 @@
 namespace Castle.Components.Binder
 {
 	using System;
+	using Castle.Components.Validator;
 
 	public delegate void BinderHandler(object instance, String prefix, Node node);
 
@@ -87,6 +88,12 @@ namespace Castle.Components.Binder
 		/// Exposes the <see cref="IConverter"/> implementation
 		/// </summary>
 		IConverter Converter { get; set; }
+
+		/// <summary>
+		/// Gets or sets the validator runner instance.
+		/// </summary>
+		/// <value>The validator instance.</value>
+		ValidatorRunner Validator { get; set; }
 		
 		/// <summary>
 		/// Invoked before the data binder implementation starts to

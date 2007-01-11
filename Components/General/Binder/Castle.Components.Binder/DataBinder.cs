@@ -19,9 +19,9 @@ namespace Castle.Components.Binder
 	using System.ComponentModel;
 	using System.Reflection;
 	using System.Web;
-	
+	using Castle.Components.Validator;
 	using Castle.Core;
-	
+
 	/// <summary>
 	/// </summary>
 	[Serializable]
@@ -31,6 +31,8 @@ namespace Castle.Components.Binder
 			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 		private IConverter converter = new DefaultConverter();
+
+		private ValidatorRunner validator;
 
 		/// <summary>Collect the databind errors</summary>
 		protected IList errors;
@@ -50,22 +52,21 @@ namespace Castle.Components.Binder
 		}
 
 		#region IServiceEnabledComponent
-		
+
 		public void Service(IServiceProvider provider)
 		{
-			
 		}
 
 		#endregion
-		
+
 		#region IDataBinder
-		
+
 		public bool CanBindParameter(Type desiredType, String paramName, CompositeNode treeRoot)
 		{
 			bool canConvert;
-			
+
 			Node childNode = treeRoot.GetChildNode(paramName);
-			
+
 			if (childNode != null)
 			{
 				canConvert = true;
@@ -78,22 +79,22 @@ namespace Castle.Components.Binder
 			{
 				canConvert = false;
 			}
-			
+
 			return canConvert;
 		}
-		
+
 		public bool CanBindObject(Type targetType, String prefix, CompositeNode treeRoot)
 		{
 			Node childNode = treeRoot.GetChildNode(prefix);
-			
+
 			return childNode != null;
 		}
-		
+
 		public object BindParameter(Type desiredType, String paramName, CompositeNode treeRoot)
 		{
 			bool conversionSucceeded;
 			object result;
-			
+
 			try
 			{
 				if (desiredType.IsArray)
@@ -111,10 +112,11 @@ namespace Castle.Components.Binder
 			{
 				// Something unexpected during convertion
 				// throw new exception with paramName specified
-				
-				throw new BindingException("Exception converting param '" + paramName + "' to " + desiredType + ". Check inner exception for details", ex);
+
+				throw new BindingException(
+					"Exception converting param '" + paramName + "' to " + desiredType + ". Check inner exception for details", ex);
 			}
-			
+
 			return result;
 		}
 
@@ -144,7 +146,8 @@ namespace Castle.Components.Binder
 			BindObjectInstance(instance, prefix, null, null, treeRoot);
 		}
 
-		public void BindObjectInstance(object instance, string prefix, string excludedProperties, string allowedProperties, CompositeNode treeRoot)
+		public void BindObjectInstance(object instance, string prefix, string excludedProperties, string allowedProperties,
+		                               CompositeNode treeRoot)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 			if (prefix == null) throw new ArgumentNullException("prefix");
@@ -158,7 +161,7 @@ namespace Castle.Components.Binder
 
 			InternalRecursiveBindObjectInstance(instance, prefix, treeRoot.GetChildNode(prefix));
 		}
-		
+
 		/// <summary>
 		/// Represents the databind errors
 		/// </summary>
@@ -173,6 +176,12 @@ namespace Castle.Components.Binder
 			set { converter = value; }
 		}
 
+		public ValidatorRunner Validator
+		{
+			get { return validator; }
+			set { validator = value; }
+		}
+
 		public IBinderTranslator Translator
 		{
 			get { return binderTranslator; }
@@ -183,7 +192,7 @@ namespace Castle.Components.Binder
 		public event BinderHandler OnAfterBinding;
 
 		#endregion
-		
+
 		#region Implementation
 
 		protected object InternalBindObject(Type instanceType, String paramPrefix, Node node)
@@ -225,12 +234,14 @@ namespace Castle.Components.Binder
 		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, Node node)
 		{
 			if (node == null) return;
-			
+
 			if (node.NodeType != NodeType.Composite && node.NodeType != NodeType.Indexed)
 			{
-				throw new BindingException("Non-composite node passed to InternalRecursiveBindObjectInstance while binding {0} with prefix {1}", instance, prefix);
+				throw new BindingException(
+					"Non-composite node passed to InternalRecursiveBindObjectInstance while binding {0} with prefix {1}", instance,
+					prefix);
 			}
-			
+
 			InternalRecursiveBindObjectInstance(instance, prefix, (CompositeNode) node);
 		}
 
@@ -261,6 +272,15 @@ namespace Castle.Components.Binder
 				Type propType = prop.PropertyType;
 				String paramName = prop.Name;
 
+				String translatedParamName = Translate(instanceType, paramName);
+
+				if (translatedParamName == null) continue;
+
+				if (CheckForValidationFailures(instance, instanceType, prop, node, translatedParamName, prefix))
+				{
+					continue;
+				}
+
 				try
 				{
 					bool conversionSucceeded;
@@ -268,10 +288,6 @@ namespace Castle.Components.Binder
 					if (IsSimpleProperty(propType))
 					{
 						if (!prop.CanWrite) continue;
-						
-						String translatedParamName = Translate(instanceType, paramName);
-
-						if (translatedParamName == null) continue;
 
 						object value = ConvertToSimpleValue(propType, translatedParamName, node, out conversionSucceeded);
 
@@ -280,7 +296,7 @@ namespace Castle.Components.Binder
 							prop.SetValue(instance, value, null);
 						}
 					}
-					else 
+					else
 					{
 						Node nestedNode = node.GetChildNode(paramName);
 
@@ -292,7 +308,7 @@ namespace Castle.Components.Binder
 							if (ShouldRecreateInstance(value, propType, paramName, nestedNode))
 							{
 								value = InternalBindObject(propType, paramName, nestedNode, out conversionSucceeded);
-								
+
 								if (conversionSucceeded)
 								{
 									prop.SetValue(instance, value, null);
@@ -315,7 +331,31 @@ namespace Castle.Components.Binder
 
 			AfterBinding(instance, prefix, node);
 		}
-		
+
+		protected bool CheckForValidationFailures(object instance, Type instanceType, PropertyInfo prop, CompositeNode node, string name, string prefix)
+		{
+			bool hasFailure = false;
+
+			if (validator != null)
+			{
+				IValidator[] validators = validator.GetValidators(instanceType, prop);
+
+				foreach(IValidator validatorItem in validators)
+				{
+					bool conversionSucceeded;
+					string value = (string) ConvertToSimpleValue(typeof(string), name, node, out conversionSucceeded);
+					
+					if (conversionSucceeded && !validatorItem.IsValid(instance, value))
+					{
+						errors.Add(new DataBindError(prefix, prop.Name, validatorItem.ErrorMessage));
+						hasFailure = true;
+					}
+				}
+			}
+
+			return hasFailure;
+		}
+
 		protected int StackDepth
 		{
 			get { return instanceStack.Count; }
@@ -339,15 +379,15 @@ namespace Castle.Components.Binder
 			{
 				return Array.CreateInstance(instanceType.GetElementType(), 0);
 			}
-			
+
 			return ConvertToArray(instanceType, paramPrefix, node, out succeeded);
 		}
-		
+
 #if DOTNET2
-		
+
 		internal static bool IsGenericList(Type instanceType)
 		{
-			if (!instanceType.IsGenericType )
+			if (!instanceType.IsGenericType)
 			{
 				return false;
 			}
@@ -357,7 +397,7 @@ namespace Castle.Components.Binder
 			}
 
 			Type[] genericArgs = instanceType.GetGenericArguments();
-			
+
 			if (genericArgs.Length == 0)
 			{
 				return false;
@@ -365,7 +405,7 @@ namespace Castle.Components.Binder
 			Type listType = typeof(System.Collections.Generic.IList<>).MakeGenericType(genericArgs[0]);
 			return listType.IsAssignableFrom(instanceType);
 		}
-		
+
 		private object InternalBindGenericList(Type instanceType, string paramPrefix, Node node, out bool succeeded)
 		{
 			succeeded = false;
@@ -389,7 +429,7 @@ namespace Castle.Components.Binder
 		}
 
 		#endregion
-		
+
 		#region Overridables
 
 		protected virtual void AfterBinding(object instance, String prefix, Node node)
@@ -429,7 +469,7 @@ namespace Castle.Components.Binder
 		{
 			return false;
 		}
-		
+
 		/// <summary>
 		/// Implementations will bound the instance itself.
 		/// <seealso cref="IsSpecialType"/>
@@ -441,11 +481,11 @@ namespace Castle.Components.Binder
 		/// <param name="prefix"></param>
 		/// <param name="node"></param>
 		/// <param name="succeeded"></param>
-		protected virtual object BindSpecialObjectInstance(Type instanceType, String prefix, 
-		                                                 Node node, out bool succeeded)
+		protected virtual object BindSpecialObjectInstance(Type instanceType, String prefix,
+		                                                   Node node, out bool succeeded)
 		{
 			succeeded = false;
-			
+
 			return null;
 		}
 
@@ -463,18 +503,18 @@ namespace Castle.Components.Binder
 		}
 
 		#endregion
-		
+
 		protected object ConvertLeafNode(Type desiredType, LeafNode lNode, out bool conversionSucceeded)
 		{
 			return Converter.Convert(desiredType, lNode.ValueType, lNode.Value, out conversionSucceeded);
 		}
-		
+
 		private object ConvertToSimpleValue(Type desiredType, string key, CompositeNode parent, out bool conversionSucceeded)
 		{
 			conversionSucceeded = false;
-			
+
 			Node childNode = parent.GetChildNode(key);
-				
+
 			if (childNode == null && IsDateTimeType(desiredType))
 			{
 				return TrySpecialDateTimeBinding(desiredType, parent, key, out conversionSucceeded);
@@ -489,7 +529,7 @@ namespace Castle.Components.Binder
 			}
 			else
 			{
-				throw new BindingException("Could not convert param as the node related " + 
+				throw new BindingException("Could not convert param as the node related " +
 				                           "to the param is not a leaf node. Param {0} parent node: {1}", key, parent.Name);
 			}
 		}
@@ -497,7 +537,7 @@ namespace Castle.Components.Binder
 		private object ConvertToArray(Type desiredType, String key, Node node, out bool conversionSucceeded)
 		{
 			Type elemType = desiredType.GetElementType();
-			
+
 			if (node == null)
 			{
 				conversionSucceeded = false;
@@ -506,13 +546,13 @@ namespace Castle.Components.Binder
 			else if (node.NodeType == NodeType.Leaf)
 			{
 				LeafNode leafNode = node as LeafNode;
-					
+
 				return Converter.Convert(desiredType, leafNode.ValueType, leafNode.Value, out conversionSucceeded);
 			}
 			else if (node.NodeType == NodeType.Indexed)
 			{
 				IndexedNode indexedNode = node as IndexedNode;
-				
+
 				if (IsSimpleProperty(elemType))
 				{
 					return ConvertFlatNodesToArray(desiredType, indexedNode.ChildNodes, out conversionSucceeded);
@@ -524,8 +564,8 @@ namespace Castle.Components.Binder
 			}
 			else
 			{
-				throw new BindingException("Could not convert param to array as the node related " + 
-					"to the param is not a leaf node nor an indexed node. Key {0}", key);
+				throw new BindingException("Could not convert param to array as the node related " +
+				                           "to the param is not a leaf node nor an indexed node. Key {0}", key);
 			}
 		}
 
@@ -541,24 +581,24 @@ namespace Castle.Components.Binder
 		private ArrayList ConvertComplexNodesToList(Type elemType, IndexedNode parent, out bool conversionSucceeded)
 		{
 			conversionSucceeded = true;
-			
+
 			ArrayList validItems = new ArrayList();
-			
+
 			foreach(Node node in parent.ChildNodes)
 			{
 				if (node.NodeType == NodeType.Composite)
 				{
 					CompositeNode lnode = node as CompositeNode;
-					
+
 					validItems.Add(InternalBindObject(elemType, parent.Name, lnode, out conversionSucceeded));
-					
+
 					if (!conversionSucceeded)
 					{
 						break;
 					}
 				}
 			}
-			
+
 			return validItems;
 		}
 
@@ -583,28 +623,29 @@ namespace Castle.Components.Binder
 				{
 					throw new BindingException("Unexpected non-flat node found: {0}", node.Name);
 				}
-				
+
 				if (node.NodeType == NodeType.Leaf)
 				{
 					LeafNode lnode = node as LeafNode;
-					
+
 					validItems.Add(ConvertLeafNode(elemType, lnode, out conversionSucceeded));
-					
+
 					if (!conversionSucceeded)
 					{
 						break;
 					}
 				}
 			}
-			
+
 			return validItems;
 		}
 
 #if DOTNET2
+
 		private object ConvertToGenericList(Type desiredType, String key, Node node, out bool conversionSucceeded)
 		{
 			Type[] genericArgs = desiredType.GetGenericArguments();
-			
+
 			if (genericArgs.Length == 0)
 			{
 				throw new BindingException("Can't infer the Generics placeholders (type parameters). Key {0}.", key);
@@ -639,8 +680,8 @@ namespace Castle.Components.Binder
 				}
 
 				IList target = (IList) CreateInstance(desiredType, key, node);
-				
-				foreach (object elem in convertedNodes)
+
+				foreach(object elem in convertedNodes)
 				{
 					target.Add(elem);
 				}
@@ -650,34 +691,34 @@ namespace Castle.Components.Binder
 			else
 			{
 				throw new BindingException("Could not convert param to generic list as the node related " +
-					"to the param is not a leaf node nor an indexed node. Key {0}", key);
+				                           "to the param is not a leaf node nor an indexed node. Key {0}", key);
 			}
 		}
 #endif
-		
-		private object TrySpecialDateTimeBinding(Type desiredType, CompositeNode treeRoot, 
+
+		private object TrySpecialDateTimeBinding(Type desiredType, CompositeNode treeRoot,
 		                                         String paramName, out bool conversionSucceeded)
 		{
 			Node dayNode = treeRoot.GetChildNode(paramName + "day");
 			Node monthNode = treeRoot.GetChildNode(paramName + "month");
 			Node yearNode = treeRoot.GetChildNode(paramName + "year");
-			
+
 			Node hourNode = treeRoot.GetChildNode(paramName + "hour");
 			Node minuteNode = treeRoot.GetChildNode(paramName + "minute");
 			Node secondNode = treeRoot.GetChildNode(paramName + "second");
-			
+
 			if (dayNode != null)
 			{
 				int day = (int) RelaxedConvertLeafNode(typeof(int), dayNode, 0);
 				int month = (int) RelaxedConvertLeafNode(typeof(int), monthNode, 0);
 				int year = (int) RelaxedConvertLeafNode(typeof(int), yearNode, 0);
-				
+
 				int hour = (int) RelaxedConvertLeafNode(typeof(int), hourNode, 0);
 				int minute = (int) RelaxedConvertLeafNode(typeof(int), minuteNode, 0);
 				int second = (int) RelaxedConvertLeafNode(typeof(int), secondNode, 0);
-				
+
 				conversionSucceeded = true;
-					
+
 				DateTime dt = new DateTime(year, month, day, hour, minute, second);
 
 				if (desiredType.Name == "NullableDateTime")
@@ -686,10 +727,10 @@ namespace Castle.Components.Binder
 
 					return typeConverter.ConvertFrom(dt);
 				}
-				
+
 				return dt;
 			}
-			
+
 			conversionSucceeded = false;
 			return null;
 		}
@@ -697,16 +738,16 @@ namespace Castle.Components.Binder
 		private object RelaxedConvertLeafNode(Type desiredType, Node node, object defaultValue)
 		{
 			if (node == null) return defaultValue;
-			
+
 			if (node.NodeType != NodeType.Leaf)
 			{
 				throw new BindingException("Expected LeafNode, found {0} named {1}", node.NodeType, node.Name);
 			}
-			
+
 			bool conversionSucceeded;
-			
+
 			object result = ConvertLeafNode(desiredType, (LeafNode) node, out conversionSucceeded);
-			
+
 			return conversionSucceeded ? result : defaultValue;
 		}
 
@@ -730,15 +771,15 @@ namespace Castle.Components.Binder
 #endif
 			return false;
 		}
-		
+
 		#region Support methods
-		
+
 		protected object InstanceOnStack
 		{
 			get
 			{
 				if (instanceStack.Count == 0) return null;
-				
+
 				return instanceStack.Peek();
 			}
 		}
@@ -792,14 +833,14 @@ namespace Castle.Components.Binder
 				return false;
 			}
 
-			bool isSimple = propType.IsPrimitive || 
-			                propType.IsEnum || 
-			                propType == typeof(String) || 
-			                propType == typeof(Guid) || 
-			                propType == typeof(DateTime) || 
-			                propType == typeof(Decimal) || 
+			bool isSimple = propType.IsPrimitive ||
+			                propType.IsEnum ||
+			                propType == typeof(String) ||
+			                propType == typeof(Guid) ||
+			                propType == typeof(DateTime) ||
+			                propType == typeof(Decimal) ||
 			                propType == typeof(HttpPostedFile);
-			
+
 			if (isSimple) return true;
 
 			TypeConverter tconverter = TypeDescriptor.GetConverter(propType);

@@ -123,6 +123,9 @@
     <Compile Include="TreeBuilderRegressionTestCase.cs" />
     <Compile Include="TreeBuilderTestCase.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Castle.Components.Binder.Tests.build" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

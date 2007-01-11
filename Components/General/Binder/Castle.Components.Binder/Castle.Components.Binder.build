@@ -9,10 +9,11 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
-		<property name="assembly.version" value="0.0.1.0" />
+		<property name="assembly.version" value="0.0.1.1" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
+			<include name="Castle.Components.Validator.dll" />
 			<include name="System.Data.dll" />
 			<include name="System.Web.dll" />
 		</assemblyfileset>

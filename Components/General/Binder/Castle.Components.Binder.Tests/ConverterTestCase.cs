@@ -54,7 +54,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsTrue(convSucceed);
 			
 			Assert.AreEqual(null, Convert(typeof(string), ""));
-			Assert.IsFalse(convSucceed);
+			Assert.IsTrue(convSucceed);
 		}
 
 		[Test]

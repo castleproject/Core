@@ -20,48 +20,90 @@ namespace Castle.Components.Binder
 	/// Represents an error that occurred when trying to 
 	/// databind a property of an instance.
 	/// </summary>
+	[Serializable]
 	public class DataBindError
 	{
-		private readonly String parent;
-		private readonly String property;
-		private readonly Exception exception;
+		private readonly string parent, property, errorMessage;
 
-		public DataBindError(String parent, String property) : this(parent, property, null)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataBindError"/> class.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
+		/// <param name="property">The property.</param>
+		public DataBindError(String parent, String property) : this(parent, property, "")
 		{
 		}
 
-		public DataBindError(String parent, String property, Exception exception)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataBindError"/> class.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
+		/// <param name="property">The property.</param>
+		/// <param name="exception">The exception.</param>
+		public DataBindError(String parent, String property, Exception exception) : this(parent, property, exception.Message)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataBindError"/> class.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
+		/// <param name="property">The property.</param>
+		/// <param name="errorMessage">The error message.</param>
+		public DataBindError(String parent, String property, String errorMessage)
 		{
 			this.parent = parent;
 			this.property = property;
-			this.exception = exception;
+			this.errorMessage = errorMessage;
 		}
 
+		/// <summary>
+		/// Gets the key.
+		/// </summary>
+		/// <value>The key.</value>
 		public String Key
 		{
 			get { return parent + "." + Property; }
 		}
 
+		/// <summary>
+		/// Gets the parent.
+		/// </summary>
+		/// <value>The parent.</value>
 		public String Parent
 		{
 			get { return parent; }
 		}
 
+		/// <summary>
+		/// Gets the property.
+		/// </summary>
+		/// <value>The property.</value>
 		public String Property
 		{
 			get { return property; }
 		}
 
-		public Exception Exception
+		/// <summary>
+		/// Gets the error message.
+		/// </summary>
+		/// <value>The error message.</value>
+		public String ErrorMessage
 		{
-			get { return exception; }
+			get { return errorMessage; }
 		}
 
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
 		public override String ToString()
 		{
-			if (Exception != null)
+			if (errorMessage != null && errorMessage != String.Empty)
 			{
-				return Exception.Message;
+				return errorMessage;
 			}
 
 			return "BindError." + Key;

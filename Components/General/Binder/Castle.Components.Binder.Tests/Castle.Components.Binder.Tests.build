@@ -16,6 +16,7 @@
 			<include name="Nullables.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.Components.Binder.dll" />
+			<include name="Castle.Components.Validator.dll" />
 			<include name="System.Data.dll" />
 			<include name="System.Web.dll" />
 		</assemblyfileset>

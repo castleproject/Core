@@ -20,10 +20,15 @@ namespace Castle.Components.Binder
 	/// <summary>
 	/// A useful representation of a set of IPropertyError instances.
 	/// </summary>
+	[Serializable]
 	public class ErrorList : ICollection
 	{
 		private readonly SortedList entries = new SortedList();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ErrorList"/> class.
+		/// </summary>
+		/// <param name="initialContents">The initial contents.</param>
 		public ErrorList(IList initialContents)
 		{
 			IList list = (initialContents != null ? initialContents : new ArrayList(0));
@@ -34,16 +39,32 @@ namespace Castle.Components.Binder
 			}
 		}
 
+		/// <summary>
+		/// Gets the number of elements contained in the <see cref="T:System.Collections.ICollection"></see>.
+		/// </summary>
+		/// <value></value>
+		/// <returns>The number of elements contained in the <see cref="T:System.Collections.ICollection"></see>.</returns>
 		public int Count
 		{
 			get { return entries.Count; }
 		}
 
+		/// <summary>
+		/// Determines whether [contains] [the specified property].
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <returns>
+		/// 	<c>true</c> if [contains] [the specified property]; otherwise, <c>false</c>.
+		/// </returns>
 		public bool Contains(String property)
 		{
 			return entries.Contains(property);
 		}
 
+		/// <summary>
+		/// Gets the <see cref="Castle.Components.Binder.DataBindError"/> with the specified property.
+		/// </summary>
+		/// <value></value>
 		public DataBindError this[String property]
 		{
 			get { return entries[property] as DataBindError; }
