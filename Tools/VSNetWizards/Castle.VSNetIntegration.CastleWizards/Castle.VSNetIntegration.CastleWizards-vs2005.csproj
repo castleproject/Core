@@ -186,6 +186,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Panels\NHIntegrationPanel.resx">
       <DependentUpon>NHIntegrationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shared\Dialogs\WizardDialog.resx">
       <DependentUpon>WizardDialog.cs</DependentUpon>

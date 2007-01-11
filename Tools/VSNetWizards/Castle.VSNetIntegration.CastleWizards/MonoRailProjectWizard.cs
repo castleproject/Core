@@ -252,14 +252,14 @@ namespace Castle.VSNetIntegration.CastleWizards
 			XmlNode configSectionsNode = webConfigDoc.SelectSingleNode("configuration/configSections");
 			XmlElement castleSectionElem = webConfigDoc.CreateElement("section");
 
-			castleSectionElem.SetAttribute("name", "Brail");
+			castleSectionElem.SetAttribute("name", "brail");
 			castleSectionElem.SetAttribute("type", "Castle.MonoRail.Views.Brail.BrailConfigurationSection, Castle.MonoRail.Views.Brail");
 
 			configSectionsNode.AppendChild(castleSectionElem);
 
 			XmlComment comment = webConfigDoc.CreateComment("For more on Brail " + 
 				"configuration see http://www.castleproject.org/index.php/MonoRail:Brail#Configuring_Brail:");
-			XmlElement brailElem = webConfigDoc.CreateElement("Brail");
+			XmlElement brailElem = webConfigDoc.CreateElement("brail");
 
 			brailElem.SetAttribute("debug", "false");
 			brailElem.SetAttribute("saveToDisk", "false");
@@ -326,8 +326,8 @@ namespace Castle.VSNetIntegration.CastleWizards
 			}
 			else if (optionsPanel.VeBrail)
 			{
-				viewFile = "index.boo";
-				viewTemplateFile = Context.GetTemplateFileName(@"CSharp\MRProject\index.boo");
+				viewFile = "index.brail";
+				viewTemplateFile = Context.GetTemplateFileName(@"CSharp\MRProject\index.brail");
 			}
 			else
 			{
@@ -352,8 +352,8 @@ namespace Castle.VSNetIntegration.CastleWizards
 			}
 			else if (optionsPanel.VeBrail)
 			{
-				viewFile = "generalerror.boo";
-				viewTemplateFile = Context.GetTemplateFileName(@"CSharp\MRProject\rescue_default.boo");
+				viewFile = "generalerror.brail";
+				viewTemplateFile = Context.GetTemplateFileName(@"CSharp\MRProject\rescue_default.brail");
 			}
 			else
 			{
@@ -378,8 +378,8 @@ namespace Castle.VSNetIntegration.CastleWizards
 			}
 			else if (optionsPanel.VeBrail)
 			{
-				viewFile = "default.boo";
-				viewTemplateFile = Context.GetTemplateFileName(@"CSharp\MRProject\layout_default.boo");
+				viewFile = "default.brail";
+				viewTemplateFile = Context.GetTemplateFileName(@"CSharp\MRProject\layout_default.brail");
 			}
 			else
 			{

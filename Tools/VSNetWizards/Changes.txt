@@ -1,5 +1,8 @@
 RC 3
 ====
+- Templates for brail now use the .brail extension
+
+- Updated list of forbidden to download file to include .vm, .njs, .brail, .brailjs, .st
 
 - Applied patch by Andrew Peters fixing CASTLE-18
   "PATCH: VS.NET Create MonoRail Project wizard fails 
