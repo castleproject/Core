@@ -20,7 +20,7 @@
 
 using Castle.Igloo.Attributes;
 
-namespace Castle.Igloo.Contexts
+namespace Castle.Igloo.Scopes
 {
     /// <summary>
     /// Register all <see cref="IScope"/> component

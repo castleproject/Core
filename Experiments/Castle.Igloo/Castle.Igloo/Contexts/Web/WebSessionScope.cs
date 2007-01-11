@@ -20,11 +20,12 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Diagnostics;
-using Castle.Igloo.Contexts;
+using Castle.Igloo.Scopes;
 using Castle.Igloo.Util;
 
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Scopes.Web
 {
     /// <summary>
     /// Represents a session context, acts as a proxy to the <see cref="ISessionScope"/>.
@@ -32,7 +33,11 @@ namespace Castle.Igloo.Contexts.Web
     //[Scope(Scope = ScopeType.Application)]
     public sealed class WebSessionScope : ISessionScope
     {
+        public const string SESSION_SCOPE_SUFFIX = "session.scope.";
         public const string SESSION_INVALID = "_SESSION_INVALID_";
+        private const string COMPONENT_NAMES = "_COMPONENT_NAMES_";
+
+
 
         #region ISessionContext Members
 
@@ -51,16 +56,7 @@ namespace Castle.Igloo.Contexts.Web
         /// <value></value>
         public object this[string name]
         {
-            get { return WebUtil.GetCurrentHttpContext().Session[name]; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="Object"/> with the specified type.
-        /// </summary>
-        /// <value></value>
-        public object this[Type clazz]
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return WebUtil.GetCurrentHttpContext().Session[ SESSION_SCOPE_SUFFIX + name]; }
         }
 
         /// <summary>
@@ -70,9 +66,9 @@ namespace Castle.Igloo.Contexts.Web
         /// <param name="value">The Object to use as the value of the element to add.</param>
         public void Add(string name, object value)
         {
-            Trace.WriteLine("Add to session Context : " + name);
-
-            WebUtil.GetCurrentHttpContext().Session.Add(name, value);
+            Trace.WriteLine("Add to session scope : " + name);
+            ComponentNames.Add(name);
+            WebUtil.GetCurrentHttpContext().Session.Add( SESSION_SCOPE_SUFFIX + name, value);
         }
 
         /// <summary>
@@ -81,9 +77,9 @@ namespace Castle.Igloo.Contexts.Web
         /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
-            Trace.WriteLine("Remove from session Context : " + name);
-
-            WebUtil.GetCurrentHttpContext().Session.Remove(name);
+            Trace.WriteLine("Remove from session scope : " + name);
+            ComponentNames.Remove(name);
+            WebUtil.GetCurrentHttpContext().Session.Remove(SESSION_SCOPE_SUFFIX + name);
         }
 
         /// <summary>
@@ -93,17 +89,7 @@ namespace Castle.Igloo.Contexts.Web
         /// <returns></returns>
         public bool Contains(string name)
         {
-            IEnumerator enumerator = WebUtil.GetCurrentHttpContext().Session.Keys.GetEnumerator();
-            while ( enumerator.MoveNext() )
-            {
-                 string key = (string) enumerator.Current;
-                if (key==name)
-                {
-                    return true;
-                }
-            }
-            
-            return false;
+            return ComponentNames.Contains(name);
         }
 
         /// <summary>
@@ -112,7 +98,7 @@ namespace Castle.Igloo.Contexts.Web
         /// <value>The names.</value>
         public ICollection Names
         {
-            get {  return WebUtil.GetCurrentHttpContext().Session.Keys; }
+            get { return ComponentNames; }
         }
 
         /// <summary>
@@ -120,9 +106,16 @@ namespace Castle.Igloo.Contexts.Web
         /// </summary>
         public void Flush()
         {
-            Trace.WriteLine("Flush session Context.");
+            Trace.WriteLine("Flush session scope.");
 
-            WebUtil.GetCurrentHttpContext().Session.Clear();
+            StringCollection toRemove = new StringCollection();
+            StringCollection names = (StringCollection)WebUtil.GetCurrentHttpContext().Items[COMPONENT_NAMES];
+            foreach (string name in names)
+            {
+                WebUtil.GetCurrentHttpContext().Session.Remove(SESSION_SCOPE_SUFFIX + name);
+                toRemove.Remove(name);
+            }
+            names.Clear();
         }
 
         /// <summary>
@@ -131,7 +124,7 @@ namespace Castle.Igloo.Contexts.Web
         public void Abandon()
         {
             // Mark Session as invalid
-            Add(SESSION_INVALID, true);
+            WebUtil.GetCurrentHttpContext().Session.Add(SESSION_INVALID, true);
         }
 
         /// <summary>
@@ -144,5 +137,19 @@ namespace Castle.Igloo.Contexts.Web
         }
 
         #endregion
+
+        private StringCollection ComponentNames
+        {
+            get
+            {
+                StringCollection names = (StringCollection)WebUtil.GetCurrentHttpContext().Session[COMPONENT_NAMES];
+                if (names == null)
+                {
+                    names = new StringCollection();
+                    WebUtil.GetCurrentHttpContext().Session.Add(COMPONENT_NAMES, names);
+                }
+                return names;
+            }
+        }
     }
 }

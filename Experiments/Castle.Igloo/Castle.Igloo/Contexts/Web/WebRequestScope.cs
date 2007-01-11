@@ -20,24 +20,31 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using Castle.Igloo.Navigation;
 using Castle.Igloo.Util;
 
 
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Scopes.Web
 {
-    //[Scope(Scope = ScopeType.Application)]
-    public sealed class WebRequestScope: IRequestScope
+    /// <summary>
+    /// Implementation of <see cref="IScope"/> whisch spans an HTTP request; 
+    /// </summary>
+    public sealed class WebRequestScope : IRequestScope
     {
+        public const string REQUEST_SCOPE_SUFFIX = "request.scope.";
         private const string INIT_REQUEST_CONTEXT = "_INIT_REQUEST_CONTEXT_";
+        private const string COMPONENT_NAMES = "_COMPONENT_NAMEs_";
 
         private void InitRequestContext()
         {
             if (!WebUtil.GetCurrentHttpContext().Items.Contains(INIT_REQUEST_CONTEXT))
             {
                 NavigationState navigationState = new NavigationState();
-                WebUtil.GetCurrentHttpContext().Items.Add(NavigationState.NAVIGATION_STATE, navigationState);
+                WebUtil.GetCurrentHttpContext().Items.Add(REQUEST_SCOPE_SUFFIX+NavigationState.NAVIGATION_STATE, navigationState);
+
+                WebUtil.GetCurrentHttpContext().Items.Add(COMPONENT_NAMES, new StringCollection());
 
                 WebUtil.GetCurrentHttpContext().Items.Add(INIT_REQUEST_CONTEXT, INIT_REQUEST_CONTEXT);
             }
@@ -64,19 +71,7 @@ namespace Castle.Igloo.Contexts.Web
             get
             {
                 InitRequestContext();
-                return WebUtil.GetCurrentHttpContext().Items[name];
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="Object"/> with the specified type.
-        /// </summary>
-        /// <value></value>
-        public object this[Type clazz]
-        {
-            get
-            {
-                throw new Exception("The method or operation is not implemented.");
+                return WebUtil.GetCurrentHttpContext().Items[REQUEST_SCOPE_SUFFIX + name];
             }
         }
 
@@ -87,10 +82,11 @@ namespace Castle.Igloo.Contexts.Web
         /// <param name="value">The Object to use as the value of the element to add.</param>
         public void Add(string name, object value)
         {
-            Trace.WriteLine("Add to request Context : " + name);
+            Trace.WriteLine("Add to request scope : " + name);
 
             InitRequestContext();
-            WebUtil.GetCurrentHttpContext().Items.Add(name, value);
+            ComponentNames.Add(name);
+            WebUtil.GetCurrentHttpContext().Items.Add(REQUEST_SCOPE_SUFFIX + name, value);
         }
 
         /// <summary>
@@ -99,10 +95,11 @@ namespace Castle.Igloo.Contexts.Web
         /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
-            Trace.WriteLine("Remove from request Context : " + name);
+            Trace.WriteLine("Remove from request scope : " + name);
 
             InitRequestContext();
-            WebUtil.GetCurrentHttpContext().Items.Remove(name);
+            ComponentNames.Remove(name);
+            WebUtil.GetCurrentHttpContext().Items.Remove(REQUEST_SCOPE_SUFFIX + name);
         }
 
         /// <summary>
@@ -113,7 +110,7 @@ namespace Castle.Igloo.Contexts.Web
         public bool Contains(string name)
         {
             InitRequestContext();
-            return WebUtil.GetCurrentHttpContext().Items.Contains(name);
+            return ComponentNames.Contains(name);
         }
 
         /// <summary>
@@ -125,7 +122,7 @@ namespace Castle.Igloo.Contexts.Web
             get
             {
                 InitRequestContext();
-                return WebUtil.GetCurrentHttpContext().Items.Keys;
+                return ComponentNames;
             }
         }
 
@@ -134,9 +131,15 @@ namespace Castle.Igloo.Contexts.Web
         /// </summary>
         public void Flush()
         {
-            Trace.WriteLine("Flush session Context.");
-
-            WebUtil.GetCurrentHttpContext().Items.Clear();
+            Trace.WriteLine("Flush request scope.");
+            StringCollection toRemove = new StringCollection();
+            StringCollection names = (StringCollection)WebUtil.GetCurrentHttpContext().Items[COMPONENT_NAMES];
+            foreach (string name in names)
+            {
+                WebUtil.GetCurrentHttpContext().Items.Remove(REQUEST_SCOPE_SUFFIX + name);
+                toRemove.Remove(name);
+            }
+            names.Clear();
         }
 
         /// <summary>
@@ -153,5 +156,19 @@ namespace Castle.Igloo.Contexts.Web
         }
 
         #endregion
+
+        private StringCollection ComponentNames
+        {
+            get
+            {
+                StringCollection names = (StringCollection)WebUtil.GetCurrentHttpContext().Items[COMPONENT_NAMES];
+                if (names == null)
+                {
+                    names = new StringCollection();
+                    WebUtil.GetCurrentHttpContext().Items.Add(COMPONENT_NAMES, names);
+                }
+                return names;
+            }
+        }
     }
 }

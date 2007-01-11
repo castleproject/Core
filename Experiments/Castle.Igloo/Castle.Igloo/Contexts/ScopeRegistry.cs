@@ -24,7 +24,7 @@ using System.Diagnostics;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Util;
 
-namespace Castle.Igloo.Contexts
+namespace Castle.Igloo.Scopes
 {
     /// <summary>
     /// Register all <see cref="IScope"/> component

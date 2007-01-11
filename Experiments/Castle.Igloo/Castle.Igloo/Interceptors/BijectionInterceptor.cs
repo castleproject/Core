@@ -25,7 +25,7 @@ using System.Reflection;
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.Igloo.Attributes;
-using Castle.Igloo.Contexts;
+using Castle.Igloo.Scopes;
 using Castle.MicroKernel;
 
 namespace Castle.Igloo.Interceptors

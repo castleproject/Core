@@ -19,7 +19,7 @@
  ********************************************************************************/
 #endregion
 
-using Castle.Igloo.Contexts;
+using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.Controllers;
 using Igloo.Clinic.Domain;
 

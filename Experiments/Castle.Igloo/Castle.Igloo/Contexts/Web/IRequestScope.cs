@@ -18,7 +18,7 @@
  ********************************************************************************/
 #endregion
 
-namespace Castle.Igloo.Contexts
+namespace Castle.Igloo.Scopes.Web
 {
     public interface IRequestScope : IScope
     {

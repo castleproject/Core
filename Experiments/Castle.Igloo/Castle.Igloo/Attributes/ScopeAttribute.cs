@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using Castle.Igloo.Scopes;
 
 namespace Castle.Igloo.Attributes
 {
@@ -29,14 +30,30 @@ namespace Castle.Igloo.Attributes
     public class ScopeAttribute : Attribute 
     {
         private string _scope = ScopeType.UnSpecified;
+        private bool _proxy = false;
 
-        /// <summary>S
+        /// <summary>
         /// The component scope.
         /// </summary>
         public string Scope
         {
             get { return _scope; }
             set { _scope = value; }
+        }
+
+        /// <summary>
+        /// Some scope like <see cref="ISessionScope"/> are not always available.
+        /// When using such a scoped comoposent, a proxy will be created for every reference to the scoped component. 
+        /// (The proxy will determine the actual instance it will point to based on the scope in which the component is called.)
+        /// This property specifies if the container must create a proxy for the component.
+        /// </summary>
+        /// <remarks>
+        /// You do not need to set to true with components that are not web scoped as <see cref="ISessionScope"/>....
+        /// </remarks>
+        public bool Proxy
+        {
+            get { return _proxy; }
+            set { _proxy = value; }
         }
     }
 }

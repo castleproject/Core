@@ -22,7 +22,7 @@ using System;
 using System.Collections;
 using Castle.Igloo.Attributes;
 
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Scopes.Web
 {
     /// <summary>
     /// A conversation context is a logical context that lasts longer than 
@@ -63,15 +63,6 @@ namespace Castle.Igloo.Contexts.Web
         public object this[string name]
         {
             get { return _sessionScope[_conversationManager.CurrentConversationId + "." + name]; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="Object"/> with the specified type.
-        /// </summary>
-        /// <value></value>
-        public object this[Type clazz]
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
         }
 
         /// <summary>

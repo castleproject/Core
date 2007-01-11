@@ -21,7 +21,8 @@
 using System;
 using System.Configuration;
 using System.Web;
-using Castle.Igloo.Contexts;
+using Castle.Igloo.Scopes;
+using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.LifestyleManager;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;

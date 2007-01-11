@@ -26,7 +26,7 @@ using Castle.Core;
 using Castle.Core.Configuration;
 using Castle.MicroKernel;
 using Castle.Igloo.Attributes;
-using Castle.Igloo.Contexts;
+using Castle.Igloo.Scopes;
 using Castle.Igloo.Controllers;
 using Castle.Igloo.Util;
 

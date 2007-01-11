@@ -112,18 +112,18 @@
     <Compile Include="Attributes\OutjectAttribute.cs" />
     <Compile Include="Attributes\ScopeAttribute.cs" />
     <Compile Include="BijectionInspector.cs" />
-    <Compile Include="Contexts\IApplicationScope.cs" />
-    <Compile Include="Contexts\IPageScope.cs" />
-    <Compile Include="Contexts\IRequestScope.cs" />
+    <Compile Include="Contexts\Web\IApplicationScope.cs" />
+    <Compile Include="Contexts\Web\IPageScope.cs" />
+    <Compile Include="Contexts\Web\IRequestScope.cs" />
     <Compile Include="Contexts\IScopeRegistry.cs" />
-    <Compile Include="Contexts\ISessionScope.cs" />
-    <Compile Include="Contexts\ScopeRegisterInspector.cs" />
+    <Compile Include="Contexts\Web\ISessionScope.cs" />
     <Compile Include="Contexts\ScopeRegistry.cs" />
     <Compile Include="Contexts\Web\WebApplicationScope.cs" />
     <Compile Include="Contexts\Web\WebConversationScope.cs" />
     <Compile Include="Contexts\Web\WebPageScope.cs" />
     <Compile Include="Contexts\Web\WebRequestScope.cs" />
     <Compile Include="Contexts\Web\WebSessionScope.cs" />
+    <Compile Include="Contexts\Windows\SingletonScope.cs" />
     <Compile Include="IglooFacility.cs" />
     <Compile Include="Interceptors\BijectionInterceptor.cs" />
     <Compile Include="LifestyleManager\Candidate.cs" />
@@ -214,7 +214,6 @@
     <Content Include="ToDo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Contexts\Windows\" />
     <Folder Include="UI\Windows\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

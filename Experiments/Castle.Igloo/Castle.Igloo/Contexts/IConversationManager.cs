@@ -20,7 +20,7 @@
 
 using System;
 
-namespace Castle.Igloo.Contexts
+namespace Castle.Igloo.Scopes
 {
     /// <summary>
     /// Manages conversation context

@@ -22,7 +22,7 @@ using System;
 using System.Collections;
 using Castle.MicroKernel;
 
-namespace Castle.Igloo.Contexts
+namespace Castle.Igloo.Scopes
 {
     /// <summary>
     /// A set of named components and items of data that
@@ -48,12 +48,6 @@ namespace Castle.Igloo.Contexts
         /// </summary>
         /// <value></value>
         object this[string name] { get; }
-        
-        /// <summary>
-        /// Gets the <see cref="Object"/> with the specified type.
-        /// </summary>
-        /// <value></value>
-        object this[Type clazz] { get; }
         
         /// <summary>
         /// Adds an element with the provided key and value to the IScope object. 

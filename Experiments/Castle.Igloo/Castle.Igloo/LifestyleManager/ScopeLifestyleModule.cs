@@ -23,8 +23,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web;
 using System.Web.UI;
-using Castle.Igloo.Contexts;
-using Castle.Igloo.Contexts.Web;
+using Castle.Igloo.Scopes;
+using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Util;
 

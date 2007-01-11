@@ -24,7 +24,7 @@ using System.Diagnostics;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Util;
 
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Scopes.Web
 {
     //[Scope(Scope = ScopeType.Application)]
     public sealed class WebApplicationScope : IApplicationScope
@@ -50,22 +50,13 @@ namespace Castle.Igloo.Contexts.Web
         }
 
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified clazz.
-        /// </summary>
-        /// <value></value>
-        public object this[Type clazz]
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        /// <summary>
         /// Add the specified object under the name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         public void Add(string name, object value)
         {
-            Trace.WriteLine("Add to application Context : " + name);
+            Trace.WriteLine("Add to application scope : " + name);
 
             WebUtil.GetCurrentHttpContext().ApplicationInstance.Application.Add(name, value);
         }
@@ -76,7 +67,7 @@ namespace Castle.Igloo.Contexts.Web
         /// <param name="name">The name.</param>
         public void Remove(string name)
         {
-            Trace.WriteLine("Remove from application Context : " + name);
+            Trace.WriteLine("Remove from application scope : " + name);
 
             WebUtil.GetCurrentHttpContext().ApplicationInstance.Application.Remove(name);
         }
@@ -108,7 +99,7 @@ namespace Castle.Igloo.Contexts.Web
         /// </summary>
         public void Flush()
         {
-            Trace.WriteLine("Flush application Context.");
+            Trace.WriteLine("Flush application scope.");
 
             WebUtil.GetCurrentHttpContext().ApplicationInstance.Application.RemoveAll();
         }

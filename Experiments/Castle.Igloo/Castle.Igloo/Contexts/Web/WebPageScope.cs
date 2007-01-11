@@ -21,16 +21,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using Castle.Igloo.Navigation;
 using Castle.Igloo.Util;
 
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Scopes.Web
 {
     //[Scope(Scope = ScopeType.Application)]
     public sealed class WebPageScope : IPageScope
     {
-        public const string PAGE_SCOPE_SUFFIX = "page.context.";
+        public const string PAGE_SCOPE_SUFFIX = "page.";
 
         private IRequestScope _requestScope = null;
         private ISessionScope _sessionScope = null;
@@ -43,6 +44,7 @@ namespace Castle.Igloo.Contexts.Web
         public WebPageScope(ISessionScope sessionContest, IRequestScope requestScope)
         {
             AssertUtils.ArgumentNotNull(sessionContest, "sessionContest");
+            AssertUtils.ArgumentNotNull(requestScope, "requestScope");
 
             _sessionScope = sessionContest;
             _requestScope = requestScope;
@@ -79,22 +81,13 @@ namespace Castle.Igloo.Contexts.Web
         }
 
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified type.
-        /// </summary>
-        /// <value></value>
-        public object this[Type clazz]
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        /// <summary>
         /// Adds an element with the provided key and value to the IScope object.
         /// </summary>
         /// <param name="name">The name of the element to add.</param>
         /// <param name="value">The Object to use as the value of the element to add.</param>
         public void Add(string name, object value)
         {
-            Trace.WriteLine("Add to page Context : " + name);
+            Trace.WriteLine("Add to page scope : " + name);
 
             _sessionScope.Add(PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name, value);
         }
@@ -105,7 +98,7 @@ namespace Castle.Igloo.Contexts.Web
         /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
-            Trace.WriteLine("Remove from page Context : " + name);
+            Trace.WriteLine("Remove from page scope : " + name);
 
             _sessionScope.Remove(PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name);
         }
@@ -126,7 +119,18 @@ namespace Castle.Igloo.Contexts.Web
         /// <value>The names.</value>
         public ICollection Names
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get 
+            { 
+                StringCollection names = new StringCollection();
+                foreach(string name in _sessionScope.Names)
+                {
+                    if (name.StartsWith(PAGE_SCOPE_SUFFIX + NavigationState.CurrentView))
+                    {
+                        names.Add(name);
+                    }
+                }
+                return names;
+            }
         }
 
         /// <summary>
@@ -134,7 +138,7 @@ namespace Castle.Igloo.Contexts.Web
         /// </summary>
         public void Flush()
         {
-            Trace.WriteLine("Flush page Context.");
+            Trace.WriteLine("Flush page scope.");
 
             IEnumerator enumerator = _sessionScope.Names.GetEnumerator();
             IList<string> toRemove = new List<string>();
@@ -149,7 +153,7 @@ namespace Castle.Igloo.Contexts.Web
             }
             foreach(string name in toRemove)
             {
-                Trace.WriteLine("Remove from page Context : " + name);
+                Trace.WriteLine("Remove from page scope : " + name);
                 _sessionScope.Remove(name);
             }
         }

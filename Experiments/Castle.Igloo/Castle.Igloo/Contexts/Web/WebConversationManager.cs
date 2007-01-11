@@ -22,7 +22,7 @@ using System;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Util;
 
-namespace Castle.Igloo.Contexts.Web
+namespace Castle.Igloo.Scopes.Web
 {
     /// <summary>
     /// Manages conversation context in web context

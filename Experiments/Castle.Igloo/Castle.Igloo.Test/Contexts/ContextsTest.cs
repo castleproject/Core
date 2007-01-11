@@ -1,5 +1,5 @@
 
-using Castle.Igloo.Contexts;
+using Castle.Igloo.Scopes;
 using Castle.Igloo.Navigation;
 using NUnit.Framework;
 

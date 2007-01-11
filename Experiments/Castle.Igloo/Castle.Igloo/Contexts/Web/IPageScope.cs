@@ -18,14 +18,9 @@
  ********************************************************************************/
 #endregion
 
-namespace Castle.Igloo.Contexts
+namespace Castle.Igloo.Scopes.Web
 {
-    public interface ISessionScope : IScope
+    public interface IPageScope : IScope
     {
-
-        /// <summary>
-        /// Abandons the current session.
-        /// </summary>
-        void Abandon();
     }
 }
