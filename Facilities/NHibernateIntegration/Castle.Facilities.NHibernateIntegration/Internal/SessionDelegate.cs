@@ -198,6 +198,11 @@ namespace Castle.Facilities.NHibernateIntegration
 			inner.DisableFilter(filterName);
 		}
 
+		public IMultiQuery CreateMultiQuery()
+		{
+			return inner.CreateMultiQuery();
+		}
+
 		public void Replicate(object obj, ReplicationMode replicationMode)
 		{
 			inner.Replicate(obj, replicationMode);

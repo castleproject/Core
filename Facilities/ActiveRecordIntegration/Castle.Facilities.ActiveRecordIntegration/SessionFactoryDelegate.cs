@@ -156,5 +156,9 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			get { throw new NotImplementedException("SessionFactoryDelegate: not implemented"); }
 		}
+
+		public void Dispose()
+		{
+		}
 	}
 }

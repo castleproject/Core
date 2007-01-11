@@ -198,6 +198,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			innerSession.DisableFilter(filterName);
 		}
 
+		public IMultiQuery CreateMultiQuery()
+		{
+			return innerSession.CreateMultiQuery();
+		}
+
 		public void Replicate(object obj, ReplicationMode replicationMode)
 		{
 			innerSession.Replicate(obj, replicationMode);
