@@ -106,6 +106,15 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field has an invalid content.
+        /// </summary>
+        internal static string generic_invalid {
+            get {
+                return ResourceManager.GetString("generic_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field value is invalid (not a valid integer).
         /// </summary>
         internal static string integer_invalid {
@@ -147,6 +156,15 @@ namespace Castle.Components.Validator {
         internal static string length_tooshort {
             get {
                 return ResourceManager.GetString("length_tooshort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields do not match.
+        /// </summary>
+        internal static string same_as_invalid {
+            get {
+                return ResourceManager.GetString("same_as_invalid", resourceCulture);
             }
         }
         

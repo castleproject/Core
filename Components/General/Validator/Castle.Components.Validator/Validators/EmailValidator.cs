@@ -48,13 +48,9 @@ namespace Castle.Components.Validator
 			generator.SetEmail(BuildErrorMessage());
 		}
 
-		/// <summary>
-		/// Builds the error message.
-		/// </summary>
-		/// <returns></returns>
-		protected override string BuildErrorMessage()
+		protected override string MessageKey
 		{
-			return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.InvalidEmailMessage), Name);
+			get { return MessageConstants.InvalidEmailMessage; }
 		}
 	}
 }

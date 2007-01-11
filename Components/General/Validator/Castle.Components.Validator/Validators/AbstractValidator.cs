@@ -151,9 +151,17 @@ namespace Castle.Components.Validator
 		/// Builds the error message.
 		/// </summary>
 		/// <returns></returns>
-		protected abstract string BuildErrorMessage();
+		protected virtual string BuildErrorMessage()
+		{
+			return String.Format(GetResourceForCurrentCulture().GetString(MessageKey), Name);
+		}
 
-		protected ResourceSet GetResourceForCurrentCulture()
+		protected virtual string MessageKey
+		{
+			get { return MessageConstants.GenericInvalidField; }
+		}
+
+		protected static ResourceSet GetResourceForCurrentCulture()
 		{
 			return resourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true); 
 		}

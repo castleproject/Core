@@ -46,14 +46,9 @@ namespace Castle.Components.Validator
 			generator.SetAsRequired(BuildErrorMessage());
 		}
 
-		/// <summary>
-		/// Builds the error message.
-		/// </summary>
-		/// <returns></returns>
-		protected override string BuildErrorMessage()
+		protected override string MessageKey
 		{
-			return string.Format(
-				GetResourceForCurrentCulture().GetString(MessageConstants.IsRequiredMessage), Name);
+			get { return MessageConstants.IsRequiredMessage; }
 		}
 	}
 }

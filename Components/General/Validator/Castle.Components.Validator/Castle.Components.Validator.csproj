@@ -36,9 +36,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attributes\ValidateEmailAttribute.cs" />
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
+    <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
     <Compile Include="Messages.pt.Designer.cs">
       <DependentUpon>Messages.pt.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -55,6 +57,7 @@
     </Compile>
     <Compile Include="PropertyBasedRegistry.cs" />
     <Compile Include="ValidationException.cs" />
+    <Compile Include="ValidationInternalError.cs" />
     <Compile Include="ValidatorRunner.cs" />
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
@@ -69,6 +72,7 @@
     <Compile Include="Attributes\ValidateNonEmptyAttribute.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="Validators\RegularExpressionValidator.cs" />
+    <Compile Include="Validators\SameAsValidator.cs" />
     <Compile Include="Validators\SingleValidator.cs" />
     <Compile Include="Validators\TimeValidator.cs" />
     <Compile Include="WebValidationConfiguration.cs" />

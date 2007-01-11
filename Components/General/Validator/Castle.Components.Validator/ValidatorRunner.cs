@@ -34,7 +34,7 @@ namespace Castle.Components.Validator
 			type2Validator[typeof(decimal)] = typeof(DecimalValidator);
 			type2Validator[typeof(Single)] = typeof(SingleValidator);
 			type2Validator[typeof(double)] = typeof(DoubleValidator);
-			type2Validator[typeof(DateTime)] = typeof(DateTime);
+			type2Validator[typeof(DateTime)] = typeof(DateValidator);
 		}
 
 		/// <summary>
@@ -84,7 +84,12 @@ namespace Castle.Components.Validator
 			{
 				Type defaultValidatorForType = (Type) type2Validator[property.PropertyType];
 
-				validators = new IValidator[] { (IValidator) Activator.CreateInstance(defaultValidatorForType) };
+				if (defaultValidatorForType != null)
+				{
+					validators = new IValidator[] { (IValidator) Activator.CreateInstance(defaultValidatorForType) };
+
+					validators[0].Initialize(property);
+				}
 			}
 
 			return validators;

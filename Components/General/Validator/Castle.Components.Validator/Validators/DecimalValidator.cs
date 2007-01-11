@@ -59,9 +59,9 @@ namespace Castle.Components.Validator
 			}
 		}
 
-		protected override string BuildErrorMessage()
+		protected override string MessageKey
 		{
-			return String.Format(GetResourceForCurrentCulture().GetString(MessageConstants.InvalidDecimalMessage), Name);
+			get { return MessageConstants.InvalidDecimalMessage; }
 		}
 	}
 }

@@ -132,6 +132,9 @@
   <data name="exactlength" xml:space="preserve">
     <value>Field must be {0} characters long</value>
   </data>
+  <data name="generic_invalid" xml:space="preserve">
+    <value>Field has an invalid content</value>
+  </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>Field value is invalid (not a valid integer)</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="length_tooshort" xml:space="preserve">
     <value>Field must be more than {0} characters long</value>
+  </data>
+  <data name="same_as_invalid" xml:space="preserve">
+    <value>Fields do not match</value>
   </data>
   <data name="single_invalid" xml:space="preserve">
     <value>Field value is invalid (not a valid single)</value>

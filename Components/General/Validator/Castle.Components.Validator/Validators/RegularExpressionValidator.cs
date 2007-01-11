@@ -72,15 +72,5 @@ namespace Castle.Components.Validator
 		{
 			generator.SetRegExp(expression, BuildErrorMessage());
 		}
-
-		/// <summary>
-		/// Builds the error message.
-		/// </summary>
-		/// <returns></returns>
-		protected override string BuildErrorMessage()
-		{
-			// TODO: use resources
-			return String.Format("Field {0} is not a valid entry for the expected pattern.", Property.Name);
-		}
 	}
 }

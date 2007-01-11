@@ -14,56 +14,57 @@
 
 namespace Castle.Components.Validator
 {
-	using System;
 	using System.Collections;
+	using System.Reflection;
 
-	public class TimeValidator : AbstractValidator
+	public class SameAsValidator : AbstractValidator
 	{
-		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
-		/// </summary>
-		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
-		/// </value>
+		private readonly string propertyToCompare;
+
+		public SameAsValidator(string propertyToCompare)
+		{
+			this.propertyToCompare = propertyToCompare;
+		}
+
 		public override bool SupportWebValidation
 		{
 			get { return true; }
 		}
 
-		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
-		/// </summary>
-		/// <param name="config">The config.</param>
-		/// <param name="inputType">Type of the input.</param>
-		/// <param name="generator">The generator.</param>
-		/// <param name="attributes">The attributes.</param>
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
 		                                        IWebValidationGenerator generator, IDictionary attributes)
 		{
-			// TODO: web validation for time
-			// generator.SetDigitsOnly(BuildErrorMessage());
+			// TODO: Add same as to IWebValidationGenerator
 		}
 
 		public override bool IsValid(object instance, object fieldValue)
 		{
-			if (fieldValue == null) return false;
+			PropertyInfo property = instance.GetType().GetProperty(propertyToCompare);
 
-			try
+			if (property == null)
 			{
-				Convert.ToDateTime(fieldValue.ToString());
+				throw new ValidationInternalError("Could not find property " + propertyToCompare + " on type " + instance.GetType());
+			}
 
+			object referenceValue = property.GetValue(instance, null);
+
+			if (fieldValue == null && referenceValue == null)
+			{
 				return true;
 			}
-			catch(Exception)
+			else if (fieldValue != null)
 			{
-				return false;
+				return fieldValue.Equals(referenceValue);
+			}
+			else
+			{
+				return referenceValue.Equals(fieldValue);
 			}
 		}
 
 		protected override string MessageKey
 		{
-			get { return MessageConstants.InvalidTimeMessage; }
+			get { return MessageConstants.SameAsMessage; }
 		}
 	}
 }

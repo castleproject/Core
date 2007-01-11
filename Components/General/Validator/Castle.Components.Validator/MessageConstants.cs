@@ -16,6 +16,7 @@ namespace Castle.Components.Validator
 {
 	class MessageConstants
 	{
+		public const string GenericInvalidField = "generic_invalid";
 		public const string IsRequiredMessage = "isrequired";
 		public const string ExactLengthMessage = "exactlength";
 		public const string LengthTooLongMessage = "length_toolong";
@@ -28,5 +29,6 @@ namespace Castle.Components.Validator
 		public const string InvalidSingleMessage = "single_invalid";
 		public const string InvalidTimeMessage = "time_invalid";
 		public const string InvalidDecimalMessage = "decimal_invalid";
+		public const string SameAsMessage = "same_as_invalid";
 	}
 }
