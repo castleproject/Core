@@ -48,6 +48,7 @@ namespace Castle.ActiveRecord.Queries
 		private ProjectionList projections;
 		private DetachedCriteria detachedCriteria;
 		private Order[] orders;
+		private int? first, max;
 
 		/// <summary>
 		/// Create a new <see cref="ProjectionQuery{ARType,TResultItem}"/> with the given projections.
@@ -58,7 +59,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			this.projections = projections;
 			this.orders = new Order[0];
-			this.detachedCriteria = DetachedCriteria.For(Target);
+			this.detachedCriteria = DetachedCriteria.For(RootType);
 		}
 
 		/// <summary>
@@ -103,7 +104,7 @@ namespace Castle.ActiveRecord.Queries
 		public ProjectionQuery(Order order, ProjectionList projections)
 		{
 			this.projections = projections;
-			this.detachedCriteria = DetachedCriteria.For(Target);
+			this.detachedCriteria = DetachedCriteria.For(RootType);
 			this.orders = new Order[] { order };
 		}
 
@@ -124,9 +125,23 @@ namespace Castle.ActiveRecord.Queries
 		/// <summary>
 		/// Gets the target type of this query
 		/// </summary>
-		public Type Target
+		public Type RootType
 		{
 			get { return typeof(ARType); }
+		}
+
+		/// <summary>
+		/// Sets the query range.
+		/// </summary>
+		/// <param name="first">The first row to return.</param>
+		/// <param name="max">The max number of rows to return.</param>
+		/// <returns>The instance</returns>
+		public ProjectionQuery<ARType, TResultItem> SetRange(int first, int max)
+		{
+			this.first = first;
+			this.max = max;
+			
+			return this;
 		}
 
 		/// <summary>
@@ -137,7 +152,13 @@ namespace Castle.ActiveRecord.Queries
 		object IActiveRecordQuery.Execute(ISession session)
 		{
 			ICriteria criteria = CreateCriteria(session);
-			
+
+			if (first.HasValue)
+			{
+				criteria.SetFirstResult(first.Value);
+				criteria.SetMaxResults(max.Value);
+			}
+
 			return criteria.List<TResultItem>();
 		}
 
@@ -162,7 +183,7 @@ namespace Castle.ActiveRecord.Queries
 		private ICriteria CreateCriteria(ISession session)
 		{
 			AssertAllArgumentsValid();
-			ICriteria criteria = this.detachedCriteria.GetExecutableCriteria(session);
+			ICriteria criteria = detachedCriteria.GetExecutableCriteria(session);
 			criteria.SetProjection(projections);
 
 			if (typeof(TResultItem) != typeof(object[]))//we are not returning a tuple, so we need the result transformer
@@ -218,7 +239,6 @@ namespace Castle.ActiveRecord.Queries
 		}
 	}
 
-
 	/// <summary>
 	/// Default implemenation of ProjectionQuery that returns an Untyped object array tuples
 	/// </summary>
@@ -229,8 +249,7 @@ namespace Castle.ActiveRecord.Queries
 		/// At least one projections must be given
 		/// </summary>
 		/// <param name="projections">The projections to use in the query</param>
-		public ProjectionQuery(ProjectionList projections)
-			: base(projections)
+		public ProjectionQuery(ProjectionList projections) : base(projections)
 		{
 		}
 
@@ -245,7 +264,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="orders">The order by which to get the result</param>
 		/// <param name="projections">The projections</param>
 		public ProjectionQuery(DetachedCriteria detachedCriteria, Order[] orders, ProjectionList projections)
-			:base(detachedCriteria, orders,projections)
+			: base(detachedCriteria, orders,projections)
 		{
 		}
 
@@ -260,7 +279,7 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="order">The order by which to get the result</param>
 		/// <param name="projections">The projections</param>
 		public ProjectionQuery(DetachedCriteria detachedCriteria, Order order, ProjectionList projections)
-			:base(detachedCriteria,order, projections)
+			: base(detachedCriteria,order, projections)
 		{
 		}
 
@@ -269,8 +288,7 @@ namespace Castle.ActiveRecord.Queries
 		/// At least one projections must be given.
 		/// The results will be loaded according to the order specified
 		/// </summary>
-		public ProjectionQuery(Order order, ProjectionList projections)
-			:base(order, projections)
+		public ProjectionQuery(Order order, ProjectionList projections) : base(order, projections)
 		{
 		}
 
@@ -282,7 +300,7 @@ namespace Castle.ActiveRecord.Queries
 		/// Note: Do not call SetProjection() on the detached criteria, since that is overwritten.
 		/// </summary>
 		public ProjectionQuery(DetachedCriteria detachedCriteria, ProjectionList projections)
-			:base(detachedCriteria, projections)
+			: base(detachedCriteria, projections)
 		{
 		}
 	}

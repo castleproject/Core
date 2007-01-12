@@ -1,6 +1,10 @@
 Release Candidate 2
 ===================
 
+- Renamed IActiveRecordQuery.Target to IActiveRecordQuery.RootType
+
+- Added SetRange to ProjectionQuery<,>
+
 - Made HasMany a bit smarter when dealing with Map elements. 
 
     AR now can guess the IndexType, the MapType and the Table name from the IDictionary<,> property.

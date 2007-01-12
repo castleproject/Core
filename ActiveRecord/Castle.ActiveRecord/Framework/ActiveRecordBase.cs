@@ -596,11 +596,11 @@ namespace Castle.ActiveRecord
 		/// <returns>An <see cref="IEnumerable"/></returns>
 		protected internal static IEnumerable EnumerateQuery(IActiveRecordQuery query)
 		{
-			Type targetType = query.Target;
+			Type rootType = query.RootType;
 
-			EnsureInitialized(targetType);
+			EnsureInitialized(rootType);
 
-			ISession session = holder.CreateSession(targetType);
+			ISession session = holder.CreateSession(rootType);
 
 			try
 			{
@@ -608,7 +608,7 @@ namespace Castle.ActiveRecord
 			}
 			catch (Exception ex)
 			{
-				throw new ActiveRecordException("Could not perform EnumerateQuery for " + targetType.Name, ex);
+				throw new ActiveRecordException("Could not perform EnumerateQuery for " + rootType.Name, ex);
 			}
 			finally
 			{
@@ -627,11 +627,11 @@ namespace Castle.ActiveRecord
 		/// <returns>The query result.</returns>
 		public static object ExecuteQuery(IActiveRecordQuery query)
 		{
-			Type targetType = query.Target;
+			Type rootType = query.RootType;
 
-			EnsureInitialized(targetType);
+			EnsureInitialized(rootType);
 
-			ISession session = holder.CreateSession(targetType);
+			ISession session = holder.CreateSession(rootType);
 
 			try
 			{
@@ -639,7 +639,7 @@ namespace Castle.ActiveRecord
 			}
 			catch (Exception ex)
 			{
-				throw new ActiveRecordException("Could not perform ExecuteQuery for " + targetType.Name, ex);
+				throw new ActiveRecordException("Could not perform ExecuteQuery for " + rootType.Name, ex);
 			}
 			finally
 			{

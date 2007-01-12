@@ -29,7 +29,7 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public abstract class ActiveRecordBaseQuery : IActiveRecordQuery, ICloneable
 	{
-		private readonly Type targetType;
+		private readonly Type rootType;
 		
 		private ILogger log = NullLogger.Instance;
 		
@@ -41,19 +41,19 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordBaseQuery"/> class.
 		/// </summary>
-		/// <param name="type">The type.</param>
-		protected ActiveRecordBaseQuery(Type type)
+		/// <param name="rootType">The type.</param>
+		protected ActiveRecordBaseQuery(Type rootType)
 		{
-			this.targetType = type;
+			this.rootType = rootType;
 		}
 
 		/// <summary>
 		/// Gets the target type of this query
 		/// </summary>
 		/// <value></value>
-		public Type Target
+		public Type RootType
 		{
-			get { return targetType; }
+			get { return rootType; }
 		}
 		
 		/// <summary>
@@ -73,6 +73,7 @@ namespace Castle.ActiveRecord
 		}
 
 		#region IActiveRecordQuery implementation
+
 		/// <summary>
 		/// Executes the specified query and return the results
 		/// </summary>
@@ -93,6 +94,7 @@ namespace Castle.ActiveRecord
 		{
 			return InternalEnumerate(session);
 		}
+
 		#endregion
 
 		/// <summary>
@@ -124,9 +126,11 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual object Clone()
 		{
-			ActiveRecordBaseQuery clone = (ActiveRecordBaseQuery) this.MemberwiseClone();
-			if (this.queryModifiers != null)
-				clone.queryModifiers = new ArrayList(this.queryModifiers);
+			ActiveRecordBaseQuery clone = (ActiveRecordBaseQuery) MemberwiseClone();
+			if (queryModifiers != null)
+			{
+				clone.queryModifiers = new ArrayList(queryModifiers);
+			}
 			return clone;
 		}
 
@@ -157,7 +161,7 @@ namespace Castle.ActiveRecord
 		{
 			if (queryModifiers != null)
 			{
-				foreach (IQueryModifier modifier in queryModifiers)
+				foreach(IQueryModifier modifier in queryModifiers)
 				{
 					modifier.Apply(query);
 				}

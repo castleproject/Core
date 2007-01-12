@@ -64,7 +64,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			if (criterias != null)
 			{
-				ICriteria criteria = session.CreateCriteria(Target);
+				ICriteria criteria = session.CreateCriteria(RootType);
 
 				foreach(ICriterion cond in criterias)
 				{

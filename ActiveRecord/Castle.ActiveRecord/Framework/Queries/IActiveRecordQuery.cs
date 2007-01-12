@@ -27,7 +27,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Gets the target type of this query
 		/// </summary>
-		Type Target { get; }
+		Type RootType { get; }
 
 		/// <summary>
 		/// Executes the specified query and return the results

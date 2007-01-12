@@ -65,7 +65,7 @@ namespace Castle.ActiveRecord.Queries
 		/// Gets the target type of this query
 		/// </summary>
 		/// <value></value>
-		public Type Target
+		public Type RootType
 		{
 			get { return typeof(ARType); }
 		}
@@ -104,7 +104,7 @@ namespace Castle.ActiveRecord.Queries
 			}
 			else
 			{
-				ICriteria criteria = session.CreateCriteria(Target);
+				ICriteria criteria = session.CreateCriteria(RootType);
 				foreach(ICriterion criterion in criterions)
 				{
 					criteria.Add(criterion);
