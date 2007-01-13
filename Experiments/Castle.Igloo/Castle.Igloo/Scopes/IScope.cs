@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using Castle.Core;
 using Castle.MicroKernel;
 
 namespace Castle.Igloo.Scopes
@@ -79,6 +80,19 @@ namespace Castle.Igloo.Scopes
         /// Removes all the elements from the IScope object. 
         /// </summary>
         void Flush();
+
+        /// <summary>
+        /// Registers for eviction.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="componentModel">The componentModel.</param>
+        /// <param name="instance">The instance.</param>
+        void RegisterForEviction(ILifestyleManager manager, ComponentModel componentModel, object instance);
+        
+        /// <summary>
+        /// Checks the initialisation.
+        /// </summary>
+        void CheckInitialisation();
         
         /// <summary>
         /// Gets the type of the scope.

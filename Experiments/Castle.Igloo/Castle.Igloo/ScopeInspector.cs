@@ -25,7 +25,6 @@ using Castle.Igloo.Interceptors;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Util;
 using Castle.MicroKernel;
-//using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.Igloo.Attributes;
 
@@ -36,7 +35,8 @@ namespace Castle.Igloo
     /// </summary>
     public class ScopeInspector : IContributeComponentModelConstruction
     {
- 
+        public const string SCOPE_TOKEN = "_SCOPE_";
+        
         /// <summary>
         /// Usually the implementation will look in the configuration property
         /// of the model or the service interface, or the implementation looking for
@@ -51,60 +51,15 @@ namespace Castle.Igloo
                 return;
             }
 
-            // For unit test
-            HttpContext current = HttpContext.Current;
-            ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);
-
+            ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);        
+            model.ExtendedProperties.Add(SCOPE_TOKEN, scopeAttribute.Scope);
+            
             // Ensure its CustomLifestyle
-            if (current != null)
-            {
-                if (scopeAttribute.Scope==ScopeType.Request)
-                {
-                    model.LifestyleType = LifestyleType.Custom;
-                    model.CustomLifestyle = typeof(ScopeWebRequestLifestyleManager);
-
-                    // Add the scope interceptor
-                    model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
-                }
-                else if (scopeAttribute.Scope == ScopeType.Session)
-                {
-                    model.LifestyleType = LifestyleType.Custom;
-                    model.CustomLifestyle = typeof(ScopeWebSessionLifestyleManager);
-                    
-                    // Add the scope interceptor
-                    model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
-                }
-                else if (scopeAttribute.Scope == ScopeType.Application)
-                {
-                    model.LifestyleType = LifestyleType.Custom;
-                    model.CustomLifestyle = typeof(ScopeWebApplicationLifestyleManager);
-
-                    // Add the scope interceptor
-                    model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
-                }
-                else
-                {
-                    throw new NotImplementedException("To do, other scope such as Session, Page");
-                }
-
-            }
-            else
-            {
-                if (scopeAttribute.Scope == ScopeType.Request)
-                {
-                    // For unit test
-                    model.LifestyleType = LifestyleType.Transient;
-                }
-                else if (scopeAttribute.Scope == ScopeType.Session)
-                {
-                    // For unit test
-                    model.LifestyleType = LifestyleType.Transient;
-                }
-                else
-                {
-                    throw new NotImplementedException("To do, other scope such as Session, Page");
-                }
-            }
+            model.LifestyleType = LifestyleType.Custom;
+            model.CustomLifestyle = typeof(ScopeLifestyleManager);
+            
+            // Add the scope interceptor
+            model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
         }
 
 

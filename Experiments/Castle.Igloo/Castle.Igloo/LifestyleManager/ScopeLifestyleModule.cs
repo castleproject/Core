@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web;
 using System.Web.UI;
-using Castle.Igloo.Scopes;
+using Castle.Core;
 using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Util;
@@ -87,21 +87,22 @@ namespace Castle.Igloo.LifestyleManager
         /// Registers for request eviction.
         /// </summary>
         /// <param name="manager">The manager.</param>
+        /// <param name="component">The component.</param>
         /// <param name="instance">The instance.</param>
         internal static void RegisterForRequestEviction(
-            ScopeWebRequestLifestyleManager manager,
-            string name, object instance)
+            ScopeLifestyleManager manager,
+            ComponentModel component, object instance)
         {
             HttpContext httpContext = HttpContext.Current;
 
-            IDictionary<ScopeWebRequestLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebRequestLifestyleManager, Candidate>)httpContext.Items[PER_REQUEST_EVICT];
+            IDictionary<ScopeLifestyleManager, Candidate> candidates = (Dictionary<ScopeLifestyleManager, Candidate>)httpContext.Items[PER_REQUEST_EVICT];
 
             if (candidates == null)
             {
-                candidates = new Dictionary<ScopeWebRequestLifestyleManager, Candidate>();
+                candidates = new Dictionary<ScopeLifestyleManager, Candidate>();
                 httpContext.Items[PER_REQUEST_EVICT] = candidates;
             }
-            Candidate candidate = new Candidate(name, instance);
+            Candidate candidate = new Candidate(component, instance);
 
             candidates.Add(manager, candidate);
         }
@@ -118,13 +119,13 @@ namespace Castle.Igloo.LifestyleManager
             HttpApplication application = (HttpApplication)sender;
             HttpContext httpContext = application.Context;
 
-            IDictionary<ScopeWebRequestLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebRequestLifestyleManager, Candidate>)httpContext.Items[PER_REQUEST_EVICT];
+            IDictionary<ScopeLifestyleManager, Candidate> candidates = (Dictionary<ScopeLifestyleManager, Candidate>)httpContext.Items[PER_REQUEST_EVICT];
 
             if (candidates != null)
             {
-                foreach (KeyValuePair<ScopeWebRequestLifestyleManager, Candidate> kvp in candidates)
+                foreach (KeyValuePair<ScopeLifestyleManager, Candidate> kvp in candidates)
                 {
-                    ScopeWebRequestLifestyleManager manager = kvp.Key;
+                    ScopeLifestyleManager manager = kvp.Key;
                     manager.Evict(kvp.Value);
                 }
 
@@ -139,22 +140,23 @@ namespace Castle.Igloo.LifestyleManager
         /// Registers for session eviction.
         /// </summary>
         /// <param name="manager">The manager.</param>
+        /// <param name="component">The component.</param>
         /// <param name="instance">The instance.</param>
         internal static void RegisterForSessionEviction(
-            ScopeWebSessionLifestyleManager manager,
-            string name,
+            ScopeLifestyleManager manager,
+            ComponentModel component,
             object instance)
         {
             HttpContext context = HttpContext.Current;
 
-            IDictionary<ScopeWebSessionLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebSessionLifestyleManager, Candidate>)context.Session[PER_SESSION_EVICT];
+            IDictionary<ScopeLifestyleManager, Candidate> candidates = (Dictionary<ScopeLifestyleManager, Candidate>)context.Session[PER_SESSION_EVICT];
 
             if (candidates == null)
             {
-                candidates = new Dictionary<ScopeWebSessionLifestyleManager, Candidate>();
+                candidates = new Dictionary<ScopeLifestyleManager, Candidate>();
                 context.Session[PER_SESSION_EVICT] = candidates;
             }
-            Candidate candidate = new Candidate(name, instance);
+            Candidate candidate = new Candidate(component, instance);
             candidates.Add(manager, candidate);
         }
         
@@ -167,13 +169,13 @@ namespace Castle.Igloo.LifestyleManager
         {
             HttpApplication application = (HttpApplication)sender;
 
-            IDictionary<ScopeWebSessionLifestyleManager, Candidate> candidates = (Dictionary<ScopeWebSessionLifestyleManager, Candidate>)application.Session[PER_SESSION_EVICT];
+            IDictionary<ScopeLifestyleManager, Candidate> candidates = (Dictionary<ScopeLifestyleManager, Candidate>)application.Session[PER_SESSION_EVICT];
 
             if (candidates != null)
             {
-                foreach (KeyValuePair<ScopeWebSessionLifestyleManager, Candidate> kvp in candidates) 
+                foreach (KeyValuePair<ScopeLifestyleManager, Candidate> kvp in candidates) 
                 {
-                    ScopeWebSessionLifestyleManager manager = kvp.Key;
+                    ScopeLifestyleManager manager = kvp.Key;
                     manager.Evict(kvp.Value);
                 }
 

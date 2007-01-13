@@ -19,7 +19,9 @@
 #endregion
 
 using System.Collections;
+using Castle.Core;
 using Castle.Igloo.Scopes;
+using Castle.MicroKernel;
 
 namespace Castle.Igloo.Contexts.Windows
 {
@@ -37,7 +39,7 @@ namespace Castle.Igloo.Contexts.Windows
         }
 
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified name.
+        /// Gets the <see cref="object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public object this[string name]
@@ -95,6 +97,17 @@ namespace Castle.Igloo.Contexts.Windows
         public string ScopeType
         {
             get { return Igloo.ScopeType.Singleton; }
+        }
+
+
+        public void RegisterForEviction(ILifestyleManager manager, ComponentModel model, object instance)
+        {
+            throw new System.Exception("The method or operation is not implemented.");
+        }
+
+        public void CheckInitialisation()
+        {
+            throw new System.Exception("The method or operation is not implemented.");
         }
 
         #endregion

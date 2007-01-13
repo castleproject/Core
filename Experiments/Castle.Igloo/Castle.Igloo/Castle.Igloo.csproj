@@ -112,22 +112,22 @@
     <Compile Include="Attributes\OutjectAttribute.cs" />
     <Compile Include="Attributes\ScopeAttribute.cs" />
     <Compile Include="BijectionInspector.cs" />
-    <Compile Include="Contexts\Web\IApplicationScope.cs" />
-    <Compile Include="Contexts\Web\IPageScope.cs" />
-    <Compile Include="Contexts\Web\IRequestScope.cs" />
-    <Compile Include="Contexts\IScopeRegistry.cs" />
-    <Compile Include="Contexts\Web\ISessionScope.cs" />
-    <Compile Include="Contexts\ScopeRegistry.cs" />
-    <Compile Include="Contexts\Web\WebApplicationScope.cs" />
-    <Compile Include="Contexts\Web\WebConversationScope.cs" />
-    <Compile Include="Contexts\Web\WebPageScope.cs" />
-    <Compile Include="Contexts\Web\WebRequestScope.cs" />
-    <Compile Include="Contexts\Web\WebSessionScope.cs" />
-    <Compile Include="Contexts\Windows\SingletonScope.cs" />
+    <Compile Include="LifestyleManager\ScopeLifestyleManager.cs" />
+    <Compile Include="Scopes\Web\IApplicationScope.cs" />
+    <Compile Include="Scopes\Web\IPageScope.cs" />
+    <Compile Include="Scopes\Web\IRequestScope.cs" />
+    <Compile Include="Scopes\IScopeRegistry.cs" />
+    <Compile Include="Scopes\Web\ISessionScope.cs" />
+    <Compile Include="Scopes\ScopeRegistry.cs" />
+    <Compile Include="Scopes\Web\WebApplicationScope.cs" />
+    <Compile Include="Scopes\Web\WebConversationScope.cs" />
+    <Compile Include="Scopes\Web\WebPageScope.cs" />
+    <Compile Include="Scopes\Web\WebRequestScope.cs" />
+    <Compile Include="Scopes\Web\WebSessionScope.cs" />
+    <Compile Include="Scopes\Windows\SingletonScope.cs" />
     <Compile Include="IglooFacility.cs" />
     <Compile Include="Interceptors\BijectionInterceptor.cs" />
     <Compile Include="LifestyleManager\Candidate.cs" />
-    <Compile Include="LifestyleManager\ScopeWebApplicationLifestyleManager.cs" />
     <Compile Include="UIComponents\UIComponentRepository.cs" />
     <Compile Include="Configuration\CommandsSetting.cs">
       <SubType>Code</SubType>
@@ -144,9 +144,9 @@
     <Compile Include="ContainerWebAccessorUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Contexts\Web\WebConversationManager.cs" />
-    <Compile Include="Contexts\IConversationManager.cs" />
-    <Compile Include="Contexts\IScope.cs" />
+    <Compile Include="Scopes\Web\WebConversationManager.cs" />
+    <Compile Include="Scopes\IConversationManager.cs" />
+    <Compile Include="Scopes\IScope.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ControllerInspector.cs" />
     <Compile Include="Controllers\IController.cs">
@@ -155,8 +155,6 @@
     <Compile Include="Interceptors\LogIMethodInterceptor.cs" />
     <Compile Include="Interceptors\NavigationInterceptor.cs" />
     <Compile Include="LifestyleManager\ScopeLifestyleModule.cs" />
-    <Compile Include="LifestyleManager\ScopeWebRequestLifestyleManager.cs" />
-    <Compile Include="LifestyleManager\ScopeWebSessionLifestyleManager.cs" />
     <Compile Include="FlashMessages.cs" />
     <Compile Include="Navigation\NavigationState.cs">
       <SubType>Code</SubType>
@@ -208,7 +206,6 @@
       <DependentUpon>Castle.Igloo.xsd</DependentUpon>
     </None>
     <None Include="Configuration\Example.config" />
-    <None Include="Contexts\Contexts.cd" />
     <Content Include="licence.txt" />
     <Content Include="readme.txt" />
     <Content Include="ToDo.txt" />

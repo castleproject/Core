@@ -22,9 +22,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Diagnostics;
+using Castle.Core;
+using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Navigation;
 using Castle.Igloo.Util;
+using Castle.MicroKernel;
 
 namespace Castle.Igloo.Scopes.Web
 {
@@ -155,6 +159,33 @@ namespace Castle.Igloo.Scopes.Web
             {
                 Trace.WriteLine("Remove from page scope : " + name);
                 _sessionScope.Remove(name);
+            }
+        }
+
+        /// <summary>
+        /// Registers for eviction.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="model">The ComponentModel.</param>
+        /// <param name="instance">The instance.</param>
+        public void RegisterForEviction(ILifestyleManager manager, ComponentModel model, object instance)
+        {
+        }
+
+        /// <summary>
+        /// Checks the initialisation.
+        /// </summary>
+        public void CheckInitialisation()
+        {
+            if (!ScopeLifestyleModule.Initialized)
+            {
+                string message = "Looks like you forgot to register the http module " +
+                    typeof(ScopeLifestyleModule).FullName +
+                    "\r\nAdd '<add name=\"ScopeLifestyleModule\" type=\"Castle.Igloo.LifestyleManager.ScopeLifestyleModule, Castle.Igloo\" />' " +
+                    "to the <httpModules> section on your web.config";
+                {
+                    throw new ConfigurationErrorsException(message);
+                }
             }
         }
 

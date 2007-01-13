@@ -20,7 +20,8 @@
 
 using System;
 using System.Collections;
-using Castle.Igloo.Attributes;
+using Castle.Core;
+using Castle.MicroKernel;
 
 namespace Castle.Igloo.Scopes.Web
 {
@@ -112,7 +113,6 @@ namespace Castle.Igloo.Scopes.Web
         }
 
 
-
         /// <summary>
         /// Gets the type of the scope.
         /// </summary>
@@ -120,6 +120,22 @@ namespace Castle.Igloo.Scopes.Web
         public string ScopeType
         {
             get { return Igloo.ScopeType.Conversation; }
+        }
+
+        /// <summary>
+        /// Registers for eviction.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="model">The ComponentModel.</param>
+        /// <param name="instance">The instance.</param>
+        public void RegisterForEviction(ILifestyleManager manager, ComponentModel model, object instance)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public void CheckInitialisation()
+        {
+            throw new Exception("The method or operation is not implemented.");
         }
 
         #endregion

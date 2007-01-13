@@ -18,6 +18,8 @@
  ********************************************************************************/
 #endregion
 
+using Castle.Core;
+
 namespace Castle.Igloo.LifestyleManager
 {
     /// <summary>
@@ -25,23 +27,36 @@ namespace Castle.Igloo.LifestyleManager
     /// </summary>
     public class Candidate
     {
-        private string _name = string.Empty;
-        private object _component = null;
+        private ComponentModel _componentModel = null;
+        private object _instance = null;
 
-        public string Name
+        /// <summary>
+        /// Gets the component model.
+        /// </summary>
+        /// <value>The component model.</value>
+        public ComponentModel ComponentModel
         {
-            get { return _name; }
+            get { return _componentModel; }
         }
 
-        public object Component
+        /// <summary>
+        /// Gets the intance.
+        /// </summary>
+        /// <value>The intance.</value>
+        public object Intance
         {
-            get { return _component; }
+            get { return _instance; }
         }
 
-        public Candidate(string name, object component)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Candidate"/> class.
+        /// </summary>
+        /// <param name="componentModel">The component model.</param>
+        /// <param name="instance">The instance.</param>
+        public Candidate(ComponentModel componentModel, object instance)
         {
-            _name = name;
-            _component = component;
+            _componentModel = componentModel;
+            _instance = instance;
         }
     }
 }
