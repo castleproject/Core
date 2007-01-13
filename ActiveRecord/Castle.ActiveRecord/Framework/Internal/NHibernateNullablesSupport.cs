@@ -24,10 +24,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 				
 		private static Type tINullableType;
 		
-		static NHibernateNullablesSupport()
-		{
-			tINullableType = Type.GetType("Nullables.INullableType, " + NullableAsm, false);
-		}
+static NHibernateNullablesSupport()
+{
+	try
+	{
+		tINullableType = Type.GetType("Nullables.INullableType, " + NullableAsm, false);
+	}
+	catch(Exception e)
+	{
+		//This can happen when someone is registerring to the AssemblyResolve event and doesn't handle
+		// missing assemblies correctly.
+		//For instance, MbUnit.AddIn.MbUnitTestRunner.AssemblyResolveHandler has this behavior.
+		tNullableType = null;
+	}
+}
 		
 		public static bool IsNHibernateNullableType(Type type)
 		{
