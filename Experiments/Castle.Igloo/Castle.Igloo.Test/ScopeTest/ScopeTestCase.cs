@@ -1,7 +1,6 @@
-using System;
+
 using System.Threading;
-using Castle.Core;
-using Castle.Core.Configuration;
+
 using Castle.Core.Resource;
 using Castle.Igloo.Test.ScopeTest.Components;
 using Castle.MicroKernel.SubSystems.Configuration;
@@ -13,7 +12,6 @@ using Castle.MicroKernel;
 
 namespace Castle.Igloo.Test.ScopeTest
 {
-
 
     /// <summary>
     /// Summary description for LifestyleManagerTestCase.
@@ -42,8 +40,29 @@ namespace Castle.Igloo.Test.ScopeTest
             _container.Dispose();
         }
 
+
         [Test]
-        public void TestPerThread()
+        public void TestSingletonScope()
+        {
+            _container.AddComponent("a", typeof(IComponent), typeof(SingletonScopeComponent));
+
+            IHandler handler = _container.Kernel.GetHandler("a");
+
+            IComponent instance1 = handler.Resolve(CreationContext.Empty) as IComponent;
+            IComponent instance2 = handler.Resolve(CreationContext.Empty) as IComponent;
+
+            Assert.IsNotNull(instance1);
+            Assert.IsNotNull(instance2);
+
+            Assert.IsTrue(instance1.Equals(instance2));
+            Assert.IsTrue(instance1.ID == instance2.ID);
+
+            handler.Release(instance1);
+            handler.Release(instance2);
+        }
+        
+        [Test]
+        public void TestThreadScope()
         {
             _container.AddComponent("a", typeof(IComponent), typeof(PerScopeThreadComponent));
 

@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using Castle.Core;
 using Castle.Igloo.Scopes;
 using Castle.MicroKernel;
@@ -27,6 +28,13 @@ namespace Castle.Igloo.Contexts.Windows
 {
     public class SingletonScope : IScope
     {
+        private IDictionary<string, object> _map = null;
+        
+        public SingletonScope()
+        {
+            _map = new Dictionary<string, object>();
+        }
+        
         #region IScope Members
 
         /// <summary>
@@ -35,7 +43,7 @@ namespace Castle.Igloo.Contexts.Windows
         /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
         public bool IsActive
         {
-            get { throw new System.Exception("The method or operation is not implemented."); }
+            get { return true; }
         }
 
         /// <summary>
@@ -44,17 +52,27 @@ namespace Castle.Igloo.Contexts.Windows
         /// <value></value>
         public object this[string name]
         {
-            get { throw new System.Exception("The method or operation is not implemented."); }
+            get 
+            {
+                if (_map.ContainsKey(name))
+                {
+                    return _map[name];
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         /// <summary>
         /// Adds an element with the provided key and value to the IScope object.
         /// </summary>
         /// <param name="name">The name of the element to add.</param>
-        /// <param name="value">The Object to use as the value of the element to add.</param>
-        public void Add(string name, object value)
+        /// <param name="instance">The Object to use as the value of the element to add.</param>
+        public void Add(string name, object instance)
         {
-            throw new System.Exception("The method or operation is not implemented.");
+            _map[name] = instance;
         }
 
         /// <summary>
@@ -63,7 +81,7 @@ namespace Castle.Igloo.Contexts.Windows
         /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
-            throw new System.Exception("The method or operation is not implemented.");
+            _map.Remove(name);
         }
 
         /// <summary>
@@ -73,7 +91,7 @@ namespace Castle.Igloo.Contexts.Windows
         /// <returns></returns>
         public bool Contains(string name)
         {
-            throw new System.Exception("The method or operation is not implemented.");
+            return _map.Keys.Contains(name);
         }
 
 
@@ -83,7 +101,7 @@ namespace Castle.Igloo.Contexts.Windows
         /// <value>The names.</value>
         public ICollection Names
         {
-            get { throw new System.Exception("The method or operation is not implemented."); }
+            get { return (ICollection)_map.Keys; }
         }
 
         /// <summary>
@@ -102,12 +120,10 @@ namespace Castle.Igloo.Contexts.Windows
 
         public void RegisterForEviction(ILifestyleManager manager, ComponentModel model, object instance)
         {
-            throw new System.Exception("The method or operation is not implemented.");
         }
 
         public void CheckInitialisation()
         {
-            throw new System.Exception("The method or operation is not implemented.");
         }
 
         #endregion
