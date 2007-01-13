@@ -30,12 +30,12 @@ static NHibernateNullablesSupport()
 	{
 		tINullableType = Type.GetType("Nullables.INullableType, " + NullableAsm, false);
 	}
-	catch(Exception e)
+	catch
 	{
 		//This can happen when someone is registerring to the AssemblyResolve event and doesn't handle
 		// missing assemblies correctly.
 		//For instance, MbUnit.AddIn.MbUnitTestRunner.AssemblyResolveHandler has this behavior.
-		tNullableType = null;
+		tINullableType = null;
 	}
 }
 		
