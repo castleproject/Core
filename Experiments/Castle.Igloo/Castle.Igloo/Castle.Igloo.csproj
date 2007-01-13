@@ -113,6 +113,11 @@
     <Compile Include="Attributes\ScopeAttribute.cs" />
     <Compile Include="BijectionInspector.cs" />
     <Compile Include="LifestyleManager\ScopeLifestyleManager.cs" />
+    <Compile Include="Mock\MockApplicationScope.cs" />
+    <Compile Include="Mock\MockPageScope.cs" />
+    <Compile Include="Mock\MockRequestScope.cs" />
+    <Compile Include="Mock\MockScope.cs" />
+    <Compile Include="Mock\MockSessionScope.cs" />
     <Compile Include="Scopes\Web\IApplicationScope.cs" />
     <Compile Include="Scopes\Web\IPageScope.cs" />
     <Compile Include="Scopes\Web\IRequestScope.cs" />

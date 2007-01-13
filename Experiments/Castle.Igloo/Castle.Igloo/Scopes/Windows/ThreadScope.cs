@@ -30,7 +30,7 @@ namespace Castle.Igloo.Scopes.Windows
 {
     public class ThreadScope : IScope
     {
-        private const string THREAD_TOKEN = "CASTLE_PER_THREAD";
+        private const string THREAD_TOKEN = "_THREAD_SCOPE_";
         
         [NonSerialized]
         private static LocalDataStoreSlot _slot = Thread.AllocateNamedDataSlot(THREAD_TOKEN);

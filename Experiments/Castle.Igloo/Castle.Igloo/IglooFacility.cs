@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Web;
 using Castle.Core.Configuration;
 using Castle.Igloo.Contexts.Windows;
+using Castle.Igloo.Mock;
 using Castle.Igloo.Scopes;
 using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.Scopes.Windows;
@@ -140,6 +141,7 @@ namespace Castle.Igloo
             HttpContext current = HttpContext.Current;
             if (current != null)
             {
+                // Web scope
                 Kernel.AddComponent(ScopeType.Application, typeof (IApplicationScope), typeof (WebApplicationScope));
                 Kernel.AddComponent(ScopeType.Page, typeof(IPageScope), typeof(WebPageScope));
                 Kernel.AddComponent(ScopeType.Request, typeof(IRequestScope), typeof(WebRequestScope));
@@ -147,7 +149,13 @@ namespace Castle.Igloo
             }
             else
             {
-                // To do register Mock
+                // Mock web scope
+                Kernel.AddComponent(ScopeType.Application, typeof(IApplicationScope), typeof(MockApplicationScope));
+                Kernel.AddComponent(ScopeType.Page, typeof(IPageScope), typeof(MockPageScope));
+                Kernel.AddComponent(ScopeType.Request, typeof(IRequestScope), typeof(MockRequestScope));
+                Kernel.AddComponent(ScopeType.Session, typeof(ISessionScope), typeof(MockSessionScope));
+
+                // Windows scope
                 Kernel.AddComponent(ScopeType.Thread, typeof(IScope), typeof(ThreadScope));
                 Kernel.AddComponent(ScopeType.Singleton, typeof(IScope), typeof(SingletonScope));
                 Kernel.AddComponent(ScopeType.Transient, typeof(IScope), typeof(TransientScope));

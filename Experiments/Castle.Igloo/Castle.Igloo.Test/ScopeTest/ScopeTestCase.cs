@@ -2,7 +2,10 @@
 using System.Threading;
 using Castle.Core;
 using Castle.Core.Resource;
+using Castle.Igloo.Attributes;
 using Castle.Igloo.LifestyleManager;
+using Castle.Igloo.Scopes;
+using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.Test.ScopeTest.Components;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -39,6 +42,29 @@ namespace Castle.Igloo.Test.ScopeTest
         public void DisposeContainer()
         {
             _container.Dispose();
+        }
+
+        /// <summary>
+        /// Test ScopeRegistry
+        /// </summary>
+        [Test]
+        public void TestScopeRegistry()
+        {
+            IScopeRegistry registry = _container.Resolve<IScopeRegistry>();
+            Assert.IsNotNull(registry);
+            
+            ISessionScope scope = _container.Resolve<ISessionScope>();
+            Assert.IsNotNull(scope);
+            
+            scope.Add("test", new object());
+
+            Assert.IsTrue(registry.IsInScopes("test"));
+            
+            InjectAttribute attribute = new InjectAttribute();
+            attribute.Name = "test";
+            attribute.Scope = ScopeType.Session;
+
+            Assert.IsNotNull(registry.GetFromScopes(attribute));
         }
 
         [Test]
