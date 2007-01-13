@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using Castle.Igloo.Scopes;
+using Castle.Igloo.Scopes.Web;
 
 namespace Castle.Igloo.Attributes
 {
@@ -30,7 +30,7 @@ namespace Castle.Igloo.Attributes
     public class ScopeAttribute : Attribute 
     {
         private string _scope = ScopeType.UnSpecified;
-        private bool _proxy = false;
+        private bool _useProxy = false;
 
         /// <summary>
         /// The component scope.
@@ -50,10 +50,10 @@ namespace Castle.Igloo.Attributes
         /// <remarks>
         /// You do not need to set to true with components that are not web scoped as <see cref="ISessionScope"/>....
         /// </remarks>
-        public bool Proxy
+        public bool UseProxy
         {
-            get { return _proxy; }
-            set { _proxy = value; }
+            get { return _useProxy; }
+            set { _useProxy = value; }
         }
     }
 }

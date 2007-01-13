@@ -1,3 +1,4 @@
+using Castle.Igloo.Scopes;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Core.Resource;
 using Castle.Windsor;
