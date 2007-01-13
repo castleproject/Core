@@ -1,7 +1,8 @@
 
 using System.Threading;
-
+using Castle.Core;
 using Castle.Core.Resource;
+using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Test.ScopeTest.Components;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -40,6 +41,29 @@ namespace Castle.Igloo.Test.ScopeTest
             _container.Dispose();
         }
 
+        [Test]
+        public void ScopeSetThroughAttribute()
+        {
+            _container.AddComponent("a", typeof(IComponent), typeof(SingletonScopeComponent));
+            IHandler handler = _container.Kernel.GetHandler("a");
+            Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+            Assert.AreEqual(typeof(ScopeLifestyleManager), handler.ComponentModel.CustomLifestyle);
+
+            _container.AddComponent("b", typeof(TransientScopeComponent));
+            handler = _container.Kernel.GetHandler("b");
+            Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+            Assert.AreEqual(typeof(ScopeLifestyleManager), handler.ComponentModel.CustomLifestyle);
+
+            _container.AddComponent("c", typeof(PerScopeThreadComponent));
+            handler = _container.Kernel.GetHandler("c");
+            Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+            Assert.AreEqual(typeof(ScopeLifestyleManager), handler.ComponentModel.CustomLifestyle);
+
+            //_container.AddComponent("d", typeof(PerScopeWebRequestComponent));
+            //handler = _container.Kernel.GetHandler("d");
+            //Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+            //Assert.AreEqual(typeof(ScopeLifestyleManager), handler.ComponentModel.CustomLifestyle);
+        }
 
         [Test]
         public void TestSingletonScope()
@@ -60,6 +84,27 @@ namespace Castle.Igloo.Test.ScopeTest
             handler.Release(instance1);
             handler.Release(instance2);
         }
+
+        [Test]
+        public void TestTransientScope()
+        {
+            _container.AddComponent("a", typeof(IComponent), typeof(TransientScopeComponent));
+
+            IHandler handler = _container.Kernel.GetHandler("a");
+
+            IComponent instance1 = handler.Resolve(CreationContext.Empty) as IComponent;
+            IComponent instance2 = handler.Resolve(CreationContext.Empty) as IComponent;
+
+            Assert.IsNotNull(instance1);
+            Assert.IsNotNull(instance2);
+
+            Assert.IsTrue(!instance1.Equals(instance2));
+            Assert.IsTrue(instance1.ID != instance2.ID);
+
+            handler.Release(instance1);
+            handler.Release(instance2);
+        }
+        
         
         [Test]
         public void TestThreadScope()

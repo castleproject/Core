@@ -56,17 +56,19 @@ namespace Castle.Igloo.LifestyleManager
 
             IScope scope = (IScope)Kernel[scopeName];
 
-            if (scope[component.Name] == null)
+            object instance = scope[component.Name];
+
+            if (instance == null)
             {
                 scope.CheckInitialisation();
 
-                object instance = base.Resolve(context);
+                instance = base.Resolve(context);
                 
                 scope.Add(component.Name, instance);
                 scope.RegisterForEviction(this, component, instance);
             }
-
-            return scope[component.Name];
+            
+            return instance;
         }
 
         public override void Release(object instance)

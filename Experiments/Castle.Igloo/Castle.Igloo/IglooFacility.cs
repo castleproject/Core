@@ -150,6 +150,7 @@ namespace Castle.Igloo
                 // To do register Mock
                 Kernel.AddComponent(ScopeType.Thread, typeof(IScope), typeof(ThreadScope));
                 Kernel.AddComponent(ScopeType.Singleton, typeof(IScope), typeof(SingletonScope));
+                Kernel.AddComponent(ScopeType.Transient, typeof(IScope), typeof(TransientScope));
             }
         }
 
