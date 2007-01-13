@@ -26,6 +26,7 @@ using System.Web;
 using Castle.Core.Configuration;
 using Castle.Igloo.Scopes;
 using Castle.Igloo.Scopes.Web;
+using Castle.Igloo.Scopes.Windows;
 using Castle.Igloo.UI;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
@@ -146,6 +147,7 @@ namespace Castle.Igloo
             else
             {
                 // To do register Mock
+                Kernel.AddComponent(ScopeType.Thread, typeof(ISessionScope), typeof(ThreadScope));
             }
         }
 

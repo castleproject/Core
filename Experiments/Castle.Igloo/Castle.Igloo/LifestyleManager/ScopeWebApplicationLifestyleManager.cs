@@ -22,7 +22,6 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Web;
-using Castle.Igloo.Scopes;
 using Castle.Igloo.Scopes.Web;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;

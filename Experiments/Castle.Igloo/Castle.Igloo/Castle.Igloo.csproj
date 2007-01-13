@@ -128,6 +128,7 @@
     <Compile Include="IglooFacility.cs" />
     <Compile Include="Interceptors\BijectionInterceptor.cs" />
     <Compile Include="LifestyleManager\Candidate.cs" />
+    <Compile Include="Scopes\Windows\ThreadScope.cs" />
     <Compile Include="UIComponents\UIComponentRepository.cs" />
     <Compile Include="Configuration\CommandsSetting.cs">
       <SubType>Code</SubType>

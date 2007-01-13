@@ -49,6 +49,9 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="Contexts\ContextsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScopeTest\Components\IComponant.cs" />
+    <Compile Include="ScopeTest\Components\PerScopeThreadComponent.cs" />
+    <Compile Include="ScopeTest\ScopeTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Igloo\Castle.Igloo.csproj">

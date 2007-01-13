@@ -39,6 +39,12 @@ namespace Castle.Igloo
         public const string Transient = "Transient";
 
         /// <summary>
+        /// Constant identifying the thread scope.
+        /// Scopes a single component model to the lifecycle of a thread; 
+        /// </summary>
+        public const string Thread = "Thread";
+
+        /// <summary>
         /// Constant identifying the application scope.
         /// Scopes a single component definition to the lifecycle of an ASP.NET application; 
         /// </summary>
