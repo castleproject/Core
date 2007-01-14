@@ -381,7 +381,13 @@ namespace Castle.ActiveRecord
 			foreach(ActiveRecordModel model in models)
 			{
 				Configuration cfg = holder.GetConfiguration(holder.GetRootType(model.Type));
-
+				if(cfg==null)
+				{
+					throw new ActiveRecordException(
+						string.Format(
+							"Could not find configuration for {0} or its root type {1} this is usually an indication that the configuration has not been setup correctly.",
+							model.Type, holder.GetRootType(model.Type)));
+				}
 				if (!model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
 				{
 					xmlVisitor.Reset();
