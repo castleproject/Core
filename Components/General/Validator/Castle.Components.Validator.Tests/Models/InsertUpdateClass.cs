@@ -14,41 +14,36 @@
 
 namespace Castle.Components.Validator.Tests.Models
 {
-	public class Client : Person
+	public class InsertUpdateClass
 	{
-		private string email, password, confirmation;
+		private string prop1, prop2, prop3, prop4;
 
-		public Client()
+		[ValidateNonEmpty(FriendlyName="Property 1", RunWhen=RunWhen.Insert)]
+		public string Prop1
 		{
+			get { return prop1; }
+			set { prop1 = value; }
 		}
 
-		public Client(int id, int age, string name, string address,
-		              string email, string password, string confirmation) : base(id, age, name, address)
+		[ValidateNonEmpty(FriendlyName = "Property 2", RunWhen = RunWhen.Insert)]
+		public string Prop2
 		{
-			this.email = email;
-			this.password = password;
-			this.confirmation = confirmation;
+			get { return prop2; }
+			set { prop2 = value; }
 		}
 
-		[ValidateEmail]
-		public string Email
+		[ValidateNonEmpty(FriendlyName = "Property 3", RunWhen = RunWhen.Update)]
+		public string Prop3
 		{
-			get { return email; }
-			set { email = value; }
+			get { return prop3; }
+			set { prop3 = value; }
 		}
 
-		[ValidateLength(3, 12, "Invalid password length")]
-		public string Password
+		[ValidateNonEmpty(FriendlyName = "Property 4", RunWhen = RunWhen.Update)]
+		public string Prop4
 		{
-			get { return password; }
-			set { password = value; }
-		}
-
-		[ValidateSameAs("Password", RunWhen=RunWhen.Custom)]
-		public string Confirmation
-		{
-			get { return confirmation; }
-			set { confirmation = value; }
+			get { return prop4; }
+			set { prop4 = value; }
 		}
 	}
 }

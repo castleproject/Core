@@ -17,33 +17,23 @@ namespace Castle.Components.Validator
 	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// This is a meta validator. 
+	/// It is only useful to test a source content before setting it on the 
+	/// target instance.
+	/// </summary>
 	public class IntegerValidator : AbstractValidator
 	{
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// If the <c>fieldValue</c> is not null, an attempt to convert the
+		/// content to a Integer is performed, and the field is considered value
+		/// if the conversion is successful.
 		/// </summary>
-		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
-		/// </value>
-		public override bool SupportWebValidation
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
-		/// </summary>
-		/// <param name="config">The config.</param>
-		/// <param name="inputType">Type of the input.</param>
-		/// <param name="generator">The generator.</param>
-		/// <param name="attributes">The attributes.</param>
-		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                                        IWebValidationGenerator generator, IDictionary attributes)
-		{
-			generator.SetDigitsOnly(BuildErrorMessage());
-		}
-
+		/// <param name="instance">The target type instance</param>
+		/// <param name="fieldValue">The property/field value. It can be null.</param>
+		/// <returns>
+		/// 	<c>true</c> if the value is accepted (has passed the validation test)
+		/// </returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
 			if (fieldValue == null) return false;
@@ -65,13 +55,41 @@ namespace Castle.Components.Validator
 
 				return true;
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				return false;
 			}
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this validator supports web validation.
+		/// </summary>
+		/// <value>
+		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// </value>
+		public override bool SupportsWebValidation
+		{
+			get { return true; }
+		}
 
+		/// <summary>
+		/// Applies the web validation by setting up one or
+		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// </summary>
+		/// <param name="config">The config.</param>
+		/// <param name="inputType">Type of the input.</param>
+		/// <param name="generator">The generator.</param>
+		/// <param name="attributes">The attributes.</param>
+		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
+		                                        IWebValidationGenerator generator, IDictionary attributes)
+		{
+			generator.SetDigitsOnly(BuildErrorMessage());
+		}
+
+		/// <summary>
+		/// Returns the key used to internationalize error messages
+		/// </summary>
+		/// <value></value>
 		protected override string MessageKey
 		{
 			get { return MessageConstants.InvalidIntegerMessage; }

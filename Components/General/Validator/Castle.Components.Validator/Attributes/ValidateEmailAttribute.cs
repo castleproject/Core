@@ -43,6 +43,11 @@ namespace Castle.Components.Validator
 		{
 		}
 
+		/// <summary>
+		/// Constructs and configures an <see cref="IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		/// <returns></returns>
 		public override IValidator Build()
 		{
 			IValidator validator = new EmailValidator();

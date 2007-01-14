@@ -16,17 +16,36 @@ namespace Castle.Components.Validator
 {
 	using System.Collections;
 
+	/// <summary>
+	/// Represents the base of a web configuration.
+	/// </summary>
 	public class WebValidationConfiguration
 	{
+		/// <summary>
+		/// Configures the JS library based on the supplied parameters.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
 		public virtual void Configure(IDictionary parameters)
 		{
 		}
 
+		/// <summary>
+		/// Implementors should return any tag/js content
+		/// to be rendered after the form tag is rendered.
+		/// </summary>
+		/// <param name="formId">The form id.</param>
+		/// <returns></returns>
 		public virtual string CreateAfterFormOpened(string formId)
 		{
 			return string.Empty;
 		}
 
+		/// <summary>
+		/// Implementors should return any tag/js content
+		/// to be rendered after the form tag is closed.
+		/// </summary>
+		/// <param name="formId">The form id.</param>
+		/// <returns></returns>
 		public virtual string CreateBeforeFormClosed(string formId)
 		{
 			return string.Empty;

@@ -18,15 +18,43 @@ namespace Castle.Components.Validator
 	using System.Reflection;
 
 	/// <summary>
-	/// Define the basic contract for validators
+	/// Defines the basic contract for validators. 
+	/// <para>
+	/// To create a new validation you should use <see cref="AbstractValidator"/> as it 
+	/// implements most of the common methods and properties.
+	/// </para>
+	/// <para>
+	/// The validation should happen at <c>IsValid</c>, and if the validator can configure
+	/// a client-side validation script, it should use the <see cref="SupportsWebValidation"/>
+	/// to indicate that it does support client-side validation and also implement the 
+	/// <see cref="ApplyWebValidation"/> to configure it.
+	/// </para>
 	/// </summary>
 	public interface IValidator
 	{
+		/// <summary>
+		/// Implementors should perform any initialization logic
+		/// </summary>
+		/// <param name="property">The target property</param>
+		void Initialize(PropertyInfo property);
+
 		/// <summary>
 		/// The target property
 		/// </summary>
 		PropertyInfo Property { get; }
 
+		/// <summary>
+		/// Defines when to run the validation. 
+		/// Defaults to <c>RunWhen.Everytime</c>
+		/// </summary>
+		RunWhen RunWhen { get; set; }
+
+		/// <summary>
+		/// Gets or sets the validation execution order.
+		/// </summary>
+		/// <value>The execution order.</value>
+		int ExecutionOrder { get; set; }
+		
 		/// <summary>
 		/// The error message to be displayed if the validation fails
 		/// </summary>
@@ -38,12 +66,6 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <value>The name.</value>
 		string FriendlyName { get; set; }
-
-		/// <summary>
-		/// Implementors should perform any initialization logic
-		/// </summary>
-		/// <param name="property">The target property</param>
-		void Initialize(PropertyInfo property);
 
 		/// <summary>
 		/// Implementors should perform the actual validation upon
@@ -68,7 +90,7 @@ namespace Castle.Components.Validator
 		/// <value>
 		/// <see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		bool SupportWebValidation { get; }
+		bool SupportsWebValidation { get; }
 
 		/// <summary>
 		/// Applies the web validation by setting up one or 

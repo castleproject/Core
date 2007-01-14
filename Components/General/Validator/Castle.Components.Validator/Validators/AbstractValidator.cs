@@ -29,9 +29,14 @@ namespace Castle.Components.Validator
 	{
 		private static ResourceManager resourceManager;
 
-		private String errorMessage, friendlyName;
+		private int executionOrder;
+		private string errorMessage, friendlyName;
 		private PropertyInfo property;
+		private RunWhen runWhen;
 
+		/// <summary>
+		/// Initializes the <see cref="AbstractValidator"/> class.
+		/// </summary>
 		static AbstractValidator()
 		{
 			resourceManager = 
@@ -81,6 +86,26 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
+		/// Gets or sets the validation execution order.
+		/// </summary>
+		/// <value>The execution order.</value>
+		public int ExecutionOrder
+		{
+			get { return executionOrder; }
+			set { executionOrder = value; }
+		}
+
+		/// <summary>
+		/// Defines when to run the validation. 
+		/// Defaults to <c>RunWhen.Everytime</c>
+		/// </summary>
+		public RunWhen RunWhen
+		{
+			get { return runWhen; }
+			set { runWhen = value; }
+		}
+
+		/// <summary>
 		/// The target property
 		/// </summary>
 		public PropertyInfo Property
@@ -111,9 +136,9 @@ namespace Castle.Components.Validator
 		/// Gets a value indicating whether this validator supports web validation.
 		/// </summary>
 		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// <see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public abstract bool SupportWebValidation { get; }
+		public abstract bool SupportsWebValidation { get; }
 
 		/// <summary>
 		/// Applies the web validation by setting up one or
@@ -131,7 +156,7 @@ namespace Castle.Components.Validator
 		/// Implementors should perform the actual validation upon
 		/// the property value
 		/// </summary>
-		/// <param name="instance"></param>
+		/// <param name="instance">The target type instance</param>
 		/// <returns><c>true</c> if the field is OK</returns>
 		public bool IsValid(object instance)
 		{
@@ -142,30 +167,41 @@ namespace Castle.Components.Validator
 		/// Implementors should perform the actual validation upon
 		/// the property value
 		/// </summary>
-		/// <param name="instance"></param>
-		/// <param name="fieldValue"></param>
-		/// <returns><c>true</c> if the field is OK</returns>
+		/// <param name="instance">The target type instance</param>
+		/// <param name="fieldValue">The property/field value. It can be null.</param>
+		/// <returns><c>true</c> if the value is accepted (has passed the validation test)</returns>
 		public abstract bool IsValid(object instance, object fieldValue);
 
 		/// <summary>
 		/// Builds the error message.
 		/// </summary>
-		/// <returns></returns>
 		protected virtual string BuildErrorMessage()
 		{
 			return String.Format(GetResourceForCurrentCulture().GetString(MessageKey), Name);
 		}
 
+		/// <summary>
+		/// Returns the key used to internationalize error messages
+		/// </summary>
 		protected virtual string MessageKey
 		{
 			get { return MessageConstants.GenericInvalidField; }
 		}
 
+		/// <summary>
+		/// Returns the resource set instance with the validation error messages.
+		/// <seealso cref="MessageConstants"/>
+		/// </summary>
+		/// <returns>A resource set instance</returns>
 		protected static ResourceSet GetResourceForCurrentCulture()
 		{
 			return resourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true); 
 		}
 
+		/// <summary>
+		/// Gets the property name. The <see cref="FriendlyName"/>
+		/// is returned if non-null, otherwise it will return the property name.
+		/// </summary>
 		protected string Name
 		{
 			get

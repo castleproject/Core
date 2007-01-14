@@ -34,9 +34,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ErrorSummaryTestCase.cs" />
     <Compile Include="Models\Client.cs" />
-    <Compile Include="PropertyBasedRegistryTestCase.cs" />
+    <Compile Include="CachedValidationRegistryTestCase.cs" />
+    <Compile Include="Models\InsertUpdateClass.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Supplier.cs" />
     <Compile Include="ValidatorRunnerTestCase.cs" />
+    <Compile Include="ValidatorsExecutionOrderTestCase.cs" />
+    <Compile Include="ValidatorTests\DateTimeValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\DecimalValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\DoubleValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\EmailValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\IntegerValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\LengthValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\NonEmptyValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\RegularExpressionValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\SameAsValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\SingleValidatorTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator.csproj">

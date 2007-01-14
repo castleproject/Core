@@ -17,15 +17,46 @@ namespace Castle.Components.Validator
 	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// This is a meta validator. 
+	/// It is only useful to test a source content before setting it on the 
+	/// target instance.
+	/// </summary>
 	public class SingleValidator : AbstractValidator
 	{
+		/// <summary>
+		/// If the <c>fieldValue</c> is not null, an attempt to convert the
+		/// content to a Single is performed, and the field is considered value
+		/// if the conversion is successful.
+		/// </summary>
+		/// <param name="instance">The target type instance</param>
+		/// <param name="fieldValue">The property/field value. It can be null.</param>
+		/// <returns>
+		/// 	<c>true</c> if the value is accepted (has passed the validation test)
+		/// </returns>
+		public override bool IsValid(object instance, object fieldValue)
+		{
+			if (fieldValue == null) return false;
+
+			try
+			{
+				Convert.ToSingle(fieldValue.ToString());
+
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
+
 		/// <summary>
 		/// Gets a value indicating whether this validator supports web validation.
 		/// </summary>
 		/// <value>
 		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public override bool SupportWebValidation
+		public override bool SupportsWebValidation
 		{
 			get { return true; }
 		}
@@ -44,22 +75,10 @@ namespace Castle.Components.Validator
 			generator.SetDigitsOnly(BuildErrorMessage());
 		}
 
-		public override bool IsValid(object instance, object fieldValue)
-		{
-			if (fieldValue == null) return false;
-
-			try
-			{
-				Convert.ToSingle(fieldValue.ToString());
-				
-				return true;
-			}
-			catch(Exception)
-			{
-				return false;
-			}
-		}
-
+		/// <summary>
+		/// Returns the key used to internationalize error messages
+		/// </summary>
+		/// <value></value>
 		protected override string MessageKey
 		{
 			get { return MessageConstants.InvalidSingleMessage; }

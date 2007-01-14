@@ -17,6 +17,31 @@ namespace Castle.Components.Validator
 	using System;
 
 	/// <summary>
+	/// Represents "phases" in which you can group 
+	/// different validations and run then accordingly
+	/// </summary>
+	[Flags]
+	public enum RunWhen
+	{
+		/// <summary>
+		/// Run all validations
+		/// </summary>
+		Everytime = 0x1,
+		/// <summary>
+		/// Only during an insertion phase
+		/// </summary>
+		Insert = 0x2,
+		/// <summary>
+		/// Only during an update phase
+		/// </summary>
+		Update = 0x4,
+		/// <summary>
+		/// Defines a custom phase
+		/// </summary>
+		Custom = 0x8,
+	}
+
+	/// <summary>
 	/// The base class for all the validation attributes.
 	/// This class define a <seealso cref="Validator"/> property that is used to retrieve the validtor that is used to 
 	/// validate the value of the property.
@@ -26,6 +51,8 @@ namespace Castle.Components.Validator
 	{
 		private readonly string errorMessage;
 		private string friendlyName;
+		private int executionOrder = 0;
+		private RunWhen runWhen = RunWhen.Everytime;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractValidationAttribute"/> class.
@@ -41,6 +68,26 @@ namespace Castle.Components.Validator
 		protected AbstractValidationAttribute(string errorMessage)
 		{
 			this.errorMessage = errorMessage;
+		}
+
+		/// <summary>
+		/// Defines when to run the validation. 
+		/// Defaults to <c>RunWhen.Everytime</c>
+		/// </summary>
+		public RunWhen RunWhen
+		{
+			get { return runWhen; }
+			set { runWhen = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the validation execution order.
+		/// </summary>
+		/// <value>The execution order.</value>
+		public int ExecutionOrder
+		{
+			get { return executionOrder; }
+			set { executionOrder = value; }
 		}
 
 		/// <summary>
@@ -62,10 +109,22 @@ namespace Castle.Components.Validator
 			get { return errorMessage; }
 		}
 
+		/// <summary>
+		/// Constructs and configures an <see cref="IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		/// <returns></returns>
 		public abstract IValidator Build();
 
+		/// <summary>
+		/// Applies the common configuration defined on the attribute.
+		/// </summary>
+		/// <param name="validator">The validator instance.</param>
 		protected void ConfigureValidatorMessage(IValidator validator)
 		{
+			validator.RunWhen = runWhen;
+			validator.ExecutionOrder = executionOrder;
+
 			if (errorMessage != null)
 			{
 				validator.ErrorMessage = errorMessage;

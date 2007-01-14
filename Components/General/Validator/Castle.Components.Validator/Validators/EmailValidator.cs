@@ -37,17 +37,34 @@ namespace Castle.Components.Validator
 		{
 		}
 
-		public override bool SupportWebValidation
+		/// <summary>
+		/// Gets a value indicating whether [supports web validation].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [supports web validation]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool SupportsWebValidation
 		{
 			get { return true; }
 		}
 
+		/// <summary>
+		/// Applies the web validation.
+		/// </summary>
+		/// <param name="config">The config.</param>
+		/// <param name="inputType">Type of the input.</param>
+		/// <param name="generator">The generator.</param>
+		/// <param name="attributes">The attributes.</param>
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
 		                                        IWebValidationGenerator generator, IDictionary attributes)
 		{
 			generator.SetEmail(BuildErrorMessage());
 		}
 
+		/// <summary>
+		/// Returns the key used to internationalize error messages
+		/// </summary>
+		/// <value></value>
 		protected override string MessageKey
 		{
 			get { return MessageConstants.InvalidEmailMessage; }

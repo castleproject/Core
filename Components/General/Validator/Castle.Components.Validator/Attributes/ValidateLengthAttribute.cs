@@ -19,7 +19,7 @@ namespace Castle.Components.Validator
 	using Castle.Components.Validator;
 
 	/// <summary>
-	/// Validate that this property has the required length (either exact or in range)
+	/// Validate that this property has the required length (either exact or in a range)
 	/// </summary>
 	[Serializable, CLSCompliant(false)]
 	public class ValidateLengthAttribute : AbstractValidationAttribute
@@ -66,6 +66,11 @@ namespace Castle.Components.Validator
 			validator = new LengthValidator(minLength, maxLength);
 		}
 
+		/// <summary>
+		/// Constructs and configures an <see cref="IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		/// <returns></returns>
 		public override IValidator Build()
 		{
 			ConfigureValidatorMessage(validator);

@@ -18,11 +18,24 @@ namespace Castle.Components.Validator
 	using System.Collections;
 	using System.Reflection;
 
+	/// <summary>
+	/// Coordinates the gathering and execution of validators.
+	/// <seealso cref="IValidatorRegistry"/>
+	/// </summary>
+	/// <example>
+	/// ValidatorRunner runner = new ValidatorRunner(new CachedValidationRegistry());
+	/// 
+	/// if (!runner.IsValid(customer))
+	/// {
+	///		// do something as the Customer instance is not valid
+	/// }
+	/// </example>
 	public class ValidatorRunner
 	{
-		private static IDictionary type2Validator;
+		private readonly static IDictionary type2Validator;
 
 		private readonly bool inferValidators;
+		private readonly IDictionary errorPerInstance;
 		private readonly IValidatorRegistry registry;
 
 		static ValidatorRunner()
@@ -34,7 +47,15 @@ namespace Castle.Components.Validator
 			type2Validator[typeof(decimal)] = typeof(DecimalValidator);
 			type2Validator[typeof(Single)] = typeof(SingleValidator);
 			type2Validator[typeof(double)] = typeof(DoubleValidator);
-			type2Validator[typeof(DateTime)] = typeof(DateValidator);
+			type2Validator[typeof(DateTime)] = typeof(DateTimeValidator);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
+		/// </summary>
+		/// <param name="registry">The instance registry.</param>
+		public ValidatorRunner(IValidatorRegistry registry) : this(true, registry)
+		{
 		}
 
 		/// <summary>
@@ -45,40 +66,87 @@ namespace Castle.Components.Validator
 		/// <param name="registry">The registry.</param>
 		public ValidatorRunner(bool inferValidators, IValidatorRegistry registry)
 		{
+			if (registry == null) throw new ArgumentNullException("registry");
+
+			errorPerInstance = new Hashtable();
+
 			this.inferValidators = inferValidators;
 			this.registry = registry;
 		}
 
 		/// <summary>
 		/// Determines whether the specified instance is valid.
+		/// <para>
+		/// All validators are run.
+		/// </para>
 		/// </summary>
-		/// <param name="objectInstance">The obj.</param>
+		/// <param name="objectInstance">The object instance to be validated (cannot be null).</param>
 		/// <returns>
 		/// 	<see langword="true"/> if the specified obj is valid; otherwise, <see langword="false"/>.
 		/// </returns>
 		public bool IsValid(object objectInstance)
 		{
+			return IsValid(objectInstance, RunWhen.Everytime);
+		}
+
+		/// <summary>
+		/// Determines whether the specified instance is valid.
+		/// <para>
+		/// All validators are run for the specified <see cref="RunWhen"/> phase.
+		/// </para>
+		/// </summary>
+		/// <param name="objectInstance">The object instance to be validated (cannot be null).</param>
+		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
+		/// <returns>
+		/// <see langword="true"/> if the specified instance is valid; otherwise, <see langword="false"/>.
+		/// </returns>
+		public bool IsValid(object objectInstance, RunWhen runWhen)
+		{
 			if (objectInstance == null) throw new ArgumentNullException("objectInstance");
 
 			bool isValid = true;
 
-			foreach(IValidator validator in GetValidators(objectInstance))
+			ErrorSummary summary = new ErrorSummary();
+
+			foreach(IValidator validator in GetValidators(objectInstance, runWhen))
 			{
 				if (!validator.IsValid(objectInstance))
 				{
+					summary.RegisterErrorMessage(validator.Property, validator.ErrorMessage);
+
 					isValid = false;
 				}
 			}
 
+			errorPerInstance[objectInstance] = summary;
+
 			return isValid;
 		}
 
+		/// <summary>
+		/// Gets the registered validators.
+		/// </summary>
+		/// <param name="parentType">Type of the parent.</param>
+		/// <param name="property">The property.</param>
+		/// <returns></returns>
 		public IValidator[] GetValidators(Type parentType, PropertyInfo property)
+		{
+			return GetValidators(parentType, property, RunWhen.Everytime);
+		}
+
+		/// <summary>
+		/// Gets the registered validators.
+		/// </summary>
+		/// <param name="parentType">Type of the parent.</param>
+		/// <param name="property">The property.</param>
+		/// <param name="runWhenPhase">The run when phase.</param>
+		/// <returns></returns>
+		public IValidator[] GetValidators(Type parentType, PropertyInfo property, RunWhen runWhenPhase)
 		{
 			if (parentType == null) throw new ArgumentNullException("parentType");
 			if (property == null) throw new ArgumentNullException("property");
 
-			IValidator[] validators = registry.GetValidators(parentType, property);
+			IValidator[] validators = registry.GetValidators(parentType, property, runWhenPhase);
 
 			if (inferValidators && validators.Length == 0)
 			{
@@ -92,14 +160,62 @@ namespace Castle.Components.Validator
 				}
 			}
 
+			Array.Sort(validators, ValidatorComparer.Instance);
+
 			return validators;
 		}
 
-		private IValidator[] GetValidators(object objectInstance)
+		/// <summary>
+		/// Gets the error list per instance.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <returns></returns>
+		public bool HasErrors(object instance)
+		{
+			ErrorSummary summary = (ErrorSummary) errorPerInstance[instance];
+
+			if (summary == null) return false;
+
+			return summary.ErrorsCount != 0;
+		}
+
+		/// <summary>
+		/// Gets the error list per instance.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		/// <returns></returns>
+		public ErrorSummary GetErrorSummary(object instance)
+		{
+			return (ErrorSummary) errorPerInstance[instance];
+		}
+
+		private IValidator[] GetValidators(object objectInstance, RunWhen runWhen)
 		{
 			if (objectInstance == null) throw new ArgumentNullException("objectInstance");
 
-			return registry.GetValidators(objectInstance.GetType());
+			IValidator[] validators = registry.GetValidators(objectInstance.GetType(), runWhen);
+
+			Array.Sort(validators, ValidatorComparer.Instance);
+
+			return validators;
+		}
+
+		class ValidatorComparer : IComparer
+		{
+			private readonly static ValidatorComparer instance = new ValidatorComparer();
+
+			public int Compare(object x, object y)
+			{
+				IValidator left = (IValidator) x;
+				IValidator right = (IValidator) y;
+
+				return left.ExecutionOrder - right.ExecutionOrder;
+			}
+
+			public static ValidatorComparer Instance
+			{
+				get { return instance; }
+			}
 		}
 	}
 }

@@ -14,41 +14,50 @@
 
 namespace Castle.Components.Validator.Tests.Models
 {
-	public class Client : Person
+	public class Person
 	{
-		private string email, password, confirmation;
+		private int id, age;
+		private string name;
+		private string address;
 
-		public Client()
+		public Person()
 		{
 		}
 
-		public Client(int id, int age, string name, string address,
-		              string email, string password, string confirmation) : base(id, age, name, address)
+		public Person(int id, int age, string name, string address)
 		{
-			this.email = email;
-			this.password = password;
-			this.confirmation = confirmation;
+			this.id = id;
+			this.age = age;
+			this.name = name;
+			this.address = address;
 		}
 
-		[ValidateEmail]
-		public string Email
+		[ValidateNonEmpty]
+		public int Id
 		{
-			get { return email; }
-			set { email = value; }
+			get { return id; }
+			set { id = value; }
 		}
 
-		[ValidateLength(3, 12, "Invalid password length")]
-		public string Password
+		[ValidateNonEmpty]
+		public int Age
 		{
-			get { return password; }
-			set { password = value; }
+			get { return age; }
+			set { age = value; }
 		}
 
-		[ValidateSameAs("Password", RunWhen=RunWhen.Custom)]
-		public string Confirmation
+		[ValidateNonEmpty]
+		public string Name
 		{
-			get { return confirmation; }
-			set { confirmation = value; }
+			get { return name; }
+			set { name = value; }
+		}
+
+		[ValidateNonEmpty]
+		public string Address
+		{
+			get { return address; }
+			set { address = value; }
 		}
 	}
 }

@@ -13,11 +13,7 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
-			<include name="Nullables.dll" />
-			<include name="Castle.Core.dll" />
 			<include name="Castle.Components.Validator.dll" />
-			<include name="System.Data.dll" />
-			<include name="System.Web.dll" />
 		</assemblyfileset>
 	</target>
 

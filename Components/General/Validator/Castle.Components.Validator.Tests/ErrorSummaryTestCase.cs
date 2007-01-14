@@ -18,7 +18,7 @@ namespace Castle.Components.Validator.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class ValidatorRunnerTestCase
+	public class ErrorSummaryTestCase
 	{
 		private ValidatorRunner runner;
 
@@ -29,42 +29,17 @@ namespace Castle.Components.Validator.Tests
 		}
 
 		[Test]
-		public void IsValidForEverything()
+		public void SummaryBasicFunctionality()
 		{
 			Person person = new Person();
 			Assert.IsFalse(runner.IsValid(person));
 
-			person = new Person(1, 27, "hammett", "100, street");
-			Assert.IsTrue(runner.IsValid(person));
-		}
+			Assert.IsTrue(runner.HasErrors(person));
 
-		[Test]
-		public void IsValidForInsertUpdate()
-		{
-			InsertUpdateClass obj = new InsertUpdateClass();
-			
-			Assert.IsFalse(runner.IsValid(obj, RunWhen.Insert));
-			
-			obj.Prop1 = "value";
-			obj.Prop2 = "value";
-			
-			Assert.IsTrue(runner.IsValid(obj, RunWhen.Insert));
-
-			Assert.IsFalse(runner.IsValid(obj, RunWhen.Update));
-			
-			obj.Prop3 = "value";
-			obj.Prop4 = "value";
-
-			Assert.IsTrue(runner.IsValid(obj, RunWhen.Update));
-		}
-
-		[Test]
-		public void InheritanceTest()
-		{
-			Client client = new Client();
-			Assert.IsFalse(runner.IsValid(client));
-			client = new Client(1, 27, "hammett", "100, street", "hammett@gmail.com", "123", "123");
-			Assert.IsTrue(runner.IsValid(client));
+			ErrorSummary errorSummary = runner.GetErrorSummary(person);
+			Assert.IsNotNull(errorSummary);
+			Assert.AreEqual(2, errorSummary.ErrorsCount);
+			Assert.AreEqual(2, errorSummary.InvalidPropertiesCount);
 		}
 	}
 }

@@ -17,10 +17,32 @@ namespace Castle.Components.Validator
 	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// Abstracts a validation registry per <see cref="Type"/>.
+	/// </summary>
 	public interface IValidatorRegistry
 	{
-		IValidator[] GetValidators(Type targeType);
+		/// <summary>
+		/// Gets all validators associated with a <see cref="Type"/>. 
+		/// <para>
+		/// The validators returned are initialized.
+		/// </para>
+		/// </summary>
+		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
+		/// <param name="targetType">Target type.</param>
+		/// <returns>A Validator array</returns>
+		IValidator[] GetValidators(Type targetType, RunWhen runWhen);
 
-		IValidator[] GetValidators(Type targeType, PropertyInfo property);
+		/// <summary>
+		/// Gets all validators associated with a property. 
+		/// <para>
+		/// The validators returned are initialized.
+		/// </para>
+		/// </summary>
+		/// <param name="targetType">Target type.</param>
+		/// <param name="property">The property.</param>
+		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
+		/// <returns>A Validator array</returns>
+		IValidator[] GetValidators(Type targetType, PropertyInfo property, RunWhen runWhen);
 	}
 }

@@ -14,7 +14,10 @@
 
 namespace Castle.Components.Validator
 {
-
+	/// <summary>
+	/// Validates that the content has the same 
+	/// value as the property informed.
+	/// </summary>
 	public class ValidateSameAsAttribute : AbstractValidationAttribute
 	{
 		private readonly string propertyToCompare;
@@ -38,6 +41,11 @@ namespace Castle.Components.Validator
 			this.propertyToCompare = propertyToCompare;
 		}
 
+		/// <summary>
+		/// Constructs and configures an <see cref="IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		/// <returns></returns>
 		public override IValidator Build()
 		{
 			IValidator validator = new SameAsValidator(propertyToCompare);

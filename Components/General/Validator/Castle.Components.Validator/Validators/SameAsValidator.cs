@@ -17,26 +17,32 @@ namespace Castle.Components.Validator
 	using System.Collections;
 	using System.Reflection;
 
+	/// <summary>
+	/// Validates that the content has the same 
+	/// value as the property informed.
+	/// </summary>
 	public class SameAsValidator : AbstractValidator
 	{
 		private readonly string propertyToCompare;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SameAsValidator"/> class.
+		/// </summary>
+		/// <param name="propertyToCompare">The property to compare.</param>
 		public SameAsValidator(string propertyToCompare)
 		{
 			this.propertyToCompare = propertyToCompare;
 		}
 
-		public override bool SupportWebValidation
-		{
-			get { return true; }
-		}
-
-		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                                        IWebValidationGenerator generator, IDictionary attributes)
-		{
-			// TODO: Add same as to IWebValidationGenerator
-		}
-
+		/// <summary>
+		/// Validates that the <c>fieldValue</c>
+		/// is the same as the property set through the constructor.
+		/// </summary>
+		/// <param name="instance">The target type instance</param>
+		/// <param name="fieldValue">The property/field value. It can be null.</param>
+		/// <returns>
+		/// 	<c>true</c> if the value is accepted (has passed the validation test)
+		/// </returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
 			PropertyInfo property = instance.GetType().GetProperty(propertyToCompare);
@@ -62,6 +68,35 @@ namespace Castle.Components.Validator
 			}
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this validator supports web validation.
+		/// </summary>
+		/// <value>
+		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// </value>
+		public override bool SupportsWebValidation
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Applies the web validation by setting up one or
+		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// </summary>
+		/// <param name="config">The config.</param>
+		/// <param name="inputType">Type of the input.</param>
+		/// <param name="generator">The generator.</param>
+		/// <param name="attributes">The attributes.</param>
+		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
+		                                        IWebValidationGenerator generator, IDictionary attributes)
+		{
+			// TODO: Add same as to IWebValidationGenerator
+		}
+
+		/// <summary>
+		/// Returns the key used to internationalize error messages
+		/// </summary>
+		/// <value></value>
 		protected override string MessageKey
 		{
 			get { return MessageConstants.SameAsMessage; }

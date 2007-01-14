@@ -14,11 +14,34 @@
 
 namespace Castle.Components.Validator
 {
+	/// <summary>
+	/// Defines an html element type
+	/// </summary>
 	public enum InputElementType
 	{
+		/// <summary>
+		/// Nothing specified
+		/// </summary>
 		Undefined,
+
+		/// <summary>
+		/// Text input element
+		/// </summary>
 		Text,
+
+		/// <summary>
+		/// Select element
+		/// </summary>
 		Select,
-		Radio
+
+		/// <summary>
+		/// Radio element
+		/// </summary>
+		Radio,
+
+		/// <summary>
+		/// Checkbox element
+		/// </summary>
+		Checkbox
 	}
 }

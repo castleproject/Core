@@ -30,9 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +39,7 @@
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
+    <Compile Include="ErrorSummary.cs" />
     <Compile Include="Messages.pt.Designer.cs">
       <DependentUpon>Messages.pt.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -55,13 +54,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
-    <Compile Include="PropertyBasedRegistry.cs" />
+    <Compile Include="CachedValidationRegistry.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="ValidationInternalError.cs" />
     <Compile Include="ValidatorRunner.cs" />
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
-    <Compile Include="Validators\DateValidator.cs" />
+    <Compile Include="Validators\DateTimeValidator.cs" />
     <Compile Include="Validators\DecimalValidator.cs" />
     <Compile Include="Validators\DoubleValidator.cs" />
     <Compile Include="Validators\EmailValidator.cs" />
@@ -74,7 +73,6 @@
     <Compile Include="Validators\RegularExpressionValidator.cs" />
     <Compile Include="Validators\SameAsValidator.cs" />
     <Compile Include="Validators\SingleValidator.cs" />
-    <Compile Include="Validators\TimeValidator.cs" />
     <Compile Include="WebValidationConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +91,7 @@
     <None Include="..\..\..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <None Include="Castle.Components.Validator.build" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

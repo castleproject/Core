@@ -9,12 +9,12 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<target name="init" depends="common.init">
+		<property name="build.warnmissingdocs" value="true" />
+		<property name="assembly.description" value="Castle Project's implementation of a Validation infrastructure" />
 		<property name="assembly.version" value="0.0.1.0" />
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
-			<include name="Castle.Core.dll" />
-			<include name="System.Data.dll" />
-			<include name="System.Web.dll" />
+			<include name="System.Xml.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" basedir="${src.dir}" prefix="${project::get-name()}" dynamicprefix="true">

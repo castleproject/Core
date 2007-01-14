@@ -16,8 +16,15 @@ namespace Castle.Components.Validator
 {
 	using Castle.Components.Validator;
 
+	/// <summary>
+	/// Constructs an <see cref="IValidator"/> implementation.
+	/// </summary>
 	public interface IValidatorBuilder
 	{
+		/// <summary>
+		/// Builds this instance.
+		/// </summary>
+		/// <returns></returns>
 		IValidator Build();
 	}
 }

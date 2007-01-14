@@ -12,9 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.Validator.Tests
+namespace Castle.Components.Validator.Tests.ValidatorTests
 {
-	public class PropertyBasedRegistryTestCase
+	using NUnit.Framework;
+
+	[TestFixture]
+	public class RegularExpressionValidatorTestCase
 	{
+		// TODO: Implement this test case
 	}
 }

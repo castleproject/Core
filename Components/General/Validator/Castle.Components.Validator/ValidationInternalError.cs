@@ -17,6 +17,10 @@ namespace Castle.Components.Validator
 	using System;
 	using System.Runtime.Serialization;
 
+	/// <summary>
+	/// Exception used when something goes wrong on 
+	/// validation internal inner workings.
+	/// </summary>
 	[Serializable]
 	public class ValidationInternalError : ApplicationException
 	{
