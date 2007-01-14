@@ -21,6 +21,7 @@ namespace Castle.Components.Binder
 	using System.Web;
 	using Castle.Components.Validator;
 	using Castle.Core;
+	using Castle.Core.Logging;
 
 	/// <summary>
 	/// </summary>
@@ -37,16 +38,23 @@ namespace Castle.Components.Binder
 		/// <summary>Collect the databind errors</summary>
 		protected IList errors;
 
+		private ILogger logger = NullLogger.Instance;
+
 		/// <summary>Holds a sorted array of properties names that should be ignored</summary>
-		private String[] excludedPropertyList;
+		private string[] excludedPropertyList;
 
 		/// <summary>Holds a sorted array of properties names that are on the white list</summary>
-		private String[] allowedPropertyList;
+		private string[] allowedPropertyList;
 
 		private Stack instanceStack;
 
+		private IDictionary validationErrorSummaryPerInstance = new Hashtable();
+
 		private IBinderTranslator binderTranslator;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataBinder"/> class.
+		/// </summary>
 		public DataBinder()
 		{
 		}
@@ -55,6 +63,12 @@ namespace Castle.Components.Binder
 
 		public void Service(IServiceProvider provider)
 		{
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(DataBinder));
+			}
 		}
 
 		#endregion
@@ -71,7 +85,7 @@ namespace Castle.Components.Binder
 			{
 				canConvert = true;
 			}
-			else if (childNode == null && desiredType == typeof(DateTime))
+			else if (desiredType == typeof(DateTime))
 			{
 				TrySpecialDateTimeBinding(desiredType, treeRoot, paramName, out canConvert);
 			}
@@ -188,6 +202,15 @@ namespace Castle.Components.Binder
 			set { binderTranslator = value; }
 		}
 
+		/// <summary>
+		/// Gets the validation error summary.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		public ErrorSummary GetValidationSummary(object instance)
+		{
+			return (ErrorSummary) validationErrorSummaryPerInstance[instance];
+		}
+
 		public event BinderHandler OnBeforeBinding;
 		public event BinderHandler OnAfterBinding;
 
@@ -258,9 +281,12 @@ namespace Castle.Components.Binder
 
 			PushInstance(instance);
 
+			ErrorSummary summary = new ErrorSummary();
+
+			validationErrorSummaryPerInstance[instance] = summary;
+
 			Type instanceType = instance.GetType();
 
-			// TODO: Good candidate to cache:
 			PropertyInfo[] props = instanceType.GetProperties(PropertiesBindingFlags);
 
 			string nodeFullName = node.FullName;
@@ -276,7 +302,9 @@ namespace Castle.Components.Binder
 
 				if (translatedParamName == null) continue;
 
-				if (CheckForValidationFailures(instance, instanceType, prop, node, translatedParamName, prefix))
+				// There are some caveats by running the validators here. 
+				// We should follow the validator's execution order...
+				if (CheckForValidationFailures(instance, instanceType, prop, node, translatedParamName, prefix, summary))
 				{
 					continue;
 				}
@@ -332,24 +360,41 @@ namespace Castle.Components.Binder
 			AfterBinding(instance, prefix, node);
 		}
 
-		protected bool CheckForValidationFailures(object instance, Type instanceType, PropertyInfo prop, CompositeNode node, string name, string prefix)
+		protected bool CheckForValidationFailures(object instance, Type instanceType,
+		                                          PropertyInfo prop, CompositeNode node,
+		                                          string name, string prefix, ErrorSummary summary)
 		{
 			bool hasFailure = false;
 
-			if (validator != null)
-			{
-				IValidator[] validators = validator.GetValidators(instanceType, prop);
+			if (validator == null) return false;
 
-				foreach(IValidator validatorItem in validators)
+			IValidator[] validators = validator.GetValidators(instanceType, prop);
+
+			object value = null;
+
+			if (validators.Length != 0)
+			{
+				Node valNode = node.GetChildNode(name);
+
+				if (valNode != null && valNode.NodeType == NodeType.Leaf)
+				{
+					value = ((LeafNode) valNode).Value;
+				}
+
+				if (value == null && IsDateTimeType(prop.PropertyType))
 				{
 					bool conversionSucceeded;
-					string value = (string) ConvertToSimpleValue(typeof(string), name, node, out conversionSucceeded);
-					
-					if (conversionSucceeded && !validatorItem.IsValid(instance, value))
-					{
-						errors.Add(new DataBindError(prefix, prop.Name, validatorItem.ErrorMessage));
-						hasFailure = true;
-					}
+					value = TryGetDateWithUTCFormat(node, name, out conversionSucceeded);
+				}
+			}
+
+			foreach(IValidator validatorItem in validators)
+			{
+				if (!validatorItem.IsValid(instance, value))
+				{
+					errors.Add(new DataBindError(prefix, prop.Name, validatorItem.ErrorMessage));
+					summary.RegisterErrorMessage(prop, validatorItem.ErrorMessage);
+					hasFailure = true;
 				}
 			}
 
@@ -696,9 +741,12 @@ namespace Castle.Components.Binder
 		}
 #endif
 
-		private object TrySpecialDateTimeBinding(Type desiredType, CompositeNode treeRoot,
-		                                         String paramName, out bool conversionSucceeded)
+		private string TryGetDateWithUTCFormat(CompositeNode treeRoot, string paramName, out bool conversionSucceeded)
 		{
+			// YYYY-MM-DDThh:mm:ss.sTZD (eg 1997-07-16T19:20:30.45+01:00)
+			string fullDateTime = "";
+			conversionSucceeded = false;
+
 			Node dayNode = treeRoot.GetChildNode(paramName + "day");
 			Node monthNode = treeRoot.GetChildNode(paramName + "month");
 			Node yearNode = treeRoot.GetChildNode(paramName + "year");
@@ -713,22 +761,44 @@ namespace Castle.Components.Binder
 				int month = (int) RelaxedConvertLeafNode(typeof(int), monthNode, 0);
 				int year = (int) RelaxedConvertLeafNode(typeof(int), yearNode, 0);
 
+				fullDateTime = string.Format("{0,4}-{1,2}-{2,2}", year, month, day);
+				conversionSucceeded = true;
+			}
+
+			if (hourNode != null)
+			{
 				int hour = (int) RelaxedConvertLeafNode(typeof(int), hourNode, 0);
 				int minute = (int) RelaxedConvertLeafNode(typeof(int), minuteNode, 0);
 				int second = (int) RelaxedConvertLeafNode(typeof(int), secondNode, 0);
 
+				fullDateTime += string.Format("T{0,2}:{1,2}:{2,2}", hour, minute, second);
+				conversionSucceeded = true;
+			}
+
+			return fullDateTime == "" ? null : fullDateTime;
+		}
+
+		private object TrySpecialDateTimeBinding(Type desiredType, CompositeNode treeRoot,
+		                                         String paramName, out bool conversionSucceeded)
+		{
+			string dateUtc = TryGetDateWithUTCFormat(treeRoot, paramName, out conversionSucceeded);
+
+			if (dateUtc != null)
+			{
 				conversionSucceeded = true;
 
-				DateTime dt = new DateTime(year, month, day, hour, minute, second);
+				DateTime dt = DateTime.Parse(dateUtc);
 
 				if (desiredType.Name == "NullableDateTime")
 				{
 					TypeConverter typeConverter = TypeDescriptor.GetConverter(desiredType);
 
-					return typeConverter.ConvertFrom(dt);
+					return typeConverter.ConvertFrom(dateUtc);
 				}
-
-				return dt;
+				else
+				{
+					return DateTime.Parse(dateUtc);
+				}
 			}
 
 			conversionSucceeded = false;

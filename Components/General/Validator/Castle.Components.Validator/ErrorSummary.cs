@@ -107,7 +107,7 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <param name="property">The property.</param>
 		/// <param name="message">The message.</param>
-		protected internal void RegisterErrorMessage(PropertyInfo property, string message)
+		public void RegisterErrorMessage(PropertyInfo property, string message)
 		{
 			if (property == null) throw new ArgumentNullException("property");
 			if (message == null) throw new ArgumentNullException("message");

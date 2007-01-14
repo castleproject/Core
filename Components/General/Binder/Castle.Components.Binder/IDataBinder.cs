@@ -79,6 +79,12 @@ namespace Castle.Components.Binder
 		ErrorList ErrorList { get; }
 
 		/// <summary>
+		/// Gets the validation error summary.
+		/// </summary>
+		/// <param name="instance">The instance.</param>
+		ErrorSummary GetValidationSummary(object instance);
+
+		/// <summary>
 		/// Exposes the <see cref="IBinderTranslator"/> implementation
 		/// if one was provided
 		/// </summary>
