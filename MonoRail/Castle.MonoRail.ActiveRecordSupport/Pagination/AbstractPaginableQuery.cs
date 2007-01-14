@@ -44,7 +44,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		public virtual int ObtainCount()
 		{
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
-			ISession session = holder.CreateSession(Target);
+			ISession session = holder.CreateSession(RootType);
 
 			try
 			{
@@ -85,7 +85,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			this.currentPage = currentPage;
 
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
-			ISession session = holder.CreateSession(Target);
+			ISession session = holder.CreateSession(RootType);
 
 			try
 			{
