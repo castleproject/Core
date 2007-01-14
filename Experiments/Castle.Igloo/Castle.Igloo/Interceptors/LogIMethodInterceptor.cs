@@ -27,10 +27,12 @@ using Castle.Igloo.Controllers;
 namespace Castle.Igloo.Interceptors
 {
 
-    public class LogIMethodInterceptor : IMethodInterceptor
+    public class LogIMethodInterceptor : IInterceptor
     {
 
-        #region Membres de IMethodInterceptor
+        #region IInterceptor Members
+
+
 
         /// <summary>
         /// Method invoked by the proxy in order to allow
@@ -38,18 +40,16 @@ namespace Castle.Igloo.Interceptors
         /// the actual invocation.
         /// </summary>
         /// <param name="invocation">The invocation holds the details of this interception</param>
-        /// <param name="args">The original method arguments</param>
         /// <returns>The return value of this invocation</returns>
-        public object Intercept(IMethodInvocation invocation, params object[] args)
+        public void Intercept(IInvocation invocation)
         {
             string traceOutput = null;
-            object result = null;
             IController controller = invocation.InvocationTarget as IController;
 
             try
             {
                 //Trace.Write("Current view : " + controller.Navigator.NavigationState.CurrentView + "\n");
-                traceOutput = ExtractTraceInfo(invocation, args);
+                traceOutput = ExtractTraceInfo(invocation);
                 Trace.Write(traceOutput);
             }
             catch
@@ -58,11 +58,9 @@ namespace Castle.Igloo.Interceptors
             }
             finally
             {
-                result = invocation.Proceed(args);
+                invocation.Proceed();
                 //Trace.Write("Next view : " + controller.Navigator.NavigationContext.CurrentView + "\n");
             }
-
-            return result;
         }
 
         #endregion
@@ -72,9 +70,8 @@ namespace Castle.Igloo.Interceptors
         /// Extracts the trace info.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        /// <param name="args">The args.</param>
         /// <returns></returns>
-        private string ExtractTraceInfo(IMethodInvocation invocation, object[] args)
+        private string ExtractTraceInfo(IInvocation invocation)
         {
             StringBuilder traceInfo = new StringBuilder();
             MethodInfo methodInfo = invocation.MethodInvocationTarget;
@@ -82,9 +79,9 @@ namespace Castle.Igloo.Interceptors
             ParameterInfo[] param = methodInfo.GetParameters();
             traceInfo.Append("Method Name : ");
             traceInfo.Append(methodInfo.Name);
-            for (int i = 0; i < args.Length; i++)
+            for (int i = 0; i < invocation.Arguments.Length; i++)
             {
-                traceInfo.AppendFormat(", Parameter {0}: {1}", param[i].Name, args[i]);
+                traceInfo.AppendFormat(", Parameter {0}: {1}", param[i].Name, invocation.Arguments[i]);
             }
             traceInfo.AppendFormat("\n");
             return traceInfo.ToString();

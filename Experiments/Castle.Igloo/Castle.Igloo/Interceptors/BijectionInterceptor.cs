@@ -35,7 +35,7 @@ namespace Castle.Igloo.Interceptors
     /// After invoking, outject dependencies back into their context. 
     /// </summary>
     [Transient]
-    public class BijectionInterceptor : IMethodInterceptor, IOnBehalfAware 
+    public class BijectionInterceptor : IInterceptor, IOnBehalfAware 
     {
         private IKernel _kernel = null;
         private ComponentModel _model = null;
@@ -57,9 +57,8 @@ namespace Castle.Igloo.Interceptors
         /// the actual invocation.
         /// </summary>
         /// <param name="invocation">The invocation holds the details of this interception</param>
-        /// <param name="args">The original method arguments</param>
         /// <returns>The return value of this invocation</returns>
-        public object Intercept(IMethodInvocation invocation, params object[] args)
+        public void Intercept(IInvocation invocation)
         {
             if (NeedsInjection)
             {
@@ -92,8 +91,7 @@ namespace Castle.Igloo.Interceptors
                 }
             }
 
-            object result = invocation.Proceed(args);
-            return result;
+            invocation.Proceed();
         }
 
         #endregion

@@ -4,7 +4,7 @@ using Castle.Igloo.Attributes;
 namespace Castle.Igloo.Test.ScopeTest.Components
 {
     [Scope(Scope = ScopeType.Thread)]
-    public class PerScopeThreadComponent
+    public class PerScopeThreadComponent : IComponent
     {
 		#region IComponent Members
 

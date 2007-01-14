@@ -31,7 +31,7 @@ namespace Castle.Igloo.Interceptors
     /// Intercepts call for <see cref="IController"/> components, do navigation if needed.
     /// </summary>
     [Transient]
-    public class NavigationInterceptor : IMethodInterceptor, IOnBehalfAware 
+    public class NavigationInterceptor : IInterceptor, IOnBehalfAware 
     {
         private readonly INavigator _navigator = null;
         private IDictionary<string, SkipNavigationAttribute> _noNavigationMembers = null;
@@ -43,10 +43,10 @@ namespace Castle.Igloo.Interceptors
         public NavigationInterceptor(INavigator navigator)
 		{
             _navigator = navigator;
-		}
+        }
 
-        
-        #region Membres de IMethodInterceptor
+
+        #region IInterceptor Members
 
         /// <summary>
         /// Method invoked by the proxy in order to allow
@@ -54,17 +54,14 @@ namespace Castle.Igloo.Interceptors
         /// the actual invocation.
         /// </summary>
         /// <param name="invocation">The invocation holds the details of this interception</param>
-        /// <param name="args">The original method arguments</param>
         /// <returns>The return value of this invocation</returns>
-        public object Intercept(IMethodInvocation invocation, params object[] args)
+        public void Intercept(IInvocation invocation)
         {
-            object result = invocation.Proceed(args);
+            invocation.Proceed();
             if (!_noNavigationMembers.Keys.Contains(invocation.Method.Name))
             {
                 _navigator.Navigate();
             }
-
-            return result;
         }
 
         #endregion
