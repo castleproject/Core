@@ -20,6 +20,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections;
 	using System.Reflection;
 	using System.Web.UI;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Provides usefull common methods to generate HTML tags.
@@ -393,7 +394,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LinkTo(String name, String action)
 		{
-			return LinkTo(name, Controller.Name, action);
+			string url = UrlInfo.CreateAbsoluteRailsUrl(Controller.Context.ApplicationPath, Controller.AreaName, Controller.Name, action, Controller.Context.UrlInfo.Extension);
+
+			return String.Format("<a href=\"{0}\">{1}</a>", url, name);
 		}
 
 		/// <summary>

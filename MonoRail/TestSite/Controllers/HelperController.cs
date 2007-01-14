@@ -17,11 +17,11 @@ namespace TestSite.Controllers
 	using System;
 
 	using Castle.MonoRail.Framework;
-
-	using TestSite.Helpers;
+	using Castle.MonoRail.Framework.Helpers;
+	using DateFormatHelper=TestSite.Helpers.DateFormatHelper;
 
 	[Helper(typeof(DateFormatHelper))]
-	public class HelperController : Controller
+	public class HelperController : SmartDispatcherController
 	{
 		public HelperController()
 		{
@@ -40,6 +40,26 @@ namespace TestSite.Controllers
 		public void HelpMe()
 		{
 			
+		}
+
+		public virtual void LinkTo(string name, string action)
+		{
+			HtmlHelper htmlHelper = (HtmlHelper) Helpers["HtmlHelper"];
+
+			RenderText(htmlHelper.LinkTo(name, action));
+		}
+	}
+
+	[ControllerDetails(Area="test")]
+	public class Helper2Controller : HelperController
+	{
+		public Helper2Controller()
+		{
+		}
+
+		public override void LinkTo(string name, string action)
+		{
+			base.LinkTo(name, action);
 		}
 	}
 }

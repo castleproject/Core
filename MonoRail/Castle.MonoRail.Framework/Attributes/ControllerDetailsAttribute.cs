@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework
 
 	/// <summary>
 	/// Decorates a controller with a different name
-	/// and optionaly an area which the controller belongs.
+	/// and optionally an area which the controller belongs to.
 	/// This is used to override the convention for controller
 	/// names and to optionally associate a controller with an 
 	/// area name.
