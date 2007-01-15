@@ -1007,37 +1007,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="selectedValue"></param>
 		/// <param name="dataSource">The set of available elements</param>
-		/// <returns>The generated form element</returns>
-		public string Select(string target, object selectedValue, IEnumerable dataSource)
-		{
-			return Select(target, selectedValue, dataSource, null);
-		}
-
-		/// <summary>
-		/// Creates a <c>select</c> element and its <c>option</c>s based on the <c>dataSource</c>.
-		/// If the <c>dataSource</c>
-		/// elements are complex objects (ie not string or primitives), 
-		/// supply the parameters <c>value</c> and <c>text</c> to the dictionary to make
-		/// the helper use the specified properties to extract the <c>option</c> value and content respectively.
-		/// <para>
-		/// You can also specify the attribute <c>firstoption</c> to force the first option be
-		/// something like 'please select'. You can set the value of <c>firstoption</c> by specifying the attribute
-		/// <c>firstoptionvalue</c>. The default value is '0'.
-		/// </para>
-		/// <para>
-		/// Usually the <c>target</c> is a single value and the <c>dataSource</c> is obviously 
-		/// a set with multiple items. The element types tend to be the same. If 
-		/// they are not, you might have to specify the <c>suffix</c> parameters on 
-		/// the <c>attributes</c> as it would not be inferred.
-		/// </para>
-		/// <para>
-		/// The target can also be a set. In this case the intersection will be 
-		/// the initially selected elements.
-		/// </para>
-		/// </summary>
-		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
-		/// <param name="selectedValue"></param>
-		/// <param name="dataSource">The set of available elements</param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
 		public string Select(string target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
