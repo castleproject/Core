@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Reflection;
-
+	using System.Threading;
 	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Configuration;
@@ -294,13 +294,45 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Returns a link that will trigger a javascript function using the 
 		/// onclick handler and return false after the fact.
+		/// <code>
+		/// &lt;a href="javascript:void(0);" onclick="confirm('question') { functionCodeOrName}; return false"&gt;innerContent&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="innerContent">Link content</param>
+		/// <param name="functionCodeOrName">Function definition</param>
+		/// <param name="confirm">Confirm question</param>
+		/// <param name="attributes">Attributes to be applied to the html element</param>
+		/// <returns></returns>
+		public String LinkToFunction(String innerContent, String functionCodeOrName, string confirm, IDictionary attributes)
+		{
+			String htmlAtt = GetAttributes(attributes);
+
+			return String.Format("<a href=\"javascript:void(0);\" {2} onclick=\"if(confirm('" + confirm + "')){{{0}}};return false;\" >{1}</a>", functionCodeOrName, innerContent, htmlAtt);
+		}
+
+		/// <summary>
+		/// Returns a link that will trigger a javascript function using the 
+		/// onclick handler and return false after the fact.
 		/// </summary>
 		/// <param name="innerContent">Link content</param>
 		/// <param name="functionCodeOrName">Function definition</param>
 		/// <returns></returns>
 		public String LinkToFunction(String innerContent, String functionCodeOrName)
 		{
-			return LinkToFunction(innerContent, functionCodeOrName, null);
+			return LinkToFunction(innerContent, functionCodeOrName, null, null);
+		}
+
+		/// <summary>
+		/// Returns a link that will trigger a javascript function using the 
+		/// onclick handler and return false after the fact.
+		/// </summary>
+		/// <param name="innerContent">Link content</param>
+		/// <param name="functionCodeOrName">Function definition</param>
+		/// <param name="confirm">Confirm question</param>
+		/// <returns></returns>
+		public String LinkToFunction(String innerContent, String functionCodeOrName, String confirm)
+		{
+			return LinkToFunction(innerContent, functionCodeOrName, confirm, null);
 		}
 		
 		#endregion
@@ -382,6 +414,23 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String LinkToRemote(String innerContent, String url, IDictionary options)
 		{
 			return LinkToFunction(innerContent, BuildRemoteFunction(url, options));
+		}
+
+		/// <summary>
+		/// Returns a link to a remote action defined by <c>options["url"]</c> 
+		/// that is called in the background using 
+		/// XMLHttpRequest. The result of that request can then be inserted into a
+		/// DOM object whose id can be specified with <c>options["update"]</c>. 
+		/// Usually, the result would be a partial prepared by the controller
+		/// </summary>
+		/// <param name="innerContent">Link content</param>
+		/// <param name="url">Target url</param>
+		/// <param name="confirm">the confirm question</param>
+		/// <param name="options">the options for the Ajax invocation</param>
+		/// <returns>The handcrafted element</returns>
+		public String LinkToRemote(String innerContent, String url, String confirm, IDictionary options)
+		{
+			return LinkToFunction(innerContent, BuildRemoteFunction(url, options), confirm, null);
 		}
 
 		/// <summary>
