@@ -27,6 +27,7 @@ using Castle.Igloo.Util;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.Igloo.Attributes;
+using Castle.MicroKernel.SubSystems.Conversion;
 
 namespace Castle.Igloo
 {
@@ -35,8 +36,10 @@ namespace Castle.Igloo
     /// </summary>
     public class ScopeInspector : IContributeComponentModelConstruction
     {
-        public const string SCOPE_TOKEN = "_SCOPE_";
-        
+        public const string SCOPE_ATTRIBUTE = "_SCOPE_ATTRIBUTE_";
+        public const string SCOPE_TOKEN = "scope";
+        public const string PROXY_TOKEN = "proxyScope";
+      
         /// <summary>
         /// Usually the implementation will look in the configuration property
         /// of the model or the service interface, or the implementation looking for
@@ -46,13 +49,46 @@ namespace Castle.Igloo
         /// <param name="model">The component model</param>
         public void ProcessModel(IKernel kernel, ComponentModel model)
         {
-            if (!AttributeUtil.HasScopeAttribute(model.Implementation))
-            {
-                return;
-            }
+            //bool isScoped = IsScopedModel(kernel, model);
 
-            ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);        
-            model.ExtendedProperties.Add(SCOPE_TOKEN, scopeAttribute.Scope);
+            //if (isScoped)
+            //{
+
+            //}
+
+            if (model.Configuration != null &&
+                model.Configuration.Attributes[SCOPE_TOKEN]!=null)
+            {
+                ScopeAttribute scopeAttribute = new ScopeAttribute();
+                scopeAttribute.Scope = model.Configuration.Attributes[SCOPE_TOKEN];
+                
+                if (model.Configuration.Attributes[SCOPE_TOKEN]!=null)
+                {
+                    bool result = false;
+                    bool.TryParse(model.Configuration.Attributes[SCOPE_TOKEN],out result);
+                    if (result)
+                    {
+                        scopeAttribute.UseProxy = bool.Parse(model.Configuration.Attributes[SCOPE_TOKEN]);
+                    }
+                }
+
+                DecorateComponent(model, scopeAttribute);
+            }
+            else if (AttributeUtil.HasScopeAttribute(model.Implementation))
+            {
+                ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);
+                DecorateComponent(model, scopeAttribute);
+            }
+        }
+
+        /// <summary>
+        /// Decorates the component.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="scopeAttribute">The scope attribute.</param>
+        private void DecorateComponent(ComponentModel model, ScopeAttribute scopeAttribute)
+        {
+            model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute.Scope);
             
             // Ensure its CustomLifestyle
             model.LifestyleType = LifestyleType.Custom;
@@ -61,8 +97,6 @@ namespace Castle.Igloo
             // Add the scope interceptor
             model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
         }
-
-
     }
 }
 

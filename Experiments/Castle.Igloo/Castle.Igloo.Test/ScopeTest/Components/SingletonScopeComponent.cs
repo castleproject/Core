@@ -1,10 +1,7 @@
 
-using Castle.Igloo.Attributes;
-
 namespace Castle.Igloo.Test.ScopeTest.Components
 {
 
-    [Scope(Scope = ScopeType.Singleton)]
     public class SingletonScopeComponent : IComponent
     {
 

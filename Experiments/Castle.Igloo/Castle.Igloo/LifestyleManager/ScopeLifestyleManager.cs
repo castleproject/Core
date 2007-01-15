@@ -51,8 +51,8 @@ namespace Castle.Igloo.LifestyleManager
         /// <returns>The component</returns>
         public override object Resolve(CreationContext context)
         {
-            ComponentModel component = (ComponentActivator as AbstractComponentActivator).Model;
-            string scopeName = (string)component.ExtendedProperties[ScopeInspector.SCOPE_TOKEN];
+            ComponentModel component = ((AbstractComponentActivator)ComponentActivator).Model;
+            string scopeName = (string)component.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
 
             IScope scope = (IScope)Kernel[scopeName];
 
@@ -71,6 +71,10 @@ namespace Castle.Igloo.LifestyleManager
             return instance;
         }
 
+        /// <summary>
+        /// Releases the specified instance.
+        /// </summary>
+        /// <param name="instance">The instance.</param>
         public override void Release(object instance)
         {
             // Since this method is called by the kernel when an external
@@ -81,17 +85,24 @@ namespace Castle.Igloo.LifestyleManager
             // the web session.
         }
 
+        /// <summary>
+        /// Evicts the specified candidate.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
         public void Evict(Candidate candidate)
         {
             base.Release(candidate.Intance);
 
-            string scopeName = (string)candidate.ComponentModel.ExtendedProperties[ScopeInspector.SCOPE_TOKEN];
+            string scopeName = (string)candidate.ComponentModel.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
 
             IScope scope = (IScope)Kernel[scopeName];
 
             scope.Remove(candidate.ComponentModel.Name);
         }
 
+        /// <summary>
+        /// Disposes this instance.
+        /// </summary>
         public override void Dispose()
         {
         }
