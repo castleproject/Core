@@ -22,6 +22,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 	using Castle.Core;
 	using Castle.Core.Logging;
+	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
 
 	public enum CallbackEnum
@@ -220,6 +221,29 @@ namespace Castle.MonoRail.Framework.Helpers
 					foreach(ParameterInfo pi in ajaxActionMethod.GetParameters())
 					{
 						String paramName = pi.Name;
+
+						object[] parameterAttributes = pi.GetCustomAttributes(typeof(DataBindAttribute), true);
+						if(parameterAttributes.Length > 0)
+						{
+							paramName = ((DataBindAttribute)parameterAttributes[0]).Prefix;
+						}
+
+						Type ARFetcherType =
+							TypeLoadUtil.GetType(
+								TypeLoadUtil.GetEffectiveTypeName(
+									"Castle.MonoRail.ActiveRecordSupport.ARFetchAttribute, Castle.MonoRail.ActiveRecordSupport"), true);
+
+
+						if(ARFetcherType != null)
+						{
+							parameterAttributes = pi.GetCustomAttributes(ARFetcherType, true);
+							if (parameterAttributes.Length > 0)
+							{
+								paramName = Convert.ToString(ARFetcherType.GetProperty("RequestParameterName").GetValue(parameterAttributes[0], null));
+							}
+						}
+
+						
 						paramName = Char.ToLower(paramName[0], System.Globalization.CultureInfo.InvariantCulture) + 
 						            (paramName.Length > 0 ? paramName.Substring(1) : null);
 						functions.AppendFormat("{0}, ", paramName);
