@@ -432,7 +432,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 //						new StaticAccessorHelper<UIntPtr>(),
 //						new StaticAccessorHelper<Object>(),
 						new StaticAccessorHelper<String>(),
-						new StaticAccessorHelper<Guid>()
+						new StaticAccessorHelper<Guid>(),
+						new StaticAccessorHelper<DateTime>()
 					};
 
 			foreach (object helper in builtInHelpers)
