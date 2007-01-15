@@ -12,81 +12,113 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.MonoRail.Framework
 {
 	using System;
 
 	/// <summary>
-	/// Represents the splitted information on a Url.
+	/// Represents the tokenized information from an Url.
 	/// </summary>
 	[Serializable]
 	public class UrlInfo
 	{
-		private readonly String _urlRaw;
-		private readonly String _area;
-		private readonly String _controller;
-		private readonly String _action;
-		private readonly String _extension;
+		private readonly int port;
+		private readonly string domain, subdomain, appVirtualDir, protocol;
+		private readonly string urlRaw;
+		private readonly string area, controller, action, extension;
 
-		public UrlInfo( String urlRaw, String area, String controller, String action, String extension )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlInfo"/> class.
+		/// </summary>
+		/// <param name="area">The area.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="action">The action.</param>
+		public UrlInfo(string area, string controller, string action)
 		{
-			_controller = controller;
-			_area = area;
-			_action = action;
-			_urlRaw = urlRaw;
-			_extension = extension;
+			this.area = area;
+			this.controller = controller;
+			this.action = action;
 		}
 
-		public String Controller
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlInfo"/> class.
+		/// </summary>
+		/// <param name="domain">The domain (host).</param>
+		/// <param name="subdomain">The subdomain (first token on the domain).</param>
+		/// <param name="protocol">Protocol (http/https)</param>
+		/// <param name="port">The port.</param>
+		/// <param name="urlRaw">The raw URL.</param>
+		/// <param name="area">The area, or empty.</param>
+		/// <param name="controller">The controller name.</param>
+		/// <param name="action">The action name.</param>
+		/// <param name="extension">The file extension.</param>
+		/// <param name="appVirtualDir">The application virtual dir.</param>
+		public UrlInfo(string domain, string subdomain, string appVirtualDir, string protocol, int port, string urlRaw,
+		               string area, string controller, string action, string extension)
 		{
-			get { return _controller; }
+			this.port = port;
+			this.domain = domain;
+			this.subdomain = subdomain;
+			this.urlRaw = urlRaw;
+			this.area = area;
+			this.controller = controller;
+			this.action = action;
+			this.extension = extension;
+			this.appVirtualDir = appVirtualDir;
+			this.protocol = protocol;
 		}
 
-		public String Action
+		public string AppVirtualDir
 		{
-			get { return _action; }
+			get { return appVirtualDir; }
 		}
 
-		public String Area
+		public int Port
 		{
-			get { return _area; }
+			get { return port; }
 		}
 
-		public String UrlRaw
+		public string Domain
 		{
-			get { return _urlRaw; }
+			get { return domain; }
+		}
+
+		public string Subdomain
+		{
+			get { return subdomain; }
+		}
+
+		public string UrlRaw
+		{
+			get { return urlRaw; }
+		}
+
+		public string Area
+		{
+			get { return area; }
+		}
+
+		public string Controller
+		{
+			get { return controller; }
+		}
+
+		public string Action
+		{
+			get { return action; }
+		}
+
+		public string Protocol
+		{
+			get { return protocol; }
 		}
 
 		/// <summary>
 		/// The URL extension, without the leading dot.
 		/// </summary>
-		public String Extension
+		public string Extension
 		{
-			get { return _extension; }
-		}
-
-		/// <summary>
-		/// Creates an absolute MonoRail url.
-		/// </summary>
-		public static String CreateAbsoluteRailsUrl(String appPath, String controller, 
-		                                            String action, String extension)
-		{
-			return appPath + '/' + controller + '/' + action + '.' + extension;
-		}
-
-		/// <summary>
-		/// Creates an absolute MonoRail url.
-		/// </summary>
-		public static String CreateAbsoluteRailsUrl(String appPath, String area, 
-		                                            String controller, String action, 
-		                                            String extension)
-		{
-			if (area == null || area.Length == 0)
-			{
-				return CreateAbsoluteRailsUrl(appPath, controller, action, extension);
-			}
-			
-			return appPath + '/' + area + '/' + controller + '/' + action + '.' + extension;
+			get { return extension; }
 		}
 	}
 }

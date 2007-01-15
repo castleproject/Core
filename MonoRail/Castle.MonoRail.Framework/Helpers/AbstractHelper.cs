@@ -15,9 +15,9 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
-	using System.Globalization;
 	using System.Text;
 	using System.Collections;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Optional base class for helpers. 
@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public abstract class AbstractHelper : IControllerAware
 	{
-		private const string MonoRailVersion = "RC3_0001";
+		private const string MonoRailVersion = "RC3_0002";
 
 		#region Controller Reference
 
@@ -35,7 +35,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Store's <see cref="Controller"/> for the current view.
 		/// </summary>
 		private Controller controller;
-		
+
+		private IServerUtility serverUtility;
+
 		/// <summary>
 		/// Sets the controller.
 		/// </summary>
@@ -43,6 +45,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		public virtual void SetController(Controller controller)
 		{
 			this.controller = controller;
+
+			if (controller.Context != null) // It will be null when invoked from test cases
+			{
+				serverUtility = controller.Context.Server;
+			}
 		}
 
 		/// <summary>
@@ -54,7 +61,18 @@ namespace Castle.MonoRail.Framework.Helpers
 			get { return controller; }
 		}
 
-		#endregion 
+		#endregion
+
+		public IServerUtility ServerUtility
+		{
+			get { return serverUtility; }
+			set { serverUtility = value; }
+		}
+
+		protected UrlHelper UrlHelper
+		{
+			get { return (UrlHelper) controller.Helpers["UrlHelper"]; }
+		}
 
 		/// <summary>
 		/// Merges <paramref name="userOptions"/> with <paramref name="defaultOptions"/> placing results in
@@ -107,7 +125,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>An empty script block</returns>
 		protected string RenderScriptBlockToSource(string url)
 		{
-			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}?" + MonoRailVersion + "\"></script>",
+			return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}?" + MonoRailVersion + "\"></script>",
 				Controller.Context.ApplicationPath + url, Controller.Context.UrlInfo.Extension);
 		}
 
@@ -118,21 +136,21 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="attributes">The attributes for the element.</param>
 		/// <returns><see cref="String"/> to use inside HTML element's tag.</returns>
 		/// <remarks>
-		/// <see cref="String.Empty"/> is returned if <paramref name="attributes"/> is <c>null</c> or empty.
+		/// <see cref="string.Empty"/> is returned if <paramref name="attributes"/> is <c>null</c> or empty.
 		/// <para>
 		/// If for some <see cref="DictionaryEntry.Key"/> <see cref="DictionaryEntry.Value"/> is <c>null</c> or
-		/// <see cref="String.Empty"/> only attribute name is appended to the string.
+		/// <see cref="string.Empty"/> only attribute name is appended to the string.
 		/// </para>
 		/// </remarks>
-		protected String GetAttributes(IDictionary attributes)
+		protected string GetAttributes(IDictionary attributes)
 		{
-			if (attributes == null || attributes.Count == 0) return String.Empty;
+			if (attributes == null || attributes.Count == 0) return string.Empty;
 
 			StringBuilder contents = new StringBuilder();
 
 			foreach (DictionaryEntry entry in attributes)
 			{
-				if (entry.Value == null || entry.Value.ToString() == String.Empty)
+				if (entry.Value == null || entry.Value.ToString() == string.Empty)
 				{
 					contents.Append(entry.Key);
 				}
@@ -147,7 +165,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Builds a query string.
+		/// Builds a query string encoded.
 		/// </summary>
 		/// <remarks>
 		/// Supports multi-value query strings, using any
@@ -157,46 +175,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// IDictionary dict = new Hashtable();
 		/// dict.Add("id", 5);
 		/// dict.Add("selectedItem", new int[] { 2, 4, 99 });
-		/// string queryString = BuildQueryString(dict);
+		/// string querystring = BuildQueryString(dict);
 		/// // should result in: "id=5&amp;selectedItem=2&amp;selectedItem=4&amp;selectedItem=99&amp;"
 		/// </code>
 		/// </example>
 		/// </remarks>
 		/// <param name="parameters">The parameters</param>
-		public String BuildQueryString(IDictionary parameters)
+		public string BuildQueryString(IDictionary parameters)
 		{
-			if (parameters == null) return String.Empty;
-
-			Object[] singleValueEntry = new Object[1];
-			StringBuilder sb = new StringBuilder();
-
-			foreach(DictionaryEntry entry in parameters)
-			{
-				if (entry.Value == null) continue;
-
-				IEnumerable values = singleValueEntry;
-				
-				if (!(entry.Value is String) && (entry.Value is IEnumerable))
-				{
-					values = (IEnumerable) entry.Value;
-				}
-				else
-				{
-					singleValueEntry[0] = entry.Value;
-				}
-
-				foreach(object value in values)
-				{
-					string encoded = UrlEncode(Convert.ToString(value, CultureInfo.CurrentCulture));
-
-					sb.Append(entry.Key)
-						.Append('=')
-						.Append(encoded)
-						.Append("&amp;");
-				}
-			}
-
-			return sb.ToString();
+			return CommonUtils.BuildQueryString(serverUtility, parameters, true);
 		}
 
 		/// <summary>
@@ -206,7 +193,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="leftParams">key values</param>
 		/// <param name="rightParams">key values</param>
 		/// <returns>The concatenation result</returns>
-		protected String ConcatQueryString(String leftParams, String rightParams)
+		protected string ConcatQueryString(string leftParams, string rightParams)
 		{
 			if (leftParams == null || leftParams.Length == 0)
 			{
@@ -222,7 +209,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				leftParams = leftParams.Substring( 0, leftParams.Length - 1 );
 			}
 
-			return String.Format("{0}&amp;{1}", leftParams, rightParams);
+			return string.Format("{0}&amp;{1}", leftParams, rightParams);
 		}
 
 		/// <summary>
@@ -230,7 +217,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="content">The text string to HTML encode.</param>
 		/// <returns>The HTML encoded text.</returns>
-		public virtual String HtmlEncode(String content)
+		public virtual string HtmlEncode(string content)
 		{
 			return controller.Context.Server.HtmlEncode(content);
 		}
@@ -240,7 +227,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
 		/// <returns>The URL encoded text.</returns>
-		public virtual String UrlEncode(String content)
+		public virtual string UrlEncode(string content)
 		{
 			return controller.Context.Server.UrlEncode(content);
 		}
@@ -250,7 +237,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
 		/// <returns>The URL encoded text.</returns>
-		public String UrlPathEncode(String content)
+		public string UrlPathEncode(string content)
 		{
 			return controller.Context.Server.UrlPathEncode(content);
 		}
@@ -263,7 +250,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </remarks>
 		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
-		public String JavaScriptEscape(String content)
+		public string JavaScriptEscape(string content)
 		{
 			return controller.Context.Server.JavaScriptEscape(content);
 		}
@@ -276,7 +263,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="jsOptions">The js options.</param>
 		/// <returns>An associative array in javascript</returns>
-		public static String JavascriptOptions(IDictionary jsOptions)
+		public static string JavascriptOptions(IDictionary jsOptions)
 		{
 			if (jsOptions == null || jsOptions.Count == 0)
 			{
@@ -291,7 +278,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				if (!comma) comma = true; else sb.Append(", ");
 
-				sb.Append(String.Format("{0}:{1}", entry.Key, entry.Value));
+				sb.Append(string.Format("{0}:{1}", entry.Key, entry.Value));
 			}
 
 			sb.Append("}");
@@ -308,7 +295,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="scriptContents">The script contents.</param>
 		/// <returns><paramref name="scriptContents"/> placed inside <b>script</b> tags.</returns>
-		public static String ScriptBlock(String scriptContents)
+		public static string ScriptBlock(string scriptContents)
 		{
 			return "\r\n<script type=\"text/javascript\">\r\n" + scriptContents + "</script>\r\n";
 		}

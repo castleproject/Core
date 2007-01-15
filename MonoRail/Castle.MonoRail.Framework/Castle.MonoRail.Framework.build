@@ -18,6 +18,7 @@
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
 			<include name="Castle.Components.Binder.dll" />
+			<include name="Castle.Components.Validator.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
 			<include name="System.Data.dll" />
 			<include name="System.Web.dll" />

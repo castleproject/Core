@@ -14,13 +14,8 @@
 
 namespace Castle.MonoRail.Framework.Tests.Controllers.Clients
 {
-	using System;
-
 	[ControllerDetails("hire-us", Area="Clients")]
 	public class OtherController : Controller
 	{
-		public OtherController()
-		{
-		}
 	}
 }

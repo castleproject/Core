@@ -21,11 +21,11 @@ namespace Castle.MonoRail.Framework
 	using System.Configuration;
 	using System.IO;
 	using System.Xml;
+	using Castle.Components.Validator;
 	using Castle.Core;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
-	using Castle.MonoRail.Framework.Views.Aspx;
 
 	/// <summary>
 	/// Parent Service container for the MonoRail framework
@@ -53,6 +53,17 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Allows registration without the configuration
+		/// </summary>
+		public void RegisterBaseService(Type service, object instance)
+		{
+			InvokeServiceEnabled(instance);
+			InvokeInitialize(instance);
+
+			AddService(service, instance);
+		}
+
+		/// <summary>
 		/// Initializes the container state and its services
 		/// </summary>
 		public void Start()
@@ -65,7 +76,6 @@ namespace Castle.MonoRail.Framework
 
 			InitExtensions(config);
 			InitServices(config);
-			// InitApplicationHooks(context);
 		}
 
 		/// <summary>
@@ -177,20 +187,7 @@ namespace Castle.MonoRail.Framework
 		{
 			foreach(object instance in services)
 			{
-				IInitializable initializable = instance as IInitializable;
-
-				if (initializable != null)
-				{
-					initializable.Initialize();
-				}
-
-				ISupportInitialize suppInitialize = instance as ISupportInitialize;
-
-				if (suppInitialize != null)
-				{
-					suppInitialize.BeginInit();
-					suppInitialize.EndInit();
-				}
+				InvokeInitialize(instance);
 			}
 		}
 
@@ -203,12 +200,7 @@ namespace Castle.MonoRail.Framework
 		{
 			foreach(object instance in services)
 			{
-				IServiceEnabledComponent serviceEnabled = instance as IServiceEnabledComponent;
-
-				if (serviceEnabled != null)
-				{
-					serviceEnabled.Service(this);
-				}
+				InvokeServiceEnabled(instance);
 			}
 		}
 
@@ -281,15 +273,6 @@ namespace Castle.MonoRail.Framework
 				services.RegisterService(ServiceIdentification.ViewSourceLoader,
 				                         typeof(FileAssemblyViewSourceLoader));
 			}
-//			if (!services.HasService(ServiceIdentification.ViewEngine))
-//			{
-//				Type viewEngineType = config.ViewEngineConfig.CustomEngine;
-//
-//				if (viewEngineType == null)
-//					viewEngineType = typeof(WebFormsViewEngine);
-//
-//				services.RegisterService(ServiceIdentification.ViewEngine, viewEngineType);
-//			}
 			if (!services.HasService(ServiceIdentification.ScaffoldingSupport))
 			{
 				Type defaultScaffoldingType =
@@ -390,6 +373,16 @@ namespace Castle.MonoRail.Framework
 			{
 				services.RegisterService(ServiceIdentification.ExecutorFactory, typeof(DefaultControllerLifecycleExecutorFactory));
 			}
+			if (!services.HasService(ServiceIdentification.UrlBuilder))
+			{
+				services.RegisterService(ServiceIdentification.UrlBuilder, typeof(DefaultUrlBuilder));
+			}
+			if (!services.HasService(ServiceIdentification.UrlTokenizer))
+			{
+				services.RegisterService(ServiceIdentification.UrlTokenizer, typeof(DefaultUrlTokenizer));
+			}
+
+			services.RegisterService(ServiceIdentification.ValidatorRegistry, typeof(CachedValidationRegistry));
 		}
 
 		private object ActivateService(Type type)
@@ -407,6 +400,34 @@ namespace Castle.MonoRail.Framework
 #else
 				throw new ConfigurationException(message, ex);
 #endif
+			}
+		}
+
+		private void InvokeInitialize(object instance)
+		{
+			IInitializable initializable = instance as IInitializable;
+
+			if (initializable != null)
+			{
+				initializable.Initialize();
+			}
+
+			ISupportInitialize suppInitialize = instance as ISupportInitialize;
+
+			if (suppInitialize != null)
+			{
+				suppInitialize.BeginInit();
+				suppInitialize.EndInit();
+			}
+		}
+
+		private void InvokeServiceEnabled(object instance)
+		{
+			IServiceEnabledComponent serviceEnabled = instance as IServiceEnabledComponent;
+
+			if (serviceEnabled != null)
+			{
+				serviceEnabled.Service(this);
 			}
 		}
 

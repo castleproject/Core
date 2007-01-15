@@ -63,9 +63,8 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			return new ARPager(pageSize, criteria, ObtainCurrentPage());
 		}
 
-		// query.Count(); does not exists anymore
-		
-//#if DOTNET2
+#if DOTNET2
+
 //		/// <summary>
 //		/// Paginates using the specified <see cref="SimpleQuery{T}"/>.
 //		/// </summary>
@@ -108,7 +107,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 //					return queryClone.Execute();
 //			}
 //		}
-//#endif
+#endif
 
 		private static int ObtainCurrentPage()
 		{

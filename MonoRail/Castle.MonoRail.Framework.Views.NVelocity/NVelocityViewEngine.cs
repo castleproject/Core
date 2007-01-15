@@ -455,7 +455,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				innerContext[Flash.FlashKey] = context.Flash;
 
-				foreach (DictionaryEntry entry in context.Flash)
+				foreach(DictionaryEntry entry in context.Flash)
 				{
 					if (entry.Value == null) continue;
 					innerContext[entry.Key] = entry.Value;

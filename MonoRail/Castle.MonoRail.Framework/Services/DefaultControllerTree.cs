@@ -80,7 +80,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="areaName">The area name, or <c>String.Empty</c></param>
 		/// <param name="controllerName">The controller name</param>
 		/// <param name="controller">The controller representation</param>
-		public void AddController(String areaName, String controllerName, object controller)
+		public void AddController(String areaName, String controllerName, Type controller)
 		{
 			if (areaName == null) throw new ArgumentNullException("areaName");
 			if (controllerName == null) throw new ArgumentNullException("controllerName");
@@ -127,7 +127,7 @@ namespace Castle.MonoRail.Framework.Services
 		/// <param name="areaName">The area name, or <c>String.Empty</c></param>
 		/// <param name="controllerName">The controller name</param>
 		/// <returns>The controller representation or null</returns>
-		public object GetController(String areaName, String controllerName)
+		public Type GetController(String areaName, String controllerName)
 		{
 			if (areaName == null) throw new ArgumentNullException("areaName");
 			if (controllerName == null) throw new ArgumentNullException("controllerName");
@@ -136,7 +136,7 @@ namespace Castle.MonoRail.Framework.Services
 			
 			if (cmp == 0)
 			{
-				return controllers[controllerName];
+				return (Type) controllers[controllerName];
 			}
 			else
 			{

@@ -4,6 +4,20 @@ Change history
 Release Candidate 3
 ===================
 
+- Added 
+
+	SmartDispatcherController.ValidationSummaryPerInstance : IDictionary
+	SmartDispatcherController.GetErrorSummary(object instance) : ErrorSummary
+	SmartDispatcherController.HasValidationError(object instance) : bool
+	
+  Those can be used if DataBinder is configured to validate
+
+- Added Controller.RedirectToReferer
+
+- Configuration changed, added defaultUrls section (see monorail_configuration_ref.txt)
+
+- Added Controller.RenderMailMessage(string templateName, bool doNotApplyLayout) overload
+
 - Added static accessor support to NVelocity view engine. Default helpers are 
   the Common System Types in dotnet (i.e. Double, String, Decimal, etc.)
   

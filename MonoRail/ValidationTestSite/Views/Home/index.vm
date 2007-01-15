@@ -1,0 +1,97 @@
+
+<fieldset>
+
+$Form.FormTag("%{action='save.rails', immediate='true', usetitles='true'}")
+
+$Form.Push("client")
+
+<p>
+	$Form.LabelFor("id", "Id:")
+	$Form.TextField("id")
+</p>
+
+<p>
+	$Form.LabelFor("name", "Name:")
+	$Form.TextField("name")
+</p>
+
+<p>
+	$Form.LabelFor("email", "E-mail:")
+	$Form.TextField("email")
+</p>
+
+<p>
+	$Form.Select("dobDay", [1..31])
+	$Form.Select("dobMonth", [1..31])
+	$Form.Select("dobYear", [1979..2005])
+	$!errors.GetErrorsForProperty("dob")
+</p>
+
+<p>
+	$Form.LabelFor("created", "Created:")
+	$Form.TextField("created")
+</p>
+
+<p>
+	$Form.Submit("Save")
+</p>
+
+$Form.Pop()
+
+$Form.EndFormTag()
+
+</fieldset>
+
+
+<fieldset>
+
+$Form.FormTag("%{action='save.rails', immediate='true', usetitles='true'}")
+
+<p>
+	$Form.LabelFor("client.id", "Id:")
+	$Form.TextField("client.id")
+#foreach($err in $errors.GetErrorsForProperty("id"))
+<br/> $err
+#end
+</p>
+
+<p>
+	$Form.LabelFor("client.name", "Name:")
+	$Form.TextField("client.name")
+#foreach($err in $errors.GetErrorsForProperty("name"))
+<br/> $err
+#end
+</p>
+
+<p>
+	$Form.LabelFor("client.email", "E-mail:")
+	$Form.TextField("client.email")
+#foreach($err in $errors.GetErrorsForProperty("email"))
+<br/> $err
+#end
+</p>
+
+<p>
+	$Form.Select("client.dobDay", $client.Dob.Day, [1..31])
+	$Form.Select("client.dobMonth", $client.Dob.Month, [1..12])
+	$Form.Select("client.dobYear", $client.Dob.Year, [1979..2005])
+	#foreach($err in $errors.GetErrorsForProperty("dob"))
+	<br/> $err
+#end
+</p>
+
+<p>
+	$Form.LabelFor("client.created", "Created:")
+	$Form.TextField("client.created")
+#foreach($err in $errors.GetErrorsForProperty("created"))
+	<br/> $err 
+#end
+</p>
+
+<p>
+	$Form.Submit("Save")
+</p>
+
+</form>
+
+</fieldset>

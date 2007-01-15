@@ -16,14 +16,13 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
-	using System.Text;
 	using System.Web;
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using System.Globalization;
 
 	using Castle.Components.Common.EmailSender;
+	using Castle.Components.Validator;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Helpers;
@@ -60,28 +59,28 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// The area name which was used to access this controller
 		/// </summary>
-		private String _areaName;
+		private string _areaName;
 
 		/// <summary>
 		/// The controller name which was used to access this controller
 		/// </summary>
-		private String _controllerName;
+		private string _controllerName;
 
 		/// <summary>
 		/// The view name selected to be rendered after the execution 
 		/// of the action
 		/// </summary>
-		internal String _selectedViewName;
+		internal string _selectedViewName;
 
 		/// <summary>
 		/// The layout name that the view engine should use
 		/// </summary>
-		private String _layoutName;
+		private string _layoutName;
 
 		/// <summary>
 		/// The original action requested
 		/// </summary>
-		private String _evaluatedAction;
+		private string _evaluatedAction;
 
 		/// <summary>
 		/// True if any Controller.Send operation was called.
@@ -102,16 +101,15 @@ namespace Castle.MonoRail.Framework
 		/// Reference to the <see cref="IResourceFactory"/> instance
 		/// </summary>
 		// internal IResourceFactory resourceFactory;
-
 		internal IDictionary _dynamicActions = new HybridDictionary(true);
-
-		// internal IScaffoldingSupport scaffoldSupport;
 
 		internal bool directRenderInvoked;
 
 		internal ControllerMetaDescriptor metaDescriptor;
 
 		internal IServiceProvider serviceProvider;
+
+		internal ValidatorRunner validator;
 
 		#endregion
 
@@ -212,7 +210,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets the controller's name.
 		/// </summary>
-		public String Name
+		public string Name
 		{
 			get { return _controllerName; }
 		}
@@ -220,7 +218,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets the controller's area name.
 		/// </summary>
-		public String AreaName
+		public string AreaName
 		{
 			get { return _areaName; }
 		}
@@ -228,7 +226,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets or set the layout being used.
 		/// </summary>
-		public String LayoutName
+		public string LayoutName
 		{
 			get { return _layoutName; }
 			set { _layoutName = value; }
@@ -237,7 +235,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets the name of the action being processed.
 		/// </summary>
-		public String Action
+		public string Action
 		{
 			get { return _evaluatedAction; }
 		}
@@ -254,7 +252,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets or sets the view which will be rendered by this action.
 		/// </summary>
-		public String SelectedViewName
+		public string SelectedViewName
 		{
 			get { return _selectedViewName; }
 			set { _selectedViewName = value; }
@@ -355,6 +353,25 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Gets the validator runner instance.
+		/// </summary>
+		/// <value>The validator instance.</value>
+		public ValidatorRunner Validator
+		{
+			get { return validator; }
+			set { validator = value; }		
+		}
+
+		/// <summary>
+		/// Gets the URL builder instance.
+		/// </summary>
+		/// <value>The URL builder.</value>
+		public IUrlBuilder UrlBuilder
+		{
+			get { return (IUrlBuilder) serviceProvider.GetService(typeof(IUrlBuilder)); }
+		}
+
+		/// <summary>
 		/// Shortcut to 
 		/// <see cref="IResponse.IsClientConnected"/>
 		/// </summary>
@@ -393,9 +410,9 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
-		public void RenderView(String name)
+		public void RenderView(string name)
 		{
-			String basePath = _controllerName;
+			string basePath = _controllerName;
 
 			if (_areaName != null && _areaName.Length > 0)
 			{
@@ -408,7 +425,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
-		public void RenderView(String name, bool skipLayout)
+		public void RenderView(string name, bool skipLayout)
 		{
 			if (skipLayout) CancelLayout();
 
@@ -418,7 +435,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
-		public void RenderView(String controller, String name)
+		public void RenderView(string controller, string name)
 		{
 			_selectedViewName = Path.Combine(controller, name);
 		}
@@ -426,7 +443,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
-		public void RenderView(String controller, String name, bool skipLayout)
+		public void RenderView(string controller, string name, bool skipLayout)
 		{
 			if (skipLayout) CancelLayout();
 
@@ -438,9 +455,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="output"></param>
 		/// <param name="name">The name of the view to process.</param>
-		public void InPlaceRenderView(TextWriter output, String name)
+		public void InPlaceRenderView(TextWriter output, string name)
 		{
-			String basePath = _controllerName;
+			string basePath = _controllerName;
 
 			if (_areaName != null && _areaName.Length > 0)
 			{
@@ -456,7 +473,7 @@ namespace Castle.MonoRail.Framework
 		/// by others views and usually in the root folder
 		/// of the view directory).
 		/// </summary>
-		public void RenderSharedView(String name)
+		public void RenderSharedView(string name)
 		{
 			_selectedViewName = name;
 		}
@@ -467,7 +484,7 @@ namespace Castle.MonoRail.Framework
 		/// by others views and usually in the root folder
 		/// of the view directory).
 		/// </summary>
-		public void RenderSharedView(String name, bool skipLayout)
+		public void RenderSharedView(string name, bool skipLayout)
 		{
 			if (skipLayout) CancelLayout();
 			
@@ -481,7 +498,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="output"></param>
 		/// <param name="name">The name of the view to process.</param>
-		public void InPlaceRenderSharedView(TextWriter output, String name)
+		public void InPlaceRenderSharedView(TextWriter output, string name)
 		{
 			viewEngineManager.Process(output, Context, this, name);
 		}
@@ -506,7 +523,7 @@ namespace Castle.MonoRail.Framework
 		/// Cancels the view processing and writes
 		/// the specified contents to the browser
 		/// </summary>
-		public void RenderText(String contents)
+		public void RenderText(string contents)
 		{
 			CancelView();
 
@@ -517,7 +534,7 @@ namespace Castle.MonoRail.Framework
 		/// Cancels the view processing and writes
 		/// the specified contents to the browser
 		/// </summary>
-		public void RenderText(String contents, params object[] args)
+		public void RenderText(string contents, params object[] args)
 		{
 			RenderText(String.Format(contents, args));
 		}
@@ -526,7 +543,7 @@ namespace Castle.MonoRail.Framework
 		/// Cancels the view processing and writes
 		/// the specified contents to the browser
 		/// </summary>
-		public void RenderText(IFormatProvider formatProvider, String contents, params object[] args)
+		public void RenderText(IFormatProvider formatProvider, string contents, params object[] args)
 		{
 			RenderText(String.Format(formatProvider, contents, args));
 		}
@@ -536,7 +553,7 @@ namespace Castle.MonoRail.Framework
 		/// It's up to the view engine just to apply the layout and nothing else.
 		/// </summary>
 		/// <param name="contents">Contents to be rendered.</param>
-		public void DirectRender(String contents)
+		public void DirectRender(string contents)
 		{
 			CancelView();
 
@@ -554,18 +571,27 @@ namespace Castle.MonoRail.Framework
 		/// Returns true if the specified template exists.
 		/// </summary>
 		/// <param name="templateName"></param>
-		public bool HasTemplate(String templateName)
+		public bool HasTemplate(string templateName)
 		{
 			return viewEngineManager.HasTemplate(templateName);
 		}
 
 		#region RedirectToAction
-		
+
+		/// <summary> 
+		/// Redirects to another action in the same controller.
+		/// </summary>
+		protected void RedirectToReferer()
+		{
+			string referer = Request.Params["HTTP_Referer"];
+			Redirect(referer);
+		}
+
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
 		/// <param name="action">The action name</param>
-		protected void RedirectToAction(String action)
+		protected void RedirectToAction(string action)
 		{
 			RedirectToAction(action, (NameValueCollection) null);
 		}
@@ -577,7 +603,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="queryStringParameters">list of key/value pairs. Each string is supposed
 		/// to have the format "key=value" that will be converted to a proper 
 		/// query string</param>
-		protected void RedirectToAction(String action, params String[] queryStringParameters)
+		protected void RedirectToAction(string action, params String[] queryStringParameters)
 		{
 			RedirectToAction(action, DictHelper.Create(queryStringParameters));
 		}
@@ -587,7 +613,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="action">The action name</param>
 		/// <param name="queryStringParameters">Query string entries</param>
-		protected void RedirectToAction(String action, IDictionary queryStringParameters)
+		protected void RedirectToAction(string action, IDictionary queryStringParameters)
 		{
 			if (queryStringParameters != null)
 			{
@@ -604,7 +630,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="action">The action name</param>
 		/// <param name="queryStringParameters">Query string entries</param>
-		protected void RedirectToAction(String action, NameValueCollection queryStringParameters)
+		protected void RedirectToAction(string action, NameValueCollection queryStringParameters)
 		{
 			if (queryStringParameters != null)
 			{
@@ -618,26 +644,11 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		protected String CreateAbsoluteRailsUrl(String area, String controller, String action)
-		{
-			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, area, controller, action, Context.UrlInfo.Extension);
-		}
-		
-		protected String CreateAbsoluteRailsUrl(String controller, String action)
-		{
-			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, controller, action, Context.UrlInfo.Extension);
-		}
-		
-		protected String CreateAbsoluteRailsUrlForAction(String action)
-		{
-			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, AreaName, Name, action, Context.UrlInfo.Extension);
-		}
-		
 		/// <summary>
 		/// Redirects to the specified URL. All other Redirects call this one.
 		/// </summary>
 		/// <param name="url">Target URL</param>
-		public virtual void Redirect(String url)
+		public virtual void Redirect(string url)
 		{
 			CancelView();
 
@@ -649,7 +660,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="url">Target URL</param>
 		/// <param name="parameters">URL parameters</param>
-		public virtual void Redirect(String url, IDictionary parameters)
+		public virtual void Redirect(string url, IDictionary parameters)
 		{
 			CancelView();
 			
@@ -673,7 +684,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="url">Target URL</param>
 		/// <param name="parameters">URL parameters</param>
-		public virtual void Redirect(String url, NameValueCollection parameters)
+		public virtual void Redirect(string url, NameValueCollection parameters)
 		{
 			CancelView();
 			
@@ -697,9 +708,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
-		public void Redirect(String controller, String action)
+		public void Redirect(string controller, string action)
 		{
-			Redirect( CreateAbsoluteRailsUrl(controller, action) );
+			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, controller, action));
 		}
 
 		/// <summary>
@@ -708,9 +719,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="area">Area name</param>
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
-		public void Redirect(String area, String controller, String action)
+		public void Redirect(string area, string controller, string action)
 		{
-			Redirect( CreateAbsoluteRailsUrl(area, controller, action) );
+			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action));
 		}
 
 		/// <summary>
@@ -719,12 +730,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
 		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(String controller, String action, NameValueCollection parameters)
+		public void Redirect(string controller, string action, NameValueCollection parameters)
 		{
-			String querystring = ToQueryString(parameters);
-			String url = CreateAbsoluteRailsUrl(controller, action);
-
-			Redirect(url + '?' + querystring);
+			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, controller, action, parameters));
 		}
 
 		/// <summary>
@@ -734,12 +742,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
 		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(String area, String controller, String action, NameValueCollection parameters)
+		public void Redirect(string area, string controller, string action, NameValueCollection parameters)
 		{
-			String querystring = ToQueryString(parameters);
-			String url = CreateAbsoluteRailsUrl(area, controller, action);
-
-			Redirect(url + '?' + querystring);
+			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action, parameters));
 		}
 		
 		/// <summary>
@@ -748,12 +753,9 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
 		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(String controller, String action, IDictionary parameters)
+		public void Redirect(string controller, string action, IDictionary parameters)
 		{
-			String querystring = ToQueryString(parameters);
-			String url = CreateAbsoluteRailsUrl(controller, action);
-
-			Redirect(url + '?' + querystring);
+			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, controller, action, parameters));
 		}
 
 		/// <summary>
@@ -763,82 +765,19 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
 		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(String area, String controller, String action, IDictionary parameters)
+		public void Redirect(string area, string controller, string action, IDictionary parameters)
 		{
-			String querystring = ToQueryString(parameters);
-			String url = CreateAbsoluteRailsUrl(area, controller, action);
-
-			Redirect(url + '?' + querystring);
+			Redirect(UrlBuilder.BuildUrl(Context.UrlInfo, area, controller, action, parameters));
 		}
 
-		protected String ToQueryString(NameValueCollection parameters)
+		protected string ToQueryString(NameValueCollection parameters)
 		{
-			if (parameters == null || parameters.Count == 0)
-			{
-				return String.Empty;
-			}
-			
-			StringBuilder buffer = new StringBuilder();
-			IServerUtility srv = Context.Server;
-	
-			foreach(String key in parameters.Keys)
-			{
-				if (key == null) continue;
-				
-				foreach(String value in parameters.GetValues(key))
-				{
-					buffer.Append( srv.UrlEncode(key) )
-					      .Append('=')
-					      .Append( srv.UrlEncode(value) )
-					      .Append('&');
-				}
-			}
-
-			if (buffer.Length > 0) // removing extra &
-			{
-				buffer.Length -= 1;
-			} 
-
-			return buffer.ToString();
+			return CommonUtils.BuildQueryString(Context.Server, parameters, false);
 		}
 
-		protected String ToQueryString(IDictionary parameters)
+		protected string ToQueryString(IDictionary parameters)
 		{
-			if (parameters == null || parameters.Count == 0)
-			{
-				return String.Empty;
-			}
-			
-			Object[] singleValueEntry = new Object[1];
-			StringBuilder buffer = new StringBuilder();
-			IServerUtility srv = Context.Server;
-	
-			foreach(DictionaryEntry entry in parameters)
-			{
-				if (entry.Value == null) continue;
-				
-				IEnumerable values = singleValueEntry;
-				if (!(entry.Value is String) && (entry.Value is IEnumerable))
-					values = (IEnumerable) entry.Value;
-				else
-					singleValueEntry[0] = entry.Value;
-				
-				foreach(object value in values)
-				{
-					buffer.Append(srv.UrlEncode(Convert.ToString(entry.Key, CultureInfo.CurrentCulture)))
-					      .Append('=')
-					      .Append(srv.UrlEncode(Convert.ToString(value, CultureInfo.CurrentCulture)))
-					      .Append("&");
-				}
-			}
-			
-			if (buffer.Length > 0)
-			{
-				// removes extra &
-				buffer.Length -= 1;
-			} 
-
-			return buffer.ToString();
+			return CommonUtils.BuildQueryString(Context.Server, parameters, false);
 		}
 
 		#endregion
@@ -866,7 +805,7 @@ namespace Castle.MonoRail.Framework
 			this.context = context;
 		}
 
-		internal void InitializeControllerState(String areaName, String controllerName, String actionName)
+		internal void InitializeControllerState(string areaName, string controllerName, string actionName)
 		{
 			SetEvaluatedAction(actionName);
 			_areaName = areaName;
@@ -877,7 +816,7 @@ namespace Castle.MonoRail.Framework
 		/// Sets the evaluated action.
 		/// </summary>
 		/// <param name="actionName">Name of the action.</param>
-		internal void SetEvaluatedAction(String actionName)
+		internal void SetEvaluatedAction(string actionName)
 		{
 			_evaluatedAction = actionName;
 		}
@@ -902,7 +841,7 @@ namespace Castle.MonoRail.Framework
 		/// 6. Invoke the view engine<br/>
 		/// </summary>
 		/// <param name="action">Action name</param>
-		public void Send(String action)
+		public void Send(string action)
 		{
 			ResetIsPostback();
 			InternalSend(action, null);
@@ -913,7 +852,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="action">Action name</param>
 		/// <param name="actionArgs">Action arguments</param>
-		public void Send(String action, IDictionary actionArgs)
+		public void Send(string action, IDictionary actionArgs)
 		{
 			ResetIsPostback();
 			InternalSend(action, actionArgs);
@@ -931,7 +870,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="action">Action name</param>
 		/// <param name="actionArgs">Action arguments</param>
-		protected virtual void InternalSend(String action, IDictionary actionArgs)
+		protected virtual void InternalSend(string action, IDictionary actionArgs)
 		{
 			// If a redirect was sent there's no point in
 			// wasting processor cycles
@@ -970,7 +909,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="action">Raw action name</param>
 		/// <returns>Properly formatted action name</returns>
-		internal virtual String TransformActionName(String action)
+		internal virtual string TransformActionName(string action)
 		{
 			return action;
 		}
@@ -1009,7 +948,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="request"></param>
 		/// <param name="actionArgs"></param>
 		/// <returns></returns>
-		protected internal virtual MethodInfo SelectMethod(String action, IDictionary actions, 
+		protected internal virtual MethodInfo SelectMethod(string action, IDictionary actions, 
 		                                          IRequest request, IDictionary actionArgs)
 		{
 			return actions[action] as MethodInfo;
@@ -1046,6 +985,10 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected virtual void Initialize()
 		{
+			IValidatorRegistry validatorRegistry = 
+				(IValidatorRegistry) serviceProvider.GetService(typeof(IValidatorRegistry));
+
+			validator = new ValidatorRunner(true, validatorRegistry);
 		}
 
 		/// <summary>
@@ -1088,12 +1031,27 @@ namespace Castle.MonoRail.Framework
 		/// Will look in Views/mail for that template file.
 		/// </param>
 		/// <returns>An instance of <see cref="Message"/></returns>
-		public Message RenderMailMessage(String templateName)
+		public Message RenderMailMessage(string templateName)
 		{
-			IEmailTemplateService templateService = (IEmailTemplateService) 
+			return RenderMailMessage(templateName, false);
+		}
+
+		/// <summary>
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">
+		/// Name of the template to load. 
+		/// Will look in Views/mail for that template file.
+		/// </param>
+		/// <param name="doNotApplyLayout">If <c>true</c>, it will skip the layout</param>
+		/// <returns>An instance of <see cref="Message"/></returns>
+		public Message RenderMailMessage(string templateName, bool doNotApplyLayout)
+		{
+			IEmailTemplateService templateService = (IEmailTemplateService)
 				ServiceProvider.GetService(typeof(IEmailTemplateService));
 
-			return templateService.RenderMailMessage(templateName, Context, this);
+			return templateService.RenderMailMessage(templateName, Context, this, doNotApplyLayout);
 		}
 
 		/// <summary>
@@ -1121,11 +1079,10 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>
 		/// Renders and delivers the e-mail message.
-		/// <seealso cref="RenderMailMessage"/>
 		/// <seealso cref="DeliverEmail"/>
 		/// </summary>
 		/// <param name="templateName"></param>
-		public void RenderEmailAndSend(String templateName)
+		public void RenderEmailAndSend(string templateName)
 		{
 			Message message = RenderMailMessage(templateName);
 			DeliverEmail(message);

@@ -155,12 +155,17 @@
     </Compile>
     <Compile Include="Attributes\SkipFilterAttribute.cs" />
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
+    <Compile Include="Configuration\DefaultUrl.cs" />
+    <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Helpers\BehaviourHelper.cs" />
     <Compile Include="Helpers\ScriptaculousHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\PrototypeHelper.cs" />
-    <Compile Include="Helpers\UrlForHelper.cs" />
+    <Compile Include="Helpers\UrlHelper.cs" />
+    <Compile Include="Helpers\ValidationStrategy\FValidateValidator.cs" />
+    <Compile Include="Helpers\ValidationStrategy\IWebValidatorProvider.cs" />
+    <Compile Include="Helpers\ValidationStrategy\PrototypeWebValidator.cs" />
     <Compile Include="ICachePolicyConfigurer.cs" />
     <Compile Include="Configuration\ControllersConfig.cs" />
     <Compile Include="Configuration\ExtensionEntry.cs" />
@@ -299,6 +304,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\AssemblySourceInfo.cs" />
+    <Compile Include="Internal\CommonUtils.cs" />
     <Compile Include="Internal\Descriptors\ActionMetaDescriptor.cs" />
     <Compile Include="Internal\Descriptors\BaseMetaDescriptor.cs" />
     <Compile Include="Internal\Descriptors\ControllerDescriptor.cs" />
@@ -342,9 +348,6 @@
     <Compile Include="Internal\UrlInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\UrlTokenizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Internal\UrlTokenizerException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -373,6 +376,8 @@
     <Compile Include="ITrace.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IUrlBuilder.cs" />
+    <Compile Include="IUrlTokenizer.cs" />
     <Compile Include="IViewComponentContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -410,6 +415,8 @@
     <Compile Include="Services\DefaultControllerTree.cs" />
     <Compile Include="Services\DefaultFilterFactory.cs" />
     <Compile Include="Services\DefaultResourceFactory.cs" />
+    <Compile Include="Services\DefaultUrlBuilder.cs" />
+    <Compile Include="Services\DefaultUrlTokenizer.cs" />
     <Compile Include="Services\DefaultViewComponentFactory.cs" />
     <Compile Include="Services\DefaultViewEngineManager.cs" />
     <Compile Include="Services\EmailTemplateService.cs" />
@@ -431,9 +438,6 @@
     <Compile Include="ViewComponents\SecurityComponent.cs" />
     <Compile Include="ViewComponents\UpdatePage.cs" />
     <Compile Include="ViewComponents\UpdatePageTag.cs" />
-    <Compile Include="Views\Aspx\ActionTo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Aspx\Contents.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -518,6 +522,10 @@
     <ProjectReference Include="..\..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\General\Validator\Castle.Components.Validator\Castle.Components.Validator.csproj">
+      <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
+      <Name>Castle.Components.Validator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

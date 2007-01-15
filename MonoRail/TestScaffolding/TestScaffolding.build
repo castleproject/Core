@@ -26,6 +26,7 @@
 				<include name="Castle.MonoRail.ActiveRecordScaffold.dll" />
 				<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
 				<include name="Castle.Components.Binder.dll" />
+				<include name="Castle.Components.Validator.dll" />
 				<include name="Castle.Components.Common.TemplateEngine.dll" />
 				<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 				<include name="Castle.Components.Common.EmailSender.dll" />

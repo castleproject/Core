@@ -27,6 +27,10 @@ namespace Castle.MonoRail.WindsorExtension
 	{
 		private readonly IKernel kernel;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultWizardPageFactory"/> class.
+		/// </summary>
+		/// <param name="kernel">The kernel.</param>
 		public DefaultWizardPageFactory(IKernel kernel)
 		{
 			this.kernel = kernel;

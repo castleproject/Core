@@ -43,9 +43,9 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void UrlPathEncode()
 		{
-			DoGet("ServerUtility/UrlPathEncode.rails", @"content=My path folder\is this one");
+			DoGet("ServerUtility/UrlPathEncode.rails", @"content=My path folder is this one");
 
-			AssertReplyEqualTo(@"My%20path%20folder\is%20this%20one");
+			AssertReplyEqualTo(@"My%20path%20folder%20is%20this%20one");
 		}
 	
 		[Test]

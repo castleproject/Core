@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Tests.Controllers;
+	using Castle.MonoRail.Framework.Tests.Mocks;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -30,7 +31,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void Init()
 		{
 			helper = new DummyHelper();
-			helper.SetController(new HomeController());
+			helper.ServerUtility = new MockServerUtility();
 		}
 
 		[Test]

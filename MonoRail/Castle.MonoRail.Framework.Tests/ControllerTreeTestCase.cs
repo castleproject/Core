@@ -15,11 +15,11 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
-	
 	using Castle.MonoRail.Framework.Services;
-	
+	using Castle.MonoRail.Framework.Tests.Controllers;
+	using Castle.MonoRail.Framework.Tests.Controllers.Clients;
+	using Castle.MonoRail.Framework.Tests.Controllers.Products;
 	using NUnit.Framework;
-
 
 	[TestFixture]
 	public class ControllerTreeTestCase
@@ -35,13 +35,13 @@ namespace Castle.MonoRail.Framework.Tests
 		public void EmptyArea()
 		{
 			DefaultControllerTree tree = new DefaultControllerTree();
-			tree.AddController("", "home", "controller1");
-			tree.AddController("", "contact", "controller2");
-			tree.AddController("", "cart", "controller3");
+			tree.AddController("", "home", typeof(HomeController));
+			tree.AddController("", "contact", typeof(ContactController));
+			tree.AddController("", "cart", typeof(CartController));
 
-			Assert.AreEqual( "controller1", tree.GetController("", "home") );
-			Assert.AreEqual( "controller2", tree.GetController("", "contact") );
-			Assert.AreEqual( "controller3", tree.GetController("", "cart") );
+			Assert.AreEqual( typeof(HomeController), tree.GetController("", "home") );
+			Assert.AreEqual( typeof(ContactController), tree.GetController("", "contact") );
+			Assert.AreEqual( typeof(CartController), tree.GetController("", "cart") );
 		}
 
 		[Test]
@@ -49,27 +49,23 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			DefaultControllerTree tree = new DefaultControllerTree();
 
-			tree.AddController("", "home", "controller1");
-			tree.AddController("", "contact", "controller2");
-			tree.AddController("", "cart", "controller3");
-			tree.AddController("clients", "home", "controller11");
-			tree.AddController("clients", "contact", "controller21");
-			tree.AddController("clients", "cart", "controller31");
-			tree.AddController("lists", "home", "controller12");
-			tree.AddController("lists", "contact", "controller22");
-			tree.AddController("lists", "cart", "controller32");
+			tree.AddController("", "home", typeof(HomeController));
+			tree.AddController("", "contact", typeof(ContactController));
+			tree.AddController("", "cart", typeof(CartController));
+			tree.AddController("clients", "home", typeof(ClientHomeController));
+			tree.AddController("clients", "contact", typeof(ClientContactController));
+			tree.AddController("clients", "cart", typeof(ClientCartController));
+			tree.AddController("lists", "home", typeof(ListController));
 
-			Assert.AreEqual( "controller1", tree.GetController("", "home") );
-			Assert.AreEqual( "controller2", tree.GetController("", "contact") );
-			Assert.AreEqual( "controller3", tree.GetController("", "cart") );
+			Assert.AreEqual( typeof(HomeController), tree.GetController("", "home") );
+			Assert.AreEqual( typeof(ContactController), tree.GetController("", "contact") );
+			Assert.AreEqual( typeof(CartController), tree.GetController("", "cart") );
 
-			Assert.AreEqual( "controller11", tree.GetController("clients", "home") );
-			Assert.AreEqual( "controller21", tree.GetController("clients", "contact") );
-			Assert.AreEqual( "controller31", tree.GetController("clients", "cart") );
+			Assert.AreEqual( typeof(ClientHomeController), tree.GetController("clients", "home") );
+			Assert.AreEqual( typeof(ClientContactController), tree.GetController("clients", "contact") );
+			Assert.AreEqual( typeof(ClientCartController), tree.GetController("clients", "cart") );
 
-			Assert.AreEqual( "controller12", tree.GetController("lists", "home") );
-			Assert.AreEqual( "controller22", tree.GetController("lists", "contact") );
-			Assert.AreEqual( "controller32", tree.GetController("lists", "cart") );
+			Assert.AreEqual( typeof(ListController), tree.GetController("lists", "home") );
 		}
 	}
 }

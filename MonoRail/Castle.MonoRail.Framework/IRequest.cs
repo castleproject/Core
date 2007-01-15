@@ -17,23 +17,34 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Web;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IRequest
 	{
+		/// <summary>
+		/// Gets the Http headers.
+		/// </summary>
+		/// <value>The Http headers.</value>
 		NameValueCollection Headers { get; }
 
+		/// <summary>
+		/// Gets the <see cref="HttpPostedFile"/> per key.
+		/// </summary>
 		IDictionary Files { get; }
 
 		NameValueCollection Params { get; }
 
 		bool IsLocal { get; }
 
+		String RawUrl { get; }
+
 		Uri Uri { get; }
 
 		String HttpMethod { get; }
 		
-		String RawUrl { get; }
-
 		String FilePath { get; }
 
 		byte[] BinaryRead(int count);
@@ -42,12 +53,12 @@ namespace Castle.MonoRail.Framework
 
 		String ReadCookie( String name );
 
-		void ValidateInput();
-
 		NameValueCollection QueryString { get; }
 
 		NameValueCollection Form { get; }
 
 		String[] UserLanguages { get; }
+
+		void ValidateInput();
 	}
 }

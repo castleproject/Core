@@ -63,12 +63,13 @@ namespace Castle.MonoRail.WindsorExtension
 
 			// Ensure it's transient
 			model.LifestyleType = LifestyleType.Transient;
+			model.InspectionBehavior = PropertiesInspectionBehavior.DeclaredOnly;
 
 			if (isController)
 			{
 				ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(model.Implementation);
-			
-				tree.AddController( descriptor.Area, descriptor.Name, model.Name );
+
+				tree.AddController(descriptor.Area, descriptor.Name, model.Implementation);
 			}
 		}
 	}

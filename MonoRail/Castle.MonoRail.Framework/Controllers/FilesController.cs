@@ -113,7 +113,7 @@ namespace Castle.MonoRail.Framework.Controllers
 
 		private String GetResourceValue(String resName, String resKey)
 		{
-			return (String)(Resources[resName])[resKey];
+			return (String) (Resources[resName])[resKey];
 		}
 	}
 }

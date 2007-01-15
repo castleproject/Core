@@ -16,8 +16,6 @@ namespace Castle.MonoRail.Framework.Tests
 {
 	using NUnit.Framework;
 
-	using Castle.MonoRail.TestSupport;
-
 	[TestFixture]
 	public class AccessibleThroughTestCase : AbstractTestCase
 	{
@@ -32,14 +30,14 @@ namespace Castle.MonoRail.Framework.Tests
         public void AccessibleThroughPostVerbByGet()
         {
             DoGet("home/PostOnlyMethod.rails");
-            AssertReplyContains("Access to the action [postonlymethod] on controller [home] is not allowed by the http verb [GET].");
+            AssertReplyContains("Access to the action [PostOnlyMethod] on controller [home] is not allowed by the http verb [GET].");
         }
 
 		[Test]
         public void AccessibleThroughGetVerbByPost()
 		{
             DoPost("home/GetOnlyMethod.rails");
-            AssertReplyContains("Access to the action [getonlymethod] on controller [home] is not allowed by the http verb [POST].");
+			AssertReplyContains("Access to the action [GetOnlyMethod] on controller [home] is not allowed by the http verb [POST].");
 		}
 
         [Test]

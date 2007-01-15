@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Adapters;
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Provides the services used and shared by the framework. Also 
@@ -46,6 +45,7 @@ namespace Castle.MonoRail.Framework
 				if (container == null)
 				{
 					container = new MonoRailServiceContainer();
+					container.RegisterBaseService(typeof(IServerUtility), new ServerUtilityAdapter(context.Server));
 					container.Start();
 
 					ILoggerFactory loggerFactory = (ILoggerFactory) container.GetService(typeof(ILoggerFactory));
@@ -57,9 +57,10 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			SubscribeToApplicationHooks(context);
+			context.BeginRequest += new EventHandler(OnStartMonoRailRequest);
+			context.AuthorizeRequest += new EventHandler(CreateControllerAndRunStartRequestFilters);
 
-			context.AuthorizeRequest += new EventHandler(OnStartMonoRailRequest);
+			SubscribeToApplicationHooks(context);
 		}
 
 		/// <summary>
@@ -70,36 +71,68 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
+		#region MonoRail Request Lifecycle
+
+		/// <summary>
+		/// This method is invoked in response to BeginRequest event.
+		/// It checks if the request should be treat by MonoRail (by reading the file extension)
+		/// and if so, creates the <see cref="IRailsEngineContext"/> instance.
+		/// </summary>
+		/// <param name="sender">The HttpApplication instance</param>
+		/// <param name="e">Event information</param>
 		private void OnStartMonoRailRequest(object sender, EventArgs e)
 		{
 			HttpApplication app = (HttpApplication) sender;
 
+			// Is this request a MonoRail request?
 			if (!container.IsMonoRailRequest(app.Context.Request.FilePath))
 			{
 				return;
 			}
-			
-			IRailsEngineContext context = ObtainContextFromApplication(sender);
-			
+
+			// Mark it so we dont have to check the file extension again
+			MarkRequestAsMonoRailRequest(app.Context);
+
+			// Creates the our context
+			IRailsEngineContext context = CreateRailsEngineContext(app.Context);
+
+			#region TestSupport related
+
 			String isTest = context.Request.Headers["IsTestWorkerRequest"];
 			
 			if ("true" == isTest)
 			{
 				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(app.Context);
 			}
-			
+
+			#endregion
+		}
+
+		/// <summary>
+		/// Creates the controller, selects the target action 
+		/// and run start request filters.
+		/// </summary>
+		/// <param name="sender">The HttpApplication instance</param>
+		/// <param name="e">Event information</param>
+		private void CreateControllerAndRunStartRequestFilters(object sender, EventArgs e)
+		{
+			HttpApplication app = (HttpApplication) sender;
+			if (!IsMonoRailRequest(app.Context)) return;
+
+			IRailsEngineContext context = ObtainRailsEngineContext(app.Context);
+
 			Controller controller = CreateController(context);
-			
+
 			IControllerLifecycleExecutor executor = CreateControllerExecutor(controller, context);
-			
+
 			UrlInfo info = context.UrlInfo;
-			
+
 			executor.InitializeController(info.Area, info.Controller, info.Action);
-						
+
 			if (!executor.SelectAction(info.Action, info.Controller))
 			{
 				// Could not even select the action, stop here
-				
+
 				return;
 			}
 
@@ -109,11 +142,23 @@ namespace Castle.MonoRail.Framework
 				// one of the filters returned false
 				// We assume that the filter that stopped the request, also sent a redirect
 				// or something similar
-				
+
 				context.UnderlyingContext.Response.End();
 
 				executor.Dispose();
 			}
+		}
+
+		#endregion
+
+		private void MarkRequestAsMonoRailRequest(HttpContext context)
+		{
+			context.Items["is.mr.request"] = true;
+		}
+
+		private bool IsMonoRailRequest(HttpContext context)
+		{
+			return context.Items.Contains("is.mr.request");
 		}
 
 		/// <summary>
@@ -136,15 +181,6 @@ namespace Castle.MonoRail.Framework
 
 			Controller controller = controllerFactory.CreateController(info);
 
-			if (controller == null)
-			{
-				String message = String.Format("No controller for {0}\\{1}", info.Area, info.Controller);
-
-				if (logger.IsErrorEnabled) logger.Error(message);
-
-				throw new RailsException(message);
-			}
-			
 			return controller;
 		}
 
@@ -152,10 +188,9 @@ namespace Castle.MonoRail.Framework
 		/// Creates the and initialize executor.
 		/// </summary>
 		/// <param name="controller">The controller.</param>
-		/// /// <param name="context">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		private IControllerLifecycleExecutor CreateControllerExecutor(Controller controller, 
-		                                                              IRailsEngineContext context)
+		private IControllerLifecycleExecutor CreateControllerExecutor(Controller controller, IRailsEngineContext context)
 		{
 			IControllerLifecycleExecutorFactory factory = 
 				(IControllerLifecycleExecutorFactory) context.GetService(typeof(IControllerLifecycleExecutorFactory));
@@ -188,48 +223,42 @@ namespace Castle.MonoRail.Framework
 
 		#region Hooks dispatched to extensions
 
-		private void OnAuthenticateRequest(object sender, EventArgs e)
+		private void OnBeginRequest(object sender, EventArgs e)
 		{
 			HttpApplication app = (HttpApplication) sender;
-			HttpContext context = app.Context;
+			if (!IsMonoRailRequest(app.Context)) return;
+			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
-			IRailsEngineContext mrContext = CreateRailsEngineContext(context);
+			if (mrContext == null) throw new NullReferenceException("mrContext");
+
+			if (container == null) throw new NullReferenceException("container");
+			if (container.extensionManager == null) throw new NullReferenceException("container.extensionManager");
+
+			container.extensionManager.RaiseContextCreated(mrContext);
+		}
+
+		private void OnAuthenticateRequest(object sender, EventArgs e)
+		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
+			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaiseAuthenticateRequest(mrContext);
 		}
 
 		private void OnAuthorizeRequest(object sender, EventArgs e)
 		{
-			HttpApplication app = (HttpApplication) sender;
-			HttpContext context = app.Context;
-
-			IRailsEngineContext mrContext = CreateRailsEngineContext(context);
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
+			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaiseAuthorizeRequest(mrContext);
 		}
 
-		private void OnBeginRequest(object sender, EventArgs e)
-		{
-			HttpApplication app = (HttpApplication) sender;
-			
-			if (app == null) throw new NullReferenceException("app");
-			
-			HttpContext context = app.Context;
-			
-			if (context == null) throw new NullReferenceException("context");
-
-			IRailsEngineContext mrContext = CreateRailsEngineContext(context);
-			
-			if (mrContext == null) throw new NullReferenceException("mrContext");
-
-			if (container == null) throw new NullReferenceException("container");
-			if (container.extensionManager == null) throw new NullReferenceException("container.extensionManager");
-			
-			container.extensionManager.RaiseContextCreated(mrContext);
-		}
-
 		private void OnEndRequest(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaiseContextDisposed(mrContext);
@@ -237,6 +266,8 @@ namespace Castle.MonoRail.Framework
 
 		private void OnAcquireRequestState(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaiseAcquireRequestState(mrContext);
@@ -244,6 +275,8 @@ namespace Castle.MonoRail.Framework
 
 		private void OnReleaseRequestState(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaiseReleaseRequestState(mrContext);
@@ -251,6 +284,8 @@ namespace Castle.MonoRail.Framework
 
 		private void OnPreRequestHandlerExecute(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaisePreProcess(mrContext);
@@ -258,6 +293,8 @@ namespace Castle.MonoRail.Framework
 
 		private void OnPostRequestHandlerExecute(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaisePostProcess(mrContext);
@@ -265,6 +302,8 @@ namespace Castle.MonoRail.Framework
 
 		private void OnError(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			mrContext.LastException = mrContext.UnderlyingContext.Server.GetLastError();
@@ -274,6 +313,8 @@ namespace Castle.MonoRail.Framework
 
 		private void OnResolveRequestCache(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaiseResolveRequestCache(mrContext);
@@ -281,6 +322,8 @@ namespace Castle.MonoRail.Framework
 
 		private void OnUpdateRequestCache(object sender, EventArgs e)
 		{
+			HttpApplication app = (HttpApplication)sender;
+			if (!IsMonoRailRequest(app.Context)) return;
 			IRailsEngineContext mrContext = ObtainContextFromApplication(sender);
 
 			container.extensionManager.RaiseUpdateRequestCache(mrContext);
@@ -294,7 +337,13 @@ namespace Castle.MonoRail.Framework
 
 			if (mrContext == null)
 			{
-				DefaultRailsEngineContext newContext = new DefaultRailsEngineContext(container, context);
+				IUrlTokenizer urlTokenizer = (IUrlTokenizer) container.GetService(typeof(IUrlTokenizer));
+
+				HttpRequest req = context.Request;
+
+				UrlInfo urlInfo = urlTokenizer.TokenizeUrl(req.FilePath, req.Url, req.IsLocal, req.ApplicationPath);
+
+				DefaultRailsEngineContext newContext = new DefaultRailsEngineContext(container, urlInfo, context);
 
 				context.Items[RailsContextKey] = newContext;
 

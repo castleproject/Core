@@ -589,7 +589,7 @@ namespace Castle.MonoRail.Framework
 				new AbstractHelper[]
 					{
 						new AjaxHelper(), new BehaviourHelper(),
-						new UrlForHelper(), new TextHelper(), 
+						new UrlHelper(), new TextHelper(), 
 						new EffectsFatHelper(), new ScriptaculousHelper(), 
 						new DateFormatHelper(), new HtmlHelper(),
 						new ValidationHelper(), new DictHelper(),

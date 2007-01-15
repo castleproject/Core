@@ -11,6 +11,10 @@
 	<customComponentFactory type="type name that implements IComponentFactory" />
 	<customFilterFactory type="type name that implements IFilterFactory" />
 
+	<defaultUrls>
+		<add url="/index.rails" controller="home" action="index" area="optional" />
+	</defaultUrls>
+
 	<controllers>
 		<assembly>AssemblyName1</assembly>
 		<assembly>AssemblyName2</assembly>

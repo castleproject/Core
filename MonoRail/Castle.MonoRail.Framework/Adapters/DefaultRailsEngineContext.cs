@@ -49,9 +49,11 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// Initializes a new instance of the <see cref="DefaultRailsEngineContext"/> class.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
+		/// <param name="urlInfo">Url information</param>
 		/// <param name="context">The context.</param>
-		public DefaultRailsEngineContext(IServiceContainer parent, HttpContext context) : base(parent)
+		public DefaultRailsEngineContext(IServiceContainer parent, UrlInfo urlInfo, HttpContext context) : base(parent)
 		{
+			_urlInfo = urlInfo;
 			_context = context;
 			_request = new RequestAdapter(context.Request);
 			_trace = new TraceAdapter(context.Trace);
@@ -236,14 +238,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <value></value>
 		public UrlInfo UrlInfo
 		{
-			get
-			{
-				if (_urlInfo == null)
-				{
-					_urlInfo = UrlTokenizer.ExtractInfo(_request.FilePath, ApplicationPath);
-				}
-				return _urlInfo;
-			}
+			get { return _urlInfo; }
 		}
 
 		/// <summary>

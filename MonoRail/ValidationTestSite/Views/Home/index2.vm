@@ -1,0 +1,27 @@
+<div id="errors" style="color:red;">
+
+</div>
+
+$Form.UsefValidate()
+
+$Form.FormTag("%{action='save.rails'}")
+
+$Form.Push("client")
+
+<p>
+	$Form.LabelFor("name", "Name:")
+	$Form.TextField("name")
+</p>
+
+<p>
+	$Form.LabelFor("email", "E-mail:")
+	$Form.TextField("email")
+</p>
+
+<p>
+	$Form.Submit("Save")
+</p>
+
+$Form.Pop()
+
+$Form.EndFormTag()

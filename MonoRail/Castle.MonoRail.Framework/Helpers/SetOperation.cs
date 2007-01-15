@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// 
@@ -33,11 +34,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			Type initialSelectionType = ExtractType(initialSelection);
 			Type dataSourceType = ExtractType(dataSource);
 
-			String customSuffix = FormHelper.ObtainEntryAndRemove(attributes, "suffix");
-			String valueProperty = FormHelper.ObtainEntryAndRemove(attributes, "value");
-			String textProperty = FormHelper.ObtainEntryAndRemove(attributes, "text");
-			String textFormat = FormHelper.ObtainEntryAndRemove(attributes, "textformat");
-			String valueFormat = FormHelper.ObtainEntryAndRemove(attributes, "valueformat");
+			String customSuffix = CommonUtils.ObtainEntryAndRemove(attributes, "suffix");
+			String valueProperty = CommonUtils.ObtainEntryAndRemove(attributes, "value");
+			String textProperty = CommonUtils.ObtainEntryAndRemove(attributes, "text");
+			String textFormat = CommonUtils.ObtainEntryAndRemove(attributes, "textformat");
+			String valueFormat = CommonUtils.ObtainEntryAndRemove(attributes, "valueformat");
 
 			if (dataSourceType == null)
 			{
@@ -64,7 +65,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else // types are different, most complex scenario
 			{
-				String sourceProperty = FormHelper.ObtainEntryAndRemove(attributes, "sourceProperty");
+				String sourceProperty = CommonUtils.ObtainEntryAndRemove(attributes, "sourceProperty");
 
 				return new DifferentTypeOperationState(initialSelectionType, 
 				                                       dataSourceType, initialSelection, dataSource,

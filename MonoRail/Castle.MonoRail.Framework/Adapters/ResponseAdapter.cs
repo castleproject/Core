@@ -165,8 +165,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			redirected = true;
 
-			response.Redirect(UrlInfo.CreateAbsoluteRailsUrl(
-								appPath, controller, action, context.UrlInfo.Extension), false);
+			IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+
+			response.Redirect(builder.BuildUrl(context.UrlInfo, controller, action), false);
 		}
 
 		public void Redirect(String area, String controller, String action)
@@ -179,8 +180,9 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				redirected = true;
 
-				response.Redirect(UrlInfo.CreateAbsoluteRailsUrl(
-				                  	appPath, area, controller, action, context.UrlInfo.Extension), false);
+				IUrlBuilder builder = (IUrlBuilder) context.GetService(typeof(IUrlBuilder));
+
+				response.Redirect(builder.BuildUrl(context.UrlInfo, area, controller, action), false);
 			}
 		}
 
@@ -215,7 +217,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			HttpCookie cookie = new HttpCookie(name, cookieValue);
 
 			cookie.Expires = expiration;
-			cookie.Path = "/";
+			cookie.Path = context.ApplicationPath;
 
 			CreateCookie(cookie);
 		}

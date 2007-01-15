@@ -57,12 +57,5 @@ namespace Castle.MonoRail.Framework
 		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
 		String JavaScriptEscape(String content);
-
-		/// <summary>
-		/// Build an encoded QueryString
-		/// </summary>
-		/// <param name="queryParams">A NameValueCollection with the values for the QueryParams</param>
-		/// <returns>The QueryString encoded.</returns>
-		String BuildWebParams(NameValueCollection queryParams);
 	}
 }

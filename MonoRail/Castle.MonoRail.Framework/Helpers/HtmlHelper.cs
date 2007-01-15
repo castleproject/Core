@@ -394,7 +394,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LinkTo(String name, String action)
 		{
-			string url = UrlInfo.CreateAbsoluteRailsUrl(Controller.Context.ApplicationPath, Controller.AreaName, Controller.Name, action, Controller.Context.UrlInfo.Extension);
+			string url = UrlHelper.For(DictHelper.Create("action=" + action));
 
 			return String.Format("<a href=\"{0}\">{1}</a>", url, name);
 		}
@@ -420,11 +420,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LinkTo(String name, String controller, String action)
 		{
-			String url = Controller.Context.ApplicationPath;
-			String extension = Controller.Context.UrlInfo.Extension;
+			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}\">{4}</a>",
-			                     url, controller, action, extension, name);
+			return String.Format("<a href=\"{0}\">{1}</a>", url, name);
 		}
 
 		/// <summary>
@@ -452,11 +450,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LinkTo(String name, String controller, String action, object id)
 		{
-			String url = Controller.Context.ApplicationPath;
-			String extension = Controller.Context.UrlInfo.Extension;
+			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>",
-			                     url, controller, action, extension, id, name);
+			return String.Format("<a href=\"{0}?id={1}\">{2}</a>", url, id, name);
 		}
 
 		/// <summary>
@@ -480,11 +476,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LinkToAttributed(String name, String controller, String action, IDictionary attributes)
 		{
-			String url = Controller.Context.ApplicationPath;
-			String extension = Controller.Context.UrlInfo.Extension;
+			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}\" {5}>{4}</a>",
-			                     url, controller, action, extension, name, GetAttributes(attributes));
+			return String.Format("<a href=\"{0}\" {1}>{2}</a>", url, name, GetAttributes(attributes));
 		}
 
 		/// <summary>
@@ -509,11 +503,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LinkToAttributed(String name, String controller, String action, object id, IDictionary attributes)
 		{
-			String url = Controller.Context.ApplicationPath;
-			String extension = Controller.Context.UrlInfo.Extension;
+			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={6}\" {5}>{4}</a>",
-			                     url, controller, action, extension, name, GetAttributes(attributes), id);
+			return String.Format("<a href=\"{0}?id={1}\" {2}>{3}</a>", url, id, name, GetAttributes(attributes));
 		}
 
 		/// <summary>
@@ -627,7 +619,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Creates an anchor (link) to the <paramref name="action"/> on the specified <paramref name="controller"/> that posts
+		/// Creates an anchor (link) to the <paramref name="action"/> 
+		/// on the specified <paramref name="controller"/> that posts
 		/// using a hidden form element.
 		/// </summary>
 		/// <param name="name">Name for the link.</param>
@@ -639,12 +632,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>HTML string with anchor that posts to the specified <paramref name="controller"/></returns>
 		public String LinkToWithPostAttributed(String name, String controller, String action, object id, String confirm, IDictionary attributes)
 		{
-			IDictionary formAttributes
-				= DictHelper.Create("style=display:inline;margin:0;");
+			IDictionary formAttributes = DictHelper.Create("style=display:inline;margin:0;");
 
-			string onclickAttribute = !String.IsNullOrEmpty(confirm)
-				? String.Format("if(confirm('{0}')){{this.parentNode.submit();}};return false;", confirm)
-				: "this.parentNode.submit();return false;";
+			string onclickAttribute = "this.parentNode.submit();return false;";
+
+			if (confirm != null && confirm != "")
+			{
+				onclickAttribute = "if(confirm('" + confirm + "')){{this.parentNode.submit();}};return false;";
+			}
 
 			if (attributes == null)
 			{

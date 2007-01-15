@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="urlInfo"></param>
 		/// <returns></returns>
-		Controller CreateController(Internal.UrlInfo urlInfo);
+		Controller CreateController(UrlInfo urlInfo);
 
 		/// <summary>
 		/// Implementors should perform their logic 

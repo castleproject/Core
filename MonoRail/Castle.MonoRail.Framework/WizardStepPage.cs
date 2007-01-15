@@ -443,8 +443,7 @@ namespace Castle.MonoRail.Framework
 				// We need to preserve any attribute from the QueryString
 				// for example in case the url has an Id
 
-				String url = UrlInfo.CreateAbsoluteRailsUrl( Context.ApplicationPath, 
-								_wizardcontroller.Name, step, Context.UrlInfo.Extension ) + Context.Request.Uri.Query;
+				string url = UrlBuilder.BuildUrl(Context.UrlInfo, _wizardcontroller.Name, step) + Context.Request.Uri.Query;
 				
 				Context.Response.Redirect(url);
 			}

@@ -1,0 +1,207 @@
+namespace Castle.MonoRail.Framework.Services
+{
+	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
+	using Castle.Core;
+	using Castle.MonoRail.Framework.Internal;
+
+	public class DefaultUrlBuilder : IUrlBuilder, IServiceEnabledComponent
+	{
+		private bool useExtensions = true;
+		private IServerUtility serverUtil;
+
+		public DefaultUrlBuilder()
+		{
+		}
+
+		#region Properties
+
+		public bool UseExtensions
+		{
+			get { return useExtensions; }
+			set { useExtensions = value; }
+		}
+
+		public IServerUtility ServerUtil
+		{
+			get { return serverUtil; }
+			set { serverUtil = value; }
+		}
+
+		#endregion
+
+		#region IUrlBuilder
+
+		public void Service(IServiceProvider provider)
+		{
+			serverUtil = (IServerUtility) provider.GetService(typeof(IServerUtility));
+		}
+
+		#endregion
+
+		#region IUrlBuilder
+
+		public string BuildUrl(UrlInfo current, IDictionary parameters)
+		{
+			bool applySubdomain = false;
+			bool createAbsolutePath = CommonUtils.ObtainEntryAndRemove(parameters, "absolute", "false") == "true";
+			bool encode = CommonUtils.ObtainEntryAndRemove(parameters, "encode", "false") == "true";
+
+			string area = CommonUtils.ObtainEntryAndRemove(parameters, "area", current.Area);
+			string controller = CommonUtils.ObtainEntryAndRemove(parameters, "controller", current.Controller);
+			string action = CommonUtils.ObtainEntryAndRemove(parameters, "action", current.Action);
+			
+			string domain = CommonUtils.ObtainEntryAndRemove(parameters, "domain", current.Domain);
+			string subdomain = CommonUtils.ObtainEntryAndRemove(parameters, "subdomain", current.Subdomain);
+			string protocol = CommonUtils.ObtainEntryAndRemove(parameters, "protocol", current.Protocol);
+			string port = CommonUtils.ObtainEntryAndRemove(parameters, "port", current.Port.ToString());
+			string suffix = null;
+
+			object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
+
+			if (queryString != null)
+			{
+				if (queryString is IDictionary)
+				{
+					suffix = CommonUtils.BuildQueryString(serverUtil, (IDictionary) queryString, encode);
+				}
+				else if (queryString is NameValueCollection)
+				{
+					suffix = CommonUtils.BuildQueryString(serverUtil, (NameValueCollection) queryString, encode);	
+				}
+				else if (queryString is string)
+				{
+					suffix = queryString.ToString();
+				}
+			}
+
+			if (subdomain.ToLower() != current.Subdomain.ToLower())
+			{
+				applySubdomain = true;
+			}
+
+			return InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain,
+				current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix);
+		}
+
+		public string BuildUrl(UrlInfo current, string controller, string action)
+		{
+			Hashtable parameters = new Hashtable();
+			parameters["controller"] = controller;
+			parameters["action"] = action;
+			return BuildUrl(current, parameters);
+		}
+
+		public string BuildUrl(UrlInfo current, string controller, string action, IDictionary queryStringParams)
+		{
+			Hashtable parameters = new Hashtable();
+			parameters["controller"] = controller;
+			parameters["action"] = action;
+			parameters["querystring"] = queryStringParams;
+			return BuildUrl(current, parameters);
+		}
+
+		public string BuildUrl(UrlInfo current, string controller, string action, NameValueCollection queryStringParams)
+		{
+			Hashtable parameters = new Hashtable();
+			parameters["controller"] = controller;
+			parameters["action"] = action;
+			parameters["querystring"] = queryStringParams;
+			return BuildUrl(current, parameters);
+		}
+
+		public string BuildUrl(UrlInfo current, string area, string controller, string action)
+		{
+			Hashtable parameters = new Hashtable();
+			parameters["area"] = area;
+			parameters["controller"] = controller;
+			parameters["action"] = action;
+			return BuildUrl(current, parameters);
+		}
+
+		public string BuildUrl(UrlInfo current, string area, string controller, string action, IDictionary queryStringParams)
+		{
+			Hashtable parameters = new Hashtable();
+			parameters["area"] = area;
+			parameters["controller"] = controller;
+			parameters["action"] = action;
+			parameters["querystring"] = queryStringParams;
+			return BuildUrl(current, parameters);
+		}
+
+		public string BuildUrl(UrlInfo current, string area, string controller, string action,
+		                       NameValueCollection queryStringParams)
+		{
+			Hashtable parameters = new Hashtable();
+			parameters["area"] = area;
+			parameters["controller"] = controller;
+			parameters["action"] = action;
+			parameters["querystring"] = queryStringParams;
+			return BuildUrl(current, parameters);
+		}
+
+		#endregion
+
+		private string InternalBuildUrl(string area, string controller, string action, string protocol,
+		                                string port, string domain, string subdomain, string appVirtualDir, string extension, 
+		                                bool absolutePath, bool applySubdomain, string suffix)
+		{
+			if (area == null) throw new ArgumentNullException("area");
+			if (controller == null) throw new ArgumentNullException("controller");
+			if (action == null) throw new ArgumentNullException("action");
+			if (appVirtualDir == null) throw new ArgumentNullException("appVirtualDir");
+
+			string path;
+
+			if (appVirtualDir.Length > 1 && !appVirtualDir.StartsWith("/"))
+			{
+				appVirtualDir = "/" + appVirtualDir;
+			}
+
+			if (area != String.Empty)
+			{
+				path = appVirtualDir + "/" + area + "/" + controller + "/" + action;
+			}
+			else
+			{
+				path = appVirtualDir + "/" + controller + "/" + action;
+			}
+
+			if (useExtensions)
+			{
+				path += "." + extension;
+			}
+
+			if (suffix != null && suffix != String.Empty)
+			{
+				path += "?" + suffix;
+			}
+
+			if (absolutePath)
+			{
+				string url;
+
+				if (applySubdomain)
+				{
+					url = protocol + "://" + subdomain + domain;
+				}
+				else
+				{
+					url = protocol + "://" + domain;
+				}
+
+				if (port != "80")
+				{
+					url += ":" + port;
+				}
+
+				return url + path;
+			}
+			else
+			{
+				return path;
+			}
+		}
+	}
+}

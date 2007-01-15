@@ -1,4 +1,4 @@
-// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,26 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Tests
+namespace Castle.MonoRail.Framework.Tests.Controllers.Clients
 {
-	using System;
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class ControllerLifecycleExecutorTestCase
+	[ControllerDetails("Home", Area="clients")]
+	public class ClientHomeController : Controller
 	{
-		//private ControllerLifecycleExecutor executor;
-		
-		[SetUp]
-		public void Init()
-		{
-			// executor = new ControllerLifecycleExecutor();
-		}
-		
-		[Test]
-		public void ControllerCreation()
-		{
-			
-		}
 	}
 }

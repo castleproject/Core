@@ -168,9 +168,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (result == null)
 			{
-				Controller controllerInstance = controllerFactory.CreateController(new UrlInfo("/", area, controller, "", ""));
-				
-				if (controllerInstance == null)
+				IControllerTree tree = (IControllerTree) CurrentContext.GetService(typeof(IControllerTree));
+
+				Type controllerType = tree.GetController(area, controller);
+
+				if (controllerType == null)
 				{
 					throw new RailsException("Controller not found with Area: '{0}', Name: '{1}'", area, controller);
 				}
@@ -192,8 +194,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				
 				functions.Append("{ " + Environment.NewLine);
 				
-				ControllerMetaDescriptor metaDescriptor = 
-					controllerDescriptorBuilder.BuildDescriptor(controllerInstance);
+				ControllerMetaDescriptor metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(controllerType);
 				
 				bool commaNeeded = false;
 				
