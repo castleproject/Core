@@ -319,7 +319,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToFunction(String innerContent, String functionCodeOrName)
 		{
-			return LinkToFunction(innerContent, functionCodeOrName, null, null);
+			return LinkToFunction(innerContent, functionCodeOrName, new Hashtable());
 		}
 
 		/// <summary>
@@ -424,11 +424,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Usually, the result would be a partial prepared by the controller
 		/// </summary>
 		/// <param name="innerContent">Link content</param>
-		/// <param name="url">Target url</param>
 		/// <param name="confirm">the confirm question</param>
+		/// <param name="url">Target url</param>
 		/// <param name="options">the options for the Ajax invocation</param>
 		/// <returns>The handcrafted element</returns>
-		public String LinkToRemote(String innerContent, String url, String confirm, IDictionary options)
+		public String LinkToRemote(String innerContent, String confirm, String url, IDictionary options)
 		{
 			return LinkToFunction(innerContent, BuildRemoteFunction(url, options), confirm, null);
 		}
