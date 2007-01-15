@@ -18,6 +18,7 @@ namespace Castle.MonoRail.WindsorExtension
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Controllers;
 	using Castle.MonoRail.Framework.Services;
@@ -43,6 +44,9 @@ namespace Castle.MonoRail.WindsorExtension
 			tree = (IControllerTree) Kernel["rails.controllertree"];
 
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
+
+			MonoRailConfiguration.GetConfig().ServiceEntries.RegisterService(
+				ServiceIdentification.ControllerTree, typeof(ControllerTreeAccessor));
 
 			AddBuiltInControllers();
 		}
