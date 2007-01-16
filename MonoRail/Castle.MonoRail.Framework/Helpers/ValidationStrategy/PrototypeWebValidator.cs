@@ -116,11 +116,13 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				if (inputType == InputElementType.Text)
 				{
 					AddClass("required");
-					AddTitle(violationMessage);
 				}
-				else
+				else if (inputType == InputElementType.Select)
 				{
+					AddClass("validate-selection");
 				}
+
+				AddTitle(violationMessage);
 			}
 
 			public void SetDigitsOnly(string violationMessage)
@@ -158,7 +160,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetMaxLength(int maxLength)
 			{
-				// Not supported by the prototype validation
+				// Not supported by the prototype validation, 
+				// but we can set the maxlength on the input element
 
 				if (inputType == InputElementType.Text)
 				{
