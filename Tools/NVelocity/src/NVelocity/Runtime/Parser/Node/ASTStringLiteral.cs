@@ -1,51 +1,38 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
-	using System.Text.RegularExpressions;
 	using NVelocity.Context;
 
-	/// <summary> ASTStringLiteral support.  Will interpolate!
-	/// *
+	/// <summary> 
+	/// ASTStringLiteral support.
 	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <version> $Id: ASTStringLiteral.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
 	public class ASTStringLiteral : SimpleNode
 	{
 		// begin and end dictionary string markers
 		private static readonly String DictStart = "%{";
 		private static readonly String DictEnd = "}";
 
-		// Regex for key = 'value' pairs
-		// private static readonly Regex dictPairRegex = new Regex(
-		//	@" (\w+) \s* = \s* '(.*?)(?<!\\)' ", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
-		// Regex for string between pairs
-		// private static readonly Regex dictBetweenPairRegex = new Regex(
-		//	@"^\s*,\s*$", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
-		// Regex for string at the begining or end of a dictionary string
-		// private static readonly Regex dictEdgePairRegex = new Regex(
-		//	@"^\s*$", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
-		/* cache the value of the interpolation switch */
 		private bool interpolate = true;
 		private SimpleNode nodeTree = null;
 		private String image = "";
 		private String interpolateimage = "";
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ASTStringLiteral"/> class.
+		/// </summary>
+		/// <param name="id">The id.</param>
 		public ASTStringLiteral(int id) : base(id)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ASTStringLiteral"/> class.
+		/// </summary>
+		/// <param name="p">The p.</param>
+		/// <param name="id">The id.</param>
 		public ASTStringLiteral(Parser p, int id) : base(p, id)
 		{
 		}
@@ -55,10 +42,6 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Init(IInternalContextAdapter context, Object data)
 		{
-			/*
-			*  simple habit...  we prollie don't have an AST beneath us
-			*/
-
 			base.Init(context, data);
 
 			/*
@@ -154,7 +137,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 						result = ret.Substring(0, (ret.Length - 1) - (0));
 					}
-					catch (Exception e)
+					catch(Exception e)
 					{
 						rsvc.Error("Error in interpolating string literal : " + e);
 						result = image;
@@ -177,28 +160,44 @@ namespace NVelocity.Runtime.Parser.Node
 		private HybridDictionary InterpolateDictionaryString(string str, IInternalContextAdapter context)
 		{
 			HybridDictionary hash = new HybridDictionary(true);
-			
-			// key=val, key='val', key=$val, key=${val}, key='id$id'
-			
-			char[] contents = str.ToCharArray();
 
-			bool inKey, valueStarted, expectSingleCommaAtEnd, inTransition;
-			inKey = true;
-			inTransition = false;
-			valueStarted = expectSingleCommaAtEnd = false;
+			// key=val, key='val', key=$val, key=${val}, key='id$id'
+
+			char[] contents = str.ToCharArray();
+			int lastIndex;
+
+			return RecursiveBuildDictionary(contents, 2, context, out lastIndex);
+		}
+
+		private HybridDictionary RecursiveBuildDictionary(char[] contents, int fromIndex, IInternalContextAdapter context,
+		                                                  out int lastIndex)
+		{
+			lastIndex = 0;
+
+			HybridDictionary hash = new HybridDictionary(true);
+
+			bool inKey, valueStarted, expectSingleCommaAtEnd, inTransition, inEvaluationContext;
+			inKey = false;
+			inTransition = true;
+			valueStarted = expectSingleCommaAtEnd = inEvaluationContext = false;
 			StringBuilder sbKeyBuilder = new StringBuilder();
 			StringBuilder sbValBuilder = new StringBuilder();
-			
-			for(int i = 2; i < contents.Length - 1; i++)
+
+			for(int i = fromIndex; i < contents.Length; i++)
 			{
 				char c = contents[i];
 
 				if (inTransition)
 				{
 					// Eat all insignificant chars
-					if (c == ',' || c == ' ') 
+					if (c == ',' || c == ' ')
 					{
 						continue;
+					}
+					else if (c == '}') // Time to stop
+					{
+						lastIndex = i;
+						break;
 					}
 					else
 					{
@@ -206,14 +205,14 @@ namespace NVelocity.Runtime.Parser.Node
 						inKey = true;
 					}
 				}
-				
+
 				if (c == '=' && inKey)
 				{
 					inKey = false;
 					valueStarted = true;
 					continue;
 				}
-				
+
 				if (inKey)
 				{
 					sbKeyBuilder.Append(c);
@@ -221,71 +220,111 @@ namespace NVelocity.Runtime.Parser.Node
 				else
 				{
 					if (valueStarted && c == ' ') continue;
-					
+
 					if (valueStarted)
 					{
 						valueStarted = false;
-						
+
 						if (c == '\'')
 						{
 							expectSingleCommaAtEnd = true;
 							continue;
 						}
-					}
-					
-					if (!valueStarted)
-					{
-						if ((c == '\'' && expectSingleCommaAtEnd) || 
-						    (!expectSingleCommaAtEnd && c == ','))
+						else if (c == '{')
 						{
-							ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
-							
+							object nestedHash = RecursiveBuildDictionary(contents, i + 1, context, out i);
+							ProcessDictEntry(hash, sbKeyBuilder, nestedHash, context);
 							inKey = false;
 							valueStarted = false;
 							inTransition = true;
+							continue;
+						}
+					}
+
+					if (!valueStarted)
+					{
+						if ((c == '\'' && expectSingleCommaAtEnd) ||
+							(!expectSingleCommaAtEnd && c == ',') || 
+							(!inEvaluationContext && c == '}'))
+						{
+							ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
+
+							inKey = false;
+							valueStarted = false;
+							inTransition = true;
+
+							if (!inEvaluationContext && c == '}')
+							{
+								lastIndex = i;
+								break;
+							}
 						}
 						else
 						{
+							if (!inEvaluationContext && c == '{')
+							{
+								inEvaluationContext = true;
+							}
+							else if (inEvaluationContext && c == '}')
+							{
+								inEvaluationContext = false;
+							}
+
 							sbValBuilder.Append(c);
 						}
 					}
 				}
 
-				if (i == contents.Length - 2)
+				if (i == contents.Length - 1)
 				{
 					if (sbKeyBuilder.ToString().Trim() == String.Empty)
 					{
 						break;
 					}
 
+					lastIndex = i;
+
 					ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
+
+					inKey = false;
+					valueStarted = false;
+					inTransition = true;
 				}
 			}
 
 			return hash;
 		}
 
-		private void ProcessDictEntry(HybridDictionary map, 
-		                              StringBuilder keyBuilder, StringBuilder value, 
-		                              bool isTextContent, IInternalContextAdapter context)
+		private void ProcessDictEntry(HybridDictionary map, StringBuilder keyBuilder, object value,
+		                              IInternalContextAdapter context)
 		{
 			object key = keyBuilder.ToString().Trim();
-			object val = value.ToString().Trim();
 
 			if (key.ToString().StartsWith("$"))
 			{
 				object keyVal = EvaluateInPlace(key.ToString(), context);
-				
+
 				if (keyVal == null)
 				{
-					throw new ArgumentException("The dictionary entry " + key + " evaluated to null, but null is not a valid dictionary key");
+					throw new ArgumentException("The dictionary entry " + key +
+					                            " evaluated to null, but null is not a valid dictionary key");
 				}
 
 				key = keyVal;
 			}
-			
-			// Is it a reference?
 
+			map[key] = value;
+
+			keyBuilder.Length = 0;
+		}
+
+		private void ProcessDictEntry(HybridDictionary map,
+		                              StringBuilder keyBuilder, StringBuilder value,
+		                              bool isTextContent, IInternalContextAdapter context)
+		{
+			object val = value.ToString().Trim();
+
+			// Is it a reference?
 			if (val.ToString().StartsWith("$") || val.ToString().IndexOf('$') != -1)
 			{
 				val = EvaluateInPlace(val.ToString(), context);
@@ -298,33 +337,33 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					try
 					{
-						map[key] = Convert.ToInt32(val);
+						val = Convert.ToInt32(val);
 					}
-					catch (Exception)
+					catch(Exception)
 					{
-						throw new ArgumentException("Could not convert dictionary value for entry " + key + " with value " + val +
-													" to Int32. If the value is supposed to be a string, it must be enclosed with '' (single quotes)");
+						throw new ArgumentException("Could not convert dictionary value for entry " + keyBuilder + " with value " + val +
+						                            " to Int32. If the value is supposed to be a string, it must be enclosed with '' (single quotes)");
 					}
 				}
 				else
 				{
 					try
 					{
-						map[key] = Convert.ToSingle(val);
+						val = Convert.ToSingle(val);
 					}
-					catch (Exception)
+					catch(Exception)
 					{
-						throw new ArgumentException("Could not convert dictionary value for entry " + key + " with value " + val +
-													" to Single. If the value is supposed to be a string, it must be enclosed with '' (single quotes)");
+						throw new ArgumentException("Could not convert dictionary value for entry " + keyBuilder + " with value " + val +
+						                            " to Single. If the value is supposed to be a string, it must be enclosed with '' (single quotes)");
 					}
 				}
 			}
 
-			map[key] = val;
-			
+			ProcessDictEntry(map, keyBuilder, val, context);
+
 			// Reset buffers
-			
-			keyBuilder.Length = value.Length = 0;
+
+			value.Length = 0;
 		}
 
 		private object EvaluateInPlace(string content, IInternalContextAdapter context)
@@ -345,23 +384,31 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private object Evaluate(SimpleNode inlineNode, IInternalContextAdapter context)
 		{
-			StringBuilder result = new StringBuilder();
-
-			for(int i = 0; i < inlineNode.ChildrenCount; i++)
+			if (inlineNode.ChildrenCount == 1)
 			{
-				INode child = inlineNode.GetChild(i);
-				
-				if (child.Type == ParserTreeConstants.REFERENCE)
-				{
-					result.Append(child.Value(context));
-				}
-				else
-				{
-					result.Append(child.Literal);
-				}
+				INode child = inlineNode.GetChild(0);
+				return child.Value(context);
 			}
+			else
+			{
+				StringBuilder result = new StringBuilder();
 
-			return result.ToString();
+				for(int i = 0; i < inlineNode.ChildrenCount; i++)
+				{
+					INode child = inlineNode.GetChild(i);
+
+					if (child.Type == ParserTreeConstants.REFERENCE)
+					{
+						result.Append(child.Value(context));
+					}
+					else
+					{
+						result.Append(child.Literal);
+					}
+				}
+
+				return result;
+			}
 		}
 
 		private bool IsDictionaryString(string str)

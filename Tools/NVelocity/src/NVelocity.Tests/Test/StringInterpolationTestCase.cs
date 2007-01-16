@@ -43,6 +43,7 @@ namespace NVelocity.Test
 		[Test]
 		public void MultiParamDictUsingInterpolation()
 		{
+			Assert.AreEqual("2:key1=<> key2=<1:id=<123>>", Eval("%{key1=${siteRoot}, key2=$params}"));
 			Assert.AreEqual("3:key1=<value1> key2=<value2> key3=<value3>",
 							Eval("%{ key1='value${survey}', key2='value$id', key3='value3' }"));
 
@@ -51,7 +52,23 @@ namespace NVelocity.Test
 
 			Assert.AreEqual("2:key1=<> key2=<2>", Eval("%{key1=${siteRoot}, key2=$id}"));
 		}
-		
+
+		[Test]
+		public void NestedDicts()
+		{
+			Assert.AreEqual("3:action=<index> controller=<area> params=<0>",
+							Eval("%{controller='area', action='index', params={}}"));
+
+			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<1> lastpage=<2>>",
+							Eval("%{controller='area', action='index', params={id=1, lastpage=$id} }"));
+
+			Assert.AreEqual("3:action=<index> controller=<area> params=<0>",
+							Eval("%{params={}, action='index', controller='area'}"));
+
+			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<'1'> lastpage=<2>>",
+							Eval("%{params={id=$survey.to_squote, lastpage=$id}, controller='area', action='index'}"));
+		}
+
 		[Test]
 		public void ZeroParamDictInterpolation()
 		{
@@ -67,6 +84,9 @@ namespace NVelocity.Test
 		public string Eval(string text, bool wrapBetweenQuote)
 		{
 			VelocityContext c = new VelocityContext();
+			Hashtable hash2 = new Hashtable();
+			hash2["id"] = "123";
+			c.Put("params", hash2);
 			c.Put("style", "style='color:red'");
 			c.Put("survey", 1);
 			c.Put("id", 2);
@@ -111,7 +131,18 @@ namespace NVelocity.Test
 
 			foreach(string key in keysSorted)
 			{
-				sb.Append(key).Append("=<").Append(options[key]).Append("> ");
+				object val = options[key];
+
+				IDictionary dict = val as IDictionary;
+
+				if (dict != null)
+				{
+					sb.Append(key).Append("=<").Append(Dump(dict)).Append("> ");
+				}
+				else
+				{
+					sb.Append(key).Append("=<").Append(val).Append("> ");
+				}
 			}
 
 			if (sb.Length > 0) sb.Length--;
