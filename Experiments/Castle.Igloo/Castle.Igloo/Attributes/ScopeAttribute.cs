@@ -45,7 +45,7 @@ namespace Castle.Igloo.Attributes
         /// Some scope like <see cref="ISessionScope"/> are not always available.
         /// When using such a scoped comoposent, a proxy will be created for every reference to the scoped component. 
         /// (The proxy will determine the actual instance it will point to based on the scope in which the component is called.)
-        /// This property specifies if the container must create a proxy for the component.
+        /// This property specifies if the container must create a scoped proxy for the component.
         /// </summary>
         /// <remarks>
         /// You do not need to set to true with components that are not web scoped as <see cref="ISessionScope"/>....

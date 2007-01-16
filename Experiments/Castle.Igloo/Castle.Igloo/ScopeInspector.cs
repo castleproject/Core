@@ -49,13 +49,6 @@ namespace Castle.Igloo
         /// <param name="model">The component model</param>
         public void ProcessModel(IKernel kernel, ComponentModel model)
         {
-            //bool isScoped = IsScopedModel(kernel, model);
-
-            //if (isScoped)
-            //{
-
-            //}
-
             if (model.Configuration != null &&
                 model.Configuration.Attributes[SCOPE_TOKEN]!=null)
             {
@@ -88,7 +81,7 @@ namespace Castle.Igloo
         /// <param name="scopeAttribute">The scope attribute.</param>
         private void DecorateComponent(ComponentModel model, ScopeAttribute scopeAttribute)
         {
-            model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute.Scope);
+            model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute);
             
             // Ensure its CustomLifestyle
             model.LifestyleType = LifestyleType.Custom;

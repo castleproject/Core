@@ -1,7 +1,11 @@
 
+using System;
 using System.Threading;
 using Castle.Core;
+using Castle.Core.Interceptor;
 using Castle.Core.Resource;
+using Castle.DynamicProxy;
+using Castle.DynamicProxy.Generators;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Scopes;
@@ -166,6 +170,60 @@ namespace Castle.Igloo.Test.ScopeTest
         {
             IHandler handler = _container.Kernel.GetHandler("a");
             this.instance3 = handler.Resolve(CreationContext.Empty) as IComponent;
+        }
+
+        [Test]
+        public void TestProxyScopeIdea()
+        {
+            _container.AddComponent("Simple.Component", typeof(IComponent), typeof(SimpleComponent));
+
+            IHandler handler = _container.Kernel.GetHandler("Simple.Component");
+
+            ProxyGenerator generator = new ProxyGenerator();
+            Type[] interfaces = new Type[1];
+            interfaces[0] = typeof (IScopedObject);
+
+            IInterceptor interceptor = new ProxyScopeInterceptor(handler.ComponentModel, _container.Kernel);
+            IComponent service = (IComponent)generator.CreateInterfaceProxyWithoutTarget(typeof(IComponent), interfaces, interceptor);
+
+            Assert.IsNotNull(service);
+            Assert.IsTrue(typeof(IScopedObject).IsAssignableFrom(service.GetType()));
+
+            int result = service.ID;
+            Assert.AreEqual(99, result);
+        }
+
+        public class ProxyScopeInterceptor : IInterceptor
+        {
+            private ComponentModel _model = null;
+            private IKernel _kernel = null;
+
+            public ProxyScopeInterceptor(ComponentModel model, IKernel kernel)
+            {
+                _model = model;
+                _kernel = kernel;
+            }
+
+            public void Intercept(IInvocation invocation)
+            {
+                // We need to retrieve the componet instance from the Kernel, it will put it in the scope
+                // then we must call the invocation method on the component instance
+
+                object scopedObject = _kernel[_model.Name];
+                invocation.ReturnValue = invocation.MethodInvocationTarget.Invoke(scopedObject, invocation.Arguments);
+            }
+        }
+
+        public interface IScopedObject
+        {
+        }
+
+        /// <summary>
+        /// Summary description for SimpleMixin.
+        /// </summary>
+        [Serializable]
+        public class ScopedObject : IScopedObject
+        {
         }
     }
 }

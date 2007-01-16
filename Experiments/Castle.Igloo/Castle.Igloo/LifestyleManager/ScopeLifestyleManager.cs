@@ -20,6 +20,7 @@
 
 using System;
 using Castle.Core;
+using Castle.Igloo.Attributes;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Scopes;
 using Castle.MicroKernel;
@@ -52,23 +53,62 @@ namespace Castle.Igloo.LifestyleManager
         public override object Resolve(CreationContext context)
         {
             ComponentModel component = ((AbstractComponentActivator)ComponentActivator).Model;
-            string scopeName = (string)component.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
+            ScopeAttribute scopeAttribute = (ScopeAttribute)component.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
 
-            IScope scope = (IScope)Kernel[scopeName];
+            IScope scope = (IScope)Kernel[scopeAttribute.Scope];
 
+            if (!scopeAttribute.UseProxy)
+            {
+                return GetKernelInstance(context, scope, component);
+                 
+            }
+            else
+            {
+                // To do
+
+                /// When using a proxy scoped component, a proxy will be created for every reference to the scoped component. 
+                /// The proxy will determine the actual instance it will point to based on the context in which the bean is called.
+
+                // Created proxies are singletons and may be injected, with transparent scoping behavior.
+
+                // Must return a proxy generated as in TestProxyScopeIdea if the call not come from the poxiefied component
+                // else
+                // must delegate to the Kernel
+                // Need to find a way to distinct which I must return
+
+                return GetKernelInstance(context, scope, component);
+
+            }
+        }
+
+        /// <summary>
+        /// Gets an instance from the kernel.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="scope">The scope.</param>
+        /// <param name="component">The component.</param>
+        /// <returns></returns>
+        private object GetKernelInstance(CreationContext context, IScope scope, ComponentModel component)
+        {
             object instance = scope[component.Name];
+
+            //System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+            //for (int i = 0; i < st.FrameCount;i++ )
+            //{
+            //    Console.WriteLine(		st.GetFrame(i).GetMethod() );
+            //}
 
             if (instance == null)
             {
                 scope.CheckInitialisation();
 
                 instance = base.Resolve(context);
-                
+
                 scope.Add(component.Name, instance);
                 scope.RegisterForEviction(this, component, instance);
             }
-            
-            return instance;
+
+            return instance;  
         }
 
         /// <summary>
@@ -93,9 +133,9 @@ namespace Castle.Igloo.LifestyleManager
         {
             base.Release(candidate.Intance);
 
-            string scopeName = (string)candidate.ComponentModel.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
+            ScopeAttribute scopeAttribute = (ScopeAttribute)candidate.ComponentModel.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
 
-            IScope scope = (IScope)Kernel[scopeName];
+            IScope scope = (IScope)Kernel[scopeAttribute.Scope];
 
             scope.Remove(candidate.ComponentModel.Name);
         }

@@ -112,6 +112,7 @@
     <Compile Include="Attributes\OutjectAttribute.cs" />
     <Compile Include="Attributes\ScopeAttribute.cs" />
     <Compile Include="BijectionInspector.cs" />
+    <Compile Include="Interceptors\ProxyScopeInterceptor.cs" />
     <Compile Include="LifestyleManager\ScopeLifestyleManager.cs" />
     <Compile Include="Mock\MockApplicationScope.cs" />
     <Compile Include="Mock\MockPageScope.cs" />
