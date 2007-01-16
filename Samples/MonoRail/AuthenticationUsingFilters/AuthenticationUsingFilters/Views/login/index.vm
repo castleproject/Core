@@ -5,7 +5,7 @@
 </p>
 #end
 
-<form method="post" action="login.rails?ReturnUrl=$ReturnUrl">
+<form method="post" action="login.rails?ReturnUrl=$!ReturnUrl">
 
 <fieldset style="width: 400px;">
 	<legend>Authentication</legend>
