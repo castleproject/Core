@@ -148,6 +148,16 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
+		public void VirDirNonLowerCase()
+		{
+			UrlInfo info = tokenizer.TokenizeUrl("/MyVirDirectory/home/index.rails", new Uri("http://localhost"), true, "/myvirdirectory");
+			Assert.IsNotNull(info);
+			Assert.AreEqual("home", info.Controller);
+			Assert.AreEqual("index", info.Action);
+			Assert.AreEqual(String.Empty, info.Area);
+		}
+
+		[Test]
 		public void EmptyVirDir()
 		{
 			UrlInfo info = tokenizer.TokenizeUrl("/home/index.rails", new Uri("http://localhost"), true, "");

@@ -72,7 +72,7 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				appVirtualDir = appVirtualDir.ToLower(System.Globalization.CultureInfo.InvariantCulture).Substring(1);
 
-				if (!rawUrl.StartsWith(appVirtualDir))
+				if (!rawUrl.StartsWith(appVirtualDir, true, System.Globalization.CultureInfo.InvariantCulture))
 				{
 					// Sanity check
 					throw new UrlTokenizerException("Url does not start with the virtual dir");
