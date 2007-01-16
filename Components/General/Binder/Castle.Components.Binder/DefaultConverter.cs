@@ -125,6 +125,13 @@ namespace Castle.Components.Binder
 				{
 					return ConvertPrimitive(desiredType, input, ref conversionSucceeded);
 				}
+#if DOTNET2
+				else if (desiredType.IsGenericType &&
+				         desiredType.GetGenericTypeDefinition() == typeof(Nullable<>))
+				{
+					return ConvertPrimitive(desiredType, input, ref conversionSucceeded);
+				}
+#endif
 				else if (desiredType == typeof(Guid))
 				{
 					return ConvertGuid(input, ref conversionSucceeded);
@@ -259,7 +266,7 @@ namespace Castle.Components.Binder
 
 			String value = NormalizeInput(input);
 			
-			if (desiredType == typeof(Boolean))
+			if (IsBool(desiredType))
 			{
 				if (input == null)
 				{
@@ -308,6 +315,18 @@ namespace Castle.Components.Binder
 			{
 				return System.Convert.ChangeType(input, desiredType);
 			}
+		}
+
+		private bool IsBool(Type desiredType)
+		{
+			bool isBool = desiredType == typeof(Boolean);
+#if DOTNET2
+			if (!isBool)
+			{
+				isBool = desiredType == typeof(bool?);
+			}
+#endif
+			return isBool;
 		}
 
 		private object ConvertEnum(Type desiredType, object input, ref bool conversionSucceeded)
