@@ -21,7 +21,6 @@ namespace Castle.Components.Binder.Tests
 #endif
 	using System.Globalization;
 	using System.Threading;
-	
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -33,11 +32,11 @@ namespace Castle.Components.Binder.Tests
 		[TestFixtureSetUp]
 		public void Init()
 		{
-			CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
-			Thread.CurrentThread.CurrentCulture	= en;
+			Thread.CurrentThread.CurrentCulture = en;
 			Thread.CurrentThread.CurrentUICulture = en;
-			
+
 			converter = new DefaultConverter();
 		}
 
@@ -46,13 +45,13 @@ namespace Castle.Components.Binder.Tests
 		{
 			Assert.AreEqual("hello", Convert(typeof(string), "hello"));
 			Assert.IsTrue(convSucceed);
-			
+
 			Assert.AreEqual(null, Convert(typeof(string), null));
 			Assert.IsFalse(convSucceed);
 
 			Assert.AreEqual("\n  \t", Convert(typeof(string), " \n  \t "));
 			Assert.IsTrue(convSucceed);
-			
+
 			Assert.AreEqual(null, Convert(typeof(string), ""));
 			Assert.IsTrue(convSucceed);
 		}
@@ -128,7 +127,8 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void GuidConvert()
 		{
-			Assert.AreEqual(new Guid("6CDEF425-6EEA-42AC-A318-0772B55FF259"), Convert(typeof(Guid), "6CDEF425-6EEA-42AC-A318-0772B55FF259"));
+			Assert.AreEqual(new Guid("6CDEF425-6EEA-42AC-A318-0772B55FF259"),
+			                Convert(typeof(Guid), "6CDEF425-6EEA-42AC-A318-0772B55FF259"));
 			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(Guid), null));
@@ -230,13 +230,13 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void BooleanWithArrayAsSourceConvert()
 		{
-			Assert.AreEqual(true, ConvertFromArray(typeof(bool), new string[] { "1", "0" }));
+			Assert.AreEqual(true, ConvertFromArray(typeof(bool), new string[] {"1", "0"}));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(false, ConvertFromArray(typeof(bool), new string[] { "0" }));
+			Assert.AreEqual(false, ConvertFromArray(typeof(bool), new string[] {"0"}));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(false, ConvertFromArray(typeof(bool), new string[] { "0", "0" }));
+			Assert.AreEqual(false, ConvertFromArray(typeof(bool), new string[] {"0", "0"}));
 			Assert.IsTrue(convSucceed);
 		}
 
@@ -285,8 +285,60 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(col, converter.Convert(typeof(ICollection), col, out convSucceed));
 			Assert.IsTrue(convSucceed);
 		}
-		
+
 #if DOTNET2
+
+		[Test]
+		public void NullableInt32Conversion()
+		{
+			Assert.AreEqual(12, Convert(typeof(int?), "12"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(null, Convert(typeof(int?), ""));
+			Assert.IsFalse(convSucceed);
+
+			Assert.AreEqual(null, Convert(typeof(int?), null));
+			Assert.IsFalse(convSucceed);
+		}
+
+		[Test]
+		public void NullableDecimalConversion()
+		{
+			Assert.AreEqual((decimal?)12.22, Convert(typeof(decimal?), "12.22"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual((decimal?)3000, Convert(typeof(decimal?), "3,000.00"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(null, Convert(typeof(decimal?), null));
+			Assert.IsFalse(convSucceed);
+
+			Assert.AreEqual(null, Convert(typeof(decimal?), "   "));
+			Assert.IsFalse(convSucceed);
+
+			try
+			{
+				Convert(typeof(decimal?), "Invalid Value");
+				Assert.Fail("DecimalConvert should had throwed an exception");
+			}
+			catch (BindingException)
+			{
+				Assert.IsFalse(convSucceed);
+			}
+		}
+
+		[Test]
+		public void NullableDateTimeConversion()
+		{
+			Assert.AreEqual(new DateTime?(new DateTime(2005, 1, 31)), Convert(typeof(DateTime?), "2005-01-31"));
+			Assert.IsTrue(convSucceed);
+
+			Convert(typeof(DateTime?), null);
+			Assert.IsFalse(convSucceed);
+
+			Convert(typeof(DateTime?), "      ");
+			Assert.IsFalse(convSucceed);
+		}
 
 		[Test]
 		public void NullableBooleanConversion()
@@ -304,13 +356,13 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void NullableBooleanWithArrayAsSourceConvert()
 		{
-			Assert.AreEqual(new bool?(true), ConvertFromArray(typeof(bool?), new string[] { "1", "0" }));
+			Assert.AreEqual(new bool?(true), ConvertFromArray(typeof(bool?), new string[] {"1", "0"}));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(new bool?(false), ConvertFromArray(typeof(bool?), new string[] { "0" }));
+			Assert.AreEqual(new bool?(false), ConvertFromArray(typeof(bool?), new string[] {"0"}));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(new bool?(false), ConvertFromArray(typeof(bool?), new string[] { "0", "0" }));
+			Assert.AreEqual(new bool?(false), ConvertFromArray(typeof(bool?), new string[] {"0", "0"}));
 			Assert.IsTrue(convSucceed);
 		}
 
@@ -320,7 +372,7 @@ namespace Castle.Components.Binder.Tests
 			Type desiredType = typeof(System.Collections.Generic.List<int>);
 
 			List<int> result;
-			
+
 			result = Convert(desiredType, "1,2,3") as List<int>;
 
 			Assert.IsNotNull(result);
@@ -336,7 +388,7 @@ namespace Castle.Components.Binder.Tests
 			result = Convert(desiredType, "") as List<int>;
 			Assert.IsNotNull(result);
 			Assert.AreEqual(0, result.Count);
-			Assert.IsTrue(convSucceed);		
+			Assert.IsTrue(convSucceed);
 		}
 
 		[Test]

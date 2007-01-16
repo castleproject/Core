@@ -129,7 +129,7 @@ namespace Castle.Components.Binder
 				else if (desiredType.IsGenericType &&
 				         desiredType.GetGenericTypeDefinition() == typeof(Nullable<>))
 				{
-					return ConvertPrimitive(desiredType, input, ref conversionSucceeded);
+					return ConvertNullable(desiredType, input, ref conversionSucceeded);
 				}
 #endif
 				else if (desiredType == typeof(Guid))
@@ -169,6 +169,22 @@ namespace Castle.Components.Binder
 		}
 
 #if DOTNET2		
+		private object ConvertNullable(Type desiredType, object input, ref bool conversionSucceeded)
+		{
+			Type underlyingType = Nullable.GetUnderlyingType(desiredType);
+
+			object value = Convert(underlyingType, input, out conversionSucceeded);
+
+			if (conversionSucceeded)
+			{
+				Type typeToConstruct = typeof(Nullable<>).MakeGenericType(underlyingType);
+
+				return Activator.CreateInstance(typeToConstruct, value);
+			}
+
+			return null;
+		}
+
 		private object ConvertGenericList(Type desiredType, object input, ref bool conversionSucceeded)
 		{
 			Type elemType = desiredType.GetGenericArguments()[0];
@@ -268,42 +284,7 @@ namespace Castle.Components.Binder
 			
 			if (IsBool(desiredType))
 			{
-				if (input == null)
-				{
-					conversionSucceeded = false;
-					return null;
-				}
-				else if (value == String.Empty)
-				{
-					return false;
-				}
-				else
-				{
-					if (value.IndexOf(',') != -1)
-					{
-						value = value.Substring(0, value.IndexOf(','));
-					}
-					
-					bool performNumericConversion = false;
-					
-					foreach(char c in value.ToCharArray())
-					{
-						if (Char.IsNumber(c))
-						{
-							performNumericConversion = true;
-							break;
-						}
-					}
-					
-					if (performNumericConversion)
-					{
-						return System.Convert.ToBoolean(System.Convert.ToInt32(value));
-					}
-					else
-					{
-						return !(String.Compare("false", value, true) == 0);
-					}
-				}
+				return SpecialBoolConversion(value, input, ref conversionSucceeded);
 			}
 			else if (input == null || value == String.Empty)
 			{
@@ -314,6 +295,46 @@ namespace Castle.Components.Binder
 			else
 			{
 				return System.Convert.ChangeType(input, desiredType);
+			}
+		}
+
+		private object SpecialBoolConversion(string value, object input, ref bool conversionSucceeded)
+		{
+			if (input == null)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+			else if (value == String.Empty)
+			{
+				return false;
+			}
+			else
+			{
+				if (value.IndexOf(',') != -1)
+				{
+					value = value.Substring(0, value.IndexOf(','));
+				}
+
+				bool performNumericConversion = false;
+
+				foreach (char c in value.ToCharArray())
+				{
+					if (Char.IsNumber(c))
+					{
+						performNumericConversion = true;
+						break;
+					}
+				}
+
+				if (performNumericConversion)
+				{
+					return System.Convert.ToBoolean(System.Convert.ToInt32(value));
+				}
+				else
+				{
+					return !(String.Compare("false", value, true) == 0);
+				}
 			}
 		}
 
@@ -372,10 +393,11 @@ namespace Castle.Components.Binder
 
 			Array values = input as Array;
 			Array result = Array.CreateInstance(elemType, values.Length);
-			bool elementConversionSucceeded;
 
 			for(int i = 0; i < values.Length; i++)
 			{
+				bool elementConversionSucceeded;
+
 				result.SetValue(Convert(elemType, values.GetValue(i), out elementConversionSucceeded), i);
 				
 				// if at least one array element get converted 
