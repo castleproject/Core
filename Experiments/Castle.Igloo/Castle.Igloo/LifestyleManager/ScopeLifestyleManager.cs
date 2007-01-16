@@ -30,12 +30,8 @@ using Castle.MicroKernel.Lifestyle;
 namespace Castle.Igloo.LifestyleManager
 {
     /// <summary>
-    /// Implements a Lifestyle Manager for Web Apps that
-    /// create at most one object per web session.
-    /// 
-    /// ScopeWebSessionLifestyleManager tries to lookup component by name 
-    /// in http session. 
-    /// If not found, it tries to instantiate new bean and attaches it to said session.
+    /// ScopeLifestyleManager tries to lookup component by name in the scope. 
+    /// If not found, it tries to instantiate new component and register it in its scope.
     /// </summary>
     [Serializable]
     public class ScopeLifestyleManager : AbstractLifestyleManager
@@ -64,10 +60,17 @@ namespace Castle.Igloo.LifestyleManager
             }
             else
             {
+                // If the Kernel want to inject a component that, for the sake of argument is scoped at the HTTP request scope, 
+                // into another singleton component scope, the Kernel will need to inject a proxy in place 
+                // of the request scoped compoenent. 
+                // That is to say, the Kernel need to inject a proxy object that exposes the same public interface as the scoped object, 
+                // but that is smart enough to be able to retrieve the real,target object from the relevant scope 
+                // (for example a HTTP request) and delegate method calls onto the real object.
+
                 // To do
 
                 /// When using a proxy scoped component, a proxy will be created for every reference to the scoped component. 
-                /// The proxy will determine the actual instance it will point to based on the context in which the bean is called.
+                /// The proxy will determine the actual instance it will point to based on the context in which the component is called.
 
                 // Created proxies are singletons and may be injected, with transparent scoping behavior.
 
