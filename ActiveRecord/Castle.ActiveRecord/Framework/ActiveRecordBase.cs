@@ -995,6 +995,19 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Searches and returns the first row.
 		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="detachedCriteria">The criteria.</param>
+		/// <param name="orders">The sort order - used to determine which record is the first one.</param>
+		/// <returns>A <c>targetType</c> instance or <c>null.</c></returns>
+		protected internal static object FindFirst(Type targetType, DetachedCriteria detachedCriteria, params Order[] orders)
+		{
+			Array result = SlicedFindAll(targetType, 0, 1, orders, detachedCriteria);
+			return (result != null && result.Length > 0 ? result.GetValue(0) : null);
+		}
+
+		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
 		/// <param name="targetType">The target type</param>
 		/// <param name="orders">The sort order - used to determine which record is the first one</param>
 		/// <param name="criteria">The criteria expression</param>

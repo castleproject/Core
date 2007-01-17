@@ -406,6 +406,17 @@ namespace Castle.ActiveRecord
 		#region FindFirst
 
 		/// <summary>
+		/// Searches and returns the first row for <typeparamref name="T"/>.
+		/// </summary>
+		/// <param name="criteria">Detached criteria.</param>
+		/// <param name="orders">The sort order - used to determine which record is the first one.</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c>.</returns>
+		public static T FindFirst(DetachedCriteria criteria, params Order[] orders)
+		{
+			return (T) FindFirst(typeof(T), criteria, orders);
+		}
+
+		/// <summary>
 		/// Searches and returns the first row for <typeparamref name="T"/>
 		/// </summary>
 		/// <param name="order">The sort order - used to determine which record is the first one</param>
