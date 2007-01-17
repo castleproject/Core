@@ -264,10 +264,11 @@
 		<!-- Create the master zip file with all files included -->
 		<zip zipfile="${build.zip.fullpath}">
 			<fileset basedir="${build.dir}" prefix="bin" >
-				<include name="Castle*.*" />
+				<include name="**/Castle*.*" />
 				<include name="AspectSharp*.*" />
 				<include name="external-dependencies.zip" />
 				<exclude name="*Tests.*" />
+				<exclude name="test-results/**" />
 			</fileset>
 			<fileset basedir="${root.dir}">
 				<include name="ASL - Apache Software Foundation License.txt" />
