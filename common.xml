@@ -90,9 +90,15 @@
 		<property name="csc.args" 		value="" />
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
 
+		<!-- Where is MbUnit.Cons.exe ? -->
+		<property name="mbunit-console" value="MbUnit.Cons.exe" overwrite="false" />
+
 		<!-- Where is nunit-console executable(win/mono) ? -->
 		<property name="nunit-console2" value="nunit-console2" overwrite="false" />
 		<property name="nunit-console" value="nunit-console" overwrite="false" />
+
+		<property name="testrunner" value="NUnit" />
+
 		<!-- Where is WiX? -->
 		<property name="wix.dir" value="%ProgramFiles%\wix" overwrite="false" />
 	</target>
@@ -196,6 +202,13 @@
 	<target name="common.find-nunit">
 		<if test="${not property::exists('nunit.found')}">
 			<exec 
+				program="${mbunit-console}" 
+				resultproperty="mbunit.found"
+				failonerror="false" />
+
+			<property name="mbunit.found" value="${mbunit.found == '0'}" readonly="true" />
+			
+			<exec
 				program="${nunit-console2}" 
 				resultproperty="nunit.found"
 				failonerror="false" />
@@ -209,7 +222,7 @@
 
 			<property name="nunit.found" value="${nunit.found == '0'}" readonly="true" />
 
-			<echo message="INFO: Using nunit-console for running unit tests" if="${nunit.found}"/>
+			<echo message="INFO: Using ${nunit-console} for running unit tests" if="${nunit.found}"/>
 			<echo message="WARNING: nunit-console not found, using less predictable NAnt &lt;nunit2&gt; task" unless="${nunit.found}"/>
 		</if>
 	</target>

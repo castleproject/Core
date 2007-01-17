@@ -251,14 +251,19 @@
 
 			<echo message="Running tests in '${project::get-name()}'" />
 
+			<exec if="${mbunit.found and testrunner=='MbUnit'}"
+				program="${mbunit-console}" 
+				workingdir="${build.dir}"
+				commandline="${project::get-name()}.dll /rf:${testresults.dir} /rnf:${project::get-name()}.dll-results /rt:Xml"
+			/>
 			<!-- Use nunit-console.exe if found, otherwise fall back to nunit2 task -->
-			<exec if="${nunit.found}"
+			<exec if="${nunit.found and testrunner=='NUnit'}"
 				program="${nunit-console}" 
 				workingdir="${build.dir}" 
 				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo"
 				 />
 
-			<nunit2 unless="${nunit.found}">
+			<nunit2 unless="${nunit.found}" if="${testrunner=='NUnit'}">
 				<formatter 
 					type="Xml" 
 					usefile="true" 
