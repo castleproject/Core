@@ -240,6 +240,7 @@
     </Compile>
     <Compile Include="Generators\Emitters\TypeConstructorEmitter.cs" />
     <Compile Include="Generators\Emitters\TypeUtil.cs" />
+    <Compile Include="Generators\EventToGenerate.cs" />
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -30,10 +30,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected PropertiesCollection properties;
 		protected EventCollection events;
 		protected internal NestedClassCollection nested;
-//#if DOTNET2
+		//#if DOTNET2
 		protected GenericTypeParameterBuilder[] genericTypeParams;
 		protected Dictionary<String, GenericTypeParameterBuilder> name2GenericType;
-//#endif
+		//#endif
 
 		public AbstractTypeEmitter()
 		{
@@ -44,12 +44,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			events = new EventCollection();
 			name2GenericType = new Dictionary<String, GenericTypeParameterBuilder>();
 		}
-		
+
 		public bool IsGenericArgument(String genericArgumentName)
 		{
 			return name2GenericType.ContainsKey(genericArgumentName);
 		}
-		
+
 		public Type GetGenericArgument(String genericArgumentName)
 		{
 			return name2GenericType[genericArgumentName];
@@ -59,19 +59,19 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			List<Type> types = new List<Type>();
 
-			foreach(Type genType in genericType.GetGenericArguments())
+			foreach (Type genType in genericType.GetGenericArguments())
 			{
 				types.Add(name2GenericType[genType.Name]);
 			}
 
 			return types.ToArray();
 		}
-		
+
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
 			List<Type> types = new List<Type>();
 
-			foreach(Type genType in genericMethod.GetGenericArguments())
+			foreach (Type genType in genericMethod.GetGenericArguments())
 			{
 				types.Add(name2GenericType[genType.Name]);
 			}
@@ -104,7 +104,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			methods.Add(member);
 			return member;
 		}
-		
+
 		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments)
 		{
 			MethodEmitter member = new MethodEmitter(this, name, returnType, arguments);
@@ -126,12 +126,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return member;
 		}
 
-//		public EasyRuntimeMethod CreateRuntimeMethod(String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments)
-//		{
-//			EasyRuntimeMethod member = new EasyRuntimeMethod(this, name, returnType, arguments);
-//			methods.Add(member);
-//			return member;
-//		}
+		//		public EasyRuntimeMethod CreateRuntimeMethod(String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments)
+		//		{
+		//			EasyRuntimeMethod member = new EasyRuntimeMethod(this, name, returnType, arguments);
+		//			methods.Add(member);
+		//			return member;
+		//		}
 
 		public FieldReference CreateStaticField(string name, Type fieldType)
 		{
@@ -141,7 +141,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return new FieldReference(fieldBuilder);
 		}
-		
+
 		public FieldReference CreateField(string name, Type fieldType)
 		{
 			return CreateField(name, fieldType, true);
@@ -160,12 +160,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return new FieldReference(fieldBuilder);
 		}
-		
+
 		public PropertyEmitter CreateProperty(String name, PropertyAttributes attributes, Type propertyType)
 		{
 			PropertyEmitter propEmitter = new PropertyEmitter(this, name, attributes, propertyType);
 			properties.Add(propEmitter);
 			return propEmitter;
+		}
+
+
+		public EventEmitter CreateEvent(string name, EventAttributes atts, Type type)
+		{
+			EventEmitter eventEmitter = new EventEmitter(this, name, atts, type);
+			events.Add(eventEmitter);
+			return eventEmitter;
 		}
 
 		public void DefineCustomAttribute(Attribute attribute)
@@ -177,7 +185,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			field.Reference.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
 		}
-		
+
 		public ConstructorCollection Constructors
 		{
 			get { return constructors; }
@@ -198,7 +206,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return TypeBuilder.BaseType; }
 		}
 
-//#if DOTNET2
+		//#if DOTNET2
 
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
@@ -215,14 +223,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, typebuilder, name2GenericType);
 		}
-		
+
 		public virtual Type BuildType()
 		{
 			EnsureBuildersAreInAValidState();
 
 			Type type = typebuilder.CreateType();
 
-			foreach(NestedClassEmitter builder in nested)
+			foreach (NestedClassEmitter builder in nested)
 			{
 				builder.BuildType();
 			}
@@ -237,22 +245,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				CreateDefaultConstructor();
 			}
 
-			foreach(IMemberEmitter builder in properties)
+			foreach (IMemberEmitter builder in properties)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IMemberEmitter builder in events)
+			foreach (IMemberEmitter builder in events)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IMemberEmitter builder in constructors)
+			foreach (IMemberEmitter builder in constructors)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IMemberEmitter builder in methods)
+			foreach (IMemberEmitter builder in methods)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
