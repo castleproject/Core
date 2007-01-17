@@ -407,7 +407,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 				}
 
-				return result;
+				return result.ToString();
 			}
 		}
 
