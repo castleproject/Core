@@ -59,10 +59,10 @@ namespace Castle.Igloo
                 if (model.Configuration.Attributes[SCOPE_TOKEN]!=null)
                 {
                     bool result = false;
-                    bool.TryParse(model.Configuration.Attributes[SCOPE_TOKEN],out result);
+                    bool.TryParse(model.Configuration.Attributes[PROXY_TOKEN], out result);
                     if (result)
                     {
-                        scopeAttribute.UseProxy = bool.Parse(model.Configuration.Attributes[SCOPE_TOKEN]);
+                        scopeAttribute.UseProxy = bool.Parse(model.Configuration.Attributes[PROXY_TOKEN]);
                     }
                 }
 

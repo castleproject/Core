@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
@@ -75,6 +76,8 @@ namespace Castle.Igloo.ComponentActivator
 
             IInterceptor interceptor = new ProxyScopeInterceptor(Model, Kernel, context);
             object instance = _generator.CreateInterfaceProxyWithoutTarget(Model.Service, interfaces, interceptor);
+
+            Trace.WriteLine("Return a proxy scope for component : " + Model.Name );
 
             return instance;
         }

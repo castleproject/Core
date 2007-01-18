@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.Igloo.LifestyleManager;
@@ -35,6 +36,7 @@ namespace Castle.Igloo.Interceptors
         private ILifestyleManager _manager = null;
         private CreationContext _context = null;
         private const string TARGET_NAME_PREFIX = "scopedTarget.";
+        private string _componentName = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProxyScopeInterceptor"/> class.
@@ -45,9 +47,10 @@ namespace Castle.Igloo.Interceptors
         public ProxyScopeInterceptor(ComponentModel model, IKernel kernel, CreationContext context )
         {
             _context = context;
+            _componentName = model.Name;
 
             ComponentModel proxyModel = kernel.ComponentModelBuilder.BuildModel(
-                TARGET_NAME_PREFIX+model.Name, model.Service, model.Implementation, null);
+                TARGET_NAME_PREFIX + model.Name, model.Service, model.Implementation, model.ExtendedProperties);
 
             proxyModel.CustomComponentActivator = null;
             proxyModel.LifestyleType = LifestyleType.Custom;
@@ -73,6 +76,9 @@ namespace Castle.Igloo.Interceptors
 
             object scopedObject = _manager.Resolve(_context);
             invocation.ReturnValue = invocation.MethodInvocationTarget.Invoke(scopedObject, invocation.Arguments);
+
+            Trace.WriteLine("Intercepted call to proxy scope component : " + _componentName + " on method " + invocation.MethodInvocationTarget.Name);
+
         }
     }
 }
