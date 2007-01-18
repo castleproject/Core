@@ -5,7 +5,6 @@ using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.Core.Resource;
 using Castle.DynamicProxy;
-using Castle.DynamicProxy.Generators;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Scopes;
@@ -83,11 +82,6 @@ namespace Castle.Igloo.Test.ScopeTest
             handler = _container.Kernel.GetHandler("c");
             Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
             Assert.AreEqual(typeof(ScopeLifestyleManager), handler.ComponentModel.CustomLifestyle);
-
-            //_container.AddComponent("d", typeof(PerScopeWebRequestComponent));
-            //handler = _container.Kernel.GetHandler("d");
-            //Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
-            //Assert.AreEqual(typeof(ScopeLifestyleManager), handler.ComponentModel.CustomLifestyle);
         }
 
         [Test]
@@ -173,6 +167,29 @@ namespace Castle.Igloo.Test.ScopeTest
         }
 
         [Test]
+        public void TestProxyScope()
+        {
+            _container.AddComponent("Simple.Component", typeof(IComponent), typeof(SimpleComponent));
+
+            IComponent service1 = _container.Resolve<IComponent>("Simple.Component");
+
+            Assert.IsNotNull(service1);
+            Assert.IsTrue(typeof(IScopedObject).IsAssignableFrom(service1.GetType()));
+
+            int result = service1.ID;
+            Assert.AreEqual(99, result);
+
+            IComponent service2 = _container.Resolve<IComponent>("Simple.Component");
+
+            Assert.IsTrue(service1.Equals(service2));
+
+            result = service2.ID;
+            Assert.AreEqual(99, result);
+        }
+
+        //********************************************************
+/*
+        [Test]
         public void TestProxyScopeIdea()
         {
             _container.AddComponent("Simple.Component", typeof(IComponent), typeof(SimpleComponent));
@@ -225,5 +242,6 @@ namespace Castle.Igloo.Test.ScopeTest
         public class ScopedObject : IScopedObject
         {
         }
+ */
     }
 }

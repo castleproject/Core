@@ -53,53 +53,7 @@ namespace Castle.Igloo.LifestyleManager
 
             IScope scope = (IScope)Kernel[scopeAttribute.Scope];
 
-            if (!scopeAttribute.UseProxy)
-            {
-                return GetKernelInstance(context, scope, component);
-                 
-            }
-            else
-            {
-                // If the Kernel want to inject a component that, for the sake of argument is scoped at the HTTP request scope, 
-                // into another singleton component scope, the Kernel will need to inject a proxy in place 
-                // of the request scoped compoenent. 
-                // That is to say, the Kernel need to inject a proxy object that exposes the same public interface as the scoped object, 
-                // but that is smart enough to be able to retrieve the real,target object from the relevant scope 
-                // (for example a HTTP request) and delegate method calls onto the real object.
-
-                // To do
-
-                /// When using a proxy scoped component, a proxy will be created for every reference to the scoped component. 
-                /// The proxy will determine the actual instance it will point to based on the context in which the component is called.
-
-                // Created proxies are singletons and may be injected, with transparent scoping behavior.
-
-                // Must return a proxy generated as in TestProxyScopeIdea if the call not come from the poxiefied component
-                // else
-                // must delegate to the Kernel
-                // Need to find a way to distinct which I must return
-
-                return GetKernelInstance(context, scope, component);
-
-            }
-        }
-
-        /// <summary>
-        /// Gets an instance from the kernel.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="scope">The scope.</param>
-        /// <param name="component">The component.</param>
-        /// <returns></returns>
-        private object GetKernelInstance(CreationContext context, IScope scope, ComponentModel component)
-        {
             object instance = scope[component.Name];
-
-            //System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
-            //for (int i = 0; i < st.FrameCount;i++ )
-            //{
-            //    Console.WriteLine(		st.GetFrame(i).GetMethod() );
-            //}
 
             if (instance == null)
             {
@@ -111,7 +65,7 @@ namespace Castle.Igloo.LifestyleManager
                 scope.RegisterForEviction(this, component, instance);
             }
 
-            return instance;  
+            return instance; 
         }
 
         /// <summary>

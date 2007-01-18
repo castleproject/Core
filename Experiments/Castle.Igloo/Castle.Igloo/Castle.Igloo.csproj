@@ -77,6 +77,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.DynamicProxy2, Version=2.0.0.1, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\build\net-2.0\debug\Castle.DynamicProxy2.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.MicroKernel, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\net-2.0\debug\Castle.MicroKernel.dll</HintPath>
@@ -112,6 +116,7 @@
     <Compile Include="Attributes\OutjectAttribute.cs" />
     <Compile Include="Attributes\ScopeAttribute.cs" />
     <Compile Include="BijectionInspector.cs" />
+    <Compile Include="ComponentActivator\ScopeComponentActivator .cs" />
     <Compile Include="Interceptors\ProxyScopeInterceptor.cs" />
     <Compile Include="LifestyleManager\ScopeLifestyleManager.cs" />
     <Compile Include="Mock\MockApplicationScope.cs" />
@@ -119,6 +124,7 @@
     <Compile Include="Mock\MockRequestScope.cs" />
     <Compile Include="Mock\MockScope.cs" />
     <Compile Include="Mock\MockSessionScope.cs" />
+    <Compile Include="Scopes\IScopedObject.cs" />
     <Compile Include="Scopes\Web\IApplicationScope.cs" />
     <Compile Include="Scopes\Web\IPageScope.cs" />
     <Compile Include="Scopes\Web\IRequestScope.cs" />

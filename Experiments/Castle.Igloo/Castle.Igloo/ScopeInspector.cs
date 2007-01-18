@@ -21,6 +21,7 @@
 using System;
 using System.Web;
 using Castle.Core;
+using Castle.Igloo.ComponentActivator;
 using Castle.Igloo.Interceptors;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Util;
@@ -82,13 +83,19 @@ namespace Castle.Igloo
         private void DecorateComponent(ComponentModel model, ScopeAttribute scopeAttribute)
         {
             model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute);
-            
-            // Ensure its CustomLifestyle
-            model.LifestyleType = LifestyleType.Custom;
-            model.CustomLifestyle = typeof(ScopeLifestyleManager);
-            
-            // Add the scope interceptor
-            model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
+            if (scopeAttribute.UseProxy)
+            {
+                model.CustomComponentActivator = typeof (ScopeComponentActivator);
+            }
+            else
+            {
+                // Ensure its CustomLifestyle
+                model.LifestyleType = LifestyleType.Custom;
+                model.CustomLifestyle = typeof(ScopeLifestyleManager);
+                
+                // Add the scope interceptor
+                model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
+            }
         }
     }
 }
