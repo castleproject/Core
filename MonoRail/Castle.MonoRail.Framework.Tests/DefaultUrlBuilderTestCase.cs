@@ -38,6 +38,14 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
+		public void OperationsWithArea()
+		{
+			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, null, "product", "list"));
+			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, "", "product", "list"));
+			Assert.AreEqual("/test/product/list.rails", urlBuilder.BuildUrl(areaUrl, "test", "product", "list"));
+		}
+
+		[Test]
 		public void NoExtensions()
 		{
 			urlBuilder.UseExtensions = false;

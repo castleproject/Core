@@ -48,7 +48,19 @@ namespace Castle.MonoRail.Framework.Services
 			bool createAbsolutePath = CommonUtils.ObtainEntryAndRemove(parameters, "absolute", "false") == "true";
 			bool encode = CommonUtils.ObtainEntryAndRemove(parameters, "encode", "false") == "true";
 
-			string area = CommonUtils.ObtainEntryAndRemove(parameters, "area", current.Area);
+			string area;
+
+			if (parameters.Contains("area"))
+			{
+				area = CommonUtils.ObtainEntryAndRemove(parameters, "area");
+				
+				if (area == null) area = string.Empty;
+			}
+			else
+			{
+				area = current.Area;
+			}
+
 			string controller = CommonUtils.ObtainEntryAndRemove(parameters, "controller", current.Controller);
 			string action = CommonUtils.ObtainEntryAndRemove(parameters, "action", current.Action);
 			
