@@ -28,7 +28,16 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Process process = new Process();
 
-			process.StartInfo.FileName = Path.Combine(ConfigurationManager.AppSettings["sdkDir"],"peverify.exe");
+			string path = Path.Combine(ConfigurationManager.AppSettings["sdkDir"], "peverify.exe");
+			if (!File.Exists(path))
+			{
+				path = Path.Combine(ConfigurationManager.AppSettings["x86SdkDir"], "peverify.exe");
+			}
+			if (!File.Exists(path))
+			{
+				throw new FileNotFoundException("Please check the sdkDir configuration setting and set it to the location of peverify.exe");
+			}
+			process.StartInfo.FileName = path;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;

@@ -619,13 +619,43 @@ namespace Castle.DynamicProxy.Generators
 			MethodInfo callbackMethod,
 			ConstructorVersion version)
 		{
+			return BuildInvocationNestedType(emitter, targetType, targetForInvocation, methodInfo, callbackMethod, version, false);
+		}
+
+		/// <summary>
+		/// If callbackMethod is null the InvokeOnTarget implementation
+		/// is just the code to throw an exception
+		/// </summary>
+		/// <param name="emitter"></param>
+		/// <param name="targetType"></param>
+		/// <param name="targetForInvocation"></param>
+		/// <param name="methodInfo"></param>
+		/// <param name="callbackMethod"></param>
+		/// <param name="version"></param>
+		/// <param name="allowChangeTarget">If true the invocation will implement the IChangeProxyTarget interface</param>
+		/// <returns></returns>
+		protected NestedClassEmitter BuildInvocationNestedType(
+			ClassEmitter emitter,
+			Type targetType,
+			Type targetForInvocation,
+			MethodInfo methodInfo,
+			MethodInfo callbackMethod,
+			ConstructorVersion version,
+			bool allowChangeTarget)
+		{
 			nestedCounter++;
 
-			NestedClassEmitter nested =
+			Type[] interfaces = new Type[0];
+			if (allowChangeTarget)
+			{
+				interfaces = new Type[] { typeof(IChangeProxyTarget) };
+			}
+
+      NestedClassEmitter nested =
 				new NestedClassEmitter(emitter,
-				                       "Invocation" + methodInfo.Name + "_" + nestedCounter.ToString(),
-				                       typeof (AbstractInvocation),
-				                       new Type[0]);
+																"Invocation" + methodInfo.Name + "_" + nestedCounter.ToString(),
+																typeof(AbstractInvocation),
+																interfaces);
 
 			Type[] genTypes = TypeUtil.Union(targetType.GetGenericArguments(), methodInfo.GetGenericArguments());
 
@@ -638,6 +668,18 @@ namespace Castle.DynamicProxy.Generators
 			// Create constructor
 
 			CreateIInvocationConstructor(targetForInvocation, nested, targetRef, version);
+
+			if (allowChangeTarget)
+			{
+				ArgumentReference argument1 = new ArgumentReference(typeof(object));
+				MethodEmitter methodEmitter = nested.CreateMethod("ChangeInvocationTarget", new ReturnReferenceExpression(typeof(void)), MethodAttributes.Public | MethodAttributes.Virtual, argument1);
+				methodEmitter.CodeBuilder.AddStatement(
+					new AssignStatement(targetRef,
+						new ConvertExpression(targetType, argument1.ToExpression())
+					)
+				);
+				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement());
+			}
 
 			// InvokeMethodOnTarget implementation
 

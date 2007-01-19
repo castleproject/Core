@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using System.Diagnostics;
 	using System.Reflection;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.BugsReported;
@@ -114,6 +113,43 @@ namespace Castle.DynamicProxy.Tests
 				new ClassWithMultiDimentionalArray(), 
 				new LogInvocationInterceptor());
 		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentException))]
+		public void CantCreateInterfaceTargetedProxyWithoutInterface()
+		{
+			IService2 service = (IService2)
+				generator.CreateInterfaceProxyWithTargetInterface(
+					typeof(Service2), new Service2());
+		}
+
+		[Test]
+		public void InterfaceTargetTypeProducesInvocationsThatCanChangeTarget()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+			AssertCanChangeTargetInterceptor invocationChecker = new AssertCanChangeTargetInterceptor();
+
+			IService2 service = (IService2)
+				generator.CreateInterfaceProxyWithTargetInterface(
+					typeof(IService2), new Service2(), invocationChecker, logger);
+
+			service.DoOperation2();
+
+			Assert.AreEqual("DoOperation2 ", logger.LogContents);
+		}
+
+		[Test]
+		public void ChangingInvocationTargetSucceeds()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+
+			IService service = (IService)
+				generator.CreateInterfaceProxyWithTargetInterface(
+					typeof(IService), new AlwaysThrowsServiceImpl(), new ChangeTargetInterceptor(new ServiceImpl()), logger);
+
+			Assert.AreEqual(20, service.Sum(10, 10));
+		}
+
 
 		/// <summary>
 		/// See http://support.castleproject.org/browse/DYNPROXY-43

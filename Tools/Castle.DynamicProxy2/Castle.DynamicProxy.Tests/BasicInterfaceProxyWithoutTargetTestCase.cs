@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Data;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.InterClasses;
+	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -71,7 +72,18 @@ namespace Castle.DynamicProxy.Tests
 			// Only PEVerify is enough
 			generator.CreateInterfaceProxyWithoutTarget<IList<int>>(new ThrowingInterceptor());
 		}
-		
+
+		[Test]
+		public void ProducesInvocationsThatCantChangeTarget()
+		{
+			IService service = (IService)
+				generator.CreateInterfaceProxyWithoutTarget(
+					typeof(IService), new AssertCannotChangeTargetInterceptor(), new ReturnThreeInterceptor());
+
+			int result = service.Sum(2, 2);
+			Assert.AreEqual(3, result);
+		}
+
 		public class ReturnThreeInterceptor : IInterceptor
 		{
 			public void Intercept(IInvocation invocation)

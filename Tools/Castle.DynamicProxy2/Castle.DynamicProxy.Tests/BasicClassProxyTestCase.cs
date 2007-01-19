@@ -217,6 +217,16 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ProducesInvocationsThatCantChangeTarget()
+		{
+			AssertCannotChangeTargetInterceptor invocationChecker = new AssertCannotChangeTargetInterceptor();
+			object proxy = generator.CreateClassProxy(typeof(ClassWithCharRetType), invocationChecker);
+			Assert.IsNotNull(proxy);
+			ClassWithCharRetType classProxy = (ClassWithCharRetType) proxy;
+			Assert.AreEqual('c', classProxy.DoSomething());
+		}
+
+		[Test]
 		[Ignore("Multi dimensional arrays seems to not work at all")]
 		public void ProxyTypeWithMultiDimentionalArrayAsParameters()
 		{

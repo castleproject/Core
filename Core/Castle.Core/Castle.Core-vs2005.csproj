@@ -48,6 +48,7 @@
     <Compile Include="Attributes\DoNotWireAttribute.cs" />
     <Compile Include="Attributes\InterceptorAttribute.cs" />
     <Compile Include="Attributes\LifestyleAttributes.cs" />
+    <Compile Include="Interceptor\IChangeProxyTarget.cs" />
     <Compile Include="Interceptor\IInterceptor.cs" />
     <Compile Include="Interceptor\IInvocation.cs" />
     <Compile Include="Interceptor\IOnBehalfAware.cs" />

@@ -1,6 +1,19 @@
 Beta 1 Version 1.0.0.0
 ======================
 
+- Applied Jacob Lewallen's patch that introduces ProxyInterfaceWithTargetInterface
+  Quoting
+
+  "I've introduced a new "mode" that is
+   ProxyInterfaceWithTargetInterface, that uses the given interface as
+   the target type, rather than the type of the target (it asserts the
+   target implements the interface) All other modes should remain the
+   same.
+
+  "In this scenario, the IInvocation will also implement
+   IChangeProxyTarget, which can then be used to change the proxy target
+   to another implementation of the target interface."
+
 - Added support for events
 
 - Fixed DYNPROXY-43

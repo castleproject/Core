@@ -246,6 +246,7 @@
     </Compile>
     <Compile Include="Generators\InterfaceProxyGeneratorWithoutTarget.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
+    <Compile Include="Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />
     <Compile Include="Generators\PropertyToGenerate.cs" />
     <Compile Include="IInterceptorSelector.cs">
       <SubType>Code</SubType>

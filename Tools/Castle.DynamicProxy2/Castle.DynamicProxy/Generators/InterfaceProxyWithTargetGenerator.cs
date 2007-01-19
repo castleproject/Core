@@ -155,9 +155,13 @@ namespace Castle.DynamicProxy.Generators
 
 				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
 
-				CacheMethodTokens(emitter,
-								  proxyTargetType.GetMethods(BindingFlags.Public | BindingFlags.Instance),
-								  typeInitializer);
+				// InterfaceProxyGeneratorWithTargetInterface gets duplicate method exceptions from BaseProxyGenerator with this... -jlewalle
+				if (!proxyTargetType.IsInterface)
+				{
+					CacheMethodTokens(emitter,
+						proxyTargetType.GetMethods(BindingFlags.Public | BindingFlags.Instance),
+						typeInitializer);
+				}
 
 				CreateInitializeCacheMethodBody(proxyTargetType, methods, emitter, typeInitializer);
 				GenerateConstructors(emitter, baseType, interceptorsField, targetField);
@@ -351,7 +355,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name="methodOnInterface">The method on interface.</param>
 		/// <param name="proxyTargetType">Type of the proxy target.</param>
 		/// <returns></returns>
-		private static MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType)
+		protected static MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType)
 		{
 
 			// #if DOTNET2
