@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.IO;
 	using System.Web;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Adapts the <see cref="IResponse"/> to
@@ -237,7 +236,12 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <param name="name">The name.</param>
 		public void RemoveCookie(string name)
 		{
-			response.Cookies.Remove(name);
+			HttpCookie cookie = new HttpCookie(name, "");
+			
+			cookie.Expires = DateTime.Now.AddYears(-10);
+			cookie.Path = context.ApplicationPath;
+			
+			CreateCookie(cookie);
 		}
 	}
 }

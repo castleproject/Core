@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Patrick McEvoy's patch with a new approach to delete cookies
+
 - Added 
 
 	SmartDispatcherController.ValidationSummaryPerInstance : IDictionary
