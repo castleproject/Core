@@ -106,6 +106,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			return RenderScriptBlockToSource("/MonoRail/Files/FormHelperScript");
 		}
 
+		#region FormTag related (TODO: Document)
+
 		/// <summary>
 		/// Creates a form tag based on the parameters.
 		/// Pendent: more documentation
@@ -133,6 +135,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return beforeEndTag + "</form>";
 		}
+
+		#endregion
+
+		#region Object scope related (TODO: Document)
 
 		public void Push(string target)
 		{
@@ -168,6 +174,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			objectStack.Pop();
 		}
 
+		#endregion
+
+		#region Submit and Button related (TODO: Document)
+
 		public string Submit(string value)
 		{
 			return Submit(value, null);
@@ -187,6 +197,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return CreateInputElement("button", value, attributes);
 		}
+
+		#endregion
 
 		#region TextFieldValue
 
@@ -1087,24 +1099,26 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region Validation
 
 		/// <summary>
+		/// Configures this FormHelper instance to use the supplied
+		/// web validator to generate field validation.
+		/// </summary>
+		/// <param name="provider">The validation provider.</param>
+		public void UseWebValidatorProvider(IWebValidatorProvider provider)
+		{
+			if (provider == null) throw new ArgumentNullException("provider");
+
+			validatorProvider = provider;
+		}
+
+		/// <summary>
 		/// Configures the use of fValidate for form fields validation
 		/// </summary>
 		public void UsefValidate()
 		{
-			validatorProvider = new FValidateWebValidator();
+			UseWebValidatorProvider(new FValidateWebValidator());
 		}
 
-		private bool IsValidationEnabledForScope
-		{
-			get
-			{
-				if (objectStack.Count == 0) return false;
-
-				return ((FormScopeInfo) objectStack.Peek()).IsValidationEnabled;
-			}
-		}
-
-		private void ApplyValidation(InputElementType inputType, string target, ref IDictionary attributes)
+		protected virtual void ApplyValidation(InputElementType inputType, string target, ref IDictionary attributes)
 		{
 			bool disableValidation = CommonUtils.ObtainEntryAndRemove(attributes, "disablevalidation", "false") == "true";
 
@@ -1148,6 +1162,16 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		private bool IsValidationEnabledForScope
+		{
+			get
+			{
+				if (objectStack.Count == 0) return false;
+
+				return ((FormScopeInfo)objectStack.Peek()).IsValidationEnabled;
+			}
+		}
+
 		#endregion
 
 		#region protected members
@@ -1174,7 +1198,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="value"></param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
-		protected string CreateInputElement(string type, string target, Object value, IDictionary attributes)
+		protected virtual string CreateInputElement(string type, string target, Object value, IDictionary attributes)
 		{
 			if (value == null)
 			{
@@ -1197,7 +1221,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="value"></param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
 		/// <returns>The generated form element</returns>
-		protected string CreateInputElement(string type, string id, string target, string value, IDictionary attributes)
+		protected virtual string CreateInputElement(string type, string id, string target, string value, IDictionary attributes)
 		{
 			if (Controller.Context != null) // We have a context
 			{
@@ -1222,7 +1246,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			                     type, id, target, value, GetAttributes(attributes));
 		}
 
-		protected string CreateInputElement(string type, string value, IDictionary attributes)
+		protected virtual string CreateInputElement(string type, string value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"{0}\" value=\"{1}\" {2}/>",
 								 type, value, GetAttributes(attributes));
