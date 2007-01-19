@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.MonoRail.Views.Brail
 {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
-	using System.Text.RegularExpressions;
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.Steps;
@@ -29,15 +26,15 @@ namespace Castle.MonoRail.Views.Brail
 	public class BrailPreProcessor : AbstractCompilerStep
 	{
 		private static IDictionary Seperators = CreateSeperators();
-        private BooViewEngine booViewEngine;
-		IDictionary inputToCode = new Hashtable();
+		private BooViewEngine booViewEngine;
+		private IDictionary inputToCode = new Hashtable();
 
-	    public BrailPreProcessor(BooViewEngine booViewEngine)
-	    {
-	        this.booViewEngine = booViewEngine;
-	    }
+		public BrailPreProcessor(BooViewEngine booViewEngine)
+		{
+			this.booViewEngine = booViewEngine;
+		}
 
-	    private static IDictionary CreateSeperators()
+		private static IDictionary CreateSeperators()
 		{
 			Hashtable seperators = new Hashtable();
 			seperators.Add("<?brail", "?>");
@@ -47,9 +44,9 @@ namespace Castle.MonoRail.Views.Brail
 
 		public string GetInputCode(ICompilerInput input)
 		{
-			return (string)inputToCode[input];
+			return (string) inputToCode[input];
 		}
-		
+
 		public override void Run()
 		{
 			ArrayList processed = new ArrayList();
@@ -59,10 +56,10 @@ namespace Castle.MonoRail.Views.Brail
 				//	System.Diagnostics.Debugger.Break()
 				using(TextReader reader = input.Open())
 				{
-				    string code = reader.ReadToEnd();
-                    if(this.booViewEngine.ConditionalPreProcessingOnly(input.Name) == false || 
-						ShouldPreProcess(code))
-                        code = Booify(code);
+					string code = reader.ReadToEnd();
+					if (this.booViewEngine.ConditionalPreProcessingOnly(input.Name) == false ||
+					    ShouldPreProcess(code))
+						code = Booify(code);
 					StringInput newInput = new StringInput(input.Name, code);
 					inputToCode.Add(input, code);
 					processed.Add(newInput);
@@ -77,9 +74,9 @@ namespace Castle.MonoRail.Views.Brail
 
 		private bool ShouldPreProcess(string code)
 		{
-			foreach (DictionaryEntry entry in Seperators)
+			foreach(DictionaryEntry entry in Seperators)
 			{
-				if(code.Contains(entry.Key.ToString()))
+				if (code.Contains(entry.Key.ToString()))
 					return true;
 			}
 			return false;
@@ -104,7 +101,7 @@ namespace Castle.MonoRail.Views.Brail
 				index = code.IndexOf(start, lastIndex);
 				if (index == -1)
 					break;
-                Output(buffer, code.Substring(lastIndex, index - lastIndex));
+				Output(buffer, code.Substring(lastIndex, index - lastIndex));
 				int startReading = index + start.Length;
 				lastIndex = code.IndexOf(end, startReading);
 				if (lastIndex == -1)
@@ -137,7 +134,7 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			Stack<BrachMatchingInfo> bracesPositions = new Stack<BrachMatchingInfo>();
 			bool prevCharWasDollary = false;
-			for (int index = 0; index < code.Length;index++ )
+			for(int index = 0; index < code.Length; index++)
 			{
 				if (code[index] == '{')
 				{
@@ -151,14 +148,14 @@ namespace Castle.MonoRail.Views.Brail
 				}
 				prevCharWasDollary = code[index] == '$';
 			}
-			if(bracesPositions.Count==0)
+			if (bracesPositions.Count == 0)
 				return code;
 			StringBuilder sb = new StringBuilder(code);
 			foreach(BrachMatchingInfo matchingInfo in bracesPositions)
 			{
 				//probably a malf-formed expression, or not part of an ${ }, we will ignore that and let
 				// the parser shout at the user
-				if (matchingInfo.End== -1 || matchingInfo.PrevCharWasDollar==false)
+				if (matchingInfo.End == -1 || matchingInfo.PrevCharWasDollar == false)
 					continue;
 				sb.Replace('"', '\'', matchingInfo.Start, matchingInfo.End - matchingInfo.Start);
 			}
@@ -207,7 +204,7 @@ namespace Castle.MonoRail.Views.Brail
 					if (start != null && code.IndexOf(entry.Key as string) != -1)
 						continue; //handle a shorthanded seperator.
 					// handle long seperator
-					if (start != null &&  entry.Key.ToString().IndexOf(start as string) == -1)
+					if (start != null && entry.Key.ToString().IndexOf(start as string) == -1)
 					{
 						throw new RailsException("Can't mix seperators in one file. Found both " + start + " and " + entry.Key);
 					}

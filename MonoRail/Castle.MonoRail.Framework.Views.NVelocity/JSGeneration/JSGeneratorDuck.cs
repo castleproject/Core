@@ -20,16 +20,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
-    /// <summary>
+	/// <summary>
 	/// 
 	/// </summary>
-    public class JSGeneratorDuck : JSGeneratorBase, IDuck
+	public class JSGeneratorDuck : JSGeneratorBase, IDuck
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JSGeneratorDuck"/> class.
 		/// </summary>
 		/// <param name="generator">The generator.</param>
-		public JSGeneratorDuck(PrototypeHelper.JSGenerator generator) : base(generator)
+		public JSGeneratorDuck(IJSGenerator generator) : base(generator)
 		{
 		}
 
@@ -63,24 +63,24 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object Invoke(string method, params object[] args)
 		{
-		    return InternalInvoke(method, args);
+			return InternalInvoke(method, args);
 		}
 
 		#endregion
 
 		protected override object CreateNullGenerator()
-        {
-            return null;
-        }
+		{
+			return null;
+		}
 
-        protected override object CreateJSCollectionGenerator(PrototypeHelper.JSCollectionGenerator collectionGenerator)
-        {
-            return new JSCollectionGeneratorDuck(collectionGenerator);
-        }
+		protected override object CreateJSCollectionGenerator(IJSCollectionGenerator collectionGenerator)
+		{
+			return new JSCollectionGeneratorDuck(collectionGenerator);
+		}
 
-        protected override object CreateJSElementGenerator(PrototypeHelper.JSElementGenerator elementGenerator)
-        {
-            return new JSElementGeneratorDuck(elementGenerator);
-        }
+		protected override object CreateJSElementGenerator(IJSElementGenerator elementGenerator)
+		{
+			return new JSElementGeneratorDuck(elementGenerator);
+		}
 	}
 }

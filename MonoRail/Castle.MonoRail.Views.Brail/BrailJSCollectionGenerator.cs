@@ -14,31 +14,31 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-    using System;
-    using Boo.Lang;
-    using Castle.MonoRail.Framework.Helpers;
-    using Castle.MonoRail.Framework.Internal;
+	using System;
+	using Boo.Lang;
+	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Internal;
 
-    public class BrailJSCollectionGenerator : JSCollectionGeneratorBase, IQuackFu
-    {
-        public object QuackGet(string name, object[] parameters)
-        {
-            base.InternalGet(name);
-            return this;
-        }
+	public class BrailJSCollectionGenerator : JSCollectionGeneratorBase, IQuackFu
+	{
+		public object QuackGet(string name, object[] parameters)
+		{
+			base.InternalGet(name);
+			return this;
+		}
 
-        public object QuackSet(string name,object[] parameters, object value)
-        {
-            throw new NotSupportedException("Can't call property set on generator");
-        }
+		public object QuackSet(string name, object[] parameters, object value)
+		{
+			throw new NotSupportedException("Can't call property set on generator");
+		}
 
-        public object QuackInvoke(string name, params object[] args)
-        {
-            return InternalInvoke(name, args);
-        }
+		public object QuackInvoke(string name, params object[] args)
+		{
+			return InternalInvoke(name, args);
+		}
 
-        public BrailJSCollectionGenerator(PrototypeHelper.JSCollectionGenerator generator) : base(generator)
-        {
-        }
-    }
+		public BrailJSCollectionGenerator(IJSCollectionGenerator generator) : base(generator)
+		{
+		}
+	}
 }

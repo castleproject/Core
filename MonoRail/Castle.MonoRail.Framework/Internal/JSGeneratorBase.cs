@@ -14,77 +14,83 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
-    using System;
-    using Castle.MonoRail.Framework.Helpers;
+	using System;
+	using Castle.MonoRail.Framework.Helpers;
 
-    /// <summary>
-    /// Abstract class that contains the shared logic of JS Generations, seperate from
-    /// the various view engine implementations
-    /// </summary>
-    public abstract class JSGeneratorBase
-    {
-        protected readonly PrototypeHelper.JSGenerator generator;
+	/// <summary>
+	/// Abstract class that contains the shared logic of JS Generations, seperate from
+	/// the various view engine implementations
+	/// </summary>
+	public abstract class JSGeneratorBase
+	{
+		protected readonly IJSGenerator generator;
 
-        protected JSGeneratorBase(PrototypeHelper.JSGenerator generator)
-        {
-            this.generator = generator;
-        }
+		protected JSGeneratorBase(IJSGenerator generator)
+		{
+			this.generator = generator;
+		}
 
-        protected object InternalInvoke(string method, params object[] args)
-        {
-            if (method == "el")
-            {
-                if (args == null || args.Length != 1)
-                {
-                    throw new ArgumentException("el() method must be invoked with the element name as an argument");
-                }
-                if (args[0] == null)
-                {
-                    throw new ArgumentNullException("el() method invoked with a null argument");
-                }
+		protected object InternalInvoke(string method, params object[] args)
+		{
+			if (method == "el")
+			{
+				if (args == null || args.Length != 1)
+				{
+					throw new ArgumentException("el() method must be invoked with the element name as an argument");
+				}
+				if (args[0] == null)
+				{
+					throw new ArgumentNullException("el() method invoked with a null argument");
+				}
 
-                return CreateJSElementGenerator(
-                    new PrototypeHelper.JSElementGenerator(generator, args[0].ToString()));
-            }
-            else if (method == "select")
-            {
-                if (args == null || args.Length != 1)
-                {
-                    throw new ArgumentException(
-                        "select() method must be invoked with the element/css selection rule name as an argument");
-                }
-                if (args[0] == null)
-                {
-                    throw new ArgumentNullException("select() method invoked with a null argument");
-                }
+				return CreateJSElementGenerator(
+					generator.CreateElementGenerator(args[0].ToString()));
+			}
+			else if (method == "select")
+			{
+				if (args == null || args.Length != 1)
+				{
+					throw new ArgumentException(
+						"select() method must be invoked with the element/css selection rule name as an argument");
+				}
+				if (args[0] == null)
+				{
+					throw new ArgumentNullException("select() method invoked with a null argument");
+				}
 
-                return CreateJSCollectionGenerator(
-                    new PrototypeHelper.JSCollectionGenerator(generator, args[0].ToString()));
-            }
+				return CreateJSCollectionGenerator(
+					generator.CreateCollectionGenerator(args[0].ToString()));
+			}
 
-            if (generator.IsGeneratorMethod(method))
-            {
-                generator.Dispatch(method, args);
-            }
+			DynamicDispatchSupport dispInterface = generator as DynamicDispatchSupport;
+			if (dispInterface == null)
+			{
+				throw new MonoRail.Framework.RailsException("JS Generators must inherit DynamicDispatchSupport");
+			}
 
-            return CreateNullGenerator();
-        }
+			if (dispInterface.IsGeneratorMethod(method))
+			{
+				dispInterface.Dispatch(method, args);
+			}
 
-        protected abstract object CreateNullGenerator();
+			return CreateNullGenerator();
+		}
 
-        protected abstract object CreateJSCollectionGenerator(PrototypeHelper.JSCollectionGenerator collectionGenerator);
+		protected abstract object CreateNullGenerator();
 
-        protected abstract object CreateJSElementGenerator(PrototypeHelper.JSElementGenerator elementGenerator);
+		protected abstract object CreateJSCollectionGenerator(IJSCollectionGenerator collectionGenerator);
 
-        /// <summary>
-        /// Delegates to the generator
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-        /// </returns>
-        public override string ToString()
-        {
-            return generator.ToString();
-        }
-    }
+		protected abstract object CreateJSElementGenerator(IJSElementGenerator elementGenerator);
+
+		/// <summary>
+		/// Delegates to the generator
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
+		public override string ToString()
+		{
+			return generator.ToString();
+		}
+	}
 }

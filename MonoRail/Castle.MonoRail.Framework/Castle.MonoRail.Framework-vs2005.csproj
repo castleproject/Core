@@ -159,6 +159,10 @@
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Helpers\BehaviourHelper.cs" />
+    <Compile Include="Helpers\IJSCollectionGenerator.cs" />
+    <Compile Include="Helpers\IJSElementGenerator.cs" />
+    <Compile Include="Helpers\IJSGenerator.cs" />
+    <Compile Include="Helpers\MooHelper.cs" />
     <Compile Include="Helpers\ScriptaculousHelper.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\PrototypeHelper.cs" />

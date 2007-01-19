@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class PrototypeHelper : AbstractHelper
+	public class MooHelper : AbstractHelper
 	{
 		/// <summary>
 		/// Pendent
@@ -102,9 +102,23 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="renderOptions"></param>
 			public void InsertHtml(string position, string id, object renderOptions)
 			{
-				position = Enum.Parse(typeof(Position), position, true).ToString();
+				Position p = (Position) Enum.Parse(typeof(Position), position, true);
 
-				Call("new Insertion." + position, Quote(id), Render(renderOptions));
+				switch(p)
+				{
+					case Position.Top:
+						CallFunction(id, "injectInside", Render(renderOptions));
+						break;
+					case Position.Before:
+						CallFunction(id, "injectBefore", Render(renderOptions));
+						break;
+					case Position.After:
+						CallFunction(id, "injectAfter", Render(renderOptions));
+						break;
+					case Position.Bottom:
+						CallFunction(id, "adopt", Render(renderOptions));
+						break;
+				}
 			}
 
 			/// <summary>
@@ -114,7 +128,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="renderOptions"></param>
 			public void ReplaceHtml(String id, object renderOptions)
 			{
-				Call("Element.update", Quote(id), Render(renderOptions));
+				//Call("Element.update", Quote(id), Render(renderOptions));
+				CallFunction(id, "setHTML", Render(renderOptions));
 			}
 
 			/// <summary>
@@ -124,7 +139,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="renderOptions"></param>
 			public void Replace(String id, object renderOptions)
 			{
-				Call("Element.replace", Quote(id), Render(renderOptions));
+				//Call("Element.replace", Quote(id), Render(renderOptions));
+				CallFunction(id, "replaceWith", Render(renderOptions));
 			}
 
 			/// <summary>
@@ -133,7 +149,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="ids"></param>
 			public void Show(params string[] ids)
 			{
-				Call("Element.show", Quote(ids));
+				//Call("Element.show", Quote(ids));
+				for(int i = 0; i < ids.Length; i++)
+				{
+					CallFunction(ids[i], "show", null);
+				}
 			}
 
 			/// <summary>
@@ -142,7 +162,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="ids"></param>
 			public void Hide(params string[] ids)
 			{
-				Call("Element.hide", Quote(ids));
+				for(int i = 0; i < ids.Length; i++)
+				{
+					CallFunction(ids[i], "hide", null);
+				}
 			}
 
 			/// <summary>
@@ -151,7 +174,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="ids"></param>
 			public void Toggle(params string[] ids)
 			{
-				Call("Element.toggle", Quote(ids));
+				//Call("Element.toggle", Quote(ids));
+				for(int i = 0; i < ids.Length; i++)
+				{
+					CallFunction(ids[i], "toggle", null);
+				}
 			}
 
 			/// <summary>
@@ -160,7 +187,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="ids"></param>
 			public void Remove(params string[] ids)
 			{
-				Record(this, "[" + BuildJSArguments(Quote(ids)) + "].each(Element.remove)");
+				// Record(this, "[" + BuildJSArguments(Quote(ids)) + "].each(Element.remove)");
+				for(int i = 0; i < ids.Length; i++)
+				{
+					CallFunction(ids[i], "remove", null);
+				}
 			}
 
 			/// <summary>
@@ -186,7 +217,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// </summary>
 			public void ReApply()
 			{
-				Call("Behaviour.apply");
+				// Call("Behaviour.apply");
+				//TODO: Exception or silent fail?
 			}
 
 			/// <summary>
@@ -230,6 +262,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			public void Call(object function, params object[] args)
 			{
 				Record(this, function + "(" + BuildJSArguments(args) + ")");
+			}
+
+			public void CallFunction(string target, object function, params object[] args)
+			{
+				Record(this, "$(" + Quote(target) + ")." + function + "(" + BuildJSArguments(args) + ")");
 			}
 
 			/// <summary>
@@ -330,19 +367,19 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			public IJSCollectionGenerator CreateCollectionGenerator(string root)
 			{
-				return new PrototypeHelper.JSCollectionGenerator(this, root);
+				return new MooHelper.JSCollectionGenerator(this, root);
 			}
 
 			public IJSElementGenerator CreateElementGenerator(string root)
 			{
-				return new PrototypeHelper.JSElementGenerator(this, root);
+				return new MooHelper.JSElementGenerator(this, root);
 			}
 
 			#region Static members
 
-			public static void Record(IJSGenerator gen, string line)
+			public static void Record(JSGenerator gen, string line)
 			{
-				gen.Lines.AppendFormat("{0};\r\n", line);
+				gen.lines.AppendFormat("{0};\r\n", line);
 			}
 
 			public static string BuildJSArguments(object[] args)
@@ -365,27 +402,26 @@ namespace Castle.MonoRail.Framework.Helpers
 				return tempBuffer.ToString();
 			}
 
-			//TODO: Should just the stringbuilder be passed here?
-			public static void ReplaceTailByPeriod(IJSGenerator generator)
+			public static void ReplaceTailByPeriod(JSGenerator generator)
 			{
-				int len = generator.Lines.Length;
+				int len = generator.lines.Length;
 
 				if (len > 3)
 				{
 					RemoveTail(generator);
-					generator.Lines.Append('.');
+					generator.lines.Append('.');
 				}
 			}
 
-			public static void RemoveTail(IJSGenerator generator)
+			public static void RemoveTail(JSGenerator generator)
 			{
-				int len = generator.Lines.Length;
+				int len = generator.lines.Length;
 
 				if (len > 3)
 				{
-					if (generator.Lines[len - 3] == ';')
+					if (generator.lines[len - 3] == ';')
 					{
-						generator.Lines.Length = len - 3;
+						generator.lines.Length = len - 3;
 					}
 				}
 			}
@@ -555,100 +591,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			#endregion
-		}
-	}
-
-	public abstract class DynamicDispatchSupport
-	{
-		protected static void PopulateAvailableMethods(IDictionary generatorMethods, MethodInfo[] methods)
-		{
-			foreach(MethodInfo method in methods)
-			{
-				generatorMethods[method.Name] = method;
-			}
-		}
-
-		protected abstract IDictionary GeneratorMethods { get; }
-
-		public bool IsGeneratorMethod(string method)
-		{
-			return GeneratorMethods.Contains(method);
-		}
-
-		public void Dispatch(string method, params object[] args)
-		{
-			MethodInfo methodInfo = (MethodInfo) GeneratorMethods[method];
-
-			ParameterInfo[] parameters = methodInfo.GetParameters();
-
-			int paramArrayIndex = -1;
-
-			for(int i = 0; i < parameters.Length; i++)
-			{
-				ParameterInfo paramInfo = parameters[i];
-
-				if (paramInfo.IsDefined(typeof(ParamArrayAttribute), true))
-				{
-					paramArrayIndex = i;
-				}
-			}
-
-			try
-			{
-				methodInfo.Invoke(this, BuildMethodArgs(methodInfo, args, paramArrayIndex));
-			}
-			catch(Exception ex)
-			{
-				throw new RailsException("Error invoking method on generator. " +
-				                         "Method invoked [" + method + "] with " + args.Length + " argument(s)", ex);
-			}
-		}
-
-		private object[] BuildMethodArgs(MethodInfo method, object[] methodArguments, int paramArrayIndex)
-		{
-			ParameterInfo[] methodArgs = method.GetParameters();
-
-			if (paramArrayIndex != -1)
-			{
-				Type arrayParamType = methodArgs[paramArrayIndex].ParameterType;
-
-				object[] newParams = new object[methodArgs.Length];
-
-				Array.Copy(methodArguments, newParams, methodArgs.Length - 1);
-
-				if (methodArguments.Length < (paramArrayIndex + 1))
-				{
-					newParams[paramArrayIndex] = Array.CreateInstance(
-						arrayParamType.GetElementType(), 0);
-				}
-				else
-				{
-					Array args = Array.CreateInstance(arrayParamType.GetElementType(), (methodArguments.Length + 1) - newParams.Length);
-
-					Array.Copy(methodArguments, methodArgs.Length - 1, args, 0, args.Length);
-
-					newParams[paramArrayIndex] = args;
-				}
-
-				methodArguments = newParams;
-			}
-			else
-			{
-				int expectedParameterCount = methodArgs.Length;
-
-				if (methodArguments.Length < expectedParameterCount)
-				{
-					// Complete with nulls, assuming that parameters are optional
-
-					object[] newArgs = new object[expectedParameterCount];
-
-					Array.Copy(methodArguments, newArgs, methodArguments.Length);
-
-					methodArguments = newArgs;
-				}
-			}
-
-			return methodArguments;
 		}
 	}
 }

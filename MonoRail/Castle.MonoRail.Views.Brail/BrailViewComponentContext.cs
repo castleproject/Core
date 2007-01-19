@@ -14,9 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.IO;
 	using Boo.Lang;
 	using Castle.MonoRail.Framework;

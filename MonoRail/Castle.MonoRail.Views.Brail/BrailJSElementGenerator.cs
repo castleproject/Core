@@ -14,32 +14,32 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
-    using System;
-    using Boo.Lang;
-    using Castle.MonoRail.Framework.Helpers;
-    using Castle.MonoRail.Framework.Internal;
+	using System;
+	using Boo.Lang;
+	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Internal;
 
-    public class BrailJSElementGenerator : JSElementGeneratorBase, IQuackFu
-    {
-        public object QuackGet(string name, object[] parameters)
-        {
-            base.InternalGet(name);
-            return this;
-        }
+	public class BrailJSElementGenerator : JSElementGeneratorBase, IQuackFu
+	{
+		public object QuackGet(string name, object[] parameters)
+		{
+			base.InternalGet(name);
+			return this;
+		}
 
-        public object QuackSet(string name, object[] parameters, object value)
-        {
-            InternalGet(name);//get the current element and then set it
-            return InternalInvoke("set", parameters);
-        }
+		public object QuackSet(string name, object[] parameters, object value)
+		{
+			InternalGet(name); //get the current element and then set it
+			return InternalInvoke("set", parameters);
+		}
 
-        public object QuackInvoke(string name, params object[] args)
-        {
-            return base.InternalInvoke(name, args);
-        }
+		public object QuackInvoke(string name, params object[] args)
+		{
+			return base.InternalInvoke(name, args);
+		}
 
-        public BrailJSElementGenerator(PrototypeHelper.JSElementGenerator generator) : base(generator)
-        {
-        }
-    }
+		public BrailJSElementGenerator(IJSElementGenerator generator) : base(generator)
+		{
+		}
+	}
 }

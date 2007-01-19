@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Views.Brail
 	using System.IO;
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.Steps;
+
 	//This class is responsible for taking a view script and transforming it to a legible
 	//code. It does so by doing the following transformations:
 	// * Add imports to Brail and Castle.MonoRail.Framework

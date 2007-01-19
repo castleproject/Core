@@ -20,16 +20,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
-    /// <summary>
+	/// <summary>
 	/// 
 	/// </summary>
-    public class JSElementGeneratorDuck : JSElementGeneratorBase,IDuck
+	public class JSElementGeneratorDuck : JSElementGeneratorBase, IDuck
 	{
-        public JSElementGeneratorDuck(PrototypeHelper.JSElementGenerator generator) : base(generator)
-        {
-        }
+		public JSElementGeneratorDuck(IJSElementGenerator generator) : base(generator)
+		{
+		}
 
-        #region IDuck
+		#region IDuck
 
 		/// <summary>
 		/// Defines the behavior when a property is read
@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object GetInvoke(string propName)
 		{
-		    InternalGet(propName);
+			InternalGet(propName);
 
 			return this;
 		}
@@ -61,9 +61,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.JSGeneration
 		/// <returns>value back to the template</returns>
 		public object Invoke(string method, params object[] args)
 		{
-		    return InternalInvoke(method, args);
+			return InternalInvoke(method, args);
 		}
 
-        #endregion
+		#endregion
 	}
 }

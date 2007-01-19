@@ -14,55 +14,59 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
-    using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Helpers;
 
-    public abstract class JSElementGeneratorBase
-    {
-        protected readonly PrototypeHelper.JSElementGenerator generator;
-        protected readonly PrototypeHelper.JSGenerator parentGenerator;
+	public abstract class JSElementGeneratorBase
+	{
+		protected readonly IJSElementGenerator generator;
+		protected readonly IJSGenerator parentGenerator;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JSElementGeneratorBase"/> class.
-        /// </summary>
-        /// <param name="generator">The generator.</param>
-        public JSElementGeneratorBase(PrototypeHelper.JSElementGenerator generator)
-        {
-            this.generator = generator;
-            parentGenerator = generator.ParentGenerator;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JSElementGeneratorBase"/> class.
+		/// </summary>
+		/// <param name="generator">The generator.</param>
+		public JSElementGeneratorBase(IJSElementGenerator generator)
+		{
+			this.generator = generator;
+			parentGenerator = generator.ParentGenerator;
+		}
 
-        protected void InternalGet(string propName)
-        {
-            PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
-            PrototypeHelper.JSGenerator.Record(parentGenerator, propName);
-        }
+		protected void InternalGet(string propName)
+		{
+			PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
+			PrototypeHelper.JSGenerator.Record(parentGenerator, propName);
+		}
 
-        protected object InternalInvoke(string method, object[] args)
-        {
+		protected object InternalInvoke(string method, object[] args)
+		{
+			if (method == "set")
+			{
+				PrototypeHelper.JSGenerator.RemoveTail(parentGenerator);
 
-            if (method == "set")
-            {
-                PrototypeHelper.JSGenerator.RemoveTail(parentGenerator);
+				PrototypeHelper.JSGenerator.Record(parentGenerator, " = " + args[0]);
 
-                PrototypeHelper.JSGenerator.Record(parentGenerator, " = " + args[0]);
+				return null;
+			}
+			else
+			{
+				PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
+				//TODO: This code is duplicated JSCollectionGeneratorBase line 65
+				DynamicDispatchSupport dispInterface = generator as DynamicDispatchSupport;
+				if (dispInterface == null)
+				{
+					throw new MonoRail.Framework.RailsException("JS Generators must inherit DynamicDispatchSupport");
+				}
+				if (dispInterface.IsGeneratorMethod(method))
+				{
+					dispInterface.Dispatch(method, args);
+				}
+				else
+				{
+					parentGenerator.Call(method, args);
+				}
 
-                return null;
-            }
-            else
-            {
-                PrototypeHelper.JSGenerator.ReplaceTailByPeriod(parentGenerator);
-
-                if (generator.IsGeneratorMethod(method))
-                {
-                    generator.Dispatch(method, args);
-                }
-                else
-                {
-                    parentGenerator.Call(method, args);
-                }
-
-                return this;
-            }
-        }
-    }
+				return this;
+			}
+		}
+	}
 }
