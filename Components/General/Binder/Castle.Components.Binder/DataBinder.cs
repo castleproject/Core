@@ -386,6 +386,12 @@ namespace Castle.Components.Binder
 					bool conversionSucceeded;
 					value = TryGetDateWithUTCFormat(node, name, out conversionSucceeded);
 				}
+
+				if (value == null && valNode == null)
+				{
+					// Value was not present on the data source. Skip validation
+					return false;
+				}
 			}
 
 			foreach(IValidator validatorItem in validators)
