@@ -18,8 +18,6 @@
  ********************************************************************************/
 #endregion
 
-using System;
-using System.Web;
 using Castle.Core;
 using Castle.Igloo.ComponentActivator;
 using Castle.Igloo.Interceptors;
@@ -28,7 +26,6 @@ using Castle.Igloo.Util;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.Igloo.Attributes;
-using Castle.MicroKernel.SubSystems.Conversion;
 
 namespace Castle.Igloo
 {
@@ -50,29 +47,33 @@ namespace Castle.Igloo
         /// <param name="model">The component model</param>
         public void ProcessModel(IKernel kernel, ComponentModel model)
         {
-            if (model.Configuration != null &&
-                model.Configuration.Attributes[SCOPE_TOKEN]!=null)
+            if (!model.Name.StartsWith(ProxyScopeInterceptor.TARGET_NAME_PREFIX))
             {
-                ScopeAttribute scopeAttribute = new ScopeAttribute();
-                scopeAttribute.Scope = model.Configuration.Attributes[SCOPE_TOKEN];
-                
-                if (model.Configuration.Attributes[SCOPE_TOKEN]!=null)
+                if (model.Configuration != null &&
+                    model.Configuration.Attributes[SCOPE_TOKEN]!=null)
                 {
-                    bool result = false;
-                    bool.TryParse(model.Configuration.Attributes[PROXY_TOKEN], out result);
-                    if (result)
+                    ScopeAttribute scopeAttribute = new ScopeAttribute();
+                    scopeAttribute.Scope = model.Configuration.Attributes[SCOPE_TOKEN];
+                    
+                    if (model.Configuration.Attributes[SCOPE_TOKEN]!=null)
                     {
-                        scopeAttribute.UseProxy = bool.Parse(model.Configuration.Attributes[PROXY_TOKEN]);
+                        bool result = false;
+                        bool.TryParse(model.Configuration.Attributes[PROXY_TOKEN], out result);
+                        if (result)
+                        {
+                            scopeAttribute.UseProxy = bool.Parse(model.Configuration.Attributes[PROXY_TOKEN]);
+                        }
                     }
-                }
 
-                DecorateComponent(model, scopeAttribute);
+                    DecorateComponent(model, scopeAttribute);
+                }
+                else if (AttributeUtil.HasScopeAttribute(model.Implementation))
+                {
+                    ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);
+                    DecorateComponent(model, scopeAttribute);
+                }                
             }
-            else if (AttributeUtil.HasScopeAttribute(model.Implementation))
-            {
-                ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);
-                DecorateComponent(model, scopeAttribute);
-            }
+
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace Castle.Igloo
             model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute);
             if (scopeAttribute.UseProxy)
             {
-                model.CustomComponentActivator = typeof (ScopeComponentActivator);
+                model.CustomComponentActivator = typeof(ScopeComponentActivator);
             }
             else
             {
@@ -93,7 +94,7 @@ namespace Castle.Igloo
                 model.LifestyleType = LifestyleType.Custom;
                 model.CustomLifestyle = typeof(ScopeLifestyleManager);
                 
-                // Add the scope interceptor
+                // Add the bijection interceptor
                 model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
             }
         }

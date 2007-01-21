@@ -55,17 +55,17 @@ namespace Castle.Igloo
         /// </summary>
 		protected override void Init()
 		{
-			if (FacilityConfig == null)
+			if (FacilityConfig != null)
 			{
-				throw new ConfigurationErrorsException(
-					"The IglooFacility requires an 'assembyView' child tag.");
-			}
-
-			IConfiguration factoriesConfig = FacilityConfig.Children["assembyView"];
-			if (factoriesConfig!=null && 
-				factoriesConfig.Value!= null && factoriesConfig.Value!= string.Empty )
-			{
-				_assembly =  Assembly.Load(factoriesConfig.Value) ;	
+                IConfiguration factoriesConfig = FacilityConfig.Children["assembyView"];
+                if (factoriesConfig != null &&
+                    factoriesConfig.Value != null && factoriesConfig.Value != string.Empty)
+                {
+                    _assembly = Assembly.Load(factoriesConfig.Value);
+                }
+			    
+                //throw new ConfigurationErrorsException(
+                //    "The IglooFacility requires an 'assembyView' child tag.");
 			}
 
             RegisterContributor();

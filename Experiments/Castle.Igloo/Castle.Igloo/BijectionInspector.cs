@@ -83,10 +83,7 @@ namespace Castle.Igloo
                     inMembers.Add(injectAttribute, properties[i]);
                 }
             }
-            //if (inMembers.Count > 0)
-            //{
-                model.ExtendedProperties[IN_MEMBERS] = inMembers;
-            //}
+            model.ExtendedProperties[IN_MEMBERS] = inMembers;
         }
 
     }

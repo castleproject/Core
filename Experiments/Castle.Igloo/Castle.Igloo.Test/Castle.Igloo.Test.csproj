@@ -52,12 +52,15 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScopeTest\ComponentActivatorInspectorTests.cs" />
     <Compile Include="ScopeTest\Components\IComponant.cs" />
     <Compile Include="ScopeTest\Components\PerScopeThreadComponent.cs" />
     <Compile Include="ScopeTest\Components\PerWebScopeComponent.cs" />
     <Compile Include="ScopeTest\Components\SimpleComponent.cs" />
     <Compile Include="ScopeTest\Components\SingletonScopeComponent.cs" />
+    <Compile Include="ScopeTest\Components\StubKernel.cs" />
     <Compile Include="ScopeTest\Components\TransientScopeComponent.cs" />
+    <Compile Include="ScopeTest\ProxyScopeTest.cs" />
     <Compile Include="ScopeTest\ScopeTestCase.cs" />
   </ItemGroup>
   <ItemGroup>

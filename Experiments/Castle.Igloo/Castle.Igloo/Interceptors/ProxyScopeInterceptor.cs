@@ -33,9 +33,9 @@ namespace Castle.Igloo.Interceptors
     /// </summary>
     public class ProxyScopeInterceptor : IInterceptor
     {
+        public const string TARGET_NAME_PREFIX = "scopedTarget.";
         private ILifestyleManager _manager = null;
         private CreationContext _context = null;
-        private const string TARGET_NAME_PREFIX = "scopedTarget.";
         private string _componentName = string.Empty;
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Castle.Igloo.Interceptors
             proxyModel.LifestyleType = LifestyleType.Custom;
             proxyModel.CustomLifestyle = typeof(ScopeLifestyleManager);
 
-            // Add the scope interceptor
+            // Add the bijection interceptor
             proxyModel.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
 
             IComponentActivator defaultActivator = kernel.CreateComponentActivator(proxyModel);
