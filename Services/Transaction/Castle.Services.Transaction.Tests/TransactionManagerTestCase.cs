@@ -21,10 +21,17 @@ namespace Castle.Services.Transaction.Tests
 	[TestFixture]
 	public class TransactionManagerTestCase
 	{
+		private DefaultTransactionManager tm;
+
+		[SetUp]
+		public void Init()
+		{
+			tm = new DefaultTransactionManager(new TransientActivityManager());
+		}
+
 		[Test]
 		public void SynchronizationsAndCommit()
 		{
-			DefaultTransactionManager tm = new DefaultTransactionManager();
 			ITransaction transaction = 
 				tm.CreateTransaction(TransactionMode.Unspecified, IsolationMode.Unspecified);
 
@@ -46,7 +53,6 @@ namespace Castle.Services.Transaction.Tests
 		[Test]
 		public void SynchronizationsAndRollback()
 		{
-			DefaultTransactionManager tm = new DefaultTransactionManager();
 			ITransaction transaction = 
 				tm.CreateTransaction(TransactionMode.Unspecified, IsolationMode.Unspecified);
 
@@ -68,7 +74,6 @@ namespace Castle.Services.Transaction.Tests
 		[Test]
 		public void ResourcesAndCommit()
 		{
-			DefaultTransactionManager tm = new DefaultTransactionManager();
 			ITransaction transaction = 
 				tm.CreateTransaction(TransactionMode.Unspecified, IsolationMode.Unspecified);
 	
@@ -96,7 +101,6 @@ namespace Castle.Services.Transaction.Tests
 		[Test]
 		public void ResourcesAndRollback()
 		{
-			DefaultTransactionManager tm = new DefaultTransactionManager();
 			ITransaction transaction = 
 				tm.CreateTransaction(TransactionMode.Unspecified, IsolationMode.Unspecified);
 	
@@ -125,8 +129,6 @@ namespace Castle.Services.Transaction.Tests
 		[ExpectedException( typeof(TransactionException) )]
 		public void InvalidBegin()
 		{
-			DefaultTransactionManager tm = new DefaultTransactionManager();
-			
 			ITransaction transaction = tm.CreateTransaction(
 				TransactionMode.Requires, IsolationMode.Unspecified);
 
@@ -138,8 +140,6 @@ namespace Castle.Services.Transaction.Tests
 		[ExpectedException( typeof(TransactionException) )]
 		public void InvalidCommit()
 		{
-			DefaultTransactionManager tm = new DefaultTransactionManager();
-			
 			ITransaction transaction = tm.CreateTransaction(
 				TransactionMode.Requires, IsolationMode.Unspecified);
 

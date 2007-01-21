@@ -43,7 +43,9 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		public IBatisNetFacility() {}
+		public IBatisNetFacility()
+		{
+		}
 
 		#region IFacility Members
 
@@ -60,12 +62,12 @@ namespace Castle.Facilities.IBatisNetIntegration
 			}
 
 			Kernel.ComponentModelBuilder.AddContributor(new AutomaticSessionInspector());
-			Kernel.AddComponent("IBatis.session.interceptor", typeof (AutomaticSessionInterceptor));
-			Kernel.AddComponent("IBatis.transaction.manager", typeof (ITransactionManager), typeof (DataMapperTransactionManager));
+			Kernel.AddComponent("IBatis.session.interceptor", typeof(AutomaticSessionInterceptor));
+			Kernel.AddComponent("IBatis.transaction.manager", typeof(ITransactionManager), typeof(DefaultTransactionManager));
 
 			int factories = 0;
 
-			foreach (IConfiguration factoryConfig in FacilityConfig.Children)
+			foreach(IConfiguration factoryConfig in FacilityConfig.Children)
 			{
 				if (factoryConfig.Name == "sqlMap")
 				{
@@ -131,22 +133,25 @@ namespace Castle.Facilities.IBatisNetIntegration
 						_logger.Debug("The SqlMap.config was set to embedded.");
 					}
 				}
-				catch (Exception ex)
+				catch(Exception ex)
 				{
 					if (_logger.IsWarnEnabled)
 					{
-						_logger.Warn(string.Format("The SqlMap.config had a value set for embedded, [{0}], but it was not able to parsed as a Boolean.", embedded.ToString()), ex);
+						_logger.Warn(
+							string.Format(
+								"The SqlMap.config had a value set for embedded, [{0}], but it was not able to parsed as a Boolean.",
+								embedded.ToString()), ex);
 					}
 					isEmbedded = false;
 				}
 			}
 
-			ComponentModel model = new ComponentModel(id, typeof (ISqlMapper), null);
+			ComponentModel model = new ComponentModel(id, typeof(ISqlMapper), null);
 			model.ExtendedProperties.Add(MAPPER_CONFIG_FILE, fileName);
 			model.ExtendedProperties.Add(MAPPER_CONFIG_EMBEDDED, isEmbedded);
 			model.ExtendedProperties.Add(MAPPER_CONFIG_CONNECTION_STRING, connectionString);
 			model.LifestyleType = LifestyleType.Singleton;
-			model.CustomComponentActivator = typeof (SqlMapActivator);
+			model.CustomComponentActivator = typeof(SqlMapActivator);
 
 			Kernel.AddCustomComponent(model);
 		}

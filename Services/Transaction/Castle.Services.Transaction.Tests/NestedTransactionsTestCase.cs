@@ -21,12 +21,12 @@ namespace Castle.Services.Transaction.Tests
 	[TestFixture]
 	public class NestedTransactionsTestCase
 	{
-		DefaultTransactionManager tm;
+		private DefaultTransactionManager tm;
 
 		[SetUp]
 		public void Init()
 		{
-			tm = new DefaultTransactionManager();
+			tm = new DefaultTransactionManager(new TransientActivityManager());
 		}
 
 		[Test]

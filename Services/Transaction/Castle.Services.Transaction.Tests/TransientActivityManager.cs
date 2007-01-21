@@ -12,20 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Services.Transaction.Tests
 {
-	using System;
-	
-	using Castle.Core;
-	
-	using Castle.Services.Transaction;
-
-	
-	[PerThread]
-	public class NHibernateTransactionManager : DefaultTransactionManager
+	public class TransientActivityManager : IActivityManager
 	{
-		public NHibernateTransactionManager()
+		private Activity activity;
+
+		public TransientActivityManager()
 		{
+			activity = new Activity();
+		}
+
+		/// <summary>
+		/// Gets the current activity.
+		/// </summary>
+		/// <value>The current activity.</value>
+		public Activity CurrentActivity
+		{
+			get { return activity; }
 		}
 	}
 }

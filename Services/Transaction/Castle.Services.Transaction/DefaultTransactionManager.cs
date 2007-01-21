@@ -15,9 +15,7 @@
 namespace Castle.Services.Transaction
 {
 	using System;
-	using System.Collections;
 	using System.ComponentModel;
-
 	using Castle.Core.Logging;
 
 	/// <summary>
@@ -33,12 +31,38 @@ namespace Castle.Services.Transaction
 
 		private EventHandlerList events = new EventHandlerList();
 		private ILogger logger = new NullLogger();
-		private Stack transactions = new Stack(5);
+		private IActivityManager activityManager;
 
-		public DefaultTransactionManager()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultTransactionManager"/> class.
+		/// </summary>
+		public DefaultTransactionManager() : this(new CallContextActivityManager())
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultTransactionManager"/> class.
+		/// </summary>
+		/// <param name="activityManager">The activity manager.</param>
+		public DefaultTransactionManager(IActivityManager activityManager)
+		{
+			this.activityManager = activityManager;
+		}
+
+		/// <summary>
+		/// Gets or sets the activity manager.
+		/// </summary>
+		/// <value>The activity manager.</value>
+		public IActivityManager ActivityManager
+		{
+			get { return activityManager; }
+			set { activityManager = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the logger.
+		/// </summary>
+		/// <value>The logger.</value>
 		public ILogger Logger
 		{
 			get { return logger; }
@@ -56,7 +80,26 @@ namespace Castle.Services.Transaction
 
 		#region ITransactionManager Members
 
+		/// <summary>
+		/// Creates a transaction.
+		/// </summary>
+		/// <param name="transactionMode">The transaction mode.</param>
+		/// <param name="isolationMode">The isolation mode.</param>
+		/// <returns></returns>
 		public virtual ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode)
+		{
+			return CreateTransaction(transactionMode, isolationMode, false);
+		}
+
+		/// <summary>
+		/// Creates a transaction.
+		/// </summary>
+		/// <param name="transactionMode">The transaction mode.</param>
+		/// <param name="isolationMode">The isolation mode.</param>
+		/// <param name="distributedTransaction">if set to <c>true</c>, the TM will create a distributed transaction.</param>
+		/// <returns></returns>
+		public virtual ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode,
+		                                              bool distributedTransaction)
 		{
 			if (transactionMode == TransactionMode.Unspecified)
 			{
@@ -65,9 +108,9 @@ namespace Castle.Services.Transaction
 
 			CheckNotSupportedTransaction(transactionMode);
 
-			if (CurrentTransaction == null && 
-				(transactionMode == TransactionMode.Supported || 
-				 transactionMode == TransactionMode.NotSupported))
+			if (CurrentTransaction == null &&
+			    (transactionMode == TransactionMode.Supported ||
+			     transactionMode == TransactionMode.NotSupported))
 			{
 				return null;
 			}
@@ -78,9 +121,9 @@ namespace Castle.Services.Transaction
 			{
 				if (transactionMode == TransactionMode.Requires || transactionMode == TransactionMode.Supported)
 				{
-					transaction = (CurrentTransaction as StandardTransaction).CreateChildTransaction();
+					transaction = ((StandardTransaction) CurrentTransaction).CreateChildTransaction();
 
-					RaiseChildTransactionCreated(transaction, transactionMode, isolationMode);
+					RaiseChildTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);
 
 					logger.DebugFormat("Child Transaction {0} created", transaction.GetHashCode());
 				}
@@ -89,20 +132,30 @@ namespace Castle.Services.Transaction
 			if (transaction == null)
 			{
 				transaction = new StandardTransaction(
-					new TransactionDelegate(RaiseTransactionCommitted), 
-					new TransactionDelegate(RaiseTransactionRolledback) );
+					new TransactionDelegate(RaiseTransactionCommitted),
+					new TransactionDelegate(RaiseTransactionRolledback));
 
-				RaiseTransactionCreated(transaction, transactionMode, isolationMode);
+				RaiseTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);
 
 				logger.DebugFormat("Transaction {0} created", transaction.GetHashCode());
 			}
 
-			transaction.Logger = logger.CreateChildLogger( transaction.GetType().FullName );
+			transaction.Logger = logger.CreateChildLogger(transaction.GetType().FullName);
 
-			transactions.Push(transaction);
+			activityManager.CurrentActivity.Push(transaction);
 
 			return transaction;
 		}
+
+		public virtual ITransaction CurrentTransaction
+		{
+			get
+			{
+				return activityManager.CurrentActivity.CurrentTransaction;
+			}
+		}
+
+		#region events
 
 		public event TransactionCreationInfoDelegate TransactionCreated
 		{
@@ -134,17 +187,60 @@ namespace Castle.Services.Transaction
 			remove { events.RemoveHandler(TransactionDisposedEvent, value); }
 		}
 
-		public virtual ITransaction CurrentTransaction
+		protected void RaiseTransactionCreated(ITransaction transaction, TransactionMode transactionMode,
+		                                       IsolationMode isolationMode, bool distributedTransaction)
 		{
-			get
+			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) events[TransactionCreatedEvent];
+
+			if (eventDelegate != null)
 			{
-				if (transactions.Count == 0)
-				{
-					return null;
-				}
-				return transactions.Peek() as ITransaction;
+				eventDelegate(transaction, transactionMode, isolationMode, distributedTransaction);
 			}
 		}
+
+		protected void RaiseChildTransactionCreated(ITransaction transaction, TransactionMode transactionMode,
+													IsolationMode isolationMode, bool distributedTransaction)
+		{
+			TransactionCreationInfoDelegate eventDelegate =
+				(TransactionCreationInfoDelegate) events[ChildTransactionCreatedEvent];
+
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction, transactionMode, isolationMode, distributedTransaction);
+			}
+		}
+
+		protected void RaiseTransactionDisposed(ITransaction transaction)
+		{
+			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionDisposedEvent];
+
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction);
+			}
+		}
+
+		protected void RaiseTransactionCommitted(ITransaction transaction)
+		{
+			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionCommittedEvent];
+
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction);
+			}
+		}
+
+		protected void RaiseTransactionRolledback(ITransaction transaction)
+		{
+			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionRolledbackEvent];
+
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction);
+			}
+		}
+
+		#endregion
 
 		public virtual void Dispose(ITransaction transaction)
 		{
@@ -153,15 +249,13 @@ namespace Castle.Services.Transaction
 				throw new ArgumentNullException("transaction", "Tried to dispose a null transaction");
 			}
 
-			lock(transactions)
+			if (CurrentTransaction != transaction)
 			{
-				if (CurrentTransaction != transaction)
-				{
-					throw new ArgumentException("transaction", "Tried to dispose a transaction that is not on the current active transaction");
-				}
-
-				transactions.Pop();
+				throw new ArgumentException("transaction",
+				                            "Tried to dispose a transaction that is not on the current active transaction");
 			}
+
+			activityManager.CurrentActivity.Pop();
 
 			if (transaction is IDisposable)
 			{
@@ -175,56 +269,6 @@ namespace Castle.Services.Transaction
 
 		#endregion
 
-		protected void RaiseTransactionCreated(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
-		{
-			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) events[TransactionCreatedEvent];
-			
-			if (eventDelegate != null)
-			{
-				eventDelegate(transaction, transactionMode, isolationMode);
-			}
-		}
-
-		protected void RaiseChildTransactionCreated(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
-		{
-			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) events[ChildTransactionCreatedEvent];
-			
-			if (eventDelegate != null)
-			{
-				eventDelegate(transaction, transactionMode, isolationMode);
-			}
-		}
-
-		protected void RaiseTransactionDisposed(ITransaction transaction)
-		{
-			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionDisposedEvent];
-			
-			if (eventDelegate != null)
-			{
-				eventDelegate(transaction);
-			}
-		}
-
-		protected void RaiseTransactionCommitted(ITransaction transaction)
-		{
-			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionCommittedEvent];
-			
-			if (eventDelegate != null)
-			{
-				eventDelegate(transaction);
-			}
-		}
-
-		protected void RaiseTransactionRolledback(ITransaction transaction)
-		{
-			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionRolledbackEvent];
-			
-			if (eventDelegate != null)
-			{
-				eventDelegate(transaction);
-			}
-		}
-
 		protected virtual TransactionMode ObtainDefaultTransactionMode(TransactionMode transactionMode)
 		{
 			return TransactionMode.Requires;
@@ -232,12 +276,12 @@ namespace Castle.Services.Transaction
 
 		private void CheckNotSupportedTransaction(TransactionMode transactionMode)
 		{
-			if (transactionMode == TransactionMode.NotSupported && 
-				CurrentTransaction != null && 
-				CurrentTransaction.Status == TransactionStatus.Active)
+			if (transactionMode == TransactionMode.NotSupported &&
+			    CurrentTransaction != null &&
+			    CurrentTransaction.Status == TransactionStatus.Active)
 			{
-				String message = "There is a transaction active and the transaction mode " + 
-					"specified explicit says that no transaction is supported for this context";
+				String message = "There is a transaction active and the transaction mode " +
+				                 "explicit says that no transaction is supported for this context";
 
 				logger.Error(message);
 

@@ -12,14 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This supporting service was inspired by
-// http://www.codeproject.com/cs/database/dal.asp
-// by Deyan Petrov
-
 namespace Castle.Services.Transaction
 {
-	public delegate void TransactionCreationInfoDelegate(
-		ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode );
+	public delegate void TransactionCreationInfoDelegate(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction);
 
 	public delegate void TransactionDelegate(ITransaction transaction);
 
@@ -54,13 +49,21 @@ namespace Castle.Services.Transaction
 		event TransactionDelegate TransactionDisposed;
 
 		/// <summary>
-		/// More information here.
-		/// Can return null!
+		/// Creates a transaction.
 		/// </summary>
-		/// <param name="transactionMode"></param>
-		/// <param name="isolationMode"></param>
+		/// <param name="transactionMode">The transaction mode.</param>
+		/// <param name="isolationMode">The isolation mode.</param>
 		/// <returns></returns>
-		ITransaction CreateTransaction( TransactionMode transactionMode, IsolationMode isolationMode );
+		ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode);
+
+		/// <summary>
+		/// Creates a transaction.
+		/// </summary>
+		/// <param name="transactionMode">The transaction mode.</param>
+		/// <param name="isolationMode">The isolation mode.</param>
+		/// <param name="distributedTransaction">if set to <c>true</c>, the TM will create a distributed transaction.</param>
+		/// <returns></returns>
+		ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction);
 
 		/// <summary>
 		/// Returns the current <see cref="ITransaction"/>. 
@@ -68,10 +71,7 @@ namespace Castle.Services.Transaction
 		/// hold the created transaction in the thread or in 
 		/// some sort of context.
 		/// </summary>
-		ITransaction CurrentTransaction
-		{
-			get;
-		}
+		ITransaction CurrentTransaction { get; }
 
 		/// <summary>
 		/// Should guarantee the correct disposal of transaction

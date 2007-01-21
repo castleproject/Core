@@ -109,6 +109,7 @@
     <Compile Include="TransactionManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TransientActivityManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

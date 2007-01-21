@@ -114,12 +114,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\InversionOfControl\Castle.Windsor.Tests\Castle.Windsor.Tests-2-0.csproj">
-      <Project>{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}</Project>
-      <Name>Castle.Windsor.Tests-2-0</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>

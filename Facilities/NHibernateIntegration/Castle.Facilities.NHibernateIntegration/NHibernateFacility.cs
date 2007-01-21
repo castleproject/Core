@@ -159,8 +159,8 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		protected void RegisterTransactionManager()
 		{
-			Kernel.AddComponent( "nhibernate.transaction.manager", 
-			   typeof(ITransactionManager), typeof(NHibernateTransactionManager) );
+			Kernel.AddComponent( "nhibernate.transaction.manager",
+			   typeof(ITransactionManager), typeof(DefaultTransactionManager));
 		}
 
 		#endregion

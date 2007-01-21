@@ -117,9 +117,6 @@
     <Compile Include="ActiveRecordFacility.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ActiveRecordTransactionManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

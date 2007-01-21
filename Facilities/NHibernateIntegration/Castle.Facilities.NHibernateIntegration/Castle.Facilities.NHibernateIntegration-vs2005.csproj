@@ -161,9 +161,6 @@
     <Compile Include="Internal\ISessionStore.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Internal\NHibernateTransactionManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Internal\ResourceAdapter.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -115,9 +115,6 @@
     <Compile Include="AutomaticSessionInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataMapperTransactionManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IBatisNetFacility.cs">
       <SubType>Code</SubType>
     </Compile>

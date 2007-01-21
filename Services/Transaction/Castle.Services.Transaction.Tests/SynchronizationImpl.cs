@@ -16,7 +16,6 @@ namespace Castle.Services.Transaction.Tests
 {
 	using System;
 
-
 	public class SynchronizationImpl : ISynchronization
 	{
 		private DateTime _after = DateTime.MinValue;

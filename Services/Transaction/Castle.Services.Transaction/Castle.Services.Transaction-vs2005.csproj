@@ -98,9 +98,12 @@
     <Compile Include="Attributes.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CallContextActivityManager.cs" />
     <Compile Include="DefaultTransactionManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Activity.cs" />
+    <Compile Include="IActivityManager.cs" />
     <Compile Include="IResource.cs">
       <SubType>Code</SubType>
     </Compile>

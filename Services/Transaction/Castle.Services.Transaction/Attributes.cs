@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This supporting service was inspired by
-// http://www.codeproject.com/cs/database/dal.asp
-// by Deyan Petrov
-
 namespace Castle.Services.Transaction
 {
 	using System;
@@ -23,8 +19,8 @@ namespace Castle.Services.Transaction
 	/// <summary>
 	/// The supported transaction mode for the components.
 	/// </summary>
-	public enum TransactionMode 
-	{ 
+	public enum TransactionMode
+	{
 		/// <summary>
 		/// 
 		/// </summary>
@@ -49,15 +45,15 @@ namespace Castle.Services.Transaction
 		/// </summary>
 		Supported
 	}
-    
+
 	/// <summary>
 	/// The supported isolation modes.
 	/// </summary>
 	public enum IsolationMode
 	{
 		Unspecified,
-		Chaos = 0,        
-		ReadCommitted,    
+		Chaos = 0,
+		ReadCommitted,
 		ReadUncommitted,
 		RepeatableRead,
 		Serializable
@@ -68,7 +64,7 @@ namespace Castle.Services.Transaction
 	/// the transactional services.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class TransactionalAttribute : System.Attribute 
+	public class TransactionalAttribute : System.Attribute
 	{
 	}
 
@@ -76,10 +72,11 @@ namespace Castle.Services.Transaction
 	/// Indicates the transaction support for a method.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
-	public class TransactionAttribute : System.Attribute 
+	public class TransactionAttribute : System.Attribute
 	{
 		private TransactionMode _transactionMode;
 		private IsolationMode _isolationMode;
+		private bool distributedTransaction;
 
 		/// <summary>
 		/// Declares unspecified values for transaction and isolation, which
@@ -96,7 +93,7 @@ namespace Castle.Services.Transaction
 		/// default value for it.
 		/// </summary>
 		/// <param name="transactionMode"></param>
-		public TransactionAttribute( TransactionMode transactionMode ) : this(transactionMode, IsolationMode.Unspecified)
+		public TransactionAttribute(TransactionMode transactionMode) : this(transactionMode, IsolationMode.Unspecified)
 		{
 		}
 
@@ -107,7 +104,7 @@ namespace Castle.Services.Transaction
 		/// </summary>
 		/// <param name="transactionMode"></param>
 		/// <param name="isolationMode"></param>
-		public TransactionAttribute( TransactionMode transactionMode, IsolationMode isolationMode )
+		public TransactionAttribute(TransactionMode transactionMode, IsolationMode isolationMode)
 		{
 			_transactionMode = transactionMode;
 			_isolationMode = isolationMode;
@@ -127,6 +124,18 @@ namespace Castle.Services.Transaction
 		public IsolationMode IsolationMode
 		{
 			get { return _isolationMode; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the transaction should be distributed.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if a distributed transaction should be created; otherwise, <c>false</c>.
+		/// </value>
+		public bool DistributedTransaction
+		{
+			get { return distributedTransaction; }
+			set { distributedTransaction = value; }
 		}
 	}
 }
