@@ -46,6 +46,25 @@ namespace Castle.Components.Validator
 			regexRule = new Regex(expression, options);
 		}
 
+
+		/// <summary>
+		/// Gets the regular expression object.
+		/// </summary>
+		/// <value>The regular expression object.</value>
+		public Regex RegexRule
+		{
+			get { return regexRule; }
+		}
+
+		/// <summary>
+		/// Gets the expression.
+		/// </summary>
+		/// <value>The expression.</value>
+		public string Expression
+		{
+			get { return expression; }
+		}
+
 		/// <summary>
 		/// Validate that the property value match the given regex
 		/// </summary>

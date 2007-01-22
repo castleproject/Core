@@ -34,6 +34,16 @@ namespace Castle.Components.Validator
 			this.propertyToCompare = propertyToCompare;
 		}
 
+
+		/// <summary>
+		/// Gets the property to compare.
+		/// </summary>
+		/// <value>The property to compare.</value>
+		public string PropertyToCompare
+		{
+			get { return propertyToCompare; }
+		}
+
 		/// <summary>
 		/// Validates that the <c>fieldValue</c>
 		/// is the same as the property set through the constructor.

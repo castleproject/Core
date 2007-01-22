@@ -73,6 +73,37 @@ namespace Castle.Components.Validator
 			this.maxLength = maxLength;
 		}
 
+
+		/// <summary>
+		/// Gets or sets the exact length to validate.
+		/// </summary>
+		/// <value>The exact length to validate.</value>
+		public int ExactLength
+		{
+			get { return exactLength; }
+			set { exactLength = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the minimun length to validate.
+		/// </summary>
+		/// <value>The minimun length to validate.</value>
+		public int MinLength
+		{
+			get { return minLength; }
+			set { minLength = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the maximum length to validate.
+		/// </summary>
+		/// <value>The maximum length to validate.</value>
+		public int MaxLength
+		{
+			get { return maxLength; }
+			set { maxLength = value; }
+		}
+
 		/// <summary>
 		/// Validate that the property value matches the length requirements.
 		/// </summary>
