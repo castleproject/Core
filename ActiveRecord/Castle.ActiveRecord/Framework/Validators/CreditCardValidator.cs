@@ -75,6 +75,24 @@ namespace Castle.ActiveRecord.Framework.Validators
 
 
 		/// <summary>
+		/// Gets the allowed credit card types.
+		/// </summary>
+		/// <value>The <see cref="CardType"/> representing the allowed types.</value>
+		public CardType AllowedTypes
+		{
+			get { return allowedTypes; }
+		}
+
+		/// <summary>
+		/// An array of card numbers to skip checking for (eg. gateway test numbers).
+		/// </summary>
+		/// <value>A <see cref="Array"/>representing the card numbers to skip checking.</value>
+		public string[] Exceptions
+		{
+			get { return exceptions; }
+		}
+
+		/// <summary>
 		/// Validate that the propety value matches a valid (formatted) credit card
 		/// Note: null values are consider OK always, combine with <see cref="NullCheckValidator"/> if required.
 		/// </summary>

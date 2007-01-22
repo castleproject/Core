@@ -34,6 +34,16 @@ namespace Castle.ActiveRecord.Framework.Validators
 			_confirmationFieldOrProperty = confirmationFieldOrProperty;
 		}
 
+		
+		/// <summary>
+		/// Gets the confirmation field or property.
+		/// </summary>
+		/// <value>The confirmation field or property.</value>
+		public string ConfirmationFieldOrProperty
+		{
+			get { return _confirmationFieldOrProperty; }
+		}
+
 		/// <summary>
 		/// Check that the confirmation property has the same value as this property.
 		/// </summary>

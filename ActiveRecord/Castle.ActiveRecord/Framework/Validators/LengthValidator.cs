@@ -72,6 +72,34 @@ namespace Castle.ActiveRecord.Framework.Validators
 			this.maxLength = maxLength;
 		}
 
+
+		/// <summary>
+		/// Gets the exact length of the field.
+		/// </summary>
+		/// <value>The exact length of the field.</value>
+		public int ExactLength
+		{
+			get { return exactLength; }
+		}
+
+		/// <summary>
+		/// Gets the minimum length.
+		/// </summary>
+		/// <value>The minimum length.</value>
+		public int MinLength
+		{
+			get { return minLength; }
+		}
+
+		/// <summary>
+		/// Gets the maximun length.
+		/// </summary>
+		/// <value>The maximun length.</value>
+		public int MaxLength
+		{
+			get { return maxLength; }
+		}
+
 		/// <summary>
 		/// Validate that the property value matches the length requirements.
 		/// </summary>

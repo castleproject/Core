@@ -43,6 +43,16 @@ namespace Castle.ActiveRecord.Framework.Validators
 			_regexRule = new Regex(expression, options);
 		}
 
+
+		/// <summary>
+		/// Gets the regular expression rule.
+		/// </summary>
+		/// <value>The regular expression rule.</value>
+		public Regex RegexRule
+		{
+			get { return _regexRule; }
+		}
+
 		/// <summary>
 		/// Validate that the property value match the given regex
 		/// </summary>

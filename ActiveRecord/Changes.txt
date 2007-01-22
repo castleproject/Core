@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Exposed some IValidator's properties.
+
 - Renamed IActiveRecordQuery.Target to IActiveRecordQuery.RootType
 
 - Added SetRange to ProjectionQuery<,>
