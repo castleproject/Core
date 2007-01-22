@@ -14,16 +14,12 @@
 
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
-	using System;
 	using Castle.Core.Resource;
+	using Castle.Windsor;
 	using Castle.Windsor.Configuration.Interpreters;
 	using NHibernate.Cfg;
 	using NHibernate.Tool.hbm2ddl;
-	
 	using NUnit.Framework;
-
-	using Castle.Windsor;
-
 
 	public abstract class AbstractNHibernateTestCase
 	{

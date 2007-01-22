@@ -129,9 +129,6 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlogItemDao.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Common\Blog.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -170,16 +167,21 @@
     <Compile Include="SessionCreation\MySecondDao.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Transactions\DistributedTransactionsTestCase.cs" />
     <Compile Include="Transactions\Model\FirstDao.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Transactions\Model\FirstDao2.cs" />
     <Compile Include="Transactions\Model\OrderDao.cs" />
+    <Compile Include="Transactions\Model\OrderDao2.cs" />
     <Compile Include="Transactions\Model\RootService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Transactions\Model\RootService2.cs" />
     <Compile Include="Transactions\Model\SecondDao.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Transactions\Model\SecondDao2.cs" />
     <Compile Include="Transactions\TransactionsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

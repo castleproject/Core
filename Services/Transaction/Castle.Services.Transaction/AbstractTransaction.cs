@@ -28,6 +28,9 @@ namespace Castle.Services.Transaction
 		private HybridDictionary context;
 		private IList synchronizations;
 		private TransactionStatus state = TransactionStatus.NoTransaction;
+		private TransactionMode transactionMode;
+		private IsolationMode isolationMode;
+		private bool distributedTransaction;
 		private ILogger logger = NullLogger.Instance;
 
 		internal IList resources;
@@ -37,6 +40,13 @@ namespace Castle.Services.Transaction
 			resources = new ArrayList();
 			synchronizations = new ArrayList();
 			context = new HybridDictionary(true);
+		}
+
+		public AbstractTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction) : this()
+		{
+			this.transactionMode = transactionMode;
+			this.isolationMode = isolationMode;
+			this.distributedTransaction = distributedTransaction;
 		}
 
 		public ILogger Logger
@@ -204,6 +214,21 @@ namespace Castle.Services.Transaction
 		public abstract bool IsChildTransaction { get; }
 
 		public abstract bool IsRollbackOnlySet { get; }
+
+		public TransactionMode TransactionMode
+		{
+			get { return transactionMode; }
+		}
+
+		public IsolationMode IsolationMode
+		{
+			get { return isolationMode; }
+		}
+
+		public bool DistributedTransaction
+		{
+			get { return distributedTransaction; }
+		}
 
 		#endregion
 

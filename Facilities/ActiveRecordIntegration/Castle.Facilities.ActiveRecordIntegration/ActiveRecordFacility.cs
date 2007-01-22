@@ -130,7 +130,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		private void OnNewTransaction(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction)
 		{
-			transaction.Enlist(new TransactionScopeResourceAdapter(transactionMode));
+			if (!transaction.DistributedTransaction)
+			{
+				transaction.Enlist(new TransactionScopeResourceAdapter(transactionMode));
+			}
 		}
 
 		private Assembly ObtainAssembly(String assemblyName)

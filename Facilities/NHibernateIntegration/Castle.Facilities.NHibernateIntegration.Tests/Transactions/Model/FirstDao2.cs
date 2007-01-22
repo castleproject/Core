@@ -14,57 +14,62 @@
 
 namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 {
+	using System;
 	using Castle.Services.Transaction;
 	using NHibernate;
 
 	[Transactional]
-	public class OrderDao : NHibernateGenericDao
+	public class FirstDao2
 	{
 		private readonly ISessionManager sessManager;
 
-		public OrderDao(ISessionManager sessManager) : base(sessManager, "db2")
+		public FirstDao2(ISessionManager sessManager)
 		{
 			this.sessManager = sessManager;
 		}
 
-		[Transaction]
-		public virtual Order Create(float val)
+		[Transaction(Distributed = true)]
+		public virtual Blog Create()
 		{
-			using(ISession session = sessManager.OpenSession("db2"))
-			{
-				NUnit.Framework.Assert.IsNotNull(session.Transaction);
+			return Create("xbox blog");
+		}
 
-				Order order = new Order();
-				order.Value = val;
-				session.Save(order);
-				
-				return order;
+		[Transaction(Distributed = true)]
+		public virtual Blog Create(String name)
+		{
+			NHibernate.ITransaction tran;
+
+			using(ISession session = sessManager.OpenSession())
+			{
+				tran = session.Transaction;
+
+				// NUnit.Framework.Assert.IsNotNull(session.Transaction);
+				// NUnit.Framework.Assert.IsTrue(session.Transaction.IsActive);
+
+				Blog blog = new Blog();
+				blog.Name = name;
+				session.Save(blog);
+				return blog;
 			}
 		}
 
-		[Transaction]
-		public virtual void Update(Order order, float newval)
+		[Transaction(Distributed = true)]
+		public virtual void Delete(String name)
 		{
-			using(ISession session = sessManager.OpenSession("db2"))
+			using(ISession session = sessManager.OpenSession())
 			{
 				NUnit.Framework.Assert.IsNotNull(session.Transaction);
 
-				order.Value = newval;
-				
-				session.Update(order);
+				session.Delete("from Blog b where b.Name ='" + name + "'");
 			}
 		}
 
-		[Transaction]
-		public virtual void Delete(int orderId)
+		[Transaction(Distributed = true)]
+		public virtual void AddBlogRef(BlogRef blogRef)
 		{
-			using(ISession session = sessManager.OpenSession("db2"))
+			using(ISession session = sessManager.OpenSession())
 			{
-				NUnit.Framework.Assert.IsNotNull(session.Transaction);
-
-				Order order = (Order) session.Load(typeof(Order), orderId);
-				
-				session.Delete(order);
+				session.Save(blogRef);
 			}
 		}
 	}

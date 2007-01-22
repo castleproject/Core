@@ -19,26 +19,26 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class TransactionWithTwoDatabasesTestCase : AbstractNHibernateTestCase
+	public class DistributedTransactionsTestCase : AbstractNHibernateTestCase
 	{
 		protected override void ConfigureContainer()
 		{
 			container.AddFacility("transactions", new TransactionFacility());
 
-			container.AddComponent("root", typeof(RootService));
-			container.AddComponent("myfirstdao", typeof(FirstDao));
-			container.AddComponent("myseconddao", typeof(SecondDao));
-			container.AddComponent("myorderdao", typeof(OrderDao));
+			container.AddComponent("root", typeof(RootService2));
+			container.AddComponent("myfirstdao", typeof(FirstDao2));
+			container.AddComponent("myseconddao", typeof(SecondDao2));
+			container.AddComponent("myorderdao", typeof(OrderDao2));
 		}
 
 		[Test]
 		public void SuccessfulSituationWithTwoDatabases()
 		{
-			RootService service = (RootService) container["root"];
-			OrderDao orderDao = (OrderDao) container["myorderdao"];
-			
+			RootService2 service = (RootService2) container["root"];
+			OrderDao2 orderDao = (OrderDao2) container["myorderdao"];
+
 			service.DoTwoDBOperation_Create(false);
-			
+
 			Array blogs = service.FindAll(typeof(Blog));
 			Array blogitems = service.FindAll(typeof(BlogItem));
 			Array orders = orderDao.FindAll(typeof(Order));
@@ -54,8 +54,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 		[Test]
 		public void ExceptionOnEndWithTwoDatabases()
 		{
-			RootService service = (RootService) container["root"];
-			OrderDao orderDao = (OrderDao) container["myorderdao"];
+			RootService2 service = (RootService2)container["root"];
+			OrderDao2 orderDao = (OrderDao2)container["myorderdao"];
 
 			try
 			{

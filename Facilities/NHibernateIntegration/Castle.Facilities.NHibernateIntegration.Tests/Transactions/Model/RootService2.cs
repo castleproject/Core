@@ -18,46 +18,47 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 	using Castle.Services.Transaction;
 
 	[Transactional]
-	public class RootService : NHibernateGenericDao
+	public class RootService2 : NHibernateGenericDao
 	{
-		private readonly FirstDao firstDao;
-		private readonly SecondDao secondDao;
-		private OrderDao orderDao;
+		private readonly FirstDao2 firstDao;
+		private readonly SecondDao2 secondDao;
+		private OrderDao2 orderDao;
 
-		public RootService(FirstDao firstDao, SecondDao secondDao, ISessionManager sessManager) : base(sessManager)
+		public RootService2(FirstDao2 firstDao, SecondDao2 secondDao, ISessionManager sessManager)
+			: base(sessManager)
 		{
 			this.firstDao = firstDao;
 			this.secondDao = secondDao;
 		}
 
-		public OrderDao OrderDao
+		public OrderDao2 OrderDao
 		{
 			get { return orderDao; }
 			set { orderDao = value; }
 		}
 
-		[Transaction]
+		[Transaction(Distributed=true)]
 		public virtual BlogItem SuccessFullCall()
 		{
 			Blog blog = firstDao.Create();
 			return secondDao.Create(blog);
 		}
 
-		[Transaction]
+		[Transaction(Distributed = true)]
 		public virtual void CallWithException()
 		{
 			Blog blog = firstDao.Create();
 			secondDao.CreateWithException(blog);
 		}
 
-		[Transaction]
+		[Transaction(Distributed = true)]
 		public virtual void CallWithException2()
 		{
 			Blog blog = firstDao.Create();
 			secondDao.CreateWithException2(blog);
 		}
 
-		[Transaction]
+		[Transaction(Distributed = true)]
 		public virtual void DoBlogRefOperation(Blog blog)
 		{
 			BlogRef blogRef = new BlogRef();
@@ -68,8 +69,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 			//constraint exception
 			firstDao.Delete("Blog1");
 		}
-		
-		[Transaction]
+
+		[Transaction(Distributed = true)]
 		public virtual void DoTwoDBOperation_Create(bool throwException)
 		{
 			Blog blog = firstDao.Create();

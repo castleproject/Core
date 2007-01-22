@@ -14,10 +14,7 @@
 
 namespace Castle.Facilities.NHibernateIntegration.Tests.Wiring
 {
-	using System;
-
 	using NUnit.Framework;
-
 
 	[TestFixture]
 	public class DaoTestCase : AbstractNHibernateTestCase

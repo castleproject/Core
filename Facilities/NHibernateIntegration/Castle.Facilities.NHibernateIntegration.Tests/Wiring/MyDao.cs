@@ -14,11 +14,8 @@
 
 namespace Castle.Facilities.NHibernateIntegration.Tests.Wiring
 {
-	using System;
-
 	using NHibernate;
 	using NHibernate.Cfg;
-
 
 	public class MyDao
 	{

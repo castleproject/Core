@@ -92,9 +92,8 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 				ITransactionManager manager = (ITransactionManager) kernel[ typeof(ITransactionManager) ];
 
-				ITransaction transaction = 
-					manager.CreateTransaction( 
-						transactionAtt.TransactionMode, transactionAtt.IsolationMode );
+				ITransaction transaction = manager.CreateTransaction(
+					transactionAtt.TransactionMode, transactionAtt.IsolationMode, transactionAtt.Distributed);
 
 				if (transaction == null)
 				{

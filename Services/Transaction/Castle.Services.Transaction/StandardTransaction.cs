@@ -14,7 +14,6 @@
 
 namespace Castle.Services.Transaction
 {
-	using System;
 	using System.Collections;
 
 	/// <summary>
@@ -28,13 +27,20 @@ namespace Castle.Services.Transaction
 		private IList children = ArrayList.Synchronized( new ArrayList() );
 		private bool rollbackOnly;
 
-		public StandardTransaction(TransactionDelegate onTransactionCommitted, TransactionDelegate onTransactionRolledback)
+		protected StandardTransaction()
+		{
+		}
+
+		public StandardTransaction(TransactionDelegate onTransactionCommitted, TransactionDelegate onTransactionRolledback,
+			TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction) : 
+			this(transactionMode, isolationMode, distributedTransaction)
 		{
 			this.onTransactionCommitted = onTransactionCommitted;
 			this.onTransactionRolledback = onTransactionRolledback;
 		}
 
-		public StandardTransaction()
+		public StandardTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction) : 
+			base(transactionMode, isolationMode, distributedTransaction)
 		{
 		}
 
@@ -94,7 +100,8 @@ namespace Castle.Services.Transaction
 	{
 		private StandardTransaction _parent;
 
-		public ChildTransaction(StandardTransaction parent)
+		public ChildTransaction(StandardTransaction parent) : 
+			base(parent.TransactionMode, parent.IsolationMode, parent.DistributedTransaction)
 		{
 			_parent = parent;
 		}

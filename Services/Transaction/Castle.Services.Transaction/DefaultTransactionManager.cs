@@ -24,13 +24,13 @@ namespace Castle.Services.Transaction
 	public class DefaultTransactionManager : MarshalByRefObject, ITransactionManager
 	{
 		private static readonly object TransactionCreatedEvent = new object();
-		private static readonly object ChildTransactionCreatedEvent = new object();
 		private static readonly object TransactionCommittedEvent = new object();
 		private static readonly object TransactionRolledbackEvent = new object();
 		private static readonly object TransactionDisposedEvent = new object();
+		private static readonly object ChildTransactionCreatedEvent = new object();
 
 		private EventHandlerList events = new EventHandlerList();
-		private ILogger logger = new NullLogger();
+		private ILogger logger = NullLogger.Instance;
 		private IActivityManager activityManager;
 
 		/// <summary>
@@ -98,8 +98,7 @@ namespace Castle.Services.Transaction
 		/// <param name="isolationMode">The isolation mode.</param>
 		/// <param name="distributedTransaction">if set to <c>true</c>, the TM will create a distributed transaction.</param>
 		/// <returns></returns>
-		public virtual ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode,
-		                                              bool distributedTransaction)
+		public virtual ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction)
 		{
 			if (transactionMode == TransactionMode.Unspecified)
 			{
@@ -133,7 +132,12 @@ namespace Castle.Services.Transaction
 			{
 				transaction = new StandardTransaction(
 					new TransactionDelegate(RaiseTransactionCommitted),
-					new TransactionDelegate(RaiseTransactionRolledback));
+					new TransactionDelegate(RaiseTransactionRolledback), transactionMode, isolationMode, distributedTransaction);
+
+				if (distributedTransaction)
+				{
+					transaction.Enlist(new TransactionScopeResourceAdapter(transactionMode, isolationMode));
+				}
 
 				RaiseTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);
 
@@ -149,10 +153,7 @@ namespace Castle.Services.Transaction
 
 		public virtual ITransaction CurrentTransaction
 		{
-			get
-			{
-				return activityManager.CurrentActivity.CurrentTransaction;
-			}
+			get { return activityManager.CurrentActivity.CurrentTransaction; }
 		}
 
 		#region events

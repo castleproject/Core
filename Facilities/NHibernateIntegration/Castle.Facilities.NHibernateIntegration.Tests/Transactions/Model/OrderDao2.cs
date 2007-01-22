@@ -18,16 +18,16 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 	using NHibernate;
 
 	[Transactional]
-	public class OrderDao : NHibernateGenericDao
+	public class OrderDao2 : NHibernateGenericDao
 	{
 		private readonly ISessionManager sessManager;
 
-		public OrderDao(ISessionManager sessManager) : base(sessManager, "db2")
+		public OrderDao2(ISessionManager sessManager) : base(sessManager, "db2")
 		{
 			this.sessManager = sessManager;
 		}
 
-		[Transaction]
+		[Transaction(Distributed = true)]
 		public virtual Order Create(float val)
 		{
 			using(ISession session = sessManager.OpenSession("db2"))
@@ -37,12 +37,12 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 				Order order = new Order();
 				order.Value = val;
 				session.Save(order);
-				
+
 				return order;
 			}
 		}
 
-		[Transaction]
+		[Transaction(Distributed = true)]
 		public virtual void Update(Order order, float newval)
 		{
 			using(ISession session = sessManager.OpenSession("db2"))
@@ -50,12 +50,12 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 				NUnit.Framework.Assert.IsNotNull(session.Transaction);
 
 				order.Value = newval;
-				
+
 				session.Update(order);
 			}
 		}
 
-		[Transaction]
+		[Transaction(Distributed = true)]
 		public virtual void Delete(int orderId)
 		{
 			using(ISession session = sessManager.OpenSession("db2"))
@@ -63,7 +63,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 				NUnit.Framework.Assert.IsNotNull(session.Transaction);
 
 				Order order = (Order) session.Load(typeof(Order), orderId);
-				
+
 				session.Delete(order);
 			}
 		}

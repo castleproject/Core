@@ -52,7 +52,7 @@ namespace Castle.Services.Transaction
 	public enum IsolationMode
 	{
 		Unspecified,
-		Chaos = 0,
+		Chaos,
 		ReadCommitted,
 		ReadUncommitted,
 		RepeatableRead,
@@ -132,7 +132,7 @@ namespace Castle.Services.Transaction
 		/// <value>
 		/// <c>true</c> if a distributed transaction should be created; otherwise, <c>false</c>.
 		/// </value>
-		public bool DistributedTransaction
+		public bool Distributed
 		{
 			get { return distributedTransaction; }
 			set { distributedTransaction = value; }
