@@ -18,12 +18,26 @@
  ********************************************************************************/
 #endregion
 
+using Castle.Igloo.ComponentActivator;
+
 namespace Castle.Igloo.Scopes
 {
     /// <summary>
-    /// 
+    /// Objects created from the <see cref="ScopeComponentActivator"/> can be cast to this interface, 
+    /// enabling access to the raw target object
+    /// and programmatic removal of the target object.
     /// </summary>
     public interface IScopedObject
     {
+        /// <summary>
+        /// Return the current target object behind this scoped object proxy, in its raw form (as stored in the target scope).
+        /// </summary>
+        object TargetObject { get; }
+
+        /// <summary>
+        /// Remove this object from its target scope0
+        /// </summary>
+        void RemoveFromScope();
+
     }
 }

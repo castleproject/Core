@@ -54,14 +54,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScopeTest\ComponentActivatorInspectorTests.cs" />
     <Compile Include="ScopeTest\Components\IComponant.cs" />
+    <Compile Include="ScopeTest\Components\IComponent0.cs" />
+    <Compile Include="ScopeTest\Components\IComponent1.cs" />
+    <Compile Include="ScopeTest\Components\IComponent2.cs" />
     <Compile Include="ScopeTest\Components\PerScopeThreadComponent.cs" />
     <Compile Include="ScopeTest\Components\PerWebScopeComponent.cs" />
     <Compile Include="ScopeTest\Components\SimpleComponent.cs" />
+    <Compile Include="ScopeTest\Components\SimpleComponent0.cs" />
+    <Compile Include="ScopeTest\Components\SimpleComponent1.cs" />
+    <Compile Include="ScopeTest\Components\SimpleComponent2.cs" />
     <Compile Include="ScopeTest\Components\SingletonScopeComponent.cs" />
-    <Compile Include="ScopeTest\Components\StubKernel.cs" />
     <Compile Include="ScopeTest\Components\TransientScopeComponent.cs" />
     <Compile Include="ScopeTest\ProxyScopeTest.cs" />
     <Compile Include="ScopeTest\ScopeTestCase.cs" />
+    <Compile Include="SimpleComponent2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Igloo\Castle.Igloo.csproj">

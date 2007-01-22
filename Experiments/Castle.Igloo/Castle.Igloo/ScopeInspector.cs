@@ -47,33 +47,29 @@ namespace Castle.Igloo
         /// <param name="model">The component model</param>
         public void ProcessModel(IKernel kernel, ComponentModel model)
         {
-            if (!model.Name.StartsWith(ProxyScopeInterceptor.TARGET_NAME_PREFIX))
+            if (model.Configuration != null &&
+                model.Configuration.Attributes[SCOPE_TOKEN]!=null)
             {
-                if (model.Configuration != null &&
-                    model.Configuration.Attributes[SCOPE_TOKEN]!=null)
+                ScopeAttribute scopeAttribute = new ScopeAttribute();
+                scopeAttribute.Scope = model.Configuration.Attributes[SCOPE_TOKEN];
+                
+                if (model.Configuration.Attributes[SCOPE_TOKEN]!=null)
                 {
-                    ScopeAttribute scopeAttribute = new ScopeAttribute();
-                    scopeAttribute.Scope = model.Configuration.Attributes[SCOPE_TOKEN];
-                    
-                    if (model.Configuration.Attributes[SCOPE_TOKEN]!=null)
+                    bool result = false;
+                    bool.TryParse(model.Configuration.Attributes[PROXY_TOKEN], out result);
+                    if (result)
                     {
-                        bool result = false;
-                        bool.TryParse(model.Configuration.Attributes[PROXY_TOKEN], out result);
-                        if (result)
-                        {
-                            scopeAttribute.UseProxy = bool.Parse(model.Configuration.Attributes[PROXY_TOKEN]);
-                        }
+                        scopeAttribute.UseProxy = bool.Parse(model.Configuration.Attributes[PROXY_TOKEN]);
                     }
-
-                    DecorateComponent(model, scopeAttribute);
                 }
-                else if (AttributeUtil.HasScopeAttribute(model.Implementation))
-                {
-                    ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);
-                    DecorateComponent(model, scopeAttribute);
-                }                
-            }
 
+                DecorateComponent(model, scopeAttribute);
+            }
+            else if (AttributeUtil.HasScopeAttribute(model.Implementation))
+            {
+                ScopeAttribute scopeAttribute = AttributeUtil.GetScopeAttribute(model.Implementation);
+                DecorateComponent(model, scopeAttribute);
+            }                
         }
 
         /// <summary>
@@ -83,17 +79,36 @@ namespace Castle.Igloo
         /// <param name="scopeAttribute">The scope attribute.</param>
         private void DecorateComponent(ComponentModel model, ScopeAttribute scopeAttribute)
         {
-            model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute);
-            if (scopeAttribute.UseProxy)
+           if (!model.Name.StartsWith(ProxyScopeInterceptor.TARGET_NAME_PREFIX))
             {
-                model.CustomComponentActivator = typeof(ScopeComponentActivator);
+                if (scopeAttribute.UseProxy)
+                {
+                    scopeAttribute.Scope = ScopeType.Singleton;
+                    
+                    model.CustomComponentActivator = typeof (ScopeComponentActivator);
+
+                    // Ensure its CustomLifestyle
+                    model.LifestyleType = LifestyleType.Custom;
+                    model.CustomLifestyle = typeof(ScopeLifestyleManager);
+                }
+                else
+                {
+                    // Ensure its CustomLifestyle
+                    model.LifestyleType = LifestyleType.Custom;
+                    model.CustomLifestyle = typeof (ScopeLifestyleManager);
+
+                    // Add the bijection interceptor
+                    model.Interceptors.AddFirst(new InterceptorReference(typeof (BijectionInterceptor)));
+                }
+                model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute);
             }
             else
             {
+                model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute);
                 // Ensure its CustomLifestyle
                 model.LifestyleType = LifestyleType.Custom;
                 model.CustomLifestyle = typeof(ScopeLifestyleManager);
-                
+
                 // Add the bijection interceptor
                 model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
             }

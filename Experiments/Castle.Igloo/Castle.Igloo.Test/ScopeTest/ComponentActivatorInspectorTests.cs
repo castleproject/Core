@@ -49,7 +49,7 @@ namespace Castle.Igloo.Test.ScopeTest
             ScopeAttribute scopeAttribute = (ScopeAttribute)model.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
 
             Assert.IsTrue(scopeAttribute.UseProxy);
-            Assert.AreEqual(ScopeType.Thread ,scopeAttribute.Scope);
+            Assert.AreEqual(ScopeType.Singleton ,scopeAttribute.Scope);
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace Castle.Igloo.Test.ScopeTest
                     ScopeAttribute scopeAttribute = (ScopeAttribute)model.ExtendedProperties[ScopeInspector.SCOPE_ATTRIBUTE];
 
                     Assert.IsTrue(scopeAttribute.UseProxy);
-                    Assert.AreEqual(ScopeType.Thread, scopeAttribute.Scope);
+                    Assert.AreEqual(ScopeType.Singleton, scopeAttribute.Scope);
 			    }
 			}
         }

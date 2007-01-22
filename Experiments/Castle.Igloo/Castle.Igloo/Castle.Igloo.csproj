@@ -124,6 +124,7 @@
     <Compile Include="Mock\MockRequestScope.cs" />
     <Compile Include="Mock\MockScope.cs" />
     <Compile Include="Mock\MockSessionScope.cs" />
+    <Compile Include="Scopes\DefaultScopedObject.cs" />
     <Compile Include="Scopes\IScopedObject.cs" />
     <Compile Include="Scopes\Web\IApplicationScope.cs" />
     <Compile Include="Scopes\Web\IPageScope.cs" />
