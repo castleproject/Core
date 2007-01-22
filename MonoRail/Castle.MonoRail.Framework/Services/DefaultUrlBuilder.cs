@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Services
 
 		#endregion
 
-		#region IUrlBuilder
+		#region IServiceEnabledComponent
 
 		public void Service(IServiceProvider provider)
 		{
