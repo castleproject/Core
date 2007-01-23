@@ -210,6 +210,7 @@
     </Compile>
     <Compile Include="Util\AssertUtils.cs" />
     <Compile Include="Util\AttributeUtil.cs" />
+    <Compile Include="Util\TraceUtil.cs" />
     <Compile Include="Util\WebUtil.cs.cs" />
     <EmbeddedResource Include="castle.Igloo.resx">
       <SubType>Designer</SubType>

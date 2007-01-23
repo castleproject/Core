@@ -40,6 +40,9 @@ namespace Castle.Igloo.Scopes.Web
         private const string INIT_REQUEST_CONTEXT = "_INIT_REQUEST_CONTEXT_";
         private const string COMPONENT_NAMES = "_COMPONENT_NAMEs_";
 
+        /// <summary>
+        /// Inits the request context.
+        /// </summary>
         private void InitRequestContext()
         {
             if (!WebUtil.GetCurrentHttpContext().Items.Contains(INIT_REQUEST_CONTEXT))
@@ -85,7 +88,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <param name="value">The Object to use as the value of the element to add.</param>
         public void Add(string name, object value)
         {
-            Trace.WriteLine("Add to request scope : " + name);
+            TraceUtil.Log("Add to request scope : " + name);
 
             InitRequestContext();
             ComponentNames.Add(name);
@@ -98,7 +101,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
-            Trace.WriteLine("Remove from request scope : " + name);
+            TraceUtil.Log("Remove from request scope : " + name);
 
             InitRequestContext();
             ComponentNames.Remove(name);
@@ -134,7 +137,7 @@ namespace Castle.Igloo.Scopes.Web
         /// </summary>
         public void Flush()
         {
-            Trace.WriteLine("Flush request scope.");
+            TraceUtil.Log("Flush request scope.");
             StringCollection toRemove = new StringCollection();
             StringCollection names = (StringCollection)WebUtil.GetCurrentHttpContext().Items[COMPONENT_NAMES];
             foreach (string name in names)

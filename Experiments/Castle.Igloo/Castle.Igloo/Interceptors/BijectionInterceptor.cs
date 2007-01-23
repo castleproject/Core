@@ -20,12 +20,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Scopes;
+using Castle.Igloo.Util;
 using Castle.MicroKernel;
 
 namespace Castle.Igloo.Interceptors
@@ -62,11 +62,9 @@ namespace Castle.Igloo.Interceptors
         {
             if (NeedsInjection)
             {
-                //if (log.isTraceEnabled())
-                //{
-                Trace.WriteLine("injecting dependencies of : " + _model.Name);
-                //}
-                IScopeRegistry scopeRegistry = _kernel[typeof(IScopeRegistry)] as IScopeRegistry;
+                TraceUtil.Log("injecting dependencies of : " + _model.Name);
+
+                IScopeRegistry scopeRegistry = (IScopeRegistry)_kernel[typeof(IScopeRegistry)];
 
                 foreach (KeyValuePair<InjectAttribute, PropertyInfo> kvp in _inMembers)
                 {                   

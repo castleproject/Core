@@ -19,13 +19,12 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 using Castle.Igloo.Interceptors;
 using Castle.Igloo.Scopes;
+using Castle.Igloo.Util;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ComponentActivator;
 
@@ -80,7 +79,7 @@ namespace Castle.Igloo.ComponentActivator
 
                 //object instance = _generator.CreateInterfaceProxyWithoutTarget(Model.Service, interfaces, options, interceptor);
 
-                Trace.WriteLine("Return a proxy scope for component : " + Model.Name );
+                TraceUtil.Log("Return a proxy scope for component : " + Model.Name );
 
                 return instance;  
             }
@@ -88,7 +87,7 @@ namespace Castle.Igloo.ComponentActivator
             {
                 //object instance = _generator.CreateClassProxy(Model.Service, interfaces, options, interceptor);
 
-                Trace.WriteLine("Return a proxy scope for component : " + Model.Name);
+                TraceUtil.Log("Return a proxy scope for component : " + Model.Name);
 
                 return new NotImplementedException();  
             }

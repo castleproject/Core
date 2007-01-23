@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Web;
 using System.Web.UI;
 using Castle.Core;
@@ -114,7 +113,7 @@ namespace Castle.Igloo.LifestyleManager
         /// <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         internal void ReleaseRequestScopeComponent(Object sender, EventArgs e)
         {
-            Trace.WriteLine("<<< End web request");
+            TraceUtil.Log("<<< End web request");
             
             HttpApplication application = (HttpApplication)sender;
             HttpContext httpContext = application.Context;

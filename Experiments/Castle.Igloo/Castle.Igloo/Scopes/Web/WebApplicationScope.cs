@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Configuration;
-using System.Diagnostics;
 using Castle.Core;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Util;
@@ -59,7 +58,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <param name="value">The value.</param>
         public void Add(string name, object value)
         {
-            Trace.WriteLine("Add to application scope : " + name);
+            TraceUtil.Log("Add to application scope : " + name);
 
             WebUtil.GetCurrentHttpContext().ApplicationInstance.Application.Add(name, value);
         }
@@ -70,7 +69,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <param name="name">The name.</param>
         public void Remove(string name)
         {
-            Trace.WriteLine("Remove from application scope : " + name);
+            TraceUtil.Log("Remove from application scope : " + name);
 
             WebUtil.GetCurrentHttpContext().ApplicationInstance.Application.Remove(name);
         }
@@ -102,7 +101,7 @@ namespace Castle.Igloo.Scopes.Web
         /// </summary>
         public void Flush()
         {
-            Trace.WriteLine("Flush application scope.");
+            TraceUtil.Log("Flush application scope.");
 
             WebUtil.GetCurrentHttpContext().ApplicationInstance.Application.RemoveAll();
         }

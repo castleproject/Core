@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Util;
 
@@ -85,7 +84,7 @@ namespace Castle.Igloo.Scopes
                     object instance = scope[attribute.Name];
                     if (instance != null)
                     {
-                        Trace.WriteLine("found in scope : " + attribute.Name);
+                        TraceUtil.Log("found in scope : " + attribute.Name);
                         return instance;
                     }
                 }
@@ -100,7 +99,7 @@ namespace Castle.Igloo.Scopes
                         object instance = scope[attribute.Name];
                         if (instance != null)
                         {
-                            Trace.WriteLine("found in scope : " + attribute.Name);
+                            TraceUtil.Log("found in scope : " + attribute.Name);
                             return instance;
                         }
                     }

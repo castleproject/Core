@@ -23,7 +23,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Diagnostics;
 using Castle.Core;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Navigation;
@@ -91,7 +90,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <param name="value">The Object to use as the value of the element to add.</param>
         public void Add(string name, object value)
         {
-            Trace.WriteLine("Add to page scope : " + name);
+            TraceUtil.Log("Add to page scope : " + name);
 
             _sessionScope.Add(PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name, value);
         }
@@ -102,7 +101,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
-            Trace.WriteLine("Remove from page scope : " + name);
+            TraceUtil.Log("Remove from page scope : " + name);
 
             _sessionScope.Remove(PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name);
         }
@@ -142,7 +141,7 @@ namespace Castle.Igloo.Scopes.Web
         /// </summary>
         public void Flush()
         {
-            Trace.WriteLine("Flush page scope.");
+            TraceUtil.Log("Flush page scope.");
 
             IEnumerator enumerator = _sessionScope.Names.GetEnumerator();
             IList<string> toRemove = new List<string>();
@@ -157,7 +156,7 @@ namespace Castle.Igloo.Scopes.Web
             }
             foreach(string name in toRemove)
             {
-                Trace.WriteLine("Remove from page scope : " + name);
+                TraceUtil.Log("Remove from page scope : " + name);
                 _sessionScope.Remove(name);
             }
         }

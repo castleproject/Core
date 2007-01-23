@@ -20,10 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
-using Castle.Core;
-using Castle.Core.Configuration;
 using Castle.MicroKernel;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Scopes;
@@ -152,7 +149,7 @@ namespace Castle.Igloo.UIComponents
         {
             if (NeedsInjection)
             {
-                Trace.WriteLine("injecting dependencies of : " + _name);
+                TraceUtil.Log("injecting dependencies of : " + _name);
 
                 IScopeRegistry scopeRegistry = _kernel[typeof(IScopeRegistry)] as IScopeRegistry;
 

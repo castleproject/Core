@@ -18,11 +18,9 @@
  ********************************************************************************/
 #endregion
 
-using System;
-using System.Diagnostics;
 using Castle.Core;
 using Castle.Core.Interceptor;
-using Castle.Igloo.LifestyleManager;
+using Castle.Igloo.Util;
 using Castle.MicroKernel;
 
 namespace Castle.Igloo.Interceptors
@@ -62,7 +60,7 @@ namespace Castle.Igloo.Interceptors
             object scopedObject = _kernel[_componentName];
             invocation.ReturnValue = invocation.MethodInvocationTarget.Invoke(scopedObject, invocation.Arguments);
 
-            Trace.WriteLine("Intercepted call to proxy scope component : " + _componentName + " on method " + invocation.MethodInvocationTarget.Name);
+            TraceUtil.Log("Intercepted call to proxy scope component : " + _componentName + " on method " + invocation.MethodInvocationTarget.Name);
 
         }
     }
