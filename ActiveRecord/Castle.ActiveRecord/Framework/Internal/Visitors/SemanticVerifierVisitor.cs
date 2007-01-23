@@ -438,11 +438,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public override void VisitAny(AnyModel model)
 		{
 			if (model.AnyAtt.TypeColumn == null)
-				throw new ActiveRecordException("TypeColumn in AnyAttribute can not be null on " + model.Property.DeclaringType.FullName + "." +
-												model.Property.Name + ".");
-			if (model.AnyAtt.IdColumn == null)
-				throw new ActiveRecordException("IdColumn in AnyAttribute can not be null on " + model.Property.DeclaringType.FullName + "." +
-												model.Property.Name + ".");
+			{
+				model.AnyAtt.TypeColumn = model.Property.Name + "AnyType";
+			}
+			if(model.AnyAtt.IdColumn == null)
+			{
+				model.AnyAtt.IdColumn= model.Property.Name + "AnyTypeId";
+			}
+				
 		}
 
 		/// <summary>

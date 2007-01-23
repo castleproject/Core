@@ -55,8 +55,7 @@ namespace Castle.ActiveRecord
 		private CascadeEnum cascade;
 		private Type idType;
 		private Type metaType;
-		private string typeColumn = "AnyType";
-		private string idColumn = "Id";
+		private string typeColumn, idColumn;
 		private string index;
 		private bool insert = true, update = true;
 		private bool notNull = false;
