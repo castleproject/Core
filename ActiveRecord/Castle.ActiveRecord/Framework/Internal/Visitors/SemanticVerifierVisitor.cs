@@ -437,9 +437,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public override void VisitAny(AnyModel model)
 		{
-			if (model.AnyAtt.MetaType == null)
-				throw new ActiveRecordException("MetaType is a required attribute of AnyAttribute on " + model.Property.DeclaringType.FullName + "." +
-				                                model.Property.Name + ".");
+			if (model.AnyAtt.TypeColumn == null)
+				throw new ActiveRecordException("TypeColumn in AnyAttribute can not be null on " + model.Property.DeclaringType.FullName + "." +
+												model.Property.Name + ".");
+			if (model.AnyAtt.IdColumn == null)
+				throw new ActiveRecordException("IdColumn in AnyAttribute can not be null on " + model.Property.DeclaringType.FullName + "." +
+												model.Property.Name + ".");
 		}
 
 		/// <summary>

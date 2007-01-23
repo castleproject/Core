@@ -55,10 +55,20 @@ namespace Castle.ActiveRecord
 		private CascadeEnum cascade;
 		private Type idType;
 		private Type metaType;
-		private string typeColumn, idColumn;
+		private string typeColumn = "AnyType";
+		private string idColumn = "Id";
 		private string index;
 		private bool insert = true, update = true;
 		private bool notNull = false;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AnyAttribute"/> class.
+		/// </summary>
+		/// <remarks>Using this constructor defaults the idType to Int32</remarks>
+		public AnyAttribute()
+			: this(typeof(Int32))
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AnyAttribute"/> class.
@@ -68,6 +78,7 @@ namespace Castle.ActiveRecord
 		{
 			this.idType = idType;
 		}
+
 
 		/// <summary>
 		/// Gets or sets the type of the id.

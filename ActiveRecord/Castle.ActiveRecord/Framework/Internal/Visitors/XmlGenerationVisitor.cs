@@ -391,7 +391,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.AnyAtt.AccessString),
 			        MakeCustomTypeAtt("id-type", model.AnyAtt.IdType),
-			        MakeCustomTypeAtt("meta-type", model.AnyAtt.MetaType),
+					MakeCustomTypeAttIfNotNull("meta-type", model.AnyAtt.MetaType),
 			        WriteIfFalse("insert", model.AnyAtt.Insert),
 			        WriteIfFalse("update", model.AnyAtt.Update),
 			        WriteIfNonNull("index", model.AnyAtt.Index),

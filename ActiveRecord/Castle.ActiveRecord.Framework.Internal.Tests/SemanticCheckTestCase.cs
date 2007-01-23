@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 	[TestFixture]
 	public class SemanticCheckTestCase : AbstractActiveRecordTest
 	{
-		[Test]
+		[Test,Ignore("meta-type is optional")]
 		[ExpectedException(typeof(ActiveRecordException), "MetaType is a required attribute of AnyAttribute on Castle.ActiveRecord.Framework.Internal.Tests.Model.BadClassWithAnyAttribute.PaymentMethod.")]
 		public void UsingAnyWithoutSpecifyingTheMetaType()
 		{
@@ -34,7 +34,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
 			semanticVisitor.VisitNode(model);
-	
 		}
 
 		[Test]
