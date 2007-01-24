@@ -38,7 +38,7 @@ namespace Castle.Igloo.Attributes
         private string _scope = ScopeType.UnSpecified;
 
         /// <summary>
-        /// The context variable name. Defaults to the name of
+        /// The scope variable name. Defaults to the name of
         /// the annotated field or getter method.
         /// </summary>
         public string Name
@@ -49,7 +49,7 @@ namespace Castle.Igloo.Attributes
 
         /// <summary>
         /// Specifies that a component should be instantiated
-        /// if the context variable is null.
+        /// if the scope variable is null.
         /// </summary>
         public bool Create
         {
