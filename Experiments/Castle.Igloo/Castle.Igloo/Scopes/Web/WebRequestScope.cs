@@ -22,7 +22,6 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Diagnostics;
 using Castle.Core;
 using Castle.Igloo.LifestyleManager;
 using Castle.Igloo.Navigation;
@@ -32,7 +31,7 @@ using Castle.MicroKernel;
 namespace Castle.Igloo.Scopes.Web
 {
     /// <summary>
-    /// Implementation of <see cref="IScope"/> whisch spans an HTTP request; 
+    /// Implementation of <see cref="IScope"/> that scopes a single component model to the lifecycle of a single HTTP request; 
     /// </summary>
     public sealed class WebRequestScope : IRequestScope
     {
@@ -67,33 +66,34 @@ namespace Castle.Igloo.Scopes.Web
         {
             get { return WebUtil.GetCurrentHttpContext() != null; }
         }
-        
+
+
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified name.
+        /// Gets or sets the <see cref="Object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public object this[string name]
         {
             get
             {
+                TraceUtil.Log("Get from request scope : " + name);
+
                 InitRequestContext();
                 return WebUtil.GetCurrentHttpContext().Items[REQUEST_SCOPE_SUFFIX + name];
             }
+            set
+            {
+                TraceUtil.Log("Set to request scope : " + name);
+
+                InitRequestContext();
+                if (!ComponentNames.Contains(name))
+                {
+                    ComponentNames.Add(name);
+                }
+                WebUtil.GetCurrentHttpContext().Items[REQUEST_SCOPE_SUFFIX + name] = value;
+            }
         }
 
-        /// <summary>
-        /// Adds an element with the provided key and value to the IScope object.
-        /// </summary>
-        /// <param name="name">The name of the element to add.</param>
-        /// <param name="value">The Object to use as the value of the element to add.</param>
-        public void Add(string name, object value)
-        {
-            TraceUtil.Log("Add to request scope : " + name);
-
-            InitRequestContext();
-            ComponentNames.Add(name);
-            WebUtil.GetCurrentHttpContext().Items.Add(REQUEST_SCOPE_SUFFIX + name, value);
-        }
 
         /// <summary>
         /// Removes the element with the specified name from the IScope object.

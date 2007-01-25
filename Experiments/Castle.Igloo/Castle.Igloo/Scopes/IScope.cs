@@ -31,7 +31,7 @@ namespace Castle.Igloo.Scopes
     /// 
     /// Used by the by the <see cref="IKernel"/> to hold components in.
     /// <p>Provides the ability to add and get objects from whatever underlying
-    /// storage mechanism, such as HTTP session or request. 
+    /// storage mechanism, such as HTTP session or request. </p>
     /// 
     /// <p><code>Scope</code> implementations are expected to be thread-safe.</p>
     /// 
@@ -45,18 +45,11 @@ namespace Castle.Igloo.Scopes
         bool IsActive { get; }
         
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified name.
+        /// Gets or sets the <see cref="Object"/> with the specified name.
         /// </summary>
         /// <value></value>
-        object this[string name] { get; }
-        
-        /// <summary>
-        /// Adds an element with the provided key and value to the IScope object. 
-        /// </summary>
-        /// <param name="name">The name of the element to add.</param>
-        /// <param name="value">The Object to use as the value of the element to add.</param>
-        void Add(string name, Object value);
-        
+        object this[string name] { get; set;}
+                
         /// <summary>
         /// Removes the element with the specified name from the IScope object. 
         /// </summary>

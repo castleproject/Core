@@ -31,7 +31,9 @@ using Castle.MicroKernel;
 
 namespace Castle.Igloo.Scopes.Web
 {
-    //[Scope(Scope = ScopeType.Application)]
+    /// <summary>
+    /// <see cref="IPageScope"/> implementation that scopes a single component model to the lifecycle of a aspx page.
+    /// </summary>
     public sealed class WebPageScope : IPageScope
     {
         public const string PAGE_SCOPE_SUFFIX = "page.";
@@ -75,24 +77,23 @@ namespace Castle.Igloo.Scopes.Web
                
  
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified name.
+        /// Gets or sets the <see cref="Object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public object this[string name]
         {
-            get { return _sessionScope[PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name]; }
-        }
+            get
+            {
+                TraceUtil.Log("Get from page scope : " + name);
 
-        /// <summary>
-        /// Adds an element with the provided key and value to the IScope object.
-        /// </summary>
-        /// <param name="name">The name of the element to add.</param>
-        /// <param name="value">The Object to use as the value of the element to add.</param>
-        public void Add(string name, object value)
-        {
-            TraceUtil.Log("Add to page scope : " + name);
+                return _sessionScope[PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name];
+            }
+            set
+            {
+                TraceUtil.Log("Set to page scope : " + name);
 
-            _sessionScope.Add(PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name, value);
+                _sessionScope[PAGE_SCOPE_SUFFIX + NavigationState.CurrentView + "." + name] = value;
+            }
         }
 
         /// <summary>

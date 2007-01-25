@@ -26,6 +26,9 @@ using Castle.MicroKernel;
 
 namespace Castle.Igloo.Scopes.Windows
 {
+    /// <summary>
+    /// <see cref="IScope"/> implementation
+    /// </summary>
     public class TransientScope :IScope
     {
         #region IScope Members
@@ -40,32 +43,45 @@ namespace Castle.Igloo.Scopes.Windows
         }
 
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified name.
+        /// Gets or sets the <see cref="Object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public object this[string name]
         {
             get { return null; }
+            set {}
         }
 
-        public void Add(string name, object value)
-        {
-        }
-
+        /// <summary>
+        /// Removes the element with the specified name from the IScope object.
+        /// </summary>
+        /// <param name="name">The name of the element to remove.</param>
         public void Remove(string name)
         {
         }
 
+        /// <summary>
+        /// Determines whether the IDictionary object contains an element with the specified name.
+        /// </summary>
+        /// <param name="name">The name to locate in the IScope object.</param>
+        /// <returns></returns>
         public bool Contains(string name)
         {
             return false;
         }
 
+        /// <summary>
+        /// Gets All the objects names contain in the IScope object.
+        /// </summary>
+        /// <value>The names.</value>
         public ICollection Names
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }
 
+        /// <summary>
+        /// Removes all the elements from the IScope object.
+        /// </summary>
         public void Flush()
         {
             throw new Exception("The method or operation is not implemented.");

@@ -53,7 +53,7 @@ namespace Igloo.Clinic.Application
             {
                 // Add an object in the session context under the name "doctor"
                 // this object will be inject later
-                _sessionScope.Add("doctor", doctor);               
+                _sessionScope["doctor"] = doctor;               
             }
             else
             {

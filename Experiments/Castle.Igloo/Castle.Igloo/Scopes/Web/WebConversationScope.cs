@@ -58,22 +58,16 @@ namespace Castle.Igloo.Scopes.Web
         }
         
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified name.
+        /// Gets or sets the <see cref="Object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public object this[string name]
         {
             get { return _sessionScope[_conversationManager.CurrentConversationId + "." + name]; }
-        }
-
-        /// <summary>
-        /// Adds an element with the provided key and value to the IScope object.
-        /// </summary>
-        /// <param name="name">The name of the element to add.</param>
-        /// <param name="value">The Object to use as the value of the element to add.</param>
-        public void Add(string name, object value)
-        {
-            _sessionScope.Add(_conversationManager.CurrentConversationId + "." + name, value);
+            set
+            {
+                _sessionScope[_conversationManager.CurrentConversationId + "." + name] = value;
+            }
         }
 
         /// <summary>
@@ -133,6 +127,9 @@ namespace Castle.Igloo.Scopes.Web
             throw new Exception("The method or operation is not implemented.");
         }
 
+        /// <summary>
+        /// Checks the initialisation.
+        /// </summary>
         public void CheckInitialisation()
         {
             throw new Exception("The method or operation is not implemented.");

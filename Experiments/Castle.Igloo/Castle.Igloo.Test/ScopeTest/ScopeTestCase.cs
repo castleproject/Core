@@ -56,7 +56,7 @@ namespace Castle.Igloo.Test.ScopeTest
             ISessionScope scope = _container.Resolve<ISessionScope>();
             Assert.IsNotNull(scope);
             
-            scope.Add("test", new object());
+            scope["test"] = new object();
 
             Assert.IsTrue(registry.IsInScopes("test"));
             

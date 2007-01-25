@@ -49,7 +49,7 @@ namespace Igloo.Clinic.Application
         {
             IList<Patient> patients = _patientService.RetrievePatients(_doctor);
 
-            _pageScope.Add("Patients", patients);
+            _pageScope["Patients"] = patients;
 
             return patients;
         }

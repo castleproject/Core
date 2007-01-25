@@ -24,7 +24,9 @@ using System.Reflection;
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.Igloo.Attributes;
+using Castle.Igloo.Controllers;
 using Castle.Igloo.Scopes;
+using Castle.Igloo.UIComponents;
 using Castle.Igloo.Util;
 using Castle.MicroKernel;
 
@@ -40,6 +42,7 @@ namespace Castle.Igloo.Interceptors
         private IKernel _kernel = null;
         private ComponentModel _model = null;
         private IDictionary<InjectAttribute, PropertyInfo> _inMembers = null;
+        private IDictionary<OutjectAttribute, PropertyInfo> _outMembers = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BijectionInterceptor"/> class.
@@ -47,9 +50,9 @@ namespace Castle.Igloo.Interceptors
         public BijectionInterceptor(IKernel kernel)
 		{
             _kernel = kernel;
-		}
-        
-        #region IMethodInterceptor Members
+        }
+
+        #region IInterceptor Members
 
         /// <summary>
         /// Method invoked by the proxy in order to allow
@@ -60,12 +63,12 @@ namespace Castle.Igloo.Interceptors
         /// <returns>The return value of this invocation</returns>
         public void Intercept(IInvocation invocation)
         {
+            IScopeRegistry scopeRegistry = (IScopeRegistry)_kernel[typeof(IScopeRegistry)];
+
             if (NeedsInjection)
             {
-                TraceUtil.Log("injecting dependencies of : " + _model.Name);
-
-                IScopeRegistry scopeRegistry = (IScopeRegistry)_kernel[typeof(IScopeRegistry)];
-
+                TraceUtil.Log("Injecting dependencies of : " + _model.Name);
+                
                 foreach (KeyValuePair<InjectAttribute, PropertyInfo> kvp in _inMembers)
                 {                   
                     PropertyInfo propertyInfo = kvp.Value;
@@ -78,7 +81,7 @@ namespace Castle.Igloo.Interceptors
                             instanceToInject = Activator.CreateInstance(propertyInfo.PropertyType);
 
                             IScope scope = scopeRegistry[kvp.Key.Scope];
-                            scope.Add(kvp.Key.Name, instanceToInject);
+                            scope[kvp.Key.Name] = instanceToInject;
                         }
                         else
                         {
@@ -90,6 +93,27 @@ namespace Castle.Igloo.Interceptors
             }
 
             invocation.Proceed();
+
+            if (NeedsOutjection)
+            {
+                TraceUtil.Log("Outjecting dependencies of : " + _model.Name);
+
+                foreach (KeyValuePair<OutjectAttribute, PropertyInfo> kvp in _outMembers)
+                {
+                    PropertyInfo propertyInfo = kvp.Value;
+                    object valueToOutject = propertyInfo.GetValue(invocation.InvocationTarget, null);
+
+                    IScope scope = GetOutScope(scopeRegistry, kvp.Key.Scope);
+                    scope[kvp.Key.Name] = valueToOutject;
+                }
+            }
+
+            if (NeedsInjection && typeof(IController).IsAssignableFrom(_model.Implementation))
+            {
+                TraceUtil.Log("Refresh UI component : " + _model.Name);
+
+                RefreshUIElement(scopeRegistry);
+            }
         }
 
         #endregion
@@ -103,8 +127,9 @@ namespace Castle.Igloo.Interceptors
         public void SetInterceptedComponentModel(ComponentModel target)
         {
             _model = target;
-            _inMembers =
-                (IDictionary<InjectAttribute, PropertyInfo>)target.ExtendedProperties[BijectionInspector.IN_MEMBERS];
+            _inMembers = (IDictionary<InjectAttribute, PropertyInfo>)target.ExtendedProperties[BijectionInspector.IN_MEMBERS];
+            _outMembers = (IDictionary<OutjectAttribute, PropertyInfo>)target.ExtendedProperties[BijectionInspector.OUT_MEMBERS];
+
         }
 
         #endregion
@@ -113,9 +138,55 @@ namespace Castle.Igloo.Interceptors
         /// Gets a value indicating whether the component needs injection.
         /// </summary>
         /// <value><c>true</c> if [needs injection]; otherwise, <c>false</c>.</value>
-        public bool NeedsInjection
+        private bool NeedsInjection
         {
             get { return _inMembers.Count > 0; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the component needs outjection.
+        /// </summary>
+        /// <value><c>true</c> if [needs outjection]; otherwise, <c>false</c>.</value>
+        private bool NeedsOutjection
+        {
+            get { return _outMembers.Count > 0; }
+        }
+
+        /// <summary>
+        /// Refreshes the UI element.
+        /// </summary>
+        /// <param name="scopeRegistry">The scope registry.</param>
+        private void RefreshUIElement(IScopeRegistry scopeRegistry)
+        {
+            IScope requestScope = scopeRegistry[ScopeType.Request];
+
+            IDictionary<UIComponent, object> uiComponentToRefresh = (IDictionary<UIComponent, object>)requestScope[UIComponent.UICOMPONENT_TO_REFRESH];
+
+            if (uiComponentToRefresh!=null)
+            {
+                foreach (KeyValuePair<UIComponent, object> kvp in uiComponentToRefresh)
+                {
+                    kvp.Key.InjectMembers(kvp.Value, false);
+                }                
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the out scope.
+        /// </summary>
+        /// <param name="scopeRegistry">The scope registry.</param>
+        /// <param name="specifiedScope">The specified scope.</param>
+        /// <returns></returns>
+        private IScope GetOutScope(IScopeRegistry scopeRegistry, string specifiedScope)
+        {
+            string scope = specifiedScope;
+            if (scope == ScopeType.UnSpecified)
+            {
+                scope = ScopeType.Request;
+            }
+
+            return scopeRegistry[scope];
         }
     }
 }

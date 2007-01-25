@@ -28,6 +28,9 @@ using Castle.MicroKernel;
 
 namespace Castle.Igloo.Scopes.Windows
 {
+    /// <summary>
+    /// Scopes a single component model to the lifecycle of a thread.
+    /// </summary>
     public class ThreadScope : IScope
     {
         private const string THREAD_TOKEN = "_THREAD_SCOPE_";
@@ -68,20 +71,14 @@ namespace Castle.Igloo.Scopes.Windows
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Adds an element with the provided key and value to the IScope object.
-        /// </summary>
-        /// <param name="name">The name of the element to add.</param>
-        /// <param name="instance">The Object to use as the value of the element to add.</param>
-        public void Add(string name, object instance)
-        {
-            lock (_slot)
+            set
             {
-                IDictionary<string, object> map = GetMap();
+                lock (_slot)
+                {
+                    IDictionary<string, object> map = GetMap();
 
-                map[name] = instance;
+                    map[name] = value;
+                }
             }
         }
 
@@ -114,6 +111,10 @@ namespace Castle.Igloo.Scopes.Windows
             }
         }
 
+        /// <summary>
+        /// Gets All the objects names contain in the IScope object.
+        /// </summary>
+        /// <value>The names.</value>
         public ICollection Names
         {
             get
@@ -127,15 +128,27 @@ namespace Castle.Igloo.Scopes.Windows
             }
         }
 
+        /// <summary>
+        /// Removes all the elements from the IScope object.
+        /// </summary>
         public void Flush()
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
+        /// <summary>
+        /// Registers for eviction.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="componentModel">The componentModel.</param>
+        /// <param name="instance">The instance.</param>
         public void RegisterForEviction(ILifestyleManager manager, ComponentModel componentModel, object instance)
         {
         }
 
+        /// <summary>
+        /// Checks the initialisation.
+        /// </summary>
         public void CheckInitialisation()
         {
             IDictionary<string, object> map = (IDictionary<string, object>)Thread.GetData(_slot);

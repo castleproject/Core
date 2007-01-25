@@ -61,7 +61,7 @@ namespace Castle.Igloo.LifestyleManager
 
                 instance = base.Resolve(context);
 
-                scope.Add(component.Name, instance);
+                scope[component.Name] = instance;
                 scope.RegisterForEviction(this, component, instance);
             }
 

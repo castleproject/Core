@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Configuration;
 using System.Reflection;
 using Castle.Core;
 using Castle.Igloo.Util;
@@ -38,6 +39,11 @@ namespace Castle.Igloo
         /// In members token
         /// </summary>
         public const string IN_MEMBERS = "_IN_MEMBERS_";
+
+        /// <summary>
+        /// Out members token
+        /// </summary>
+        public const string OUT_MEMBERS = "_OUT_MEMBERS_";
 
         /// <summary>
         /// Binding token
@@ -61,6 +67,7 @@ namespace Castle.Igloo
         public void ProcessModel(IKernel kernel, ComponentModel model)
         {
             RetrieveInMembers(model);
+            RetrieveOutMembers(model);
         }
 
         #endregion
@@ -80,11 +87,42 @@ namespace Castle.Igloo
                     {
                         injectAttribute.Name = properties[i].Name;
                     }
+                    MethodInfo methodInfo = properties[i].GetSetMethod();
+                    if (methodInfo == null)
+                    {
+                        throw new ConfigurationErrorsException("Outject attribute requires a set method on properties " + properties[i].Name + " in model " + model.Name);
+                    }
+
                     inMembers.Add(injectAttribute, properties[i]);
                 }
             }
             model.ExtendedProperties[IN_MEMBERS] = inMembers;
         }
 
+        private void RetrieveOutMembers(ComponentModel model)
+        {
+            PropertyInfo[] properties = model.Implementation.GetProperties(BINDING_FLAGS_SET);
+
+            IDictionary<OutjectAttribute, PropertyInfo> outMembers = new Dictionary<OutjectAttribute, PropertyInfo>();
+
+            for (int i = 0; i < properties.Length; i++)
+            {
+                OutjectAttribute outjectAttribute = AttributeUtil.GetOutjectAttribute(properties[i]);
+                if (outjectAttribute != null)
+                {
+                    if (outjectAttribute.Name.Length == 0)
+                    {
+                        outjectAttribute.Name = properties[i].Name;
+                    }
+                    MethodInfo methodInfo = properties[i].GetGetMethod();
+                    if (methodInfo==null)
+                    {
+                        throw new ConfigurationErrorsException("Outject attribute requires a get method on properties "+properties[i].Name+" in model "+model.Name);
+                    }
+                    outMembers.Add(outjectAttribute, properties[i]);
+                }
+            }
+            model.ExtendedProperties[OUT_MEMBERS] = outMembers;
+        }
     }
 }

@@ -30,7 +30,6 @@ namespace Castle.Igloo.Attributes
     public class OutjectAttribute : Attribute
     {
         private string _name = string.Empty;
-        private bool _needInstanciation = false;
         private bool _isRequired = false;
         private string _scope = ScopeType.UnSpecified;
 

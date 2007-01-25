@@ -90,6 +90,38 @@ namespace Castle.Igloo.Util
             }
             return attribute;
         }
+
+        /// <summary>
+        /// Determines whether the specified properties type has the <see cref="OutjectAttribute"/>.
+        /// </summary>
+        /// <param name="memberInfo">The <see cref="MemberInfo"/>.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified type has <see cref="OutjectAttribute"/>; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool HasOutjectAttribute(MemberInfo memberInfo)
+        {
+            OutjectAttribute attribute = Attribute.GetCustomAttribute(memberInfo, typeof(OutjectAttribute)) as OutjectAttribute;
+            if (attribute == null)
+            {
+                attribute = Attribute.GetCustomAttribute(memberInfo, typeof(OutjectAttribute), true) as OutjectAttribute;
+            }
+            return (attribute != null);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="OutjectAttribute"/> on properties.
+        /// </summary>
+        /// <param name="memberInfo">The <see cref="MemberInfo"/>.</param>
+        /// <returns>The attribute</returns>
+        public static OutjectAttribute GetOutjectAttribute(MemberInfo memberInfo)
+        {
+            OutjectAttribute attribute = Attribute.GetCustomAttribute(memberInfo, typeof(OutjectAttribute)) as OutjectAttribute;
+            if (attribute == null)
+            {
+                attribute = Attribute.GetCustomAttribute(memberInfo, typeof(OutjectAttribute), true) as OutjectAttribute;
+            }
+            return attribute;
+        }
         
         /// <summary>
         /// Determines whether the specified class type has the <see cref="ScopeAttribute"/>.

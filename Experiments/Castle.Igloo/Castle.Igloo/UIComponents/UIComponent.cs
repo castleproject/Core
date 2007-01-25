@@ -46,6 +46,7 @@ namespace Castle.Igloo.UIComponents
         
         public const string COMPONENT_SUFFIX = ".uicomponent";
         public const string VIEW_SUFFIX = "view.";
+        public const string UICOMPONENT_TO_REFRESH = "_UICOMPONENT_TO_REFRESH_";
 
         private string _name = string.Empty;
         private IKernel _kernel = null;
@@ -119,19 +120,19 @@ namespace Castle.Igloo.UIComponents
 
         
         /// <summary>
-        /// Inject context variable values into @In attributes
+        /// Inject context variable values into [Inject] attributes
         /// of a component instance.
         /// </summary>
-        /// <param name="instance">A NTie component instance.</param>
+        /// <param name="instance">A UI component instance.</param>
         public void Inject(Object instance)
         {
-            InjectMembers(instance);
+            InjectMembers(instance, true);
             InjectControllers(instance);
         }
 
 
         /// <summary>
-        /// Outject context variable values from @Out attributes
+        /// Outject context variable values from [Outject] attributes
         /// of a component instance.
         /// </summary>
         /// <param name="instance">A NTie component instance.</param>
@@ -141,17 +142,37 @@ namespace Castle.Igloo.UIComponents
             // TO DO Outject field
         }
 
+
         /// <summary>
-        /// TO DO Inject field
+        /// Injects the members.
         /// </summary>
-        /// <param name="instance"></param>
-        private void InjectMembers(Object instance)
+        /// <param name="instance">The instance.</param>
+        /// <param name="trackInjectedMembers">
+        /// if set to <c>true</c> tracks injected members so they can be refresh them on back call from controller method.
+        /// </param>
+        /// <remarks>TO DO Inject fields</remarks>
+        public void InjectMembers(Object instance, bool trackInjectedMembers)
         {
             if (NeedsInjection)
             {
-                TraceUtil.Log("injecting dependencies of : " + _name);
+                TraceUtil.Log("Injecting dependencies of : " + _name);
 
                 IScopeRegistry scopeRegistry = _kernel[typeof(IScopeRegistry)] as IScopeRegistry;
+
+                if (trackInjectedMembers)
+                {
+                    // Tracks the injected members so bijection interceptor
+                    // can refresh them on back call from controller method.
+                   //UIComponent, object
+                     IScope requestScope = scopeRegistry[ScopeType.Request];
+                     IDictionary<UIComponent, object> uiComponentToRefresh = (IDictionary<UIComponent, object>)requestScope[UIComponent.UICOMPONENT_TO_REFRESH];
+                     if (uiComponentToRefresh==null)
+                     {
+                         uiComponentToRefresh = new Dictionary<UIComponent, object>();
+                         requestScope[UICOMPONENT_TO_REFRESH] = uiComponentToRefresh;
+                     }
+                     uiComponentToRefresh.Add(this, instance);
+                }
 
                 foreach (KeyValuePair<InjectAttribute, PropertyInfo> kvp in InMembers)
                 {                   
@@ -165,7 +186,7 @@ namespace Castle.Igloo.UIComponents
                             instanceToInject = Activator.CreateInstance(propertyInfo.PropertyType);
 
                             IScope scope = scopeRegistry[kvp.Key.Scope];
-                            scope.Add(kvp.Key.Name, instanceToInject);
+                            scope[kvp.Key.Name] = instanceToInject;
                         }
                         else
                         {
@@ -202,8 +223,8 @@ namespace Castle.Igloo.UIComponents
         }
         
         /// <summary>
-        /// Retrieves the injected user IScope component and
-        /// the injected IController component on a view component
+        /// Retrieves the injected user context scoped object and
+        /// injected IController components on a view component
         /// </summary>
         /// <remarks>
         /// Today, only check injected properties memnbers

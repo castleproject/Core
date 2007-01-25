@@ -26,10 +26,16 @@ using Castle.MicroKernel;
 
 namespace Castle.Igloo.Contexts.Windows
 {
+    /// <summary>
+    /// Scopes a single component model to a single object instance per Castle IoC container.
+    /// </summary>
     public class SingletonScope : IScope
     {
         private IDictionary<string, object> _map = null;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingletonScope"/> class.
+        /// </summary>
         public SingletonScope()
         {
             _map = new Dictionary<string, object>();
@@ -47,7 +53,7 @@ namespace Castle.Igloo.Contexts.Windows
         }
 
         /// <summary>
-        /// Gets the <see cref="object"/> with the specified name.
+        /// Gets or sets the <see cref="object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public object this[string name]
@@ -63,16 +69,10 @@ namespace Castle.Igloo.Contexts.Windows
                     return null;
                 }
             }
-        }
-
-        /// <summary>
-        /// Adds an element with the provided key and value to the IScope object.
-        /// </summary>
-        /// <param name="name">The name of the element to add.</param>
-        /// <param name="instance">The Object to use as the value of the element to add.</param>
-        public void Add(string name, object instance)
-        {
-            _map[name] = instance;
+            set
+            {
+                _map[name] = value;
+            }
         }
 
         /// <summary>
@@ -112,16 +112,29 @@ namespace Castle.Igloo.Contexts.Windows
             throw new System.Exception("The method or operation is not implemented.");
         }
 
+        /// <summary>
+        /// Gets the type of the scope.
+        /// </summary>
+        /// <value>The type of the scope.</value>
         public string ScopeType
         {
             get { return Igloo.ScopeType.Singleton; }
         }
 
 
+        /// <summary>
+        /// Registers for eviction.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="instance">The instance.</param>
         public void RegisterForEviction(ILifestyleManager manager, ComponentModel model, object instance)
         {
         }
 
+        /// <summary>
+        /// Checks the initialisation.
+        /// </summary>
         public void CheckInitialisation()
         {
         }

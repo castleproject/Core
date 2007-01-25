@@ -27,6 +27,9 @@ using Castle.MicroKernel;
 
 namespace Castle.Igloo.Mock
 {
+    /// <summary>
+    /// Mock implementation of <see cref="IScope"/>
+    /// </summary>
     public abstract class MockScope : Dictionary<string, object> , IScope
     {
         private ReaderWriterLock _lock = null; 
@@ -51,22 +54,13 @@ namespace Castle.Igloo.Mock
         }
 
         /// <summary>
-        /// Gets the <see cref="object"/> with the specified name.
+        /// Gets or sets the <see cref="object"/> with the specified name.
         /// </summary>
         /// <value></value>
         public new object this[string name]
         {
             get { return Get(name); }
-        }
-
-        /// <summary>
-        /// Adds an element with the provided key and value to the IScope object.
-        /// </summary>
-        /// <param name="name">The name of the element to add.</param>
-        /// <param name="value">The Object to use as the value of the element to add.</param>
-        public new void Add(string name, object value)
-        {
-            Set(name, value);
+            set { Set(name, value); }
         }
 
         /// <summary>
@@ -178,7 +172,7 @@ namespace Castle.Igloo.Mock
             _lock.AcquireWriterLock(-1);
             try
             {
-               base.Add(key, value);
+               base[key] = value;
             }
             finally
             {
