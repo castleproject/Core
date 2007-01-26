@@ -185,6 +185,14 @@ You must provide an override if a component has a dependency on a service that i
             Assert.IsTrue(typeof(ReviewerRepository).IsInstanceOfType(repository), "Not ReviewerRepository!");
         }
 
+        [Test]
+        public void ComplexGenericConfiguration_GetRepositoryByIdAndType()
+        {
+            IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("ComplexGenericConfig.xml")));
+            IRepository<IReviewer> repository = container.Resolve<IRepository<IReviewer>>("generic.repository");
+            Assert.IsTrue(typeof(DemoRepository<IReviewer>).IsInstanceOfType(repository), "Not DemoRepository!");
+        }
+
 		[Test]
 		public void TestComponentLifestylePerGenericType()
 		{
