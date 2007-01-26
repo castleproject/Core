@@ -63,11 +63,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public override void Configure(IDictionary parameters)
 			{
-				string onSubmit = CommonUtils.ObtainEntryAndRemove(parameters, "onsubmit", "true");
+				string onSubmit = CommonUtils.ObtainEntryAndRemove(parameters, "on_submit", "true");
 				string stopOnFirst = CommonUtils.ObtainEntryAndRemove(parameters, "stopOnFirst", "false");
-				string immediate = CommonUtils.ObtainEntryAndRemove(parameters, "immediate", "false");
+				string immediate = CommonUtils.ObtainEntryAndRemove(parameters, "immediate", "true");
 				string focusOnError = CommonUtils.ObtainEntryAndRemove(parameters, "focusOnError", "true");
-				string useTitles = CommonUtils.ObtainEntryAndRemove(parameters, "useTitles", "false");
+				string useTitles = CommonUtils.ObtainEntryAndRemove(parameters, "useTitles", "true");
 				string onFormValidate = CommonUtils.ObtainEntryAndRemove(parameters, "onFormValidate");
 				string onElementValidate = CommonUtils.ObtainEntryAndRemove(parameters, "onElementValidate");
 

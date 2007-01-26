@@ -23,8 +23,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// #blockcomponent(AuthenticatedContent)
 	///	#logged
 	///   Welcome back $context.CurrentUser.Identity.Name
+	/// #end
 	/// #notlogged
 	///   Create your account by clicking here.
+	/// #end
 	/// #end
 	/// </code>
 	/// </summary>

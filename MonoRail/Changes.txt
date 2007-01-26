@@ -4,7 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Added 'noaction' parameter to FormHelper.FormTag to prevent action attribute generation
 - Added Select list from Enum.
+
 
 	in controller:
 		PropertyBag.Add("newsItemStateType",typeof(NewsItemStateEnum));
