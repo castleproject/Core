@@ -54,7 +54,18 @@ namespace Castle.Components.Binder.Tests
 
 			Assert.IsNotNull(instance);
 			Person p = (Person) instance;
-			Assert.AreEqual(p.DOB, new DateTime(2005, 12, 1));
+			Assert.AreEqual(new DateTime(2005, 12, 1), p.DOB);
+
+			args.Clear();
+			args.Add("person.DOBday", 2.ToString());
+			args.Add("person.DOBmonth", 1.ToString());
+			args.Add("person.DOByear", 2005.ToString());
+
+			instance = binder.BindObject(typeof(Person), "person", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			p = (Person) instance;
+			Assert.AreEqual(new DateTime(2005, 1, 2), p.DOB);
 		}
 
 		[Test]

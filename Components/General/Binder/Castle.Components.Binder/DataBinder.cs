@@ -767,7 +767,7 @@ namespace Castle.Components.Binder
 				int month = (int) RelaxedConvertLeafNode(typeof(int), monthNode, 0);
 				int year = (int) RelaxedConvertLeafNode(typeof(int), yearNode, 0);
 
-				fullDateTime = string.Format("{0,4}-{1,2}-{2,2}", year, month, day);
+				fullDateTime = string.Format("{0:0000}-{1:00}-{2:00}", year, month, day);
 				conversionSucceeded = true;
 			}
 
@@ -777,7 +777,7 @@ namespace Castle.Components.Binder
 				int minute = (int) RelaxedConvertLeafNode(typeof(int), minuteNode, 0);
 				int second = (int) RelaxedConvertLeafNode(typeof(int), secondNode, 0);
 
-				fullDateTime += string.Format("T{0,2}:{1,2}:{2,2}", hour, minute, second);
+				fullDateTime += string.Format("T{0:00}:{1:00}:{2:00}", hour, minute, second);
 				conversionSucceeded = true;
 			}
 
