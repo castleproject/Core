@@ -4,6 +4,13 @@ Change history
 Release Candidate 3
 ===================
 
+- Added Select list from Enum.
+
+	in controller:
+		PropertyBag.Add("newsItemStateType",typeof(NewsItemStateEnum));
+	in view:
+		$Form.Select("State",$newsItemStateType)
+
 - Applied Chris Ortman's patch adding MooHelper/JS generation based on it.
 
 - Applied Jacob Lewallen's patch adding virtuals to some FormHelper methods
