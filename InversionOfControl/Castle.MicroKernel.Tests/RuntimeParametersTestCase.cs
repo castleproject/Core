@@ -56,6 +56,21 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
+		public void WillAlwaysResolveCustomParameterFromServiceComponent()
+		{
+			kernel.AddComponent("compc", typeof(CompC));
+			Hashtable c_dependencies = new Hashtable();
+			c_dependencies["test"] = 15;
+			kernel.RegisterCustomDependencies(typeof(CompC), c_dependencies);
+			Hashtable b_dependencies = new Hashtable();
+			b_dependencies["myArgument"] = "foo";
+			kernel.RegisterCustomDependencies(typeof(CompB), b_dependencies);
+			CompB b = kernel["compb"] as CompB;
+			Assert.IsNotNull(b);
+			Assert.AreEqual(15, b.Compc.test);
+		}
+
+		[Test]
 		public void ResolveUsingParameters()
 		{
 			CompB compb = kernel.Resolve(typeof(CompB), deps) as CompB;
