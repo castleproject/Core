@@ -525,10 +525,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 	public class SimpleUser
 	{
+		public enum RegistrationEnum
+		{
+			unregistered = 1,
+			pending = 2,
+			registered = 6
+		}
+
 		private int id;
 		private String name;
 		private ArrayList roles = new ArrayList();
 		private bool isActive;
+		private RegistrationEnum registration;
 
 		public int Id
 		{
@@ -546,6 +554,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			get { return name; }
 			set { name = value; }
+		}
+
+		public RegistrationEnum Registration
+		{
+			get { return registration; }
+			set { registration = value; }
 		}
 
 		public Role[] RolesAsArray

@@ -40,6 +40,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			String textFormat = CommonUtils.ObtainEntryAndRemove(attributes, "textformat");
 			String valueFormat = CommonUtils.ObtainEntryAndRemove(attributes, "valueformat");
 
+			bool emptyValueCase = CheckForEmpyTextValueCase(dataSourceType);
+
 			if (dataSourceType == null)
 			{
 				// If the dataSourceType could not be obtained 
@@ -61,7 +63,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				return new SameTypeOperationState(dataSourceType, 
 				                                  initialSelection, dataSource,
-												  valueProperty, textProperty, textFormat, valueFormat, isInitialSelectionASet);
+												  emptyValueCase, valueProperty, textProperty, textFormat, valueFormat, isInitialSelectionASet);
 			}
 			else // types are different, most complex scenario
 			{
@@ -72,6 +74,15 @@ namespace Castle.MonoRail.Framework.Helpers
 													   sourceProperty, valueProperty, textProperty, textFormat, valueFormat, 
 				                                       isInitialSelectionASet);
 			}
+		}
+
+		private static bool CheckForEmpyTextValueCase(Type datasourceType)
+		{
+			if (typeof(Enum).IsAssignableFrom(datasourceType))
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private static Type ExtractType(object source)
@@ -168,7 +179,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		protected IEnumerator enumerator;
 
 		protected OperationState(Type type, IEnumerable dataSource, 
-			String valueProperty, String textProperty, String textFormat, String valueFormat)
+			bool emptyValueCase,String valueProperty, String textProperty, String textFormat, String valueFormat)
 		{
 			if (dataSource != null)
 			{
@@ -179,7 +190,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			this.textFormat = textFormat;
 			this.valueFormat = valueFormat;
 
-			if (valueProperty != null)
+			if (valueProperty != null || emptyValueCase) 
 			{
 				valuePropInfo = FormHelper.ValueGetterAbstractFactory.Create(type, valueProperty); // FormHelper.GetMethod(type, valueProperty);
 			}
@@ -255,7 +266,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		public static readonly NoIterationState Instance = new NoIterationState();
 
-		private NoIterationState() : base(null, null, null, null, null, null)
+		private NoIterationState() : base(null, null, false, null, null, null, null)
 		{
 		}
 
@@ -276,7 +287,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public ListDataSourceState(Type type, IEnumerable dataSource, String valueProperty,
 			String textProperty, String textFormat, String valueFormat, String customSuffix)
-			: base(type, dataSource, valueProperty, textProperty, textFormat, valueFormat)
+			: base(type, dataSource, false, valueProperty, textProperty, textFormat, valueFormat)
 		{
 			this.customSuffix = customSuffix;
 		}
@@ -314,8 +325,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		private readonly bool isInitialSelectionASet;
 
 		public SameTypeOperationState(Type type, object initialSelection, IEnumerable dataSource, 
-			String valueProperty, String textProperty, String textFormat, String valueFormat, bool isInitialSelectionASet)
-			: base(type, dataSource, valueProperty, textProperty, textFormat, valueFormat)
+			bool emptyValueCase,String valueProperty, String textProperty, String textFormat, String valueFormat, bool isInitialSelectionASet)
+			: base(type, dataSource, emptyValueCase, valueProperty, textProperty, textFormat, valueFormat)
 		{
 			this.initialSelection = initialSelection;
 			this.isInitialSelectionASet = isInitialSelectionASet;
@@ -360,7 +371,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			object initialSelection, IEnumerable dataSource, 
 			String sourceProperty, String valueProperty,
 			String textProperty, String textFormat, String valueFormat, bool isInitialSelectionASet)
-			: base(dataSourceType, dataSource, valueProperty, textProperty, textFormat, valueFormat)
+			: base(dataSourceType, dataSource, false, valueProperty, textProperty, textFormat, valueFormat)
 		{
 			this.initialSelection = initialSelection;
 			this.isInitialSelectionASet = isInitialSelectionASet;

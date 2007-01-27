@@ -944,51 +944,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region Select
 
-		internal class EnumValue
-		{
-			private string text = string.Empty;
-			private object value = null;
-
-			public EnumValue(string text, object value)
-			{
-				this.text = text;
-				this.value = value;
-			}
-
-			public object Value
-			{
-				get { return value; }
-				set { this.value = value; }
-			}
-
-			public string Text
-			{
-				get { return text; }
-				set { text = value; }
-			}
-		}
-
-		/// <summary>
-		/// Creates a <c>select</c> element and its <c>option</c>s based on an <c>Enum</c> type.
-		/// </summary>
-		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
-		/// <param name="enumType">The enum to create the datasource from</param>
-		/// <returns>The generated form element</returns>
-		public string Select(string target, Type enumType)
-		{
-			ArrayList datasource = new ArrayList();
-			foreach(object value in Enum.GetValues(enumType))
-			{
-				datasource.Add(new EnumValue(Enum.GetName(enumType, value), value));
-			}
-
-			Hashtable attributes = new Hashtable();
-			attributes.Add("value","Value");
-			attributes.Add("text", "Text");
-
-			return Select(target, datasource, attributes);
-		}
-
 		/// <summary>
 		/// Creates a <c>select</c> element and its <c>option</c>s based on the <c>dataSource</c>.
 		/// If the <c>dataSource</c>
@@ -1952,6 +1907,26 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		public class EnumValueGetter : ValueGetter
+		{
+			private Type enumType;
+
+			public EnumValueGetter(Type enumType)
+			{
+				this.enumType = enumType;
+			}
+
+			public override string Name
+			{
+				get { return string.Empty; }
+			}
+
+			public override object GetValue(object instance)
+			{
+				return Enum.Format(enumType, Enum.Parse(enumType, Convert.ToString(instance)), "d");
+			}
+		}
+
 		public class ValueGetterAbstractFactory
 		{
 			public static ValueGetter Create(Type targetType, string keyName)
@@ -1967,6 +1942,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				else if (targetType == typeof(DataRowView))
 				{
 					return new DataRowViewValueGetter(keyName);
+				}
+				else if(typeof(Enum).IsAssignableFrom(targetType))
+				{
+					return new EnumValueGetter(targetType);
 				}
 				else
 				{

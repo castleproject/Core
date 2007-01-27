@@ -5,13 +5,14 @@ Release Candidate 3
 ===================
 
 - Added 'noaction' parameter to FormHelper.FormTag to prevent action attribute generation
+
 - Added Select list from Enum.
 
-
 	in controller:
-		PropertyBag.Add("newsItemStateType",typeof(NewsItemStateEnum));
+		PropertyBag.Add("colors",Enum.GetValues(typeof(ColorEnum)));
+
 	in view:
-		$Form.Select("State",$newsItemStateType)
+		$Form.Select("Color", $colors)
 
 - Applied Chris Ortman's patch adding MooHelper/JS generation based on it.
 

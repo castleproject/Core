@@ -240,6 +240,16 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.Select("user.id", workTable.Rows, DictHelper.Create("value=custid", "text=name", "sourceProperty=id")));
 		}
 
+		[Test]
+		public void UsingEnums()
+		{
+			Assert.AreEqual(
+				"<select id=\"user_registration\" name=\"user.registration\" >" + Environment.NewLine + 
+				"<option value=\"1\">unregistered</option>" + Environment.NewLine + "<option value=\"2\">pending</option>" + Environment.NewLine + "<option value=\"6\">registered</option>" + Environment.NewLine + "</select>",
+				helper.Select("user.registration", Enum.GetValues(typeof(SimpleUser.RegistrationEnum))));
+		}			
+
+
 #if DOTNET2
 
 		[Test]
