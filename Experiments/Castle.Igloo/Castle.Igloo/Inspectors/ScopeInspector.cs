@@ -18,6 +18,8 @@
  ********************************************************************************/
 #endregion
 
+using System.Collections.Generic;
+using System.Reflection;
 using Castle.Core;
 using Castle.Igloo.ComponentActivator;
 using Castle.Igloo.Interceptors;
@@ -98,7 +100,10 @@ namespace Castle.Igloo
                     model.CustomLifestyle = typeof (ScopeLifestyleManager);
 
                     // Add the bijection interceptor
-                    model.Interceptors.AddFirst(new InterceptorReference(typeof (BijectionInterceptor)));
+                    if (NeedBijection(model))
+                    {
+                        model.Interceptors.AddFirst(new InterceptorReference(typeof (BijectionInterceptor)));
+                    }
                 }
                 model.ExtendedProperties.Add(SCOPE_ATTRIBUTE, scopeAttribute);
             }
@@ -110,8 +115,27 @@ namespace Castle.Igloo
                 model.CustomLifestyle = typeof(ScopeLifestyleManager);
 
                 // Add the bijection interceptor
-                model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
+                if (NeedBijection(model))
+                {
+                    model.Interceptors.AddFirst(new InterceptorReference(typeof(BijectionInterceptor)));
+                }
             }
+        }
+
+        private bool NeedBijection(ComponentModel model)
+        {
+            bool needBijection = false;
+            if ( model.ExtendedProperties[BijectionInspector.IN_MEMBERS]!=null )
+            {
+                IDictionary<InjectAttribute, PropertyInfo> inMembers = (IDictionary<InjectAttribute, PropertyInfo>)model.ExtendedProperties[BijectionInspector.IN_MEMBERS];
+                needBijection = inMembers.Count > 0;
+            }
+            if (model.ExtendedProperties[BijectionInspector.OUT_MEMBERS] != null && !needBijection)
+            {
+                IDictionary<OutjectAttribute, PropertyInfo> outMembers = (IDictionary<OutjectAttribute, PropertyInfo>)model.ExtendedProperties[BijectionInspector.OUT_MEMBERS];
+                needBijection = outMembers.Count > 0;
+            }
+            return needBijection;
         }
     }
 }

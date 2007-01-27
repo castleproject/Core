@@ -118,6 +118,7 @@
     <Compile Include="ComponentActivator\ScopeComponentActivator .cs" />
     <Compile Include="Inspectors\BijectionInspector.cs" />
     <Compile Include="Inspectors\ControllerInspector.cs" />
+    <Compile Include="Inspectors\IglooInspector.cs" />
     <Compile Include="Inspectors\ScopeInspector.cs" />
     <Compile Include="Interceptors\ProxyScopeInterceptor.cs" />
     <Compile Include="LifestyleManager\ScopeLifestyleManager.cs" />

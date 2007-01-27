@@ -20,11 +20,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Reflection;
 using System.Web;
 using Castle.Core.Configuration;
 using Castle.Igloo.Contexts.Windows;
+using Castle.Igloo.Inspectors;
 using Castle.Igloo.Mock;
 using Castle.Igloo.Scopes;
 using Castle.Igloo.Scopes.Web;
@@ -142,10 +142,10 @@ namespace Castle.Igloo
             if (current != null)
             {
                 // Web scope
-                Kernel.AddComponent(ScopeType.Application, typeof (IApplicationScope), typeof (WebApplicationScope));
-                Kernel.AddComponent(ScopeType.Page, typeof(IPageScope), typeof(WebPageScope));
                 Kernel.AddComponent(ScopeType.Request, typeof(IRequestScope), typeof(WebRequestScope));
+                Kernel.AddComponent(ScopeType.Page, typeof(IPageScope), typeof(WebPageScope));
                 Kernel.AddComponent(ScopeType.Session, typeof(ISessionScope), typeof(WebSessionScope));
+                Kernel.AddComponent(ScopeType.Application, typeof (IApplicationScope), typeof (WebApplicationScope));
             }
             else
             {
@@ -165,10 +165,8 @@ namespace Castle.Igloo
         private void RegisterContributor()
         {
             Kernel.ComponentModelBuilder.AddContributor(new ControllerInspector());
-            Kernel.ComponentModelBuilder.AddContributor(new ScopeInspector());
-            Kernel.ComponentModelBuilder.AddContributor(new BijectionInspector());
-            //Kernel.ComponentModelBuilder.AddContributor(new ScopeRegisterInspector());
-        }
+            Kernel.ComponentModelBuilder.AddContributor(new IglooInspector());
+       }
         
 	    private void RegisterViewComponent()
 		{
