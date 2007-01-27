@@ -115,8 +115,10 @@
     <Compile Include="Attributes\SkipNavigationAttribute.cs" />
     <Compile Include="Attributes\OutjectAttribute.cs" />
     <Compile Include="Attributes\ScopeAttribute.cs" />
-    <Compile Include="BijectionInspector.cs" />
     <Compile Include="ComponentActivator\ScopeComponentActivator .cs" />
+    <Compile Include="Inspectors\BijectionInspector.cs" />
+    <Compile Include="Inspectors\ControllerInspector.cs" />
+    <Compile Include="Inspectors\ScopeInspector.cs" />
     <Compile Include="Interceptors\ProxyScopeInterceptor.cs" />
     <Compile Include="LifestyleManager\ScopeLifestyleManager.cs" />
     <Compile Include="Mock\MockApplicationScope.cs" />
@@ -163,7 +165,6 @@
     <Compile Include="Scopes\IConversationManager.cs" />
     <Compile Include="Scopes\IScope.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\ControllerInspector.cs" />
     <Compile Include="Controllers\IController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -181,7 +182,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UIComponents\UIComponent.cs" />
-    <Compile Include="ScopeInspector.cs" />
     <Compile Include="Resource.cs">
       <SubType>Code</SubType>
     </Compile>
