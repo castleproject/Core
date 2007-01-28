@@ -57,7 +57,7 @@ namespace Igloo.Clinic.Application
             }
             else
             {
-                navigationState.Action = Castle.Igloo.Navigation.NavigationState.NO_NAVIGATION;
+                NavigationState.Action = Castle.Igloo.Navigation.NavigationState.NO_NAVIGATION;
                 flashMessages.Add("unknown", "Unknown login or bad password");
             }
             return (doctor != null);
@@ -77,7 +77,7 @@ namespace Igloo.Clinic.Application
             }
             else
             {
-                navigationState.Action = Castle.Igloo.Navigation.NavigationState.NO_NAVIGATION;
+                NavigationState.Action = Castle.Igloo.Navigation.NavigationState.NO_NAVIGATION;
                 flashMessages.Add("ALREADY", "login already exists.");
             }
             return (doctor == null);

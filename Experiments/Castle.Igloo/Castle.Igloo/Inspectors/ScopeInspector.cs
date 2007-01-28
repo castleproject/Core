@@ -32,7 +32,7 @@ using Castle.Igloo.Attributes;
 namespace Castle.Igloo
 {
     /// <summary>
-    /// Analyses <see cref="ScopeAttribute"/> on component.
+    /// Sets scope on component by analysing <see cref="ScopeAttribute"/> or configuration file.
     /// </summary>
     public class ScopeInspector : IContributeComponentModelConstruction
     {
@@ -137,6 +137,7 @@ namespace Castle.Igloo
             }
             return needBijection;
         }
+        
     }
 }
 

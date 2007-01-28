@@ -22,8 +22,24 @@ using System;
 
 namespace Castle.Igloo.Attributes
 {
+    /// <summary>
+    /// Marks a method as beginning a conversation. 
+    /// </summary>
     [AttributeUsageAttribute(AttributeTargets.Method)]
     public class BeginAttribute : Attribute
     {
+        private bool _nested = false;
+
+        /// <summary>
+        /// If enabled, and if a conversation is already active,
+        /// begin a nested conversation, instead of continuing
+        /// in the context of the existing conversation.
+        /// </summary>
+        /// <value><c>true</c> if nested; otherwise, <c>false</c>.</value>
+        public bool Nested
+        {
+            get { return _nested; }
+            set { _nested = value; }
+        }
     }
 }

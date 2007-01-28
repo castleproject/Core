@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Castle.Igloo.Navigation;
 using Castle.MicroKernel;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Scopes;
@@ -54,7 +55,8 @@ namespace Castle.Igloo.UIComponents
         private IDictionary<InjectAttribute, PropertyInfo> _inMembers = new Dictionary<InjectAttribute, PropertyInfo>();
         private IDictionary<OutjectAttribute, PropertyInfo> _outMembers = new Dictionary<OutjectAttribute, PropertyInfo>();
         private IList<PropertyInfo> _inControllers = new List<PropertyInfo>();
-
+        private PropertyInfo _inNavigationState = null;
+        
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -127,7 +129,7 @@ namespace Castle.Igloo.UIComponents
         public void Inject(Object instance)
         {
             InjectMembers(instance, true);
-            InjectControllers(instance);
+            InjectIOCComponnet(instance);
         }
 
 
@@ -198,8 +200,13 @@ namespace Castle.Igloo.UIComponents
             }
         }
 
-        private void InjectControllers(Object instance)
+        private void InjectIOCComponnet(Object instance)
         {
+            // Inject Navigation State
+            object navigationState = _kernel[_inNavigationState.PropertyType];
+            _inNavigationState.SetValue(instance, navigationState, null);
+
+            // Inject controllers
             foreach(PropertyInfo propertyInfo in _inControllers)
             {
                 object controller = _kernel[propertyInfo.PropertyType];
@@ -250,13 +257,17 @@ namespace Castle.Igloo.UIComponents
                 }
             }
             
-            // Inject attribute are ignored for IController component
+            // Retrieves IOC setter injection
             for (int i = 0; i < properties.Length; i++)
             {
                 if ( (typeof(IController).IsAssignableFrom(properties[i].PropertyType)) )
                 {
                     _inControllers.Add(properties[i]);
-                }                 
+                }
+                if ((typeof(NavigationState).IsAssignableFrom(properties[i].PropertyType)))
+                {
+                    _inNavigationState = properties[i];
+                }  
             }
         }
     }

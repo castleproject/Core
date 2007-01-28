@@ -24,14 +24,14 @@ using System.Collections.Specialized;
 using System.Configuration;
 using Castle.Core;
 using Castle.Igloo.LifestyleManager;
-using Castle.Igloo.Navigation;
 using Castle.Igloo.Util;
 using Castle.MicroKernel;
 
 namespace Castle.Igloo.Scopes.Web
 {
     /// <summary>
-    /// Implementation of <see cref="IScope"/> that scopes a single component model to the lifecycle of a single HTTP request; 
+    /// Implementation of <see cref="IScope"/> that scopes a single component model 
+    /// to the lifecycle of a single HTTP request; 
     /// </summary>
     public sealed class WebRequestScope : IRequestScope
     {
@@ -46,9 +46,6 @@ namespace Castle.Igloo.Scopes.Web
         {
             if (!WebUtil.GetCurrentHttpContext().Items.Contains(INIT_REQUEST_CONTEXT))
             {
-                NavigationState navigationState = new NavigationState();
-                WebUtil.GetCurrentHttpContext().Items.Add(REQUEST_SCOPE_SUFFIX+NavigationState.NAVIGATION_STATE, navigationState);
-
                 WebUtil.GetCurrentHttpContext().Items.Add(COMPONENT_NAMES, new StringCollection());
 
                 WebUtil.GetCurrentHttpContext().Items.Add(INIT_REQUEST_CONTEXT, INIT_REQUEST_CONTEXT);

@@ -27,7 +27,13 @@ namespace Castle.Igloo.UI
 	/// </summary>
 	public interface IViewManager
 	{
-
+        /// <summary>
+        /// Gets the view id.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        string GetView(string path);
+	    
         /// <summary>
         /// Gets the next view.
         /// </summary>

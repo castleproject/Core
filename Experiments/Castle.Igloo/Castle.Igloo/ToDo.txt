@@ -1,49 +1,4 @@
 
-
-
 To Do
 ========
-- Gérer le ISessionContext comme des proxys de base et ne plus passer par IContexts
-- Faire un ScoppeInterceptor comme Spring
-- Permettre de rajouter des custom Scope et faire un bootsrap pour les ajouter comme spring
 
-- Gérer les Outject attribute
-- Renumer Iglu --> Iglue ?
-
-- Créer un httModule qui fait les injection ds les pages, user control, master page
-  (pas sur que c'est possible)
-
-- Est ce qu'on pourait pas faire un objectDatasource qui appelle directement un controller
- comme ce que m'a montrer gabriel
-  http://saftsack.fs.uni-bayreuth.de/~dun3/archives/trying-to-enhance-objectdatasource/60.html
- Voir Paul Winston, LLBLGen qui fournissent des ObjectDataSource (dérive de  DataSourceControl)
- http://www.codeproject.com/useritems/FolderContentsDataSource.asp
- http://www.manuelabadia.com/blog/default.aspx
- http://msdn2.microsoft.com/en-us/library/system.web.ui.datasourcecontrol.aspx
- http://msdn2.microsoft.com/en-us/library/system.web.ui.idatasource.aspx
- 
-- Gérer les conversation comme Seam
-    Sauvegarde du conversation id ds un champ hidden http://www.codeproject.com/useritems/PageStatePersister.asp
-    ClientScript.RegisterHiddenField("__CONVERSATION_ID_", id.ToString());
-	http://www.hanselman.com/blog/MakingTheASPNETMobileControlsRenderRTLLanguages.aspx  
-	http://www.microsoft.com/germany/msdn/solve/knowhow/howto/java/ImplementierungDesSynchronizerTokenPattern.mspx +++  
-	Google ClientScript.RegisterHiddenField
-	
-	http://72.14.221.104/search?q=cache:XK8DwBd9LPAJ:lists.ximian.com/pipermail/mono-patches/2006-August/078374.html+pageadapter+ClientScript.RegisterHiddenField&hl=fr&gl=fr&ct=clnk&cd=4
-	http://www.codeproject.com/useritems/PageStatePersister.asp.
-	http://knowledge-base.havit.cz/asp-net/
-	
- Fait
- =====
-- Ajouter une interafec INeedInjection
-- Supprimer IState, IStatePersister usage
-- Utiliser un Inspector comme AutomaticSessionInspector pour enforcer le lifecycle et l'intercepteur
- Navigation sur les controlleurs
-- Faire un context resolver qui va chercher dans tous les IContexts une instance
-- PageContext
-- Renomer WebFormView en Page (cf Spring.Web.UI.Page)
-- Ajouter Messages
-- NoNavigation attribute
-
- 
- http://www.microsoft.com/france/msdn/aspnet/10-pieges-a-eviter.mspx

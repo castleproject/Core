@@ -27,8 +27,6 @@ namespace Igloo.Clinic.Test
         private ISessionScope _sessionScope = null;
         private IPageScope _pageScope = null;
     
-        private NavigationState _navigationState = null;
-
 		#region SetUp & TearDown
 
 		/// <summary>
@@ -64,10 +62,6 @@ namespace Igloo.Clinic.Test
             _sessionScope = _container.Resolve<ISessionScope>();
             _pageScope = _container.Resolve<IPageScope>();
             _requestScope = _container.Resolve<IRequestScope>();
-
-            ((MockRequestScope)_requestScope).Reset();
-            
-            _navigationState = _requestScope[NavigationState.NAVIGATION_STATE] as NavigationState;
         }
 
         /// <summary>
@@ -107,16 +101,16 @@ namespace Igloo.Clinic.Test
             LoginController controller = _container.Resolve<LoginController>();
 
             Assert.IsNotNull(controller);
-            Assert.IsNotNull(_navigationState);
+            Assert.IsNotNull(controller.NavigationState);
 
-            _navigationState.CurrentView = "login";
-            _navigationState.Action = "login";
+            controller.NavigationState.CurrentView = "login";
+            controller.NavigationState.Action = "login";
 
             controller.Validate("no", "xxxx");
 
-            Assert.AreEqual("login", _navigationState.PreviousView);
-            Assert.AreEqual("login", _navigationState.CurrentView);
-            Assert.AreEqual("index", _navigationState.NextView);
+            Assert.AreEqual("login", controller.NavigationState.PreviousView);
+            Assert.AreEqual("login", controller.NavigationState.CurrentView);
+            Assert.AreEqual("index", controller.NavigationState.NextView);
         }
 
         /// <summary>
@@ -129,8 +123,8 @@ namespace Igloo.Clinic.Test
 
             Assert.IsNotNull(controller);
 
-            _navigationState.CurrentView = "login";
-            _navigationState.Action = "login";
+            controller.NavigationState.CurrentView = "login";
+            controller.NavigationState.Action = "login";
 
             Assert.IsTrue(controller.Validate("no", "xxxx"));
 
@@ -153,8 +147,8 @@ namespace Igloo.Clinic.Test
 
             Assert.IsNotNull(controller);
 
-            _navigationState.CurrentView = "login";
-            _navigationState.Action = "login";
+            controller.NavigationState.CurrentView = "login";
+            controller.NavigationState.Action = "login";
 
             Assert.IsFalse(controller.Validate("Ali Baba and the Forty Thieves", "xxxx"));
 
@@ -164,9 +158,9 @@ namespace Igloo.Clinic.Test
             
             Assert.IsTrue(messages.ContainsKey("unknown"));
 
-            Assert.AreEqual("login", _navigationState.PreviousView);
-            Assert.AreEqual("login", _navigationState.CurrentView);
-            Assert.AreEqual("login", _navigationState.NextView);
+            Assert.AreEqual("login", controller.NavigationState.PreviousView);
+            Assert.AreEqual("login", controller.NavigationState.CurrentView);
+            Assert.AreEqual("login", controller.NavigationState.NextView);
 
         }
 

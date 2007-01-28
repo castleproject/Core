@@ -43,8 +43,10 @@ namespace Castle.Igloo.Inspectors
         public void ProcessModel(IKernel kernel,ComponentModel model)
         {
             // Ensures that the 2 inspectors are done in this order
+            
             BijectionInspector bijectionInspector = new BijectionInspector();
             bijectionInspector.ProcessModel(kernel, model);
+            
             ScopeInspector scopeInspector = new ScopeInspector();
             scopeInspector.ProcessModel(kernel, model);
         }

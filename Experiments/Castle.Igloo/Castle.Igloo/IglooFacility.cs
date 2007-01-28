@@ -26,6 +26,7 @@ using Castle.Core.Configuration;
 using Castle.Igloo.Contexts.Windows;
 using Castle.Igloo.Inspectors;
 using Castle.Igloo.Mock;
+using Castle.Igloo.Navigation;
 using Castle.Igloo.Scopes;
 using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.Scopes.Windows;
@@ -76,8 +77,10 @@ namespace Castle.Igloo
 			
             // Added a UIComponent Repository to track it
             Kernel.AddComponent("component.repository", typeof(UIComponentRepository));
-            
-            RegisterInternaleScopes();
+
+            Kernel.AddComponent("Navigation.State", typeof(NavigationState));
+
+            AddInternalScope();
             
             // Added interceptors
             Kernel.AddComponent("navigation.interceptor", typeof(NavigationInterceptor));
@@ -112,19 +115,22 @@ namespace Castle.Igloo
         /// state may have became valid, so we check them
         private void CheckWaitingList()
         {
-            IList<IHandler> handlersToRemove = new List<IHandler>();
+            IList<IHandler> handlersToRegister = new List<IHandler>();
 
             foreach (IHandler handler in _waitListHandlers)
             {
                 if (handler.CurrentState == HandlerState.Valid)
                 {
-                    RegisterScope(handler.ComponentModel.Name);
-                    handlersToRemove.Add(handler);
+                    handlersToRegister.Add(handler);
                 }
             }
-            foreach (IHandler handler in handlersToRemove)
+            foreach (IHandler handler in handlersToRegister)
             {
                _waitListHandlers.Remove(handler);
+            }
+            foreach (IHandler handler in handlersToRegister)
+            {
+                RegisterScope(handler.ComponentModel.Name);
             }
         }
 
@@ -135,8 +141,13 @@ namespace Castle.Igloo
             scopeRegistry.RegisterScope(scopeName, scope);
         }
 
-	    private void RegisterInternaleScopes()
+	    private void AddInternalScope()
         {
+            // Windows scope
+            Kernel.AddComponent(ScopeType.Thread, typeof(IScope), typeof(ThreadScope));
+            Kernel.AddComponent(ScopeType.Singleton, typeof(IScope), typeof(SingletonScope));
+            Kernel.AddComponent(ScopeType.Transient, typeof(IScope), typeof(TransientScope));
+	        
             // For unit test
             HttpContext current = HttpContext.Current;
             if (current != null)
@@ -155,11 +166,6 @@ namespace Castle.Igloo
                 Kernel.AddComponent(ScopeType.Request, typeof(IRequestScope), typeof(MockRequestScope));
                 Kernel.AddComponent(ScopeType.Session, typeof(ISessionScope), typeof(MockSessionScope));
             }
-
-            // Windows scope
-            Kernel.AddComponent(ScopeType.Thread, typeof(IScope), typeof(ThreadScope));
-            Kernel.AddComponent(ScopeType.Singleton, typeof(IScope), typeof(SingletonScope));
-            Kernel.AddComponent(ScopeType.Transient, typeof(IScope), typeof(TransientScope));
         }
 
         private void RegisterContributor()

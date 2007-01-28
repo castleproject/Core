@@ -52,7 +52,6 @@ namespace Castle.Igloo.UI.Web
         /// <summary>
         /// Gets the current NavigationContext.
         /// </summary>
-        [Inject(Name = NavigationState.NAVIGATION_STATE, Scope = ScopeType.Request, Create = true)]
         public NavigationState NavigationState
         {
             get { return _navigationState; }

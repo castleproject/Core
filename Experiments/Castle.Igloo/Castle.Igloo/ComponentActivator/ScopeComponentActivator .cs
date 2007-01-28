@@ -64,9 +64,9 @@ namespace Castle.Igloo.ComponentActivator
         /// <returns></returns>
         protected override object CreateInstance(CreationContext context, object[] arguments, Type[] signature)
         {
-            //ProxyGenerationOptions options = new ProxyGenerationOptions();
-            //DefaultScopedObject scopedObject = new DefaultScopedObject(Kernel, ProxyScopeInterceptor.TARGET_NAME_PREFIX+Model.Name);
-            //options.AddMixinInstance(scopedObject);
+            ProxyGenerationOptions options = new ProxyGenerationOptions();
+            DefaultScopedObject scopedObject = new DefaultScopedObject(Kernel, ProxyScopeInterceptor.TARGET_NAME_PREFIX+Model.Name);
+            options.AddMixinInstance(scopedObject);
 
             IInterceptor interceptor = new ProxyScopeInterceptor(Model, Kernel);
 
@@ -85,11 +85,11 @@ namespace Castle.Igloo.ComponentActivator
             }
             else
             {
-                //object instance = _generator.CreateClassProxy(Model.Service, interfaces, options, interceptor);
+                object instance = _generator.CreateClassProxy(Model.Service, interfaces, options, interceptor);
 
                 TraceUtil.Log("Return a proxy scope for component : " + Model.Name);
 
-                return new NotImplementedException();  
+                return instance;  
             }
         }
 

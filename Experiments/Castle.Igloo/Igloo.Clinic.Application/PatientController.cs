@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Castle.Igloo;
 using Castle.Igloo.Attributes;
 using Castle.Igloo.Scopes.Web;
 using Castle.Igloo.Controllers;
@@ -13,6 +14,7 @@ namespace Igloo.Clinic.Application
         private IPageScope _pageScope = null;
         private IList<Patient> _patients = null;
         private IPatientService _patientService = null;
+        private DrugCollection _drugs;
 
         public IPageScope PageScope
         {
@@ -23,6 +25,12 @@ namespace Igloo.Clinic.Application
         public Doctor Doctor
         {
             set { _doctor = value; }
+        }
+
+        [Outject(Scope = ScopeType.Session)]
+        public DrugCollection Drugs
+        {
+            get { return _drugs; }
         }
 
         [Inject]
@@ -75,6 +83,14 @@ namespace Igloo.Clinic.Application
         public virtual void DeletePatient(int index)
         {
             _patients.RemoveAt(index);
+        }
+
+        [Begin]
+        public virtual void Checkout()
+        {
+            _drugs = new DrugCollection();
+            Drug drug = new Drug(1, "name", "description");
+            _drugs.Add(drug);
         }
     }
 }

@@ -97,7 +97,7 @@ namespace Castle.Igloo.Configuration
 		{		
 			foreach( XmlNode currentNode in configNode.SelectNodes( NODE_COMMANDS_XPATH ) )
 			{
-				CommandsSetting setting = new CommandsSetting( currentNode );
+				ActionsSetting setting = new ActionsSetting( currentNode );
 				_mappings.Add( setting.View, setting );
 			}
 		}
@@ -197,10 +197,10 @@ namespace Castle.Igloo.Configuration
 			}
 			else
 			{
-				CommandsSetting setting= null;
+				ActionsSetting setting= null;
 				if( _mappings.Contains( viewID ) )
 				{
-					setting = _mappings[viewID] as CommandsSetting;
+					setting = _mappings[viewID] as ActionsSetting;
 				}
 				else
 				{

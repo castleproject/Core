@@ -30,17 +30,17 @@ namespace Castle.Igloo.Controllers
     [Scope(Scope = ScopeType.Request)]
     public abstract class BaseController : IController
     {
-        protected NavigationState navigationState = null;
+        private NavigationState _navigationState = null;
         protected FlashMessages flashMessages = null;
-
+        
         /// <summary>
         /// Sets the navigation context.
         /// </summary>
         /// <value>The navigation context.</value>
-        [Inject(Name = NavigationState.NAVIGATION_STATE, Scope = ScopeType.Request, Create = true)]
         public NavigationState NavigationState
         {
-            set { navigationState = value; }
+            get { return _navigationState; }
+            set { _navigationState = value; }
         }
 
         /// <summary>

@@ -31,7 +31,17 @@ namespace Castle.Igloo.UI.Web
 	{   
 		#region IViewManager members
 
-	            /// <summary>
+	    /// <summary>
+        /// Gets the view id.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public string GetView(string path)
+        {
+            return ConfigUtil.Settings.GetView(path);
+        }
+	    
+	    /// <summary>
         /// Gets the next view.
         /// </summary>
         /// <param name="navigationState">The navigation context.</param>

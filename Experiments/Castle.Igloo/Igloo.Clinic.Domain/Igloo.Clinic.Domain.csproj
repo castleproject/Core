@@ -35,6 +35,8 @@
   <ItemGroup>
     <Compile Include="Cart.cs" />
     <Compile Include="Doctor.cs" />
+    <Compile Include="Drug.cs" />
+    <Compile Include="DrugCollection.cs" />
     <Compile Include="ICart.cs" />
     <Compile Include="Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -39,7 +39,7 @@ namespace Igloo.Clinic.Web.Views
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-
+            _patientController.Checkout();
         }
     }
 }

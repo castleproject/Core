@@ -22,6 +22,9 @@ using System;
 
 namespace Castle.Igloo.Attributes
 {
+    /// <summary>
+    /// Marks a method as ending a conversation.
+    /// </summary>
     [AttributeUsageAttribute(AttributeTargets.Method)]
     public class EndAttribute : Attribute
     {

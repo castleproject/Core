@@ -55,6 +55,7 @@ namespace Castle.Igloo.Attributes
 
         /// <summary>S
         /// Specifies the scope to outject to.
+        /// If it ist not defined, the Request scope is used.
         /// </summary>
         public string Scope
         {

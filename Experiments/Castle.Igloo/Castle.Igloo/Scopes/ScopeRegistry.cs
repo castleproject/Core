@@ -45,7 +45,7 @@ namespace Castle.Igloo.Scopes
 
             if (_scopes.ContainsKey(scopeName) || ScopeType.UnSpecified.Equals(scopeName))
             {
-                throw new ArgumentException("Cannot replace existing scopes.");
+                throw new ArgumentException("Cannot replace existing scopes : " + scopeName);
             }
             _scopes.Add(scopeName, scope);
         }

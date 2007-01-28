@@ -45,7 +45,10 @@ namespace Castle.Igloo.Interceptors
             _componentName = TARGET_NAME_PREFIX + model.Name;
             _kernel = kernel;
 
-            kernel.AddComponent(_componentName, model.Service, model.Implementation);
+            if (!kernel.HasComponent(_componentName))
+            {
+                kernel.AddComponent(_componentName, model.Service, model.Implementation);      
+            }
         }
 
         /// <summary>

@@ -9,5 +9,5 @@
        <HeaderStyle BackColor="#4A3C8C" Font-Bold="True" ForeColor="#F7F7F7" />
        <AlternatingRowStyle BackColor="#F7F7F7" />
     </asp:GridView>
-    <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Button" />
+    <asp:Button ID="Button1" runat="server" CommandName="searchDrug" OnClick="Button1_Click" Text="View drug" />
 </asp:Content>

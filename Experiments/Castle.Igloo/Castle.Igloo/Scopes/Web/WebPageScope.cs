@@ -38,21 +38,22 @@ namespace Castle.Igloo.Scopes.Web
     {
         public const string PAGE_SCOPE_SUFFIX = "page.";
 
-        private IRequestScope _requestScope = null;
         private ISessionScope _sessionScope = null;
+        private NavigationState _navigationState = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebPageScope"/> class.
         /// </summary>
         /// <param name="sessionContest">The session contest.</param>
-        /// <param name="requestScope">The request context.</param>
-        public WebPageScope(ISessionScope sessionContest, IRequestScope requestScope)
+        /// <param name="navigationState">State of the navigation.</param>
+        public WebPageScope(ISessionScope sessionContest, 
+                            NavigationState navigationState)
         {
             AssertUtils.ArgumentNotNull(sessionContest, "sessionContest");
-            AssertUtils.ArgumentNotNull(requestScope, "requestScope");
+            AssertUtils.ArgumentNotNull(navigationState, "navigationState");
 
             _sessionScope = sessionContest;
-            _requestScope = requestScope;
+            _navigationState = navigationState;
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <value>The navigation context.</value>
         private NavigationState NavigationState
         {
-            get { return (NavigationState)_requestScope[NavigationState.NAVIGATION_STATE]; }
+            get { return _navigationState; }
         }
         
         #region IPageContext Members
@@ -72,7 +73,7 @@ namespace Castle.Igloo.Scopes.Web
         /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
         public bool IsActive
         {
-            get { return NavigationState != null; }
+            get { return WebUtil.GetCurrentHttpContext() != null; }
         }
                
  

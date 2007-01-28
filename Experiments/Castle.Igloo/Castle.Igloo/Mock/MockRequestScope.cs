@@ -18,18 +18,12 @@
  ********************************************************************************/
 #endregion
 
-using Castle.Igloo.Navigation;
 using Castle.Igloo.Scopes.Web;
 
 namespace Castle.Igloo.Mock
 {
     public class MockRequestScope : MockScope, IRequestScope
     {
-        public void Reset()
-        {
-            NavigationState navigationState = new NavigationState();
-            Add(NavigationState.NAVIGATION_STATE, navigationState);
-        }
 
         /// <summary>
         /// Gets the type of the scope.

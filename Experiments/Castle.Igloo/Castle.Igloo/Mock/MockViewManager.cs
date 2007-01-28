@@ -33,6 +33,16 @@ namespace Castle.Igloo.Mock
         #region IViewManager Members
 
         /// <summary>
+        /// Gets the view id.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public string GetView(string path)
+        {
+            return ConfigUtil.Settings.GetView(path);
+        }
+	    
+        /// <summary>
         /// Activates a specified view.
         /// </summary>
         /// <param name="navigator">The navigator.</param>

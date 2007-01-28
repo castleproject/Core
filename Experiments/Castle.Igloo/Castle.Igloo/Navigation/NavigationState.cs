@@ -20,15 +20,15 @@
 
 using System.Web;
 using Castle.Igloo.Attributes;
-using Castle.Igloo.Configuration;
+using Castle.Igloo.UI;
 
 namespace Castle.Igloo.Navigation
 {
     /// <summary>
     /// Contains data for processing navigation
     /// </summary>
-    [Scope(Scope = ScopeType.Request)]
-    public sealed class NavigationState 
+    [Scope(Scope = ScopeType.Request, UseProxy = true)]
+    public class NavigationState 
     {
         public const string NO_NAVIGATION = "\002NO_NAVIGATION\002";
         public const string NAVIGATION_STATE = "_NAVIGATION_STATE_";
@@ -41,15 +41,24 @@ namespace Castle.Igloo.Navigation
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationState"/> class.
         /// </summary>
+        /// <remarks>Used when build proxy scope component</remarks>
         public NavigationState()
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationState"/> class.
+        /// </summary>
+        public NavigationState(IViewManager viewManager)
         {
             HttpContext currentContext = HttpContext.Current;
             if (currentContext != null)
             {
-                _currentView = ConfigUtil.Settings.GetView(currentContext.Request.Path);
+                _currentView = viewManager.GetView(currentContext.Request.Path);
+                    //ConfigUtil.Settings.GetView(currentContext.Request.Path);
                 if (currentContext.Request.UrlReferrer != null)
                 {
-                    _previousView = ConfigUtil.Settings.GetView(currentContext.Request.UrlReferrer.LocalPath);
+                    _previousView = viewManager.GetView(currentContext.Request.UrlReferrer.LocalPath);
+                        //ConfigUtil.Settings.GetView(currentContext.Request.UrlReferrer.LocalPath);
                 }
             }
         }
@@ -58,7 +67,7 @@ namespace Castle.Igloo.Navigation
         /// Gets or sets the action value. This value determines 
         /// which view is the next view in the navigation graph.
         /// </summary>
-        public string Action
+        public virtual string Action
         {
             get { return _action; }
             set { _action = value; }
@@ -67,7 +76,7 @@ namespace Castle.Igloo.Navigation
         /// <summary>
         /// Gets or sets the current view name.
         /// </summary>
-        public string CurrentView
+        public virtual string CurrentView
         {
             get { return _currentView; }
             set { _currentView = value; }
@@ -76,7 +85,7 @@ namespace Castle.Igloo.Navigation
         /// <summary>
         /// Gets or sets the previous view.
         /// </summary>
-        public string PreviousView
+        public virtual string PreviousView
         {
             get { return _previousView; }
             set { _previousView = value; }

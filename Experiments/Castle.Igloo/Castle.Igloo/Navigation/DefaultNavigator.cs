@@ -25,10 +25,11 @@ using Castle.Igloo.Util;
 namespace Castle.Igloo.Navigation
 {
 	/// <summary>
-    /// DefaultNavigator.
+    /// <see cref="INavigator"/> implemenattion that follows page flow defines
+    /// in app.config.
 	/// </summary>
     [Scope(Scope = ScopeType.Request)]
-	public class DefaultNavigator : INavigator
+	public class GraphNavigator : INavigator
 	{
 		private IViewManager _viewManager = null;
         private NavigationState _navigationState = null;
@@ -37,7 +38,7 @@ namespace Castle.Igloo.Navigation
 		/// Constructor
 		/// </summary>
 		/// <param name="viewManager">A view manager</param>
-        public DefaultNavigator(IViewManager viewManager)
+        public GraphNavigator(IViewManager viewManager)
 		{
             AssertUtils.ArgumentNotNull(viewManager, "viewManager");
 		    
@@ -51,7 +52,6 @@ namespace Castle.Igloo.Navigation
         /// The current Navigation Context.
         /// </summary>
         /// <value></value>
-        [Inject(Name = NavigationState.NAVIGATION_STATE, Scope = ScopeType.Request, Create = true)]
         public NavigationState NavigationState
         {
             get { return _navigationState; }
@@ -59,7 +59,7 @@ namespace Castle.Igloo.Navigation
         }
 
 		/// <summary>
-		/// Natvigate to the next view.
+		/// Navigate to the next view.
 		/// </summary>
 		public void Navigate()
 		{

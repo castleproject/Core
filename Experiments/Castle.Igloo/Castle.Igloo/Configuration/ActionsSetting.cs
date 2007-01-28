@@ -27,7 +27,7 @@ namespace Castle.Igloo.Configuration
 	/// <summary>
 	/// Represents a commands configuration file.
 	/// </summary>
-	public class CommandsSetting
+	public class ActionsSetting
 	{
 		/// <summary>
 		/// Key used to retrieve command configuation element.
@@ -70,7 +70,7 @@ namespace Castle.Igloo.Configuration
 		/// Initializes an instance of the NodeSettings class using the specified configNode.
 		/// </summary>
 		/// <param name="configNode">The XmlNode from the configuration file.</param>
-		public CommandsSetting(XmlNode configNode)
+        public ActionsSetting(XmlNode configNode)
 		{
 			XmlNode currentAttribute = configNode.Attributes[ATTRIBUTE_VIEW];
 			if( currentAttribute.Value.Trim().Length > 0  )

@@ -147,7 +147,7 @@
     <Compile Include="Scopes\Windows\ThreadScope.cs" />
     <Compile Include="Scopes\Windows\TransientScope.cs" />
     <Compile Include="UIComponents\UIComponentRepository.cs" />
-    <Compile Include="Configuration\CommandsSetting.cs">
+    <Compile Include="Configuration\ActionsSetting.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\ConfigurationSectionHandler.cs">
