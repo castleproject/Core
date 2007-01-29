@@ -30,5 +30,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return Controller.UrlBuilder.BuildUrl(Controller.Context.UrlInfo, parameters);
 		}
+
+		public string Link(string innerContent, IDictionary parameters)
+		{
+			return "<a href=\"" + For(parameters) + "\">" + innerContent + "</a>";
+		}
+
+		public string Link(string innerContent, IDictionary parameters, IDictionary anchorAttributes)
+		{
+			return "<a " + GetAttributes(anchorAttributes) + " href=\"" + For(parameters) + "\">" + innerContent + "</a>";
+		}
 	}
 }

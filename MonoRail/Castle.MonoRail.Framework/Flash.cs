@@ -70,7 +70,7 @@ namespace Castle.MonoRail.Framework
 
 			if (keep.Count == 0)
 			{
-				this.Clear();
+				Clear();
 			}
 			else
 			{
