@@ -88,6 +88,14 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns><c>true</c> if the user modified the <c>currentState</c> in any way</returns>
 		public bool OnFlushDirty(object entity, object id, object[] currentState, object[] previousState, string[] propertyNames, IType[] types)
 		{
+			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+			if (hookTarget != null)
+			{
+				return hookTarget.OnFlushDirty(id, new DictionaryAdapter(propertyNames, previousState), new DictionaryAdapter(propertyNames, currentState), types);
+			}
+
+
 			return false;
 		}
 

@@ -113,6 +113,20 @@ namespace Castle.ActiveRecord
 			return null;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="previousState"></param>
+		/// <param name="currentState"></param>
+		/// <param name="types"></param>
+		/// <returns></returns>
+		protected virtual internal bool OnFlushDirty(object id, IDictionary previousState, IDictionary currentState,
+		                                           IType[] types)
+		{
+			return false;
+		}
+
 		#region ILifecycle
 
 		LifecycleVeto ILifecycle.OnSave(ISession session)

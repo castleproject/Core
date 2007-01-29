@@ -26,6 +26,7 @@ namespace Castle.ActiveRecord.Framework
 		private int _tablesize;
 		private Entry[] _table;
 		private object[] _values;
+		private string[] _keys;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DictionaryAdapter"/> class.
@@ -37,6 +38,7 @@ namespace Castle.ActiveRecord.Framework
 			_tablesize = names.Length;
 			_table = new Entry[_tablesize];
 			_values = values;
+			_keys = names;
 
 			for(int i=0; i<_tablesize; i++)
 			{
@@ -179,7 +181,10 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns>An <see cref="T:System.Collections.ICollection"></see> object containing the keys of the <see cref="T:System.Collections.IDictionary"></see> object.</returns>
 		public ICollection Keys
 		{
-			get { throw new NotSupportedException(); }
+			get			
+			{
+				return _keys;
+			}
 		}
 
 		/// <summary>
@@ -220,6 +225,9 @@ namespace Castle.ActiveRecord.Framework
 		{
 			get 
 			{
+				if (_values == null || _values.Length.Equals(0))
+					return null;
+
 				int index = GetValuesIndexByKey(key);
 
 				if (index >= 0)
