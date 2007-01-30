@@ -401,7 +401,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				foreach(String key in controller.Resources.Keys)
 				{
-					innerContext.Add(key, controller.Resources[key]);
+					innerContext[key] = controller.Resources[key];
 				}
 			}
 
@@ -438,13 +438,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			foreach(object helper in builtInHelpers)
 			{
-				innerContext.Add(helper.GetType().GetGenericArguments()[0].Name, helper);
+				innerContext[helper.GetType().GetGenericArguments()[0].Name] = helper;
 			}
 #endif
 
 			foreach(object key in controller.Helpers.Keys)
 			{
-				innerContext.Add(key, controller.Helpers[key]);
+				innerContext[key] = controller.Helpers[key];
 			}
 
 			// Adding flash as a collection and each individual item
