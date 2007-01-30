@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { lastName = value; }
 		}
 
-		[OneToOne(Constrained=true)]
+		[OneToOne]
 		public Award Award
 		{
 			get { return award; }
@@ -84,7 +84,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			this.employee = employee;
 		}
 
-		[OneToOne]
+		[OneToOne(Constrained=true)]
 		public Employee Employee
 		{
 			get { return employee; }

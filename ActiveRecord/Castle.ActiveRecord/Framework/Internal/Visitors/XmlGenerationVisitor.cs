@@ -510,7 +510,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			String cascade = TranslateCascadeEnum(model.OneToOneAtt.Cascade);
 
-			AppendF("<one-to-one{0}{1}{2}{3}{4}{5} />",
+			AppendF("<one-to-one{0}{1}{2}{3}{4}{5}{6} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.OneToOneAtt.AccessString),
 			        MakeAtt("class", MakeTypeName(model.OneToOneAtt.MapType)),

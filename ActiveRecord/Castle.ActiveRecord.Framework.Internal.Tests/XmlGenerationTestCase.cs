@@ -816,7 +816,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"    <property name=\"LastName\" access=\"property\" type=\"String\">\r\n" + 
 				"      <column name=\"LastName\"/>\r\n" + 
 				"    </property>\r\n" +
-				"    <one-to-one name=\"Award\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Award, Castle.ActiveRecord.Framework.Internal.Tests\" fetch=\"join\" />\r\n" + 
+				"    <one-to-one name=\"Award\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Award, Castle.ActiveRecord.Framework.Internal.Tests\" fetch=\"join\" constrained=\"true\" />\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
 
