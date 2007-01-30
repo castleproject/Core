@@ -24,7 +24,7 @@ namespace Castle.ActiveRecord
 	/// {
 	///		...
 	///		
-	/// 	[HasMany(typeof(Post), RelationType.Bag, Key="Posts", Table="Posts", Column="blogid")]
+	/// 	[HasMany(typeof(Post), RelationType.Bag, ColumnKey="Posts", Table="Posts")]
 	///		public IList Posts
 	///		{
 	///			get { return _posts; }
