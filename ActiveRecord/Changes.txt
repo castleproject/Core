@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Add Count(ICriterion[] criteria) overrides to ActiveRecordMediator and ActiveRecordMediator.Generic (original patch from Andy W. Dobbels)
+
 - Fixed AR-120 
   "Add support for the <Operation>AndFlush family of methods to ActiveRecordMediator"
 

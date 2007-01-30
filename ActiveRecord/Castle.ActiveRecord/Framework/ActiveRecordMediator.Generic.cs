@@ -232,6 +232,17 @@ namespace Castle.ActiveRecord
 
 		/// <summary>
 		/// Returns the number of records of the specified 
+		/// type in the database that match the given critera
+		/// </summary>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The count result</returns>
+		public static int Count(ICriterion[] criteria)
+		{
+			return ActiveRecordBase.Count(typeof(T), criteria);
+		}
+
+		/// <summary>
+		/// Returns the number of records of the specified 
 		/// type in the database
 		/// </summary>
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>

@@ -320,6 +320,17 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Returns the number of records of the specified 
+		/// type in the database
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>The count result</returns>
+		public static int Count(Type targetType, ICriterion[] criteria) {
+			return ActiveRecordBase.Count(targetType, criteria);
+		}
+
+		/// <summary>
 		/// Check if there is any records in the db for the target type
 		/// </summary>
 		/// <param name="targetType">Type of the target.</param>
