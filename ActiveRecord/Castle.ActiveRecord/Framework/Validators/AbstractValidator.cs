@@ -92,7 +92,8 @@ namespace Castle.ActiveRecord.Framework.Validators
 		/// <returns><c>true</c> if the field is OK</returns>
 		public bool Perform(object instance)
 		{
-			return this.Perform(instance, Property.GetValue(instance, null));
+			PropertyInfo instanceProp = instance.GetType().GetProperty(Property.Name);
+			return this.Perform(instance, instanceProp.GetValue(instance, null));
 		}
 
 		/// <summary>
