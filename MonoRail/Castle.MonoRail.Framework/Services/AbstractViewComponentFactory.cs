@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework.Services
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
-
 	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.ViewComponents;
@@ -32,12 +31,18 @@ namespace Castle.MonoRail.Framework.Services
 		/// </summary>
 		private ILogger logger = NullLogger.Instance;
 
+		/// <summary>
+		/// A dictionary of name to ViewComponent
+		/// </summary>
+		private readonly IDictionary components;
+		
 		public AbstractViewComponentFactory()
 		{
+			components = new HybridDictionary(true);
 		}
 
 		#region IInitializable implementation
-
+		
 		/// <summary>
 		/// Invoked by the framework in order to initialize the state
 		/// </summary>
@@ -45,11 +50,11 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			AddBuiltInComponents();
 		}
-
+		
 		#endregion
 
 		#region IServiceEnabledComponent implementation
-
+		
 		/// <summary>
 		/// Invoked by the framework in order to give a chance to
 		/// obtain other services
@@ -58,7 +63,7 @@ namespace Castle.MonoRail.Framework.Services
 		public virtual void Service(IServiceProvider provider)
 		{
 			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
-
+			
 			if (loggerFactory != null)
 			{
 				logger = loggerFactory.Create(typeof(AbstractViewComponentFactory));
@@ -74,29 +79,30 @@ namespace Castle.MonoRail.Framework.Services
 		/// <returns>The view component instance</returns>
 		public virtual ViewComponent Create(String name)
 		{
-			Type viewCompType = ResolveType(name);
-			try
-			{
-				return (ViewComponent)Activator.CreateInstance(viewCompType);
-			}
-			catch (Exception ex)
-			{
-				logger.Error("Could not create ViewComponent instance", ex);
-
-				throw;
-			}
-		}
-
-		protected Type ResolveType(string name)
-		{
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat("Creating view component '{0}'", name);
 			}
+			
+			Type viewCompType = (Type) components[name];
 
-			Type viewCompType = GetViewComponentTree().GetViewComponent(name);
+			if (viewCompType == null)
+			{
+				logger.Error("No ViewComponent found for name " + name);
+				
+				throw new RailsException("No ViewComponent found for name " + name);
+			}
 
-			return viewCompType;
+			try
+			{
+				return (ViewComponent) Activator.CreateInstance(viewCompType);
+			}
+			catch(Exception ex)
+			{
+				logger.Error("Could not create ViewComponent instance", ex);
+				
+				throw;
+			}
 		}
 
 		/// <summary>
@@ -148,12 +154,15 @@ namespace Castle.MonoRail.Framework.Services
 			{
 				logger.DebugFormat("Registering ViewComponent {0} Type {1} ", name, type);
 			}
-			GetViewComponentTree().AddViewComponent(name, type);
-		}
+			
+			if (!typeof(ViewComponent).IsAssignableFrom(type))
+			{
+				logger.ErrorFormat("RegisterComponent({0},{1}) failed, components must inherit from ViewComponent", name, type.FullName);
+				
+				throw new RailsException("RegisterComponent({0},{1}) failed, components must inherit from ViewComponent", name, type.FullName);
+			}
 
-		protected virtual IViewComponentTree GetViewComponentTree()
-		{
-			throw new NotImplementedException();
+			components[name] = type;
 		}
 	}
 }

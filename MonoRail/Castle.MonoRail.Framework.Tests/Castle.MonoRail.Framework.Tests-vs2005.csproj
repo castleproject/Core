@@ -144,7 +144,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DefaultUrlBuilderTestCase.cs" />
-    <Compile Include="DefaultViewComponentTreeTests.cs" />
     <Compile Include="Helpers\AbstractHelperTestCase.cs" />
     <Compile Include="Helpers\ScriptaculousHelperTestCase.cs" />
     <Compile Include="Helpers\TextHelperTestCase.cs" />
