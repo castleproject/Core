@@ -618,7 +618,7 @@
 						errorElem;
 					if ( errorElem = document.getElementById( errorId ) ) // short-circuit
 					{
-						errorElem.firstChild.nodeValue = emsg.toHTML();
+						errorElem.firstChild.innerHTML = emsg.toHTML();
 					}
 					else
 					{

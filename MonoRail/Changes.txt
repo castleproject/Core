@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-217 
+  "fValidate box message contains <BR/> if being triggered twice"
+
 - Fixed MR-221
   "HtmlHelper.LinkToAttributed bug"
 
