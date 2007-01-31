@@ -151,12 +151,12 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void WritePrev(StringWriter writer)
 		{
-			WriteLink(writer, page.PreviousIndex, "« prev", !page.HasPrevious);
+			WriteLink(writer, page.PreviousIndex, "&laquo; prev", !page.HasPrevious);
 		}
 
 		private void WriteNext(StringWriter writer)
 		{
-			WriteLink(writer, page.NextIndex, "next »", !page.HasNext);
+			WriteLink(writer, page.NextIndex, "next &raquo;", !page.HasNext);
 		}
 
 		private void StartBlock(StringWriter writer)
@@ -193,7 +193,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void WriteElipsis(TextWriter writer)
 		{
-			writer.Write("...");
+			writer.Write("&#8230;");
 		}
 
 		private void WriteNumberedLinks(TextWriter writer, int startIndex, int endIndex)

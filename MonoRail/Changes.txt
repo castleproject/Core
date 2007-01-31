@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied goodwill's patch fixing MR-213
+  "DiggStylePagination has a typo which prevents the code from build"
+
 - Applied Edward Kreis' patch fixing MR-214
   "ARDataBinding and joined subclasses with derived BelongsTo, HasMany, HasAndBelongsToMany proeprties"
 
