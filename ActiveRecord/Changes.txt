@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Brian Romanko's patch fixing AR-104
+  "IsUniqueValidator does not work properly with nullable primary keys"
+
 - Add Count(ICriterion[] criteria) overrides to ActiveRecordMediator and ActiveRecordMediator.Generic (original patch from Andy W. Dobbels)
 
 - Fixed AR-120 

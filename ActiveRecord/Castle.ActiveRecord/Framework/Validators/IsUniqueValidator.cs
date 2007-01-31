@@ -102,8 +102,8 @@ namespace Castle.ActiveRecord.Framework.Validators
 			else
 			{
 				object id = _pkModel.Property.GetValue(instance, new object[0]);
-				criteria.Add(
-					Expression.And(Expression.Eq(Property.Name, _fieldValue), Expression.Not(Expression.Eq(_pkModel.Property.Name, id))));
+				ICriterion pKeyCriteria = (id == null) ? Expression.IsNull(_pkModel.Property.Name) : Expression.Eq(_pkModel.Property.Name, id);
+				criteria.Add(Expression.And(Expression.Eq(Property.Name, _fieldValue), Expression.Not(pKeyCriteria)));
 			}
 			return criteria.List().Count == 0;
 		}

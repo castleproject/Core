@@ -138,6 +138,31 @@ namespace Castle.ActiveRecord.Tests.Validation
 			blog.Create();
 		}
 
+#if DOTNET2
+		[Test]
+		[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
+		public void IsUniqueWithNullKey()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog4));
+			Recreate();
+
+			Blog4.DeleteAll();
+
+			Blog4 blog = new Blog4();
+			blog.Name = "hammett";
+			blog.Create();
+
+			blog = new Blog4();
+			blog.Name = "hammett";
+
+			String[] messages = blog.ValidationErrorMessages;
+			Assert.IsTrue(messages.Length == 1);
+			Assert.AreEqual("Name is currently in use. Please pick up a new Name.", messages[0]);
+
+			blog.Create();
+		}
+#endif
+
 		[Test]
 		public void IsUniqueWithSessionScope()
 		{
