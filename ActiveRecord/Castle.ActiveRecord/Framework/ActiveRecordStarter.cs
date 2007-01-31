@@ -34,6 +34,11 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	/// <param name="holder"></param>
 	public delegate void SessionFactoryHolderDelegate(ISessionFactoryHolder holder);
+	
+	/// <summary>
+	/// Delegate for use in <see cref="ActiveRecordStarter.ModelsCreated"/>
+	/// </summary>
+	public delegate void ModelsCreatedDelegate(ActiveRecordModelCollection models, IConfigurationSource source);
 
 	/// <summary>
 	/// Performs the framework initialization.
@@ -59,6 +64,17 @@ namespace Castle.ActiveRecord
 		/// creation and act on the holder instance
 		/// </summary>
 		public static event SessionFactoryHolderDelegate SessionFactoryHolderCreated;
+
+		/// <summary>
+		/// Allows other frameworks to modify the ActiveRecordModel
+		/// before the generation of the NHibernate XML configuration.
+		/// As an example, this may be used to rewrite table names to
+		/// conform to an application-specific standard.  Since the
+		/// configuration source is passed in, it is possible to
+		/// determine the underlying database type and make changes
+		/// if necessary.
+		/// </summary>
+		public static event ModelsCreatedDelegate ModelsCreated;
 
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
@@ -542,6 +558,9 @@ namespace Castle.ActiveRecord
 
 				SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
 				semanticVisitor.VisitNodes(models);
+
+				if (ModelsCreated != null)
+					ModelsCreated(models, source);
 
 				AddXmlToNHibernateCfg(holder, models);
 			}
