@@ -478,7 +478,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
-			return String.Format("<a href=\"{0}\" {1}>{2}</a>", url, name, GetAttributes(attributes));
+			return String.Format("<a href=\"{0}\" {2}>{1}</a>", url, name, GetAttributes(attributes));
 		}
 
 		/// <summary>
@@ -505,7 +505,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			string url = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
-			return String.Format("<a href=\"{0}?id={1}\" {2}>{3}</a>", url, id, name, GetAttributes(attributes));
+			return String.Format("<a href=\"{0}?id={1}\" {3}>{2}</a>", url, id, name, GetAttributes(attributes));
 		}
 
 		/// <summary>

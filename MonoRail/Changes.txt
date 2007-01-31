@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-221
+  "HtmlHelper.LinkToAttributed bug"
+
 - Applied Jacob Lewallen's patch adding an optional attribute to define a view component's name
   The patch also introduces a IViewComponentTree.
 
