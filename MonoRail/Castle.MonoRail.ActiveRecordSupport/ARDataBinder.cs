@@ -20,7 +20,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
-	
+
 	using Iesi.Collections;
 
 	/// <summary>
@@ -121,7 +121,55 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			return instance;
 		}
-		
+
+		/// <summary>
+		/// for joined subclasses HasAndBelongsToMany properties doesn't include the ones of the parent class
+		/// so we need to check them recursively
+		/// </summary>
+		protected bool FindPropertyInHasAndBelongsToMany(ActiveRecordModel model, string propertyName,
+			 ref Type foundType, ref ActiveRecordModel foundModel)
+		{
+			foreach (HasAndBelongsToManyModel hasMany2ManyModel in model.HasAndBelongsToMany)
+			{
+				// Inverse=true relations will be ignored
+				if (hasMany2ManyModel.Property.Name == propertyName && !hasMany2ManyModel.HasManyAtt.Inverse)
+				{
+					foundType = hasMany2ManyModel.HasManyAtt.MapType;
+					foundModel = ActiveRecordModel.GetModel(foundType);
+					return true;
+				}
+			}
+			if (model.IsJoinedSubClass || model.IsDiscriminatorSubClass)
+			{
+				return FindPropertyInHasAndBelongsToMany(model.Parent, propertyName, ref foundType, ref foundModel);
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// for joined subclasses HasMany properties doesn't include the ones of the parent class
+		/// so we need to check them recursively
+		/// </summary>
+		protected bool FindPropertyInHasMany(ActiveRecordModel model, string propertyName,
+			 ref Type foundType, ref ActiveRecordModel foundModel)
+		{
+			foreach (HasManyModel hasManyModel in model.HasMany)
+			{
+				// Inverse=true relations will be ignored
+				if (hasManyModel.Property.Name == propertyName && !hasManyModel.HasManyAtt.Inverse)
+				{
+					foundType = hasManyModel.HasManyAtt.MapType;
+					foundModel = ActiveRecordModel.GetModel(foundType);
+					return true;
+				}
+			}
+			if (model.IsJoinedSubClass || model.IsDiscriminatorSubClass)
+			{
+				return FindPropertyInHasMany(model.Parent, propertyName, ref foundType, ref foundModel);
+			}
+			return false;
+		}
+
 		protected override object BindSpecialObjectInstance(Type instanceType, string prefix, Node node, out bool succeeded)
 		{
 			succeeded = false;
@@ -139,35 +187,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			Type targetType = null;
 			ActiveRecordModel targetModel = null;
 
-			foreach(HasAndBelongsToManyModel hasMany2ManyModel in model.HasAndBelongsToMany)
-			{
-				// Inverse=true relations will be ignored
-				if (hasMany2ManyModel.Property.Name == prefix && !hasMany2ManyModel.HasManyAtt.Inverse)
-				{
-					targetType = hasMany2ManyModel.HasManyAtt.MapType;
+			found = FindPropertyInHasAndBelongsToMany(model, prefix, ref targetType, ref targetModel);
 
-					targetModel = ActiveRecordModel.GetModel(targetType);
-
-					found = true;
-					break;
-				}
-			}
-			
 			if (!found)
 			{
-				foreach(HasManyModel hasManyModel in model.HasMany)
-				{
-					// Inverse=true relations will be ignored
-					if (hasManyModel.Property.Name == prefix && !hasManyModel.HasManyAtt.Inverse)
-					{
-						targetType = hasManyModel.HasManyAtt.MapType;
-
-						targetModel = ActiveRecordModel.GetModel(targetType);
-
-						found = true;
-						break;
-					}
-				}
+				found = FindPropertyInHasMany(model, prefix, ref targetType, ref targetModel);
 			}
 
 			if (found)
@@ -234,6 +258,26 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return IsContainerType(instanceType);
 		}
 
+		/// <summary>
+		/// for joined subclasses BelongsTo properties doesn't include the ones of the parent class
+		/// so we need to check them recursively
+		/// </summary>
+		protected bool IsBelongsToRef(ActiveRecordModel arModel, string prefix)
+		{
+			foreach (BelongsToModel model in arModel.BelongsTo)
+			{
+				if (model.Property.Name == prefix)
+				{
+					return true;
+				}
+			}
+			if (arModel.IsJoinedSubClass || arModel.IsDiscriminatorSubClass)
+			{
+				return IsBelongsToRef(arModel.Parent, prefix);
+			}
+			return false;
+		}
+
 		protected override bool ShouldRecreateInstance(object value, Type type, string prefix, Node node)
 		{
 			if (IsContainerType(type))
@@ -245,16 +289,12 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			{
 				// If it's a belongsTo ref, we need to recreate it 
 				// instead of overwrite its properties, otherwise NHibernate will complain
-
-				foreach(BelongsToModel model in CurrentARModel.BelongsTo)
+				if (IsBelongsToRef(CurrentARModel, prefix))
 				{
-					if (model.Property.Name == prefix)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
-			
+
 			return base.ShouldRecreateInstance(value, type, prefix, node);
 		}
 		
