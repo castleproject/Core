@@ -60,6 +60,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	public class FormHelper : AbstractHelper, IServiceEnabledComponent
 	{
 		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+		protected static readonly BindingFlags PropertyFlags2 = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase|BindingFlags.DeclaredOnly;
 		protected static readonly BindingFlags FieldFlags = BindingFlags.GetField|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
 
 		private int formCount;
@@ -1425,7 +1426,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			bool isIndexed = CheckForExistenceAndExtractIndex(ref property, out index);
 
-			PropertyInfo propertyInfo = type.GetProperty(property, PropertyFlags);
+			PropertyInfo propertyInfo = type.GetProperty(property, ResolveFlagsToUse(type));
 
 			if (propertyInfo == null)
 			{
@@ -1484,7 +1485,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			bool isIndexed = CheckForExistenceAndExtractIndex(ref property, out index);
 
-			PropertyInfo propertyInfo = instanceType.GetProperty(property, PropertyFlags);
+			PropertyInfo propertyInfo = instanceType.GetProperty(property, ResolveFlagsToUse(instanceType));
 
 			object instance = null;
 
@@ -1760,29 +1761,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			return false;
 		}
 		
-		// <summary>
-		// Gets the property get method.
-		// </summary>
-		// <param name="elem">Object specifying the type for which to get the method.</param>
-		// <param name="property">Property name.</param>
-		// <returns><see cref="MethodInfo"/> to be used to retrieve the property value.
-		// If <paramref name="property"/> is <c>null</c> <c>null</c> is returned.</returns>
-		// <remarks>This method is used to get the <see cref="MethodInfo"/> to retrieve
-		// specified property from the specified type.</remarks>
-		// <exception cref="ArgumentNullException">Thrown is <paramref name="elem"/> is <c>null</c>.</exception>
-//		protected internal static PropertyInfo GetMethoda(object elem, string property)
-//		{
-//			if (elem == null) throw new ArgumentNullException("elem");
-//			if (property == null) return null;
-//
-//			return GetMethod(elem.GetType(), property);
-//		}
-//
-//		protected internal static PropertyInfo GetMethoda(Type type, string property)
-//		{
-//			return type.GetProperty(property, PropertyFlags);
-//		}
-
 		private static void AddChecked(IDictionary attributes)
 		{
 			attributes["checked"] = "checked";
@@ -1949,7 +1927,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 				else
 				{
-					PropertyInfo info = targetType.GetProperty(keyName, PropertyFlags);
+					PropertyInfo info = targetType.GetProperty(keyName, ResolveFlagsToUse(targetType));
 					
 					if (info != null)
 					{
@@ -1988,5 +1966,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		#endregion
+
+		private static BindingFlags ResolveFlagsToUse(Type type)
+		{
+			if (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+			{
+				return PropertyFlags2;
+			}
+
+			return PropertyFlags;
+		}
 	}
 }

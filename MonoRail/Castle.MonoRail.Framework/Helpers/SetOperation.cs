@@ -16,7 +16,6 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>

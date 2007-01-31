@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	using System.Globalization;
 	using System.IO;
 	using System.Threading;
-
+	using Castle.DynamicProxy;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Tests.Controllers;
 	
@@ -32,10 +32,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	public class FormHelperTestCase
 	{
 		private FormHelper helper;
-		private Product product;
+		private Product product, productProxy;
 		private SimpleUser user;
 		private Subscription subscription;
 		private Month[] months;
+		private ProxyGenerator generator = new ProxyGenerator();
 
 		[SetUp]
 		public void Init()
@@ -50,11 +51,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			subscription = new Subscription();
 			months = new Month[] {new Month(1, "January"), new Month(1, "February")};
 			product = new Product("memory card", 10, (decimal) 12.30);
+			
+			productProxy = (Product) generator.CreateClassProxy(typeof(Product), new StandardInterceptor());
+			
+			productProxy.Name = "memory card";
+			productProxy.Quantity = 10;
+			productProxy.Price = (decimal) 12.30;
+
 			user = new SimpleUser();
 
 			HomeController controller = new HomeController();
 
 			controller.PropertyBag.Add("product", product);
+			controller.PropertyBag.Add("productproxy", productProxy);
 			controller.PropertyBag.Add("user", user);
 			controller.PropertyBag.Add("roles", new Role[] { new Role(1, "a"), new Role(2, "b"), new Role(3, "c") });
 			controller.PropertyBag.Add("sendemail", true);
@@ -109,6 +118,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.TextField("product.name"));
 			Assert.AreEqual("<input type=\"text\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />", 
 				helper.TextField("product.quantity"));
+		}
+
+		[Test]
+		public void ProxiedComponent()
+		{
+			Assert.AreEqual("<input type=\"text\" id=\"productproxy_name\" name=\"productproxy.name\" value=\"memory card\" />",
+				helper.TextField("productproxy.name"));
+			Assert.AreEqual("<input type=\"text\" id=\"productproxy_quantity\" name=\"productproxy.quantity\" value=\"10\" />",
+				helper.TextField("productproxy.quantity"));
 		}
 
 		[Test]
@@ -372,8 +390,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 		public IList<Month> Months4
 		{
-			get { return this.months4; }
-			set { this.months4 = value; }
+			get { return months4; }
+			set { months4 = value; }
 		}
 
 #endif
@@ -381,11 +399,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 	public class Product
 	{
-		private String name;
+		private string name;
 		private int quantity;
-		private Decimal price;
 		private bool isAvailable;
+		private decimal price;
 		private ProductCategory category = new ProductCategory();
+
+		public Product()
+		{
+		}
 
 		public Product(string name, int quantity, decimal price)
 		{
@@ -394,31 +416,31 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			this.price = price;
 		}
 
-		public string Name
+		public virtual string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
-		public int Quantity
+		public virtual int Quantity
 		{
 			get { return quantity; }
 			set { quantity = value; }
 		}
 
-		public decimal Price
+		public virtual decimal Price
 		{
 			get { return price; }
 			set { price = value; }
 		}
 
-		public bool IsAvailable
+		public virtual bool IsAvailable
 		{
 			get { return isAvailable; }
 			set { isAvailable = value; }
 		}
 
-		public ProductCategory Category
+		public virtual ProductCategory Category
 		{
 			get { return category; }
 			set { category = value; }

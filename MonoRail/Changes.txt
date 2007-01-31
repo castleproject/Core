@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-208
+  "Using a lazy loaded nested object, "Ambiguous match found" exception occures when 
+   trying to use FormHelper to render control for the nested objects property."
+
 - Applied goodwill's patch fixing MR-213
   "DiggStylePagination has a typo which prevents the code from build"
 
