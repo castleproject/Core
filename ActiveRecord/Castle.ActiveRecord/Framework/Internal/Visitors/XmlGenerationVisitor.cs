@@ -1055,13 +1055,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private void CreateXmlPI()
 		{
-			Append("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
+			Append(Constants.XmlPI);
 		}
 
 		private void StartMappingNode(bool useAutoImport)
 		{
-			AppendF("<hibernate-mapping {0}{1} xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">", 
+			AppendF(Constants.XmlHeader, 
 			        MakeAtt("auto-import", useAutoImport),
 				MakeAtt("default-lazy", ActiveRecordModel.isLazyByDefault));
 		}
@@ -1071,7 +1070,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Append("</hibernate-mapping>");
 		}
 
-		private String MakeTypeName(Type type)
+		/// <summary>
+		/// Create a valid name from a type, without including all the version and public key
+		/// information
+		/// </summary>
+		public static String MakeTypeName(Type type)
 		{
 			if (type == null) return null;
 

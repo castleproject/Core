@@ -372,6 +372,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\Enums.cs" />
+    <Compile Include="Attributes\HqlNamedQueryAttribute.cs" />
     <Compile Include="Attributes\ImportAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateCreditCardAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateLengthAttribute.cs" />
@@ -379,10 +380,12 @@
     <Compile Include="Framework\ActiveRecordHooksBase.cs" />
     <Compile Include="Framework\ARSchemaCreator.cs" />
     <Compile Include="Framework\ActiveRecordValidationBase.Generic.cs" />
+    <Compile Include="Framework\Internal\Constants.cs" />
     <Compile Include="Framework\Internal\Inflector.cs" />
     <Compile Include="Framework\Internal\Model\CompositeKeyModel.cs" />
     <Compile Include="Framework\Internal\Model\ImportModel.cs" />
     <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
+    <Compile Include="Framework\Internal\AssemblyXmlGenerator.cs" />
     <Compile Include="Framework\Queries\CountQuery.cs" />
     <Compile Include="Framework\Queries\HqlBasedQuery.cs" />
     <Compile Include="Framework\Queries\IActiveRecordQuery.Generic.cs" />

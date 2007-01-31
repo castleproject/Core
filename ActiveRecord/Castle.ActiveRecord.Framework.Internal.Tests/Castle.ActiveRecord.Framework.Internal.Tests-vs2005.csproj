@@ -129,9 +129,11 @@
     <Compile Include="AbstractActiveRecordTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AssemblyAttributes.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AssemblyXmlGenerationTestCase.cs" />
     <Compile Include="GraphConnectorTestCase.cs" />
     <Compile Include="ImportTestCase.cs" />
     <Compile Include="InflectorTestCase.cs" />

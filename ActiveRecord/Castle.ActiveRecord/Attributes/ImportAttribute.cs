@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+	using Castle.ActiveRecord.Queries;
 
 	/// <summary>
 	/// This is used to map between a type to a friendly name that can be used in the queries.
@@ -24,7 +25,7 @@ namespace Castle.ActiveRecord
 	/// <example>
 	/// [Import(typeof(SummaryRow), "summary")]
 	/// </example>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true), Serializable]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly, AllowMultiple = true), Serializable]
 	public class ImportAttribute : Attribute
 	{
 		private readonly Type type;
