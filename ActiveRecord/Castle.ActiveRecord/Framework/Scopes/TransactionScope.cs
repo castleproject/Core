@@ -341,15 +341,26 @@ namespace Castle.ActiveRecord
 				return;
 			}
 
+			Exception transactionError = null;
+
 			foreach(ITransaction transaction in transactions.Values)
 			{
-				if (rollbackOnly)
+				try
 				{
-					transaction.Rollback();
+					if (rollbackOnly)
+					{
+						transaction.Rollback();
+					}
+					else
+					{
+						transaction.Commit();
+					}
 				}
-				else
+				catch(Exception ex)
 				{
-					transaction.Commit();
+					transactionError = ex;
+
+					transaction.Dispose();
 				}
 			}
 
@@ -374,6 +385,11 @@ namespace Castle.ActiveRecord
 			}
 
 			RaiseOnCompleted();
+
+			if (transactionError != null)
+			{
+				throw transactionError;
+			}
 		}
 
 		/// <summary>
