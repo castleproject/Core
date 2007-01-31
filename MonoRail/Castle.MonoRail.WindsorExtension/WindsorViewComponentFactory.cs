@@ -34,20 +34,14 @@ namespace Castle.MonoRail.WindsorExtension
 		public override ViewComponent Create(String name)
 		{
 			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			Type type = ResolveType(name);
+			return (ViewComponent)container[type];
+		}
 
-			if (container.Kernel.HasComponent(name))
-			{
-				try
-				{
-					return (ViewComponent) container[name];
-				}
-				catch(InvalidCastException ex)
-				{
-					throw new RailsException("The component registered for the given key could not be casted into a ViewComponent. Key " + name, ex);
-				}
-			}
-
-			return base.Create(name);
+		protected override IViewComponentTree GetViewComponentTree()
+		{
+			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			return (IViewComponentTree)container["rails.viewcomponenttree"];
 		}
 	}
 }

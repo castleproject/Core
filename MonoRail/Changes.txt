@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Jacob Lewallen's patch adding an optional attribute to define a view component's name
+  The patch also introduces a IViewComponentTree.
+
 - Added 'noaction' parameter to FormHelper.FormTag to prevent action attribute generation
 
 - Added Select list from Enum.
