@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	using System;
 	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
-	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
 	public class ComponentsTestCase : AbstractTestCase
@@ -199,6 +198,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("usingcomponent2/ChildContentComponent2.rails");
 			AssertReplyContains("View content and 1 2 True Something hello");
+		}
+
+		[Test]
+		public void CanRenderMultipleDynamicComponents() 
+		{
+			DoGet("usingcomponent/dynamiccomponent.rails");
+			AssertReplyContains("Hello from SimpleInlineViewComponent");
+			AssertReplyContains("This is a view used by a component");
 		}
 
 		void AssertOutput(String expected, object output)

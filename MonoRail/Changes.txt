@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied chris ortman's patch fixing MR-188
+  "Allow the #component directive to support variables for the component name"
+
 - Fixed MR-208
   "Using a lazy loaded nested object, "Ambiguous match found" exception occures when 
    trying to use FormHelper to render control for the nested objects property."

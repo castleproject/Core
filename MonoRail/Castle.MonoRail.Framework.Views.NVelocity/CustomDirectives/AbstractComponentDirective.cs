@@ -42,6 +42,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		private ViewComponent component;
 		private NVelocityViewContextAdapter contextAdapter;
 		private IViewEngine viewEngine;
+		private INode compNameNode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractComponentDirective"/> class.
@@ -58,7 +59,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			base.Init(rs, context, node);
 
-			INode compNameNode = node.GetChild(0);
+			compNameNode = node.GetChild(0);
 
 			if (compNameNode == null)
 			{
@@ -66,17 +67,28 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				throw new ViewComponentException(message);
 			}
 
-			componentName = compNameNode.FirstToken.Image;
+			
+		}
+
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
+		{
+		componentName = compNameNode.FirstToken.Image;
 
 			if (componentName == null)
 			{
 				String message = String.Format("Could not obtain component name from the #{0} directive", Name);
 				throw new ViewComponentException(message);
 			}
-		}
+			
+			 if (componentName.StartsWith("$")) 
+			 {
+				String nodeContent = compNameNode.Literal.Trim('"', '\'');
+				SimpleNode inlineNode = rsvc.Parse(new StringReader(nodeContent), context.CurrentTemplateName, false);
 
-		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
-		{
+				inlineNode.Init(context, rsvc);
+				componentName = (String) Evaluate(inlineNode, context);
+			}
+
 			component = viewComponentFactory.Create(componentName);
 
 			ASTDirective directiveNode = (ASTDirective) node;
