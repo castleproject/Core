@@ -1,6 +1,8 @@
 Beta 1 Version 1.0.0.0
 ======================
 
+- Applied Lee Henson's patch fixing generic parameter definitions
+
 - Applied Jacob Lewallen's patch that introduces ProxyInterfaceWithTargetInterface
   Quoting
 

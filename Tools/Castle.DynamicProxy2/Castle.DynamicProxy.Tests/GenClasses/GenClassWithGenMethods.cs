@@ -14,6 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
+	using System;
+
 	public class GenClassWithGenMethods<T> where T : new()
 	{
 		private object savedParam;
@@ -36,6 +38,13 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			savedParam = z;
 			
 			return new T();
+		}
+
+		public virtual void DoSomethingElse<T2>(Converter<int, T2> converter, int value)
+		{
+			invoked = true;
+			
+			savedParam = converter(value);
 		}
 	}
 }

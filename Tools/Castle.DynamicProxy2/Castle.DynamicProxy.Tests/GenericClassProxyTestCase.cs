@@ -145,6 +145,23 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ProxyWithGenericArgumentsAndMethodGenericArgumentsWithOneNotDefinedOnType()
+		{
+			GenClassWithGenMethods<ArrayList> proxy =
+				generator.CreateClassProxy<GenClassWithGenMethods<ArrayList>>(logger);
+
+			Assert.IsNotNull(proxy);
+
+			int value1 = 10;
+
+			proxy.DoSomethingElse<string>(delegate(int param1) { return param1.ToString(); }, value1);
+
+			Assert.IsTrue(proxy.Invoked);
+			Assert.AreEqual("10", proxy.SavedParam);
+			Assert.AreEqual("DoSomethingElse ", logger.LogContents);
+		}
+
+		[Test]
 		public void ProxyWithGenericArgumentsAndMethodGenericReturn()
 		{
 			GenClassWithGenReturn<ArrayList, Hashtable> proxy =
