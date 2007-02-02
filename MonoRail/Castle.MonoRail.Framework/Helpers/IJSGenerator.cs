@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// TODO: Implement and document this one
 		/// </summary>
 		/// <param name="url"></param>
-		void RedirectTo(String url);
+		void RedirectTo(object url);
 
 		/// <summary>
 		/// Re-apply Behaviour css' rules.

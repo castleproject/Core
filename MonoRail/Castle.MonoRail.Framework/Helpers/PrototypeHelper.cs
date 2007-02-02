@@ -44,6 +44,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			private readonly IRailsEngineContext context;
 			private readonly StringBuilder lines = new StringBuilder();
+			private readonly UrlHelper urlHelper;
 
 			#region Type Constructor
 
@@ -72,6 +73,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			public JSGenerator(IRailsEngineContext context)
 			{
 				this.context = context;
+
+				urlHelper = (UrlHelper) context.CurrentController.Helpers["UrlHelper"];
 			}
 
 			#endregion
@@ -176,9 +179,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// TODO: Implement and document this one
 			/// </summary>
 			/// <param name="url"></param>
-			public void RedirectTo(String url)
+			public void RedirectTo(object url)
 			{
-				Assign("window.location.href", Quote(url));
+				string target;
+
+				if (url is IDictionary)
+				{
+					target = urlHelper.For(url as IDictionary);
+				}
+				else
+				{
+					target = url.ToString();
+				}
+
+				Assign("window.location.href", Quote(target));
 			}
 
 			/// <summary>

@@ -207,7 +207,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// TODO: Implement and document this one
 			/// </summary>
 			/// <param name="url"></param>
-			public void RedirectTo(String url)
+			public void RedirectTo(object url)
 			{
 				Assign("window.location.href", Quote(url));
 			}
