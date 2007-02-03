@@ -58,34 +58,4 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { classA = value; }
 		}
 	}
-
-	[ActiveRecord(Lazy = false)]
-	public class BelongsToClassA3 : ActiveRecordBase
-	{
-		private int id;
-		private ClassA classA;
-		private string name;
-
-		[PrimaryKey]
-		public int Id
-		{
-			get { return id; }
-			set { id = value; }
-		}
-
-		[BelongsTo("classa_id", Update = false, Insert = false, NotNull = true, Unique = true, Cascade=CascadeEnum.SaveUpdate,
-			 UniqueKey = "UniqueA")]
-		public ClassA ClassA
-		{
-			get { return classA; }
-			set { classA = value; }
-		}
-
-		[Property(UniqueKey = "UniqueA")]
-		public string Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-	}
 }

@@ -711,33 +711,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
 		[Test]
-		public void BelongsTo3()
-		{
-			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
-			ActiveRecordModel model = builder.Create(typeof(BelongsToClassA3));
-			Assert.IsNotNull(model);
-
-			String xml = Process(builder, model);
-
-			String expected =
-				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
-				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
-				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BelongsToClassA3, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"BelongsToClassA3\" lazy=\"false\">\r\n" +
-				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
-				"      <generator class=\"native\">\r\n" +
-				"      </generator>\r\n" +
-				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" type=\"String\">\r\n" +
-				"      <column name=\"Name\" unique-key=\"UniqueA\"/>\r\n" +
-				"    </property>\r\n" +
-				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" insert=\"false\" update=\"false\" not-null=\"true\" unique=\"true\" cascade=\"save-update\" unique_key=\"UniqueA\" />\r\n" +
-				"  </class>\r\n" +
-				"</hibernate-mapping>\r\n";
-
-			Assert.AreEqual(expected, xml);
-		}
-
-		[Test]
 		public void HasManyWithExplicitInfo()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
