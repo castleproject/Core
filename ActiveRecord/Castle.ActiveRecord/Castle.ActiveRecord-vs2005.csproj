@@ -383,6 +383,7 @@
     <Compile Include="Framework\Internal\Constants.cs" />
     <Compile Include="Framework\Internal\Inflector.cs" />
     <Compile Include="Framework\Internal\Model\CompositeKeyModel.cs" />
+    <Compile Include="Framework\Internal\Model\DependentObjectModel.cs" />
     <Compile Include="Framework\Internal\Model\ImportModel.cs" />
     <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
     <Compile Include="Framework\Internal\AssemblyXmlGenerator.cs" />

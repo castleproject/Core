@@ -14,42 +14,15 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-	using System.Collections;
-
-	[ActiveRecord(Lazy=false, Cache=CacheEnum.ReadWrite)]
-	public class CacheClass : ActiveRecordBase
+	internal class Component
 	{
-		private int id;
-		private string name;
-		private CacheClass parent;
-		private IList subclasses;
-
-		[PrimaryKey]
-		public int Id
-		{
-			get { return id; }
-			set { id = value; }
-		}
+		private string value;
 
 		[Property]
-		public string Name
+		public string Value
 		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		[BelongsTo("parent_id")]
-		public CacheClass Parent
-		{
-			get { return parent; }
-			set { parent = value; }
-		}
-
-		[HasMany( typeof(CacheClass), Cache=CacheEnum.ReadWrite )]
-		public IList SubClasses
-		{
-			get { return subclasses; }
-			set { subclasses = value; }
+			get { return value; }
+			set { this.value = value; }
 		}
 	}
 }

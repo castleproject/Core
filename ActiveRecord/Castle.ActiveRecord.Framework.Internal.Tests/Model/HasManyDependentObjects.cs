@@ -16,13 +16,11 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System.Collections;
 
-	[ActiveRecord(Lazy=false, Cache=CacheEnum.ReadWrite)]
-	public class CacheClass : ActiveRecordBase
+	[ActiveRecord]
+	internal class HasManyDependentObjects : ActiveRecordBase
 	{
 		private int id;
-		private string name;
-		private CacheClass parent;
-		private IList subclasses;
+		private IList components = new ArrayList();
 
 		[PrimaryKey]
 		public int Id
@@ -31,25 +29,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { id = value; }
 		}
 
-		[Property]
-		public string Name
+		[HasMany(typeof(Component), "id", 
+			"dependent_objects", Index = "pos", 
+			RelationType=RelationType.List, DependentObjects = true)]
+		public IList Components
 		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		[BelongsTo("parent_id")]
-		public CacheClass Parent
-		{
-			get { return parent; }
-			set { parent = value; }
-		}
-
-		[HasMany( typeof(CacheClass), Cache=CacheEnum.ReadWrite )]
-		public IList SubClasses
-		{
-			get { return subclasses; }
-			set { subclasses = value; }
+			get { return components; }
+			set { components = value; }
 		}
 	}
 }

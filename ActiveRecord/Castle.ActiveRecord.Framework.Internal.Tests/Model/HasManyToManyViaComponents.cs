@@ -16,40 +16,30 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System.Collections;
 
-	[ActiveRecord(Lazy=false, Cache=CacheEnum.ReadWrite)]
-	public class CacheClass : ActiveRecordBase
+	[ActiveRecord]
+	public class HasManyToManyViaComponents
 	{
 		private int id;
-		private string name;
-		private CacheClass parent;
-		private IList subclasses;
+		private IList components = new ArrayList();
+
+		public HasManyToManyViaComponents()
+		{
+		}
+
+		[HasMany(typeof(ComponentManyToClassA), "id", 
+			"components_to_a", Index="pos", RelationType = RelationType.List,
+			DependentObjects = true)]
+		public IList Components
+		{
+			get { return components; }
+			set { components = value; }
+		}
 
 		[PrimaryKey]
 		public int Id
 		{
 			get { return id; }
 			set { id = value; }
-		}
-
-		[Property]
-		public string Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		[BelongsTo("parent_id")]
-		public CacheClass Parent
-		{
-			get { return parent; }
-			set { parent = value; }
-		}
-
-		[HasMany( typeof(CacheClass), Cache=CacheEnum.ReadWrite )]
-		public IList SubClasses
-		{
-			get { return subclasses; }
-			set { subclasses = value; }
 		}
 	}
 }

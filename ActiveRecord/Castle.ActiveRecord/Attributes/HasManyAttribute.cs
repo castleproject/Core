@@ -46,6 +46,11 @@ namespace Castle.ActiveRecord
 		protected String[] compositeKeyColumns;
 
 		/// <summary>
+		/// Whether the target type is for dependent objects or not
+		/// </summary>
+		protected bool hasDependentObjects;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="HasManyAttribute"/> class.
 		/// </summary>
 		public HasManyAttribute()
@@ -91,8 +96,18 @@ namespace Castle.ActiveRecord
 		/// <value>The composite key column keys.</value>
 		public String[] CompositeKeyColumnKeys
 		{
-			get { return this.compositeKeyColumns; }
-			set { this.compositeKeyColumns = value; }
+			get { return compositeKeyColumns; }
+			set { compositeKeyColumns = value; }
+		}
+
+		/// <summary>
+		/// Whether or not the target type is a dependent object.
+		/// </summary>
+		/// <value>true = the target type is a dependent object</value>
+		public bool DependentObjects
+		{
+			get { return hasDependentObjects; }
+			set { hasDependentObjects = value; }
 		}
 	}
 }

@@ -296,7 +296,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 						HasManyAttribute propAtt = attribute as HasManyAttribute;
 						isArProperty = true;
 
-						model.HasMany.Add(new HasManyModel(prop, propAtt));
+						HasManyModel hasManyModel = new HasManyModel(prop, propAtt);
+						if (propAtt.DependentObjects)
+						{
+							ActiveRecordModel dependentObjectModel = new ActiveRecordModel(propAtt.MapType);
+							dependentObjectModel.IsNestedType = true;
+
+							ProcessProperties(propAtt.MapType, dependentObjectModel);
+
+							hasManyModel.DependentObjectModel = new DependentObjectModel(prop, propAtt, dependentObjectModel);
+						}
+						model.HasMany.Add(hasManyModel);
 					}
 					else if (attribute is HasAndBelongsToManyAttribute)
 					{
@@ -336,16 +346,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private void CollectMetaValues(IList metaStore,PropertyInfo prop)
+		private void CollectMetaValues(IList metaStore, PropertyInfo prop)
 		{
 			if (metaStore == null)
 				throw new ArgumentNullException("metaStore");
-			
-			Any.MetaValueAttribute[] metaValues = prop.GetCustomAttributes(typeof(Any.MetaValueAttribute), false) as Any.MetaValueAttribute[];
-			
+
+			Any.MetaValueAttribute[] metaValues =
+				prop.GetCustomAttributes(typeof(Any.MetaValueAttribute), false) as Any.MetaValueAttribute[];
+
 			if (metaValues == null || metaValues.Length == 0)
 				return;
-			
+
 			foreach(Any.MetaValueAttribute attribute in metaValues)
 			{
 				metaStore.Add(attribute);

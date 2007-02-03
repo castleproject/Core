@@ -63,24 +63,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 				return;
 			}
 
-			VisitNode( model.PrimaryKey );
-			VisitNode( model.CompositeKey );
-			VisitNode( model.Key );
-			VisitNode( model.Version );
-			VisitNode( model.Timestamp );
-			VisitNodes( model.JoinedClasses );
-			VisitNodes( model.Classes );
-			VisitNodes( model.Fields );
-			VisitNodes( model.Anys );
-			VisitNodes( model.Properties );
-			VisitNodes( model.OneToOnes );
-			VisitNodes( model.BelongsTo );
-			VisitNodes( model.HasMany );
-			VisitNodes( model.HasAndBelongsToMany );
-			VisitNodes( model.HasManyToAny );
-			VisitNodes( model.CollectionIDs );
-			VisitNodes( model.Hilos );
-			VisitNodes( model.Components );
+			VisitNode(model.PrimaryKey);
+			VisitNode(model.CompositeKey);
+			VisitNode(model.Key);
+			VisitNode(model.Version);
+			VisitNode(model.Timestamp);
+			VisitNodes(model.JoinedClasses);
+			VisitNodes(model.Classes);
+			VisitNodes(model.Fields);
+			VisitNodes(model.Anys);
+			VisitNodes(model.Properties);
+			VisitNodes(model.OneToOnes);
+			VisitNodes(model.BelongsTo);
+			VisitNodes(model.HasMany);
+			VisitNodes(model.HasAndBelongsToMany);
+			VisitNodes(model.HasManyToAny);
+			VisitNodes(model.CollectionIDs);
+			VisitNodes(model.Hilos);
+			VisitNodes(model.Components);
 		}
 
 		/// <summary>
@@ -230,21 +230,31 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
+		/// Visits the Dependent Object à
+		/// </summary>
+		/// <param name="model">The model</param>
+		public virtual void VisitDependentObject(DependentObjectModel model)
+		{
+			VisitNode(model.Model);
+		}
+
+		/// <summary>
 		/// Guesses the type of the other end.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="propertyType">Type of the property.</param>
 		/// <returns></returns>
-		public static Type GuessType(Type type, Type propertyType) {
+		public static Type GuessType(Type type, Type propertyType)
+		{
 			Type otherend = type;
-			if(otherend==null)
+			if (otherend == null)
 			{
 #if DOTNET2
 				//naive guessing of type if not specified
-				if(propertyType.IsGenericType)
+				if (propertyType.IsGenericType)
 				{
 					Type[] arguments = propertyType.GetGenericArguments();
-					if(arguments.Length==1)
+					if (arguments.Length == 1)
 						otherend = arguments[0];
 				}
 #endif

@@ -1,6 +1,11 @@
 Release Candidate 2
 ===================
 
+- Applied Ernst Perpignand's fixing AR-126
+  "Collection of dependent objects"
+  
+  Quoting 'patch implementing collection of dependent objects as per Hibernate documentation section 7.2'
+
 - Fixed AR-125
   "Cannot use webservices or XmlSerializer on classes derived from ActiveRecordValidationBase because of IDictionary PropertiesValidationErrorMessage"
 
