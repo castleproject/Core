@@ -73,6 +73,7 @@ namespace Castle.ActiveRecord
 		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
 		private CascadeEnum cascade = CascadeEnum.None;
 		private NotFoundBehaviour notFoundBehaviour = NotFoundBehaviour.Default;
+		private string uniqueKey;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BelongsToAttribute"/> class.
@@ -179,6 +180,24 @@ namespace Castle.ActiveRecord
 		{
 			get { return notFoundBehaviour; }
 			set { notFoundBehaviour = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// A unique-key attribute can be used to group columns 
+		/// in a single unit key constraint. 
+		/// </summary>
+		/// <value>unique key name</value>
+		/// <remarks>
+		/// Currently, the 
+		/// specified value of the unique-key attribute is not 
+		/// used to name the constraint, only to group the columns 
+		/// in the mapping file.
+		/// </remarks>
+		public string UniqueKey
+		{
+			get { return uniqueKey; }
+			set { uniqueKey = value; }
 		}
 	}
 }

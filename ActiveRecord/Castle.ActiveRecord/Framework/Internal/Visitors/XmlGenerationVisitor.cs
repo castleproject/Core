@@ -532,7 +532,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			if (model.BelongsToAtt.Column == null)
 			{
-				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
+				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
 						MakeAtt("name", model.Property.Name),
 						MakeAtt("access", model.BelongsToAtt.AccessString),
 						MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
@@ -542,7 +542,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 						WriteIfTrue("unique", model.BelongsToAtt.Unique),
 						WriteIfNonNull("cascade", cascade),
 						WriteIfNonNull("outer-join", outerJoin),
-						WriteIfNonNull("not-found", notFoundMode));
+						WriteIfNonNull("not-found", notFoundMode),
+						WriteIfNonNull("unique_key", model.BelongsToAtt.UniqueKey));
 				Ident();
 				WriteCompositeColumns(model.BelongsToAtt.CompositeKeyColumns);
 				Dedent();
@@ -550,7 +551,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
+				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11} />",
 						MakeAtt("name", model.Property.Name),
 						MakeAtt("access", model.BelongsToAtt.AccessString),
 						MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
@@ -561,7 +562,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 						WriteIfTrue("unique", model.BelongsToAtt.Unique),
 						WriteIfNonNull("cascade", cascade),
 						WriteIfNonNull("outer-join", outerJoin),
-						WriteIfNonNull("not-found", notFoundMode));
+						WriteIfNonNull("not-found", notFoundMode),
+						WriteIfNonNull("unique_key", model.BelongsToAtt.UniqueKey));
 			}
 		}
 
