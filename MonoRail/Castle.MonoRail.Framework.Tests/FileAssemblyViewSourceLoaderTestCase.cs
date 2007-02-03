@@ -91,6 +91,7 @@ namespace Castle.MonoRail.Framework.Tests
 			AddService(typeof(ILayoutDescriptorProvider), new DefaultLayoutDescriptorProvider());
 			AddService(typeof(IHelperDescriptorProvider), new DefaultHelperDescriptorProvider());
 			AddService(typeof(IFilterDescriptorProvider), new DefaultFilterDescriptorProvider());
+			AddService(typeof(ITransformFilterDescriptorProvider), new DefaultTransformFilterDescriptorProvider());
 		}
 	}
 }

@@ -134,6 +134,10 @@ namespace Castle.MonoRail.Framework.Configuration
 					return typeof(IResourceFactory);
 				case ServiceIdentification.ExecutorFactory:
 					return typeof(IControllerLifecycleExecutorFactory);
+				case ServiceIdentification.TransformationFilterFactory:
+					return typeof(ITransformFilterFactory);
+				case ServiceIdentification.TransformFilterDescriptorProvider:
+					return typeof(ITransformFilterDescriptorProvider);
 				case ServiceIdentification.UrlBuilder:
 					return typeof(IUrlBuilder);
 				case ServiceIdentification.UrlTokenizer:

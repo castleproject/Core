@@ -53,6 +53,11 @@ namespace Castle.MonoRail.Framework
 		private IFilterFactory filterFactory;
 
 		/// <summary>
+		/// Reference to the <see cref="ITransformFilterFactory"/> instance
+		/// </summary>
+		private ITransformFilterFactory transformFilterFactory;
+
+		/// <summary>
 		/// Holds the filters associated with the action
 		/// </summary>
 		private FilterDescriptor[] filters;
@@ -92,7 +97,8 @@ namespace Castle.MonoRail.Framework
 			filterFactory = (IFilterFactory) provider.GetService(typeof(IFilterFactory));
 			resourceFactory = (IResourceFactory) provider.GetService(typeof(IResourceFactory));
 			scaffoldSupport = (IScaffoldingSupport) provider.GetService(typeof(IScaffoldingSupport));
-
+			transformFilterFactory = (ITransformFilterFactory)provider.GetService(typeof(ITransformFilterFactory));
+			
 			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
 
 			if (loggerFactory != null)
@@ -274,6 +280,7 @@ namespace Castle.MonoRail.Framework
 				if (canProceed)
 				{
 					PrepareResources();
+					PrepareTransformFilter();
 					
 					if (actionMethod != null)
 					{
@@ -346,6 +353,24 @@ namespace Castle.MonoRail.Framework
 			}
 			
 			RunAfterRenderFilters();
+		}
+
+		private void PrepareTransformFilter()
+		{
+			PrepareTransformFilter(actionMethod);
+		}
+		
+		protected void PrepareTransformFilter(MethodInfo method)
+		{
+			if (method == null) return;
+
+			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
+
+			foreach (TransformFilterDescriptor transformFilter in actionMeta.TransformFilters)
+			{
+				ITransformFilter filter = transformFilterFactory.Create(transformFilter.TransformFilterType, context.UnderlyingContext.Response.Filter);
+				context.UnderlyingContext.Response.Filter = filter as Stream;
+			}
 		}
 
 		/// <summary>

@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Ernst Naezer's patch fixing MR-191
+  "Add TransformFilter support to MR"
+
 - Applied Lee Henson's patch fixing MR-222
   "Use of IRailsEngineContext.Items"
 

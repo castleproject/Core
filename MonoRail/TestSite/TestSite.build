@@ -19,6 +19,9 @@
 			<include name="Castle.Components.Validator.dll" />
 			<include name="Castle.Components.Common.EmailSender.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
+			<include name="Castle.MonoRail.TransformFilters.dll" />
+			<include name="Castle.WikiFormatter.dll" />
+			<include name="anrControls.Markdown.NET.dll" />
 			<include name="System.Data.dll" />
 			<include name="System.Drawing.dll" />
 			<include name="System.Web.dll" />

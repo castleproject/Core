@@ -27,7 +27,8 @@ namespace Castle.MonoRail.Framework.Internal
 		private AccessibleThroughAttribute accessibleThrough;
 		private IList skipFilters = new ArrayList();
 		private IList cacheConfigurers = new ArrayList();
-
+		private TransformFilterDescriptor[] transformFilters = new TransformFilterDescriptor[] {};
+		
 		public SkipRescueAttribute SkipRescue
 		{
 			get { return skipRescue; }
@@ -48,6 +49,12 @@ namespace Castle.MonoRail.Framework.Internal
 		public IList CacheConfigurers
 		{
 			get { return cacheConfigurers; }
+		}
+
+		public TransformFilterDescriptor[] TransformFilters
+		{
+			get { return transformFilters; }
+			set { transformFilters = value; }
 		}
 	}
 }

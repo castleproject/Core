@@ -35,7 +35,8 @@ namespace Castle.MonoRail.Framework.Internal
 		private Hashtable actionMetaDescriptors = new Hashtable();
 		private IDictionary actions = new HybridDictionary(true);
 		private FilterDescriptor[] filters;
-
+		private TransformFilterDescriptor[] transformFilters;
+		
 		public ControllerMetaDescriptor()
 		{
 		}
@@ -89,6 +90,12 @@ namespace Castle.MonoRail.Framework.Internal
 		public IList ActionProviders
 		{
 			get { return actionProviders; }
+		}
+
+		public TransformFilterDescriptor[] TransformFilters
+		{
+			get { return transformFilters; }
+			set { transformFilters = value; }
 		}
 	}
 }

@@ -20,6 +20,7 @@
 		<include name="Castle.MonoRail.Framework.Views.CompositeView/Castle.MonoRail.Framework.Views.CompositeView.build" />
 		<include name="Castle.MonoRail.ActiveRecordSupport/Castle.MonoRail.ActiveRecordSupport.build" />
 		<include name="Castle.MonoRail.ActiveRecordScaffold/Castle.MonoRail.ActiveRecordScaffold.build" />
+		<include name="Castle.MonoRail.TransformFilters\Castle.MonoRail.TransformFilters.build " />
 		<include name="Castle.MonoRail.TestSupport/Castle.MonoRail.TestSupport.build" />
 		<include name="TestSite/TestSite.build" />
 		<include name="TestSiteWindsor/TestSiteWindsor.build" />

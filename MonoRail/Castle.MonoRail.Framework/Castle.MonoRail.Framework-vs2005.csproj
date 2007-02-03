@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="Attributes\SkipFilterAttribute.cs" />
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
+    <Compile Include="Attributes\TransformFilterAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="Filter.cs" />
@@ -320,9 +321,11 @@
     <Compile Include="Internal\Descriptors\ILayoutDescriptorBuilder.cs" />
     <Compile Include="Internal\Descriptors\IRescueDescriptorBuilder.cs" />
     <Compile Include="Internal\Descriptors\IResourceDescriptorBuilder.cs" />
+    <Compile Include="Internal\Descriptors\ITransformFilterDescriptorBuilder.cs" />
     <Compile Include="Internal\Descriptors\LayoutDescriptor.cs" />
     <Compile Include="Internal\Descriptors\RescueDescriptor.cs" />
     <Compile Include="Internal\Descriptors\ResourceDescriptor.cs" />
+    <Compile Include="Internal\Descriptors\TransformFilterDescriptor.cs" />
     <Compile Include="Internal\JSCollectionGeneratorBase.cs" />
     <Compile Include="Internal\JSElementGeneratorBase.cs" />
     <Compile Include="Internal\JSGeneratorBase.cs" />
@@ -331,12 +334,14 @@
     <Compile Include="Internal\Providers\DefaultLayoutDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultRescueDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\DefaultResourceDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\DefaultTransformFilterDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\IFilterDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\IHelperDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\ILayoutDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\IProvider.cs" />
     <Compile Include="Internal\Providers\IRescueDescriptorProvider.cs" />
     <Compile Include="Internal\Providers\IResourceDescriptorProvider.cs" />
+    <Compile Include="Internal\Providers\ITransformDescriptorFilterProvider.cs" />
     <Compile Include="Internal\ResourceDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -380,6 +385,8 @@
     <Compile Include="ITrace.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ITransformFilter.cs" />
+    <Compile Include="ITransformFilterFactory.cs" />
     <Compile Include="IUrlBuilder.cs" />
     <Compile Include="IUrlTokenizer.cs" />
     <Compile Include="IViewComponentContext.cs">
@@ -419,6 +426,7 @@
     <Compile Include="Services\DefaultControllerTree.cs" />
     <Compile Include="Services\DefaultFilterFactory.cs" />
     <Compile Include="Services\DefaultResourceFactory.cs" />
+    <Compile Include="Services\DefaultTransformFilterFactory.cs" />
     <Compile Include="Services\DefaultUrlBuilder.cs" />
     <Compile Include="Services\DefaultUrlTokenizer.cs" />
     <Compile Include="Services\DefaultViewComponentFactory.cs" />
@@ -430,6 +438,11 @@
     <Compile Include="SmartDispatcherController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TransformFilter.cs" />
+    <Compile Include="TransformFilters\Formatters\WikiFormatter.cs" />
+    <Compile Include="TransformFilters\LowerCaseTransformFilter.cs" />
+    <Compile Include="TransformFilters\UpperCaseTransformFilter.cs" />
+    <Compile Include="TransformFilters\WikiTransformFilter.cs" />
     <Compile Include="ViewComponent.cs">
       <SubType>Code</SubType>
     </Compile>

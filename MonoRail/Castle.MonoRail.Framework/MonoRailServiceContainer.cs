@@ -372,6 +372,10 @@ namespace Castle.MonoRail.Framework
 			if (!services.HasService(ServiceIdentification.ExecutorFactory))
 			{
 				services.RegisterService(ServiceIdentification.ExecutorFactory, typeof(DefaultControllerLifecycleExecutorFactory));
+			if (!services.HasService(ServiceIdentification.TransformationFilterFactory))
+				services.RegisterService(ServiceIdentification.TransformationFilterFactory, typeof(DefaultTransformFilterFactory));
+			if (!services.HasService(ServiceIdentification.TransformFilterDescriptorProvider))
+				services.RegisterService(ServiceIdentification.TransformFilterDescriptorProvider, typeof(DefaultTransformFilterDescriptorProvider));
 			}
 			if (!services.HasService(ServiceIdentification.UrlBuilder))
 			{

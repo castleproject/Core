@@ -44,6 +44,7 @@ namespace Castle.MonoRail.Framework.Services
 		private ILayoutDescriptorProvider layoutDescriptorProvider;
 		private IRescueDescriptorProvider rescueDescriptorProvider;
 		private IResourceDescriptorProvider resourceDescriptorProvider;
+		private ITransformFilterDescriptorProvider transformFilterDescriptorProvider;
 
 		#region IServiceEnabledComponent implementation
 
@@ -70,6 +71,9 @@ namespace Castle.MonoRail.Framework.Services
 		
 			resourceDescriptorProvider = (IResourceDescriptorProvider)
 				serviceProvider.GetService(typeof(IResourceDescriptorProvider));
+			
+			transformFilterDescriptorProvider = (ITransformFilterDescriptorProvider)
+				serviceProvider.GetService(typeof(ITransformFilterDescriptorProvider));
 		}
 
 		#endregion
@@ -227,6 +231,7 @@ namespace Castle.MonoRail.Framework.Services
 			CollectSkipRescue(actionDescriptor, method);
 			CollectLayout(actionDescriptor, method);
 			CollectCacheConfigures(actionDescriptor, method);
+			CollectTransformFilter(actionDescriptor, method);
 			
 			if (method.IsDefined(typeof(AjaxActionAttribute), true))
 			{
@@ -267,6 +272,12 @@ namespace Castle.MonoRail.Framework.Services
 		private void CollectResources(BaseMetaDescriptor desc, MemberInfo memberInfo)
 		{
 			desc.Resources = resourceDescriptorProvider.CollectResources(memberInfo);
+		}
+
+		private void CollectTransformFilter(ActionMetaDescriptor actionDescriptor, MethodInfo method)
+		{
+			actionDescriptor.TransformFilters = transformFilterDescriptorProvider.CollectFilters((method));
+			Array.Sort(actionDescriptor.TransformFilters, TransformFilterDescriptorComparer.Instance);
 		}
 		
 		/// <summary>
@@ -410,6 +421,29 @@ namespace Castle.MonoRail.Framework.Services
 			public int Compare(object left, object right)
 			{
 				return ((FilterDescriptor) left).ExecutionOrder - ((FilterDescriptor) right).ExecutionOrder;
+			}
+		}
+
+		/// <summary>
+		/// This <see cref="IComparer"/> implementation
+		/// is used to sort the transformfilters based on their Execution Order.
+		/// </summary>
+		class TransformFilterDescriptorComparer : IComparer
+		{
+			private static readonly TransformFilterDescriptorComparer instance = new TransformFilterDescriptorComparer();
+
+			private TransformFilterDescriptorComparer()
+			{
+			}
+
+			public static TransformFilterDescriptorComparer Instance
+			{
+				get { return instance; }
+			}
+
+			public int Compare(object left, object right)
+			{
+				return ((TransformFilterDescriptor)right).ExecutionOrder - ((TransformFilterDescriptor)left).ExecutionOrder;
 			}
 		}
 	}
