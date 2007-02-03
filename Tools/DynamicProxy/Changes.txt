@@ -1,3 +1,6 @@
+- Applied Thomas Darimont's patch fixing 
+  "Provide access to the Interceptor of a Proxy"
+
 - Applied 'brian@protexis.com' suggestion: "When the GetMethods call is 
   made on the Type object, the returned array of Method objects do not nessessarily 
   belong to the same Assembly object as the Type object. "

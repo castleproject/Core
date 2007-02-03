@@ -286,18 +286,42 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			_method2Invocation.CodeBuilder.AddStatement(new ReturnStatement(invocation_local));
 		}
 
-		protected virtual Type[] AddISerializable(Type[] interfaces)
+		protected virtual Type[] AddInterfaces(Type[] interfacesToAdd, Type[] interfaces)
 		{
-			if (Array.IndexOf(interfaces, typeof(ISerializable)) != -1)
+			bool[] containsInterface = new bool[interfacesToAdd.Length];
+			int interfacesToAddCount = 0;
+			for(int i = interfacesToAdd.Length - 1; i >= 0; i--)
 			{
-				return interfaces;
+				containsInterface[i] = Array.Exists(interfaces, delegate(Type type)
+				                                                	{
+				                                                		//May be somebody should revise this...
+				                                                		return interfacesToAdd[i].FullName.Equals(type.FullName);
+				                                                	});
+				if (!containsInterface[i])
+				{
+					interfacesToAddCount++;
+				}
 			}
 
-			int len = interfaces.Length;
-			Type[] newlist = new Type[len + 1];
-			Array.Copy(interfaces, newlist, len);
-			newlist[len] = typeof(ISerializable);
-			return newlist;
+			Type[] newList = new Type[interfaces.Length + interfacesToAddCount];
+			Array.Copy(interfaces, newList, interfaces.Length);
+			int currentIndex = interfaces.Length;
+
+			for(int i = 0; i < interfacesToAdd.Length; i++)
+			{
+				if (!containsInterface[i]) // Proxy does not yet implement the interface...
+				{
+					newList[currentIndex++] = interfacesToAdd[i];
+				}
+			}
+
+			return newList;
+		}
+
+		//For backward compatibility...
+		protected virtual Type[] AddISerializable(Type[] interfaces)
+		{
+			return AddInterfaces(new Type[] {typeof(ISerializable)}, interfaces);
 		}
 
 		protected virtual Type CreateType()
@@ -505,7 +529,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// Generate property implementation
 		/// </summary>
 		/// <param name="property"></param>
-		protected EasyProperty CreateProperty(PropertyInfo property)
+		protected virtual EasyProperty CreateProperty(PropertyInfo property)
 		{
 			return _typeBuilder.CreateProperty(property);
 		}
@@ -868,67 +892,67 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 #else
 			return false;
 #endif
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		internal class CallableField
-		{
-			private FieldReference _field;
-			private EasyCallable _callable;
-			private MethodInfo _callback;
-			private int _sourceArgIndex;
-
-			public CallableField(FieldReference field, EasyCallable callable,
-			                     MethodInfo callback, int sourceArgIndex)
-			{
-				_field = field;
-				_callable = callable;
-				_callback = callback;
-				_sourceArgIndex = sourceArgIndex;
-			}
-
-			public FieldReference Field
-			{
-				get { return _field; }
-			}
-
-			public EasyCallable Callable
-			{
-				get { return _callable; }
-			}
-
-			public int SourceArgIndex
-			{
-				get { return _sourceArgIndex; }
-			}
-
-			public void WriteInitialization(AbstractCodeBuilder codebuilder,
-			                                Reference targetArgument, Reference mixinArray)
-			{
-				NewInstanceExpression newInst = null;
-
-				if (SourceArgIndex == EmptyIndex)
-				{
-					newInst = new NewInstanceExpression(Callable,
-					                                    targetArgument.ToExpression(), new MethodPointerExpression(_callback));
-				}
-				else
-				{
-					newInst = new NewInstanceExpression(Callable,
-					                                    new LoadRefArrayElementExpression(SourceArgIndex, mixinArray),
-					                                    new MethodPointerExpression(_callback));
-				}
-
-				codebuilder.AddStatement(new AssignStatement(
-				                         	Field, newInst));
-			}
-
-			public static int EmptyIndex
-			{
-				get { return -1; }
-			}
 		}
 	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	internal class CallableField
+	{
+		private FieldReference _field;
+		private EasyCallable _callable;
+		private MethodInfo _callback;
+		private int _sourceArgIndex;
+
+		public CallableField(FieldReference field, EasyCallable callable,
+		                     MethodInfo callback, int sourceArgIndex)
+		{
+			_field = field;
+			_callable = callable;
+			_callback = callback;
+			_sourceArgIndex = sourceArgIndex;
+		}
+
+		public FieldReference Field
+		{
+			get { return _field; }
+		}
+
+		public EasyCallable Callable
+		{
+			get { return _callable; }
+		}
+
+		public int SourceArgIndex
+		{
+			get { return _sourceArgIndex; }
+		}
+
+		public void WriteInitialization(AbstractCodeBuilder codebuilder,
+		                                Reference targetArgument, Reference mixinArray)
+		{
+			NewInstanceExpression newInst = null;
+
+			if (SourceArgIndex == EmptyIndex)
+			{
+				newInst = new NewInstanceExpression(Callable,
+				                                    targetArgument.ToExpression(), new MethodPointerExpression(_callback));
+			}
+			else
+			{
+				newInst = new NewInstanceExpression(Callable,
+				                                    new LoadRefArrayElementExpression(SourceArgIndex, mixinArray),
+				                                    new MethodPointerExpression(_callback));
+			}
+
+			codebuilder.AddStatement(new AssignStatement(
+			                         	Field, newInst));
+		}
+
+		public static int EmptyIndex
+		{
+			get { return -1; }
+		}
+	}
+}

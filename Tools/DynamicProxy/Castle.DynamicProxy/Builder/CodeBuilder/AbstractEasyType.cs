@@ -144,6 +144,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			get { return _methods; }
 		}
 
+		public PropertiesCollection Properties
+		{
+			get { return _properties; }
+		}
+
 		public TypeBuilder TypeBuilder
 		{
 			get { return _typebuilder; }

@@ -77,6 +77,8 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -313,6 +315,7 @@
     <Compile Include="Invocation\SameClassInvocation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IProxy.cs" />
     <Compile Include="ProxyGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
