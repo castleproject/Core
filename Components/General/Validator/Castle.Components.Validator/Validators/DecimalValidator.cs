@@ -71,7 +71,10 @@ namespace Castle.Components.Validator
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
 		                                        IWebValidationGenerator generator, IDictionary attributes)
 		{
-			generator.SetNumberOnly(BuildErrorMessage());
+			if (inputType == InputElementType.Text)
+			{
+				generator.SetNumberOnly(BuildErrorMessage());
+			}
 		}
 
 		/// <summary>

@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 {
-	using System;
 	using System.Collections;
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Internal;
