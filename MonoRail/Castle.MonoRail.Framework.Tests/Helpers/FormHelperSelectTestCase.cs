@@ -247,10 +247,22 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				"<select id=\"user_registration\" name=\"user.registration\" >" + Environment.NewLine + 
 				"<option value=\"1\">unregistered</option>" + Environment.NewLine + "<option value=\"2\">pending</option>" + Environment.NewLine + "<option value=\"6\">registered</option>" + Environment.NewLine + "</select>",
 				helper.Select("user.registration", Enum.GetValues(typeof(SimpleUser.RegistrationEnum))));
-		}			
+		}	
+		
+#if DOTNET2		
 
+		[Test]
+		public void UsingInterface()
+		{
+			List<IInterfacedList> list = new List<IInterfacedList>();
 
-#if DOTNET2
+			list.Add(new InterfacedClassA(1, "ernst"));
+			list.Add(new InterfacedClassB(2, "enix"));
+
+			Assert.AreEqual("<select id=\"user_name\" name=\"user.name\" >" + Environment.NewLine +
+				"<option value=\"1\">ernst</option>" + Environment.NewLine + "<option value=\"2\">enix</option>" + Environment.NewLine + "</select>",
+				helper.Select("user.name", list, DictHelper.Create("value=id", "text=name")));
+		}
 
 		[Test]
 		public void BasicFunctionalityInDotNet2()

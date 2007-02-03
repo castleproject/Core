@@ -1824,7 +1824,21 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			public override object GetValue(object instance)
 			{
-				return propInfo.GetValue(instance, null);
+				try
+				{
+					return propInfo.GetValue(instance, null);
+				}
+				catch(TargetException)
+				{
+					PropertyInfo tempProp = instance.GetType().GetProperty(Name);
+
+					if (tempProp == null)
+					{
+						throw;
+					}
+
+					return tempProp.GetValue(instance, null);
+				}
 			}
 		}
 
@@ -1921,7 +1935,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				{
 					return new DataRowViewValueGetter(keyName);
 				}
-				else if(typeof(Enum).IsAssignableFrom(targetType))
+				else if (targetType.IsEnum)
 				{
 					return new EnumValueGetter(targetType);
 				}

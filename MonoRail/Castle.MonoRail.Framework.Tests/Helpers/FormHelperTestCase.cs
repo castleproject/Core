@@ -682,5 +682,67 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 #endif
 
+	public interface IInterfacedList
+	{
+		int Id { get; set;}
+		string Name { get; set;}
+	}
+
+	public class InterfacedClassA : IInterfacedList
+	{
+		private int id;
+		private string name;
+
+		public InterfacedClassA(int id, string name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		#region IInterfacedList Members
+
+		public int Id
+		{
+			get{ return id; }
+			set{ id = value; }
+		}
+
+		public string Name
+		{
+			get{ return name; }
+			set{ name = value; }
+		}
+
+		#endregion
+	}
+
+	public class InterfacedClassB : IInterfacedList
+	{
+		private int id;
+		private string name;
+
+		public InterfacedClassB(int id, string name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		#region IInterfacedList Members
+
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		#endregion
+	}
+
 	#endregion
 }

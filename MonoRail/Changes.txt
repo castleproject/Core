@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-219
+  "FormHelper.Select with an interface datasource throws an Object mismatch exception."
+
 - Applied chris ortman's patch fixing MR-188
   "Allow the #component directive to support variables for the component name"
 
