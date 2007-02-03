@@ -155,7 +155,7 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			context.UnderlyingContext.Items["wizard.step.list"] = stepList;
+			context.Items["wizard.step.list"] = stepList;
 
 			SetUpWizardHelper(controller);
 			SetUpWizardHelper(currentStepInstance);
@@ -254,7 +254,7 @@ namespace Castle.MonoRail.Framework
 
 			IRailsEngineContext context = controller.Context;
 
-			IList stepList = (IList) context.UnderlyingContext.Items["wizard.step.list"];
+			IList stepList = (IList) context.Items["wizard.step.list"];
 
 			String firstStep = (String) stepList[0];
 

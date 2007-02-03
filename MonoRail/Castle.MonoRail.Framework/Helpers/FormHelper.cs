@@ -1361,7 +1361,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			if (rootInstance == null && (context == RequestContext.All || context == RequestContext.Request))
 			{
-				rootInstance = Controller.Context.UnderlyingContext.Items[target];
+				rootInstance = Controller.Context.Items[target];
 			}
 
 			return rootInstance;

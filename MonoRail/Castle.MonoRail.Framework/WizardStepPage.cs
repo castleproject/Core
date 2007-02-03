@@ -288,7 +288,7 @@ namespace Castle.MonoRail.Framework
 
 			int currentIndex = (int) Context.Session[wizardName + "currentstepindex"];
 			
-			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
+			IList stepList = (IList) Context.Items["wizard.step.list"];
 
 			if ((currentIndex + 1) < stepList.Count)
 			{
@@ -337,7 +337,7 @@ namespace Castle.MonoRail.Framework
 
 			int currentIndex = (int) Context.Session[wizardName + "currentstepindex"];
 			
-			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
+			IList stepList = (IList) Context.Items["wizard.step.list"];
 
 			if ((currentIndex - 1) >= 0)
 			{
@@ -374,7 +374,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected void RedirectToFirstStep(IDictionary queryStringParameters)
 		{
-			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
+			IList stepList = (IList) Context.Items["wizard.step.list"];
 
 			String firstStep = (String) stepList[0];
 
@@ -402,7 +402,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected bool RedirectToStep(String stepName, IDictionary queryStringParameters)
 		{
-			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
+			IList stepList = (IList) Context.Items["wizard.step.list"];
 
 			for(int index = 0; index < stepList.Count; index++)
 			{

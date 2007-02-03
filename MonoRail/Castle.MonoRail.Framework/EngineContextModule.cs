@@ -197,7 +197,7 @@ namespace Castle.MonoRail.Framework
 
 			IControllerLifecycleExecutor executor = factory.CreateExecutor(controller, context);
 			
-			context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry] = executor;
+			context.Items[ControllerLifecycleExecutor.ExecutorEntry] = executor;
 
 			return executor;
 		}

@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Lee Henson's patch fixing MR-222
+  "Use of IRailsEngineContext.Items"
+
 - Fixed MR-224
   "ARDataBindAttribute does not set the Controllers validator on it's DataBinder"
 

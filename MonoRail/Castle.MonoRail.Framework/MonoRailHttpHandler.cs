@@ -73,17 +73,15 @@ namespace Castle.MonoRail.Framework
 		public virtual void Process(IRailsEngineContext context)
 		{
 			ControllerLifecycleExecutor executor = 
-				(ControllerLifecycleExecutor) context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
+				(ControllerLifecycleExecutor) context.Items[ControllerLifecycleExecutor.ExecutorEntry];
 
 			DefaultRailsEngineContext contextImpl = (DefaultRailsEngineContext) context;
 			contextImpl.ResolveRequestSession();
 
-			HttpContext httpCtx = context.UnderlyingContext;
-			
-			httpCtx.Items["mr.controller"] = executor.Controller;
-			httpCtx.Items["mr.flash"] = executor.Controller.Flash;
-			httpCtx.Items["mr.propertybag"] = executor.Controller.PropertyBag;
-			httpCtx.Items["mr.session"] = context.Session;
+			context.Items["mr.controller"] = executor.Controller;
+			context.Items["mr.flash"] = executor.Controller.Flash;
+			context.Items["mr.propertybag"] = executor.Controller.PropertyBag;
+			context.Items["mr.session"] = context.Session;
 			
 			// At this point, the before filters were executed. 
 			// So we just need to perform the secondary initialization

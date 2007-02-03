@@ -416,7 +416,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private Controller GetCurrentController()
 		{
 			IControllerLifecycleExecutor executor = (IControllerLifecycleExecutor)
-													MonoRailHttpHandler.CurrentContext.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
+													MonoRailHttpHandler.CurrentContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
 
 			return executor.Controller;
 		}

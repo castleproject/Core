@@ -124,14 +124,14 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		{
 			const String mrExceptionKey = "MonoRail.ExceptionHandled";
 			
-			if (context.UnderlyingContext.Items.Contains(mrExceptionKey))
+			if (context.Items.Contains(mrExceptionKey))
 			{
 				return;
 			}
 			
 			if (firstHandler != null)
 			{
-				context.UnderlyingContext.Items.Add(mrExceptionKey, true);
+				context.Items.Add(mrExceptionKey, true);
 				
 				firstHandler.Process(context);
 			}

@@ -888,7 +888,7 @@ namespace Castle.MonoRail.Framework
 			if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
 
 			IControllerLifecycleExecutor executor =
-				(IControllerLifecycleExecutor) context.UnderlyingContext.Items[ControllerLifecycleExecutor.ExecutorEntry];
+				(IControllerLifecycleExecutor) context.Items[ControllerLifecycleExecutor.ExecutorEntry];
 
 			if (!executor.SelectAction(action, Name, actionArgs))
 			{
@@ -1003,9 +1003,9 @@ namespace Castle.MonoRail.Framework
 				(view as IControllerAware).SetController(this);
 			}
 
-			if (context.UnderlyingContext != null)
+			if (context.Items != null)
 			{
-				context.UnderlyingContext.Items[Constants.ControllerContextKey] = this;
+				context.Items[Constants.ControllerContextKey] = this;
 			}
 		}
 
