@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="email" xml:space="preserve">
-    <value>Campo não parece ser um e-mail válido</value>
+    <value>Campo não parece conter um e-mail válido</value>
   </data>
   <data name="exactlength" xml:space="preserve">
     <value>Campo precisa ter {0} caracteres</value>
@@ -133,6 +133,30 @@
     <value>Campo precisa ter menos que {0} caracteres</value>
   </data>
   <data name="length_tooshort" xml:space="preserve">
-    <value>Campo precisa ter mais que {0} caracteres</value>
+    <value>Campos precisa ter mais que {0} caracteres</value>
+  </data>
+  <data name="date_invalid" xml:space="preserve">
+    <value>Data inválida</value>
+  </data>
+  <data name="decimal_invalid" xml:space="preserve">
+    <value>Campo inválido, conteúdo não é um decimal</value>
+  </data>
+  <data name="double_invalid" xml:space="preserve">
+    <value>Campo inválido, conteúdo não é um número real</value>
+  </data>
+  <data name="generic_invalid" xml:space="preserve">
+    <value>Campo inválido</value>
+  </data>
+  <data name="integer_invalid" xml:space="preserve">
+    <value>Campo inválido, conteúdo não é um inteiro</value>
+  </data>
+  <data name="same_as_invalid" xml:space="preserve">
+    <value>Valores dos campos nao coincidem</value>
+  </data>
+  <data name="single_invalid" xml:space="preserve">
+    <value>Campo inválido, conteúdo não é um número real</value>
+  </data>
+  <data name="time_invalid" xml:space="preserve">
+    <value>Campo inválido, conteúdo não é uma hora</value>
   </data>
 </root>
