@@ -113,16 +113,16 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				binder = new ARDataBinder();
 			}
 
+			ConfigureValidator(controller, binder);
+
 			binder.AutoLoad = autoLoad;
 			
 			CompositeNode node = controller.ObtainParamsNode(From);
 
 			object instance = binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, node);
 
-			if (instance != null)
-			{
-				controller.BoundInstanceErrors[instance] = binder.ErrorList;
-			}
+			BindInstanceErrors(controller, binder, instance);
+			PopulateValidatorErrorSummary(controller, binder, instance);
 
 			return instance;
 		}

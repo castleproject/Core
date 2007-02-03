@@ -16,6 +16,7 @@
 			<include name="Castle.ActiveRecord.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.Components.Binder.dll" />
+			<include name="Castle.Components.Validator.dll" />
 			<include name="NHibernate.dll" />
 			<include name="Nullables.dll" />
 			<include name="Iesi.Collections.dll" />

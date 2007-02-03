@@ -155,6 +155,20 @@ namespace Castle.MonoRail.Framework
 		{
 			DataBinder binder = controller.Binder;
 
+			ConfigureValidator(controller, binder);
+
+			CompositeNode node = controller.ObtainParamsNode(From);
+
+			object instance = binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, node);
+
+			BindInstanceErrors(controller, binder, instance);
+			PopulateValidatorErrorSummary(controller, binder, instance);
+
+			return instance;
+		}
+
+		protected void ConfigureValidator(SmartDispatcherController controller, DataBinder binder)
+		{
 			if (validate)
 			{
 				binder.Validator = controller.Validator;
@@ -163,24 +177,23 @@ namespace Castle.MonoRail.Framework
 			{
 				binder.Validator = null;
 			}
+		}
 
-			CompositeNode node = controller.ObtainParamsNode(From);
-
-			object instance = binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, node);
-
-			if (instance != null)
-			{
-				controller.BoundInstanceErrors[instance] = binder.ErrorList;
-			}
-
-			// Populates the validation error summary
+		protected void PopulateValidatorErrorSummary(SmartDispatcherController controller, DataBinder binder, object instance)
+		{
 			if (validate)
 			{
 				ErrorSummary summary = binder.GetValidationSummary(instance);
 				controller.ValidationSummaryPerInstance[instance] = summary;
 			}
+		}
 
-			return instance;
+		protected void BindInstanceErrors(SmartDispatcherController controller, DataBinder binder, object instance)
+		{
+			if (instance != null)
+			{
+				controller.BoundInstanceErrors[instance] = binder.ErrorList;
+			}
 		}
 	}
 }

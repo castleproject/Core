@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-224
+  "ARDataBindAttribute does not set the Controllers validator on it's DataBinder"
+
 - Fixed MR-219
   "FormHelper.Select with an interface datasource throws an Object mismatch exception."
 

@@ -151,7 +151,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// so we need to check them recursively
 		/// </summary>
 		protected bool FindPropertyInHasMany(ActiveRecordModel model, string propertyName,
-			 ref Type foundType, ref ActiveRecordModel foundModel)
+		                                     ref Type foundType, ref ActiveRecordModel foundModel)
 		{
 			foreach (HasManyModel hasManyModel in model.HasMany)
 			{
