@@ -20,6 +20,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 	using Castle.Core.Resource;
 	using Castle.Core.Configuration;
+
 	using Castle.MicroKernel;
 
 	/// <summary>
@@ -29,8 +30,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 	public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
 		#region Fields
-		protected const string ContainersNodeName = "containers";
-		protected const string ContainerNodeName = "container";
 		protected static readonly String FacilitiesNodeName = "facilities";
 		protected static readonly String FacilityNodeName = "facility";
 		protected static readonly String ComponentsNodeName = "components";
@@ -117,15 +116,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 		protected void AddComponentConfig(IConfiguration component, IConfigurationStore store)
 		{
 			AddComponentConfig( component.Attributes["id"], component, store );
-		}
-
-		protected void AddChildContainerConfig(String name, IConfiguration childContainer, IConfigurationStore store)
-		{
-			AssertValidId(name);
-
-			// TODO: Use import collection on type attribute (if it exists)
-
-			store.AddChildContainerConfiguration(name, childContainer);
 		}
 
 		protected void AddFacilityConfig(String id, IConfiguration facility, IConfigurationStore store)

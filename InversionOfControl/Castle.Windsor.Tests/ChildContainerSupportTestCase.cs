@@ -49,20 +49,6 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
-		public void ResolveAgainstParentContainerWithProperty()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer();
-			childcontainer.Parent = container;
-
-			Assert.AreEqual(container, childcontainer.Parent);
-
-			childcontainer.AddComponent("B", typeof(B));
-			B b = childcontainer["B"] as B;
-
-			Assert.IsNotNull(b);
-		}
-
-		[Test]
 		public void AddAndRemoveChildContainer()
 		{
 			IWindsorContainer childcontainer = new WindsorContainer();			
@@ -77,20 +63,6 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
-		public void AddAndRemoveChildContainerWithProperty()
-		{
-			IWindsorContainer childcontainer = new WindsorContainer();
-			childcontainer.Parent = container;
-			Assert.AreEqual(container, childcontainer.Parent);
-
-			childcontainer.Parent = null;
-			Assert.IsNull(childcontainer.Parent);
-
-			childcontainer.Parent = container;
-			Assert.AreEqual(container, childcontainer.Parent);
-		}
-
-		[Test]
 		[ExpectedException(typeof(KernelException))]
 		public void AddingToTwoParentContainsThrowsKernelException()
 		{
@@ -100,15 +72,6 @@ namespace Castle.Windsor.Tests
 			container3.AddChildContainer(childcontainer);
 		}
 
-		[Test]
-		[ExpectedException(typeof(KernelException))]
-		public void AddingToTwoParentWithPropertyContainsThrowsKernelException()
-		{
-			IWindsorContainer container3 = new WindsorContainer();
-			IWindsorContainer childcontainer = new WindsorContainer();
-			childcontainer.Parent = container;
-			childcontainer.Parent = container3;
-		}
 
 		[Test]
 		public void StartWithParentContainer()

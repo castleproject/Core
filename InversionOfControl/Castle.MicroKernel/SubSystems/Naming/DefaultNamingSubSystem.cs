@@ -38,9 +38,6 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// </summary>
 		protected IDictionary service2Handler;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DefaultNamingSubSystem"/> class.
-		/// </summary>
 		public DefaultNamingSubSystem()
 		{
 			key2Handler = Hashtable.Synchronized(new Hashtable());

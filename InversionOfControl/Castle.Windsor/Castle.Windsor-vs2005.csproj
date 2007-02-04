@@ -119,6 +119,9 @@
     <Compile Include="Configuration\AppDomain\CastleSectionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\CascadeConfigurationStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Configuration\IConfigurationInterpreter.cs">
       <SubType>Code</SubType>
     </Compile>

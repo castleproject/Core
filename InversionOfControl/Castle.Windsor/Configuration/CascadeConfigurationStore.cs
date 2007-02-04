@@ -12,17 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Windsor.Configuration
 {
 	using System;
 
+	using Castle.MicroKernel.SubSystems.Configuration;
+
 	/// <summary>
-	/// Summary description for DefaultTemplateEngine.
+	/// Enables a hierarchical configuration store. 
 	/// </summary>
-	public class DefaultTemplateEngine
+	public class CascadeConfigurationStore : DefaultConfigurationStore
 	{
-		public DefaultTemplateEngine()
+		public CascadeConfigurationStore(
+			IConfigurationInterpreter parent, IConfigurationInterpreter child)
 		{
+			if (parent == null) throw new ArgumentNullException("parent");
+			if (child == null) throw new ArgumentNullException("child");
+
+			// The parent configuration add the main entries.
+			parent.ProcessResource( parent.Source, this );
+
+			// The child may overwrite the config entries.
+			child.ProcessResource( child.Source, this );
 		}
 	}
 }

@@ -31,9 +31,6 @@ namespace Castle.Windsor
 	{
 		#region Fields
 
-		private readonly string name = Guid.NewGuid().ToString();
-		private readonly IDictionary childContainers = Hashtable.Synchronized(new Hashtable());
-
 		private IKernel kernel;
 		private IWindsorContainer parent;
 		private IComponentsInstaller installer;
@@ -46,7 +43,8 @@ namespace Castle.Windsor
 		/// Constructs a container without any external 
 		/// configuration reference
 		/// </summary>
-		public WindsorContainer() : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
+		public WindsorContainer()
+			: this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
 		{
 		}
 
@@ -76,29 +74,23 @@ namespace Castle.Windsor
 			RunInstaller();
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="WindsorContainer"/> class using a
-		/// xml file to configure it.
-		/// <para>
-		/// Equivalent to the use of <c>new WindsorContainer(new XmlInterpreter(xmlFile))</c>
-		/// </para>
-		/// </summary>
-		/// <param name="xmlFile">The XML file.</param>
+		[Obsolete("Use includes instead of cascade configurations")]
+		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this()
+		{
+			if (parent == null) throw new ArgumentNullException("parent");
+			if (child == null) throw new ArgumentNullException("child");
+
+			kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+
+			RunInstaller();
+		}
+
 		public WindsorContainer(String xmlFile) : this(new XmlInterpreter(xmlFile))
 		{
 		}
 
-		/// <summary>
-		/// Constructs a container using the specified <see cref="IKernel"/>
-		/// implementation. Rarely used.
-		/// </summary>
-		/// <remarks>
-		/// This constructs sets the Kernel.ProxyFactory property to
-		/// <see cref="Proxy.DefaultProxyFactory"/>
-		/// </remarks>
-		/// <param name="kernel">Kernel instance</param>
-		/// <param name="installer">Installer instance</param>
-		public WindsorContainer(IKernel kernel, IComponentsInstaller installer) : this(Guid.NewGuid().ToString(), kernel, installer)
+		[Obsolete("Use includes instead of cascade configurations")]
+		public WindsorContainer(String parentXmlFile, String childXmlFile) : this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
 		{
 		}
 
@@ -110,16 +102,15 @@ namespace Castle.Windsor
 		/// This constructs sets the Kernel.ProxyFactory property to
 		/// <see cref="Proxy.DefaultProxyFactory"/>
 		/// </remarks>
-		/// <param name="name">Container's name</param>
-		/// <param name="kernel">Kernel instance</param>
-		/// <param name="installer">Installer instance</param>
-		public WindsorContainer(String name, IKernel kernel, IComponentsInstaller installer)
+		/// <param name="kernel"></param>
+		/// <param name="installer"></param>
+		public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
 		{
-			if (name == null) throw new ArgumentNullException("name");
 			if (kernel == null) throw new ArgumentNullException("kernel");
 			if (installer == null) throw new ArgumentNullException("installer");
 
 			this.kernel = kernel;
+			// this.kernel.ProxyFactory = new Proxy.ProxySmartFactory();
 			this.kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
 
 			this.installer = installer;
@@ -142,8 +133,8 @@ namespace Castle.Windsor
 		/// Constructs a container assigning a parent container 
 		/// before starting the dependency resolution.
 		/// </summary>
-		/// <param name="parent">The instance of an <see cref="IWindsorContainer"/></param>
-		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation</param>
+		/// <param name="parent">The instance of an <see cref="IWindsorContainer"/>.</param>
+		/// <param name="interpreter">The instance of an <see cref="IConfigurationInterpreter"/> implementation.</param>
 		public WindsorContainer(IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
@@ -156,42 +147,9 @@ namespace Castle.Windsor
 			RunInstaller();
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="WindsorContainer"/> class.
-		/// </summary>
-		/// <param name="name">The container's name.</param>
-		/// <param name="parent">The parent.</param>
-		/// <param name="interpreter">The interpreter.</param>
-		public WindsorContainer(string name, IWindsorContainer parent, IConfigurationInterpreter interpreter) : this()
-		{
-			if (name == null) throw new ArgumentNullException("name");
-			if (parent == null) throw new ArgumentNullException("parent");
-			if (interpreter == null) throw new ArgumentNullException("interpreter");
-
-			this.name = name;
-
-			parent.AddChildContainer(this);
-
-			interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore);
-
-			RunInstaller();
-		}
-
 		#endregion
 
 		#region IWindsorContainer Members
-
-		/// <summary>
-		/// Gets the container's name
-		/// </summary>
-		/// <remarks>
-		/// Only useful when child containers are being used
-		/// </remarks>
-		/// <value>The container's name.</value>
-		public string Name
-		{
-			get { return name; }
-		}
 
 		/// <summary>
 		/// Returns the inner instance of the MicroKernel
@@ -210,21 +168,18 @@ namespace Castle.Windsor
 			get { return parent; }
 			set
 			{
-				if( value == null )
+				if (value == null)
 				{
 					if (parent != null)
 					{
-						parent.RemoveChildContainer(this);
+						parent.Kernel.RemoveChildKernel(kernel);
 						parent = null;
 					}
 				}
 				else
 				{
-					if (value != parent)
-					{
-						parent = value;
-						parent.AddChildContainer(this);
-					}
+					parent = value;
+					value.Kernel.AddChildKernel(kernel);
 				}
 			}
 		}
@@ -436,20 +391,7 @@ namespace Castle.Windsor
 		/// <param name="childContainer"></param>
 		public virtual void AddChildContainer(IWindsorContainer childContainer)
 		{
-			if (childContainer == null) throw new ArgumentNullException("childContainer");
-
-			if (!childContainers.Contains(childContainer.Name))
-			{
-				lock (childContainers.SyncRoot)
-				{
-					if (!childContainers.Contains(childContainer.Name))
-					{
-						kernel.AddChildKernel(childContainer.Kernel);
-						childContainers.Add(childContainer.Name, childContainer);
-						childContainer.Parent = this;
-					}
-				}
-			}
+			childContainer.Parent = this;
 		}
 
 		/// <summary>
@@ -459,30 +401,7 @@ namespace Castle.Windsor
 		/// <param name="childContainer"></param>
 		public virtual void RemoveChildContainer(IWindsorContainer childContainer)
 		{
-			if (childContainer == null) throw new ArgumentNullException("childContainer");
-
-			if (childContainers.Contains(childContainer.Name))
-			{
-				lock (childContainers.SyncRoot)
-				{
-					if (childContainers.Contains(childContainer.Name))
-					{
-						kernel.RemoveChildKernel(childContainer.Kernel);
-						childContainers.Remove(childContainer.Name);
-						childContainer.Parent = null;
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets a child container instance by name.
-		/// </summary>
-		/// <param name="name">The container's name.</param>
-		/// <returns>The child container instance or null</returns>
-		public IWindsorContainer GetChildContainer(string name)
-		{
-			return childContainers[name] as IWindsorContainer;
+			childContainer.Parent = null;
 		}
 
 		#endregion
@@ -494,8 +413,6 @@ namespace Castle.Windsor
 		/// </summary>
 		public virtual void Dispose()
 		{
-			Parent = null;
-			childContainers.Clear();
 			kernel.Dispose();
 		}
 

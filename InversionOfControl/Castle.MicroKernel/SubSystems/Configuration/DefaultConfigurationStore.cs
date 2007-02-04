@@ -32,11 +32,9 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 	[Serializable]
 	public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	{
-		private readonly IDictionary childContainers = new HybridDictionary();
 		private readonly IDictionary facilities = new HybridDictionary();
 		private readonly IDictionary components = new HybridDictionary();
 		private readonly IDictionary bootstrapcomponents = new HybridDictionary();
-		private readonly ArrayList childContainersList = new ArrayList();
 		private readonly ArrayList facilitiesList = new ArrayList();
 		private readonly ArrayList componentsList = new ArrayList();
 		private readonly ArrayList bootstrapComponentsList = new ArrayList();
@@ -84,19 +82,6 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 		}
 
 		/// <summary>
-		/// Adds the child container configuration.
-		/// </summary>
-		/// <param name="key">The key.</param>
-		/// <param name="config">The config.</param>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public void AddChildContainerConfiguration(String key, IConfiguration config)
-		{
-			childContainersList.Add(config);
-
-			childContainers[key] = config;
-		}
-
-		/// <summary>
 		/// Returns the configuration node associated with
 		/// the specified facility key. Should return null
 		/// if no association exists.
@@ -107,19 +92,6 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 		public IConfiguration GetFacilityConfiguration(String key)
 		{
 			return facilities[key] as IConfiguration;
-		}
-
-		/// <summary>
-		/// Returns the configuration node associated with
-		/// the specified child container key. Should return null
-		/// if no association exists.
-		/// </summary>
-		/// <param name="key">item key</param>
-		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public IConfiguration GetChildContainerConfiguration(String key)
-		{
-			return childContainers[key] as IConfiguration;
 		}
 
 		/// <summary>
@@ -166,16 +138,6 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 		public IConfiguration[] GetBootstrapComponents()
 		{
 			return (IConfiguration[]) bootstrapComponentsList.ToArray(typeof(IConfiguration));
-		}
-
-		/// <summary>
-		/// Returns all configuration nodes for child containers
-		/// </summary>
-		/// <returns></returns>
-		[MethodImpl(MethodImplOptions.Synchronized)]
-		public IConfiguration[] GetConfigurationForChildContainers()
-		{
-			return (IConfiguration[]) childContainersList.ToArray(typeof(IConfiguration));
 		}
 
 		/// <summary>

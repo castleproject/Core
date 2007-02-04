@@ -19,7 +19,6 @@ namespace Castle.MicroKernel.Tests.SubContainers
 
 	using NUnit.Framework;
 
-	using Castle.Core;
 	using Castle.MicroKernel.Tests.ClassComponents;
 
 	/// <summary>
@@ -43,91 +42,18 @@ namespace Castle.MicroKernel.Tests.SubContainers
 		}
 
 		[Test]
-		public void ChildDependenciesSatisfiedAmongContainers()
-		{
-			IKernel subkernel = new DefaultKernel();
-
-			kernel.AddComponent("spamservice", typeof(DefaultSpamService));
-			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
-
-			kernel.AddChildKernel(subkernel);
-			subkernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
-
-			DefaultSpamService spamservice = (DefaultSpamService) subkernel["spamservice"];
-
-			Assert.IsNotNull(spamservice);
-			Assert.IsNotNull(spamservice.MailSender);
-			Assert.IsNotNull(spamservice.TemplateEngine);
-		}
-
-		[Test]
-		public void UseChildComponentsForParentDependenciesWhenRequestedFromChild()
-		{
-			IKernel subkernel = new DefaultKernel();
-
-			kernel.AddComponent("spamservice", typeof(DefaultSpamService), LifestyleType.Transient);
-			kernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
-			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
-
-			kernel.AddChildKernel(subkernel);
-			subkernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
-
-			DefaultTemplateEngine templateengine = (DefaultTemplateEngine)kernel["templateengine"];
-			DefaultTemplateEngine sub_templateengine = (DefaultTemplateEngine)subkernel["templateengine"];
-
-			DefaultSpamService spamservice = (DefaultSpamService)subkernel["spamservice"];
-			Assert.AreNotEqual(spamservice.TemplateEngine, templateengine);
-			Assert.AreEqual(spamservice.TemplateEngine, sub_templateengine);
-
-			spamservice = (DefaultSpamService)kernel["spamservice"];
-			Assert.AreNotEqual(spamservice.TemplateEngine, sub_templateengine);
-			Assert.AreEqual(spamservice.TemplateEngine, templateengine);
-
-			kernel.RemoveComponent("templateengine");
-			spamservice = (DefaultSpamService)kernel["spamservice"];
-			Assert.IsNull(spamservice.TemplateEngine);
-		}
-
-		[Test]
-		public void Singleton_WithNonSingletonDependencies_DoesNotReResolveDependencies()
-		{
-			kernel.AddComponent("spamservice", typeof(DefaultSpamService));
-			kernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
-
-			IKernel subkernel1 = new DefaultKernel();
-			subkernel1.AddComponent("templateengine", typeof(DefaultTemplateEngine));
-			kernel.AddChildKernel(subkernel1);
-
-			IKernel subkernel2 = new DefaultKernel();
-			subkernel2.AddComponent("templateengine", typeof(DefaultTemplateEngine), LifestyleType.Transient);
-			kernel.AddChildKernel(subkernel2);
-
-			DefaultTemplateEngine templateengine1 = (DefaultTemplateEngine)subkernel1["templateengine"];
-			DefaultSpamService spamservice1 = (DefaultSpamService)subkernel1["spamservice"];
-			Assert.IsNotNull(spamservice1);
-			Assert.AreEqual(spamservice1.TemplateEngine.Key, templateengine1.Key);
-
-			DefaultTemplateEngine templateengine2 = (DefaultTemplateEngine)subkernel2["templateengine"];
-			DefaultSpamService spamservice2 = (DefaultSpamService)subkernel2["spamservice"];
-			Assert.IsNotNull(spamservice2);
-			Assert.AreEqual(spamservice1, spamservice2);
-			Assert.AreEqual(spamservice1.TemplateEngine.Key, templateengine1.Key);
-			Assert.AreNotEqual(spamservice2.TemplateEngine.Key, templateengine2.Key);
-		}
-
-		[Test]
 		public void DependenciesSatisfiedAmongContainers()
 		{
 			IKernel subkernel = new DefaultKernel();
 
-			kernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
-			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
+			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
+			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
 
 			kernel.AddChildKernel(subkernel);
 
-			subkernel.AddComponent("spamservice", typeof(DefaultSpamService));
+			subkernel.AddComponent( "spamservice", typeof(DefaultSpamService) );
 
-			DefaultSpamService spamservice = (DefaultSpamService)subkernel["spamservice"];
+			DefaultSpamService spamservice = (DefaultSpamService) subkernel["spamservice"];
 
 			Assert.IsNotNull(spamservice);
 			Assert.IsNotNull(spamservice.MailSender);
