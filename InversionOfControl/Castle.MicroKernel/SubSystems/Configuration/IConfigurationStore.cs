@@ -48,6 +48,22 @@ namespace Castle.MicroKernel
 		void AddBootstrapComponentConfiguration(String key, IConfiguration config);
 
 		/// <summary>
+		/// Adds the child container configuration.
+		/// </summary>
+		/// <param name="name">The container's name.</param>
+		/// <param name="config">The config.</param>
+		void AddChildContainerConfiguration(String name, IConfiguration config);
+
+		/// <summary>
+		/// Returns the configuration node associated with 
+		/// the specified child container key. Should return null
+		/// if no association exists.
+		/// </summary>
+		/// <param name="key">item key</param>
+		/// <returns></returns>
+		IConfiguration GetChildContainerConfiguration(String key);
+
+		/// <summary>
 		/// Returns the configuration node associated with 
 		/// the specified facility key. Should return null
 		/// if no association exists.
@@ -91,6 +107,12 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <returns></returns>
 		IConfiguration[] GetBootstrapComponents();
+
+		/// <summary>
+		/// Gets the child containers configuration nodes.
+		/// </summary>
+		/// <returns></returns>
+		IConfiguration[] GetConfigurationForChildContainers();
 
 		/// <summary>
 		/// 

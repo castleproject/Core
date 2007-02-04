@@ -13,25 +13,30 @@
 // limitations under the License.
 
 
-
 #if DOTNET2
 
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using Castle.Core.Configuration;
-
 
 	[Serializable]
 	public class GenericDictionaryConverter : AbstractTypeConverter
 	{
-		public GenericDictionaryConverter() {}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GenericDictionaryConverter"/> class.
+		/// </summary>
+		public GenericDictionaryConverter()
+		{
+		}
 
 		public override bool CanHandleType(Type type)
 		{
-			return type.IsGenericType  && (type.GetGenericTypeDefinition() == typeof (IDictionary<,>) || type.GetGenericTypeDefinition() == typeof (Dictionary<,>));
+			return
+				type.IsGenericType &&
+				(type.GetGenericTypeDefinition() == typeof(IDictionary<,>) ||
+				 type.GetGenericTypeDefinition() == typeof(Dictionary<,>));
 		}
 
 		public override object PerformConversion(String value, Type targetType)
@@ -43,28 +48,39 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			System.Diagnostics.Debug.Assert(CanHandleType(targetType), "Got a type we can't handle!");
 
+			Type[] argTypes = targetType.GetGenericArguments();
+
+			if (argTypes.Length != 2)
+			{
+				throw new ConverterException("Expected type with two generic arguments.");
+			}
 
 			String keyTypeName = configuration.Attributes["keyType"];
-			Type defaultKeyType = typeof (String);
+			Type defaultKeyType = argTypes[0];
 
 			String valueTypeName = configuration.Attributes["valueType"];
-			Type defaultValueType = typeof (String);
+			Type defaultValueType = argTypes[1];
 
 			if (keyTypeName != null)
 			{
-				defaultKeyType = (Type) Context.Composition.PerformConversion(keyTypeName, typeof (Type));
+				defaultKeyType = (Type) Context.Composition.PerformConversion(keyTypeName, typeof(Type));
 			}
+			
 			if (valueTypeName != null)
 			{
-				defaultValueType = (Type) Context.Composition.PerformConversion(valueTypeName, typeof (Type));
+				defaultValueType = (Type) Context.Composition.PerformConversion(valueTypeName, typeof(Type));
 			}
-			IGenericCollectionConverterHelper collectionConverterHelper = (IGenericCollectionConverterHelper) Activator.CreateInstance(typeof (DictionaryHelper<,>).MakeGenericType(defaultKeyType, defaultValueType), this);
+
+			IGenericCollectionConverterHelper collectionConverterHelper =
+				(IGenericCollectionConverterHelper)
+				Activator.CreateInstance(typeof(DictionaryHelper<,>).MakeGenericType(defaultKeyType, defaultValueType), this);
+			
 			return collectionConverterHelper.ConvertConfigurationToCollection(configuration);
 		}
 
 		private class DictionaryHelper<TKey, TValue> : IGenericCollectionConverterHelper
 		{
-			GenericDictionaryConverter parent;
+			private GenericDictionaryConverter parent;
 
 			public DictionaryHelper(GenericDictionaryConverter parent)
 			{
@@ -75,7 +91,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			{
 				Dictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
 
-				foreach (IConfiguration itemConfig in configuration.Children)
+				foreach(IConfiguration itemConfig in configuration.Children)
 				{
 					// Preparing the key
 
@@ -86,32 +102,37 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 						throw new ConverterException("You must provide a key for the dictionary entry");
 					}
 
-					Type convertKeyTo = typeof (TKey);
+					Type convertKeyTo = typeof(TKey);
 
 					if (itemConfig.Attributes["keyType"] != null)
 					{
-						convertKeyTo = (Type) parent.Context.Composition.PerformConversion(itemConfig.Attributes["keyType"], typeof (Type));
+						convertKeyTo = (Type) parent.Context.Composition.PerformConversion(itemConfig.Attributes["keyType"], typeof(Type));
 					}
 
-					if (!typeof (TKey).IsAssignableFrom(convertKeyTo))
+					if (!typeof(TKey).IsAssignableFrom(convertKeyTo))
 					{
-						throw new ArgumentException(string.Format("Could not create dictionary<{0},{1}> because {2} is not assignmable to key type {0}", typeof (TKey), typeof (TValue), convertKeyTo));
+						throw new ArgumentException(
+							string.Format("Could not create dictionary<{0},{1}> because {2} is not assignmable to key type {0}", typeof(TKey),
+							              typeof(TValue), convertKeyTo));
 					}
 
 					TKey key = (TKey) parent.Context.Composition.PerformConversion(keyValue, convertKeyTo);
 
 					// Preparing the value
 
-					Type convertValueTo = typeof (TValue);
+					Type convertValueTo = typeof(TValue);
 
 					if (itemConfig.Attributes["valueType"] != null)
 					{
-						convertValueTo = (Type) parent.Context.Composition.PerformConversion(itemConfig.Attributes["valueType"], typeof (Type));
+						convertValueTo =
+							(Type) parent.Context.Composition.PerformConversion(itemConfig.Attributes["valueType"], typeof(Type));
 					}
 
-					if (!typeof (TValue).IsAssignableFrom(convertValueTo))
+					if (!typeof(TValue).IsAssignableFrom(convertValueTo))
 					{
-						throw new ArgumentException(string.Format("Could not create dictionary<{0},{1}> because {2} is not assignmable to value type {1}", typeof (TKey), typeof (TValue), convertValueTo));
+						throw new ArgumentException(
+							string.Format("Could not create dictionary<{0},{1}> because {2} is not assignmable to value type {1}",
+							              typeof(TKey), typeof(TValue), convertValueTo));
 					}
 					TValue value = (TValue) parent.Context.Composition.PerformConversion(itemConfig.Value, convertValueTo);
 

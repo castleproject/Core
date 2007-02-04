@@ -14,7 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.Configuration
 {
-	using System;
 	using NUnit.Framework;
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Resolvers;
@@ -216,6 +215,39 @@ namespace Castle.MicroKernel.Tests.Configuration
 			Assert.IsNotNull(instance);
 			Assert.AreEqual(Core.LifestyleType.Custom, handler.ComponentModel.LifestyleType);
 			Assert.AreEqual(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
+		}
+
+		[Test]
+		public void ComplexConfigurationParameter()
+		{
+			string key = "key";
+			string value1 = "value1";
+			string value2 = "value2";
+
+			MutableConfiguration confignode = new MutableConfiguration(key);
+
+			IConfiguration parameters =
+				confignode.Children.Add(new MutableConfiguration("parameters"));
+
+			IConfiguration complexParam
+				= parameters.Children.Add(new MutableConfiguration("complexparam"));
+
+			IConfiguration complexNode
+				= complexParam.Children.Add(new MutableConfiguration("complexparametertype"));
+
+			complexNode.Children.Add(new MutableConfiguration("mandatoryvalue", value1));
+			complexNode.Children.Add(new MutableConfiguration("optionalvalue", value2));
+
+
+			kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
+			kernel.AddComponent(key, typeof(ClassWithComplexParameter));
+
+			ClassWithComplexParameter instance = (ClassWithComplexParameter) kernel[key];
+
+			Assert.IsNotNull(instance);
+			Assert.IsNotNull(instance.ComplexParam);
+			Assert.AreEqual(value1, instance.ComplexParam.MandatoryValue);
+			Assert.AreEqual(value2, instance.ComplexParam.OptionalValue);
 		}
 	}
 }

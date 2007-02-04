@@ -12,51 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.using System;
 
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Castle.MicroKernel.SubSystems.Conversion;
-
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
+	using System;
 
-    /// <summary>
-    /// Declares a type as being convertible by a <see cref="ITypeConverter"/> and optionally defines the converter to be used
-    /// </summary>
-    [global::System.AttributeUsage( AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false )]
-    public class ConvertibleAttribute : Attribute
-    {
-        readonly Type _converterType;
+	/// <summary>
+	/// Declares a type as being convertible by a <see cref="ITypeConverter"/> and optionally defines the converter to be used
+	/// </summary>
+	[System.AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false, AllowMultiple = false)]
+	public class ConvertibleAttribute : Attribute
+	{
+		private readonly Type converterType;
 
+		/// <summary>
+		/// Defines the <see cref="DefaultComplexConverter "/> to be used to convert the type
+		/// </summary>
+		public ConvertibleAttribute() : this(typeof(DefaultComplexConverter))
+		{
+		}
 
-        /// <summary>
-        /// Defines the <see cref="DefaultComplexConverter "/> to be used to convert the type
-        /// </summary>
-        public ConvertibleAttribute()
-            : this( typeof( DefaultComplexConverter ) )
-        {
+		/// <summary>
+		/// Defines the <see cref="ITypeConverter"/> to be used to convert the type
+		/// </summary>
+		/// <param name="converterType"></param>
+		public ConvertibleAttribute(Type converterType)
+		{
+			if (!typeof(ITypeConverter).IsAssignableFrom(converterType))
+			{
+				throw new ArgumentException("converterType must implement ITypeConverter interface", "converterType");
+			}
 
-        }
+			this.converterType = converterType;
+		}
 
-        /// <summary>
-        /// Defines the <see cref="ITypeConverter"/> to be used to convert the type
-        /// </summary>
-        /// <param name="converterType"></param>
-        public ConvertibleAttribute( Type converterType )
-        {
-            if (!typeof( ITypeConverter ).IsAssignableFrom( converterType ))
-                throw new ArgumentException( "converterType must implement ITypeConverter interface", "converterType" );
-
-            _converterType = converterType;
-        }
-
-        public Type ConverterType
-        {
-            get { return this._converterType; }
-        }
-
-    }
-
+		public Type ConverterType
+		{
+			get { return converterType; }
+		}
+	}
 }

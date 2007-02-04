@@ -93,6 +93,7 @@
     <Compile Include="ComponentActivator\DefaultComponentActivator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ComponentActivator\WebUserControlComponentActivator.cs" />
     <Compile Include="Context\DependencyTrackingScope.cs" />
     <Compile Include="ComponentActivator\ExternalInstanceActivator.cs">
       <SubType>Code</SubType>
@@ -182,6 +183,7 @@
     <Compile Include="Handlers\AbstractHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Handlers\ParentHandlerWithChildResolver.cs" />
     <Compile Include="Handlers\DefaultGenericHandler.cs" />
     <Compile Include="Handlers\DefaultHandler.cs">
       <SubType>Code</SubType>
@@ -267,6 +269,7 @@
     <Compile Include="ModelBuilder\IContributeComponentModelConstruction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ModelBuilder\Inspectors\ComponentActivatorInspector.cs" />
     <Compile Include="ModelBuilder\Inspectors\ConfigurationModelInspector.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -343,9 +346,11 @@
     <Compile Include="SubSystems\Conversion\Converters\ArrayConverter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\AttributeAwareConverter.cs" />
     <Compile Include="SubSystems\Conversion\Converters\ComponentConverter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Conversion\Converters\DefaultComplexConverter.cs" />
     <Compile Include="SubSystems\Conversion\Converters\DictionaryConverter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -365,6 +370,7 @@
     <Compile Include="SubSystems\Conversion\Converters\TypeNameConverter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Conversion\ConvertibleAttribute.cs" />
     <Compile Include="SubSystems\Conversion\DefaultConversionManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -392,6 +398,7 @@
     <Compile Include="SubSystems\Naming\DefaultNamingSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SubSystems\Naming\KeySearchNamingSubSystem.cs" />
     <Compile Include="SubSystems\Naming\INamingSubSystem.cs">
       <SubType>Code</SubType>
     </Compile>

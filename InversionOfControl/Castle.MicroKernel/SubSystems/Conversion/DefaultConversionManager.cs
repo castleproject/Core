@@ -51,7 +51,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			Add( new GenericListConverter() );
 #endif
 			Add( new ArrayConverter() ); 
-			Add( new ComponentConverter() ); 
+			Add( new ComponentConverter() );
+			Add( new AttributeAwareConverter() );
 		}
 
 		#region IConversionManager Members

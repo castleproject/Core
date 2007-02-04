@@ -1,4 +1,16 @@
 <configuration>
+	
+	<containers>
+		
+		<container name="child1">
+			<configuration />	
+		</container>
+		
+		<container name="child2">
+			<configuration />	
+		</container>
+		
+	</containers>
 
 	<facilities>
 

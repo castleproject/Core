@@ -694,7 +694,7 @@ namespace Castle.MicroKernel
 
 			if (handler == null && Parent != null)
 			{
-				handler = Parent.GetHandler(key);
+				handler = WrapParentHandler(Parent.GetHandler(key));
 			}
 
 			return handler;
@@ -714,7 +714,7 @@ namespace Castle.MicroKernel
 #endif
 			if (handler == null && Parent != null)
 			{
-				handler = Parent.GetHandler(service);
+				handler = WrapParentHandler(Parent.GetHandler(service));
 			}
 
 			return handler;
@@ -1002,6 +1002,16 @@ namespace Castle.MicroKernel
 		#endregion
 
 		#region Protected members
+
+		protected virtual IHandler WrapParentHandler(IHandler parentHandler)
+		{
+			if (parentHandler == null) return null;
+
+			// This has a very destructive side-effect. While the goal is to resolve on same-level containers,
+			// the resolver will invoke GetHandler recursively, leading to stack overflows
+			// return new ParentHandlerWithChildResolver(parentHandler, Resolver);
+			return parentHandler;
+		}
 
 		protected INamingSubSystem NamingSubSystem
 		{

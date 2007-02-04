@@ -1,4 +1,3 @@
-using Castle.Core.Configuration;
 // Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,7 @@ using Castle.Core.Configuration;
 namespace Castle.MicroKernel.Tests
 {
 	using System;
-
+	using Castle.Core.Configuration;
 	using NUnit.Framework;
 
 	using Castle.MicroKernel.SubSystems.Configuration;

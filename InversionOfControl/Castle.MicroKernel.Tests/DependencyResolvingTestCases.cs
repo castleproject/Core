@@ -14,7 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.DependencyResolving
 {
-	using System;
 	using System.Collections;
 
 	using NUnit.Framework;
@@ -22,7 +21,6 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 	using Castle.Core;
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Tests.ClassComponents;
-
 
 	/// <summary>
 	/// This test case ensures that the resolving event

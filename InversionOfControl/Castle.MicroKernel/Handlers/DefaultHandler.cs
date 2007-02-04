@@ -36,13 +36,6 @@ namespace Castle.MicroKernel.Handlers
 				AssertNotWaitingForDependency();
 			}
 
-#if DOTNET2
-			CreationContext newContext = new CreationContext(this, ComponentModel.Service, context);
-#else
-			CreationContext newContext = new CreationContext(this, context);
-#endif
-
-			// return lifestyleManager.Resolve(newContext);
 			return lifestyleManager.Resolve(context);
 		}
 
