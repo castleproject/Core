@@ -58,20 +58,7 @@
 	<target name="common.compile-tests"
 		description="Compile NUnit tests and copy App.config file to the output directory, if it exists.">
 
-		<csc 
-			target="library"
-			define="${current.build.defines}"
-			debug="${build.debug}"
-			warnaserror="${build.warnaserrors}"
-			output="${build.dir}/${project::get-name()}.dll"
-			rebuild="${build.rebuild}"
-		>
-			<sources refid="project.sources" />
-			<references refid="project.references" />
-			<resources refid="project.resources" />
-			<arg line="${csc.keyfile}" if="${assembly.sign}" />
-			<arg line="${csc.args}" />
-		</csc>
+		<call target="common.compile-dll" />
 
 		<!-- Check if there is a framework specific config file and use that -->
 		<property name="app.config.src" value="${src.dir}/App-${framework::get-target-framework()}.config" />
@@ -116,25 +103,36 @@
  	<target name="common.compile-dll"
 		description="Compile sources into a DLL">
 
-		<csc
-			target="library" 
-			define="${current.build.defines}" 
-			debug="${build.debug}" 
-			optimize="${build.optimize}"
-			warnaserror="${build.warnaserrors}"
-			output="${build.dir}/${project::get-name()}.dll" 
-			doc="${build.dir}/${project::get-name()}.xml"
-			rebuild="${build.rebuild}"
-		>
-			<nowarn>
-				<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->
-			</nowarn>
-			<sources refid="project.sources" />
-			<references refid="project.references" />
-			<resources refid="project.resources" />
-			<arg line="${csc.keyfile}" if="${assembly.sign}" />
-			<arg line="${csc.args}" />
-		</csc>
+        <if test="${build.msbuild}">
+			<property name="msbuildlogger" value="" overwrite="false" unless="${property::exists('CCNetLabel')}" />
+			<property name="msbuildlogger" value="/logger:ThoughtWorks.CruiseControl.MsBuild.XmlLogger" overwrite="false" if="${property::exists('CCNetLabel')}" />
+
+			<exec program="${framework::get-framework-directory(framework::get-target-framework())}/MSBuild.exe" workingdir="${build.dir}"
+				commandline='/p:Configuration=${project.config} /p:OutputPath=${build.dir} /p:WarnAsError=${build.warnaserrors} ${msbuildlogger} ${src.dir}/${project.vsproj}' />
+		</if>
+		
+		<if test="${not build.msbuild}">
+			<csc
+				target="library" 
+				define="${current.build.defines}" 
+				debug="${build.debug}" 
+				optimize="${build.optimize}"
+				warnaserror="${build.warnaserrors}"
+				output="${build.dir}/${project::get-name()}.dll" 
+				doc="${build.dir}/${project::get-name()}.xml"
+				rebuild="${build.rebuild}"
+				unless="${build.msbuild}"
+			>
+				<nowarn>
+					<warning number="1591" unless="${build.warnmissingdocs}" /> <!-- No XML comment for publicly visible member -->
+				</nowarn>
+				<sources refid="project.sources" />
+				<references refid="project.references" />
+				<resources refid="project.resources" />
+				<arg line="${csc.keyfile}" if="${assembly.sign}" />
+				<arg line="${csc.args}" />
+			</csc>
+		</if>
 	</target>
 
  	<target name="common.compile-website">

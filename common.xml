@@ -90,6 +90,8 @@
 		<property name="csc.args" 		value="" />
 		<call target="set-${framework::get-target-framework()}-framework-configuration" />
 
+		<property name="build.msbuild" 	value="false" overwrite="false" />
+
 		<!-- Where is MbUnit.Cons.exe ? -->
 		<property name="mbunit-console" value="MbUnit.Cons.exe" overwrite="false" />
 
@@ -136,6 +138,8 @@
 				<property name="dev.env.dir" value="${default.dev.env.dir}" />
 			</if>
 		</if>
+		<property name="build.msbuild"	value="false" overwrite="false" />
+		<property name="project.vsproj" value="${project::get-name()}-vs2005.csproj" />
 	</target>
 
 	<target name="set-mono-1.0-framework-configuration">
