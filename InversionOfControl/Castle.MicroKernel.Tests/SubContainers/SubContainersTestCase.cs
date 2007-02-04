@@ -58,6 +58,24 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			Assert.IsNotNull(spamservice.TemplateEngine);
 		}
 
+		[Test, Ignore("Not passing")]
+		public void SameLevelDependenciesSatisfied()
+		{
+			IKernel subkernel = new DefaultKernel();
+
+			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
+			kernel.AddComponent("spamservice", typeof(DefaultSpamService));
+
+			kernel.AddChildKernel(subkernel);
+			subkernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
+
+			DefaultSpamService spamservice = (DefaultSpamService) subkernel["spamservice"];
+
+			Assert.IsNotNull(spamservice);
+			Assert.IsNotNull(spamservice.MailSender);
+			Assert.IsNotNull(spamservice.TemplateEngine);
+		}
+
 		[Test, Ignore("This is not passing, and anyway, the goal should be reviewed")]
 		public void UseChildComponentsForParentDependenciesWhenRequestedFromChild()
 		{
