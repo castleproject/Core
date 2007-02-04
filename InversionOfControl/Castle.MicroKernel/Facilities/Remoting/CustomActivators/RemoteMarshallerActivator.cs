@@ -21,9 +21,18 @@ namespace Castle.Facilities.Remoting
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	
-
+	/// <summary>
+	/// Activates and publishes a server object.
+	/// </summary>
 	public class RemoteMarshallerActivator : DefaultComponentActivator
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoteMarshallerActivator"/> class.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="kernel">The kernel.</param>
+		/// <param name="onCreation">The oncreation event handler.</param>
+		/// <param name="onDestruction">The ondestruction event handler.</param>
 		public RemoteMarshallerActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
 		{
 		}

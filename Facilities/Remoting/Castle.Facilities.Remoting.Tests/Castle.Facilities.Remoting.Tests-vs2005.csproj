@@ -126,7 +126,7 @@
     </Compile>
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="RemoteGenericComponentTestCase.cs" />
-    <Compile Include="FacilityLifeCycle.cs">
+    <Compile Include="FacilityLifeCycleTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RemoteClientActivatedTestCase.cs">

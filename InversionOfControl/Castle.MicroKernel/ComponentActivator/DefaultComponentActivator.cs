@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.Remoting;
+
 namespace Castle.MicroKernel.ComponentActivator
 {
 	using System;
@@ -251,11 +253,14 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		private static object GetUnproxiedInstance(object instance)
 		{
-			IProxyTargetAccessor accessor = instance as IProxyTargetAccessor;
-
-			if (accessor != null)
+			if (!RemotingServices.IsTransparentProxy(instance))
 			{
-				instance = accessor.DynProxyGetTarget();
+				IProxyTargetAccessor accessor = instance as IProxyTargetAccessor;
+
+				if (accessor != null)
+				{
+					instance = accessor.DynProxyGetTarget();
+				}
 			}
 			
 			return instance;

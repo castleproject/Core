@@ -1,3 +1,8 @@
+Release Candidate 2
+===================
+
+- Fixed the FACILITIES-70 and FACILITIES-73 - DynProxyGetTarget invoked on transparent proxies
+
 
 Alpha Version 1.0.0
 - First release

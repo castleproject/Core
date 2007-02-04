@@ -23,6 +23,15 @@ namespace Castle.Facilities.Remoting
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
 
+	/// <summary>
+	/// Facility to allow the communication with remote kernel, using the .NET Remoting infraestructure.
+	/// </summary>
+	/// <remarks>
+	/// TODO
+	/// </remarks>
+	/// <example>
+	/// TODO
+	/// </example>
 	public class RemotingFacility : AbstractFacility
 	{
 		private ITypeConverter converter;

@@ -33,6 +33,10 @@ namespace Castle.Facilities.Remoting
 		RecoverableComponent
 	}
 
+	/// <summary>
+	/// Inspects the model looking for remote component configuration. If found, 
+	/// do the component Remoting configuration.
+	/// </summary>
 	public class RemotingInspector : IContributeComponentModelConstruction
 	{
 		private readonly RemotingRegistry remoteRegistry;
@@ -41,6 +45,15 @@ namespace Castle.Facilities.Remoting
 		private readonly String baseUri;
 		private readonly bool isServer, isClient;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemotingInspector"/> class.
+		/// </summary>
+		/// <param name="converter">The converter.</param>
+		/// <param name="isServer">if set to <c>true</c> is a server.</param>
+		/// <param name="isClient">if set to <c>true</c> is a client.</param>
+		/// <param name="baseUri">The base URI.</param>
+		/// <param name="remoteRegistry">The remote registry.</param>
+		/// <param name="localRegistry">The local registry.</param>
 		public RemotingInspector(ITypeConverter converter, bool isServer, bool isClient, 
 			String baseUri, RemotingRegistry remoteRegistry, RemotingRegistry localRegistry)
 		{
@@ -58,7 +71,6 @@ namespace Castle.Facilities.Remoting
 
 			String remoteserverAttValue = model.Configuration.Attributes["remoteserver"];
 			String remoteclientAttValue = model.Configuration.Attributes["remoteclient"];
-			// String sponsorIdAttValue = model.Configuration.Attributes["sponsorId"];
 
 			RemotingStrategy server = RemotingStrategy.None;
 			RemotingStrategy client = RemotingStrategy.None;

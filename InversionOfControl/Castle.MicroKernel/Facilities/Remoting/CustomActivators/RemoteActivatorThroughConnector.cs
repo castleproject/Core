@@ -20,9 +20,18 @@ namespace Castle.Facilities.Remoting
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	
-
+	/// <summary>
+	/// Activates a client connecting to the remote server, enforcing the uri and the server activation.
+	/// </summary>
 	public class RemoteActivatorThroughConnector : DefaultComponentActivator
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoteActivatorThroughConnector"/> class.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="kernel">The kernel.</param>
+		/// <param name="onCreation">The oncreation event handler.</param>
+		/// <param name="onDestruction">The ondestruction event handler.</param>
 		public RemoteActivatorThroughConnector(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
 		{
 		}
