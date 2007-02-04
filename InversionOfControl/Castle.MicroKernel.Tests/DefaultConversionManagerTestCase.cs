@@ -20,11 +20,8 @@ namespace Castle.MicroKernel.Tests
 	using System.Collections.Generic;
 #endif
 	using NUnit.Framework;
-
 	using Castle.Core.Configuration;
-
 	using Castle.MicroKernel.SubSystems.Conversion;
-
 
 	[TestFixture]
 	public class DefaultConversionManagerTestCase
@@ -119,8 +116,8 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(40, dict[4]);
 			Assert.AreEqual(new DateTime(2005, 12, 1), dict[new DateTime(2000, 1, 1)]);
 		}
-#if DOTNET2
 
+#if DOTNET2
 
 		[Test]
 		public void GenericPerformConversionList()
@@ -141,7 +138,25 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(3147L, list[1]);
 			Assert.AreEqual(997L, list[2]);
 		}
-		
+
+		[Test]
+		public void ListOfLongGuessingType()
+		{
+			MutableConfiguration config = new MutableConfiguration("list");
+
+			config.Children.Add(new MutableConfiguration("item", "345"));
+			config.Children.Add(new MutableConfiguration("item", "3147"));
+			config.Children.Add(new MutableConfiguration("item", "997"));
+
+			Assert.IsTrue(conversionMng.CanHandleType(typeof(IList<double>)));
+			Assert.IsTrue(conversionMng.CanHandleType(typeof(List<string>)));
+
+			IList<long> list = (IList<long>)conversionMng.PerformConversion(config, typeof(IList<long>));
+			Assert.IsNotNull(list);
+			Assert.AreEqual(345L, list[0]);
+			Assert.AreEqual(3147L, list[1]);
+			Assert.AreEqual(997L, list[2]);
+		}
 		
 		[Test]
 		public void GenericDictionary()

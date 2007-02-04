@@ -1,6 +1,42 @@
 RC 4
 ====
 
+- Applied Norbert Wagner's patch fixing IOC-55
+  "Generic Type Converters: Set default entry types to generic arguments of property type"
+
+- Applied Jeff Brown's patch fixing IOC-54
+  "Empty component parameter values cause runtime exception during component resolution."
+
+- Applied patch by Bill Pierce that
+
+-- Introduces the WebUserControlComponentActivator
+
+-- Introduces the KeySearchNamingSubSystem
+
+-- Allows you to associate a custom component activator using
+    1. componentActivatorType on component node
+    2. ComponentActivatorAttribute
+
+-- Allows you to create and configure child containers 
+   through the configuration, using
+
+  <configuration>
+    <containers>
+        <container name="child1">
+          <configuration>
+                <facilities>
+					...
+                </facilities>
+          
+                <components>
+					...
+                </components>
+                
+            </configuration>
+        </container>
+    </containers>
+  </configuration>
+
 - Applied AndyD's patch fixing IOC-52
   "Remote access to generic components"
 

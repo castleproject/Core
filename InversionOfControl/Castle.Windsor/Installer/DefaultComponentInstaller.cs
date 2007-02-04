@@ -18,8 +18,9 @@ namespace Castle.Windsor.Installer
 	using System.Configuration;
 
 	using Castle.Core.Configuration;
-
+	using Castle.Core.Resource;
 	using Castle.MicroKernel;
+	using Castle.Windsor.Configuration.Interpreters;
 
 	/// <summary>
 	/// Default <see cref="IComponentsInstaller"/> implementation.
@@ -45,6 +46,7 @@ namespace Castle.Windsor.Installer
 			SetUpComponents(store.GetBootstrapComponents(), container);
 			SetUpFacilities(store.GetFacilities(), container);
 			SetUpComponents(store.GetComponents(), container);
+			SetUpChildContainers(store.GetConfigurationForChildContainers(), container);
 		}
 
 		#endregion
@@ -92,6 +94,19 @@ namespace Castle.Windsor.Installer
 				System.Diagnostics.Debug.Assert( service != null );
 
 				container.AddComponent(id, service, type);
+			}
+		}
+
+		private void SetUpChildContainers(IConfiguration[] configurations, IWindsorContainer parentContainer)
+		{
+			foreach(IConfiguration childContainerConfig in configurations)
+			{
+				String id = childContainerConfig.Attributes["name"];
+				
+				System.Diagnostics.Debug.Assert( id != null );
+
+				new WindsorContainer(id, parentContainer, 
+					new XmlInterpreter(new StaticContentResource(childContainerConfig.Value)));
 			}
 		}
 

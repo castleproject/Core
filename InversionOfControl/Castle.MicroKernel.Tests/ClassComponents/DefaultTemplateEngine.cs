@@ -21,6 +21,8 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 	/// </summary>
 	public class DefaultTemplateEngine
 	{
+		public string Key = Guid.NewGuid().ToString();
+
 		public DefaultTemplateEngine()
 		{
 		}

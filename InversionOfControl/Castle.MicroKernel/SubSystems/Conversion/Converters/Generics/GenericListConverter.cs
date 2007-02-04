@@ -12,28 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if DOTNET2
+
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using Castle.Core.Configuration;
-
 
 	[Serializable]
 	public class GenericListConverter : AbstractTypeConverter
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GenericListConverter"/> class.
+		/// </summary>
 		public GenericListConverter()
 		{
 		}
 
 		public override bool CanHandleType(Type type)
 		{
-			return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IList<>) 
-					|| type.GetGenericTypeDefinition() == typeof(ICollection<>)
-					|| type.GetGenericTypeDefinition() == typeof(List<>)
-					|| type.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IList<>)
+			                              || type.GetGenericTypeDefinition() == typeof(ICollection<>)
+			                              || type.GetGenericTypeDefinition() == typeof(List<>)
+			                              || type.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 		}
 
 		public override object PerformConversion(String value, Type targetType)
@@ -43,27 +46,33 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override object PerformConversion(IConfiguration configuration, Type targetType)
 		{
-			System.Diagnostics.Debug.Assert( CanHandleType(targetType) );
+			System.Diagnostics.Debug.Assert(CanHandleType(targetType));
 
+			Type[] argTypes = targetType.GetGenericArguments();
+			
+			if (argTypes.Length != 1)
+			{
+				throw new ConverterException("Expected type with one generic argument.");
+			}
 
 			String itemType = configuration.Attributes["type"];
-			Type convertTo = typeof(String);
+			Type convertTo = argTypes[0];
 
 			if (itemType != null)
 			{
-				convertTo = (Type) Context.Composition.PerformConversion( itemType, typeof(Type) );
+				convertTo = (Type) Context.Composition.PerformConversion(itemType, typeof(Type));
 			}
 
 			IGenericCollectionConverterHelper converterHelper = (IGenericCollectionConverterHelper)
 			                                                    Activator.CreateInstance(
-			                                                    	typeof(ListHelper<>).MakeGenericType(convertTo), 
-			                                                        this);
+			                                                    	typeof(ListHelper<>).MakeGenericType(convertTo),
+			                                                    	this);
 			return converterHelper.ConvertConfigurationToCollection(configuration);
 		}
 
 		private class ListHelper<T> : IGenericCollectionConverterHelper
 		{
-			GenericListConverter parent;
+			private GenericListConverter parent;
 
 			public ListHelper(GenericListConverter parent)
 			{
@@ -73,9 +82,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			public object ConvertConfigurationToCollection(IConfiguration configuration)
 			{
 				List<T> list = new List<T>();
-				foreach (IConfiguration itemConfig in configuration.Children)
+				foreach(IConfiguration itemConfig in configuration.Children)
 				{
-					T item = (T)this.parent.Context.Composition.PerformConversion(itemConfig.Value, typeof(T));
+					T item = (T) parent.Context.Composition.PerformConversion(itemConfig.Value, typeof(T));
 					list.Add(item);
 				}
 
@@ -84,4 +93,5 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		}
 	}
 }
+
 #endif
