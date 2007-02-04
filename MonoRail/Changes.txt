@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Jacob Lewallen's patch adding a new attribute (ViewComponentAttribute) used
+  to name view components. The behavior is changed to strip the 'Component' suffix from the class name as well.
+
 - Applied Ernst Naezer's patch fixing MR-191
   "Add TransformFilter support to MR"
 

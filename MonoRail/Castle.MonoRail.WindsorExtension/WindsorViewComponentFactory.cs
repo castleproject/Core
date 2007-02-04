@@ -15,11 +15,9 @@
 namespace Castle.MonoRail.WindsorExtension
 {
 	using System;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Services;
 	using Castle.Windsor;
-
 
 	public class WindsorViewComponentFactory : AbstractViewComponentFactory
 	{
@@ -34,20 +32,18 @@ namespace Castle.MonoRail.WindsorExtension
 		public override ViewComponent Create(String name)
 		{
 			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
-
-			if (container.Kernel.HasComponent(name))
+			Type type = ResolveType(name);
+			if (container.Kernel.HasComponent(type))
 			{
-				try
-				{
-					return (ViewComponent) container[name];
-				}
-				catch(InvalidCastException ex)
-				{
-					throw new RailsException("The component registered for the given key could not be casted into a ViewComponent. Key " + name, ex);
-				}
+				return (ViewComponent) container[type];
 			}
+			return (ViewComponent) Activator.CreateInstance(type);
+		}
 
-			return base.Create(name);
+		protected override IViewComponentRegistry GetViewComponentRegistry()
+		{
+			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			return (IViewComponentRegistry) container["rails.viewcomponentregistry"];
 		}
 	}
 }

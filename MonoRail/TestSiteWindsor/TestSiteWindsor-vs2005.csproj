@@ -133,6 +133,7 @@
     <Content Include="views\home\index.aspx" />
     <None Include="views\home\ComponentOnLayout.vm" />
     <None Include="views\home\ComponentTest.vm" />
+    <None Include="views\home\BuiltinComponentTest.vm" />
     <None Include="views\layouts\layout.vm" />
     <None Include="views\testwizard\InnerAction2.vm" />
     <None Include="views\testwizard\page1.vm" />

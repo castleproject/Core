@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="Attributes\SkipFilterAttribute.cs" />
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
+    <Compile Include="Attributes\ViewComponentDetailsAttribute.cs" />
     <Compile Include="Attributes\TransformFilterAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
@@ -393,6 +394,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IViewComponentFactory.cs" />
+    <Compile Include="IViewComponentRegistry.cs" />
     <Compile Include="IViewEngine.cs" />
     <Compile Include="IViewEngineManager.cs" />
     <Compile Include="IViewSource.cs" />
@@ -430,6 +432,7 @@
     <Compile Include="Services\DefaultUrlBuilder.cs" />
     <Compile Include="Services\DefaultUrlTokenizer.cs" />
     <Compile Include="Services\DefaultViewComponentFactory.cs" />
+    <Compile Include="Services\DefaultViewComponentRegistry.cs" />
     <Compile Include="Services\DefaultViewEngineManager.cs" />
     <Compile Include="Services\EmailTemplateService.cs" />
     <Compile Include="Services\MonoRailSmtpSender.cs" />
@@ -549,6 +552,7 @@
     <None Include="..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <None Include="Castle.MonoRail.Framework.build" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\Castle.gif" />

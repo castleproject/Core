@@ -15,9 +15,8 @@
 namespace Castle.MonoRail.WindsorExtension.Tests
 {
 	using Castle.MonoRail.Framework.Tests;
-	
 	using NUnit.Framework;
-	
+
 	[TestFixture]
 	public class WindsorExtensionBasicFunctionalityTestCase : AbstractTestCase
 	{
@@ -28,7 +27,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualTo( "My View contents for Home\\Index" );
+			AssertReplyEqualTo("My View contents for Home\\Index");
 		}
 
 		[Test]
@@ -38,7 +37,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualTo( "my component" );
+			AssertReplyEqualTo("my component");
 		}
 
 		[Test]
@@ -48,7 +47,17 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualTo( "my component\r\n\r\nInner content" );
+			AssertReplyEqualTo("my component\r\n\r\nInner content");
+		}
+
+		[Test]
+		public void UsingBuiltinComponent()
+		{
+			DoGet("home/builtincomponenttest.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualTo("stuff\r\n");
 		}
 	}
 }

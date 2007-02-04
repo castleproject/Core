@@ -1,0 +1,4 @@
+#blockcomponent(CaptureFor with "id=test")
+stuff
+#end
+$!test
