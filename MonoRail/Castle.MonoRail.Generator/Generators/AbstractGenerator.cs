@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Generator.Generators
 		{
 			engine = new NVelocityTemplateEngine();
 
-			engine.AssemblyName = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+			engine.AddResourceAssembly(System.Reflection.Assembly.GetExecutingAssembly().FullName);
 			
 			engine.BeginInit();
 			engine.EndInit();

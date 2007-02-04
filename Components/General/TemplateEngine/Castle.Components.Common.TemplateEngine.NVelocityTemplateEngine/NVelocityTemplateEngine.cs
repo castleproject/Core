@@ -38,8 +38,8 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 	{
 		private VelocityEngine vengine;
 		private ILogger log = NullLogger.Instance;
-		
-		private String assemblyName;
+
+		private ArrayList assemblies = new ArrayList();
 		private String templateDir = ".";
 		private bool enableCache = true;
 
@@ -66,10 +66,26 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		/// forces NVelocityTemplateEngine to use an assembly resource loader
 		/// instead of File resource loader (which is the default) 
 		/// </summary>
-		public string AssemblyName
+		/// <remarks>
+		/// The property is obsolete, please use the AddResourceAssembly function.
+		/// </remarks>
+		[Obsolete("Please use the AddResourceAssembly function")]
+		public string AssemblyName;
+		
+		/// <summary>
+		/// Add an assembly to the resource collection.
+		/// </summary>
+		/// <param name="assembly"></param>
+		public void AddResourceAssembly(string assembly)
 		{
-			get { return assemblyName; }
-			set { assemblyName = value; }
+			if (assembly == null || assembly == string.Empty)
+				throw new ArgumentException("assembly name can not be null or empty");
+
+			if (assemblies.Contains(assembly))
+				return;
+			
+			
+			assemblies.Add(assembly);
 		}
 
 		/// <summary>
@@ -111,17 +127,21 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			
 			ExtendedProperties props = new ExtendedProperties();
 
-			if (assemblyName != null)
-			{
-				log.InfoFormat("Initializing NVelocityTemplateEngine component using Assembly: {0}", assemblyName);
-				
-				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "assembly");
-				props.SetProperty("assembly.resource.loader.class", "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader;NVelocity");
-				props.SetProperty("assembly.resource.loader.cache", EnableCache.ToString().ToLower() );
-				props.SetProperty("assembly.resource.loader.assembly", assemblyName);
-			}
-			else
-			{
+ 			if (assemblies.Count != 0)
+  			{
+ 				log.Info("Initializing NVelocityTemplateEngine component using Assemblies:");
+ 				foreach(string s in assemblies)
+ 				{
+ 					log.Info(" - {0}", s);	
+ 				}
+  				
+  				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "assembly");
+  				props.SetProperty("assembly.resource.loader.class", "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader;NVelocity");
+  				props.SetProperty("assembly.resource.loader.cache", EnableCache.ToString().ToLower() );
+ 				props.SetProperty("assembly.resource.loader.assembly", assemblies);
+  			}
+  			else
+  			{
 				String expandedTemplateDir = ExpandTemplateDir(templateDir);
 				log.InfoFormat("Initializing NVelocityTemplateEngine component using template directory: {0}", expandedTemplateDir);
 				

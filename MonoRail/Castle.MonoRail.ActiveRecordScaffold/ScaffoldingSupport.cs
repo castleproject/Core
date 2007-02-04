@@ -124,7 +124,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				nvelTemplateEng.BeginInit();
 				nvelTemplateEng.EndInit();
 #else
-				nvelTemplateEng.AssemblyName = "Castle.MonoRail.ActiveRecordScaffold";
+				nvelTemplateEng.AddResourceAssembly("Castle.MonoRail.ActiveRecordScaffold");
 				nvelTemplateEng.BeginInit();
 				nvelTemplateEng.EndInit();
 #endif
