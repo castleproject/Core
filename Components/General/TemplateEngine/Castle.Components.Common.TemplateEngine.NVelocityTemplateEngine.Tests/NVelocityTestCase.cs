@@ -73,7 +73,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 			NVelocityTemplateEngine engine = new NVelocityTemplateEngine();
 
 			engine.AddResourceAssembly("Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests");
-			engine.AddResourceAssembly("Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SecondResourceDll");
+			engine.AddResourceAssembly("Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR");
 
 			(engine as ISupportInitialize).BeginInit();
 

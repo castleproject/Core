@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{1B38B402-1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NVelocity", "NVelocity", "{D72459EF-7B56-4B9C-BC89-ECCFD2FB55EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SecondResourceDll", "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SecondResourceDll\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SecondResourceDll.csproj", "{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR", "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR.csproj", "{B1DEC754-7B3F-4F3F-A99E-CB475C1AAFA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
