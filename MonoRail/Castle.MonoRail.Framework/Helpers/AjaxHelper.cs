@@ -486,7 +486,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			String remoteFunc = RemoteFunction(options);
 
-			String formId = options.Contains("formId") ? ("id=\"" + (String)options["formId"] + "\"") : String.Empty;
+			String formId = options.Contains("formId") ? ("id=\"" + (String) options["formId"] + "\"") : String.Empty;
 
 			return String.Format("<form {1} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, formId);
 		}
@@ -614,14 +614,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		///                       to 'value', which in the evaluated context 
 		///                       refers to the new field value.</param>
 		/// <returns>javascript that activates the observer</returns>
-		public String ObserveForm(String formId, int frequency, String url, String idOfElementToBeUpdated, String with)
+		public String ObserveForm(String formId, int frequency, String url, String idOfElementToBeUpdated, object with)
 		{
 			IDictionary options = new HybridDictionary();
 			options["frequency"] = frequency;
 			options["url"] = url;
 
 			if (idOfElementToBeUpdated != null && idOfElementToBeUpdated.Length > 0) options["update"] = idOfElementToBeUpdated;
-			if (with != null && with.Length > 0) options["with"] = with;
+			if (with != null) options["with"] = ProcessWith(with);
 
 			return ObserveForm(formId, options);
 		}
@@ -869,10 +869,11 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 			}
 
-			if (options.Contains("with"))
-			{
-				options["callback"] = String.Format( "function(element, value) { return {0} }", options["with"] );
-			}
+			// This looks like a bug. Commented
+			// if (options.Contains("with"))
+			// {
+			// 	options["callback"] = String.Format( "function(element, value) { return {0} }", options["with"] );
+			// }
 
 			if (options.Contains("indicator"))
 			{
@@ -970,14 +971,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (options.Contains("before"))
 			{
-				contents = new StringBuilder( String.Format("{0}; {1}", 
-					options["before"].ToString(), contents.ToString()) );
+				contents = new StringBuilder( String.Format("{0}; {1}", options["before"], contents) );
 			}
 
 			if (options.Contains("after"))
 			{
-				contents = new StringBuilder( String.Format("{1}; {0}", 
-					options["after"].ToString(), contents.ToString()) );
+				contents = new StringBuilder( String.Format("{1}; {0}", options["after"], contents) );
 			}
 
 			if (options.Contains("condition"))
@@ -1033,10 +1032,22 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else if (options.Contains("with"))
 			{
-				jsOptions["parameters"] = options["with"];
+				jsOptions["parameters"] = ProcessWith(options["with"]);
 			}
 
 			return JavascriptOptions(jsOptions);
+		}
+
+		private string ProcessWith(object with)
+		{
+			if (with == null) return null;
+
+			if (with is IDictionary)
+			{
+				return SQuote(CommonUtils.BuildQueryString(ServerUtility, with as IDictionary, false));
+			}
+
+			return with.ToString();
 		}
 
 		private void BuildCallbacks(IDictionary jsOptions, IDictionary options)
@@ -1114,7 +1125,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		public IDictionary GetOptions(String url, String idOfElementToBeUpdated, 
-		                              String with, String loading, String loaded, String complete, String interactive)
+		                              object with, String loading, String loaded, String complete, String interactive)
 		{
 			IDictionary options = new HybridDictionary();
 	
@@ -1122,7 +1133,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			options["url"] = url;
 			//	options["method"] = method;
 	
-			if (with != null && with.Length > 0) options["with"] = with;
+			if (with != null) options["with"] = with;
 			if (idOfElementToBeUpdated != null && idOfElementToBeUpdated.Length > 0) options["update"] = idOfElementToBeUpdated;
 			if (loading != null && loading.Length > 0) options["Loading"] = loading;
 			if (loaded != null && loaded.Length > 0) options["Loaded"] = loaded;
