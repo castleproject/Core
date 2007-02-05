@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="date_invalid" xml:space="preserve">
-    <value>Field value is invalid (not a valid date)</value>
+    <value>Please enter a valid date</value>
   </data>
   <data name="decimal_invalid" xml:space="preserve">
-    <value>Field value is invalid (not a valid decimal)</value>
+    <value>Please enter a valid decimal in this field</value>
   </data>
   <data name="double_invalid" xml:space="preserve">
-    <value>Field value is invalid (not a valid double)</value>
+    <value>Please enter a valid double in this field</value>
   </data>
   <data name="email" xml:space="preserve">
-    <value>Field does not seem as a valid e-mail</value>
+    <value>Please enter a valid email address. For example fred@domain.com</value>
   </data>
   <data name="exactlength" xml:space="preserve">
     <value>Field must be {0} characters long</value>
@@ -136,10 +136,10 @@
     <value>Field has an invalid content</value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
-    <value>Field value is invalid (not a valid integer)</value>
+    <value>Please enter a valid integer in this field</value>
   </data>
   <data name="isrequired" xml:space="preserve">
-    <value>Field is required</value>
+    <value>This is a required field</value>
   </data>
   <data name="length_invalidrange" xml:space="preserve">
     <value>Field must be between {0} and {1} characters long</value>

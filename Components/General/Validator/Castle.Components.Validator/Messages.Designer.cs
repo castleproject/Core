@@ -61,7 +61,7 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field value is invalid (not a valid date).
+        ///   Looks up a localized string similar to Please enter a valid date.
         /// </summary>
         internal static string date_invalid {
             get {
@@ -70,7 +70,7 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field value is invalid (not a valid decimal).
+        ///   Looks up a localized string similar to Please enter a valid decimal in this field.
         /// </summary>
         internal static string decimal_invalid {
             get {
@@ -79,7 +79,7 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field value is invalid (not a valid double).
+        ///   Looks up a localized string similar to Please enter a valid double in this field.
         /// </summary>
         internal static string double_invalid {
             get {
@@ -88,7 +88,7 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field does not seem as a valid e-mail.
+        ///   Looks up a localized string similar to Please enter a valid email address. For example fred@domain.com.
         /// </summary>
         internal static string email {
             get {
@@ -115,7 +115,7 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field value is invalid (not a valid integer).
+        ///   Looks up a localized string similar to Please enter a valid integer in this field.
         /// </summary>
         internal static string integer_invalid {
             get {
@@ -124,7 +124,7 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field is required.
+        ///   Looks up a localized string similar to This is a required field.
         /// </summary>
         internal static string isrequired {
             get {

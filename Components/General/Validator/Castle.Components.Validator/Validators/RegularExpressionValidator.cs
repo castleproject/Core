@@ -75,7 +75,12 @@ namespace Castle.Components.Validator
 		{
 			if (fieldValue != null)
 			{
-				return regexRule.IsMatch(fieldValue.ToString());
+				string value = fieldValue.ToString();
+
+				if (value.Length > 0)
+				{
+					return regexRule.IsMatch(value);
+				}
 			}
 
 			return true;

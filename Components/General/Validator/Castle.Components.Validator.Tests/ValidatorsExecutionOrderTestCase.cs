@@ -41,9 +41,9 @@ namespace Castle.Components.Validator.Tests
 			ErrorSummary summary = runner.GetErrorSummary(supplier);
 			Assert.IsNotNull(summary);
 
-			Assert.AreEqual("Field is required", summary.ErrorMessages[0]);
+			Assert.AreEqual("This is a required field", summary.ErrorMessages[0]);
 			Assert.AreEqual("Fields do not match", summary.ErrorMessages[1]);
-			Assert.AreEqual("Field is required", summary.ErrorMessages[2]);
+			Assert.AreEqual("This is a required field", summary.ErrorMessages[2]);
 		}
 	}
 }
