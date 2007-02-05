@@ -4,7 +4,6 @@ Change history
 Release Candidate 2
 ===================
 - Add support for multiple resource assemblies to the NV template engine. The Assembly property has been marked as obsolete. 
-- forcing the build
 
 Release Candidate 1
 ===================
