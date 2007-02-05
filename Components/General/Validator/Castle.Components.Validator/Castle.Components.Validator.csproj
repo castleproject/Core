@@ -39,6 +39,11 @@
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
+    <Compile Include="Messages.it.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.it.resx</DependentUpon>
+    </Compile>
     <Compile Include="Messages.nl.Designer.cs">
       <DependentUpon>Messages.nl.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -81,6 +86,11 @@
     <Compile Include="WebValidationConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Messages.it.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.it.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Messages.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.nl.Designer.cs</LastGenOutput>
