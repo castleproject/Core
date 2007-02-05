@@ -38,14 +38,14 @@ class ScaffoldGenerator(NamedGeneratorBase):
 		Process('ScaffoldHelper.cs', "${HelpersBasePath}/ScaffoldHelper.cs", true)
 				
 		MkDir(viewPath)
-		Process('views/list.vm', "${viewPath}/list.vm")
-		Process('views/edit.vm', "${viewPath}/edit.vm")
-		Process('views/view.vm', "${viewPath}/view.vm")
-		Process('views/new.vm', "${viewPath}/new.vm")
-		Process('views/_form.vm', "${viewPath}/_form.vm")
+		Process("views/list.${ViewEngineExtension}", "${viewPath}/list.${ViewEngineExtension}")
+		Process("views/edit.${ViewEngineExtension}", "${viewPath}/edit.${ViewEngineExtension}")
+		Process("views/view.${ViewEngineExtension}", "${viewPath}/view.${ViewEngineExtension}")
+		Process("views/new.${ViewEngineExtension}", "${viewPath}/new.${ViewEngineExtension}")
+		Process("views/_form.${ViewEngineExtension}", "${viewPath}/_form.${ViewEngineExtension}")
 				
 		MkDir("${ViewsBasePath}/layouts")
-		Process('views/layout.vm', "${ViewsBasePath}/layouts/${ControllerFileName}.vm")
+		Process("views/layout.${ViewEngineExtension}", "${ViewsBasePath}/layouts/${ControllerFileName}.${ViewEngineExtension}")
 				
 		MkDir("${StaticContentBasePath}/stylesheets")
 		Process('style.css', "${StaticContentBasePath}/stylesheets/scaffold.css", true)

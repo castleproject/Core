@@ -25,6 +25,7 @@ class Config:
 	public static ControllersTestsNamespace = "${BaseNamespace}.Tests.Controllers"
 	public static ActionExtension = "aspx" # change to rails if you like
 	public static ViewsBasePath = "app/views"
+	public static ViewEngineExtension = "vm" # options: boo, vm
 	public static StaticContentBasePath = "public/content"
 	public static StaticContentBaseUrl = "content"
 	public static HelpersBasePath = "app/helpers"

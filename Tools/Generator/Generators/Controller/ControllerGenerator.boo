@@ -12,12 +12,12 @@ class ControllerGenerator(NamedGeneratorBase):
 		Process('Test.cs', "${ControllersTestsBasePath}/${ClassName}ControllerTest.cs")
 		
 		MkDir("${ViewsBasePath}/layouts")
-		Process('layout.vm', "${ViewsBasePath}/layouts/${FileName}.vm")
+		Process("layout.${ViewEngineExtension}", "${ViewsBasePath}/layouts/${FileName}.${ViewEngineExtension}")
 		
 		MkDir(ViewPath)
 		for a in Actions:
 			Action = a
-			Process('View.vm', "${ViewsBasePath}/${FileName}/${Action.ToFileName()}.vm")
+			Process("View.${ViewEngineExtension}", "${ViewsBasePath}/${FileName}/${Action.ToFileName()}.${ViewEngineExtension}")
 	
 	def Usage() as string:
 		return 'ControllerName [Action1, Action2, ...]'
