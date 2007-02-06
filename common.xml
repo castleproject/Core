@@ -6,7 +6,7 @@
 		in SVN.
 	-->
 	<property name="sign" value="true" overwrite="false" />
-	<property name="key.file" value="${root.dir}/CastleKey.snk" />
+	<property name="key.file" value="${path::get-full-path(root.dir)}/CastleKey.snk" />
 
 	<!-- Controls whether tests are run. Setting this is as input to the build disables *all* tests. -->
 	<property name="common.run-tests" value="true" overwrite="false" />

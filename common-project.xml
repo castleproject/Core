@@ -106,7 +106,7 @@
 
 		<property name="istestsproject" value="false" overwrite="false" />
 
-        <if test="${build.msbuild}">
+		<if test="${build.msbuild}">
 			<property name="msbuildlogger" value="" overwrite="false" unless="${property::exists('CCNetLabel')}" />
 			<property name="msbuildlogger" value="/logger:ThoughtWorks.CruiseControl.MsBuild.XmlLogger" overwrite="false" if="${property::exists('CCNetLabel')}" />
 			<property name="msbuild.defines" value="${string::replace(current.build.defines, ',', ';')}" />
@@ -117,6 +117,7 @@
 				<arg value="/p:OutputPath=${build.dir}" />
 				<arg value="/p:TreatWarningsAsErrors=${build.warnaserrors}" unless="${istestsproject}" />
 				<arg value='/p:DefineConstants="${msbuild.defines}"' />
+				<arg value='/t:Rebuild' if="${build.rebuild}" />
 				<arg value="/p:DocumentationFile=${build.dir}/${project::get-name()}.xml" unless="${istestsproject}" />
 				<arg value="/p:NoWarn=1591" unless="${build.warnmissingdocs}" />
 				<arg line="/p:SignAssembly=${assembly.sign} /p:AssemblyOriginatorKeyFile=${key.file}" />
