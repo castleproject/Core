@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="date_invalid" xml:space="preserve">
-    <value>Veld bevat een ongeldige waarde (geen geldige datum)</value>
+    <value>Vul s.v.p. een geldige datum in</value>
   </data>
   <data name="decimal_invalid" xml:space="preserve">
-    <value>Veld bevat een ongeldige waarde (geen geldig getal)</value>
+    <value>Vul s.v.p. een geldig getal</value>
   </data>
   <data name="double_invalid" xml:space="preserve">
-    <value>Veld bevat een ongeldige waarde (geen geldig getal)</value>
+    <value>Vul s.v.p. een geldig getal in</value>
   </data>
   <data name="email" xml:space="preserve">
-    <value>Veld bevat een ongeldig email adres</value>
+    <value>Vul s.v.p. een geldig email adres in. Bijvoorbeeld fred@domein.nl</value>
   </data>
   <data name="exactlength" xml:space="preserve">
     <value>Veld moet {0} tekens bevatten</value>
@@ -136,10 +136,10 @@
     <value>Veld bevat een ongeldige waarde</value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
-    <value>Veld bevat een ongeldige waarde (geen geldig geheel getal)</value>
+    <value>Voer een geldig geheel getal in s.v.p.</value>
   </data>
   <data name="isrequired" xml:space="preserve">
-    <value>Veld is verplicht</value>
+    <value>Dit is een verplicht veld</value>
   </data>
   <data name="length_invalidrange" xml:space="preserve">
     <value>Veld moet tussen {0} en {1} tekens bevatten</value>
@@ -154,9 +154,9 @@
     <value>Velden komen niet overeen</value>
   </data>
   <data name="single_invalid" xml:space="preserve">
-    <value>Veld bevat een ongeldige waarde (geen geldig getal)</value>
+    <value>Vul s.v.p. een geldig getal in</value>
   </data>
   <data name="time_invalid" xml:space="preserve">
-    <value>Veld bevat een ongeldige waarde (geen geldige tijd)</value>
+    <value>Vul s.v.p. een geldig tijdstip in. Bijvoorbeeld 14:05</value>
   </data>
 </root>
