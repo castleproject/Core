@@ -90,7 +90,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 			// clear the writer for the second run
 			writer = new StringWriter();
 			
-			string secondTemplateFile = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SecondResourceDll/compiledres/simple.vm";
+			string secondTemplateFile = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests.SR/compiledres/simple.vm"; 
 			Assert.IsTrue(engine.Process(
 				new Hashtable(),
 				secondTemplateFile,
