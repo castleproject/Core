@@ -16,12 +16,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
 	using System.Collections;
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 	using System.Reflection;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
 
 	using Iesi.Collections;
+#if DOTNET2
+	using Iesi.Collections.Generic;
+#endif
 
 	/// <summary>
 	/// Extends <see cref="DataBinder"/> class with some 
@@ -383,15 +389,34 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		private object CreateContainer(Type type)
 		{
-			if (type == typeof(IList))
+#if DOTNET2
+			if (type.IsGenericType)
 			{
-				return new ArrayList();
+				if (type.GetGenericTypeDefinition() == typeof(ISet<>))
+				{
+					Type[] genericArgs = type.GetGenericArguments();
+					Type genericType = typeof(HashedSet<>).MakeGenericType(genericArgs);
+					return Activator.CreateInstance(genericType);
+				}
+				else if (type.GetGenericTypeDefinition() == typeof(IList<>))
+				{
+					Type[] genericArgs = type.GetGenericArguments();
+					Type genericType = typeof(List<>).MakeGenericType(genericArgs);
+					return Activator.CreateInstance(genericType);
+				}
 			}
-			else if (type == typeof(ISet))
+			else
+#endif
 			{
-				return new HashedSet();
+				if (type == typeof(IList))
+				{
+					return new ArrayList();
+				}
+				else if (type == typeof(ISet))
+				{
+					return new HashedSet();
+				}
 			}
-
 			return null;
 		}
 		

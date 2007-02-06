@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Bart Reyserhove's patch fixing MR-226 
+  "ARDataBinder has problems when using generic collections"
+
 - Applied Jacob Lewallen's patch adding a new attribute (ViewComponentAttribute) used
   to name view components. The behavior is changed to strip the 'Component' suffix from the class name as well.
 
