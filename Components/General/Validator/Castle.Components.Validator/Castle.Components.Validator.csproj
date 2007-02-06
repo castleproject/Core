@@ -112,6 +112,7 @@
       <Link>CastleKey.snk</Link>
     </None>
     <None Include="Castle.Components.Validator.build" />
+    <None Include="Validator.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
