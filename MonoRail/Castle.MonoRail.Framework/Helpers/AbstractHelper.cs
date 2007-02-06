@@ -223,6 +223,18 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Escapes a content replacing line breaks with html break lines.
+		/// </summary>
+		/// <param name="content">The text to escape.</param>
+		/// <returns>The URL encoded and JavaScript escaped text.</returns>
+		public String LineBreaksToHtml(String content)
+		{
+			// TODO: Replace by a regular expression, which should be much more efficient
+
+			return content.Replace("\r", "").Replace("\n", "<br/>");
+		}
+
+		/// <summary>
 		/// URL encodes a string and returns the encoded string.  
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
