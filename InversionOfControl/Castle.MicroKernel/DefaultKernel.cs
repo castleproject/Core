@@ -344,7 +344,17 @@ namespace Castle.MicroKernel
 
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
-			RegisterHandler(model.Name, handler);
+
+			object skipRegistration = model.ExtendedProperties[ComponentModel.SkipRegistration];
+
+			if (skipRegistration != null)
+			{
+				RegisterHandler(model.Name, handler, (bool)skipRegistration);
+			}
+			else
+			{
+				RegisterHandler(model.Name, handler);
+			}
 		}
 
 		/// <summary>
@@ -1020,7 +1030,15 @@ namespace Castle.MicroKernel
 
 		protected void RegisterHandler(String key, IHandler handler)
 		{
-			NamingSubSystem.Register(key, handler);
+			RegisterHandler(key, handler, false);
+		}
+
+		protected void RegisterHandler(String key, IHandler handler, bool skipRegistration)
+		{
+			if (!skipRegistration)
+			{
+				NamingSubSystem.Register(key, handler);
+			}
 
 			base.RaiseHandlerRegistered(handler);
 			base.RaiseComponentRegistered(key, handler);

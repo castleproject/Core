@@ -73,7 +73,7 @@ namespace Castle.MicroKernel
 
 		public CreationContext(DependencyModel[] dependencies)
 		{
-			this.handler = null;
+			handler = null;
 			this.dependencies = new DependencyModelCollection(dependencies);
 		}
 

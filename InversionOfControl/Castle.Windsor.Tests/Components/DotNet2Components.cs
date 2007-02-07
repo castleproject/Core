@@ -18,124 +18,124 @@ namespace Castle.Windsor.Tests
 {
 	using System;
 	using System.Collections;
-
 	using Castle.Windsor.Tests.Components;
 
 	public interface IRepository<T>
-    {
-        T Get(int id);
-    }
+	{
+		T Get(int id);
+	}
 
-    public class DemoRepository<T> : IRepository<T>
-    {
-        private string name;
-        private ICache<T> cache;
+	public class DemoRepository<T> : IRepository<T>
+	{
+		private string name;
+		private ICache<T> cache;
 
-        public ICache<T> Cache
-        {
-            get { return cache; }
-            set { cache = value; }
-        }
+		public ICache<T> Cache
+		{
+			get { return cache; }
+			set { cache = value; }
+		}
 
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
 
-        public T Get(int id)
-        {
-            return Activator.CreateInstance<T>();
-        }
-    }
+		public T Get(int id)
+		{
+			return Activator.CreateInstance<T>();
+		}
+	}
 
-    public class ReviewerRepository : DemoRepository<IReviewer>
-    {
-        string name;
-        ICache<IReviewer> cache;
+	public class ReviewerRepository : DemoRepository<IReviewer>
+	{
+		private string name;
+		private ICache<IReviewer> cache;
 
-        public new ICache<IReviewer> Cache
-        {
-            get { return cache; }
-            set { cache = value; }
-        }
+		public new ICache<IReviewer> Cache
+		{
+			get { return cache; }
+			set { cache = value; }
+		}
 
 		public new string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+		{
+			get { return name; }
+			set { name = value; }
+		}
 
 		public new IReviewer Get(int id)
-        {
-            return null;
-        }
-    }
+		{
+			return null;
+		}
+	}
 
-    public interface ICache<T> 
-    {
-        void Put(string key, T item);
-        T Get(string key);
-    }
+	public interface ICache<T>
+	{
+		void Put(string key, T item);
+		T Get(string key);
+	}
 
-    public class HashTableCache<T> : ICache<T>
-    {
-        Hashtable hash = new Hashtable();
+	public class HashTableCache<T> : ICache<T>
+	{
+		private Hashtable hash = new Hashtable();
 
-        public void Put(string key, T item)
-        {
-            hash[key] = item;
-        }
-        public T Get(string key)
-        {
-            return (T)hash[key];
-        }
-    }
+		public void Put(string key, T item)
+		{
+			hash[key] = item;
+		}
 
-    public class NullCache<T> : ICache<T>
-    {
-        public void Put(string key, T item)
-        {
-        }
+		public T Get(string key)
+		{
+			return (T) hash[key];
+		}
+	}
 
-        public T Get(string key)
-        {
-            return default(T);
-        }
-    }
+	public class NullCache<T> : ICache<T>
+	{
+		public void Put(string key, T item)
+		{
+		}
 
-    
-    public class LoggingRepositoryDecorator<T> : IRepository<T>
-    {
-        public IRepository<T> inner;
+		public T Get(string key)
+		{
+			return default(T);
+		}
+	}
 
-        public LoggingRepositoryDecorator()
-        { }
+	public class LoggingRepositoryDecorator<T> : IRepository<T>
+	{
+		public IRepository<T> inner;
 
-        public LoggingRepositoryDecorator(IRepository<T> inner)
-        {
-            this.inner = inner;
-        }
+		public LoggingRepositoryDecorator()
+		{
+		}
 
-        public T Get(int id)
-        {
-            Console.WriteLine("Getting {0}", id);
-            return inner.Get(id);
-        }
-    }
+		public LoggingRepositoryDecorator(IRepository<T> inner)
+		{
+			this.inner = inner;
+		}
+
+		public T Get(int id)
+		{
+			Console.WriteLine("Getting {0}", id);
+			return inner.Get(id);
+		}
+	}
 
 	[Castle.Core.Transient]
-	public class TransientRepository<T> : IRepository<T> where T: new()
+	public class TransientRepository<T> : IRepository<T> where T : new()
 	{
 		public T Get(int id)
 		{
 			return new T();
 		}
 	}
-	
+
 	public class NeedsGenericType
 	{
-		ICache<string> cache;
+		private ICache<string> cache;
 
 		public NeedsGenericType(ICache<string> cache)
 		{
@@ -143,4 +143,5 @@ namespace Castle.Windsor.Tests
 		}
 	}
 }
+
 #endif

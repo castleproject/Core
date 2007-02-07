@@ -25,6 +25,10 @@ namespace Castle.MicroKernel.Handlers
 	[Serializable]
 	public class DefaultHandler : AbstractHandler
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultHandler"/> class.
+		/// </summary>
+		/// <param name="model"></param>
 		public DefaultHandler(ComponentModel model) : base(model)
 		{
 		}
@@ -39,7 +43,7 @@ namespace Castle.MicroKernel.Handlers
 			return lifestyleManager.Resolve(context);
 		}
 
-	    public override void Release(object instance)
+		public override void Release(object instance)
 		{
 			lifestyleManager.Release(instance);
 		}

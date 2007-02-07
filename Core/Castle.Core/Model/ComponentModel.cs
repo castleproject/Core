@@ -81,6 +81,8 @@ namespace Castle.Core
 	[Serializable]
 	public sealed class ComponentModel : GraphNode
 	{
+		public const string SkipRegistration = "skip.registration";
+
         #region Fields
 
         /// <summary>Name (key) of the component</summary>
