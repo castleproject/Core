@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #if DOTNET2
 
 namespace Castle.ActiveRecord.Queries
@@ -97,7 +96,8 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		public T Execute()
 		{
-			return (T)ActiveRecordMediator.ExecuteQuery(this);
+			object result = ActiveRecordMediator.ExecuteQuery(this);
+			return result == null ? default(T) : (T) result;
 		}
 	}
 }
