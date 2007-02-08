@@ -174,9 +174,7 @@ namespace Castle.MicroKernel.ComponentActivator
 					}
 				}
 
-				if (winnerCandidate == null) winnerCandidate = candidate;
-
-				if (winnerPoints < candidatePoints)
+				if (winnerCandidate == null || winnerPoints < candidatePoints)
 				{
 					winnerCandidate = candidate;
 					winnerPoints = candidatePoints;

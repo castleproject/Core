@@ -82,6 +82,14 @@ namespace Castle.Windsor.Tests
 			Assert.IsNotNull(container["C"]);
 		}
 
+		[Test]
+		public void CtorSourceOrderDoesNotMatter()
+		{
+			container.AddComponent("D", typeof(D));
+			Assert.IsNotNull(container["D"]);			
+		
+		}
+
 		public class A
 		{
 			public A(B b)
@@ -100,6 +108,19 @@ namespace Castle.Windsor.Tests
 		{
 			public C()
 			{
+			}
+		}
+
+		public class D
+		{
+			public D(B b)
+			{
+
+			}
+
+			public D()
+			{
+
 			}
 		}
 	}

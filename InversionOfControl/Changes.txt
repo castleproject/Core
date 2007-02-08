@@ -1,5 +1,6 @@
 RC 4
 ====
+- Fixing IOC-63 - source order of constrcutors should not matter
 
 - Fixed IOC-62
   "Interceptors don't work properly on generic components"
