@@ -129,6 +129,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
+			
 			string afterFormTag = validationConfig.CreateAfterFormOpened(currentFormId);
 			string formContent;
 
@@ -153,7 +154,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public string AjaxFormTag(IDictionary parameters)
 		{
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
-
+			
 			//additional form parameters. fValidate creates onsubmit here.
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
@@ -175,17 +176,18 @@ namespace Castle.MonoRail.Framework.Helpers
 				if (!string.IsNullOrEmpty(conditionFunc))
 					conditionFunc += " && ";
 				conditionFunc += onSubmitFunc;
-
+				
 				parameters["condition"] = conditionFunc;
 			}
+			bool isMethodAssigned = parameters.Contains("method");
 			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
 			parameters["url"] = url;
 			//reassign method so in case if there is no value the default is assigned.
-			parameters["method"] = method;
+			if (isMethodAssigned) parameters["method"] = method;
 			String remoteFunc = RemoteFunction(parameters);
 
 			string formContent = String.Format("<form id='{1}' method='{2}' {3} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, currentFormId, method,GetAttributes(parameters));
-
+		   
 			return formContent + afterFormTag;
 		}
 
@@ -752,7 +754,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="suffix"></param>
 		/// <param name="item"></param>
 		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
-		/// <returns>The generated form elemen</returns>
+		/// <returns>The generated form element</returns>
 		internal string CheckboxItem(int index, string target, string suffix, SetItem item, IDictionary attributes)
 		{
 			if (item.IsSelected)
@@ -912,7 +914,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			else
 			{
 				isChecked = ((value != null && value is bool && ((bool)value)) || 
-				             (!(value is bool) && (value != null)));
+							 (!(value is bool) && (value != null)));
 			}
 
 			if (isChecked)
@@ -1303,7 +1305,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
-			                     type, id, target, value, GetAttributes(attributes));
+								 type, id, target, value, GetAttributes(attributes));
 		}
 
 		protected virtual string CreateInputElement(string type, string value, IDictionary attributes)
@@ -1698,7 +1700,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return contents.ToString();
 		}
-
 		private static String GetUrlOption(IDictionary options)
 		{
 			String url = CommonUtils.ObtainEntryAndRemove(options,"url");
@@ -1710,12 +1711,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return string.Format("'{0}'", url);
 		}
-
-		private static void CopyDictionaryEntryAndRemove(IDictionary targetDict, IDictionary sourceDict, string key, string defaultValue)
-		{
-			targetDict[key] = CommonUtils.ObtainEntryAndRemove(sourceDict, key, defaultValue);
-		}
-
 		private static String BuildAjaxOptions(IDictionary jsOptions, IDictionary options)
 		{
 			BuildCallbacks(jsOptions, options);
@@ -1723,10 +1718,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			jsOptions["asynchronous"] = (!options.Contains("type")).ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture);
 			CommonUtils.ObtainEntryAndRemove(options, "type");
 
-			//TODO: method key here seems overlap with form level's method key, check usage definition for ajax
+			string method=CommonUtils.ObtainEntryAndRemove(options, "method", string.Empty);
+			if (!string.IsNullOrEmpty(method))
+				jsOptions["method"] = method;
 
-			CopyDictionaryEntryAndRemove(jsOptions, options, "method", string.Empty);
-			CopyDictionaryEntryAndRemove(jsOptions, options, "evalScripts", "true");
+			jsOptions["evalScripts"] =CommonUtils.ObtainEntryAndRemove(options, "evalScripts", "true");
 			string position = CommonUtils.ObtainEntryAndRemove(options, "position");
 			if (!string.IsNullOrEmpty(position))
 			{
@@ -1747,7 +1743,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return JavascriptOptions(jsOptions);
 		}
-
 		private static void BuildCallbacks(IDictionary jsOptions, IDictionary options)
 		{
 			String[] names = CallbackEnum.GetNames(typeof(CallbackEnum));
@@ -1941,7 +1936,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="propertyOnInitialSet">Optional. Property to obtain the value from</param>
 		/// <param name="isMultiple"><c>true</c> if the initial selection is a set</param>
 		/// <returns><c>true</c> if it's selected</returns>
-		protected internal static bool IsPresent(object value, object initialSetValue, ValueGetter propertyOnInitialSet, bool isMultiple)
+		protected internal static bool IsPresent(object value, object initialSetValue, 
+												 ValueGetter propertyOnInitialSet, bool isMultiple)
 		{
 			if (!isMultiple)
 			{
@@ -2207,4 +2203,4 @@ namespace Castle.MonoRail.Framework.Helpers
 			return PropertyFlags;
 		}
 	}
-}
+} 
