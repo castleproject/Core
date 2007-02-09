@@ -34,17 +34,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
-		/// The resulting XML
-		/// </summary>
-		public string Xml
-		{
-			get { return xml.ToString(); }
-		}
-
-		/// <summary>
 		/// Reset this generator and prepare to generate xml from new assembly.
 		/// </summary>
-		public void Reset()
+		private void Reset()
 		{
 			xml = new StringBuilder();
 		}
@@ -53,11 +45,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// Generate XML from assembly attributes.
 		/// If it can't find relevant attributes, returns null.
 		/// </summary>
-		public void CreateXml(Assembly assembly)
+		public string[] CreateXmlConfigurations(Assembly assembly)
 		{
 			object[] atts = assembly.GetCustomAttributes(true);
 			ArrayList namedQueries = new ArrayList();
 			ArrayList imports = new ArrayList();
+			ArrayList rawXml = new ArrayList();
 			foreach (object attribute in atts)
 			{
 				if (attribute is HqlNamedQueryAttribute)
@@ -68,9 +61,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					imports.Add(attribute);
 				}
+				else if (attribute is RawXmlMappingAttribute)
+				{
+					string[] result = ((RawXmlMappingAttribute)attribute).GetMappings();
+					rawXml.AddRange(result);
+				}
 			}
 			xml.Append(Constants.XmlPI);
-			xml.AppendFormat(Constants.XmlHeader,"","");
+			xml.AppendFormat(Constants.XmlHeader, "", "");
 			//note that there is a meaning to the order of import vs. named queries, imports must come first.
 			foreach (ImportAttribute attribute in imports)
 			{
@@ -81,8 +79,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				AppendNamedQuery(attribute, assembly);
 			}
 			xml.AppendLine(Constants.XmlFooter);
-			if (namedQueries.Count == 0 && imports.Count == 0)
-				Reset();
+			bool hasQueriesOrImportsToAdd = namedQueries.Count != 0 || imports.Count != 0;
+			if (hasQueriesOrImportsToAdd)
+			{
+				rawXml.Insert(0,xml.ToString());
+			}
+			Reset();
+			return (string[])rawXml.ToArray(typeof(string));
 		}
 
 		private void AppendImport(ImportAttribute attribute)

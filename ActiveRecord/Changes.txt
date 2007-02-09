@@ -1,6 +1,10 @@
 Release Candidate 2
 ===================
 
+- Added RawXmlMappingAttribute base class, which can be used to give Active Record additional mapping from external source. 
+  This functionality was added to support rare cases that Active Record do not support (mapping an entity from a 3rd party assembly, etc).
+  Prefer to use the standard Active Record features over this.
+
 - Applied John Hurrell's patch fixing AR-94
   "ScalarQuery<T> on an empty table creates a null reference exception"
 

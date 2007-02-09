@@ -23,8 +23,8 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		public void GenerateHqlQueryAndImportsFromAssembly()
 		{
 			AssemblyXmlGenerator generator = new AssemblyXmlGenerator();
-			generator.CreateXml(typeof(AssemblyXmlGenerationTestCase).Assembly);
-			string actual = generator.Xml;
+			string[] xmlConfigurations = generator.CreateXmlConfigurations(typeof(AssemblyXmlGenerationTestCase).Assembly);
+			string actual = xmlConfigurations[0];
 			string expected = "<?xml version=\"1.0\" encoding=\"utf-16\"?>"+
 	"<hibernate-mapping  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\""+
 	" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">"+
@@ -34,6 +34,20 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 	"	 </query>\r\n"+
 	"</hibernate-mapping>\r\n" ;
 			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void CanGetCustomValueFromRawXmlDerivedAttribute()
+		{
+			string expected =
+@"<hibernate-mapping xmlns='urn:nhibernate-mapping-2.2'>
+	<import class='Castle.ActiveRecord.Framework.Internal.Tests.ImportClassRow2, Castle.ActiveRecord.Framework.Internal.Tests' rename='ImportClassRow2'/>
+</hibernate-mapping>";
+			AssemblyXmlGenerator generator = new AssemblyXmlGenerator();
+			string[] xmlConfigurations = generator.CreateXmlConfigurations(typeof(AssemblyXmlGenerationTestCase).Assembly);
+			string actual = xmlConfigurations[1];
+			Assert.AreEqual(expected, actual);
+		
 		}
 	}
 }

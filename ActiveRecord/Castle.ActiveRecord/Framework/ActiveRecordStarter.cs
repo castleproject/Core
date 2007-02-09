@@ -424,12 +424,11 @@ namespace Castle.ActiveRecord
 				{
 					assembliesGeneratedXmlFor.Add(model.Type.Assembly);
 
-					assemblyXmlGenerator.Reset();
-					assemblyXmlGenerator.CreateXml(model.Type.Assembly);
-					string xml = assemblyXmlGenerator.Xml;
-					if (xml != String.Empty)
+					string[] configurations = assemblyXmlGenerator.CreateXmlConfigurations(model.Type.Assembly);
+					foreach(string xml in configurations)
 					{
-						cfg.AddXmlString(xml);
+						if(xml != string.Empty)
+							cfg.AddXmlString(xml);
 					}
 				}
 			}

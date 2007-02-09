@@ -68,4 +68,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 	public class ImportClassRow
 	{
 	}
+	public class ImportClassRow2
+	{
+	}
 }
