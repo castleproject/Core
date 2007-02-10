@@ -144,7 +144,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			if (collModel == null)
 			{
 				throw new ActiveRecordException( String.Format(
-					"A HileAttribute should be used with CollectionIDAttribute, but we couldn't find it for the property " + 
+					"A HiloAttribute should be used with CollectionIDAttribute, but we couldn't find it for the property " + 
 					currentModel.Type.FullName + "." + model.Property.Name) );
 			}
 
