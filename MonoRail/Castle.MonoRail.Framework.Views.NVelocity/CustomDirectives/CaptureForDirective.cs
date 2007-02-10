@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 		}
 
-		public override bool Render( IInternalContextAdapter context, TextWriter writer, INode node )
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			if (node.ChildrenCount != 2)
 			{

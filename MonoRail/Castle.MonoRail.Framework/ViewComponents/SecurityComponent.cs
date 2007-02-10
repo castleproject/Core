@@ -14,15 +14,23 @@
 
 namespace Castle.MonoRail.Framework.ViewComponents
 {
-	using System;
-
 	/// <summary>
 	/// Only renders the body if the current user has the specified role
+	/// <example>
 	/// <code>
 	/// #blockcomponent(SecurityComponent with "role=IsAdmin")
 	///		Content only available to admin
 	/// #end
 	/// </code>
+	/// </example>
+	/// <para>or for multiple roles (using "or")</para>
+	/// <example>
+	/// <code>
+	/// #blockcomponent(SecurityComponent with "roles=Manager,Admin")
+	///		Content only available to admin or managers
+	/// #end
+	/// </code>
+	/// </example>
 	/// </summary>
 	public class SecurityComponent : ViewComponent
 	{
@@ -34,11 +42,34 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Initialize()
 		{
-			String role = (String) ComponentParams["role"];
+			string role = (string) ComponentParams["role"];
+			string roles = (string) ComponentParams["roles"];
 
-			if (role == null) throw new RailsException("SecurityComponent: you must supply a role parameter");
+			if (role == null && roles == null)
+			{
+				throw new RailsException("SecurityComponent: you must supply a role (or roles) parameter");
+			}
 
-			shouldRender = RailsContext.CurrentUser != null && RailsContext.CurrentUser.IsInRole(role);
+			shouldRender = false;
+
+			if (RailsContext.CurrentUser != null)
+			{
+				if (role != null)
+				{
+					shouldRender = RailsContext.CurrentUser.IsInRole(role);
+				}
+				else
+				{
+					foreach(string itRole in roles.Split(','))
+					{
+						if (RailsContext.CurrentUser.IsInRole(itRole.Trim()))
+						{
+							shouldRender = true;
+							break;
+						}
+					}
+				}
+			}
 		}
 
 		/// <summary>
