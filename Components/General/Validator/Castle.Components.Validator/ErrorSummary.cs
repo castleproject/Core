@@ -112,12 +112,25 @@ namespace Castle.Components.Validator
 			if (property == null) throw new ArgumentNullException("property");
 			if (message == null) throw new ArgumentNullException("message");
 
-			if (!property2Messages.Contains(property.Name))
+			RegisterErrorMessage(property.Name, message);
+		}
+
+		/// <summary>
+		/// Registers the error message per <see cref="PropertyInfo"/>.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		/// <param name="message">The message.</param>
+		public void RegisterErrorMessage(string property, string message)
+		{
+			if (property == null) throw new ArgumentNullException("property");
+			if (message == null) throw new ArgumentNullException("message");
+
+			if (!property2Messages.Contains(property))
 			{
-				property2Messages[property.Name] = new ArrayList();
+				property2Messages[property] = new ArrayList();
 			}
 
-			IList list = (IList) property2Messages[property.Name];
+			IList list = (IList) property2Messages[property];
 
 			list.Add(message);
 
