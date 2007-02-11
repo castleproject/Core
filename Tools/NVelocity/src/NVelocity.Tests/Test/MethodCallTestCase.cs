@@ -15,6 +15,7 @@
 namespace NVelocity.Test
 {
 	using System;
+	using System.Collections;
 	using System.Globalization;
 	using System.IO;
 
@@ -75,6 +76,15 @@ namespace NVelocity.Test
 		}
 
 		[Test]
+		public void NoAmbiguityTest()
+		{
+			int num = 99;
+			c.Put("num", num);
+			Assert.AreEqual("Int32", Eval("$test.Amb($num)"));
+			Assert.AreEqual("HybridDictionary", Eval("$test.Amb(\"%{id=1}\")"));
+		}
+
+		[Test]
 		[Ignore("mono issues")]
 		public void HasRelaxedSignature()
 		{
@@ -114,6 +124,16 @@ namespace NVelocity.Test
 			public string JustDoIt(object obj)
 			{
 				return Convert.ToString(obj, CultureInfo.InvariantCulture);
+			}
+
+			public string Amb(object obj)
+			{
+				return obj.GetType().Name;
+			}
+
+			public string Amb(IDictionary obj)
+			{
+				return obj.GetType().Name;
 			}
 		}
 
