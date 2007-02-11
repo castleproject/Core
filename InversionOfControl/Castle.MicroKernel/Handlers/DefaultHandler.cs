@@ -33,6 +33,12 @@ namespace Castle.MicroKernel.Handlers
 		{
 		}
 
+		/// <summary>
+		/// Returns an instance of the component this handler
+		/// is responsible for
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
 		public override object Resolve(CreationContext context)
 		{
 			if (!context.HasAdditionalParameters)
@@ -43,6 +49,10 @@ namespace Castle.MicroKernel.Handlers
 			return lifestyleManager.Resolve(context);
 		}
 
+		/// <summary>
+		/// disposes the component instance (or recycle it)
+		/// </summary>
+		/// <param name="instance"></param>
 		public override void Release(object instance)
 		{
 			lifestyleManager.Release(instance);
