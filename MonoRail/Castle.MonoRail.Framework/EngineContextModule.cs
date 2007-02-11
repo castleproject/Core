@@ -40,6 +40,14 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context"></param>
 		public void Init(HttpApplication context)
 		{
+			if (context.Context.Error != null)
+			{
+				throw new Exception(
+					"An exception happened on Global application or on a module that run before MonoRail's module. " + 
+					"MonoRail will not be initialized and further requests are going to fail. " + 
+					"Fix the cause of the error reported below.", context.Context.Error);
+			}
+
 			lock(initLock)
 			{
 				if (container == null)

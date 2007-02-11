@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-228
+  "incorrect component configuration results in an 'The container seems to be unavailable 
+   in your HttpApplication subclass' exception"
+
 - Applied Bart Reyserhove's patch fixing MR-226 
   "ARDataBinder has problems when using generic collections"
 

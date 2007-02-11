@@ -14,6 +14,7 @@
 
 namespace TestSiteWindsor
 {
+	using System;
 	using System.Web;
 
 	using Castle.Core.Resource;
@@ -27,17 +28,7 @@ namespace TestSiteWindsor
 		public void Application_OnStart() 
 		{
 			container = new WindsorContainer(new XmlInterpreter(new ConfigResource()));
-
-			// container.AddFacility( "rails", new RailsFacility() );
-
-			// AddControllers(container);
 		}
-
-//		private void AddControllers(WindsorContainer container)
-//		{
-//			container.AddComponent( "home", typeof(HomeController) );
-//			container.AddComponent( "mycomp", typeof(MyComponent) );
-//		}
 
 		public void Application_OnEnd() 
 		{
