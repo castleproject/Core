@@ -114,6 +114,7 @@
     <Compile Include="InterClasses\InterfaceWithIndexer.cs" />
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
+    <Compile Include="OutRefParams.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
   </ItemGroup>
   <ItemGroup>

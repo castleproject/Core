@@ -22,7 +22,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		private int position = -1;
 
-		public ArgumentReference(Type argumentType) : base(argumentType)
+		public ArgumentReference(Type argumentType)
+			: base(argumentType)
 		{
 		}
 
@@ -38,7 +39,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				throw new ApplicationException("ArgumentReference unitialized");
 			}
-			switch(Position)
+			switch (Position)
 			{
 				case 0:
 					gen.Emit(OpCodes.Ldarg_0);
@@ -60,9 +61,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void StoreReference(ILGenerator gen)
 		{
-			// Invalid operation
-			// We'd like to keep arguments read-only
-			throw new NotImplementedException();
+			if (Position == -1)
+			{
+				throw new ApplicationException("ArgumentReference unitialized");
+			}
+			gen.Emit(OpCodes.Starg, Position);
 		}
 
 		public override void LoadAddressOfReference(ILGenerator gen)
