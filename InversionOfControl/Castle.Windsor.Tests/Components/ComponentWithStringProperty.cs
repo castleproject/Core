@@ -12,19 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
+namespace Castle.Windsor.Tests.Components
 {
-	using System;
-	using System.Xml;
-
-	public interface IXmlNodeProcessor
+	public class ComponentWithStringProperty
 	{
-		String Name { get; }
+		private readonly string name;
 
-		XmlNodeType[] AcceptNodeTypes { get; }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ComponentWithStringProperty"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		public ComponentWithStringProperty(string name)
+		{
+			this.name = name;
+		}
 
-		void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
-
-		bool Accept( XmlNode node );
+		/// <summary>
+		/// Gets the name.
+		/// </summary>
+		/// <value>The name.</value>
+		public string Name
+		{
+			get { return name; }
+		}
 	}
 }

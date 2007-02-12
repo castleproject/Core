@@ -77,6 +77,22 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="WindsorContainer"/> class.
+		/// </summary>
+		/// <param name="interpreter">The interpreter.</param>
+		/// <param name="environmentInfo">The environment info.</param>
+		public WindsorContainer(IConfigurationInterpreter interpreter, IEnvironmentInfo environmentInfo) : this()
+		{
+			if (interpreter == null) throw new ArgumentNullException("interpreter");
+			if (environmentInfo == null) throw new ArgumentNullException("environmentInfo");
+
+			interpreter.EnvironmentName = environmentInfo.GetEnvironmentName();
+			interpreter.ProcessResource(interpreter.Source, kernel.ConfigurationStore);
+
+			RunInstaller();
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="WindsorContainer"/> class using a
 		/// xml file to configure it.
 		/// <para>

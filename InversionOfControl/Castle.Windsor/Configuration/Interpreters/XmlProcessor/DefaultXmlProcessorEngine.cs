@@ -33,16 +33,25 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 		private readonly Stack resourceStack = new Stack();
 		private readonly Hashtable nodeProcessors = new Hashtable();
 		private readonly IXmlNodeProcessor defaultElementProcessor;
+		private IResourceSubSystem resourceSubSystem;
 
-		private IResourceSubSystem resourseSubSystem;
-
-		public DefaultXmlProcessorEngine() : this(new DefaultResourceSubSystem())
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultXmlProcessorEngine"/> class.
+		/// </summary>
+		/// <param name="environmentName">Name of the environment.</param>
+		public DefaultXmlProcessorEngine(string environmentName) : this(environmentName, new DefaultResourceSubSystem())
 		{
 		}
 
-		public DefaultXmlProcessorEngine(IResourceSubSystem resourceSubSystem)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultXmlProcessorEngine"/> class.
+		/// </summary>
+		/// <param name="environmentName">Name of the environment.</param>
+		/// <param name="resourceSubSystem">The resource sub system.</param>
+		public DefaultXmlProcessorEngine(string environmentName, IResourceSubSystem resourceSubSystem)
 		{
-			this.resourseSubSystem = resourceSubSystem;
+			AddEnvNameAsFlag(environmentName);
+			this.resourceSubSystem = resourceSubSystem;
 			defaultElementProcessor = new DefaultElementProcessor();
 		}
 
@@ -100,7 +109,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 			{
 				processor = processors[node.Name] as IXmlNodeProcessor;
 
-				// sometime nodes with the same name will not accept a processor
+				// sometimes nodes with the same name will not accept a processor
 				if (processor == null || !processor.Accept(node))
 				{
 					if (node.NodeType == XmlNodeType.Element)
@@ -168,8 +177,8 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 
 			if (uri.IndexOf(Uri.SchemeDelimiter) != -1)
 			{
-				return resource == null ? resourseSubSystem.CreateResource(uri) :
-					resourseSubSystem.CreateResource(uri, resource.FileBasePath);
+				return resource == null ? resourceSubSystem.CreateResource(uri) :
+					resourceSubSystem.CreateResource(uri, resource.FileBasePath);
 			}
 			else if (resourceStack.Count > 0)
 			{
@@ -196,6 +205,14 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 			XmlElement prop = properties[key] as XmlElement;
 
 			return prop == null ? null : prop.CloneNode(true) as XmlElement;
+		}
+
+		private void AddEnvNameAsFlag(string environmentName)
+		{
+			if (environmentName != null)
+			{
+				AddFlag(environmentName);
+			}
 		}
 
 		private string GetCanonicalFlagName(string flag)

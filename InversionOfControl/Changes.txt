@@ -1,6 +1,10 @@
 RC 4
 ====
-- Fixing IOC-63 - source order of constrcutors should not matter
+
+- Added IEnvironmentInfo in an attempt to solve complex 
+  configuration/environment issues.
+
+- Fixing IOC-63 - source order of constructors should not matter
 
 - Fixed IOC-62
   "Interceptors don't work properly on generic components"

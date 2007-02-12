@@ -27,13 +27,6 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 
 		public abstract String Name { get; }
 
-		protected virtual bool IgnoreNode(XmlNode node)
-		{
-			return node.NodeType == XmlNodeType.Comment ||
-				node.NodeType == XmlNodeType.Entity ||
-				node.NodeType == XmlNodeType.EntityReference;
-		}
-
 		public virtual XmlNodeType[] AcceptNodeTypes
 		{
 			get { return acceptNodes; }
@@ -52,6 +45,13 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 		}
 
 		public abstract void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
+
+		protected virtual bool IgnoreNode(XmlNode node)
+		{
+			return node.NodeType == XmlNodeType.Comment ||
+				node.NodeType == XmlNodeType.Entity ||
+				node.NodeType == XmlNodeType.EntityReference;
+		}
 
 		/// <summary>
 		/// Convert and return child parameter into an XmlElement

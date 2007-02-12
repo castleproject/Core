@@ -29,15 +29,30 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 	{
 		private IXmlProcessorEngine engine;
 
-		public XmlProcessor(IResourceSubSystem resourceSubSystem)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlProcessor"/> class.
+		/// </summary>
+		public XmlProcessor() : this(null)
 		{
-			engine = new DefaultXmlProcessorEngine(resourceSubSystem);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlProcessor"/> class.
+		/// </summary>
+		/// <param name="environmentName">Name of the environment.</param>
+		/// <param name="resourceSubSystem">The resource sub system.</param>
+		public XmlProcessor(string environmentName, IResourceSubSystem resourceSubSystem)
+		{
+			engine = new DefaultXmlProcessorEngine(environmentName, resourceSubSystem);
 			RegisterProcessors();
 		}
 
-		public XmlProcessor()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlProcessor"/> class.
+		/// </summary>
+		public XmlProcessor(string environmentName)
 		{
-			engine = new DefaultXmlProcessorEngine();
+			engine = new DefaultXmlProcessorEngine(environmentName);
 			RegisterProcessors();
 		}
 

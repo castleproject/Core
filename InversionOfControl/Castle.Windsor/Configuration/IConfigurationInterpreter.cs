@@ -25,6 +25,12 @@ namespace Castle.Windsor.Configuration
 	public interface IConfigurationInterpreter
 	{
 		/// <summary>
+		/// Gets or sets the name of the environment.
+		/// </summary>
+		/// <value>The name of the environment.</value>
+		string EnvironmentName { get; set; }
+
+		/// <summary>
 		/// Exposes the reference to <see cref="IResource"/>
 		/// which the interpreter is likely to hold
 		/// </summary>

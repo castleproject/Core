@@ -51,20 +51,35 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlInterpreter"/> class.
+		/// </summary>
 		public XmlInterpreter()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlInterpreter"/> class.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
 		public XmlInterpreter(String filename) : base(filename)
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlInterpreter"/> class.
+		/// </summary>
+		/// <param name="source">The source.</param>
 		public XmlInterpreter(Castle.Core.Resource.IResource source) : base(source)
 		{
 		}
 
 		#endregion
 
+		/// <summary>
+		/// Gets or sets the kernel.
+		/// </summary>
+		/// <value>The kernel.</value>
 		public IKernel Kernel
 		{
 			get { return kernel ; }
@@ -73,10 +88,10 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		public override void ProcessResource(IResource source, IConfigurationStore store)
 		{
-			XmlProcessor.XmlProcessor processor = ( kernel == null ) ? 
-				new XmlProcessor.XmlProcessor() :
-				new XmlProcessor.XmlProcessor(
-					kernel.GetSubSystem( SubSystemConstants.ResourceKey ) as IResourceSubSystem );
+			XmlProcessor.XmlProcessor processor = (kernel == null) ?
+				new XmlProcessor.XmlProcessor(EnvironmentName) :
+				new XmlProcessor.XmlProcessor(EnvironmentName, 
+					kernel.GetSubSystem(SubSystemConstants.ResourceKey) as IResourceSubSystem);
 
 			try
 			{
@@ -169,7 +184,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			// Copy all attributes
 			string[] allKeys = config.Attributes.AllKeys;
 			
-			foreach (string key in allKeys)
+			foreach(string key in allKeys)
 			{
 				newConfig.Attributes.Add(key, config.Attributes[key]);
 			}

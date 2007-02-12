@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
+namespace Castle.Windsor
 {
-	using System;
-	using System.Xml;
-
-	public interface IXmlNodeProcessor
+	/// <summary>
+	/// Gets the environment information (name). Implementors should 
+	/// use to define their environments and how those affect the configuration.
+	/// It is also used by the <see cref="Castle.Windsor.Configuration.Interpreters.XmlInterpreter"/>
+	/// to define a flag with the environment name.
+	/// </summary>
+	public interface IEnvironmentInfo
 	{
-		String Name { get; }
-
-		XmlNodeType[] AcceptNodeTypes { get; }
-
-		void Process(IXmlProcessorNodeList nodeList, IXmlProcessorEngine engine);
-
-		bool Accept( XmlNode node );
+		/// <summary>
+		/// Gets the name of the environment.
+		/// </summary>
+		/// <returns></returns>
+		string GetEnvironmentName();
 	}
 }

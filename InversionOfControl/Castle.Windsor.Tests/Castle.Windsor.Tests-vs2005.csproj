@@ -140,6 +140,7 @@
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\CircularDependencyComponents.cs" />
     <Compile Include="Components\ComponentWithProperties.cs" />
+    <Compile Include="Components\ComponentWithStringProperty.cs" />
     <Compile Include="Components\DotNet2Components.cs" />
     <Compile Include="Components\Employee.cs">
       <SubType>Code</SubType>
@@ -170,6 +171,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="Configuration2\ConfigurationEnvTestCase.cs" />
     <Compile Include="Configuration2\ConfigWithStatementsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -313,7 +315,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="Configuration2\env_config.xml" />
     <Content Include="IOC-51.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -29,19 +29,22 @@ namespace Castle.Windsor.Configuration.Interpreters
 	public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
 		#region Fields
-		protected const string ContainersNodeName = "containers";
-		protected const string ContainerNodeName = "container";
-		protected static readonly String FacilitiesNodeName = "facilities";
-		protected static readonly String FacilityNodeName = "facility";
-		protected static readonly String ComponentsNodeName = "components";
-		protected static readonly String BootstrapNodeName = "bootstrap";
-		protected static readonly String ComponentNodeName = "component";
-		protected static readonly String IncludeNodeName = "include";
-		protected static readonly String PropertiesNodeName = "properties";		
+
+		protected static readonly string ContainersNodeName = "containers";
+		protected static readonly string ContainerNodeName = "container";
+		protected static readonly string FacilitiesNodeName = "facilities";
+		protected static readonly string FacilityNodeName = "facility";
+		protected static readonly string ComponentsNodeName = "components";
+		protected static readonly string BootstrapNodeName = "bootstrap";
+		protected static readonly string ComponentNodeName = "component";
+		protected static readonly string IncludeNodeName = "include";
+		protected static readonly string PropertiesNodeName = "properties";		
 
 		// private ImportDirectiveCollection imports = new ImportDirectiveCollection();
 		private IResource source;
 		private Stack resourceStack = new Stack();
+		private string environmentName;
+
 		#endregion
 
 		#region Constructors
@@ -55,7 +58,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			PushResource(source);
 		} 
 
-		public AbstractInterpreter(String filename) : this(new FileResource(filename))
+		public AbstractInterpreter(string filename) : this(new FileResource(filename))
 		{
 		} 
 
@@ -100,9 +103,24 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		#region Properties
 
+		/// <summary>
+		/// Exposes the reference to <see cref="IResource"/>
+		/// which the interpreter is likely to hold
+		/// </summary>
+		/// <value></value>
 		public IResource Source
 		{
-			get { return this.source; }
+			get { return source; }
+		}
+
+		/// <summary>
+		/// Gets or sets the name of the environment.
+		/// </summary>
+		/// <value>The name of the environment.</value>
+		public string EnvironmentName
+		{
+			get { return environmentName; }
+			set { environmentName = value; }
 		}
 
 		#endregion
@@ -119,7 +137,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			AddComponentConfig( component.Attributes["id"], component, store );
 		}
 
-		protected void AddChildContainerConfig(String name, IConfiguration childContainer, IConfigurationStore store)
+		protected void AddChildContainerConfig(string name, IConfiguration childContainer, IConfigurationStore store)
 		{
 			AssertValidId(name);
 
@@ -128,7 +146,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddChildContainerConfiguration(name, childContainer);
 		}
 
-		protected void AddFacilityConfig(String id, IConfiguration facility, IConfigurationStore store)
+		protected void AddFacilityConfig(string id, IConfiguration facility, IConfigurationStore store)
 		{
 			AssertValidId(id);
 
@@ -137,7 +155,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddFacilityConfiguration( id, facility );
 		}
 
-		protected void AddComponentConfig(String id, IConfiguration component, IConfigurationStore store)
+		protected void AddComponentConfig(string id, IConfiguration component, IConfigurationStore store)
 		{
 			AssertValidId(id);
 
@@ -146,7 +164,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			store.AddComponentConfiguration( id, component );
 		}
 
-		protected void AddBootstrapComponentConfig(String id, IConfiguration component, IConfigurationStore store)
+		protected void AddBootstrapComponentConfig(string id, IConfiguration component, IConfigurationStore store)
 		{
 			AssertValidId(id);
 
@@ -170,7 +188,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		#endregion
 		
-		protected void ProcessInclude(String uri, IConfigurationStore store)
+		protected void ProcessInclude(string uri, IConfigurationStore store)
 		{
 			IResource resource = store.GetResource(uri, CurrentResource);
 
