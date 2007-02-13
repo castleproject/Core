@@ -53,6 +53,12 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, logger.Invocations.Count);
 		}
 
+		[Test]
+		public void NeedingToCreateNewMethodTableSlot()
+		{
+			generator.CreateClassProxy(typeof (MultiClass), new Type[] {typeof (ISpecialMulti)});
+		}
+
 		public interface IWithEvents
 		{
 			event EventHandler Foo;
@@ -67,5 +73,22 @@ namespace Castle.DynamicProxy.Tests
 				Foo(this,EventArgs.Empty);
 			}
 		}
+
+		public interface IMulti
+        {
+            void OriginalMethod1();
+            void OriginalMethod2();
+        }
+        public class MultiClass : IMulti
+        {
+            // NON-virtual method
+            public void OriginalMethod1() { }
+            // VIRTUAL method
+            public virtual void OriginalMethod2() { }
+        }
+        public interface ISpecialMulti : IMulti
+        {
+            void ExtraMethod();
+        }
 	}
 }

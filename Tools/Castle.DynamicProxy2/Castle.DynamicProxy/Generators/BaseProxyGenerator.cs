@@ -55,7 +55,8 @@ namespace Castle.DynamicProxy.Generators
 		private int fieldCount = 1;
 		private FieldReference typeTokenField;
 		private Dictionary<MethodInfo, FieldReference> method2TokenField = new Dictionary<MethodInfo, FieldReference>();
-
+		private IList generateNewSlot = new ArrayList();
+      
 		protected readonly Type targetType;
 		protected IProxyGenerationHook generationHook;
 		// protected MethodEmitter initCacheMethod;
@@ -554,6 +555,11 @@ namespace Castle.DynamicProxy.Generators
 		{
 			MethodAttributes atts = MethodAttributes.Virtual;
 
+			if(ShouldCreateNewSlot(method))
+			{
+				atts |= MethodAttributes.NewSlot;
+			}
+
 			if (method.IsPublic)
 			{
 				atts |= MethodAttributes.Public;
@@ -563,7 +569,10 @@ namespace Castle.DynamicProxy.Generators
 			{
 				atts |= MethodAttributes.HideBySig;
 			}
-
+			if (InternalsHelper.IsInternal(method) && InternalsHelper.IsInternalToDynamicProxy(method.DeclaringType.Assembly))
+			{
+				atts |= MethodAttributes.Assembly;
+			}
 			if (method.IsFamilyAndAssembly)
 			{
 				atts |= MethodAttributes.FamANDAssem;
@@ -1075,7 +1084,9 @@ namespace Castle.DynamicProxy.Generators
 			if (method.IsFinal)
 				return false;
 
-			if (IsInternal(method))
+			bool isInternalsAndNotVisibleToDynamicProxy = InternalsHelper.IsInternal(method)
+				&& InternalsHelper.IsInternalToDynamicProxy(method.DeclaringType.Assembly) == false;
+			if (isInternalsAndNotVisibleToDynamicProxy)
 				return false;
 
 			if (onlyVirtuals && !method.IsVirtual)
@@ -1101,12 +1112,6 @@ namespace Castle.DynamicProxy.Generators
 
 			return generationHook.ShouldInterceptMethod(targetType, method);
 			;
-		}
-
-		private static bool IsInternal(MethodInfo method)
-		{
-			return (method.Attributes & MethodAttributes.FamANDAssem) != 0 //internal
-				   && (method.Attributes & MethodAttributes.Family) == 0; //b
 		}
 
 		protected MethodInfo[] CollectMethodsAndProperties(
@@ -1200,6 +1205,12 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (MethodInfo method in methods)
 			{
+				if(method.IsFinal)
+				{
+					AddMethodToGenerateNewSlot(method);
+					continue;
+				}
+
 				if (method.IsSpecialName)
 				{
 					continue;
@@ -1331,5 +1342,25 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		#endregion
+
+		protected void AddMethodToGenerateNewSlot(MethodInfo method)
+        {
+            generateNewSlot.Add(method);
+        }
+
+		  /// <summary>
+        /// Checks if the method has the same signature as a method that was marked as
+        /// one that should generate a new vtable slot.
+        /// </summary>
+        protected bool ShouldCreateNewSlot(MethodInfo method)
+        {
+            string methodStr = method.ToString();
+            foreach (MethodInfo candidate in generateNewSlot)
+            {
+                if (candidate.ToString() == methodStr)
+                    return true;
+            }
+            return false;
+        }
 	}
 }

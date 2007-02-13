@@ -251,6 +251,7 @@
     <Compile Include="IInterceptorSelector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InternalsHelper.cs" />
     <Compile Include="IProxyBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
