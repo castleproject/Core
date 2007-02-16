@@ -166,6 +166,11 @@ namespace Castle.Facilities.Remoting
 			converter = (ITypeConverter) Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 		}
 
+		/// <summary>
+		/// Performs the tasks associated with freeing, releasing, or resetting
+		/// the facility resources.
+		/// </summary>
+		/// <remarks>It can be overriden.</remarks>
 		public override void Dispose()
 		{
 			if (disconnectLocalRegistry) RemotingServices.Disconnect(localRegistry);

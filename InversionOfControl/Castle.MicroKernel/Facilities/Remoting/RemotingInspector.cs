@@ -170,13 +170,18 @@ namespace Castle.Facilities.Remoting
 			ResetDependencies(model);
 
 			String uri = ConstructClientURI(client, model.Name, model);
+
+			bool skipRemotingRegistration = Convert.ToBoolean(model.Configuration.Attributes["skipRemotingRegistration"]);
 			
 			switch (client)
 			{
 				case RemotingStrategy.Singleton:
 				case RemotingStrategy.SingleCall:
 				{
-					RemotingConfiguration.RegisterWellKnownClientType(type, uri);
+					if (!skipRemotingRegistration)
+					{
+						RemotingConfiguration.RegisterWellKnownClientType(type, uri);
+					}
 
 					model.ExtendedProperties.Add("remoting.uri", uri);
 					model.CustomComponentActivator = typeof(RemoteActivator);
@@ -187,7 +192,10 @@ namespace Castle.Facilities.Remoting
 				{
 					CheckHasBaseURI();
 
-					RemotingConfiguration.RegisterActivatedClientType(type, baseUri);
+					if (!skipRemotingRegistration)
+					{
+						RemotingConfiguration.RegisterActivatedClientType(type, baseUri);
+					}
 
 					model.ExtendedProperties.Add("remoting.appuri", baseUri);
 					model.CustomComponentActivator = typeof(RemoteClientActivatedActivator);

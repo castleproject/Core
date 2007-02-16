@@ -1,6 +1,7 @@
 Release Candidate 2
 ===================
 
+- Fixed FACILITIES-72: Added the skipRemotingRegistration configuration attribute
 - Fixed the FACILITIES-70 and FACILITIES-73 - DynProxyGetTarget invoked on transparent proxies
 
 

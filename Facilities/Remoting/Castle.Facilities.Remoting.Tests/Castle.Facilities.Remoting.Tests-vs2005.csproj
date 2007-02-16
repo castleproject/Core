@@ -125,6 +125,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="ConfigurableRegistrationTestCase.cs" />
     <Compile Include="RemoteGenericComponentTestCase.cs" />
     <Compile Include="FacilityLifeCycleTestCase.cs">
       <SubType>Code</SubType>
@@ -153,6 +154,8 @@
     <Content Include="Configs\client_kernelcomponent_recover.xml" />
     <Content Include="Configs\client_simple_scenario.xml" />
     <Content Include="Configs\client_kernelgenericcomponent.xml" />
+    <Content Include="Configs\client_confreg_clientactivated.xml" />
+    <Content Include="Configs\server_confreg_clientactivated.xml" />
     <Content Include="Configs\server_kernelgenericcomponent.xml" />
     <Content Include="Configs\server_clientactivated.xml" />
     <Content Include="Configs\server_client_kernelcomponent.xml" />
