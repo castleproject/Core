@@ -317,15 +317,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		
 		private object ObtainPrimaryKeyValue(ActiveRecordModel model, CompositeNode node, String prefix, out PrimaryKeyModel pkModel)
 		{
-
-			if (model.IsJoinedSubClass || model.IsDiscriminatorSubClass)
-			{
-				pkModel = model.Parent.PrimaryKey;
-			}
-			else
-			{
-				pkModel = model.PrimaryKey;
-			}
+			pkModel = ObtainPrimaryKey(model);
 			
 			String pkPropName = pkModel.Property.Name;
 			
@@ -350,6 +342,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return Converter.Convert(pkModel.Property.PropertyType, lNode.ValueType, lNode.Value, out conversionSuc);
 		}
 		
+		private static PrimaryKeyModel ObtainPrimaryKey(ActiveRecordModel model)
+		{
+			if (model.IsJoinedSubClass || model.IsDiscriminatorSubClass)
+			{
+				return ObtainPrimaryKey(model.Parent);
+			}
+			return model.PrimaryKey;
+		}
+
 		private bool IsValidKey(object id)
 		{
 			if (id != null)

@@ -85,15 +85,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (pk != null && !String.Empty.Equals(pk))
 			{
-				PrimaryKeyModel pkModel;
-				if (model.IsJoinedSubClass || model.IsDiscriminatorSubClass)
-				{
-					pkModel = model.Parent.PrimaryKey;
-				}
-				else
-				{
-					pkModel = model.PrimaryKey;
-				}
+				PrimaryKeyModel pkModel = ObtainPrimaryKey(model);
 
 				Type pkType = pkModel.Property.PropertyType;
 
@@ -115,5 +107,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			return instance;
 		}
+
+		private static PrimaryKeyModel ObtainPrimaryKey(ActiveRecordModel model)
+		{
+			if (model.IsJoinedSubClass || model.IsDiscriminatorSubClass)
+			{
+				return ObtainPrimaryKey(model.Parent);
+			}
+			return model.PrimaryKey;
+		}
+ 
 	}
 }
