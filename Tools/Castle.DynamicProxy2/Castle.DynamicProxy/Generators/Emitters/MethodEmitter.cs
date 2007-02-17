@@ -15,11 +15,13 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 
 	[CLSCompliant(false)]
 	public class MethodEmitter : IMemberEmitter
@@ -29,11 +31,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private MethodCodeBuilder codebuilder;
 		private AbstractTypeEmitter maintype;
+#if DOTNET2
 		private GenericTypeParameterBuilder[] genericTypeParams;
-
 		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
 			new Dictionary<string, GenericTypeParameterBuilder>();
-
+#endif
 		protected internal MethodEmitter()
 		{
 		}
@@ -66,11 +68,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			builder.SetReturnType(returnType);
 		}
-
+#if DOTNET2
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
 			get { return genericTypeParams; }
 		}
+#endif
 
 		/// <summary>
 		/// Inspect the base method for generic definitions
@@ -79,15 +82,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public void CopyParametersAndReturnTypeFrom(MethodInfo baseMethod, AbstractTypeEmitter parentEmitter)
 		{
+#if DOTNET2
 			GenericUtil.PopulateGenericArguments(parentEmitter, name2GenericType);
 
 			Type[] genericArguments = baseMethod.GetGenericArguments();
 
 			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, builder, name2GenericType);
-
+#endif
 			// Bind parameter types
 
 			ParameterInfo[] baseMethodParameters = baseMethod.GetParameters();
+#if DOTNET2
 
 			SetParameters(GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType));
 
@@ -95,6 +100,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			// definition for the method
 
 			SetReturnType(GenericUtil.ExtractCorrectType(baseMethod.ReturnType, name2GenericType));
+#else
+			SetParameters(GenericUtil.ExtractParameterTypes(baseMethodParameters));
+			SetReturnType(baseMethod.ReturnType);
+#endif
 
 			DefineParameters(baseMethodParameters);
 		}

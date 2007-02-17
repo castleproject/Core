@@ -15,15 +15,15 @@
 namespace Castle.DynamicProxy
 {
 	using System.Reflection;
-	using System.Runtime.CompilerServices;
 	using System.Threading;
-	using Castle.DynamicProxy;
+	using System.Runtime.CompilerServices;
 
 	public class InternalsHelper
 	{
 		private static ReaderWriterLock internalsToDynProxyLock = new ReaderWriterLock();
+#if DOTNET2
 		private static System.Collections.Generic.IDictionary<Assembly, bool> internalsToDynProxy = new System.Collections.Generic.Dictionary<Assembly, bool>();
-
+#endif
 		/// <summary>
 		/// Determines whether this assembly has internals visisble to dynamic proxy.
 		/// </summary>
@@ -76,6 +76,13 @@ namespace Castle.DynamicProxy
 #endif
 		}
 
+		/// <summary>
+		/// Determines whether the specified method is internal.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified method is internal; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool IsInternal(MethodInfo method)
 		{
 			return (method.Attributes & MethodAttributes.FamANDAssem) != 0 //internal

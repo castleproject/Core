@@ -16,7 +16,9 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections;
+#if DOTNET2
 	using System.Collections.Generic;
+#endif
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Threading;

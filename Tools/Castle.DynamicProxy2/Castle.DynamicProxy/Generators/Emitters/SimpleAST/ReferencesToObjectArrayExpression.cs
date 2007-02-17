@@ -56,10 +56,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				{
 					gen.Emit(OpCodes.Box, reference.Type.UnderlyingSystemType);
 				}
+#if DOTNET2
 				if (reference.Type.IsGenericParameter)
 				{
 					gen.Emit(OpCodes.Box, reference.Type);
 				}
+#endif
 
 				gen.Emit(OpCodes.Stelem_Ref);
 			}

@@ -56,6 +56,7 @@ namespace Castle.DynamicProxy
 		#endregion
 
 		#region CreateInterfaceProxyWithTarget
+#if DOTNET2
 
 		public T CreateInterfaceProxyWithTarget<T>(object target, params IInterceptor[] interceptors)
 		{
@@ -67,6 +68,7 @@ namespace Castle.DynamicProxy
 		{
 			return (T) CreateInterfaceProxyWithTarget(typeof(T), target, options, interceptors);
 		}
+#endif
 
 		public object CreateInterfaceProxyWithTarget(Type theInterface, object target, params IInterceptor[] interceptors)
 		{
@@ -210,7 +212,7 @@ namespace Castle.DynamicProxy
 		#endregion
 
 		#region CreateInterfaceProxyWithoutTarget
-
+#if DOTNET2
 		public T CreateInterfaceProxyWithoutTarget<T>(IInterceptor interceptor)
 		{
 			return (T) CreateInterfaceProxyWithoutTarget(typeof(T), interceptor);
@@ -220,7 +222,7 @@ namespace Castle.DynamicProxy
 		{
 			return (T) CreateInterfaceProxyWithoutTarget(typeof(T), interceptors);
 		}
-
+#endif
 		public object CreateInterfaceProxyWithoutTarget(Type theInterface, IInterceptor interceptor)
 		{
 			return CreateInterfaceProxyWithoutTarget(theInterface, new Type[0],
@@ -284,7 +286,7 @@ namespace Castle.DynamicProxy
 		#endregion
 
 		#region CreateClassProxy
-
+#if DOTNET2
 		public T CreateClassProxy<T>(params IInterceptor[] interceptors)
 		{
 			return (T) CreateClassProxy(typeof(T), ProxyGenerationOptions.Default, interceptors);
@@ -294,19 +296,26 @@ namespace Castle.DynamicProxy
 		{
 			return CreateClassProxy(targetType, ProxyGenerationOptions.Default, interceptors);
 		}
-
+#endif
 		/// <summary>
-		/// 
+		/// Creates the class proxy.
 		/// </summary>
-		/// <param name="targetType"></param>
-		/// <param name="interfaces"></param>
-		/// <param name="interceptors"></param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="interfaces">The interfaces.</param>
+		/// <param name="interceptors">The interceptors.</param>
 		/// <returns></returns>
 		public object CreateClassProxy(Type targetType, Type[] interfaces, params IInterceptor[] interceptors)
 		{
 			return CreateClassProxy(targetType, interfaces, ProxyGenerationOptions.Default, interceptors);
 		}
 
+		/// <summary>
+		/// Creates the class proxy.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="interceptors">The interceptors.</param>
+		/// <param name="constructorArgs">The constructor args.</param>
+		/// <returns></returns>
 		public object CreateClassProxy(Type targetType, IInterceptor[] interceptors,
 		                               params object[] constructorArgs)
 		{
@@ -333,13 +342,13 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// 
+		/// Creates the class proxy.
 		/// </summary>
-		/// <param name="targetType"></param>
-		/// <param name="interfaces"></param>
-		/// <param name="options"></param>
-		/// <param name="interceptors"></param>
-		/// <param name="constructorArgs"></param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="interfaces">The interfaces.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="constructorArgs">The constructor args.</param>
+		/// <param name="interceptors">The interceptors.</param>
 		/// <returns></returns>
 		public object CreateClassProxy(Type targetType, Type[] interfaces, ProxyGenerationOptions options,
 		                               object[] constructorArgs, params IInterceptor[] interceptors)
@@ -356,31 +365,32 @@ namespace Castle.DynamicProxy
 			{
 				throw new ArgumentException("'targetType' must be a class", "targetType");
 			}
+			
+			Type proxyType;
 
-// #if DOTNET2
+#if DOTNET2
 			if (targetType.IsGenericTypeDefinition)
 			{
 				throw new ArgumentException("You can't specify a generic type definition", "baseClass");
 			}
 
-			Type proxyType;
 
 			if (targetType.IsGenericType)
 			{
 				proxyType = CreateClassProxyType(targetType.GetGenericTypeDefinition(), interfaces, options);
 			}
 			else
-// #endif
+#endif
 			{
 				proxyType = CreateClassProxyType(targetType, interfaces, options);
 			}
 
-			// #if DOTNET2
+			#if DOTNET2
 			if (targetType.IsGenericType)
 			{
 				proxyType = proxyType.MakeGenericType(targetType.GetGenericArguments());
 			}
-			// #endif
+			#endif
 
 			object[] args;
 

@@ -16,7 +16,9 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections;
+#if DOTNET2
 	using System.Collections.Generic;
+#endif
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.Core.Interceptor;
@@ -56,7 +58,7 @@ namespace Castle.DynamicProxy.Generators
 		private int nestedCounter, callbackCounter;
 		private int fieldCount = 1;
 		private FieldReference typeTokenField;
-		private Dictionary<MethodInfo, FieldReference> method2TokenField = new Dictionary<MethodInfo, FieldReference>();
+		private Hashtable method2TokenField = new Hashtable();
 		private IList generateNewSlot = new ArrayList();
 		protected IList methodsToSkip = new ArrayList();
       
@@ -338,7 +340,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (method2TokenField.ContainsKey(method)) // Token is in the cache
 			{
-				methodInfoTokenExp = method2TokenField[method].ToExpression();
+				methodInfoTokenExp = ((FieldReference)method2TokenField[method]).ToExpression();
 			}
 			else
 			{
@@ -362,7 +364,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (method2TokenField.ContainsKey(methodOnTarget)) // Token is in the cache
 				{
-					methodOnTargetTokenExp = method2TokenField[methodOnTarget].ToExpression();
+					methodOnTargetTokenExp =  ((FieldReference)method2TokenField[methodOnTarget]).ToExpression();
 				}
 				else
 				{
@@ -705,9 +707,9 @@ namespace Castle.DynamicProxy.Generators
 									   interfaces);
 
 			Type[] genTypes = TypeUtil.Union(targetType.GetGenericArguments(), methodInfo.GetGenericArguments());
-
+#if DOTNET2
 			nested.CreateGenericParameters(genTypes);
-
+#endif
 			// Create the invocation fields
 
 			FieldReference targetRef = nested.CreateField("target", targetForInvocation);

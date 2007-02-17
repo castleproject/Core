@@ -16,7 +16,9 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections;
+#if DOTNET2
 	using System.Collections.Generic;
+#endif
 	using System.Reflection;
 	using System.Threading;
 	using System.Xml.Serialization;
@@ -34,8 +36,8 @@ namespace Castle.DynamicProxy.Generators
 	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		private FieldReference targetField;
-		protected Dictionary<MethodInfo, NestedClassEmitter> method2Invocation = new Dictionary<MethodInfo, NestedClassEmitter>();
-		protected Dictionary<MethodInfo, MethodInfo> method2methodOnTarget = new Dictionary<MethodInfo, MethodInfo>();
+		protected Hashtable method2Invocation = new Hashtable();
+		protected Hashtable method2methodOnTarget = new Hashtable();
 
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface)
 			: base(scope, theInterface)
@@ -203,13 +205,13 @@ namespace Castle.DynamicProxy.Generators
 						continue;
 					}
 
-					NestedClassEmitter nestedClass = method2Invocation[method];
+					NestedClassEmitter nestedClass = (NestedClassEmitter)method2Invocation[method];
 
 					// TODO: Should the targetType be a generic definition or instantiation
 
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(
 						targetType, method, emitter, nestedClass, interceptorsField, targetField,
-						ConstructorVersion.WithTargetMethod, method2methodOnTarget[method]);
+						ConstructorVersion.WithTargetMethod, (MethodInfo)method2methodOnTarget[method]);
 
 					ReplicateNonInheritableAttributes(method, newProxiedMethod);
 
@@ -239,7 +241,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					if (propToGen.CanRead)
 					{
-						NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
+						NestedClassEmitter nestedClass = (NestedClassEmitter)method2Invocation[propToGen.GetMethod];
 
 						MethodAttributes atts = ObtainMethodAttributes(propToGen.GetMethod);
 
@@ -248,7 +250,7 @@ namespace Castle.DynamicProxy.Generators
 						ImplementProxiedMethod(targetType, getEmitter,
 											   propToGen.GetMethod, emitter,
 											   nestedClass, interceptorsField, targetField,
-											   ConstructorVersion.WithTargetMethod, method2methodOnTarget[propToGen.GetMethod]);
+											   ConstructorVersion.WithTargetMethod, (MethodInfo)method2methodOnTarget[propToGen.GetMethod]);
 
 						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
 
@@ -257,7 +259,7 @@ namespace Castle.DynamicProxy.Generators
 
 					if (propToGen.CanWrite)
 					{
-						NestedClassEmitter nestedClass = method2Invocation[propToGen.SetMethod];
+						NestedClassEmitter nestedClass = (NestedClassEmitter)method2Invocation[propToGen.SetMethod];
 
 						MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod);
 
@@ -266,7 +268,7 @@ namespace Castle.DynamicProxy.Generators
 						ImplementProxiedMethod(targetType, setEmitter,
 											   propToGen.SetMethod, emitter,
 											   nestedClass, interceptorsField, targetField,
-											   ConstructorVersion.WithTargetMethod, method2methodOnTarget[propToGen.SetMethod]);
+											   ConstructorVersion.WithTargetMethod, (MethodInfo)method2methodOnTarget[propToGen.SetMethod]);
 
 						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
 
@@ -277,7 +279,7 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach (EventToGenerate eventToGenerate in eventToGenerates)
 				{
-					NestedClassEmitter add_nestedClass = method2Invocation[eventToGenerate.AddMethod];
+					NestedClassEmitter add_nestedClass = (NestedClassEmitter)method2Invocation[eventToGenerate.AddMethod];
 
 					MethodAttributes add_atts = ObtainMethodAttributes(eventToGenerate.AddMethod);
 
@@ -286,12 +288,12 @@ namespace Castle.DynamicProxy.Generators
 					ImplementProxiedMethod(targetType, addEmitter,
 										   eventToGenerate.AddMethod, emitter,
 										   add_nestedClass, interceptorsField, targetField,
-										   ConstructorVersion.WithTargetMethod, method2methodOnTarget[eventToGenerate.AddMethod]);
+										   ConstructorVersion.WithTargetMethod, (MethodInfo)method2methodOnTarget[eventToGenerate.AddMethod]);
 
 					ReplicateNonInheritableAttributes(eventToGenerate.AddMethod, addEmitter);
 
 
-					NestedClassEmitter remove_nestedClass = method2Invocation[eventToGenerate.RemoveMethod];
+					NestedClassEmitter remove_nestedClass = (NestedClassEmitter)method2Invocation[eventToGenerate.RemoveMethod];
 
 					MethodAttributes remove_atts = ObtainMethodAttributes(eventToGenerate.RemoveMethod);
 
@@ -300,7 +302,7 @@ namespace Castle.DynamicProxy.Generators
 					ImplementProxiedMethod(targetType, removeEmitter,
 										   eventToGenerate.RemoveMethod, emitter,
 										   remove_nestedClass, interceptorsField, targetField,
-										   ConstructorVersion.WithTargetMethod, method2methodOnTarget[eventToGenerate.RemoveMethod]);
+										   ConstructorVersion.WithTargetMethod, (MethodInfo)method2methodOnTarget[eventToGenerate.RemoveMethod]);
 
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 
@@ -365,9 +367,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <returns></returns>
 		protected static MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType)
 		{
-
-			// #if DOTNET2
-
+#if DOTNET2
 			// The code below assumes that the target
 			// class uses the same generic arguments
 			// as the interface generic arguments
@@ -421,7 +421,7 @@ namespace Castle.DynamicProxy.Generators
 
 			return (MethodInfo)members[0];
 
-#if !DOTNET2
+#else
 			ParameterInfo[] parameters = methodOnInterface.GetParameters();
 			Type[] argTypes = new Type[parameters.Length];
 			

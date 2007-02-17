@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
-
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using System.Collections;
+
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 
 	[CLSCompliant(false)]
 	public abstract class AbstractTypeEmitter
@@ -30,10 +34,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected PropertiesCollection properties;
 		protected EventCollection events;
 		protected internal NestedClassCollection nested;
-		//#if DOTNET2
+		#if DOTNET2
 		protected GenericTypeParameterBuilder[] genericTypeParams;
 		protected Dictionary<String, GenericTypeParameterBuilder> name2GenericType;
-		//#endif
+		#endif
 
 		public AbstractTypeEmitter()
 		{
@@ -42,22 +46,33 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			constructors = new ConstructorCollection();
 			properties = new PropertiesCollection();
 			events = new EventCollection();
+#if DOTNET2
 			name2GenericType = new Dictionary<String, GenericTypeParameterBuilder>();
+#endif
 		}
 
 		public bool IsGenericArgument(String genericArgumentName)
 		{
+#if DOTNET2
 			return name2GenericType.ContainsKey(genericArgumentName);
+#else
+			return false;
+#endif
 		}
 
 		public Type GetGenericArgument(String genericArgumentName)
 		{
+#if DOTNET2
 			return name2GenericType[genericArgumentName];
+#else
+			throw new NotSupportedException("Generic arguments are not supported for 1.1");
+#endif
 		}
 
 		public Type[] GetGenericArgumentsFor(Type genericType)
 		{
-			List<Type> types = new List<Type>();
+			ArrayList types = new ArrayList();
+#if DOTNET2
 
 			foreach (Type genType in genericType.GetGenericArguments())
 			{
@@ -70,20 +85,23 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					types.Add(genType);
 				}
 			}
-
-			return types.ToArray();
+#endif
+			return (Type[]) types.ToArray(typeof (Type));
 		}
 
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
+#if DOTNET2
 			List<Type> types = new List<Type>();
-
 			foreach (Type genType in genericMethod.GetGenericArguments())
 			{
 				types.Add(name2GenericType[genType.Name]);
 			}
 
 			return types.ToArray();
+#else
+			return new Type[0];
+#endif
 		}
 
 		public void CreateDefaultConstructor()
@@ -213,7 +231,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return TypeBuilder.BaseType; }
 		}
 
-		//#if DOTNET2
+#if DOTNET2
 
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
@@ -230,6 +248,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			genericTypeParams = GenericUtil.DefineGenericArguments(genericArguments, typebuilder, name2GenericType);
 		}
+#endif
 
 		public virtual Type BuildType()
 		{

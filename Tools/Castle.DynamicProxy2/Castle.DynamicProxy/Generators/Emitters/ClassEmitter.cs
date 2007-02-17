@@ -37,19 +37,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
             
 			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
 			
-//#if DOTNET2
+#if DOTNET2
 			if (baseType.IsGenericType)
 			{
 			 	CreateGenericParameters(baseType.GetGenericArguments());
 			 
 				baseType = baseType.MakeGenericType(genericTypeParams);
 			}
-//#endif
+#endif
 			
 			if (interfaces != null)
 			{
 				foreach(Type inter in interfaces)
 				{
+#if DOTNET2
 					if (inter.IsGenericType)
 					{
 						CreateGenericParameters(inter.GetGenericArguments());
@@ -57,6 +58,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 						typebuilder.AddInterfaceImplementation(inter.MakeGenericType(GenericTypeParams));
 					}
 					else
+#endif
 					{
 						typebuilder.AddInterfaceImplementation(inter);
 					}
