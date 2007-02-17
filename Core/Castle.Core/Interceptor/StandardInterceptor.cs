@@ -16,6 +16,7 @@ namespace Castle.Core.Interceptor
 {
 	using System;
 
+	[Serializable]
 	public class StandardInterceptor : MarshalByRefObject, IInterceptor
 	{
 		public void Intercept(IInvocation invocation)
