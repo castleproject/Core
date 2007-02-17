@@ -23,6 +23,8 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using System.Runtime.Serialization;
+	using Castle.DynamicProxy.Serialization;
 
 	public enum ConstructorVersion
 	{
@@ -56,10 +58,12 @@ namespace Castle.DynamicProxy.Generators
 		private FieldReference typeTokenField;
 		private Dictionary<MethodInfo, FieldReference> method2TokenField = new Dictionary<MethodInfo, FieldReference>();
 		private IList generateNewSlot = new ArrayList();
+		protected IList methodsToSkip = new ArrayList();
       
 		protected readonly Type targetType;
 		protected IProxyGenerationHook generationHook;
 		// protected MethodEmitter initCacheMethod;
+		protected ConstructorInfo serializationConstructor;
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
 		{
@@ -738,6 +742,8 @@ namespace Castle.DynamicProxy.Generators
 				CreateEmptyIInvocationInvokeOnTarget(nested);
 			}
 
+			nested.DefineCustomAttribute(new SerializableAttribute());
+
 			return nested;
 		}
 
@@ -1362,5 +1368,125 @@ namespace Castle.DynamicProxy.Generators
             }
             return false;
         }
+
+		protected virtual void ImplementGetObjectData(ClassEmitter emitter, FieldReference interceptorsField, Type[] interfaces)
+		{
+			/*// To prevent re-implementation of this interface.
+			_generated.Add(typeof(ISerializable));*/
+
+			if(interfaces==null)
+				interfaces = new Type[0];
+
+			Type[] get_type_args = new Type[] {typeof(String), typeof(bool), typeof(bool)};
+			Type[] key_and_object = new Type[] {typeof(String), typeof(Object)};
+			MethodInfo addValueMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_object);
+
+			ArgumentReference arg1 = new ArgumentReference(typeof(SerializationInfo));
+			ArgumentReference arg2 = new ArgumentReference(typeof(StreamingContext));
+			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData",
+			                                                        new ReturnReferenceExpression(typeof(void)), arg1, arg2);
+
+			LocalReference typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof(Type));
+
+			getObjectData.CodeBuilder.AddStatement(new AssignStatement(
+			                                       	typeLocal,
+			                                       	new MethodInvocationExpression(null,
+			                                       	                               typeof(Type).GetMethod("GetType",
+			                                       	                                                      get_type_args),
+			                                       	                               new ConstReference(
+			                                       	                               	typeof(ProxyObjectReference).
+			                                       	                               		AssemblyQualifiedName).ToExpression(),
+			                                       	                               new ConstReference(1).ToExpression(),
+			                                       	                               new ConstReference(0).ToExpression())));
+
+			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
+			                                       	new MethodInvocationExpression(
+			                                       		arg1, typeof(SerializationInfo).GetMethod("SetType"),
+			                                       		typeLocal.ToExpression())));
+
+			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
+			                                       	new MethodInvocationExpression(arg1, addValueMethod,
+			                                       	                                      new ConstReference("__interceptors").
+			                                       	                                      	ToExpression(),
+			                                       	                                      interceptorsField.ToExpression())));
+
+			LocalReference interfacesLocal =
+				getObjectData.CodeBuilder.DeclareLocal(typeof(String[]));
+
+			getObjectData.CodeBuilder.AddStatement(
+				new AssignStatement(interfacesLocal,
+				                    new NewArrayExpression(interfaces.Length, typeof(String))));
+
+			for(int i = 0; i < interfaces.Length; i++)
+			{
+				getObjectData.CodeBuilder.AddStatement(new AssignArrayStatement(
+				                                       	interfacesLocal, i,
+				                                       	new ConstReference(interfaces[i].AssemblyQualifiedName).ToExpression()));
+			}
+
+			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
+			                                       	new MethodInvocationExpression(arg1, addValueMethod,
+			                                       	                                      new ConstReference("__interfaces").
+			                                       	                                      	ToExpression(),
+			                                       	                                      interfacesLocal.ToExpression())));
+
+			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
+			                                       	new MethodInvocationExpression(arg1, addValueMethod,
+			                                       	                                      new ConstReference("__baseType").
+			                                       	                                      	ToExpression(),
+			                                       	                                      new TypeTokenExpression(emitter.BaseType))));
+
+			CustomizeGetObjectData(getObjectData.CodeBuilder, arg1, arg2);
+
+			getObjectData.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		protected virtual void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1,
+		                                              ArgumentReference arg2)
+		{
+		}
+
+
+		protected bool VerifyIfBaseImplementsGetObjectData(Type baseType)
+		{
+			// If base type implements ISerializable, we have to make sure
+			// the GetObjectData is marked as virtual
+			
+			if (typeof(ISerializable).IsAssignableFrom(baseType))
+			{
+				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData",  
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+				if (getObjectDataMethod==null)//explicit interface implementation
+				{
+					return false;
+				}
+
+				if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
+				{
+					String message = String.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual", 
+						baseType.FullName);
+					throw new ArgumentException(message);
+				}
+
+				methodsToSkip.Add(getObjectDataMethod);
+
+				serializationConstructor = baseType.GetConstructor( 
+					BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic, 
+					null,  
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) }, 
+					null);
+
+				if (serializationConstructor == null)
+				{
+					String message = String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor", 
+						baseType.FullName);
+					throw new ArgumentException(message);
+				}
+
+				return true;
+			}
+			return false;
+		}
 	}
 }

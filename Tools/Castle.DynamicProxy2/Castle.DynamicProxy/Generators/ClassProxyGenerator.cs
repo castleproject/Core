@@ -24,6 +24,9 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using System.Collections.Specialized;
+	using System.Runtime.Serialization;
+	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 
 	/// <summary>
 	/// 
@@ -31,6 +34,8 @@ namespace Castle.DynamicProxy.Generators
 	[CLSCompliant(false)]
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
+		bool delegateToBaseGetObjectData = false;
+		
 		public ClassProxyGenerator(ModuleScope scope, Type targetType)
 			: base(scope, targetType)
 		{
@@ -39,6 +44,8 @@ namespace Castle.DynamicProxy.Generators
 		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
 		{
 			Type type;
+
+			
 
 			ReaderWriterLock rwlock = Scope.RWLock;
 
@@ -80,6 +87,12 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				AddDefaultInterfaces(interfaceList);
+				if (targetType.IsSerializable)
+				{
+					delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType);
+					if (!interfaceList.Contains(typeof(ISerializable)))
+						interfaceList.Add(typeof(ISerializable));
+				}
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
@@ -114,6 +127,11 @@ namespace Castle.DynamicProxy.Generators
 				CreateInitializeCacheMethodBody(targetType, methods, emitter, typeInitializer);
 				GenerateConstructors(emitter, targetType, interceptorsField);
 				GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
+
+				if (delegateToBaseGetObjectData)
+				{
+					GenerateSerializationConstructor(emitter, interceptorsField, delegateToBaseGetObjectData);
+				}
 
 				// Implement interfaces
 
@@ -154,7 +172,7 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach (MethodInfo method in methods)
 				{
-					if (method.IsSpecialName && (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")))
+					if (method.IsSpecialName && (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")) || methodsToSkip.Contains(method))
 					{
 						continue;
 					}
@@ -239,6 +257,8 @@ namespace Castle.DynamicProxy.Generators
 
 				}
 
+				ImplementGetObjectData(emitter, interceptorsField, interfaces);
+
 				// Complete type initializer code body
 
 				CompleteInitCacheMethod(typeInitializer.CodeBuilder);
@@ -267,6 +287,78 @@ namespace Castle.DynamicProxy.Generators
 		protected override bool CanOnlyProxyVirtual()
 		{
 			return true;
+		}
+
+		protected void GenerateSerializationConstructor(ClassEmitter emitter, FieldReference interceptorField, bool delegateToBaseGetObjectData)
+		{
+			ArgumentReference arg1 = new ArgumentReference(typeof(SerializationInfo));
+			ArgumentReference arg2 = new ArgumentReference(typeof(StreamingContext));
+
+			ConstructorEmitter constr = emitter.CreateConstructor(arg1, arg2);
+
+			constr.CodeBuilder.AddStatement(
+				new ConstructorInvocationStatement(serializationConstructor,
+					arg1.ToExpression(), arg2.ToExpression()));
+
+			Type[] object_arg = new Type[] { typeof(String), typeof(Type) };
+			MethodInfo getValueMethod = typeof(SerializationInfo).GetMethod("GetValue", object_arg);
+
+			MethodInvocationExpression getInterceptorInvocation =
+				new MethodInvocationExpression(arg1, getValueMethod,
+				new ConstReference("__interceptors").ToExpression(),
+				new TypeTokenExpression(typeof(IInterceptor[])));
+
+			constr.CodeBuilder.AddStatement(new AssignStatement(
+				interceptorField, getInterceptorInvocation));
+
+			constr.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, 
+		                                               ArgumentReference arg1, ArgumentReference arg2)
+		{
+			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
+			Type[] key_and_bool = new Type[] {typeof (String), typeof (bool)};
+			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
+			MethodInfo addValueBoolMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_bool);
+
+			codebuilder.AddStatement( new ExpressionStatement(
+				new MethodInvocationExpression(arg1, addValueBoolMethod, 
+				new ConstReference("__delegateToBase").ToExpression(), 
+				new ConstReference( delegateToBaseGetObjectData ? 1 : 0 ).ToExpression() ) ) );
+
+			if (delegateToBaseGetObjectData)
+			{
+				MethodInfo baseGetObjectData = targetType.GetMethod("GetObjectData", 
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+				codebuilder.AddStatement( new ExpressionStatement(
+					new MethodInvocationExpression( baseGetObjectData, 
+						arg1.ToExpression(), arg2.ToExpression() )) );
+			}
+			else
+			{
+				LocalReference members_ref = codebuilder.DeclareLocal( typeof(MemberInfo[]) );
+				LocalReference data_ref = codebuilder.DeclareLocal( typeof(object[]) );
+
+				MethodInfo getSerMembers = typeof(FormatterServices).GetMethod("GetSerializableMembers", 
+					new Type[] { typeof(Type) });
+				MethodInfo getObjData = typeof(FormatterServices).GetMethod("GetObjectData", 
+					new Type[] { typeof(object), typeof(MemberInfo[]) });
+				
+				codebuilder.AddStatement( new AssignStatement( members_ref,
+					new MethodInvocationExpression( null, getSerMembers, 
+					new TypeTokenExpression( targetType ) )) );
+				
+				codebuilder.AddStatement( new AssignStatement( data_ref, 
+					new MethodInvocationExpression( null, getObjData, 
+					SelfReference.Self.ToExpression(), members_ref.ToExpression() )) );
+
+				codebuilder.AddStatement( new ExpressionStatement(
+					new MethodInvocationExpression(arg1, addValueMethod, 
+					new ConstReference("__data").ToExpression(), 
+					data_ref.ToExpression() ) ) );
+			}
 		}
 	}
 }

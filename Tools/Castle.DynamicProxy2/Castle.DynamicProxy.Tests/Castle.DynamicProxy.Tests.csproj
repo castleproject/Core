@@ -102,6 +102,7 @@
     <Compile Include="BugsReported\DynProxy46.cs" />
     <Compile Include="Classes\ClassWithCharRetType.cs" />
     <Compile Include="Classes\ClassWithConstructors.cs" />
+    <Compile Include="Classes\MySerializableClass.cs" />
     <Compile Include="GenInterfaces\GenInterfaceHierarchy.cs" />
     <Compile Include="GenInterfaces\GenExplicitImplementation.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenArray.cs" />
@@ -109,13 +110,16 @@
     <Compile Include="Interceptors\KeepDataInterceptor.cs" />
     <Compile Include="InterClasses\AlwaysThrowsServiceImpl.cs" />
     <Compile Include="InterClasses\ClassWithIndexer.cs" />
+    <Compile Include="InterClasses\ClassWithMarkerInterface.cs" />
     <Compile Include="InterClasses\ClassWithMultiDimentionalArray.cs" />
     <Compile Include="InterClasses\IClassWithMultiDimentionalArray.cs" />
+    <Compile Include="InterClasses\IMyInterface2.cs" />
     <Compile Include="InterClasses\InterfaceWithIndexer.cs" />
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
+    <Compile Include="SerializableClassTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

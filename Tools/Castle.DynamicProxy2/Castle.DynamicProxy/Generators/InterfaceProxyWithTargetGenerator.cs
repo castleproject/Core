@@ -23,6 +23,9 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using System.Runtime.Serialization;
+	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
+
 
 	/// <summary>
 	/// 
@@ -83,6 +86,8 @@ namespace Castle.DynamicProxy.Generators
 				{
 					interfaceList.AddRange(interfaces);
 				}
+				if (!interfaceList.Contains(typeof(ISerializable)))
+					interfaceList.Add(typeof(ISerializable));
 
 				AddDefaultInterfaces(interfaceList);
 
@@ -90,6 +95,7 @@ namespace Castle.DynamicProxy.Generators
 
 				ClassEmitter emitter = BuildClassEmitter(newName, baseType, interfaceList);
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
+				emitter.DefineCustomAttribute(new SerializableAttribute());
 
 				// Custom attributes
 				ReplicateNonInheritableAttributes(targetType, emitter);
@@ -114,8 +120,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (interfaces != null && interfaces.Length != 0)
 				{
-					interfaceList.Clear();
-					interfaceList.AddRange(interfaces);
+					ArrayList tmpInterfaces = new ArrayList(interfaces);
 
 					foreach (Type inter in interfaces)
 					{
@@ -142,11 +147,11 @@ namespace Castle.DynamicProxy.Generators
 							propsToGenerate = newPropsToGenerate;
 							eventToGenerates = newEvents;
 
-							interfaceList.Remove(inter);
+							tmpInterfaces.Remove(inter);
 						}
 					}
 
-					interfaces = (Type[])interfaceList.ToArray(typeof(Type));
+					interfaces = (Type[])tmpInterfaces.ToArray(typeof(Type));
 				}
 
 				options.Hook.MethodsInspected();
@@ -192,7 +197,8 @@ namespace Castle.DynamicProxy.Generators
 				{
 					if (method.IsSpecialName &&
 						(method.Name.StartsWith("get_") || method.Name.StartsWith("set_") ||
-						method.Name.StartsWith("add_") || method.Name.StartsWith("remove_")))
+						method.Name.StartsWith("add_") || method.Name.StartsWith("remove_")) || 
+						methodsToSkip.Contains(method))
 					{
 						continue;
 					}
@@ -213,7 +219,7 @@ namespace Castle.DynamicProxy.Generators
 					// ParameterInfo[] parametersProxy = newProxiedMethod.MethodBuilder.GetParameters();
 
 					// bool useDefineOverride = true;
-
+					/*
 					for (int i = 0; i < parameters.Length; i++)
 					{
 						// ParameterInfo paramInfo = parameters[i];
@@ -226,7 +232,7 @@ namespace Castle.DynamicProxy.Generators
 					// if (useDefineOverride)
 					// {
 					// emitter.TypeBuilder.DefineMethodOverride(newProxiedMethod.MethodBuilder, method);
-					// }
+					// }*/
 				}
 
 				foreach (PropertyToGenerate propToGen in propsToGenerate)
@@ -298,8 +304,10 @@ namespace Castle.DynamicProxy.Generators
 
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);
 
-					
+
 				}
+
+				ImplementGetObjectData(emitter, interceptorsField, interfaces);
 
 				// Complete Initialize 
 
@@ -309,7 +317,7 @@ namespace Castle.DynamicProxy.Generators
 
 				generatedType = emitter.BuildType();
 
-				foreach (MethodInfo m in generatedType.GetMethods())
+				/*foreach (MethodInfo m in generatedType.GetMethods())
 				{
 					ParameterInfo[] parameters = m.GetParameters();
 
@@ -323,7 +331,7 @@ namespace Castle.DynamicProxy.Generators
 						// Console.WriteLine("{0} {1} {2} {3}", paramInfo2.Name, paramInfo2.ParameterType, paramInfo2.Attributes, paramInfo2.Position);
 					}
 				}
-
+				*/
 
 				AddToCache(cacheKey, generatedType);
 			}
@@ -542,5 +550,47 @@ namespace Castle.DynamicProxy.Generators
 
 			return true;
 		}
+
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1,
+													   ArgumentReference arg2)
+		{
+			Type[] key_and_object = new Type[] { typeof(String), typeof(Object) };
+			Type[] key_and_int = new Type[] { typeof(String), typeof(int) };
+			Type[] key_and_string = new Type[] { typeof(String), typeof(string) };
+			MethodInfo addValueMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_object);
+			MethodInfo addIntMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_int);
+			MethodInfo addStringMethod = typeof(SerializationInfo).GetMethod("AddValue", key_and_string);
+
+			codebuilder.AddStatement(new ExpressionStatement(
+										new MethodInvocationExpression(arg1, addValueMethod,
+																			  new ConstReference("__target").ToExpression(),
+																			  targetField.ToExpression())));
+
+			codebuilder.AddStatement(new ExpressionStatement(
+									new MethodInvocationExpression(arg1, addIntMethod,
+																		  new ConstReference("__interface_generator_type").ToExpression(),
+																		  new ConstReference((int)GeneratorType).ToExpression())));
+
+				codebuilder.AddStatement(new ExpressionStatement(
+									new MethodInvocationExpression(arg1, addStringMethod,
+																		  new ConstReference("__theInterface").ToExpression(),
+																		  new ConstReference(targetType.AssemblyQualifiedName).ToExpression())));
+		}
+
+		protected virtual InterfaceGeneratorType GeneratorType
+		{
+			get { return InterfaceGeneratorType.WithTarget; }
+		}
+	}
+
+	/// <summary>
+	/// This is used by the ProxyObjectReference class durin de-serialiation, to know
+	/// which generator it should use
+	/// </summary>
+	public enum InterfaceGeneratorType
+	{
+		WithTarget = 1,
+		WithoutTarget = 2,
+		WithTargetInterface = 3
 	}
 }

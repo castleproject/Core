@@ -34,5 +34,13 @@ namespace Castle.DynamicProxy.Generators
 			                                                      method, null,
 			                                                      ConstructorVersion.WithTargetMethod);
 		}
+
+		protected override InterfaceGeneratorType GeneratorType
+		{
+			get
+			{
+				return InterfaceGeneratorType.WithoutTarget;
+			}
+		}
 	}
 }
