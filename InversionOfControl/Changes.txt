@@ -1,6 +1,11 @@
 RC 4
 ====
 
+- Added eval support to configuration. Currently it only supports 
+  BaseDirectory as a content to evaluate
+
+  <?eval $BaseDirectory ?>
+
 - Added IEnvironmentInfo in an attempt to solve complex 
   configuration/environment issues.
 

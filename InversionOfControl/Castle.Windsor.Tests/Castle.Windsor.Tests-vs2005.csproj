@@ -175,6 +175,7 @@
     <Compile Include="Configuration2\ConfigWithStatementsTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration2\EvalSupportTestCase.cs" />
     <Compile Include="Configuration2\IncludesTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -316,6 +317,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <EmbeddedResource Include="Configuration2\env_config.xml" />
+    <EmbeddedResource Include="Configuration2\eval_config.xml" />
     <Content Include="IOC-51.xml" />
   </ItemGroup>
   <ItemGroup>

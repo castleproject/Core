@@ -159,6 +159,7 @@
     <Compile Include="Configuration\Interpreters\XmlProcessor\ElementProcessors\DefineElementProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\Interpreters\XmlProcessor\ElementProcessors\EvalProcessingInstructionProcessor.cs" />
     <Compile Include="Configuration\Interpreters\XmlProcessor\ElementProcessors\IfElementProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
