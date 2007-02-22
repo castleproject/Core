@@ -100,6 +100,7 @@
     <Compile Include="BugsReportedTestCase.cs" />
     <Compile Include="BugsReported\Camera.cs" />
     <Compile Include="BugsReported\DynProxy46.cs" />
+    <Compile Include="CacheKeyTestCase.cs" />
     <Compile Include="Classes\ClassWithCharRetType.cs" />
     <Compile Include="Classes\ClassWithConstructors.cs" />
     <Compile Include="Classes\MySerializableClass.cs" />

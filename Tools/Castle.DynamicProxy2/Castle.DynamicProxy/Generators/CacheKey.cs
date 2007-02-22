@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Generators
 			int result = targetType.GetHashCode();
 			if (interfaces != null)
 			{
-				foreach (Type inter in interfaces)
+				foreach(Type inter in interfaces)
 				{
 					result += 29 + inter.GetHashCode();
 				}

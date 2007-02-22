@@ -17,9 +17,6 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Collections;
 
-	/// <summary>
-	/// 
-	/// </summary>
 	public class ProxyGenerationOptions
 	{
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
@@ -30,12 +27,19 @@ namespace Castle.DynamicProxy
 		private Type baseTypeForInterfaceProxy = typeof(object);
 		private bool useSelector;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
+		/// </summary>
+		/// <param name="hook">The hook.</param>
 		public ProxyGenerationOptions(IProxyGenerationHook hook)
 		{
 			this.hook = hook;
 			useSelector = false;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
+		/// </summary>
 		public ProxyGenerationOptions() : this(new AllMethodsHook())
 		{
 		}
@@ -96,7 +100,7 @@ namespace Castle.DynamicProxy
 			if (this == obj) return true;
 			ProxyGenerationOptions proxyGenerationOptions = obj as ProxyGenerationOptions;
 			if (proxyGenerationOptions == null) return false;
-			if (!Equals(hook, proxyGenerationOptions.hook)) return false;
+			if (!Equals(hook.GetType(), proxyGenerationOptions.hook.GetType())) return false;
 			if (!Equals(selector, proxyGenerationOptions.selector)) return false;
 			if (!Equals(mixins, proxyGenerationOptions.mixins)) return false;
 			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
@@ -106,7 +110,7 @@ namespace Castle.DynamicProxy
 
 		public override int GetHashCode()
 		{
-			int result = hook != null ? hook.GetHashCode() : 0;
+			int result = hook != null ? hook.GetType().GetHashCode() : 0;
 			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
 			result = 29 * result + (mixins != null ? mixins.GetHashCode() : 0);
 			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
