@@ -40,12 +40,7 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	/// <remarks>
 	/// TODO: 
-	/// - Add events so people can hook into the proxy generation and change the generated code
-	/// - Add serialization support
-	/// - Add Xml serialization support
-	/// - Allow one to specify the base class for interface proxies
 	/// - Use the interceptor selector if provided
-	/// - Expose parameters of non-parameterless constructors on the generated constructor
 	/// - Add tests and fixes for 'leaking this' problem
 	/// - Mixin support
 	/// </remarks>
@@ -64,7 +59,6 @@ namespace Castle.DynamicProxy.Generators
       
 		protected readonly Type targetType;
 		protected IProxyGenerationHook generationHook;
-		// protected MethodEmitter initCacheMethod;
 		protected ConstructorInfo serializationConstructor;
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
@@ -1481,8 +1475,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (serializationConstructor == null)
 				{
-					String message = String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor", 
-						baseType.FullName);
+					String message = String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor", baseType.FullName);
 					throw new ArgumentException(message);
 				}
 

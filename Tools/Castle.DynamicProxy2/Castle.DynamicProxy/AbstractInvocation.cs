@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy
 	using Castle.Core.Interceptor;
 
 	[Serializable]
-	public abstract class AbstractInvocation : MarshalByRefObject, IInvocation
+	public abstract class AbstractInvocation : IInvocation
 	{
 		private readonly object proxy;
 		private readonly object target;
