@@ -26,6 +26,21 @@ namespace Castle.DynamicProxy.Generators
 		private EventEmitter emitter;
 		private EventAttributes attributes;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EventToGenerate"/> class.
+		/// </summary>
+		/// <param name="emitter">The emitter.</param>
+		/// <param name="addMethod">The add method.</param>
+		/// <param name="removeMethod">The remove method.</param>
+		/// <param name="attributes">The attributes.</param>
+		public EventToGenerate(EventEmitter emitter, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes)
+		{
+			this.addMethod = addMethod;
+			this.removeMethod = removeMethod;
+			this.emitter = emitter;
+			this.attributes = attributes;
+		}
+
 		public EventEmitter Emitter
 		{
 			get { return emitter; }
@@ -43,24 +58,10 @@ namespace Castle.DynamicProxy.Generators
 			set { removeMethod = value; }
 		}
 
-		public EventEmitter Emitter_
-		{
-			get { return Emitter; }
-			set { emitter = value; }
-		}
-
 		public EventAttributes Attributes
 		{
 			get { return attributes; }
 			set { attributes = value; }
-		}
-
-		public EventToGenerate(EventEmitter emitter, MethodInfo addMethod, MethodInfo removeMethod, EventAttributes attributes)
-		{
-			this.addMethod = addMethod;
-			this.removeMethod = removeMethod;
-			this.emitter = emitter;
-			this.attributes = attributes;
 		}
 	}
 }
