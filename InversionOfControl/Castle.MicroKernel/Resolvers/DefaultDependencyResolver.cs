@@ -97,7 +97,18 @@ namespace Castle.MicroKernel.Resolvers
 				}
 			}
 
-			// 2 - check within parent resolver, if present
+            // 2 - check with the model's handler, if not the same as the parent resolver
+            IHandler handler = kernel.GetHandler(model.Name);
+
+            if (handler != null && handler != parentResolver)
+            {
+                if (handler.CanResolve(context, parentResolver, model, dependency))
+                {
+                    return true;
+                }
+            }
+
+			// 3 - check within parent resolver, if present
 
 			if (parentResolver != null)
 			{
@@ -107,7 +118,7 @@ namespace Castle.MicroKernel.Resolvers
 				}
 			}
 
-			// 3 - check within subresolvers
+			// 4 - check within subresolvers
 
 			foreach(ISubDependencyResolver subResolver in subResolvers)
 			{
@@ -117,7 +128,7 @@ namespace Castle.MicroKernel.Resolvers
 				}
 			}
 
-			// 4 - normal flow, checking against the kernel
+			// 5 - normal flow, checking against the kernel
 
 			if (dependency.DependencyType == DependencyType.Service || 
 			    dependency.DependencyType == DependencyType.ServiceOverride)
