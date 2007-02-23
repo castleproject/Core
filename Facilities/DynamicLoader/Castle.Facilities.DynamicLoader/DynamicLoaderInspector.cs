@@ -16,30 +16,36 @@ namespace Castle.Facilities.DynamicLoader
 {
 	using System;
 
+	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;
-	using Castle.Core;
 
 	/// <summary>
 	/// Inspects component configuration nodes, looking for <c>domain</c>
-	/// attributes. When found, register a custom activator.
+	/// attributes. When found, register a custom activator: <see cref="DynamicLoaderActivator"/>.
 	/// </summary>
 	public class DynamicLoaderInspector : IContributeComponentModelConstruction
 	{
 		private readonly DynamicLoaderRegistry registry;
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
 		public DynamicLoaderInspector(DynamicLoaderRegistry registry)
 		{
 			this.registry = registry;
 		}
 
+		/// <summary>
+		/// Performs the inspection on the model.
+		/// </summary>
 		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (model.Configuration == null)
 				return;
-			
+
 			string domainId = model.Configuration.Attributes["domain"];
-			if (domainId == null || domainId.Length == 0)
+			if (String.IsNullOrEmpty(domainId))
 				return;
 
 			model.ExtendedProperties.Add("dynamicLoader.loader", registry.GetLoader(domainId));

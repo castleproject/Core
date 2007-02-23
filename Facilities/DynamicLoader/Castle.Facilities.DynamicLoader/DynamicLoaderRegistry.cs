@@ -19,26 +19,70 @@ namespace Castle.Facilities.DynamicLoader
 
 	using Castle.MicroKernel.Facilities;
 
-	public class DynamicLoaderRegistry : MarshalByRefObject
+	/// <summary>
+	/// Stores instances of <see cref="RemoteLoader"/>.
+	/// </summary>
+	public class DynamicLoaderRegistry : IDisposable
 	{
-		Dictionary<string, RemoteLoader> loaders = new Dictionary<string, RemoteLoader>();
+		private Dictionary<string, RemoteLoader> loaders = new Dictionary<string, RemoteLoader>();
 
+		/// <summary>
+		/// Register a new loader, for the specified <paramref name="domainId"/>.
+		/// </summary>
 		public void RegisterLoader(string domainId, RemoteLoader loader)
 		{
+			if (loaders == null)
+				throw new ObjectDisposedException("DynamicLoaderRegistry");
+
 			loaders.Add(domainId, loader);
 		}
-		
+
+		/// <summary>
+		/// Gets the <see cref="RemoteLoader"/> instance for the specified <paramref name="domainId"/>.
+		/// </summary>
 		public RemoteLoader GetLoader(string domainId)
 		{
-			if (!loaders.ContainsKey(domainId))
+			if (loaders == null)
+				throw new ObjectDisposedException("DynamicLoaderRegistry");
+
+			RemoteLoader loader;
+			if (!loaders.TryGetValue(domainId, out loader))
 				throw new FacilityException("Domain not found: " + domainId);
-			
-			return loaders[domainId];
+
+			return loader;
 		}
-		
+
+		/// <summary>
+		/// Registers a specific component on a specific domain.
+		/// </summary>
+		/// <remarks>
+		/// The implementation simply calls <see cref="GetLoader"/> to get the correct
+		/// <see cref="RemoteLoader"/>, then add the component to the <see cref="RemoteLoader.Kernel"/>.
+		/// </remarks>
 		public void RegisterComponentOnDomain(string domainId, string key, Type service, Type component)
 		{
+			if (loaders == null)
+				throw new ObjectDisposedException("DynamicLoaderRegistry");
+
 			GetLoader(domainId).Kernel.AddComponent(key, service, component);
+		}
+
+		/// <summary>
+		/// Implementation of <see cref="IDisposable"/>.
+		/// </summary>
+		public void Dispose()
+		{
+			foreach (RemoteLoader loader in loaders.Values)
+			{
+				loader.Kernel.Parent.RemoveChildKernel(loader.Kernel);
+				
+				loader.Dispose();
+
+				AppDomain.Unload(loader.AppDomain);
+			}
+			
+			loaders.Clear();
+			loaders = null;
 		}
 	}
 }

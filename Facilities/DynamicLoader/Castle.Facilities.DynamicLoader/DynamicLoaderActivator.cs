@@ -28,8 +28,8 @@ namespace Castle.Facilities.DynamicLoader
 	/// </summary>
 	public class DynamicLoaderActivator : DefaultComponentActivator, IDisposable
 	{
-		readonly RemoteLoader loader;
-		ClientSponsor keepAliveSponsor;
+		private readonly RemoteLoader loader;
+		private ClientSponsor keepAliveSponsor;
 
 		/// <summary>
 		/// Creates a new <see cref="DynamicLoaderActivator"/>.

@@ -1,4 +1,13 @@
 Change history
---------------
+==============
 
-- Changed to use new Windsor/DynamicProxy 2
+
+Feb 23, 2007
+------------
+ - Added more XML documentation;
+ - Fixed DynamicLoader misbehavior on ASP.NET applications.
+
+
+Dec 6, 2006
+-----------
+ - Changed to use new Windsor/DynamicProxy 2

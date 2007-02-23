@@ -37,17 +37,20 @@ namespace Castle.Facilities.DynamicLoader
 
 		private int seqComponent;
 		private string componentIdMask;
+		private AppDomain appDomain;
 
 		/// <summary>
 		/// Creates a new <see cref="RemoteLoader"/>. This constructor should not be called
-		/// directly in the code, but via <see cref="AppDomain.CreateInstance(string,string)"/>.
+		/// directly in the code, but via <see cref="System.AppDomain.CreateInstance(string,string)"/>.
 		/// </summary>
 		public RemoteLoader()
 		{
-			this.kernel = new DefaultKernel();
+			this.appDomain = AppDomain.CurrentDomain;
 
 			// forces the loading of every library on the AppDomain directory
-			LoadAllAssemblies();
+			this.LoadAllAssemblies();
+
+			this.kernel = new DefaultKernel();
 		}
 		
 		/// <summary>
@@ -98,6 +101,14 @@ namespace Castle.Facilities.DynamicLoader
 		public IKernel Kernel
 		{
 			get { return kernel; }
+		}
+
+		/// <summary>
+		/// The <see cref="AppDomain"/>.
+		/// </summary>
+		public AppDomain AppDomain
+		{
+			get { return appDomain; }
 		}
 
 		/// <summary>
