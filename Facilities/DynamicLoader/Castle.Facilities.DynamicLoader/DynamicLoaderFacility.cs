@@ -114,10 +114,12 @@ namespace Castle.Facilities.DynamicLoader
 			if (IsTrue(setup.ShadowCopyFiles))
 			{
 				setup.ShadowCopyDirectories = null;
-				
+
 				setup.CachePath = cfg.Attributes["cachePath"];
 				if (IsEmpty(setup.CachePath))
 				{
+					// fix for ASP.NET:
+					// http://weblogs.asp.net/hernandl/archive/2004/10/28/appdomainshcopy.aspx
 					setup.CachePath = currentSetup.CachePath;
 				}
 			}
@@ -133,10 +135,6 @@ namespace Castle.Facilities.DynamicLoader
 			log.Debug("  ShadowCopyDirectories: " + appDomain.SetupInformation.ShadowCopyDirectories);
 			log.Debug("  CachePath: " + appDomain.SetupInformation.CachePath);
 			log.Debug("  PrivateBinPath: " + appDomain.SetupInformation.PrivateBinPath);
-
-			/*IPrincipal princ = Thread.CurrentPrincipal;
-			log.Debug("Using principal: {0} ({1}), auth = {2}", princ.Identity.Name, princ.Identity.AuthenticationType, princ.Identity.IsAuthenticated);
-			appDomain.SetThreadPrincipal(princ);*/
 
 			RemoteLoader l = this.CreateRemoteLoader(appDomain);
 
@@ -158,8 +156,6 @@ namespace Castle.Facilities.DynamicLoader
 			string remoteLoaderAsmName = typeof(RemoteLoader).Assembly.FullName;
 			string remoteLoaderClsName = typeof(RemoteLoader).FullName;
 
-			appDomain.AssemblyResolve += new ResolveEventHandler(appDomain_AssemblyResolve);
-			
 			try
 			{
 				appDomain.DoCallBack(
@@ -187,11 +183,6 @@ namespace Castle.Facilities.DynamicLoader
 				log.Fatal("Error while creating the RemoteLoader", ex);
 				throw new FacilityException("Failed to create the RemoteLoader", ex);
 			}
-		}
-
-		static Assembly appDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-		{
-			throw new Exception("The method or operation is not implemented.");
 		}
 
 		protected virtual void InitializeBatchRegistration(RemoteLoader loader, IConfiguration batchRegistrationNode)
