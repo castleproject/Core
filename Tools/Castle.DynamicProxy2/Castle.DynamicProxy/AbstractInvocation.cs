@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.DynamicProxy
 {
+
 	using System;
 	using System.Reflection;
+	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
 
+
 	[Serializable]
-	public abstract class AbstractInvocation : IInvocation
+	public abstract class AbstractInvocation : IInvocation, ISerializable
 	{
 		private readonly object proxy;
 		private readonly object target;
@@ -31,8 +35,9 @@ namespace Castle.DynamicProxy
 		private object[] arguments;
 		private int execIndex = -1;
 
-		protected AbstractInvocation(object target, object proxy, IInterceptor[] interceptors, 
-		                             Type targetType, MethodInfo targetMethod, object[] arguments)
+		protected AbstractInvocation(
+			object target, object proxy, IInterceptor[] interceptors,
+			Type targetType, MethodInfo targetMethod, object[] arguments)
 		{
 			this.proxy = proxy;
 			this.target = target;
@@ -42,9 +47,11 @@ namespace Castle.DynamicProxy
 			this.arguments = arguments;
 		}
 
-		protected AbstractInvocation(object target, object proxy, IInterceptor[] interceptors, 
-		                             Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, 
-		                             object[] arguments) : this(target, proxy, interceptors, targetType, targetMethod, arguments)
+		protected AbstractInvocation(
+			object target, object proxy, IInterceptor[] interceptors,
+			Type targetType, MethodInfo targetMethod, MethodInfo interfMethod,
+			object[] arguments)
+			: this(target, proxy, interceptors, targetType, targetMethod, arguments)
 		{
 			this.interfMethod = interfMethod;
 		}
@@ -116,5 +123,11 @@ namespace Castle.DynamicProxy
 		}
 
 		protected abstract void InvokeMethodOnTarget();
+
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.SetType(typeof(RemotableInvocation));
+			info.AddValue("invocation", new RemotableInvocation(this));
+		}
 	}
 }
