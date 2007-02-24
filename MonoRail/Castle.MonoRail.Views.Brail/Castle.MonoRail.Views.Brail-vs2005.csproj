@@ -69,6 +69,8 @@
     <Compile Include="BrailPreProcessor.cs" />
     <Compile Include="BrailViewComponentContext.cs" />
     <Compile Include="BrailJSGenerator.cs" />
+    <Compile Include="ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.cs">
+    </Compile>
     <Compile Include="Macros\CodeBuilderHelper.cs" />
     <Compile Include="Macros\ComponentMacro.cs" />
     <Compile Include="CustomTypeSystem.cs" />

@@ -15,8 +15,10 @@
 namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 {
 	using System.Collections;
+	using System.Reflection;
 	using Boo.Lang;
-    using Castle.MonoRail.Framework;
+	using Castle.DynamicProxy;
+	using Castle.MonoRail.Framework;
     using System;
 
     [Serializable]
@@ -52,6 +54,30 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
         {
             
         }
+
+		public void WithDynamicProxyObject()
+		{
+			ProxyGenerator generator = new ProxyGenerator();
+			object o = generator.CreateClassProxy(typeof(SimpleProxy),new StandardInterceptor());
+			try
+			{
+				o.GetType().GetProperty("Text");
+				throw new InvalidOperationException("Should have gotten AmbiguousMatchException  here");
+			}
+			catch
+			{
+			}
+			PropertyBag["src"] = o;
+		}
+
+		public class SimpleProxy
+		{
+			public virtual string Text
+			{
+				get { return "BarBaz"; }
+				set { }
+			}
+		}
 
         public void NullableProperties()
         {

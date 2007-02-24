@@ -70,7 +70,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// </summary>
 		public abstract void Run();
 
-		
+
 		/// <summary>
 		///The path of the script, this is filled by AddBrailBaseClassStep
 		/// and is used for sub views 
@@ -139,8 +139,8 @@ namespace Castle.MonoRail.Views.Brail
 		public string GetSubViewFilename(string subviewName)
 		{
 			//absolute path from Views directory
-            if (subviewName[0] == '/')
-                return subviewName.Substring(1) + viewEngine.ViewFileExtension;
+			if (subviewName[0] == '/')
+				return subviewName.Substring(1) + viewEngine.ViewFileExtension;
 			return Path.Combine(ScriptDirectory, subviewName) + viewEngine.ViewFileExtension;
 		}
 
@@ -153,7 +153,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <returns></returns>
 		public object GetParameter(string name)
 		{
-				ParameterSearch search = GetParameterInternal(name);
+			ParameterSearch search = GetParameterInternal(name);
 			if (search.Found == false)
 				throw new RailsException("Parameter '" + name + "' was not found!");
 			return search.Value;
@@ -183,9 +183,9 @@ namespace Castle.MonoRail.Views.Brail
 			//temporary syntax to turn @variable to varaible, imitating :symbol in ruby
 			if (name.StartsWith("@"))
 				return new ParameterSearch(name.Substring(1), true);
-			if(viewComponentsParameters!=null)
+			if (viewComponentsParameters != null)
 			{
-				foreach(IDictionary viewComponentProperties in viewComponentsParameters)
+				foreach (IDictionary viewComponentProperties in viewComponentsParameters)
 				{
 					if (viewComponentProperties.Contains(name))
 						return new ParameterSearch(viewComponentProperties[name], true);
@@ -253,8 +253,8 @@ namespace Castle.MonoRail.Views.Brail
 		/// <value>The child output.</value>
 		public TextWriter ChildOutput
 		{
-			get { return childOutput;  }
-			set {  childOutput = value;  }
+			get { return childOutput; }
+			set { childOutput = value; }
 		}
 
 		/// <summary>
@@ -267,12 +267,12 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		/// <summary>
-        /// Note that this will overwrite any existing property.
-        /// </summary>
-        public void AddProperty(string name, object item)
-        {
-            properties[name] = item;
-        }
+		/// Note that this will overwrite any existing property.
+		/// </summary>
+		public void AddProperty(string name, object item)
+		{
+			properties[name] = item;
+		}
 
 		/// <summary>
 		/// Adds the view component newProperties.
@@ -310,12 +310,12 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			properties = new Hashtable(
 #if DOTNET2
-				StringComparer.InvariantCultureIgnoreCase
+StringComparer.InvariantCultureIgnoreCase
 #else
 				CaseInsensitiveHashCodeProvider.Default,
 				CaseInsensitiveComparer.Default
 #endif
-				);
+);
 
 			properties.Add("request", myContext.Request);
 			properties.Add("response", myContext.Response);
@@ -323,30 +323,30 @@ namespace Castle.MonoRail.Views.Brail
 
 			if (myController.Resources != null)
 			{
-				foreach(object key in myController.Resources.Keys)
+				foreach (object key in myController.Resources.Keys)
 				{
 					properties.Add(key, new ResourceToDuck(myController.Resources[key]));
 				}
 			}
 
-			foreach(DictionaryEntry entry in myController.Helpers)
+			foreach (DictionaryEntry entry in myController.Helpers)
 			{
 				properties.Add(entry.Key, entry.Value);
 			}
 
-			foreach(string key in myController.Params.AllKeys)
+			foreach (string key in myController.Params.AllKeys)
 			{
 				if (key == null)
 					continue;
 				properties[key] = myContext.Params[key];
 			}
 
-			foreach(DictionaryEntry entry in myContext.Flash)
+			foreach (DictionaryEntry entry in myContext.Flash)
 			{
 				properties[entry.Key] = entry.Value;
 			}
 
-			foreach(DictionaryEntry entry in myController.PropertyBag)
+			foreach (DictionaryEntry entry in myController.PropertyBag)
 			{
 				properties[entry.Key] = entry.Value;
 			}

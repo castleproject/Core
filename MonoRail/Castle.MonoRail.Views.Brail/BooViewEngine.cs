@@ -404,17 +404,23 @@ namespace Castle.MonoRail.Views.Brail
 			}
 		}
 
-		// Perform the actual compilation of the scripts
-		// Things to note here:
-		// * The generated assembly reference the Castle.MonoRail.MonoRailBrail and Castle.MonoRail.Framework assemblies
-		// * If a common scripts assembly exist, it is also referenced
-		// * The AddBrailBaseClassStep compiler step is added - to create a class from the view's code
-		// * The ProcessMethodBodiesWithDuckTyping is replaced with ReplaceUknownWithParameters
-		//   this allows to use naked parameters such as (output context.IsLocal) without using 
-		//   any special syntax
-		// * The IntroduceGlobalNamespaces step is removed, to allow to use common variables such as 
-		//   date & list without accidently using the Boo.Lang.BuiltIn versions
-        private CompilationResult DoCompile(ICompilerInput[] files, string name)
+        /// <summary>
+        /// Perform the actual compilation of the scripts
+        /// Things to note here:
+        /// * The generated assembly reference the Castle.MonoRail.MonoRailBrail and Castle.MonoRail.Framework assemblies
+        /// * If a common scripts assembly exist, it is also referenced
+        /// * The AddBrailBaseClassStep compiler step is added - to create a class from the view's code
+        /// * The ProcessMethodBodiesWithDuckTyping is replaced with ReplaceUknownWithParameters
+        ///   this allows to use naked parameters such as (output context.IsLocal) without using 
+        ///   any special syntax
+        /// * The ExpandDuckTypedExpressions is replace with a derived step that allows the use of Dynamic Proxy assemblies
+        /// * The IntroduceGlobalNamespaces step is removed, to allow to use common variables such as 
+        ///   date and list without accidently using the Boo.Lang.BuiltIn versions
+        /// </summary>
+        /// <param name="files"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+		private CompilationResult DoCompile(ICompilerInput[] files, string name)
 		{
 			BooCompiler compiler = SetupCompiler(files);
 			string filename = Path.Combine(baseSavePath, name);
@@ -429,6 +435,7 @@ namespace Castle.MonoRail.Views.Brail
 			// inserting the add class step after the parser
 			compiler.Parameters.Pipeline.Insert(2, new TransformToBrailStep());
 			compiler.Parameters.Pipeline.Replace(typeof(ProcessMethodBodiesWithDuckTyping), new ReplaceUknownWithParameters());
+			compiler.Parameters.Pipeline.Replace(typeof(ExpandDuckTypedExpressions), new ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods());
 			compiler.Parameters.Pipeline.Replace(typeof(InitializeTypeSystemServices), new InitializeCustomTypeSystem());
 			compiler.Parameters.Pipeline.RemoveAt(compiler.Parameters.Pipeline.Find(typeof(IntroduceGlobalNamespaces)));
 
