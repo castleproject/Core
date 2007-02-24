@@ -203,12 +203,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void DefineCustomAttribute(Attribute attribute)
 		{
-			typebuilder.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
+			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+			if(customAttributeBuilder==null)
+				return;
+			typebuilder.SetCustomAttribute(customAttributeBuilder);
 		}
 
 		public void DefineCustomAttributeFor(FieldReference field, Attribute attribute)
 		{
-			field.Reference.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
+			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+			if(customAttributeBuilder==null)
+				return;
+			field.Reference.SetCustomAttribute(customAttributeBuilder);
 		}
 
 		public ConstructorCollection Constructors

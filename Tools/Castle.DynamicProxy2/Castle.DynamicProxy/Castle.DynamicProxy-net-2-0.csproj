@@ -271,6 +271,7 @@
     <None Include="..\..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <EmbeddedResource Include="DynProxy.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Castle.Core\Castle.Core-vs2005.csproj">

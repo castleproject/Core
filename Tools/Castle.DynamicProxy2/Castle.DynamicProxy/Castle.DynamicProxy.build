@@ -14,6 +14,10 @@
 		<property name="assembly.copyright" value="Copyright (c) 2004,2005,2006 Castle Project - http://www.castleproject.org" />
 		<property name="assembly.allow-partially-trusted-callers" value="true" />
 
+		<resourcefileset id="project.resources" prefix="Castle.DynamicProxy">
+			<include name="DynProxy.snk"/>
+		</resourcefileset>
+
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.Core.dll" />
 		</assemblyfileset>

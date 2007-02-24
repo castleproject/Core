@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -21,6 +22,7 @@ namespace Castle.DynamicProxy
 	using System.Collections;
 	using System.Threading;
 	using Castle.DynamicProxy.Generators;
+	using System.Resources;
 
 	/// <summary>
 	/// Summary description for ModuleScope.
@@ -112,7 +114,9 @@ namespace Castle.DynamicProxy
 
 			using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
 			{
-				if (stream == null) return null;
+				if (stream == null)
+					throw new MissingManifestResourceException(
+						"Should have a Castle.DynamicProxy.DynProxy.snk as an embedded resource, so Dynamic Proxy could sign generated assembly");
 				
 				int length = (int) stream.Length;
 				keyPair = new byte[length];

@@ -1101,7 +1101,9 @@ namespace Castle.DynamicProxy.Generators
 				return false;
 			}
 
-			// TODO: Only protected and public should accepted
+			//can only proxy methods that are public or protected (or internals that have already been checked above)
+			if ((method.IsPublic || method.IsFamily || method.IsAssembly) == false)
+				return false;
 
 			if (method.DeclaringType == typeof(object))
 			{
@@ -1235,17 +1237,17 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (EventInfo eventInfo in events)
 			{
-				MethodInfo addMethod = eventInfo.GetAddMethod();
-				MethodInfo removeMethod = eventInfo.GetRemoveMethod();
+				MethodInfo addMethod = eventInfo.GetAddMethod(true);
+				MethodInfo removeMethod = eventInfo.GetRemoveMethod(true);
 				bool shouldGenerate = false;
 
-				if (IsAccessible(addMethod) && AcceptMethod(addMethod, onlyVirtuals))
+				if (addMethod != null && IsAccessible(addMethod) && AcceptMethod(addMethod, onlyVirtuals))
 				{
 					shouldGenerate = true;
 					methodList.Add(addMethod);
 				}
 
-				if (IsAccessible(removeMethod) && AcceptMethod(removeMethod, onlyVirtuals))
+				if (removeMethod!=null && IsAccessible(removeMethod) && AcceptMethod(removeMethod, onlyVirtuals))
 				{
 					shouldGenerate = true;
 					methodList.Add(removeMethod);

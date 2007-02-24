@@ -171,7 +171,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void DefineCustomAttribute(Attribute attribute)
 		{
-			builder.SetCustomAttribute(CustomAttributeUtil.CreateCustomAttribute(attribute));
+			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+			if(customAttributeBuilder==null)
+				return;
+			builder.SetCustomAttribute(customAttributeBuilder);
 		}
 
 		private void DefineParameters(ParameterInfo[] info)
