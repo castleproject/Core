@@ -371,16 +371,6 @@ namespace Castle.Facilities.NHibernateIntegration
 			return inner.GetNamedQuery(queryName);
 		}
 
-		ISQLQuery ISession.CreateSQLQuery(string sql, string returnAlias, Type returnClass)
-		{
-			return inner.CreateSQLQuery(sql, returnAlias, returnClass);
-		}
-
-		ISQLQuery ISession.CreateSQLQuery(string sql, string[] returnAliases, Type[] returnClasses)
-		{
-			return inner.CreateSQLQuery(sql, returnAliases, returnClasses);
-		}
-
 		public ISQLQuery CreateSQLQuery(string queryString)
 		{
 			return inner.CreateSQLQuery(queryString);

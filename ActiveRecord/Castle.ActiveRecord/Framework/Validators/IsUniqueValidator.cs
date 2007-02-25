@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using NHibernate;
+	using NHibernate.Classic;
 	using NHibernate.Expression;
 
 	

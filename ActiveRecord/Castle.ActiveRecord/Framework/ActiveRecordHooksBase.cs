@@ -19,6 +19,7 @@ namespace Castle.ActiveRecord
 	
 	using NHibernate;
 	using NHibernate.Type;
+	using NHibernate.Classic;
 
 	/// <summary>
 	/// Base class for ActiveRecord entities

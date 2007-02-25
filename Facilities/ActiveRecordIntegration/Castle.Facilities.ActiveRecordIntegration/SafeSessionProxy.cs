@@ -371,16 +371,6 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			return innerSession.GetNamedQuery(queryName);
 		}
 
-		ISQLQuery ISession.CreateSQLQuery(string sql, string returnAlias, Type returnClass)
-		{
-			return innerSession.CreateSQLQuery(sql, returnAlias, returnClass);
-		}
-
-		ISQLQuery ISession.CreateSQLQuery(string sql, string[] returnAliases, Type[] returnClasses)
-		{
-			return innerSession.CreateSQLQuery(sql, returnAliases, returnClasses);
-		}
-
 		public ISQLQuery CreateSQLQuery(string queryString)
 		{
 			return innerSession.CreateSQLQuery(queryString);

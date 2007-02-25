@@ -38,7 +38,7 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		Sql = 1,
 	}
-	
+
 	/// <summary>
 	/// Base class for all HQL or SQL-based queries.
 	/// </summary>
@@ -52,7 +52,8 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		/// <param name="targetType">Type of the target.</param>
 		/// <param name="query">The query.</param>
-		public HqlBasedQuery(Type targetType, string query) : this(targetType, QueryLanguage.Hql, query)
+		public HqlBasedQuery(Type targetType, string query)
+			: this(targetType, QueryLanguage.Hql, query)
 		{
 		}
 
@@ -62,7 +63,8 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="targetType">Type of the target.</param>
 		/// <param name="query">The query.</param>
 		/// <param name="positionalParameters">The positional parameters.</param>
-		public HqlBasedQuery(Type targetType, string query, params object[] positionalParameters) : this(targetType, QueryLanguage.Hql, query, positionalParameters)
+		public HqlBasedQuery(Type targetType, string query, params object[] positionalParameters)
+			: this(targetType, QueryLanguage.Hql, query, positionalParameters)
 		{
 		}
 
@@ -72,7 +74,8 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="targetType">Type of the target.</param>
 		/// <param name="queryLanguage">The query language.</param>
 		/// <param name="query">The query.</param>
-		public HqlBasedQuery(Type targetType, QueryLanguage queryLanguage, string query) : base(targetType)
+		public HqlBasedQuery(Type targetType, QueryLanguage queryLanguage, string query)
+			: base(targetType)
 		{
 			this.query = query;
 			this.queryLanguage = queryLanguage;
@@ -91,7 +94,7 @@ namespace Castle.ActiveRecord.Queries
 			if (positionalParameters != null && positionalParameters.Length > 0)
 			{
 				int i = 0;
-				foreach(object value in positionalParameters)
+				foreach (object value in positionalParameters)
 				{
 					AddModifier(new QueryParameter(i++, value));
 				}
@@ -150,7 +153,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			AddModifier(new QueryParameter(parameterName, list, type));
 		}
-		
+
 		#endregion
 
 		#region SetQueryRange
@@ -173,11 +176,11 @@ namespace Castle.ActiveRecord.Queries
 		{
 			AddModifier(new QueryRange(maxResults));
 		}
-		
+
 		#endregion
-		
+
 		#region AddSqlReturnDefinition
-		
+
 		/// <summary>
 		/// Adds a SQL query return definition.
 		/// See <see cref="NHibernate.ISession.CreateSQLQuery(string,string[],Type[])"/> for more information.
@@ -186,7 +189,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			AddModifier(new SqlQueryReturnDefinition(returnType, returnAlias));
 		}
-		
+
 		#endregion
 
 		/// <summary>
@@ -197,33 +200,36 @@ namespace Castle.ActiveRecord.Queries
 		protected override IQuery CreateQuery(ISession session)
 		{
 			IQuery nhibQuery;
-			
-			switch(queryLanguage)
+
+			switch (queryLanguage)
 			{
 				case QueryLanguage.Hql:
 					nhibQuery = session.CreateQuery(Query);
 					break;
-				
+
 				case QueryLanguage.Sql:
 					ArrayList queryReturnAliases = new ArrayList();
 					ArrayList queryReturnTypes = new ArrayList();
 					if (queryModifiers != null)
 					{
-						foreach(IQueryModifier mod in queryModifiers)
+						foreach (IQueryModifier mod in queryModifiers)
 						{
 							SqlQueryReturnDefinition returnDef = mod as SqlQueryReturnDefinition;
-							
+
 							if (returnDef == null) continue;
-							
+
 							queryReturnAliases.Add(returnDef.ReturnAlias);
 							queryReturnTypes.Add(returnDef.ReturnType);
 						}
 					}
-					nhibQuery = session.CreateSQLQuery(Query, 
-					                                   (String[]) queryReturnAliases.ToArray(typeof(String)), 
-					                                   (Type[]) queryReturnTypes.ToArray(typeof(Type)));
+					ISQLQuery sqlQuery = session.CreateSQLQuery(Query);
+					for (int i = 0; i < queryReturnAliases.Count; i++)
+					{
+						sqlQuery.AddEntity((string)queryReturnAliases[i], (Type)queryReturnTypes[i]);
+					}
+					nhibQuery = sqlQuery;
 					break;
-				
+
 				default:
 					throw new ActiveRecordException("Query language not supported: " + queryLanguage);
 			}

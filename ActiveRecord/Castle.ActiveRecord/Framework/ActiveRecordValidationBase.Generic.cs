@@ -48,7 +48,7 @@ namespace Castle.ActiveRecord
 	///	</code>
 	/// </example>
 	[Serializable]
-	public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T>, NHibernate.IValidatable where T : class
+	public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T>, NHibernate.Classic.IValidatable where T : class
 	{
 		/// <summary>
 		/// List of validators that should be executed for this class
@@ -160,7 +160,7 @@ namespace Castle.ActiveRecord
 			get { return __failedProperties; }
 		}
 
-		void NHibernate.IValidatable.Validate()
+		void NHibernate.Classic.IValidatable.Validate()
 		{
 			if (!IsValid())
 			{
