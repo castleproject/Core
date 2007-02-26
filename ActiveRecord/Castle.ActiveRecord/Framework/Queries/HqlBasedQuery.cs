@@ -208,8 +208,8 @@ namespace Castle.ActiveRecord.Queries
 					break;
 
 				case QueryLanguage.Sql:
-					ArrayList queryReturnAliases = new ArrayList();
-					ArrayList queryReturnTypes = new ArrayList();
+					ISQLQuery sqlQuery = session.CreateSQLQuery(Query);
+
 					if (queryModifiers != null)
 					{
 						foreach (IQueryModifier mod in queryModifiers)
@@ -218,15 +218,10 @@ namespace Castle.ActiveRecord.Queries
 
 							if (returnDef == null) continue;
 
-							queryReturnAliases.Add(returnDef.ReturnAlias);
-							queryReturnTypes.Add(returnDef.ReturnType);
+							sqlQuery.AddEntity(returnDef.ReturnAlias, returnDef.ReturnType);
 						}
 					}
-					ISQLQuery sqlQuery = session.CreateSQLQuery(Query);
-					for (int i = 0; i < queryReturnAliases.Count; i++)
-					{
-						sqlQuery.AddEntity((string)queryReturnAliases[i], (Type)queryReturnTypes[i]);
-					}
+					
 					nhibQuery = sqlQuery;
 					break;
 
