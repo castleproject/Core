@@ -17,47 +17,11 @@ namespace NVelocity.Runtime.Parser
 	/// </summary>
 	public sealed class VelocityCharStream : ICharStream
 	{
-		public int Column
-		{
-			get { return bufcolumn[bufpos]; }
-
-		}
-
-		public int Line
-		{
-			get { return bufline[bufpos]; }
-
-		}
-
-		public int EndColumn
-		{
-			get { return bufcolumn[bufpos]; }
-
-		}
-
-		public int EndLine
-		{
-			get { return bufline[bufpos]; }
-
-		}
-
-		public int BeginColumn
-		{
-			get { return bufcolumn[tokenBegin]; }
-
-		}
-
-		public int BeginLine
-		{
-			get { return bufline[tokenBegin]; }
-
-		}
-
 		public const bool staticFlag = false;
 		internal int bufsize;
 		internal int available;
 		internal int tokenBegin;
-		public int bufpos = - 1;
+		public int bufpos = -1;
 		private int[] bufline;
 		private int[] bufcolumn;
 
@@ -72,6 +36,159 @@ namespace NVelocity.Runtime.Parser
 		private char[] buffer;
 		private int maxNextCharInd = 0;
 		private int inBuf = 0;
+
+		public VelocityCharStream(TextReader dstream, 
+			int startline, int startcolumn, int buffersize)
+		{
+			inputStream = dstream;
+			line = startline;
+			column = startcolumn - 1;
+
+			available = bufsize = buffersize;
+			buffer = new char[buffersize];
+			bufline = new int[buffersize];
+			bufcolumn = new int[buffersize];
+		}
+
+		public VelocityCharStream(TextReader dstream, int startline, int startcolumn)
+			: this(dstream, startline, startcolumn, 4096)
+		{
+		}
+
+		public void ReInit(TextReader dstream, int startline, int startcolumn, int buffersize)
+		{
+			inputStream = dstream;
+			line = startline;
+			column = startcolumn - 1;
+
+			if (buffer == null || buffersize != buffer.Length)
+			{
+				available = bufsize = buffersize;
+				buffer = new char[buffersize];
+				bufline = new int[buffersize];
+				bufcolumn = new int[buffersize];
+			}
+			prevCharIsLF = prevCharIsCR = false;
+			tokenBegin = inBuf = maxNextCharInd = 0;
+			bufpos = -1;
+		}
+
+		public void ReInit(TextReader dstream, int startline, int startcolumn)
+		{
+			ReInit(dstream, startline, startcolumn, 4096);
+		}
+
+		public String GetImage()
+		{
+			if (bufpos >= tokenBegin)
+			{
+				Int32 len = (bufpos - tokenBegin + 1) > buffer.Length ? buffer.Length : (bufpos - tokenBegin + 1);
+				//return new String(buffer, tokenBegin, bufpos - tokenBegin + 1);
+				return new String(buffer, tokenBegin, len);
+			}
+			else
+			{
+				return new String(buffer, tokenBegin, bufsize - tokenBegin) + new String(buffer, 0, bufpos + 1);
+			}
+		}
+
+		public char[] GetSuffix(int len)
+		{
+			char[] ret = new char[len];
+
+			if ((bufpos + 1) >= len)
+				Array.Copy(buffer, bufpos - len + 1, ret, 0, len);
+			else
+			{
+				Array.Copy(buffer, bufsize - (len - bufpos - 1), ret, 0, len - bufpos - 1);
+				Array.Copy(buffer, 0, ret, len - bufpos - 1, bufpos + 1);
+			}
+
+			return ret;
+		}
+
+		public void Done()
+		{
+			buffer = null;
+			bufline = null;
+			bufcolumn = null;
+		}
+
+		/// <summary> Method to adjust line and column numbers for the start of a token.<br/>
+		/// </summary>
+		public void AdjustBeginLineColumn(int newLine, int newCol)
+		{
+			int start = tokenBegin;
+			int len;
+
+			if (bufpos >= tokenBegin)
+			{
+				len = bufpos - tokenBegin + inBuf + 1;
+			}
+			else
+			{
+				len = bufsize - tokenBegin + bufpos + 1 + inBuf;
+			}
+
+			int i = 0, j = 0, k = 0;
+			int nextColDiff = 0, columnDiff = 0;
+
+			while (i < len && bufline[j = start % bufsize] == bufline[k = ++start % bufsize])
+			{
+				bufline[j] = newLine;
+				nextColDiff = columnDiff + bufcolumn[k] - bufcolumn[j];
+				bufcolumn[j] = newCol + columnDiff;
+				columnDiff = nextColDiff;
+				i++;
+			}
+
+			if (i < len)
+			{
+				bufline[j] = newLine++;
+				bufcolumn[j] = newCol + columnDiff;
+
+				while (i++ < len)
+				{
+					if (bufline[j = start % bufsize] != bufline[++start % bufsize])
+						bufline[j] = newLine++;
+					else
+						bufline[j] = newLine;
+				}
+			}
+
+			line = bufline[j];
+			column = bufcolumn[j];
+		}
+
+		public int Column
+		{
+			get { return bufcolumn[bufpos]; }
+		}
+
+		public int Line
+		{
+			get { return bufline[bufpos]; }
+		}
+
+		public int EndColumn
+		{
+			get { return bufcolumn[bufpos]; }
+		}
+
+		public int EndLine
+		{
+			get { return bufline[bufpos]; }
+		}
+
+		public int BeginColumn
+		{
+			get { return bufcolumn[tokenBegin]; }
+		}
+
+		public int BeginLine
+		{
+			get { return bufline[tokenBegin]; }
+		}
 
 		private void ExpandBuff(bool wrapAround)
 		{
@@ -116,7 +233,6 @@ namespace NVelocity.Runtime.Parser
 				throw new ApplicationException(t.Message);
 			}
 
-
 			bufsize += 2048;
 			available = bufsize;
 			tokenBegin = 0;
@@ -147,6 +263,7 @@ namespace NVelocity.Runtime.Parser
 			}
 
 			int i;
+
 			try
 			{
 				try
@@ -258,127 +375,6 @@ namespace NVelocity.Runtime.Parser
 			inBuf += amount;
 			if ((bufpos -= amount) < 0)
 				bufpos += bufsize;
-		}
-
-		public VelocityCharStream(TextReader dstream, int startline, int startcolumn, int buffersize)
-		{
-			inputStream = dstream;
-			line = startline;
-			column = startcolumn - 1;
-
-			available = bufsize = buffersize;
-			buffer = new char[buffersize];
-			bufline = new int[buffersize];
-			bufcolumn = new int[buffersize];
-		}
-
-		public VelocityCharStream(TextReader dstream, int startline, int startcolumn) : this(dstream, startline, startcolumn, 4096)
-		{
-		}
-
-		public void ReInit(TextReader dstream, int startline, int startcolumn, int buffersize)
-		{
-			inputStream = dstream;
-			line = startline;
-			column = startcolumn - 1;
-
-			if (buffer == null || buffersize != buffer.Length)
-			{
-				available = bufsize = buffersize;
-				buffer = new char[buffersize];
-				bufline = new int[buffersize];
-				bufcolumn = new int[buffersize];
-			}
-			prevCharIsLF = prevCharIsCR = false;
-			tokenBegin = inBuf = maxNextCharInd = 0;
-			bufpos = - 1;
-		}
-
-		public void ReInit(TextReader dstream, int startline, int startcolumn)
-		{
-			ReInit(dstream, startline, startcolumn, 4096);
-		}
-
-		public String GetImage()
-		{
-			if (bufpos >= tokenBegin)
-			{
-				Int32 len = (bufpos - tokenBegin + 1) > buffer.Length ? buffer.Length : (bufpos - tokenBegin + 1);
-				//return new String(buffer, tokenBegin, bufpos - tokenBegin + 1);
-				return new String(buffer, tokenBegin, len);
-			}
-			else
-			{
-				return new String(buffer, tokenBegin, bufsize - tokenBegin) + new String(buffer, 0, bufpos + 1);
-			}
-		}
-
-		public char[] GetSuffix(int len)
-		{
-			char[] ret = new char[len];
-
-			if ((bufpos + 1) >= len)
-				Array.Copy(buffer, bufpos - len + 1, ret, 0, len);
-			else
-			{
-				Array.Copy(buffer, bufsize - (len - bufpos - 1), ret, 0, len - bufpos - 1);
-				Array.Copy(buffer, 0, ret, len - bufpos - 1, bufpos + 1);
-			}
-
-			return ret;
-		}
-
-		public void Done()
-		{
-			buffer = null;
-			bufline = null;
-			bufcolumn = null;
-		}
-
-		/// <summary> Method to adjust line and column numbers for the start of a token.<br/>
-		/// </summary>
-		public void AdjustBeginLineColumn(int newLine, int newCol)
-		{
-			int start = tokenBegin;
-			int len;
-
-			if (bufpos >= tokenBegin)
-			{
-				len = bufpos - tokenBegin + inBuf + 1;
-			}
-			else
-			{
-				len = bufsize - tokenBegin + bufpos + 1 + inBuf;
-			}
-
-			int i = 0, j = 0, k = 0;
-			int nextColDiff = 0, columnDiff = 0;
-
-			while (i < len && bufline[j = start%bufsize] == bufline[k = ++start%bufsize])
-			{
-				bufline[j] = newLine;
-				nextColDiff = columnDiff + bufcolumn[k] - bufcolumn[j];
-				bufcolumn[j] = newCol + columnDiff;
-				columnDiff = nextColDiff;
-				i++;
-			}
-
-			if (i < len)
-			{
-				bufline[j] = newLine++;
-				bufcolumn[j] = newCol + columnDiff;
-
-				while (i++ < len)
-				{
-					if (bufline[j = start%bufsize] != bufline[++start%bufsize])
-						bufline[j] = newLine++;
-					else
-						bufline[j] = newLine;
-				}
-			}
-
-			line = bufline[j];
-			column = bufcolumn[j];
 		}
 	}
 }

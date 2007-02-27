@@ -241,37 +241,62 @@ namespace NVelocity.Runtime.Parser.Node
 						}
 					}
 
-					if (!valueStarted)
+					if (c == '\\')
 					{
-						if ((c == '\'' && expectSingleCommaAtEnd) ||
-							(!expectSingleCommaAtEnd && c == ',') || 
-							(!inEvaluationContext && c == '}'))
+						char ahead = contents[i + 1];
+
+						// Within escape
+
+						switch(ahead)
 						{
-							ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
-
-							inKey = false;
-							valueStarted = false;
-							inTransition = true;
-
-							if (!inEvaluationContext && c == '}')
-							{
-								lastIndex = i;
-								break;
-							}
+							case 'r':
+								i++;
+								sbValBuilder.Append('\r');
+								continue;
+							case '\'':
+								i++;
+								sbValBuilder.Append('\'');
+								continue;
+							case '"':
+								i++;
+								sbValBuilder.Append('"');
+								continue;
+							case 'n':
+								i++;
+								sbValBuilder.Append('\n');
+								continue;
 						}
-						else
+					}
+
+
+					if ((c == '\'' && expectSingleCommaAtEnd) ||
+						(!expectSingleCommaAtEnd && c == ',') || 
+						(!inEvaluationContext && c == '}'))
+					{
+						ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
+
+						inKey = false;
+						valueStarted = false;
+						inTransition = true;
+
+						if (!inEvaluationContext && c == '}')
 						{
-							if (!inEvaluationContext && c == '{')
-							{
-								inEvaluationContext = true;
-							}
-							else if (inEvaluationContext && c == '}')
-							{
-								inEvaluationContext = false;
-							}
-
-							sbValBuilder.Append(c);
+							lastIndex = i;
+							break;
 						}
+					}
+					else
+					{
+						if (!inEvaluationContext && c == '{')
+						{
+							inEvaluationContext = true;
+						}
+						else if (inEvaluationContext && c == '}')
+						{
+							inEvaluationContext = false;
+						}
+
+						sbValBuilder.Append(c);
 					}
 				}
 

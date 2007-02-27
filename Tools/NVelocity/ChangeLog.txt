@@ -1,3 +1,7 @@
+- Added escape support for the dictionary strings
+
+  For example: #{onclick='alert(\'hello\')'}
+
 - Added to_quote and to_squote identifiers special treatment
 
   usage:

@@ -65,9 +65,18 @@ namespace NVelocity.Test
 			Assert.AreEqual("3:action=<index> controller=<area> params=<0>",
 							Eval("%{params={}, action='index', controller='area'}"));
 
+			Assert.AreEqual("3:action=<1> controller=<area> params=<0>",
+							Eval("%{params={}, action=$survey, controller='area'}"));
+
 			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<'1'> lastpage=<2>>",
 							Eval("%{params={id=$survey.to_squote, lastpage=$id}, controller='area', action='index'}"));
 		}
+
+		[Test]
+		public void EscapeChars()
+		{
+			Assert.AreEqual("1:action=<'abc'>", Eval(@"%{action='\'abc\''}"));
+		} 
 
 		[Test]
 		public void ZeroParamDictInterpolation()

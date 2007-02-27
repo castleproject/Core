@@ -18,13 +18,6 @@ namespace NVelocity.Runtime.Parser
 	/// </summary>
 	public interface ICharStream
 	{
-		int Column { get; }
-		int Line { get; }
-		int EndColumn { get; }
-		int EndLine { get; }
-		int BeginColumn { get; }
-		int BeginLine { get; }
-
 		/// <summary> Returns the next character from the selected input.  The method
 		/// of selecting the input is the responsibility of the class
 		/// implementing this interface.  Can throw any java.io.IOException.
@@ -51,7 +44,8 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		String GetImage();
 
-		/// <summary> Returns an array of characters that make up the suffix of length 'len' for
+		/// <summary> 
+		/// Returns an array of characters that make up the suffix of length 'len' for
 		/// the currently matched token. This is used to build up the matched string
 		/// for use in actions in the case of MORE. A simple and inefficient
 		/// implementation of this is as follows :
@@ -69,5 +63,41 @@ namespace NVelocity.Runtime.Parser
 		/// affect the lexer's operation.
 		/// </summary>
 		void Done();
+
+		/// <summary>
+		/// Gets the column.
+		/// </summary>
+		/// <value>The column.</value>
+		int Column { get; }
+		
+		/// <summary>
+		/// Gets the line.
+		/// </summary>
+		/// <value>The line.</value>
+		int Line { get; }
+		
+		/// <summary>
+		/// Gets the end column.
+		/// </summary>
+		/// <value>The end column.</value>
+		int EndColumn { get; }
+		
+		/// <summary>
+		/// Gets the end line.
+		/// </summary>
+		/// <value>The end line.</value>
+		int EndLine { get; }
+		
+		/// <summary>
+		/// Gets the begin column.
+		/// </summary>
+		/// <value>The begin column.</value>
+		int BeginColumn { get; }
+		
+		/// <summary>
+		/// Gets the begin line.
+		/// </summary>
+		/// <value>The begin line.</value>
+		int BeginLine { get; }
 	}
 }
