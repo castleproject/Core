@@ -1,6 +1,8 @@
 Release Candidate 3
 ===================
 
+- Made NullLogger and IExtnededLogger
+
 - Enabled a new format on ILogger interface, with 6 overloads for each method:
     Debug(string)
     Debug(string, Exception)
