@@ -205,10 +205,12 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			String threadinfotype = facilityConfig.Attributes["threadinfotype"];
 			string isDebug = facilityConfig.Attributes["isDebug"];
 			string sessionfactoryholdertype = facilityConfig.Attributes["sessionfactoryholdertype"];
+			string isLazyByDefault = facilityConfig.Attributes["default-lazy"];
 
 			SetUpThreadInfoType("true" == isWeb, threadinfotype);
 			SetDebugFlag("true" == isDebug);
 			SetUpSessionFactoryHolderType(sessionfactoryholdertype);
+			SetIsLazyByDefault("true" == isLazyByDefault);
 
 			foreach(IConfiguration config in facilityConfig.Children)
 			{

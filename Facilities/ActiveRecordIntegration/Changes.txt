@@ -4,6 +4,8 @@ Change history
 Beta 3
 ======
 
+-  Support the 'default-lazy' attribute on the facility config just like AR's XmlConfigurationSource does.
+
 - Changed to use new Windsor/DynamicProxy 2
 
 -  Applied (with added test) patch from Ernst Naezer, fixing FACILITIES-66 ('fix null ref exception when no assemblies entry in the
