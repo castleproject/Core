@@ -45,7 +45,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		#region AbstractComponentActivator Members
 
-		protected override sealed object InternalCreate(CreationContext context)
+		protected override object InternalCreate(CreationContext context)
 		{
 			object instance = Instantiate(context);
 

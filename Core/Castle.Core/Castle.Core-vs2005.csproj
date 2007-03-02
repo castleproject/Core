@@ -46,6 +46,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attributes\CastleComponent.cs" />
     <Compile Include="Attributes\ComponentActivatorAttribute.cs" />
+    <Compile Include="Attributes\ComponentProxyBehaviorAttribute.cs" />
     <Compile Include="Attributes\DoNotWireAttribute.cs" />
     <Compile Include="Attributes\InterceptorAttribute.cs" />
     <Compile Include="Attributes\LifestyleAttributes.cs" />

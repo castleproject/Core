@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Added ComponentProxyBehaviorAttribute and ComponentProxyInspector 
+  to control the creation of component proxies.
+
 - Added eval support to configuration. Currently it only supports 
   BaseDirectory as a content to evaluate
 

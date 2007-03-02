@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy
 		public object CreateInterfaceProxyWithTarget(Type theInterface, Type[] interfaces,
 		                                             object target, params IInterceptor[] interceptors)
 		{
-			return CreateInterfaceProxyWithTarget(theInterface, null, target, ProxyGenerationOptions.Default, interceptors);
+			return CreateInterfaceProxyWithTarget(theInterface, interfaces, target, ProxyGenerationOptions.Default, interceptors);
 		}
 
 		public object CreateInterfaceProxyWithTarget(Type theInterface, Type[] interfaces, object target,

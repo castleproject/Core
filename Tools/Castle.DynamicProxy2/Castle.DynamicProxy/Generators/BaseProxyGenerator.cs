@@ -989,22 +989,20 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void AddFieldToCacheMethodTokenAndStatementsToInitialize(
-			MethodInfo method, ConstructorEmitter typeInitializerConstructor, ClassEmitter classEmitter)
-		{
-			FieldReference fieldCache = classEmitter.CreateStaticField("tokenCache" + fieldCount++, typeof(MethodInfo));
+	    protected void AddFieldToCacheMethodTokenAndStatementsToInitialize(
+	        MethodInfo method, ConstructorEmitter typeInitializerConstructor, ClassEmitter classEmitter)
+	    {
+	        if (!method2TokenField.ContainsKey(method))
+	        {
+	            FieldReference fieldCache =
+	                classEmitter.CreateStaticField("tokenCache" + fieldCount++, typeof (MethodInfo));
 
-			if (method2TokenField.ContainsKey(method))
-			{
-				throw new ArgumentException(
-					String.Format("Duplicate method {0} on type {1}", method.ToString(), method.DeclaringType.FullName));
-			}
+	            method2TokenField.Add(method, fieldCache);
 
-			method2TokenField.Add(method, fieldCache);
-
-			typeInitializerConstructor.CodeBuilder.AddStatement(
-				new AssignStatement(fieldCache, new MethodTokenExpression(method)));
-		}
+	            typeInitializerConstructor.CodeBuilder.AddStatement(
+	                new AssignStatement(fieldCache, new MethodTokenExpression(method)));
+	        }
+	    }
 
 		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
 		{

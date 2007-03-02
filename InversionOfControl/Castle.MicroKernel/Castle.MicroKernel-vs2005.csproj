@@ -279,6 +279,7 @@
     <Compile Include="ModelBuilder\Inspectors\ConstructorDependenciesModelInspector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ModelBuilder\Inspectors\ComponentProxyInspector.cs" />
     <Compile Include="ModelBuilder\Inspectors\ExtendedPropertiesConstants.cs">
       <SubType>Code</SubType>
     </Compile>

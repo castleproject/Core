@@ -1,6 +1,10 @@
 Release Candidate 3
 ===================
 
+- Added UseSingleInterfaceProxy to CompomentModel to control the proxying
+  behavior while maintaining backward compatibility.
+  Added the corresponding ComponentProxyBehaviorAttribute.
+
 - Made NullLogger and IExtnededLogger
 
 - Enabled a new format on ILogger interface, with 6 overloads for each method:

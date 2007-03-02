@@ -62,7 +62,7 @@ namespace Castle.Windsor.Proxy
 				CustomizeOptions(options, kernel, model, constructorArguments);
 				
 				proxy = generator.CreateInterfaceProxyWithTarget(model.Service,
-																 CollectInterfaces(model.Service, model.Implementation), 
+																 CollectInterfaces(model), 
 				                                                 target, options, interceptors);
 			}
 			else
@@ -91,9 +91,11 @@ namespace Castle.Windsor.Proxy
 			return model.Service.IsInterface;
 		}
 
-		protected Type[] CollectInterfaces(Type serviceInterface, Type implementation)
+		protected Type[] CollectInterfaces(ComponentModel model)
 		{
-			return implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), serviceInterface);
+			if (model.UseSingleInterfaceProxy) return null;
+
+			return model.Implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), model.Service);
 		}
 
 		private bool EmptyTypeFilter(Type type, object criteria)

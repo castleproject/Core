@@ -141,6 +141,7 @@
     <Compile Include="Components\CircularDependencyComponents.cs" />
     <Compile Include="Components\ComponentWithProperties.cs" />
     <Compile Include="Components\ComponentWithStringProperty.cs" />
+    <Compile Include="Components\CalculatorServiceWithProxyBehavior.cs" />
     <Compile Include="Components\DotNet2Components.cs" />
     <Compile Include="Components\Employee.cs">
       <SubType>Code</SubType>
@@ -215,6 +216,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropertiesInspectionBehaviorTestCase.cs" />
+    <Compile Include="Proxy\ProxyBehaviorInvalidTestCase.cs" />
+    <Compile Include="Proxy\ProxyBehaviorTestCase.cs" />
     <Compile Include="ReportedProblemTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -319,6 +322,8 @@
     <EmbeddedResource Include="Configuration2\env_config.xml" />
     <EmbeddedResource Include="Configuration2\eval_config.xml" />
     <Content Include="IOC-51.xml" />
+    <Content Include="Proxy\proxyBehaviorInvalidConfig.xml" />
+    <Content Include="Proxy\proxyBehavior.xml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
