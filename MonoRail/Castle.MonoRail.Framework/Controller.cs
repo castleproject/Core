@@ -784,7 +784,7 @@ namespace Castle.MonoRail.Framework
 
 		#region Core members
 
-		internal void InitializeFieldsFromServiceProvider(IRailsEngineContext context)
+		public void InitializeFieldsFromServiceProvider(IRailsEngineContext context)
 		{
 			serviceProvider = context;
 
@@ -805,7 +805,13 @@ namespace Castle.MonoRail.Framework
 			this.context = context;
 		}
 
-		internal void InitializeControllerState(string areaName, string controllerName, string actionName)
+		/// <summary>
+		/// Initializes the state of the controller.
+		/// </summary>
+		/// <param name="areaName">Name of the area.</param>
+		/// <param name="controllerName">Name of the controller.</param>
+		/// <param name="actionName">Name of the action.</param>
+		public void InitializeControllerState(string areaName, string controllerName, string actionName)
 		{
 			SetEvaluatedAction(actionName);
 			_areaName = areaName;
