@@ -191,16 +191,14 @@ namespace NVelocity.Runtime.Directive
 				context.PushCurrentTemplateName(arg);
 				((SimpleNode) template.Data).Render(context, writer);
 			}
-			catch (Exception e)
+			catch(Exception)
 			{
 				// if it's a MIE, it came from the render.... throw it...
-				if (e is MethodInvocationException)
-				{
-					throw;
-				}
+				// if (e is MethodInvocationException)
+				throw;
 
-				rsvc.Error("Exception rendering #parse( " + arg + " )  : " + e);
-				result = false;
+				// rsvc.Error("Exception rendering #parse( " + arg + " )  : " + e);
+				// result = false;
 			}
 			finally
 			{
