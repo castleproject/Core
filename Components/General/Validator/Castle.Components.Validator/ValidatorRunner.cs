@@ -112,7 +112,7 @@ namespace Castle.Components.Validator
 			{
 				if (!validator.IsValid(objectInstance))
 				{
-					summary.RegisterErrorMessage(validator.Property, validator.ErrorMessage);
+					summary.RegisterErrorMessage(validator.Name, validator.ErrorMessage);
 
 					isValid = false;
 				}

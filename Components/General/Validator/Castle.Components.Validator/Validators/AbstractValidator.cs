@@ -202,7 +202,7 @@ namespace Castle.Components.Validator
 		/// Gets the property name. The <see cref="FriendlyName"/>
 		/// is returned if non-null, otherwise it will return the property name.
 		/// </summary>
-		protected string Name
+		public string Name
 		{
 			get
 			{

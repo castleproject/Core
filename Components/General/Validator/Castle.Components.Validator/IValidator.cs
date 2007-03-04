@@ -102,5 +102,11 @@ namespace Castle.Components.Validator
 		/// <param name="attributes">The attributes.</param>
 		void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
 								IWebValidationGenerator generator, IDictionary attributes);
+
+        /// <summary>
+		/// Gets the property name. The <see cref="FriendlyName"/>
+		/// is returned if non-null, otherwise it will return the property name.
+		/// </summary>
+        string Name { get; }
 	}
 }
