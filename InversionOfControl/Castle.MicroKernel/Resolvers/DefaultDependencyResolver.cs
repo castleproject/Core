@@ -262,6 +262,11 @@ namespace Castle.MicroKernel.Resolvers
 
 		protected virtual bool CanResolveServiceDependency(ComponentModel model, DependencyModel dependency)
 		{
+			if (dependency.DependencyType == DependencyType.ServiceOverride)
+			{
+				return HasComponentInValidState(dependency.DependencyKey);	
+			}
+
 			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
 
 			if (parameter != null)

@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Fixed IOC-69 - DefaultDependencyResolver issue with Service Overrides.
+
 - Added ComponentProxyBehaviorAttribute and ComponentProxyInspector 
   to control the creation of component proxies.
 
