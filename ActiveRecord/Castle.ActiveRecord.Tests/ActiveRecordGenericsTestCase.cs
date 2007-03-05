@@ -462,6 +462,23 @@ namespace Castle.ActiveRecord.Tests
 			Blog fromDB = Blog.Find(blog.Id);
 			Assert.AreEqual(1, fromDB.Posts.Count);
 		}
+
+		[Test]
+		public void AbstractClassTableName()
+		{
+			ActiveRecordStarter.ResetInitializationFlag();
+
+			ActiveRecordStarter.Initialize(GetConfigSource(),
+										   typeof(AbstractClass<>),
+										   typeof(ConcreteClass));
+			Recreate();
+
+			ConcreteClass c = new ConcreteClass();
+
+			c.Save();
+
+			Assert.IsTrue(ConcreteClass.FindAll().Length == 1);
+		}
 	}
 }
 

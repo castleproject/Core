@@ -302,6 +302,7 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="LazyTestCase.cs" />
     <Compile Include="Model\AnyModel\Models.cs" />
+    <Compile Include="Model\GenericModel\AbstractClass.cs" />
     <Compile Include="Model\Octopus.cs" />
     <Compile Include="PluralizationTestCase.cs" />
   </ItemGroup>
