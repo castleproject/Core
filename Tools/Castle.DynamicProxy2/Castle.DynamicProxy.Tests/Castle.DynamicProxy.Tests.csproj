@@ -51,7 +51,6 @@
     <Compile Include="Classes\ClassToSerialize.cs" />
     <Compile Include="Classes\ClassWithIndexer.cs" />
     <Compile Include="Classes\DiffAccessLevelOnProperties.cs" />
-    <Compile Include="Classes\NonPublicClass.cs" />
     <Compile Include="Classes\NonPublicConstructorClass.cs" />
     <Compile Include="Classes\NonPublicMethodsClass.cs" />
     <Compile Include="Classes\ServiceClass.cs" />

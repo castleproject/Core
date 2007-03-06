@@ -78,11 +78,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test, ExpectedException(typeof(GeneratorException), "Type is not public, so a proxy " + 
-			"cannot be generated. Type: Castle.DynamicProxy.Tests.Classes.NonPublicClass")]
+			"cannot be generated. Type: System.AppDomainInitializerInfo")]
 		public void ProxyForNonPublicClass()
 		{
+			//have to use a type that is not from this assembly, because it is marked as internals visible to 
+			//DynamicProxy2
+
 			object proxy = generator.CreateClassProxy(
-				typeof(NonPublicClass), new StandardInterceptor());
+				Type.GetType("System.AppDomainInitializerInfo, mscorlib"), new StandardInterceptor());
 		}
 		
 		[Test]

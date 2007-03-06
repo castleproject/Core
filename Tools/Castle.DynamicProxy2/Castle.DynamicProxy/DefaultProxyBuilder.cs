@@ -88,7 +88,9 @@ namespace Castle.DynamicProxy
 
 		private void AssertValidType(Type target)
 		{
-			bool internalAndVisibleToDynProxy = (target.IsNestedAssembly || target.IsNestedFamORAssem) && InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
+			bool isNestedAndInternal = target.IsNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
+			bool isInternalNotNested = target.IsVisible ==false && target.IsNested==false;
+			bool internalAndVisibleToDynProxy = (isInternalNotNested || isNestedAndInternal) && InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
 			if (!target.IsPublic && !target.IsNestedPublic && !internalAndVisibleToDynProxy)
 			{
 				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
