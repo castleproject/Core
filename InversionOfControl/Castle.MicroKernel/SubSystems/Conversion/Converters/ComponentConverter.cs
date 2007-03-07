@@ -23,6 +23,18 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	[Serializable]
 	public class ComponentConverter : AbstractTypeConverter, IKernelDependentConverter
 	{
+		public override bool CanHandleType(Type type, IConfiguration configuration)
+		{
+			if (configuration.Value != null)
+			{
+				return ReferenceExpressionUtil.IsReference(configuration.Value.Trim());
+			}
+			else
+			{
+				return CanHandleType(type);
+			}
+		}
+
 		public override bool CanHandleType(Type type)
 		{
 			if (Context.Kernel == null) return false;

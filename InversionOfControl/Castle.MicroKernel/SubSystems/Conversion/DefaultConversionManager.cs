@@ -101,10 +101,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 	    public bool CanHandleType(Type type, IConfiguration configuration)
 	    {
-            foreach (ITypeConverter converter in converters)
+            foreach(ITypeConverter converter in converters)
             {
-                if (converter.CanHandleType(type,configuration))
-                    return true;
+                if (converter.CanHandleType(type, configuration)) return true;
             }
 
             return false;
@@ -114,8 +113,10 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			foreach(ITypeConverter converter in converters)
 			{
-				if (converter.CanHandleType(targetType)) 
+				if (converter.CanHandleType(targetType))
+				{
 					return converter.PerformConversion(value, targetType);
+				}
 			}
 
 			String message = String.Format("No converter registered to handle the type {0}", 
@@ -128,8 +129,10 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			foreach(ITypeConverter converter in converters)
 			{
-				if (converter.CanHandleType(targetType,configuration)) 
+				if (converter.CanHandleType(targetType, configuration))
+				{
 					return converter.PerformConversion(configuration, targetType);
+				}
 			}
 
 			String message = String.Format("No converter registered to handle the type {0}", 
