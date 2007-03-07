@@ -198,5 +198,15 @@ namespace Castle.Facilities.DynamicLoader
 
 			return instance;
 		}
+
+		/// <summary>
+		/// Overrides <see cref="MarshalByRefObject.InitializeLifetimeService"/>,
+		/// so no lease is returned and the object is kept in memory
+		/// as long as the host application domain is running.
+		/// </summary>
+		public override object InitializeLifetimeService()
+		{
+			return null;
+		}
 	}
 }

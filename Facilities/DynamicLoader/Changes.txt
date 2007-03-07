@@ -1,6 +1,9 @@
 Change history
 ==============
 
+Mar 7, 2007
+-----------
+ - Fixed some bugs on sponsorship.
 
 Feb 23, 2007
 ------------
