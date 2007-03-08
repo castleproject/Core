@@ -66,13 +66,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				String message = String.Format("You must specify the component name on the #{0} directive", Name);
 				throw new ViewComponentException(message);
 			}
-
-			
 		}
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
-		componentName = compNameNode.FirstToken.Image;
+			componentName = compNameNode.FirstToken.Image;
 
 			if (componentName == null)
 			{
