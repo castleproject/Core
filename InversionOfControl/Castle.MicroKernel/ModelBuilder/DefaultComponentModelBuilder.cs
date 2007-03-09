@@ -118,7 +118,6 @@ namespace Castle.MicroKernel.ModelBuilder
 			AddContributor(new ConfigurationParametersInspector());
 			AddContributor(new InterceptorInspector());
 			AddContributor(new ComponentActivatorInspector());
-			AddContributor(new ComponentProxyInspector());
 		}
 	}
 }

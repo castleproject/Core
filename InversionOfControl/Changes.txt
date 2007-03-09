@@ -1,6 +1,10 @@
 RC 4
 ====
 
+- Moved ProxyComponentInspector from Castle.MicroKernel to here and added
+  support to supply ProxyGenerationOptions on a ComponentModel basis.  This
+  provides the needed ability to provide proxy options in facilities.
+
 - Fixed IOC-69 - DefaultDependencyResolver issue with Service Overrides.
 
 - Added ComponentProxyBehaviorAttribute and ComponentProxyInspector 

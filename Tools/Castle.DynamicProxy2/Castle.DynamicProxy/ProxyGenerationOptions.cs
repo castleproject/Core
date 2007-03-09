@@ -25,6 +25,7 @@ namespace Castle.DynamicProxy
 		private IInterceptorSelector selector;
 		private ArrayList mixins;
 		private Type baseTypeForInterfaceProxy = typeof(object);
+		private bool useSingleInterfaceProxy;
 		private bool useSelector;
 
 		/// <summary>
@@ -60,6 +61,12 @@ namespace Castle.DynamicProxy
 		{
 			get { return useSelector; }
 			set { useSelector = value; }
+		}
+
+		public bool UseSingleInterfaceProxy
+		{
+			get { return useSingleInterfaceProxy; }
+			set { useSingleInterfaceProxy = value; }
 		}
 
 		public void AddMixinInstance(object instance)
@@ -105,6 +112,7 @@ namespace Castle.DynamicProxy
 			if (!Equals(mixins, proxyGenerationOptions.mixins)) return false;
 			if (!Equals(baseTypeForInterfaceProxy, proxyGenerationOptions.baseTypeForInterfaceProxy)) return false;
 			if (!Equals(useSelector, proxyGenerationOptions.useSelector)) return false;
+			if (!Equals(useSingleInterfaceProxy, proxyGenerationOptions.useSingleInterfaceProxy)) return false;
 			return true;
 		}
 
@@ -115,6 +123,7 @@ namespace Castle.DynamicProxy
 			result = 29 * result + (mixins != null ? mixins.GetHashCode() : 0);
 			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
 			result = 29 * result + useSelector.GetHashCode();
+			result = 29 * result + useSingleInterfaceProxy.GetHashCode();
 			return result;
 		}
 	}

@@ -137,6 +137,7 @@ namespace Castle.Windsor
 
 			this.kernel = kernel;
 			this.kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
+			this.kernel.ComponentModelBuilder.AddContributor(new Proxy.ProxyComponentInspector());
 
 			this.installer = installer;
 		}

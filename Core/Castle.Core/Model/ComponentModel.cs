@@ -134,8 +134,6 @@ namespace Castle.Core
 
 		private bool requiresGenericArguments;
 
-		private bool useSingleInterfaceProxy;
-
         #endregion
 
         /// <summary>
@@ -189,18 +187,6 @@ namespace Castle.Core
 		{
 			get { return requiresGenericArguments; }
 			set { requiresGenericArguments = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the component requires single interface proxy.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if single interface proxy are required; otherwise, <c>false</c>.
-		/// </value>
-		public bool UseSingleInterfaceProxy
-		{
-			get { return useSingleInterfaceProxy; }
-			set { useSingleInterfaceProxy = value; }
 		}
 
 		/// <summary>

@@ -49,26 +49,35 @@ namespace Castle.Windsor.Proxy
 		public override object Create(IKernel kernel, object target, ComponentModel model,
 		                              params object[] constructorArguments)
 		{
-			IInterceptor[] interceptors = ObtainInterceptors(kernel, model);
-
 			object proxy;
 
-			ProxyGenerationOptions options = new ProxyGenerationOptions();
+			IInterceptor[] interceptors = ObtainInterceptors(kernel, model);
+
+			ProxyGenerationOptions options = ObtainProxyGeneratorOptions(model);
+
+			CustomizeOptions(options, kernel, model, constructorArguments);
 
 			if (model.Service.IsInterface)
 			{
-				options.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
+				Type[] interfaces = null;
 
-				CustomizeOptions(options, kernel, model, constructorArguments);
-				
-				proxy = generator.CreateInterfaceProxyWithTarget(model.Service,
-																 CollectInterfaces(model), 
+				if (options.BaseTypeForInterfaceProxy == null)
+				{
+					options.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
+				}
+
+				if (!options.UseSingleInterfaceProxy)
+				{
+					interfaces = CollectInterfaces(model);
+				}
+
+				proxy = generator.CreateInterfaceProxyWithTarget(model.Service, interfaces, 
 				                                                 target, options, interceptors);
 			}
 			else
 			{
-				proxy = generator.CreateClassProxy(model.Implementation, 
-				                                   interceptors, constructorArguments);
+				proxy = generator.CreateClassProxy(model.Implementation, null, options,
+				                                   constructorArguments, interceptors);
 			}
 
 			CustomizeProxy(proxy, options, kernel, model);
@@ -93,8 +102,6 @@ namespace Castle.Windsor.Proxy
 
 		protected Type[] CollectInterfaces(ComponentModel model)
 		{
-			if (model.UseSingleInterfaceProxy) return null;
-
 			return model.Implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), model.Service);
 		}
 
@@ -113,6 +120,16 @@ namespace Castle.Windsor.Proxy
 		}
 
 		#endregion
+
+		private ProxyGenerationOptions ObtainProxyGeneratorOptions(ComponentModel model)
+		{
+			ProxyGenerationOptions options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey]
+			                                 as ProxyGenerationOptions;
+
+			if (options == null) options = new ProxyGenerationOptions();
+
+			return options;
+		}
 
 		private void Init()
 		{
