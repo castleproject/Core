@@ -121,6 +121,7 @@
     <Compile Include="CustomerService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GenericService.cs" />
     <Compile Include="ICustomerService.cs">
       <SubType>Code</SubType>
     </Compile>

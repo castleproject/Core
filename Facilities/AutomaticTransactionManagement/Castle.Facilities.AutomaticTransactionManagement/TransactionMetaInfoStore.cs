@@ -57,9 +57,9 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		{
 			if (implementation == typeof(object) || implementation == typeof(MarshalByRefObject)) return;
 
-			MethodInfo[] methods = implementation.GetMethods(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.DeclaredOnly);
+			MethodInfo[] methods = implementation.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 
-			foreach(MethodInfo method in methods)
+			foreach (MethodInfo method in methods)
 			{
 				object[] atts = method.GetCustomAttributes(typeof(TransactionAttribute), true);
 
@@ -81,17 +81,17 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 				metaInfo = new TransactionMetaInfo();
 			}
 
-			foreach(MethodInfo method in methods)
+			foreach (MethodInfo method in methods)
 			{
 				String transactionMode = config.Attributes[TransactionModeAtt];
-				String isolationLevel  = config.Attributes[IsolationModeAtt];
+				String isolationLevel = config.Attributes[IsolationModeAtt];
 
 				TransactionMode mode = ObtainTransactionMode(implementation, method, transactionMode);
 				IsolationMode level = ObtainIsolation(implementation, method, isolationLevel);
 
 				metaInfo.Add(method, new TransactionAttribute(mode, level));
 			}
-			
+
 			Register(implementation, metaInfo);
 
 			return metaInfo;
@@ -99,7 +99,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 		public TransactionMetaInfo GetMetaFor(Type implementation)
 		{
-			return (TransactionMetaInfo) type2MetaInfo[implementation];
+			return (TransactionMetaInfo)type2MetaInfo[implementation];
 		}
 
 		private TransactionMode ObtainTransactionMode(Type implementation, MethodInfo method, string mode)
@@ -111,16 +111,16 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 			try
 			{
-				return (TransactionMode) Enum.Parse(typeof(TransactionMode), mode, true);
+				return (TransactionMode)Enum.Parse(typeof(TransactionMode), mode, true);
 			}
-			catch(Exception)
+			catch (Exception)
 			{
-				String[] values = (String[]) Enum.GetValues(typeof(TransactionMode));
+				String[] values = (String[])Enum.GetValues(typeof(TransactionMode));
 
-				String message = String.Format( "The configuration for the class {0}, " + 
-					"method {1}, has specified {2} on {3} attribute which is not supported. " + 
+				String message = String.Format("The configuration for the class {0}, " +
+					"method {1}, has specified {2} on {3} attribute which is not supported. " +
 					"The possible values are {4}",
-					implementation.FullName, method.Name, mode, TransactionModeAtt, String.Join(", ", values) );
+					implementation.FullName, method.Name, mode, TransactionModeAtt, String.Join(", ", values));
 
 				throw new FacilityException(message);
 			}
@@ -135,16 +135,16 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 			try
 			{
-				return (IsolationMode) Enum.Parse(typeof(IsolationMode), level, true);
+				return (IsolationMode)Enum.Parse(typeof(IsolationMode), level, true);
 			}
-			catch(Exception)
+			catch (Exception)
 			{
-				String[] values = (String[]) Enum.GetValues(typeof(TransactionMode));
+				String[] values = (String[])Enum.GetValues(typeof(TransactionMode));
 
-				String message = String.Format( "The configuration for the class {0}, " + 
-					"method {1}, has specified {2} on {3} attribute which is not supported. " + 
+				String message = String.Format("The configuration for the class {0}, " +
+					"method {1}, has specified {2} on {3} attribute which is not supported. " +
 					"The possible values are {4}",
-					implementation.FullName, method.Name, level, IsolationModeAtt, String.Join(", ", values) );
+					implementation.FullName, method.Name, level, IsolationModeAtt, String.Join(", ", values));
 
 				throw new FacilityException(message);
 			}
@@ -159,6 +159,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	public class TransactionMetaInfo : MarshalByRefObject
 	{
 		private readonly IDictionary method2Att = new Hashtable();
+		private readonly IList notTransactional = new ArrayList();
 
 		#region MarshalByRefObject overrides
 
@@ -168,7 +169,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		}
 
 		#endregion
-		
+
 		public void Add(MethodInfo method, TransactionAttribute attribute)
 		{
 			method2Att[method] = attribute;
@@ -186,12 +187,41 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 		public bool Contains(MethodInfo info)
 		{
-			return method2Att.Contains(info);
+			if (method2Att.Contains(info))
+				return true;
+			if (notTransactional.Contains(info))
+				return false;
+#if DOTNET2
+			if (info.DeclaringType.IsGenericType || info.IsGenericMethod)
+			{
+				return HandleMethodWithGenerics(info);
+			}
+#endif
+			return false;
+		}
+
+		private bool HandleMethodWithGenerics(MethodInfo info)
+		{
+			lock (method2Att)
+			{
+				object[] atts = info.GetCustomAttributes(typeof(TransactionAttribute), true);
+
+				if (atts.Length != 0)
+				{
+					Add(info, atts[0] as TransactionAttribute);
+					return true;
+				}
+				else
+				{
+					notTransactional.Add(info);
+					return false;
+				}
+			}
 		}
 
 		public TransactionAttribute GetTransactionAttributeFor(MethodInfo methodInfo)
 		{
-			return (TransactionAttribute) method2Att[methodInfo];
+			return (TransactionAttribute)method2Att[methodInfo];
 		}
 	}
 }
