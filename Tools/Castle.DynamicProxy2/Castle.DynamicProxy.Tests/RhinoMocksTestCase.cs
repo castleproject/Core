@@ -37,6 +37,26 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void GenericClassWithGenericMethod()
+		{
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+			IDoubleGeneric<int> proxy = (IDoubleGeneric<int>)generator.CreateInterfaceProxyWithTarget(typeof(IDoubleGeneric<int>),
+				new DoubleGenericImpl<int>(), logger);
+			proxy.Call<string>(1, "");
+			Assert.AreEqual("Call", logger.Invocations[0]);
+		}
+
+		[Test]
+		public void GenericClassWithGenericMethodWitoutTarget()
+		{
+			BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor interceptor = new BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor();
+			IDoubleGeneric<int> proxy = (IDoubleGeneric<int>)generator.CreateInterfaceProxyWithoutTarget(typeof(IDoubleGeneric<int>),
+				interceptor);
+			object o = proxy.Call<string>(1, "");
+			Assert.AreEqual(3,o );
+		}
+
+		[Test]
 		public void UsingEvents_Interface()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
@@ -142,4 +162,17 @@ namespace Castle.DynamicProxy.Tests
 		{
 		}
 	}	
+
+	public interface IDoubleGeneric<One>
+	{
+		object Call<T>(One one, T two);
+	}
+
+	public class DoubleGenericImpl<One> : IDoubleGeneric<One>
+	{
+		public object Call<T>(One one, T two)
+		{
+			return two;
+		}
+	}
 }
