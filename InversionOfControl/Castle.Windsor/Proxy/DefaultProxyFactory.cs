@@ -53,7 +53,7 @@ namespace Castle.Windsor.Proxy
 
 			IInterceptor[] interceptors = ObtainInterceptors(kernel, model);
 
-			ProxyGenerationOptions options = ObtainProxyGeneratorOptions(model);
+			ProxyGenerationOptions options = ProxyUtil.ObtainProxyGenerationOptions(model, true);
 
 			CustomizeOptions(options, kernel, model, constructorArguments);
 
@@ -120,16 +120,6 @@ namespace Castle.Windsor.Proxy
 		}
 
 		#endregion
-
-		private ProxyGenerationOptions ObtainProxyGeneratorOptions(ComponentModel model)
-		{
-			ProxyGenerationOptions options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey]
-			                                 as ProxyGenerationOptions;
-
-			if (options == null) options = new ProxyGenerationOptions();
-
-			return options;
-		}
 
 		private void Init()
 		{
