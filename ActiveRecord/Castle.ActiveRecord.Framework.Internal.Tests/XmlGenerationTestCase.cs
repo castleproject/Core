@@ -709,6 +709,30 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
 		[Test]
+		public void BelongsToWithFetch()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(BelongsToClassAFetch));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BelongsToClassAFetch, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"BelongsToClassAFetch\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <many-to-one name=\"ClassA\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"classa_id\" fetch=\"join\" />\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
 		public void HasManyWithExplicitInfo()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
@@ -726,6 +750,33 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
 				"    <bag name=\"Items\" access=\"property\" table=\"ClassATable\" lazy=\"false\" inverse=\"true\">\r\n" +
+				"      <key column=\"keycol\" />\r\n" +
+				"      <one-to-many class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
+				"    </bag>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
+		public void HasManyWithFetch()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(HasManyWithFetch));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.HasManyWithFetch, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"HasManyWithFetch\" lazy=\"false\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <bag name=\"Items\" access=\"property\" table=\"ClassATable\" lazy=\"false\" inverse=\"true\" fetch=\"join\">\r\n" +
 				"      <key column=\"keycol\" />\r\n" +
 				"      <one-to-many class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
 				"    </bag>\r\n" +

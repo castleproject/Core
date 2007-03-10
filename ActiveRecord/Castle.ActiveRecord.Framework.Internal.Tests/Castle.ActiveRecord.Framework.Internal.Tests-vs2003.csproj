@@ -158,6 +158,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\BelongsToWithFetch.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\CacheClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -268,6 +273,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\HasManyWithFetch.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\ImportClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -316,4 +326,5 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
 

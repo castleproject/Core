@@ -139,6 +139,7 @@
     <Compile Include="InflectorTestCase.cs" />
     <Compile Include="Model\BadCompositeKey.cs" />
     <Compile Include="Model\BaseJoinedClass.cs" />
+    <Compile Include="Model\BelongsToWithFetch.cs" />
     <Compile Include="Model\CacheClass.cs" />
     <Compile Include="Model\ClassKeyAssigned.cs" />
     <Compile Include="Model\ClassWithBadCompositeKey.cs" />
@@ -186,6 +187,7 @@
     </Compile>
     <Compile Include="Model\HasManyDependentObjects.cs" />
     <Compile Include="Model\HasManyToManyViaComponents.cs" />
+    <Compile Include="Model\HasManyWithFetch.cs" />
     <Compile Include="Model\ImportClass.cs" />
     <Compile Include="Model\LazyClass.cs" />
     <Compile Include="Model\LazyClassWithoutVirtualPropertyOnBelongsTo.cs" />

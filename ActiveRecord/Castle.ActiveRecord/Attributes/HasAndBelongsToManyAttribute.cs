@@ -43,6 +43,7 @@ namespace Castle.ActiveRecord
 		private String[] compositeKeyColumnRefs;
 		private String columnKey;
 		private String[] compositeKeyColumnKeys;
+		private FetchEnum fetchMethod = FetchEnum.Unspecified;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HasAndBelongsToManyAttribute"/> class.
@@ -109,6 +110,16 @@ namespace Castle.ActiveRecord
 		{
 			get { return compositeKeyColumnKeys; }
 			set { compositeKeyColumnKeys = value; }
+		}
+
+		/// <summary>
+		/// Chooses between outer-join fetching
+		/// or sequential select fetching.
+		/// </summary>
+		public FetchEnum Fetch
+		{
+			get { return fetchMethod; }
+			set { fetchMethod = value; }
 		}
 	}
 }

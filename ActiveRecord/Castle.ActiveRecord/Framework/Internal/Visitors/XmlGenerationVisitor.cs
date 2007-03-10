@@ -431,7 +431,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, null, null, null, null, model.Configuration, att.Index,
 			                att.IndexType,
-			                att.Cache, att.NotFoundBehaviour);
+			                att.Cache, att.NotFoundBehaviour, att.Fetch);
 		}
 
 		/// <summary>
@@ -529,7 +529,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public override void VisitBelongsTo(BelongsToModel model)
 		{
 			String cascade = TranslateCascadeEnum(model.BelongsToAtt.Cascade);
-			String outerJoin = TranslateOuterJoin(model.BelongsToAtt.OuterJoin);
+			String fetch = TranslateFetch(model.BelongsToAtt.Fetch);
 			String notFoundMode = TranslateNotFoundBehaviourEnum(model.BelongsToAtt.NotFoundBehaviour);
 
 			if (model.BelongsToAtt.Column == null)
@@ -543,7 +543,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
 				        WriteIfTrue("unique", model.BelongsToAtt.Unique),
 				        WriteIfNonNull("cascade", cascade),
-				        WriteIfNonNull("outer-join", outerJoin),
+				        WriteIfNonNull("fetch", fetch),
 				        WriteIfNonNull("not-found", notFoundMode));
 				Ident();
 				WriteCompositeColumns(model.BelongsToAtt.CompositeKeyColumns);
@@ -562,7 +562,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
 				        WriteIfTrue("unique", model.BelongsToAtt.Unique),
 				        WriteIfNonNull("cascade", cascade),
-				        WriteIfNonNull("outer-join", outerJoin),
+				        WriteIfNonNull("fetch", fetch),
 				        WriteIfNonNull("not-found", notFoundMode));
 			}
 		}
@@ -580,7 +580,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, null, null,
 			                model.DependentObjectModel, att.Index, att.IndexType,
-			                att.Cache, att.NotFoundBehaviour);
+			                att.Cache, att.NotFoundBehaviour, att.Fetch);
 		}
 
 		/// <summary>
@@ -596,7 +596,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, att.ColumnRef,
 			                att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache,
-			                att.NotFoundBehaviour);
+			                att.NotFoundBehaviour, att.Fetch);
 		}
 
 		/// <summary>
@@ -669,10 +669,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                             string columnKey, string[] compositeKeyColumnKeys, string element,
 		                             string columnRef, string[] compositeKeyColumnRefs,
 		                             IVisitable extraModel, string index, string indexType, CacheEnum cache,
-		                             NotFoundBehaviour notFoundBehaviour)
+		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 			String notFoundMode = TranslateNotFoundBehaviourEnum(notFoundBehaviour);
+			String fetchString = TranslateFetch(fetch);
 
 			String closingTag = null;
 
@@ -683,22 +684,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</bag>";
 
-				AppendF("<bag{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
-				        MakeAtt("name", name),
-				        MakeAtt("access", accessString),
-				        WriteIfNonNull("table", table),
-				        WriteIfNonNull("schema", schema),
-				        MakeAtt("lazy", lazy),
-				        WriteIfTrue("inverse", inverse),
-				        WriteIfNonNull("cascade", cascade),
-				        WriteIfNonNull("order-by", orderBy),
-				        WriteIfNonNull("where", where));
-			}
-			else if (type == RelationType.Set)
-			{
-				closingTag = "</set>";
-
-				AppendF("<set{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
+				AppendF("<bag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -708,13 +694,30 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
-				        WriteIfNonNull("sort", sort));
+				        WriteIfNonNull("fetch", fetchString));
+			}
+			else if (type == RelationType.Set)
+			{
+				closingTag = "</set>";
+
+				AppendF("<set{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
+				        MakeAtt("name", name),
+				        MakeAtt("access", accessString),
+				        WriteIfNonNull("table", table),
+				        WriteIfNonNull("schema", schema),
+				        MakeAtt("lazy", lazy),
+				        WriteIfTrue("inverse", inverse),
+				        WriteIfNonNull("cascade", cascade),
+				        WriteIfNonNull("order-by", orderBy),
+				        WriteIfNonNull("where", where),
+				        WriteIfNonNull("sort", sort),
+				        WriteIfNonNull("fetch", fetchString));
 			}
 			else if (type == RelationType.IdBag)
 			{
 				closingTag = "</idbag>";
 
-				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}>",
+				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -722,7 +725,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("lazy", lazy),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
-				        WriteIfNonNull("where", where));
+				        WriteIfNonNull("where", where),
+				        WriteIfNonNull("fetch", fetchString));
 
 				VisitNode(extraModel);
 			}
@@ -730,7 +734,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</map>";
 
-				AppendF("<map{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
+				AppendF("<map{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -740,12 +744,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
-				        WriteIfNonNull("sort", sort));
+				        WriteIfNonNull("sort", sort),
+				        WriteIfNonNull("fetch", fetchString));
 			}
 			else if (type == RelationType.List)
 			{
 				closingTag = "</list>";
-				AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}>",
+				AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -753,7 +758,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("lazy", lazy),
 				        WriteIfTrue("inverse", inverse),
 				        WriteIfNonNull("cascade", cascade),
-				        WriteIfNonNull("where", where));
+				        WriteIfNonNull("where", where),
+				        WriteIfNonNull("fetch", fetchString));
 			}
 
 
@@ -892,18 +898,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 				default:
 					return null;
 			}
-		}
-
-		private static string TranslateOuterJoin(OuterJoinEnum ojEnum)
-		{
-			String outerJoin = null;
-
-			if (ojEnum != OuterJoinEnum.Auto)
-			{
-				outerJoin = ojEnum.ToString().ToLower();
-			}
-
-			return outerJoin;
 		}
 
 		private String MakeTypeAtt(Type type, String typeName)

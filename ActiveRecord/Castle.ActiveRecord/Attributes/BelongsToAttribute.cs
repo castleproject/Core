@@ -70,7 +70,7 @@ namespace Castle.ActiveRecord
 		private bool insert = true;
 		private bool notnull;
 		private bool unique;
-		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
+		private FetchEnum fetchMethod = FetchEnum.Unspecified;
 		private CascadeEnum cascade = CascadeEnum.None;
 		private NotFoundBehaviour notFoundBehaviour = NotFoundBehaviour.Default;
 
@@ -128,11 +128,56 @@ namespace Castle.ActiveRecord
 
 		/// <summary>
 		/// Defines the outer join behavior of this association.
+		/// NHibernate has deprecated the outer-join attribute so this property is
+		/// marked obsolete - it now converts to and from the fetch value.
 		/// </summary>
+		[Obsolete("Use the Fetch property instead")]
 		public OuterJoinEnum OuterJoin
 		{
-			get { return outerJoin; }
-			set { outerJoin = value; }
+			get
+			{
+				OuterJoinEnum returnValue = OuterJoinEnum.Auto;
+
+				switch (fetchMethod)
+				{
+					case FetchEnum.Unspecified:
+						returnValue = OuterJoinEnum.Auto;
+						break;
+					case FetchEnum.Join:
+						returnValue = OuterJoinEnum.True;
+						break;
+					case FetchEnum.Select:
+						returnValue = OuterJoinEnum.False;
+						break;
+				}
+
+				return returnValue;
+			}
+			set
+			{
+				switch (value)
+				{
+					case OuterJoinEnum.Auto:
+						fetchMethod = FetchEnum.Unspecified;
+						break;
+					case OuterJoinEnum.True:
+						fetchMethod = FetchEnum.Join;
+						break;
+					case OuterJoinEnum.False:
+						fetchMethod = FetchEnum.Select;
+						break;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Chooses between outer-join fetching
+		/// or sequential select fetching.
+		/// </summary>
+		public FetchEnum Fetch
+		{
+			get { return fetchMethod; }
+			set { fetchMethod = value; }
 		}
 
 		/// <summary>

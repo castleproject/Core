@@ -105,6 +105,25 @@ namespace Castle.ActiveRecord
 	}
 
 	/// <summary>
+	/// Define the possible fetch option values
+	/// </summary>
+	public enum FetchEnum
+	{
+		/// <summary>
+		/// Let NHibernate decide what to do here
+		/// </summary>
+		Unspecified,
+		/// <summary>
+		/// Use a JOIN to load the data
+		/// </summary>
+		Join,
+		/// <summary>
+		/// Use a seperate SELECT statement to load the data
+		/// </summary>
+		Select
+	}
+
+	/// <summary>
 	/// Defines the cascading behaviour of this association.
 	/// </summary>
 	/// <remarks>
