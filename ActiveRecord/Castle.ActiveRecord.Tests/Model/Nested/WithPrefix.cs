@@ -80,5 +80,8 @@ namespace Castle.ActiveRecord.Tests.Model.Nested
 			get { return this.last; }
 			set { this.last = value; }
 		}
+
+        [Field]
+	    public string Middle;
 	}
 }

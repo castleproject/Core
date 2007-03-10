@@ -62,10 +62,12 @@ namespace Castle.ActiveRecord.Tests
 
 			nested.Self = new Name();
 			nested.Self.First = "John";
+		    nested.Self.Middle = "Mystery";
 			nested.Self.Last = "Doe";
 			
 			nested.Other = new Name();
 			nested.Other.First = "Edward";
+		    nested.Other.Middle = "G";
 			nested.Other.Last = "Norton";
 			
 			nested.Save();
@@ -75,8 +77,11 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsNotNull(nested.Other);
 			Assert.AreEqual("John", nested.Self.First);
 			Assert.AreEqual("Doe", nested.Self.Last);
+            Assert.AreEqual("Mystery", nested.Self.Middle);
+
 			Assert.AreEqual("Edward", nested.Other.First);
 			Assert.AreEqual("Norton", nested.Other.Last);
+            Assert.AreEqual("G", nested.Other.Middle);
 		}
 	}
 }
