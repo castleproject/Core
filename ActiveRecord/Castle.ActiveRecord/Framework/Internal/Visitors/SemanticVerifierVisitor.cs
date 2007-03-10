@@ -722,6 +722,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			if (type != RelationType.Guess)
 				return type;
 			Type propertyType = property.PropertyType;
+
+			if (!propertyType.IsInterface)
+			{
+				throw new ActiveRecordException(String.Format(
+					"Type of property {0}.{1} must be an interface (IList, ISet, IDictionary or their generic counter parts). You cannot use ArrayList or List<T> as the property type.",
+						property.DeclaringType.Name, property.Name));
+			}
+
 			if (propertyType == typeof(IList))
 			{
 				return RelationType.Bag;
