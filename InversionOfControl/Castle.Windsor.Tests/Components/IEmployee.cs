@@ -32,7 +32,7 @@ namespace Castle.Windsor.Tests.Components
 		bool IsProxy { get; set; }
 
 		string FullName { get; }
-		
+
 		string Email { get; set; }
 
 		bool IsSupervisor { get; set; }

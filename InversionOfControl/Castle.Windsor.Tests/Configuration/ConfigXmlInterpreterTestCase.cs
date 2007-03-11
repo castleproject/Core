@@ -14,12 +14,11 @@
 
 namespace Castle.Windsor.Tests
 {
-	using Castle.Core.Resource;
 	using Castle.Core.Configuration;
+	using Castle.Core.Resource;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.SubSystems.Configuration;
 	using Castle.Windsor.Configuration.Interpreters;
-
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -74,7 +73,7 @@ namespace Castle.Windsor.Tests
 			XmlInterpreter interpreter = new XmlInterpreter(ConfigHelper.ResolveConfigPath("sample_config.xml"));
 			interpreter.ProcessResource(interpreter.Source, store);
 
-			WindsorContainer container = new WindsorContainer(store);			
+			WindsorContainer container = new WindsorContainer(store);
 
 			container.AddFacility("testidengine", new DummyFacility());
 		}

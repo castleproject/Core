@@ -14,11 +14,8 @@
 
 namespace Castle.Windsor.Tests
 {
-	using System;
-
-	using NUnit.Framework;
-
 	using Castle.Windsor.Tests.Components;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Check for existence of any problem, as 
@@ -34,8 +31,8 @@ namespace Castle.Windsor.Tests
 		{
 			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("robotwireconfig.xml"));
 
-			Robot robot = (Robot) container[ typeof(Robot) ];
-			
+			Robot robot = (Robot) container[typeof(Robot)];
+
 			Assert.IsNotNull(robot);
 			Assert.IsNotNull(robot.Left);
 			Assert.IsNotNull(robot.Right);

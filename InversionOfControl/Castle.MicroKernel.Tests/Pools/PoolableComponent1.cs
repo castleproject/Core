@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.Pools
 {
-	using System;
-
 	using Castle.Core;
 
 	[Pooled(2, 5)]

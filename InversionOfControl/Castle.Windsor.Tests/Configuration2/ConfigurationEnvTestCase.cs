@@ -23,24 +23,24 @@ namespace Castle.Windsor.Tests.Configuration2
 	[TestFixture]
 	public class ConfigurationEnvTestCase
 	{
-		string dir = ConfigHelper.ResolveConfigPath("Configuration2/");
+		private string dir = ConfigHelper.ResolveConfigPath("Configuration2/");
 
 		[Test]
 		public void AssertDefineIsSetBasedOnEnvironmentInformation()
 		{
 			string file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
-				"env_config.xml");
+			                                                                  "env_config.xml");
 
 			WindsorContainer container = new WindsorContainer(new XmlInterpreter(file), new CustomEnv(true));
 
-			ComponentWithStringProperty prop = 
+			ComponentWithStringProperty prop =
 				(ComponentWithStringProperty) container.Resolve("component");
 
 			Assert.AreEqual("John Doe", prop.Name);
 
 			container = new WindsorContainer(new XmlInterpreter(file), new CustomEnv(false));
 
-			prop = (ComponentWithStringProperty)container.Resolve("component");
+			prop = (ComponentWithStringProperty) container.Resolve("component");
 
 			Assert.AreEqual("Hammett", prop.Name);
 		}

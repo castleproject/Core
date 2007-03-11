@@ -15,11 +15,10 @@
 namespace Castle.Windsor.Tests
 {
 	using System;
-	using System.Reflection;
 	using Castle.MicroKernel.Exceptions;
+	using Castle.MicroKernel.Handlers;
 	using Castle.Windsor.Tests.Components;
 	using NUnit.Framework;
-	using Castle.MicroKernel.Handlers;
 
 	[TestFixture]
 	public class CircularDependencyTests
@@ -35,12 +34,12 @@ namespace Castle.Windsor.Tests
 				container.Resolve("controller");
 
 				throw new Exception(
-				@"A cycle was detected when trying to resolve a dependency. The dependency graph that resulted in a cycle is:
+					@"A cycle was detected when trying to resolve a dependency. The dependency graph that resulted in a cycle is:
  - Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in type Castle.Windsor.Tests.Components.Controller
  - Service dependency 'Controller' type 'Castle.Windsor.Tests.Components.IController' for Castle.Windsor.Tests.Components.IController Controller in type Castle.Windsor.Tests.Components.View
  + Service dependency 'view' type 'Castle.Windsor.Tests.Components.IView' for Void .ctor(Castle.Windsor.Tests.Components.IView) in Castle.Windsor.Tests.Components.Controller
 "
-				);
+					);
 			}
 			catch(CircularDependecyException)
 			{
@@ -87,21 +86,20 @@ Services:
 		public void ShouldNotGetCircularDepencyExceptionWhenResolvingTypeOnItselfWithDifferentModels()
 		{
 			WindsorContainer container = new WindsorContainer(ConfigHelper.ResolveConfigPath("IOC-51.xml"));
-			object o = container[ "path.fileFinder" ];
+			object o = container["path.fileFinder"];
 			Assert.IsNotNull(o);
 		}
 	}
 
 	namespace IOC51
 	{
+		using System.Reflection;
 
 		public interface IPathProvider
 		{
-			string Path
-			{
-				get;
-			}
+			string Path { get; }
 		}
+
 		public class AssemblyPath : IPathProvider
 		{
 			public string Path
@@ -113,21 +111,20 @@ Services:
 				}
 			}
 		}
+
 		public class RelativeFilePath : IPathProvider
 		{
 			public RelativeFilePath(IPathProvider basePathProvider, string extensionsPath)
 			{
-				this._path = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
+				_path = System.IO.Path.Combine(basePathProvider.Path + "\\", extensionsPath);
 			}
 
 			public string Path
 			{
-				get
-				{
-					return this._path;
-				}
+				get { return _path; }
 			}
+
 			private string _path;
-		} 
+		}
 	}
 }

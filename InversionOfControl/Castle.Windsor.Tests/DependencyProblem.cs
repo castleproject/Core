@@ -14,10 +14,7 @@
 
 namespace Castle.Windsor.Tests
 {
-	using System;
-
 	using NUnit.Framework;
-
 
 	/// <summary>
 	/// Reported at http://forum.castleproject.org/posts/list/17.page
@@ -40,7 +37,7 @@ namespace Castle.Windsor.Tests
 			container.AddComponent("B", typeof(B));
 			container.AddComponent("A", typeof(A));
 
-			Assert.IsNotNull(container["A"]);			
+			Assert.IsNotNull(container["A"]);
 			Assert.IsNotNull(container["B"]);
 			Assert.IsNotNull(container["C"]);
 		}
@@ -52,11 +49,11 @@ namespace Castle.Windsor.Tests
 			container.AddComponent("C", typeof(C));
 			container.AddComponent("A", typeof(A));
 
-			Assert.IsNotNull(container["A"]);			
+			Assert.IsNotNull(container["A"]);
 			Assert.IsNotNull(container["B"]);
 			Assert.IsNotNull(container["C"]);
 		}
-	
+
 		[Test]
 		public void LoadingOutOfSequence()
 		{
@@ -64,7 +61,7 @@ namespace Castle.Windsor.Tests
 			container.AddComponent("B", typeof(B));
 			container.AddComponent("C", typeof(C));
 
-			Assert.IsNotNull(container["A"]);			
+			Assert.IsNotNull(container["A"]);
 			Assert.IsNotNull(container["B"]);
 			Assert.IsNotNull(container["C"]);
 		}
@@ -77,7 +74,7 @@ namespace Castle.Windsor.Tests
 			container.AddComponent("C", typeof(C));
 			container.AddComponent("NotUsed", typeof(int));
 
-			Assert.IsNotNull(container["A"]);			
+			Assert.IsNotNull(container["A"]);
 			Assert.IsNotNull(container["B"]);
 			Assert.IsNotNull(container["C"]);
 		}
@@ -86,8 +83,7 @@ namespace Castle.Windsor.Tests
 		public void CtorSourceOrderDoesNotMatter()
 		{
 			container.AddComponent("D", typeof(D));
-			Assert.IsNotNull(container["D"]);			
-		
+			Assert.IsNotNull(container["D"]);
 		}
 
 		public class A
@@ -115,12 +111,10 @@ namespace Castle.Windsor.Tests
 		{
 			public D(B b)
 			{
-
 			}
 
 			public D()
 			{
-
 			}
 		}
 	}

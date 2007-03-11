@@ -14,13 +14,9 @@
 
 namespace Castle.Windsor.Tests
 {
-	using System;
+	using Castle.MicroKernel;
 	using Castle.Windsor.Configuration.Interpreters;
 	using NUnit.Framework;
-
-	using Castle.MicroKernel;
-	using Castle.Windsor.Tests.Components;
-
 
 	[TestFixture]
 	public class ChildContainerSupportTestCase
@@ -30,22 +26,22 @@ namespace Castle.Windsor.Tests
 		[SetUp]
 		public void Init()
 		{
-			container = new WindsorContainer();						
+			container = new WindsorContainer();
 			container.AddComponent("A", typeof(A));
 		}
 
 		[Test]
 		public void ResolveAgainstParentContainer()
-		{			
-			IWindsorContainer childcontainer = new WindsorContainer();			
+		{
+			IWindsorContainer childcontainer = new WindsorContainer();
 			container.AddChildContainer(childcontainer);
-			
+
 			Assert.AreEqual(container, childcontainer.Parent);
-			
+
 			childcontainer.AddComponent("B", typeof(B));
 			B b = childcontainer["B"] as B;
-			
-			Assert.IsNotNull(b);	
+
+			Assert.IsNotNull(b);
 		}
 
 		[Test]
@@ -65,7 +61,7 @@ namespace Castle.Windsor.Tests
 		[Test]
 		public void AddAndRemoveChildContainer()
 		{
-			IWindsorContainer childcontainer = new WindsorContainer();			
+			IWindsorContainer childcontainer = new WindsorContainer();
 			container.AddChildContainer(childcontainer);
 			Assert.AreEqual(container, childcontainer.Parent);
 
@@ -95,7 +91,7 @@ namespace Castle.Windsor.Tests
 		public void AddingToTwoParentContainsThrowsKernelException()
 		{
 			IWindsorContainer container3 = new WindsorContainer();
-			IWindsorContainer childcontainer = new WindsorContainer();			
+			IWindsorContainer childcontainer = new WindsorContainer();
 			container.AddChildContainer(childcontainer);
 			container3.AddChildContainer(childcontainer);
 		}
@@ -114,7 +110,7 @@ namespace Castle.Windsor.Tests
 		public void StartWithParentContainer()
 		{
 			IWindsorContainer childcontainer = new WindsorContainer(container, new XmlInterpreter());
-			
+
 			Assert.AreEqual(container, childcontainer.Parent);
 
 			childcontainer.AddComponent("B", typeof(B));

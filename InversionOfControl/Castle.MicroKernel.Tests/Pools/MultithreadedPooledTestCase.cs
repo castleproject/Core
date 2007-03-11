@@ -14,29 +14,26 @@
 
 namespace Castle.MicroKernel.Tests.Pools
 {
-	using System;
 	using System.Threading;
-
 	using NUnit.Framework;
-
 
 	[TestFixture]
 	public class MultithreadedPooledTestCase
 	{
-		private ManualResetEvent  _startEvent = new ManualResetEvent(false);
-		private ManualResetEvent  _stopEvent  = new ManualResetEvent(false);
+		private ManualResetEvent _startEvent = new ManualResetEvent(false);
+		private ManualResetEvent _stopEvent = new ManualResetEvent(false);
 		private IKernel _kernel;
 
 		[Test]
 		public void Multithreaded()
 		{
 			_kernel = new DefaultKernel();
-			_kernel.AddComponent( "a", typeof(PoolableComponent1) );
+			_kernel.AddComponent("a", typeof(PoolableComponent1));
 
 			const int threadCount = 15;
 
 			Thread[] threads = new Thread[threadCount];
-			
+
 			for(int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal));
@@ -54,11 +51,11 @@ namespace Castle.MicroKernel.Tests.Pools
 		{
 			_startEvent.WaitOne(int.MaxValue, false);
 
-			while (!_stopEvent.WaitOne(1, false))
+			while(!_stopEvent.WaitOne(1, false))
 			{
 				PoolableComponent1 instance = _kernel["a"] as PoolableComponent1;
-				
-				Assert.IsNotNull( instance );
+
+				Assert.IsNotNull(instance);
 
 				Thread.Sleep(1 * 500);
 

@@ -17,17 +17,17 @@ namespace Castle.Windsor.Tests
 	using System.Configuration;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
+	using Castle.Windsor.Tests.Components;
 	using NUnit.Framework;
 
-	using Castle.Windsor.Tests.Components;
-	
 	[TestFixture]
 	public class ProxyBehaviorInvalidTestCase
 	{
 		[Test, ExpectedException(typeof(ConfigurationErrorsException))]
 		public void InvalidProxyBehaviorFromConfiguration()
 		{
-			IWindsorContainer container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Proxy/proxyBehaviorInvalidConfig.xml"));
+			IWindsorContainer container =
+				new WindsorContainer(ConfigHelper.ResolveConfigPath("Proxy/proxyBehaviorInvalidConfig.xml"));
 		}
 
 		[Test, ExpectedException(typeof(ComponentRegistrationException))]

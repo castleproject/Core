@@ -14,13 +14,10 @@
 
 namespace Castle.MicroKernel.Tests
 {
-	using Castle.MicroKernel.Handlers;
-	using NUnit.Framework;
-
 	using System.Collections;
-
+	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.Tests.RuntimeParameters;
-
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class RuntimeParametersTestCase
@@ -48,8 +45,9 @@ namespace Castle.MicroKernel.Tests
 
 		[Test]
 		[ExpectedException(typeof(HandlerException), "Can't create component 'compb' as it has " +
-			"dependencies to be satisfied. \r\ncompb is waiting for the following dependencies: \r\n\r\n" +
-			"Services: \r\n- Castle.MicroKernel.Tests.RuntimeParameters.CompC which was not registered. \r\n")]
+		                                             "dependencies to be satisfied. \r\ncompb is waiting for the following dependencies: \r\n\r\n" +
+		                                             "Services: \r\n- Castle.MicroKernel.Tests.RuntimeParameters.CompC which was not registered. \r\n"
+			)]
 		public void WithoutParameters()
 		{
 			CompB compb = kernel[typeof(CompB)] as CompB;
@@ -92,19 +90,19 @@ namespace Castle.MicroKernel.Tests
 		{
 			kernel.RegisterCustomDependencies("compb", deps);
 
-			CompB instance_with_model = (CompB)kernel[typeof(CompB)];
+			CompB instance_with_model = (CompB) kernel[typeof(CompB)];
 			Assert.AreSame(deps["cc"], instance_with_model.Compc, "Model dependency should override kernel dependency");
 
 			Hashtable deps2 = new Hashtable();
 			deps2.Add("cc", new CompC(12));
 			deps2.Add("myArgument", "ayende");
-	
+
 			CompB instance_with_args = (CompB) kernel.Resolve(typeof(CompB), deps2);
-			
-			Assert.AreSame(deps2["cc"],instance_with_args.Compc, "Should get it from resolve params");
+
+			Assert.AreSame(deps2["cc"], instance_with_args.Compc, "Should get it from resolve params");
 			Assert.AreEqual("ayende", instance_with_args.MyArgument);
 		}
-		
+
 		private void AssertDependencies(CompB compb)
 		{
 			Assert.IsNotNull(compb, "Component B should have been resolved");
@@ -113,7 +111,8 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(compb.MyArgument != string.Empty, "MyArgument property should not be empty");
 
 			Assert.AreSame(deps["cc"], compb.Compc, "CompC property should be the same instnace as in the hashtable argument");
-			Assert.IsTrue("ernst".Equals(compb.MyArgument),string.Format( "The MyArgument property of compb should be equal to ernst, found {0}", compb.MyArgument));
+			Assert.IsTrue("ernst".Equals(compb.MyArgument),
+			              string.Format("The MyArgument property of compb should be equal to ernst, found {0}", compb.MyArgument));
 		}
 	}
 }

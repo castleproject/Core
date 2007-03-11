@@ -31,7 +31,7 @@ namespace Castle.MicroKernel.Tests.RuntimeParameters
 
 		public CompB(CompA ca, CompC cc, string myArgument)
 		{
-			this.compc = cc;
+			compc = cc;
 			this.myArgument = myArgument;
 		}
 

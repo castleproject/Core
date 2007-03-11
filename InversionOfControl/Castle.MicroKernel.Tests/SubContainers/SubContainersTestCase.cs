@@ -16,9 +16,9 @@ namespace Castle.MicroKernel.Tests.SubContainers
 {
 	using System;
 	using System.Collections;
-	using NUnit.Framework;
 	using Castle.Core;
 	using Castle.MicroKernel.Tests.ClassComponents;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for SubContainersTestCase.
@@ -45,7 +45,7 @@ namespace Castle.MicroKernel.Tests.SubContainers
 		{
 			IKernel subkernel = new DefaultKernel();
 
-			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine)); 
+			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
 			kernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
 
 			kernel.AddChildKernel(subkernel);
@@ -314,7 +314,7 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			public EventsCollector(object expectedSender)
 			{
 				this.expectedSender = expectedSender;
-				this.events = new ArrayList();
+				events = new ArrayList();
 			}
 
 			public void AddedAsChildKernel(object sender, EventArgs e)

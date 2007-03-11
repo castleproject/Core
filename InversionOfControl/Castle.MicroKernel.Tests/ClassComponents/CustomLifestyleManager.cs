@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
-
 	using Castle.MicroKernel.Lifestyle;
 
 	/// <summary>

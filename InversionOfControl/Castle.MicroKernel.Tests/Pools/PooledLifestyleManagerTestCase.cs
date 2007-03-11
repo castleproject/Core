@@ -14,9 +14,7 @@
 
 namespace Castle.MicroKernel.Tests.Pools
 {
-	using System;
 	using System.Collections;
-
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -26,7 +24,7 @@ namespace Castle.MicroKernel.Tests.Pools
 		public void SimpleUsage()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddComponent( "a", typeof(PoolableComponent1) );
+			kernel.AddComponent("a", typeof(PoolableComponent1));
 
 			PoolableComponent1 inst1 = kernel["a"] as PoolableComponent1;
 			PoolableComponent1 inst2 = kernel["a"] as PoolableComponent1;
@@ -43,8 +41,8 @@ namespace Castle.MicroKernel.Tests.Pools
 			Assert.IsNotNull(other1);
 			Assert.IsNotNull(other2);
 
-			Assert.AreSame( inst1, other1 );
-			Assert.AreSame( inst2, other2 );
+			Assert.AreSame(inst1, other1);
+			Assert.AreSame(inst2, other2);
 
 			kernel.ReleaseComponent(inst2);
 			kernel.ReleaseComponent(inst1);
@@ -54,20 +52,20 @@ namespace Castle.MicroKernel.Tests.Pools
 		public void MaxSize()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddComponent( "a", typeof(PoolableComponent1) );
+			kernel.AddComponent("a", typeof(PoolableComponent1));
 
 			ArrayList instances = new ArrayList();
 
-			instances.Add( kernel["a"] as PoolableComponent1 );
-			instances.Add( kernel["a"] as PoolableComponent1 );
-			instances.Add( kernel["a"] as PoolableComponent1 );
-			instances.Add( kernel["a"] as PoolableComponent1 );
-			instances.Add( kernel["a"] as PoolableComponent1 );
+			instances.Add(kernel["a"] as PoolableComponent1);
+			instances.Add(kernel["a"] as PoolableComponent1);
+			instances.Add(kernel["a"] as PoolableComponent1);
+			instances.Add(kernel["a"] as PoolableComponent1);
+			instances.Add(kernel["a"] as PoolableComponent1);
 
 			PoolableComponent1 other1 = kernel["a"] as PoolableComponent1;
 
-			Assert.IsNotNull( other1 );
-			Assert.IsTrue( !instances.Contains(other1) );
+			Assert.IsNotNull(other1);
+			Assert.IsTrue(!instances.Contains(other1));
 
 			foreach(object inst in instances)
 			{
@@ -77,9 +75,9 @@ namespace Castle.MicroKernel.Tests.Pools
 			kernel.ReleaseComponent(other1);
 
 			PoolableComponent1 other2 = kernel["a"] as PoolableComponent1;
-			Assert.IsNotNull( other2 );
-			Assert.IsTrue( other1 != other2 );
-			Assert.IsTrue( instances.Contains(other2) );
+			Assert.IsNotNull(other2);
+			Assert.IsTrue(other1 != other2);
+			Assert.IsTrue(instances.Contains(other2));
 
 			kernel.ReleaseComponent(other2);
 		}

@@ -14,14 +14,10 @@
 
 namespace Castle.MicroKernel.Tests
 {
-	using System;
-
-	using NUnit.Framework;
-
 	using Castle.Core;
-
 	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.SubSystems.Naming;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class BinaryTreeComponentNameTestCase
@@ -195,7 +191,8 @@ namespace Castle.MicroKernel.Tests
 		}
 
 
-		private void assertRemoved(BinaryTreeComponentName tree, int expectedCount, ComponentName removed, ComponentName exists)
+		private void assertRemoved(BinaryTreeComponentName tree, int expectedCount, ComponentName removed,
+		                           ComponentName exists)
 		{
 			Assert.AreEqual(expectedCount, tree.Count);
 			Assert.AreEqual(expectedCount, tree.Handlers.Length);

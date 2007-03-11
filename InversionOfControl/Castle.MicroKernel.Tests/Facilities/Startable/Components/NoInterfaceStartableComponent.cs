@@ -14,32 +14,32 @@
 
 namespace Castle.Facilities.Startable.Tests.Components
 {
-    using Castle.Core;
+	using Castle.Core;
 
 	[Transient]
 	public class NoInterfaceStartableComponent
 	{
-        private bool _Started = false;
-        private bool _Stopped = false;
+		private bool _Started = false;
+		private bool _Stopped = false;
 
-        public void Start()
-        {
-            _Started = true;
-        }
+		public void Start()
+		{
+			_Started = true;
+		}
 
-        public void Stop()
-        {
-            _Stopped = true;
-        }
+		public void Stop()
+		{
+			_Stopped = true;
+		}
 
-        public bool Started
-        {
-            get { return _Started; }
-        }
+		public bool Started
+		{
+			get { return _Started; }
+		}
 
-        public bool Stopped
-        {
-            get { return _Stopped; }
-        }
+		public bool Stopped
+		{
+			get { return _Stopped; }
+		}
 	}
 }

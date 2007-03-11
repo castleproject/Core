@@ -14,12 +14,10 @@
 
 namespace Castle.Windsor.Tests
 {
-	using System.Runtime.Remoting;
 	using Castle.MicroKernel;
+	using Castle.Windsor.Tests.Components;
 	using NUnit.Framework;
 
-	using Castle.Windsor.Tests.Components;
-	
 	[TestFixture]
 	public class PropertiesInspectionBehaviorTestCase
 	{
@@ -27,11 +25,11 @@ namespace Castle.Windsor.Tests
 		public void PropertiesInspectionTestCase()
 		{
 			IWindsorContainer container;
-			
+
 			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("propertyInspectionBehavior.xml"));
-			
+
 			ExtendedComponentWithProperties comp;
-			
+
 			comp = (ExtendedComponentWithProperties) container["comp1"]; // None
 			Assert.IsNull(comp.Prop1);
 			Assert.AreEqual(0, comp.Prop2);
@@ -48,11 +46,14 @@ namespace Castle.Windsor.Tests
 			Assert.AreEqual(2, comp.Prop3);
 		}
 
-		[Test, ExpectedException(typeof(KernelException), "Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined,None,All,DeclaredOnly'")]
+		[Test,
+		 ExpectedException(typeof(KernelException),
+		 	"Error on properties inspection. Could not convert the inspectionBehavior attribute value into an expected enum value. Value found is 'Invalid' while possible values are 'Undefined,None,All,DeclaredOnly'"
+		 	)]
 		public void InvalidOption()
 		{
 			IWindsorContainer container;
-			
+
 			container = new WindsorContainer(ConfigHelper.ResolveConfigPath("propertyInspectionBehaviorInvalid.xml"));
 		}
 	}

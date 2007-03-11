@@ -14,14 +14,11 @@
 
 namespace Castle.Windsor.Tests.Configuration
 {
-	using NUnit.Framework;
-
-	using Castle.MicroKernel.SubSystems.Configuration;
-	
-	using Castle.Core.Resource;
 	using Castle.Core.Configuration;
-
+	using Castle.Core.Resource;
+	using Castle.MicroKernel.SubSystems.Configuration;
 	using Castle.Windsor.Configuration.Interpreters;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for AppDomainConfigSourceTestCase.
@@ -33,7 +30,7 @@ namespace Castle.Windsor.Tests.Configuration
 		public void ProperDeserialization()
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
-			XmlInterpreter interpreter = new XmlInterpreter( new ConfigResource() );
+			XmlInterpreter interpreter = new XmlInterpreter(new ConfigResource());
 			interpreter.ProcessResource(interpreter.Source, store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);

@@ -1,4 +1,5 @@
 #region Copyright
+
 // Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 #endregion
 
 namespace Castle.Windsor.Tests.Adapters.ComponentModel
 {
-	using System;
 	using System.ComponentModel;
 
 	public class TestComponent : Component
@@ -37,7 +38,7 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		public override ISite Site
 		{
 			set
-			{ 
+			{
 				base.Site = value;
 				_sited = true;
 			}
@@ -47,7 +48,7 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			if (disposing)
 			{
-				base.Dispose( disposing );
+				base.Dispose(disposing);
 
 				_disposed = true;
 			}

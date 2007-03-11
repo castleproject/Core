@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
-
 	/// <summary>
 	/// Summary description for ICommon.
 	/// </summary>

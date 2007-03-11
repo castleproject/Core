@@ -21,19 +21,10 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 	/// </summary>
 	public interface ICustomer
 	{
-		String Name
-		{
-			get; set;
-		}
+		String Name { get; set; }
 
-		String Address
-		{
-			get; set;
-		}
+		String Address { get; set; }
 
-		int Age
-		{
-			get; set;
-		}
+		int Age { get; set; }
 	}
 }

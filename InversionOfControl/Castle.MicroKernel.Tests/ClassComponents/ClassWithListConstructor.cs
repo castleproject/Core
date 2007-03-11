@@ -14,7 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
 	using System.Collections;
 
 	public class ClassWithListConstructor

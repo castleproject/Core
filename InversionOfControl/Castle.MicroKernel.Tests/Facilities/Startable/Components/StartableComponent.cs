@@ -14,8 +14,6 @@
 
 namespace Castle.Facilities.Startable.Tests.Components
 {
-	using System;
-
 	using Castle.Core;
 
 	[Transient]

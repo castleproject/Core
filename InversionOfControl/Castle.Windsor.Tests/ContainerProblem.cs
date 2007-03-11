@@ -14,14 +14,11 @@
 
 namespace Castle.Windsor.Tests
 {
-	using System.Collections;
+	using System.Collections.Generic;
+	using Castle.MicroKernel;
+	using NUnit.Framework;
 #if DOTNET2
-    using System.Collections.Generic;
 #endif
-	
-    using Castle.MicroKernel;
-	
-    using NUnit.Framework;
 
 	[TestFixture]
 	public class ContainerProblem
@@ -30,7 +27,7 @@ namespace Castle.Windsor.Tests
 		public void CausesStackOverflow()
 		{
 			IWindsorContainer container = new WindsorContainer();
-			
+
 			container.AddComponent("child", typeof(IChild), typeof(Child));
 			container.AddComponent("parent", typeof(IParent), typeof(Parent));
 
@@ -43,11 +40,11 @@ namespace Castle.Windsor.Tests
 	}
 
 #if DOTNET2
-    public interface IParent : IList<IChild>
+	public interface IParent : IList<IChild>
 #else
     public interface IParent : IList
 #endif
-    {
+	{
 	}
 
 	public interface IChild
@@ -62,11 +59,11 @@ namespace Castle.Windsor.Tests
 	}
 
 #if DOTNET2
-    public class Parent : List<IChild>
+	public class Parent : List<IChild>
 #else
     public class Parent : ArrayList
 #endif
-    {
+	{
 		public Parent(IKernel kernel)
 		{
 		}

@@ -14,11 +14,15 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	public interface IRepository { }
+	public interface IRepository
+	{
+	}
 
 	public class DecoratedRepository : IRepository
 	{
-		public DecoratedRepository() { }
+		public DecoratedRepository()
+		{
+		}
 	}
 
 	public class Repository1 : IRepository

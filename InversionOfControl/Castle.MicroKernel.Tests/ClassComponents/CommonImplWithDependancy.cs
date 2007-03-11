@@ -14,11 +14,10 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
-
 	public class CommonImplWithDependancy : ICommon
 	{
 		public ICustomer Customer;
+
 		public CommonImplWithDependancy(ICustomer customer)
 		{
 			Customer = customer;

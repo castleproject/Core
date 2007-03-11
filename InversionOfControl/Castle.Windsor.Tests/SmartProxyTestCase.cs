@@ -16,9 +16,8 @@ namespace Castle.Windsor.Tests
 {
 	using System.Runtime.Remoting;
 	using Castle.Core.Interceptor;
-	using NUnit.Framework;
-
 	using Castle.Windsor.Tests.Components;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class SmartProxyTestCase
@@ -34,9 +33,9 @@ namespace Castle.Windsor.Tests
 		{
 			_container = new WindsorContainer();
 
-			_container.AddFacility( "1", new MyInterceptorGreedyFacility() );
-			_container.AddFacility( "2", new MyInterceptorGreedyFacility() );
-			_container.AddFacility( "3", new MyInterceptorGreedyFacility() );
+			_container.AddFacility("1", new MyInterceptorGreedyFacility());
+			_container.AddFacility("2", new MyInterceptorGreedyFacility());
+			_container.AddFacility("3", new MyInterceptorGreedyFacility());
 		}
 
 		[TearDown]
@@ -59,28 +58,28 @@ namespace Castle.Windsor.Tests
 		[Test]
 		public void InterfaceProxy()
 		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", 
-				typeof(ICalcService), typeof(CalculatorService)  );
+			_container.AddComponent("interceptor", typeof(ResultModifierInterceptor));
+			_container.AddComponent("key",
+			                        typeof(ICalcService), typeof(CalculatorService));
 
 			ICalcService service = (ICalcService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
 			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
-			Assert.AreEqual( 7, service.Sum(2,2) );
+			Assert.AreEqual(7, service.Sum(2, 2));
 		}
 
 		[Test]
 		public void ConcreteClassProxy()
 		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", typeof(CalculatorService)  );
+			_container.AddComponent("interceptor", typeof(ResultModifierInterceptor));
+			_container.AddComponent("key", typeof(CalculatorService));
 
 			CalculatorService service = (CalculatorService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
 			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
-			Assert.AreEqual( 7, service.Sum(2,2) );
+			Assert.AreEqual(7, service.Sum(2, 2));
 		}
 	}
 }

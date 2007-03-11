@@ -19,8 +19,8 @@ namespace Castle.Windsor.Tests.Components
 	public interface ICamera
 	{
 		int Id { get; }
-		string Name { get; set;}
-		string IPNumber { get; set;}
+		string Name { get; set; }
+		string IPNumber { get; set; }
 	}
 
 	public interface ICameraServiceBase

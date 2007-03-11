@@ -14,15 +14,10 @@
 
 namespace Castle.MicroKernel.Tests
 {
-	using System;
-
-	using NUnit.Framework;
-
 	using Castle.Core;
-
 	using Castle.MicroKernel.SubSystems.Naming;
-
 	using Castle.MicroKernel.Tests.ClassComponents;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class NamingPartsSubSystemTestCase
@@ -31,69 +26,69 @@ namespace Castle.MicroKernel.Tests
 		public void ComponentQuery()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem( SubSystemConstants.NamingKey, new NamingPartsSubSystem() );
+			kernel.AddSubSystem(SubSystemConstants.NamingKey, new NamingPartsSubSystem());
 
-			kernel.AddComponent( "common:key1=true", typeof(ICommon), typeof(CommonImpl1) );
-			kernel.AddComponent( "common:secure=true", typeof(ICommon), typeof(CommonImpl2) );
+			kernel.AddComponent("common:key1=true", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("common:secure=true", typeof(ICommon), typeof(CommonImpl2));
 
 			ICommon common = kernel["common"] as ICommon;
 
-			Assert.IsNotNull( common );
-			Assert.AreEqual( typeof(CommonImpl1), common.GetType() );
+			Assert.IsNotNull(common);
+			Assert.AreEqual(typeof(CommonImpl1), common.GetType());
 
 			common = kernel["common:key1=true"] as ICommon;
 
-			Assert.IsNotNull( common );
-			Assert.AreEqual( typeof(CommonImpl1), common.GetType() );
+			Assert.IsNotNull(common);
+			Assert.AreEqual(typeof(CommonImpl1), common.GetType());
 
 			common = kernel["common:secure=true"] as ICommon;
 
-			Assert.IsNotNull( common );
-			Assert.AreEqual( typeof(CommonImpl2), common.GetType() );
+			Assert.IsNotNull(common);
+			Assert.AreEqual(typeof(CommonImpl2), common.GetType());
 		}
 
 		[Test]
 		public void ComponentGraph()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem( SubSystemConstants.NamingKey, new NamingPartsSubSystem() );
+			kernel.AddSubSystem(SubSystemConstants.NamingKey, new NamingPartsSubSystem());
 
-			kernel.AddComponent( "common:key1=true", typeof(ICommon), typeof(CommonImpl1) );
-			kernel.AddComponent( "common:secure=true", typeof(ICommon), typeof(CommonImpl2) );
+			kernel.AddComponent("common:key1=true", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("common:secure=true", typeof(ICommon), typeof(CommonImpl2));
 
 			GraphNode[] nodes = kernel.GraphNodes;
-			Assert.IsNotNull( nodes );
-			Assert.AreEqual( 2, nodes.Length );
+			Assert.IsNotNull(nodes);
+			Assert.AreEqual(2, nodes.Length);
 		}
 
 		[Test]
 		public void ServiceLookup()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem( SubSystemConstants.NamingKey, new NamingPartsSubSystem() );
+			kernel.AddSubSystem(SubSystemConstants.NamingKey, new NamingPartsSubSystem());
 
-			kernel.AddComponent( "common:key1=true", typeof(ICommon), typeof(CommonImpl1) );
-			kernel.AddComponent( "common:secure=true", typeof(ICommon), typeof(CommonImpl2) );
+			kernel.AddComponent("common:key1=true", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("common:secure=true", typeof(ICommon), typeof(CommonImpl2));
 
-			ICommon common = kernel[ typeof(ICommon) ] as ICommon;
+			ICommon common = kernel[typeof(ICommon)] as ICommon;
 
-			Assert.IsNotNull( common );
-			Assert.AreEqual( typeof(CommonImpl1), common.GetType() );
+			Assert.IsNotNull(common);
+			Assert.AreEqual(typeof(CommonImpl1), common.GetType());
 		}
 
 		[Test]
 		public void GetAssignableHandlers()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem( SubSystemConstants.NamingKey, new NamingPartsSubSystem() );
+			kernel.AddSubSystem(SubSystemConstants.NamingKey, new NamingPartsSubSystem());
 
-			kernel.AddComponent( "common:key1=true", typeof(ICommon), typeof(CommonImpl1) );
-			kernel.AddComponent( "common:secure=true", typeof(ICommon), typeof(CommonImpl2) );
+			kernel.AddComponent("common:key1=true", typeof(ICommon), typeof(CommonImpl1));
+			kernel.AddComponent("common:secure=true", typeof(ICommon), typeof(CommonImpl2));
 
-			IHandler[] handlers = kernel.GetAssignableHandlers( typeof(ICommon) );
+			IHandler[] handlers = kernel.GetAssignableHandlers(typeof(ICommon));
 
-			Assert.IsNotNull( handlers );
-			Assert.AreEqual( 2, handlers.Length );
+			Assert.IsNotNull(handlers);
+			Assert.AreEqual(2, handlers.Length);
 		}
 	}
 }

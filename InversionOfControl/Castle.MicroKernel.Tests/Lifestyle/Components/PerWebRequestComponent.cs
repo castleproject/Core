@@ -22,7 +22,9 @@ namespace Castle.MicroKernel.Tests.Lifestyle.Components
 	[PerWebRequest]
 	public class PerWebRequestComponent : IComponent
 	{
-		public PerWebRequestComponent() {}
+		public PerWebRequestComponent()
+		{
+		}
 
 		#region IComponent Members
 

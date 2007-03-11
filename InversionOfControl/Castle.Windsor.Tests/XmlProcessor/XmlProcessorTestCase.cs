@@ -19,10 +19,8 @@ namespace Castle.Windsor.Tests.XmlProcessor
 	using System.IO;
 	using System.Text.RegularExpressions;
 	using System.Xml;
-	
-	using NUnit.Framework;
-
 	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for Class1.
@@ -30,7 +28,7 @@ namespace Castle.Windsor.Tests.XmlProcessor
 	[TestFixture]
 	public class XmlProcessorTestCase
 	{
-		String dir = ConfigHelper.ResolveConfigPath("XmlProcessor/TestFiles/");
+		private String dir = ConfigHelper.ResolveConfigPath("XmlProcessor/TestFiles/");
 
 		[Test]
 		public void InvalidFiles()
@@ -67,7 +65,7 @@ namespace Castle.Windsor.Tests.XmlProcessor
 			{
 				// Debug.WriteLine("Running " + fileName.Substring( fileName.LastIndexOf("/") + 1 ));
 
-				if(fileName.EndsWith("PropertiesWithAttributesTest.xml"))
+				if (fileName.EndsWith("PropertiesWithAttributesTest.xml"))
 				{
 					continue;
 				}

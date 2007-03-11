@@ -14,11 +14,8 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
-
 	using NUnit.Framework;
 
-	
 	public class HiperFacility : IFacility
 	{
 		public bool Initialized = false;

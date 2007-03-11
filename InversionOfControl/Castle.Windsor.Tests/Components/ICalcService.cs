@@ -14,8 +14,6 @@
 
 namespace Castle.Windsor.Tests.Components
 {
-	using System;
-
 	/// <summary>
 	/// Summary description for ICalcService.
 	/// </summary>
@@ -23,14 +21,8 @@ namespace Castle.Windsor.Tests.Components
 	{
 		int Sum(int x, int y);
 
-		bool Initialized
-		{
-			get;
-		}
+		bool Initialized { get; }
 
-		bool Disposed
-		{
-			get;
-		}
+		bool Disposed { get; }
 	}
 }

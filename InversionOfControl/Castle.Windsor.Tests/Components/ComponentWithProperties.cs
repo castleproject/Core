@@ -33,7 +33,7 @@ namespace Castle.Windsor.Tests.Components
 			set { prop2 = value; }
 		}
 	}
-	
+
 	public class ExtendedComponentWithProperties : ComponentWithProperties
 	{
 		private int prop3;

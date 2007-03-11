@@ -16,10 +16,8 @@ namespace Castle.MicroKernel.Tests
 {
 	using System;
 	using System.Collections;
-	using NUnit.Framework;
-
 	using Castle.MicroKernel.Tests.ClassComponents;
-
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class MicroKernelTestCase
@@ -56,14 +54,14 @@ namespace Castle.MicroKernel.Tests
 		public void AddClassComponentWithInterface()
 		{
 			kernel.AddComponent("key", typeof(CustomerImpl));
-			Assert.IsTrue( kernel.HasComponent("key") );
+			Assert.IsTrue(kernel.HasComponent("key"));
 		}
 
 		[Test]
 		public void AddClassComponentWithNoInterface()
 		{
 			kernel.AddComponent("key", typeof(DefaultCustomer));
-			Assert.IsTrue( kernel.HasComponent("key") );
+			Assert.IsTrue(kernel.HasComponent("key"));
 		}
 
 		[Test]
@@ -72,13 +70,13 @@ namespace Castle.MicroKernel.Tests
 			CustomerImpl customer = new CustomerImpl();
 
 			kernel.AddComponentInstance("key", typeof(ICustomer), customer);
-			Assert.IsTrue( kernel.HasComponent("key") );
+			Assert.IsTrue(kernel.HasComponent("key"));
 
 			CustomerImpl customer2 = kernel["key"] as CustomerImpl;
-			Assert.AreSame( customer, customer2 );
+			Assert.AreSame(customer, customer2);
 
-			customer2 = kernel[ typeof(ICustomer) ] as CustomerImpl;
-			Assert.AreSame( customer, customer2 );
+			customer2 = kernel[typeof(ICustomer)] as CustomerImpl;
+			Assert.AreSame(customer, customer2);
 		}
 
 		[Test]
@@ -87,20 +85,20 @@ namespace Castle.MicroKernel.Tests
 			CustomerImpl customer = new CustomerImpl();
 
 			kernel.AddComponentInstance("key", customer);
-			Assert.IsTrue( kernel.HasComponent("key") );
+			Assert.IsTrue(kernel.HasComponent("key"));
 
 			CustomerImpl customer2 = kernel["key"] as CustomerImpl;
-			Assert.AreSame( customer, customer2 );
+			Assert.AreSame(customer, customer2);
 
-			customer2 = kernel[ typeof(CustomerImpl) ] as CustomerImpl;
-			Assert.AreSame( customer, customer2 );
+			customer2 = kernel[typeof(CustomerImpl)] as CustomerImpl;
+			Assert.AreSame(customer, customer2);
 		}
 
 		[Test]
 		public void AddCommonComponent()
 		{
 			kernel.AddComponent("key", typeof(ICustomer), typeof(CustomerImpl));
-			Assert.IsTrue( kernel.HasComponent("key") );
+			Assert.IsTrue(kernel.HasComponent("key"));
 		}
 
 		[Test]
@@ -140,20 +138,20 @@ namespace Castle.MicroKernel.Tests
 		public void UnregisteredComponentByService()
 		{
 			kernel.AddComponent("key1", typeof(CustomerImpl));
-			object component = kernel[ typeof(IDisposable) ];
+			object component = kernel[typeof(IDisposable)];
 		}
 
 		[Test]
 		public void AddClassThatHasTwoParametersOfSameTypeAndNoOverloads()
 		{
-			kernel.AddComponent("test",typeof(ClassWithTwoParametersWithSameType));
-			kernel.AddComponent("test2",typeof(ICommon),typeof(CommonImpl1));
-			object resolved = kernel.Resolve(typeof (ClassWithTwoParametersWithSameType), new Hashtable());
+			kernel.AddComponent("test", typeof(ClassWithTwoParametersWithSameType));
+			kernel.AddComponent("test2", typeof(ICommon), typeof(CommonImpl1));
+			object resolved = kernel.Resolve(typeof(ClassWithTwoParametersWithSameType), new Hashtable());
 			Assert.IsNotNull(resolved);
 		}
 
-		#if DOTNET2
-		
+#if DOTNET2
+
 		[Test]
 		public void ResolveServices()
 		{
@@ -171,6 +169,6 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(0, services.Length);
 		}
 
-		#endif
+#endif
 	}
 }

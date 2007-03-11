@@ -23,13 +23,13 @@ namespace Castle.Windsor.Tests.Configuration2
 	[TestFixture]
 	public class EvalSupportTestCase
 	{
-		string dir = ConfigHelper.ResolveConfigPath("Configuration2/");
+		private string dir = ConfigHelper.ResolveConfigPath("Configuration2/");
 
 		[Test]
 		public void AssertBaseDirectoryIsCorrectlyEvaluated()
 		{
 			string file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
-				"eval_config.xml");
+			                                                                  "eval_config.xml");
 
 			WindsorContainer container = new WindsorContainer(new XmlInterpreter(file), new CustomEnv(true));
 

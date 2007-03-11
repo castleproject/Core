@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if DOTNET2 && !MONO
 
 namespace Castle.Windsor.Tests
 {
 	using System;
 	using System.IO;
-	using Castle.Windsor.Tests.Components;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.MicroKernel.Resolvers;
 	using Castle.Core.Interceptor;
+	using Castle.MicroKernel.Resolvers;
+	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Tests.Components;
 	using NUnit.Framework;
 
 	[TestFixture]

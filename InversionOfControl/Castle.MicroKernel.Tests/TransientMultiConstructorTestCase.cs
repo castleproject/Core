@@ -98,7 +98,6 @@ namespace Castle.MicroKernel.Tests
 		{
 			this.foo = foo;
 		}
-
 	}
 
 	[Transient]

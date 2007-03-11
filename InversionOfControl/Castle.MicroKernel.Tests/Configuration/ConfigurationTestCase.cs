@@ -14,11 +14,11 @@
 
 namespace Castle.MicroKernel.Tests.Configuration
 {
-	using NUnit.Framework;
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Resolvers;
-	using Castle.MicroKernel.Tests.Configuration.Components;
 	using Castle.MicroKernel.Tests.ClassComponents;
+	using Castle.MicroKernel.Tests.Configuration.Components;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class ConfigurationTestCase

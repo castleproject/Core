@@ -14,15 +14,11 @@
 
 namespace Castle.Windsor.Tests
 {
-	using System;
-
+	using Castle.Core.Configuration;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.SubSystems.Configuration;
-	using Castle.Core.Configuration;
 	using Castle.Windsor.Tests.Components;
-
 	using NUnit.Framework;
-
 
 	[TestFixture]
 	public class AsyncInitializationContainerTestCase
@@ -39,7 +35,7 @@ namespace Castle.Windsor.Tests
 			configurationStore.AddFacilityConfiguration("slow", facNode);
 
 			MutableConfiguration compNode = new MutableConfiguration("component");
-			
+
 			compNode.Attributes["id"] = "a";
 			compNode.Attributes["type"] = "Castle.Windsor.Tests.Components.CalculatorService, Castle.Windsor.Tests";
 
@@ -50,11 +46,11 @@ namespace Castle.Windsor.Tests
 			Assert.AreEqual(1, container.Kernel.GraphNodes.Length);
 			Assert.AreEqual(1, container.Kernel.GraphNodes.Length);
 
-			CalculatorService service = (CalculatorService) 
-				container[typeof(CalculatorService)];
+			CalculatorService service = (CalculatorService)
+			                            container[typeof(CalculatorService)];
 			Assert.IsNotNull(service);
-			service = (CalculatorService) 
-				container[typeof(CalculatorService)];
+			service = (CalculatorService)
+			          container[typeof(CalculatorService)];
 		}
 
 		[Test]

@@ -15,14 +15,13 @@
 namespace Castle.Windsor.Tests.Components
 {
 	using System;
-
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 
 	/// <summary>
 	/// Summary description for CalculatorServiceWithAttributes.
 	/// </summary>
-	[Interceptor( typeof(StandardInterceptor) )]
+	[Interceptor(typeof(StandardInterceptor))]
 	public class CalculatorServiceWithMultipleInterfaces : CalculatorService, IDisposable
 	{
 		public CalculatorServiceWithMultipleInterfaces()
@@ -31,7 +30,6 @@ namespace Castle.Windsor.Tests.Components
 
 		public void Dispose()
 		{
-			
 		}
 	}
 
@@ -48,7 +46,6 @@ namespace Castle.Windsor.Tests.Components
 
 		public void Dispose()
 		{
-
 		}
 	}
 
@@ -65,7 +62,6 @@ namespace Castle.Windsor.Tests.Components
 
 		public void Dispose()
 		{
-
 		}
 	}
 }

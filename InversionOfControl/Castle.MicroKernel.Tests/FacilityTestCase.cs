@@ -14,12 +14,9 @@
 
 namespace Castle.MicroKernel.Tests
 {
-	using System;
-
-	using NUnit.Framework;
-
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.Tests.ClassComponents;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class FacilityTestCase
@@ -36,10 +33,10 @@ namespace Castle.MicroKernel.Tests
 		public void Init()
 		{
 			_kernel = new DefaultKernel();
-			
+
 			IConfiguration confignode = new MutableConfiguration("facility");
-			IConfiguration facilityConf = confignode.Children.Add( new MutableConfiguration(FacilityKey) );
-			_kernel.ConfigurationStore.AddFacilityConfiguration( FacilityKey, confignode );
+			IConfiguration facilityConf = confignode.Children.Add(new MutableConfiguration(FacilityKey));
+			_kernel.ConfigurationStore.AddFacilityConfiguration(FacilityKey, confignode);
 
 			_facility = new HiperFacility();
 

@@ -16,29 +16,24 @@ namespace Castle.Windsor.Tests.Configuration2
 {
 	using System;
 	using System.IO;
-	using Castle.Windsor.Tests;
-	using NUnit.Framework;
-
-	using Castle.Core.Resource;
 	using Castle.Core.Configuration;
-
+	using Castle.Core.Resource;
 	using Castle.MicroKernel;
-	
 	using Castle.Windsor.Configuration.Interpreters;
-	
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class IncludesTestCase
 	{
-		String dir = ConfigHelper.ResolveConfigPath("Configuration2/");
+		private String dir = ConfigHelper.ResolveConfigPath("Configuration2/");
 
 		private IWindsorContainer container;
 
 		[Test]
 		public void FileResourceAndIncludes()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_include.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_include.xml");
 
 			container = new WindsorContainer(file);
 
@@ -48,8 +43,8 @@ namespace Castle.Windsor.Tests.Configuration2
 		[Test]
 		public void FileResourceAndRelativeIncludes()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_include_relative.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_include_relative.xml");
 
 			container = new WindsorContainer(file);
 
@@ -59,8 +54,8 @@ namespace Castle.Windsor.Tests.Configuration2
 		[Test]
 		public void FileResourceAndRelativeIncludes2()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_include_relative2.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_include_relative2.xml");
 
 			container = new WindsorContainer(file);
 
@@ -70,7 +65,8 @@ namespace Castle.Windsor.Tests.Configuration2
 		[Test]
 		public void AssemblyResourceAndIncludes()
 		{
-			IResource resource = new AssemblyResource("assembly://Castle.Windsor.Tests/Configuration2/resource_config_with_include.xml");
+			IResource resource =
+				new AssemblyResource("assembly://Castle.Windsor.Tests/Configuration2/resource_config_with_include.xml");
 
 			container = new WindsorContainer(new XmlInterpreter(resource));
 

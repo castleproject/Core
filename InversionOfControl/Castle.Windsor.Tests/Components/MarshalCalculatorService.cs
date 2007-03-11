@@ -16,7 +16,6 @@ namespace Castle.Windsor.Tests.Components
 {
 	using System;
 
-
 	public class MarshalCalculatorService : MarshalByRefObject, ICalcService
 	{
 		public MarshalCalculatorService()

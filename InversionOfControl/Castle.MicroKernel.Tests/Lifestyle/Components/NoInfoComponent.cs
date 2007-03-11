@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.Lifestyle.Components
 {
-	using System;
-
 	/// <summary>
 	/// Component without lifestyle information
 	/// </summary>

@@ -17,14 +17,10 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 	using System;
 	using System.ComponentModel;
 	using System.ComponentModel.Design;
-
-	using NUnit.Framework;
-
 	using Castle.MicroKernel;
 	using Castle.Windsor.Adapters.ComponentModel;
-
 	using Castle.Windsor.Tests.Components;
-    using System.Collections;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class ContainerAdapterTestCase
@@ -50,39 +46,39 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		[Test]
 		public void GetIntrinsicServices()
 		{
-			Assert.IsNotNull( container.GetService( typeof(IContainer) ) );
-			Assert.IsNotNull( container.GetService( typeof(IServiceContainer) ) );
-			Assert.IsNotNull( container.GetService( typeof(IWindsorContainer) ) );
-			Assert.IsNotNull( container.GetService( typeof(IKernel) ) );
+			Assert.IsNotNull(container.GetService(typeof(IContainer)));
+			Assert.IsNotNull(container.GetService(typeof(IServiceContainer)));
+			Assert.IsNotNull(container.GetService(typeof(IWindsorContainer)));
+			Assert.IsNotNull(container.GetService(typeof(IKernel)));
 		}
 
 		[Test]
-		[ExpectedException( typeof(ArgumentException),
-			 "A service for type 'Castle.Windsor.IWindsorContainer' already exists")]
+		[ExpectedException(typeof(ArgumentException),
+			"A service for type 'Castle.Windsor.IWindsorContainer' already exists")]
 		public void AddIntrinsicService()
 		{
-			container.AddService( typeof(IWindsorContainer), new WindsorContainer() );
+			container.AddService(typeof(IWindsorContainer), new WindsorContainer());
 		}
 
 		[Test]
-		[ExpectedException( typeof(ArgumentException),  "Cannot remove an instrinsic service")]
+		[ExpectedException(typeof(ArgumentException), "Cannot remove an instrinsic service")]
 		public void RemoveInstrinsicService()
 		{
-			container.RemoveService( typeof(IWindsorContainer) );
+			container.RemoveService(typeof(IWindsorContainer));
 		}
 
 		[Test]
 		public void GetExistingServiceFromKernel()
 		{
 			WindsorContainer windsor = new WindsorContainer();
-			
-			windsor.AddComponent( "calculator", typeof(ICalcService), typeof(CalculatorService) );
 
-			IContainerAdapter adapter = new ContainerAdapter( windsor );
+			windsor.AddComponent("calculator", typeof(ICalcService), typeof(CalculatorService));
 
-			ICalcService service = (ICalcService) adapter.GetService( typeof(ICalcService) );
+			IContainerAdapter adapter = new ContainerAdapter(windsor);
 
-			Assert.IsNotNull( service );
+			ICalcService service = (ICalcService) adapter.GetService(typeof(ICalcService));
+
+			Assert.IsNotNull(service);
 		}
 
 		[Test]
@@ -90,16 +86,16 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			IComponent component = new Component();
 
-			container.Add( component );
+			container.Add(component);
 			ISite site = component.Site;
-			Assert.IsNotNull( site );
-			Assert.AreSame( container, site.Container );
-			Assert.AreEqual( 1, container.Components.Count );
-			Assert.IsNotNull( site.GetService( typeof(IHandler) ) );
+			Assert.IsNotNull(site);
+			Assert.AreSame(container, site.Container);
+			Assert.AreEqual(1, container.Components.Count);
+			Assert.IsNotNull(site.GetService(typeof(IHandler)));
 
 			IComponent component2 = container.Components[0];
-			Assert.AreSame( component, component2 );
-			Assert.AreSame( container, component2.Site.Container );
+			Assert.AreSame(component, component2);
+			Assert.AreSame(container, component2.Site.Container);
 		}
 
 		[Test]
@@ -107,28 +103,28 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			IComponent component = new Component();
 
-			container.Add( component, "myComponent" );
+			container.Add(component, "myComponent");
 			ISite site = component.Site;
-			Assert.IsNotNull( site );
-			Assert.AreSame( container, site.Container );
-			Assert.AreEqual( 1, container.Components.Count );
-			Assert.IsNotNull( container.Components["myComponent"] );
-			Assert.IsTrue( container.Container.Kernel.HasComponent( "myComponent" ) );
-			Assert.IsNotNull( site.GetService( typeof(IHandler) ) );
+			Assert.IsNotNull(site);
+			Assert.AreSame(container, site.Container);
+			Assert.AreEqual(1, container.Components.Count);
+			Assert.IsNotNull(container.Components["myComponent"]);
+			Assert.IsTrue(container.Container.Kernel.HasComponent("myComponent"));
+			Assert.IsNotNull(site.GetService(typeof(IHandler)));
 
 			IComponent component2 = container.Components["myComponent"];
-			Assert.AreSame( component2, component );
-			Assert.AreSame( component2, container.Container["myComponent"] );
-			Assert.AreSame( container, component2.Site.Container );
+			Assert.AreSame(component2, component);
+			Assert.AreSame(component2, container.Container["myComponent"]);
+			Assert.AreSame(container, component2.Site.Container);
 		}
 
 		[Test]
-		[ExpectedException( typeof(ArgumentException),
-			 "There is a component already registered for the given key myComponent" )]
+		[ExpectedException(typeof(ArgumentException),
+			"There is a component already registered for the given key myComponent")]
 		public void AddDuplicateComponent()
 		{
-			container.Add( new Component(), "myComponent" );
-			container.Add( new Component(), "myComponent" );
+			container.Add(new Component(), "myComponent");
+			container.Add(new Component(), "myComponent");
 		}
 
 		[Test]
@@ -136,14 +132,14 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			IComponent component = new Component();
 
-			container.Add( component );
+			container.Add(component);
 			IContainerAdapterSite site = component.Site as IContainerAdapterSite;
-			Assert.IsNotNull( site );
+			Assert.IsNotNull(site);
 
-			container.Remove( component );
-			Assert.IsNull( component.Site );
-			Assert.AreEqual( 0, container.Components.Count );
-			Assert.IsFalse( container.Container.Kernel.HasComponent( site.EffectiveName ) );
+			container.Remove(component);
+			Assert.IsNull(component.Site);
+			Assert.AreEqual(0, container.Components.Count);
+			Assert.IsFalse(container.Container.Kernel.HasComponent(site.EffectiveName));
 		}
 
 		[Test]
@@ -151,14 +147,14 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			IComponent component = new Component();
 
-			container.Add( component, "myComponent" );
+			container.Add(component, "myComponent");
 			ISite site = component.Site as ISite;
-			Assert.IsNotNull( site );
+			Assert.IsNotNull(site);
 
-			container.Remove( component );
-			Assert.IsNull( component.Site );
-			Assert.AreEqual( 0, container.Components.Count );
-			Assert.IsFalse( container.Container.Kernel.HasComponent( "myComponent" ) );
+			container.Remove(component);
+			Assert.IsNull(component.Site);
+			Assert.AreEqual(0, container.Components.Count);
+			Assert.IsFalse(container.Container.Kernel.HasComponent("myComponent"));
 		}
 
 		[Test]
@@ -166,11 +162,11 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			IComponent component = new Component();
 
-			container.Add( component, "myComponent" );
+			container.Add(component, "myComponent");
 			IContainerAdapterSite site = component.Site as IContainerAdapterSite;
 
-			container.Container.Kernel.RemoveComponent( site.EffectiveName );
-			Assert.AreEqual( 0, container.Components.Count );
+			container.Container.Kernel.RemoveComponent(site.EffectiveName);
+			Assert.AreEqual(0, container.Components.Count);
 		}
 
 		[Test]
@@ -178,7 +174,7 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			IComponent component = new Component();
 
-			container.Add( component );
+			container.Add(component);
 
 			IHandler[] handlers = container.Container.Kernel.GetHandlers(typeof(IComponent));
 			Assert.AreEqual(1, handlers.Length);
@@ -189,38 +185,38 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		public void AddServiceInstance()
 		{
 			ICalcService service = new CalculatorService();
-			
-			container.AddService( typeof(ICalcService), service );
 
-			Assert.AreSame( container.GetService( typeof(ICalcService) ), service );
-			Assert.AreSame( container.Container[typeof(ICalcService)], service );
+			container.AddService(typeof(ICalcService), service);
+
+			Assert.AreSame(container.GetService(typeof(ICalcService)), service);
+			Assert.AreSame(container.Container[typeof(ICalcService)], service);
 		}
 
 		[Test]
 		public void AddPromotedServiceInstance()
 		{
 			ContainerAdapter child = new ContainerAdapter();
-			container.Add( child );
+			container.Add(child);
 
 			ICalcService service = new CalculatorService();
-			
-			child.AddService( typeof(ICalcService), service, true );
 
-			Assert.AreSame( child.GetService( typeof(ICalcService) ), service );
-			Assert.AreSame( container.GetService( typeof(ICalcService) ), service );
+			child.AddService(typeof(ICalcService), service, true);
 
-			container.Remove( child );
-			Assert.IsNull( child.GetService( typeof(ICalcService) ) );
-			Assert.AreSame( container.GetService( typeof(ICalcService) ), service );
+			Assert.AreSame(child.GetService(typeof(ICalcService)), service);
+			Assert.AreSame(container.GetService(typeof(ICalcService)), service);
+
+			container.Remove(child);
+			Assert.IsNull(child.GetService(typeof(ICalcService)));
+			Assert.AreSame(container.GetService(typeof(ICalcService)), service);
 		}
 
 		[Test]
-		[ExpectedException( typeof(ArgumentException),
-			 "A service for type 'Castle.Windsor.Tests.Components.ICalcService' already exists")]
+		[ExpectedException(typeof(ArgumentException),
+			"A service for type 'Castle.Windsor.Tests.Components.ICalcService' already exists")]
 		public void AddExistingServiceInstance()
 		{
-			container.AddService( typeof(ICalcService), new CalculatorService() );
-			container.AddService( typeof(ICalcService), new CalculatorService() );
+			container.AddService(typeof(ICalcService), new CalculatorService());
+			container.AddService(typeof(ICalcService), new CalculatorService());
 		}
 
 		[Test]
@@ -228,89 +224,89 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		{
 			ServiceCreatorCallback callback = new ServiceCreatorCallback(CreateCalculatorService);
 
-			container.AddService( typeof(ICalcService), callback );
+			container.AddService(typeof(ICalcService), callback);
 
-			ICalcService service = (ICalcService) container.GetService( typeof(ICalcService) );
+			ICalcService service = (ICalcService) container.GetService(typeof(ICalcService));
 
-			Assert.IsNotNull( service );
-			Assert.AreSame( service, container.Container[typeof(ICalcService)] );
+			Assert.IsNotNull(service);
+			Assert.AreSame(service, container.Container[typeof(ICalcService)]);
 
-			service = (ICalcService) container.GetService( typeof(ICalcService) );
-			Assert.AreEqual( 1, calledCount );
+			service = (ICalcService) container.GetService(typeof(ICalcService));
+			Assert.AreEqual(1, calledCount);
 		}
 
 		[Test]
 		public void AddPromotedServiceCreatorCallback()
 		{
 			ContainerAdapter child = new ContainerAdapter();
-			container.Add( child );
+			container.Add(child);
 
 			ServiceCreatorCallback callback = new ServiceCreatorCallback(CreateCalculatorService);
 
-			child.AddService( typeof(ICalcService), callback, true );
+			child.AddService(typeof(ICalcService), callback, true);
 
-			ICalcService service = (ICalcService) child.GetService( typeof(ICalcService) );
-			Assert.IsNotNull( service );
+			ICalcService service = (ICalcService) child.GetService(typeof(ICalcService));
+			Assert.IsNotNull(service);
 
-			ICalcService promotedService = (ICalcService) container.GetService( typeof(ICalcService) );
-			Assert.IsNotNull( service );
+			ICalcService promotedService = (ICalcService) container.GetService(typeof(ICalcService));
+			Assert.IsNotNull(service);
 
-			Assert.AreSame( service, promotedService );
+			Assert.AreSame(service, promotedService);
 
-			container.Remove( child );
-			Assert.IsNull( child.GetService( typeof(ICalcService) ) );
-			Assert.AreSame( container.GetService( typeof(ICalcService) ), service );
+			container.Remove(child);
+			Assert.IsNull(child.GetService(typeof(ICalcService)));
+			Assert.AreSame(container.GetService(typeof(ICalcService)), service);
 		}
 
 		[Test]
 		public void RemoveServiceInstance()
 		{
 			ICalcService service = new CalculatorService();
-			
-			container.AddService( typeof(ICalcService), service );
-			container.RemoveService( typeof(ICalcService ) );
-			Assert.IsNull( container.GetService( typeof(ICalcService) ) );
-			Assert.IsFalse( container.Container.Kernel.HasComponent( typeof(ICalcService) ));
+
+			container.AddService(typeof(ICalcService), service);
+			container.RemoveService(typeof(ICalcService));
+			Assert.IsNull(container.GetService(typeof(ICalcService)));
+			Assert.IsFalse(container.Container.Kernel.HasComponent(typeof(ICalcService)));
 		}
 
 		[Test]
 		public void RemovePromotedServiceInstance()
 		{
 			ContainerAdapter child = new ContainerAdapter();
-			container.Add( child );
+			container.Add(child);
 
 			ICalcService service = new CalculatorService();
-			
-			child.AddService( typeof(ICalcService), service, true );
-			Assert.IsNotNull( child.GetService( typeof(ICalcService) ) );
 
-			child.RemoveService( typeof(ICalcService), true );
-			Assert.IsNull( child.GetService( typeof(ICalcService) ) );
-			Assert.IsNull( container.GetService( typeof(ICalcService) ) );
+			child.AddService(typeof(ICalcService), service, true);
+			Assert.IsNotNull(child.GetService(typeof(ICalcService)));
+
+			child.RemoveService(typeof(ICalcService), true);
+			Assert.IsNull(child.GetService(typeof(ICalcService)));
+			Assert.IsNull(container.GetService(typeof(ICalcService)));
 		}
 
 		public void ChainContainers()
 		{
 			ICalcService service = new CalculatorService();
-			container.AddService( typeof(ICalcService), service );
+			container.AddService(typeof(ICalcService), service);
 
-			IContainerAdapter adapter = new ContainerAdapter( container );
+			IContainerAdapter adapter = new ContainerAdapter(container);
 
-			Assert.AreSame( service, container.GetService( typeof(ICalcService) ) );
+			Assert.AreSame(service, container.GetService(typeof(ICalcService)));
 		}
 
 		[Test]
 		public void ComponentLifecyle()
 		{
 			TestComponent component = new TestComponent();
-			Assert.IsFalse( component.IsSited );
-			Assert.IsFalse( component.IsDisposed );
+			Assert.IsFalse(component.IsSited);
+			Assert.IsFalse(component.IsDisposed);
 
-			container.Add( component );
-			Assert.IsTrue( component.IsSited );
+			container.Add(component);
+			Assert.IsTrue(component.IsSited);
 
 			container.Dispose();
-			Assert.IsTrue( component.IsDisposed );
+			Assert.IsTrue(component.IsDisposed);
 		}
 
 		[Test]

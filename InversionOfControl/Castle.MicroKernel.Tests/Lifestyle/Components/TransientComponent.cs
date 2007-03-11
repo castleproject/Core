@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.Lifestyle.Components
 {
-	using System;
-
 	using Castle.Core;
 
 	/// <summary>
@@ -32,10 +30,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle.Components
 
 		public int ID
 		{
-			get
-			{
-				return this.GetHashCode();
-			}
+			get { return GetHashCode(); }
 		}
 
 		#endregion

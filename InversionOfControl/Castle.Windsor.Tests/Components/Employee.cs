@@ -61,9 +61,8 @@ namespace Castle.Windsor.Tests.Components
 //					}
 
 					return _ntLogin;
-
 				}
-				catch (Exception)
+				catch(Exception)
 				{
 //					Logger.Error("NTLogin check failed.", e);
 //					Logger.SendMail("ERROR", "NTLogin check failed.", e);

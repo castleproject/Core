@@ -19,7 +19,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle.Components
 	/// <summary>
 	/// Summary description for CustomComponent.
 	/// </summary>
-	[CustomLifestyle( typeof(MyLifestyleHandler) )]
+	[CustomLifestyle(typeof(MyLifestyleHandler))]
 	public class CustomComponent : IComponent
 	{
 		public CustomComponent()
@@ -30,10 +30,7 @@ namespace Castle.MicroKernel.Tests.Lifestyle.Components
 
 		public int ID
 		{
-			get
-			{
-				return this.GetHashCode();
-			}
+			get { return GetHashCode(); }
 		}
 
 		#endregion

@@ -16,12 +16,13 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 {
 	using System;
 
-
 	public class CustomerImpl2 : CustomerImpl
 	{
 		public CustomerImpl2(String name, String address, int age)
 		{
-			this.Name = name; this.Address = address; this.Age = age;
+			Name = name;
+			Address = address;
+			Age = age;
 		}
 	}
 }

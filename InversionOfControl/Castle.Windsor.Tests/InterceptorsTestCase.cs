@@ -16,13 +16,11 @@ namespace Castle.Windsor.Tests
 {
 	using System;
 	using System.Threading;
-
-	using NUnit.Framework;
-
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel;
 	using Castle.Windsor.Tests.Components;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for InterceptorsTestCase.
@@ -31,8 +29,8 @@ namespace Castle.Windsor.Tests
 	public class InterceptorsTestCase
 	{
 		private IWindsorContainer _container;
-		private ManualResetEvent  _startEvent = new ManualResetEvent(false);
-		private ManualResetEvent  _stopEvent = new ManualResetEvent(false);
+		private ManualResetEvent _startEvent = new ManualResetEvent(false);
+		private ManualResetEvent _stopEvent = new ManualResetEvent(false);
 		private CalculatorService _service;
 
 		[SetUp]
@@ -40,9 +38,9 @@ namespace Castle.Windsor.Tests
 		{
 			_container = new WindsorContainer();
 
-			_container.AddFacility( "1", new MyInterceptorGreedyFacility() );
-			_container.AddFacility( "2", new MyInterceptorGreedyFacility() );
-			_container.AddFacility( "3", new MyInterceptorGreedyFacility() );
+			_container.AddFacility("1", new MyInterceptorGreedyFacility());
+			_container.AddFacility("2", new MyInterceptorGreedyFacility());
+			_container.AddFacility("3", new MyInterceptorGreedyFacility());
 		}
 
 		[TearDown]
@@ -54,63 +52,63 @@ namespace Castle.Windsor.Tests
 		[Test]
 		public void InterfaceProxy()
 		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", 
-				typeof(ICalcService), typeof(CalculatorService)  );
+			_container.AddComponent("interceptor", typeof(ResultModifierInterceptor));
+			_container.AddComponent("key",
+			                        typeof(ICalcService), typeof(CalculatorService));
 
 			ICalcService service = (ICalcService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.AreEqual( 7, service.Sum(2,2) );
+			Assert.AreEqual(7, service.Sum(2, 2));
 		}
 
 		[Test]
 		public void InterfaceProxyWithLifecycle()
 		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", 
-				typeof(ICalcService), typeof(CalculatorServiceWithLifecycle)  );
+			_container.AddComponent("interceptor", typeof(ResultModifierInterceptor));
+			_container.AddComponent("key",
+			                        typeof(ICalcService), typeof(CalculatorServiceWithLifecycle));
 
 			ICalcService service = (ICalcService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.IsTrue( service.Initialized );
-			Assert.AreEqual( 7, service.Sum(2,2) );
+			Assert.IsTrue(service.Initialized);
+			Assert.AreEqual(7, service.Sum(2, 2));
 
-			Assert.IsFalse( service.Disposed );
+			Assert.IsFalse(service.Disposed);
 
-			_container.Release( service );
+			_container.Release(service);
 
-			Assert.IsTrue( service.Disposed );
+			Assert.IsTrue(service.Disposed);
 		}
 
 		[Test]
 		public void ClassProxy()
 		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", typeof(CalculatorService)  );
+			_container.AddComponent("interceptor", typeof(ResultModifierInterceptor));
+			_container.AddComponent("key", typeof(CalculatorService));
 
 			CalculatorService service = (CalculatorService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.AreEqual( 7, service.Sum(2,2) );
+			Assert.AreEqual(7, service.Sum(2, 2));
 		}
 
 		[Test]
 		public void OnBehalfOfTest()
 		{
-			_container.AddComponent( "interceptor", typeof(InterceptorWithOnBehalf) );
-			_container.AddComponent( "key", typeof(CalculatorService)  );
+			_container.AddComponent("interceptor", typeof(InterceptorWithOnBehalf));
+			_container.AddComponent("key", typeof(CalculatorService));
 
-			CalculatorService service = 
+			CalculatorService service =
 				(CalculatorService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.AreEqual( 4, service.Sum(2,2) );
-			Assert.IsNotNull( InterceptorWithOnBehalf.Model );
-			Assert.AreEqual( "key", InterceptorWithOnBehalf.Model.Name );
-			Assert.AreEqual( typeof(CalculatorService), 
-				InterceptorWithOnBehalf.Model.Implementation );
+			Assert.AreEqual(4, service.Sum(2, 2));
+			Assert.IsNotNull(InterceptorWithOnBehalf.Model);
+			Assert.AreEqual("key", InterceptorWithOnBehalf.Model.Name);
+			Assert.AreEqual(typeof(CalculatorService),
+			                InterceptorWithOnBehalf.Model.Implementation);
 		}
 
 		[Test]
@@ -118,28 +116,28 @@ namespace Castle.Windsor.Tests
 		{
 			_container = new WindsorContainer(); // So we wont use the facilities
 
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", typeof(CalculatorServiceWithAttributes)  );
+			_container.AddComponent("interceptor", typeof(ResultModifierInterceptor));
+			_container.AddComponent("key", typeof(CalculatorServiceWithAttributes));
 
-			CalculatorServiceWithAttributes service = 
+			CalculatorServiceWithAttributes service =
 				(CalculatorServiceWithAttributes) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.AreEqual( 5, service.Sum(2,2) );
+			Assert.AreEqual(5, service.Sum(2, 2));
 		}
 
 		[Test]
 		public void Multithreaded()
 		{
-			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", typeof(CalculatorService)  );
+			_container.AddComponent("interceptor", typeof(ResultModifierInterceptor));
+			_container.AddComponent("key", typeof(CalculatorService));
 
 			_service = (CalculatorService) _container.Resolve("key");
 
 			const int threadCount = 10;
 
 			Thread[] threads = new Thread[threadCount];
-			
+
 			for(int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal));
@@ -157,11 +155,11 @@ namespace Castle.Windsor.Tests
 		{
 			_startEvent.WaitOne(int.MaxValue, false);
 
-			while (!_stopEvent.WaitOne(1, false))
+			while(!_stopEvent.WaitOne(1, false))
 			{
-				Assert.AreEqual( 7, _service.Sum(2,2) );
-				Assert.AreEqual( 8, _service.Sum(3,2) );
-				Assert.AreEqual( 10, _service.Sum(3,4) );
+				Assert.AreEqual(7, _service.Sum(2, 2));
+				Assert.AreEqual(8, _service.Sum(3, 2));
+				Assert.AreEqual(10, _service.Sum(3, 4));
 			}
 		}
 	}
@@ -185,8 +183,8 @@ namespace Castle.Windsor.Tests
 		{
 			if (key == "key")
 			{
-				handler.ComponentModel.Interceptors.Add( 
-					new InterceptorReference( "interceptor" ) );
+				handler.ComponentModel.Interceptors.Add(
+					new InterceptorReference("interceptor"));
 			}
 		}
 	}
@@ -225,10 +223,10 @@ namespace Castle.Windsor.Tests
 			{
 				invocation.Proceed();
 				object result = invocation.ReturnValue;
-				invocation.ReturnValue = ((int)result) + 1;
+				invocation.ReturnValue = ((int) result) + 1;
 				return;
 			}
-			
+
 			invocation.Proceed();
 		}
 	}

@@ -15,7 +15,6 @@
 namespace Castle.Windsor.Tests.Components
 {
 	using System;
-
 	using Castle.Core;
 
 	[Transient]

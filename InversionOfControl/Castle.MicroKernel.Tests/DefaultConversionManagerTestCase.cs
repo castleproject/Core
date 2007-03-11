@@ -16,17 +16,17 @@ namespace Castle.MicroKernel.Tests
 {
 	using System;
 	using System.Collections;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
-	using NUnit.Framework;
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.SubSystems.Conversion;
+	using NUnit.Framework;
+#if DOTNET2
+#endif
 
 	[TestFixture]
 	public class DefaultConversionManagerTestCase
 	{
-		DefaultConversionManager conversionMng = new DefaultConversionManager();
+		private DefaultConversionManager conversionMng = new DefaultConversionManager();
 
 		[Test]
 		public void PerformConversionInt()
@@ -52,9 +52,9 @@ namespace Castle.MicroKernel.Tests
 		public void PerformConversionType()
 		{
 			Assert.AreEqual(typeof(DefaultConversionManagerTestCase),
-				conversionMng.PerformConversion(
-					"Castle.MicroKernel.Tests.DefaultConversionManagerTestCase, Castle.MicroKernel.Tests",
-					typeof(Type)));
+			                conversionMng.PerformConversion(
+			                	"Castle.MicroKernel.Tests.DefaultConversionManagerTestCase, Castle.MicroKernel.Tests",
+			                	typeof(Type)));
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IList)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(ArrayList)));
 
-			IList list = (IList)conversionMng.PerformConversion(config, typeof(IList));
+			IList list = (IList) conversionMng.PerformConversion(config, typeof(IList));
 			Assert.IsNotNull(list);
 			Assert.AreEqual("first", list[0]);
 			Assert.AreEqual("second", list[1]);
@@ -106,7 +106,7 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(Hashtable)));
 
 			IDictionary dict = (IDictionary)
-				conversionMng.PerformConversion(config, typeof(IDictionary));
+			                   conversionMng.PerformConversion(config, typeof(IDictionary));
 
 			Assert.IsNotNull(dict);
 
@@ -132,7 +132,7 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IList<double>)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(List<string>)));
 
-			IList<long> list = (IList<long>)conversionMng.PerformConversion(config, typeof(IList<long>));
+			IList<long> list = (IList<long>) conversionMng.PerformConversion(config, typeof(IList<long>));
 			Assert.IsNotNull(list);
 			Assert.AreEqual(345L, list[0]);
 			Assert.AreEqual(3147L, list[1]);
@@ -151,13 +151,13 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IList<double>)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(List<string>)));
 
-			IList<long> list = (IList<long>)conversionMng.PerformConversion(config, typeof(IList<long>));
+			IList<long> list = (IList<long>) conversionMng.PerformConversion(config, typeof(IList<long>));
 			Assert.IsNotNull(list);
 			Assert.AreEqual(345L, list[0]);
 			Assert.AreEqual(3147L, list[1]);
 			Assert.AreEqual(997L, list[2]);
 		}
-		
+
 		[Test]
 		public void GenericDictionary()
 		{
@@ -172,7 +172,8 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IDictionary<string, string>)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(Dictionary<string, int>)));
 
-			IDictionary<string, int> dict = (IDictionary<string, int>)conversionMng.PerformConversion(config, typeof(IDictionary<string, int>));
+			IDictionary<string, int> dict =
+				(IDictionary<string, int>) conversionMng.PerformConversion(config, typeof(IDictionary<string, int>));
 
 			Assert.IsNotNull(dict);
 
@@ -181,6 +182,7 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(3, dict["key3"]);
 		}
 #endif
+
 		[Test]
 		public void Array()
 		{
@@ -193,7 +195,7 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(String[])));
 
 			String[] array = (String[])
-				conversionMng.PerformConversion(config, typeof(String[]));
+			                 conversionMng.PerformConversion(config, typeof(String[]));
 
 			Assert.IsNotNull(array);
 
@@ -209,7 +211,8 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(TimeSpan.FromDays(14), conversionMng.PerformConversion("14", typeof(TimeSpan)));
 			Assert.AreEqual(new TimeSpan(0, 1, 2, 3), conversionMng.PerformConversion("1:2:3", typeof(TimeSpan)));
 			Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 250), conversionMng.PerformConversion("0:0:0.250", typeof(TimeSpan)));
-			Assert.AreEqual(new TimeSpan(10, 20, 30, 40, 500), conversionMng.PerformConversion("10.20:30:40.50", typeof(TimeSpan)));
+			Assert.AreEqual(new TimeSpan(10, 20, 30, 40, 500),
+			                conversionMng.PerformConversion("10.20:30:40.50", typeof(TimeSpan)));
 		}
 	}
 }

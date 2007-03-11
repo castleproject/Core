@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if DOTNET2
 
 namespace Castle.MicroKernel.Tests
@@ -19,10 +20,8 @@ namespace Castle.MicroKernel.Tests
 	using System;
 	using System.Collections;
 	using System.Threading;
-
 	using Castle.MicroKernel.SubSystems.Naming;
 	using Castle.MicroKernel.Tests.ClassComponents;
-
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -47,10 +46,9 @@ namespace Castle.MicroKernel.Tests
 		public void ReturnsCorrectType()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate(string key)
-			{
-				return key.StartsWith("castlestronghold.com");
-			}));
+			kernel.AddSubSystem(SubSystemConstants.NamingKey,
+			                    new KeySearchNamingSubSystem(
+			                    	delegate(string key) { return key.StartsWith("castlestronghold.com"); }));
 
 			kernel.AddComponent("castleproject.org.common", typeof(ICommon), typeof(CommonImpl1));
 			kernel.AddComponent("castlestronghold.com.common", typeof(ICommon), typeof(CommonImpl2));
@@ -65,10 +63,8 @@ namespace Castle.MicroKernel.Tests
 		public void ReturnsFirstTypeWhenNotFound()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate(string key)
-			{
-				return key.StartsWith("3");
-			}));
+			kernel.AddSubSystem(SubSystemConstants.NamingKey,
+			                    new KeySearchNamingSubSystem(delegate(string key) { return key.StartsWith("3"); }));
 
 			kernel.AddComponent("1.common", typeof(ICommon), typeof(CommonImpl1));
 			kernel.AddComponent("2.common", typeof(ICommon), typeof(CommonImpl2));
@@ -83,10 +79,8 @@ namespace Castle.MicroKernel.Tests
 		public void ReturnsFirstMatchingType()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate(string key)
-			{
-				return key.StartsWith("1");
-			}));
+			kernel.AddSubSystem(SubSystemConstants.NamingKey,
+			                    new KeySearchNamingSubSystem(delegate(string key) { return key.StartsWith("1"); }));
 
 			kernel.AddComponent("1.common", typeof(ICommon), typeof(CommonImpl1));
 			kernel.AddComponent("11.common", typeof(ICommon), typeof(CommonImpl2));
@@ -101,10 +95,8 @@ namespace Castle.MicroKernel.Tests
 		public void ComponentUnregistersProperly()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate(string key)
-			{
-				return key.StartsWith("2");
-			}));
+			kernel.AddSubSystem(SubSystemConstants.NamingKey,
+			                    new KeySearchNamingSubSystem(delegate(string key) { return key.StartsWith("2"); }));
 
 			kernel.AddComponent("1.common", typeof(ICommon), typeof(CommonImpl1));
 			kernel.AddComponent("2.common", typeof(ICommon), typeof(CommonImpl2));
@@ -126,10 +118,8 @@ namespace Castle.MicroKernel.Tests
 		public void FirstLoadedComponentUnregistersProperly()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate(string key)
-			{
-				return key.StartsWith("1");
-			}));
+			kernel.AddSubSystem(SubSystemConstants.NamingKey,
+			                    new KeySearchNamingSubSystem(delegate(string key) { return key.StartsWith("1"); }));
 
 			kernel.AddComponent("1.common", typeof(ICommon), typeof(CommonImpl1));
 			kernel.AddComponent("2.common", typeof(ICommon), typeof(CommonImpl2));
@@ -152,10 +142,8 @@ namespace Castle.MicroKernel.Tests
 		public void SingleComponentUnregistersProperly()
 		{
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate(string key)
-			{
-				return key.StartsWith("1");
-			}));
+			kernel.AddSubSystem(SubSystemConstants.NamingKey,
+			                    new KeySearchNamingSubSystem(delegate(string key) { return key.StartsWith("1"); }));
 
 			kernel.AddComponent("1.common", typeof(ICommon), typeof(CommonImpl1));
 
@@ -184,35 +172,35 @@ namespace Castle.MicroKernel.Tests
 			kernel.AddComponent("common", typeof(ICommon), typeof(CommonImpl1));
 
 			WaitCallback resolveThread = delegate
-			{
-				waitEvent.WaitOne();
-				while (threadCount > 0 && list.Count == 0)
-				{
-					try
-					{
-						ICommon common = kernel[typeof(ICommon)] as ICommon;
-					}
-					catch (Exception e)
-					{
-						list.Add(e.ToString());
-					}
-				}
-			};
+			                             	{
+			                             		waitEvent.WaitOne();
+			                             		while(threadCount > 0 && list.Count == 0)
+			                             		{
+			                             			try
+			                             			{
+			                             				ICommon common = kernel[typeof(ICommon)] as ICommon;
+			                             			}
+			                             			catch(Exception e)
+			                             			{
+			                             				list.Add(e.ToString());
+			                             			}
+			                             		}
+			                             	};
 			ThreadPool.QueueUserWorkItem(resolveThread);
 
 			WaitCallback addThread = delegate
-			{
-				waitEvent.WaitOne();
-				kernel.AddComponent(rand.Next() + ".common", typeof(ICommon), typeof(CommonImpl1));
-				Interlocked.Decrement(ref threadCount);
-			};
-			for (int i = 0; i < threadCount; i++)
+			                         	{
+			                         		waitEvent.WaitOne();
+			                         		kernel.AddComponent(rand.Next() + ".common", typeof(ICommon), typeof(CommonImpl1));
+			                         		Interlocked.Decrement(ref threadCount);
+			                         	};
+			for(int i = 0; i < threadCount; i++)
 			{
 				ThreadPool.QueueUserWorkItem(addThread);
 			}
 
 			waitEvent.Set();
-			while(threadCount > 0 && list.Count == 0 )
+			while(threadCount > 0 && list.Count == 0)
 			{
 				Thread.Sleep(15);
 			}
@@ -242,51 +230,48 @@ namespace Castle.MicroKernel.Tests
 			ManualResetEvent waitEvent = new ManualResetEvent(false);
 
 			IKernel kernel = new DefaultKernel();
-			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate
-			{
-				return false;
-			}));
+			kernel.AddSubSystem(SubSystemConstants.NamingKey, new KeySearchNamingSubSystem(delegate { return false; }));
 
 			kernel.AddComponent("common", typeof(ICommon), typeof(CommonImpl1));
 
 			WaitCallback resolveThread = delegate
-			{
-				waitEvent.WaitOne();
-				while (threadCount > 0 && list.Count == 0)
-				{
-					try
-					{
-						ICommon common = kernel[typeof(ICommon)] as ICommon;
-					}
-					catch (Exception e)
-					{
-						list.Add(e);
-					}
-				}
-			};
+			                             	{
+			                             		waitEvent.WaitOne();
+			                             		while(threadCount > 0 && list.Count == 0)
+			                             		{
+			                             			try
+			                             			{
+			                             				ICommon common = kernel[typeof(ICommon)] as ICommon;
+			                             			}
+			                             			catch(Exception e)
+			                             			{
+			                             				list.Add(e);
+			                             			}
+			                             		}
+			                             	};
 			ThreadPool.QueueUserWorkItem(resolveThread);
 
 			WaitCallback removeThread = delegate
-			{
-				waitEvent.WaitOne();
-				kernel.RemoveComponent(threadCount + ".common");
-				Interlocked.Decrement(ref threadCount);
-			};
-			for (int i = 0; i < threadCount; i++)
+			                            	{
+			                            		waitEvent.WaitOne();
+			                            		kernel.RemoveComponent(threadCount + ".common");
+			                            		Interlocked.Decrement(ref threadCount);
+			                            	};
+			for(int i = 0; i < threadCount; i++)
 			{
 				kernel.AddComponent(i + ".common", typeof(ICommon), typeof(CommonImpl1));
 				ThreadPool.QueueUserWorkItem(removeThread);
 			}
 
 			waitEvent.Set();
-			while (threadCount > 0 && list.Count == 0)
+			while(threadCount > 0 && list.Count == 0)
 			{
 				Thread.Sleep(15);
 			}
 
 			if (list.Count > 0)
 			{
-				throw (Exception)list[0];
+				throw (Exception) list[0];
 			}
 		}
 	}

@@ -14,17 +14,14 @@
 
 namespace Castle.MicroKernel.Tests.Lifecycle
 {
-	using System;
-
-	using NUnit.Framework;
-
 	using Castle.MicroKernel.Tests.Lifecycle.Components;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for LifecycleTestCase.
 	/// </summary>
 	[TestFixture]
-	public class LifecycleTestCase 
+	public class LifecycleTestCase
 	{
 		private IKernel kernel;
 
@@ -43,22 +40,22 @@ namespace Castle.MicroKernel.Tests.Lifecycle
 		[Test]
 		public void InitializeLifecycle()
 		{
-			kernel.AddComponent( "a", typeof(HttpFakeServer) );
+			kernel.AddComponent("a", typeof(HttpFakeServer));
 			HttpFakeServer server = (HttpFakeServer) kernel["a"];
 
-			Assert.IsTrue( server.IsInitialized );
+			Assert.IsTrue(server.IsInitialized);
 		}
 
 		[Test]
 		public void DisposableLifecycle()
 		{
-			kernel.AddComponent( "a", typeof(HttpFakeServer) );
+			kernel.AddComponent("a", typeof(HttpFakeServer));
 			IHandler handler = kernel.GetHandler("a");
 			HttpFakeServer server = (HttpFakeServer) handler.Resolve(CreationContext.Empty);
 
-			handler.Release( server );
+			handler.Release(server);
 
-			Assert.IsTrue( server.IsDisposed );
+			Assert.IsTrue(server.IsDisposed);
 		}
 	}
 }

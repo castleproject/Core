@@ -14,11 +14,8 @@
 
 namespace Castle.Windsor.Tests.Installer
 {
-	using System;
-	using NUnit.Framework;
-
 	using Castle.Windsor.Tests.Components;
-	using Castle.Windsor.Configuration.Interpreters;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class InstallerTestCase
@@ -28,8 +25,8 @@ namespace Castle.Windsor.Tests.Installer
 		{
 			WindsorContainer container = new WindsorContainer(ConfigHelper.ResolveConfigPath("installerconfig.xml"));
 
-			Assert.IsTrue( container.Kernel.HasComponent( typeof(ICalcService) ) );
-			Assert.IsTrue( container.Kernel.HasComponent( "calcservice" ) );
+			Assert.IsTrue(container.Kernel.HasComponent(typeof(ICalcService)));
+			Assert.IsTrue(container.Kernel.HasComponent("calcservice"));
 		}
 
 		[Test]
@@ -46,6 +43,6 @@ namespace Castle.Windsor.Tests.Installer
 			ICalcService calcservice = container.Resolve("calcservice") as ICalcService;
 			ICalcService child_calcservice = child1.Resolve(typeof(ICalcService)) as ICalcService;
 			Assert.AreNotEqual(calcservice, child_calcservice);
-		}		
+		}
 	}
 }

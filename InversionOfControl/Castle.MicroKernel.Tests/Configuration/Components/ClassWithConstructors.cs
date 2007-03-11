@@ -21,9 +21,9 @@ namespace Castle.MicroKernel.Tests.Configuration.Components
 	/// </summary>
 	public class ClassWithConstructors
 	{
-		String _host;
-		String[] _hosts;
-		
+		private String _host;
+		private String[] _hosts;
+
 		public ClassWithConstructors(String host)
 		{
 			_host = host;

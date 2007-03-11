@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel.Tests.Lifecycle.Components
 {
 	using System;
-
 	using Castle.Core;
 
 	/// <summary>

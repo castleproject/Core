@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
-
 	/// <summary>
 	/// Summary description for CommonServiceUser.
 	/// </summary>
@@ -33,7 +31,7 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 			get { return _common; }
 		}
 	}
-	
+
 	public class CommonServiceUser3
 	{
 		private ICommon _common;
@@ -52,5 +50,4 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 			get { return _common; }
 		}
 	}
-
 }

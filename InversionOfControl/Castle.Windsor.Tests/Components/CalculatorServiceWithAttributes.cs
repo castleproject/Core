@@ -15,13 +15,12 @@
 namespace Castle.Windsor.Tests.Components
 {
 	using System;
-
 	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for CalculatorServiceWithAttributes.
 	/// </summary>
-	[Interceptor( typeof(ResultModifierInterceptor) )]
+	[Interceptor(typeof(ResultModifierInterceptor))]
 	public class CalculatorServiceWithAttributes : MarshalByRefObject
 	{
 		public CalculatorServiceWithAttributes()

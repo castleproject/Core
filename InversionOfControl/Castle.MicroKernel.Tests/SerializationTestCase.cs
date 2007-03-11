@@ -16,15 +16,11 @@ namespace Castle.MicroKernel.Tests
 {
 	using System;
 	using System.IO;
-	using System.Security.Policy;
 	using System.Runtime.Serialization.Formatters.Binary;
-
-	using NUnit.Framework;
-
+	using System.Security.Policy;
 	using Castle.Core;
-
 	using Castle.MicroKernel.Tests.ClassComponents;
-
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class SerializationTestCase
@@ -35,7 +31,7 @@ namespace Castle.MicroKernel.Tests
 		{
 			IKernel kernel = new DefaultKernel();
 			kernel.AddComponent("key", typeof(CustomerImpl));
-			Assert.IsTrue( kernel.HasComponent("key") );
+			Assert.IsTrue(kernel.HasComponent("key"));
 
 			MemoryStream stream = new MemoryStream();
 			BinaryFormatter formatter = new BinaryFormatter();
@@ -45,7 +41,7 @@ namespace Castle.MicroKernel.Tests
 			stream.Position = 0;
 
 			IKernel desKernel = (IKernel) formatter.Deserialize(stream);
-			Assert.IsTrue( desKernel.HasComponent("key") );
+			Assert.IsTrue(desKernel.HasComponent("key"));
 		}
 
 		[Test]
@@ -59,12 +55,12 @@ namespace Castle.MicroKernel.Tests
 
 			try
 			{
-				IKernel kernel = (IKernel) 
-					otherDomain.CreateInstanceAndUnwrap( 
-					"Castle.MicroKernel", "Castle.MicroKernel.DefaultKernel" );
+				IKernel kernel = (IKernel)
+				                 otherDomain.CreateInstanceAndUnwrap(
+				                 	"Castle.MicroKernel", "Castle.MicroKernel.DefaultKernel");
 
 				kernel.AddComponent("key", typeof(CustomerImpl));
-				Assert.IsTrue( kernel.HasComponent("key") );
+				Assert.IsTrue(kernel.HasComponent("key"));
 			}
 			catch(Exception ex)
 			{
@@ -75,7 +71,7 @@ namespace Castle.MicroKernel.Tests
 				AppDomain.Unload(otherDomain);
 			}
 		}
-		
+
 		[Test]
 #if MONO2
 		[Ignore(@"problem running on mono 2.0 profile")]
@@ -89,17 +85,17 @@ namespace Castle.MicroKernel.Tests
 
 			try
 			{
-				IKernel kernel = (IKernel) 
-					otherDomain.CreateInstanceAndUnwrap( 
-					"Castle.MicroKernel", "Castle.MicroKernel.DefaultKernel" );
+				IKernel kernel = (IKernel)
+				                 otherDomain.CreateInstanceAndUnwrap(
+				                 	"Castle.MicroKernel", "Castle.MicroKernel.DefaultKernel");
 
 				kernel.AddComponent("key", typeof(CustomerImpl));
-				Assert.IsTrue( kernel.HasComponent("key") );
+				Assert.IsTrue(kernel.HasComponent("key"));
 
 				GraphNode[] nodes = kernel.GraphNodes;
 
-				Assert.IsNotNull( nodes );
-				Assert.AreEqual( 1, nodes.Length );
+				Assert.IsNotNull(nodes);
+				Assert.AreEqual(1, nodes.Length);
 			}
 			catch(Exception ex)
 			{

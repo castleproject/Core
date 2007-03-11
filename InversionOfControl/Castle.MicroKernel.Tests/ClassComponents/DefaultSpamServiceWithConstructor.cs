@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.Tests.ClassComponents
 {
-	using System;
-
 	/// <summary>
 	/// Summary description for DefaultSpamServiceWithConstructor.
 	/// </summary>
@@ -24,9 +22,9 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 		private DefaultMailSenderService mailSender;
 		private DefaultTemplateEngine templateEngine;
 
-		public DefaultSpamServiceWithConstructor( DefaultMailSenderService mailsender, DefaultTemplateEngine templateEngine )
+		public DefaultSpamServiceWithConstructor(DefaultMailSenderService mailsender, DefaultTemplateEngine templateEngine)
 		{
-			this.mailSender = mailsender;
+			mailSender = mailsender;
 			this.templateEngine = templateEngine;
 		}
 

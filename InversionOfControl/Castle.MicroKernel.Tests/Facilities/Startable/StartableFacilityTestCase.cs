@@ -14,14 +14,10 @@
 
 namespace Castle.Facilities.Startable.Tests
 {
-	using System;
 	using Castle.Core.Configuration;
-	using NUnit.Framework;
-
-	using Castle.MicroKernel;
-
 	using Castle.Facilities.Startable.Tests.Components;
-
+	using Castle.MicroKernel;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class StartableFacilityTestCase
@@ -31,24 +27,24 @@ namespace Castle.Facilities.Startable.Tests
 		{
 			IKernel kernel = new DefaultKernel();
 
-			kernel.AddFacility( "startable", new StartableFacility() );
+			kernel.AddFacility("startable", new StartableFacility());
 
-			kernel.AddComponent( "a", typeof(StartableComponent) );
+			kernel.AddComponent("a", typeof(StartableComponent));
 
 			StartableComponent component = kernel["a"] as StartableComponent;
 
 			Assert.IsNotNull(component);
-			Assert.IsTrue( component.Started );
-			Assert.IsFalse( component.Stopped );
+			Assert.IsTrue(component.Started);
+			Assert.IsFalse(component.Stopped);
 
 			kernel.ReleaseComponent(component);
-			Assert.IsTrue( component.Stopped );
+			Assert.IsTrue(component.Stopped);
 		}
 
-        [Test]
-        public void TestComponentWithNoInterface()
-        {
-            IKernel kernel = new DefaultKernel();
+		[Test]
+		public void TestComponentWithNoInterface()
+		{
+			IKernel kernel = new DefaultKernel();
 
 			MutableConfiguration compNode = new MutableConfiguration("component");
 			compNode.Attributes["id"] = "b";
@@ -58,16 +54,16 @@ namespace Castle.Facilities.Startable.Tests
 
 			kernel.ConfigurationStore.AddComponentConfiguration("b", compNode);
 
-            kernel.AddFacility( "startable", new StartableFacility() );
-            kernel.AddComponent( "b", typeof(NoInterfaceStartableComponent) );
-            NoInterfaceStartableComponent component = kernel["b"] as NoInterfaceStartableComponent;
+			kernel.AddFacility("startable", new StartableFacility());
+			kernel.AddComponent("b", typeof(NoInterfaceStartableComponent));
+			NoInterfaceStartableComponent component = kernel["b"] as NoInterfaceStartableComponent;
 
-            Assert.IsNotNull(component);
-            Assert.IsTrue( component.Started );
-            Assert.IsFalse( component.Stopped );
+			Assert.IsNotNull(component);
+			Assert.IsTrue(component.Started);
+			Assert.IsFalse(component.Stopped);
 
-            kernel.ReleaseComponent(component);
-            Assert.IsTrue( component.Stopped );
-        }
+			kernel.ReleaseComponent(component);
+			Assert.IsTrue(component.Stopped);
+		}
 	}
 }

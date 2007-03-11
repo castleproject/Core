@@ -14,16 +14,11 @@
 
 namespace Castle.MicroKernel.Tests.Lifestyle.Components
 {
-	using System;
-
 	/// <summary>
 	/// Summary description for IComponent.
 	/// </summary>
 	public interface IComponent
 	{
-		int ID
-		{
-			get;
-		}
+		int ID { get; }
 	}
 }

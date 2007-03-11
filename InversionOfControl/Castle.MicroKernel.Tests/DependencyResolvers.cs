@@ -14,13 +14,10 @@
 
 namespace Castle.MicroKernel.Tests
 {
-	using NUnit.Framework;
-
 	using Castle.Core.Configuration;
-
 	using Castle.MicroKernel.Handlers;
-
 	using Castle.MicroKernel.Tests.ClassComponents;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for DependencyResolvers.
@@ -46,17 +43,17 @@ namespace Castle.MicroKernel.Tests
 		public void ResolvingPrimitivesThroughProperties()
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
-			
-			MutableConfiguration parameters = (MutableConfiguration ) 
-				config.Children.Add( new MutableConfiguration("parameters") );
 
-			parameters.Children.Add( new MutableConfiguration("name", "hammett") );
-			parameters.Children.Add( new MutableConfiguration("address", "something") );
-			parameters.Children.Add( new MutableConfiguration("age", "25") );
+			MutableConfiguration parameters = (MutableConfiguration)
+			                                  config.Children.Add(new MutableConfiguration("parameters"));
+
+			parameters.Children.Add(new MutableConfiguration("name", "hammett"));
+			parameters.Children.Add(new MutableConfiguration("address", "something"));
+			parameters.Children.Add(new MutableConfiguration("age", "25"));
 
 			kernel.ConfigurationStore.AddComponentConfiguration("customer", config);
 
-			kernel.AddComponent( "customer", typeof(ICustomer), typeof(CustomerImpl) );
+			kernel.AddComponent("customer", typeof(ICustomer), typeof(CustomerImpl));
 
 			ICustomer customer = (ICustomer) kernel["customer"];
 
@@ -69,9 +66,9 @@ namespace Castle.MicroKernel.Tests
 		[Test]
 		public void ResolvingConcreteClassThroughProperties()
 		{
-			kernel.AddComponent( "spamservice", typeof(DefaultSpamService) );
-			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
-			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
+			kernel.AddComponent("spamservice", typeof(DefaultSpamService));
+			kernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
+			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
 
 			DefaultSpamService spamservice = (DefaultSpamService) kernel["spamservice"];
 
@@ -83,11 +80,11 @@ namespace Castle.MicroKernel.Tests
 		[Test]
 		public void ResolvingConcreteClassThroughConstructor()
 		{
-			kernel.AddComponent( "spamservice", typeof(DefaultSpamServiceWithConstructor) );
-			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
-			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
+			kernel.AddComponent("spamservice", typeof(DefaultSpamServiceWithConstructor));
+			kernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
+			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
 
-			DefaultSpamServiceWithConstructor spamservice = 
+			DefaultSpamServiceWithConstructor spamservice =
 				(DefaultSpamServiceWithConstructor) kernel["spamservice"];
 
 			Assert.IsNotNull(spamservice);
@@ -99,8 +96,8 @@ namespace Castle.MicroKernel.Tests
 		[ExpectedException(typeof(HandlerException))]
 		public void UnresolvedDependencies()
 		{
-			kernel.AddComponent( "spamservice", typeof(DefaultSpamServiceWithConstructor) );
-			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
+			kernel.AddComponent("spamservice", typeof(DefaultSpamServiceWithConstructor));
+			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
 
 			DefaultSpamService spamservice = (DefaultSpamService) kernel["spamservice"];
 		}
@@ -108,17 +105,17 @@ namespace Castle.MicroKernel.Tests
 		[Test]
 		public void FactoryPattern()
 		{
-			kernel.AddComponent( "spamservice", typeof(DefaultSpamServiceWithConstructor) );
-			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
-			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
+			kernel.AddComponent("spamservice", typeof(DefaultSpamServiceWithConstructor));
+			kernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
+			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
 
-			kernel.AddComponent( "factory", typeof(ComponentFactory) );
+			kernel.AddComponent("factory", typeof(ComponentFactory));
 
 			ComponentFactory factory = (ComponentFactory) kernel["factory"];
 
 			Assert.IsNotNull(factory);
 
-			DefaultSpamServiceWithConstructor spamservice = 
+			DefaultSpamServiceWithConstructor spamservice =
 				(DefaultSpamServiceWithConstructor) factory.Create("spamservice");
 
 			Assert.IsNotNull(spamservice);

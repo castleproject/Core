@@ -14,12 +14,9 @@
 
 namespace Castle.MicroKernel.Tests
 {
-	using System;
-
-	using NUnit.Framework;
-
 	using Castle.Core;
 	using Castle.Core.Internal;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class GraphTestCase
@@ -41,35 +38,35 @@ namespace Castle.MicroKernel.Tests
 		[Test]
 		public void TopologicalSortOnComponents()
 		{
-			kernel.AddComponent( "a", typeof(A) );
-			kernel.AddComponent( "b", typeof(B) );
-			kernel.AddComponent( "c", typeof(C) );
+			kernel.AddComponent("a", typeof(A));
+			kernel.AddComponent("b", typeof(B));
+			kernel.AddComponent("c", typeof(C));
 
 			GraphNode[] nodes = kernel.GraphNodes;
 
-			Assert.IsNotNull( nodes );
-			Assert.AreEqual( 3, nodes.Length );
+			Assert.IsNotNull(nodes);
+			Assert.AreEqual(3, nodes.Length);
 
-			IVertex[] vertices = TopologicalSortAlgo.Sort( nodes );
+			IVertex[] vertices = TopologicalSortAlgo.Sort(nodes);
 
-			Assert.AreEqual( "c", (vertices[0] as ComponentModel).Name );
-			Assert.AreEqual( "b", (vertices[1] as ComponentModel).Name );
-			Assert.AreEqual( "a", (vertices[2] as ComponentModel).Name );
+			Assert.AreEqual("c", (vertices[0] as ComponentModel).Name);
+			Assert.AreEqual("b", (vertices[1] as ComponentModel).Name);
+			Assert.AreEqual("a", (vertices[2] as ComponentModel).Name);
 		}
 
 		[Test]
 		public void RemoveComponent()
 		{
-			kernel.AddComponent( "a", typeof(A) );
-			kernel.AddComponent( "b", typeof(B) );
-			kernel.AddComponent( "c", typeof(C) );
+			kernel.AddComponent("a", typeof(A));
+			kernel.AddComponent("b", typeof(B));
+			kernel.AddComponent("c", typeof(C));
 
-			Assert.IsFalse( kernel.RemoveComponent("a") );
-			Assert.IsFalse( kernel.RemoveComponent("b") );
+			Assert.IsFalse(kernel.RemoveComponent("a"));
+			Assert.IsFalse(kernel.RemoveComponent("b"));
 
-			Assert.IsTrue( kernel.RemoveComponent("c") );
-			Assert.IsTrue( kernel.RemoveComponent("b") );
-			Assert.IsTrue( kernel.RemoveComponent("a") );
+			Assert.IsTrue(kernel.RemoveComponent("c"));
+			Assert.IsTrue(kernel.RemoveComponent("b"));
+			Assert.IsTrue(kernel.RemoveComponent("a"));
 		}
 	}
 }

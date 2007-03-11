@@ -15,27 +15,24 @@
 namespace Castle.Windsor.Tests.Configuration2.Properties
 {
 	using System;
-	using System.Configuration;
 	using System.IO;
-	
-	using Castle.MicroKernel;
 	using Castle.Core.Configuration;
+	using Castle.MicroKernel;
 	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
-	using Castle.Windsor.Tests;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class PropertiesTestCase
 	{
-		String dir = ConfigHelper.ResolveConfigPath("Configuration2/Properties/");
+		private String dir = ConfigHelper.ResolveConfigPath("Configuration2/Properties/");
 
 		private IWindsorContainer container;
 
 		[Test]
 		public void CorrectEval()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_properties.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_properties.xml");
 
 			container = new WindsorContainer(file);
 
@@ -45,8 +42,8 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 		[Test]
 		public void SilentProperties()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_silent_properties.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_silent_properties.xml");
 
 			container = new WindsorContainer(file);
 
@@ -71,17 +68,17 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 		[Test, ExpectedException(typeof(ConfigurationProcessingException))]
 		public void MissingProperties()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_missing_properties.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_missing_properties.xml");
 
-			container = new WindsorContainer(file);	
+			container = new WindsorContainer(file);
 		}
 
 		[Test]
 		public void PropertiesWithinProperties()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"properties_using_properties.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "properties_using_properties.xml");
 
 			container = new WindsorContainer(file);
 
@@ -91,8 +88,8 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 		[Test]
 		public void PropertiesAndIncludes()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_properties_and_includes.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_properties_and_includes.xml");
 
 			container = new WindsorContainer(file);
 
@@ -102,8 +99,8 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 		[Test]
 		public void PropertiesAndDefines()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_properties_and_defines.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_properties_and_defines.xml");
 
 			container = new WindsorContainer(file);
 
@@ -113,8 +110,8 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 		[Test]
 		public void PropertiesAndDefines2()
 		{
-			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
-				"config_with_properties_and_defines2.xml");
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir +
+			                                                                  "config_with_properties_and_defines2.xml");
 
 			container = new WindsorContainer(file);
 
@@ -142,7 +139,7 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 
 			config = store.GetFacilityConfiguration("facility3");
 			Assert.IsNotNull(config);
-			Assert.AreEqual( 3, config.Children.Count, "facility3 should have 3 children" );
+			Assert.AreEqual(3, config.Children.Count, "facility3 should have 3 children");
 
 			childItem = config.Children["param1"];
 			Assert.IsNotNull(childItem);

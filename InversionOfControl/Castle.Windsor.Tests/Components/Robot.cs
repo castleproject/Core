@@ -14,25 +14,36 @@
 
 namespace Castle.Windsor.Tests.Components
 {
-	using System;
-
 	public interface IArm
 	{
 		void Rotate(float degree);
 		float GetLength();
 	}
+
 	public class PlasmaGunArm : IArm
 	{
-		public void Rotate(float degree) { }
-		public float GetLength() { return 2.0f; }
+		public void Rotate(float degree)
+		{
+		}
+
+		public float GetLength()
+		{
+			return 2.0f;
+		}
 	}
- 
+
 	public class HumanArm : IArm
 	{
-		public void Rotate(float degree) { }
-		public float GetLength() { return 1.0f; }
+		public void Rotate(float degree)
+		{
+		}
+
+		public float GetLength()
+		{
+			return 1.0f;
+		}
 	}
- 
+
 	public class Robot
 	{
 		public Robot(IArm left, IArm right)

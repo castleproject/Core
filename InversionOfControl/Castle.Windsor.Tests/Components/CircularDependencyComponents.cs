@@ -26,7 +26,7 @@ namespace Castle.Windsor.Tests.Components
 
 	public class View : IView
 	{
-		IController controller;
+		private IController controller;
 
 		public IController Controller
 		{
@@ -41,7 +41,7 @@ namespace Castle.Windsor.Tests.Components
 
 	public class Controller : IController
 	{
-		IView View;
+		private IView View;
 
 		public Controller(IView view)
 		{
@@ -52,28 +52,28 @@ namespace Castle.Windsor.Tests.Components
 		{
 		}
 	}
-	
+
 	public class CompA
 	{
 		public CompA(CompB compb)
 		{
 		}
 	}
-	
+
 	public class CompB
 	{
 		public CompB(CompC compC)
 		{
 		}
 	}
-	
+
 	public class CompC
 	{
 		public CompC(CompD compD)
 		{
 		}
 	}
-	
+
 	public class CompD
 	{
 		public CompD(CompA compA)
