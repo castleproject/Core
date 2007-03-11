@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel
 {
-	using System;
-
 	using Castle.Core;
 
 	/// <summary>

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #if DOTNET2
+
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using Castle.Core.Configuration;
@@ -27,4 +28,5 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		object ConvertConfigurationToCollection(IConfiguration configuration);
 	}
 }
+
 #endif

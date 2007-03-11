@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
-
 	using Castle.Core.Configuration;
 
 	/// <summary>
@@ -30,21 +29,21 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			types = new Type[]
 				{
-					typeof (Char),
-					typeof (DateTime),
-					typeof (Decimal),
-					typeof (Boolean),
-					typeof (Int16),
-					typeof (Int32),
-					typeof (Int64),
-					typeof (UInt16),
-					typeof (UInt32),
-					typeof (UInt64),
-					typeof (Byte),
-					typeof (SByte),
-					typeof (Single),
-					typeof (Double),
-					typeof (String)
+					typeof(Char),
+					typeof(DateTime),
+					typeof(Decimal),
+					typeof(Boolean),
+					typeof(Int16),
+					typeof(Int32),
+					typeof(Int64),
+					typeof(UInt16),
+					typeof(UInt32),
+					typeof(UInt64),
+					typeof(Byte),
+					typeof(SByte),
+					typeof(Single),
+					typeof(Double),
+					typeof(String)
 				};
 		}
 
@@ -64,9 +63,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			catch(Exception ex)
 			{
 				String message = String.Format(
-					"Could not convert from '{0}' to {1}", 
+					"Could not convert from '{0}' to {1}",
 					value, targetType.FullName);
-				
+
 				throw new ConverterException(message, ex);
 			}
 		}

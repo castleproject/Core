@@ -19,14 +19,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 	using Castle.Core.Configuration;
 
-
 	[Serializable]
 	public class DictionaryConverter : AbstractTypeConverter
 	{
-		public DictionaryConverter()
-		{
-		}
-
 		public override bool CanHandleType(Type type)
 		{
 			return (type == typeof(IDictionary) || type == typeof(Hashtable));
@@ -73,7 +68,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 				if (itemConfig.Attributes["keyType"] != null)
 				{
-					convertKeyTo = (Type) Context.Composition.PerformConversion( itemConfig.Attributes["keyType"], typeof(Type) );
+					convertKeyTo = (Type) Context.Composition.PerformConversion( 
+						itemConfig.Attributes["keyType"], typeof(Type) );
 				}
 
 				object key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
@@ -84,7 +80,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 				if (itemConfig.Attributes["valueType"] != null)
 				{
-					convertValueTo = (Type) Context.Composition.PerformConversion( itemConfig.Attributes["valueType"], typeof(Type) );
+					convertValueTo = (Type) Context.Composition.PerformConversion( 
+						itemConfig.Attributes["valueType"], typeof(Type) );
 				}
 				object value = Context.Composition.PerformConversion(itemConfig.Value, convertValueTo);
 
