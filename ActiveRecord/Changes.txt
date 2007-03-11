@@ -1,7 +1,10 @@
 Release Candidate 2
 ===================
 
-- AR-135: applied patch from Rafael Steil - better error message when using non interface type for an association.
+- AR-130: Fixed
+  "BelongsTo attribute does not support UniqueKey"
+
+- AR-135: Applied patch from Rafael Steil - better error message when using non interface type for an association.
 
 - AR-134: Applied patch from Kristofer Goss. Can now use [Field] on [Nested] types.
 

@@ -542,6 +542,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfFalse("update", model.BelongsToAtt.Update),
 				        WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
 				        WriteIfTrue("unique", model.BelongsToAtt.Unique),
+						WriteIfNonNull("unique-key", model.BelongsToAtt.UniqueKey),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("fetch", fetch),
 				        WriteIfNonNull("not-found", notFoundMode));

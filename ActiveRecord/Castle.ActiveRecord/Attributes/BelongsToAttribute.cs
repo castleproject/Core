@@ -66,6 +66,7 @@ namespace Castle.ActiveRecord
 		private Type type;
 		private String column;
 		private String[] compositeKeyColumns;
+		private String uniqueKey;
 		private bool update = true;
 		private bool insert = true;
 		private bool notnull;
@@ -224,6 +225,24 @@ namespace Castle.ActiveRecord
 		{
 			get { return notFoundBehaviour; }
 			set { notFoundBehaviour = value; }
+		}
+
+		/// <summary>
+		/// From NHibernate documentation:
+		/// A unique-key attribute can be used to group columns 
+		/// in a single unit key constraint. 
+		/// </summary>
+		/// <value>unique key name</value>
+		/// <remarks>
+		/// Currently, the 
+		/// specified value of the unique-key attribute is not 
+		/// used to name the constraint, only to group the columns 
+		/// in the mapping file.
+		/// </remarks>
+		public string UniqueKey
+		{
+			get { return uniqueKey; }
+			set { uniqueKey = value; }
 		}
 	}
 }
