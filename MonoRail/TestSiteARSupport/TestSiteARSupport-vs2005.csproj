@@ -140,6 +140,9 @@
     <None Include="Views\User\new.vm" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Content\css\" />
     <Folder Include="Content\images\" />
     <Folder Include="Properties\" />

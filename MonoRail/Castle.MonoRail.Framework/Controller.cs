@@ -109,7 +109,7 @@ namespace Castle.MonoRail.Framework
 
 		internal IServiceProvider serviceProvider;
 
-		protected ValidatorRunner validator;
+		internal ValidatorRunner validator;
 
 		#endregion
 

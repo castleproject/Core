@@ -187,6 +187,9 @@
     <EmbeddedResource Include="Controllers\ResourceFile.resources" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\" />
     <Folder Include="Views\flash\" />
   </ItemGroup>
