@@ -83,7 +83,19 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 					convertValueTo = (Type) Context.Composition.PerformConversion( 
 						itemConfig.Attributes["valueType"], typeof(Type) );
 				}
-				object value = Context.Composition.PerformConversion(itemConfig.Value, convertValueTo);
+
+				object value;
+
+				if (itemConfig.Children.Count == 0)
+				{
+					value = Context.Composition.PerformConversion(
+						itemConfig, convertValueTo);
+				}
+				else
+				{
+					value = Context.Composition.PerformConversion(
+						itemConfig.Children[0], convertValueTo);
+				}
 
 				dict.Add( key, value );
 			}

@@ -1,6 +1,11 @@
 RC 4
 ====
 
+- Fixed IOC-65
+  "DictionaryConverter should use the alternate overload of the 
+   PerformConversion method in order to support dictionaries that contain 
+   custom types"
+
 - Moved ProxyComponentInspector from Castle.MicroKernel to here and added
   support to supply ProxyGenerationOptions on a ComponentModel basis.  This
   provides the needed ability to provide proxy options in facilities.

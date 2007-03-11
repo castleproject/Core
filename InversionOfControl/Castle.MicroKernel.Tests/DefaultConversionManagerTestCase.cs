@@ -20,8 +20,6 @@ namespace Castle.MicroKernel.Tests
 	using Castle.Core.Configuration;
 	using Castle.MicroKernel.SubSystems.Conversion;
 	using NUnit.Framework;
-#if DOTNET2
-#endif
 
 	[TestFixture]
 	public class DefaultConversionManagerTestCase
@@ -115,6 +113,35 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual("third", dict["key3"]);
 			Assert.AreEqual(40, dict[4]);
 			Assert.AreEqual(new DateTime(2005, 12, 1), dict[new DateTime(2000, 1, 1)]);
+		}
+
+		[Test]
+		public void DictionaryWithDifferentValueTypes()
+		{
+			MutableConfiguration config = new MutableConfiguration("dictionary");
+
+			config.CreateChild("entry")
+				.Attribute("key", "intentry")
+				.Attribute("valueType", "System.Int32, mscorlib")
+				.Value = "123";
+
+			config.CreateChild("entry")
+				.Attribute("key", "values")
+				.Attribute("valueType", "System.Int32[], mscorlib")
+				.CreateChild("array")
+					.Attribute("type", "System.Int32, mscorlib")
+					.CreateChild("item", "400");
+
+			IDictionary dict = 
+				(IDictionary) conversionMng.PerformConversion(config, typeof(IDictionary));
+
+			Assert.IsNotNull(dict);
+
+			Assert.AreEqual(123, dict["intentry"]);
+			int[] values = (int[]) dict["values"];
+			Assert.IsNotNull(values);
+			Assert.AreEqual(1, values.Length);
+			Assert.AreEqual(400, values[0]);
 		}
 
 #if DOTNET2
