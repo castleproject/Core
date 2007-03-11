@@ -111,7 +111,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsFalse(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(decimal), "   "));
-			Assert.IsFalse(convSucceed);
+			Assert.IsTrue(convSucceed);
 
 			try
 			{
@@ -135,7 +135,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsFalse(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(Guid), "   "));
-			Assert.IsFalse(convSucceed);
+			Assert.IsTrue(convSucceed);
 
 			try
 			{
@@ -196,7 +196,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(int), ""));
-			Assert.IsFalse(convSucceed);
+			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(int), null));
 			Assert.IsFalse(convSucceed);
@@ -247,7 +247,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(float), ""));
-			Assert.IsFalse(convSucceed);
+			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(float), null));
 			Assert.IsFalse(convSucceed);
@@ -289,13 +289,41 @@ namespace Castle.Components.Binder.Tests
 #if DOTNET2
 
 		[Test]
-		public void NullableInt32Conversion()
+		public void NullableEnumConversion()
 		{
-			Assert.AreEqual(12, Convert(typeof(int?), "12"));
+			UriPartial? val = (UriPartial?) Convert(typeof(UriPartial?), "Path");
+			Assert.AreEqual(UriPartial.Path, val);
+			Assert.IsTrue(val.HasValue);
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(null, Convert(typeof(int?), ""));
+			val = (UriPartial?) Convert(typeof(UriPartial?), "");
+			Assert.IsFalse(val.HasValue);
+			Assert.IsTrue(convSucceed);
+
+			val = (UriPartial?) Convert(typeof(UriPartial?), "  ");
+			Assert.IsFalse(val.HasValue);
+			Assert.IsTrue(convSucceed);
+
+			val = (UriPartial?) Convert(typeof(UriPartial?), null);
+			Assert.IsFalse(val.HasValue);
 			Assert.IsFalse(convSucceed);
+		}
+
+		[Test]
+		public void NullableInt32Conversion()
+		{
+//			int? val = (int?) Convert(typeof(int?), "12");
+//			Assert.AreEqual(12, val);
+//			Assert.IsTrue(val.HasValue);
+//			Assert.IsTrue(convSucceed);
+
+			int? val = (int?) Convert(typeof(int?), "");
+			Assert.IsFalse(val.HasValue);
+			Assert.IsTrue(convSucceed);
+
+			val = (int?) Convert(typeof(int?), "  ");
+			Assert.IsFalse(val.HasValue);
+			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(null, Convert(typeof(int?), null));
 			Assert.IsFalse(convSucceed);
@@ -304,24 +332,34 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void NullableDecimalConversion()
 		{
-			Assert.AreEqual((decimal?)12.22, Convert(typeof(decimal?), "12.22"));
+			decimal? val = (decimal?) Convert(typeof(decimal?), "12.22");
+			Assert.AreEqual((decimal?) 12.22, val);
+			Assert.IsTrue(val.HasValue);
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual((decimal?)3000, Convert(typeof(decimal?), "3,000.00"));
+			val = (decimal?) Convert(typeof(decimal?), "");
+			Assert.IsFalse(val.HasValue);
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(null, Convert(typeof(decimal?), null));
+			val = (decimal?) Convert(typeof(decimal?), "3,000.00");
+			Assert.AreEqual((decimal?) 3000, val);
+			Assert.IsTrue(val.HasValue);
+			Assert.IsTrue(convSucceed);
+
+			val = (decimal?) Convert(typeof(decimal?), null);
+			Assert.IsFalse(val.HasValue); 
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual(null, Convert(typeof(decimal?), "   "));
-			Assert.IsFalse(convSucceed);
+			val = (decimal?) Convert(typeof(decimal?), "   ");
+			Assert.IsFalse(val.HasValue);
+			Assert.IsTrue(convSucceed);
 
 			try
 			{
 				Convert(typeof(decimal?), "Invalid Value");
 				Assert.Fail("DecimalConvert should had throwed an exception");
 			}
-			catch (BindingException)
+			catch(BindingException)
 			{
 				Assert.IsFalse(convSucceed);
 			}
@@ -337,7 +375,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsFalse(convSucceed);
 
 			Convert(typeof(DateTime?), "      ");
-			Assert.IsFalse(convSucceed);
+			Assert.IsTrue(convSucceed);
 		}
 
 		[Test]

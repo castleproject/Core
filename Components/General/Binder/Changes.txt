@@ -1,6 +1,15 @@
 Beta 2
 ======
 
+- Changed DefaultConverter behavior:
+  
+  -> If we are dealing with a primitive, non-null values will always
+     set conversionSuceeded to true
+     That's because the value was on the form, and the binder needs to set it
+  
+  -> If we are dealing with a nullable, the conversionSuceeded will be set to true
+     if the nested conversion succeeds or if the input is different from null.
+
 - Fixed COMP-8: Converter is not able to deal with Nullables<>
 
 - Fixed COMP-6: Nullable boolean cannot be bound

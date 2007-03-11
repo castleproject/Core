@@ -175,11 +175,19 @@ namespace Castle.Components.Binder
 
 			object value = Convert(underlyingType, input, out conversionSucceeded);
 
-			if (conversionSucceeded)
+			if (conversionSucceeded && value != null)
 			{
 				Type typeToConstruct = typeof(Nullable<>).MakeGenericType(underlyingType);
 
 				return Activator.CreateInstance(typeToConstruct, value);
+			}
+			else if (input != null)
+			{
+				conversionSucceeded = true;
+			}
+			else
+			{
+				conversionSucceeded = false;
 			}
 
 			return null;
@@ -246,11 +254,17 @@ namespace Castle.Components.Binder
 		{
 			conversionSucceeded = true;
 
+			if (input == null)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+
 			String value = NormalizeInput(input);
 	
 			if (value == String.Empty)
 			{
-				conversionSucceeded = false;
+				conversionSucceeded = true;
 				return null;
 			}
 			else
@@ -263,11 +277,17 @@ namespace Castle.Components.Binder
 		{
 			conversionSucceeded = true;
 
+			if (input == null)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+
 			String value = NormalizeInput(input);
 	
 			if (value == String.Empty)
 			{
-				conversionSucceeded = false;
+				conversionSucceeded = true;
 				return null;
 			}
 			else
@@ -286,10 +306,14 @@ namespace Castle.Components.Binder
 			{
 				return SpecialBoolConversion(value, input, ref conversionSucceeded);
 			}
-			else if (input == null || value == String.Empty)
+			else if (input == null)
 			{
 				conversionSucceeded = false;
-						
+				return null;
+			}
+			else if (value == String.Empty)
+			{
+				conversionSucceeded = true;
 				return null;
 			}
 			else
@@ -307,6 +331,7 @@ namespace Castle.Components.Binder
 			}
 			else if (value == String.Empty)
 			{
+				conversionSucceeded = true;
 				return false;
 			}
 			else
@@ -354,6 +379,12 @@ namespace Castle.Components.Binder
 		{
 			conversionSucceeded = true;
 
+			if (input == null)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+
 			String value = NormalizeInput(input);
 	
 			if (value == String.Empty)
@@ -370,6 +401,12 @@ namespace Castle.Components.Binder
 		private object ConvertDate(object input, ref bool conversionSucceeded)
 		{
 			conversionSucceeded = true;
+
+			if (input == null)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
 
 			String value = NormalizeInput(input);
 
