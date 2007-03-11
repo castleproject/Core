@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { lastName = value; }
 		}
 
-		[OneToOne(Constrained=true, Fetch=FetchEnum.Join)]
+		[OneToOne(Constrained=true, Fetch=FetchEnum.Join, ForeignKey="FK_FOREIGN_KEY")]
 		public Award Award
 		{
 			get { return award; }

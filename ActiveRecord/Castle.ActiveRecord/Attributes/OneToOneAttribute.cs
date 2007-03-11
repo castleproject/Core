@@ -106,6 +106,7 @@ namespace Castle.ActiveRecord
 		private String propertyRef;
 		private Type mapType;
 		private bool constrained;
+		private string foreignKey;
 
 		/// <summary>
 		/// Allows one to reference a different type
@@ -164,6 +165,17 @@ namespace Castle.ActiveRecord
 		{
 			get { return constrained; }
 			set { constrained = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the name of the foreign key constraint generated for 
+		/// an association. NHibernate will only use the ForeignKey name one 
+		/// the inherited class and Constrained = true.
+		/// </summary>
+		public string ForeignKey
+		{
+			get { return foreignKey; }
+			set { foreignKey = value; }	
 		}
 	}
 }

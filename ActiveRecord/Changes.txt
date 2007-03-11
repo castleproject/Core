@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- AR-129: Applied patch by John Hurrell
+  "Implement NHibernate's "foreign-key" Attribute"
+
 - AR-130: Fixed
   "BelongsTo attribute does not support UniqueKey"
 

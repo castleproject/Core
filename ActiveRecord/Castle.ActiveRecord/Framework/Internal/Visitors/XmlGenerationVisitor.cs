@@ -512,14 +512,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			String cascade = TranslateCascadeEnum(model.OneToOneAtt.Cascade);
 
-			AppendF("<one-to-one{0}{1}{2}{3}{4}{5}{6} />",
+			AppendF("<one-to-one{0}{1}{2}{3}{4}{5}{6}{7} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.OneToOneAtt.AccessString),
 			        MakeAtt("class", MakeTypeName(model.OneToOneAtt.MapType)),
 			        WriteIfNonNull("cascade", cascade),
 			        WriteIfNonNull("property-ref", model.OneToOneAtt.PropertyRef),
-			        WriteIfNonNull("fetch", TranslateFetch(model.OneToOneAtt.Fetch)),
-			        WriteIfTrue("constrained", model.OneToOneAtt.Constrained));
+					WriteIfNonNull("foreign-key", model.OneToOneAtt.ForeignKey),
+					WriteIfNonNull("fetch", TranslateFetch(model.OneToOneAtt.Fetch)),
+					WriteIfTrue("constrained", model.OneToOneAtt.Constrained));
 		}
 
 		/// <summary>
@@ -538,13 +539,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("name", model.Property.Name),
 				        MakeAtt("access", model.BelongsToAtt.AccessString),
 				        MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
-				        WriteIfFalse("insert", model.BelongsToAtt.Insert),
-				        WriteIfFalse("update", model.BelongsToAtt.Update),
 				        WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
 				        WriteIfTrue("unique", model.BelongsToAtt.Unique),
-						WriteIfNonNull("unique-key", model.BelongsToAtt.UniqueKey),
+				        WriteIfNonNull("unique-key", model.BelongsToAtt.UniqueKey),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("fetch", fetch),
+				        WriteIfFalse("update", model.BelongsToAtt.Update),
+				        WriteIfFalse("insert", model.BelongsToAtt.Insert),
+				        WriteIfNonNull("foreign-key", model.BelongsToAtt.ForeignKey),
 				        WriteIfNonNull("not-found", notFoundMode));
 				Ident();
 				WriteCompositeColumns(model.BelongsToAtt.CompositeKeyColumns);
@@ -553,7 +555,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
+				AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11} />",
 				        MakeAtt("name", model.Property.Name),
 				        MakeAtt("access", model.BelongsToAtt.AccessString),
 				        MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
@@ -562,7 +564,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfFalse("update", model.BelongsToAtt.Update),
 				        WriteIfTrue("not-null", model.BelongsToAtt.NotNull),
 				        WriteIfTrue("unique", model.BelongsToAtt.Unique),
-				        WriteIfNonNull("cascade", cascade),
+						WriteIfNonNull("foreign-key", model.BelongsToAtt.ForeignKey),
+						WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("fetch", fetch),
 				        WriteIfNonNull("not-found", notFoundMode));
 			}

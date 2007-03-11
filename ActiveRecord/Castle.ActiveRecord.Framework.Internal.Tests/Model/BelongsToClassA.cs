@@ -29,7 +29,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { id = value; }
 		}
 
-		[ BelongsTo( "classa_id" ) ]
+		[ BelongsTo( "classa_id", ForeignKey = "FK_FOREIGN_KEY_A" ) ]
 		public ClassA ClassA
 		{
 			get { return classA; }
@@ -50,8 +50,8 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { id = value; }
 		}
 
-		[ BelongsTo( "classa_id", Update=false, Insert=false, NotNull=true, Unique=true, 
-			  Cascade=CascadeEnum.SaveUpdate ) ]
+		[ BelongsTo( "classa_id", Update=false, Insert=false, NotNull=true, Unique=true,
+			Cascade = CascadeEnum.SaveUpdate, ForeignKey = "FK_FOREIGN_KEY_B")]
 		public ClassA ClassA
 		{
 			get { return classA; }

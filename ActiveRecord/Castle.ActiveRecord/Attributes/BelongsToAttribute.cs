@@ -67,6 +67,7 @@ namespace Castle.ActiveRecord
 		private String column;
 		private String[] compositeKeyColumns;
 		private String uniqueKey;
+		private String foreignKey;
 		private bool update = true;
 		private bool insert = true;
 		private bool notnull;
@@ -139,7 +140,7 @@ namespace Castle.ActiveRecord
 			{
 				OuterJoinEnum returnValue = OuterJoinEnum.Auto;
 
-				switch (fetchMethod)
+				switch(fetchMethod)
 				{
 					case FetchEnum.Unspecified:
 						returnValue = OuterJoinEnum.Auto;
@@ -156,7 +157,7 @@ namespace Castle.ActiveRecord
 			}
 			set
 			{
-				switch (value)
+				switch(value)
 				{
 					case OuterJoinEnum.Auto:
 						fetchMethod = FetchEnum.Unspecified;
@@ -243,6 +244,16 @@ namespace Castle.ActiveRecord
 		{
 			get { return uniqueKey; }
 			set { uniqueKey = value; }
+		}
+
+		/// <summary>
+		/// Gets and sets the name of the foreign key constraint 
+		/// generated for an association.
+		/// </summary>
+		public string ForeignKey
+		{
+			get { return foreignKey; }
+			set { foreignKey = value; }
 		}
 	}
 }
