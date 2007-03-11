@@ -140,5 +140,5 @@ namespace Castle.MicroKernel
 		/// </summary>
 		IDictionary GetService2Handler();
 
-    }
+	}
 }

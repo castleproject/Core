@@ -15,7 +15,7 @@
 namespace Castle.MicroKernel.Handlers
 {
 	using System;
-using System.Collections;
+	using System.Collections;
 
 	/// <summary>
 	/// Might be implemented by a handler 

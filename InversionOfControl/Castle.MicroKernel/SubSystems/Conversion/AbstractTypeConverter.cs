@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
-
 	using Castle.Core.Configuration;
 
 	/// <summary>
@@ -44,11 +43,11 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		/// The default behavior is to just pass it to the normal CanHadnleType
 		/// peeking into the configuration is used for some advanced functionality
 		/// </remarks>
-	    public virtual bool CanHandleType(Type type, IConfiguration configuration)
-	    {
-            return CanHandleType(type);
-	    }
-	    
+		public virtual bool CanHandleType(Type type, IConfiguration configuration)
+		{
+			return CanHandleType(type);
+		}
+
 		public abstract bool CanHandleType(Type type);
 
 		public abstract object PerformConversion(String value, Type targetType);

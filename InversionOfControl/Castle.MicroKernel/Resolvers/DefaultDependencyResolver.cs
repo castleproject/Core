@@ -16,11 +16,9 @@ namespace Castle.MicroKernel.Resolvers
 {
 	using System;
 	using System.Collections;
-
 	using Castle.Core;
-
-	using Castle.MicroKernel.Util;
 	using Castle.MicroKernel.SubSystems.Conversion;
+	using Castle.MicroKernel.Util;
 
 	/// <summary>
 	/// Default implementation for <see cref="IDependencyResolver"/>.
@@ -85,7 +83,8 @@ namespace Castle.MicroKernel.Resolvers
 		/// <param name="model">Model of the component that is requesting the dependency</param>
 		/// <param name="dependency">The dependency model</param>
 		/// <returns><c>true</c> if the dependency can be satisfied</returns>
-		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		                       DependencyModel dependency)
 		{
 			// 1 - check for the dependency on CreationContext, if present
 
@@ -97,16 +96,17 @@ namespace Castle.MicroKernel.Resolvers
 				}
 			}
 
-            // 2 - check with the model's handler, if not the same as the parent resolver
-            IHandler handler = kernel.GetHandler(model.Name);
+			// 2 - check with the model's handler, if not the same as the parent resolver
 
-            if (handler != null && handler != parentResolver)
-            {
-                if (handler.CanResolve(context, parentResolver, model, dependency))
-                {
-                    return true;
-                }
-            }
+			IHandler handler = kernel.GetHandler(model.Name);
+
+			if (handler != null && handler != parentResolver)
+			{
+				if (handler.CanResolve(context, parentResolver, model, dependency))
+				{
+					return true;
+				}
+			}
 
 			// 3 - check within parent resolver, if present
 
@@ -130,7 +130,7 @@ namespace Castle.MicroKernel.Resolvers
 
 			// 5 - normal flow, checking against the kernel
 
-			if (dependency.DependencyType == DependencyType.Service || 
+			if (dependency.DependencyType == DependencyType.Service ||
 			    dependency.DependencyType == DependencyType.ServiceOverride)
 			{
 				return CanResolveServiceDependency(model, dependency);
@@ -169,7 +169,8 @@ namespace Castle.MicroKernel.Resolvers
 		/// <param name="model">Model of the component that is requesting the dependency</param>
 		/// <param name="dependency">The dependency model</param>
 		/// <returns>The dependency resolved value or null</returns>
-		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model, DependencyModel dependency)
+		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
+		                      DependencyModel dependency)
 		{
 			object value = null;
 
@@ -187,6 +188,7 @@ namespace Castle.MicroKernel.Resolvers
 			}
 
 			// 2 - check with the model's handler, if not the same as the parent resolver
+
 			IHandler handler = kernel.GetHandler(model.Name);
 
 			if (!resolved && handler != parentResolver)
@@ -229,7 +231,7 @@ namespace Castle.MicroKernel.Resolvers
 			if (!resolved)
 			{
 				if (dependency.DependencyType == DependencyType.Service ||
-					dependency.DependencyType == DependencyType.ServiceOverride)
+				    dependency.DependencyType == DependencyType.ServiceOverride)
 				{
 					value = ResolveServiceDependency(context, model, dependency);
 				}
@@ -264,7 +266,7 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			if (dependency.DependencyType == DependencyType.ServiceOverride)
 			{
-				return HasComponentInValidState(dependency.DependencyKey);	
+				return HasComponentInValidState(dependency.DependencyKey);
 			}
 
 			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
@@ -303,7 +305,8 @@ namespace Castle.MicroKernel.Resolvers
 			return parameter != null;
 		}
 
-		protected virtual object ResolveServiceDependency(CreationContext context, ComponentModel model, DependencyModel dependency)
+		protected virtual object ResolveServiceDependency(CreationContext context, ComponentModel model,
+		                                                  DependencyModel dependency)
 		{
 			IHandler handler;
 
@@ -354,7 +357,8 @@ namespace Castle.MicroKernel.Resolvers
 			return handler.Resolve(context);
 		}
 
-		protected virtual object ResolveParameterDependency(CreationContext context, ComponentModel model, DependencyModel dependency)
+		protected virtual object ResolveParameterDependency(CreationContext context, ComponentModel model,
+		                                                    DependencyModel dependency)
 		{
 			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
 
@@ -382,7 +386,8 @@ namespace Castle.MicroKernel.Resolvers
 			return null;
 		}
 
-		protected virtual ParameterModel ObtainParameterModelMatchingDependency(DependencyModel dependency, ComponentModel model)
+		protected virtual ParameterModel ObtainParameterModelMatchingDependency(DependencyModel dependency,
+		                                                                        ComponentModel model)
 		{
 			String key = dependency.DependencyKey;
 
@@ -404,7 +409,7 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				throw new DependencyResolverException(
 					String.Format("Key invalid for parameter {0}. " +
-					"Thus the kernel was unable to override the service dependency", name));
+					              "Thus the kernel was unable to override the service dependency", name));
 			}
 
 			return ReferenceExpressionUtil.ExtractComponentKey(keyValue);
@@ -440,7 +445,7 @@ namespace Castle.MicroKernel.Resolvers
 		}
 
 #if DOTNET2
-		
+
 		/// <summary>
 		/// This method rebuild the context for the parameter type.
 		/// Naive implementation.
@@ -456,7 +461,7 @@ namespace Castle.MicroKernel.Resolvers
 				return new CreationContext(current.Handler, parameterType, current);
 			}
 		}
-		
-		#endif
+
+#endif
 	}
 }

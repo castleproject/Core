@@ -30,16 +30,16 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Key used for the conversion manager
 		/// </summary>
-		public static readonly String ConversionManagerKey  = "conversion.mng";
+		public static readonly String ConversionManagerKey = "conversion.mng";
 
 		/// <summary>
 		/// Key used for the naming subsystem
 		/// </summary>
-		public static readonly String NamingKey             = "naming.sub.key";
+		public static readonly String NamingKey = "naming.sub.key";
 
 		/// <summary>
 		/// Key used for the resource subsystem
 		/// </summary>
-		public static readonly String ResourceKey           = "resource.sub.key";
+		public static readonly String ResourceKey = "resource.sub.key";
 	}
 }

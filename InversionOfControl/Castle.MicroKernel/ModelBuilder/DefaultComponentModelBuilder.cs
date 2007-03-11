@@ -36,7 +36,7 @@ namespace Castle.MicroKernel.ModelBuilder
 		public DefaultComponentModelBuilder(IKernel kernel)
 		{
 			this.kernel = kernel;
-			this.contributors = new ArrayList();
+			contributors = new ArrayList();
 
 			InitializeContributors();
 		}

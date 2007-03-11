@@ -191,7 +191,6 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			}
 		}
 
-
 		private void Remove(TreeNode node)
 		{
 			if (node == null) return;

@@ -18,7 +18,6 @@ namespace Castle.MicroKernel.Handlers
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Text;
 	using Castle.Core;
 
 	/// <summary>

@@ -25,6 +25,9 @@ namespace Castle.MicroKernel.Releasers
 	[Serializable]
 	public class LifecycledComponentsReleasePolicy : AllComponentsReleasePolicy
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LifecycledComponentsReleasePolicy"/> class.
+		/// </summary>
 		public LifecycledComponentsReleasePolicy()
 		{
 		}

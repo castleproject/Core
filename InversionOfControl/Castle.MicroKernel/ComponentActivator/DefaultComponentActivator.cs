@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.Remoting;
-
 namespace Castle.MicroKernel.ComponentActivator
 {
 	using System;
 	using System.Reflection;
+	using System.Runtime.Remoting;
 
 	using Castle.Core;
 	using Castle.Core.Interceptor;

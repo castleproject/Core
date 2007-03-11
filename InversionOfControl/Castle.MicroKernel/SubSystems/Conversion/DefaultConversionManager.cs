@@ -16,7 +16,6 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 	using System.Collections;
-
 	using Castle.Core;
 	using Castle.Core.Configuration;
 
@@ -40,19 +39,19 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		protected virtual void InitDefaultConverters()
 		{
-			Add( new PrimitiveConverter() );
-			Add( new TimeSpanConverter() );
-			Add( new TypeNameConverter() );
-			Add( new EnumConverter() );
-			Add( new ListConverter() );
-			Add( new DictionaryConverter() );
+			Add(new PrimitiveConverter());
+			Add(new TimeSpanConverter());
+			Add(new TypeNameConverter());
+			Add(new EnumConverter());
+			Add(new ListConverter());
+			Add(new DictionaryConverter());
 #if DOTNET2
-			Add( new GenericDictionaryConverter() );
-			Add( new GenericListConverter() );
+			Add(new GenericDictionaryConverter());
+			Add(new GenericListConverter());
 #endif
-			Add( new ArrayConverter() ); 
-			Add( new ComponentConverter() );
-			Add( new AttributeAwareConverter() );
+			Add(new ArrayConverter());
+			Add(new ComponentConverter());
+			Add(new AttributeAwareConverter());
 		}
 
 		#region IConversionManager Members
@@ -99,17 +98,17 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			return false;
 		}
 
-	    public bool CanHandleType(Type type, IConfiguration configuration)
-	    {
-            foreach(ITypeConverter converter in converters)
-            {
-                if (converter.CanHandleType(type, configuration)) return true;
-            }
+		public bool CanHandleType(Type type, IConfiguration configuration)
+		{
+			foreach(ITypeConverter converter in converters)
+			{
+				if (converter.CanHandleType(type, configuration)) return true;
+			}
 
-            return false;
-	    }
+			return false;
+		}
 
-	    public object PerformConversion(String value, Type targetType)
+		public object PerformConversion(String value, Type targetType)
 		{
 			foreach(ITypeConverter converter in converters)
 			{
@@ -119,8 +118,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 				}
 			}
 
-			String message = String.Format("No converter registered to handle the type {0}", 
-				targetType.FullName);
+			String message = String.Format("No converter registered to handle the type {0}",
+			                               targetType.FullName);
 
 			throw new ConverterException(message);
 		}
@@ -135,8 +134,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 				}
 			}
 
-			String message = String.Format("No converter registered to handle the type {0}", 
-				targetType.FullName);
+			String message = String.Format("No converter registered to handle the type {0}",
+			                               targetType.FullName);
 
 			throw new ConverterException(message);
 		}
@@ -162,8 +161,11 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public ComponentModel CurrentModel
 		{
-			get { if (modelStack.Count == 0) return null; 
-				  else return (ComponentModel) modelStack.Peek(); }
+			get
+			{
+				if (modelStack.Count == 0) return null;
+				else return (ComponentModel) modelStack.Peek();
+			}
 		}
 
 		public ITypeConverter Composition

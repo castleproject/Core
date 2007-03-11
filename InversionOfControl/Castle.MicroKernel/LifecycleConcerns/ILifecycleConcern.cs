@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.LifecycleConcerns
 {
-	using System;
-
 	using Castle.Core;
 
 	/// <summary>
@@ -23,6 +21,6 @@ namespace Castle.MicroKernel.LifecycleConcerns
 	/// </summary>
 	public interface ILifecycleConcern
 	{
-		void Apply( ComponentModel model, object component );
+		void Apply(ComponentModel model, object component);
 	}
 }

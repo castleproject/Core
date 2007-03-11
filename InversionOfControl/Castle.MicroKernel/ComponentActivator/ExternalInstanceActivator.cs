@@ -14,10 +14,7 @@
 
 namespace Castle.MicroKernel.ComponentActivator
 {
-	using System;
-
 	using Castle.Core;
-
 
 	public class ExternalInstanceActivator : AbstractComponentActivator
 	{
@@ -27,7 +24,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected override object InternalCreate(CreationContext context)
 		{
-			return base.Model.ExtendedProperties["instance"];
+			return Model.ExtendedProperties["instance"];
 		}
 
 		protected override void InternalDestroy(object instance)
