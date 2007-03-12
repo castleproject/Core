@@ -1,5 +1,7 @@
 Release Candidate 2
 ===================
+- 	Applying commutative patch from Roy Tate: AR-133, AR-139, AR-138
+	ActiveRecordMultiQuery, ActiveRecordCriteriaQuery, CriteriaHelper, CountQuery.
 
 - AR-129: Applied patch by John Hurrell
   "Implement NHibernate's "foreign-key" Attribute"
