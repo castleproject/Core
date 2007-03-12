@@ -129,10 +129,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// <returns><see langword="true"/> if section is supported</returns>
 		public override bool SupportsSection(string name)
 		{
-			return name == "start" || name == "end" ||
+			return name == "start" || name == "endblock" ||
 			       name == "startcolumn" || name == "endcolumn" ||
 			       name == "startrow" || name == "endrow" ||
-			       name == "item" || name == "firstelement";
+			       name == "item" || name == "firstelement" || 
+				   name == "empty";
 		}
 
 		private void WriteElement(object item)
@@ -226,9 +227,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void EndTable()
 		{
-			if (Context.HasSection("end"))
+			if (Context.HasSection("endblock"))
 			{
-				Context.RenderSection("end");
+				Context.RenderSection("endblock");
 			}
 			else
 			{
