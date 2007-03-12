@@ -15,56 +15,39 @@
 namespace Castle.ActiveRecord.Queries
 {
 	using System;
+
 	using NHibernate;
 	using NHibernate.Expression;
 
 	/// <summary>
-	/// Query the database for a count (using COUNT(*) ) of all the entites of the specified type.
-	/// Optionally using a where clause;
-	/// Note: If Criteria are used, this query can not be included in a MultiQuery.
+	/// Criteria Query
+	/// Note: This query can not be included in a MultiQuery.
+	/// the problem is that NHibernate does not have a real CriteriaQuery class
 	/// </summary>
-	public class CountQuery : HqlBasedQuery
+	public class ActiveRecordCriteriaQuery : HqlBasedQuery
 	{
 		// constructors will set EITHER criterias OR detachedCriteria
 		private readonly ICriterion[] criterias;
 		private readonly DetachedCriteria detachedCriteria;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CountQuery"/> class.
-		/// </summary>
-		/// <param name="targetType">The target type.</param>
-		/// <param name="filter">The filter.</param>
-		/// <param name="parameters">The parameters.</param>
-		public CountQuery(Type targetType, string filter, params object[] parameters)
-			: base(targetType, "SELECT COUNT(*) FROM " + targetType.Name + " WHERE " + filter, parameters)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CountQuery"/> class.
-		/// </summary>
-		/// <param name="targetType">The target type.</param>
-		public CountQuery(Type targetType) : this(targetType, "1=1", null)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CountQuery"/> class.
+		/// Initializes a new instance of the <see cref="ActiveRecordCriteriaQuery"/> class.
 		/// </summary>
 		/// <param name="targetType">The target type.</param>
 		/// <param name="criterias">Criteria applied to the query</param>
-		public CountQuery(Type targetType, ICriterion[] criterias) : this(targetType, string.Empty, null)
+		public ActiveRecordCriteriaQuery(Type targetType, ICriterion[] criterias)
+			: base(targetType, string.Empty, null)
 		{
 			this.criterias = criterias;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CountQuery"/> class.
+		/// Initializes a new instance of the <see cref="ActiveRecordCriteriaQuery"/> class.
 		/// </summary>
 		/// <param name="targetType">The target type.</param>
 		/// <param name="detachedCriteria">Criteria applied to the query</param>
-		public CountQuery(Type targetType, DetachedCriteria detachedCriteria)
-			: this(targetType, string.Empty, null)
+		public ActiveRecordCriteriaQuery(Type targetType, DetachedCriteria detachedCriteria)
+			: base(targetType, string.Empty, null)
 		{
 			this.detachedCriteria = detachedCriteria;
 		}
@@ -73,21 +56,14 @@ namespace Castle.ActiveRecord.Queries
 		/// Executes the query.
 		/// </summary>
 		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
-		/// <returns><c>System.Int32</c> as object</returns>
+		/// <returns><c>ArrayList</c> as an <c>object</c></returns>
 		protected override object InternalExecute(ISession session)
 		{
 			if (detachedCriteria != null)
 			{
 				ICriteria criteria = detachedCriteria.GetExecutableCriteria(session);
 
-				criteria.SetProjection(Projections.RowCount());
-
-				Int32 count = Convert.ToInt32(criteria.UniqueResult());
-
-				// clear the projection, so our caller can re-use the DetachedCriteria
-				criteria.SetProjection(null);
-
-				return count;
+				return criteria.List();
 			}
 			else if (criterias != null)
 			{
@@ -95,13 +71,11 @@ namespace Castle.ActiveRecord.Queries
 
 				CriteriaHelper.AddCriterionToCriteria(criteria, criterias);
 
-				criteria.SetProjection(Projections.RowCount());
-
-				return Convert.ToInt32(criteria.UniqueResult());
+				return criteria.List();
 			}
 			else
 			{
-				return Convert.ToInt32(base.CreateQuery(session).UniqueResult());
+				return base.CreateQuery(session).List();
 			}
 		}
 	}

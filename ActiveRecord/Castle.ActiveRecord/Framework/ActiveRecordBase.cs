@@ -721,6 +721,20 @@ namespace Castle.ActiveRecord
 			return (int) ExecuteQuery(query);
 		}
 
+		/// <summary>
+		/// Returns the number of records of the specified 
+		/// type in the database
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="detachedCriteria">The criteria expression</param>
+		/// <returns>The count result</returns>
+		protected internal static int Count(Type targetType, DetachedCriteria detachedCriteria)
+		{
+			CountQuery query = new CountQuery(targetType, detachedCriteria);
+
+			return (int)ExecuteQuery(query);
+		}
+
 		#endregion
 
 		#region Exists
@@ -769,6 +783,17 @@ namespace Castle.ActiveRecord
 			return Count(targetType, criteria) > 0;
 		}
 
+		/// <summary>
+		/// Check if any instance matching the criteria exists in the database.
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="detachedCriteria">The criteria expression</param>		
+		/// <returns><c>true</c> if an instance is found; otherwise <c>false</c>.</returns>
+		protected internal static bool Exists(Type targetType, DetachedCriteria detachedCriteria)
+		{
+			return Count(targetType, detachedCriteria) > 0;
+		}
+		
 		#endregion
 
 		#region FindAll

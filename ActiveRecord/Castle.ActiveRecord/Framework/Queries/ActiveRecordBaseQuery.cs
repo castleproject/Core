@@ -117,6 +117,17 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Add this query to a multiquery
+		/// </summary>
+		/// <param name="session">an <c>ISession</c> shared by all queries in the multiquery</param>
+		/// <param name="multiquery">the <c>IMultiQuery</c> that will receive the newly created query</param>
+		internal void AddQuery(ISession session, IMultiQuery multiquery) 
+		{
+			IQuery query = CreateQuery(session);
+			multiquery.Add(query);
+		}
+
+		/// <summary>
 		/// Creates the <see cref="IQuery" /> instance.
 		/// </summary>
 		protected abstract IQuery CreateQuery(ISession session);

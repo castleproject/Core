@@ -105,11 +105,10 @@ namespace Castle.ActiveRecord.Queries
 			else
 			{
 				ICriteria criteria = session.CreateCriteria(RootType);
-				foreach(ICriterion criterion in criterions)
-				{
-					criteria.Add(criterion);
-				}
-				criteria.SetProjection(projection);
+
+                CriteriaHelper.AddCriterionToCriteria(criteria, criterions);
+
+                criteria.SetProjection(projection);
 				return criteria.UniqueResult<TResult>();
 			}
 		}

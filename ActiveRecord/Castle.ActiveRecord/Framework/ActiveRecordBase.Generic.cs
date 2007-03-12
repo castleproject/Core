@@ -220,6 +220,27 @@ namespace Castle.ActiveRecord
 			return Count(typeof(T), filter, args);
 		}
 
+		/// <summary>
+		/// Check if any instance matching the criteria exists in the database.
+		/// </summary>
+		/// <param name="criteria">The criteria expression</param>		
+		/// <returns>The count result</returns>
+		protected internal static int Count(params ICriterion[] criteria)
+		{
+			return Count(typeof(T), criteria);
+		}
+
+		/// <summary>
+		/// Returns the number of records of the specified 
+		/// type in the database
+		/// </summary>
+		/// <param name="detachedCriteria">The criteria expression</param>
+		/// <returns>The count result</returns>
+		protected internal static int Count(DetachedCriteria detachedCriteria)
+		{
+			return Count(typeof(T), detachedCriteria);
+		}
+
 		#endregion
 
 		#region Exists
@@ -263,6 +284,16 @@ namespace Castle.ActiveRecord
 		public static bool Exists(params ICriterion[] criteria)
 		{
 			return Exists(typeof(T), criteria);
+		}
+
+		/// <summary>
+		/// Check if any instance matching the criteria exists in the database.
+		/// </summary>
+		/// <param name="detachedCriteria">The criteria expression</param>		
+		/// <returns><c>true</c> if an instance is found; otherwise <c>false</c>.</returns>
+		public static bool Exists(DetachedCriteria detachedCriteria)
+		{
+			return Exists(typeof(T), detachedCriteria);
 		}
 
 		#endregion

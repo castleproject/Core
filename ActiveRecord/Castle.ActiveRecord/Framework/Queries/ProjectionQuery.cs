@@ -148,7 +148,7 @@ namespace Castle.ActiveRecord.Queries
 		/// Executes the specified query and return the results
 		/// </summary>
 		/// <param name="session">The session to execute the query in.</param>
-		/// <returns></returns>
+        /// <returns>IList&lt;TResultItem&gt; cast to object because of interface</returns>
 		object IActiveRecordQuery.Execute(ISession session)
 		{
 			ICriteria criteria = CreateCriteria(session);
@@ -191,10 +191,8 @@ namespace Castle.ActiveRecord.Queries
 				criteria.SetResultTransformer(new TypedResultTransformer<TResultItem>());
 			}
 
-			foreach(Order order in orders)
-			{
-				criteria.AddOrder(order);
-			}
+			CriteriaHelper.AddOrdersToCriteria(criteria, orders);
+
 			return criteria;
 		}
 
