@@ -44,5 +44,10 @@ namespace Igloo.Clinic.Application
         {
             _drugs.Remove(id);
         }
+
+        [SkipNavigation]
+        public virtual void Delete(long id, int j)
+        {
+        }
     }
 }

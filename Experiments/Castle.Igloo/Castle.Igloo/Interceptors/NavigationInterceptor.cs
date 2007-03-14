@@ -58,7 +58,7 @@ namespace Castle.Igloo.Interceptors
         public void Intercept(IInvocation invocation)
         {
             invocation.Proceed();
-            if (!_noNavigationMembers.Keys.Contains(invocation.Method.Name))
+            if (!_noNavigationMembers.Keys.Contains(invocation.Method.ToString()))
             {
                 _navigator.Navigate();
             }

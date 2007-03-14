@@ -83,7 +83,7 @@ namespace Castle.Igloo.Controllers
                 markedAllWithNoNavigation = true;
             }
 
-            // Cheks on Method
+            // Checks on Method
             if (!markedAllWithNoNavigation)
             {
                 MethodInfo[] methods = model.Implementation.GetMethods(BINDING_FLAGS_SET);
@@ -92,7 +92,7 @@ namespace Castle.Igloo.Controllers
                     skipNavigationAttribute = AttributeUtil.GetSkipNavigationAttribute(methods[i]);
                     if (skipNavigationAttribute != null)
                     {
-                        skipNavigationMembers.Add(methods[i].Name, skipNavigationAttribute);
+                        skipNavigationMembers.Add(methods[i].ToString(), skipNavigationAttribute);
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace Castle.Igloo.Controllers
                 for (int i = 0; i < methods.Length; i++)
                 {
                     SkipNavigationAttribute attribute = new SkipNavigationAttribute();
-                    skipNavigationMembers.Add(methods[i].Name, attribute);
+                    skipNavigationMembers.Add(methods[i].ToString(), attribute);
                 }
             }
 
