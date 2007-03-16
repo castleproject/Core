@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+#if DOTNET2
 	using System.Collections;
 
 	using Castle.DynamicProxy.Tests.GenClasses;
@@ -208,4 +209,5 @@ namespace Castle.DynamicProxy.Tests
 
 		}
 	}
+#endif
 }

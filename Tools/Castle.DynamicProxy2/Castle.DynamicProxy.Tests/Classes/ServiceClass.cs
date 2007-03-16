@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		public virtual byte Sum(byte b1, byte b2)
 		{
-			return System.Convert.ToByte(b1 + b2);
+			return Convert.ToByte(b1 + b2);
 		}
 
 		public virtual long Sum(long b1, long b2)

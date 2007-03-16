@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Castle.DynamicProxy.Tests.Classes
 {
+	using System;
+
 	public class Test : IDisposable, ICloneable
 	{
 		public void Dispose()

@@ -24,8 +24,5 @@ namespace Castle.DynamicProxy.Test.Classes
 	[Serializable]
 	public class ClassWithMarkerInterface
 	{
-		public ClassWithMarkerInterface()
-		{
-		}
 	}
 }

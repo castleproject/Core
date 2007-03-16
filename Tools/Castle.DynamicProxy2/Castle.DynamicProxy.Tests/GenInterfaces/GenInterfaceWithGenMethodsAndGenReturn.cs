@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.GenInterfaces
 {
+#if DOTNET2
 	public interface GenInterfaceWithGenMethodsAndGenReturn<T>
 	{
 		Z DoSomething<Z>(Z z, T t);
@@ -26,4 +27,5 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 			return z;
 		}
 	}
+#endif
 }

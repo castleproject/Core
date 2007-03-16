@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.InterClasses
 {
-	using System;
 
 	public class ClassWithMultiDimentionalArray : IClassWithMultiDimentionalArray
 	{

@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+#if DOTNET2
 	using System;
 	using System.Collections.Generic;
 	using Castle.DynamicProxy.Generators;
@@ -136,4 +137,5 @@ namespace Castle.DynamicProxy.Tests
 				new GenExplicitImplementation<int>(), logger);
 		}
 	}
+#endif
 }

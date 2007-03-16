@@ -34,10 +34,6 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 		private String _name;
 		private bool _started;
 
-		public MyInterfaceImpl()
-		{
-		}
-
 		public virtual String Name
 		{
 			get
