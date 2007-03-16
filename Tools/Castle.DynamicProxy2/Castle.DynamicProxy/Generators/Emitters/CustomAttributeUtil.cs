@@ -136,8 +136,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (propertyInfo.CanRead == false && propertyInfo.GetIndexParameters().Length != 0)
+				{
 					continue;
-				if (StringComparer.InvariantCultureIgnoreCase.Equals(propertyInfo.Name, parameterInfo.Name))
+				}
+				
+				if (string.Compare(propertyInfo.Name, parameterInfo.Name, true) == 0)
 				{
 					return ConvertValue(propertyInfo.GetValue(attribute, null), paramType);
 				}

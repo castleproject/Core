@@ -79,6 +79,11 @@
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "Castle.Core-vs2003"
+                    Project = "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -104,17 +109,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IInterceptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IInterceptorSelector.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IInvocation.cs"
+                    RelPath = "InternalsHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -125,11 +125,6 @@
                 />
                 <File
                     RelPath = "IProxyGenerationHook.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IProxyTargetAccessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -149,7 +144,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "StandardInteceptor.cs"
+                    RelPath = "RemotableInvocation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\BaseProxyGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\CacheKey.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -160,6 +165,36 @@
                 />
                 <File
                     RelPath = "Generators\Constants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\EventToGenerate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\GeneratorException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\InterfaceProxyGeneratorWithoutTarget.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\InterfaceProxyWithTargetGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\InterfaceProxyWithTargetInterfaceGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\PropertyToGenerate.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -189,12 +224,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\CustomAttributeUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\EventCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Generators\Emitters\EventEmitter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\Emitters\GenericUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -254,6 +299,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\TypeConstructorEmitter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\Emitters\TypeUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\CodeBuilders\AbstractCodeBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -279,12 +334,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\SimpleAST\AssignArrayStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\SimpleAST\AssignStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\SimpleAST\ConstReference.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\SimpleAST\ConstructorInvocationStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\Emitters\SimpleAST\ConvertExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -309,7 +379,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\SimpleAST\IndirectReference.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\SimpleAST\LiteralIntExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\Emitters\SimpleAST\LoadArrayElementExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\Emitters\SimpleAST\LoadRefArrayElementExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -329,6 +414,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\SimpleAST\NewArrayExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\SimpleAST\NewInstanceExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -339,12 +429,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\SimpleAST\NullExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\SimpleAST\Reference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Generators\Emitters\SimpleAST\ReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\Emitters\SimpleAST\ReferencesToObjectArrayExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -369,12 +469,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\Emitters\SimpleAST\ThrowStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\Emitters\SimpleAST\TypeReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Generators\Emitters\SimpleAST\TypeTokenExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Serialization\ProxyObjectReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}"
+        ProjectGuid = "{6B71F0BC-7A84-4759-978D-9BF42B385AD9}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.DynamicProxy"
+                AssemblyName = "Castle.DynamicProxy.Tests-vs2003"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.DynamicProxy"
+                RootNamespace = "Castle.DynamicProxy.Tests_vs2003"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;PHYSICALASSEMBLY"
+                    DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -67,31 +67,30 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AbstractInvocation.cs"
+                    RelPath = "AccessLevelTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AllMethodsHook.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "App.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
@@ -99,270 +98,315 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DefaultProxyBuilder.cs"
+                    RelPath = "BasePEVerifyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IInterceptor.cs"
+                    RelPath = "BasicClassProxyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IInterceptorSelector.cs"
+                    RelPath = "BasicInterfaceProxyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IInvocation.cs"
+                    RelPath = "BasicInterfaceProxyWithoutTargetTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IProxyBuilder.cs"
+                    RelPath = "BugsReportedTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IProxyGenerationHook.cs"
+                    RelPath = "CacheKeyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ModuleScope.cs"
+                    RelPath = "Castle.DynamicProxy.Tests.build"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "ClassWithAttributesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ProxyGenerationOptions.cs"
+                    RelPath = "GenerationHookTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ProxyGenerator.cs"
+                    RelPath = "GenericClassProxyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "StandardInteceptor.cs"
+                    RelPath = "GenericInterfaceProxyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\ClassProxyGenerator.cs"
+                    RelPath = "InvocationTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Constants.cs"
+                    RelPath = "MethodsWithAttributesOnParametersTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\AbstractTypeEmitter.cs"
+                    RelPath = "MixinTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\ArgumentsUtil.cs"
+                    RelPath = "OutRefParams.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\ClassEmitter.cs"
+                    RelPath = "RhinoMocksTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\ConstructorCollection.cs"
+                    RelPath = "SerializableClassTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\ConstructorEmitter.cs"
+                    RelPath = "TypeEquivalentTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\EventCollection.cs"
+                    RelPath = "XmlSerializationTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\EventEmitter.cs"
+                    RelPath = "BugsReported\Camera.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\IMemberEmitter.cs"
+                    RelPath = "BugsReported\DynProxy46.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\LdcOpCodesDictionary.cs"
+                    RelPath = "Classes\AttributedClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\LdindOpCodesDictionary.cs"
+                    RelPath = "Classes\ClassToSerialize.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\MethodCollection.cs"
+                    RelPath = "Classes\ClassWithCharRetType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\MethodEmitter.cs"
+                    RelPath = "Classes\ClassWithConstructors.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\NestedClassCollection.cs"
+                    RelPath = "Classes\ClassWithIndexer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\NestedClassEmitter.cs"
+                    RelPath = "Classes\DiffAccessLevelOnProperties.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\OpCodeUtil.cs"
+                    RelPath = "Classes\MySerializableClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\PropertiesCollection.cs"
+                    RelPath = "Classes\NonPublicConstructorClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\PropertyEmitter.cs"
+                    RelPath = "Classes\NonPublicMethodsClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\StindOpCodesDictionary.cs"
+                    RelPath = "Classes\ServiceClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\CodeBuilders\AbstractCodeBuilder.cs"
+                    RelPath = "Classes\Test.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\CodeBuilders\ConstructorCodeBuilder.cs"
+                    RelPath = "GenClasses\ClassWithGenArgs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\CodeBuilders\MethodCodeBuilder.cs"
+                    RelPath = "GenClasses\ClassWithIndexer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\AddressOfReferenceExpression.cs"
+                    RelPath = "GenClasses\GenClassNameClash.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\ArgumentReference.cs"
+                    RelPath = "GenClasses\GenClassWithConstraints.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\AssignStatement.cs"
+                    RelPath = "GenClasses\GenClassWithGenMethods.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\ConstructorInvocationStatement.cs"
+                    RelPath = "GenClasses\GenClassWithGenMethodsConstrained.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\Expression.cs"
+                    RelPath = "GenClasses\GenClassWithGenReturn.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\ExpressionStatement.cs"
+                    RelPath = "GenClasses\OnlyGenMethodsClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\FieldReference.cs"
+                    RelPath = "GenInterfaces\GenExplicitImplementation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\IILEmitter.cs"
+                    RelPath = "GenInterfaces\GenInterface.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\LiteralIntExpression.cs"
+                    RelPath = "GenInterfaces\GenInterfaceHierarchy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\LocalReference.cs"
+                    RelPath = "GenInterfaces\GenInterfaceWithGenArray.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\MethodInvocationExpression.cs"
+                    RelPath = "GenInterfaces\GenInterfaceWithGenericTypes.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\NewInstanceExpression.cs"
+                    RelPath = "GenInterfaces\GenInterfaceWithGenMethods.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\NopStatement.cs"
+                    RelPath = "GenInterfaces\GenInterfaceWithGenMethodsAndGenReturn.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\Reference.cs"
+                    RelPath = "Interceptors\ChangeTargetInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\ReferenceExpression.cs"
+                    RelPath = "Interceptors\KeepDataInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\ReturnReferenceExpression.cs"
+                    RelPath = "Interceptors\LogInvocationInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\ReturnStatement.cs"
+                    RelPath = "Interceptors\ResultModifierInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\SelfReference.cs"
+                    RelPath = "InterClasses\AlwaysThrowsServiceImpl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\Statement.cs"
+                    RelPath = "InterClasses\ClassWithIndexer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\Emitters\SimpleAST\TypeReference.cs"
+                    RelPath = "InterClasses\ClassWithMarkerInterface.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "InterClasses\ClassWithMultiDimentionalArray.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InterClasses\IClassWithMultiDimentionalArray.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InterClasses\IExtendedService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InterClasses\IMyInterface2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InterClasses\InterfaceWithIndexer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InterClasses\IService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InterClasses\IService2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InterClasses\ServiceImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <Folder RelPath = "Properties\" />
             </Include>
         </Files>
     </CSHARP>
