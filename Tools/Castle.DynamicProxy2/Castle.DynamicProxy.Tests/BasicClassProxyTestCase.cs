@@ -173,7 +173,7 @@ namespace Castle.DynamicProxy.Tests
 			catch(NotImplementedException ex)
 			{
 				Assert.AreEqual("This is a DynamicProxy2 error: the interceptor attempted " + 
-					"to 'Proceed' for a method without a target, for example, an interface method", ex.Message);
+					"to 'Proceed' for a method without a target, for example, an interface method or an abstract method", ex.Message);
 			}
 		}
 

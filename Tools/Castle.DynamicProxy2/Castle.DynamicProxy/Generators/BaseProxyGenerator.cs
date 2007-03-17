@@ -211,7 +211,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (propToGen.CanWrite)
 				{
-					NestedClassEmitter nestedClass = method2Invocation[propToGen.GetMethod];
+					NestedClassEmitter nestedClass = method2Invocation[propToGen.SetMethod];
 
 					MethodAttributes atts = ObtainMethodAttributes(propToGen.SetMethod);
 
@@ -607,6 +607,9 @@ namespace Castle.DynamicProxy.Generators
 		{
 			MethodInfo targetMethod = methodOnTarget != null ? methodOnTarget : methodInfo;
 
+			if(targetMethod.IsAbstract)
+				return null;
+
 			// MethodBuild creation
 
 			MethodAttributes atts = MethodAttributes.Family;
@@ -842,7 +845,7 @@ namespace Castle.DynamicProxy.Generators
 
 			String message =
 				String.Format("This is a DynamicProxy2 error: the interceptor attempted " +
-							  "to 'Proceed' for a method without a target, for example, an interface method");
+							  "to 'Proceed' for a method without a target, for example, an interface method or an abstract method");
 
 			method.CodeBuilder.AddStatement(new ThrowStatement(typeof(NotImplementedException), message));
 

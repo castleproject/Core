@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace Castle.DynamicProxy.Tests
 {
 	using Castle.Core.Interceptor;
@@ -27,14 +29,96 @@ namespace Castle.DynamicProxy.Tests
 			ProxyGenerator generator = new ProxyGenerator();
 
 			ICameraService proxy = (ICameraService)
-			   generator.CreateInterfaceProxyWithTarget(typeof(ICameraService), 
-			                                            new CameraService(), 
-			                                            new StandardInterceptor());
+			   generator.CreateInterfaceProxyWithTarget(typeof(ICameraService),
+														new CameraService(),
+														new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
-			
+
 			proxy.Add("", "");
 			proxy.Record(null);
+		}
+
+		[Test]
+		public void ProxyInterfaceWithSetterOnly()
+		{
+			ProxyGenerator generator = new ProxyGenerator();
+
+			IHaveOnlySetter proxy = (IHaveOnlySetter)
+			   generator.CreateInterfaceProxyWithTarget(typeof(IHaveOnlySetter),
+					new HaveOnlySetter(),
+					new SkipCallingMethodInterceptor());
+
+			Assert.IsNotNull(proxy);
+
+			proxy.Foo = "bar";
+		}
+
+		[Test]
+		[ExpectedException(typeof(NotImplementedException), "This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method")]
+		public void CallingProceedOnAbstractMethodShouldThrowException()
+		{
+			ProxyGenerator generator = new ProxyGenerator();
+
+			AbstractClass proxy = (AbstractClass)
+			   generator.CreateClassProxy(typeof(AbstractClass), ProxyGenerationOptions.Default, new StandardInterceptor());
+
+			Assert.IsNotNull(proxy);
+
+			proxy.Foo();
+
+		}
+
+		[Test]
+		public void ProxyTypeThatInheritFromGenericType()
+		{
+			ProxyGenerator generator = new ProxyGenerator();
+
+			IUserRepository proxy = (IUserRepository)
+			                        generator.CreateInterfaceProxyWithoutTarget(typeof (IUserRepository), 
+									new SkipCallingMethodInterceptor());
+
+			Assert.IsNotNull(proxy);
+
+	
+		}
+	}
+
+	public interface IRepository<TEntity, TKey>
+	{
+		TEntity GetById(TKey key);
+	}
+
+	public class User{}
+
+	public interface IUserRepository : IRepository<User, string>
+	{
+		
+	}
+
+	public abstract class AbstractClass
+	{
+		public abstract string Foo();
+	}
+
+	public class SkipCallingMethodInterceptor : IInterceptor
+	{
+		public void Intercept(IInvocation invocation)
+		{
+
+		}
+	}
+
+	public interface IHaveOnlySetter
+	{
+		string Foo { set; }
+	}
+
+	public class HaveOnlySetter : IHaveOnlySetter
+	{
+		public string Foo
+		{
+			set { throw new System.Exception("The method or operation is not implemented."); }
 		}
 	}
 }
