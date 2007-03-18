@@ -38,8 +38,6 @@ namespace Castle.Components.Binder
 		/// <summary>Collect the databind errors</summary>
 		protected IList errors;
 
-		private ILogger logger = NullLogger.Instance;
-
 		/// <summary>Holds a sorted array of properties names that should be ignored</summary>
 		private string[] excludedPropertyList;
 
@@ -51,6 +49,8 @@ namespace Castle.Components.Binder
 		private IDictionary validationErrorSummaryPerInstance = new Hashtable();
 
 		private IBinderTranslator binderTranslator;
+
+		private ILogger logger = NullLogger.Instance;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataBinder"/> class.
@@ -554,6 +554,11 @@ namespace Castle.Components.Binder
 		}
 
 		#endregion
+
+		protected ILogger Logger
+		{
+			get { return logger; }
+		}
 
 		protected object ConvertLeafNode(Type desiredType, LeafNode lNode, out bool conversionSucceeded)
 		{
