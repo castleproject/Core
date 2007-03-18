@@ -53,6 +53,15 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="MonoRailServiceContainer"/> class.
+		/// </summary>
+		/// <param name="config">The config.</param>
+		public MonoRailServiceContainer(MonoRailConfiguration config) : this()
+		{
+			this.config = config;
+		}
+
+		/// <summary>
 		/// Allows registration without the configuration
 		/// </summary>
 		public void RegisterBaseService(Type service, object instance)

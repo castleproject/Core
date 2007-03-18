@@ -89,7 +89,7 @@ namespace TestSiteNVelocity.Controllers
 		{
 			Movement movement = (Movement) BindObject(typeof(Movement), "mov");
 			
-			RenderText(String.Format("incoming {0} {1}", movement.Name, movement.Amount.ToString()));
+			RenderText(String.Format("incoming {0} {1}", movement.Name, movement.Amount));
 		}
 
 		public void ArrayBinding()

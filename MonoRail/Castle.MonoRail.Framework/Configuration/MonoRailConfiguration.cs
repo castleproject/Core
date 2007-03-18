@@ -40,12 +40,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		private ExtensionEntryCollection extensions;
 		private ServiceEntryCollection services;
 		private DefaultUrlCollection defaultUrls;
-		
+
 		/// <summary>
-		/// Pendent
+		/// Initializes a new instance of the <see cref="MonoRailConfiguration"/> class.
 		/// </summary>
-		/// <param name="section"></param>
-		public MonoRailConfiguration(XmlNode section)
+		public MonoRailConfiguration()
 		{
 			smtpConfig = new SmtpConfig();
 			viewEngineConfig = new ViewEngineConfig();
@@ -58,7 +57,14 @@ namespace Castle.MonoRail.Framework.Configuration
 			defaultUrls = new DefaultUrlCollection();
 			
 			checkClientIsConnected = false;
-			
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <param name="section"></param>
+		public MonoRailConfiguration(XmlNode section) : this()
+		{			
 			configurationSection = section;
 		}
 

@@ -21,23 +21,43 @@ namespace Castle.MonoRail.Framework.Services
 
 	public abstract class AbstractServiceContainer : MarshalByRefObject, IServiceContainer
 	{
-		private readonly IServiceContainer parent;
+		private IServiceContainer parent;
 		private IDictionary type2Service;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractServiceContainer"/> class.
+		/// </summary>
 		public AbstractServiceContainer()
 		{
 		}
 
+		#region IServiceContainer
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractServiceContainer"/> class.
+		/// </summary>
+		/// <param name="parent">The parent.</param>
 		public AbstractServiceContainer(IServiceContainer parent)
 		{
 			this.parent = parent;
 		}
 
+		/// <summary>
+		/// Adds the specified service to the service container.
+		/// </summary>
+		/// <param name="serviceType">The type of service to add.</param>
+		/// <param name="serviceInstance">An instance of the service type to add. This object must implement or inherit from the type indicated by the serviceType parameter.</param>
 		public void AddService(Type serviceType, object serviceInstance)
 		{
 			AddService(serviceType, serviceInstance, false);
 		}
 
+		/// <summary>
+		/// Adds the specified service to the service container, and optionally promotes the service to any parent service containers.
+		/// </summary>
+		/// <param name="serviceType">The type of service to add.</param>
+		/// <param name="serviceInstance">An instance of the service type to add. This object must implement or inherit from the type indicated by the serviceType parameter.</param>
+		/// <param name="promote">true to promote this request to any parent service containers; otherwise, false.</param>
 		public void AddService(Type serviceType, object serviceInstance, bool promote)
 		{
 			if (promote)
@@ -59,21 +79,41 @@ namespace Castle.MonoRail.Framework.Services
 			type2Service[serviceType] = serviceInstance;		
 		}
 
+		/// <summary>
+		/// Adds the specified service to the service container.
+		/// </summary>
+		/// <param name="serviceType">The type of service to add.</param>
+		/// <param name="callback">A callback object that is used to create the service. This allows a service to be declared as available, but delays the creation of the object until the service is requested.</param>
 		public void AddService(Type serviceType, ServiceCreatorCallback callback)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Adds the specified service to the service container, and optionally promotes the service to parent service containers.
+		/// </summary>
+		/// <param name="serviceType">The type of service to add.</param>
+		/// <param name="callback">A callback object that is used to create the service. This allows a service to be declared as available, but delays the creation of the object until the service is requested.</param>
+		/// <param name="promote">true to promote this request to any parent service containers; otherwise, false.</param>
 		public void AddService(Type serviceType, ServiceCreatorCallback callback, bool promote)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Removes the specified service type from the service container.
+		/// </summary>
+		/// <param name="serviceType">The type of service to remove.</param>
 		public void RemoveService(Type serviceType)
 		{
 			RemoveService(serviceType, false);
 		}
 
+		/// <summary>
+		/// Removes the specified service type from the service container, and optionally promotes the service to parent service containers.
+		/// </summary>
+		/// <param name="serviceType">The type of service to remove.</param>
+		/// <param name="promote">true to promote this request to any parent service containers; otherwise, false.</param>
 		public void RemoveService(Type serviceType, bool promote)
 		{
 			if (promote)
@@ -93,6 +133,13 @@ namespace Castle.MonoRail.Framework.Services
 			}
 		}
 
+		/// <summary>
+		/// Gets the service object of the specified type.
+		/// </summary>
+		/// <param name="serviceType">An object that specifies the type of service object to get.</param>
+		/// <returns>
+		/// A service object of type serviceType.-or- null if there is no service object of type serviceType.
+		/// </returns>
 		public object GetService(Type serviceType)
 		{
 			object service = null;
@@ -113,6 +160,18 @@ namespace Castle.MonoRail.Framework.Services
 			}
 
 			return service;
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Gets or sets the parent container.
+		/// </summary>
+		/// <value>The parent.</value>
+		public IServiceContainer Parent
+		{
+			get { return parent; }
+			set { parent = value; }
 		}
 
 		private IServiceContainer ParentContainer

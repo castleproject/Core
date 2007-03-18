@@ -107,19 +107,27 @@ namespace Castle.MonoRail.Framework.Helpers
 			return RenderScriptBlockToSource("/MonoRail/Files/FormHelperScript");
 		}
 
-		#region FormTag related (TODO: Document)
+		#region FormTag related
 
 		/// <summary>
 		/// Creates a form tag based on the parameters.
-		/// Pendent: more documentation
+		/// <para>
+		/// Javascript validation can also be bound to 
+		/// the form and|or elements nested as long as the helper is 
+		/// able to reach the <see cref="Type"/> of the object used on your view code
+		/// </para>
+		/// <para>
+		/// The action attribute generation will use <see cref="UrlHelper"/>
+		/// </para>
 		/// </summary>
-		/// <param name="parameters">The parameters.</param>
+		/// <param name="parameters">The parameters for the tag or for action and form validation generation.</param>
 		/// <returns></returns>
 		public string FormTag(IDictionary parameters)
 		{
 			string url = null;
 			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
 
+			// Creates action attribute
 			if (CommonUtils.ObtainEntryAndRemove(parameters, "noaction", "false") == "false")
 			{
 				url = UrlHelper.For(parameters);
@@ -129,7 +137,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
-			
 			string afterFormTag = validationConfig.CreateAfterFormOpened(currentFormId);
 			string formContent;
 
@@ -145,9 +152,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return formContent + afterFormTag;
 		}
+
 		/// <summary>
 		/// Generate Ajax form tag for ajax based form submission
-		/// Note noaction is not supported here as ajax requires the url
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
@@ -238,23 +245,45 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
-		#region Submit and Button related (TODO: Document)
+		#region Submit and Button related
 
+		/// <summary>
+		/// Generates an input submit element.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns>The element tag</returns>
 		public string Submit(string value)
 		{
 			return Submit(value, null);
 		}
 
+		/// <summary>
+		/// Generates an input submit element.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The element tag</returns>
 		public string Submit(string value, IDictionary attributes)
 		{
 			return CreateInputElement("submit", value, attributes);
 		}
 
+		/// <summary>
+		/// Generates an input button element.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns>The element tag</returns>
 		public string Button(string value)
 		{
 			return Submit(value, null);
 		}
 
+		/// <summary>
+		/// Generates an input button element.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The element tag</returns>
 		public string Button(string value, IDictionary attributes)
 		{
 			return CreateInputElement("button", value, attributes);

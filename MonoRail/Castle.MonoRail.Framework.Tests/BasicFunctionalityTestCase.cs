@@ -18,8 +18,6 @@ namespace Castle.MonoRail.Framework.Tests
 	
 	using NUnit.Framework;
 
-	using Castle.MonoRail.TestSupport;
-
 
 	[TestFixture]
 	public class BasicFunctionalityTestCase : AbstractTestCase

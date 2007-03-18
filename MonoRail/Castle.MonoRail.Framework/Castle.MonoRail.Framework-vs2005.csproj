@@ -441,6 +441,7 @@
     <Compile Include="SmartDispatcherController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Test\TestEngineContext.cs" />
     <Compile Include="TransformFilter.cs" />
     <Compile Include="TransformFilters\Formatters\WikiFormatter.cs" />
     <Compile Include="TransformFilters\LowerCaseTransformFilter.cs" />

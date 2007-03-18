@@ -21,8 +21,6 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	using Castle.MonoRail.Framework.Internal;
-
 	/// <summary>
 	/// Represents an abstraction between the MonoRail API
 	/// and the ASP.Net API. 
