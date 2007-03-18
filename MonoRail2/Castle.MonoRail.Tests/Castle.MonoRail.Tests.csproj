@@ -35,7 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControllerExecutorTestCase.cs" />
+    <Compile Include="PocoControllerSupportTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCategories.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.MonoRail\Castle.MonoRail.csproj">

@@ -29,7 +29,7 @@ namespace Castle.MonoRail
 			this.actionMethod = actionMethod;
 		}
 
-		public override void Execute(IController controller)
+		public override void Execute(object controller)
 		{
 			actionMethod.Invoke(controller, null);
 		}

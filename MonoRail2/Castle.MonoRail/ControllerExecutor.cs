@@ -26,7 +26,7 @@ namespace Castle.MonoRail
 	/// </remarks>
 	public class ControllerExecutor
 	{
-		private readonly IController controller;
+		private readonly object controller;
 		private readonly IExecutionContext executionContext;
 
 		/// <summary>
@@ -34,14 +34,19 @@ namespace Castle.MonoRail
 		/// </summary>
 		/// <param name="controller">The controller.</param>
 		/// <param name="executionContext">The execution context.</param>
-		public ControllerExecutor(IController controller, IExecutionContext executionContext)
+		public ControllerExecutor(object controller, IExecutionContext executionContext)
 		{
 			if (controller == null) throw new ArgumentNullException("controller");
 			if (executionContext == null) throw new ArgumentNullException("executionContext");
 
 			UrlInfo url = executionContext.OriginalUrl;
 
-			controller.SetInitialState(url.Area, url.Controller, url.Action);
+			IController properController = controller as IController;
+
+			if (properController != null)
+			{
+				properController.SetInitialState(url.Area, url.Controller, url.Action);
+			}
 
 			this.controller = controller;
 			this.executionContext = executionContext;

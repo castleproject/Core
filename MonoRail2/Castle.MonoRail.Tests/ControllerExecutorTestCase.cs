@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Tests
 	using Castle.MonoRail.Test;
 	using NUnit.Framework;
 
-	[TestFixture]
+	[TestFixture, Category(TestCategories.Core)]
 	public class ControllerExecutorTestCase
 	{
 		private SimpleController controller;

@@ -39,6 +39,6 @@ namespace Castle.MonoRail
 
 		public abstract ActionType ActionType { get; }
 
-		public abstract void Execute(IController controller);
+		public abstract void Execute(object controller);
 	}
 }
