@@ -34,10 +34,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionExecutor.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="ControllerExecutor.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="IExecutionContext.cs" />
+    <Compile Include="MethodActionExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\TestContext.cs" />
     <Compile Include="UrlInfo.cs" />
