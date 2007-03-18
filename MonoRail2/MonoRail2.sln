@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail", "Castle.M
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Tests", "Castle.MonoRail.Tests\Castle.MonoRail.Tests.csproj", "{AC90700E-49D7-4047-9D4F-C81392A0AF38}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +23,10 @@ Global
 		{5EA0DDBB-755D-49DE-BDF1-71D01B5BB228}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EA0DDBB-755D-49DE-BDF1-71D01B5BB228}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EA0DDBB-755D-49DE-BDF1-71D01B5BB228}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC90700E-49D7-4047-9D4F-C81392A0AF38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC90700E-49D7-4047-9D4F-C81392A0AF38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC90700E-49D7-4047-9D4F-C81392A0AF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC90700E-49D7-4047-9D4F-C81392A0AF38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
