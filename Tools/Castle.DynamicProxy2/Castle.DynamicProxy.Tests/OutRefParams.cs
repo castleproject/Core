@@ -13,14 +13,13 @@
 // limitations under the License.
 
 
-using System;
-
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
-	
+
 	[TestFixture]
 	public class OutRefParams
 	{
@@ -36,7 +35,7 @@ namespace Castle.DynamicProxy.Tests
 		public void CanCreateProxyOfInterfaceWithOutParameter()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			object proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut),interceptor);
+			object proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
 			Assert.IsNotNull(proxy);
 		}
 
@@ -44,8 +43,8 @@ namespace Castle.DynamicProxy.Tests
 		public void CanCallMethodWithOutParameter()
 		{
 			int i;
-			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate {});
-			WithOut proxy = (WithOut)generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut),interceptor);
+			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate { });
+			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
 			proxy.Do(out i);
 		}
 
@@ -53,46 +52,60 @@ namespace Castle.DynamicProxy.Tests
 		public void CanAffectValueOfOutParameter()
 		{
 			int i;
-			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate (IInvocation invocation)
-			{
-				invocation.Arguments[0] = 5;
-			});
-			WithOut proxy = (WithOut)generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut),interceptor);
+			InvocatingInterceptor interceptor =
+				new InvocatingInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
+			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
 			proxy.Do(out i);
-			Assert.AreEqual(5,i);
+			Assert.AreEqual(5, i);
 		}
 
 		[Test]
 		public void CanCreateProxyWithRefParam()
 		{
-			int i =3;
-			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate (IInvocation invocation)
-			{
-				invocation.Arguments[0] = 5;
-			});
-			WithOut proxy = (WithOut)generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut),interceptor);
+			int i = 3;
+			InvocatingInterceptor interceptor =
+				new InvocatingInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
+			WithOut proxy = (WithOut) generator.CreateInterfaceProxyWithoutTarget(typeof(WithOut), interceptor);
 			proxy.Did(ref i);
-			Assert.AreEqual(5,i);
+			Assert.AreEqual(5, i);
 		}
 
 
 		[Test]
 		public void CanCreateComplexOutRefProxyOnClass()
 		{
-			int i =3;
+			int i = 3;
 			string s1 = "2";
 			string s2;
-			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate (IInvocation invocation)
-			{
-				invocation.Arguments[0] = 5;
-				invocation.Arguments[1] = "aaa";
-				invocation.Arguments[3] = "bbb";
-			});
-			MyClass proxy = (MyClass)generator.CreateClassProxy(typeof(MyClass),interceptor);
+			InvocatingInterceptor interceptor = new InvocatingInterceptor(delegate(IInvocation invocation)
+			                                                              	{
+			                                                              		invocation.Arguments[0] = 5;
+			                                                              		invocation.Arguments[1] = "aaa";
+			                                                              		invocation.Arguments[3] = "bbb";
+			                                                              	});
+			MyClass proxy = (MyClass) generator.CreateClassProxy(typeof(MyClass), interceptor);
 			proxy.MyMethod(out i, ref s1, 1, out s2);
-			Assert.AreEqual(5,i);
-			Assert.AreEqual(s1, "aaa" );
-			Assert.AreEqual(s2, "bbb" );
+			Assert.AreEqual(5, i);
+			Assert.AreEqual(s1, "aaa");
+			Assert.AreEqual(s2, "bbb");
+		}
+
+		[Test, Explicit]
+		public void CanCreateProxyWithStructRefParam()
+		{
+			MyStruct s = new MyStruct(10);
+			MyClass proxy = (MyClass)generator.CreateClassProxy(typeof(MyClass), new StandardInterceptor());
+			proxy.MyMethodWithStruct(ref s);
+			Assert.AreEqual(20, s.Value);
+		}
+
+		public struct MyStruct
+		{
+			public int Value;
+			public MyStruct(int value)
+			{
+				Value = value;
+			}
 		}
 
 		public interface WithOut
@@ -102,13 +115,18 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 
-		 public class MyClass
-        {
-            public virtual void MyMethod(out int i, ref string s, int i1, out string s2)
-            {
-                throw new NotImplementedException(); 
-            }
-        }
+		public class MyClass
+		{
+			public virtual void MyMethod(out int i, ref string s, int i1, out string s2)
+			{
+				throw new NotImplementedException();
+			}
+
+			public virtual void MyMethodWithStruct(ref MyStruct s)
+			{
+				s.Value = 2 * s.Value;
+			}
+		}
 
 		public class InvocatingInterceptor : IInterceptor
 		{
