@@ -14,8 +14,6 @@
 
 namespace Castle.Core
 {
-	using System;
-
 	/// <summary>
 	/// Only called for components that 
 	/// belongs to a pool when the component

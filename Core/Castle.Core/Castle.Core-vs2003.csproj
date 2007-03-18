@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{C3D02148-5E0F-4C35-A38E-D59308AA4DAC}"
     >
@@ -99,12 +99,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\ComponentActivatorAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\ComponentProxyBehaviorAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\DoNotWireAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\InterceptorAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Attributes\LifestyleAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interceptor\IChangeProxyTarget.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -119,17 +139,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Interceptor\IMethodInterceptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Interceptor\IMethodInvocation.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Interceptor\IOnBehalfAware.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interceptor\IProxyTargetAccessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -179,6 +194,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Logging\IContextProperties.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\IContextStack.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\IContextStacks.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\IExtendedLogger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\IExtendedLoggerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Logging\ILogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -190,6 +230,11 @@
                 />
                 <File
                     RelPath = "Logging\LoggerException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Logging\Factories\AbstractExtendedLoggerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

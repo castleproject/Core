@@ -14,8 +14,6 @@
 
 namespace Castle.Core
 {
-	using System;
-
 	/// <summary>
 	/// Lifecycle interface. If implemented by a component,
 	/// the method Initialized will be invoked by the container

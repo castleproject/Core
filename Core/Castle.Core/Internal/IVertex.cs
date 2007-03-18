@@ -14,8 +14,6 @@
 
 namespace Castle.Core
 {
-	using System;
-
 	/// <summary>
 	/// Abstract representation of a vertex.
 	/// </summary>
