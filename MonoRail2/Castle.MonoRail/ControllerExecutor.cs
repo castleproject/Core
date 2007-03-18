@@ -69,5 +69,12 @@ namespace Castle.MonoRail
 
 			return null;
 		}
+
+		public void Execute(ActionExecutor executor)
+		{
+			if (executor == null) throw new ArgumentNullException("executor");
+
+			executor.Execute(controller);
+		}
 	}
 }

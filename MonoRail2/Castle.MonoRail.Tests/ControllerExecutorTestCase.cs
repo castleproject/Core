@@ -52,10 +52,23 @@ namespace Castle.MonoRail.Tests
 			Assert.AreEqual("Index", actionExec.Name);
 		}
 
+		[Test]
+		public void ActionIsExecuted()
+		{
+			ControllerExecutor executor = new ControllerExecutor(controller, testContext);
+
+			executor.Execute(executor.SelectAction());
+
+			Assert.IsTrue(controller.wasRun, "ControllerExecutor failed to execute the action");
+		}
+
 		public class SimpleController : Controller
 		{
+			public bool wasRun;
+
 			public void Index()
 			{
+				wasRun = true;
 			}
 		}
 	}
