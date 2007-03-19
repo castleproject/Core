@@ -1,4 +1,7 @@
 
+- Fixed FACILITIES-77
+  "ILoggerFactory instance creation requires constructor with one argument"
+
 Alpha Version 1.0.0
 - First release
 

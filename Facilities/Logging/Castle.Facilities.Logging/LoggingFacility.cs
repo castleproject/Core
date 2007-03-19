@@ -16,6 +16,7 @@ namespace Castle.Facilities.Logging
 {
 	using System;
 	using System.Configuration;
+	using System.Reflection;
 	using Castle.Core.Logging;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
@@ -67,6 +68,9 @@ namespace Castle.Facilities.Logging
 		private ILoggerFactory factory;
 		private LoggerImplementation logApi;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoggingFacility"/> class.
+		/// </summary>
 		public LoggingFacility()
 		{
 		}
@@ -132,6 +136,49 @@ namespace Castle.Facilities.Logging
 
 		private void CreateProperLoggerFactory(string customType, string configFile)
 		{
+			Type loggerFactoryType = GetLoggingFactoryType(customType);
+
+			if (loggerFactoryType == null)
+			{
+				throw new FacilityException("LoggingFacility was unable to find an implementation of ILoggerFactory or IExtendedLoggerFactory.");
+			}
+
+			object[] args = GetLoggingFactoryArguments(configFile, loggerFactoryType);
+
+			if (logApi == LoggerImplementation.ExtendedNLog || logApi == LoggerImplementation.ExtendedLog4net)
+			{
+				factory = (IExtendedLoggerFactory) Activator.CreateInstance(loggerFactoryType, args);
+			}
+			else
+			{
+				factory = (ILoggerFactory) Activator.CreateInstance(loggerFactoryType, args);
+			}
+		}
+
+		private object[] GetLoggingFactoryArguments(string configFile, Type loggerFactoryType)
+		{
+			object[] args = null;
+
+			ConstructorInfo ctor = loggerFactoryType.GetConstructor(BindingFlags.Instance|BindingFlags.Public, null, new Type[] { typeof(string) }, null);
+
+			if (ctor != null)
+			{
+				args = new object[] { configFile };
+			}
+			else
+			{
+				ctor = loggerFactoryType.GetConstructor(BindingFlags.Instance|BindingFlags.Public, null, new Type[0], null);
+
+				if (ctor == null)
+				{
+					throw new FacilityException("No support constructor found for logging type " + logApi);
+				}
+			}
+			return args;
+		}
+
+		private Type GetLoggingFactoryType(string customType)
+		{
 			Type loggerFactoryType;
 
 			switch(logApi)
@@ -140,8 +187,8 @@ namespace Castle.Facilities.Logging
 					if (customType == null)
 					{
 						String message = "If you specify loggingApi='custom' " +
-														 "then you must use the attribute customLoggerFactory to inform the " +
-														 "type name of the custom logger factory";
+						                 "then you must use the attribute customLoggerFactory to inform the " +
+						                 "type name of the custom logger factory";
 #if DOTNET2
 						throw new ConfigurationErrorsException(message);
 #else
@@ -150,12 +197,12 @@ namespace Castle.Facilities.Logging
 					}
 
 					loggerFactoryType = (Type)
-															converter.PerformConversion(customType, typeof(Type));
+					                    converter.PerformConversion(customType, typeof(Type));
 
 					if (!typeof(ILoggerFactory).IsAssignableFrom(loggerFactoryType) && !typeof(IExtendedLoggerFactory).IsAssignableFrom(loggerFactoryType))
 					{
 						throw new FacilityException("The specified type '" + customType +
-																				"' does not implement either ILoggerFactory or IExtendedLoggerFactory.");
+						                            "' does not implement either ILoggerFactory or IExtendedLoggerFactory.");
 					}
 					break;
 				case LoggerImplementation.Null:
@@ -192,24 +239,7 @@ namespace Castle.Facilities.Logging
 #endif
 					}
 			}
-
-			if (loggerFactoryType == null)
-			{
-				throw new FacilityException("LoggingFacility was unable to find an implementation of ILoggerFactory or IExtendedLoggerFactory.");
-			}
-
-			object[] args = null;
-
-			if (configFile != null) args = new object[] {configFile};
-
-			if (logApi == LoggerImplementation.ExtendedNLog || logApi == LoggerImplementation.ExtendedLog4net)
-			{
-				factory = (IExtendedLoggerFactory) Activator.CreateInstance(loggerFactoryType, args);
-			}
-			else
-			{
-				factory = (ILoggerFactory) Activator.CreateInstance(loggerFactoryType, args);
-			}
+			return loggerFactoryType;
 		}
 
 		private void SetUpTypeConverter()

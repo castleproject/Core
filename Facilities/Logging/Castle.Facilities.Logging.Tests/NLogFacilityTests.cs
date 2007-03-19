@@ -38,7 +38,10 @@ namespace Castle.Facilities.Logging.Tests
 		[TearDown]
 		public void Teardown()
 		{
-			container.Dispose();
+			if (container != null)
+			{
+				container.Dispose();
+			}
 		}
 
 		[Test]
