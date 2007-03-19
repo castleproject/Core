@@ -289,6 +289,39 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CreateInputElement("button", value, attributes);
 		}
 
+		/// <summary>
+		/// Creates a basic button element of type submit.
+		/// </summary>
+		/// <param name="innerText">The inner text of the button element.</param>
+		/// <returns>The generated button element.</returns>
+		public string ButtonElement(string innerText)
+		{
+			return ButtonElement(innerText, "submit", null);
+		}
+
+		/// <summary>
+		/// Creates a basic button element of the specified type.
+		/// </summary>
+		/// <param name="innerText">The inner text of the button element.</param>
+		/// <param name="type">The type of the button.</param>
+		/// <returns>The generated button element.</returns>
+		public string ButtonElement(string innerText, string type)
+		{
+			return ButtonElement(innerText, type, null);
+		}
+
+		/// <summary>
+		/// Creates a basic button element of the specified type and with specified attributes.
+		/// </summary>
+		/// <param name="innerText">The inner text of the button element.</param>
+		/// <param name="type">The type of the button.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated button element.</returns>
+		public string ButtonElement(string innerText, string type, IDictionary attributes)
+		{
+			return String.Format("<button type=\"{0}\" {1}>{2}</button>", type, GetAttributes(attributes), innerText);
+		}
+
 		#endregion
 
 		#region TextFieldValue
