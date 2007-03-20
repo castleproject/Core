@@ -15,14 +15,14 @@ using System.Runtime.InteropServices;
 
 [assembly: CLSCompliantAttribute(true)]
 [assembly: ComVisibleAttribute(false)]
-[assembly: AssemblyTitleAttribute("Castle.MonoRail.Framework for Microsoft .NET Framework 2.0")]
-[assembly: AssemblyDescriptionAttribute("MVC web framework for .NET")]
+[assembly: AssemblyTitleAttribute("Castle.MonoRail.Tests for Microsoft .NET Framework 2.0")]
+[assembly: AssemblyDescriptionAttribute("")]
 [assembly: AssemblyCompanyAttribute("Castle Project")]
-[assembly: AssemblyProductAttribute("Castle.MonoRail.Framework")]
+[assembly: AssemblyProductAttribute("Castle.MonoRail.Tests")]
 [assembly: AssemblyCopyrightAttribute("Castle Project, original author or authors")]
-[assembly: AssemblyVersionAttribute("1.0.0.0")]
-[assembly: AssemblyInformationalVersionAttribute("1.0.0.0")]
-[assembly: AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: AssemblyVersionAttribute("1.1.0.0")]
+[assembly: AssemblyInformationalVersionAttribute("1.1.0.0")]
+[assembly: AssemblyFileVersionAttribute("1.1.0.0")]
 [assembly: AssemblyDelaySignAttribute(false)]
 
 #if !DOTNET2 || MONO
