@@ -159,7 +159,9 @@ namespace Castle.Facilities.Logging
 		{
 			object[] args = null;
 
-			ConstructorInfo ctor = loggerFactoryType.GetConstructor(BindingFlags.Instance|BindingFlags.Public, null, new Type[] { typeof(string) }, null);
+			const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+
+			ConstructorInfo ctor = loggerFactoryType.GetConstructor(flags, null, new Type[] { typeof(string) }, null);
 
 			if (ctor != null)
 			{
@@ -167,7 +169,7 @@ namespace Castle.Facilities.Logging
 			}
 			else
 			{
-				ctor = loggerFactoryType.GetConstructor(BindingFlags.Instance|BindingFlags.Public, null, new Type[0], null);
+				ctor = loggerFactoryType.GetConstructor(flags, null, Type.EmptyTypes, null);
 
 				if (ctor == null)
 				{
