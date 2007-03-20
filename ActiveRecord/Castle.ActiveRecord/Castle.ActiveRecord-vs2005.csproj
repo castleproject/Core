@@ -389,6 +389,8 @@
     <Compile Include="Framework\Internal\Model\ImportModel.cs" />
     <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
     <Compile Include="Framework\Internal\AssemblyXmlGenerator.cs" />
+    <Compile Include="Framework\Queries\ActiveRecordCriteriaQuery.cs" />
+    <Compile Include="Framework\Queries\ActiveRecordMultiQuery.cs" />
     <Compile Include="Framework\Queries\CountQuery.cs" />
     <Compile Include="Framework\Queries\HqlBasedQuery.cs" />
     <Compile Include="Framework\Queries\IActiveRecordQuery.Generic.cs" />

@@ -226,9 +226,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.TransformFi
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(TextTemplating) = postSolution
-		TextTemplating = 1
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -287,6 +284,7 @@ Global
 		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4107B52-109E-4629-A202-58E93917C80B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4107B52-109E-4629-A202-58E93917C80B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4107B52-109E-4629-A202-58E93917C80B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4107B52-109E-4629-A202-58E93917C80B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -298,6 +296,7 @@ Global
 		{CC39D6D0-2467-4DD5-A53E-92D580B60038}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC39D6D0-2467-4DD5-A53E-92D580B60038}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26AA3359-6571-4575-845D-ED05E4EDB586}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26AA3359-6571-4575-845D-ED05E4EDB586}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26AA3359-6571-4575-845D-ED05E4EDB586}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26AA3359-6571-4575-845D-ED05E4EDB586}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3FBEADBB-692E-44CF-A06F-B4E7F2DE27D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -319,7 +318,6 @@ Global
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C116D44-7A78-45BD-BE01-9C6DD3FBDE93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C116D44-7A78-45BD-BE01-9C6DD3FBDE93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C116D44-7A78-45BD-BE01-9C6DD3FBDE93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C116D44-7A78-45BD-BE01-9C6DD3FBDE93}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB60A834-F753-4091-9709-676B6A9F0188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -355,5 +353,8 @@ Global
 		{BB60A834-F753-4091-9709-676B6A9F0188} = {4CA9E7D1-3BEF-4B35-A771-EFBD1FC52BD6}
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
 		{4C945D49-02E9-43F2-9202-E7A6E7C56E77} = {9264F1C2-88DA-497B-AD12-99AC46B0292B}
+	EndGlobalSection
+	GlobalSection(TextTemplating) = postSolution
+		TextTemplating = 1
 	EndGlobalSection
 EndGlobal

@@ -259,5 +259,39 @@ namespace Castle.ActiveRecord.Tests.Validation
 				scope.VoteCommit();
 			}
 		}
+
+		[Test, ExpectedException(typeof(ValidationException))]
+		public void IsUniqueTimeoutExpiredBug()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog2), typeof(Blog5));
+			Recreate();
+
+			for (int i = 0; i < 5; i++)
+			{
+				Blog5 blog = new Blog5();
+				blog.Name = "A cool blog";
+				blog.Create();
+			}
+
+			Blog5 theBlog = new Blog5();
+			theBlog.Name = "A cool blog";
+			theBlog.Create();
+
+			Blog5 anotherBlog = new Blog5();
+			anotherBlog.Name = "A cool blog";
+			anotherBlog.Create();
+				
+			anotherBlog.Name = "A very cool blog";
+			anotherBlog.Update();
+
+			Assert.IsFalse(Blog2.Find(theBlog.Id).IsValid());
+
+			Blog2 weblog = new Blog2();
+			weblog.Name = theBlog.Name;
+
+			Assert.IsFalse(weblog.IsValid());
+			
+			weblog.Create();
+		}
 	}
 }

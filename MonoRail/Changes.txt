@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Added the Expect property to the ARDataBindAttr. Now it will clear the collections 
+  that are declared as expected, if not can be found on the resquest params. (MR-163)
+	 
+
 - Applied Colin Ramsay's patch fixing MR-232
   "HtmlHelper.InputButton should create <button> not <input type="button">"
 

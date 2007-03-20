@@ -41,7 +41,7 @@ class AccountPermissionTestCase < Test::Unit::TestCase
 		
 		AccountPermission.edit($ie, id, 'other name')
 		
-		AccountPermission.edit($ie, id, '')
+		#AccountPermission.edit($ie, id, '')
 		
 		AccountPermission.edit($ie, id, 'new name')
 		
@@ -177,7 +177,7 @@ class CastleTests
 	end
 end
 
-$base_url = "http://localhost:89"
+$base_url = "http://localhost:1556"
 
 $ie = IE.new()
 $ie.set_fast_speed

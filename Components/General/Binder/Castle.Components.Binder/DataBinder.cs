@@ -52,6 +52,10 @@ namespace Castle.Components.Binder
 
 		private ILogger logger = NullLogger.Instance;
 
+		public event BinderHandler OnBeforeBinding;
+
+		public event BinderHandler OnAfterBinding;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataBinder"/> class.
 		/// </summary>
@@ -211,9 +215,6 @@ namespace Castle.Components.Binder
 			return (ErrorSummary) validationErrorSummaryPerInstance[instance];
 		}
 
-		public event BinderHandler OnBeforeBinding;
-		public event BinderHandler OnAfterBinding;
-
 		#endregion
 
 		#region Implementation
@@ -308,6 +309,8 @@ namespace Castle.Components.Binder
 				{
 					continue;
 				}
+
+				BeforeBindingProperty(instance, prop, prefix, node);
 
 				try
 				{
@@ -497,6 +500,10 @@ namespace Castle.Components.Binder
 			{
 				OnBeforeBinding(instance, prefix, node);
 			}
+		}
+
+		protected virtual void BeforeBindingProperty(object instance, PropertyInfo prop, string prefix, CompositeNode node)
+		{
 		}
 
 		protected virtual bool ShouldRecreateInstance(object value, Type type, String prefix, Node node)
@@ -881,10 +888,11 @@ namespace Castle.Components.Binder
 
 		private void NormalizeList(String[] list)
 		{
-			for(int i = 0; i < list.Length; i++)
+			for (int i = 0; i < list.Length; i++)
 			{
 				list[i] = "root." + list[i].Trim();
 			}
+
 			Array.Sort(list, CaseInsensitiveComparer.Default);
 		}
 

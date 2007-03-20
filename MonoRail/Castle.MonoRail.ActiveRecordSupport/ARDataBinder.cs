@@ -36,7 +36,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// <seealso cref="ARDataBindAttribute"/>
 	/// </summary>
 	/// <remarks>
-	/// Autoload can be turned on on the parameter, see <see cref="AutoLoadBehavior"/>.
+	/// Autoload can be turned <i>on</i> on the parameter, see <see cref="AutoLoadBehavior"/>.
 	/// </remarks>
 	public class ARDataBinder : DataBinder
 	{
@@ -44,21 +44,46 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		private AutoLoadBehavior autoLoad;
 		private bool persistchanges;
+		private string[] expectCollPropertiesList;
 
-		public ARDataBinder() : base()
-		{
-		}
-
+		/// <summary>
+		/// Gets or sets a value indicating if the changes should be persisted.
+		/// </summary>
+		/// <value><c>true</c> if the changes should be persisted; otherwise, <c>false</c>.</value>
 		public bool PersistChanges
 		{
 			get { return persistchanges; }
 			set { persistchanges = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the <see cref="AutoLoadBehavior"/>.
+		/// </summary>
+		/// <value>The auto load behavior.</value>
 		public AutoLoadBehavior AutoLoad
 		{
 			get { return autoLoad; }
 			set { autoLoad = value; }
+		}
+
+		/// <summary>
+		/// Gets the current AR model.
+		/// </summary>
+		/// <value>The current AR model.</value>
+		protected ActiveRecordModel CurrentARModel
+		{
+			get
+			{
+				object stackInstance = InstanceOnStack;
+				return ActiveRecordModel.GetModel(stackInstance.GetType());
+			}
+		}
+
+		public object BindObject(Type targetType, string prefix, string exclude, string allow, string expect, CompositeNode treeRoot)
+		{
+			expectCollPropertiesList = CreateNormalizedList(expect);
+
+			return BindObject(targetType, prefix, exclude, allow, treeRoot);
 		}
 
 		protected override object CreateInstance(Type instanceType, String paramPrefix, Node node)
@@ -303,14 +328,35 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			return base.ShouldRecreateInstance(value, type, prefix, node);
 		}
-		
-		protected ActiveRecordModel CurrentARModel
+
+
+		protected override void BeforeBindingProperty(object instance, PropertyInfo prop, string prefix, CompositeNode node)
 		{
-			get 
+			base.BeforeBindingProperty(instance, prop, prefix, node);
+
+			if (IsPropertyExpected(prop, node))
 			{
-				object stackInstance = InstanceOnStack;
-				return ActiveRecordModel.GetModel(stackInstance.GetType());
+				ClearExpectedCollectionProperties(instance, prop);
 			}
+		}
+
+		private bool IsPropertyExpected(PropertyInfo prop, CompositeNode node)
+		{
+			string propId = string.Format("{0}.{1}", node.FullName, prop.Name);
+
+			if (expectCollPropertiesList != null)
+			{
+				return Array.BinarySearch(expectCollPropertiesList, propId, CaseInsensitiveComparer.Default) >= 0;
+			}
+
+			return false;
+		}
+
+		private void ClearExpectedCollectionProperties(object instance, PropertyInfo prop)
+		{
+			object value = prop.GetValue(instance, null);
+
+			ClearContainer(value);
 		}
 
 		#region helpers
@@ -380,7 +426,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			{
 				Type[] genericArgs = type.GetGenericArguments();
 
-				Type genType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(genericArgs);
+				Type genType = typeof(ICollection<>).MakeGenericType(genericArgs);
 
 				isContainerType = genType.IsAssignableFrom(type);
 			}
@@ -448,7 +494,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 #if DOTNET2
 				Type itemType = item.GetType();
 
-				Type collectionType = typeof(System.Collections.Generic.ICollection<>).MakeGenericType(itemType);
+				Type collectionType = typeof(ICollection<>).MakeGenericType(itemType);
 
 				if (collectionType.IsAssignableFrom(container.GetType()))
 				{

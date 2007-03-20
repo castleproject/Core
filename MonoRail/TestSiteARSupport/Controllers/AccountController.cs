@@ -29,12 +29,14 @@ namespace TestSiteARSupport.Controllers
 		{
 			PropertyBag.Add("licenses", ProductLicense.FindAll());
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
+			PropertyBag.Add("users", User.FindAll());
 		}
 
 		public void New2()
 		{
 			PropertyBag.Add("licenses", ProductLicense.FindAll());
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
+			PropertyBag.Add("users", User.FindAll());
 		}
 
 		[AccessibleThrough(Verb.Post)]
@@ -57,10 +59,11 @@ namespace TestSiteARSupport.Controllers
 			PropertyBag.Add("licenses", ProductLicense.FindAll());
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
 			PropertyBag.Add("account", account);
+			PropertyBag.Add("users", User.FindAll());
 		}
 		
 		[AccessibleThrough(Verb.Post)]
-		public void Update([ARDataBind("account", AutoLoad=AutoLoadBehavior.Always)] Account account)
+		public void Update([ARDataBind("account", AutoLoad=AutoLoadBehavior.Always, Expect="account.Permissions")] Account account)
 		{
 			ErrorList errorList = (ErrorList) BoundInstanceErrors[account];
 			

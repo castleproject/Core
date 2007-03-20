@@ -16,12 +16,14 @@ namespace TestSiteARSupport.Model
 {
 	using System;
 	using Castle.ActiveRecord;
+	using NHibernate.Expression;
 
 	[ActiveRecord("TSAS_User")]
 	public class User : ActiveRecordBase
 	{
 		private int id;
 		private String name;
+		private Account account;
 
 		[PrimaryKey]
 		public int Id
@@ -35,6 +37,18 @@ namespace TestSiteARSupport.Model
 		{
 			get { return name; }
 			set { name = value; }
+		}
+
+		[BelongsTo("account_id")]
+		public Account Account
+		{
+			get { return account; }
+			set { account = value; }
+		}
+
+		public static User[] FindAll()
+		{
+			return (User[]) ActiveRecordBase.FindAll(typeof(User), new Order[] { Order.Asc("Name") });
 		}
 	}
 }

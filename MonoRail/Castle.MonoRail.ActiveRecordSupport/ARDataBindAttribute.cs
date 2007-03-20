@@ -67,6 +67,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public class ARDataBindAttribute : DataBindAttribute, IParameterBinder
 	{
 		private AutoLoadBehavior autoLoad = AutoLoadBehavior.Never;
+		private string expect = null;
 
 		/// <summary>
 		/// Defines a binder for the parameter
@@ -104,6 +105,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { autoLoad = value; }
 		}
 
+
+		/// <summary>
+		/// Gets or sets the names of the collection that are expected to be binded.
+		/// If the binder don't found any value to an expected collection, it will clear to collection.
+		/// </summary>
+		/// <value>The expect collections names, in a csv fashion.</value>
+		public string Expect
+		{
+			get { return expect; }
+			set { expect = value; }
+		}
+
 		public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			ARDataBinder binder = controller.Binder as ARDataBinder;
@@ -119,7 +132,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			
 			CompositeNode node = controller.ObtainParamsNode(From);
 
-			object instance = binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, node);
+			object instance = binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, Expect, node);
 
 			BindInstanceErrors(controller, binder, instance);
 			PopulateValidatorErrorSummary(controller, binder, instance);

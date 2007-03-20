@@ -15,7 +15,7 @@
 namespace TestSiteARSupport.Model
 {
 	using System;
-
+	using System.Collections.Generic;
 	using Castle.ActiveRecord;
 	using Iesi.Collections;
 
@@ -29,10 +29,7 @@ namespace TestSiteARSupport.Model
 		private String confirmationpassword;
 		private ProductLicense productLicense;
 		private ISet permissions;
-
-		public Account()
-		{
-		}
+		private IList<User> users = new List<User>();
 
 		[PrimaryKey]
 		public int Id
@@ -83,10 +80,17 @@ namespace TestSiteARSupport.Model
 			get { return permissions; }
 			set { permissions = value; }
 		}
-		
+
+		[HasMany(typeof(User))]
+		public IList<User> Users
+		{
+			get { return users; }
+			set { users = value; }
+		}
+
 		public static Account[] FindAll()
 		{
-			return (Account[]) ActiveRecordBase.FindAll(typeof(Account));
+			return (Account[]) FindAll(typeof(Account));
 		}
 	}
 }

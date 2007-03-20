@@ -27,6 +27,13 @@
   <input type="checkbox" id="account_permissions" name="account.Permissions" value="$perm.Id" id="account_permissions" /> $perm.Name
 #end
   </p>
+  <p>
+  User:
+#set($list = $FormHelper.CreateCheckboxList("account.Users", $users, "%{value='Id', id='account_users'}"))
+#foreach($it in $list)
+  $list.Item() $it.Name
+#end
+  </p>
 
   <input type="submit" id="insertbutton" value="Insert" />
 
