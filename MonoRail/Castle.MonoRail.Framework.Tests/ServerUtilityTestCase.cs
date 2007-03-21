@@ -51,9 +51,9 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void JavaScriptEscape()
 		{
-			DoGet("ServerUtility/JavaScriptEscape.rails", "content=some js \" content \"");
+			DoGet("ServerUtility/JavaScriptEscape.rails", "content=some js \" content \", test's");
 
-			AssertReplyEqualTo("some js \\\" content \\\"");
+			AssertReplyEqualTo("some js \\\" content \\\", test\\'s");
 		}
 	}
 }
