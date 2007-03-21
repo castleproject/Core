@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Reflection;
 using Castle.Core;
 using Castle.Core.Interceptor;
 using Castle.Igloo.Attributes;
@@ -58,7 +59,7 @@ namespace Castle.Igloo.Interceptors
         public void Intercept(IInvocation invocation)
         {
             invocation.Proceed();
-            if (!_noNavigationMembers.Keys.Contains(invocation.Method.ToString()))
+            if (!_noNavigationMembers.Keys.Contains(GetMethodName(invocation.Method)))
             {
                 _navigator.Navigate();
             }
@@ -78,5 +79,22 @@ namespace Castle.Igloo.Interceptors
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the name of the method.
+        /// </summary>
+        /// <param name="methodInfo">The methodinfo.</param>
+        /// <returns>The Method (or generic definition) name </returns>
+        private string GetMethodName(MethodInfo methodInfo)
+        {
+            if (methodInfo.IsGenericMethod)
+            {
+                return methodInfo.GetGenericMethodDefinition().ToString();
+            }
+            else
+            {
+                return methodInfo.ToString();
+            }
+        } 
     }
 }

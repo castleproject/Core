@@ -92,7 +92,7 @@ namespace Castle.Igloo.Controllers
                     skipNavigationAttribute = AttributeUtil.GetSkipNavigationAttribute(methods[i]);
                     if (skipNavigationAttribute != null)
                     {
-                        skipNavigationMembers.Add(methods[i].ToString(), skipNavigationAttribute);
+                        skipNavigationMembers.Add(GetMethodName(methods[i]), skipNavigationAttribute);
                     }
                 }
             }
@@ -103,11 +103,28 @@ namespace Castle.Igloo.Controllers
                 for (int i = 0; i < methods.Length; i++)
                 {
                     SkipNavigationAttribute attribute = new SkipNavigationAttribute();
-                    skipNavigationMembers.Add(methods[i].ToString(), attribute);
+                    skipNavigationMembers.Add(GetMethodName(methods[i]), attribute);
                 }
             }
 
             model.ExtendedProperties[SKIP_NAVIGATION] = skipNavigationMembers;
         }
+
+        /// <summary>
+        /// Gets the name of the method.
+        /// </summary>
+        /// <param name="methodInfo">The methodinfo.</param>
+        /// <returns>The Method (or generic definition) name </returns>
+        private string GetMethodName(MethodInfo methodInfo)
+        {
+            if (methodInfo.IsGenericMethod)
+            {
+                return methodInfo.GetGenericMethodDefinition().ToString();
+            }
+            else
+            {
+                return methodInfo.ToString();
+            }
+        } 
     }
 }
