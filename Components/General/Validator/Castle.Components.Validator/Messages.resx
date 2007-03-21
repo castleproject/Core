@@ -150,6 +150,18 @@
   <data name="length_tooshort" xml:space="preserve">
     <value>Field must be more than {0} characters long</value>
   </data>
+  <data name="range_invalid" xml:space="preserve">
+    <value>Field must be between {0} and {1}</value>
+  </data>
+  <data name="range_toohigh" xml:space="preserve">
+    <value>Field must be less than or equal to {0}</value>
+  </data>
+  <data name="range_toohighorlow" xml:space="preserve">
+    <value>Field must be between {0} and {1}</value>
+  </data>
+  <data name="range_toolow" xml:space="preserve">
+    <value>Field must be greater than or equal to {0}</value>
+  </data>
   <data name="same_as_invalid" xml:space="preserve">
     <value>Fields do not match</value>
   </data>

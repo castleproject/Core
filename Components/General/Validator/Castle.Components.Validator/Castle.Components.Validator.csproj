@@ -37,6 +37,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attributes\ValidateEmailAttribute.cs" />
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
+    <Compile Include="Attributes\ValidateRangeAttribute.cs" />
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
     <Compile Include="Messages.fr.Designer.cs">
@@ -91,6 +92,7 @@
     <Compile Include="Attributes\AbstractValidationAttribute.cs" />
     <Compile Include="Attributes\ValidateNonEmptyAttribute.cs" />
     <Compile Include="IValidator.cs" />
+    <Compile Include="Validators\RangeValidator.cs" />
     <Compile Include="Validators\RegularExpressionValidator.cs" />
     <Compile Include="Validators\SameAsValidator.cs" />
     <Compile Include="Validators\SingleValidator.cs" />

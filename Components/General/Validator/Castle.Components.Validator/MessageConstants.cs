@@ -30,5 +30,9 @@ namespace Castle.Components.Validator
 		public const string InvalidTimeMessage = "time_invalid";
 		public const string InvalidDecimalMessage = "decimal_invalid";
 		public const string SameAsMessage = "same_as_invalid";
+		public const string InvalidRangeMessage = "range_invalid";
+		public const string RangeTooHighMessage = "range_toohigh";
+		public const string RangeTooLowMessage = "range_toolow";
+		public const string RangeTooHighOrLowMessage = "range_toohighorlow";
 	}
 }

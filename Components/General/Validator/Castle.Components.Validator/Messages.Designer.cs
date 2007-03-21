@@ -160,6 +160,42 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field must be between {0} and {1}.
+        /// </summary>
+        internal static string range_invalid {
+            get {
+                return ResourceManager.GetString("range_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field must be less than or equal to {0}.
+        /// </summary>
+        internal static string range_toohigh {
+            get {
+                return ResourceManager.GetString("range_toohigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field must be between {0} and {1}.
+        /// </summary>
+        internal static string range_toohighorlow {
+            get {
+                return ResourceManager.GetString("range_toohighorlow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field must be greater than or equal to {0}.
+        /// </summary>
+        internal static string range_toolow {
+            get {
+                return ResourceManager.GetString("range_toolow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fields do not match.
         /// </summary>
         internal static string same_as_invalid {

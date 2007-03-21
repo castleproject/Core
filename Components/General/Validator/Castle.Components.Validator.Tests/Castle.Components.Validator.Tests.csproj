@@ -42,6 +42,7 @@
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="ValidatorRunnerTestCase.cs" />
     <Compile Include="ValidatorsExecutionOrderTestCase.cs" />
+    <Compile Include="ValidatorTests\RangeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateTimeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DecimalValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DoubleValidatorTestCase.cs" />
@@ -58,6 +59,9 @@
       <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
       <Name>Castle.Components.Validator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
