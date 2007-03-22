@@ -13,13 +13,12 @@
 // limitations under the License.
 
 using System;
+using Castle.Core.Interceptor;
+using Castle.DynamicProxy.Tests.BugsReported;
+using NUnit.Framework;
 
 namespace Castle.DynamicProxy.Tests
 {
-	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy.Tests.BugsReported;
-	using NUnit.Framework;
-
 	[TestFixture]
 	public class BugsReportedTestCase
 	{
@@ -29,9 +28,9 @@ namespace Castle.DynamicProxy.Tests
 			ProxyGenerator generator = new ProxyGenerator();
 
 			ICameraService proxy = (ICameraService)
-			   generator.CreateInterfaceProxyWithTarget(typeof(ICameraService),
-														new CameraService(),
-														new StandardInterceptor());
+								   generator.CreateInterfaceProxyWithTarget(typeof(ICameraService),
+																			new CameraService(),
+																			new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 
@@ -45,9 +44,9 @@ namespace Castle.DynamicProxy.Tests
 			ProxyGenerator generator = new ProxyGenerator();
 
 			IHaveOnlySetter proxy = (IHaveOnlySetter)
-			   generator.CreateInterfaceProxyWithTarget(typeof(IHaveOnlySetter),
-					new HaveOnlySetter(),
-					new SkipCallingMethodInterceptor());
+									generator.CreateInterfaceProxyWithTarget(typeof(IHaveOnlySetter),
+																			 new HaveOnlySetter(),
+																			 new SkipCallingMethodInterceptor());
 
 			Assert.IsNotNull(proxy);
 
@@ -55,18 +54,19 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(NotImplementedException), "This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method")]
+		[ExpectedException(typeof(NotImplementedException),
+			"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
+			)]
 		public void CallingProceedOnAbstractMethodShouldThrowException()
 		{
 			ProxyGenerator generator = new ProxyGenerator();
 
 			AbstractClass proxy = (AbstractClass)
-			   generator.CreateClassProxy(typeof(AbstractClass), ProxyGenerationOptions.Default, new StandardInterceptor());
+								  generator.CreateClassProxy(typeof(AbstractClass), ProxyGenerationOptions.Default, new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 
 			proxy.Foo();
-
 		}
 
 		[Test]
@@ -75,12 +75,20 @@ namespace Castle.DynamicProxy.Tests
 			ProxyGenerator generator = new ProxyGenerator();
 
 			IUserRepository proxy = (IUserRepository)
-			                        generator.CreateInterfaceProxyWithoutTarget(typeof (IUserRepository), 
-									new SkipCallingMethodInterceptor());
+									generator.CreateInterfaceProxyWithoutTarget(typeof(IUserRepository),
+																				new SkipCallingMethodInterceptor());
 
 			Assert.IsNotNull(proxy);
+		}
 
-	
+		[Test]
+		[Ignore("Need to discuss why we are calling interf.GetGenericArguments() in class emitter")]
+		public void DYNPROXY_51_GenericMarkerInterface()
+		{
+			ProxyGenerator gen = new ProxyGenerator();
+			WithMixin p = (WithMixin)gen.CreateClassProxy(typeof(WithMixin), new Type[] { typeof(Marker<int>) }, new IInterceptor[0]);
+			p.Method();
+
 		}
 	}
 
@@ -89,11 +97,12 @@ namespace Castle.DynamicProxy.Tests
 		TEntity GetById(TKey key);
 	}
 
-	public class User{}
+	public class User
+	{
+	}
 
 	public interface IUserRepository : IRepository<User, string>
 	{
-		
 	}
 
 	public abstract class AbstractClass
@@ -105,7 +114,6 @@ namespace Castle.DynamicProxy.Tests
 	{
 		public void Intercept(IInvocation invocation)
 		{
-
 		}
 	}
 
@@ -118,7 +126,18 @@ namespace Castle.DynamicProxy.Tests
 	{
 		public string Foo
 		{
-			set { throw new System.Exception("The method or operation is not implemented."); }
+			set { throw new Exception("The method or operation is not implemented."); }
+		}
+	}
+
+	public interface Marker<T>
+	{
+	}
+
+	public class WithMixin
+	{
+		public virtual void Method()
+		{
 		}
 	}
 }

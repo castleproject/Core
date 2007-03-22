@@ -169,6 +169,7 @@
     <Compile Include="Generators\Emitters\SimpleAST\AssignStatement.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\SimpleAST\ByRefReference.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\ConstReference.cs" />
     <Compile Include="Generators\Emitters\SimpleAST\ConstructorInvocationStatement.cs">
       <SubType>Code</SubType>
@@ -279,6 +280,9 @@
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core-vs2005</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
