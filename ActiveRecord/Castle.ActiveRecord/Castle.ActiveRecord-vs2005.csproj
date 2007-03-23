@@ -374,6 +374,7 @@
     <Compile Include="Attributes\Enums.cs" />
     <Compile Include="Attributes\HqlNamedQueryAttribute.cs" />
     <Compile Include="Attributes\ImportAttribute.cs" />
+    <Compile Include="Attributes\NestedParentReferenceAttribute.cs" />
     <Compile Include="Attributes\RawXmlMappingAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateCreditCardAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateLengthAttribute.cs" />
@@ -387,6 +388,7 @@
     <Compile Include="Framework\Internal\Model\CompositeKeyModel.cs" />
     <Compile Include="Framework\Internal\Model\DependentObjectModel.cs" />
     <Compile Include="Framework\Internal\Model\ImportModel.cs" />
+    <Compile Include="Framework\Internal\Model\NestedParentReferenceModel.cs" />
     <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
     <Compile Include="Framework\Internal\AssemblyXmlGenerator.cs" />
     <Compile Include="Framework\Queries\ActiveRecordCriteriaQuery.cs" />

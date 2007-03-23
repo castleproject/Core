@@ -201,6 +201,7 @@
     <Compile Include="Model\SequenceParamClass.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\SimpleNestedComponent.cs" />
     <Compile Include="Model\TimestampedClass.cs">
       <SubType>Code</SubType>
     </Compile>

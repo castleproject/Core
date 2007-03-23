@@ -64,6 +64,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private IList anys = new ArrayList();
 		private IList properties = new ArrayList();
 		private IList fields = new ArrayList();
+	    private IList componentParent = new ArrayList();
 		private IList classes = new ArrayList();
 		private IList joinedclasses = new ArrayList();
 		private IList components = new ArrayList();
@@ -229,6 +230,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			get { return fields; }
 		}
+
+        /// <summary>
+        /// If the object is a component, will return the objects declared parent property.
+        /// There should only be one, but implemented as a list
+        /// </summary>
+	    public IList ComponentParent
+	    {
+            get { return componentParent; }
+	    }
 
 		/// <summary>
 		/// Gets the list of [has many to any] models

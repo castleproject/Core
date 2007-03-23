@@ -123,6 +123,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 		}
 
+        /// <summary>
+        /// Visits the component parent
+        /// </summary>
+        /// <param name="referenceModel">The model.</param>
+        public virtual void VisitNestedParentReference(NestedParentReferenceModel referenceModel)
+        {
+        }
+
 		/// <summary>
 		/// Visits any.
 		/// </summary>

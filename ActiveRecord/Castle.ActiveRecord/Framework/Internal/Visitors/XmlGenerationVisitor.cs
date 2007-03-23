@@ -137,6 +137,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			else if (model.IsNestedType)
 			{
 				Ident();
+			    VisitNodes(model.ComponentParent);
 				VisitNodes(model.Fields);
 				VisitNodes(model.Properties);
 				VisitNodes(model.BelongsTo);
@@ -380,6 +381,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 			              att.Update, att.Formula, att.Column,
 			              att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);
 		}
+
+        /// <summary>
+        /// Visits the parent
+        /// </summary>
+        /// <param name="referenceModel">The referenceModel.</param>
+        public override void VisitNestedParentReference(NestedParentReferenceModel referenceModel)
+        {
+            NestedParentReferenceAttribute att = referenceModel.NestedParentAtt;
+
+            AppendF("<parent name=\"{0}\"/>", referenceModel.Property.Name);
+        }
 
 		/// <summary>
 		/// Visits any.

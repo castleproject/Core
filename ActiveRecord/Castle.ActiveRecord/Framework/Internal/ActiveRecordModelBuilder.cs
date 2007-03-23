@@ -242,7 +242,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						model.Components.Add(new NestedModel(prop, propAtt, nestedModel));
 					}
-					else if (attribute is JoinedKeyAttribute)
+                    else if (attribute is NestedParentReferenceAttribute)
+                    {
+                        NestedParentReferenceAttribute nestedParentAtt = attribute as NestedParentReferenceAttribute;
+                        isArProperty = true;
+
+                        model.ComponentParent.Add(new NestedParentReferenceModel(prop, nestedParentAtt));
+                    }
+                    else if (attribute is JoinedKeyAttribute)
 					{
 						JoinedKeyAttribute propAtt = attribute as JoinedKeyAttribute;
 						isArProperty = true;
