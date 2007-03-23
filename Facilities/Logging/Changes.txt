@@ -1,4 +1,6 @@
 
+- Register base logger and factory when using extended logger.
+
 - Fixed FACILITIES-77
   "ILoggerFactory instance creation requires constructor with one argument"
 

@@ -90,7 +90,9 @@ namespace Castle.Facilities.Logging
 		{
 			if (logApi == LoggerImplementation.ExtendedNLog || logApi == LoggerImplementation.ExtendedLog4net)
 			{
-				Kernel.AddComponentInstance("ilogger.default", typeof(IExtendedLogger), factory.Create("Default"));
+				ILogger defaultLogger = factory.Create("Default");
+				Kernel.AddComponentInstance("ilogger.default", typeof(IExtendedLogger), defaultLogger);
+				Kernel.AddComponentInstance("ilogger.default.base", typeof(ILogger), defaultLogger);
 			}
 			else
 			{
@@ -103,6 +105,7 @@ namespace Castle.Facilities.Logging
 			if (logApi == LoggerImplementation.ExtendedNLog || logApi == LoggerImplementation.ExtendedLog4net)
 			{
 				Kernel.AddComponentInstance("iloggerfactory", typeof(IExtendedLoggerFactory), factory);
+				Kernel.AddComponentInstance("iloggerfactory.base", typeof(ILoggerFactory), factory);
 			}
 			else
 			{
