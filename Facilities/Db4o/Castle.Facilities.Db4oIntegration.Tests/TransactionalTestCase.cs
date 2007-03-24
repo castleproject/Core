@@ -27,9 +27,6 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 	{
 		private BeerBox _box;
 
-		private const int InvocationsNumber = 20;
-		private const int ThreadsNumber = 10;
-
 		private IObjectContainer _objContainer;
 
 		[SetUp]
@@ -88,46 +85,6 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 		private void DoRollback()
 		{
 			_objContainer.Rollback();
-		}
-
-		[Test]
-		public void MultiThreaded()
-		{
-			Thread[] threads = new Thread[ThreadsNumber];
-
-			for (int i = 0; i < threads.Length; i++)
-			{
-				threads[i] = new Thread(new ThreadStart(BeerFactory));
-			}
-
-			Start(threads);
-			Join(threads);
-
-			Assert.AreEqual(InvocationsNumber * ThreadsNumber, _box.GetAll().Size());
-		}
-
-		private void Join(Thread[] threads)
-		{
-			foreach (Thread t in threads)
-			{
-				t.Join();
-			}
-		}
-
-		private void Start(Thread[] threads)
-		{
-			foreach (Thread t in threads)
-			{
-				t.Start();
-			}
-		}
-
-		public void BeerFactory()
-		{
-			for (int i = 0; i < InvocationsNumber; i++)
-			{
-				AddToBox();
-			}
 		}
 	}
 }

@@ -29,10 +29,6 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 		int InvocationsNumber = 20;
 		int ThreadsNumber = 10;
 
-		public DaoTestCase()
-		{
-		}
-
 		[SetUp]
 		public override void Init()
 		{
@@ -64,7 +60,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 			Start(threads);
 			Join(threads);
 
-			Assert.AreEqual(InvocationsNumber * ThreadsNumber, _dao.FindAll().Size());
+			Assert.AreEqual(InvocationsNumber * ThreadsNumber, _dao.FindAll().Count);
 		}
 
 		private void Join(Thread[] threads)

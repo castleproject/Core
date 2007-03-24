@@ -14,7 +14,6 @@
 
 namespace Castle.Facilities.Db4oIntegration.Tests.Components
 {
-	using System;
 	using Db4objects.Db4o;
 	using Db4objects.Db4o.Query;
 

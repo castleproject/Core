@@ -18,6 +18,8 @@ namespace Castle.Facilities.Db4oIntegration
 	using System.Collections;
 	using System.Configuration;
 
+	using Castle.Core;
+	using Castle.MicroKernel;
 	using Castle.Core.Configuration;
 	using Castle.Services.Transaction;
 	using Castle.MicroKernel.Facilities;
@@ -41,6 +43,10 @@ namespace Castle.Facilities.Db4oIntegration
 		internal const string ExceptionsOnNotStorableKey = "exceptionsOnNotStorable";
 		internal const string CallConstructorsKey = "callConstructors";
 
+		private const String ContextKey = "db40.transaction.context";
+
+		#region Facility Life Cycle
+
 		protected override void Init()
 		{
 			if (FacilityConfig == null)
@@ -53,16 +59,19 @@ namespace Castle.Facilities.Db4oIntegration
 #endif
 			}
 
-			Kernel.ComponentModelBuilder.AddContributor(new AutoDb4oTransactionInspector());
 			Kernel.ComponentModelBuilder.AddContributor(new ObjectContainerActivatorOverrider());
+			Kernel.ComponentCreated += new ComponentInstanceDelegate(Kernel_ComponentCreated);
 
-			Kernel.AddComponent("db4o.transaction.autocommit.interceptor", typeof(AutoCommitInterceptor), typeof(AutoCommitInterceptor));
+			SetUpTransactionManager();
 
-			Kernel.AddComponent("db4o.transaction.manager", typeof(ITransactionManager), typeof(Db4oTransactionManager));
-
-			ConfigureAndAddContainer();
+			ConfigureAndAddDb4oContainer();
 		}
 
+		/// <summary>
+		/// Performs the tasks associated with freeing, releasing, or resetting
+		/// the facility resources.
+		/// </summary>
+		/// <remarks>It can be overriden.</remarks>
 		public override void Dispose()
 		{
 			IObjectContainer objContainer = (IObjectContainer) Kernel[typeof(IObjectContainer)];
@@ -72,7 +81,42 @@ namespace Castle.Facilities.Db4oIntegration
 			base.Dispose();
 		}
 
-		private void ConfigureAndAddContainer()
+		#endregion
+
+
+		#region Transaction Management Related
+
+		private void SetUpTransactionManager()
+		{
+			if (!Kernel.HasComponent(typeof(ITransactionManager)))
+			{
+				Kernel.AddComponent("db4o.transaction.manager", typeof(ITransactionManager), typeof(DefaultTransactionManager));
+			}
+		}
+
+		private void Kernel_ComponentCreated(ComponentModel model, object instance)
+		{
+			if (model.Service != null && model.Service == typeof(ITransactionManager))
+			{
+				(instance as ITransactionManager).TransactionCreated += new TransactionCreationInfoDelegate(OnNewTransaction);
+			}
+		}
+
+		private void OnNewTransaction(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction)
+		{
+			//if (!transaction.Context.Contains(ContextKey))
+			{
+				IObjectContainer db4oContainer = (IObjectContainer) Kernel[typeof(IObjectContainer)];
+
+				transaction.Context[ContextKey] = true;
+				transaction.Enlist(new ResourceObjectContainerAdapter(db4oContainer));
+			}
+		}
+
+		#endregion
+
+
+		private void ConfigureAndAddDb4oContainer()
 		{
 			IConfiguration config = FacilityConfig.Children["container"];
 

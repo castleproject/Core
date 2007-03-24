@@ -14,16 +14,22 @@
 
 namespace Castle.Facilities.Db4oIntegration
 {
-	using System;
-
 	using Db4objects.Db4o;
 
 	using Castle.Core;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;
 	
+	/// <summary>
+	/// Overrides the <see cref="IObjectContainer"/> component initialization.
+	/// </summary>
 	public class ObjectContainerActivatorOverrider : IContributeComponentModelConstruction
 	{
+		/// <summary>
+		/// Overrides the <see cref="IComponentActivator"/>, if the component is the <see cref="IObjectContainer"/>.
+		/// </summary>
+		/// <param name="kernel">The kernel instance</param>
+		/// <param name="model">The component model</param>
 		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (model.Implementation == typeof(IObjectContainer))

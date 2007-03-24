@@ -14,16 +14,27 @@
 
 namespace Castle.Facilities.Db4oIntegration.Tests.Components
 {
-	using System;
-
 	using Db4objects.Db4o;
+	using Castle.Services.Transaction;
 
-	[AutoDb4oTransaction]
+	[Transactional]
 	public class BeerTransactionalDao : BeerDao
 	{
 		public BeerTransactionalDao(IObjectContainer objContainer)
 			: base(objContainer)
 		{
+		}
+
+		[Transaction]
+		public override void Create(Beer beer)
+		{
+			base.Create(beer);
+		}
+
+		[Transaction]
+		public override void Remove(Beer beer)
+		{
+			base.Remove(beer);
 		}
 	}
 }

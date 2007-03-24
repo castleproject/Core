@@ -14,7 +14,6 @@
 
 namespace Castle.Facilities.Db4oIntegration
 {
-	using System;
 	using Db4objects.Db4o;
 
 	using Castle.Services.Transaction;

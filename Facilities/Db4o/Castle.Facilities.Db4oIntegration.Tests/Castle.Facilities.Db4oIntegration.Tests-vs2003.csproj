@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}"
     >
@@ -95,16 +95,6 @@
                     HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
                 />
                 <Reference
-                    Name = "db4o"
-                    AssemblyName = "db4o"
-                    HintPath = "..\..\..\build\net-1.1\debug\db4o.dll"
-                />
-                <Reference
-                    Name = "Db4oIntegration"
-                    Project = "{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Transaction.dll"
@@ -113,6 +103,11 @@
                     Name = "Castle.Facilities.AutomaticTransactionManagement"
                     AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
                     HintPath = "..\..\..\build\net-1.1\debug\Castle.Facilities.AutomaticTransactionManagement.dll"
+                />
+                <Reference
+                    Name = "Db4objects.Db4o"
+                    AssemblyName = "Db4objects.Db4o"
+                    HintPath = "..\..\..\SharedLibs\net\1.1\Db4objects.Db4o.dll"
                 />
             </References>
         </Build>

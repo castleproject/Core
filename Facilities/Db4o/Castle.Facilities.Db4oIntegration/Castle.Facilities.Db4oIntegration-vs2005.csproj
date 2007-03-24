@@ -103,19 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoCommitInterceptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AutoDb4oTransactionAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AutoDb4oTransactionInspector.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Db4oFacility.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Db4oTransactionManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectContainerActivatorOverrider.cs">

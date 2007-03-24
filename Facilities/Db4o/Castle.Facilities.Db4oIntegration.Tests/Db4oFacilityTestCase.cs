@@ -48,15 +48,15 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 
 			IObjectSet results = db4oContainer.Get(typeof(Beer));
 
-			Assert.AreEqual(1, results.Size());
-			Beer loaded = (Beer)results.Next();
+			Assert.AreEqual(1, results.Count);
+			Beer loaded = (Beer)results[0];
 			Assert.AreEqual(id, loaded.Id);
 
 			db4oContainer.Delete(loaded);
 			db4oContainer.Commit();
 
 			results = db4oContainer.Get(typeof(Beer));
-			Assert.AreEqual(0, results.Size());
+			Assert.AreEqual(0, results.Count);
 		}
 	}
 }

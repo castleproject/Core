@@ -1,4 +1,3 @@
-using System.Configuration;
 // Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,7 @@ namespace Castle.Facilities.Db4oIntegration
 	using System;
 	using System.IO;
 	using System.Globalization;
+	using System.Configuration;
 
 	using Db4objects.Db4o;
 	using Db4objects.Db4o.Config;

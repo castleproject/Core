@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}"
     >
@@ -90,11 +90,6 @@
                     HintPath = "..\..\..\build\net-1.1\debug\Castle.Services.Transaction.dll"
                 />
                 <Reference
-                    Name = "db4o"
-                    AssemblyName = "db4o"
-                    HintPath = "..\..\..\build\net-1.1\debug\db4o.dll"
-                />
-                <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
@@ -108,6 +103,11 @@
                     Name = "Castle.Core"
                     AssemblyName = "Castle.Core"
                     HintPath = "..\..\..\build\net-1.1\debug\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Db4objects.Db4o"
+                    AssemblyName = "Db4objects.Db4o"
+                    HintPath = "..\..\..\SharedLibs\net\1.1\Db4objects.Db4o.dll"
                 />
             </References>
         </Build>
