@@ -24,10 +24,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 	public class ActiveRecordModelBuilder
 	{
 		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
-																   BindingFlags.Instance | BindingFlags.NonPublic;
+		                                                           BindingFlags.Instance | BindingFlags.NonPublic;
 
 		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
-																		BindingFlags.NonPublic | BindingFlags.Instance;
+		                                                                BindingFlags.NonPublic | BindingFlags.Instance;
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
@@ -120,8 +120,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				string safename = GetSafeName(model.Type.Name);
 				model.ActiveRecordAtt.Table = ActiveRecordModel.pluralizeTableNames
-												? Inflector.Pluralize(safename)
-												: safename;
+				                              	? Inflector.Pluralize(safename)
+				                              	: safename;
 			}
 		}
 
@@ -236,20 +236,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						nestedModel.IsNestedType = true;
 
-					    Type nestedType = propAtt.MapType != null ? propAtt.MapType : prop.PropertyType;
-					    ProcessProperties(nestedType, nestedModel);
-					    ProcessFields(nestedType, nestedModel);
+						Type nestedType = propAtt.MapType != null ? propAtt.MapType : prop.PropertyType;
+						ProcessProperties(nestedType, nestedModel);
+						ProcessFields(nestedType, nestedModel);
 
 						model.Components.Add(new NestedModel(prop, propAtt, nestedModel));
 					}
-                    else if (attribute is NestedParentReferenceAttribute)
-                    {
-                        NestedParentReferenceAttribute nestedParentAtt = attribute as NestedParentReferenceAttribute;
-                        isArProperty = true;
+					else if (attribute is NestedParentReferenceAttribute)
+					{
+						NestedParentReferenceAttribute nestedParentAtt = attribute as NestedParentReferenceAttribute;
+						isArProperty = true;
 
-                        model.ComponentParent.Add(new NestedParentReferenceModel(prop, nestedParentAtt));
-                    }
-                    else if (attribute is JoinedKeyAttribute)
+						model.ComponentParent.Add(new NestedParentReferenceModel(prop, nestedParentAtt));
+					}
+					else if (attribute is JoinedKeyAttribute)
 					{
 						JoinedKeyAttribute propAtt = attribute as JoinedKeyAttribute;
 						isArProperty = true;
@@ -257,7 +257,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Key != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one JoinedKeyAttribute. " +
-															"Check type " + model.Type.FullName);
+							                                "Check type " + model.Type.FullName);
 						}
 
 						model.Key = new KeyModel(prop, propAtt);
@@ -270,7 +270,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Version != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one VersionAttribute. " +
-															"Check type " + model.Type.FullName);
+							                                "Check type " + model.Type.FullName);
 						}
 
 						model.Version = new VersionModel(prop, propAtt);
@@ -283,7 +283,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Timestamp != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one TimestampAttribute. " +
-															"Check type " + model.Type.FullName);
+							                                "Check type " + model.Type.FullName);
 						}
 
 						model.Timestamp = new TimestampModel(prop, propAtt);
@@ -341,7 +341,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					else if (attribute is Any.MetaValueAttribute)
 					{
 						if (prop.GetCustomAttributes(typeof(HasManyToAnyAttribute), false).Length == 0 &&
-							prop.GetCustomAttributes(typeof(AnyAttribute), false).Length == 0
+						    prop.GetCustomAttributes(typeof(AnyAttribute), false).Length == 0
 							)
 							throw new ActiveRecordException(
 								"You can't specify an Any.MetaValue without specifying the Any or HasManyToAny attribute. " +
@@ -422,8 +422,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private static bool IsRootType(Type type)
 		{
 			bool isRootType = type.BaseType != typeof(object) &&
-							  type.BaseType != typeof(ActiveRecordBase) &&
-							  type.BaseType != typeof(ActiveRecordValidationBase);
+			                  type.BaseType != typeof(ActiveRecordBase) &&
+			                  type.BaseType != typeof(ActiveRecordValidationBase);
 			// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
 
 #if DOTNET2
@@ -431,7 +431,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			if (type.BaseType.IsGenericType)
 			{
 				isRootType = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
-							 type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
+				             type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
 			}
 #endif
 

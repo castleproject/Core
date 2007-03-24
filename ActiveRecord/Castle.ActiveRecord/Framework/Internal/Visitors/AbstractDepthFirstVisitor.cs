@@ -123,13 +123,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 		}
 
-        /// <summary>
-        /// Visits the component parent
-        /// </summary>
-        /// <param name="referenceModel">The model.</param>
-        public virtual void VisitNestedParentReference(NestedParentReferenceModel referenceModel)
-        {
-        }
+		/// <summary>
+		/// Visits the component parent
+		/// </summary>
+		/// <param name="referenceModel">The model.</param>
+		public virtual void VisitNestedParentReference(NestedParentReferenceModel referenceModel)
+		{
+		}
 
 		/// <summary>
 		/// Visits any.
@@ -255,15 +255,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public static Type GuessType(Type type, Type propertyType)
 		{
 			Type otherend = type;
+
 			if (otherend == null)
 			{
 #if DOTNET2
-				//naive guessing of type if not specified
+				// naive guessing of type if not specified
 				if (propertyType.IsGenericType)
 				{
 					Type[] arguments = propertyType.GetGenericArguments();
+					
 					if (arguments.Length == 1)
+					{
 						otherend = arguments[0];
+					}
 				}
 #endif
 			}

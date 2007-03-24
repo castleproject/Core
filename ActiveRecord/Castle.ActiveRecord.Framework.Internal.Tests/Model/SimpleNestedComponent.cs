@@ -14,65 +14,44 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-    [ActiveRecord]
-    public class SimpleNestedComponent : ActiveRecordBase
-    {
-        private int id;
+	[ActiveRecord]
+	public class SimpleNestedComponent : ActiveRecordBase
+	{
+		private int id;
+		private NestedComponent nested;
 
-        [PrimaryKey]
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
+		[PrimaryKey]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
 
-        private NestedComponent _nested;
+		[Nested]
+		public NestedComponent Nested
+		{
+			get { return nested; }
+			set { nested = value; }
+		}
+	}
 
-        [Nested]
-        public NestedComponent Nested
-        {
-            get
-            {
-                return this._nested;
-            }
-            set
-            {
-                this._nested = value;
-            }
-        }
+	public class NestedComponent
+	{
+		private SimpleNestedComponent parent;
+		private string nestedProperty = "";
 
-    }
+		[NestedParentReference]
+		public SimpleNestedComponent Parent
+		{
+			get { return parent; }
+			set { parent = value; }
+		}
 
-    public class NestedComponent
-    {
-        private SimpleNestedComponent _parent;
-
-        [NestedParentReference]
-        public SimpleNestedComponent Parent
-        {
-            get
-            {
-                return this._parent;
-            }
-            set
-            {
-                this._parent = value;
-            }
-        }
-
-        private string _nestedProperty = "";
-        
-        [Property]
-        public string NestedProperty
-        {
-            get
-            {
-                return this._nestedProperty;
-            }
-            set
-            {
-                this._nestedProperty = value;
-            }
-        }
-    }
+		[Property]
+		public string NestedProperty
+		{
+			get { return nestedProperty; }
+			set { nestedProperty = value; }
+		}
+	}
 }

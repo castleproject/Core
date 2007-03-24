@@ -63,11 +63,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		void VisitField(FieldModel model);
 
-        /// <summary>
-        /// Visits the component parent reference
-        /// </summary>
-        /// <param name="referenceModel">The model.</param>
-        void VisitNestedParentReference(NestedParentReferenceModel referenceModel);
+		/// <summary>
+		/// Visits the component parent reference
+		/// </summary>
+		/// <param name="referenceModel">The model.</param>
+		void VisitNestedParentReference(NestedParentReferenceModel referenceModel);
 
 		/// <summary>
 		/// Visits the version.

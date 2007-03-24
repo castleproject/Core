@@ -31,7 +31,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="propInfo">The prop info.</param>
 		/// <param name="nestedParentAtt">The parent att.</param>
-		public NestedParentReferenceModel( PropertyInfo propInfo, NestedParentReferenceAttribute nestedParentAtt )
+		public NestedParentReferenceModel(PropertyInfo propInfo, NestedParentReferenceAttribute nestedParentAtt)
 		{
 			this.nestedParentAtt = nestedParentAtt;
 			this.propInfo = propInfo;
