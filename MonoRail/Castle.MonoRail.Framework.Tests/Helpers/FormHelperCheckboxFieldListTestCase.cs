@@ -251,6 +251,34 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			}
 		}
 
+		[Test]
+		public void UsingIdPerElement()
+		{
+			subscription.Months = new int[] { 1, 2, 3, 4, 5 };
+
+			FormHelper.CheckboxList list =
+				helper.CreateCheckboxList("subscription.Months", new int[] { 1, 2 });
+
+			Assert.IsNotNull(list);
+
+			int index = 0;
+
+			foreach(Object item in list)
+			{
+				string content = list.Item("menu" + index);
+
+				if (index < 2)
+				{
+					Assert.AreEqual("<input type=\"checkbox\" id=\"menu" + index + "\" name=\"subscription.Months[" + index + "]\" value=\"" + item + "\" checked=\"checked\" />", content);
+				}
+				else
+				{
+					Assert.AreEqual("<input type=\"checkbox\" name=\"subscription.Months[" + index + "]\" value=\"" + item + "\" id=\"menu" + index + "\" />", content);
+				}
+				index++;
+			}
+		}
+
 #if DOTNET2
 
 		[Test]
