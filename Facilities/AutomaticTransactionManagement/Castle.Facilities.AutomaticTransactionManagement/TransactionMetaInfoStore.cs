@@ -16,6 +16,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Reflection;
 
@@ -158,8 +159,18 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 	public class TransactionMetaInfo : MarshalByRefObject
 	{
-		private readonly IDictionary method2Att = new Hashtable();
-		private readonly IList notTransactional = new ArrayList();
+		private readonly Dictionary<MethodInfo, TransactionAttribute> method2Att;
+		private readonly Dictionary<MethodInfo, String> notTransactionalCache;
+		private readonly object locker = new object();
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TransactionMetaInfo"/> class.
+		/// </summary>
+		public TransactionMetaInfo()
+		{
+			method2Att = new Dictionary<MethodInfo, TransactionAttribute>();
+			notTransactionalCache = new Dictionary<MethodInfo, String>();
+		}
 
 		#region MarshalByRefObject overrides
 
@@ -187,41 +198,40 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 		public bool Contains(MethodInfo info)
 		{
-			if (method2Att.Contains(info))
-				return true;
-			if (notTransactional.Contains(info))
+			lock(locker)
+			{
+				if (method2Att.ContainsKey(info)) return true;
+				if (notTransactionalCache.ContainsKey(info)) return false;
+
+				if (info.DeclaringType.IsGenericType || info.IsGenericMethod)
+				{
+					return IsGenericMethodTransactional(info);
+				}
+
 				return false;
-#if DOTNET2
-			if (info.DeclaringType.IsGenericType || info.IsGenericMethod)
-			{
-				return HandleMethodWithGenerics(info);
-			}
-#endif
-			return false;
-		}
-
-		private bool HandleMethodWithGenerics(MethodInfo info)
-		{
-			lock (method2Att)
-			{
-				object[] atts = info.GetCustomAttributes(typeof(TransactionAttribute), true);
-
-				if (atts.Length != 0)
-				{
-					Add(info, atts[0] as TransactionAttribute);
-					return true;
-				}
-				else
-				{
-					notTransactional.Add(info);
-					return false;
-				}
 			}
 		}
 
 		public TransactionAttribute GetTransactionAttributeFor(MethodInfo methodInfo)
 		{
-			return (TransactionAttribute)method2Att[methodInfo];
+			return method2Att[methodInfo];
+		}
+
+		private bool IsGenericMethodTransactional(MethodInfo info)
+		{
+			object[] atts = info.GetCustomAttributes(typeof(TransactionAttribute), true);
+
+			if (atts.Length != 0)
+			{
+				Add(info, atts[0] as TransactionAttribute);
+				return true;
+			}
+			else
+			{
+				notTransactionalCache[info] = string.Empty;
+			}
+
+			return false;
 		}
 	}
 }

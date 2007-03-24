@@ -12,39 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 {
+	using System;
 	using Castle.Services.Transaction;
-#if DOTNET2
 
 	[Transactional]
 	public class GenericService<T>
 	{
-		[Transaction()]
+		[Transaction]
 		public virtual void Bar<K>()
 		{
-			
 		}
 
-		[Transaction()]
+		[Transaction]
 		public virtual void Foo()
 		{
-
 		}
 
-		[Transaction()]
+		[Transaction]
 		public virtual void Throw()
 		{
-			throw new Exception(typeof (T).FullName);
+			throw new Exception(typeof(T).FullName);
 		}
 
-		[Transaction()]
+		[Transaction]
 		public virtual void Throw<K>()
 		{
-			throw new Exception(typeof (T).FullName);
+			throw new Exception(typeof(T).FullName);
 		}
 	}
-#endif
 }

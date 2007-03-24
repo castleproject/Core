@@ -20,9 +20,6 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 	using Castle.Windsor;
 	using Castle.Services.Transaction;
 
-	/// <summary>
-	/// Summary description for TransactionTestCase.
-	/// </summary>
 	[TestFixture]
 	public class FacilityBasicTestCase
 	{
@@ -93,9 +90,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
 			container.AddFacility("transactionmanagement", new TransactionFacility());
-
 			container.AddComponent("transactionmanager", typeof(ITransactionManager), typeof(MockTransactionManager));
-
 			container.AddComponent("services.customer", typeof(ICustomerService), typeof(AnotherCustomerService));
 
 			ICustomerService service = (ICustomerService)container["services.customer"];
@@ -122,17 +117,13 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(1, transactionManager.RolledBackCount);
 		}
 
-#if DOTNET2
-
 		[Test]
 		public void TestBasicOperationsWithGenericService()
 		{
 			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
 			container.AddFacility("transactionmanagement", new TransactionFacility());
-
 			container.AddComponent("transactionmanager", typeof(ITransactionManager), typeof(MockTransactionManager));
-
 			container.AddComponent("generic.services", typeof(GenericService<>));
 
 			GenericService<string> genericService = container.Resolve<GenericService<string>>();
@@ -164,7 +155,6 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(2, transactionManager.CommittedCount);
 			Assert.AreEqual(1, transactionManager.RolledBackCount);
 
-
 			try
 			{
 				genericService.Throw<float>();
@@ -178,8 +168,6 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(2, transactionManager.CommittedCount);
 			Assert.AreEqual(2, transactionManager.RolledBackCount);
 		}
-
-#endif
 
 		[Test]
 		public void TestBasicOperationsWithConfigComponent()
