@@ -752,7 +752,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates a <see cref="CheckboxList"/> instance
 		/// which is enumerable. For each interaction you can invoke
-		/// <see cref="CheckboxList.Item"/> which will correctly render
+		/// <see cref="CheckboxList.Item()"/> which will correctly render
 		/// a checkbox input element for the current element on the supplied set (<c>dataSource</c>).
 		/// <para>
 		/// The enumerable item will be an element of the <c>dataSource</c>.
@@ -779,7 +779,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Creates a <see cref="CheckboxList"/> instance
 		/// which is enumerable. For each interaction you can invoke
-		/// <see cref="CheckboxList.Item"/> which will correctly render
+		/// <see cref="CheckboxList.Item()"/> which will correctly render
 		/// a checkbox input element for the current element on the supplied set (<c>dataSource</c>).
 		/// <para>
 		/// The enumerable item will be an element of the <c>dataSource</c>.
@@ -830,7 +830,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			target = String.Format("{0}[{1}]", target, index);
 			
-			string elementId = CreateHtmlId(attributes, target, false);
+			string elementId = CreateHtmlId(attributes, target, true);
 			
 			string computedTarget = target;
 			
@@ -877,22 +877,41 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			
 			/// <summary>
-			/// 
+			/// Outputs the Checkbox in the correct state (checked/unchecked) based
+			/// on the Set. 
+			/// <seealso cref="FormHelper.CreateCheckboxList(string,IEnumerable,IDictionary)"/>
 			/// </summary>
-			/// <returns>The generated form element</returns>
+			/// <returns>The generated input element</returns>
 			public string Item()
+			{
+				return Item(null);
+			}
+
+			/// <summary>
+			/// Outputs the Checkbox in the correct state (checked/unchecked) based
+			/// on the Set. 
+			/// <seealso cref="FormHelper.CreateCheckboxList(string,IEnumerable,IDictionary)"/>
+			/// </summary>
+			/// <param name="id">The element id</param>
+			/// <returns>The generated input element</returns>
+			public string Item(string id)
 			{
 				if (!hasMovedNext)
 				{
 					throw new InvalidOperationException("Before rendering a checkbox item, you must use MoveNext");
 				}
-				
+
 				if (!hasItem)
 				{
 					// Nothing to render
 					return String.Empty;
 				}
-								
+
+				if (id != null)
+				{
+					attributes["id"] = id;
+				}
+
 				return helper.CheckboxItem(index, target, operationState.TargetSuffix, CurrentSetItem, attributes);
 			}
 
@@ -1147,6 +1166,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The generated form element</returns>
 		public string Select(string target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
 		{
+			return GenerateSelect(target, selectedValue, dataSource, attributes);
+		}
+
+		protected virtual string GenerateSelect(string target, object selectedValue, IEnumerable dataSource,
+		                                        IDictionary attributes)
+		{
 			string id = CreateHtmlId(target);
 
 			ApplyValidation(InputElementType.Select, target, ref attributes);
@@ -1163,7 +1188,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				firstOption = CommonUtils.ObtainEntryAndRemove(attributes, "firstoption");
 				firstOptionValue = CommonUtils.ObtainEntryAndRemove(attributes, "firstoptionvalue");
-				
+
 				if (attributes.Contains("name"))
 				{
 					name = (String) attributes["name"];
@@ -1196,11 +1221,11 @@ namespace Castle.MonoRail.Framework.Helpers
 				writer.WriteEndTag("option");
 				writer.WriteLine();
 			}
-			
+
 			foreach(SetItem item in state)
 			{
 				writer.WriteBeginTag("option");
-				
+
 				if (item.IsSelected)
 				{
 					writer.Write(" selected=\"selected\"");
@@ -1212,7 +1237,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				writer.WriteEndTag("option");
 				writer.WriteLine();
 			}
-			
+
 			writer.WriteEndTag("select");
 
 			return sbWriter.ToString();

@@ -4,6 +4,12 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Chris Ortman's patch fixing MR-235
+  "Allow overriding of select generation in FormHelper"
+
+- Added Item(string id) overload to Checkboxlist
+  Used to generate a checkbox with the specified id. Useful to label for='id' constructions
+
 - Added the Expect property to the ARDataBindAttr. Now it will clear the collections 
   that are declared as expected, if not can be found on the resquest params. (MR-163)
 	 
