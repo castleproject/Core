@@ -23,15 +23,16 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	public class RangeValidatorTestCase
 	{
 		private RangeValidator validatorIntLow, validatorIntHigh, validatorIntLowOrHigh,
-			validatorDateTimeLow, validatorDateTimeHigh, validatorDateTimeLowOrHigh;
+			validatorDateTimeLow, validatorDateTimeHigh, validatorDateTimeLowOrHigh,
+			validatorStringLow, validatorStringHigh, validatorStringLowOrHigh;
 		private TestTargetInt intTarget;
 		private TestTargetDateTime dateTimeTarget;
+		private TestTargetString stringTarget;
 
 		[SetUp]
 		public void Init()
 		{
-			Thread.CurrentThread.CurrentCulture =
-				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
+			Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
 			// Integer validation
 			validatorIntLow = new RangeValidator(0, int.MaxValue);
@@ -56,6 +57,18 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validatorDateTimeLowOrHigh.Initialize(typeof(TestTargetDateTime).GetProperty("TargetField"));
 
 			dateTimeTarget = new TestTargetDateTime();
+
+			// String validation
+			validatorStringLow = new RangeValidator("bbb", String.Empty);
+			validatorStringLow.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
+
+			validatorStringHigh = new RangeValidator(String.Empty, "yyy");
+			validatorStringHigh.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
+			
+			validatorStringLowOrHigh = new RangeValidator("bbb", "yyy");
+			validatorStringLowOrHigh.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
+
+			stringTarget = new TestTargetString();
 		}
 
 		public class TestTargetInt
@@ -74,6 +87,17 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			private DateTime targetField;
 
 			public DateTime TargetField
+			{
+				get { return targetField; }
+				set { targetField = value; }
+			}
+		}
+
+		public class TestTargetString
+		{
+			private string targetField;
+
+			public string TargetField
 			{
 				get { return targetField; }
 				set { targetField = value; }
@@ -153,5 +177,37 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, DateTime.Now));
 		}
 		#endregion
+
+		#region String range tests
+		[Test]
+		public void RangeStringTooLowValidator()
+		{
+			//fail when compare to string too low
+			Assert.IsFalse(validatorStringLow.IsValid(intTarget, "aaa"));
+			//pass when compare to string not too low
+			Assert.IsTrue(validatorStringLow.IsValid(intTarget, "ccc"));
+		}
+
+		[Test]
+		public void RangeStringTooHighValidator()
+		{
+			//fail when compare to string too high
+			Assert.IsFalse(validatorStringHigh.IsValid(intTarget, "zzz"));
+			//pass when compare to string not too high
+			Assert.IsTrue(validatorStringHigh.IsValid(intTarget, "xxx"));
+		}
+
+		[Test]
+		public void RangeStringTooLowOrHighValidator()
+		{
+			//fail when compare to string too low
+			Assert.IsFalse(validatorStringLowOrHigh.IsValid(intTarget, "aaa"));
+			//fail when compare to string too high
+			Assert.IsFalse(validatorStringLowOrHigh.IsValid(intTarget, "zzz"));
+			//pass when compare to string not too high
+			Assert.IsTrue(validatorStringLowOrHigh.IsValid(intTarget, "mmm"));
+		}
+		#endregion
+
 	}
 }

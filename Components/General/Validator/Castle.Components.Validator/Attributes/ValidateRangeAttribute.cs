@@ -48,46 +48,24 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Initializes a DateTime-based range validator.
+		/// Initializes a string-based range validator.
 		/// </summary>
 		/// <param name="min">The minimum value, or <c>String.Empty</c> if this should not be tested.</param>
 		/// <param name="max">The maximum value, or <c>String.Empty</c> if this should not be tested.</param>
 		public ValidateRangeAttribute(string min, string max)
 		{
-			DateTime dtmin, dtmax;
-
-			if (!DateTime.TryParse(min, out dtmin))
-			{
-				dtmin = DateTime.MinValue;
-			}
-			if (!DateTime.TryParse(max, out dtmax))
-			{
-				dtmax = DateTime.MaxValue;
-			}
-
-			validator = new RangeValidator(dtmin, dtmax);
+			validator = new RangeValidator(min, max);
 		}
 
 		/// <summary>
-		/// Initializes a DateTime-based range validator.
+		/// Initializes a string-based range validator.
 		/// </summary>
 		/// <param name="min">The minimum value, or <c>String.Empty</c> if this should not be tested.</param>
 		/// <param name="max">The maximum value, or <c>String.Empty</c> if this should not be tested.</param>
 		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
 		public ValidateRangeAttribute(string min, string max, string errorMessage) : base(errorMessage)
 		{
-			DateTime dtmin, dtmax;
-
-			if (!DateTime.TryParse(min, out dtmin))
-			{
-				dtmin = DateTime.MinValue;
-			}
-			if (!DateTime.TryParse(max, out dtmax))
-			{
-				dtmax = DateTime.MaxValue;
-			}
-
-			validator = new RangeValidator(dtmin, dtmax);
+			validator = new RangeValidator(min, max);
 		}
 
 		/// <summary>

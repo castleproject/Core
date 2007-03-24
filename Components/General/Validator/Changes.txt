@@ -1,5 +1,8 @@
 Beta 1
 ======
 
+- Applied Brian DeMarzo's patch fixing COMP-16
+  "RangeValidator cleanup, added RangeValidationType.String"
+
 - Applied Brian DeMarzo's patch adding a new validator: RangeValidator
   Fixes COMP-15
