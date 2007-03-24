@@ -99,8 +99,54 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 			Assert.AreEqual("This is the second simple template", writer.GetStringBuilder().ToString());
 			
 		}
-		
-		
-		
+
+
+		[Test]
+		public void ShouldProcessAStringTemplate()
+		{
+			NVelocityTemplateEngine engine = new NVelocityTemplateEngine();
+
+			(engine as ISupportInitialize).BeginInit();
+
+			StringWriter writer = new StringWriter();
+			StringWriter contextWriter = new StringWriter();
+
+			string template = "This is a simple template";
+			string contextTemplate = "This is a simple $templateType template";
+			IDictionary context = new Hashtable();
+			context.Add("templateType", typeof(NVelocityTemplateEngine).Name);
+
+			Assert.IsTrue(engine.Process(new Hashtable(), "ShouldProcessAStringTemplate", writer, template));
+
+			Assert.AreEqual("This is a simple template", writer.GetStringBuilder().ToString());
+
+			Assert.IsTrue(engine.Process(context, "ShouldProcessAStringTemplate", contextWriter, contextTemplate));
+
+			Assert.AreEqual("This is a simple NVelocityTemplateEngine template", contextWriter.GetStringBuilder().ToString());
+		}
+
+		[Test]
+		public void ShouldProcessATextReaderTemplate()
+		{
+			NVelocityTemplateEngine engine = new NVelocityTemplateEngine();
+
+			(engine as ISupportInitialize).BeginInit();
+
+			StringWriter writer = new StringWriter();
+			StringWriter contextWriter = new StringWriter();
+
+			string template = "This is a simple template";
+			string contextTemplate = "This is a simple $templateType template";
+			IDictionary context = new Hashtable();
+			context.Add("templateType", typeof(NVelocityTemplateEngine).Name);
+
+			Assert.IsTrue(engine.Process(new Hashtable(), "ShouldProcessAStringTemplate", writer, new StringReader(template)));
+
+			Assert.AreEqual("This is a simple template", writer.GetStringBuilder().ToString());
+
+			Assert.IsTrue(engine.Process(context, "ShouldProcessAStringTemplate", contextWriter, new StringReader(contextTemplate)));
+
+			Assert.AreEqual("This is a simple NVelocityTemplateEngine template", contextWriter.GetStringBuilder().ToString());
+		}
 	}
 }

@@ -205,6 +205,35 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			return true;
 		}
 
+		/// <summary>
+		/// Process the input template with data from the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="templateName">Name of the template.  Used only for information during logging</param>
+		/// <param name="output">The output.</param>
+		/// <param name="inputTemplate">The input template.</param>
+		/// <returns></returns>
+		public bool Process(IDictionary context, string templateName, TextWriter output, string inputTemplate)
+		{
+			return Process(context, templateName, output, new StringReader(inputTemplate));
+		}
+
+		/// <summary>
+		/// Process the input template with data from the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="templateName">Name of the template.  Used only for information during logging</param>
+		/// <param name="output">The output.</param>
+		/// <param name="inputTemplate">The input template.</param>
+		/// <returns></returns>
+		public bool Process(IDictionary context, string templateName, TextWriter output, TextReader inputTemplate)
+		{
+			if (vengine == null)
+				throw new InvalidOperationException("Template Engine not yet initialized.");
+
+			return vengine.Evaluate(CreateContext(context), output, templateName, inputTemplate);
+		}
+
 		private IContext CreateContext(IDictionary context)
 		{
 			return new VelocityContext( new Hashtable(context) );

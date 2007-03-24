@@ -35,6 +35,28 @@ namespace Castle.Components.Common.TemplateEngine
 		bool Process(IDictionary context, String templateName, TextWriter output);
 
 		/// <summary>
+		/// Implementors should process the input template with
+		/// data from the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="templateName">Name of the template.  Used only for information during logging</param>
+		/// <param name="output">The output.</param>
+		/// <param name="inputTemplate">The input template.</param>
+		/// <returns></returns>
+		bool Process(IDictionary context, String templateName, TextWriter output, String inputTemplate);
+
+		/// <summary>
+		/// Implementors should process the input template with
+		/// data from the context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="templateName">Name of the template.  Used only for information during logging</param>
+		/// <param name="output">The output.</param>
+		/// <param name="inputTemplate">The input template.</param>
+		/// <returns></returns>
+		bool Process(IDictionary context, String templateName, TextWriter output, TextReader inputTemplate);
+
+		/// <summary>
 		/// Implementors should return <c>true</c> only if the 
 		/// specified template exists and can be used
 		/// </summary>
