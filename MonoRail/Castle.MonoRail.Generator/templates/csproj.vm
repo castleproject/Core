@@ -89,6 +89,21 @@
                     AssemblyName = "Castle.MonoRail.Framework"
                     HintPath = "..\lib\Castle.MonoRail.Framework.dll"
                 />
+                <Reference
+                    Name = "Castle.Core"
+                    AssemblyName = "Castle.Core"
+                    HintPath = "..\lib\Castle.Core.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Validator"
+                    AssemblyName = "Castle.Components.Validator"
+                    HintPath = "..\lib\Castle.Components.Validator.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\lib\Castle.Components.Common.EmailSender.dll"
+                />
 #if ($isNVelocity)
                 <Reference
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
@@ -154,4 +169,5 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
 

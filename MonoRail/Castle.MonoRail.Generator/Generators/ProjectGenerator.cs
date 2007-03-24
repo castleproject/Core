@@ -221,8 +221,11 @@ namespace Castle.MonoRail.Generator.Generators
 		{
 			String sourcedir = AppDomain.CurrentDomain.BaseDirectory;
 
+			CopyFileToLib(sourcedir, "Castle.Core.dll");
 			CopyFileToLib(sourcedir, "Castle.MonoRail.Framework.dll");
 			CopyFileToLib(sourcedir, "Castle.MonoRail.TestSupport.dll");
+      CopyFileToLib(sourcedir, "Castle.Components.Validator.dll");
+      CopyFileToLib(sourcedir, "Castle.Components.Common.EmailSender.dll");
 			
 			if (isNVelocity)
 			{

@@ -19,6 +19,7 @@
 		
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">
 			<include name="**/*.resx" />
+			<include name="templates/*.vm" />
 			<exclude name="obj/**" />
 		</resourcefileset>
 	</target>
