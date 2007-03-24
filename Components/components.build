@@ -2,8 +2,7 @@
 <project
 	name="castle-components"
 	default="build"
-	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
->
+	xmlns="http://nant.sf.net/release/0.85/nant.xsd">
 
 	<property name="root.dir" value=".." />
 	<include buildfile="${root.dir}/common-project.xml" />
@@ -11,7 +10,6 @@
 	<fileset id="buildfiles.all">
 		<!-- Files have to be in dependency order -->
 		<include name="General/General.build" />
-		<include name="Winforms/Winforms.build" />
 	</fileset>
 
 	<target name="build" depends="common.build" />
