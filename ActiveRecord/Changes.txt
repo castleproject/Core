@@ -1,5 +1,10 @@
 Release Candidate 2
 ===================
+
+- Applied Roy Tate's patch fixing AR-143 
+  "XmlGenerationVisitor generates incomplete XML mapping 
+   for BelongsTo with composite key"
+
 - AR-140 - Patch to allow  "The <component> element allows a <parent> subelement that maps a property of the component class as a reference back to the containing entity."
 
 
