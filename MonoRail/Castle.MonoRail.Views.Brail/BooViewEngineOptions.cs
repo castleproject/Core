@@ -28,6 +28,7 @@ namespace Castle.MonoRail.Views.Brail
 		string commonScriptsDirectory = "CommonScripts";
 		string saveDirectory = "Brail_Generated_Code";
 		IList assembliesToReference = new ArrayList();
+		IList namespacesToImport = new ArrayList();
 
 		public bool Debug
 		{
@@ -62,6 +63,11 @@ namespace Castle.MonoRail.Views.Brail
 		public IList AssembliesToReference
 		{
 			get { return assembliesToReference; }
+		}
+
+		public IList NamespacesToImport
+		{
+			get { return namespacesToImport; }
 		}
 
 		public BooViewEngineOptions()

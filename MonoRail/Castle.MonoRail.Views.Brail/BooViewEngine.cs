@@ -433,7 +433,7 @@ namespace Castle.MonoRail.Views.Brail
 			BrailPreProcessor processor = new BrailPreProcessor(this);
 			compiler.Parameters.Pipeline.Insert(0, processor);
 			// inserting the add class step after the parser
-			compiler.Parameters.Pipeline.Insert(2, new TransformToBrailStep());
+			compiler.Parameters.Pipeline.Insert(2, new TransformToBrailStep(options));
 			compiler.Parameters.Pipeline.Replace(typeof(ProcessMethodBodiesWithDuckTyping), new ReplaceUknownWithParameters());
 			compiler.Parameters.Pipeline.Replace(typeof(ExpandDuckTypedExpressions), new ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods());
 			compiler.Parameters.Pipeline.Replace(typeof(InitializeTypeSystemServices), new InitializeCustomTypeSystem());

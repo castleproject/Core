@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace Castle.MonoRail.Views.Brail
 {
+	using System;
 	using System.Configuration;
 	using System.Reflection;
 	using System.Xml;
@@ -32,12 +33,33 @@ namespace Castle.MonoRail.Views.Brail
 				options.SaveDirectory = section.Attributes["saveDirectory"].Value;
 			if (section.Attributes["commonScriptsDirectory"] != null)
 				options.CommonScriptsDirectory = section.Attributes["commonScriptsDirectory"].Value;
-			foreach(XmlNode refence in section.SelectNodes("reference"))
+			foreach (XmlNode refence in section.SelectNodes("reference"))
 			{
-				Assembly asm = Assembly.Load(refence.Attributes["assembly"].Value);
+				XmlAttribute attribute = refence.Attributes["assembly"];
+				if (attribute == null)
+					throw GetConfigurationException("Attribute 'assembly' is mandatory for <reference/> tags");
+				Assembly asm = Assembly.Load(attribute.Value);
 				options.AssembliesToReference.Add(asm);
 			}
+
+			foreach (XmlNode import in section.SelectNodes("import"))
+			{
+				XmlAttribute attribute = import.Attributes["namespace"];
+				if (attribute == null)
+					throw GetConfigurationException("Attribute 'namespace' is mandatory for <import/> tags");
+				string name = attribute.Value;
+				options.NamespacesToImport.Add(name);
+			}
 			return options;
+		}
+
+		private static Exception GetConfigurationException(string error)
+		{
+#if DOTNET2
+			return new ConfigurationErrorsException(error);
+#else
+			return new ConfigurationException(dotNet2);
+#endif
 		}
 	}
 }

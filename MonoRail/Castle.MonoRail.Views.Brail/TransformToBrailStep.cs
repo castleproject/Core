@@ -30,12 +30,25 @@ namespace Castle.MonoRail.Views.Brail
 	// * Create a constructor that delegate to BrailBase constructor
 	public class TransformToBrailStep : AbstractCompilerStep
 	{
+		private BooViewEngineOptions options;
+
+		public TransformToBrailStep(BooViewEngineOptions options)
+		{
+			this.options = options;
+		}
+
 		public override void Run()
 		{
 			foreach(Module module in CompileUnit.Modules)
 			{
 				module.Imports.Add(new Import(module.LexicalInfo, "Castle.MonoRail.Views.Brail"));
 				module.Imports.Add(new Import(module.LexicalInfo, "Castle.MonoRail.Framework"));
+
+				foreach(string name in options.NamespacesToImport)
+				{
+					module.Imports.Add(new Import(module.LexicalInfo, name));
+				}
+
 				ClassDefinition macro = new ClassDefinition();
 				macro.Name = module.FullName + "_BrailView";
 				macro.BaseTypes.Add(new SimpleTypeReference("Castle.MonoRail.Views.Brail.BrailBase"));
