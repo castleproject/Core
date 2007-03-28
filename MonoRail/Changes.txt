@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Aaron Jensen's patch fixing the Resource Manager usage 
+  Changed from ResourceSet to ResourceManager
+
 - Applied Lee Henson's patch adding the 'onCreateAdvice'
   to PrototypeWebValidator
 

@@ -15,39 +15,41 @@
 namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
+	using System.Globalization;
 	using System.Resources;
 
 	/// <summary>
 	/// Simple facade that provides the IResource interface to a
-	/// ResourceSet instance.
+	/// ResourceManager instance.
 	/// </summary>
 	public class ResourceFacade : IResource
 	{
-		private readonly ResourceSet resourceSet;
+		private readonly ResourceManager resourceManager;
+		private readonly CultureInfo cultureInfo;
 
-		public ResourceFacade(ResourceSet resourceSet)
+		public ResourceFacade(ResourceManager resourceManager, CultureInfo cultureInfo)
 		{
-			this.resourceSet = resourceSet;
+			this.resourceManager = resourceManager;
+			this.cultureInfo = cultureInfo;
 		}
 
-		public object this[String key]
+		public object GetObject(string key)
 		{
-			get { return GetObject( key ); }
+			return resourceManager.GetObject(key, cultureInfo);
 		}
 
-		public String GetString(String key)
+		public string GetString(string key)
 		{
-			return key != null ? resourceSet.GetString(key, true) : null;
+			return resourceManager.GetString(key, cultureInfo);
 		}
 
-		public object GetObject(String key)
+		public object this[string key]
 		{
-			return key != null ? resourceSet.GetObject(key, true) : null;
+			get { return resourceManager.GetObject(key, cultureInfo); }
 		}
 
 		public void Dispose()
 		{
-			resourceSet.Dispose();
 		}
 	}
 }
