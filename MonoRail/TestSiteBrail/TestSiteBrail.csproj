@@ -107,6 +107,7 @@
     <Compile Include="Controllers\AppPathController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\CookiesController.cs" />
+    <Compile Include="Controllers\BugsController.cs" />
     <Compile Include="Controllers\DefaultLayoutController.cs" />
     <Compile Include="Controllers\DirectRenderController.cs" />
     <Compile Include="Controllers\DummySubView.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Controllers\UsingComponentsController.cs" />
     <Compile Include="Controllers\XmlController.cs" />
     <Compile Include="Helpers\DateFormatHelper.cs" />
+    <None Include="Views\bugs\mr_233.brail" />
     <None Include="Views\HappenedOnTheField\JustComponent.brail" />
     <None Include="Views\home\namespacesInConfig.brail" />
     <None Include="Views\home\withDynamicProxyObject.brail" />

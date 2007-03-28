@@ -2,7 +2,7 @@
 <html>
 <h1><?brail
 for element in list:
-	output IgnoreNull(element).Foo
+	output IgnoreNull(element).Bar
 end
 ?></h1>
 </html>

@@ -46,6 +46,7 @@
     <Compile Include="ComponentsTestCase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
+    <Compile Include="BrailBugsTestCase.cs" />
     <Compile Include="DirectRenderTestCase.cs" />
     <Compile Include="HappenedOnTheFieldFixture.cs" />
     <Compile Include="JSGenerationTestCase.cs" />

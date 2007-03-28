@@ -1,1 +1,1 @@
-Date formatted ${DateFormatHelper.FormatDate( date )}
+Date formatted ${DateFormatHelper.ToShortDate( date )}

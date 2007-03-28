@@ -24,7 +24,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void JsFunctions()
 		{
 			DoGet("ajax/JsFunctions.rails");
-            string expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails?RC3_0001\"></script>";
+            string expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails?RC3_0002\"></script>";
 			AssertSuccess();
 			AssertReplyEqualTo(expected);
 		}

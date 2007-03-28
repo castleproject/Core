@@ -29,7 +29,16 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (macro.Arguments.Count == 0)
 				throw new RailsException("output must be called with arguemnts");
+			UnescapeInitialAndClosingDoubleQuotes(macro);
 			return Expand(macro, output, output);
+		}
+
+		private static void UnescapeInitialAndClosingDoubleQuotes(MacroStatement macro)
+		{
+			StringLiteralExpression value = macro.Arguments[0] as StringLiteralExpression;
+			if(value==null)
+				return;
+			value.Value = BrailPreProcessor.UnescapeInitialAndClosingDoubleQuotes(value.Value);
 		}
 	}
 }

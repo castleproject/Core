@@ -25,6 +25,8 @@ namespace Castle.MonoRail.Views.Brail
 
 	public class BrailPreProcessor : AbstractCompilerStep
 	{
+		public const string ClosingQuoteReplacement = "`^`";
+		public const string DoubleQuote = "\"";
 		private static IDictionary Seperators = CreateSeperators();
 		private BooViewEngine booViewEngine;
 		private IDictionary inputToCode = new Hashtable();
@@ -117,11 +119,23 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (code.Length == 0)
 				return;
+			//This remove double quotes from ${}
 			code = RemoveDoubleQuotesFromExpressions(code);
 			buffer.WriteLine();
 			buffer.Write("output \"\"\"");
+			//This remove inital and closing double quotes from text
+			code = EscapeInitialAndClosingDoubleQuotes(code);
 			buffer.Write(code);
 			buffer.WriteLine("\"\"\"");
+		}
+
+		private static string EscapeInitialAndClosingDoubleQuotes(string code)
+		{
+			if (code.StartsWith(DoubleQuote))
+				code = ClosingQuoteReplacement + code.Substring(DoubleQuote.Length);
+			if (code.EndsWith(DoubleQuote))
+				code = code.Substring(0, code.Length - DoubleQuote.Length) + ClosingQuoteReplacement;
+			return code;
 		}
 
 		/// <summary>
@@ -221,6 +235,16 @@ namespace Castle.MonoRail.Views.Brail
 				}
 			}
 			return new DictionaryEntry(start, end);
+		}
+
+		public static string UnescapeInitialAndClosingDoubleQuotes(string code)
+		{
+			if (code.StartsWith(ClosingQuoteReplacement))
+				code = DoubleQuote + code.Substring(ClosingQuoteReplacement.Length);
+			if (code.EndsWith(ClosingQuoteReplacement))
+				code = code.Substring(0, code.Length - ClosingQuoteReplacement.Length) +
+				         DoubleQuote;
+			return code;
 		}
 	}
 }
