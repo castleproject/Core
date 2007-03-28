@@ -36,12 +36,21 @@ namespace Castle.MonoRail.Views.Brail
 
         public object QuackGet(string name, object[] parameters)
 		{
+			if(IsStringIndexer(name, parameters))
+			{
+				name = (string) parameters[0];
+			}
 			object val = resource.GetObject(name);
 			if(val==null)
 			{
 				throw new RailsException("Resource "+name+" does not exists");
 			}
 			return val;
+		}
+
+		private static bool IsStringIndexer(string name, object[] parameters)
+		{
+			return name.Length==0 && parameters.Length==1 && parameters[0] is string;
 		}
 
 		public object QuackSet(string name, object[] parameters, object value)
