@@ -131,5 +131,13 @@ end";
 ";
 			AssertReplyEqualTo(expected);
 		}
+
+		[Test]
+		public void CanUseNamespacesFromConfig()
+		{
+			string expected = "Using Udp without namespace, since it is in the web.config\r\n";
+			DoGet("home/namespacesInConfig.rails");
+			AssertReplyEqualTo(expected);
+		}
 	}
 }

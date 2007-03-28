@@ -129,6 +129,10 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 			
 		}
 
+		public void NamespacesInConfig()
+		{
+			
+		}
     }
 }
 

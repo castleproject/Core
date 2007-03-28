@@ -130,6 +130,7 @@
     <Compile Include="Controllers\XmlController.cs" />
     <Compile Include="Helpers\DateFormatHelper.cs" />
     <None Include="Views\HappenedOnTheField\JustComponent.brail" />
+    <None Include="Views\home\namespacesInConfig.brail" />
     <None Include="Views\home\withDynamicProxyObject.brail" />
     <None Include="Views\home\repeater.brail" />
     <None Include="Views\home\WithNothingAfterTheLastSeperator.brail" />
