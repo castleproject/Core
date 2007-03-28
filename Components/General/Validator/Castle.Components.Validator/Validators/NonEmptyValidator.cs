@@ -54,9 +54,12 @@ namespace Castle.Components.Validator
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
+		/// <param name="target">The target.</param>
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-												IWebValidationGenerator generator, IDictionary attributes)
+												IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
+			base.ApplyWebValidation(config, inputType, generator, attributes, target);
+
 			generator.SetAsRequired(BuildErrorMessage());
 		}
 

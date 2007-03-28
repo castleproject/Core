@@ -65,6 +65,13 @@ namespace Castle.Components.Validator
 		void SetMinLength(int minLength);
 
 		/// <summary>
+		/// Sets the length of the min.
+		/// </summary>
+		/// <param name="minLength">Length of the min.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetMinLength(int minLength, string violationMessage);
+
+		/// <summary>
 		/// Sets the length of the max.
 		/// </summary>
 		/// <param name="maxLength">Length of the max.</param>
@@ -76,5 +83,12 @@ namespace Castle.Components.Validator
 		/// <param name="minLength">Length of the min.</param>
 		/// <param name="maxLength">Length of the max.</param>
 		void SetLengthRange(int minLength, int maxLength);
+
+		/// <summary>
+		/// Set as same as.
+		/// </summary>
+		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetAsSameAs(string comparisonFieldName, string violationMessage);
 	}
 }

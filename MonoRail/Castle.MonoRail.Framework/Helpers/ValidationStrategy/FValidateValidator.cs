@@ -136,8 +136,13 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetMinLength(int minLength)
 			{
-				AddValidator("length|1");
+				SetMinLength(minLength, null);
 				// AddErrorMessage(violationMessage);
+			}
+
+			public void SetMinLength(int minLength, string violationMessage)
+			{
+				AddValidator("length|" + minLength);
 			}
 
 			public void SetMaxLength(int maxLength)
@@ -149,6 +154,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				AddValidator("length|" + minLength + "|" + maxLength);
 				// AddErrorMessage(violationMessage);
+			}
+
+			public void SetAsSameAs(string comparisonFieldName, string violationMessage)
+			{
+				throw new NotImplementedException();
 			}
 
 			private void AddValidator(string validator)

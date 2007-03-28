@@ -100,8 +100,9 @@ namespace Castle.Components.Validator
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
+		/// <param name="target">The target.</param>
 		void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-								IWebValidationGenerator generator, IDictionary attributes);
+								IWebValidationGenerator generator, IDictionary attributes, string target);
 
         /// <summary>
 		/// Gets the property name. The <see cref="FriendlyName"/>

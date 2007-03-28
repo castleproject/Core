@@ -148,9 +148,30 @@ namespace Castle.Components.Validator
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
-		public abstract void ApplyWebValidation(WebValidationConfiguration config,
+		/// <param name="target">The target.</param>
+		public virtual void ApplyWebValidation(WebValidationConfiguration config,
 		                                        InputElementType inputType, IWebValidationGenerator generator,
-		                                        IDictionary attributes);
+		                                        IDictionary attributes, string target)
+		{
+			if (target.Contains("."))
+			{
+				string[] parts = target.Split('.');
+
+				if (attributes.Contains("class"))
+				{
+					string[] classNames = attributes["class"].ToString().Split(' ');
+
+					if (!Array.Exists(classNames, delegate(string className) { return className.StartsWith("validator-prefix-id-"); }))
+					{
+						attributes["class"] += " validator-id-prefix-" + parts[0] + "_";
+					}
+				}
+				else
+				{
+					attributes.Add("class", "validator-id-prefix-" + parts[0] + "_");
+				}
+			}
+		}
 
 		/// <summary>
 		/// Implementors should perform the actual validation upon

@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Lee Henson's patch adding the 'onCreateAdvice'
+  to PrototypeWebValidator
+
 - Applied Chris Ortman's patch fixing MR-235
   "Allow overriding of select generation in FormHelper"
 

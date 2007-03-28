@@ -1008,6 +1008,8 @@ namespace Castle.MonoRail.Framework.Helpers
 				AddChecked(attributes);
 			}
 
+			ApplyValidation(InputElementType.Checkbox, target, ref attributes);
+
 			string id = CreateHtmlId(attributes, target);
 			string hiddenElementId = id + "H";
 			string hiddenElementValue = CommonUtils.ObtainEntryAndRemove(attributes, "falseValue", "false");
@@ -1306,7 +1308,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				if (validator.SupportsWebValidation)
 				{
-					validator.ApplyWebValidation(validationConfig, inputType, generator, attributes);
+					validator.ApplyWebValidation(validationConfig, inputType, generator, attributes, target);
 				}
 			}
 		}

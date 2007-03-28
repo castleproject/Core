@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 {
+	using System;
 	using System.Collections;
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Internal;
@@ -69,6 +70,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				string useTitles = CommonUtils.ObtainEntryAndRemove(parameters, "useTitles", "true");
 				string onFormValidate = CommonUtils.ObtainEntryAndRemove(parameters, "onFormValidate");
 				string onElementValidate = CommonUtils.ObtainEntryAndRemove(parameters, "onElementValidate");
+				string onCreateAdvice = CommonUtils.ObtainEntryAndRemove(parameters, "onCreateAdvice");
 
 				jsOptions["onSubmit"] = onSubmit;
 				jsOptions["stopOnFirst"] = stopOnFirst;
@@ -83,6 +85,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				if (onElementValidate != null)
 				{
 					jsOptions["onElementValidate"] = onElementValidate;
+				}
+				if (onCreateAdvice != null)
+				{
+					jsOptions["onCreateAdvice"] = onCreateAdvice;
 				}
 			}
 		}
@@ -120,7 +126,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				{
 					AddClass("validate-selection");
 				}
-
+				else if (inputType == InputElementType.Checkbox)
+				{
+					AddClass("validate-checked");
+				}
 				AddTitle(violationMessage);
 			}
 
@@ -154,7 +163,15 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetMinLength(int minLength)
 			{
-				// Not supported by the prototype validation
+				SetMinLength(minLength, null);
+			}
+
+			public void SetMinLength(int minLength, string violationMessage)
+			{
+				AddClass("validate-min-length-" + minLength);
+				
+				if (!string.IsNullOrEmpty(violationMessage))
+					AddTitle(violationMessage);
 			}
 
 			public void SetMaxLength(int maxLength)
@@ -170,7 +187,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetLengthRange(int minLength, int maxLength)
 			{
-				// Not supported by the prototype validation
+				SetMinLength(minLength);
+				SetMaxLength(maxLength);
+			}
+
+			public void SetAsSameAs(string comparisonFieldName, string violationMessage)
+			{
+				AddClass("validate-same-as-" + comparisonFieldName);
+				AddTitle(violationMessage);
 			}
 
 			private void AddTitle(string message)

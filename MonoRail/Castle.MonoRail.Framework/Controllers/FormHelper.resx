@@ -1,5 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -59,16 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="jsfunctions" xml:space="preserve">
-    <value><![CDATA[
-function monorail_formhelper_numberonly(e, exceptions, forbidalso)
+    <value>function monorail_formhelper_numberonly(e, exceptions, forbidalso)
 {
 	exceptions = exceptions.concat([8,9,13,37,38,39,40,46]);
 	var code = e.charCode;
 	if (!code) code = e.keyCode;
 	if (e.ctrlKey || e.altKey) return true;
-	for(var i=0; i < forbidalso.length; i++) if (forbidalso[i] == code) return false;
-	for(var i=0; i < exceptions.length; i++) if (exceptions[i] == code) return true;
-	if (code <= 47 || code > 57) return false;
+	for(var i=0; i &lt; forbidalso.length; i++) if (forbidalso[i] == code) return false;
+	for(var i=0; i &lt; exceptions.length; i++) if (exceptions[i] == code) return true;
+	if (code &lt;= 47 || code &gt; 57) return false;
 	return true; 
 }
 
@@ -125,9 +183,9 @@ function monorail_formhelper_mask(e, elem,loc,delim)
 	var locs = loc.split(',');
 	var str = elem.value;
 	
-	for (var i = 0; i <= locs.length; i++)
+	for (var i = 0; i &lt;= locs.length; i++)
 	{
-		for (var k = 0; k <= str.length; k++)
+		for (var k = 0; k &lt;= str.length; k++)
 		{
 			if (k == locs[i])
 			{
@@ -187,17 +245,17 @@ Validator.prototype = {
 		this.className = className;
 	},
 	test : function(v, elm) {
-		return (this._test(v,elm) && this.options.all(function(p){
+		return (this._test(v,elm) &amp;&amp; this.options.all(function(p){
 			return Validator.methods[p.key] ? Validator.methods[p.key](v,elm,p.value) : true;
 		}));
 	}
 }
 Validator.methods = {
 	pattern : function(v,elm,opt) {return Validation.get('IsEmpty').test(v) || opt.test(v)},
-	minLength : function(v,elm,opt) {return v.length >= opt},
-	maxLength : function(v,elm,opt) {return v.length <= opt},
-	min : function(v,elm,opt) {return v >= parseFloat(opt)}, 
-	max : function(v,elm,opt) {return v <= parseFloat(opt)},
+	minLength : function(v,elm,opt) {return v.length &gt;= opt},
+	maxLength : function(v,elm,opt) {return v.length &lt;= opt},
+	min : function(v,elm,opt) {return v &gt;= parseFloat(opt)}, 
+	max : function(v,elm,opt) {return v &lt;= parseFloat(opt)},
 	notOneOf : function(v,elm,opt) {return $A(opt).all(function(value) {
 		return v != value;
 	})},
@@ -208,9 +266,8 @@ Validator.methods = {
 	isNot : function(v,elm,opt) {return v != opt},
 	equalToField : function(v,elm,opt) {return v == $F(opt)},
 	notEqualToField : function(v,elm,opt) {return v != $F(opt)},
-	include : function(v,elm,opt) {return $A(opt).all(function(value) {
-		return Validation.get(value).test(v,elm);
-	})}
+	include : function(v,elm,opt) {return $A(opt).all(function(value) {return Validation.get(value).test(v,elm);})},
+	parameterIsFieldReference : function(v,elm,opt) {return opt}
 }
 
 var Validation = Class.create();
@@ -230,9 +287,10 @@ Validation.prototype = {
 		if(this.options.onSubmit) Event.observe(this.form,'submit',this.onSubmit.bind(this),false);
 		if(this.options.immediate) {
 			var useTitles = this.options.useTitles;
-			var callback = this.options.onElementValidate;
+			var elementValidateCallback = this.options.onElementValidate;
+		    var createAdviceCallback = this.options.onCreateAdvice;
 			Form.getElements(this.form).each(function(input) { // Thanks Mike!
-				Event.observe(input, 'blur', function(ev) { Validation.validate(Event.element(ev),{useTitle : useTitles, onElementValidate : callback}); });
+				Event.observe(input, 'blur', function(ev) { Validation.validate(Event.element(ev),{useTitle : useTitles, onElementValidate : elementValidateCallback, onCreateAdvice : createAdviceCallback}); });
 			});
 		}
 	},
@@ -242,13 +300,14 @@ Validation.prototype = {
 	validate : function() {
 		var result = false;
 		var useTitles = this.options.useTitles;
-		var callback = this.options.onElementValidate;
+		var elementValidateCallback = this.options.onElementValidate;
+		var createAdviceCallback = this.options.onCreateAdvice;
 		if(this.options.stopOnFirst) {
-			result = Form.getElements(this.form).all(function(elm) { return Validation.validate(elm,{useTitle : useTitles, onElementValidate : callback}); });
+			result = Form.getElements(this.form).all(function(elm) { return Validation.validate(elm,{useTitle : useTitles, onElementValidate : elementValidateCallback, onCreateAdvice : createAdviceCallback}); });
 		} else {
-			result = Form.getElements(this.form).collect(function(elm) { return Validation.validate(elm,{useTitle : useTitles, onElementValidate : callback}); }).all();
+			result = Form.getElements(this.form).collect(function(elm) { return Validation.validate(elm,{useTitle : useTitles, onElementValidate : elementValidateCallback, onCreateAdvice : createAdviceCallback}); }).all();
 		}
-		if(!result && this.options.focusOnError) {
+		if(!result &amp;&amp; this.options.focusOnError) {
 			Form.getElements(this.form).findAll(function(elm){return $(elm).hasClassName('validation-failed')}).first().focus()
 		}
 		this.options.onFormValidate(result, this.form);
@@ -263,38 +322,48 @@ Object.extend(Validation, {
 	validate : function(elm, options){
 		options = Object.extend({
 			useTitle : false,
-			onElementValidate : function(result, elm) {}
+			onElementValidate : function(result, elm) {},
+			onCreateAdvice : function(elm) {}
 		}, options || {});
 		elm = $(elm);
 		var cn = elm.classNames();
 		return result = cn.all(function(value) {
-			var test = Validation.test(value,elm,options.useTitle);
+			var test = Validation.test(value,elm,options.useTitle,options.onCreateAdvice);
 			options.onElementValidate(test, elm);
 			return test;
 		});
 	},
-	test : function(name, elm, useTitle) {
-		var v = Validation.get(name);
+	test : function(name, elm, useTitle, createAdviceCallback) {
+	    var v = Validation.get(name);
 		var prop = '__advice'+name.camelize();
 		try {
-		if(Validation.isVisible(elm) && !v.test($F(elm), elm)) {
+		if(Validation.isVisible(elm) &amp;&amp; !v.test($F(elm), elm)) {
 			if(!elm[prop]) {
 				var advice = Validation.getAdvice(name, elm);
 				if(advice == null) {
-					var errorMsg = useTitle ? ((elm && elm.title) ? elm.title : v.error) : v.error;
-					advice = '<div class="validation-advice" id="advice-' + name + '-' + Validation.getElmID(elm) +'" style="display:none">' + errorMsg + '</div>'
-					switch (elm.type.toLowerCase()) {
-						case 'checkbox':
-						case 'radio':
-							var p = elm.parentNode;
-							if(p) {
-								new Insertion.Bottom(p, advice);
-							} else {
-								new Insertion.After(elm, advice);
-							}
-							break;
-						default:
-							new Insertion.After(elm, advice);
+				    var adviceId = Validation.getAdviceId(name, elm);
+				    if (createAdviceCallback == undefined)
+				    {
+					    var errorMsg = useTitle ? ((elm &amp;&amp; elm.title) ? elm.title : v.error) : v.error;
+					    advice = '&lt;div class="validation-advice" id="' + adviceId + '" style="display:none"&gt;' + errorMsg + '&lt;/div&gt;'
+					    switch (elm.type.toLowerCase()) {
+						    case 'checkbox':
+						    case 'radio':
+							    var p = elm.parentNode;
+							    if(p) {
+								    new Insertion.Bottom(p, advice);
+							    } else {
+								    new Insertion.After(elm, advice);
+							    }
+							    break;
+						    default:
+							    new Insertion.After(elm, advice);
+				        }
+				    }
+				    else
+				    {
+				        var idPrefix = Validation.getValidatorIdPrefix(elm);
+				        createAdviceCallback(adviceId, v.error, idPrefix.length &gt; 0 ? idPrefix.substring(0, idPrefix.length - 1) : '');
 				    }
 					advice = Validation.getAdvice(name, elm);
 				}
@@ -328,7 +397,25 @@ Object.extend(Validation, {
 		return true;
 	},
 	getAdvice : function(name, elm) {
-		return $('advice-' + name + '-' + Validation.getElmID(elm)) || $('advice-' + Validation.getElmID(elm));
+		return $(Validation.getAdviceId(name, elm)) || $('advice-' + Validation.getElmID(elm));
+	},
+	getAdviceId : function(name, elm) {
+	    try {
+	        var parameterizedValidatorName = Validation.getParameterizedValidatorName(name);
+	        var validatorParameter = Validation.getValidatorParameter(elm, parameterizedValidatorName);
+	        var idPrefix = Validation.getValidatorIdPrefix(elm);
+	        var parameterIsFieldReference = Validation.parameterizedMethods[parameterizedValidatorName].options.find(function(option) {
+	            return option.key == 'parameterIsFieldReference';
+	        });
+	        
+	        if ((parameterIsFieldReference == undefined) || (parameterIsFieldReference.value == false))
+                idPrefix = '';
+                
+	        return 'advice-' + parameterizedValidatorName + '-' + idPrefix + validatorParameter + '-' + Validation.getElmID(elm);
+	    }
+	    catch (e) {
+	        return 'advice-' + name + '-' + Validation.getElmID(elm);
+	    }
 	},
 	getElmID : function(elm) {
 		return elm.id ? elm.id : elm.name;
@@ -352,18 +439,65 @@ Object.extend(Validation, {
 		nv[className] = new Validator(className, error, test, options);
 		Object.extend(Validation.methods, nv);
 	},
+	addParameterized : function(className, error, test, options) {
+		var nv = {};
+		nv[className] = new Validator(className, error, test, options);
+		Object.extend(Validation.parameterizedMethods, nv);
+	},
 	addAllThese : function(validators) {
 		var nv = {};
 		$A(validators).each(function(value) {
-				nv[value[0]] = new Validator(value[0], value[1], value[2], (value.length > 3 ? value[3] : {}));
+				nv[value[0]] = new Validator(value[0], value[1], value[2], (value.length &gt; 3 ? value[3] : {}));
 			});
 		Object.extend(Validation.methods, nv);
 	},
-	get : function(name) {
-		return  Validation.methods[name] ? Validation.methods[name] : Validation.methods['_LikeNoIDIEverSaw_'];
+	addAllTheseParameterized : function(validators) {
+		var nv = {};
+		$A(validators).each(function(value) {
+				nv[value[0]] = new Validator(value[0], value[1], value[2], (value.length &gt; 3 ? value[3] : {}));
+			});
+		Object.extend(Validation.parameterizedMethods, nv);
+	},
+	get : function(validatorName) {
+	    if (Object.keys(Validation.methods).indexOf(validatorName) != -1)
+	        return Validation.methods[validatorName];
+	    
+	    try {
+	        var parameterizedValidatorName = Validation.getParameterizedValidatorName(validatorName);
+    	    
+	        if (Object.keys(Validation.parameterizedMethods).indexOf(parameterizedValidatorName) != -1)
+	            return Validation.parameterizedMethods[parameterizedValidatorName];
+	    }
+	    catch(e) {}
+	    
+	    return Validation.methods['_LikeNoIDIEverSaw_'];
+	    
+	    //try { method = Validation.parameterizedMethods[Validation.getParameterizedValidatorName(validatorName)]; }
+	    //catch (e) { method = Validation.methods['_LikeNoIDIEverSaw_']; }
+
+	    //return method;
 	},
 	methods : {
 		'_LikeNoIDIEverSaw_' : new Validator('_LikeNoIDIEverSaw_','',{})
+	},
+	parameterizedMethods : {
+	},
+	getValidatorParameter : function(elm, validator) {
+	    var validatorClass = elm.classNames().find(function(className) { return className.indexOf(validator) != -1; });
+        return validatorClass.substring(validator.length + 1);
+	},
+	getParameterizedValidatorName : function(name) {
+	    var validatorName;
+	    Object.keys(Validation.parameterizedMethods).each(function(key) { if (name.indexOf(key) == 0) validatorName = key; });
+	    
+	    if (validatorName != undefined)
+	        return validatorName;
+	    else
+	        throw 'Could not find parameterized validator name: ' + name;
+	},
+	getValidatorIdPrefix : function(elm) {
+	    var prefixClass = elm.classNames().find(function(className) { return className.indexOf('validator-id-prefix') != -1; });
+        return (prefixClass != undefined) ? prefixClass.substring('validator-id-prefix-'.length) : '';
 	}
 });
 
@@ -376,7 +510,7 @@ Validation.addAllThese([
 				return !Validation.get('IsEmpty').test(v);
 			}],
 	['validate-number', 'Please enter a valid number in this field.', function(v) {
-				return Validation.get('IsEmpty').test(v) || (!isNaN(v) && !/^\s+$/.test(v));
+				return Validation.get('IsEmpty').test(v) || (!isNaN(v) &amp;&amp; !/^\s+$/.test(v));
 			}],
 	['validate-digits', 'Please use numbers only in this field. please avoid spaces or other characters such as dots or commas.', function(v) {
 				return Validation.get('IsEmpty').test(v) ||  !/[^\d]/.test(v);
@@ -402,8 +536,8 @@ Validation.addAllThese([
 				var regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 				if(!regex.test(v)) return false;
 				var d = new Date(v.replace(regex, '$2/$1/$3'));
-				return ( parseInt(RegExp.$2, 10) == (1+d.getMonth()) ) && 
-							(parseInt(RegExp.$1, 10) == d.getDate()) && 
+				return ( parseInt(RegExp.$2, 10) == (1+d.getMonth()) ) &amp;&amp; 
+							(parseInt(RegExp.$1, 10) == d.getDate()) &amp;&amp; 
 							(parseInt(RegExp.$3, 10) == d.getFullYear() );
 			}],
 	['validate-currency-dollar', 'Please enter a valid $ amount. For example $100.00 .', function(v) {
@@ -414,7 +548,7 @@ Validation.addAllThese([
 				return Validation.get('IsEmpty').test(v) ||  /^\$?\-?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(v)
 			}],
 	['validate-selection', 'Please make a selection', function(v,elm){
-				return elm.options ? elm.selectedIndex > 0 : !Validation.get('IsEmpty').test(v);
+				return elm.options ? elm.selectedIndex &gt; 0 : !Validation.get('IsEmpty').test(v);
 			}],
 	['validate-one-required', 'Please select one of the above options.', function (v,elm) {
 				var p = elm.parentNode;
@@ -422,9 +556,24 @@ Validation.addAllThese([
 				return $A(options).any(function(elm) {
 					return $F(elm);
 				});
+			}],
+	['validate-checked', 'You must check this box', function(v,elm) {
+				return elm.checked;
 			}]
 ]);
-]]>
-    </value>
+
+Validation.addAllTheseParameterized([	
+    ['validate-same-as', 'These fields must match.', function (v,elm) {
+                var comparisonId = Validation.getValidatorParameter(elm, 'validate-same-as');
+                var idPrefix = Validation.getValidatorIdPrefix(elm);
+                
+                return v == $F($(idPrefix + comparisonId));
+            }, { parameterIsFieldReference : true }],
+    ['validate-min-length', 'Field is too short.', function (v,elm) {
+                var minimumLength = Validation.getValidatorParameter(elm, 'validate-min-length');
+                
+                return v.length &gt;= parseInt(minimumLength);
+            }]
+]);</value>
   </data>
 </root>
