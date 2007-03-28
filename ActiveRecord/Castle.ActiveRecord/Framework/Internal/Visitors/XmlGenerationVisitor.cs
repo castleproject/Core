@@ -441,7 +441,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, null, null, null, null, model.Configuration, att.Index,
 			                att.IndexType,
-			                att.Cache, att.NotFoundBehaviour, att.Fetch);
+			                att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize);
 		}
 
 		/// <summary>
@@ -594,7 +594,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, null, null,
 			                model.DependentObjectModel, att.Index, att.IndexType,
-			                att.Cache, att.NotFoundBehaviour, att.Fetch);
+			                att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize);
 		}
 
 		/// <summary>
@@ -610,7 +610,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, att.ColumnRef,
 			                att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache,
-			                att.NotFoundBehaviour, att.Fetch);
+			                att.NotFoundBehaviour, att.Fetch, att.BatchSize);
 		}
 
 		/// <summary>
@@ -683,7 +683,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                             string columnKey, string[] compositeKeyColumnKeys, string element,
 		                             string columnRef, string[] compositeKeyColumnRefs,
 		                             IVisitable extraModel, string index, string indexType, CacheEnum cache,
-		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch)
+		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch, int batchSize)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 			String notFoundMode = TranslateNotFoundBehaviourEnum(notFoundBehaviour);
@@ -698,7 +698,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</bag>";
 
-				AppendF("<bag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
+				AppendF("<bag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -708,13 +708,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
-				        WriteIfNonNull("fetch", fetchString));
+				        WriteIfNonNull("fetch", fetchString),
+                        WriteIfNotOne("batch-size", batchSize));
 			}
 			else if (type == RelationType.Set)
 			{
 				closingTag = "</set>";
 
-				AppendF("<set{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
+				AppendF("<set{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -725,13 +726,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
 				        WriteIfNonNull("sort", sort),
-				        WriteIfNonNull("fetch", fetchString));
+                        WriteIfNonNull("fetch", fetchString),
+                        WriteIfNotOne("batch-size", batchSize));
 			}
 			else if (type == RelationType.IdBag)
 			{
 				closingTag = "</idbag>";
 
-				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
+				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -740,7 +742,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
-				        WriteIfNonNull("fetch", fetchString));
+                        WriteIfNonNull("fetch", fetchString),
+                        WriteIfNotOne("batch-size", batchSize));
 
 				VisitNode(extraModel);
 			}
@@ -748,7 +751,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</map>";
 
-				AppendF("<map{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
+				AppendF("<map{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -759,12 +762,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
 				        WriteIfNonNull("sort", sort),
-				        WriteIfNonNull("fetch", fetchString));
+                        WriteIfNonNull("fetch", fetchString),
+                        WriteIfNotOne("batch-size", batchSize));
 			}
 			else if (type == RelationType.List)
 			{
 				closingTag = "</list>";
-				AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
+				AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -773,7 +777,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfTrue("inverse", inverse),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("where", where),
-				        WriteIfNonNull("fetch", fetchString));
+                        WriteIfNonNull("fetch", fetchString),
+                        WriteIfNotOne("batch-size", batchSize));
 			}
 
 
@@ -914,7 +919,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private String MakeTypeAtt(Type type, String typeName)
+	    private String MakeTypeAtt(Type type, String typeName)
 		{
 			if (typeName != null)
 			{
@@ -1145,6 +1150,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			if (value == 0) return String.Empty;
 			return MakeAtt(attName, value.ToString());
 		}
+
+        private String WriteIfNotOne(String attName, int value)
+        {
+            if (value == 1) return String.Empty;
+            return MakeAtt(attName, value.ToString());
+        }
 
 		private String MakeAtt(String attName, String value)
 		{

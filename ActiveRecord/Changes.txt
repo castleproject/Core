@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Andrew Denysenko's patch fixing AR-142 
+  "Allow setting "batch-size" on collections"
+
 - Applied Roy Tate's patch fixing AR-143 
   "XmlGenerationVisitor generates incomplete XML mapping 
    for BelongsTo with composite key"

@@ -70,8 +70,9 @@ namespace Castle.ActiveRecord
 		internal ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
 		internal RelationType relType = RelationType.Guess;
 		internal NotFoundBehaviour notFoundBehaviour = NotFoundBehaviour.Default;
+	    private int batchSize = 1;
 
-		/// <summary>
+	    /// <summary>
 		/// Gets or sets the type of the relation.
 		/// </summary>
 		/// <value>The type of the relation.</value>
@@ -213,5 +214,15 @@ namespace Castle.ActiveRecord
 			get { return notFoundBehaviour; }
 			set { notFoundBehaviour = value; }
 		}
+
+	    /// <summary>
+	    /// From NHibernate documentation:
+	    /// Specify a "batch size" for batch fetching of collections.
+	    /// </summary>
+	    public int BatchSize
+	    {
+	        get { return batchSize; }
+	        set { batchSize = value; }
+	    }
 	}
 }
