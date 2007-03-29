@@ -36,5 +36,25 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual("a", postFromDb.Title);
 			
 		}
+
+		[Test]
+		public void CanSaveAndLoadLazy()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(),typeof(VeryLazyObject));
+			Recreate();
+			VeryLazyObject lazy = new VeryLazyObject();
+			lazy.Title = "test";
+
+			ActiveRecordMediator.Save(lazy);
+
+			VeryLazyObject lazyFromDb = (VeryLazyObject)ActiveRecordMediator.FindByPrimaryKey(typeof(VeryLazyObject),lazy.Id);
+			Assert.AreEqual("test", lazyFromDb.Title);
+
+			lazyFromDb.Title = "test for update";
+			ActiveRecordMediator.Update(lazyFromDb);
+
+			lazyFromDb = (VeryLazyObject)ActiveRecordMediator.FindByPrimaryKey(typeof(VeryLazyObject), lazy.Id);
+			Assert.AreEqual("test for update", lazyFromDb.Title);
+		}
 	}
 }

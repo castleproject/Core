@@ -1,6 +1,14 @@
 Release Candidate 2
 ===================
 
+- Fixed working with Lazy objects.
+
+	Classes that are marked with [ActiveRecord(Lazy = true)] break in the EnsureInitialized function with the exception:
+
+	Castle.ActiveRecord.Framework.ActiveRecordException: 
+	You have accessed an ActiveRecord class that wasn't properly initialized. The only explanation is that the call to ActiveRecordStarter.Initialize() 
+	didn't include CProxyTypeCastle_ActiveRecord_Tests_ModelVeryLazyObjectModel_NHibernate_ProxyINHibernateProxy1 class
+
 - Applied Andrew Denysenko's patch fixing AR-142 
   "Allow setting "batch-size" on collections"
 

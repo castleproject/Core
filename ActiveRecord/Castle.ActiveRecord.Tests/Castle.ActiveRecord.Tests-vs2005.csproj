@@ -304,6 +304,7 @@
     <Compile Include="Model\AnyModel\Models.cs" />
     <Compile Include="Model\GenericModel\AbstractClass.cs" />
     <Compile Include="Model\Octopus.cs" />
+    <Compile Include="Model\VeryLazyObject.cs" />
     <Compile Include="PluralizationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>

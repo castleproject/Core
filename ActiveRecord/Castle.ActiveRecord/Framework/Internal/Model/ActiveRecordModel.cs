@@ -407,6 +407,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		public static ActiveRecordModel GetModel(Type arType)
 		{
+			arType = GetNonProxy(arType);
 			return (ActiveRecordModel) type2Model[arType];
 		}
 
@@ -420,6 +421,18 @@ namespace Castle.ActiveRecord.Framework.Internal
 			type2Model.Values.CopyTo(modelArray, 0);
 
 			return modelArray;
+		}
+
+		/// <summary>
+		/// Get the base type is the object is lazy
+		/// </summary>
+		private static Type GetNonProxy(Type type)
+		{
+			if (type.GetField("__interceptor") != null)
+			{
+				type = type.BaseType;
+			}
+			return type;
 		}
 
 		#region IVisitable Members

@@ -82,7 +82,7 @@ namespace Castle.ActiveRecord
 			if (model == null)
 			{
 				throw new ActiveRecordException(
-					"Seems that the framework wasn't initialized properly. (ActiveRecordModel could not obtained)");
+					string.Format("Seems that the framework wasn't initialized properly. ActiveRecordModel could not obtained. Please make sure you have an [ActiveRecord] attribute on class {0}",targetType.Name));
 			}
 
 			__validators.AddRange(model.Validators);
