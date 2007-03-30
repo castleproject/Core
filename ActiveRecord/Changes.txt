@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Fixed the Validation for Generic types (AR-122 and MR-237)
+
 - Fixed working with Lazy objects.
 
 	Classes that are marked with [ActiveRecord(Lazy = true)] break in the EnsureInitialized function with the exception:

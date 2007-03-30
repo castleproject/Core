@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 {
 #if DOTNET2
 	using System;
-
+	using Castle.ActiveRecord.Tests.Validation.Model.GenericModel;
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Validation.GenericModel;
@@ -167,6 +167,19 @@ namespace Castle.ActiveRecord.Tests.Validation
 
 			Assert.IsTrue( c1.IsValid() );
 		}
+
+		[Test]
+		public void ValidateIsUnique()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(TimeSlotFixedDate));
+			Recreate();
+
+			TimeSlotFixedDate timeDate = new TimeSlotFixedDate();
+			timeDate.Hour = 1;
+			timeDate.Name = null;
+
+			Assert.IsFalse(timeDate.IsValid());
+		} 
 	}
 #endif
 }

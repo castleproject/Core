@@ -92,8 +92,18 @@ namespace Castle.ActiveRecord.Framework.Validators
 		/// <returns><c>true</c> if the field is OK</returns>
 		public bool Perform(object instance)
 		{
-			PropertyInfo instanceProp = instance.GetType().GetProperty(Property.Name);
-			return this.Perform(instance, instanceProp.GetValue(instance, null));
+			Type type = instance.GetType();
+
+#if DOTNET2
+			if (type.IsGenericType && type.IsGenericTypeDefinition)
+			{
+				type = instance.GetType().MakeGenericType(instance.GetType().GetGenericArguments());
+			}
+#endif
+			
+			PropertyInfo instanceProp = type.GetProperty(Property.Name);
+
+			return Perform(instance, instanceProp.GetValue(instance, null));
 		}
 
 		/// <summary>
