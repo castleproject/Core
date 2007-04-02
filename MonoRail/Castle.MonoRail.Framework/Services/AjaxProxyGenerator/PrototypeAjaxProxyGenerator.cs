@@ -150,8 +150,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 					functions.Append("\t}").Append(nl);
 				}
 
-				functions.Length -= 1;
-				functions.Append("}").Append(nl);
+				functions.Append("};").Append(nl);
 
 				ajaxProxyCache[cacheKey] = result = functions.ToString();
 			}
