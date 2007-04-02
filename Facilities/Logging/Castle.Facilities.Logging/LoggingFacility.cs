@@ -160,11 +160,15 @@ namespace Castle.Facilities.Logging
 
 		private object[] GetLoggingFactoryArguments(string configFile, Type loggerFactoryType)
 		{
-			object[] args = null;
-
 			const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
 
-			ConstructorInfo ctor = loggerFactoryType.GetConstructor(flags, null, new Type[] { typeof(string) }, null);
+			object[] args = null;
+			ConstructorInfo ctor = null;
+
+			if (configFile != null && configFile.Length > 0)
+			{
+				ctor = loggerFactoryType.GetConstructor(flags, null, new Type[] { typeof(string) }, null);
+			}
 
 			if (ctor != null)
 			{
