@@ -21,7 +21,8 @@ namespace Castle.MonoRail.Framework.Configuration
 	using Castle.Components.Common.EmailSender;
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Internal;
-	
+	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
+
 
 	public class ServiceEntryCollection : ISerializedConfig
 	{
@@ -146,6 +147,8 @@ namespace Castle.MonoRail.Framework.Configuration
 					return typeof(IServerUtility);
 				case ServiceIdentification.ValidatorRegistry:
 					return typeof(IValidatorRegistry);
+				case ServiceIdentification.AjaxProxyGenerator:
+					return typeof(IAjaxProxyGenerator);
 				default:
 					throw new NotSupportedException("Id not supported " + id);
 			}

@@ -44,7 +44,8 @@ namespace Castle.MonoRail.Framework.Configuration
 		UrlBuilder,
 		UrlTokenizer,
 		ServerUtility,
-		ValidatorRegistry
+		ValidatorRegistry,
+		AjaxProxyGenerator,
 	}
 
 	public class ServiceEntry : ISerializedConfig
