@@ -136,6 +136,26 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateInterfaceProxyWithTarget<InterfaceWithExplicitImpl<int>>(
 				new GenExplicitImplementation<int>(), logger);
 		}
+
+		[Test]
+		public void TwoGenericsInterfaceWithoutTarget()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(GenInterface<object>), 
+				new Type[] { typeof(InterfaceWithExplicitImpl<int>) }, new LogInvocationInterceptor());
+		}
+
+		[Test]
+		public void NonGenInterfaceWithParentGenClassImplementingGenInterface()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(IUserRepository),
+				new Type[] { typeof(InterfaceWithExplicitImpl<int>) }, new LogInvocationInterceptor());
+		}
+
+		[Test]
+		public void WithoutTarget()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(InterfaceWithExplicitImpl<int>), new LogInvocationInterceptor());
+		}
 	}
 #endif
 }

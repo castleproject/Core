@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				foreach(Type inter in interfaces)
 				{
 #if DOTNET2
-					if (inter.IsGenericType)
+					if (inter.IsGenericType && inter.IsGenericTypeDefinition)
 					{
 						CreateGenericParameters(inter.GetGenericArguments());
 
