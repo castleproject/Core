@@ -111,7 +111,6 @@
     <Compile Include="ContainerAccessorUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ControllerTreeAccessor.cs" />
     <Compile Include="DefaultWizardPageFactory.cs" />
     <Compile Include="IWizardPageFactory.cs" />
     <Compile Include="RailsFacility.cs">
