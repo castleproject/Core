@@ -50,7 +50,6 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Gets the target type of this query
 		/// </summary>
-		/// <value></value>
 		public Type RootType
 		{
 			get { return rootType; }
@@ -211,6 +210,15 @@ namespace Castle.ActiveRecord
 		protected Array GetResultsArray(Type t, IList list, int entityIndex, bool distinct)
 		{
 			return SupportingUtils.BuildArray(t, list, entityIndex, distinct);
+		}
+
+		/// <summary>
+		/// Gets the internal list of modifiers used by the specified query.
+		/// NOT INTENTED FOR NORMAL USE.
+		/// </summary>
+		public static IList GetModifiers(ActiveRecordBaseQuery query)
+		{
+			return query.queryModifiers;
 		}
 	}
 }
