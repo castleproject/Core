@@ -18,9 +18,12 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Reflection;
+	using System.Threading;
 	using Castle.Core;
+	using Castle.Core.Logging;
+	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
 
 	public enum CallbackEnum
 	{
@@ -71,10 +74,25 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class AjaxHelper : AbstractHelper, IServiceEnabledComponent
 	{
-		private IAjaxProxyGenerator ajaxProxyGenerator;
+		private static Hashtable ajaxProxyCache = Hashtable.Synchronized(new Hashtable());
+		
+		/// <summary>
+		/// The logger instance
+		/// </summary>
+		private ILogger logger = NullLogger.Instance;
+		
+		/// <summary>
+		/// Used by <c>GenerateJSProxy</c> overloads.
+		/// </summary>
+		private IControllerFactory controllerFactory;
+		
+		/// <summary>
+		/// Used by <c>GenerateJSProxy</c> overloads.
+		/// </summary>
+		private IControllerDescriptorProvider controllerDescriptorBuilder;
 
 		#region IServiceEnabledComponent implementation
-
+		
 		/// <summary>
 		/// Invoked by the framework in order to give a chance to
 		/// obtain other services
@@ -82,7 +100,18 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="provider">The service proviver</param>
 		public void Service(IServiceProvider provider)
 		{
-			this.ajaxProxyGenerator = (IAjaxProxyGenerator) provider.GetService(typeof(IAjaxProxyGenerator));
+			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));
+			
+			if (loggerFactory != null)
+			{
+				logger = loggerFactory.Create(typeof(AjaxHelper));
+			}
+			
+			controllerFactory = (IControllerFactory) 
+				provider.GetService(typeof(IControllerFactory));
+			
+			controllerDescriptorBuilder = (IControllerDescriptorProvider) 
+				provider.GetService(typeof(IControllerDescriptorProvider));
 		}
 
 		#endregion
@@ -92,14 +121,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Renders a Javascript library inside a single script tag.
 		/// </summary>
+		/// <returns></returns>
 		public String InstallScripts()
 		{
 			return RenderScriptBlockToSource("/MonoRail/Files/AjaxScripts");
 		}
 
-		/// <summary>
-		/// Renders a Javascript library inside a single script tag.
-		/// </summary>
 		[Obsolete("Please use the preferred InstallScripts function.")]
 		public String GetJavascriptFunctions()
 		{
@@ -137,7 +164,109 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="area">area which the controller belongs to</param>
 		public String GenerateJSProxy(string proxyName, string area, string controller)
 		{
-			return ajaxProxyGenerator.GenerateJSProxy(CurrentContext, proxyName, area, controller);
+			String cacheKey = (area + "|" + controller).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+			String result = (String) ajaxProxyCache[cacheKey];
+
+			if (result == null)
+			{
+				IControllerTree tree = (IControllerTree) CurrentContext.GetService(typeof(IControllerTree));
+
+				Type controllerType = tree.GetController(area, controller);
+
+				if (controllerType == null)
+				{
+					throw new RailsException("Controller not found with Area: '{0}', Name: '{1}'", area, controller);
+				}
+				
+				String baseUrl = Controller.Context.ApplicationPath + "/";
+				
+				if (area != null && area != String.Empty)
+				{
+					baseUrl += area + "/";
+				}
+				
+				baseUrl += controller + "/";
+				
+				// TODO: develop a smarter function generation, inspecting the return
+				// value of the action and generating a proxy that does the same.
+				// also, think on a proxy pattern for the Ajax.Updater.
+				
+				StringBuilder functions = new StringBuilder(1024);
+				
+				functions.Append("{ " + Environment.NewLine);
+				
+				ControllerMetaDescriptor metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(controllerType);
+				
+				bool commaNeeded = false;
+				
+				foreach(MethodInfo ajaxActionMethod in metaDescriptor.AjaxActions)
+				{
+					if (!commaNeeded) commaNeeded = true; else functions.Append(',');
+					
+					String methodName = ajaxActionMethod.Name;
+					
+					object[] attributes = ajaxActionMethod.GetCustomAttributes(typeof(AjaxActionAttribute), true);
+					
+					AjaxActionAttribute ajaxActionAtt = (AjaxActionAttribute) attributes[0];
+					
+					StringBuilder parameters = new StringBuilder("_=");
+					String url = baseUrl + methodName + "." + Controller.Context.UrlInfo.Extension;
+					String functionName = ajaxActionAtt.Name != null ? ajaxActionAtt.Name : methodName;
+
+					functionName = Char.ToLower(functionName[0], System.Globalization.CultureInfo.InvariantCulture) + 
+					               (functionName.Length > 0 ? functionName.Substring(1) : null);
+
+					functions.AppendFormat(Environment.NewLine + "\t{0}: " + Environment.NewLine + "\tfunction(", functionName);
+					
+					foreach(ParameterInfo pi in ajaxActionMethod.GetParameters())
+					{
+						String paramName = pi.Name;
+
+						object[] parameterAttributes = pi.GetCustomAttributes(typeof(DataBindAttribute), true);
+						if(parameterAttributes.Length > 0)
+						{
+							paramName = ((DataBindAttribute)parameterAttributes[0]).Prefix;
+						}
+
+						Type ARFetcherType =
+							TypeLoadUtil.GetType(
+								TypeLoadUtil.GetEffectiveTypeName(
+									"Castle.MonoRail.ActiveRecordSupport.ARFetchAttribute, Castle.MonoRail.ActiveRecordSupport"), true);
+
+
+						if(ARFetcherType != null)
+						{
+							parameterAttributes = pi.GetCustomAttributes(ARFetcherType, true);
+							if (parameterAttributes.Length > 0)
+							{
+								paramName = Convert.ToString(ARFetcherType.GetProperty("RequestParameterName").GetValue(parameterAttributes[0], null));
+							}
+						}
+
+						
+						paramName = Char.ToLower(paramName[0], System.Globalization.CultureInfo.InvariantCulture) + 
+						            (paramName.Length > 0 ? paramName.Substring(1) : null);
+						functions.AppendFormat("{0}, ", paramName);
+						parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
+					}
+					
+					functions.Append("callback)").Append(Environment.NewLine).Append("\t{");
+					functions.Append(Environment.NewLine).AppendFormat("\t\tvar r=new Ajax.Request('{0}', " + 
+						"{{parameters: '{1}', asynchronous: !!callback, onComplete: callback}}); " + 
+						Environment.NewLine + 
+						"\t\tif(!callback) return r.transport.responseText;", url, parameters.ToString());
+					functions.Append("}").Append(Environment.NewLine);
+				}
+				
+				functions.Length -= 1;
+				functions.Append("}").Append(Environment.NewLine);
+
+				ajaxProxyCache[cacheKey] = result = functions.ToString();
+			}
+			
+			return @"<script type=""text/javascript"">var " + 
+			       proxyName + " = " + Environment.NewLine + 
+			       result + "</script>";
 		}
 		
 		#endregion
@@ -949,7 +1078,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (callback != CallbackEnum.OnFailure && callback != CallbackEnum.OnSuccess)
 			{
-				name = "on" + callback;
+				name = "on" + callback.ToString();
 			}
 			else if (callback == CallbackEnum.OnFailure)
 			{

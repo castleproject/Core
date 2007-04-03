@@ -20,6 +20,7 @@ namespace Castle.MonoRail.WindsorExtension
 	using Castle.MicroKernel;
 
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 
 	/// <summary>

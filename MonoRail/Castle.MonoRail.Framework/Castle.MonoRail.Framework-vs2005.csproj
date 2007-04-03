@@ -160,8 +160,6 @@
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="Filter.cs" />
-    <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs" />
-    <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs" />
     <Compile Include="Helpers\BehaviourHelper.cs" />
     <Compile Include="Helpers\IJSCollectionGenerator.cs" />
     <Compile Include="Helpers\IJSElementGenerator.cs" />

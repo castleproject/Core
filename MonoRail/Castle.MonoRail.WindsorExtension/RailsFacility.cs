@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.WindsorExtension
 {
 	using Castle.Core;
-	using Castle.Core.Logging;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MonoRail.Framework;
@@ -33,7 +32,6 @@ namespace Castle.MonoRail.WindsorExtension
 	{
 		private IControllerTree controllerTree;
 		private IViewComponentRegistry componentRegistry;
-		private ILogger log = NullLogger.Instance;
 
 		public RailsFacility()
 		{
@@ -41,11 +39,6 @@ namespace Castle.MonoRail.WindsorExtension
 
 		protected override void Init()
 		{
-			if (Kernel.HasComponent(typeof(ILoggerFactory)))
-				log = ((ILoggerFactory) Kernel[typeof(ILoggerFactory)]).Create(typeof(RailsFacility));
-
-			log.Info("Initializing RailsFacility");
-
 			Kernel.AddComponent("rails.controllertree", typeof(IControllerTree), typeof(DefaultControllerTree));
 			Kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
 			Kernel.AddComponent("rails.viewcomponentregistry", typeof(IViewComponentRegistry), typeof(DefaultViewComponentRegistry));
@@ -55,15 +48,14 @@ namespace Castle.MonoRail.WindsorExtension
 
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 
-			log.Debug("Replacing MR service for IControllerTree");
-			MonoRailServiceContainer.Instance.RegisterBaseService(typeof(IControllerTree), controllerTree);
+			MonoRailConfiguration.GetConfig().ServiceEntries.RegisterService(
+				ServiceIdentification.ControllerTree, typeof(ControllerTreeAccessor));
 
 			AddBuiltInControllers();
 		}
 
 		protected virtual void AddBuiltInControllers()
 		{
-			log.Debug("Adding built-in controllers");
 			Kernel.AddComponent("files", typeof(FilesController), typeof(FilesController));
 		}
 
@@ -86,13 +78,11 @@ namespace Castle.MonoRail.WindsorExtension
 				ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(model.Implementation);
 
 				controllerTree.AddController(descriptor.Area, descriptor.Name, model.Implementation);
-				log.Debug("New controller registered: area='{0}', name='{1}', impl={2}", descriptor.Area, descriptor.Name, model.Implementation);
 			}
 
 			if (isViewComponent)
 			{
 				componentRegistry.AddViewComponent(model.Name, model.Implementation);
-				log.Debug("New view component registered: name='{0}', impl={1}", model.Name, model.Implementation);
 			}
 		}
 	}

@@ -26,15 +26,12 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
-	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
 
 	/// <summary>
 	/// Parent Service container for the MonoRail framework
 	/// </summary>
 	public class MonoRailServiceContainer : AbstractServiceContainer
 	{
-		private static MonoRailServiceContainer instance;
-
 		/// <summary>The only one Extension Manager</summary>
 		protected internal ExtensionManager extensionManager;
 
@@ -52,11 +49,6 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public MonoRailServiceContainer()
 		{
-			if (instance != null)
-				throw new RailsException("There is more than one instance of MonoRailServiceContainer currently running.");
-
-			MonoRailServiceContainer.instance = this;
-
 			extension2handler = new HybridDictionary(true);
 		}
 
@@ -67,14 +59,6 @@ namespace Castle.MonoRail.Framework
 		public MonoRailServiceContainer(MonoRailConfiguration config) : this()
 		{
 			this.config = config;
-		}
-
-		/// <summary>
-		/// The unique instance of <see cref="MonoRailServiceContainer"/>.
-		/// </summary>
-		public static MonoRailServiceContainer Instance
-		{
-			get { return instance; }
 		}
 
 		/// <summary>
@@ -397,11 +381,10 @@ namespace Castle.MonoRail.Framework
 			if (!services.HasService(ServiceIdentification.ExecutorFactory))
 			{
 				services.RegisterService(ServiceIdentification.ExecutorFactory, typeof(DefaultControllerLifecycleExecutorFactory));
-
-				if (!services.HasService(ServiceIdentification.TransformationFilterFactory))
-					services.RegisterService(ServiceIdentification.TransformationFilterFactory, typeof(DefaultTransformFilterFactory));
-				if (!services.HasService(ServiceIdentification.TransformFilterDescriptorProvider))
-					services.RegisterService(ServiceIdentification.TransformFilterDescriptorProvider, typeof(DefaultTransformFilterDescriptorProvider));
+			if (!services.HasService(ServiceIdentification.TransformationFilterFactory))
+				services.RegisterService(ServiceIdentification.TransformationFilterFactory, typeof(DefaultTransformFilterFactory));
+			if (!services.HasService(ServiceIdentification.TransformFilterDescriptorProvider))
+				services.RegisterService(ServiceIdentification.TransformFilterDescriptorProvider, typeof(DefaultTransformFilterDescriptorProvider));
 			}
 			if (!services.HasService(ServiceIdentification.UrlBuilder))
 			{
@@ -413,11 +396,6 @@ namespace Castle.MonoRail.Framework
 			}
 
 			services.RegisterService(ServiceIdentification.ValidatorRegistry, typeof(CachedValidationRegistry));
-
-			if (!services.HasService(ServiceIdentification.AjaxProxyGenerator))
-			{
-				services.RegisterService(ServiceIdentification.AjaxProxyGenerator, typeof(PrototypeAjaxProxyGenerator));
-			}
 		}
 
 		private object ActivateService(Type type)
