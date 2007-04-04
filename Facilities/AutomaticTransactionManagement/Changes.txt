@@ -1,4 +1,7 @@
 
+- SERVICES-7 Fixed 
+  "Can't explictly rollback transaction using ATM"
+
 == Beta 5 ==
 
 - Fixed bug reported on the Forum (when a
