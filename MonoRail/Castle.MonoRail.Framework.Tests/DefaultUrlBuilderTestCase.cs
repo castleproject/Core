@@ -54,6 +54,8 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void OperationsWithArea()
 		{
+			Assert.AreEqual("/area/home/list.rails", urlBuilder.BuildUrl(areaUrl, DictHelper.Create("action=list")));
+			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, "product", "list"));
 			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, null, "product", "list"));
 			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, "", "product", "list"));
 			Assert.AreEqual("/test/product/list.rails", urlBuilder.BuildUrl(areaUrl, "test", "product", "list"));
