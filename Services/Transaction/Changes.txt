@@ -1,4 +1,7 @@
 
+- Applied Jan Persson's patch fixing SERVICES-8
+  "Exception says: Tried to dispose a transaction that is not on the current active transaction"
+
 Jan, 2007
 
 - Added System.Transactions integration
