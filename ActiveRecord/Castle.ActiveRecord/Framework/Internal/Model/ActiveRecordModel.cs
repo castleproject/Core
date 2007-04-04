@@ -76,6 +76,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private IList hilos = new ArrayList();
 		private IList notMappedProperties = new ArrayList();
 		private IList validators = new ArrayList();
+		private bool isNestedCompositeType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordModel"/> class.
@@ -164,6 +165,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return isNestedType; }
 			set { isNestedType = value; }
 		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is nested type.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is nested type; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsNestedCompositeType
+		{
+			get { return isNestedCompositeType; }
+			set { isNestedCompositeType = value; }
+		}
+
+
 
 		/// <summary>
 		/// Gets or sets the active record attribute

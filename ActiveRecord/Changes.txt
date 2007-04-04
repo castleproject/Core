@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Simon Laroche's patch fixing AR-141
+  "Support for NHibernate nested-composite-element"
+
 - Fixed the Validation for Generic types (AR-122 and MR-237)
 
 - Fixed working with Lazy objects.

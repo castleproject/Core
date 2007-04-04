@@ -237,6 +237,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						nestedModel.IsNestedType = true;
 
 						Type nestedType = propAtt.MapType != null ? propAtt.MapType : prop.PropertyType;
+						nestedModel.IsNestedCompositeType = model.IsNestedCompositeType;
 						ProcessProperties(nestedType, nestedModel);
 						ProcessFields(nestedType, nestedModel);
 
@@ -324,7 +325,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						{
 							ActiveRecordModel dependentObjectModel = new ActiveRecordModel(propAtt.MapType);
 							dependentObjectModel.IsNestedType = true;
-
+							dependentObjectModel.IsNestedCompositeType = true;
 							ProcessProperties(propAtt.MapType, dependentObjectModel);
 
 							hasManyModel.DependentObjectModel = new DependentObjectModel(prop, propAtt, dependentObjectModel);

@@ -76,7 +76,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <component name=\"Nested\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.NestedComponent, Castle.ActiveRecord.Framework.Internal.Tests\">\r\n" +
+				"    <component name=\"Nested\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.NestedComponent, Castle.ActiveRecord.Framework.Internal.Tests\" access=\"property\">\r\n" +
 				"      <parent name=\"Parent\"/>\r\n" +
 				"      <property name=\"NestedProperty\" access=\"property\" type=\"String\">\r\n" +
 				"        <column name=\"NestedProperty\"/>\r\n" +
@@ -87,6 +87,43 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			Assert.AreEqual(expected, xml);
 		}
+
+
+		[Test]
+		public void SimpleCaseWithNestedComponentWithFieldAccess()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(SimpleNestedComponentWithFieldAccess));
+			Assert.IsNotNull(model);
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+
+			String xml = xmlVisitor.Xml;
+
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.SimpleNestedComponentWithFieldAccess, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"SimpleNestedComponentWithFieldAccess\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <component name=\"Nested\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.NestedComponent, Castle.ActiveRecord.Framework.Internal.Tests\" access=\"nosetter.camelcase\">\r\n" +
+				"      <parent name=\"Parent\"/>\r\n" +
+				"      <property name=\"NestedProperty\" access=\"property\" type=\"String\">\r\n" +
+				"        <column name=\"NestedProperty\"/>\r\n" +
+				"      </property>\r\n" +
+				"    </component>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
 
 		[Test]
 		public void SimpleCaseWithKeyAndProperties()
@@ -1146,6 +1183,77 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			Assert.AreEqual(expected, xml);
 		}
+
+		[Test]
+		public void SimpleListOfComponentsWithNestedComponents()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(HasManyDependentObjectsWithNested));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+
+			string expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.HasManyDependentObjectsWithNested, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"HasManyDependentObjectsWithNested\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <list name=\"ComponentsWithNested\" access=\"property\" table=\"dependent_objects\" lazy=\"false\">\r\n" +
+				"      <key column=\"id\" />\r\n" +
+				"      <index column=\"pos\" />\r\n" +
+				"      <composite-element class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ComponentWithNested, Castle.ActiveRecord.Framework.Internal.Tests\">\r\n" +
+				"        <nested-composite-element name=\"Component\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Component, Castle.ActiveRecord.Framework.Internal.Tests\" access=\"property\">\r\n" +
+				"          <property name=\"Value\" access=\"property\" type=\"String\">\r\n" +
+				"            <column name=\"Value\"/>\r\n" +
+				"          </property>\r\n" +
+				"        </nested-composite-element>\r\n" +
+				"      </composite-element>\r\n" +
+				"    </list>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
+		public void SimpleListOfComponentsWithNestedComponents2LevelsDeep()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(HasManyDependentObjectsWithNested2LevelsDeep));
+			Assert.IsNotNull(model);
+
+			String xml = Process(builder, model);
+
+			string expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.HasManyDependentObjectsWithNested2LevelsDeep, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"HasManyDependentObjectsWithNested2LevelsDeep\">\r\n" +
+				"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <list name=\"ComponentsWithNested2LevelsDeep\" access=\"property\" table=\"dependent_objects\" lazy=\"false\">\r\n" +
+				"      <key column=\"id\" />\r\n" +
+				"      <index column=\"pos\" />\r\n" +
+				"      <composite-element class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ComponentWithNested2LevelsDeep, Castle.ActiveRecord.Framework.Internal.Tests\">\r\n" +
+				"        <nested-composite-element name=\"ComponentWithNested\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ComponentWithNested, Castle.ActiveRecord.Framework.Internal.Tests\" access=\"property\">\r\n" +
+				"          <nested-composite-element name=\"Component\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Component, Castle.ActiveRecord.Framework.Internal.Tests\" access=\"property\">\r\n" +
+				"            <property name=\"Value\" access=\"property\" type=\"String\">\r\n" +
+				"              <column name=\"Value\"/>\r\n" +
+				"            </property>\r\n" +
+				"          </nested-composite-element>\r\n" +
+				"        </nested-composite-element>\r\n" +
+				"      </composite-element>\r\n" +
+				"    </list>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
 
 		[Test]
 		public void ManyToMayViaComponents()

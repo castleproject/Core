@@ -177,6 +177,11 @@
     <Compile Include="Model\CompositeKeyForClassWithCompositeKey.cs" />
     <Compile Include="Model\ClassADynamicInsertUpdate.cs" />
     <Compile Include="Model\HasManyWithBatch.cs" />
+    <Compile Include="Model\ComponentWithNested.cs" />
+    <Compile Include="Model\ComponentWithNested2LevelsDeep.cs" />
+    <Compile Include="Model\HasManyDependentObjectsWithNested2LevelsDeep.cs" />
+    <Compile Include="Model\SimpleNestedComponentWithFieldAccess.cs" />
+    <Compile Include="Model\HasManyDependentObjectsWithNested.cs" />
     <Compile Include="Model\DictionaryModel.cs" />
     <Compile Include="Model\GenBaseJoinedClass.cs" />
     <Compile Include="Model\DiscriminatorGrandchild.cs" />

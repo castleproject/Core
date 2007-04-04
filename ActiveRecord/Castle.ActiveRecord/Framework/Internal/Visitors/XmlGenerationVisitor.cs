@@ -619,15 +619,32 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public override void VisitNested(NestedModel model)
 		{
-			AppendF("<component{0}{1}{2}{3}>",
-			        MakeAtt("name", model.Property.Name),
-			        WriteIfFalse("update", model.NestedAtt.Update),
-			        WriteIfFalse("insert", model.NestedAtt.Insert),
-			        WriteIfNonNull("class", MakeTypeName(model.NestedAtt.MapType)));
+			if (model.Model.IsNestedCompositeType)
+			{
+				AppendF("<nested-composite-element{0}{1}{2}{3}{4}>",
+						MakeAtt("name", model.Property.Name),
+						WriteIfFalse("update", model.NestedAtt.Update),
+						WriteIfFalse("insert", model.NestedAtt.Insert),
+						WriteIfNonNull("class", MakeTypeName(model.NestedAtt.MapType)),
+						WriteIfNonNull("access", model.NestedAtt.AccessString));
 
-			base.VisitNested(model);
+				base.VisitNested(model);
 
-			Append("</component>");
+				Append("</nested-composite-element>");
+			}
+			else
+			{
+				AppendF("<component{0}{1}{2}{3}{4}>",
+				        MakeAtt("name", model.Property.Name),
+				        WriteIfFalse("update", model.NestedAtt.Update),
+				        WriteIfFalse("insert", model.NestedAtt.Insert),
+				        WriteIfNonNull("class", MakeTypeName(model.NestedAtt.MapType)),
+						WriteIfNonNull("access", model.NestedAtt.AccessString));
+
+				base.VisitNested(model);
+
+				Append("</component>");
+			}
 		}
 
 		/// <summary>
