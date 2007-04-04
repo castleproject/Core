@@ -12,23 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.Components.Validator
 {
-    using System;
-    using Castle.Components.Validator;
-
-	/// <summary>
-	/// Constructs an <see cref="IValidator"/> implementation.
-	/// </summary>
-	public interface IValidatorBuilder
-	{
+    /// <summary>
+    /// Validates that the collection is not empty
+    /// </summary>
+    public class ValidateCollectionNotEmptyAttribute : AbstractValidationAttribute
+    {
         /// <summary>
-        /// Builds this instance.
+        /// Constructs and configures an <see cref="T:Castle.Components.Validator.IValidator"/>
+        /// instance based on the properties set on the attribute instance.
         /// </summary>
-        /// <param name="validatorRunner">The validator runner.</param>
-        /// <param name="type">The type that this validator is built for</param>
         /// <returns></returns>
-        IValidator Build(ValidatorRunner validatorRunner, Type type);
-	}
+        public override IValidator Build()
+        {
+            CollectionNotEmptyValidator validator = new CollectionNotEmptyValidator();
+            
+            ConfigureValidatorMessage(validator);
+			
+            return validator;
+        }
+    }
 }

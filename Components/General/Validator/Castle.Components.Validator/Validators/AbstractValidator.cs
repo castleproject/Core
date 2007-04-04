@@ -48,7 +48,7 @@ namespace Castle.Components.Validator
 		/// Implementors should perform any initialization logic
 		/// </summary>
 		/// <param name="property">The target property</param>
-		public void Initialize(PropertyInfo property)
+		public virtual void Initialize(PropertyInfo property)
 		{
 			this.property = property;
 
@@ -219,7 +219,7 @@ namespace Castle.Components.Validator
 		/// <seealso cref="MessageConstants"/>
 		/// </summary>
 		/// <returns>A resource set instance</returns>
-		protected static ResourceSet GetResourceForCurrentCulture()
+		protected internal static ResourceSet GetResourceForCurrentCulture()
 		{
 			return resourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true); 
 		}

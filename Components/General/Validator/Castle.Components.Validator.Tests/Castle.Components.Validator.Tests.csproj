@@ -42,6 +42,9 @@
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="ValidatorRunnerTestCase.cs" />
     <Compile Include="ValidatorsExecutionOrderTestCase.cs" />
+    <Compile Include="ValidatorTests\CollectionNotEmptyValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\GroupNotEmptyValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\NotSameValueValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\RangeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateTimeValidatorTestCase.cs" />

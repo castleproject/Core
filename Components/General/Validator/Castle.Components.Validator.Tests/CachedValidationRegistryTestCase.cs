@@ -31,10 +31,10 @@ namespace Castle.Components.Validator.Tests
 		[Test]
 		public void RunWhenEverytimeTest()
 		{
-			IValidator[] validators = registry.GetValidators(typeof(Client), RunWhen.Everytime);
+			IValidator[] validators = registry.GetValidators(new ValidatorRunner(registry), typeof(Client), RunWhen.Everytime);
 			
 			Assert.IsNotNull(validators);
-			Assert.AreEqual(6, validators.Length);
+			Assert.AreEqual(8, validators.Length);
 
 			foreach(IValidator val in validators)
 			{
@@ -45,10 +45,10 @@ namespace Castle.Components.Validator.Tests
 		[Test]
 		public void RunWhenCustomTest()
 		{
-			IValidator[] validators = registry.GetValidators(typeof(Client), RunWhen.Custom);
+            IValidator[] validators = registry.GetValidators(new ValidatorRunner(registry), typeof(Client), RunWhen.Custom);
 
 			Assert.IsNotNull(validators);
-			Assert.AreEqual(7, validators.Length); // RunWhen.Everytime is returned too
+			Assert.AreEqual(9, validators.Length); // RunWhen.Everytime is returned too
 
 			foreach(IValidator val in validators)
 			{

@@ -61,6 +61,15 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collection must not be empty.
+        /// </summary>
+        internal static string collection_not_empty {
+            get {
+                return ResourceManager.GetString("collection_not_empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter a valid date.
         /// </summary>
         internal static string date_invalid {
@@ -115,6 +124,24 @@ namespace Castle.Components.Validator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to At least one of the values in ({0}) should not be empty.
+        /// </summary>
+        internal static string group_not_empty_invalid {
+            get {
+                return ResourceManager.GetString("group_not_empty_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to , .
+        /// </summary>
+        internal static string group_not_empty_seperator {
+            get {
+                return ResourceManager.GetString("group_not_empty_seperator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter a valid integer in this field.
         /// </summary>
         internal static string integer_invalid {
@@ -156,6 +183,15 @@ namespace Castle.Components.Validator {
         internal static string length_tooshort {
             get {
                 return ResourceManager.GetString("length_tooshort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field must not equals &apos;{0}&apos;.
+        /// </summary>
+        internal static string not_same_as_invalid {
+            get {
+                return ResourceManager.GetString("not_same_as_invalid", resourceCulture);
             }
         }
         

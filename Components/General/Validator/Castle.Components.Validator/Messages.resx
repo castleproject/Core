@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="collection_not_empty" xml:space="preserve">
+    <value>Collection must not be empty</value>
+  </data>
   <data name="date_invalid" xml:space="preserve">
     <value>Please enter a valid date</value>
   </data>
@@ -135,6 +138,12 @@
   <data name="generic_invalid" xml:space="preserve">
     <value>Field has an invalid content</value>
   </data>
+  <data name="group_not_empty_invalid" xml:space="preserve">
+    <value>At least one of the values in ({0}) should not be empty</value>
+  </data>
+  <data name="group_not_empty_seperator" xml:space="preserve">
+    <value>, </value>
+  </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>Please enter a valid integer in this field</value>
   </data>
@@ -152,6 +161,9 @@
   </data>
   <data name="range_invalid" xml:space="preserve">
     <value>Field must be between {0} and {1}</value>
+  </data>
+  <data name="not_same_as_invalid" xml:space="preserve">
+    <value>Field must not equals '{0}'</value>
   </data>
   <data name="range_toohigh" xml:space="preserve">
     <value>Field must be less than or equal to {0}</value>

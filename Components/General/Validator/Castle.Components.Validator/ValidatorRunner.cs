@@ -33,7 +33,7 @@ namespace Castle.Components.Validator
 	public class ValidatorRunner
 	{
 		private readonly static IDictionary type2Validator;
-
+	    private readonly IDictionary extendedProperties = new Hashtable();
 		private readonly bool inferValidators;
 		private readonly IDictionary errorPerInstance;
 		private readonly IValidatorRegistry registry;
@@ -50,7 +50,12 @@ namespace Castle.Components.Validator
 			type2Validator[typeof(DateTime)] = typeof(DateTimeValidator);
 		}
 
-		/// <summary>
+	    public IDictionary ExtendedProperties
+	    {
+	        get { return extendedProperties; }
+	    }
+
+	    /// <summary>
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
 		/// </summary>
 		/// <param name="registry">The instance registry.</param>
@@ -146,7 +151,7 @@ namespace Castle.Components.Validator
 			if (parentType == null) throw new ArgumentNullException("parentType");
 			if (property == null) throw new ArgumentNullException("property");
 
-			IValidator[] validators = registry.GetValidators(parentType, property, runWhenPhase);
+			IValidator[] validators = registry.GetValidators(this, parentType, property, runWhenPhase);
 
 			if (inferValidators && validators.Length == 0)
 			{
@@ -193,7 +198,7 @@ namespace Castle.Components.Validator
 		{
 			if (objectInstance == null) throw new ArgumentNullException("objectInstance");
 
-			IValidator[] validators = registry.GetValidators(objectInstance.GetType(), runWhen);
+			IValidator[] validators = registry.GetValidators(this, objectInstance.GetType(), runWhen);
 
 			Array.Sort(validators, ValidatorComparer.Instance);
 

@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 namespace Castle.Components.Validator
 {
 	using System;
-
+    using System.Collections;
 	using Castle.Components.Validator;
 
 	/// <summary>
@@ -24,6 +25,8 @@ namespace Castle.Components.Validator
 	[Serializable]
 	public class ValidateNonEmptyAttribute : AbstractValidationAttribute
 	{
+	    private readonly IDictionary validatorPerGroup = Hashtable.Synchronized(new Hashtable());
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateNonEmptyAttribute"/> class.
 		/// </summary>

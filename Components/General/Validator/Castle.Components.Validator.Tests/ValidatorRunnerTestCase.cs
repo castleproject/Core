@@ -66,5 +66,17 @@ namespace Castle.Components.Validator.Tests
 			client = new Client(1, 27, "hammett", "100, street", "hammett@gmail.com", "123", "123");
 			Assert.IsTrue(runner.IsValid(client));
 		}
+
+	    [Test]
+	    public void GroupValidation()
+	    {
+	        Client client = new Client();
+	        client.Email = "foo@bar.com";
+	        Assert.IsFalse(runner.IsValid(client));
+
+            Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Email").Length);
+            Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Password").Length);
+
+	    }
 	}
 }
