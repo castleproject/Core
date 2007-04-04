@@ -12,54 +12,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
-
 namespace Castle.Components.Validator
 {
-    
-    using System;
-    
-    /// <summary>
-    /// Validate that at least one of the properties in the group is not null or empty (for strings)
-    /// </summary>
-    [Serializable]
-    public class ValidateGroupNotEmptyAttribute : AbstractValidationAttribute
-    {
-        private string group;
-        private static IDictionary groupsPerType = Hashtable.Synchronized(new Hashtable());
+	using System;
+	using System.Collections;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidateGroupNotEmptyAttribute"/> class.
-        /// </summary>
-        /// <param name="group">The group.</param>
-        public ValidateGroupNotEmptyAttribute(string group)
-        {
-            this.group = group;
-        }
+	/// <summary>
+	/// Validate that at least one of the properties in the group is not null or empty (for strings)
+	/// </summary>
+	[Serializable]
+	public class ValidateGroupNotEmptyAttribute : AbstractValidationAttribute
+	{
+		private string group;
+		private static IDictionary groupsPerType = Hashtable.Synchronized(new Hashtable());
 
-        /// <summary>
-        /// Constructs and configures an <see cref="IValidator"/>
-        /// instance based on the properties set on the attribute instance.
-        /// </summary>
-        /// <returns></returns>
-        public override IValidator Build()
-        {
-            throw new NotSupportedException("You must call Build with a type parameter");
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateGroupNotEmptyAttribute"/> class.
+		/// </summary>
+		/// <param name="group">The group.</param>
+		public ValidateGroupNotEmptyAttribute(string group)
+		{
+			this.group = group;
+		}
 
-        public override IValidator Build(ValidatorRunner validatorRunner, Type type)
-        {
+		/// <summary>
+		/// Constructs and configures an <see cref="IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		/// <returns></returns>
+		public override IValidator Build()
+		{
+			throw new NotSupportedException("You must call Build with a type parameter");
+		}
 
-            GroupNotEmptyValidator validator = (GroupNotEmptyValidator)
-                validatorRunner.ExtendedProperties[group];
-            if(validator==null)
-            {
-                validatorRunner.ExtendedProperties[group] = validator 
-                    = new GroupNotEmptyValidator(group); 
-            }
-            ConfigureValidatorMessage(validator);
+		public override IValidator Build(ValidatorRunner validatorRunner, Type type)
+		{
+			GroupNotEmptyValidator validator = (GroupNotEmptyValidator)
+			                                   validatorRunner.ExtendedProperties[group];
+			if (validator == null)
+			{
+				validatorRunner.ExtendedProperties[group] = validator
+				                                            = new GroupNotEmptyValidator(group);
+			}
+			ConfigureValidatorMessage(validator);
 
-            return validator;
-        }
-    }
+			return validator;
+		}
+	}
 }

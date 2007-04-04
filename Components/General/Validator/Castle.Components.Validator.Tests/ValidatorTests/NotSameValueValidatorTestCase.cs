@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Components.Validator.Tests.ValidatorTests
 {
+	using System;
 	using System.Globalization;
 	using System.Threading;
 	using NUnit.Framework;
@@ -23,7 +22,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	[TestFixture]
 	public class NotSameValueValidatorTestCase
 	{
-        private NotSameValueValidator validator1, validator2, validator3;
+		private NotSameValueValidator validator1, validator2, validator3;
 		private TestTarget target;
 
 		[SetUp]
@@ -35,12 +34,12 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validator1 = new NotSameValueValidator("15");
 			validator1.Initialize(typeof(TestTarget).GetProperty("TargetField1"));
 
-            validator2 = new NotSameValueValidator(15);
+			validator2 = new NotSameValueValidator(15);
 			validator2.Initialize(typeof(TestTarget).GetProperty("TargetField2"));
 
-		    ValidateNotSameValueAttribute attribute = new ValidateNotSameValueAttribute(typeof(Guid), Guid.Empty.ToString());
-		    validator3 = (NotSameValueValidator)attribute.Build();
-            validator3.Initialize(typeof(TestTarget).GetProperty("TargetField3"));
+			ValidateNotSameValueAttribute attribute = new ValidateNotSameValueAttribute(typeof(Guid), Guid.Empty.ToString());
+			validator3 = (NotSameValueValidator) attribute.Build();
+			validator3.Initialize(typeof(TestTarget).GetProperty("TargetField3"));
 
 			target = new TestTarget();
 		}
@@ -70,17 +69,17 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validator2.IsValid(target, 100));
 		}
 
-	    [Test]
-	    public void InvalidGuid()
-	    {
-            Assert.IsFalse(validator3.IsValid(target, Guid.Empty));
-	    }
+		[Test]
+		public void InvalidGuid()
+		{
+			Assert.IsFalse(validator3.IsValid(target, Guid.Empty));
+		}
 
 		public class TestTarget
 		{
 			private string targetField1;
 			private int targetField2;
-		    private Guid targetField3;
+			private Guid targetField3;
 
 			public string TargetField1
 			{
@@ -95,11 +94,11 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			}
 
 
-		    public Guid TargetField3
-		    {
-		        get { return targetField3; }
-		        set { targetField3 = value; }
-		    }
+			public Guid TargetField3
+			{
+				get { return targetField3; }
+				set { targetField3 = value; }
+			}
 		}
 	}
 }

@@ -55,7 +55,7 @@ namespace Castle.Components.Validator
 
 				return true;
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				return false;
 			}
@@ -82,7 +82,7 @@ namespace Castle.Components.Validator
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-												IWebValidationGenerator generator, IDictionary attributes, string target)
+		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 

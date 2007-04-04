@@ -14,57 +14,54 @@
 
 namespace Castle.Components.Validator
 {
-    using System.Collections;
-    using System.Reflection;
+	/// <summary>
+	/// Validates that the content is not set to the specified value
+	/// </summary>
+	public class NotSameValueValidator : AbstractValidator
+	{
+		private readonly object value;
 
-    /// <summary>
-    /// Validates that the content is not set to the specified value
-    /// </summary>
-    public class NotSameValueValidator : AbstractValidator
-    {
-        private readonly object value;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SameAsValidator"/> class.
+		/// </summary>
+		public NotSameValueValidator(object value)
+		{
+			this.value = value;
+		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SameAsValidator"/> class.
-        /// </summary>
-        public NotSameValueValidator(object value)
-        {
-            this.value = value;
-        }
+		/// <summary>
+		/// Validates that the <c>fieldValue</c>
+		/// is not set to the specified value 
+		/// </summary>
+		/// <param name="instance">The target type instance</param>
+		/// <param name="fieldValue">The property/field value. It can be null.</param>
+		/// <returns>
+		/// 	<c>true</c> if the value is accepted (has passed the validation test)
+		/// </returns>
+		public override bool IsValid(object instance, object fieldValue)
+		{
+			return Equals(value, fieldValue) == false;
+		}
 
-        /// <summary>
-        /// Validates that the <c>fieldValue</c>
-        /// is not set to the specified value 
-        /// </summary>
-        /// <param name="instance">The target type instance</param>
-        /// <param name="fieldValue">The property/field value. It can be null.</param>
-        /// <returns>
-        /// 	<c>true</c> if the value is accepted (has passed the validation test)
-        /// </returns>
-        public override bool IsValid(object instance, object fieldValue)
-        {
-            return Equals(value, fieldValue) == false;
-        }
+		/// <summary>
+		/// Gets a value indicating whether this validator supports web validation.
+		/// </summary>
+		/// <value>
+		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// </value>
+		public override bool SupportsWebValidation
+		{
+			get { return false; }
+		}
 
-        /// <summary>
-        /// Gets a value indicating whether this validator supports web validation.
-        /// </summary>
-        /// <value>
-        /// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
-        /// </value>
-        public override bool SupportsWebValidation
-        {
-            get { return false; }
-        }
+		protected override string MessageKey
+		{
+			get { return MessageConstants.NotSameAsMessage; }
+		}
 
-        protected override string MessageKey
-        {
-            get { return MessageConstants.NotSameAsMessage; }
-        }
-
-        protected override string BuildErrorMessage()
-        {
-            return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.NotSameAsMessage), value);			
-        }
-    }
+		protected override string BuildErrorMessage()
+		{
+			return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.NotSameAsMessage), value);
+		}
+	}
 }

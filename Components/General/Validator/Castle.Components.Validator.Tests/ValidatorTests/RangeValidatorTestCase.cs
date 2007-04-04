@@ -22,9 +22,16 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	[TestFixture]
 	public class RangeValidatorTestCase
 	{
-		private RangeValidator validatorIntLow, validatorIntHigh, validatorIntLowOrHigh,
-			validatorDateTimeLow, validatorDateTimeHigh, validatorDateTimeLowOrHigh,
-			validatorStringLow, validatorStringHigh, validatorStringLowOrHigh;
+		private RangeValidator validatorIntLow,
+		                       validatorIntHigh,
+		                       validatorIntLowOrHigh,
+		                       validatorDateTimeLow,
+		                       validatorDateTimeHigh,
+		                       validatorDateTimeLowOrHigh,
+		                       validatorStringLow,
+		                       validatorStringHigh,
+		                       validatorStringLowOrHigh;
+
 		private TestTargetInt intTarget;
 		private TestTargetDateTime dateTimeTarget;
 		private TestTargetString stringTarget;
@@ -64,7 +71,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 
 			validatorStringHigh = new RangeValidator(String.Empty, "yyy");
 			validatorStringHigh.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
-			
+
 			validatorStringLowOrHigh = new RangeValidator(RangeValidationType.String, 'b'.ToString(), 'y'.ToString());
 			validatorStringLowOrHigh.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
 
@@ -105,6 +112,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		}
 
 		#region Integer range tests
+
 		[Test]
 		public void RangeIntTooLowValidator()
 		{
@@ -139,9 +147,11 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			//pass when compare to number not too high
 			Assert.IsTrue(validatorIntLowOrHigh.IsValid(intTarget, 0));
 		}
+
 		#endregion
 
 		#region DateTime range tests
+
 		[Test]
 		public void RangeDateTimeTooLowValidator()
 		{
@@ -170,15 +180,17 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			//fail when compare to non-date
 			Assert.IsFalse(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, "abc"));
 			//fail when compare to date too low
-			Assert.IsFalse(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, new DateTime(1999,01,01)));
+			Assert.IsFalse(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, new DateTime(1999, 01, 01)));
 			//fail when compare to date too high
-			Assert.IsFalse(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, new DateTime(2100,01,01)));
+			Assert.IsFalse(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, new DateTime(2100, 01, 01)));
 			//pass when compare to date not too low or high
-			Assert.IsTrue(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, new DateTime(2007,01,01)));
+			Assert.IsTrue(validatorDateTimeLowOrHigh.IsValid(dateTimeTarget, new DateTime(2007, 01, 01)));
 		}
+
 		#endregion
 
 		#region String range tests
+
 		[Test]
 		public void RangeStringTooLowValidator()
 		{
@@ -207,7 +219,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			//pass when compare to string not too low or high
 			Assert.IsTrue(validatorStringLowOrHigh.IsValid(intTarget, "m"));
 		}
-		#endregion
 
+		#endregion
 	}
 }

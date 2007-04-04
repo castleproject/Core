@@ -42,16 +42,16 @@ namespace Castle.Components.Validator.Tests
 		public void IsValidForInsertUpdate()
 		{
 			InsertUpdateClass obj = new InsertUpdateClass();
-			
+
 			Assert.IsFalse(runner.IsValid(obj, RunWhen.Insert));
-			
+
 			obj.Prop1 = "value";
 			obj.Prop2 = "value";
-			
+
 			Assert.IsTrue(runner.IsValid(obj, RunWhen.Insert));
 
 			Assert.IsFalse(runner.IsValid(obj, RunWhen.Update));
-			
+
 			obj.Prop3 = "value";
 			obj.Prop4 = "value";
 
@@ -67,16 +67,15 @@ namespace Castle.Components.Validator.Tests
 			Assert.IsTrue(runner.IsValid(client));
 		}
 
-	    [Test]
-	    public void GroupValidation()
-	    {
-	        Client client = new Client();
-	        client.Email = "foo@bar.com";
-	        Assert.IsFalse(runner.IsValid(client));
+		[Test]
+		public void GroupValidation()
+		{
+			Client client = new Client();
+			client.Email = "foo@bar.com";
+			Assert.IsFalse(runner.IsValid(client));
 
-            Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Email").Length);
-            Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Password").Length);
-
-	    }
+			Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Email").Length);
+			Assert.AreEqual(0, runner.GetErrorSummary(client).GetErrorsForProperty("Password").Length);
+		}
 	}
 }

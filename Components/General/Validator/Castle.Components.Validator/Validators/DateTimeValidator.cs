@@ -44,7 +44,7 @@ namespace Castle.Components.Validator
 
 				return true;
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				return false;
 			}

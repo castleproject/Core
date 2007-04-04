@@ -22,29 +22,29 @@ namespace Castle.Components.Validator
 	/// </summary>
 	public interface IValidatorRegistry
 	{
-        /// <summary>
-        /// Gets all validators associated with a <see cref="Type"/>.
-        /// <para>
-        /// The validators returned are initialized.
-        /// </para>
-        /// </summary>
-        /// <param name="validatorRunner">The validator runner.</param>
-        /// <param name="targetType">Target type.</param>
-        /// <param name="runWhen">Restrict the set returned to the phase specified</param>
-        /// <returns>A Validator array</returns>
+		/// <summary>
+		/// Gets all validators associated with a <see cref="Type"/>.
+		/// <para>
+		/// The validators returned are initialized.
+		/// </para>
+		/// </summary>
+		/// <param name="validatorRunner">The validator runner.</param>
+		/// <param name="targetType">Target type.</param>
+		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
+		/// <returns>A Validator array</returns>
 		IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, RunWhen runWhen);
 
-        /// <summary>
-        /// Gets all validators associated with a property.
-        /// <para>
-        /// The validators returned are initialized.
-        /// </para>
-        /// </summary>
-        /// <param name="validatorRunner">The validator runner.</param>
-        /// <param name="targetType">Target type.</param>
-        /// <param name="property">The property.</param>
-        /// <param name="runWhen">Restrict the set returned to the phase specified</param>
-        /// <returns>A Validator array</returns>
+		/// <summary>
+		/// Gets all validators associated with a property.
+		/// <para>
+		/// The validators returned are initialized.
+		/// </para>
+		/// </summary>
+		/// <param name="validatorRunner">The validator runner.</param>
+		/// <param name="targetType">Target type.</param>
+		/// <param name="property">The property.</param>
+		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
+		/// <returns>A Validator array</returns>
 		IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, PropertyInfo property, RunWhen runWhen);
 	}
 }

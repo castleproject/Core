@@ -27,8 +27,8 @@ namespace Castle.Components.Validator
 		/// From http://www.codeproject.com/aspnet/Valid_Email_Addresses.asp
 		/// </summary>
 		private static readonly String emailRule = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-			 @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" + 
-			 @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+		                                           @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+		                                           @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EmailValidator"/> class.
@@ -57,7 +57,7 @@ namespace Castle.Components.Validator
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-												IWebValidationGenerator generator, IDictionary attributes, string target)
+		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 

@@ -32,7 +32,7 @@ namespace Castle.Components.Validator.Tests
 		public void RunWhenEverytimeTest()
 		{
 			IValidator[] validators = registry.GetValidators(new ValidatorRunner(registry), typeof(Client), RunWhen.Everytime);
-			
+
 			Assert.IsNotNull(validators);
 			Assert.AreEqual(8, validators.Length);
 
@@ -45,7 +45,7 @@ namespace Castle.Components.Validator.Tests
 		[Test]
 		public void RunWhenCustomTest()
 		{
-            IValidator[] validators = registry.GetValidators(new ValidatorRunner(registry), typeof(Client), RunWhen.Custom);
+			IValidator[] validators = registry.GetValidators(new ValidatorRunner(registry), typeof(Client), RunWhen.Custom);
 
 			Assert.IsNotNull(validators);
 			Assert.AreEqual(9, validators.Length); // RunWhen.Everytime is returned too

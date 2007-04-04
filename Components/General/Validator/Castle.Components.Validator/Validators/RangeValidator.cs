@@ -133,7 +133,7 @@ namespace Castle.Components.Validator
 			try
 			{
 				//check properties for valid types
-				switch (type)
+				switch(type)
 				{
 					case RangeValidationType.Integer:
 						return GetIntValue(max, int.MaxValue);
@@ -145,9 +145,10 @@ namespace Castle.Components.Validator
 						throw new ArgumentException("Unknown RangeValidatorType found.");
 				}
 			}
-			catch (InvalidCastException)
+			catch(InvalidCastException)
 			{
-				throw new ArgumentException("RangeValidator's maximum value data type is incompatible with the RangeValidationType specified.");
+				throw new ArgumentException(
+					"RangeValidator's maximum value data type is incompatible with the RangeValidationType specified.");
 			}
 		}
 
@@ -174,14 +175,14 @@ namespace Castle.Components.Validator
 						int intValue;
 						try
 						{
-							intValue = (int)fieldValue;
-							valid = intValue >= (int)min && intValue <= (int)max;
+							intValue = (int) fieldValue;
+							valid = intValue >= (int) min && intValue <= (int) max;
 						}
 						catch
 						{
 							if (int.TryParse(fieldValue.ToString(), out intValue))
 							{
-								valid = intValue >= (int)min && intValue <= (int)max;
+								valid = intValue >= (int) min && intValue <= (int) max;
 							}
 						}
 						break;
@@ -189,32 +190,37 @@ namespace Castle.Components.Validator
 						DateTime dtValue;
 						try
 						{
-							dtValue = (DateTime)fieldValue;
-							valid = dtValue >= (DateTime)min && dtValue <= (DateTime)max;
+							dtValue = (DateTime) fieldValue;
+							valid = dtValue >= (DateTime) min && dtValue <= (DateTime) max;
 						}
 						catch
 						{
 							if (DateTime.TryParse(fieldValue.ToString(), out dtValue))
 							{
-								valid = dtValue >= (DateTime)min && dtValue <= (DateTime)max;
+								valid = dtValue >= (DateTime) min && dtValue <= (DateTime) max;
 							}
 						}
 						break;
 					case RangeValidationType.String:
 						string stringValue = fieldValue.ToString();
-						string minv = this.min.ToString();
-						string maxv = this.max.ToString();
+						string minv = min.ToString();
+						string maxv = max.ToString();
 						valid = (
-							(String.IsNullOrEmpty(minv) || String.Compare(stringValue, minv, StringComparison.InvariantCultureIgnoreCase) >= 0)
-							&& (String.IsNullOrEmpty(maxv) || String.Compare(stringValue, maxv, StringComparison.InvariantCultureIgnoreCase) <= 0)
-						);
+						        	(String.IsNullOrEmpty(minv) ||
+						        	 String.Compare(stringValue, minv, StringComparison.InvariantCultureIgnoreCase) >= 0)
+						        	&&
+						        	(String.IsNullOrEmpty(maxv) ||
+						        	 String.Compare(stringValue, maxv, StringComparison.InvariantCultureIgnoreCase) <= 0)
+						        );
 						break;
 					default:
 						valid = false;
 						break;
 				}
 			}
-			catch { }
+			catch
+			{
+			}
 
 			return valid;
 		}
@@ -252,7 +258,7 @@ namespace Castle.Components.Validator
 		{
 			if (type == RangeValidationType.DateTime)
 			{
-				return BuildDateTimeErrorMessage((DateTime)min, (DateTime)max);
+				return BuildDateTimeErrorMessage((DateTime) min, (DateTime) max);
 			}
 
 			if (type == RangeValidationType.String)
@@ -262,7 +268,7 @@ namespace Castle.Components.Validator
 
 			if (type == RangeValidationType.Integer)
 			{
-				return BuildIntegerErrorMessage((int)min, (int)max);
+				return BuildIntegerErrorMessage((int) min, (int) max);
 			}
 
 			throw new InvalidOperationException();
@@ -359,7 +365,8 @@ namespace Castle.Components.Validator
 		{
 			if (String.IsNullOrEmpty(min) && String.IsNullOrEmpty(max))
 			{
-				throw new ArgumentException("Both min and max were set in such as way that neither would be tested. At least one must be tested.");
+				throw new ArgumentException(
+					"Both min and max were set in such as way that neither would be tested. At least one must be tested.");
 			}
 		}
 
@@ -367,7 +374,8 @@ namespace Castle.Components.Validator
 		{
 			if (min == int.MinValue && max == int.MaxValue)
 			{
-				throw new ArgumentException("Both min and max were set in such as way that neither would be tested. At least one must be tested.");
+				throw new ArgumentException(
+					"Both min and max were set in such as way that neither would be tested. At least one must be tested.");
 			}
 			if (min > max)
 			{
@@ -383,7 +391,8 @@ namespace Castle.Components.Validator
 		{
 			if (min == DateTime.MinValue && max == DateTime.MaxValue)
 			{
-				throw new ArgumentException("Both min and max were set in such as way that neither would be tested. At least one must be tested.");
+				throw new ArgumentException(
+					"Both min and max were set in such as way that neither would be tested. At least one must be tested.");
 			}
 			if (min > max)
 			{
@@ -406,7 +415,7 @@ namespace Castle.Components.Validator
 			try
 			{
 				//check properties for valid types
-				switch (type)
+				switch(type)
 				{
 					case RangeValidationType.Integer:
 						return GetIntValue(min, int.MinValue);
@@ -418,9 +427,10 @@ namespace Castle.Components.Validator
 						throw new ArgumentException("Unknown RangeValidatorType found.");
 				}
 			}
-			catch (InvalidCastException)
+			catch(InvalidCastException)
 			{
-				throw new ArgumentException("RangeValidator's mininum value data type is incompatible with the RangeValidationType specified.");
+				throw new ArgumentException(
+					"RangeValidator's mininum value data type is incompatible with the RangeValidationType specified.");
 			}
 		}
 
@@ -429,7 +439,7 @@ namespace Castle.Components.Validator
 			int intValue = defaultValue;
 			try
 			{
-				intValue = (int)value;
+				intValue = (int) value;
 			}
 			catch
 			{
@@ -438,12 +448,13 @@ namespace Castle.Components.Validator
 			}
 			return intValue;
 		}
+
 		private DateTime GetDateTimeValue(object value, DateTime defaultValue)
 		{
 			DateTime dtValue = defaultValue;
 			try
 			{
-				dtValue = (DateTime)value;
+				dtValue = (DateTime) value;
 			}
 			catch
 			{

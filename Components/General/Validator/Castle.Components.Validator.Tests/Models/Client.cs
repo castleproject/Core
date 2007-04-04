@@ -30,7 +30,7 @@ namespace Castle.Components.Validator.Tests.Models
 			this.confirmation = confirmation;
 		}
 
-        [ValidateGroupNotEmpty("EmailOrPass")]
+		[ValidateGroupNotEmpty("EmailOrPass")]
 		[ValidateEmail]
 		public string Email
 		{
@@ -38,7 +38,7 @@ namespace Castle.Components.Validator.Tests.Models
 			set { email = value; }
 		}
 
-        [ValidateGroupNotEmpty("EmailOrPass")]
+		[ValidateGroupNotEmpty("EmailOrPass")]
 		[ValidateLength(3, 12, "Invalid password length")]
 		public string Password
 		{

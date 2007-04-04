@@ -19,7 +19,6 @@ namespace Castle.Components.Validator
 	using System.Reflection;
 	using System.Resources;
 	using System.Threading;
-	using Castle.Components.Validator;
 
 	/// <summary>
 	/// Abstract <see cref="IValidator"/> implementation
@@ -39,9 +38,9 @@ namespace Castle.Components.Validator
 		/// </summary>
 		static AbstractValidator()
 		{
-			resourceManager = 
-				new ResourceManager("Castle.Components.Validator.Messages", 
-					typeof(AbstractValidator).Assembly);
+			resourceManager =
+				new ResourceManager("Castle.Components.Validator.Messages",
+				                    typeof(AbstractValidator).Assembly);
 		}
 
 		/// <summary>
@@ -66,11 +65,15 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public object GetFieldOrPropertyValue(object instance, string fieldOrPropertyName)
 		{
-			PropertyInfo pi = instance.GetType().GetProperty(fieldOrPropertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+			PropertyInfo pi =
+				instance.GetType().GetProperty(fieldOrPropertyName,
+				                               BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
 
 			if (pi == null)
 			{
-				FieldInfo fi = instance.GetType().GetField(fieldOrPropertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+				FieldInfo fi =
+					instance.GetType().GetField(fieldOrPropertyName,
+					                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
 
 				if (fi != null)
 				{
@@ -82,7 +85,8 @@ namespace Castle.Components.Validator
 				return pi.GetValue(instance, null);
 			}
 
-			throw new ValidationException("No public instance field or property named " + fieldOrPropertyName + " for type " + instance.GetType().FullName);
+			throw new ValidationException("No public instance field or property named " + fieldOrPropertyName + " for type " +
+			                              instance.GetType().FullName);
 		}
 
 		/// <summary>
@@ -150,8 +154,8 @@ namespace Castle.Components.Validator
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
 		public virtual void ApplyWebValidation(WebValidationConfiguration config,
-		                                        InputElementType inputType, IWebValidationGenerator generator,
-		                                        IDictionary attributes, string target)
+		                                       InputElementType inputType, IWebValidationGenerator generator,
+		                                       IDictionary attributes, string target)
 		{
 			if (target.Contains("."))
 			{
@@ -221,7 +225,7 @@ namespace Castle.Components.Validator
 		/// <returns>A resource set instance</returns>
 		protected internal static ResourceSet GetResourceForCurrentCulture()
 		{
-			return resourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true); 
+			return resourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true);
 		}
 
 		/// <summary>

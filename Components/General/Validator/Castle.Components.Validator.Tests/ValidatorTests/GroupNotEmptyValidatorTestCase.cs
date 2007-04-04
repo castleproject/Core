@@ -14,90 +14,89 @@
 
 namespace Castle.Components.Validator.Tests.ValidatorTests
 {
-    using System.Globalization;
-    using System.Threading;
-    using NUnit.Framework;
+	using System.Globalization;
+	using System.Threading;
+	using NUnit.Framework;
 
-    [TestFixture]
-    public class GroupNotEmptyValidatorTestCase
-    {
-        private GroupNotEmptyValidator validator;
-        private TestTarget target;
+	[TestFixture]
+	public class GroupNotEmptyValidatorTestCase
+	{
+		private GroupNotEmptyValidator validator;
+		private TestTarget target;
 
-        [SetUp]
-        public void Init()
-        {
-            Thread.CurrentThread.CurrentCulture =
-                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
+		[SetUp]
+		public void Init()
+		{
+			Thread.CurrentThread.CurrentCulture =
+				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
-            validator = new GroupNotEmptyValidator("Dummy");
-            validator.Initialize(typeof(TestTarget).GetProperty("Foo"));
-            validator.FriendlyName = "BAR";
-            validator.Initialize(typeof(TestTarget).GetProperty("Bar"));
-            target = new TestTarget();
-        }
+			validator = new GroupNotEmptyValidator("Dummy");
+			validator.Initialize(typeof(TestTarget).GetProperty("Foo"));
+			validator.FriendlyName = "BAR";
+			validator.Initialize(typeof(TestTarget).GetProperty("Bar"));
+			target = new TestTarget();
+		}
 
-        [Test]
-        public void BothEmptyStrings()
-        {
-            target.Bar = null;
-            target.Foo = "";
-            Assert.IsFalse(validator.IsValid(target));
-        }
+		[Test]
+		public void BothEmptyStrings()
+		{
+			target.Bar = null;
+			target.Foo = "";
+			Assert.IsFalse(validator.IsValid(target));
+		}
 
-        [Test]
-        public void BothNonEmptyStrings()
-        {
-            target.Bar = "Abva";
-            target.Foo = "tdhf";
-            Assert.IsTrue(validator.IsValid(target));
-        }
+		[Test]
+		public void BothNonEmptyStrings()
+		{
+			target.Bar = "Abva";
+			target.Foo = "tdhf";
+			Assert.IsTrue(validator.IsValid(target));
+		}
 
-        [Test]
-        public void FirstEmptySecondFull()
-        {
-            target.Bar = "";
-            target.Foo = " ";
-            Assert.IsTrue(validator.IsValid(target));
-        }
-
-
-        [Test]
-        public void FirstFullSecondEmpty()
-        {
-            target.Bar = "aa ";
-            target.Foo = "";
-            Assert.IsTrue(validator.IsValid(target));
-        }
-
-        [Test]
-        public void ErrorMessage()
-        {
-            Assert.IsFalse(validator.IsValid(target));
-
-            Assert.IsTrue(
-                "At least one of the values in (Foo, BAR) should not be empty"== validator.ErrorMessage
-                || "At least one of the values in (BAR, Foo) should not be empty" == validator.ErrorMessage); 
-
-        }
-
-        public class TestTarget
-        {
-            private string foo;
-            private string bar;
+		[Test]
+		public void FirstEmptySecondFull()
+		{
+			target.Bar = "";
+			target.Foo = " ";
+			Assert.IsTrue(validator.IsValid(target));
+		}
 
 
-            public string Bar
-            {
-                get { return bar; }
-                set { bar = value; }
-            }
+		[Test]
+		public void FirstFullSecondEmpty()
+		{
+			target.Bar = "aa ";
+			target.Foo = "";
+			Assert.IsTrue(validator.IsValid(target));
+		}
 
-            public string Foo
-            {
-                get { return foo; }
-                set { foo = value; }
-            }
-        }
-    }
+		[Test]
+		public void ErrorMessage()
+		{
+			Assert.IsFalse(validator.IsValid(target));
+
+			Assert.IsTrue(
+				"At least one of the values in (Foo, BAR) should not be empty" == validator.ErrorMessage
+				|| "At least one of the values in (BAR, Foo) should not be empty" == validator.ErrorMessage);
+		}
+
+		public class TestTarget
+		{
+			private string foo;
+			private string bar;
+
+
+			public string Bar
+			{
+				get { return bar; }
+				set { bar = value; }
+			}
+
+			public string Foo
+			{
+				get { return foo; }
+				set { foo = value; }
+			}
+		}
+	}
 }

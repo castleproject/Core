@@ -14,23 +14,23 @@
 
 namespace Castle.Components.Validator
 {
-    /// <summary>
-    /// Validates that the collection is not empty
-    /// </summary>
-    public class ValidateCollectionNotEmptyAttribute : AbstractValidationAttribute
-    {
-        /// <summary>
-        /// Constructs and configures an <see cref="T:Castle.Components.Validator.IValidator"/>
-        /// instance based on the properties set on the attribute instance.
-        /// </summary>
-        /// <returns></returns>
-        public override IValidator Build()
-        {
-            CollectionNotEmptyValidator validator = new CollectionNotEmptyValidator();
-            
-            ConfigureValidatorMessage(validator);
-			
-            return validator;
-        }
-    }
+	/// <summary>
+	/// Validates that the collection is not empty
+	/// </summary>
+	public class ValidateCollectionNotEmptyAttribute : AbstractValidationAttribute
+	{
+		/// <summary>
+		/// Constructs and configures an <see cref="T:Castle.Components.Validator.IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		/// <returns></returns>
+		public override IValidator Build()
+		{
+			CollectionNotEmptyValidator validator = new CollectionNotEmptyValidator();
+
+			ConfigureValidatorMessage(validator);
+
+			return validator;
+		}
+	}
 }

@@ -51,7 +51,8 @@ namespace Castle.Components.Validator
 		{
 			if (minLength == int.MinValue && maxLength == int.MaxValue)
 			{
-				throw new ArgumentException("Both minLength and maxLength were set in such as way that neither would be tested. At least one must be tested.");
+				throw new ArgumentException(
+					"Both minLength and maxLength were set in such as way that neither would be tested. At least one must be tested.");
 			}
 
 			if (minLength > maxLength)
@@ -61,12 +62,14 @@ namespace Castle.Components.Validator
 
 			if (minLength != int.MinValue && minLength < 0)
 			{
-				throw new ArgumentOutOfRangeException("The minLength parameter must be set to either int.MinValue or a non-negative number.");
+				throw new ArgumentOutOfRangeException(
+					"The minLength parameter must be set to either int.MinValue or a non-negative number.");
 			}
 
 			if (maxLength < 0)
 			{
-				throw new ArgumentOutOfRangeException("The maxLength parameter must be set to either int.MaxValue or a non-negative number.");
+				throw new ArgumentOutOfRangeException(
+					"The maxLength parameter must be set to either int.MaxValue or a non-negative number.");
 			}
 
 			this.minLength = minLength;
@@ -154,7 +157,7 @@ namespace Castle.Components.Validator
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-												IWebValidationGenerator generator, IDictionary attributes, string target)
+		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
@@ -191,20 +194,21 @@ namespace Castle.Components.Validator
 			if (exactLength != int.MinValue)
 			{
 				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.ExactLengthMessage), exactLength);
-			} 
+			}
 			else if (minLength == int.MinValue && maxLength != int.MaxValue)
 			{
 				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.LengthTooLongMessage), maxLength);
-			} 
+			}
 			else if (minLength != int.MinValue && maxLength == int.MaxValue)
 			{
 				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.LengthTooShortMessage), minLength);
-			} 
+			}
 			else if (minLength != int.MinValue || maxLength != int.MaxValue)
 			{
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.LenghtInRangeMessage), minLength, maxLength);
-			} 
-			else 
+				return
+					string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.LenghtInRangeMessage), minLength, maxLength);
+			}
+			else
 			{
 				throw new InvalidOperationException();
 			}

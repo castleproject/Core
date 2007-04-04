@@ -49,9 +49,9 @@ namespace Castle.Components.Validator
 		public override IValidator Build()
 		{
 			IValidator validator = new SameAsValidator(propertyToCompare);
-			
+
 			ConfigureValidatorMessage(validator);
-			
+
 			return validator;
 		}
 	}

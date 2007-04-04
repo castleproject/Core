@@ -54,7 +54,7 @@ namespace Castle.Components.Validator
 		/// </summary>
 		/// <value>The execution order.</value>
 		int ExecutionOrder { get; set; }
-		
+
 		/// <summary>
 		/// The error message to be displayed if the validation fails
 		/// </summary>
@@ -102,12 +102,12 @@ namespace Castle.Components.Validator
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
 		void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-								IWebValidationGenerator generator, IDictionary attributes, string target);
+		                        IWebValidationGenerator generator, IDictionary attributes, string target);
 
-        /// <summary>
+		/// <summary>
 		/// Gets the property name. The <see cref="FriendlyName"/>
 		/// is returned if non-null, otherwise it will return the property name.
 		/// </summary>
-        string Name { get; }
+		string Name { get; }
 	}
 }

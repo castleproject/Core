@@ -16,8 +16,7 @@
 namespace Castle.Components.Validator
 {
 	using System;
-    using System.Collections;
-	using Castle.Components.Validator;
+	using System.Collections;
 
 	/// <summary>
 	/// Validate that the property is not null or empty (for strings)
@@ -25,7 +24,7 @@ namespace Castle.Components.Validator
 	[Serializable]
 	public class ValidateNonEmptyAttribute : AbstractValidationAttribute
 	{
-	    private readonly IDictionary validatorPerGroup = Hashtable.Synchronized(new Hashtable());
+		private readonly IDictionary validatorPerGroup = Hashtable.Synchronized(new Hashtable());
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateNonEmptyAttribute"/> class.
@@ -50,9 +49,9 @@ namespace Castle.Components.Validator
 		public override IValidator Build()
 		{
 			IValidator validator = new NonEmptyValidator();
-			
+
 			ConfigureValidatorMessage(validator);
-			
+
 			return validator;
 		}
 	}

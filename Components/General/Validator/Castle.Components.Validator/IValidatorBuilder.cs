@@ -15,20 +15,19 @@
 
 namespace Castle.Components.Validator
 {
-    using System;
-    using Castle.Components.Validator;
+	using System;
 
 	/// <summary>
 	/// Constructs an <see cref="IValidator"/> implementation.
 	/// </summary>
 	public interface IValidatorBuilder
 	{
-        /// <summary>
-        /// Builds this instance.
-        /// </summary>
-        /// <param name="validatorRunner">The validator runner.</param>
-        /// <param name="type">The type that this validator is built for</param>
-        /// <returns></returns>
-        IValidator Build(ValidatorRunner validatorRunner, Type type);
+		/// <summary>
+		/// Builds this instance.
+		/// </summary>
+		/// <param name="validatorRunner">The validator runner.</param>
+		/// <param name="type">The type that this validator is built for</param>
+		/// <returns></returns>
+		IValidator Build(ValidatorRunner validatorRunner, Type type);
 	}
 }

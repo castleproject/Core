@@ -34,7 +34,7 @@ namespace Castle.Components.Validator
 		public RegularExpressionValidator(String expression) : this(expression, RegexOptions.Compiled)
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RegularExpressionValidator"/> class.
 		/// </summary>
@@ -107,7 +107,7 @@ namespace Castle.Components.Validator
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-												IWebValidationGenerator generator, IDictionary attributes, string target)
+		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 

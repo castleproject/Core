@@ -16,9 +16,6 @@ namespace Castle.Components.Validator
 {
 	using System;
 
-	using Castle.Components.Validator;
-
-
 	/// <summary>
 	/// Validate that this email address is a valid one.
 	/// </summary>

@@ -14,50 +14,46 @@
 
 namespace Castle.Components.Validator
 {
-	using System;
 	using System.Collections;
-	
+
 	/// <summary>
-    /// Validates that the content is a collection that is not empty
-    /// </summary>
-    public class CollectionNotEmptyValidator : AbstractValidator
-    {
-        /// <summary>
-        /// Implementors should perform the actual validation upon
-        /// the property value
-        /// </summary>
-        /// <param name="instance">The target type instance</param>
-        /// <param name="fieldValue">The property/field value. It can be null.</param>
-        /// <returns>
-        /// 	<c>true</c> if the value is accepted (has passed the validation test)
-        /// </returns>
-        public override bool IsValid(object instance, object fieldValue)
-        {
-            ICollection collection = fieldValue as ICollection;
-            if (collection == null)
-            {
-                return false;
-            }
-            return collection.Count != 0;
-        }
+	/// Validates that the content is a collection that is not empty
+	/// </summary>
+	public class CollectionNotEmptyValidator : AbstractValidator
+	{
+		/// <summary>
+		/// Implementors should perform the actual validation upon
+		/// the property value
+		/// </summary>
+		/// <param name="instance">The target type instance</param>
+		/// <param name="fieldValue">The property/field value. It can be null.</param>
+		/// <returns>
+		/// 	<c>true</c> if the value is accepted (has passed the validation test)
+		/// </returns>
+		public override bool IsValid(object instance, object fieldValue)
+		{
+			ICollection collection = fieldValue as ICollection;
+			if (collection == null)
+			{
+				return false;
+			}
+			return collection.Count != 0;
+		}
 
-        /// <summary>
-        /// Gets a value indicating whether this validator supports web validation.
-        /// </summary>
-        /// <value>
-        /// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
-        /// </value>
-        public override bool SupportsWebValidation
-        {
-            get { return false; }
-        }
+		/// <summary>
+		/// Gets a value indicating whether this validator supports web validation.
+		/// </summary>
+		/// <value>
+		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// </value>
+		public override bool SupportsWebValidation
+		{
+			get { return false; }
+		}
 
-        protected override string MessageKey
-        {
-            get
-            {
-                return MessageConstants.CollectionNotEmpty;
-            }
-        }
-    }
+		protected override string MessageKey
+		{
+			get { return MessageConstants.CollectionNotEmpty; }
+		}
+	}
 }

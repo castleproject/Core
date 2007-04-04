@@ -16,8 +16,6 @@ namespace Castle.Components.Validator
 {
 	using System;
 
-	using Castle.Components.Validator;
-
 	/// <summary>
 	/// Validate that this property has the required length (either exact or in a range)
 	/// </summary>

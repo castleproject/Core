@@ -32,8 +32,8 @@ namespace Castle.Components.Validator
 	/// </example>
 	public class ValidatorRunner
 	{
-		private readonly static IDictionary type2Validator;
-	    private readonly IDictionary extendedProperties = new Hashtable();
+		private static readonly IDictionary type2Validator;
+		private readonly IDictionary extendedProperties = new Hashtable();
 		private readonly bool inferValidators;
 		private readonly IDictionary errorPerInstance;
 		private readonly IValidatorRegistry registry;
@@ -50,12 +50,12 @@ namespace Castle.Components.Validator
 			type2Validator[typeof(DateTime)] = typeof(DateTimeValidator);
 		}
 
-	    public IDictionary ExtendedProperties
-	    {
-	        get { return extendedProperties; }
-	    }
+		public IDictionary ExtendedProperties
+		{
+			get { return extendedProperties; }
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
 		/// </summary>
 		/// <param name="registry">The instance registry.</param>
@@ -159,7 +159,7 @@ namespace Castle.Components.Validator
 
 				if (defaultValidatorForType != null)
 				{
-					validators = new IValidator[] { (IValidator) Activator.CreateInstance(defaultValidatorForType) };
+					validators = new IValidator[] {(IValidator) Activator.CreateInstance(defaultValidatorForType)};
 
 					validators[0].Initialize(property);
 				}
@@ -205,9 +205,9 @@ namespace Castle.Components.Validator
 			return validators;
 		}
 
-		class ValidatorComparer : IComparer
+		private class ValidatorComparer : IComparer
 		{
-			private readonly static ValidatorComparer instance = new ValidatorComparer();
+			private static readonly ValidatorComparer instance = new ValidatorComparer();
 
 			public int Compare(object x, object y)
 			{

@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-
 namespace Castle.Components.Validator.Tests.ValidatorTests
 {
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Threading;
 	using NUnit.Framework;
@@ -23,7 +22,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	[TestFixture]
 	public class CollectionNotEmptyValidatorTestCase
 	{
-        private CollectionNotEmptyValidator validator;
+		private CollectionNotEmptyValidator validator;
 		private TestTarget target;
 
 		[SetUp]
@@ -47,16 +46,16 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		[Test]
 		public void NonEmptyCollection()
 		{
-			Assert.IsTrue(validator.IsValid(target, "1,2,3".Split(',') ) );
+			Assert.IsTrue(validator.IsValid(target, "1,2,3".Split(',')));
 		}
 
 		public class TestTarget
 		{
-		    private IList<string> targetField = new List<string>();
+			private IList<string> targetField = new List<string>();
 
 			public IList<string> TargetField
 			{
-                get { return targetField; }
+				get { return targetField; }
 				set { targetField = value; }
 			}
 		}

@@ -117,14 +117,14 @@ namespace Castle.Components.Validator
 		public abstract IValidator Build();
 
 
-        /// <summary>
-        /// Constructs and configures an <see cref="IValidator"/>
-        /// instance based on the properties set on the attribute instance.
-        /// </summary>
-        public virtual IValidator Build(ValidatorRunner validatorRunner, Type type)
-        {
-            return Build();
-        }
+		/// <summary>
+		/// Constructs and configures an <see cref="IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		public virtual IValidator Build(ValidatorRunner validatorRunner, Type type)
+		{
+			return Build();
+		}
 
 		/// <summary>
 		/// Applies the common configuration defined on the attribute.

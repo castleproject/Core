@@ -29,16 +29,16 @@ namespace Castle.Components.Validator
 
 		#region IValidatorRegistry Members
 
-        /// <summary>
-        /// Gets all validators associated with a <see cref="Type"/>.
-        /// <para>
-        /// The validators returned are initialized.
-        /// </para>
-        /// </summary>
-        /// <param name="validatorRunner">The validator runner.</param>
-        /// <param name="targetType">Target type.</param>
-        /// <param name="runWhen">Restrict the set returned to the phase specified</param>
-        /// <returns>A Validator array</returns>
+		/// <summary>
+		/// Gets all validators associated with a <see cref="Type"/>.
+		/// <para>
+		/// The validators returned are initialized.
+		/// </para>
+		/// </summary>
+		/// <param name="validatorRunner">The validator runner.</param>
+		/// <param name="targetType">Target type.</param>
+		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
+		/// <returns>A Validator array</returns>
 		public IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, RunWhen runWhen)
 		{
 			PropertyInfo[] properties = (PropertyInfo[]) propertiesPerType[targetType];
@@ -59,18 +59,19 @@ namespace Castle.Components.Validator
 			return (IValidator[]) list.ToArray(typeof(IValidator));
 		}
 
-        /// <summary>
-        /// Gets all validators associated with a property.
-        /// <para>
-        /// The validators returned are initialized.
-        /// </para>
-        /// </summary>
-        /// <param name="validatorRunner">The validator runner.</param>
-        /// <param name="targetType">Target type.</param>
-        /// <param name="property">The property.</param>
-        /// <param name="runWhen">Restrict the set returned to the phase specified</param>
-        /// <returns>A Validator array</returns>
-        public IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, PropertyInfo property, RunWhen runWhen)
+		/// <summary>
+		/// Gets all validators associated with a property.
+		/// <para>
+		/// The validators returned are initialized.
+		/// </para>
+		/// </summary>
+		/// <param name="validatorRunner">The validator runner.</param>
+		/// <param name="targetType">Target type.</param>
+		/// <param name="property">The property.</param>
+		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
+		/// <returns>A Validator array</returns>
+		public IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, PropertyInfo property,
+		                                  RunWhen runWhen)
 		{
 			object[] builders = (object[]) attrsPerProperty[property];
 
@@ -81,7 +82,7 @@ namespace Castle.Components.Validator
 			}
 
 			ArrayList validators = new ArrayList();
-			
+
 			foreach(IValidatorBuilder builder in builders)
 			{
 				IValidator validator = builder.Build(validatorRunner, targetType);

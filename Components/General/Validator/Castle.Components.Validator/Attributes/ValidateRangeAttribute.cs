@@ -16,8 +16,6 @@ namespace Castle.Components.Validator
 {
 	using System;
 
-	using Castle.Components.Validator;
-
 	/// <summary>
 	/// Validate that this property has the required length (either exact or in a range)
 	/// </summary>
@@ -107,7 +105,8 @@ namespace Castle.Components.Validator
 		/// <param name="min">The minimum value, or <c>DateTime.MinValue</c> if this should not be tested.</param>
 		/// <param name="max">The maximum value, or <c>DateTime.MaxValue</c> if this should not be tested.</param>
 		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
-		public ValidateRangeAttribute(RangeValidationType type, object min, object max, string errorMessage) : base(errorMessage)
+		public ValidateRangeAttribute(RangeValidationType type, object min, object max, string errorMessage)
+			: base(errorMessage)
 		{
 			validator = new RangeValidator(type, min, max);
 		}
