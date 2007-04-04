@@ -90,6 +90,19 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
+		/// Initializes a range validator of the given type with the given minimum and maximum values.
+		/// </summary>
+		/// <param name="type">The type of range validator.</param>
+		/// <param name="min">The minimum value, or <c>null</c> if this should not be tested.</param>
+		/// <param name="max">The maximum value, or <c>null</c> if this should not be tested.</param>
+		public RangeValidator(RangeValidationType type, object min, object max)
+		{
+			this.type = type;
+			this.min = GetMinValue(min);
+			this.max = GetMaxValue(max);
+		}
+
+		/// <summary>
 		/// Gets or sets the range validation type for this validator. If the type is changed,
 		/// the minimum and maximum values are reset to null-equivalent values (i.e. appropriate
 		/// minimum and maximum values for the data type).
@@ -123,18 +136,18 @@ namespace Castle.Components.Validator
 				switch (type)
 				{
 					case RangeValidationType.Integer:
-						return (max == null || !(max is int) ? int.MaxValue : (int)max);
+						return GetIntValue(max, int.MaxValue);
 					case RangeValidationType.DateTime:
-						return (max == null || !(max is DateTime) ? DateTime.MaxValue : (DateTime)max);
+						return GetDateTimeValue(max, DateTime.MaxValue);
 					case RangeValidationType.String:
-						return max.ToString();
+						return (max == null || String.IsNullOrEmpty(max.ToString()) ? String.Empty : max.ToString());
 					default:
 						throw new ArgumentException("Unknown RangeValidatorType found.");
 				}
 			}
 			catch (InvalidCastException)
 			{
-				throw new ArgumentException("RangeValidator's mininum value data type is incompatible with the RangeValidationType specified.");
+				throw new ArgumentException("RangeValidator's maximum value data type is incompatible with the RangeValidationType specified.");
 			}
 		}
 
@@ -382,7 +395,7 @@ namespace Castle.Components.Validator
 			}
 		}
 
-			/// <summary>
+		/// <summary>
 		/// Internal method that checks a given minimum value's data type and converts
 		/// null values to the proper minimum value for the data type.
 		/// </summary>
@@ -396,11 +409,11 @@ namespace Castle.Components.Validator
 				switch (type)
 				{
 					case RangeValidationType.Integer:
-						return (min == null || !(min is int) ? int.MinValue : (int)min);
+						return GetIntValue(min, int.MinValue);
 					case RangeValidationType.DateTime:
-						return (min == null || !(min is DateTime) ? DateTime.MinValue : (DateTime)min);
+						return GetDateTimeValue(min, DateTime.MinValue);
 					case RangeValidationType.String:
-						return min.ToString();
+						return (min == null || String.IsNullOrEmpty(min.ToString()) ? String.Empty : min.ToString());
 					default:
 						throw new ArgumentException("Unknown RangeValidatorType found.");
 				}
@@ -409,6 +422,35 @@ namespace Castle.Components.Validator
 			{
 				throw new ArgumentException("RangeValidator's mininum value data type is incompatible with the RangeValidationType specified.");
 			}
+		}
+
+		private int GetIntValue(object value, int defaultValue)
+		{
+			int intValue = defaultValue;
+			try
+			{
+				intValue = (int)value;
+			}
+			catch
+			{
+				if (value == null || !int.TryParse(value.ToString(), out intValue))
+					value = defaultValue;
+			}
+			return intValue;
+		}
+		private DateTime GetDateTimeValue(object value, DateTime defaultValue)
+		{
+			DateTime dtValue = defaultValue;
+			try
+			{
+				dtValue = (DateTime)value;
+			}
+			catch
+			{
+				if (value == null || !DateTime.TryParse(value.ToString(), out dtValue))
+					value = defaultValue;
+			}
+			return dtValue;
 		}
 	}
 }

@@ -90,6 +90,29 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
+		/// Initializes a range validator of a specified type.
+		/// </summary>
+		/// <param name="type">The data type to be used by the range validator.</param>
+		/// <param name="min">The minimum value, or <c>DateTime.MinValue</c> if this should not be tested.</param>
+		/// <param name="max">The maximum value, or <c>DateTime.MaxValue</c> if this should not be tested.</param>
+		public ValidateRangeAttribute(RangeValidationType type, object min, object max) : base()
+		{
+			validator = new RangeValidator(type, min, max);
+		}
+
+		/// <summary>
+		/// Initializes a range validator of a specified type.
+		/// </summary>
+		/// <param name="type">The data type to be used by the range validator.</param>
+		/// <param name="min">The minimum value, or <c>DateTime.MinValue</c> if this should not be tested.</param>
+		/// <param name="max">The maximum value, or <c>DateTime.MaxValue</c> if this should not be tested.</param>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
+		public ValidateRangeAttribute(RangeValidationType type, object min, object max, string errorMessage) : base(errorMessage)
+		{
+			validator = new RangeValidator(type, min, max);
+		}
+
+		/// <summary>
 		/// Constructs and configures an <see cref="IValidator"/>
 		/// instance based on the properties set on the attribute instance.
 		/// </summary>

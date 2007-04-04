@@ -1,6 +1,9 @@
 Beta 1
 ======
 
+- Applied Brian DeMarzo's patch fixing COMP-17
+  "Added overloaded constructors supporting RangeValidationType and object type conversion"
+
 - Applied Brian DeMarzo's patch fixing COMP-16
   "RangeValidator cleanup, added RangeValidationType.String"
 
