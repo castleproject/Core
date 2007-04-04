@@ -78,9 +78,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				{
 					hasElements = true;
 
-					if (toFinishRow == itemIndex) EndRow();
-
 					bool writeRow = itemIndex++ % cols == 0;
+
+					if (toFinishRow == itemIndex) EndRow();
 
 					if (writeRow)
 					{
@@ -97,6 +97,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					{
 						toFinishRow = itemIndex + cols;
 					}
+
 				}
 
 				if (itemIndex < toFinishRow)
@@ -107,7 +108,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 						RenderText("&nbsp;");
 						EndColumn();
 					}
-
 					EndRow();
 				}
 			}

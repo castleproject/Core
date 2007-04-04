@@ -4,6 +4,12 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied bonskijr's patch fixing MR-234
+  "Under some circunstances ColumnRenderer generates invalid html"
+
+- Applied Marc-André's patch fixing MR-238
+  "HtmlHelper.LinkTo: bugs- don't function when existing a area"
+
 - Applied Aaron Jensen's patch fixing the Resource Manager usage 
   Changed from ResourceSet to ResourceManager
 
