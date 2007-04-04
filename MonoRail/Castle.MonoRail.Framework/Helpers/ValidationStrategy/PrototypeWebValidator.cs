@@ -153,7 +153,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetRegExp(string regExp, string violationMessage)
 			{
-				// Not supported by the prototype validation
+				AddClass("validate-regex-" + regExp);
+				AddTitle(violationMessage);
 			}
 
 			public void SetExactLength(int length)
@@ -194,6 +195,12 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			public void SetAsSameAs(string comparisonFieldName, string violationMessage)
 			{
 				AddClass("validate-same-as-" + comparisonFieldName);
+				AddTitle(violationMessage);
+			}
+
+			public void SetDate(string violationMessage)
+			{
+				AddClass("validate-date");
 				AddTitle(violationMessage);
 			}
 

@@ -198,6 +198,11 @@ namespace Castle.Components.Validator
 		/// </summary>
 		protected virtual string BuildErrorMessage()
 		{
+			if (!String.IsNullOrEmpty(ErrorMessage))
+			{
+				// No localization for now
+				return (ErrorMessage);
+			}
 			return String.Format(GetResourceForCurrentCulture().GetString(MessageKey), Name);
 		}
 

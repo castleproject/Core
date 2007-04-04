@@ -161,6 +161,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				throw new NotImplementedException();
 			}
 
+			public void SetDate(string violationMessage)
+			{
+				throw new NotImplementedException();
+			}
+
 			private void AddValidator(string validator)
 			{
 				string existingValidators = (string) attributes["validators"];

@@ -42,6 +42,7 @@
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="ValidatorRunnerTestCase.cs" />
     <Compile Include="ValidatorsExecutionOrderTestCase.cs" />
+    <Compile Include="ValidatorTests\DateValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\RangeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateTimeValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DecimalValidatorTestCase.cs" />

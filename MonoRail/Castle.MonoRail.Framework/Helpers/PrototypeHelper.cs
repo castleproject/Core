@@ -294,10 +294,6 @@ namespace Castle.MonoRail.Framework.Helpers
 						throw new RailsException("Could not process partial " + partialName, ex);
 					}
 				}
-				else
-				{
-					// TODO: add support for partial rendering
-				}
 
 				return Quote(JsEscape(renderOptions.ToString()));
 			}

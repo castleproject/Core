@@ -90,5 +90,11 @@ namespace Castle.Components.Validator
 		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 		/// <param name="violationMessage">The violation message.</param>
 		void SetAsSameAs(string comparisonFieldName, string violationMessage);
+
+		/// <summary>
+		/// Set date.
+		/// </summary>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetDate(string violationMessage);
 	}
 }

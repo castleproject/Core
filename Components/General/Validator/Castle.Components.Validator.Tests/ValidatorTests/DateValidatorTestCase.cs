@@ -20,9 +20,9 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class DateTimeValidatorTestCase
+	public class DateValidatorTestCase
 	{
-		private DateTimeValidator validator;
+		private DateValidator validator;
 		private TestTarget target;
 
 		[SetUp]
@@ -31,7 +31,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Thread.CurrentThread.CurrentCulture =
 				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
-			validator = new DateTimeValidator();
+			validator = new DateValidator();
 			validator.Initialize(typeof(TestTarget).GetProperty("DtField"));
 			target = new TestTarget();
 		}
@@ -43,6 +43,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsFalse(validator.IsValid(target, "122"));
 			Assert.IsFalse(validator.IsValid(target, "99/99/99"));
 			Assert.IsFalse(validator.IsValid(target, "99-99-99"));
+			Assert.IsFalse(validator.IsValid(target, "2007-01-14T12:05:25"));
 		}
 
 		[Test]
@@ -50,7 +51,6 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		{
 			Assert.IsTrue(validator.IsValid(target, "01/12/2004"));
 			Assert.IsTrue(validator.IsValid(target, "07/16/79"));
-			Assert.IsTrue(validator.IsValid(target, "2007-01-14T12:05:25"));
 		}
 
 		public class TestTarget
