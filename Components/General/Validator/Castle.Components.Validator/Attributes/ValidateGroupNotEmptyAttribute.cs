@@ -45,6 +45,13 @@ namespace Castle.Components.Validator
 			throw new NotSupportedException("You must call Build with a type parameter");
 		}
 
+		/// <summary>
+		/// Constructs and configures an <see cref="IValidator"/>
+		/// instance based on the properties set on the attribute instance.
+		/// </summary>
+		/// <param name="validatorRunner"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		public override IValidator Build(ValidatorRunner validatorRunner, Type type)
 		{
 			GroupNotEmptyValidator validator = (GroupNotEmptyValidator)

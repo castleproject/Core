@@ -51,6 +51,10 @@ namespace Castle.Components.Validator
 			get { return false; }
 		}
 
+		/// <summary>
+		/// Returns the key used to internationalize error messages
+		/// </summary>
+		/// <value></value>
 		protected override string MessageKey
 		{
 			get { return MessageConstants.CollectionNotEmpty; }

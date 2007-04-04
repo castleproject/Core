@@ -50,6 +50,11 @@ namespace Castle.Components.Validator
 			type2Validator[typeof(DateTime)] = typeof(DateTimeValidator);
 		}
 
+		/// <summary>
+		/// Gets the extended properties, which allows <see cref="IValidator"/> 
+		/// implementation to store additional information to track state.
+		/// </summary>
+		/// <value>The extended properties.</value>
 		public IDictionary ExtendedProperties
 		{
 			get { return extendedProperties; }

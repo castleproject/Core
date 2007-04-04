@@ -33,10 +33,13 @@ namespace Castle.Components.Validator
 		private string friendlyName;
 		private string groupName;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GroupNotEmptyValidator"/> class.
+		/// </summary>
+		/// <param name="groupName">Name of the group.</param>
 		public GroupNotEmptyValidator(string groupName)
 		{
 			this.groupName = groupName;
-			friendlyName = friendlyName;
 		}
 
 		/// <summary>

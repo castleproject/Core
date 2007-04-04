@@ -54,11 +54,19 @@ namespace Castle.Components.Validator
 			get { return false; }
 		}
 
+		/// <summary>
+		/// Returns the key used to internationalize error messages
+		/// </summary>
+		/// <value></value>
 		protected override string MessageKey
 		{
 			get { return MessageConstants.NotSameAsMessage; }
 		}
 
+		/// <summary>
+		/// Builds the error message.
+		/// </summary>
+		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
 			return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.NotSameAsMessage), value);
