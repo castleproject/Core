@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="collection_not_empty" xml:space="preserve">
+    <value>Verzameling mag niet leeg zijn</value>
+  </data>
   <data name="date_invalid" xml:space="preserve">
     <value>Vul s.v.p. een geldige datum in</value>
   </data>
@@ -135,6 +138,12 @@
   <data name="generic_invalid" xml:space="preserve">
     <value>Veld bevat een ongeldige waarde</value>
   </data>
+  <data name="group_not_empty_invalid" xml:space="preserve">
+    <value>Minimaal een van de waarden in ({0}) moet gevuld zijn</value>
+  </data>
+  <data name="group_not_empty_seperator" xml:space="preserve">
+    <value>, </value>
+  </data>
   <data name="integer_invalid" xml:space="preserve">
     <value>Voer een geldig geheel getal in s.v.p.</value>
   </data>
@@ -149,6 +158,21 @@
   </data>
   <data name="length_tooshort" xml:space="preserve">
     <value>Veld moet meer dan {0} tekens bevatten</value>
+  </data>
+  <data name="range_invalid" xml:space="preserve">
+    <value>Veld moet een waarde tussen {0} en {1} bevatten</value>
+  </data>
+  <data name="not_same_as_invalid" xml:space="preserve">
+    <value>Veld mag niet gelijk zijn aan '{0}'</value>
+  </data>
+  <data name="range_toohigh" xml:space="preserve">
+    <value>Veld moet kleiner of gelijk zijn aan {0}</value>
+  </data>
+  <data name="range_toohighorlow" xml:space="preserve">
+    <value>Veld moet een waarde tussen {0} en {1} bevatten</value>
+  </data>
+  <data name="range_toolow" xml:space="preserve">
+    <value>Veld moet groter of gelijk zijn aan {0}</value>
   </data>
   <data name="same_as_invalid" xml:space="preserve">
     <value>Velden komen niet overeen</value>
