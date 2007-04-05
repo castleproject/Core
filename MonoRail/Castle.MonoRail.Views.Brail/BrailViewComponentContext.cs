@@ -139,7 +139,16 @@ namespace Castle.MonoRail.Views.Brail
 		public void RegisterSection(string name, ICallable section)
 		{
 			if (sections == null)
-				sections = new Hashtable();
+			{
+				sections = new Hashtable(
+#if DOTNET2
+				System.StringComparer.InvariantCultureIgnoreCase
+#else
+				CaseInsensitiveHashCodeProvider.Default,
+				CaseInsensitiveComparer.Default
+#endif
+);
+			}
 			sections[name] = section;
 		}
 	}
