@@ -680,7 +680,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			writer.WriteBeginTag("label");
 			writer.WriteAttribute("for", id);
-			writer.Write(GetAttributes(attributes)); 
+			string strAttributes = GetAttributes(attributes);
+			if (strAttributes != String.Empty) writer.Write(HtmlTextWriter.SpaceChar);
+
+			writer.Write(strAttributes); 
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.Write(label);
 			writer.WriteEndTag("label");

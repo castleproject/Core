@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 #if DOTNET2
 	using System.Collections.Generic;
 #endif
+	using System.Collections.Specialized;
 	using System.Globalization;
 	using System.IO;
 	using System.Threading;
@@ -243,6 +244,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.LabelFor("product.name", "Name:"));
 		}
 
+		[Test]
+		public void LabelForAttributed()
+		{
+			IDictionary attrs = new ListDictionary();
+			attrs.Add("class", "cssclass");
+			Assert.AreEqual("<label for=\"product_name\" class=\"cssclass\" >Name:</label>",
+			                helper.LabelFor("product.name", "Name:",attrs));
+		}
 		[Test]
 		public void TextFieldWithIndex()
 		{
