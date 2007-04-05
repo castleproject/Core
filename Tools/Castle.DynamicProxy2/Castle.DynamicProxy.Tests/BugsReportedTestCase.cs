@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.InteropServices;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy.Tests.BugsReported;
 using NUnit.Framework;
@@ -82,14 +83,33 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("Need to discuss why we are calling interf.GetGenericArguments() in class emitter")]
 		public void DYNPROXY_51_GenericMarkerInterface()
 		{
 			ProxyGenerator gen = new ProxyGenerator();
 			WithMixin p = (WithMixin)gen.CreateClassProxy(typeof(WithMixin), new Type[] { typeof(Marker<int>) }, new IInterceptor[0]);
 			p.Method();
-
 		}
+
+		[Test]
+		public void ProxyingInterfaceWithComImport()
+		{
+			ProxyGenerator generator = new ProxyGenerator();
+
+			IHTMLEventObj2 proxy = (IHTMLEventObj2)
+									generator.CreateInterfaceProxyWithoutTarget(typeof(IHTMLEventObj2),
+																			 new SkipCallingMethodInterceptor());
+
+			Assert.IsNotNull(proxy);
+
+	
+		}
+	}
+
+	[ComImport, Guid("3050F48B-98B5-11CF-BB82-00AA00BDCE0B")]
+	public interface IHTMLEventObj2
+	{
+		
+	
 	}
 
 	public interface IRepository<TEntity, TKey>
