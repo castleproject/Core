@@ -1,4 +1,6 @@
 
+- Added test case supplied by chris ortman
+
 - Register base logger and factory when using extended logger.
 
 - Fixed FACILITIES-77

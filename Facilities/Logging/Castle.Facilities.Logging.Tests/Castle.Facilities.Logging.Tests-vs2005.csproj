@@ -143,6 +143,7 @@
     </Compile>
     <Compile Include="ExtendedNLogFacilityTests.cs" />
     <Compile Include="ExtendedLog4NetFacilityTests.cs" />
+    <Compile Include="Facilities77.cs" />
     <Compile Include="NullFacitlyTest.cs" />
     <Compile Include="Log4NetFacilityTests.cs">
       <SubType>Code</SubType>
