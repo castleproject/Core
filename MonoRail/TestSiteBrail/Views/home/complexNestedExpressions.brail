@@ -1,0 +1,4 @@
+${Html.LinkToAttributed( title ,@customers, @list, {
+	@onclick: "paginate(${pageIndex})" 
+	}
+)}

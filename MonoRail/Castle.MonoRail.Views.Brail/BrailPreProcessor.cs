@@ -119,14 +119,38 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (code.Length == 0)
 				return;
-			//This remove double quotes from ${}
-			code = RemoveDoubleQuotesFromExpressions(code);
-			buffer.WriteLine();
-			buffer.Write("output \"\"\"");
-			//This remove inital and closing double quotes from text
 			code = EscapeInitialAndClosingDoubleQuotes(code);
+			IList<ExpressionPosition> expressions = GetExpressionsPositions(code);
+			if(expressions.Count==0)
+			{
+				OutputText(buffer, code);
+				return;
+			}
+
+			int start = 0;
+			foreach(ExpressionPosition position in expressions)
+			{
+				string text = code.Substring(start, position.Start - start);
+				OutputText(buffer, text);
+				string expression = code.Substring(position.Start+2, position.End - (position.Start+2));
+				OutputExpression(buffer,expression);
+				start = position.End + 1;
+			}
+			string remainingText = code.Substring(start, code.Length-start);
+			OutputText(buffer, remainingText);
+		}
+
+		private static void OutputText(StringWriter buffer, string code)
+		{
+			buffer.Write("output \"\"\"");
 			buffer.Write(code);
 			buffer.WriteLine("\"\"\"");
+		}
+
+		private static void OutputExpression(StringWriter buffer, string code)
+		{
+			buffer.Write("output ");
+			buffer.WriteLine(code);
 		}
 
 		private static string EscapeInitialAndClosingDoubleQuotes(string code)
@@ -139,51 +163,40 @@ namespace Castle.MonoRail.Views.Brail
 		}
 
 		/// <summary>
-		/// This will replace any " inside a ${ } expressions with a ', because it breaks the parser
-		/// otherwise.
-		/// This is a very stupid scanner, but it is replacing a regex that had performance issues.
+		/// Will find all the (outer most ${} expressions in the code, and return their positions).
+		/// Smart enough to figure out $${} escaping, but not much more
 		/// </summary>
-		/// <param name="code"></param>
-		private static string RemoveDoubleQuotesFromExpressions(string code)
+		private static IList<ExpressionPosition> GetExpressionsPositions(string code)
 		{
-			Stack<BrachMatchingInfo> bracesPositions = new Stack<BrachMatchingInfo>();
-			bool prevCharWasDollary = false;
+			List<ExpressionPosition> bracesPositions = new List<ExpressionPosition>();
+			bool prevCharWasDollar = false;
 			for(int index = 0; index < code.Length; index++)
 			{
-				if (code[index] == '{')
+				bool notInsideAnExpression = bracesPositions.Count==0 || 
+					bracesPositions[bracesPositions.Count-1].End!=-1;
+				if (code[index] == '{' && prevCharWasDollar && notInsideAnExpression)
 				{
-					bracesPositions.Push(new BrachMatchingInfo(index, -1, prevCharWasDollary));
+					bracesPositions.Add(new ExpressionPosition(index -1 , -1));
 				}
 				// Note that here there is an implicit check for ${   }   }
 				// it will match the last }
 				if (code[index] == '}' && bracesPositions.Count > 0)
 				{
-					bracesPositions.Peek().End = index;
+					bracesPositions[bracesPositions.Count-1].End = index;
 				}
-				prevCharWasDollary = code[index] == '$';
+				//handles escaping expressions with $$ as well
+				prevCharWasDollar = code[index] == '$' && !prevCharWasDollar ;
 			}
-			if (bracesPositions.Count == 0)
-				return code;
-			StringBuilder sb = new StringBuilder(code);
-			foreach(BrachMatchingInfo matchingInfo in bracesPositions)
-			{
-				//probably a malf-formed expression, or not part of an ${ }, we will ignore that and let
-				// the parser shout at the user
-				if (matchingInfo.End == -1 || matchingInfo.PrevCharWasDollar == false)
-					continue;
-				sb.Replace('"', '\'', matchingInfo.Start, matchingInfo.End - matchingInfo.Start);
-			}
-			return sb.ToString();
+			return bracesPositions;
 		}
 
-		private class BrachMatchingInfo
+		private class ExpressionPosition
 		{
 			private int start, end;
 
 			public int Start
 			{
 				get { return start; }
-				set { start = value; }
 			}
 
 			public int End
@@ -192,20 +205,12 @@ namespace Castle.MonoRail.Views.Brail
 				set { end = value; }
 			}
 
-			public bool PrevCharWasDollar
-			{
-				get { return prevCharWasDollar; }
-				set { prevCharWasDollar = value; }
-			}
-
-			public BrachMatchingInfo(int start, int end, bool prevCharWasDollar)
+			public ExpressionPosition(int start, int end)
 			{
 				this.start = start;
 				this.end = end;
-				this.prevCharWasDollar = prevCharWasDollar;
 			}
 
-			private bool prevCharWasDollar;
 		}
 
 		private static DictionaryEntry GetSeperators(string code)

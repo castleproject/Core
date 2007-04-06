@@ -35,11 +35,11 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			string script = Path.Combine(GetPhysicalDir(), @"Views\AppPath\Index.brail");
 			string newContent = "new content";
 			string old;
-			using(TextReader read = File.OpenText(script))
+			using (TextReader read = File.OpenText(script))
 			{
 				old = read.ReadToEnd();
 			}
-			using(TextWriter write = File.CreateText(script))
+			using (TextWriter write = File.CreateText(script))
 			{
 				write.Write(newContent);
 			}
@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			}
 			finally
 			{
-				using(TextWriter write = File.CreateText(script))
+				using (TextWriter write = File.CreateText(script))
 				{
 					write.Write(old);
 				}
@@ -80,7 +80,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			string common = Path.Combine(GetPhysicalDir(), @"Views\CommonScripts\Hello.brail");
 			string old;
-			using(TextReader read = File.OpenText(common))
+			using (TextReader read = File.OpenText(common))
 			{
 				old = read.ReadToEnd();
 			}
@@ -88,7 +88,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 def SayHello(name as string):
 	return 'Hello, '+name+'! Modified!' 
 end";
-			using(TextWriter write = File.CreateText(common))
+			using (TextWriter write = File.CreateText(common))
 			{
 				write.Write(@new);
 			}
@@ -103,7 +103,7 @@ end";
 			}
 			finally
 			{
-				using(TextWriter write = File.CreateText(common))
+				using (TextWriter write = File.CreateText(common))
 				{
 					write.Write(old);
 				}
@@ -118,14 +118,14 @@ end";
 		{
 			string layout = Path.Combine(GetPhysicalDir(), @"Views\layouts\defaultlayout.brail");
 			string old;
-			using(TextReader read = File.OpenText(layout))
+			using (TextReader read = File.OpenText(layout))
 			{
 				old = read.ReadToEnd();
 			}
 			string newLayout = @"start modified
 ${ChildOutput}
 end";
-			using(TextWriter write = File.CreateText(layout))
+			using (TextWriter write = File.CreateText(layout))
 			{
 				write.Write(newLayout);
 			}
@@ -140,7 +140,7 @@ end";
 			}
 			finally
 			{
-				using(TextWriter write = File.CreateText(layout))
+				using (TextWriter write = File.CreateText(layout))
 				{
 					write.Write(old);
 				}
@@ -173,6 +173,14 @@ end";
 		{
 			string expected = "Using Udp without namespace, since it is in the web.config\r\n";
 			DoGet("home/namespacesInConfig.rails");
+			AssertReplyEqualTo(expected);
+		}
+
+		[Test]
+		public void ComplexNestedExpressions()
+		{
+			string expected = "<a href=\"/customers/list.rails\" onclick=\"paginate(5)\" >first</a>";
+			DoGet("home/complexNestedExpressions.rails");
 			AssertReplyEqualTo(expected);
 		}
 	}

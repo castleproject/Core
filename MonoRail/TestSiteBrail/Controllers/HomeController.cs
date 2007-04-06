@@ -31,6 +31,12 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
             this.PropertyBag.Add("List", textArray1);
         }
 
+		public void ComplexNestedExpressions()
+		{
+			PropertyBag["title"] = "first";
+			PropertyBag["pageIndex"] = 5;
+		}
+
         public void Bag2()
         {
             this.PropertyBag.Add("CustomerName", "hammett");
