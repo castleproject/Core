@@ -183,5 +183,15 @@ end";
 			DoGet("home/complexNestedExpressions.rails");
 			AssertReplyEqualTo(expected);
 		}
+
+		[Test]
+		public void OutputSubViewInDiv()
+		{
+			string expected = @"<div>
+Contents for heyhello View
+</div>";
+			DoGet("home/subview.rails");
+			AssertReplyEqualTo(expected);
+		}
 	}
 }

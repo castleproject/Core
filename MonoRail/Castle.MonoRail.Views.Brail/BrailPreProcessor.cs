@@ -108,7 +108,7 @@ namespace Castle.MonoRail.Views.Brail
 				lastIndex = code.IndexOf(end, startReading);
 				if (lastIndex == -1)
 					throw new RailsException("expected " + end);
-				buffer.Write(code.Substring(startReading, lastIndex - startReading));
+				buffer.WriteLine(code.Substring(startReading, lastIndex - startReading));
 				lastIndex += end.Length;
 			}
 			Output(buffer, code.Substring(lastIndex));
