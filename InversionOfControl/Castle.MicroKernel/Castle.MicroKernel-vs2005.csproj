@@ -90,6 +90,7 @@
     <Compile Include="ComponentActivator\ComponentActivatorException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ComponentActivator\DecomissioningResponsibility.cs" />
     <Compile Include="ComponentActivator\DefaultComponentActivator.cs">
       <SubType>Code</SubType>
     </Compile>

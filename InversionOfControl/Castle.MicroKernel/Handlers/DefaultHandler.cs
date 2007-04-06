@@ -46,7 +46,9 @@ namespace Castle.MicroKernel.Handlers
 				AssertNotWaitingForDependency();
 			}
 
-			return lifestyleManager.Resolve(context);
+			object instance = lifestyleManager.Resolve(context);
+
+			return instance;
 		}
 
 		/// <summary>

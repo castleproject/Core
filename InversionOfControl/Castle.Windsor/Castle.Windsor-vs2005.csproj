@@ -113,9 +113,6 @@
     <Compile Include="Adapters\ComponentModel\ServiceCreatorCallbackActivator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AsyncInitializationContainer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Configuration\AppDomain\CastleSectionHandler.cs">
       <SubType>Code</SubType>
     </Compile>

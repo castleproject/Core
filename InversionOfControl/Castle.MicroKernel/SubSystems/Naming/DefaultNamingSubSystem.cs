@@ -29,7 +29,6 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// Map(String, IHandler) to map component keys
 		/// to <see cref="IHandler"/>
 		/// </summary>
-		[NonSerialized] 
 		protected IDictionary key2Handler;
 
 		/// <summary>
@@ -37,6 +36,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// to <see cref="IHandler"/>
 		/// </summary>
 		protected IDictionary service2Handler;
+
+		private object locker = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultNamingSubSystem"/> class.
@@ -53,69 +54,92 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		{
 			Type service = handler.ComponentModel.Service;
 
-			if (key2Handler.Contains(key))
+			lock(locker)
 			{
-				throw new ComponentRegistrationException(
-					String.Format("There is a component already registered for the given key {0}", key));
+				if (key2Handler.Contains(key))
+				{
+					throw new ComponentRegistrationException(
+						String.Format("There is a component already registered for the given key {0}", key));
+				}
+
+				if (!service2Handler.Contains(service))
+				{
+					this[service] = handler;
+				}
+
+				this[key] = handler;
 			}
 
-			if (!service2Handler.Contains(service))
-			{
-				this[service] = handler;
-			}
-
-			this[key] = handler;
 		}
 
 		public virtual bool Contains(String key)
 		{
-			return key2Handler.Contains(key);
+			lock(locker)
+			{
+				return key2Handler.Contains(key);
+			}
 		}
 
 		public virtual bool Contains(Type service)
 		{
-			if (service2Handler.Contains(service))
+			lock(locker)
 			{
-				return true;
+				return service2Handler.Contains(service);
 			}
-
-			return false;
 		}
 
 		public virtual void UnRegister(String key)
 		{
-			key2Handler.Remove(key);
+			lock (locker)
+			{
+				key2Handler.Remove(key);
+			}
 		}
 
 		public virtual void UnRegister(Type service)
 		{
-			service2Handler.Remove(service);
+			lock(locker)
+			{
+				service2Handler.Remove(service);
+			}
 		}
 
 		public virtual int ComponentCount
 		{
-			get { return key2Handler.Count; }
+			get
+			{
+				lock(locker)
+				{
+					return key2Handler.Count;
+				}
+			}
 		}
 
 		public virtual IHandler GetHandler(String key)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 
-			return key2Handler[key] as IHandler;
+			lock (locker)
+			{
+				return key2Handler[key] as IHandler;
+			}
 		}
 
 		public virtual IHandler[] GetHandlers(String query)
 		{
-			return new IHandler[0];
+			throw new NotImplementedException();
 		}
 
 		public virtual IHandler GetHandler(Type service)
 		{
 			if (service == null) throw new ArgumentNullException("service");
 
-			IHandler handler = service2Handler[service] as IHandler;
+			lock (locker)
+			{
+				IHandler handler = service2Handler[service] as IHandler;
 
-			return handler;
+				return handler;
+			}
 		}
 
 		public virtual IHandler GetHandler(String key, Type service)
@@ -123,9 +147,12 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			if (key == null) throw new ArgumentNullException("key");
 			if (service == null) throw new ArgumentNullException("service");
 
-			IHandler handler = key2Handler[key] as IHandler;
+			lock (locker)
+			{
+				IHandler handler = key2Handler[key] as IHandler;
 
-			return handler;
+				return handler;
+			}
 		}
 
 		public virtual IHandler[] GetHandlers(Type service)
@@ -151,7 +178,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			ArrayList list = new ArrayList();
 
-			foreach(IHandler handler in this.GetHandlers())
+			foreach(IHandler handler in GetHandlers())
 			{
 				if (service.IsAssignableFrom(handler.ComponentModel.Service))
 				{
@@ -164,26 +191,41 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public virtual IHandler[] GetHandlers()
 		{
-			IHandler[] list = new IHandler[key2Handler.Values.Count];
-
-			int index = 0;
-
-			foreach(IHandler handler in key2Handler.Values)
+			lock (locker)
 			{
-				list[index++] = handler;
-			}
+				IHandler[] list = new IHandler[key2Handler.Values.Count];
 
-			return list;
+				int index = 0;
+
+				foreach(IHandler handler in key2Handler.Values)
+				{
+					list[index++] = handler;
+				}
+
+				return list;
+			}
 		}
 
 		public virtual IHandler this[Type service]
 		{
-			set { service2Handler[service] = value; }
+			set
+			{
+				lock(locker)
+				{
+					service2Handler[service] = value;
+				}
+			}
 		}
 
 		public virtual IHandler this[String key]
 		{
-			set { key2Handler[key] = value; }
+			set
+			{
+				lock (locker)
+				{
+					key2Handler[key] = value;
+				}
+			}
 		}
 
 		public IDictionary GetKey2Handler()

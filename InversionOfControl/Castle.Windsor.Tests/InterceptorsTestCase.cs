@@ -22,9 +22,6 @@ namespace Castle.Windsor.Tests
 	using Castle.Windsor.Tests.Components;
 	using NUnit.Framework;
 
-	/// <summary>
-	/// Summary description for InterceptorsTestCase.
-	/// </summary>
 	[TestFixture]
 	public class InterceptorsTestCase
 	{

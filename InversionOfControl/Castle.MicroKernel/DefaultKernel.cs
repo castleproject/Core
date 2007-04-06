@@ -17,6 +17,7 @@ namespace Castle.MicroKernel
 	using System;
 	using System.Reflection;
 	using System.Collections;
+	using System.Runtime.CompilerServices;
 	using System.Runtime.Serialization;
 
 	using Castle.Core;

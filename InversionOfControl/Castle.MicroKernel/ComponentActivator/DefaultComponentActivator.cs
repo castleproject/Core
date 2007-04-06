@@ -17,7 +17,6 @@ namespace Castle.MicroKernel.ComponentActivator
 	using System;
 	using System.Reflection;
 	using System.Runtime.Remoting;
-
 	using Castle.Core;
 	using Castle.Core.Interceptor;
 	using Castle.MicroKernel.LifecycleConcerns;
@@ -36,9 +35,17 @@ namespace Castle.MicroKernel.ComponentActivator
 	[Serializable]
 	public class DefaultComponentActivator : AbstractComponentActivator
 	{
-		public DefaultComponentActivator(ComponentModel model, IKernel kernel, 
-			ComponentInstanceDelegate onCreation, 
-			ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DefaultComponentActivator"/> class.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="kernel"></param>
+		/// <param name="onCreation"></param>
+		/// <param name="onDestruction"></param>
+		public DefaultComponentActivator(ComponentModel model, IKernel kernel,
+		                                 ComponentInstanceDelegate onCreation,
+		                                 ComponentInstanceDelegate onDestruction)
+			: base(model, kernel, onCreation, onDestruction)
 		{
 		}
 
@@ -57,7 +64,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected override void InternalDestroy(object instance)
 		{
-			ApplyDecommissionConcerns( instance );
+			ApplyDecommissionConcerns(instance);
 		}
 
 		#endregion
@@ -65,7 +72,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		protected virtual object Instantiate(CreationContext context)
 		{
 			ConstructorCandidate candidate = SelectEligibleConstructor(context);
-	
+
 			Type[] signature;
 			object[] arguments = CreateConstructorArguments(candidate, context, out signature);
 
@@ -80,7 +87,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			bool createProxy = Model.Interceptors.HasInterceptors;
 			bool createInstance = true;
-			
+
 			if (createProxy)
 			{
 				createInstance = Kernel.ProxyFactory.RequiresTargetInstance(Kernel, Model);
@@ -91,15 +98,16 @@ namespace Castle.MicroKernel.ComponentActivator
 				try
 				{
 					ConstructorInfo cinfo = implType.GetConstructor(
-							BindingFlags.Public | BindingFlags.Instance, null, signature, null);
+						BindingFlags.Public | BindingFlags.Instance, null, signature, null);
 
 					instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
 
 					cinfo.Invoke(instance, arguments);
 				}
-				catch (Exception ex)
+				catch(Exception ex)
 				{
-					throw new ComponentActivatorException("ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex);
+					throw new ComponentActivatorException(
+						"ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex);
 				}
 			}
 
@@ -114,7 +122,7 @@ namespace Castle.MicroKernel.ComponentActivator
 					throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex);
 				}
 			}
-			
+
 			return instance;
 		}
 
@@ -136,7 +144,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			foreach(ILifecycleConcern concern in steps)
 			{
-				concern.Apply( Model, instance );
+				concern.Apply(Model, instance);
 			}
 		}
 
@@ -156,11 +164,11 @@ namespace Castle.MicroKernel.ComponentActivator
 			ConstructorCandidate winnerCandidate = null;
 
 			int winnerPoints = 0;
-			
+
 			foreach(ConstructorCandidate candidate in Model.Constructors)
 			{
 				int candidatePoints = 0;
-				
+
 				foreach(DependencyModel dep in candidate.Dependencies)
 				{
 					if (CanSatisfyDependency(context, dep))
@@ -237,12 +245,14 @@ namespace Castle.MicroKernel.ComponentActivator
 
 				try
 				{
-					setMethod.Invoke(instance, new object[] { value });
+					setMethod.Invoke(instance, new object[] {value});
 				}
 				catch(Exception ex)
 				{
-					String message = String.Format("Error setting property {0} on type {1}, Component id is {2}. See inner exception for more information.", 
-					                               setMethod.Name, instance.GetType().FullName, Model.Name);
+					String message =
+						String.Format(
+							"Error setting property {0} on type {1}, Component id is {2}. See inner exception for more information.",
+							setMethod.Name, instance.GetType().FullName, Model.Name);
 					throw new ComponentActivatorException(message, ex);
 				}
 			}
@@ -259,7 +269,7 @@ namespace Castle.MicroKernel.ComponentActivator
 					instance = accessor.DynProxyGetTarget();
 				}
 			}
-			
+
 			return instance;
 		}
 	}

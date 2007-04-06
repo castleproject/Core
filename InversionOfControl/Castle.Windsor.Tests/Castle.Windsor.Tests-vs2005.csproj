@@ -121,9 +121,6 @@
     <Compile Include="Adapters\ComponentModel\TestComponent.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AsyncInitializationContainerTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ChildContainerSupportTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -139,6 +136,7 @@
     </Compile>
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\CircularDependencyComponents.cs" />
+    <Compile Include="Components\ComponentWithConfigs.cs" />
     <Compile Include="Components\ComponentWithProperties.cs" />
     <Compile Include="Components\ComponentWithStringProperty.cs" />
     <Compile Include="Components\CalculatorServiceWithProxyBehavior.cs" />
@@ -183,6 +181,7 @@
     <Compile Include="Configuration2\Properties\PropertiesTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration2\SynchronizationProblemTestCase.cs" />
     <Compile Include="Configuration\AppDomainConfigurationStoreTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -321,6 +320,7 @@
     <None Include="App.config" />
     <EmbeddedResource Include="Configuration2\env_config.xml" />
     <EmbeddedResource Include="Configuration2\eval_config.xml" />
+    <Content Include="Configuration2\synchtest_config.xml" />
     <Content Include="IOC-51.xml" />
     <Content Include="Proxy\proxyBehaviorInvalidConfig.xml" />
     <Content Include="Proxy\proxyBehavior.xml" />

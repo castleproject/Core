@@ -16,6 +16,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 	using System.Collections;
+	using System.Threading;
 	using Castle.Core;
 	using Castle.Core.Configuration;
 
@@ -25,9 +26,9 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	[Serializable]
 	public class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 	{
+		private static LocalDataStoreSlot slot = Thread.AllocateDataSlot();
 		private IList converters;
 		private IList standAloneConverters;
-		private Stack modelStack = new Stack();
 
 		public DefaultConversionManager()
 		{
@@ -151,20 +152,20 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public void PushModel(ComponentModel model)
 		{
-			modelStack.Push(model);
+			CurrentStack.Push(model);
 		}
 
 		public void PopModel()
 		{
-			modelStack.Pop();
+			CurrentStack.Pop();
 		}
 
 		public ComponentModel CurrentModel
 		{
 			get
 			{
-				if (modelStack.Count == 0) return null;
-				else return (ComponentModel) modelStack.Peek();
+				if (CurrentStack.Count == 0) return null;
+				else return (ComponentModel) CurrentStack.Peek();
 			}
 		}
 
@@ -174,5 +175,21 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		}
 
 		#endregion
+
+		private Stack CurrentStack
+		{
+			get
+			{
+				Stack stack = (Stack) Thread.GetData(slot);
+
+				if (stack == null)
+				{
+					stack = new Stack();
+					Thread.SetData(slot, stack);
+				}
+
+				return stack;
+			}
+		}
 	}
 }
