@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.IO;
-	
+
 	using Castle.Core;
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
@@ -32,13 +32,13 @@ namespace Castle.MonoRail.Framework
 		private String viewRootDir;
 		private bool enableCache = true;
 		private FileSystemWatcher viewFolderWatcher;
-		
+
 		#region IServiceEnabledComponent implementation
 
 		public void Service(IServiceProvider provider)
 		{
-			MonoRailConfiguration config = (MonoRailConfiguration) provider.GetService(typeof(MonoRailConfiguration));
-			
+			MonoRailConfiguration config = (MonoRailConfiguration)provider.GetService(typeof(MonoRailConfiguration));
+
 			if (config != null)
 			{
 				viewRootDir = config.ViewEngineConfig.ViewPathRoot;
@@ -88,7 +88,7 @@ namespace Castle.MonoRail.Framework
 			CollectViewsOnFileSystem(dirName, views);
 			CollectViewsOnAssemblies(dirName, views);
 
-			return (String[]) views.ToArray(typeof(String));
+			return (String[])views.ToArray(typeof(String));
 		}
 
 		/// <summary>
@@ -126,7 +126,7 @@ namespace Castle.MonoRail.Framework
 			{
 				//avoid concurrency problems with creating/removing the watcher
 				//in two threads in parallel. Unlikely, but better to be safe.
-				lock(this)
+				lock (this)
 				{
 					//create the watcher if it doesn't exists
 					if (viewFolderWatcher == null)
@@ -140,7 +140,7 @@ namespace Castle.MonoRail.Framework
 			{
 				//avoid concurrency problems with creating/removing the watcher
 				//in two threads in parallel. Unlikely, but better to be safe.
-				lock(this)
+				lock (this)
 				{
 					ViewChangedImpl -= value;
 					if (ViewChangedImpl == null)//no more subscribers.
@@ -152,7 +152,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		private event FileSystemEventHandler ViewChangedImpl;
-		
+
 		private void DisposeViewFolderWatch()
 		{
 			ViewChangedImpl -= new FileSystemEventHandler(viewFolderWatcher_Changed);
@@ -161,17 +161,12 @@ namespace Castle.MonoRail.Framework
 
 		private void InitViewFolderWatch()
 		{
-			
+
 			viewFolderWatcher = new FileSystemWatcher(ViewRootDir);
-			//need all of those because VS likes to play games
-			//with the way it is saving files.
-			viewFolderWatcher.NotifyFilter = NotifyFilters.CreationTime |
-			                                 NotifyFilters.DirectoryName |
-			                                 NotifyFilters.FileName |
-			                                 NotifyFilters.LastWrite |
-			                                 NotifyFilters.Size;
 			viewFolderWatcher.IncludeSubdirectories = true;
 			viewFolderWatcher.Changed += new FileSystemEventHandler(viewFolderWatcher_Changed);
+			viewFolderWatcher.Created += new FileSystemEventHandler(viewFolderWatcher_Changed);
+			viewFolderWatcher.Deleted += new FileSystemEventHandler(viewFolderWatcher_Changed);
 			viewFolderWatcher.EnableRaisingEvents = true;
 		}
 
@@ -185,7 +180,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#endregion
-		
+
 		private bool HasTemplateOnFileSystem(string templateName)
 		{
 			return CreateFileInfo(templateName).Exists;
@@ -203,7 +198,7 @@ namespace Castle.MonoRail.Framework
 
 		private bool HasTemplateOnAssemblies(string templateName)
 		{
-			foreach(AssemblySourceInfo sourceInfo in additionalSources)
+			foreach (AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				if (sourceInfo.HasTemplate(templateName))
 				{
@@ -216,7 +211,7 @@ namespace Castle.MonoRail.Framework
 
 		private IViewSource GetStreamFromAdditionalSources(string templateName)
 		{
-			foreach(AssemblySourceInfo sourceInfo in additionalSources)
+			foreach (AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				if (sourceInfo.HasTemplate(templateName))
 				{
@@ -230,10 +225,10 @@ namespace Castle.MonoRail.Framework
 		private void CollectViewsOnFileSystem(string dirName, ArrayList views)
 		{
 			DirectoryInfo dir = new DirectoryInfo(Path.Combine(ViewRootDir, dirName));
-	
+
 			if (dir.Exists)
 			{
-				foreach(FileInfo file in dir.GetFiles("*.*"))
+				foreach (FileInfo file in dir.GetFiles("*.*"))
 				{
 					views.Add(Path.Combine(dirName, file.Name));
 				}
@@ -242,7 +237,7 @@ namespace Castle.MonoRail.Framework
 
 		private void CollectViewsOnAssemblies(string dirName, ArrayList views)
 		{
-			foreach(AssemblySourceInfo sourceInfo in additionalSources)
+			foreach (AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				sourceInfo.CollectViews(dirName, views);
 			}

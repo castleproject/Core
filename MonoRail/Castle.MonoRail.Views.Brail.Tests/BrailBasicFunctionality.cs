@@ -29,10 +29,10 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertReplyEqualTo("Current apppath is ");
 		}
 
-		[Test, Ignore("Sometimes fail, but the functionality is working.")]
+		[Test]
 		public void AppPathChangeOnTheFly()
 		{
-			string script = Path.Combine(GetPhysicalDir(), @"Views\AppPath\Index.boo");
+			string script = Path.Combine(GetPhysicalDir(), @"Views\AppPath\Index.brail");
 			string newContent = "new content";
 			string old;
 			using(TextReader read = File.OpenText(script))
@@ -75,10 +75,10 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertReplyEqualTo(expected);
 		}
 
-		[Test, Ignore("Sometimes fail, but the functionality is working.")]
+		[Test]
 		public void CommonScriptsChangeOnTheFly()
 		{
-			string common = Path.Combine(GetPhysicalDir(), @"Views\CommonScripts\Hello.boo");
+			string common = Path.Combine(GetPhysicalDir(), @"Views\CommonScripts\Hello.brail");
 			string old;
 			using(TextReader read = File.OpenText(common))
 			{
@@ -86,7 +86,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			}
 			string @new = @"
 def SayHello(name as string):
-	return 'Hello, \${name}! Modified!' 
+	return 'Hello, '+name+'! Modified!' 
 end";
 			using(TextWriter write = File.CreateText(common))
 			{
@@ -112,6 +112,42 @@ end";
 			// might get the modified version.
 			Thread.Sleep(500);
 		}
+
+		[Test]
+		public void LayoutsChangeOnTheFly()
+		{
+			string layout = Path.Combine(GetPhysicalDir(), @"Views\layouts\defaultlayout.brail");
+			string old;
+			using(TextReader read = File.OpenText(layout))
+			{
+				old = read.ReadToEnd();
+			}
+			string newLayout = @"start modified
+${ChildOutput}
+end";
+			using(TextWriter write = File.CreateText(layout))
+			{
+				write.Write(newLayout);
+			}
+			string expected = @"start modified
+content
+end";
+			Thread.Sleep(500);
+			try
+			{
+				DoGet("defaultlayout/index.rails");
+				AssertReplyEqualTo(expected);
+			}
+			finally
+			{
+				using(TextWriter write = File.CreateText(layout))
+				{
+					write.Write(old);
+				}
+			}
+			Thread.Sleep(500);
+		}
+
 
 		[Test]
 		public void PreProcessor()
