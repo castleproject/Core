@@ -1991,7 +1991,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			if (left == null || right == null) return false;
 
-			if (left is string || right is String)
+			if (left is string && right is String)
 			{
 				return String.Compare(left.ToString(), right.ToString()) == 0;
 			}

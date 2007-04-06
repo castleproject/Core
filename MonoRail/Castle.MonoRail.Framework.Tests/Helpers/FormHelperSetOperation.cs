@@ -401,9 +401,14 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void SingleSelectionDifferentTypes()
 		{
+			CultureInfo en = CultureInfo.CreateSpecificCulture("pt-br");
+
+			Thread.CurrentThread.CurrentCulture = en;
+			Thread.CurrentThread.CurrentUICulture = en;
+
 			OperationState state = SetOperation.IterateOnDataSource(
 				(decimal?) 1.5,
-				new string[] { "1", "1.5", "2" }, null);
+				new string[] { "1", "1,5", "2" }, null);
 			Assert.IsNotNull(state);
 			Assert.IsTrue(state is DifferentTypeOperationState);
 
@@ -420,8 +425,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				if (index == 1)
 				{
 					Assert.IsTrue(item.IsSelected);
-					Assert.AreEqual("1.5", item.Text);
-					Assert.AreEqual("1.5", item.Value);
+					Assert.AreEqual("1,5", item.Text);
+					Assert.AreEqual("1,5", item.Value);
 				}
 				else
 				{
