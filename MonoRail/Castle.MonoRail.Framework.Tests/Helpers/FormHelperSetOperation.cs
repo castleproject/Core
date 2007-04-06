@@ -395,6 +395,45 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsTrue(iterated);
 		}
 
+		/// <summary>
+		/// The target is a decimal while the data source is an array of strings
+		/// </summary>
+		[Test]
+		public void SingleSelectionDifferentTypes()
+		{
+			OperationState state = SetOperation.IterateOnDataSource(
+				(decimal?) 1.5,
+				new string[] { "1", "1.5", "2" }, null);
+			Assert.IsNotNull(state);
+			Assert.IsTrue(state is DifferentTypeOperationState);
+
+			bool iterated = false;
+			int index = 0;
+
+			foreach(SetItem item in state)
+			{
+				iterated = true;
+
+				Assert.IsNotNull(item.Text);
+				Assert.IsNotNull(item.Value);
+
+				if (index == 1)
+				{
+					Assert.IsTrue(item.IsSelected);
+					Assert.AreEqual("1.5", item.Text);
+					Assert.AreEqual("1.5", item.Value);
+				}
+				else
+				{
+					Assert.IsFalse(item.IsSelected);
+				}
+
+				index++;
+			}
+
+			Assert.IsTrue(iterated);
+		}
+
 		[Test]
 		public void MultipleValuesInitialSet_DifferentTypes_Primitive_NoNameMatching()
 		{
