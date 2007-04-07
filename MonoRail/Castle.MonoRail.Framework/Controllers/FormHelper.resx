@@ -124,7 +124,7 @@ function monorail_formhelper_numberonly(e, exceptions, forbidalso)
 	exceptions = exceptions.concat([8,9,13,38,39,40,46]);
 	var code = e.charCode;
 	if (!code) code = e.keyCode;
-	if ((e.ctrlKey && code == 118) || (e.ctrlKey && code == 122))
+	if ((e.ctrlKey &amp;&amp; code == 118) || (e.ctrlKey &amp;&amp; code == 122))
 	{
 		return false;
 	}
