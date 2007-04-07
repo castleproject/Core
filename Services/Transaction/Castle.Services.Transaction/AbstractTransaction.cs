@@ -190,6 +190,10 @@ namespace Castle.Services.Transaction
 			}
 		}
 
+		public virtual void SetRollbackOnly()
+		{
+		}
+
 		public TransactionStatus Status
 		{
 			get { return state; }

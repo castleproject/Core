@@ -116,6 +116,13 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 
 	public class MockTransaction : AbstractTransaction
 	{
+		private bool rollbackOnly;
+
+		public override void SetRollbackOnly()
+		{
+			rollbackOnly = true;
+		}
+
 		public override bool IsChildTransaction
 		{
 			get { return false; }
@@ -123,7 +130,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 
 		public override bool IsRollbackOnlySet
 		{
-			get { return false; }
+			get { return rollbackOnly; }
 		}
 	}
 }

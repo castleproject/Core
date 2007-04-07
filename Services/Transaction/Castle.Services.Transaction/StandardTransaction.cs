@@ -62,7 +62,7 @@ namespace Castle.Services.Transaction
 		{
 			if (rollbackOnly)
 			{
-				throw new TransactionException("Can't commit as one of the child transactions rolledback");
+				throw new TransactionException("Can't commit as transaction was marked as 'rollback only'");
 			}
 
 			base.Commit();
@@ -77,18 +77,14 @@ namespace Castle.Services.Transaction
 			if (onTransactionRolledback != null) onTransactionRolledback(this);
 		}
 
+		public override void SetRollbackOnly()
+		{
+			rollbackOnly = true;
+		}
+
 		public override bool IsRollbackOnlySet
 		{
 			get { return rollbackOnly; }
-		}
-
-		/// <summary>
-		/// Invoked by child transactions, meaning that 
-		/// some sort of error has occured, so 
-		/// </summary>
-		public virtual void ChildTransactionRolledBack()
-		{
-			rollbackOnly = true;
 		}
 	}
 
@@ -120,12 +116,17 @@ namespace Castle.Services.Transaction
 		{
 			// Vote as rollback
 
-			_parent.ChildTransactionRolledBack();
+			_parent.SetRollbackOnly();
 		}
 
 		public override void Commit()
 		{
 			// Vote as commit
+		}
+
+		public override void SetRollbackOnly()
+		{
+			Rollback();
 		}
 
 		public override void RegisterSynchronization(ISynchronization synchronization)
@@ -146,11 +147,6 @@ namespace Castle.Services.Transaction
 		public override bool IsRollbackOnlySet
 		{
 			get { return _parent.IsRollbackOnlySet; }
-		}
-
-		public override void ChildTransactionRolledBack()
-		{
-			_parent.ChildTransactionRolledBack();
 		}
 	}
 }

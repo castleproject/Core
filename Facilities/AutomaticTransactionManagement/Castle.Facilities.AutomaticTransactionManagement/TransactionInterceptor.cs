@@ -109,21 +109,18 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 				{
 					invocation.Proceed();
 
-					if (transaction.Status == TransactionStatus.Active)
+					if (transaction.IsRollbackOnlySet)
 					{
-						if (transaction.IsRollbackOnlySet)
-						{
-							logger.DebugFormat("Rolling back transaction {0}", transaction.GetHashCode());
+						logger.DebugFormat("Rolling back transaction {0}", transaction.GetHashCode());
 
-							rolledback = true;
-							transaction.Rollback();
-						}
-						else
-						{
-							logger.DebugFormat("Committing back transaction {0}", transaction.GetHashCode());
+						rolledback = true;
+						transaction.Rollback();
+					}
+					else
+					{
+						logger.DebugFormat("Committing back transaction {0}", transaction.GetHashCode());
 
-							transaction.Commit();
-						}
+						transaction.Commit();
 					}
 				}
 				catch(TransactionException ex)

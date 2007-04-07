@@ -192,5 +192,34 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(3, transactionManager.CommittedCount);
 			Assert.AreEqual(0, transactionManager.RolledBackCount);
 		}
+
+		/// <summary>
+		/// Tests the situation where the class uses
+		/// ATM, but grab the transaction manager and rollbacks the 
+		/// transaction manually
+		/// </summary>
+		[Test]
+		public void RollBackExplicitOnClass()
+		{
+			WindsorContainer container = new WindsorContainer();
+
+			container.AddFacility("transactionmanagement", new TransactionFacility());
+
+			container.AddComponent("transactionmanager",
+								   typeof(ITransactionManager), typeof(MockTransactionManager));
+
+			container.AddComponent("mycomp", typeof(CustomerService));
+			
+			CustomerService serv = (CustomerService) container.Resolve("mycomp");
+
+			serv.Update(1);
+
+			MockTransactionManager transactionManager = (MockTransactionManager)
+												container["transactionmanager"];
+
+			Assert.AreEqual(1, transactionManager.TransactionCount);
+			Assert.AreEqual(1, transactionManager.RolledBackCount);
+			Assert.AreEqual(0, transactionManager.CommittedCount);
+		}
 	}
 }

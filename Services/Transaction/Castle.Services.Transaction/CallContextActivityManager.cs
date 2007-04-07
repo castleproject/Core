@@ -15,7 +15,7 @@
 namespace Castle.Services.Transaction
 {
 	using System;
-	using System.Threading;
+	using System.Runtime.Remoting.Messaging;
 
 	public class CallContextActivityManager : MarshalByRefObject, IActivityManager
 	{
@@ -27,7 +27,8 @@ namespace Castle.Services.Transaction
 		/// Initializes a new instance of the <see cref="CallContextActivityManager"/> class.
 		/// </summary>
 		public CallContextActivityManager()
-		{			
+		{
+			CallContext.SetData(Key, null);
 		}
 
 		#region MarshalByRefObject
@@ -58,12 +59,12 @@ namespace Castle.Services.Transaction
 			{
 				lock(lockObj)
 				{
-					Activity activity = (Activity)Thread.GetData(Thread.GetNamedDataSlot(Key));
+					Activity activity = (Activity) CallContext.GetData(Key);
 
 					if (activity == null)
 					{
-						activity = new Activity();						
-						Thread.SetData(Thread.GetNamedDataSlot(Key), activity);
+						activity = new Activity();
+						CallContext.SetData(Key, activity);
 					}
 
 					return activity;

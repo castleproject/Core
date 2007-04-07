@@ -53,6 +53,13 @@ namespace Castle.Services.Transaction
 		void Rollback();
 
 		/// <summary>
+		/// Signals that this transaction can only be rolledback. 
+		/// This is used when the transaction is not being managed by
+		/// the callee.
+		/// </summary>
+		void SetRollbackOnly();
+
+		/// <summary>
 		/// Returns the current transaction status.
 		/// </summary>
 		TransactionStatus Status { get; }

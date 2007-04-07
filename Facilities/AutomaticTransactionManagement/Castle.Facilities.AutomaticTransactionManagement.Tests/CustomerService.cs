@@ -15,8 +15,9 @@
 namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 {
 	using System;
-
+	using Castle.MicroKernel;
 	using Castle.Services.Transaction;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for CustomerService.
@@ -24,6 +25,13 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 	[Transactional]
 	public class CustomerService
 	{
+		private readonly IKernel kernel;
+
+		public CustomerService(IKernel kernel)
+		{
+			this.kernel = kernel;
+		}
+
 		[Transaction(TransactionMode.Requires)]
 		public virtual void Insert( String name, String address )
 		{
@@ -34,6 +42,19 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 		public virtual void Delete( int id )
 		{
 			throw new ApplicationException("Whopps. Problems!");
+		}
+
+		[Transaction]
+		public virtual void Update(int id)
+		{
+			ITransactionManager tm = (ITransactionManager) kernel[typeof(ITransactionManager)];
+
+			Assert.IsNotNull(tm.CurrentTransaction);
+			Assert.AreEqual(TransactionStatus.Active, tm.CurrentTransaction.Status);
+			
+			tm.CurrentTransaction.SetRollbackOnly();
+			
+			Assert.AreEqual(TransactionStatus.Active, tm.CurrentTransaction.Status);
 		}
 	}
 }
