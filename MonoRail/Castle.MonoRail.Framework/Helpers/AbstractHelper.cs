@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public abstract class AbstractHelper : IControllerAware
 	{
-		private const string MonoRailVersion = "RC3_0002";
+		private const string MonoRailVersion = "RC3_0003";
 
 		#region Controller Reference
 
