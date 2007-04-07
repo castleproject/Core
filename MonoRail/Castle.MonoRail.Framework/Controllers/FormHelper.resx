@@ -118,11 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="jsfunctions" xml:space="preserve">
-    <value>function monorail_formhelper_numberonly(e, exceptions, forbidalso)
+    <value>
+function monorail_formhelper_numberonly(e, exceptions, forbidalso)
 {
-	exceptions = exceptions.concat([8,9,13,37,38,39,40,46]);
+	exceptions = exceptions.concat([8,9,13,38,39,40,46]);
 	var code = e.charCode;
 	if (!code) code = e.keyCode;
+	if ((e.ctrlKey && code == 118) || (e.ctrlKey && code == 122))
+	{
+		return false;
+	}
 	if (e.ctrlKey || e.altKey) return true;
 	for(var i=0; i &lt; forbidalso.length; i++) if (forbidalso[i] == code) return false;
 	for(var i=0; i &lt; exceptions.length; i++) if (exceptions[i] == code) return true;
