@@ -70,13 +70,9 @@ namespace Castle.MonoRail.Framework.Services
 				
 				if (area == null) area = string.Empty;
 			}
-			else if (!parameters.Contains("controller"))
-			{
-				area = current.Area;
-			}
 			else
 			{
-				area = string.Empty;
+				area = current.Area;
 			}
 
 			string controller = CommonUtils.ObtainEntryAndRemove(parameters, "controller", current.Controller);
