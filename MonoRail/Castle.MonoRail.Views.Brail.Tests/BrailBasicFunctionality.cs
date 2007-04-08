@@ -185,6 +185,15 @@ end";
 		}
 
 		[Test]
+		public void ComplexNestedExpressions2()
+		{
+			string expected = "<a onclick=\"alert(5)\"  href=\"/customers/list.rails?page=5\">first</a>";
+			DoGet("home/complexNestedExpressions2.rails");
+			AssertReplyEqualTo(expected);
+		}
+
+
+		[Test]
 		public void OutputSubViewInDiv()
 		{
 			string expected = @"<div>

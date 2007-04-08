@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
@@ -46,21 +47,21 @@ namespace Castle.MonoRail.Views.Brail
 
 		public string GetInputCode(ICompilerInput input)
 		{
-			return (string) inputToCode[input];
+			return (string)inputToCode[input];
 		}
 
 		public override void Run()
 		{
 			ArrayList processed = new ArrayList();
-			foreach(ICompilerInput input in Parameters.Input)
+			foreach (ICompilerInput input in Parameters.Input)
 			{
 				//if input.Name.Contains("empty"):
 				//	System.Diagnostics.Debugger.Break()
-				using(TextReader reader = input.Open())
+				using (TextReader reader = input.Open())
 				{
 					string code = reader.ReadToEnd();
 					if (this.booViewEngine.ConditionalPreProcessingOnly(input.Name) == false ||
-					    ShouldPreProcess(code))
+						ShouldPreProcess(code))
 						code = Booify(code);
 					StringInput newInput = new StringInput(input.Name, code);
 					inputToCode.Add(input, code);
@@ -68,7 +69,7 @@ namespace Castle.MonoRail.Views.Brail
 				}
 			}
 			Parameters.Input.Clear();
-			foreach(StringInput input in processed)
+			foreach (StringInput input in processed)
 			{
 				Parameters.Input.Add(input);
 			}
@@ -76,7 +77,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		private bool ShouldPreProcess(string code)
 		{
-			foreach(DictionaryEntry entry in Seperators)
+			foreach (DictionaryEntry entry in Seperators)
 			{
 				if (code.Contains(entry.Key.ToString()))
 					return true;
@@ -98,7 +99,7 @@ namespace Castle.MonoRail.Views.Brail
 			start = seperators.Key.ToString();
 			end = seperators.Value.ToString();
 
-			while(index != -1)
+			while (index != -1)
 			{
 				index = code.IndexOf(start, lastIndex);
 				if (index == -1)
@@ -121,22 +122,22 @@ namespace Castle.MonoRail.Views.Brail
 				return;
 			code = EscapeInitialAndClosingDoubleQuotes(code);
 			IList<ExpressionPosition> expressions = GetExpressionsPositions(code);
-			if(expressions.Count==0)
+			if (expressions.Count == 0)
 			{
 				OutputText(buffer, code);
 				return;
 			}
 
 			int start = 0;
-			foreach(ExpressionPosition position in expressions)
+			foreach (ExpressionPosition position in expressions)
 			{
 				string text = code.Substring(start, position.Start - start);
 				OutputText(buffer, text);
-				string expression = code.Substring(position.Start+2, position.End - (position.Start+2));
-				OutputExpression(buffer,expression);
+				string expression = code.Substring(position.Start + 2, position.End - (position.Start + 2));
+				OutputExpression(buffer, expression);
 				start = position.End + 1;
 			}
-			string remainingText = code.Substring(start, code.Length-start);
+			string remainingText = code.Substring(start, code.Length - start);
 			OutputText(buffer, remainingText);
 		}
 
@@ -170,29 +171,41 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			List<ExpressionPosition> bracesPositions = new List<ExpressionPosition>();
 			bool prevCharWasDollar = false;
-			for(int index = 0; index < code.Length; index++)
+			for (int index = 0; index < code.Length; index++)
 			{
-				bool notInsideAnExpression = bracesPositions.Count==0 || 
-					bracesPositions[bracesPositions.Count-1].End!=-1;
-				if (code[index] == '{' && prevCharWasDollar && notInsideAnExpression)
+				if (code[index] == '{')
 				{
-					bracesPositions.Add(new ExpressionPosition(index -1 , -1));
+					bracesPositions.Add(new ExpressionPosition(index - 1, -1, prevCharWasDollar));
 				}
-				// Note that here there is an implicit check for ${   }   }
-				// it will match the last }
 				if (code[index] == '}' && bracesPositions.Count > 0)
 				{
-					bracesPositions[bracesPositions.Count-1].End = index;
+					if (ParentExpressionIsNotValid(bracesPositions))
+					{
+						bracesPositions.RemoveAt(bracesPositions.Count - 1);
+					}
+					else
+					{
+						bracesPositions[bracesPositions.Count - 1].End = index;
+					}
 				}
 				//handles escaping expressions with $$ as well
-				prevCharWasDollar = code[index] == '$' && !prevCharWasDollar ;
+				prevCharWasDollar = code[index] == '$' && !prevCharWasDollar;
 			}
 			return bracesPositions;
+		}
+
+		private static bool ParentExpressionIsNotValid(List<ExpressionPosition> bracesPositions)
+		{
+			if(bracesPositions.Count == 1)
+				return false;
+			ExpressionPosition parentExpression = bracesPositions[bracesPositions.Count - 2];
+			return parentExpression.End == -1 || parentExpression.PrevCharWasDollar;
 		}
 
 		private class ExpressionPosition
 		{
 			private int start, end;
+			private readonly bool prevCharWasDollar;
 
 			public int Start
 			{
@@ -205,18 +218,23 @@ namespace Castle.MonoRail.Views.Brail
 				set { end = value; }
 			}
 
-			public ExpressionPosition(int start, int end)
+			public bool PrevCharWasDollar
+			{
+				get { return prevCharWasDollar; }
+			}
+
+			public ExpressionPosition(int start, int end, bool prevCharWasDollar)
 			{
 				this.start = start;
 				this.end = end;
+				this.prevCharWasDollar = prevCharWasDollar;
 			}
-
 		}
 
 		private static DictionaryEntry GetSeperators(string code)
 		{
 			string start = null, end = null;
-			foreach(DictionaryEntry entry in Seperators)
+			foreach (DictionaryEntry entry in Seperators)
 			{
 				if (code.IndexOf(entry.Key as string, 0) != -1)
 				{
@@ -234,7 +252,7 @@ namespace Castle.MonoRail.Views.Brail
 
 			if (start == null) //default, doesn't really matter, since it won't be used.
 			{
-				foreach(DictionaryEntry entry in Seperators)
+				foreach (DictionaryEntry entry in Seperators)
 				{
 					return entry;
 				}
@@ -248,7 +266,7 @@ namespace Castle.MonoRail.Views.Brail
 				code = DoubleQuote + code.Substring(ClosingQuoteReplacement.Length);
 			if (code.EndsWith(ClosingQuoteReplacement))
 				code = code.Substring(0, code.Length - ClosingQuoteReplacement.Length) +
-				         DoubleQuote;
+						 DoubleQuote;
 			return code;
 		}
 	}

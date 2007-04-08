@@ -133,6 +133,7 @@
     <None Include="Views\bugs\mr_233.brail" />
     <None Include="Views\HappenedOnTheField\JustComponent.brail" />
     <None Include="Views\home\complexNestedExpressions.brail" />
+    <None Include="Views\home\complexNestedExpressions2.brail" />
     <None Include="Views\home\subview.brail" />
     <None Include="Views\home\namespacesInConfig.brail" />
     <None Include="Views\home\withDynamicProxyObject.brail" />
