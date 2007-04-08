@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Views.Brail
 		private IList viewComponentsParameters;
 
 		protected IRailsEngineContext context;
-		protected Controller controller;
+		protected Controller __controller;
 		protected BooViewEngine viewEngine;
 
 		/// <summary>
@@ -55,14 +55,14 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="viewEngine">The view engine.</param>
 		/// <param name="output">The output.</param>
 		/// <param name="context">The context.</param>
-		/// <param name="controller">The controller.</param>
-		public BrailBase(BooViewEngine viewEngine, TextWriter output, IRailsEngineContext context, Controller controller)
+		/// <param name="__controller">The controller.</param>
+		public BrailBase(BooViewEngine viewEngine, TextWriter output, IRailsEngineContext context, Controller __controller)
 		{
 			this.viewEngine = viewEngine;
-			outputStream = output;
+			this.outputStream = output;
 			this.context = context;
-			this.controller = controller;
-			InitProperties(context, controller);
+			this.__controller = __controller;
+			InitProperties(context, __controller);
 		}
 
 		/// <summary>
@@ -120,7 +120,7 @@ namespace Castle.MonoRail.Views.Brail
 		public void OutputSubView(string subviewName, TextWriter writer, IDictionary parameters)
 		{
 			string subViewFileName = GetSubViewFilename(subviewName);
-			BrailBase subView = viewEngine.GetCompiledScriptInstance(subViewFileName, writer, context, controller);
+			BrailBase subView = viewEngine.GetCompiledScriptInstance(subViewFileName, writer, context, __controller);
 			subView.SetParent(this);
 			foreach (DictionaryEntry entry in parameters)
 			{
@@ -316,7 +316,7 @@ StringComparer.InvariantCultureIgnoreCase
 				CaseInsensitiveComparer.Default
 #endif
 );
-
+			properties.Add("Controller", myController);
 			properties.Add("request", myContext.Request);
 			properties.Add("response", myContext.Response);
 			properties.Add("session", myContext.Session);

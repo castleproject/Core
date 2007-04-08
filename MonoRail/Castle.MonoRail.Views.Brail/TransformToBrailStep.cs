@@ -110,7 +110,7 @@ namespace Castle.MonoRail.Views.Brail
 				                         new SimpleTypeReference("Castle.MonoRail.Framework.IRailsEngineContext")));
 
 			ctor.Parameters.Add(
-				new ParameterDeclaration("controller",
+				new ParameterDeclaration("__controller",
 				                         new SimpleTypeReference("Castle.MonoRail.Framework.Controller")));
 
 
@@ -118,7 +118,7 @@ namespace Castle.MonoRail.Views.Brail
 			mie.Arguments.Add(AstUtil.CreateReferenceExpression("viewEngine"));
 			mie.Arguments.Add(AstUtil.CreateReferenceExpression("output"));
 			mie.Arguments.Add(AstUtil.CreateReferenceExpression("context"));
-			mie.Arguments.Add(AstUtil.CreateReferenceExpression("controller"));
+			mie.Arguments.Add(AstUtil.CreateReferenceExpression("__controller"));
 
 			ctor.Body.Add(mie);
 

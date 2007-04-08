@@ -191,7 +191,38 @@ end";
 			DoGet("home/complexNestedExpressions2.rails");
 			AssertReplyEqualTo(expected);
 		}
+		
+		[Test]
+		public void Javascript()
+		{
+			string expected = @"<script type='text/javascript'>
+	function paginate(index)
+	{
+		alert(index);
+	}
+</script>";;
+			DoGet("home/javascript.rails");
+			AssertReplyEqualTo(expected);
+		}
 
+		[Test]
+		public void Javascript2()
+		{
+			string expected = @"<script type='text/javascript'>
+	function paginate(index)
+	{
+		var url = '/customers/list.rails';
+		var params = 'page='+index+'&isAjax=true';
+		new Ajax.Request(url, {
+			method: 'get', 
+			evalScripts: true, 
+			parameters: params
+			});
+	}
+</script>";;
+			DoGet("home/javascript2.rails");
+			AssertReplyEqualTo(expected);
+		}
 
 		[Test]
 		public void OutputSubViewInDiv()

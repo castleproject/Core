@@ -1,0 +1,6 @@
+<script type='text/javascript'>
+	function paginate(index)
+	{
+		alert(index);
+	}
+</script>

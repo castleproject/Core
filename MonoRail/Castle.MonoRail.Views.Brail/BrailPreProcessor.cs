@@ -179,7 +179,7 @@ namespace Castle.MonoRail.Views.Brail
 				}
 				if (code[index] == '}' && bracesPositions.Count > 0)
 				{
-					if (ParentExpressionIsNotValid(bracesPositions))
+					if (ParentExpressionIsNotValid(bracesPositions, bracesPositions.Count))
 					{
 						bracesPositions.RemoveAt(bracesPositions.Count - 1);
 					}
@@ -191,15 +191,22 @@ namespace Castle.MonoRail.Views.Brail
 				//handles escaping expressions with $$ as well
 				prevCharWasDollar = code[index] == '$' && !prevCharWasDollar;
 			}
+			bracesPositions.RemoveAll(delegate(ExpressionPosition obj)
+			{
+				return !obj.PrevCharWasDollar;
+			});
 			return bracesPositions;
 		}
 
-		private static bool ParentExpressionIsNotValid(List<ExpressionPosition> bracesPositions)
+		private static bool ParentExpressionIsNotValid(List<ExpressionPosition> bracesPositions,
+			int index)
 		{
-			if(bracesPositions.Count == 1)
+			if (index - 2 < 0)
 				return false;
-			ExpressionPosition parentExpression = bracesPositions[bracesPositions.Count - 2];
-			return parentExpression.End == -1 || parentExpression.PrevCharWasDollar;
+			ExpressionPosition parentExpression = bracesPositions[index - 2];
+			if (parentExpression.PrevCharWasDollar == false)
+				return ParentExpressionIsNotValid(bracesPositions, index - 1);
+			return parentExpression.End == -1;
 		}
 
 		private class ExpressionPosition
@@ -266,7 +273,7 @@ namespace Castle.MonoRail.Views.Brail
 				code = DoubleQuote + code.Substring(ClosingQuoteReplacement.Length);
 			if (code.EndsWith(ClosingQuoteReplacement))
 				code = code.Substring(0, code.Length - ClosingQuoteReplacement.Length) +
-						 DoubleQuote;
+					   DoubleQuote;
 			return code;
 		}
 	}

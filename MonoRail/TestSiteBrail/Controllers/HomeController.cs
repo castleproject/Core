@@ -150,6 +150,16 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 		{
 			
 		}
+
+		public void Javascript()
+		{
+			
+		}
+
+		public void Javascript2()
+		{
+			
+		}
     }
 }
 

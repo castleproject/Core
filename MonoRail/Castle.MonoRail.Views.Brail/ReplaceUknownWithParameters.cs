@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using System;
 	using Boo.Lang.Compiler.Ast;
 	using Boo.Lang.Compiler.Steps;
 	using Boo.Lang.Compiler.TypeSystem;
