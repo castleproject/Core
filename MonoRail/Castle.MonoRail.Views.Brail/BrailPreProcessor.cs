@@ -120,7 +120,6 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (code.Length == 0)
 				return;
-			code = EscapeInitialAndClosingDoubleQuotes(code);
 			IList<ExpressionPosition> expressions = GetExpressionsPositions(code);
 			if (expressions.Count == 0)
 			{
@@ -143,6 +142,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static void OutputText(StringWriter buffer, string code)
 		{
+			code = EscapeInitialAndClosingDoubleQuotes(code);
 			buffer.Write("output \"\"\"");
 			buffer.Write(code);
 			buffer.WriteLine("\"\"\"");

@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using System;
 	using System.IO;
 	using System.Threading;
 	using Castle.MonoRail.Framework.Tests;
@@ -231,6 +232,14 @@ end";
 Contents for heyhello View
 </div>";
 			DoGet("home/subview.rails");
+			AssertReplyEqualTo(expected);
+		}
+
+		[Test]
+		public void UsingQuotes()
+		{
+			string expected = "<script type=\"text/javascript\" language=\"javascript\" src=\"/Content/js/datepicker.js\"></script>";
+			DoGet("home/usingQuotes.rails");
 			AssertReplyEqualTo(expected);
 		}
 	}

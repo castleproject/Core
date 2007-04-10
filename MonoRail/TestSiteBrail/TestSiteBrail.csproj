@@ -134,6 +134,7 @@
     <None Include="Views\HappenedOnTheField\JustComponent.brail" />
     <None Include="Views\home\complexNestedExpressions.brail" />
     <None Include="Views\home\complexNestedExpressions2.brail" />
+    <None Include="Views\home\usingQuotes.brail" />
     <None Include="Views\home\javascript2.brail" />
     <None Include="Views\home\javascript.brail" />
     <None Include="Views\home\subview.brail" />
