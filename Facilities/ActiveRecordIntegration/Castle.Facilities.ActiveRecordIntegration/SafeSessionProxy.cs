@@ -402,5 +402,16 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				throw new InvalidOperationException("Session was closed");
 			}
 		}
+		
+		public ISession SetBatchSize(int batchSize)
+		{
+			innerSession.SetBatchSize(batchSize);
+			return this;
+		}
+		
+		public NHibernate.Engine.ISessionImplementor GetSessionImplementation()
+		{
+			return innerSession.GetSessionImplementation();
+		}
 	}
 }

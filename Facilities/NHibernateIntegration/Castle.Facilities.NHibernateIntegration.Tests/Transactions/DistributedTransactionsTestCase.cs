@@ -37,7 +37,16 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 			RootService2 service = (RootService2) container["root"];
 			OrderDao2 orderDao = (OrderDao2) container["myorderdao"];
 
-			service.DoTwoDBOperation_Create(false);
+			try
+			{
+				service.DoTwoDBOperation_Create(false);
+			}
+			catch(Exception ex)
+			{
+				if(ex.InnerException != null && ex.InnerException.GetType().Name == "TransactionManagerCommunicationException")
+					Assert.Ignore("MTS is not available");
+				throw;
+			}
 
 			Array blogs = service.FindAll(typeof(Blog));
 			Array blogitems = service.FindAll(typeof(BlogItem));

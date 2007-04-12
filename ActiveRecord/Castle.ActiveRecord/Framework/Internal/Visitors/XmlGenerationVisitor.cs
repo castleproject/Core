@@ -206,10 +206,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					unsavedVal = "0";
 				}
-				else if (model.Property.PropertyType != typeof(Guid))
+				else if (model.Property.PropertyType == typeof(Guid))
 				{
-					// Nasty guess, but for 99.98% of situations it will be OK
-					unsavedVal = "";
+					unsavedVal = Guid.Empty.ToString();
 				}
 			}
 

@@ -170,6 +170,17 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			return inner.Get(clazz, id, lockMode);
 		}
+		
+		public NHibernate.Engine.ISessionImplementor GetSessionImplementation()
+		{
+			return inner.GetSessionImplementation();
+		}
+		
+		public ISession SetBatchSize(int batchSize)
+		{
+			inner.SetBatchSize(batchSize);
+			return this;
+		}
 
 #if DOTNET2
 		public T Get<T>(object id)

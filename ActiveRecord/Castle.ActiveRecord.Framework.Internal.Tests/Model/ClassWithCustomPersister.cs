@@ -221,6 +221,21 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			throw new NotImplementedException();
 		}
 
+		public bool IsInstance(object entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ProcessInsertGeneratedProperties(object id, object entity, object[] state, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ProcessUpdateGeneratedProperties(object id, object entity, object[] state, ISessionImplementor session)
+		{
+			throw new NotImplementedException();
+		}
+
 		public object IdentifierSpace
 		{
 			get { throw new NotImplementedException(); }
@@ -418,6 +433,21 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		}
 
 		public ISessionFactoryImplementor Factory
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsVersionPropertyGenerated
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasInsertGeneratedProperties
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool HasUpdateGeneratedProperties
 		{
 			get { throw new NotImplementedException(); }
 		}
