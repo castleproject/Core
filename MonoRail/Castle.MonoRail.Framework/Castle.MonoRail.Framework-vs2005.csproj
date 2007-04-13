@@ -159,6 +159,8 @@
     <Compile Include="Attributes\TransformFilterAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
+    <Compile Include="Extensions\ExceptionChaining\FilteredExceptionHandler.cs" />
+    <Compile Include="Extensions\ExceptionChaining\LoggingExceptionHandler.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Helpers\BehaviourHelper.cs" />
     <Compile Include="Helpers\IJSCollectionGenerator.cs" />

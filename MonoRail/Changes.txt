@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Matt Berther's patch adding LoggingExceptionHandler and FilteredExceptionHandler.
+
 - Applied chris ortman's patch fixing MR-242
   "FormHelper.LabelFor does not generate valid HTML when attributes are supplied"
 
