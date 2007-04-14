@@ -122,6 +122,9 @@
     <Compile Include="InterClasses\InterfaceWithIndexer.cs" />
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
+    <Compile Include="Mixins\ComplexMixin.cs" />
+    <Compile Include="Mixins\OtherMixin.cs" />
+    <Compile Include="Mixins\SimpleMixin.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />

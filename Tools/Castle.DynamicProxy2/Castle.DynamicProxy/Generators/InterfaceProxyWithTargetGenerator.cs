@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
@@ -91,6 +93,7 @@ namespace Castle.DynamicProxy.Generators
 				if (!interfaceList.Contains(typeof(ISerializable)))
 					interfaceList.Add(typeof(ISerializable));
 
+				AddMixinInterfaces(options, interfaceList);
 				AddDefaultInterfaces(interfaceList);
 
 				Type baseType = options.BaseTypeForInterfaceProxy;
@@ -156,6 +159,8 @@ namespace Castle.DynamicProxy.Generators
 					interfaces = (Type[])tmpInterfaces.ToArray(typeof(Type));
 				}
 
+				methods = RegisterMixinMethods(emitter, options, methods);
+
 				options.Hook.MethodsInspected();
 
 				// Constructor
@@ -171,7 +176,11 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				CreateInitializeCacheMethodBody(proxyTargetType, methods, emitter, typeInitializer);
-				GenerateConstructors(emitter, baseType, interceptorsField, targetField);
+				FieldReference[] mixinFields = AddMixinFields(options, emitter);
+				List<FieldReference> fields = new List<FieldReference>(mixinFields);
+				fields.Add(interceptorsField);
+				fields.Add(targetField);
+				GenerateConstructors(emitter, baseType, fields.ToArray());
 				// GenerateParameterlessConstructor(emitter, interceptorsField, baseType);
 
 				// Implement interfaces
@@ -210,7 +219,7 @@ namespace Castle.DynamicProxy.Generators
 					// TODO: Should the targetType be a generic definition or instantiation
 
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(
-						targetType, method, emitter, nestedClass, interceptorsField, targetField,
+						targetType, method, emitter, nestedClass, interceptorsField, GetTargetRef(method, mixinFields, targetField),
 						ConstructorVersion.WithTargetMethod, (MethodInfo)method2methodOnTarget[method]);
 
 					ReplicateNonInheritableAttributes(method, newProxiedMethod);
@@ -349,12 +358,12 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual void CreateInvocationForMethod(ClassEmitter emitter, MethodInfo method, Type proxyTargetType)
 		{
-			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType);
+			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType, true);
 
 			method2methodOnTarget[method] = methodOnTarget;
 
 			method2Invocation[method] = BuildInvocationNestedType(emitter, proxyTargetType,
-																  proxyTargetType,
+																  GetMethodTargetType(methodOnTarget),
 																  method, methodOnTarget,
 																  ConstructorVersion.WithTargetMethod);
 		}
@@ -364,8 +373,9 @@ namespace Castle.DynamicProxy.Generators
 		/// </summary>
 		/// <param name="methodOnInterface">The method on interface.</param>
 		/// <param name="proxyTargetType">Type of the proxy target.</param>
+		/// <param name="checkMixins">if set to <c>true</c> will check implementation on mixins.</param>
 		/// <returns></returns>
-		protected static MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType)
+		protected MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType, bool checkMixins)
 		{
 #if DOTNET2
 			// The code below assumes that the target
@@ -416,6 +426,10 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else if (members.Length == 0)
 			{
+				if(checkMixins && IsMixinMethod(methodOnInterface))
+				{
+					return FindMethodOnTargetType(methodOnInterface, method2MixinType[methodOnInterface], false);
+				}
 				throw new GeneratorException("Could not find a matching method on " + proxyTargetType.FullName + ". Method " + methodOnInterface.Name);
 			}
 

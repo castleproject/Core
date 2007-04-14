@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
@@ -46,8 +48,6 @@ namespace Castle.DynamicProxy.Generators
 		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
 		{
 			Type type;
-
-			
 
 			ReaderWriterLock rwlock = Scope.RWLock;
 
@@ -88,6 +88,8 @@ namespace Castle.DynamicProxy.Generators
 					interfaceList.AddRange(interfaces);
 				}
 
+				AddMixinInterfaces(options, interfaceList);
+				
 				AddDefaultInterfaces(interfaceList);
 				if (targetType.IsSerializable)
 				{
@@ -95,7 +97,7 @@ namespace Castle.DynamicProxy.Generators
 					if (!interfaceList.Contains(typeof(ISerializable)))
 						interfaceList.Add(typeof(ISerializable));
 				}
-
+				
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 
@@ -120,14 +122,22 @@ namespace Castle.DynamicProxy.Generators
 				EventToGenerate[] eventToGenerates;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventToGenerates);
 
+				methods = RegisterMixinMethods(emitter, options, methods);
+
 				options.Hook.MethodsInspected();
 
 				// Constructor
 
 				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
+				
+				FieldReference[] mixinFields = AddMixinFields(options, emitter);
+
+				List<FieldReference> fields = new List<FieldReference>(mixinFields);
+				fields.Add(interceptorsField);
+				FieldReference[] ctorArgs = fields.ToArray();
 
 				CreateInitializeCacheMethodBody(targetType, methods, emitter, typeInitializer);
-				GenerateConstructors(emitter, targetType, interceptorsField);
+				GenerateConstructors(emitter, targetType, ctorArgs);
 				GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
 
 				if (delegateToBaseGetObjectData)
@@ -136,7 +146,6 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				// Implement interfaces
-
 				if (interfaces != null && interfaces.Length != 0)
 				{
 					foreach (Type inter in interfaces)
@@ -163,7 +172,7 @@ namespace Castle.DynamicProxy.Generators
 					MethodBuilder callbackMethod = method2Callback[method];
 
 					method2Invocation[method] = BuildInvocationNestedType(emitter, targetType,
-																		  emitter.TypeBuilder,
+																		  GetMethodTargetType(method),
 																		  method, callbackMethod,
 																		  ConstructorVersion.WithoutTargetMethod);
 				}
@@ -183,8 +192,9 @@ namespace Castle.DynamicProxy.Generators
 
 					// TODO: Should the targetType be a generic definition or instantiation?
 
+					Reference targetRef = GetTargetRef(method, mixinFields, SelfReference.Self);
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(
-						targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self,
+						targetType, method, emitter, nestedClass, interceptorsField, targetRef,
 						ConstructorVersion.WithoutTargetMethod, null);
 
 					ReplicateNonInheritableAttributes(method, newProxiedMethod);
@@ -280,6 +290,7 @@ namespace Castle.DynamicProxy.Generators
 
 			return type;
 		}
+
 
 		protected override Reference GetProxyTargetReference()
 		{

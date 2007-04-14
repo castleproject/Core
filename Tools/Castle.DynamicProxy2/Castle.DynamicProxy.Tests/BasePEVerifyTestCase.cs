@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Tests
 
 	public abstract class BasePEVerifyTestCase
 	{
-#if !MONO // mono doesn't have PEVerify
+#if MONO // mono doesn't have PEVerify
 		
 		[TearDown]
 		public void RunPEVerifyOnGeneratedAssembly()
