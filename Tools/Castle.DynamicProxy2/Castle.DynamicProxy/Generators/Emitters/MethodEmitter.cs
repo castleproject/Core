@@ -19,9 +19,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
+
 
 	[CLSCompliant(false)]
 	public class MethodEmitter : IMemberEmitter
@@ -68,12 +67,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			builder.SetReturnType(returnType);
 		}
-#if DOTNET2
+
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
 			get { return genericTypeParams; }
 		}
-#endif
+
 
 		/// <summary>
 		/// Inspect the base method for generic definitions

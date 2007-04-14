@@ -15,6 +15,9 @@
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
 	using Castle.Core.Interceptor;
+  using System;
+  using NUnit.Framework;
+	using System.Reflection;
 
 	public class KeepDataInterceptor : IInterceptor
 	{
@@ -28,8 +31,16 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 		public void Intercept(IInvocation invocation)
 		{
 			this.invocation = invocation;
-			
-			invocation.Proceed();
+			MethodInfo concreteMethod = invocation.GetConcreteMethod ();
+
+      if (!invocation.MethodInvocationTarget.IsAbstract)
+      {
+        invocation.Proceed ();
+      }
+			else if (concreteMethod.ReturnType.IsValueType && !concreteMethod.ReturnType.Equals (typeof (void))) // ensure valid return value
+      {
+				invocation.ReturnValue = Activator.CreateInstance (concreteMethod.ReturnType);
+      }
 		}
 	}
 }

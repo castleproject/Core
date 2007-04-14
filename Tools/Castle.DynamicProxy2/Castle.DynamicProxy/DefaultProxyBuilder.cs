@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -52,7 +53,8 @@ namespace Castle.DynamicProxy
 
 		public Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			AssertValidType(theClass);
+			AssertValidType (theClass);
+			AssertValidTypes (interfaces);
 
 			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
 
@@ -62,6 +64,7 @@ namespace Castle.DynamicProxy
 		public Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces, ProxyGenerationOptions options)
 		{
 			AssertValidType(theInterface);
+			AssertValidTypes (interfaces);
 
 			InterfaceProxyGeneratorWithoutTarget generatorWithoutTarget = new InterfaceProxyGeneratorWithoutTarget(scope, theInterface);
 
@@ -71,6 +74,7 @@ namespace Castle.DynamicProxy
 		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType, ProxyGenerationOptions options)
 		{
 			AssertValidType(theInterface);
+			AssertValidTypes (interfaces);
 
 			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface);
 
@@ -94,6 +98,23 @@ namespace Castle.DynamicProxy
 			if (!target.IsPublic && !target.IsNestedPublic && !internalAndVisibleToDynProxy)
 			{
 				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
+			}
+#if DOTNET2
+			if (target.IsGenericTypeDefinition)
+			{
+				throw new GeneratorException ("Type is a generic tyspe definition, so a proxy cannot be generated. Type: " + target.FullName);
+			}
+#endif
+		}
+
+		private void AssertValidTypes (IEnumerable targetTypes)
+		{
+			if (targetTypes != null)
+			{
+				foreach (Type t in targetTypes)
+				{
+					AssertValidType (t);
+				}
 			}
 		}
 	}
