@@ -35,15 +35,34 @@ namespace Castle.Core.Interceptor
 		object GetArgumentValue(int index);
 
 		/// <summary>
+		/// The generic arguments of the method, or null if not a generic method.
+		/// </summary>
+		Type[] GenericArguments { get; }
+
+		/// <summary>
 		/// 
 		/// </summary>
 		MethodInfo Method { get; }
+
+		/// <summary>
+		/// Returns the concrete instantiation of <see cref="Method"/>, with any generic parameters bound to real types.
+		/// </summary>
+		/// <returns>The concrete instantiation of <see cref="Method"/>, or <see cref="Method"/> if not a generic method.</returns>
+		/// <remarks>Can be slower than calling <see cref="Method"/>.</remarks>
+		MethodInfo GetConcreteMethod ();
 
 		/// <summary>
 		/// For interface proxies, this will point to the
 		/// <see cref="MethodInfo"/> on the target class
 		/// </summary>
 		MethodInfo MethodInvocationTarget { get; }
+
+		/// <summary>
+		/// Returns the concrete instantiation of <see cref="MethodInvocationTarget"/>, with any generic parameters bound to real types.
+		/// </summary>
+		/// <returns>The concrete instantiation of <see cref="MethodInvocationTarget"/>, or <see cref="MethodInvocationTarget"/> if not a generic method.</returns>
+		/// <remarks>Can be slower than calling <see cref="MethodInvocationTarget"/>.</remarks>
+		MethodInfo GetConcreteMethodInvocationTarget ();
 
 		object ReturnValue { get; set; }
 
