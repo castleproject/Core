@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Added support for different access and naming strategies in the ARDatabind attribute.
+
 - Applied Matt Berther's patch adding LoggingExceptionHandler and FilteredExceptionHandler.
 
 - Applied chris ortman's patch fixing MR-242

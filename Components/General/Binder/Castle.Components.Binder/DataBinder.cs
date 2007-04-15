@@ -318,13 +318,11 @@ namespace Castle.Components.Binder
 
 					if (IsSimpleProperty(propType))
 					{
-						if (!prop.CanWrite) continue;
-
 						object value = ConvertToSimpleValue(propType, translatedParamName, node, out conversionSucceeded);
 
 						if (conversionSucceeded)
 						{
-							prop.SetValue(instance, value, null);
+						    SetPropertyValue(instance, prop, value);
 						}
 					}
 					else
@@ -342,7 +340,7 @@ namespace Castle.Components.Binder
 
 								if (conversionSucceeded)
 								{
-									prop.SetValue(instance, value, null);
+                                    SetPropertyValue(instance, prop, value);
 								}
 							}
 							else
@@ -363,7 +361,21 @@ namespace Castle.Components.Binder
 			AfterBinding(instance, prefix, node);
 		}
 
-		protected bool CheckForValidationFailures(object instance, Type instanceType,
+        /// <summary>
+        /// Sets the property value of the object we are binding.
+        /// Databinders that require different ways to access properties
+        /// can override this method.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="prop"></param>
+        /// <param name="value"></param>
+	    protected virtual void SetPropertyValue(object instance, PropertyInfo prop, object value)
+	    {
+            if (!prop.CanWrite) return;
+	        prop.SetValue(instance, value, null);
+	    }
+
+	    protected bool CheckForValidationFailures(object instance, Type instanceType,
 		                                          PropertyInfo prop, CompositeNode node,
 		                                          string name, string prefix, ErrorSummary summary)
 		{

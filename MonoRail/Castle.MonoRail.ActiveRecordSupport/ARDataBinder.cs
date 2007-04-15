@@ -16,17 +16,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
 	using System.Collections;
-#if DOTNET2
-	using System.Collections.Generic;
-#endif
 	using System.Reflection;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
-
 	using Iesi.Collections;
+	using NHibernate.Property;
 #if DOTNET2
 	using Iesi.Collections.Generic;
+	using System.Collections.Generic;
 #endif
 
 	/// <summary>
@@ -79,7 +77,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 		}
 
-		public object BindObject(Type targetType, string prefix, string exclude, string allow, string expect, CompositeNode treeRoot)
+		public object BindObject(Type targetType, string prefix, string exclude, string allow, string expect,
+								 CompositeNode treeRoot)
 		{
 			expectCollPropertiesList = CreateNormalizedList(expect);
 
@@ -90,23 +89,25 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			if (node == null)
 			{
-				throw new BindingException("Nothing found for the given prefix. Are you sure the form fields are using the prefix " + paramPrefix + "?");
+				throw new BindingException(
+					"Nothing found for the given prefix. Are you sure the form fields are using the prefix " +
+					paramPrefix + "?");
 			}
 
 			if (node.NodeType != NodeType.Composite)
 			{
 				throw new BindingException("Unexpected node type. Expecting Composite, found " + node.NodeType);
 			}
-			
+
 			CompositeNode cNode = (CompositeNode) node;
 
 			object instance;
 
 			bool shouldLoad = autoLoad != AutoLoadBehavior.Never;
-			
+
 			if (autoLoad == AutoLoadBehavior.OnlyNested)
 			{
-				shouldLoad =  StackDepth != 0;
+				shouldLoad = StackDepth != 0;
 			}
 
 			if (shouldLoad)
@@ -121,7 +122,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				PrimaryKeyModel pkModel;
 
 				object id = ObtainPrimaryKeyValue(model, cNode, paramPrefix, out pkModel);
-				
+
 				if (IsValidKey(id))
 				{
 					instance = ActiveRecordMediator.FindByPrimaryKey(instanceType, id, true);
@@ -132,16 +133,16 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					{
 						instance = base.CreateInstance(instanceType, paramPrefix, node);
 					}
-					else if (autoLoad == AutoLoadBehavior.NullIfInvalidKey || 
-					         autoLoad == AutoLoadBehavior.OnlyNested)
+					else if (autoLoad == AutoLoadBehavior.NullIfInvalidKey ||
+							 autoLoad == AutoLoadBehavior.OnlyNested)
 					{
 						instance = null;
 					}
 					else
 					{
 						throw new BindingException(string.Format(
-							"Could not find primary key '{0}' for '{1}'", 
-								pkModel.Property.Name, instanceType.FullName));
+													   "Could not find primary key '{0}' for '{1}'",
+													   pkModel.Property.Name, instanceType.FullName));
 					}
 				}
 			}
@@ -158,9 +159,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// so we need to check them recursively
 		/// </summary>
 		protected bool FindPropertyInHasAndBelongsToMany(ActiveRecordModel model, string propertyName,
-			 ref Type foundType, ref ActiveRecordModel foundModel)
+														 ref Type foundType, ref ActiveRecordModel foundModel)
 		{
-			foreach (HasAndBelongsToManyModel hasMany2ManyModel in model.HasAndBelongsToMany)
+			foreach(HasAndBelongsToManyModel hasMany2ManyModel in model.HasAndBelongsToMany)
 			{
 				// Inverse=true relations will be ignored
 				if (hasMany2ManyModel.Property.Name == propertyName && !hasMany2ManyModel.HasManyAtt.Inverse)
@@ -182,9 +183,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// so we need to check them recursively
 		/// </summary>
 		protected bool FindPropertyInHasMany(ActiveRecordModel model, string propertyName,
-		                                     ref Type foundType, ref ActiveRecordModel foundModel)
+											 ref Type foundType, ref ActiveRecordModel foundModel)
 		{
-			foreach (HasManyModel hasManyModel in model.HasMany)
+			foreach(HasManyModel hasManyModel in model.HasMany)
 			{
 				// Inverse=true relations will be ignored
 				if (hasManyModel.Property.Name == propertyName && !hasManyModel.HasManyAtt.Inverse)
@@ -201,19 +202,20 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return false;
 		}
 
-		protected override object BindSpecialObjectInstance(Type instanceType, string prefix, Node node, out bool succeeded)
+		protected override object BindSpecialObjectInstance(Type instanceType, string prefix, Node node,
+															out bool succeeded)
 		{
 			succeeded = false;
-			
+
 			ActiveRecordModel model = CurrentARModel;
-			
+
 			if (model == null)
 			{
 				return null;
 			}
-			
+
 			object container = CreateContainer(instanceType);
-			
+
 			bool found = false;
 			Type targetType = null;
 			ActiveRecordModel targetModel = null;
@@ -228,17 +230,17 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			if (found)
 			{
 				succeeded = true;
-				
+
 				ClearContainer(container);
-					
+
 				if (node.NodeType == NodeType.Indexed)
 				{
 					IndexedNode indexNode = (IndexedNode) node;
-						
+
 					Array collArray = Array.CreateInstance(targetType, indexNode.ChildrenCount);
-						
+
 					collArray = (Array) InternalBindObject(collArray.GetType(), prefix, node);
-						
+
 					foreach(object item in collArray)
 					{
 						AddToContainer(container, item);
@@ -248,18 +250,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				{
 					PrimaryKeyModel pkModel = targetModel.PrimaryKey;
 					Type pkType = pkModel.Property.PropertyType;
-					
+
 					LeafNode leafNode = (LeafNode) node;
 
 					bool convSucceeded;
 
 					if (leafNode.IsArray) // Multiples values found
 					{
-						foreach(object element in (Array)leafNode.Value)
+						foreach(object element in (Array) leafNode.Value)
 						{
-							object keyConverted = Converter.Convert(pkType, leafNode.ValueType.GetElementType(), 
-							                                        element, out convSucceeded);
-							
+							object keyConverted = Converter.Convert(pkType, leafNode.ValueType.GetElementType(),
+																	element, out convSucceeded);
+
 							if (convSucceeded)
 							{
 								object item = ActiveRecordMediator.FindByPrimaryKey(targetType, keyConverted, true);
@@ -269,9 +271,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					}
 					else // Single value found
 					{
-						object keyConverted = Converter.Convert(pkType, leafNode.ValueType.GetElementType(), 
-						                                        leafNode.Value, out convSucceeded);
-							
+						object keyConverted = Converter.Convert(pkType, leafNode.ValueType.GetElementType(),
+																leafNode.Value, out convSucceeded);
+
 						if (convSucceeded)
 						{
 							object item = ActiveRecordMediator.FindByPrimaryKey(targetType, keyConverted, true);
@@ -280,7 +282,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					}
 				}
 			}
-			
+
 			return container;
 		}
 
@@ -289,13 +291,68 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return IsContainerType(instanceType);
 		}
 
+		protected override void SetPropertyValue(object instance, PropertyInfo prop, object value)
+		{
+			object[] attributes = prop.GetCustomAttributes(typeof(WithAccessAttribute), false);
+
+			if (attributes.Length == 0)
+			{
+				base.SetPropertyValue(instance, prop, value);
+				return;
+			}
+
+			WithAccessAttribute accessAttribute = (WithAccessAttribute) attributes[0];
+			IPropertyAccessor propertyAccessor;
+
+			switch(accessAttribute.Access)
+			{
+				case PropertyAccess.Property:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("property");
+					break;
+				case PropertyAccess.Field:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("field");
+					break;
+				case PropertyAccess.FieldCamelcase:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("field.camelcase");
+					break;
+				case PropertyAccess.FieldCamelcaseUnderscore:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("field.camelcase-underscore");
+					break;
+				case PropertyAccess.FieldPascalcaseMUnderscore:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("field.pascalcase-m-underscore");
+					break;
+				case PropertyAccess.FieldLowercaseUnderscore:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("field.lowercase-underscore");
+					break;
+				case PropertyAccess.NosetterCamelcase:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("nosetter.camelcase");
+					break;
+				case PropertyAccess.NosetterCamelcaseUnderscore:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("nosetter.camelcase-underscore");
+					break;
+				case PropertyAccess.NosetterPascalcaseMUndersc:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("nosetter.pascalcase-m-underscore");
+					break;
+				case PropertyAccess.NosetterLowercaseUnderscore:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("nosetter.lowercase-underscore");
+					break;
+				case PropertyAccess.NosetterLowercase:
+					propertyAccessor = PropertyAccessorFactory.GetPropertyAccessor("nosetter.lowercase");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			propertyAccessor.GetSetter(instance.GetType(), prop.Name).Set(instance, value);
+		}
+
 		/// <summary>
 		/// for joined subclasses BelongsTo properties doesn't include the ones of the parent class
 		/// so we need to check them recursively
 		/// </summary>
 		protected bool IsBelongsToRef(ActiveRecordModel arModel, string prefix)
 		{
-			foreach (BelongsToModel model in arModel.BelongsTo)
+			foreach(BelongsToModel model in arModel.BelongsTo)
 			{
 				if (model.Property.Name == prefix)
 				{
@@ -315,7 +372,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			{
 				return true;
 			}
-			
+
 			if (node != null && CurrentARModel != null)
 			{
 				// If it's a belongsTo ref, we need to recreate it 
@@ -329,8 +386,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return base.ShouldRecreateInstance(value, type, prefix, node);
 		}
 
-
-		protected override void BeforeBindingProperty(object instance, PropertyInfo prop, string prefix, CompositeNode node)
+		protected override void BeforeBindingProperty(object instance, PropertyInfo prop, string prefix,
+													  CompositeNode node)
 		{
 			base.BeforeBindingProperty(instance, prop, prefix, node);
 
@@ -360,34 +417,35 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		}
 
 		#region helpers
-		
-		private object ObtainPrimaryKeyValue(ActiveRecordModel model, CompositeNode node, String prefix, out PrimaryKeyModel pkModel)
+
+		private object ObtainPrimaryKeyValue(ActiveRecordModel model, CompositeNode node, String prefix,
+											 out PrimaryKeyModel pkModel)
 		{
 			pkModel = ObtainPrimaryKey(model);
-			
+
 			String pkPropName = pkModel.Property.Name;
-			
+
 			Node idNode = node.GetChildNode(pkPropName);
-			
+
 			if (idNode != null && idNode.NodeType != NodeType.Leaf)
 			{
-				throw new BindingException("Expecting leaf node to contain id for ActiveRecord class. " + 
-					"Prefix: {0} PK Property Name: {1}", prefix, pkPropName);
+				throw new BindingException("Expecting leaf node to contain id for ActiveRecord class. " +
+										   "Prefix: {0} PK Property Name: {1}", prefix, pkPropName);
 			}
-			
+
 			LeafNode lNode = (LeafNode) idNode;
 
 			if (lNode == null)
 			{
 				throw new BindingException("ARDataBinder autoload failed as element {0} " +
-					"doesn't have a primary key {1} value", prefix, pkPropName);
+										   "doesn't have a primary key {1} value", prefix, pkPropName);
 			}
 
 			bool conversionSuc;
-			
+
 			return Converter.Convert(pkModel.Property.PropertyType, lNode.ValueType, lNode.Value, out conversionSuc);
 		}
-		
+
 		private static PrimaryKeyModel ObtainPrimaryKey(ActiveRecordModel model)
 		{
 			if (model.IsJoinedSubClass || model.IsDiscriminatorSubClass)
@@ -414,7 +472,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					return Convert.ToInt64(id) != 0;
 				}
 			}
-			
+
 			return false;
 		}
 
@@ -466,7 +524,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 			return null;
 		}
-		
+
 		private void ClearContainer(object instance)
 		{
 			if (instance is IList)
@@ -478,7 +536,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				(instance as ISet).Clear();
 			}
 		}
-		
+
 		private void AddToContainer(object container, object item)
 		{
 			if (container is IList)
@@ -505,7 +563,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 #endif
 			}
 		}
-		
+
 		#endregion
 	}
 }
