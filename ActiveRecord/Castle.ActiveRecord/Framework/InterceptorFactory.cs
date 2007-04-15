@@ -6,7 +6,7 @@ namespace Castle.ActiveRecord.Framework
 	/// Create an interceptor for the session.
 	/// Allow to override the default for creating the intercetor
 	/// </summary>
-	public class InterceptorFacotry
+	public class InterceptorFactory
 	{
 		/// <summary>
 		/// Creates an instance of the interceptor

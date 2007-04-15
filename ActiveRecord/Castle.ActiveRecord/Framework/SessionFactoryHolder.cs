@@ -187,7 +187,7 @@ namespace Castle.ActiveRecord.Framework
 		{
 			lock(sessionFactory)
 			{
-				return sessionFactory.OpenSession(InterceptorFacotry.Create());
+				return sessionFactory.OpenSession(InterceptorFactory.Create());
 			}
 		}
 
@@ -195,7 +195,7 @@ namespace Castle.ActiveRecord.Framework
 		{
 			lock(sessionFactory)
 			{
-				return scope.OpenSession(sessionFactory, InterceptorFacotry.Create());
+				return scope.OpenSession(sessionFactory, InterceptorFactory.Create());
 			}
 		}
 
