@@ -23,6 +23,7 @@
 		<include name="NHibernateIntegration/NHibernateIntegration.build" />
 		<include name="Prevalence/Prevalence.build" />
 		<include name="Synchronize/Synchronize.build" />
+		<include name="Db4o/Db4o.build" />
 	</fileset>
 
 	<target name="build" depends="common.build" />

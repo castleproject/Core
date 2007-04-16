@@ -22,6 +22,8 @@
 		<include name="Castle.MonoRail.ActiveRecordScaffold/Castle.MonoRail.ActiveRecordScaffold.build" />
 		<include name="Castle.MonoRail.TransformFilters\Castle.MonoRail.TransformFilters.build " />
 		<include name="Castle.MonoRail.TestSupport/Castle.MonoRail.TestSupport.build" />
+		<include name="Castle.Monorail.JSONSupport/Castle.Monorail.JSONSupport.build" />
+		
 		<include name="TestSite/TestSite.build" />
 		<include name="TestSiteWindsor/TestSiteWindsor.build" />
 		<include name="TestSiteNVelocity/TestSiteNVelocity.build" />
@@ -29,6 +31,7 @@
 		<include name="Castle.MonoRail.Framework.Tests/Castle.MonoRail.Framework.Tests.build" />
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" />
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
+		<include name="Castle.Monorail.JSONSupport.Tests/Castle.Monorail.JSONSupport.Tests.build" />
 		<!--
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
 		-->

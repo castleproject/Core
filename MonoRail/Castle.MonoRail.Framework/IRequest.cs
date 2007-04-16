@@ -59,6 +59,12 @@ namespace Castle.MonoRail.Framework
 
 		String[] UserLanguages { get; }
 
+		/// <summary>
+		/// Gets the IP host address of the remote client. 
+		/// </summary>
+		/// <value>The IP address of the remote client.</value>
+		string UserHostAddress { get; }
+
 		void ValidateInput();
 	}
 }

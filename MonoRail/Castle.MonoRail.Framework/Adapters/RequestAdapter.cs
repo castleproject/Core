@@ -26,89 +26,95 @@ namespace Castle.MonoRail.Framework.Adapters
 	/// </summary>
 	public class RequestAdapter : IRequest
 	{
-		private HttpRequest _request;
-		private FileDictionaryAdapter _files;
+		private HttpRequest request;
+		private FileDictionaryAdapter files;
 
 		public RequestAdapter( HttpRequest request )
 		{
-			_request = request;
+			this.request = request;
 		}
 
 		public NameValueCollection Headers
 		{
-			get { return _request.Headers; }
+			get { return request.Headers; }
 		}
 
 		public bool IsLocal 
 		{ 
-			get { return _request.Url.IsLoopback; } 
+			get { return request.Url.IsLoopback; } 
 		}
 
 		public string HttpMethod
 		{
-			get { return _request.HttpMethod; }
+			get { return request.HttpMethod; }
 		}
 		
 		public Uri Uri
 		{
-			get { return _request.Url; }
+			get { return request.Url; }
 		}
 
 		public String RawUrl
 		{
-			get { return _request.RawUrl; }
+			get { return request.RawUrl; }
 		}
 
 		public String FilePath
 		{
-			get { return _request.FilePath; }
+			get { return request.FilePath; }
 		}
 
 		public NameValueCollection QueryString
 		{
-			get { return _request.QueryString; }
+			get { return request.QueryString; }
 		}
 
 		public NameValueCollection Form
 		{
-			get { return _request.Form; }
+			get { return request.Form; }
 		}
 
 		public byte[] BinaryRead( int count )
 		{
-			return _request.BinaryRead( count );
+			return request.BinaryRead( count );
 		}
 
 		public String this[ String key ]
 		{
-			get { return _request[ key ]; }
+			get { return request[ key ]; }
 		}
 
 		public IDictionary Files
 		{
 			get
 			{
-				if ( _files == null )
+				if ( files == null )
 				{
-					_files = new FileDictionaryAdapter(_request.Files);
+					files = new FileDictionaryAdapter(request.Files);
 				}
-				return _files;
+				return files;
 			}
 		}
 
 		public NameValueCollection Params
 		{
-			get { return _request.Params; }
+			get { return request.Params; }
 		}
 
 		public String[] UserLanguages
 		{
-			get { return _request.UserLanguages; }
+			get { return request.UserLanguages; }
+		}
+
+
+		public string UserHostAddress
+		{
+			get { return request.UserHostAddress; }
 		}
 
 		public String ReadCookie( String name )
 		{
-			HttpCookie cookie = _request.Cookies[ name ];
+			HttpCookie cookie = request.Cookies[ name ];
 			if ( cookie == null )
 			{
 				return null;
@@ -118,7 +124,7 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public void ValidateInput()
 		{
-			_request.ValidateInput();
+			request.ValidateInput();
 		}
 	}
 }

@@ -39,11 +39,11 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		String Charset { get; set; } 
 
-		void AppendHeader(String name, String value);
-
 		System.IO.TextWriter Output { get; }
 		
 		System.IO.Stream OutputStream { get; }
+
+		void AppendHeader(String name, String value);
 
 		void BinaryWrite(byte[] buffer);
 
