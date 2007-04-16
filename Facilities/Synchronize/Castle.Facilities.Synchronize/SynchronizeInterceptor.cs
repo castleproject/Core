@@ -26,17 +26,6 @@ namespace Castle.Facilities.Synchronize
 	/// Intercepts calls to synchronized components and ensures
 	/// that they execute in the proper synchronization context.
 	/// </summary>
-	/// <example>
-	///		<component id="component1"
-	///			 synchronized="true"
-	///		     service="SyncTest.IService, SyncTest" 
-	///		     type="SyncTest.IService, SyncTest">
-	///		  <synchronize contextRef="DefaultContextKey">
-	///		    <method name="Method1" contextRef="MyContextKey"></method>
-	///		    <method name="Method2" contextType="SynchornizationContext"></method>
-	///		  </synchronize>
-	///		</component>
-	/// </example>
 	[Transient]
 	internal class SynchronizeInterceptor : IInterceptor, IOnBehalfAware
 	{
@@ -79,9 +68,10 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="invocation">The invocation.</param>
 		public void Intercept(IInvocation invocation)
 		{
-			if (!InvokeInSynchronizationContext(invocation))
+			if (!InvokeInSynchronizationContext(invocation) &&
+				!InvokeUsingSynchronizationTarget(invocation))
 			{
-				InvokeUsingSynchronizationTarget(invocation);
+				invocation.Proceed();
 			}
 		}
 
@@ -172,11 +162,14 @@ namespace Castle.Facilities.Synchronize
 		}
 
 		/// <summary>
-		/// Completes the invocation using the targets implicit
+		/// Continues the invocation using the targets implicit
 		/// synchronization if necessary.
 		/// </summary>
 		/// <param name="invocation">The invocation.</param>
-		private void InvokeUsingSynchronizationTarget(IInvocation invocation)
+		/// <returns>
+		/// 	<c>true</c> if continued; otherwise, <c>false</c>.
+		/// </returns>
+		private bool InvokeUsingSynchronizationTarget(IInvocation invocation)
 		{
 			ISynchronizeInvoke syncTarget = (ISynchronizeInvoke) invocation.InvocationTarget;
 
@@ -190,7 +183,11 @@ namespace Castle.Facilities.Synchronize
 				{
 					invocation.Proceed();
 				}
+
+				return true;
 			}
+
+			return false;
 		}
 
 		/// <summary>

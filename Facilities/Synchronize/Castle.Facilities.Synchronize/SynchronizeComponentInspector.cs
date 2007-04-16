@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.ComponentModel;
+
 namespace Castle.Facilities.Synchronize
 {
 	using System;
@@ -30,6 +32,17 @@ namespace Castle.Facilities.Synchronize
 	/// component configuration check for the attributes if
 	/// not available.
 	/// </summary>
+	/// <example>
+	///		<component id="component1"
+	///			 synchronized="true"
+	///		     service="SyncTest.IService, SyncTest" 
+	///		     type="SyncTest.IService, SyncTest">
+	///		  <synchronize contextRef="DefaultContextKey">
+	///		    <method name="Method1" contextRef="MyContextKey"></method>
+	///		    <method name="Method2" contextType="SynchornizationContext"></method>
+	///		  </synchronize>
+	///		</component>
+	/// </example>
 	internal class SynchronizeComponentInspector : MethodMetaInspector
 	{
 		private readonly SynchronizeMetaInfoStore metaStore;
@@ -133,7 +146,7 @@ namespace Castle.Facilities.Synchronize
 		/// </returns>
 		private static bool HasImplicitSynchronization(ComponentModel model)
 		{
-			return Constants.ISynchronizeInvokeType.IsAssignableFrom(model.Implementation);
+			return typeof(ISynchronizeInvoke).IsAssignableFrom(model.Implementation);
 		}
 
 		/// <summary>

@@ -15,7 +15,6 @@
 namespace Castle.Facilities.Synchronize
 {
 	using System;
-	using System.ComponentModel;
 
 	/// <summary>
 	/// Exposes constants used by the facility and its internal 
@@ -43,7 +42,6 @@ namespace Castle.Facilities.Synchronize
 		/// </summary>
 		public static readonly String ControlProxyHookAttrib = "controlProxyHook";
 
-		internal static readonly Type ISynchronizeInvokeType = typeof(ISynchronizeInvoke);
 		internal static readonly String WinFormsSyncContext = "winforms.sync.ctx";
 		internal static readonly String MarshalControl = "marshal.control";
 	}

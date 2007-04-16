@@ -22,6 +22,7 @@
 		<include name="Logging/Logging.build" /> 
 		<include name="NHibernateIntegration/NHibernateIntegration.build" />
 		<include name="Prevalence/Prevalence.build" />
+		<include name="Synchronize/Synchronize.build" />
 	</fileset>
 
 	<target name="build" depends="common.build" />
