@@ -48,6 +48,7 @@
     <Compile Include="Attributes\ValidateNotSameValueAttribute.cs" />
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
+    <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Messages.fr.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -107,6 +108,7 @@
     <Compile Include="Validators\RangeValidator.cs" />
     <Compile Include="Validators\RegularExpressionValidator.cs" />
     <Compile Include="Validators\SameAsValidator.cs" />
+    <Compile Include="Validators\SetValidator.cs" />
     <Compile Include="Validators\SingleValidator.cs" />
     <Compile Include="WebValidationConfiguration.cs" />
   </ItemGroup>

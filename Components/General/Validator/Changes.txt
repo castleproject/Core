@@ -1,7 +1,10 @@
 Beta 1
 ======
 
-- Applied Yuri's patch fixing COMP-18
+- Applied Brian DeMarzo's patch fixing COMP-20
+  "Added SetValidator"
+
+- Applied Yuri's patch fixing COMP-19
   "Fixed some validation issues"
 
 - Applied Yuri's patch fixing COMP-18

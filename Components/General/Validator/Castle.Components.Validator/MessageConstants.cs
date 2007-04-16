@@ -38,5 +38,6 @@ namespace Castle.Components.Validator
 		public const string GroupNotEmpty = "group_not_empty_invalid";
 		public const string GroupNotEmptySeperator = "group_not_empty_seperator";
 		public const string CollectionNotEmpty = "collection_not_empty";
+		public const string InvalidSetMessage = "set_invalid";
 	}
 }

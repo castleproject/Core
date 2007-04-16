@@ -177,6 +177,9 @@
   <data name="same_as_invalid" xml:space="preserve">
     <value>Fields do not match</value>
   </data>
+  <data name="set_invalid" xml:space="preserve">
+    <value>Field must be within a given set of values.</value>
+  </data>
   <data name="single_invalid" xml:space="preserve">
     <value>Field value is invalid (not a valid single)</value>
   </data>
