@@ -38,16 +38,21 @@ namespace Castle.Components.Validator
 		{
 			if (fieldValue == null) return false;
 
-			try
-			{
-				Convert.ToDateTime(fieldValue.ToString());
+			string value = fieldValue.ToString();
 
-				return true;
-			}
-			catch(Exception)
+			if (value.Length > 0)
 			{
-				return false;
+				try
+				{
+					Convert.ToDateTime(fieldValue.ToString());
+				}
+				catch (Exception)
+				{
+					return false;
+				}
 			}
+
+			return true;
 		}
 
 		/// <summary>

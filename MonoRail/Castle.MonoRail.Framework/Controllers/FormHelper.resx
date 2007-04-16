@@ -580,6 +580,7 @@ Validation.addAllTheseParameterized([
                 return v.length &gt;= parseInt(minimumLength);
             }],
     ['validate-regex', 'Field has an invalid content.', function (v,elm) {
+                if(Validation.get('IsEmpty').test(v)) return true;
 				var pattern = new RegExp('^' + Validation.getValidatorParameter(elm, 'validate-regex') + '$');
                 var matches = v.match(pattern);
                 if(matches) return true;

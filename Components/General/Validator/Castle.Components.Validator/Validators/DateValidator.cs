@@ -38,19 +38,21 @@ namespace Castle.Components.Validator
 		{
 			if (fieldValue == null) return true;
 
-			try
+			string value = fieldValue.ToString();
+
+			if (value.Length > 0)
 			{
-				DateTime date = Convert.ToDateTime(fieldValue.ToString());
-				if (date.TimeOfDay.TotalMilliseconds == 0)
+				try
 				{
-					return true;
+					return IsDateOnly(Convert.ToDateTime(fieldValue.ToString()));
 				}
-				return false;
+				catch (Exception)
+				{
+					return false;
+				}
 			}
-			catch(Exception)
-			{
-				return false;
-			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -88,6 +90,16 @@ namespace Castle.Components.Validator
 		protected override string MessageKey
 		{
 			get { return MessageConstants.InvalidDateMessage; }
+		}
+
+		/// <summary>
+		/// Check if only date given (so no time part)
+		/// </summary>
+		/// <param name="date">The date to check</param>
+		/// <returns><see langword="true"/>If Date only; otherwise, <see langword="false"/>.</returns>
+		private static bool IsDateOnly(DateTime date)
+		{
+			return (date.TimeOfDay.TotalMilliseconds == 0);
 		}
 	}
 }

@@ -59,8 +59,6 @@ namespace Castle.Components.Validator
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
 		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
-			base.ApplyWebValidation(config, inputType, generator, attributes, target);
-
 			generator.SetEmail(BuildErrorMessage());
 		}
 
