@@ -635,7 +635,16 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		/// <summary> 
+		/// <summary>
+		/// Redirects to the referrer action, according to the "HTTP_REFERER" header (<c>Context.UrlReferrer</c>).
+		/// </summary>
+		[Obsolete("Use RedirectToReferrer")]
+		protected void RedirectToReferer()
+		{
+			RedirectToReferrer();
+		}
+
+		/// <summary>
 		/// Redirects to the referrer action, according to the "HTTP_REFERER" header (<c>Context.UrlReferrer</c>).
 		/// </summary>
 		protected void RedirectToReferrer()
