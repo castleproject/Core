@@ -581,15 +581,6 @@ namespace Castle.MonoRail.Framework
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
-		protected void RedirectToReferer()
-		{
-			string referer = Request.Params["HTTP_Referer"];
-			Redirect(referer);
-		}
-
-		/// <summary> 
-		/// Redirects to another action in the same controller.
-		/// </summary>
 		/// <param name="action">The action name</param>
 		protected void RedirectToAction(string action)
 		{
@@ -644,6 +635,22 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
+		/// <summary> 
+		/// Redirects to the referrer action, according to the "HTTP_REFERER" header (<c>Context.UrlReferrer</c>).
+		/// </summary>
+		protected void RedirectToReferrer()
+		{
+			Redirect(Context.UrlReferrer);
+		}
+
+		/// <summary> 
+		/// Redirects to the site root directory (<c>Context.ApplicationPath + "/"</c>).
+		/// </summary>
+		public void RedirectToSiteRoot()
+		{
+			Redirect(Context.ApplicationPath + "/");
+		}
+
 		/// <summary>
 		/// Redirects to the specified URL. All other Redirects call this one.
 		/// </summary>
@@ -662,8 +669,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="parameters">URL parameters</param>
 		public virtual void Redirect(string url, IDictionary parameters)
 		{
-			CancelView();
-			
 			if (parameters != null && parameters.Count != 0)
 			{
 				if (url.IndexOf('?') != -1)
@@ -676,7 +681,7 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			context.Response.Redirect(url);
+			Redirect(url);
 		}
 
 		/// <summary>
@@ -686,8 +691,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="parameters">URL parameters</param>
 		public virtual void Redirect(string url, NameValueCollection parameters)
 		{
-			CancelView();
-			
 			if (parameters != null && parameters.Count != 0)
 			{
 				if (url.IndexOf('?') != -1)
@@ -700,7 +703,7 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			context.Response.Redirect(url);
+			Redirect(url);
 		}
 
 		/// <summary>
