@@ -19,6 +19,10 @@ namespace Castle.Monorail.JSONSupport
 	using Castle.MonoRail.Framework;
 	using Newtonsoft.Json;
 
+	/// <summary>
+	/// Extends <see cref="DataBindAttribute"/> with 
+	/// the <see cref="JavaScriptConvert"/> functionality.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Parameter)]
 	public class JSONBinderAttribute : Attribute, IParameterBinder
 	{

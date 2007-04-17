@@ -13,7 +13,8 @@
 		<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="nunit.framework.dll" />
-			
+
+			<include name="Castle.MonoRail.JSONSupport.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 		</assemblyfileset>
 	</target>

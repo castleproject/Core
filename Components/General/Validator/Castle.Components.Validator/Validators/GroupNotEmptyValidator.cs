@@ -91,6 +91,7 @@ namespace Castle.Components.Validator
 				{
 					errorMessage = BuildErrorMessage();
 				}
+
 				return errorMessage;
 			}
 			set { errorMessage = value; }
@@ -99,17 +100,22 @@ namespace Castle.Components.Validator
 		private string BuildErrorMessage()
 		{
 			StringBuilder sb = new StringBuilder();
+			
 			string seperator =
 				AbstractValidator.GetResourceForCurrentCulture().GetString(MessageConstants.GroupNotEmptySeperator);
-			foreach(string name in properties.Values)
+			
+			foreach (string name in properties.Values)
 			{
 				sb.Append(name).Append(seperator);
 			}
+			
 			if (sb.Length > 0)
 			{
 				sb.Remove(sb.Length - seperator.Length, seperator.Length);
 			}
+
 			string messageFormat = AbstractValidator.GetResourceForCurrentCulture().GetString(MessageConstants.GroupNotEmpty);
+
 			return string.Format(messageFormat, sb);
 		}
 
@@ -132,11 +138,14 @@ namespace Castle.Components.Validator
 		public bool IsValid(object instance)
 		{
 			bool result = false;
-			foreach(PropertyInfo info in properties.Keys)
+
+			foreach (PropertyInfo info in properties.Keys)
 			{
 				object o = info.GetValue(instance, null);
+
 				result |= o != null && o.ToString().Length != 0;
 			}
+
 			return result;
 		}
 

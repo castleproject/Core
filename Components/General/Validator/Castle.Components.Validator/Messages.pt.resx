@@ -159,4 +159,10 @@
   <data name="time_invalid" xml:space="preserve">
     <value>Campo inválido, conteúdo não é uma hora</value>
   </data>
+  <data name="group_not_empty_invalid" xml:space="preserve">
+    <value>Ao menos um dos valores em ({0}) nao pode estar vazio</value>
+  </data>
+  <data name="group_not_empty_seperator" xml:space="preserve">
+    <value>,</value>
+  </data>
 </root>
