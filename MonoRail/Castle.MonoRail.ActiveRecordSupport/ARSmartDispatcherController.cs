@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.ActiveRecordSupport
 {
+	using System;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -22,8 +23,49 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// </summary>
 	public class ARSmartDispatcherController : SmartDispatcherController
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ARSmartDispatcherController"/> class.
+		/// </summary>
 		public ARSmartDispatcherController() : base(new ARDataBinder())
 		{
+		}
+
+		/// <summary>
+		/// Binds the object using the posted values.
+		/// </summary>
+		/// <param name="from">Defines where the parameters should be obtained from.</param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <param name="excludedProperties">The excluded properties.</param>
+		/// <param name="allowedProperties">The allowed properties.</param>
+		/// <param name="autoLoad">The auto load behavior.</param>
+		/// <returns></returns>
+		protected object BindObject(ParamStore from, Type targetType, String prefix, String excludedProperties, String allowedProperties, AutoLoadBehavior autoLoad)
+		{
+			SetAutoLoadBehavior(autoLoad);
+
+			return BindObject(from, targetType, prefix, excludedProperties, allowedProperties);
+		}
+
+		/// <summary>
+		/// Binds the object.
+		/// </summary>
+		/// <param name="from">Defines where the parameters should be obtained from.</param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="prefix">The prefix.</param>
+		/// <param name="autoLoad">The auto load behavior.</param>
+		/// <returns></returns>
+		protected object BindObject(ParamStore from, Type targetType, String prefix, AutoLoadBehavior autoLoad)
+		{
+			SetAutoLoadBehavior(autoLoad);
+
+			return BindObject(from, targetType, prefix);
+		}
+
+		protected void SetAutoLoadBehavior(AutoLoadBehavior autoLoad)
+		{
+			ARDataBinder binder = (ARDataBinder) Binder;
+			binder.AutoLoad = autoLoad;
 		}
 	}
 }
