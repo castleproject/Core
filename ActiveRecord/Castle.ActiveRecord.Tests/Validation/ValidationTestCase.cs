@@ -137,6 +137,29 @@ namespace Castle.ActiveRecord.Tests.Validation
 
 			blog.Create();
 		}
+		
+		[Test(Description = "Reproduces AR-136")]
+		public void IsUniqueWithInvalidData()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog2), typeof(Blog2B) );
+			Recreate();
+
+			Blog2B.DeleteAll();
+
+			Blog2B blog = new Blog2B();
+			blog.Name = "hammett";
+			blog.Create();
+			
+			blog = new Blog2B();
+			blog.Name = "hammett";
+			blog.Create();
+			
+			Blog2 blog2 = new Blog2();
+			blog2.Name = blog.Name;
+			
+			Assert.IsFalse(blog2.IsValid());
+		}
+		
 
 #if DOTNET2
 		[Test]
