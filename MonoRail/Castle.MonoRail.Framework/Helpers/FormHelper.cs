@@ -1597,7 +1597,19 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (isIndexed)
 			{
-				type = type.GetElementType();
+#if DOTNET2
+				if (type.IsGenericType)
+				{
+					Type[] args = type.GetGenericArguments();
+					if (args.Length != 1)
+						throw new BindingException("Expected the generic indexed property '{0}' to be of 1 element", type.Name);
+					type = args[0];
+				}
+#endif
+				if(type.IsArray)
+				{
+					type = type.GetElementType();
+				}
 			}
 
 			if (piece + 1 == propertyPath.Length)
