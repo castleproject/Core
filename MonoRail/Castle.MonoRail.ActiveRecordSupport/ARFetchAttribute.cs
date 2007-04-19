@@ -49,6 +49,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	{
 		private String requestParameterName;
 		private bool create, required;
+		private String eager;
 		
 		/// <summary>
 		/// Constructs an <see cref="ARFetchAttribute"/> 
@@ -121,6 +122,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			get { return required; }
 			set { required = value; }
+		}
+		
+		/// <summary>
+		/// Comma-separated list of lazy associations to eager-fetch, when loading the ActiveRecord object.
+		/// </summary>
+		public String Eager
+		{
+			get { return eager; }
+			set { eager = value; }
 		}
 
 		public virtual int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)

@@ -17,6 +17,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using System;
 	using System.Reflection;
 
+	using NHibernate;
+	using NHibernate.Expression;
+
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
@@ -97,7 +100,31 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					throw new RailsException("ARFetcher could not convert PK {0} to type {1}", pk, pkType);
 				}
 
-				instance = ActiveRecordMediator.FindByPrimaryKey(type, convertedPk, attr.Required);
+				if (attr.Eager == null || attr.Eager.Length == 0)
+				{
+					// simple load
+					instance = ActiveRecordMediator.FindByPrimaryKey(type, convertedPk, attr.Required);
+				}
+				else
+				{
+					// load using eager fetching of lazy collections
+					DetachedCriteria criteria = DetachedCriteria.For(type);
+					criteria.Add(Expression.Eq(pkModel.Property.Name, convertedPk));
+					foreach (string associationToEagerFetch in attr.Eager.Split(','))
+					{
+						string clean = associationToEagerFetch.Trim();
+						if (clean.Length == 0)
+						{
+							continue;
+						}
+						
+						criteria.SetFetchMode(clean, FetchMode.Eager);
+					}
+					
+					object[] result = (object[]) ActiveRecordMediator.FindAll(type, criteria);
+					if (result.Length > 0)
+						instance = result[0];
+				}
 			}
 
 			if (instance == null && attr.Create)
