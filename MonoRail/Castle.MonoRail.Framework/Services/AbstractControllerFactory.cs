@@ -19,7 +19,6 @@ namespace Castle.MonoRail.Framework.Services
 	using Castle.Core;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Controllers;
 
 	/// <summary>
@@ -122,7 +121,7 @@ namespace Castle.MonoRail.Framework.Services
 				logger.DebugFormat("Creating controller instance. Area '{0}' Name '{1}'", area, name);
 			}
 
-			Type type = (Type) Tree.GetController(area, name);
+			Type type = Tree.GetController(area, name);
 
 			if (type == null)
 			{

@@ -26,6 +26,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
+	using Castle.MonoRail.Framework.Services.AjaxProxyGenerator;
 
 	/// <summary>
 	/// Parent Service container for the MonoRail framework
@@ -381,10 +382,11 @@ namespace Castle.MonoRail.Framework
 			if (!services.HasService(ServiceIdentification.ExecutorFactory))
 			{
 				services.RegisterService(ServiceIdentification.ExecutorFactory, typeof(DefaultControllerLifecycleExecutorFactory));
-			if (!services.HasService(ServiceIdentification.TransformationFilterFactory))
-				services.RegisterService(ServiceIdentification.TransformationFilterFactory, typeof(DefaultTransformFilterFactory));
-			if (!services.HasService(ServiceIdentification.TransformFilterDescriptorProvider))
-				services.RegisterService(ServiceIdentification.TransformFilterDescriptorProvider, typeof(DefaultTransformFilterDescriptorProvider));
+
+				if (!services.HasService(ServiceIdentification.TransformationFilterFactory))
+					services.RegisterService(ServiceIdentification.TransformationFilterFactory, typeof(DefaultTransformFilterFactory));
+				if (!services.HasService(ServiceIdentification.TransformFilterDescriptorProvider))
+					services.RegisterService(ServiceIdentification.TransformFilterDescriptorProvider, typeof(DefaultTransformFilterDescriptorProvider));
 			}
 			if (!services.HasService(ServiceIdentification.UrlBuilder))
 			{
@@ -396,6 +398,11 @@ namespace Castle.MonoRail.Framework
 			}
 
 			services.RegisterService(ServiceIdentification.ValidatorRegistry, typeof(CachedValidationRegistry));
+
+			if (!services.HasService(ServiceIdentification.AjaxProxyGenerator))
+			{
+				services.RegisterService(ServiceIdentification.AjaxProxyGenerator, typeof(PrototypeAjaxProxyGenerator));
+			}
 		}
 
 		private object ActivateService(Type type)
