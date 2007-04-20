@@ -69,7 +69,7 @@ namespace Castle.Facilities.Synchronize
 		public void Intercept(IInvocation invocation)
 		{
 			if (!InvokeInSynchronizationContext(invocation) &&
-				!InvokeUsingSynchronizationTarget(invocation))
+			    !InvokeUsingSynchronizationTarget(invocation))
 			{
 				invocation.Proceed();
 			}
@@ -132,18 +132,18 @@ namespace Castle.Facilities.Synchronize
 						SynchronizationContext.SetSynchronizationContext(syncContext);
 
 						syncContext.Send(delegate
-		                 	{
-		                 		activeSyncContext = syncContext;
+						                 	{
+						                 		activeSyncContext = syncContext;
 
-		                 		try
-		                 		{
-		                 			InvokeSafely(invocation);
-		                 		}
-		                 		finally
-		                 		{
-		                 			activeSyncContext = null;
-		                 		}
-		                 	}, null);
+						                 		try
+						                 		{
+						                 			InvokeSafely(invocation);
+						                 		}
+						                 		finally
+						                 		{
+						                 			activeSyncContext = null;
+						                 		}
+						                 	}, null);
 					}
 					finally
 					{

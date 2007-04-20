@@ -205,8 +205,10 @@ namespace Castle.Facilities.Synchronize.Tests
 			container2.AddFacility("sync.facility", new SynchronizeFacility());
 		}
 
-		protected void ExecuteInThread(ThreadStart run)
+		private void ExecuteInThread(ThreadStart run)
 		{
+			ManualResetEvent done = new ManualResetEvent(false);
+
 			Thread thread = new Thread((ThreadStart) delegate
      			{
      				try
@@ -219,12 +221,29 @@ namespace Castle.Facilities.Synchronize.Tests
      				}
 
      				Application.DoEvents();
-     				Application.Exit();
+     				done.Set();
      			});
 
 			thread.Start();
 
-			Application.Run();
+			if (!WaitForCompletion(10, done))
+			{
+				throw new Exception("Test did not finish in a reasonable amount of time");
+			}
+		}
+
+		private static bool WaitForCompletion(int seconds, ManualResetEvent done)
+		{
+			for (int i = 0; i < seconds * 2; ++i)
+			{
+				Application.DoEvents();
+				if (done.WaitOne(500, false))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }
