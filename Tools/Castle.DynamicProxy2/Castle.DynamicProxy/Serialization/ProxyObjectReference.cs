@@ -129,13 +129,28 @@ namespace Castle.DynamicProxy.Serialization
 			}
 			else
 			{
-				proxy = Activator.CreateInstance(proxy_type, new object[] { _interceptors });
+				proxy = FormatterServices.GetSafeUninitializedObject(proxy_type);
+
+				SetInterceptor(proxy, proxy_type);
 
 				MemberInfo[] members = FormatterServices.GetSerializableMembers(_baseType);
 				FormatterServices.PopulateObjectMembers(proxy, members, _data);
 			}
 
 			return proxy;
+		}
+
+		private void SetInterceptor(object proxy, Type proxy_type)
+		{
+			FieldInfo interceptorField = proxy_type.GetField("__interceptors");
+
+			if (interceptorField == null)
+			{
+				throw new SerializationException(
+					"The SerializationInfo specifies an invalid proxy type, which has no __interceptors field.");
+			}
+
+			interceptorField.SetValue (proxy, _interceptors);
 		}
 
 		protected void InvokeCallback(object target)

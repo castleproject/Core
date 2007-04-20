@@ -182,5 +182,29 @@ namespace Castle.DynamicProxy.Test
 			stream.Position = 0;
 			return formatter.Deserialize(stream);
 		}
+
+		[Serializable]
+		public class C
+		{
+			public int I;
+
+			public C (int i)
+			{
+				I = i;
+			}
+		}
+
+		[Test]
+		public void SerializatingObjectsWithoutDefaultConstructor ()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			C proxy = (C) generator.CreateClassProxy (typeof (C), new IInterceptor[] { new StandardInterceptor () }, 1);
+			C otherProxy = (C) SerializeAndDeserialize (proxy);
+
+			Assert.AreEqual (proxy.I, otherProxy.I);
+		}
+
+
 	}
 }
