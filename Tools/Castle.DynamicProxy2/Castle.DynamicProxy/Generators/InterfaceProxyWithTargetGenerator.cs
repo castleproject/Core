@@ -123,8 +123,8 @@ namespace Castle.DynamicProxy.Generators
 				// Collect methods
 
 				PropertyToGenerate[] propsToGenerate;
-				EventToGenerate[] eventToGenerates;
-				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventToGenerates);
+				EventToGenerate[] eventsToGenerate;
+				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventsToGenerate);
 
 				if (interfaces != null && interfaces.Length != 0)
 				{
@@ -140,7 +140,7 @@ namespace Castle.DynamicProxy.Generators
 
 							PropertyToGenerate[] newPropsToGenerate = new PropertyToGenerate[tempPropsToGenerate.Length + propsToGenerate.Length];
 							MethodInfo[] newMethods = new MethodInfo[methodsTemp.Length + methods.Length];
-							EventToGenerate[] newEvents = new EventToGenerate[eventToGenerates.Length + tempEventToGenerates.Length];
+							EventToGenerate[] newEvents = new EventToGenerate[eventsToGenerate.Length + tempEventToGenerates.Length];
 
 							Array.Copy(methods, newMethods, methods.Length);
 							Array.Copy(methodsTemp, 0, newMethods, methods.Length, methodsTemp.Length);
@@ -148,12 +148,12 @@ namespace Castle.DynamicProxy.Generators
 							Array.Copy(propsToGenerate, newPropsToGenerate, propsToGenerate.Length);
 							Array.Copy(tempPropsToGenerate, 0, newPropsToGenerate, propsToGenerate.Length, tempPropsToGenerate.Length);
 
-							Array.Copy(eventToGenerates, newEvents, eventToGenerates.Length);
-							Array.Copy(tempEventToGenerates, 0, newEvents, eventToGenerates.Length, tempEventToGenerates.Length);
+							Array.Copy(eventsToGenerate, newEvents, eventsToGenerate.Length);
+							Array.Copy(tempEventToGenerates, 0, newEvents, eventsToGenerate.Length, tempEventToGenerates.Length);
 
 							methods = newMethods;
 							propsToGenerate = newPropsToGenerate;
-							eventToGenerates = newEvents;
+							eventsToGenerate = newEvents;
 
 							tmpInterfaces.Remove(inter);
 						}
@@ -162,7 +162,7 @@ namespace Castle.DynamicProxy.Generators
 					interfaces = (Type[])tmpInterfaces.ToArray(typeof(Type));
 				}
 
-				methods = RegisterMixinMethods(emitter, options, methods);
+				methods = RegisterMixinMethodsAndProperties(emitter, options, methods, ref propsToGenerate, ref eventsToGenerate);
 
 				options.Hook.MethodsInspected();
 
@@ -289,7 +289,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 
-				foreach (EventToGenerate eventToGenerate in eventToGenerates)
+				foreach (EventToGenerate eventToGenerate in eventsToGenerate)
 				{
 					NestedClassEmitter add_nestedClass = (NestedClassEmitter)method2Invocation[eventToGenerate.AddMethod];
 

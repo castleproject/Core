@@ -124,7 +124,7 @@ namespace Castle.DynamicProxy.Generators
 				EventToGenerate[] eventToGenerates;
 				MethodInfo[] methods = CollectMethodsAndProperties(emitter, targetType, out propsToGenerate, out eventToGenerates);
 
-				methods = RegisterMixinMethods(emitter, options, methods);
+				methods = RegisterMixinMethodsAndProperties(emitter, options, methods, ref propsToGenerate, ref eventToGenerates);
 
 				options.Hook.MethodsInspected();
 
@@ -212,9 +212,11 @@ namespace Castle.DynamicProxy.Generators
 
 						MethodEmitter getEmitter = propToGen.Emitter.CreateGetMethod(atts);
 
+						Reference targetRef = GetTargetRef(propToGen.GetMethod, mixinFields, SelfReference.Self);
+
 						ImplementProxiedMethod(targetType, getEmitter,
 											   propToGen.GetMethod, emitter,
-											   nestedClass, interceptorsField, SelfReference.Self,
+											   nestedClass, interceptorsField, targetRef,
 											   ConstructorVersion.WithoutTargetMethod, null);
 
 						ReplicateNonInheritableAttributes(propToGen.GetMethod, getEmitter);
@@ -228,9 +230,11 @@ namespace Castle.DynamicProxy.Generators
 
 						MethodEmitter setEmitter = propToGen.Emitter.CreateSetMethod(atts);
 
+						Reference targetRef = GetTargetRef(propToGen.SetMethod, mixinFields, SelfReference.Self);
+
 						ImplementProxiedMethod(targetType, setEmitter,
 											   propToGen.SetMethod, emitter,
-											   nestedClass, interceptorsField, SelfReference.Self,
+											   nestedClass, interceptorsField, targetRef,
 											   ConstructorVersion.WithoutTargetMethod, null);
 
 						ReplicateNonInheritableAttributes(propToGen.SetMethod, setEmitter);
@@ -246,9 +250,11 @@ namespace Castle.DynamicProxy.Generators
 
 					MethodEmitter addEmitter = eventToGenerate.Emitter.CreateAddMethod(add_atts);
 
+					Reference targetRef = GetTargetRef(eventToGenerate.AddMethod, mixinFields, SelfReference.Self);
+
 					ImplementProxiedMethod(targetType, addEmitter,
 										   eventToGenerate.AddMethod, emitter,
-											add_nestedClass, interceptorsField, SelfReference.Self,
+											add_nestedClass, interceptorsField, targetRef,
 										   ConstructorVersion.WithoutTargetMethod, null);
 
 					ReplicateNonInheritableAttributes(eventToGenerate.AddMethod, addEmitter);
@@ -261,7 +267,7 @@ namespace Castle.DynamicProxy.Generators
 
 					ImplementProxiedMethod(targetType, removeEmitter,
 										   eventToGenerate.RemoveMethod, emitter,
-											remove_nestedClass, interceptorsField, SelfReference.Self,
+											remove_nestedClass, interceptorsField, targetRef,
 										   ConstructorVersion.WithoutTargetMethod, null);
 
 					ReplicateNonInheritableAttributes(eventToGenerate.RemoveMethod, removeEmitter);

@@ -27,11 +27,13 @@ namespace Castle.DynamicProxy.Tests
 	public class MixinTestCase : BasePEVerifyTestCase
 	{
 		private ProxyGenerator generator;
+		private bool mixinEventRaised;
 
 		[SetUp]
 		public void Init()
 		{
 			generator = new ProxyGenerator();
+			mixinEventRaised = false;
 		}
 
 		[Test]
@@ -66,11 +68,24 @@ namespace Castle.DynamicProxy.Tests
 
 			ISimpleMixin mixin = proxy as ISimpleMixin;
 			Assert.IsNotNull(mixin);
+			mixin.MyEvent += new EventHandler(mixin_MyEvent);
+
+			Assert.IsFalse(mixinEventRaised);
+			Assert.AreEqual(String.Empty, mixin.Name);
 			Assert.AreEqual(1, mixin.DoSomething());
+			Assert.IsTrue(mixinEventRaised);
+			
+			mixin.Name = "Fred";
+			Assert.AreEqual("Fred", mixin.Name);
 
 			Assert.IsTrue(interceptor.Invoked);
 			Assert.AreSame(proxy, interceptor.proxy);
 			Assert.AreSame(mixin_instance, interceptor.mixin);
+		}
+
+		private void mixin_MyEvent(object sender, EventArgs e)
+		{
+			mixinEventRaised = true;
 		}
 
 		[Test]

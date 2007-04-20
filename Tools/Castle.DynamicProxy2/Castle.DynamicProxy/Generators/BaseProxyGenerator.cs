@@ -1586,21 +1586,70 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 
-		protected MethodInfo[] RegisterMixinMethods(ClassEmitter emitter, ProxyGenerationOptions options, MethodInfo[] methods)
+		protected MethodInfo[] RegisterMixinMethodsAndProperties(ClassEmitter emitter, ProxyGenerationOptions options,
+		                                                         MethodInfo[] methods,
+		                                                         ref PropertyToGenerate[] propsToGenerate,
+		                                                         ref EventToGenerate[] eventsToGenerate)
 		{
-			List<MethodInfo> withMixinMethods = new List<MethodInfo>(methods);
+			List<MethodInfo> withMixinMethods = null;
+			List<PropertyToGenerate> withMixinProperties = null;
+			List<EventToGenerate> withMixinEvents = null;
+
 			foreach (Type mixinInterface in mixinInterface2MixinIndex.Keys)
 			{
-				PropertyToGenerate[] propsToGenerate;
-				EventToGenerate[] eventsToGenerate;
-				MethodInfo[] mixinMethods = CollectMethodsAndProperties(emitter, mixinInterface, false, out propsToGenerate, out eventsToGenerate);
+				PropertyToGenerate[] mixinPropsToGenerate;
+				EventToGenerate[] mixinEventsToGenerate;
+				MethodInfo[] mixinMethods = CollectMethodsAndProperties(emitter, mixinInterface, false,
+				                                                        out mixinPropsToGenerate, out mixinEventsToGenerate);
 				foreach (MethodInfo mixinMethod in mixinMethods)
 				{
 					method2MixinType[mixinMethod] = mixinInterface;
 				}
-				withMixinMethods.AddRange(mixinMethods);
+
+				if (mixinMethods.Length > 0)
+				{
+					if (withMixinMethods == null)
+					{
+						withMixinMethods = new List<MethodInfo>(methods);
+					}
+					withMixinMethods.AddRange(mixinMethods);
+				}
+
+				if (mixinPropsToGenerate.Length > 0)
+				{
+					if (withMixinProperties == null)
+					{
+						withMixinProperties = new List<PropertyToGenerate>(propsToGenerate);
+					}
+					withMixinProperties.AddRange(mixinPropsToGenerate);
+				}
+
+				if (mixinEventsToGenerate.Length > 0)
+				{
+					if (withMixinEvents == null)
+					{
+						withMixinEvents = new List<EventToGenerate>(eventsToGenerate);
+					}
+					withMixinEvents.AddRange(mixinEventsToGenerate);
+				}
+
+				if (withMixinMethods != null)
+				{
+					methods = withMixinMethods.ToArray();	
+				}
+
+				if (withMixinProperties != null)
+				{
+					propsToGenerate = withMixinProperties.ToArray();
+				}
+
+				if (withMixinEvents != null)
+				{
+					eventsToGenerate = withMixinEvents.ToArray();
+				}
 			}
-			return withMixinMethods.ToArray();
+
+			return methods;
 		}
 
 		protected FieldReference[] AddMixinFields(ProxyGenerationOptions options, ClassEmitter emitter)

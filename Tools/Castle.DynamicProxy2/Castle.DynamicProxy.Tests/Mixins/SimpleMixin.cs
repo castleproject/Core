@@ -18,6 +18,8 @@ namespace Castle.DynamicProxy.Test.Mixins
 
 	public interface ISimpleMixin
 	{
+		event EventHandler MyEvent;
+		String Name { get; set; }
 		int DoSomething();
 	}
 
@@ -27,12 +29,26 @@ namespace Castle.DynamicProxy.Test.Mixins
 	[Serializable]
 	public class SimpleMixin : ISimpleMixin
 	{
+		private String name;
+		public event EventHandler MyEvent;
+
 		public SimpleMixin()
 		{
+			name = String.Empty;
+		}
+
+		public String Name
+		{
+			get { return name; }
+			set { name = value; }
 		}
 
 		public int DoSomething()
 		{
+			if (MyEvent != null)
+			{
+				MyEvent(this, EventArgs.Empty);
+			}
 			return 1;
 		}
 	}
