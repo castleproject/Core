@@ -1,37 +1,23 @@
-For an updated version check: http://wiki.castleproject.org/index.php/How+To+Build
-
 Everything should compile fine using NAnt 0.85 RC3. Anyway, the following are some useful tips if things go wrong for some reason.
-  
 
 Where to start the build?
 =========================
 
 Use the default.build in the root directory. It compiles everything in the right order, copies dependencies and so on. 
 
+Simply type
 
-Building for .Net 2.0
-=====================
-
-Some of the Castle components have additional features that require the .Net 2.0 
-framework. If you want to use Castle on a project that runs the .Net 2.0 
-framework, you should make sure that you're building for .Net 2.0 Usually it 
-will happen automatically if the .Net 2.0 is installed on your computer, but you 
-can make sure by specifying the 2.0 version like so:
-  
-  > nant -t:net-2.0
+  > nant
 
 Database tests
 ==============
 
-If you have MS SQL Server installed, just create two databases:
+If you have MS SQL Server installed (default instance) just create two databases:
 
 - test
 - test2
 
-If not you must adjust the connection string and create a small structure on your data. To avoid all this aggravation, simply disable it:
-
-  > nant -D:nhibernate.test=false -D:activerecord.test=false
-
+If not, and you want to run the database tests, you must set the connection string, dialect and driver through NAnt defines. Otherwise you can disable the tests (see below).
 
 The basic NHibernate settings can be set as NAnt arguments:
 
@@ -45,25 +31,16 @@ The basic NHibernate settings can be set as NAnt arguments:
 
 - ar.connection.connection_string{1,2} set the connection strings for the test and test2 databases
 
-    > -D:ar.connection.connection_string.1="Data Source=.\sqlexpress;Initial Catalog=test;Integrated Security=SSPI;"
-    > -D:ar.connection.connection_string.2="Data Source=.\sqlexpress;Initial Catalog=test2;Integrated Security=SSPI;"
-
-
-
-MonoRail or BooViewEngine tests are failing
-===========================================
-
-Not good. If you have more than one CLR runtime installed, try specifying the 1.1 runtime:
-
-  > nant -t:net-1.1
-
-If the problem persists, just disable the MonoRail or BooViewEngine tests:
-  
-  > nant -D:monorail.test=false
-  > nant -D:booviewengine.test=false
+    > -D:ar.connection.connection_string.1="Data Source=.;Initial Catalog=test;Integrated Security=SSPI;"
+    > -D:ar.connection.connection_string.2="Data Source=.;Initial Catalog=test2;Integrated Security=SSPI;"
   
 Build options
 =============
+
+Disabling all tests
+-------------------
+
+  > nant -D:common.run-tests=false
 
 Compiling a Debug version
 -------------------------
@@ -74,6 +51,12 @@ Compiling a version not strongly signed
 ---------------------------------------
 
   > nant -D:sign=false
+
+
+Allowing partial trust
+----------------------
+
+  > nant -D:assembly.allow-partially-trusted-callers=true
 
 
 More questions? 
