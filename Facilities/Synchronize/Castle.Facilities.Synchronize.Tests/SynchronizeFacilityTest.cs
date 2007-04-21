@@ -16,6 +16,7 @@ namespace Castle.Facilities.Synchronize.Tests
 {
 	using System;
 	using System.Configuration;
+	using System.Diagnostics;
 	using System.Threading;
 	using System.Windows.Forms;
 	using Castle.Core;
@@ -207,8 +208,6 @@ namespace Castle.Facilities.Synchronize.Tests
 
 		private void ExecuteInThread(ThreadStart run)
 		{
-			ManualResetEvent done = new ManualResetEvent(false);
-
 			Thread thread = new Thread((ThreadStart) delegate
      			{
      				try
@@ -220,30 +219,14 @@ namespace Castle.Facilities.Synchronize.Tests
      					uncaughtException = e;
      				}
 
-     				Application.DoEvents();
-     				done.Set();
+     				Application.Exit();
      			});
 
-			thread.Start();
+			Form form = new Form();
+			Debug.Assert(form.Handle != IntPtr.Zero);
+			form.BeginInvoke((MethodInvoker) delegate { thread.Start(); });
 
-			if (!WaitForCompletion(10, done))
-			{
-				throw new Exception("Test did not finish in a reasonable amount of time");
-			}
-		}
-
-		private static bool WaitForCompletion(int seconds, ManualResetEvent done)
-		{
-			for (int i = 0; i < seconds * 2; ++i)
-			{
-				Application.DoEvents();
-				if (done.WaitOne(500, false))
-				{
-					return true;
-				}
-			}
-
-			return false;
+			Application.Run();
 		}
 	}
 }
