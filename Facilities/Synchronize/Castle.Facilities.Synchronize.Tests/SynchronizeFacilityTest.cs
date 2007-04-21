@@ -219,6 +219,7 @@ namespace Castle.Facilities.Synchronize.Tests
      					uncaughtException = e;
      				}
 
+					Application.DoEvents();
      				Application.Exit();
      			});
 
