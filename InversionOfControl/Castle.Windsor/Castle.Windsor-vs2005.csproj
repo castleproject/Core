@@ -214,6 +214,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\ProxyConstants.cs" />
+    <Compile Include="Proxy\ProxyOptions.cs" />
     <Compile Include="Proxy\ProxyUtil.cs" />
     <Compile Include="WindsorContainer.cs">
       <SubType>Code</SubType>

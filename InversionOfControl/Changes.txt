@@ -1,6 +1,10 @@
 RC 4
 ====
 
+- Added ProxyOptions to allow facilities to easily add proxy interfaces
+  without having to create custom proxy factories.  The ProxyOptions
+  are obtained via the ProxyUtil.
+
 - Fixed IOC-65
   "DictionaryConverter should use the alternate overload of the 
    PerformConversion method in order to support dictionaries that contain 

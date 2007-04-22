@@ -114,7 +114,7 @@ namespace Castle.Windsor.Proxy
 				EnsureComponentRegisteredAsService(model);
 			}
 
-			ProxyGenerationOptions options = ProxyUtil.ObtainProxyGenerationOptions(model, true);
+			ProxyGenerationOptions options = ProxyUtil.ObtainProxyOptions(model, true);
 			options.UseSingleInterfaceProxy = useSingleInterfaceProxy;
 		}
 

@@ -15,7 +15,6 @@
 namespace Castle.Windsor.Proxy
 {
 	using Castle.Core;
-	using Castle.DynamicProxy;
 
 	/// <summary>
 	/// Helper support for proxy configuration.
@@ -23,19 +22,19 @@ namespace Castle.Windsor.Proxy
 	public abstract class ProxyUtil
 	{
 		/// <summary>
-		/// Obtains the <see cref="ProxyGenerationOptions"/> associated with the <see cref="ComponentModel"/>.
+		/// Obtains the <see cref="ProxyOptions"/> associated with the <see cref="ComponentModel"/>.
 		/// </summary>
 		/// <param name="model">The component model.</param>
 		/// <param name="createOnDemand">true if the options should be created if not present.</param>
 		/// <returns>The associated proxy options for the component model.</returns>
-		public static ProxyGenerationOptions ObtainProxyGenerationOptions(ComponentModel model, bool createOnDemand)
+		public static ProxyOptions ObtainProxyOptions(ComponentModel model, bool createOnDemand)
 		{
-			ProxyGenerationOptions options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey]
-			                                 as ProxyGenerationOptions;
+			ProxyOptions options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey]
+			                       as ProxyOptions;
 
 			if (options == null && createOnDemand)
 			{
-				options = new ProxyGenerationOptions();
+				options = new ProxyOptions();
 				model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] = options;
 			}
 

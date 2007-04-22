@@ -84,7 +84,7 @@ namespace Castle.Facilities.Synchronize
 
 		private void ConfigureProxyOptions(ComponentModel model)
 		{
-			ProxyGenerationOptions options = ProxyUtil.ObtainProxyGenerationOptions(model, true);
+			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
 			options.Hook = controlProxyHook;
 		}
 

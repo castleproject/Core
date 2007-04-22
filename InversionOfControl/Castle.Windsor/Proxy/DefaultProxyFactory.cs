@@ -53,14 +53,14 @@ namespace Castle.Windsor.Proxy
 
 			IInterceptor[] interceptors = ObtainInterceptors(kernel, model);
 
-			ProxyGenerationOptions options = ProxyUtil.ObtainProxyGenerationOptions(model, true);
+			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
 
 			CustomizeOptions(options, kernel, model, constructorArguments);
 
+			Type[] interfaces = options.AdditionalInterfaces;
+
 			if (model.Service.IsInterface)
 			{
-				Type[] interfaces = null;
-
 				if (options.BaseTypeForInterfaceProxy == null)
 				{
 					options.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
@@ -68,7 +68,7 @@ namespace Castle.Windsor.Proxy
 
 				if (!options.UseSingleInterfaceProxy)
 				{
-					interfaces = CollectInterfaces(model);
+					interfaces = CollectInterfaces(interfaces, model);
 				}
 
 				proxy = generator.CreateInterfaceProxyWithTarget(model.Service, interfaces, 
@@ -76,7 +76,7 @@ namespace Castle.Windsor.Proxy
 			}
 			else
 			{
-				proxy = generator.CreateClassProxy(model.Implementation, null, options,
+				proxy = generator.CreateClassProxy(model.Implementation, interfaces, options,
 				                                   constructorArguments, interceptors);
 			}
 
@@ -100,9 +100,24 @@ namespace Castle.Windsor.Proxy
 			return model.Service.IsInterface;
 		}
 
-		protected Type[] CollectInterfaces(ComponentModel model)
+		protected Type[] CollectInterfaces(Type[] interfaces, ComponentModel model)
 		{
-			return model.Implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), model.Service);
+			Type[] modelInterfaces = model.Implementation.FindInterfaces(
+				new TypeFilter(EmptyTypeFilter), model.Service);
+
+			if (interfaces == null || interfaces.Length == 0)
+			{
+				interfaces = modelInterfaces;
+			}
+			else if (modelInterfaces != null && modelInterfaces.Length > 0)
+			{
+				Type[] allInterfaces = new Type[interfaces.Length + modelInterfaces.Length];
+				interfaces.CopyTo(allInterfaces, 0);
+				modelInterfaces.CopyTo(allInterfaces, interfaces.Length);
+				interfaces = allInterfaces;
+			}
+
+			return interfaces;
 		}
 
 		private bool EmptyTypeFilter(Type type, object criteria)

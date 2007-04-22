@@ -155,7 +155,7 @@ namespace Castle.Facilities.Synchronize
 		/// <param name="model">The model.</param>
 		private void ApplySynchronization(ComponentModel model)
 		{
-			ProxyGenerationOptions options = ProxyUtil.ObtainProxyGenerationOptions(model, true);
+			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
 			options.UseSingleInterfaceProxy = true;
 
 			model.Dependencies.Add(new DependencyModel(DependencyType.Service, null,
