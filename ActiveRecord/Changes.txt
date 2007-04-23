@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Added the CompositeUserTypeAttribute and allowed the use of NHibernate's ICompositeUserType (AR-128)
+
 - Applied the Marc-André's tests patch (AR-136).
 
 - Applied Simon Laroche's patch fixing AR-141

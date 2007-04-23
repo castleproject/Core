@@ -348,6 +348,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 								"You can't specify an Any.MetaValue without specifying the Any or HasManyToAny attribute. " +
 								"Check type " + prop.DeclaringType.FullName);
 					}
+					else if (attribute is CompositeUserTypeAttribute)
+					{
+						CompositeUserTypeAttribute propAtt = attribute as CompositeUserTypeAttribute;
+						isArProperty = true;
+
+						model.CompositeUserType.Add(new CompositeUserTypeModel(prop, propAtt));
+					}
 
 					if (attribute is CollectionIDAttribute)
 					{

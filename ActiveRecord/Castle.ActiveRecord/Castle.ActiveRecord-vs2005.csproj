@@ -371,6 +371,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CompositeUserTypeAttribute.cs" />
     <Compile Include="Attributes\Enums.cs" />
     <Compile Include="Attributes\HqlNamedQueryAttribute.cs" />
     <Compile Include="Attributes\ImportAttribute.cs" />
@@ -387,6 +388,7 @@
     <Compile Include="Framework\Internal\Constants.cs" />
     <Compile Include="Framework\Internal\Inflector.cs" />
     <Compile Include="Framework\Internal\Model\CompositeKeyModel.cs" />
+    <Compile Include="Framework\Internal\Model\CompositeUserTypeModel.cs" />
     <Compile Include="Framework\Internal\Model\DependentObjectModel.cs" />
     <Compile Include="Framework\Internal\Model\ImportModel.cs" />
     <Compile Include="Framework\Internal\Model\NestedParentReferenceModel.cs" />

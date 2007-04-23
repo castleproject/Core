@@ -146,5 +146,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="model">The model.</param>
 		void VisitDependentObject(DependentObjectModel model);
+
+		/// <summary>
+		/// Visits the custom composite user type.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		void VisitCompositeUserType(CompositeUserTypeModel model);
 	}
 }

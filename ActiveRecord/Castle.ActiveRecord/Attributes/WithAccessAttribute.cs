@@ -56,6 +56,7 @@ namespace Castle.ActiveRecord
 				{
 					return CustomAccess;
 				}
+
 				return PropertyAccessHelper.ToString(Access);
 			}
 		}

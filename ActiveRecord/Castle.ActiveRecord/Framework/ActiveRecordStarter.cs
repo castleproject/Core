@@ -25,7 +25,6 @@ namespace Castle.ActiveRecord
 	using Castle.Core.Configuration;
 	using NHibernate.Cfg;
 	using Iesi.Collections;
-	using Iesi.Collections.Generic;
 	using NHibernate.Tool.hbm2ddl;
 	using Environment=NHibernate.Cfg.Environment;
 
@@ -548,7 +547,7 @@ namespace Castle.ActiveRecord
 		private static void RegisterTypes(ISessionFactoryHolder holder, IConfigurationSource source, Type[] types,
 										  bool ignoreProblematicTypes)
 		{
-			lock(lockConfig)
+			lock (lockConfig)
 			{
 				ActiveRecordModelCollection models = BuildModels(holder, source, types, ignoreProblematicTypes);
 

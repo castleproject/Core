@@ -81,6 +81,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNodes(model.CollectionIDs);
 			VisitNodes(model.Hilos);
 			VisitNodes(model.Components);
+			VisitNodes(model.CompositeUserType);
 		}
 
 		/// <summary>
@@ -244,6 +245,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public virtual void VisitDependentObject(DependentObjectModel model)
 		{
 			VisitNode(model.Model);
+		}
+
+		/// <summary>
+		/// Visits the custom composite user type.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		public virtual void VisitCompositeUserType(CompositeUserTypeModel model)
+		{
 		}
 
 		/// <summary>

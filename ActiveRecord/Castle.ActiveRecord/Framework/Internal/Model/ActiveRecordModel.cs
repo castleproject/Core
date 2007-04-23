@@ -77,6 +77,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private IList notMappedProperties = new ArrayList();
 		private IList validators = new ArrayList();
 		private bool isNestedCompositeType;
+		private IList compositeUserType = new ArrayList();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordModel"/> class.
@@ -405,6 +406,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				return true;
 			}
+		}
+
+		/// <summary>
+		/// Gets the composite user types properties.
+		/// </summary>
+		/// <value>The type of the composite user.</value>
+		public IList CompositeUserType
+		{
+			get { return compositeUserType; }
 		}
 
 		/// <summary>

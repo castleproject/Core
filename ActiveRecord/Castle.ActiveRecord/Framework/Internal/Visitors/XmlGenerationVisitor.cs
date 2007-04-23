@@ -187,6 +187,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes(model.OneToOnes);
 				VisitNodes(model.JoinedClasses);
 				VisitNodes(model.Classes);
+				VisitNodes(model.CompositeUserType);
 				Dedent();
 				Append("</class>");
 			}
@@ -691,6 +692,32 @@ namespace Castle.ActiveRecord.Framework.Internal
 			AppendF("<param name=\"max_lo\">{0}</param>", model.HiloAtt.MaxLo);
 		}
 
+		/// <summary>
+		/// Visits the custom composite user type.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		public override void VisitCompositeUserType(CompositeUserTypeModel model)
+		{
+			/*WriteProperty(model.Property.Name, model.Property.PropertyType, att.AccessString,
+						  att.ColumnType, att.Insert,
+						  att.Update, att.Formula, att.Column,
+						  att.Length, att.NotNull, att.Unique, att.UniqueKey, att.SqlType, att.Index, att.Check);*/
+
+			CompositeUserTypeAttribute attribute = model.Attribute;
+			BeginWriteProperty(null, MakeTypeName(attribute.CompositeType), null, attribute.Insert,
+			                   model.Property.Name, model.Property.PropertyType, attribute.Update);
+
+			Ident();
+
+			for (int i = 0; i < attribute.ColumnNames.Length; i++)
+			{
+				WriteColumn(null, attribute.ColumnNames[i], null, attribute.Length[i], false, null, false, null);
+			}
+
+			Dedent();
+
+			EndWriteProperty();
+		}
 
 		private void WriteCollection(ManyRelationCascadeEnum cascadeEnum,
 		                             Type targetType, RelationType type, string name,
@@ -1079,14 +1106,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                           String column, int length, bool notNull, bool unique,
 		                           String uniqueKey, String sqlType, String index, String check)
 		{
-			AppendF("<property{0}{1}{2}{3}{4}{5}>",
-			        MakeAtt("name", name),
-			        MakeAtt("access", accessString),
-			        MakeTypeAtt(propType, columnType),
-			        WriteIfFalse("insert", insert),
-			        WriteIfFalse("update", update),
-			        WriteIfNonNull("formula", formula));
+			BeginWriteProperty(accessString, columnType, formula, insert, name, propType, update);
+			
 			Ident();
+			
+			WriteColumn(check, column, index, length, notNull, sqlType, unique, uniqueKey);
+			
+			Dedent();
+
+			EndWriteProperty();
+		}
+
+		private void EndWriteProperty()
+		{
+			Append("</property>");
+		}
+
+		private void WriteColumn(string check, string column, string index, int length, bool notNull, string sqlType, bool unique, string uniqueKey)
+		{
 			AppendF("<column{0}{1}{2}{3}{4}{5}{6}{7}/>",
 			        MakeAtt("name", column),
 			        WriteIfNotZero("length", length),
@@ -1096,8 +1133,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 			        WriteIfNonNull("sql-type", sqlType),
 			        WriteIfNonNull("index", index),
 			        WriteIfNonNull("check", check));
-			Dedent();
-			Append("</property>");
+		}
+
+		private void BeginWriteProperty(string accessString, string columnType, string formula, bool insert, string name, Type propType, bool update)
+		{
+			AppendF("<property{0}{1}{2}{3}{4}{5}>",
+			        MakeAtt("name", name),
+					WriteIfNonNull("access", accessString),
+			        MakeTypeAtt(propType, columnType),
+			        WriteIfFalse("insert", insert),
+			        WriteIfFalse("update", update),
+			        WriteIfNonNull("formula", formula));
 		}
 
 		#region Xml generations members
