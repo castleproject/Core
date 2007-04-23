@@ -56,7 +56,7 @@ namespace Castle.Facilities.Synchronize
 				return marshalingControl.Invoke(instantiateInMainThread, new object[] {context});
 			}
 
-			return base.Instantiate(context);
+			return InstantiateInMainThread(context);
 		}
 
 		private object InstantiateInMainThread(CreationContext context)
@@ -66,12 +66,15 @@ namespace Castle.Facilities.Synchronize
 			// handle is initialized in the context of the main UI thread.
 
 			object component = base.Instantiate(context);
-			Control control = (Control) GetUnproxiedInstance(component);
-
-			IntPtr formHandle = control.Handle;
-			Debug.Assert(formHandle != IntPtr.Zero);
-
+			EnsureHandleCreated(component);
 			return component;
+		}
+
+		private static void EnsureHandleCreated(object component)
+		{
+			Control control = (Control)GetUnproxiedInstance(component);
+			IntPtr handle = control.Handle;
+			Debug.Assert(handle != IntPtr.Zero);			
 		}
 
 		private static object GetUnproxiedInstance(object instance)

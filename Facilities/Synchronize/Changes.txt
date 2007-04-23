@@ -1,4 +1,7 @@
 Change history
 --------------
 
+- Ensure that handle is always created when Control is instantiated.  This
+  was only occuring when the thread differed from UI thread.
+
 - Initial version
