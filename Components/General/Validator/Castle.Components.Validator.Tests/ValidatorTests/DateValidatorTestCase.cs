@@ -44,6 +44,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsFalse(validator.IsValid(target, "99/99/99"));
 			Assert.IsFalse(validator.IsValid(target, "99-99-99"));
 			Assert.IsFalse(validator.IsValid(target, "2007-01-14T12:05:25"));
+			Assert.IsFalse(validator.IsValid(target, null));
+			Assert.IsFalse(validator.IsValid(target, ""));
 		}
 
 		[Test]

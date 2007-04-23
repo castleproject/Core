@@ -43,6 +43,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsFalse(validator.IsValid(target, "122"));
 			Assert.IsFalse(validator.IsValid(target, "99/99/99"));
 			Assert.IsFalse(validator.IsValid(target, "99-99-99"));
+			Assert.IsFalse(validator.IsValid(target, null));
+			Assert.IsFalse(validator.IsValid(target, ""));
 		}
 
 		[Test]

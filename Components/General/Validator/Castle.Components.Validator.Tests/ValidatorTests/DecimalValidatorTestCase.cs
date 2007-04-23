@@ -39,6 +39,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		public void InvalidDecimal()
 		{
 			Assert.IsFalse(validator.IsValid(target, "abc"));
+			Assert.IsFalse(validator.IsValid(target, null));
+			Assert.IsFalse(validator.IsValid(target, ""));
 		}
 
 		[Test]
@@ -46,6 +48,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		{
 			Assert.IsTrue(validator.IsValid(target, "100"));
 			Assert.IsTrue(validator.IsValid(target, "100.45"));
+			Assert.IsTrue(validator.IsValid(target, "-99.8"));
+			Assert.IsTrue(validator.IsValid(target, "-99"));
 		}
 
 		public class TestTarget

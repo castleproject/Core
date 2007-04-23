@@ -25,9 +25,8 @@ namespace Castle.Components.Validator
 	public class DateValidator : AbstractValidator
 	{
 		/// <summary>
-		/// If the <c>fieldValue</c> is not null, an attempt to convert the
-		/// content to a Date is performed, and the field is considered value
-		/// if the conversion is successful.
+		/// Checks if the <c>fieldValue</c> can be converted to a valid Date (so no time part).
+		/// Null or empty value NOT allowed.
 		/// </summary>
 		/// <param name="instance">The target type instance</param>
 		/// <param name="fieldValue">The property/field value. It can be null.</param>
@@ -36,23 +35,15 @@ namespace Castle.Components.Validator
 		/// </returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
-			if (fieldValue == null) return true;
+			if (fieldValue == null) return false;
 
-			string value = fieldValue.ToString();
+			DateTime datetimeValue;
+			bool valid = DateTime.TryParse(fieldValue.ToString(), out datetimeValue);
 
-			if (value.Length > 0)
-			{
-				try
-				{
-					return IsDateOnly(Convert.ToDateTime(fieldValue.ToString()));
-				}
-				catch (Exception)
-				{
-					return false;
-				}
-			}
+			if (valid)
+				return IsDateOnly(datetimeValue);
 
-			return true;
+			return valid;
 		}
 
 		/// <summary>
@@ -80,6 +71,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
+			generator.SetAsRequired(BuildErrorMessage());
 			generator.SetDate(BuildErrorMessage());
 		}
 

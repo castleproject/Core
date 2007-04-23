@@ -25,9 +25,8 @@ namespace Castle.Components.Validator
 	public class DoubleValidator : AbstractValidator
 	{
 		/// <summary>
-		/// If the <c>fieldValue</c> is not null, an attempt to convert the
-		/// content to a Double is performed, and the field is considered value
-		/// if the conversion is successful.
+		/// Checks if the <c>fieldValue</c> can be converted to a valid Double.
+		/// Null or empty value NOT allowed.
 		/// </summary>
 		/// <param name="instance">The target type instance</param>
 		/// <param name="fieldValue">The property/field value. It can be null.</param>
@@ -38,16 +37,8 @@ namespace Castle.Components.Validator
 		{
 			if (fieldValue == null) return false;
 
-			try
-			{
-				Convert.ToDouble(fieldValue.ToString());
-
-				return true;
-			}
-			catch(Exception)
-			{
-				return false;
-			}
+			Double doubleValue;
+			return Double.TryParse(fieldValue.ToString(), out doubleValue);
 		}
 
 		/// <summary>
@@ -75,10 +66,8 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			if (inputType == InputElementType.Text)
-			{
-				generator.SetDigitsOnly(BuildErrorMessage());
-			}
+			generator.SetAsRequired(BuildErrorMessage());
+			generator.SetNumberOnly(BuildErrorMessage());
 		}
 
 		/// <summary>

@@ -41,14 +41,19 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attributes\ValidateDateAttribute.cs" />
     <Compile Include="Attributes\ValidateCollectionNotEmptyAttribute.cs" />
+    <Compile Include="Attributes\ValidateDateTimeAttribute.cs" />
+    <Compile Include="Attributes\ValidateDecimalAttribute.cs" />
+    <Compile Include="Attributes\ValidateDoubleAttribute.cs" />
     <Compile Include="Attributes\ValidateEmailAttribute.cs" />
     <Compile Include="Attributes\ValidateGroupNotEmptyAttribute.cs" />
+    <Compile Include="Attributes\ValidateIntegerAttribute.cs" />
     <Compile Include="Attributes\ValidateLengthAttribute.cs" />
     <Compile Include="Attributes\ValidateRangeAttribute.cs" />
     <Compile Include="Attributes\ValidateNotSameValueAttribute.cs" />
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
+    <Compile Include="Attributes\ValidateSingleAttribute.cs" />
     <Compile Include="Messages.fr.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

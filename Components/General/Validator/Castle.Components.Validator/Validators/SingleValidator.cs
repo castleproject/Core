@@ -38,16 +38,8 @@ namespace Castle.Components.Validator
 		{
 			if (fieldValue == null) return false;
 
-			try
-			{
-				Convert.ToSingle(fieldValue.ToString());
-
-				return true;
-			}
-			catch(Exception)
-			{
-				return false;
-			}
+			Single doubleValue;
+			return Single.TryParse(fieldValue.ToString(), out doubleValue);
 		}
 
 		/// <summary>
@@ -77,6 +69,7 @@ namespace Castle.Components.Validator
 
 			if (inputType == InputElementType.Text)
 			{
+				generator.SetAsRequired(BuildErrorMessage());
 				generator.SetDigitsOnly(BuildErrorMessage());
 			}
 		}

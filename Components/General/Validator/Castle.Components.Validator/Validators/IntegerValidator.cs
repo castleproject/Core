@@ -25,9 +25,8 @@ namespace Castle.Components.Validator
 	public class IntegerValidator : AbstractValidator
 	{
 		/// <summary>
-		/// If the <c>fieldValue</c> is not null, an attempt to convert the
-		/// content to a Integer is performed, and the field is considered value
-		/// if the conversion is successful.
+		/// Checks if the <c>fieldValue</c> can be converted to a valid Integer.
+		/// Null or empty value NOT allowed.
 		/// </summary>
 		/// <param name="instance">The target type instance</param>
 		/// <param name="fieldValue">The property/field value. It can be null.</param>
@@ -38,26 +37,22 @@ namespace Castle.Components.Validator
 		{
 			if (fieldValue == null) return false;
 
-			try
-			{
-				if (Property.PropertyType == typeof(Int16))
-				{
-					Convert.ToInt16(fieldValue.ToString());
-				}
-				else if (Property.PropertyType == typeof(Int64))
-				{
-					Convert.ToInt64(fieldValue.ToString());
-				}
-				else
-				{
-					Convert.ToInt32(fieldValue.ToString());
-				}
+			string stringValue = fieldValue.ToString();
 
-				return true;
-			}
-			catch(Exception)
+			if (Property.PropertyType == typeof(Nullable<Int16>))
 			{
-				return false;
+				Int16 intValue;
+				return Int16.TryParse(stringValue, out intValue);
+			}
+			else if (Property.PropertyType == typeof(Nullable<Int64>))
+			{
+				Int64 intValue;
+				return Int64.TryParse(stringValue, out intValue);
+			}
+			else
+			{
+				Int32 intValue;
+				return Int32.TryParse(stringValue, out intValue);
 			}
 		}
 
@@ -86,10 +81,8 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			if (inputType == InputElementType.Text)
-			{
-				generator.SetDigitsOnly(BuildErrorMessage());
-			}
+			generator.SetAsRequired(BuildErrorMessage());
+			generator.SetDigitsOnly(BuildErrorMessage());
 		}
 
 		/// <summary>
