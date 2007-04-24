@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+    using System.Collections.Specialized;
 
 	/// <summary>
 	/// Helper that provides client-side validation.
@@ -45,11 +46,20 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String InstallScripts()
 		{
-			return RenderScriptBlockToSource("/MonoRail/Files/ValidateConfig") + Environment.NewLine +
-				   RenderScriptBlockToSource("/MonoRail/Files/ValidateCore") + Environment.NewLine +
-				   RenderScriptBlockToSource("/MonoRail/Files/ValidateValidators") + Environment.NewLine +
-				   RenderScriptBlockToSource("/MonoRail/Files/ValidateLang") + Environment.NewLine;
+            return InstallScripts(string.Empty);
 		}
+        public string InstallScripts(string locale)
+        {
+            string queryString = null;
+            if (!string.IsNullOrEmpty(locale))
+            {
+                queryString = string.Format("Locale={0}", this.UrlEncode(locale));
+            }
+            return RenderScriptBlockToSource("/MonoRail/Files/ValidateConfig") + Environment.NewLine +
+               RenderScriptBlockToSource("/MonoRail/Files/ValidateCore") + Environment.NewLine +
+               RenderScriptBlockToSource("/MonoRail/Files/ValidateValidators") + Environment.NewLine +
+               RenderScriptBlockToSource("/MonoRail/Files/ValidateLang" ,queryString) + Environment.NewLine;
+        }
 
 		/// <summary>
 		/// Configure the submit and validation options.

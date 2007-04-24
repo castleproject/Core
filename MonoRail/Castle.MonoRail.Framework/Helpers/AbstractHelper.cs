@@ -63,6 +63,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		/// <summary>
+		/// Gets or sets the server utility.
+		/// </summary>
+		/// <value>The server utility.</value>
 		public IServerUtility ServerUtility
 		{
 			get { return serverUtility; }
@@ -122,12 +126,44 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </para>
 		/// </summary>
 		/// <param name="url">The url for the scripts (should start with a '/')</param>
-		/// <returns>An empty script block</returns>
+		/// <returns>An script block pointing to the given url.</returns>
 		protected string RenderScriptBlockToSource(string url)
 		{
 			return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}?" + MonoRailVersion + "\"></script>",
 				Controller.Context.ApplicationPath + url, Controller.Context.UrlInfo.Extension);
 		}
+
+		/// <summary>
+		/// Renders the a script block with a <c>src</c> attribute
+		/// pointing to the url sending the querystring as parameter. The url must not have an extension. 
+		/// <para>
+		/// For example, suppose you invoke it like:
+		/// <code>
+		/// RenderScriptBlockToSource("/my/url/to/my/scripts", "locale=pt-br");
+		/// </code>
+		/// </para>
+		/// <para>
+		/// That will render
+		/// <code><![CDATA[
+		/// <script type="text/javascript" src="/my/url/to/my/scripts.rails?VERSIONID&locale=pt-br"></script>
+		/// ]]>
+		/// </code>
+		/// As you see the file extension will be inferred
+		/// </para>
+		/// </summary>
+		/// <param name="url">The url for the scripts (should start with a '/')</param>
+		/// <param name="queryString">The query string.</param>
+		/// <returns>An script block pointing to the given url.</returns>
+        protected string RenderScriptBlockToSource(string url, string queryString)
+        {
+			if (queryString != null && queryString != string.Empty)
+            {
+            	queryString = "&" + queryString;
+            }
+
+            return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}?" + MonoRailVersion + "{2}\"></script>",
+                Controller.Context.ApplicationPath + url, Controller.Context.UrlInfo.Extension, queryString);
+        }
 
 		/// <summary>
 		/// Generates HTML element attributes string from <paramref name="attributes"/>.

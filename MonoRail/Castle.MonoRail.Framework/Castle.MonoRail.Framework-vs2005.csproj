@@ -144,6 +144,7 @@
     <Compile Include="Attributes\LocalizationFilterAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\PersistFlashFilterAttribute.cs" />
     <Compile Include="Attributes\RescueAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -162,6 +163,7 @@
     <Compile Include="Extensions\ExceptionChaining\FilteredExceptionHandler.cs" />
     <Compile Include="Extensions\ExceptionChaining\LoggingExceptionHandler.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="Filters\PersistFlashFilter.cs" />
     <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs" />
     <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs" />
     <Compile Include="Helpers\BehaviourHelper.cs" />
@@ -538,9 +540,6 @@
     <EmbeddedResource Include="Controllers\FormHelper.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\Validation.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
@@ -559,6 +558,18 @@
     <None Include="Castle.MonoRail.Framework.build" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controllers\ValidationLang.pt-BR.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\Validation.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\ValidationLang.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\ValidationLang.zh-tw.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\Castle.gif" />
     <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\MonoRail.gif" />
     <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\ActionArgumentsEditorForm.resx">
