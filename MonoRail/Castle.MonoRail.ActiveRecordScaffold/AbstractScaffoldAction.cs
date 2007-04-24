@@ -237,9 +237,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 #endif
 				
 				writer = layoutwriter;
-			}
 
-			controller.DirectRender( writer.GetStringBuilder().ToString() );		
+				controller.CancelView();
+				controller.Response.Write(writer.GetStringBuilder().ToString());
+			}
+			else
+			{
+				controller.DirectRender(writer.GetStringBuilder().ToString());
+			}
 		}
 
 		protected static void SetUpHelpers(Controller controller)

@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed the use of Scaffolding without Layouts (MR-251).
+
 - Added support for eager fetching of lazy collections, in [ARFetch] attribute.
 
 - Added support for auto load bevahior configuration when invokling the BindObject in the   ARSmartDispatcherController
