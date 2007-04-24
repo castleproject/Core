@@ -18,9 +18,9 @@ namespace Castle.MonoRail.Framework.Filters
 
 	/// <summary>
 	/// Persist entire flash content or specific flash entry after all actions of the controller.
-	///  See <see>PersistFlashFilterAttribute</see> for details.
+	/// See <see>PersistFlashFilterAttribute</see> for details.
 	/// </summary>
-    public class PersistFlashFilter:IFilter,IFilterAttributeAware
+    public class PersistFlashFilter : IFilter, IFilterAttributeAware
     {
         private PersistFlashFilterAttribute attribute;
  
