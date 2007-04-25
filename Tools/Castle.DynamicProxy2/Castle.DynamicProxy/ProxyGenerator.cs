@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
-
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -57,29 +55,6 @@ namespace Castle.DynamicProxy
 		}
 
 		#endregion
-
-		private void CheckNotGenericTypeDefinition (Type type, string argumentName)
-		{
-#if DOTNET2
-			if (type != null && type.IsGenericTypeDefinition)
-			{
-				throw new ArgumentException ("You can't specify a generic type definition.", argumentName);
-			}
-#endif
-		}
-
-		private void CheckNotGenericTypeDefinitions (IEnumerable types, string argumentName)
-		{
-#if DOTNET2
-			if (types != null)
-			{
-				foreach (Type t in types)
-				{
-					CheckNotGenericTypeDefinition (t, argumentName);
-				}
-			}
-#endif
-		}
 
 		#region CreateInterfaceProxyWithTarget
 #if DOTNET2
@@ -397,6 +372,29 @@ namespace Castle.DynamicProxy
 		{
 			options.Initialize();
 			return ProxyBuilder.CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
+		}
+
+		private static void CheckNotGenericTypeDefinition(Type type, string argumentName)
+		{
+#if DOTNET2
+			if (type != null && type.IsGenericTypeDefinition)
+			{
+				throw new ArgumentException("You can't specify a generic type definition.", argumentName);
+			}
+#endif
+		}
+
+		private static void CheckNotGenericTypeDefinitions(IEnumerable types, string argumentName)
+		{
+#if DOTNET2
+			if (types != null)
+			{
+				foreach (Type t in types)
+				{
+					CheckNotGenericTypeDefinition(t, argumentName);
+				}
+			}
+#endif
 		}
 	}
 }

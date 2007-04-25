@@ -30,12 +30,6 @@ namespace Castle.DynamicProxy
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
 		private readonly ModuleScope scope = new ModuleScope();
-#if DOTNET2
-#endif
-
-		public DefaultProxyBuilder()
-		{
-		}
 
 		protected ModuleScope ModuleScope
 		{

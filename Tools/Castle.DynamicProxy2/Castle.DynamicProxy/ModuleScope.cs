@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -143,8 +142,7 @@ namespace Castle.DynamicProxy
 
 #if PHYSICALASSEMBLY
 			assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-				assemblyName,
-				AssemblyBuilderAccess.RunAndSave);
+				assemblyName, AssemblyBuilderAccess.RunAndSave);
 
 			moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME, true);
 
