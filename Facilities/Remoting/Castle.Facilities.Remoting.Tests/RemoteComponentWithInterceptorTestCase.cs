@@ -15,7 +15,6 @@
 namespace Castle.Facilities.Remoting.Tests
 {
 	using System;
-	using System.Runtime.Remoting;
 
 	using Castle.Windsor;
 	using Castle.Facilities.Remoting.TestComponents;
@@ -41,9 +40,6 @@ namespace Castle.Facilities.Remoting.Tests
 			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_kernelcomponent.xml"));
 
 			ICalcService service = (ICalcService) clientContainer[ typeof(ICalcService) ];
-
-			Assert.IsTrue( RemotingServices.IsTransparentProxy(service) );
-			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service) );
 
 			// The result is being intercepted, that's why we 
 			// assert for 20 instead of 10

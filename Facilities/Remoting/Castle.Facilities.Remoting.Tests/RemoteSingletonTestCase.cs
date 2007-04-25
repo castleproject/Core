@@ -40,7 +40,7 @@ namespace Castle.Facilities.Remoting.Tests
 		public void CommonAppConsumingRemoteComponentsCallback()
 		{
 			ICalcService service = (ICalcService) 
-				Activator.GetObject( typeof(ICalcService), "tcp://localhost:2133/calcservice" );
+				Activator.GetObject( typeof(ICalcService), "tcp://localhost:2133/calcservice.rem" );
 
 			Assert.IsTrue( RemotingServices.IsTransparentProxy( service ) );
 			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service) );

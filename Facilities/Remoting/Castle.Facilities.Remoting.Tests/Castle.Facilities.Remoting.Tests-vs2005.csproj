@@ -75,10 +75,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy">
-      <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
       <HintPath>C:\devtools\nant\bin\lib\net\1.1\nunit.framework.dll</HintPath>
@@ -105,9 +101,9 @@
       <Project>{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}</Project>
       <Name>Castle.Windsor-vs2005</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-net-2-0.csproj">
+    <ProjectReference Include="..\..\..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-vs2005.csproj">
       <Project>{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}</Project>
-      <Name>Castle.DynamicProxy-net-2-0</Name>
+      <Name>Castle.DynamicProxy-vs2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.Facilities.Remoting.TestsComponents\Castle.Facilities.Remoting.TestComponents-vs2005.csproj">
       <Project>{07B01B42-54DC-4A99-B856-0EA5515684AC}</Project>

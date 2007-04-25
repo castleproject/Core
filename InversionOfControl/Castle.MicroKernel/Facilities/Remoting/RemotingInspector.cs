@@ -45,6 +45,8 @@ namespace Castle.Facilities.Remoting
 		private readonly String baseUri;
 		private readonly bool isServer, isClient;
 
+	    private const string UriExtension = ".rem";
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemotingInspector"/> class.
 		/// </summary>
@@ -277,14 +279,24 @@ namespace Castle.Facilities.Remoting
 			
 			if (baseUri.EndsWith("/"))
 			{
-				uriText = String.Format("{0}{1}", baseUri, cpntUri);
+				uriText = SetUriExtensionIfNeeded(String.Format("{0}{1}", baseUri, cpntUri));
 			}
 			else
 			{
-				uriText = String.Format("{0}/{1}", baseUri, cpntUri);
+				uriText = SetUriExtensionIfNeeded(String.Format("{0}/{1}", baseUri, cpntUri));
 			}
 			
 			return uriText;
+		}
+
+		private static string SetUriExtensionIfNeeded(string uri)
+		{
+			if (!uri.EndsWith(".rem"))
+			{
+				return uri + UriExtension;
+			}
+
+			return uri;
 		}
 
 		private String ConstructServerURI(RemotingStrategy server, String componentId, ComponentModel model)
@@ -297,11 +309,11 @@ namespace Castle.Facilities.Remoting
 
 			if (value == null)
 			{
-				uriText = componentId;
+				uriText = SetUriExtensionIfNeeded(componentId);
 			}
 			else
 			{
-				uriText = value;
+				uriText = SetUriExtensionIfNeeded(value);
 			}
 
 			return uriText;

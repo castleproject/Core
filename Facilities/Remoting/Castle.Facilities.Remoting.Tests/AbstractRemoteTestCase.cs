@@ -39,8 +39,7 @@ namespace Castle.Facilities.Remoting.Tests
 			serverDomain = AppDomainFactory.Create("server");
 			clientDomain = AppDomainFactory.Create("client");
 
-			serverContainer = CreateRemoteContainer(serverDomain, 
-				GetServerConfigFile() );
+			serverContainer = CreateRemoteContainer(serverDomain, GetServerConfigFile());
 		}
 
 		[TearDown]
