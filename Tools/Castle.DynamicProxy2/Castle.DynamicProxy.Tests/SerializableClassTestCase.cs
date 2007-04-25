@@ -36,14 +36,6 @@ namespace Castle.DynamicProxy.Test
 	[TestFixture]
 	public class SerializableClassTestCase : BasePEVerifyTestCase
 	{
-		ProxyGenerator generator;
-
-		[SetUp]
-		public void Init()
-		{
-			generator = new ProxyGenerator();
-		}
-
 		[Test]
 		public void CreateSerializable()
 		{

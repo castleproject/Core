@@ -12,24 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using Castle.DynamicProxy;
-
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Reflection;
-	using System.Runtime.CompilerServices;
-	using System.Threading;
+	using System.Collections;
+	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Generators;
 
 	[CLSCompliant(false)]
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
-		private readonly ModuleScope scope = new ModuleScope();
+		protected ModuleScope scope = null;
+
+		public DefaultProxyBuilder() : this(new ModuleScope())
+		{
+		}
+
+		protected DefaultProxyBuilder(ModuleScope scope)
+		{
+			this.scope = scope;
+		}
 
 		protected ModuleScope ModuleScope
 		{

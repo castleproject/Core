@@ -22,14 +22,6 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class InvocationTestCase : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
-
-		[SetUp]
-		public void Init()
-		{
-			generator = new ProxyGenerator();
-		}
-
 		[Test]
 		public void InvocationForConcreteClassProxy()
 		{

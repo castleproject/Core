@@ -23,6 +23,14 @@ namespace Castle.DynamicProxy.Tests
 
 	public abstract class BasePEVerifyTestCase
 	{
+		protected ProxyGenerator generator;
+
+		[SetUp]
+		public virtual void Init()
+		{
+			generator = new ProxyGenerator(new PersistentProxyBuilder());
+		}
+
 #if MONO // mono doesn't have PEVerify
 		
 		[TearDown]
@@ -44,25 +52,27 @@ namespace Castle.DynamicProxy.Tests
 				path = Path.Combine(ConfigurationSettings.AppSettings["x86SdkDir"], "peverify.exe");
 #endif
 			}
+
 			if (!File.Exists(path))
 			{
 				throw new FileNotFoundException("Please check the sdkDir configuration setting and set it to the location of peverify.exe");
 			}
+
 			process.StartInfo.FileName = path;
-			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.RedirectStandardOutput = false; //if the output is redirected, the process hangs.
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = typeof(IInterceptor).Assembly.GetName().Name + ".dll";
+			process.StartInfo.Arguments = ModuleScope.FILE_NAME;
 			process.Start();
 			process.WaitForExit();
 
-			string result = process.ExitCode + " code " + process.StandardOutput.ReadToEnd();
+			string result = process.ExitCode + " code ";
 
 			Console.WriteLine(result);
 
 			if (process.ExitCode != 0)
 			{
-				Assert.Fail(result);
+				Assert.Fail("PeVerify reported error(s).", result);
 			}
 		}
 #endif

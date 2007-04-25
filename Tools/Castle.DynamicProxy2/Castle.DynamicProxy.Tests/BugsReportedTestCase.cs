@@ -21,13 +21,11 @@ using NUnit.Framework;
 namespace Castle.DynamicProxy.Tests
 {
 	[TestFixture]
-	public class BugsReportedTestCase
+	public class BugsReportedTestCase : BasePEVerifyTestCase
 	{
 		[Test]
 		public void InterfaceInheritance()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-
 			ICameraService proxy = (ICameraService)
 								   generator.CreateInterfaceProxyWithTarget(typeof(ICameraService),
 																			new CameraService(),
@@ -42,8 +40,6 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyInterfaceWithSetterOnly()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-
 			IHaveOnlySetter proxy = (IHaveOnlySetter)
 									generator.CreateInterfaceProxyWithTarget(typeof(IHaveOnlySetter),
 																			 new HaveOnlySetter(),
@@ -60,8 +56,6 @@ namespace Castle.DynamicProxy.Tests
 			)]
 		public void CallingProceedOnAbstractMethodShouldThrowException()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-
 			AbstractClass proxy = (AbstractClass)
 								  generator.CreateClassProxy(typeof(AbstractClass), ProxyGenerationOptions.Default, new StandardInterceptor());
 
@@ -73,8 +67,6 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyTypeThatInheritFromGenericType()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-
 			IUserRepository proxy = (IUserRepository)
 									generator.CreateInterfaceProxyWithoutTarget(typeof(IUserRepository),
 																				new SkipCallingMethodInterceptor());
@@ -85,16 +77,14 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void DYNPROXY_51_GenericMarkerInterface()
 		{
-			ProxyGenerator gen = new ProxyGenerator();
-			WithMixin p = (WithMixin)gen.CreateClassProxy(typeof(WithMixin), new Type[] { typeof(Marker<int>) }, new IInterceptor[0]);
+			WithMixin p = (WithMixin)generator.CreateClassProxy(typeof(WithMixin), new Type[] { typeof(Marker<int>) }, new IInterceptor[0]);
+
 			p.Method();
 		}
 
 		[Test]
 		public void ProxyingInterfaceWithComImport()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
-
 			IHTMLEventObj2 proxy = (IHTMLEventObj2)
 									generator.CreateInterfaceProxyWithoutTarget(typeof(IHTMLEventObj2),
 																			 new SkipCallingMethodInterceptor());

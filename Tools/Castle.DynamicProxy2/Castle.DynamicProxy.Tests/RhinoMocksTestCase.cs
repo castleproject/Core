@@ -34,13 +34,6 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class RhinoMocksTestCase : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
-
-		[SetUp]
-		public void Init()
-		{
-			generator = new ProxyGenerator();
-		}
 
 #if DOTNET2
 		[Test]

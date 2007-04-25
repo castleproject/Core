@@ -28,13 +28,13 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class GenericInterfaceProxyTestCase : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
 		private LogInvocationInterceptor logger;
 
 		[SetUp]
-		public void Init()
+		public override void Init()
 		{
-			generator = new ProxyGenerator();
+			base.Init();
+
 			logger = new LogInvocationInterceptor();
 		}
 

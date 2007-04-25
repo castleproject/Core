@@ -28,19 +28,10 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class BasicClassProxyTestCase : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
-
-		[SetUp]
-		public void Init()
-		{
-			generator = new ProxyGenerator();
-		}
-
 		[Test]
 		public void ProxyForClass()
 		{
-			object proxy = generator.CreateClassProxy(
-				typeof(ServiceClass), new ResultModifierInterceptor());
+			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new ResultModifierInterceptor());
 
 			Assert.IsNotNull(proxy);
 			Assert.IsTrue(typeof(ServiceClass).IsAssignableFrom(proxy.GetType()));

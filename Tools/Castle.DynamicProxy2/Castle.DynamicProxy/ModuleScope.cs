@@ -53,6 +53,24 @@ namespace Castle.DynamicProxy
 
 		private AssemblyBuilder assemblyBuilder;
 
+		private bool savePhysicalAssembly = false;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ModuleScope"/> class.
+		/// </summary>
+		public ModuleScope()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ModuleScope"/> class.
+		/// </summary>
+		/// <param name="savePhysicalAssembly">if set to <c>true</c> saves the generated module.</param>
+		public ModuleScope(bool savePhysicalAssembly)
+		{
+			this.savePhysicalAssembly = savePhysicalAssembly;
+		}
+
 		public ModuleBuilder ObtainDynamicModule()
 		{
 			return ObtainDynamicModule(false);
@@ -60,7 +78,7 @@ namespace Castle.DynamicProxy
 
 		public ModuleBuilder ObtainDynamicModule(bool signStrongName)
 		{
-			lock(_lockobj)
+			lock (_lockobj)
 			{
 				if (signStrongName && moduleBuilderWithStrongName == null)
 				{
@@ -77,7 +95,7 @@ namespace Castle.DynamicProxy
 
 		protected internal Type GetFromCache(CacheKey key)
 		{
-			return (Type)typeCache[key];
+			return (Type) typeCache[key];
 		}
 
 		protected internal void RegisterInCache(CacheKey key, Type type)
@@ -90,11 +108,20 @@ namespace Castle.DynamicProxy
 			get { return readerWriterLock; }
 		}
 
+		/// <summary>
+		/// Saves the generated assembly.
+		/// </summary>
 		public void SaveAssembly()
 		{
-#if PHYSICALASSEMBLY
-			assemblyBuilder.Save(FILE_NAME);
-#endif
+			if (savePhysicalAssembly)
+			{
+				if (File.Exists(FILE_NAME))
+				{
+					File.Delete(FILE_NAME);
+				}
+
+				assemblyBuilder.Save(FILE_NAME);
+			}
 		}
 
 		public Type this[String name]
@@ -140,20 +167,23 @@ namespace Castle.DynamicProxy
 				}
 			}
 
-#if PHYSICALASSEMBLY
-			assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-				assemblyName, AssemblyBuilderAccess.RunAndSave);
+			if (savePhysicalAssembly)
+			{
+				assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
+					assemblyName, AssemblyBuilderAccess.RunAndSave);
 
-			moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME, true);
+				moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME, true);
 
-			return moduleBuilder;
-#else
-			assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-							assemblyName,
-							AssemblyBuilderAccess.Run);
+				return moduleBuilder;
+			}
+			else
+			{
+				assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
+					assemblyName,
+					AssemblyBuilderAccess.Run);
 			
-			return assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
-#endif
+				return assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
+			}
 		}
 	}
 }

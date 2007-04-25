@@ -262,6 +262,7 @@
     <Compile Include="ModuleScope.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PersistentProxyBuilder.cs" />
     <Compile Include="ProxyGenerationOptions.cs">
       <SubType>Code</SubType>
     </Compile>

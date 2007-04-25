@@ -22,11 +22,11 @@ namespace Castle.DynamicProxy
 	public interface IProxyBuilder
 	{
 		/// <summary>
-		/// Implementors should return a proxy for the specified type
+		/// Implementors should return a proxy for the specified type.
 		/// </summary>
-		/// <param name="theClass"></param>
-		/// <param name="options"></param>
-		/// <returns></returns>
+		/// <param name="theClass">The proxy base class.</param>
+		/// <param name="options">The proxy generation options.</param>
+		/// <returns>The generated proxy type.</returns>
 		Type CreateClassProxy(Type theClass, ProxyGenerationOptions options);
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		/// Implementors should return a proxy for the specified
 		/// interface that 'proceeds' executions to the 
-		/// specified target
+		/// specified target.
 		/// </summary>
 		/// <param name="theInterface"></param>
 		/// <param name="interfaces"></param>
@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		/// Implementors should return a proxy for the specified
 		/// interface that delegate all executions to the 
-		/// specified interceptor(s)
+		/// specified interceptor(s).
 		/// </summary>
 		/// <param name="theInterface"></param>
 		/// <param name="interfaces"></param>

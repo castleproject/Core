@@ -25,14 +25,6 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class BasicInterfaceProxyWithoutTargetTestCase : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
-
-		[SetUp]
-		public void Init()
-		{
-			generator = new ProxyGenerator();
-		}
-
 		[Test]
 		[ExpectedException(typeof(NotImplementedException), "This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method")]
 		public void BasicInterfaceProxyWithValidTarget_ThrowsIfInterceptorCallsProceed()

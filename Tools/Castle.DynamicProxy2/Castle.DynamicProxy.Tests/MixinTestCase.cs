@@ -26,13 +26,13 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class MixinTestCase : BasePEVerifyTestCase
 	{
-		private ProxyGenerator generator;
 		private bool mixinEventRaised;
 
 		[SetUp]
-		public void Init()
+		public override void Init()
 		{
-			generator = new ProxyGenerator();
+			base.Init();
+
 			mixinEventRaised = false;
 		}
 
