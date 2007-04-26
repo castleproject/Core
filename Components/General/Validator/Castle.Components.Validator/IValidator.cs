@@ -36,7 +36,7 @@ namespace Castle.Components.Validator
 		/// Implementors should perform any initialization logic
 		/// </summary>
 		/// <param name="property">The target property</param>
-		void Initialize(PropertyInfo property);
+		void Initialize(IValidatorRegistry validationRegistry, PropertyInfo property);
 
 		/// <summary>
 		/// The target property

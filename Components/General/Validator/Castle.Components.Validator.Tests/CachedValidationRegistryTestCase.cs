@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
+using System.Resources;
+using System.Threading;
+
 namespace Castle.Components.Validator.Tests
 {
 	using Castle.Components.Validator.Tests.Models;
@@ -36,7 +40,7 @@ namespace Castle.Components.Validator.Tests
 			Assert.IsNotNull(validators);
 			Assert.AreEqual(8, validators.Length);
 
-			foreach(IValidator val in validators)
+			foreach (IValidator val in validators)
 			{
 				Assert.IsTrue((val.RunWhen & RunWhen.Everytime) != 0);
 			}
@@ -50,9 +54,54 @@ namespace Castle.Components.Validator.Tests
 			Assert.IsNotNull(validators);
 			Assert.AreEqual(9, validators.Length); // RunWhen.Everytime is returned too
 
-			foreach(IValidator val in validators)
+			foreach (IValidator val in validators)
 			{
 				Assert.IsTrue((val.RunWhen & RunWhen.Custom) != 0 || (val.RunWhen & RunWhen.Everytime) != 0);
+			}
+		}
+
+		[Test]
+		public void WithCustomResource()
+		{
+			CultureInfo prev = Thread.CurrentThread.CurrentCulture;
+			CultureInfo prevUI = Thread.CurrentThread.CurrentUICulture;
+			try
+			{
+				Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+				Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
+				ResourceManager resourceManager = new ResourceManager("Castle.Components.Validator.Tests.Messages", typeof(CachedValidationRegistryTestCase).Assembly);
+				registry = new CachedValidationRegistry(resourceManager);
+				string fromResource = registry.GetStringFromResource("time_invalid");
+				Assert.AreEqual("This is a test value", fromResource);
+			}
+			finally
+			{
+				Thread.CurrentThread.CurrentCulture = prev;
+				Thread.CurrentThread.CurrentUICulture = prevUI;
+			}
+
+		}
+
+		[Test]
+		public void WillFallbackToDefaultResourceIfNotFoundOnCustomOne()
+		{
+			CultureInfo prev = Thread.CurrentThread.CurrentCulture;
+			CultureInfo prevUI = Thread.CurrentThread.CurrentUICulture;
+			try
+			{
+				Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+				Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
+				ResourceManager resourceManager = new ResourceManager("Castle.Components.Validator.Tests.Messages", typeof(CachedValidationRegistryTestCase).Assembly);
+				registry = new CachedValidationRegistry(resourceManager);
+				string fromResource = registry.GetStringFromResource("collection_not_empty");
+				Assert.AreEqual("Collection must not be empty", fromResource);
+			}
+			finally
+			{
+				Thread.CurrentThread.CurrentCulture = prev;
+				Thread.CurrentThread.CurrentUICulture = prevUI;
 			}
 		}
 	}

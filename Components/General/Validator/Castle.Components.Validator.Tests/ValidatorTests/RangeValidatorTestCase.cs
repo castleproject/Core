@@ -43,37 +43,37 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 
 			// Integer validation
 			validatorIntLow = new RangeValidator(0, int.MaxValue);
-			validatorIntLow.Initialize(typeof(TestTargetInt).GetProperty("TargetField"));
+			validatorIntLow.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
 
 			validatorIntHigh = new RangeValidator(int.MinValue, 0);
-			validatorIntHigh.Initialize(typeof(TestTargetInt).GetProperty("TargetField"));
+			validatorIntHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
 
 			validatorIntLowOrHigh = new RangeValidator(RangeValidationType.Integer, "-1", "1");
-			validatorIntLowOrHigh.Initialize(typeof(TestTargetInt).GetProperty("TargetField"));
+			validatorIntLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
 
 			intTarget = new TestTargetInt();
 
 			// DateTime validation
 			validatorDateTimeLow = new RangeValidator(DateTime.Now, DateTime.MaxValue);
-			validatorDateTimeLow.Initialize(typeof(TestTargetDateTime).GetProperty("TargetField"));
+			validatorDateTimeLow.Initialize(new CachedValidationRegistry(), typeof(TestTargetDateTime).GetProperty("TargetField"));
 
 			validatorDateTimeHigh = new RangeValidator(DateTime.MinValue, DateTime.Now);
-			validatorDateTimeHigh.Initialize(typeof(TestTargetDateTime).GetProperty("TargetField"));
+			validatorDateTimeHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetDateTime).GetProperty("TargetField"));
 
 			validatorDateTimeLowOrHigh = new RangeValidator(RangeValidationType.DateTime, "2000-01-01", "2099-12-31");
-			validatorDateTimeLowOrHigh.Initialize(typeof(TestTargetDateTime).GetProperty("TargetField"));
+			validatorDateTimeLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetDateTime).GetProperty("TargetField"));
 
 			dateTimeTarget = new TestTargetDateTime();
 
 			// String validation
 			validatorStringLow = new RangeValidator("bbb", String.Empty);
-			validatorStringLow.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
+			validatorStringLow.Initialize(new CachedValidationRegistry(), typeof(TestTargetString).GetProperty("TargetField"));
 
 			validatorStringHigh = new RangeValidator(String.Empty, "yyy");
-			validatorStringHigh.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
+			validatorStringHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetString).GetProperty("TargetField"));
 
 			validatorStringLowOrHigh = new RangeValidator(RangeValidationType.String, 'b'.ToString(), 'y'.ToString());
-			validatorStringLowOrHigh.Initialize(typeof(TestTargetString).GetProperty("TargetField"));
+			validatorStringLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetString).GetProperty("TargetField"));
 
 			stringTarget = new TestTargetString();
 		}

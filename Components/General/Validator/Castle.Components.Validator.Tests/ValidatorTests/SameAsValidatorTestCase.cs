@@ -31,10 +31,10 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
 			validator1 = new SameAsValidator("ComparableField1");
-			validator1.Initialize(typeof(TestTarget).GetProperty("TargetField1"));
+			validator1.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField1"));
 
 			validator2 = new SameAsValidator("ComparableField2");
-			validator2.Initialize(typeof(TestTarget).GetProperty("TargetField2"));
+			validator2.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField2"));
 
 			target = new TestTarget();
 		}

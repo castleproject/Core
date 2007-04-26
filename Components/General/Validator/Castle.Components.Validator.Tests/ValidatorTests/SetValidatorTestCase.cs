@@ -33,15 +33,15 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			// set from string array
 			string[] valstrings = new string[] { "abc", "xyz" };
 			validatorStringArray = new SetValidator(valstrings);
-			validatorStringArray.Initialize(typeof(TestTarget).GetProperty("TargetField"));
+			validatorStringArray.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
 
 			// set from strings
 			validatorStrings = new SetValidator("abc", "xyz");
-			validatorStrings.Initialize(typeof(TestTarget).GetProperty("TargetField"));
-			
+			validatorStrings.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
+
 			// set from enum
 			validatorEnum = new SetValidator(typeof(System.DayOfWeek));
-			validatorEnum.Initialize(typeof(TestTarget).GetProperty("TargetField"));
+			validatorEnum.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
 
 			target = new TestTarget();
 		}

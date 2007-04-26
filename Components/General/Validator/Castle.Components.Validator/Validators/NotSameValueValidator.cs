@@ -69,7 +69,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
-			return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.NotSameAsMessage), value);
+			return string.Format(GetString(MessageConstants.NotSameAsMessage), value);
 		}
 	}
 }

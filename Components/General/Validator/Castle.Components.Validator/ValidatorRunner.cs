@@ -166,7 +166,7 @@ namespace Castle.Components.Validator
 				{
 					validators = new IValidator[] {(IValidator) Activator.CreateInstance(defaultValidatorForType)};
 
-					validators[0].Initialize(property);
+					validators[0].Initialize(registry, property);
 				}
 			}
 

@@ -32,6 +32,7 @@ namespace Castle.Components.Validator
 		private string errorMessage;
 		private string friendlyName;
 		private string groupName;
+		private IValidatorRegistry validationRegistry;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GroupNotEmptyValidator"/> class.
@@ -45,9 +46,11 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Implementors should perform any initialization logic
 		/// </summary>
+		/// <param name="validationRegistry"></param>
 		/// <param name="property">The target property</param>
-		public void Initialize(PropertyInfo property)
+		public void Initialize(IValidatorRegistry validationRegistry, PropertyInfo property)
 		{
+			this.validationRegistry = validationRegistry;
 			properties[property] = FriendlyName ?? property.Name;
 		}
 
@@ -102,7 +105,7 @@ namespace Castle.Components.Validator
 			StringBuilder sb = new StringBuilder();
 			
 			string seperator =
-				AbstractValidator.GetResourceForCurrentCulture().GetString(MessageConstants.GroupNotEmptySeperator);
+				validationRegistry.GetStringFromResource(MessageConstants.GroupNotEmptySeperator);
 			
 			foreach (string name in properties.Values)
 			{
@@ -113,8 +116,7 @@ namespace Castle.Components.Validator
 			{
 				sb.Remove(sb.Length - seperator.Length, seperator.Length);
 			}
-
-			string messageFormat = AbstractValidator.GetResourceForCurrentCulture().GetString(MessageConstants.GroupNotEmpty);
+			string messageFormat = validationRegistry.GetStringFromResource(MessageConstants.GroupNotEmpty);
 
 			return string.Format(messageFormat, sb);
 		}

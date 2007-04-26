@@ -193,20 +193,20 @@ namespace Castle.Components.Validator
 		{
 			if (exactLength != int.MinValue)
 			{
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.ExactLengthMessage), exactLength);
+				return string.Format(GetString(MessageConstants.ExactLengthMessage), exactLength);
 			}
 			else if (minLength == int.MinValue && maxLength != int.MaxValue)
 			{
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.LengthTooLongMessage), maxLength);
+				return string.Format(GetString(MessageConstants.LengthTooLongMessage), maxLength);
 			}
 			else if (minLength != int.MinValue && maxLength == int.MaxValue)
 			{
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.LengthTooShortMessage), minLength);
+				return string.Format(GetString(MessageConstants.LengthTooShortMessage), minLength);
 			}
 			else if (minLength != int.MinValue || maxLength != int.MaxValue)
 			{
 				return
-					string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.LenghtInRangeMessage), minLength, maxLength);
+					string.Format(GetString(MessageConstants.LenghtInRangeMessage), minLength, maxLength);
 			}
 			else
 			{

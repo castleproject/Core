@@ -46,5 +46,11 @@ namespace Castle.Components.Validator
 		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
 		/// <returns>A Validator array</returns>
 		IValidator[] GetValidators(ValidatorRunner validatorRunner, Type targetType, PropertyInfo property, RunWhen runWhen);
+
+		/// <summary>
+		/// Gets the string from resource by key
+		/// </summary>
+		/// <param name="key">The key.</param>
+		string GetStringFromResource(string key);
 	}
 }

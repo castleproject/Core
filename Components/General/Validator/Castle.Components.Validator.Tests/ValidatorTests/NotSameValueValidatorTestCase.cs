@@ -32,14 +32,14 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
 			validator1 = new NotSameValueValidator("15");
-			validator1.Initialize(typeof(TestTarget).GetProperty("TargetField1"));
+			validator1.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField1"));
 
 			validator2 = new NotSameValueValidator(15);
-			validator2.Initialize(typeof(TestTarget).GetProperty("TargetField2"));
+			validator2.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField2"));
 
 			ValidateNotSameValueAttribute attribute = new ValidateNotSameValueAttribute(typeof(Guid), Guid.Empty.ToString());
 			validator3 = (NotSameValueValidator) attribute.Build();
-			validator3.Initialize(typeof(TestTarget).GetProperty("TargetField3"));
+			validator3.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField3"));
 
 			target = new TestTarget();
 		}

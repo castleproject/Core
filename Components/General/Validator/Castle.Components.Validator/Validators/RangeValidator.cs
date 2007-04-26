@@ -278,21 +278,21 @@ namespace Castle.Components.Validator
 		/// Gets the error message string for Integer validation
 		/// </summary>
 		/// <returns>an error message</returns>
-		protected static string BuildIntegerErrorMessage(int min, int max)
+		protected string BuildIntegerErrorMessage(int min, int max)
 		{
 			if (min == int.MinValue && max != int.MaxValue)
 			{
 				// range against max value only
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooHighMessage), max);
+				return string.Format(GetString(MessageConstants.RangeTooHighMessage), max);
 			}
 			else if (min != int.MinValue && max == int.MaxValue)
 			{
 				// range against min value only
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooLowMessage), min);
+				return string.Format(GetString(MessageConstants.RangeTooLowMessage), min);
 			}
 			else if (min != int.MinValue || max != int.MaxValue)
 			{
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
+				return string.Format(GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
 			}
 			else
 			{
@@ -304,21 +304,21 @@ namespace Castle.Components.Validator
 		/// Gets the error message string for DateTime validation
 		/// </summary>
 		/// <returns>an error message</returns>
-		protected static string BuildDateTimeErrorMessage(DateTime min, DateTime max)
+		protected string BuildDateTimeErrorMessage(DateTime min, DateTime max)
 		{
 			if (min == DateTime.MinValue && max != DateTime.MaxValue)
 			{
 				// range against max value only
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooHighMessage), max);
+				return string.Format(GetString(MessageConstants.RangeTooHighMessage), max);
 			}
 			else if (min != DateTime.MinValue && max == DateTime.MaxValue)
 			{
 				// range against min value only
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooLowMessage), min);
+				return string.Format(GetString(MessageConstants.RangeTooLowMessage), min);
 			}
 			else if (min != DateTime.MinValue || max != DateTime.MaxValue)
 			{
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
+				return string.Format(GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
 			}
 			else
 			{
@@ -330,21 +330,21 @@ namespace Castle.Components.Validator
 		/// Gets the error message string for string validation
 		/// </summary>
 		/// <returns>an error message</returns>
-		protected static string BuildStringErrorMessage(string min, string max)
+		protected string BuildStringErrorMessage(string min, string max)
 		{
 			if (String.IsNullOrEmpty(min) && !String.IsNullOrEmpty(max))
 			{
 				// range against max value only
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooHighMessage), max);
+				return string.Format(GetString(MessageConstants.RangeTooHighMessage), max);
 			}
 			else if (!String.IsNullOrEmpty(min) && String.IsNullOrEmpty(max))
 			{
 				// range against min value only
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooLowMessage), min);
+				return string.Format(GetString(MessageConstants.RangeTooLowMessage), min);
 			}
 			else if (!String.IsNullOrEmpty(min) || !String.IsNullOrEmpty(max))
 			{
-				return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
+				return string.Format(GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
 			}
 			else
 			{

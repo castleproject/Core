@@ -132,7 +132,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
-			return string.Format(GetResourceForCurrentCulture().GetString(MessageConstants.InvalidSetMessage));
+			return string.Format(GetString(MessageConstants.InvalidSetMessage));
 		}
 
 		/// <summary>

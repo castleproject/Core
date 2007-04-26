@@ -32,7 +32,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
 			validator = new DateTimeValidator();
-			validator.Initialize(typeof(TestTarget).GetProperty("DtField"));
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("DtField"));
 			target = new TestTarget();
 		}
 

@@ -31,9 +31,9 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
 
 			validator = new GroupNotEmptyValidator("Dummy");
-			validator.Initialize(typeof(TestTarget).GetProperty("Foo"));
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("Foo"));
 			validator.FriendlyName = "BAR";
-			validator.Initialize(typeof(TestTarget).GetProperty("Bar"));
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("Bar"));
 			target = new TestTarget();
 		}
 

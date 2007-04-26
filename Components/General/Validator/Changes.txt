@@ -1,5 +1,6 @@
 Beta 1
 ======
+- Added a way to use external resources to override the default messages.
 
 - Applied Brian DeMarzo's patch fixing COMP-20
   "Added SetValidator"

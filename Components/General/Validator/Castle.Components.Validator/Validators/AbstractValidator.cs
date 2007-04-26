@@ -26,31 +26,21 @@ namespace Castle.Components.Validator
 	[Serializable]
 	public abstract class AbstractValidator : IValidator
 	{
-		private static ResourceManager resourceManager;
-
 		private int executionOrder;
 		private string errorMessage, friendlyName;
 		private PropertyInfo property;
 		private RunWhen runWhen;
-
-		/// <summary>
-		/// Initializes the <see cref="AbstractValidator"/> class.
-		/// </summary>
-		static AbstractValidator()
-		{
-			resourceManager =
-				new ResourceManager("Castle.Components.Validator.Messages",
-				                    typeof(AbstractValidator).Assembly);
-		}
+		private IValidatorRegistry validationRegistry;
 
 		/// <summary>
 		/// Implementors should perform any initialization logic
 		/// </summary>
+		/// <param name="validationRegistry"></param>
 		/// <param name="property">The target property</param>
-		public virtual void Initialize(PropertyInfo property)
+		public virtual void Initialize(IValidatorRegistry validationRegistry, PropertyInfo property)
 		{
 			this.property = property;
-
+			this.validationRegistry = validationRegistry;
 			if (errorMessage == null)
 			{
 				errorMessage = BuildErrorMessage();
@@ -207,7 +197,12 @@ namespace Castle.Components.Validator
 				// No localization for now
 				return (ErrorMessage);
 			}
-			return String.Format(GetResourceForCurrentCulture().GetString(MessageKey), Name);
+			return String.Format(GetString(MessageKey), Name);
+		}
+
+		protected string GetString(string key)
+		{
+			return validationRegistry.GetStringFromResource(key);
 		}
 
 		/// <summary>
@@ -216,16 +211,6 @@ namespace Castle.Components.Validator
 		protected virtual string MessageKey
 		{
 			get { return MessageConstants.GenericInvalidField; }
-		}
-
-		/// <summary>
-		/// Returns the resource set instance with the validation error messages.
-		/// <seealso cref="MessageConstants"/>
-		/// </summary>
-		/// <returns>A resource set instance</returns>
-		protected internal static ResourceSet GetResourceForCurrentCulture()
-		{
-			return resourceManager.GetResourceSet(Thread.CurrentThread.CurrentCulture, true, true);
 		}
 
 		/// <summary>
