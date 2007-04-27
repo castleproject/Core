@@ -200,6 +200,11 @@ namespace Castle.Components.Validator
 			return String.Format(GetString(MessageKey), Name);
 		}
 
+		/// <summary>
+		/// Gets the string from resource
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
 		protected string GetString(string key)
 		{
 			return validationRegistry.GetStringFromResource(key);

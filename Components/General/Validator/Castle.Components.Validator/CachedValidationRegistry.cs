@@ -43,6 +43,9 @@ namespace Castle.Components.Validator
 				                    typeof (CachedValidationRegistry).Assembly);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CachedValidationRegistry"/> class.
+		/// </summary>
 		public CachedValidationRegistry()
 		{
 
@@ -127,6 +130,11 @@ namespace Castle.Components.Validator
 			return (IValidator[]) validators.ToArray(typeof (IValidator));
 		}
 
+		/// <summary>
+		/// Gets the string from resource by key
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
 		public string GetStringFromResource(string key)
 		{
 			if(resourceManager!=null)
