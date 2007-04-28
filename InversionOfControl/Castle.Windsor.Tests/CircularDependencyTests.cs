@@ -41,7 +41,7 @@ namespace Castle.Windsor.Tests
 "
 					);
 			}
-			catch(CircularDependecyException)
+			catch(CircularDependencyException)
 			{
 			}
 		}

@@ -75,7 +75,7 @@ namespace Castle.MicroKernel
 				sb.AppendFormat("\r\n + {0} for {1} in {2}\r\n",
 				                dependencyModel, info, info.DeclaringType);
 
-				throw new CircularDependecyException(sb.ToString());
+				throw new CircularDependencyException(sb.ToString());
 			}
 
 			dependencies.Add(trackingKey);
