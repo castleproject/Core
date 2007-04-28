@@ -1207,7 +1207,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			//can only proxy methods that are public or protected (or internals that have already been checked above)
-			if ((method.IsPublic || method.IsFamily || method.IsAssembly) == false)
+			if ((method.IsPublic || method.IsFamily || method.IsAssembly || method.IsFamilyOrAssembly || method.IsFamilyAndAssembly) == false)
 				return false;
 
 			if (method.DeclaringType == typeof (object))
