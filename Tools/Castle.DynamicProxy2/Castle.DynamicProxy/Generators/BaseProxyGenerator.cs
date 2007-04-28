@@ -448,10 +448,10 @@ namespace Castle.DynamicProxy.Generators
 				methodEmitter.CodeBuilder.AddStatement(
 					new AssignArrayStatement(genericParamsArrayLocal, i, new TypeTokenExpression(genericParameters[i])));
 			}
-			MethodInfo setGenericsArgs = typeof (AbstractInvocation).GetMethod("SetGenericMethodArguments",new Type[] {typeof (Type[])});
+			MethodInfo setGenericsArgs = typeof (AbstractInvocation).GetMethod("SetGenericMethodArguments", new Type[] {typeof (Type[])});
 			methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
-               	new MethodInvocationExpression(invocationImplLocal,setGenericsArgs,
-			        new ReferenceExpression(genericParamsArrayLocal))));
+			                                       	new MethodInvocationExpression(invocationImplLocal, setGenericsArgs,
+			                                       	                               new ReferenceExpression(genericParamsArrayLocal))));
 		}
 
 		private static void CopyOutAndRefParameters(
@@ -1133,7 +1133,6 @@ namespace Castle.DynamicProxy.Generators
 			GetInterceptors.CodeBuilder.AddStatement(
 				new ReturnStatement(interceptorsField)
 				);
-			
 		}
 
 		#endregion
@@ -1481,38 +1480,10 @@ namespace Castle.DynamicProxy.Generators
 			if (interfaces == null)
 				interfaces = new Type[0];
 
-			Type[] get_type_args = new Type[] {typeof (String), typeof (bool), typeof (bool)};
-			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
-			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
-
 			ArgumentReference arg1 = new ArgumentReference(typeof (SerializationInfo));
 			ArgumentReference arg2 = new ArgumentReference(typeof (StreamingContext));
 			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData",
 			                                                   new ReturnReferenceExpression(typeof (void)), arg1, arg2);
-
-			LocalReference typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof (Type));
-
-			getObjectData.CodeBuilder.AddStatement(new AssignStatement(
-			                                       	typeLocal,
-			                                       	new MethodInvocationExpression(null,
-			                                       	                               typeof (Type).GetMethod("GetType",
-			                                       	                                                       get_type_args),
-			                                       	                               new ConstReference(
-			                                       	                               	typeof (ProxyObjectReference).
-			                                       	                               		AssemblyQualifiedName).ToExpression(),
-			                                       	                               new ConstReference(1).ToExpression(),
-			                                       	                               new ConstReference(0).ToExpression())));
-
-			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
-			                                       	new MethodInvocationExpression(
-			                                       		arg1, typeof (SerializationInfo).GetMethod("SetType"),
-			                                       		typeLocal.ToExpression())));
-
-			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
-			                                       	new MethodInvocationExpression(arg1, addValueMethod,
-			                                       	                               new ConstReference("__interceptors").
-			                                       	                               	ToExpression(),
-			                                       	                               interceptorsField.ToExpression())));
 
 			LocalReference interfacesLocal =
 				getObjectData.CodeBuilder.DeclareLocal(typeof (String[]));
@@ -1528,17 +1499,10 @@ namespace Castle.DynamicProxy.Generators
 				                                       	new ConstReference(interfaces[i].AssemblyQualifiedName).ToExpression()));
 			}
 
-			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
-			                                       	new MethodInvocationExpression(arg1, addValueMethod,
-			                                       	                               new ConstReference("__interfaces").
-			                                       	                               	ToExpression(),
-			                                       	                               interfacesLocal.ToExpression())));
-
-			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
-			                                       	new MethodInvocationExpression(arg1, addValueMethod,
-			                                       	                               new ConstReference("__baseType").
-			                                       	                               	ToExpression(),
-			                                       	                               new TypeTokenExpression(emitter.BaseType))));
+			getObjectData.CodeBuilder.AddStatement(
+				new ExpressionStatement(new MethodInvocationExpression(null, typeof (ProxySerializer).GetMethod("SerializeBaseProxyData"),
+				                                                       arg1.ToExpression(), SelfReference.Self.ToExpression(), interceptorsField.ToExpression(),
+				                                                       interfacesLocal.ToExpression(), new TypeTokenExpression(emitter.BaseType))));
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, arg1, arg2);
 
@@ -1594,10 +1558,11 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 
-		protected MethodInfo[] RegisterMixinMethodsAndProperties(ClassEmitter emitter, ProxyGenerationOptions options,
-		                                                         MethodInfo[] methods,
-		                                                         ref PropertyToGenerate[] propsToGenerate,
-		                                                         ref EventToGenerate[] eventsToGenerate)
+		protected MethodInfo[] RegisterMixinMethodsAndProperties(
+			ClassEmitter emitter, ProxyGenerationOptions options,
+			MethodInfo[] methods,
+			ref PropertyToGenerate[] propsToGenerate,
+			ref EventToGenerate[] eventsToGenerate)
 		{
 			List<MethodInfo> withMixinMethods = null;
 			List<PropertyToGenerate> withMixinProperties = null;
@@ -1643,7 +1608,7 @@ namespace Castle.DynamicProxy.Generators
 
 				if (withMixinMethods != null)
 				{
-					methods = withMixinMethods.ToArray();	
+					methods = withMixinMethods.ToArray();
 				}
 
 				if (withMixinProperties != null)

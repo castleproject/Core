@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 // 
-//     http://www.apache.org/licenses/LICENSE-2.0
+//		 http://www.apache.org/licenses/LICENSE-2.0
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -179,10 +179,12 @@ namespace Castle.DynamicProxy.Test
 		public class C
 		{
 			public int I;
+			public C This;
 
 			public C (int i)
 			{
 				I = i;
+				This = this;
 			}
 		}
 
@@ -195,8 +197,223 @@ namespace Castle.DynamicProxy.Test
 			C otherProxy = (C) SerializeAndDeserialize (proxy);
 
 			Assert.AreEqual (proxy.I, otherProxy.I);
+			Assert.AreSame (otherProxy, otherProxy.This);
 		}
 
+		[Serializable]
+		public class EventHandlerClass
+		{
+			public void TestHandler (object sender, EventArgs e)
+			{
+			}
+		 
+		}
+
+		[Serializable]
+		public class DelegateHolder
+		{
+			public EventHandler DelegateMember;
+			public ArrayList ComplexTypeMember;
+
+			public DelegateHolder ()
+			{
+			}
+
+			public void TestHandler (object sender, EventArgs e)
+			{
+			}
+		}
+
+		[Serializable]
+		public class IndirectDelegateHolder
+		{
+			public DelegateHolder DelegateHolder = new DelegateHolder();
+
+			public void TestHandler (object sender, EventArgs e)
+			{
+			}
+		}
+
+		[Test]
+		public void SerializeObjectsWithDelegateToOtherObject ()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			EventHandlerClass eventHandlerInstance = new EventHandlerClass();
+			DelegateHolder proxy = (DelegateHolder) generator.CreateClassProxy (typeof (DelegateHolder), new IInterceptor[] {new StandardInterceptor ()});
+
+			proxy.DelegateMember = new EventHandler(eventHandlerInstance.TestHandler);
+			proxy.ComplexTypeMember = new ArrayList (new int[] { 1, 2, 3 });
+			proxy.ComplexTypeMember.Add (eventHandlerInstance);
+
+			Assert.IsNotNull (proxy.DelegateMember);
+			Assert.IsNotNull (proxy.DelegateMember.Target);
+
+			Assert.IsNotNull (proxy.ComplexTypeMember);
+			Assert.AreEqual (4, proxy.ComplexTypeMember.Count);
+			Assert.AreEqual (1, proxy.ComplexTypeMember[0]);
+			Assert.AreEqual (2, proxy.ComplexTypeMember[1]);
+			Assert.AreEqual (3, proxy.ComplexTypeMember[2]);
+			Assert.AreSame (proxy.ComplexTypeMember[3], proxy.DelegateMember.Target);
+
+			DelegateHolder otherProxy = (DelegateHolder) (SerializeAndDeserialize (proxy));
+
+			Assert.IsNotNull (otherProxy.DelegateMember);
+			Assert.IsNotNull (otherProxy.DelegateMember.Target);
+
+			Assert.IsNotNull (otherProxy.ComplexTypeMember);
+			Assert.AreEqual (4, otherProxy.ComplexTypeMember.Count);
+			Assert.AreEqual (1, otherProxy.ComplexTypeMember[0]);
+			Assert.AreEqual (2, otherProxy.ComplexTypeMember[1]);
+			Assert.AreEqual (3, otherProxy.ComplexTypeMember[2]);
+			Assert.AreSame (otherProxy.ComplexTypeMember[3], otherProxy.DelegateMember.Target);
+		}
+
+		[Test]
+		public void SerializeObjectsWithDelegateToThisObject ()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			DelegateHolder proxy = (DelegateHolder) generator.CreateClassProxy (typeof (DelegateHolder), new IInterceptor[] { new StandardInterceptor () });
+
+			proxy.DelegateMember = new EventHandler (proxy.TestHandler);
+			proxy.ComplexTypeMember = new ArrayList (new int[] { 1, 2, 3 });
+
+			Assert.IsNotNull (proxy.DelegateMember);
+			Assert.AreSame (proxy, proxy.DelegateMember.Target);
+
+			Assert.IsNotNull (proxy.ComplexTypeMember);
+			Assert.AreEqual (3, proxy.ComplexTypeMember.Count);
+			Assert.AreEqual (1, proxy.ComplexTypeMember[0]);
+			Assert.AreEqual (2, proxy.ComplexTypeMember[1]);
+			Assert.AreEqual (3, proxy.ComplexTypeMember[2]);
+
+			DelegateHolder otherProxy = (DelegateHolder) (SerializeAndDeserialize (proxy));
+
+			Assert.IsNotNull (otherProxy.DelegateMember);
+			Assert.AreSame (otherProxy, otherProxy.DelegateMember.Target);
+
+			Assert.IsNotNull (otherProxy.ComplexTypeMember);
+			Assert.AreEqual (3, otherProxy.ComplexTypeMember.Count);
+			Assert.AreEqual (1, otherProxy.ComplexTypeMember[0]);
+			Assert.AreEqual (2, otherProxy.ComplexTypeMember[1]);
+			Assert.AreEqual (3, otherProxy.ComplexTypeMember[2]);
+		}
+
+		[Test]
+		public void SerializeObjectsWithIndirectDelegateToThisObject ()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			IndirectDelegateHolder proxy = (IndirectDelegateHolder) generator.CreateClassProxy (typeof (IndirectDelegateHolder),
+				new IInterceptor[] { new StandardInterceptor () });
+
+			proxy.DelegateHolder.DelegateMember = new EventHandler (proxy.TestHandler);
+			proxy.DelegateHolder.ComplexTypeMember = new ArrayList (new int[] { 1, 2, 3 });
+
+			Assert.IsNotNull (proxy.DelegateHolder.DelegateMember);
+			Assert.AreSame (proxy, proxy.DelegateHolder.DelegateMember.Target);
+
+			Assert.IsNotNull (proxy.DelegateHolder.ComplexTypeMember);
+			Assert.AreEqual (3, proxy.DelegateHolder.ComplexTypeMember.Count);
+			Assert.AreEqual (1, proxy.DelegateHolder.ComplexTypeMember[0]);
+			Assert.AreEqual (2, proxy.DelegateHolder.ComplexTypeMember[1]);
+			Assert.AreEqual (3, proxy.DelegateHolder.ComplexTypeMember[2]);
+
+			IndirectDelegateHolder otherProxy = (IndirectDelegateHolder) (SerializeAndDeserialize (proxy));
+
+			Assert.IsNotNull (otherProxy.DelegateHolder.DelegateMember);
+			Assert.AreSame (otherProxy, otherProxy.DelegateHolder.DelegateMember.Target);
+
+			Assert.IsNotNull (otherProxy.DelegateHolder.ComplexTypeMember);
+			Assert.AreEqual (3, otherProxy.DelegateHolder.ComplexTypeMember.Count);
+			Assert.AreEqual (1, otherProxy.DelegateHolder.ComplexTypeMember[0]);
+			Assert.AreEqual (2, otherProxy.DelegateHolder.ComplexTypeMember[1]);
+			Assert.AreEqual (3, otherProxy.DelegateHolder.ComplexTypeMember[2]);
+		}
+
+		[Test]
+		public void SerializeObjectsWithIndirectDelegateToMember ()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			IndirectDelegateHolder proxy = (IndirectDelegateHolder) generator.CreateClassProxy (typeof (IndirectDelegateHolder),
+				new IInterceptor[] { new StandardInterceptor () });
+
+			proxy.DelegateHolder.DelegateMember = new EventHandler (proxy.DelegateHolder.TestHandler);
+			proxy.DelegateHolder.ComplexTypeMember = new ArrayList (new int[] { 1, 2, 3 });
+
+			Assert.IsNotNull (proxy.DelegateHolder.DelegateMember);
+			Assert.AreSame (proxy.DelegateHolder, proxy.DelegateHolder.DelegateMember.Target);
+
+			Assert.IsNotNull (proxy.DelegateHolder.ComplexTypeMember);
+			Assert.AreEqual (3, proxy.DelegateHolder.ComplexTypeMember.Count);
+			Assert.AreEqual (1, proxy.DelegateHolder.ComplexTypeMember[0]);
+			Assert.AreEqual (2, proxy.DelegateHolder.ComplexTypeMember[1]);
+			Assert.AreEqual (3, proxy.DelegateHolder.ComplexTypeMember[2]);
+
+			IndirectDelegateHolder otherProxy = (IndirectDelegateHolder) (SerializeAndDeserialize (proxy));
+
+			Assert.IsNotNull (otherProxy.DelegateHolder.DelegateMember);
+			Assert.AreSame (otherProxy.DelegateHolder, otherProxy.DelegateHolder.DelegateMember.Target);
+
+			Assert.IsNotNull (otherProxy.DelegateHolder.ComplexTypeMember);
+			Assert.AreEqual (3, otherProxy.DelegateHolder.ComplexTypeMember.Count);
+			Assert.AreEqual (1, otherProxy.DelegateHolder.ComplexTypeMember[0]);
+			Assert.AreEqual (2, otherProxy.DelegateHolder.ComplexTypeMember[1]);
+			Assert.AreEqual (3, otherProxy.DelegateHolder.ComplexTypeMember[2]);
+		}
+
+		[Serializable]
+		public class ClassWithIndirectSelfReference
+		{
+			public ArrayList List = new ArrayList();
+
+			public ClassWithIndirectSelfReference()
+			{
+				List.Add (this);
+			}
+		}
+
+		[Test]
+		public void SerializeClassWithIndirectSelfReference()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			ClassWithIndirectSelfReference proxy = (ClassWithIndirectSelfReference) generator.CreateClassProxy (typeof (ClassWithIndirectSelfReference),
+				new Type[0], new StandardInterceptor ());
+			Assert.AreSame (proxy, proxy.List[0]);
+
+			ClassWithIndirectSelfReference otherProxy = (ClassWithIndirectSelfReference) SerializeAndDeserialize (proxy);
+			Assert.AreSame (otherProxy, otherProxy.List[0]);
+		}
+
+		[Serializable]
+		public class ClassWithDirectAndIndirectSelfReference
+		{
+			public ClassWithDirectAndIndirectSelfReference This;
+			public ArrayList List = new ArrayList();
+
+			public ClassWithDirectAndIndirectSelfReference ()
+			{
+				This = this;
+				List.Add (this);
+			}
+		}
+
+		[Test]
+		public void SerializeClassWithDirectAndIndirectSelfReference ()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			ClassWithDirectAndIndirectSelfReference proxy = (ClassWithDirectAndIndirectSelfReference) generator.CreateClassProxy (typeof (ClassWithDirectAndIndirectSelfReference),
+				new Type[0], new StandardInterceptor ());
+			Assert.AreSame (proxy, proxy.This);
+
+			ClassWithDirectAndIndirectSelfReference otherProxy = (ClassWithDirectAndIndirectSelfReference) SerializeAndDeserialize (proxy);
+			Assert.AreSame (otherProxy, otherProxy.List[0]);
+			Assert.AreSame (otherProxy, otherProxy.This);
+		}
 
 	}
 }

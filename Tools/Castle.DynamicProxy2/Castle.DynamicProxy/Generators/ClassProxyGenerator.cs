@@ -31,6 +31,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Specialized;
 	using System.Runtime.Serialization;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
+  using Castle.DynamicProxy.Serialization;
 
 	/// <summary>
 	/// 
@@ -336,17 +337,12 @@ namespace Castle.DynamicProxy.Generators
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, 
 		                                               ArgumentReference arg1, ArgumentReference arg2)
 		{
-			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
-			Type[] key_and_bool = new Type[] {typeof (String), typeof (bool)};
-			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
-			MethodInfo addValueBoolMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_bool);
+      codebuilder.AddStatement (new ExpressionStatement (new MethodInvocationExpression (null,
+        typeof (ProxySerializer).GetMethod ("SerializeClassProxyData"), arg1.ToExpression (),
+        new ConstReference (delegateToBaseGetObjectData).ToExpression (), new TypeTokenExpression (targetType),
+        SelfReference.Self.ToExpression())));
 
-			codebuilder.AddStatement( new ExpressionStatement(
-				new MethodInvocationExpression(arg1, addValueBoolMethod, 
-				new ConstReference("__delegateToBase").ToExpression(), 
-				new ConstReference( delegateToBaseGetObjectData ? 1 : 0 ).ToExpression() ) ) );
-
-			if (delegateToBaseGetObjectData)
+      if (delegateToBaseGetObjectData)
 			{
 				MethodInfo baseGetObjectData = targetType.GetMethod("GetObjectData", 
 					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
@@ -354,29 +350,6 @@ namespace Castle.DynamicProxy.Generators
 				codebuilder.AddStatement( new ExpressionStatement(
 					new MethodInvocationExpression( baseGetObjectData, 
 						arg1.ToExpression(), arg2.ToExpression() )) );
-			}
-			else
-			{
-				LocalReference members_ref = codebuilder.DeclareLocal( typeof(MemberInfo[]) );
-				LocalReference data_ref = codebuilder.DeclareLocal( typeof(object[]) );
-
-				MethodInfo getSerMembers = typeof(FormatterServices).GetMethod("GetSerializableMembers", 
-					new Type[] { typeof(Type) });
-				MethodInfo getObjData = typeof(FormatterServices).GetMethod("GetObjectData", 
-					new Type[] { typeof(object), typeof(MemberInfo[]) });
-				
-				codebuilder.AddStatement( new AssignStatement( members_ref,
-					new MethodInvocationExpression( null, getSerMembers, 
-					new TypeTokenExpression( targetType ) )) );
-				
-				codebuilder.AddStatement( new AssignStatement( data_ref, 
-					new MethodInvocationExpression( null, getObjData, 
-					SelfReference.Self.ToExpression(), members_ref.ToExpression() )) );
-
-				codebuilder.AddStatement( new ExpressionStatement(
-					new MethodInvocationExpression(arg1, addValueMethod, 
-					new ConstReference("__data").ToExpression(), 
-					data_ref.ToExpression() ) ) );
 			}
 		}
 	}

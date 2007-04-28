@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 // 
-//     http://www.apache.org/licenses/LICENSE-2.0
+//		 http://www.apache.org/licenses/LICENSE-2.0
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,16 +25,18 @@ namespace Castle.DynamicProxy.Serialization
 
 	/// <summary>
 	/// Handles the deserialization of proxies.
+	/// See here for more details:
+	/// http://groups.google.com/group/castle-project-devel/msg/fb5ef9656d050ba5
 	/// </summary>
 	[Serializable]
-	public class ProxyObjectReference : IObjectReference, ISerializable
+	public class ProxyObjectReference : IObjectReference, ISerializable, IDeserializationCallback
 	{
 		private static ModuleScope _scope = new ModuleScope();
 
 		private Type _baseType;
 		private Type[] _interfaces;
 		private IInterceptor[] _interceptors;
-		private object[] _data;
+		private ProxySerializer.Indirection _data;
 		private object _proxy;
 
 		/// <summary>
@@ -47,7 +49,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
 		{
-			_interceptors = (IInterceptor[])info.GetValue("__interceptors", typeof(IInterceptor[]));
+			_interceptors = (IInterceptor[])info.GetValue("__interceptors", typeof (IInterceptor[]));
 			_baseType = (Type)info.GetValue("__baseType", typeof(Type));
 
 			String[] _interfaceNames = (String[])info.GetValue("__interfaces", typeof(String[]));
@@ -60,8 +62,6 @@ namespace Castle.DynamicProxy.Serialization
 			}
 
 			_proxy = RecreateProxy(info, context);
-
-			InvokeCallback(_proxy);
 		}
 
 		protected virtual object RecreateProxy(SerializationInfo info, StreamingContext context)
@@ -88,13 +88,13 @@ namespace Castle.DynamicProxy.Serialization
 			switch (generatorType)
 			{
 				case InterfaceGeneratorType.WithTarget:
-					generator = new  InterfaceProxyWithTargetGenerator(_scope,theInterface);
+					generator = new InterfaceProxyWithTargetGenerator(_scope,theInterface);
 					break;
 				case InterfaceGeneratorType.WithoutTarget:
 					generator = new InterfaceProxyGeneratorWithoutTarget(_scope, theInterface);
 					break;
 				case InterfaceGeneratorType.WithTargetInterface:
-					generator = new InterfaceProxyWithTargetInterfaceGenerator(_scope,  theInterface);
+					generator = new InterfaceProxyWithTargetInterfaceGenerator(_scope,	theInterface);
 					break;
 				default:
 					throw new InvalidOperationException(string.Format("Got value {0} for the interface generator type, which is not known for the purpose of serialization.", generatorType));
@@ -111,11 +111,6 @@ namespace Castle.DynamicProxy.Serialization
 		{
 			bool delegateBaseSer = info.GetBoolean("__delegateToBase");
 
-			if (!delegateBaseSer)
-			{
-				_data = (object[])info.GetValue("__data", typeof(object[]));
-			}
-
 			object proxy = null;
 
 			ClassProxyGenerator cpGen = new ClassProxyGenerator(_scope, _baseType);
@@ -130,17 +125,15 @@ namespace Castle.DynamicProxy.Serialization
 			else
 			{
 				proxy = FormatterServices.GetSafeUninitializedObject(proxy_type);
+				_data = (ProxySerializer.Indirection) info.GetValue("__data", typeof (ProxySerializer.Indirection));
 
 				SetInterceptor(proxy, proxy_type);
-
-				MemberInfo[] members = FormatterServices.GetSerializableMembers(_baseType);
-				FormatterServices.PopulateObjectMembers(proxy, members, _data);
 			}
 
 			return proxy;
 		}
 
-		private void SetInterceptor(object proxy, Type proxy_type)
+		private void SetInterceptor (object proxy, Type proxy_type)
 		{
 			FieldInfo interceptorField = proxy_type.GetField("__interceptors");
 
@@ -171,5 +164,20 @@ namespace Castle.DynamicProxy.Serialization
 			// There is no need to implement this method as 
 			// this class would never be serialized.
 		}
+
+    // Class proxies must be populated in this method, since only at this point all members held by _data.IndirectedObject
+    // have been fixed up.
+		public void OnDeserialization (object sender)
+		{
+			if (_data != null)
+			{
+				object[] objectData = (object[]) _data.IndirectedObject;
+
+				MemberInfo[] members = FormatterServices.GetSerializableMembers (_baseType);
+				FormatterServices.PopulateObjectMembers (_proxy, members, objectData);
+				_data = null;
+      }
+      InvokeCallback (_proxy);
+    }
 	}
 }
