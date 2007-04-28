@@ -394,7 +394,7 @@ StringComparer.InvariantCultureIgnoreCase
 				string typeName = Path.GetFileNameWithoutExtension(input.Name) + "_BrailView";
 				type = result.Context.GeneratedAssembly.GetType(typeName);
 				Log("Adding {0} to the cache", type.FullName);
-				compilations[input.Name] = type;
+				compilations[filename] = type;
 				constructors[type] = type.GetConstructor(new Type[]
 				                                         	{
 				                                         		typeof(BooViewEngine),
