@@ -179,13 +179,14 @@ namespace Castle.MonoRail.Views.Brail
 				}
 				if (code[index] == '}' && bracesPositions.Count > 0)
 				{
+					ExpressionPosition position = bracesPositions[bracesPositions.Count - 1];
 					if (ParentExpressionIsNotValid(bracesPositions, bracesPositions.Count))
 					{
 						bracesPositions.RemoveAt(bracesPositions.Count - 1);
 					}
-					else
+					else if (position.End==-1)
 					{
-						bracesPositions[bracesPositions.Count - 1].End = index;
+						position.End = index;
 					}
 				}
 				//handles escaping expressions with $$ as well

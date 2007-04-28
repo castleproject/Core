@@ -14,8 +14,10 @@
 
 namespace Castle.MonoRail.Views.Brail.Tests
 {
+	using Boo.Lang.Compiler;
 	using Castle.MonoRail.Framework.Tests;
 	using NUnit.Framework;
+	using Boo.Lang.Compiler.IO;
 
 	[TestFixture]
 	public class BrailBugsTestCase : AbstractTestCase

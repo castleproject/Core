@@ -28,6 +28,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Boo.Lang.Compiler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Boo.Lang.Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.DynamicProxy.dll</HintPath>
@@ -41,6 +49,7 @@
     <Compile Include="BrailAjaxTestCase.cs" />
     <Compile Include="BrailBasicFunctionality.cs" />
     <Compile Include="BrailHelperTestCase.cs" />
+    <Compile Include="BrailPreProcessorFixture.cs" />
     <Compile Include="BrailRoutingTestCase.cs" />
     <Compile Include="BrailSubViewTestCase.cs" />
     <Compile Include="ComponentsTestCase.cs" />
