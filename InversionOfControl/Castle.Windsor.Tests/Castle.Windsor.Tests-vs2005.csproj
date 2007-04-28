@@ -121,6 +121,11 @@
     <Compile Include="Adapters\ComponentModel\TestComponent.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Bugs\IoC-73\ClassUser.cs" />
+    <Compile Include="Bugs\IoC-73\IMyClass.cs" />
+    <Compile Include="Bugs\IoC-73\MyClass.cs" />
+    <Compile Include="Bugs\IoC-73\IoC73.cs" />
+    <Compile Include="Bugs\IoC-73\Proxy.cs" />
     <Compile Include="ChildContainerSupportTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
