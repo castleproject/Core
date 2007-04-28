@@ -37,6 +37,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			bool isAssemblySigned = IsAssemblySigned(baseType);
+			if(isAssemblySigned==false)
+			{
+				foreach (Type type in interfaces)
+				{
+					isAssemblySigned |= IsAssemblySigned(type);
+				}
+			}
 	          
 			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
 			

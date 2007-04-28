@@ -106,6 +106,17 @@ namespace Castle.DynamicProxy.Tests
 			object o = generator.CreateClassProxy(typeof (SomeClassWithProtectedAbstractClass), new IInterceptor[]{new StandardInterceptor()});
 			Assert.IsNotNull(o);
 		}
+
+		[Test]
+		public void ProxyingInternalInterface()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof (IAmInternal), new SkipCallingMethodInterceptor());
+		}
+	}
+
+	internal interface IAmInternal
+	{
+		void Foo();
 	}
 
 	public abstract class SomeClassWithProtectedAbstractClass
