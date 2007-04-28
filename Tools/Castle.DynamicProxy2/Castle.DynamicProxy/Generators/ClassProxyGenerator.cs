@@ -107,15 +107,15 @@ namespace Castle.DynamicProxy.Generators
 
 				ReplicateNonInheritableAttributes(targetType, emitter);
 
-				// Implement builtin Interfaces
-
-				ImplementProxyTargetAccessor(targetType, emitter);
-
-				// Fields generations
+					// Fields generations
 
 				FieldReference interceptorsField =
 					emitter.CreateField("__interceptors", typeof(IInterceptor[]));
 
+				// Implement builtin Interfaces
+				ImplementProxyTargetAccessor(targetType, emitter,interceptorsField);
+
+			
 				emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
 
 				// Collect methods

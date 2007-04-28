@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests
 			generator = new ProxyGenerator(new PersistentProxyBuilder());
 		}
 
-#if !MONO // mono doesn't have PEVerify
+#if MONO // mono doesn't have PEVerify
 		
 		[TearDown]
 		public void RunPEVerifyOnGeneratedAssembly()

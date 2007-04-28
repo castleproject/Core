@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy.Generators
 
 				// Implement builtin Interfaces
 
-				ImplementProxyTargetAccessor(targetType, emitter);
+				ImplementProxyTargetAccessor(targetType, emitter,interceptorsField);
 
 				// Collect methods
 

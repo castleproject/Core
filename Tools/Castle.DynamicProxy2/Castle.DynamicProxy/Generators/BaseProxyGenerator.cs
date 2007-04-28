@@ -1117,15 +1117,23 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void ImplementProxyTargetAccessor(Type targetType, ClassEmitter emitter)
+		protected void ImplementProxyTargetAccessor(Type targetType, ClassEmitter emitter, FieldReference interceptorsField)
 		{
 			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
 
-			MethodEmitter methodEmitter =
+			MethodEmitter DynProxyGetTarget =
 				emitter.CreateMethod("DynProxyGetTarget", attributes, new ReturnReferenceExpression(typeof (object)));
 
-			methodEmitter.CodeBuilder.AddStatement(
+			DynProxyGetTarget.CodeBuilder.AddStatement(
 				new ReturnStatement(new ConvertExpression(typeof (object), targetType, GetProxyTargetReference().ToExpression())));
+
+			MethodEmitter GetInterceptors =
+				emitter.CreateMethod("GetInterceptors", attributes, new ReturnReferenceExpression(typeof (IInterceptor[])));
+
+			GetInterceptors.CodeBuilder.AddStatement(
+				new ReturnStatement(interceptorsField)
+				);
+			
 		}
 
 		#endregion

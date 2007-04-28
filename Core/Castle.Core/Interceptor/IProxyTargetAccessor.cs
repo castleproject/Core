@@ -20,9 +20,15 @@ namespace Castle.Core.Interceptor
 	public interface IProxyTargetAccessor
 	{
 		/// <summary>
-		/// 
+		/// Get the proxy target (note that null is a valid target!)
 		/// </summary>
 		/// <returns></returns>
 		object DynProxyGetTarget();
+
+		/// <summary>
+		/// Gets the interceptors for the proxy
+		/// </summary>
+		/// <returns></returns>
+		IInterceptor[] GetInterceptors();
 	}
 }

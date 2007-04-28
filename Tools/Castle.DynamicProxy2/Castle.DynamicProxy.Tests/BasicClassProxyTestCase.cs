@@ -56,6 +56,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void CanGetInterceptorsField()
+		{
+			object proxy = generator.CreateClassProxy(typeof(ServiceClass), new ResultModifierInterceptor());
+			IInterceptor[] interceptors = ((IProxyTargetAccessor)proxy).GetInterceptors();
+			Assert.AreEqual(1, interceptors.Length );
+		}
+
+		[Test]
 		public void Caching()
 		{
 			object proxy = generator.CreateClassProxy(
