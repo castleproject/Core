@@ -758,11 +758,11 @@ namespace Castle.DynamicProxy.Generators
 #endif
 			// Create the invocation fields
 
-			FieldReference targetRef = nested.CreateField("target", targetForInvocation);
+			FieldReference targetRef = nested.CreateField("target", emitter.TypeBuilder);
 
 			// Create constructor
 
-			CreateIInvocationConstructor(targetForInvocation, nested, targetRef, version);
+			CreateIInvocationConstructor(emitter.TypeBuilder, nested, targetRef, version);
 
 			if (allowChangeTarget)
 			{

@@ -37,7 +37,6 @@ namespace Castle.DynamicProxy.Tests
 		public void RunPEVerifyOnGeneratedAssembly()
 		{
 			Process process = new Process();
-
 #if DOTNET2
 			string path = Path.Combine(ConfigurationManager.AppSettings["sdkDir"], "peverify.exe");
 #else
@@ -59,11 +58,12 @@ namespace Castle.DynamicProxy.Tests
 			}
 
 			process.StartInfo.FileName = path;
-			process.StartInfo.RedirectStandardOutput = false; //if the output is redirected, the process hangs.
+			process.StartInfo.RedirectStandardOutput = true; //if the output is redirected, the process hangs.
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			process.StartInfo.Arguments = ModuleScope.FILE_NAME;
 			process.Start();
+			string text = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
 
 			string result = process.ExitCode + " code ";
@@ -72,7 +72,7 @@ namespace Castle.DynamicProxy.Tests
 
 			if (process.ExitCode != 0)
 			{
-				Assert.Fail("PeVerify reported error(s).", result);
+				Assert.Fail("PeVerify reported error(s). " + text, result);
 			}
 		}
 #endif
