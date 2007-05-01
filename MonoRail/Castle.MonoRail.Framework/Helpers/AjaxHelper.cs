@@ -927,13 +927,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			
 			foreach(String name in names)
 			{
-				if (!options.Contains(name.ToLower(System.Globalization.CultureInfo.InvariantCulture))) continue;
+				if (!options.Contains(name)) continue;
 
 				String callbackFunctionName;
 
 				String function = BuildCallbackFunction( 
 					(CallbackEnum) Enum.Parse( typeof(CallbackEnum), name, true),
-					options[name.ToLower(System.Globalization.CultureInfo.InvariantCulture)] as String, out callbackFunctionName);
+					options[name].ToString(), out callbackFunctionName);
 
 				if (function == String.Empty) return;
 
