@@ -6,10 +6,10 @@
     <members>
         <member name="T:Nullables.NHibernate.EmptyAnsiStringType">
             <summary>
-            An <see cref="T:NHibernate.UserTypes.IUserType"/> that reads a <c>null</c> value from an <c>ansi string</c>
+            An <see cref="T:NHibernate.UserTypes.IUserType"/> that reads a <see langword="null"/> value from an <c>ansi string</c>
             column in the database as a <see cref="F:System.String.Empty">String.Empty</see>
             and writes a <see cref="F:System.String.Empty">String.Empty</see> to the database
-            as <c>null</c>.
+            as <see langword="null"/>.
             </summary>
             <remarks>
             This is intended to help with Windows Forms DataBinding and the problems associated
@@ -19,10 +19,10 @@
         </member>
         <member name="T:Nullables.NHibernate.EmptyStringType">
             <summary>
-            An <see cref="T:NHibernate.UserTypes.IUserType"/> that reads a <c>null</c> value from an <c>string</c>
+            An <see cref="T:NHibernate.UserTypes.IUserType"/> that reads a <see langword="null"/> value from an <c>string</c>
             column in the database as a <see cref="F:System.String.Empty">String.Empty</see>
             and writes a <see cref="F:System.String.Empty">String.Empty</see> to the database
-            as <c>null</c>.
+            as <see langword="null"/>.
             </summary>
             <remarks>
             This is intended to help with Windows Forms DataBinding and the problems associated

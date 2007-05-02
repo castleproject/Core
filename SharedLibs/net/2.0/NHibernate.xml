@@ -2205,7 +2205,7 @@
             </summary>
             <remarks>
             This method should be prepared to handle duplicate elements caused by fetching multiple collections,
-            or <see cref="M:NHibernate.Hql.Classic.QueryTranslator.FetchedCollections.IsUnsafe(NHibernate.Persister.Collection.ICollectionPersister)"/> should be updated
+            or <see cref="M:NHibernate.Hql.Classic.QueryTranslator.FetchedCollections.IsUnsafe(NHibernate.Persister.Collection.IQueryableCollection)"/> should be updated
             to return <see langword="true"/> for the collection type.
             </remarks>
             <param name="reader">The IDataReader that contains the value of the Identifier</param>
@@ -3578,41 +3578,21 @@
             Used to show a better debug display for dictionaries
             </summary>
         </member>
-        <member name="T:NHibernate.Dialect.Function.AnsiExtractFunction">
+        <member name="T:NHibernate.Dialect.Function.AnsiSubstringFunction">
              <summary>
-             
+             ANSI-SQL substring  
+             Documented in:
+             ANSI X3.135-1992
+             American National Standard for Information Systems - Database Language - SQL
              </summary>
              <remarks>
-             <![CDATA[
-             <extract expression> ::=
-            					EXTRACT <left paren> <extract field> FROM <extract source> <right paren>
-             
-            <extract field > ::=
-            			<datetime field> | <time zone field >
-             
-             <datetime field> ::= 
-            			YEAR |
-            			MONTH |
-            			DAY |
-            			HOUR |
-            			MINUTE |
-            			SECOND
-             
-            <time zone field> ::= 
-            			TIMEZONE_HOUR	| 
-            			TIMEZONE_MINUTE
-             ]]>
+             Syntax:
+            <![CDATA[
+             <character substring function> ::=
+             SUBSTRING <left paren> <character value expression> FROM < start position>
+             [ FOR <string length> ] <right paren>
+            ]]>
              </remarks>
-        </member>
-        <member name="T:NHibernate.Dialect.Function.SQLFunctionTemplate">
-            <summary>
-            Represents HQL functions that can have different representations in different SQL dialects.
-            E.g. in HQL we can define function <code>concat(?1, ?2)</code> to concatenate two strings 
-            p1 and p2. Target SQL function will be dialect-specific, e.g. <code>(?1 || ?2)</code> for 
-            Oracle, <code>concat(?1, ?2)</code> for MySql, <code>(?1 + ?2)</code> for MS SQL.
-            Each dialect will define a template as a string (exactly like above) marking function 
-            parameters with '?' followed by parameter's index (first index is 1).
-            </summary>
         </member>
         <member name="T:NHibernate.Dialect.Function.ISQLFunction">
              <summary>
@@ -3649,30 +3629,6 @@
             <summary>
             If there are no arguments, are parens required?
             </summary>
-        </member>
-        <member name="M:NHibernate.Dialect.Function.SQLFunctionTemplate.Render(System.Collections.IList,NHibernate.Engine.ISessionFactoryImplementor)">
-            <summary>
-            Applies the template to passed in arguments.
-            </summary>
-            <param name="args">args function arguments</param>
-            <param name="factory">generated SQL function call</param>
-            <returns></returns>
-        </member>
-        <member name="T:NHibernate.Dialect.Function.AnsiSubstringFunction">
-             <summary>
-             ANSI-SQL substring  
-             Documented in:
-             ANSI X3.135-1992
-             American National Standard for Information Systems - Database Language - SQL
-             </summary>
-             <remarks>
-             Syntax:
-            <![CDATA[
-             <character substring function> ::=
-             SUBSTRING <left paren> <character value expression> FROM < start position>
-             [ FOR <string length> ] <right paren>
-            ]]>
-             </remarks>
         </member>
         <member name="T:NHibernate.Dialect.Function.AnsiTrimEmulationFunction">
             <summary>
@@ -3765,15 +3721,23 @@
             Emulation of locate() on PostgreSQL
             </summary>
         </member>
-        <member name="T:NHibernate.Dialect.Function.StandardSafeSQLFunction">
+        <member name="T:NHibernate.Dialect.Function.SQLFunctionTemplate">
             <summary>
-            Provides a standard implementation that supports the majority of the HQL
-            functions that are translated to SQL.
+            Represents HQL functions that can have different representations in different SQL dialects.
+            E.g. in HQL we can define function <code>concat(?1, ?2)</code> to concatenate two strings 
+            p1 and p2. Target SQL function will be dialect-specific, e.g. <code>(?1 || ?2)</code> for 
+            Oracle, <code>concat(?1, ?2)</code> for MySql, <code>(?1 + ?2)</code> for MS SQL.
+            Each dialect will define a template as a string (exactly like above) marking function 
+            parameters with '?' followed by parameter's index (first index is 1).
             </summary>
-            <remarks>
-            The Dialect and its sub-classes use this class to provide details required
-            for processing of the associated function.
-            </remarks>	
+        </member>
+        <member name="M:NHibernate.Dialect.Function.SQLFunctionTemplate.Render(System.Collections.IList,NHibernate.Engine.ISessionFactoryImplementor)">
+            <summary>
+            Applies the template to passed in arguments.
+            </summary>
+            <param name="args">args function arguments</param>
+            <param name="factory">generated SQL function call</param>
+            <returns></returns>
         </member>
         <member name="T:NHibernate.Dialect.Function.StandardSQLFunction">
             <summary>
@@ -3794,20 +3758,6 @@
         <member name="M:NHibernate.Dialect.Function.StandardSQLFunction.#ctor(System.String,NHibernate.Type.IType)">
             <summary>
             Initializes a new instance of the StandardSQLFunction class.
-            </summary>
-            <param name="name">SQL function name.</param>
-            <param name="typeValue">Return type for the fuction.</param>
-        </member>
-        <member name="M:NHibernate.Dialect.Function.StandardSafeSQLFunction.#ctor(System.String,System.Int32)">
-            <summary>
-            Initializes a new instance of the StandardSafeSQLFunction class.
-            </summary>
-            <param name="name">SQL function name.</param>
-            <param name="allowedArgsCount">Exact number of arguments expected.</param>
-        </member>
-        <member name="M:NHibernate.Dialect.Function.StandardSafeSQLFunction.#ctor(System.String,NHibernate.Type.IType,System.Int32)">
-            <summary>
-            Initializes a new instance of the StandardSafeSQLFunction class.
             </summary>
             <param name="name">SQL function name.</param>
             <param name="typeValue">Return type for the fuction.</param>
@@ -3938,7 +3888,7 @@
             <param name="code">The typecode</param>
             <param name="name">The database type name</param>
         </member>
-        <member name="M:NHibernate.Dialect.Dialect.GetAddForeignKeyConstraintString(System.String,System.String,System.String[],System.String,System.String[])">
+        <member name="M:NHibernate.Dialect.Dialect.GetAddForeignKeyConstraintString(System.String,System.String[],System.String,System.String[])">
             <summary>
             
             </summary>
@@ -3956,40 +3906,6 @@
             <returns>
             The SQL string to drop the foreign key constraint.
             </returns>
-        </member>
-        <member name="M:NHibernate.Dialect.Dialect.GetIfNotExistsCreateConstraint(NHibernate.Mapping.Table,System.String)">
-            <summary>
-            The syntax that is used to check if a constraint does not exists before creating it
-            </summary>
-            <param name="table">The table.</param>
-            <param name="name">The name.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NHibernate.Dialect.Dialect.GetIfNotExistsCreateConstraintEnd(NHibernate.Mapping.Table,System.String)">
-            <summary>
-            The syntax that is used to close the if for a constraint exists check, used
-            for dialects that requires begin/end for ifs
-            </summary>
-            <param name="table">The table.</param>
-            <param name="name">The name.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NHibernate.Dialect.Dialect.GetIfExistsDropConstraint(NHibernate.Mapping.Table,System.String)">
-            <summary>
-            The syntax that is used to check if a constraint exists before dropping it
-            </summary>
-            <param name="table">The table.</param>
-            <param name="name">The name.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NHibernate.Dialect.Dialect.GetIfExistsDropConstraintEnd(NHibernate.Mapping.Table,System.String)">
-            <summary>
-            The syntax that is used to close the if for a constraint exists check, used
-            for dialects that requires begin/end for ifs
-            </summary>
-            <param name="table">The table.</param>
-            <param name="name">The name.</param>
-            <returns></returns>
         </member>
         <member name="M:NHibernate.Dialect.Dialect.GetAddPrimaryKeyConstraintString(System.String)">
             <summary>
@@ -4789,10 +4705,10 @@
             <param name="hasOffset"></param>
             <returns></returns>
         </member>
-        <member name="M:NHibernate.Dialect.MySQLDialect.GetAddForeignKeyConstraintString(System.String,System.String,System.String[],System.String,System.String[])">
+        <member name="M:NHibernate.Dialect.MySQLDialect.GetAddForeignKeyConstraintString(System.String,System.String[],System.String,System.String[])">
             <summary>
+            
             </summary>
-            <param name="parentTable"></param>
             <param name="constraintName"></param>
             <param name="foreignKey"></param>
             <param name="referencedTable"></param>
@@ -7017,13 +6933,6 @@
             managed by this batcher (IDbCommands or IDataReaders).
             </summary>
         </member>
-        <member name="P:NHibernate.Engine.IBatcher.BatchSize">
-            <summary>
-            Gets or sets the size of the batch, this can change dynamically by
-            calling the session's SetBatchSize.
-            </summary>
-            <value>The size of the batch.</value>
-        </member>
         <member name="T:NHibernate.Engine.ICollectionSnapshot">
             <summary>
             Defines a complete "snapshot" of a particular collection.
@@ -8056,13 +7965,6 @@
             a list of all the results of all the queries.
             Note that each query result is itself usually a list.
             </returns>
-        </member>
-        <member name="M:NHibernate.ISession.SetBatchSize(System.Int32)">
-            <summary>
-            Sets the batch size of the session
-            </summary>
-            <param name="batchSize"></param>
-            <returns></returns>
         </member>
         <member name="M:NHibernate.ISession.GetSessionImplementation">
             <summary>
@@ -10349,11 +10251,6 @@
         <member name="M:NHibernate.Hql.Classic.FromPathExpressionParser.SetExpectingCollectionIndex">
             <summary></summary>
         </member>
-        <member name="P:NHibernate.Hql.Classic.FunctionStack.FunctionHolder.FirstValidColumnType">
-            <summary>
-            Used to hold column type in nested functions.
-            </summary>
-        </member>
         <member name="T:NHibernate.Hql.Classic.GroupByParser">
             <summary> 
             Parses the GROUP BY clause of an aggregate query
@@ -10979,15 +10876,6 @@
             WARNING: side-effecty
             </summary>
         </member>
-        <member name="M:NHibernate.Hql.Classic.QueryTranslator.ExtractFunctionClause(System.Collections.IList,System.Int32@)">
-            <summary>
-            Extract the complete clause of function.
-            </summary>
-            <param name="tokens">The list of tokens</param>
-            <param name="tokenIdx">The index of the list that represent the founded function.</param>
-            <returns>String trepresentation of each token.</returns>
-            <remarks>Each token can be string or SqlString </remarks>
-        </member>
         <member name="M:NHibernate.Hql.Classic.QueryTranslator.AddFromAssociation(System.String,System.String)">
             <remarks>Used for collection filters</remarks>
         </member>
@@ -11031,8 +10919,55 @@
             for a table (well, really class) alias.
             </summary>
         </member>
+        <member name="M:NHibernate.Hql.Classic.SelectParser.#cctor">
+            <summary></summary>
+        </member>
         <member name="M:NHibernate.Hql.Classic.SelectParser.#ctor">
             <summary></summary>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.SelectParser.Token(System.String,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.SelectParser.AggregateHasArgs(System.String,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="funcToken"></param>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.SelectParser.AggregateFuncNoArgsHasParenthesis(System.String,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="funcToken"></param>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.SelectParser.AggregateType(System.Collections.ArrayList,NHibernate.Type.IType,NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="funcTokenList"></param>
+            <param name="type"></param>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.SelectParser.Start(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:NHibernate.Hql.Classic.SelectParser.End(NHibernate.Hql.Classic.QueryTranslator)">
+            <summary>
+            
+            </summary>
+            <param name="q"></param>
         </member>
         <member name="T:NHibernate.Hql.Classic.SelectPathExpressionParser">
             <summary></summary>
@@ -12647,13 +12582,6 @@
             Gets the current <see cref="T:System.Data.IDbCommand"/> that is contained for this Batch
             </summary>
             <value>The current <see cref="T:System.Data.IDbCommand"/>.</value>
-        </member>
-        <member name="P:NHibernate.Impl.BatcherImpl.BatchSize">
-            <summary>
-            Gets or sets the size of the batch, this can change dynamically by
-            calling the session's SetBatchSize.
-            </summary>
-            <value>The size of the batch.</value>
         </member>
         <member name="P:NHibernate.Impl.BatcherImpl.Factory">
             <summary>
@@ -17870,7 +17798,7 @@
             <summary>
             Generates the SQL string to create the Unique Key Constraint in the database.
             </summary>
-            <param name="dialect">The <see cref="T:NHibernate.Dialect.Dialect"/> to use for SQL rules.</param>
+            <param name="d">The <see cref="T:NHibernate.Dialect.Dialect"/> to use for SQL rules.</param>
             <param name="constraintName"></param>
             <param name="defaultSchema"></param>
             <returns>
@@ -28077,7 +28005,7 @@
         </member>
         <member name="M:NHibernate.Util.StringHelper.Split(System.String,System.String)">
             <summary>
-            Just a faחade for calling string.Split()
+            Just a façade for calling string.Split()
             We don't use our StringTokenizer because string.Split() is
             more efficient (but it only works when we don't want to retrieve the delimiters)
             </summary>
