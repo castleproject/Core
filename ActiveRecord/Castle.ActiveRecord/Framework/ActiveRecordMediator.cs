@@ -88,6 +88,29 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="detachedCriteria">The criteria.</param>
+		/// <param name="orders">The sort order - used to determine which record is the first one.</param>
+		/// <returns>A <c>targetType</c> instance or <c>null.</c></returns>
+		public static object FindFirst(Type targetType, DetachedCriteria detachedCriteria, params Order[] orders)
+		{
+			return ActiveRecordBase.FindFirst(targetType, detachedCriteria, orders);
+		}
+
+		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criteria">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		public static object FindFirst(Type targetType, DetachedCriteria criteria)
+		{
+			return ActiveRecordBase.FindFirst(targetType, criteria);
+		}
+
+		/// <summary>
 		/// Searches and returns the a row. If more than one is found, 
 		/// throws <see cref="ActiveRecordException"/>
 		/// </summary>
@@ -331,6 +354,18 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Returns the number of records of the specified 
+		/// type in the database
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="detachedCriteria">The criteria expression</param>
+		/// <returns>The count result</returns>
+		public static int Count(Type targetType, DetachedCriteria detachedCriteria)
+		{
+			return ActiveRecordBase.Count(targetType, detachedCriteria);
+		}
+
+		/// <summary>
 		/// Check if there is any records in the db for the target type
 		/// </summary>
 		/// <param name="targetType">Type of the target.</param>
@@ -371,6 +406,17 @@ namespace Castle.ActiveRecord
 		public static bool Exists(Type targetType, params ICriterion[] criterias)
 		{
 			return ActiveRecordBase.Exists(targetType, criterias);
+		}
+
+		/// <summary>
+		/// Check if any instance matching the criteria exists in the database.
+		/// </summary>
+		/// <param name="targetType">The target type.</param>
+		/// <param name="detachedCriteria">The criteria expression</param>		
+		/// <returns><c>true</c> if an instance is found; otherwise <c>false</c>.</returns>
+		public static bool Exists(Type targetType, DetachedCriteria detachedCriteria)
+		{
+			return ActiveRecordBase.Exists(targetType, detachedCriteria);
 		}
 
 		/// <summary>
