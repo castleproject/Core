@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Data;
 	using System.IO;
@@ -1291,19 +1292,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				attributes = new HybridDictionary(true);
 			}
 
-			PropertyInfo property = ObtainTargetProperty(RequestContext.All, target);
-
-			if (property == null)
-			{
-				if (logger.IsErrorEnabled)
-				{
-					logger.Error("Could not find property for target '" + target + "'. Skipping automatic validation for this property");
-				}
-
-				return;
-			}
-
-			IValidator[] validators = Controller.Validator.GetValidators(property.DeclaringType, property);
+			IValidator[] validators = CollectValidators(RequestContext.All, target);
 
 			IWebValidationGenerator generator = validatorProvider.CreateGenerator(inputType, attributes);
 
@@ -1314,6 +1303,18 @@ namespace Castle.MonoRail.Framework.Helpers
 					validator.ApplyWebValidation(validationConfig, inputType, generator, attributes, target);
 				}
 			}
+		}
+
+		private IValidator[] CollectValidators(RequestContext requestContext, string target)
+		{
+			List<IValidator> validators = new List<IValidator>();
+
+			ObtainTargetProperty(requestContext, target, delegate(PropertyInfo property)
+         	{
+         		validators.AddRange(Controller.Validator.GetValidators(property.DeclaringType, property));
+         	});
+
+			return validators.ToArray();
 		}
 
 		private bool IsValidationEnabledForScope
@@ -1427,7 +1428,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return value.ToString();
 		}
 
-		protected PropertyInfo ObtainTargetProperty(RequestContext context, string target)
+		protected PropertyInfo ObtainTargetProperty(RequestContext context, string target, Action<PropertyInfo> action)
 		{
 			string[] pieces;
 
@@ -1435,7 +1436,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (root != null && pieces.Length > 1)
 			{
-				return QueryPropertyInfoRecursive(root, pieces, 1);
+				return QueryPropertyInfoRecursive(root, pieces, 1, action);
 			}
 
 			return null;
@@ -1558,7 +1559,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return foundType;
 		}
 
-		private PropertyInfo QueryPropertyInfoRecursive(Type type, string[] propertyPath, int piece)
+		private PropertyInfo QueryPropertyInfoRecursive(Type type, string[] propertyPath, int piece, Action<PropertyInfo> action)
 		{
 			string property = propertyPath[piece]; int index;
 
@@ -1588,6 +1589,11 @@ namespace Castle.MonoRail.Framework.Helpers
 					propertyInfo.Name, type.FullName);
 			}
 
+			if (action != null)
+			{
+				action(propertyInfo);
+			}
+
 			type = propertyInfo.PropertyType;
 
 			if (typeof(ICollection).IsAssignableFrom(type))
@@ -1606,7 +1612,7 @@ namespace Castle.MonoRail.Framework.Helpers
 					type = args[0];
 				}
 #endif
-				if(type.IsArray)
+				if (type.IsArray)
 				{
 					type = type.GetElementType();
 				}
@@ -1617,7 +1623,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				return propertyInfo;
 			}
 
-			return QueryPropertyInfoRecursive(type, propertyPath, piece + 1);
+			return QueryPropertyInfoRecursive(type, propertyPath, piece + 1, action);
 		}
 
 		/// <summary>

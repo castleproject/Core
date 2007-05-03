@@ -68,6 +68,64 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			helper.EndFormTag();
 		}
 
+		[Test]
+		public void UsingScopes()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+			helper.Push("model");
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyfield\" " +
+				"name=\"model.nonemptyfield\" value=\"\" class=\"validator-id-prefix-model_ required\" " +
+				"title=\"This is a required field\" />", helper.TextField("nonemptyfield"));
+
+			Assert.AreEqual("<input type=\"text\" id=\"model_emailfield\" " +
+				"name=\"model.emailfield\" value=\"\" class=\"validate-email\" " +
+				"title=\"Email doesnt look right\" />", helper.TextField("emailfield"));
+
+			// Attribute order cannot be guaranted, so this test may fail ocasionally
+			// Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyemailfield\" " +
+			//	"name=\"model.nonemptyemailfield\" value=\"\" class=\"validate-email validator-id-prefix-model_ required\" " +
+			//	"title=\"Please enter a valid email address. For example fred@domain.com, This is a required field\" />", helper.TextField("nonemptyemailfield"));
+
+			helper.Pop();
+			helper.EndFormTag();
+		}
+
+		[Test]
+		public void ValidationForSelects()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+
+			Assert.AreEqual("<select id=\"model_city\" " +
+				"name=\"model.city\" class=\"validator-id-prefix-model_ validate-selection\" " +
+				"title=\"This is a required field\" >\r\n" + 
+				"<option value=\"0\">---</option>\r\n" +
+				"<option value=\"Sao Paulo\">Sao Paulo</option>\r\n" +
+				"<option value=\"Sao Carlos\">Sao Carlos</option>\r\n" +
+				"</select>", 
+				helper.Select("model.city", 
+					new string[] { "Sao Paulo", "Sao Carlos" }, DictHelper.Create("firstoption=---")));
+
+			helper.EndFormTag();
+		}
+
+		[Test]
+		public void ValidationAreInherited()
+		{
+			helper.FormTag(DictHelper.Create("noaction=true"));
+
+			Assert.AreEqual("<select id=\"model_city_id\" " +
+				"name=\"model.city.id\" class=\"validator-id-prefix-model_ validate-selection\" " +
+				"title=\"This is a required field\" >\r\n" +
+				"<option value=\"0\">---</option>\r\n" +
+				"<option value=\"1\">1</option>\r\n" +
+				"<option value=\"2\">2</option>\r\n" +
+				"</select>",
+				helper.Select("model.city.id",
+					new string[] { "1", "2" }, DictHelper.Create("firstoption=---")));
+
+			helper.EndFormTag();
+		}
 	}
 
 	public class ModelWithValidation
@@ -75,6 +133,22 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		private string nonEmptyField;
 		private string emailField;
 		private string nonEmptyEmailField;
+		private string city;
+		private Country country;
+
+		[ValidateNonEmpty]
+		public Country Country
+		{
+			get { return country; }
+			set { country = value; }
+		}
+
+		[ValidateNonEmpty]
+		public string City
+		{
+			get { return city; }
+			set { city = value; }
+		}
 
 		[ValidateNonEmpty]
 		public string NonEmptyField
@@ -95,6 +169,17 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 		{
 			get { return nonEmptyEmailField; }
 			set { nonEmptyEmailField = value; }
+		}
+	}
+
+	public class Country
+	{
+		private int id;
+
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
 		}
 	}
 }
