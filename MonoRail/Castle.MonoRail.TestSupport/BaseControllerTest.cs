@@ -38,6 +38,11 @@ namespace Castle.MonoRail.TestSupport
 			this.port = port;
 		}
 
+		protected MockRailsEngineContext Context
+		{
+			get { return context; }
+		}
+
 		protected void PrepareController(Controller controller, string areaName, string controllerName, string actionName)
 		{
 			if (controller == null)
