@@ -152,42 +152,42 @@
         </member>
         <member name="M:Iesi.Collections.Generic.ISet`1.ContainsAll(System.Collections.Generic.ICollection{`0})">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.ISet`1.Add(`0)">
             <summary>
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.ISet`1.AddAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.ISet`1.RemoveAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.ISet`1.RetainAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="P:Iesi.Collections.Generic.ISet`1.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="T:Iesi.Collections.ISet">
@@ -274,52 +274,52 @@
         </member>
         <member name="M:Iesi.Collections.ISet.Contains(System.Object)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.ISet.ContainsAll(System.Collections.ICollection)">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.ISet.Add(System.Object)">
             <summary>
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.ISet.AddAll(System.Collections.ICollection)">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.ISet.Remove(System.Object)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.ISet.RemoveAll(System.Collections.ICollection)">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.ISet.RetainAll(System.Collections.ICollection)">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.ISet.Clear">
             <summary>
@@ -328,7 +328,7 @@
         </member>
         <member name="P:Iesi.Collections.ISet.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Union(Iesi.Collections.Generic.ISet{`0})">
@@ -346,23 +346,23 @@
             <summary>
             Performs a "union" of two sets, where all the elements
             in both are present.  That is, the element is included if it is in either <c>a</c> or <c>b</c>.
-            The return value is a <c>Clone()</c> of one of the sets (<c>a</c> if it is not <c>null</c>) with elements of the other set
+            The return value is a <c>Clone()</c> of one of the sets (<c>a</c> if it is not <see langword="null" />) with elements of the other set
             added in.  Neither of the input sets is modified by the operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the union of the input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the union of the input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.op_BitwiseOr(Iesi.Collections.Generic.Set{`0},Iesi.Collections.Generic.Set{`0})">
             <summary>
             Performs a "union" of two sets, where all the elements
             in both are present.  That is, the element is included if it is in either <c>a</c> or <c>b</c>.
-            The return value is a <c>Clone()</c> of one of the sets (<c>a</c> if it is not <c>null</c>) with elements of the other set
+            The return value is a <c>Clone()</c> of one of the sets (<c>a</c> if it is not <see langword="null" />) with elements of the other set
             added in.  Neither of the input sets is modified by the operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the union of the input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the union of the input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Intersect(Iesi.Collections.Generic.ISet{`0})">
             <summary>
@@ -379,24 +379,24 @@
             Performs an "intersection" of the two sets, where only the elements
             that are present in both sets remain.  That is, the element is included only if it exists in
             both <c>a</c> and <c>b</c>.  Neither input object is modified by the operation.
-            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <c>null</c>) containing the
+            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <see langword="null" />) containing the
             elements from the intersect operation. 
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>The intersection of the two input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>The intersection of the two input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.op_BitwiseAnd(Iesi.Collections.Generic.Set{`0},Iesi.Collections.Generic.Set{`0})">
             <summary>
             Performs an "intersection" of the two sets, where only the elements
             that are present in both sets remain.  That is, the element is included only if it exists in
             both <c>a</c> and <c>b</c>.  Neither input object is modified by the operation.
-            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <c>null</c>) containing the
+            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <see langword="null" />) containing the
             elements from the intersect operation. 
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>The intersection of the two input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>The intersection of the two input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Minus(Iesi.Collections.Generic.ISet{`0})">
             <summary>
@@ -417,7 +417,7 @@
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing <c>A - B</c> elements.  <c>null</c> if <c>a</c> is <c>null</c>.</returns>
+            <returns>A set containing <c>A - B</c> elements.  <see langword="null" /> if <c>a</c> is <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.op_Subtraction(Iesi.Collections.Generic.Set{`0},Iesi.Collections.Generic.Set{`0})">
             <summary>
@@ -428,7 +428,7 @@
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing <c>A - B</c> elements.  <c>null</c> if <c>a</c> is <c>null</c>.</returns>
+            <returns>A set containing <c>A - B</c> elements.  <see langword="null" /> if <c>a</c> is <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.ExclusiveOr(Iesi.Collections.Generic.ISet{`0})">
             <summary>
@@ -445,38 +445,38 @@
             Performs an "exclusive-or" of the two sets, keeping only the elements that
             are in one of the sets, but not in both.  The original sets are not modified
             during this operation.  The result set is a <c>Clone()</c> of one of the sets
-            (<c>a</c> if it is not <c>null</c>) containing
+            (<c>a</c> if it is not <see langword="null" />) containing
             the elements from the exclusive-or operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the result of <c>a ^ b</c>.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the result of <c>a ^ b</c>.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.op_ExclusiveOr(Iesi.Collections.Generic.Set{`0},Iesi.Collections.Generic.Set{`0})">
             <summary>
             Performs an "exclusive-or" of the two sets, keeping only the elements that
             are in one of the sets, but not in both.  The original sets are not modified
             during this operation.  The result set is a <c>Clone()</c> of one of the sets
-            (<c>a</c> if it is not <c>null</c>) containing
+            (<c>a</c> if it is not <see langword="null" />) containing
             the elements from the exclusive-or operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the result of <c>a ^ b</c>.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the result of <c>a ^ b</c>.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Add(`0)">
             <summary>
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.AddAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Clear">
             <summary>
@@ -485,38 +485,38 @@
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Contains(`0)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.ContainsAll(System.Collections.Generic.ICollection{`0})">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Remove(`0)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.RemoveAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.RetainAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.Set`1.Clone">
             <summary>
@@ -576,7 +576,7 @@
         </member>
         <member name="P:Iesi.Collections.Generic.Set`1.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.Generic.Set`1.Count">
@@ -586,7 +586,7 @@
         </member>
         <member name="P:Iesi.Collections.Generic.Set`1.IsSynchronized">
             <summary>
-            Returns <c>true</c> if the <c>Set</c> is synchronized across threads.  Note that
+            Returns <see langword="true" /> if the <c>Set</c> is synchronized across threads.  Note that
             enumeration is inherently not thread-safe.  Use the <c>SyncRoot</c> to lock the
             object during enumeration.
             </summary>
@@ -603,7 +603,7 @@
             Indicates whether the given instance is read-only or not
             </summary>
             <value>
-            <c>true</c> if the ISet is read-only; otherwise, <c>false</c>. 
+            <see langword="true" /> if the ISet is read-only; otherwise, <see langword="false" />. 
             In the default implementation of Set, this property always returns false. 
             </value>
         </member>
@@ -619,14 +619,14 @@
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The <typeparamref name="T"/> to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.AddAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.Clear">
             <summary>
@@ -635,38 +635,38 @@
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.Contains(`0)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.ContainsAll(System.Collections.Generic.ICollection{`0})">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.Remove(`0)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.RemoveAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.RetainAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.DictionarySet`1.CopyTo(`0[],System.Int32)">
             <summary>
@@ -701,7 +701,7 @@
         </member>
         <member name="P:Iesi.Collections.Generic.DictionarySet`1.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.Generic.DictionarySet`1.Count">
@@ -784,17 +784,17 @@
         </member>
         <member name="M:Iesi.Collections.Generic.ImmutableSet`1.Contains(`0)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.ImmutableSet`1.ContainsAll(System.Collections.Generic.ICollection{`0})">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.ImmutableSet`1.Remove(`0)">
             <summary>
@@ -918,7 +918,7 @@
         </member>
         <member name="P:Iesi.Collections.Generic.ImmutableSet`1.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.Generic.ImmutableSet`1.Count">
@@ -1001,14 +1001,14 @@
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.AddAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.Clear">
             <summary>
@@ -1017,38 +1017,38 @@
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.Contains(`0)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.ContainsAll(System.Collections.Generic.ICollection{`0})">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.Remove(`0)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.RemoveAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.RetainAll(System.Collections.Generic.ICollection{`0})">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Generic.SynchronizedSet`1.CopyTo(`0[],System.Int32)">
             <summary>
@@ -1080,7 +1080,7 @@
         </member>
         <member name="P:Iesi.Collections.Generic.SynchronizedSet`1.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.Generic.SynchronizedSet`1.Count">
@@ -1090,7 +1090,7 @@
         </member>
         <member name="P:Iesi.Collections.Generic.SynchronizedSet`1.IsSynchronized">
             <summary>
-            Returns <c>true</c>, indicating that this object is thread-safe.  The exception to this
+            Returns <see langword="true" />, indicating that this object is thread-safe.  The exception to this
             is enumeration, which is inherently not thread-safe.  Use the <c>SyncRoot</c> object to
             lock this object for the entire duration of the enumeration.
             </summary>
@@ -1125,15 +1125,22 @@
              </summary>
         </member>
         <member name="T:Iesi.Collections.Set">
-            <summary><p>A collection that contains no duplicate elements.  This class models the mathematical
-            <c>Set</c> abstraction, and is the base class for all other <c>Set</c> implementations.  
-            The order of elements in a set is dependant on (a)the data-structure implementation, and 
-            (b)the implementation of the various <c>Set</c> methods, and thus is not guaranteed.</p>
-             
-            <p>None of the <c>Set</c> implementations in this library are guranteed to be thread-safe
-            in any way unless wrapped in a <c>SynchronizedSet</c>.</p>
-            
-            <p>The following table summarizes the binary operators that are supported by the <c>Set</c> class.</p>
+            <summary>A collection that contains no duplicate elements.</summary>
+            <remarks>
+            <para>
+            This class models the mathematical set abstraction, and is the base class for all
+            other set implementations. The order of elements in a set is dependant on
+            (a) the data-structure implementation, and (b) the implementation of the various
+            methods, and thus is not guaranteed.
+            </para>
+            <para>
+            None of the <see cref="T:Iesi.Collections.ISet"/> implementations in this library are guranteed to be thread-safe
+            in any way unless wrapped in a <see cref="T:Iesi.Collections.SynchronizedSet"/>.
+            </para>
+             <para>
+            The following table summarizes the binary operators that are supported by the <see cref="T:Iesi.Collections.ISet"/>
+            type.
+            </para>
             <list type="table">
             	<listheader>
             		<term>Operation</term>
@@ -1167,40 +1174,40 @@
             		<term><c>-</c></term>
             	</item>
             </list>
-            </summary>
+            </remarks>
         </member>
         <member name="M:Iesi.Collections.Set.Union(Iesi.Collections.ISet)">
             <summary>
             Performs a "union" of the two sets, where all the elements
             in both sets are present.  That is, the element is included if it is in either <c>a</c> or <c>b</c>.
             Neither this set nor the input set are modified during the operation.  The return value
-            is a <c>Clone()</c> of this set with the extra elements added in.
+            is a clone of this set with the extra elements added in.
             </summary>
             <param name="a">A collection of elements.</param>
-            <returns>A new <c>Set</c> containing the union of this <c>Set</c> with the specified collection.
+            <returns>A new <see cref="T:Iesi.Collections.ISet"/> instance containing the union of this instance with the specified collection.
             Neither of the input objects is modified by the union.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.Union(Iesi.Collections.ISet,Iesi.Collections.ISet)">
             <summary>
             Performs a "union" of two sets, where all the elements
             in both are present.  That is, the element is included if it is in either <c>a</c> or <c>b</c>.
-            The return value is a <c>Clone()</c> of one of the sets (<c>a</c> if it is not <c>null</c>) with elements of the other set
+            The return value is a clone of one of the sets (<c>a</c> if it is not <see langword="null" />) with elements of the other set
             added in.  Neither of the input sets is modified by the operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the union of the input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the union of the input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.op_BitwiseOr(Iesi.Collections.Set,Iesi.Collections.Set)">
             <summary>
             Performs a "union" of two sets, where all the elements
             in both are present.  That is, the element is included if it is in either <c>a</c> or <c>b</c>.
-            The return value is a <c>Clone()</c> of one of the sets (<c>a</c> if it is not <c>null</c>) with elements of the other set
+            The return value is a clone of one of the sets (<c>a</c> if it is not <see langword="null" />) with elements of the other set
             added in.  Neither of the input sets is modified by the operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the union of the input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the union of the input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.Intersect(Iesi.Collections.ISet)">
             <summary>
@@ -1217,24 +1224,24 @@
             Performs an "intersection" of the two sets, where only the elements
             that are present in both sets remain.  That is, the element is included only if it exists in
             both <c>a</c> and <c>b</c>.  Neither input object is modified by the operation.
-            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <c>null</c>) containing the
+            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <see langword="null" />) containing the
             elements from the intersect operation. 
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>The intersection of the two input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>The intersection of the two input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.op_BitwiseAnd(Iesi.Collections.Set,Iesi.Collections.Set)">
             <summary>
             Performs an "intersection" of the two sets, where only the elements
             that are present in both sets remain.  That is, the element is included only if it exists in
             both <c>a</c> and <c>b</c>.  Neither input object is modified by the operation.
-            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <c>null</c>) containing the
+            The result object is a <c>Clone()</c> of one of the input objects (<c>a</c> if it is not <see langword="null" />) containing the
             elements from the intersect operation. 
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>The intersection of the two input sets.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>The intersection of the two input sets.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.Minus(Iesi.Collections.ISet)">
             <summary>
@@ -1255,7 +1262,7 @@
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing <c>A - B</c> elements.  <c>null</c> if <c>a</c> is <c>null</c>.</returns>
+            <returns>A set containing <c>A - B</c> elements.  <see langword="null" /> if <c>a</c> is <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.op_Subtraction(Iesi.Collections.Set,Iesi.Collections.Set)">
             <summary>
@@ -1266,13 +1273,13 @@
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing <c>A - B</c> elements.  <c>null</c> if <c>a</c> is <c>null</c>.</returns>
+            <returns>A set containing <c>A - B</c> elements.  <see langword="null" /> if <c>a</c> is <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.ExclusiveOr(Iesi.Collections.ISet)">
             <summary>
             Performs an "exclusive-or" of the two sets, keeping only the elements that
             are in one of the sets, but not in both.  The original sets are not modified
-            during this operation.  The result set is a <c>Clone()</c> of this set containing
+            during this operation.  The result set is a clone of this set containing
             the elements from the exclusive-or operation.
             </summary>
             <param name="a">A set of elements.</param>
@@ -1282,39 +1289,39 @@
             <summary>
             Performs an "exclusive-or" of the two sets, keeping only the elements that
             are in one of the sets, but not in both.  The original sets are not modified
-            during this operation.  The result set is a <c>Clone()</c> of one of the sets
-            (<c>a</c> if it is not <c>null</c>) containing
+            during this operation.  The result set is a clone of one of the sets
+            (<c>a</c> if it is not <see langword="null" />) containing
             the elements from the exclusive-or operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the result of <c>a ^ b</c>.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the result of <c>a ^ b</c>.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.op_ExclusiveOr(Iesi.Collections.Set,Iesi.Collections.Set)">
             <summary>
             Performs an "exclusive-or" of the two sets, keeping only the elements that
             are in one of the sets, but not in both.  The original sets are not modified
-            during this operation.  The result set is a <c>Clone()</c> of one of the sets
-            (<c>a</c> if it is not <c>null</c>) containing
+            during this operation.  The result set is a clone of one of the sets
+            (<c>a</c> if it is not <see langword="null" />) containing
             the elements from the exclusive-or operation.
             </summary>
             <param name="a">A set of elements.</param>
             <param name="b">A set of elements.</param>
-            <returns>A set containing the result of <c>a ^ b</c>.  <c>null</c> if both sets are <c>null</c>.</returns>
+            <returns>A set containing the result of <c>a ^ b</c>.  <see langword="null" /> if both sets are <see langword="null" />.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.Add(System.Object)">
             <summary>
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.AddAll(System.Collections.ICollection)">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.Clear">
             <summary>
@@ -1323,63 +1330,65 @@
         </member>
         <member name="M:Iesi.Collections.Set.Contains(System.Object)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.ContainsAll(System.Collections.ICollection)">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.Remove(System.Object)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.RemoveAll(System.Collections.ICollection)">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.RetainAll(System.Collections.ICollection)">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.Clone">
             <summary>
-            Returns a clone of the <c>Set</c> instance.  This will work for derived <c>Set</c>
+            Returns a clone of the set instance.  This will work for derived set
             classes if the derived class implements a constructor that takes no arguments.
             </summary>
             <returns>A clone of this object.</returns>
         </member>
         <member name="M:Iesi.Collections.Set.CopyTo(System.Array,System.Int32)">
             <summary>
-            Copies the elements in the <c>Set</c> to an array.  The type of array needs
-            to be compatible with the objects in the <c>Set</c>, obviously.
+            Copies the elements in the set to an array.  The type of array needs
+            to be compatible with the objects in the set, obviously.
             </summary>
             <param name="array">An array that will be the target of the copy operation.</param>
             <param name="index">The zero-based index where copying will start.</param>
         </member>
         <member name="M:Iesi.Collections.Set.GetEnumerator">
             <summary>
-            Gets an enumerator for the elements in the <c>Set</c>.
+            Returns an enumerator that iterates through the set.
             </summary>
-            <returns>An <c>IEnumerator</c> over the elements in the <c>Set</c>.</returns>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the set.
+            </returns>
         </member>
         <member name="P:Iesi.Collections.Set.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.Set.Count">
@@ -1389,16 +1398,17 @@
         </member>
         <member name="P:Iesi.Collections.Set.IsSynchronized">
             <summary>
-            Returns <c>true</c> if the <c>Set</c> is synchronized across threads.  Note that
-            enumeration is inherently not thread-safe.  Use the <c>SyncRoot</c> to lock the
+            Returns <see langword="true"/> if the set is synchronized across threads.  Note that
+            enumeration is inherently not thread-safe.  Use the <see cref="P:Iesi.Collections.Set.SyncRoot"/> to lock the
             object during enumeration.
             </summary>
         </member>
         <member name="P:Iesi.Collections.Set.SyncRoot">
             <summary>
             An object that can be used to synchronize this collection to make it thread-safe.
-            When implementing this, if your object uses a base object, like an <c>IDictionary</c>,
-            or anything that has a <c>SyncRoot</c>, return that object instead of "<c>this</c>".
+            When implementing this, if your object uses a base object, like an <see cref="T:System.Collections.IDictionary"/>,
+            or anything that has a <see cref="P:Iesi.Collections.Set.SyncRoot"/>, return that object instead
+            of <see langword="this"/>.
             </summary>
         </member>
         <member name="F:Iesi.Collections.DictionarySet.InternalDictionary">
@@ -1413,14 +1423,14 @@
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.DictionarySet.AddAll(System.Collections.ICollection)">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.DictionarySet.Clear">
             <summary>
@@ -1429,38 +1439,38 @@
         </member>
         <member name="M:Iesi.Collections.DictionarySet.Contains(System.Object)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.DictionarySet.ContainsAll(System.Collections.ICollection)">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.DictionarySet.Remove(System.Object)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.DictionarySet.RemoveAll(System.Collections.ICollection)">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.DictionarySet.RetainAll(System.Collections.ICollection)">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.DictionarySet.CopyTo(System.Array,System.Int32)">
             <summary>
@@ -1486,7 +1496,7 @@
         </member>
         <member name="P:Iesi.Collections.DictionarySet.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.DictionarySet.Count">
@@ -1566,14 +1576,14 @@
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.AddAll(System.Collections.ICollection)">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.Clear">
             <summary>
@@ -1582,38 +1592,38 @@
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.Contains(System.Object)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.ContainsAll(System.Collections.ICollection)">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.Remove(System.Object)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.RemoveAll(System.Collections.ICollection)">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.RetainAll(System.Collections.ICollection)">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.ImmutableSet.CopyTo(System.Array,System.Int32)">
             <summary>
@@ -1678,7 +1688,7 @@
         </member>
         <member name="P:Iesi.Collections.ImmutableSet.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.ImmutableSet.Count">
@@ -1720,10 +1730,11 @@
         </member>
         <member name="T:Iesi.Collections.SortedSet">
             <summary>
-            Implements a <c>Set</c> based on a sorted tree.  This gives good performance for operations on very
-            large data-sets, though not as good - asymptotically - as a <c>HashedSet</c>.  However, iteration
-            occurs in order.  Elements that you put into this type of collection must implement <c>IComparable</c>,
-            and they must actually be comparable.  You can't mix <c>string</c> and <c>int</c> values, for example.
+            Implements a set based on a sorted tree.  This gives good performance for operations on very
+            large data-sets, though not as good - asymptotically - as a <see cref="T:Iesi.Collections.HashedSet"/>.
+            However, iteration occurs in order.  Elements that you put into this type of collection must
+            implement <see cref="T:System.IComparable"/>, and they must actually be comparable.  You can't mix
+            <see cref="T:System.String"/> and <see cref="T:System.Int32"/> values, for example.
             </summary>
         </member>
         <member name="M:Iesi.Collections.SortedSet.#ctor">
@@ -1754,31 +1765,35 @@
         </member>
         <member name="T:Iesi.Collections.SynchronizedSet">
             <summary>
-            <p>Implements a thread-safe <c>Set</c> wrapper.  The implementation is extremely conservative, 
-            serializing critical sections to prevent possible deadlocks, and locking on everything.
-            The one exception is for enumeration, which is inherently not thread-safe.  For this, you
-            have to <c>lock</c> the <c>SyncRoot</c> object for the duration of the enumeration.</p>
+            Implements a thread-safe <see cref="T:Iesi.Collections.ISet"/> wrapper.
             </summary>
+            <remarks>
+            The implementation is extremely conservative, serializing critical sections
+            to prevent possible deadlocks, and locking on everything. The one exception
+            is for enumeration, which is inherently not thread-safe.  For this, you have
+            to <see langword="lock"/> the <see cref="P:Iesi.Collections.SynchronizedSet.SyncRoot"/> object for the duration
+            of the enumeration.
+            </remarks>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.#ctor(Iesi.Collections.ISet)">
             <summary>
-            Constructs a thread-safe <c>Set</c> wrapper.
+            Constructs a thread-safe <see cref="T:Iesi.Collections.ISet"/> wrapper.
             </summary>
-            <param name="basisSet">The <c>Set</c> object that this object will wrap.</param>
+            <param name="basisSet">The <see cref="T:Iesi.Collections.ISet"/> object that this object will wrap.</param>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.Add(System.Object)">
             <summary>
             Adds the specified element to this set if it is not already present.
             </summary>
             <param name="o">The object to add to the set.</param>
-            <returns><c>true</c> is the object was added, <c>false</c> if it was already present.</returns>
+            <returns><see langword="true" /> is the object was added, <see langword="false" /> if it was already present.</returns>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.AddAll(System.Collections.ICollection)">
             <summary>
             Adds all the elements in the specified collection to the set if they are not already present.
             </summary>
             <param name="c">A collection of objects to add to the set.</param>
-            <returns><c>true</c> is the set changed as a result of this operation, <c>false</c> if not.</returns>
+            <returns><see langword="true" /> is the set changed as a result of this operation, <see langword="false" /> if not.</returns>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.Clear">
             <summary>
@@ -1787,63 +1802,68 @@
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.Contains(System.Object)">
             <summary>
-            Returns <c>true</c> if this set contains the specified element.
+            Returns <see langword="true" /> if this set contains the specified element.
             </summary>
             <param name="o">The element to look for.</param>
-            <returns><c>true</c> if this set contains the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if this set contains the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.ContainsAll(System.Collections.ICollection)">
             <summary>
-            Returns <c>true</c> if the set contains all the elements in the specified collection.
+            Returns <see langword="true" /> if the set contains all the elements in the specified collection.
             </summary>
             <param name="c">A collection of objects.</param>
-            <returns><c>true</c> if the set contains all the elements in the specified collection, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contains all the elements in the specified collection, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.Remove(System.Object)">
             <summary>
             Removes the specified element from the set.
             </summary>
             <param name="o">The element to be removed.</param>
-            <returns><c>true</c> if the set contained the specified element, <c>false</c> otherwise.</returns>
+            <returns><see langword="true" /> if the set contained the specified element, <see langword="false" /> otherwise.</returns>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.RemoveAll(System.Collections.ICollection)">
             <summary>
             Remove all the specified elements from this set, if they exist in this set.
             </summary>
             <param name="c">A collection of elements to remove.</param>
-            <returns><c>true</c> if the set was modified as a result of this operation.</returns>
+            <returns><see langword="true" /> if the set was modified as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.RetainAll(System.Collections.ICollection)">
             <summary>
             Retains only the elements in this set that are contained in the specified collection.
             </summary>
             <param name="c">Collection that defines the set of elements to be retained.</param>
-            <returns><c>true</c> if this set changed as a result of this operation.</returns>
+            <returns><see langword="true" /> if this set changed as a result of this operation.</returns>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.CopyTo(System.Array,System.Int32)">
             <summary>
-            Copies the elements in the <c>Set</c> to an array.  The type of array needs
-            to be compatible with the objects in the <c>Set</c>, obviously.
+            Copies the elements in the set to an array.  The type of array needs
+            to be compatible with the objects in the set, obviously.
             </summary>
             <param name="array">An array that will be the target of the copy operation.</param>
             <param name="index">The zero-based index where copying will start.</param>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.GetEnumerator">
             <summary>
-            Enumeration is, by definition, not thread-safe.  Use a <c>lock</c> on the <c>SyncRoot</c> 
-            to synchronize the entire enumeration process.
+            Returns an enumerator that iterates through the set.
             </summary>
-            <returns></returns>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the set.
+            </returns>
+            <remarks>
+            Enumeration is, by definition, not thread-safe.  Use a <see langword="lock"/> on the <see cref="P:Iesi.Collections.SynchronizedSet.SyncRoot"/> 
+            to synchronize the entire enumeration process.
+            </remarks>
         </member>
         <member name="M:Iesi.Collections.SynchronizedSet.Clone">
             <summary>
-            Returns a clone of the <c>Set</c> instance.  
+            Returns a clone of this instance.  
             </summary>
             <returns>A clone of this object.</returns>
         </member>
         <member name="P:Iesi.Collections.SynchronizedSet.IsEmpty">
             <summary>
-            Returns <c>true</c> if this set contains no elements.
+            Returns <see langword="true" /> if this set contains no elements.
             </summary>
         </member>
         <member name="P:Iesi.Collections.SynchronizedSet.Count">
@@ -1853,14 +1873,14 @@
         </member>
         <member name="P:Iesi.Collections.SynchronizedSet.IsSynchronized">
             <summary>
-            Returns <c>true</c>, indicating that this object is thread-safe.  The exception to this
-            is enumeration, which is inherently not thread-safe.  Use the <c>SyncRoot</c> object to
+            Returns <see langword="true"/>, indicating that this object is thread-safe.  The exception to this
+            is enumeration, which is inherently not thread-safe.  Use the <see cref="P:Iesi.Collections.SynchronizedSet.SyncRoot"/> object to
             lock this object for the entire duration of the enumeration.
             </summary>
         </member>
         <member name="P:Iesi.Collections.SynchronizedSet.SyncRoot">
             <summary>
-            Returns an object that can be used to synchronize the <c>Set</c> between threads.
+            Returns an object that can be used to synchronize the set between threads.
             </summary>
         </member>
     </members>

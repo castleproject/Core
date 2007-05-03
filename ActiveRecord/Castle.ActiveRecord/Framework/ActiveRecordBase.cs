@@ -1233,7 +1233,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="call">The delegate instance</param>
 		/// <returns>Whatever is returned by the delegate invocation</returns>
-		protected internal object Execute(NHibernateDelegate call)
+		protected virtual internal object Execute(NHibernateDelegate call)
 		{
 			return Execute(GetType(), call, this);
 		}

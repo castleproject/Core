@@ -769,7 +769,13 @@
             </summary>
         </member>
         <member name="M:NHibernate.Cache.QueryKey.#ctor(NHibernate.Engine.ISessionFactoryImplementor,NHibernate.SqlCommand.SqlString,NHibernate.Engine.QueryParameters,Iesi.Collections.ISet)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.Cache.QueryKey"/> class.
+            </summary>
             <param name="factory">the sesion factory for this query key, required to get the identifiers of entities that are used as values.</param>
+            <param name="queryString">The query string.</param>
+            <param name="queryParameters">The query parameters.</param>
+            <param name="filters">The filters.</param>
         </member>
         <member name="T:NHibernate.Cache.ReadOnlyCache">
             <summary>
@@ -13001,6 +13007,17 @@
             <param name="id">The id</param>
             <returns>A descriptive <see cref="T:System.String"/> in the form <c>[collectionrole#id]</c></returns>
         </member>
+        <member name="M:NHibernate.Type.ICacheAssembler.Disassemble(System.Object,NHibernate.Engine.ISessionImplementor)">
+            <summary>
+		When implemented by a class, disassembles the object into a cacheable representation.
+		</summary><param name="value">The value to disassemble.</param><param name="session">The sesion</param><returns>The disassembled, deep cloned state of the object</returns> 
+        </member>
+        <member name="M:NHibernate.Type.ICacheAssembler.Assemble(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
+            <summary>
+		When implemented by a class, reconstructs the object from its 
+		cached "disassembled" state.
+		</summary><param name="cached">The disassembled state from the cache</param><param name="session">The session</param><param name="owner">tThe parent Entity object</param><returns>The assembled object.</returns> 
+        </member>
         <member name="T:NHibernate.IMultiQuery">
             <summary>
             Combines sevaral queries into a single database call
@@ -13236,17 +13253,6 @@
             <summary>
             Return the query results of all the queries
             </summary>
-        </member>
-        <member name="M:NHibernate.Type.ICacheAssembler.Disassemble(System.Object,NHibernate.Engine.ISessionImplementor)">
-            <summary>
-		When implemented by a class, disassembles the object into a cacheable representation.
-		</summary><param name="value">The value to disassemble.</param><param name="session">The sesion</param><returns>The disassembled, deep cloned state of the object</returns> 
-        </member>
-        <member name="M:NHibernate.Type.ICacheAssembler.Assemble(System.Object,NHibernate.Engine.ISessionImplementor,System.Object)">
-            <summary>
-		When implemented by a class, reconstructs the object from its 
-		cached "disassembled" state.
-		</summary><param name="cached">The disassembled state from the cache</param><param name="session">The session</param><param name="owner">tThe parent Entity object</param><returns>The assembled object.</returns> 
         </member>
         <member name="T:NHibernate.Impl.NonBatchingBatcher">
             <summary>
@@ -15187,6 +15193,12 @@
             <returns>
             A string that contains the SQL to drop an object.
             </returns>
+        </member>
+        <member name="M:NHibernate.Mapping.IAuxiliaryDatabaseObject.SetParameterValues(System.Collections.IDictionary)">
+            <summary>
+            Gets called by NHibernate to pass the configured type parameters to 
+            the implementation.
+            </summary>
         </member>
         <member name="T:NHibernate.Mapping.Any">
             <summary>
