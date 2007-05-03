@@ -16,9 +16,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
 	using System.Collections;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 	using System.Collections.Specialized;
 	using System.Globalization;
 	using System.IO;
@@ -306,8 +304,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.TextField("user.roles[1].Name"));
 		}
 
-#if DOTNET2
-		
 		[Test]
 		public void IndexedValueTextFieldInDotNet2()
 		{
@@ -320,8 +316,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual("<input type=\"text\" id=\"subscription_months4_0_name\" name=\"subscription.months4[0].name\" value=\"Jan\" />",
 				helper.TextField("subscription.months4[0].name"));
 		}
-
-#endif
 
 		[Test, ExpectedException(typeof(RailsException))]
 		public void InvalidIndex1()
@@ -373,9 +367,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		int[] months; 
 		IList months2 = new ArrayList();
 		Month[] months3;
-#if DOTNET2
 		IList<Month> months4 = new CustomList<Month>();
-#endif
 
 		public int[] Months
 		{
@@ -395,15 +387,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			set { months3 = value; }
 		}
 
-#if DOTNET2
-
 		public IList<Month> Months4
 		{
 			get { return months4; }
 			set { months4 = value; }
 		}
-
-#endif
 	}
 
 	public class Product
@@ -616,8 +604,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		}
 	}
 	
-#if DOTNET2
-
 	public class CustomList<T> : IList<T>
 	{
 		private List<T> innerList = new List<T>();
@@ -688,8 +674,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			return innerList.GetEnumerator();
 		}
 	}
-
-#endif
 
 	public interface IInterfacedList
 	{

@@ -398,11 +398,6 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		internal void InternalInitialize()
-		{
-			Initialize();
-		}
-
 		#endregion
 
 		#region Useful Operations
@@ -815,6 +810,8 @@ namespace Castle.MonoRail.Framework
 			}
 			
 			this.context = context;
+
+			Initialize();
 		}
 
 		/// <summary>

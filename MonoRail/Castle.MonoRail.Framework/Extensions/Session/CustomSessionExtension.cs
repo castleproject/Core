@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 			{
 				String message = "The CustomSessionExtension requires that " + 
 					"the type that implements ICustomSessionFactory be specified through the " + 
-					"'customSession' attribute on 'monoRail' configuration node";
+					"'customSession' attribute on 'monorail' configuration node";
 #if DOTNET2
 				throw new ConfigurationErrorsException(message);
 #else

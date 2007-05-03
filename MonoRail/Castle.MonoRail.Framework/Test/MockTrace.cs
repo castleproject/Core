@@ -12,33 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Tests.Mocks
+namespace Castle.MonoRail.Framework.Test
 {
 	using System;
 
-	public class MockServerUtility : IServerUtility
+	public class MockTrace : ITrace
 	{
-		public string MapPath(string virtualPath)
+		public void Warn(string message)
 		{
 			throw new NotImplementedException();
 		}
 
-		public string HtmlEncode(string content)
+		public void Warn(string category, string message)
 		{
 			throw new NotImplementedException();
 		}
 
-		public string UrlEncode(string content)
-		{
-			return content.Replace("&", "&amp;");
-		}
-
-		public string UrlPathEncode(string content)
+		public void Warn(string category, string message, Exception errorInfo)
 		{
 			throw new NotImplementedException();
 		}
 
-		public string JavaScriptEscape(string content)
+		public void Write(string message)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Write(string category, string message)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Write(string category, string message, Exception errorInfo)
 		{
 			throw new NotImplementedException();
 		}

@@ -75,6 +75,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Components.Validator, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.Core">
       <Name>Castle.Core</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
@@ -149,7 +150,7 @@
     <Compile Include="Helpers\ScriptaculousHelperTestCase.cs" />
     <Compile Include="Helpers\TextHelperTestCase.cs" />
     <Compile Include="Helpers\UrlForHelperTestCase.cs" />
-    <Compile Include="Mocks\MockServerUtility.cs" />
+    <Compile Include="Helpers\Validations\FormValidationTestCase.cs" />
     <Compile Include="PostBackTestCase.cs" />
     <Compile Include="DefaultControllerFactoryTestCase.cs">
       <SubType>Code</SubType>

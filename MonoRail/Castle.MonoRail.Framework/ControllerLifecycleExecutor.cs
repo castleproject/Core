@@ -146,8 +146,6 @@ namespace Castle.MonoRail.Framework
 			// Record the default view for this area/controller/action
 			controller.RenderView(actionName);
 
-			controller.InternalInitialize();
-
 			// If we have an HttpContext available, store the original view name
 			if (controller.HttpContext != null)
 			{

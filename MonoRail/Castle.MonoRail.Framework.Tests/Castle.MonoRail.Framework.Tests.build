@@ -16,6 +16,7 @@
 			<include name="Castle.MonoRail.TestSupport.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.DynamicProxy.dll" />
+			<include name="Castle.Components.Validator.dll" />
 			<include name="System.Data.dll" />
 		</assemblyfileset>
 

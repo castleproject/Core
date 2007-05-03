@@ -22,7 +22,6 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Collections;
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
 
 	/// <summary>

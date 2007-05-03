@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Tests
 	using System;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Services;
-	using Castle.MonoRail.Framework.Tests.Mocks;
+	using Castle.MonoRail.Framework.Test;
 	using NUnit.Framework;
 
 	[TestFixture]

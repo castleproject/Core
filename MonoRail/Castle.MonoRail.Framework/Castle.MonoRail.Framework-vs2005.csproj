@@ -447,6 +447,12 @@
     <Compile Include="SmartDispatcherController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Test\MockCacheProvider.cs" />
+    <Compile Include="Test\MockRailsEngineContext.cs" />
+    <Compile Include="Test\MockRequest.cs" />
+    <Compile Include="Test\MockResponse.cs" />
+    <Compile Include="Test\MockServerUtility.cs" />
+    <Compile Include="Test\MockTrace.cs" />
     <Compile Include="TransformFilter.cs" />
     <Compile Include="TransformFilters\Formatters\WikiFormatter.cs" />
     <Compile Include="TransformFilters\LowerCaseTransformFilter.cs" />

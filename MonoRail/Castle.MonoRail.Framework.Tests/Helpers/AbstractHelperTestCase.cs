@@ -14,12 +14,10 @@
 
 namespace Castle.MonoRail.Framework.Tests.Helpers
 {
-	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.Framework.Tests.Controllers;
-	using Castle.MonoRail.Framework.Tests.Mocks;
+	using Castle.MonoRail.Framework.Test;
 	using NUnit.Framework;
 
 	[TestFixture]
