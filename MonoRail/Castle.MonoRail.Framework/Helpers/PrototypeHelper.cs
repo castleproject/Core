@@ -585,7 +585,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return GeneratorMethods.Contains(method);
 		}
 
-		public void Dispatch(string method, params object[] args)
+		public object Dispatch(string method, params object[] args)
 		{
 			MethodInfo methodInfo = (MethodInfo) GeneratorMethods[method];
 
@@ -605,7 +605,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			try
 			{
-				methodInfo.Invoke(this, BuildMethodArgs(methodInfo, args, paramArrayIndex));
+				return methodInfo.Invoke(this, BuildMethodArgs(methodInfo, args, paramArrayIndex));
+			}
+			catch(RailsException)
+			{
+				throw;
 			}
 			catch(Exception ex)
 			{

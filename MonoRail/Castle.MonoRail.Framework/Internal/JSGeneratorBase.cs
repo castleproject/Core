@@ -18,8 +18,8 @@ namespace Castle.MonoRail.Framework.Internal
 	using Castle.MonoRail.Framework.Helpers;
 
 	/// <summary>
-	/// Abstract class that contains the shared logic of JS Generations, seperate from
-	/// the various view engine implementations
+	/// Abstract class that contains the shared logic of JS Generation, separated from
+	/// the various view engines implementations
 	/// </summary>
 	public abstract class JSGeneratorBase
 	{
@@ -70,7 +70,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 			if (dispInterface.IsGeneratorMethod(method))
 			{
-				dispInterface.Dispatch(method, args);
+				return dispInterface.Dispatch(method, args);
 			}
 
 			return CreateNullGenerator();
