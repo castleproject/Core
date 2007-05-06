@@ -159,7 +159,7 @@ namespace Castle.DynamicProxy
 			}
 			else if (execIndex > interceptors.Length)
 			{
-				throw new ApplicationException("Blah");
+				throw new InvalidOperationException(@"Proceed() was called too many times. This usually signify a bug in the calling code");
 			}
 			else
 			{
