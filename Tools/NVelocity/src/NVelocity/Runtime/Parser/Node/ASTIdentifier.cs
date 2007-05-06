@@ -81,12 +81,12 @@ namespace NVelocity.Runtime.Parser.Node
 			if (identifier == "to_quote" && (o.GetType() == typeof(string) || 
 				o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
 			{
-				return "\"" + o + "\"";
+				return "\"" + EscapeDoubleQuote(o.ToString()) + "\"";
 			}
 			else if (identifier == "to_squote" && (o.GetType() == typeof(string) || 
 				o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
 			{
-				return "'" + o + "'";
+				return "'" + EscapeSingleQuote(o.ToString()) + "'";
 			}
 
 			IDuck duck = o as IDuck;
@@ -186,6 +186,16 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			return null;
+		}
+
+		private static string EscapeSingleQuote(string content)
+		{
+			return content.Replace("'", "\'");
+		}
+
+		private static string EscapeDoubleQuote(string content)
+		{
+			return content.Replace("\"", "\\\"");
 		}
 	}
 }
