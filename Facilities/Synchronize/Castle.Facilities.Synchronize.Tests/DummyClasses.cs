@@ -19,7 +19,7 @@ namespace Castle.Facilities.Synchronize.Tests
 	using System.Reflection;
 	using System.Threading;
 	using System.Windows.Forms;
-	using Castle.DynamicProxy;
+	using Castle.MicroKernel.Proxy;
 
 	public interface IDummyForm
 	{
@@ -88,7 +88,7 @@ namespace Castle.Facilities.Synchronize.Tests
 		}
 	}
 
-	public class DummyProxyHook : IProxyGenerationHook
+	public class DummyProxyHook : IProxyHook
 	{
 		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{

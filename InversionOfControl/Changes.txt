@@ -1,6 +1,16 @@
 RC 4
 ====
 
+- Updated TypedFactoryFacility to not require a target instance
+  when proxying.
+
+- Added Windsor proxy support to create proxies without targets.
+
+- Removed relationship between ProxyOptions and ProxyGeneration options
+  and moved ProxyOptions into the MicroKernel.  ProxyGeneration options
+  are created from the ProxyOptions and will probably need to be updated
+  as facilities demand more proxy generation customizations.
+
 - Added ProxyOptions to allow facilities to easily add proxy interfaces
   without having to create custom proxy factories.  The ProxyOptions
   are obtained via the ProxyUtil.

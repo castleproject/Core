@@ -19,11 +19,10 @@ namespace Castle.Facilities.Synchronize
 	using System.Windows.Forms;
 	using Castle.Core;
 	using Castle.Core.Configuration;
-	using Castle.DynamicProxy;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;
+	using Castle.MicroKernel.Proxy;
 	using Castle.MicroKernel.SubSystems.Conversion;
-	using Castle.Windsor.Proxy;
 
 	/// <summary>
 	/// Checks for <see cref="Control"/> implementations a registers
@@ -33,7 +32,7 @@ namespace Castle.Facilities.Synchronize
 	internal class ControlComponentInspector : IContributeComponentModelConstruction, IDisposable
 	{
 		private readonly MarshalingControl marshalingControl;
-		private readonly IProxyGenerationHook controlProxyHook;
+		private readonly IProxyHook controlProxyHook;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ControlComponentInspector"/> class.
@@ -43,7 +42,7 @@ namespace Castle.Facilities.Synchronize
 		public ControlComponentInspector(IKernel kernel, IConfiguration config)
 		{
 			marshalingControl = new MarshalingControl();
-			controlProxyHook = ObtainProxyGenerationHook(kernel, config);
+			controlProxyHook = ObtainProxyHook(kernel, config);
 
 			RegisterWindowsFormsSynchronizationContext(kernel);
 		}
@@ -101,9 +100,9 @@ namespace Castle.Facilities.Synchronize
 #endif
 		}
 
-		private static IProxyGenerationHook ObtainProxyGenerationHook(IKernel kernel, IConfiguration config)
+		private static IProxyHook ObtainProxyHook(IKernel kernel, IConfiguration config)
 		{
-			IProxyGenerationHook hook = null;
+			IProxyHook hook = null;
 
 			if (config != null)
 			{
@@ -116,10 +115,11 @@ namespace Castle.Facilities.Synchronize
 
 					Type hookType = (Type) converter.PerformConversion(hookAttrib, typeof(Type));
 
-					if (!typeof(IProxyGenerationHook).IsAssignableFrom(hookType))
+					if (!typeof(IProxyHook).IsAssignableFrom(hookType))
 					{
 						String message = String.Format("The specified controlProxyHook does " +
-						                               "not implement the interface IProxyGenerationHook. Type {0}", hookType.FullName);
+						                               "not implement the interface IProxyHook. Type {0}",
+						                               hookType.FullName);
 #if DOTNET2
 						throw new ConfigurationErrorsException(message);
 #else
@@ -127,7 +127,7 @@ namespace Castle.Facilities.Synchronize
 #endif
 					}
 
-					hook = (IProxyGenerationHook) Activator.CreateInstance(hookType);
+					hook = (IProxyHook) Activator.CreateInstance(hookType);
 				}
 			}
 

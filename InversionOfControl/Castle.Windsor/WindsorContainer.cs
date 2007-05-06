@@ -135,10 +135,9 @@ namespace Castle.Windsor
 			if (kernel == null) throw new ArgumentNullException("kernel");
 			if (installer == null) throw new ArgumentNullException("installer");
 
+			this.name = name;
 			this.kernel = kernel;
 			this.kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
-			this.kernel.ComponentModelBuilder.AddContributor(new Proxy.ProxyComponentInspector());
-
 			this.installer = installer;
 		}
 

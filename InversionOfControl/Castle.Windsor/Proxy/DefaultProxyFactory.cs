@@ -21,6 +21,7 @@ namespace Castle.Windsor.Proxy
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Proxy;
 
 	/// <summary>
 	/// This implementation of <see cref="IProxyFactory"/> relies 
@@ -46,6 +47,14 @@ namespace Castle.Windsor.Proxy
 			Init();
 		}
 
+		/// <summary>
+		/// Creates the proxy for the supplied component.
+		/// </summary>
+		/// <param name="kernel">The kernel.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="model">The model.</param>
+		/// <param name="constructorArguments">The constructor arguments.</param>
+		/// <returns>The component proxy.</returns>
 		public override object Create(IKernel kernel, object target, ComponentModel model,
 		                              params object[] constructorArguments)
 		{
@@ -53,36 +62,57 @@ namespace Castle.Windsor.Proxy
 
 			IInterceptor[] interceptors = ObtainInterceptors(kernel, model);
 
-			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
+			ProxyOptions proxyOptions = ProxyUtil.ObtainProxyOptions(model, true);
+			ProxyGenerationOptions proxyGenOptions = CreateProxyGenerationOptionsFrom(proxyOptions);
 
-			CustomizeOptions(options, kernel, model, constructorArguments);
+			CustomizeOptions(proxyGenOptions, kernel, model, constructorArguments);
 
-			Type[] interfaces = options.AdditionalInterfaces;
+			Type[] interfaces = proxyOptions.AdditionalInterfaces;
 
 			if (model.Service.IsInterface)
 			{
-				if (options.BaseTypeForInterfaceProxy == null)
+				if (proxyOptions.OmitTarget)
 				{
-					options.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
+					proxy = generator.CreateInterfaceProxyWithoutTarget(model.Service, interfaces,
+					                                                    proxyGenOptions, interceptors);
 				}
-
-				if (!options.UseSingleInterfaceProxy)
+				else
 				{
-					interfaces = CollectInterfaces(interfaces, model);
-				}
+					if (proxyGenOptions.BaseTypeForInterfaceProxy == null)
+					{
+						proxyGenOptions.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
+					}
 
-				proxy = generator.CreateInterfaceProxyWithTarget(model.Service, interfaces, 
-				                                                 target, options, interceptors);
+					if (!proxyOptions.UseSingleInterfaceProxy)
+					{
+						interfaces = CollectInterfaces(interfaces, model);
+					}
+
+					proxy = generator.CreateInterfaceProxyWithTarget(model.Service, interfaces,
+					                                                 target, proxyGenOptions, interceptors);
+				}
 			}
 			else
 			{
-				proxy = generator.CreateClassProxy(model.Implementation, interfaces, options,
+				proxy = generator.CreateClassProxy(model.Implementation, interfaces, proxyGenOptions,
 				                                   constructorArguments, interceptors);
 			}
 
-			CustomizeProxy(proxy, options, kernel, model);
+			CustomizeProxy(proxy, proxyGenOptions, kernel, model);
 
 			return proxy;
+		}
+
+		protected static ProxyGenerationOptions CreateProxyGenerationOptionsFrom(ProxyOptions proxyOptions)
+		{
+			ProxyGenerationOptions proxyGenOptions = new ProxyGenerationOptions();
+
+			if (proxyOptions.Hook != null)
+			{
+				proxyGenOptions.Hook = new ProxyGenerationHookAdapter(proxyOptions.Hook);
+			}
+
+			return proxyGenOptions;
 		}
 
 		protected virtual void CustomizeProxy(object proxy, ProxyGenerationOptions options, 
@@ -95,9 +125,17 @@ namespace Castle.Windsor.Proxy
 		{
 		}
 		
+		/// <summary>
+		/// Determines if the component requiries a target instance for proxying.
+		/// </summary>
+		/// <param name="kernel">The kernel.</param>
+		/// <param name="model">The model.</param>
+		/// <returns>true if an instance is required.</returns>
 		public override bool RequiresTargetInstance(IKernel kernel, ComponentModel model)
 		{
-			return model.Service.IsInterface;
+			ProxyOptions proxyOptions = ProxyUtil.ObtainProxyOptions(model, true);
+
+			return model.Service.IsInterface && !proxyOptions.OmitTarget;
 		}
 
 		protected Type[] CollectInterfaces(Type[] interfaces, ComponentModel model)

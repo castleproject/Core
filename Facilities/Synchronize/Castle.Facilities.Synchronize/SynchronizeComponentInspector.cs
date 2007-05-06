@@ -25,6 +25,7 @@ namespace Castle.Facilities.Synchronize
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.ModelBuilder.Inspectors;
+	using Castle.MicroKernel.Proxy;
 	using Castle.Windsor.Proxy;
 
 	/// <summary>

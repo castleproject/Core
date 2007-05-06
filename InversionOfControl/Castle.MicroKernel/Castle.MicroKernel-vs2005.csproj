@@ -271,6 +271,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModelBuilder\Inspectors\ComponentActivatorInspector.cs" />
+    <Compile Include="ModelBuilder\Inspectors\ComponentProxyInspector.cs" />
     <Compile Include="ModelBuilder\Inspectors\ConfigurationModelInspector.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -302,9 +303,13 @@
     <Compile Include="Proxy\IProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\IProxyHook.cs" />
     <Compile Include="Proxy\NotSupportedProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Proxy\ProxyConstants.cs" />
+    <Compile Include="Proxy\ProxyOptions.cs" />
+    <Compile Include="Proxy\ProxyUtil.cs" />
     <Compile Include="Releasers\AllComponentsReleasePolicy.cs">
       <SubType>Code</SubType>
     </Compile>

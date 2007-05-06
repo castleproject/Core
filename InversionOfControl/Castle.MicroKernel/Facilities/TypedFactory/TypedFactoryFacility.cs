@@ -23,6 +23,7 @@ namespace Castle.Facilities.TypedFactory
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
+	using Castle.MicroKernel.Proxy;
 	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
@@ -38,6 +39,9 @@ namespace Castle.Facilities.TypedFactory
 			model.LifestyleType = LifestyleType.Singleton;
 			model.ExtendedProperties["typed.fac.entry"] = entry;
 			model.Interceptors.Add( new InterceptorReference( typeof(FactoryInterceptor) ) );
+
+			ProxyOptions proxyOptions = ProxyUtil.ObtainProxyOptions(model, true);
+			proxyOptions.OmitTarget = true;
 
 			Kernel.AddCustomComponent( model );
 		}

@@ -12,30 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Proxy
+namespace Castle.MicroKernel.Proxy
 {
 	using System;
 	using System.Collections;
-	using Castle.DynamicProxy;
 
-	public class ProxyOptions : ProxyGenerationOptions
+	/// <summary>
+	/// Represents options to configure proxies.
+	/// </summary>
+	public class ProxyOptions
 	{
+		private IProxyHook hook;
 		private ArrayList interfaceList;
+		private bool useSingleInterfaceProxy;
+		private bool omitTarget;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProxyOptions"/> class.
 		/// </summary>
 		public ProxyOptions()
 		{
+			useSingleInterfaceProxy = false;
+			omitTarget = false;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ProxyOptions"/> class.
+		/// Gets or sets the proxy hook.
 		/// </summary>
-		/// <param name="hook">The hook.</param>
-		public ProxyOptions(IProxyGenerationHook hook)
-			: base(hook)
+		public IProxyHook Hook
 		{
+			get { return hook; }
+			set { hook = value; }
+		}
+
+		/// <summary>
+		/// Determines if the proxied component uses a target.
+		/// </summary>
+		public bool OmitTarget
+		{
+			get { return omitTarget; }
+			set { omitTarget = value; }
+		}
+
+		/// <summary>
+		/// Determines if the proxied component should only include
+		/// the service interface.
+		/// </summary>
+		public bool UseSingleInterfaceProxy
+		{
+			get { return useSingleInterfaceProxy; }
+			set { useSingleInterfaceProxy = value; }
 		}
 
 		/// <summary>
@@ -84,6 +110,9 @@ namespace Castle.Windsor.Proxy
 			if (this == obj) return true;
 			ProxyOptions proxyOptions = obj as ProxyOptions;
 			if (proxyOptions == null) return false;
+			if (!Equals(hook, proxyOptions.hook)) return false;
+			if (!Equals(useSingleInterfaceProxy, proxyOptions.useSingleInterfaceProxy)) return false;
+			if (!Equals(omitTarget, proxyOptions.omitTarget)) return false;
 			return AdditionalInterfacesAreEquals(proxyOptions);
 		}
 

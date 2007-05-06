@@ -21,11 +21,10 @@ namespace Castle.Facilities.Synchronize.Tests
 	using System.Windows.Forms;
 	using Castle.Core;
 	using Castle.Core.Configuration;
-	using Castle.DynamicProxy;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.Handlers;
+	using Castle.MicroKernel.Proxy;
 	using Castle.Windsor;
-	using Castle.Windsor.Proxy;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -209,19 +208,19 @@ namespace Castle.Facilities.Synchronize.Tests
 		private void ExecuteInThread(ThreadStart run)
 		{
 			Thread thread = new Thread((ThreadStart) delegate
-     			{
-     				try
-     				{
-     					run();
-     				}
-     				catch(Exception e)
-     				{
-     					uncaughtException = e;
-     				}
+			                                         	{
+			                                         		try
+			                                         		{
+			                                         			run();
+			                                         		}
+			                                         		catch(Exception e)
+			                                         		{
+			                                         			uncaughtException = e;
+			                                         		}
 
-					Application.DoEvents();
-     				Application.Exit();
-     			});
+			                                         		Application.DoEvents();
+			                                         		Application.Exit();
+			                                         	});
 
 			Form form = new Form();
 			Debug.Assert(form.Handle != IntPtr.Zero);

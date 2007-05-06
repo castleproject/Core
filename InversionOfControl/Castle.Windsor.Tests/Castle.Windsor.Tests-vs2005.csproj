@@ -220,6 +220,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PropertiesInspectionBehaviorTestCase.cs" />
+    <Compile Include="Proxy\TypedFactoryFacilityTestCase.cs" />
     <Compile Include="Proxy\ProxyBehaviorInvalidTestCase.cs" />
     <Compile Include="Proxy\ProxyBehaviorTestCase.cs" />
     <Compile Include="ReportedProblemTestCase.cs">
@@ -327,6 +328,7 @@
     <EmbeddedResource Include="Configuration2\eval_config.xml" />
     <Content Include="Configuration2\synchtest_config.xml" />
     <Content Include="IOC-51.xml" />
+    <Content Include="Proxy\typedFactory.xml" />
     <Content Include="Proxy\proxyBehaviorInvalidConfig.xml" />
     <Content Include="Proxy\proxyBehavior.xml" />
   </ItemGroup>

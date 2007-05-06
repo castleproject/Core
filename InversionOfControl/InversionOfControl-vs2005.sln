@@ -1,28 +1,66 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F9A88F20-64E5-442C-8C20-10C69A39EF4C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		Changes.txt = Changes.txt
 		Know issues.txt = Know issues.txt
 		License.txt = License.txt
 		Readme.txt = Readme.txt
 	EndProjectSection
+	ProjectSection(FolderStartupServices) = postProject
+		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel-vs2005", "Castle.MicroKernel\Castle.MicroKernel-vs2005.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor-vs2005", "Castle.Windsor\Castle.Windsor-vs2005.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests-vs2005", "Castle.MicroKernel.Tests\Castle.MicroKernel.Tests-vs2005.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests-vs2005", "Castle.Windsor.Tests\Castle.Windsor.Tests-vs2005.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Core-vs2005", "..\Core\Castle.Core\Castle.Core-vs2005.csproj", "{E4FA5B53-7D36-429E-8E5C-53D5479242BA}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy-net-2-0", "..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-vs2005.csproj", "{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy-vs2005", "..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy\Castle.DynamicProxy-vs2005.csproj", "{2DE7CC8C-6F06-43BC-A7B6-9466BEDEAC28}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy.Tests", "..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy.Tests\Castle.DynamicProxy.Tests-vs2005.csproj", "{FE432670-73A1-499D-A353-28FC902A43C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy.Tests-vs2005", "..\Tools\Castle.DynamicProxy2\Castle.DynamicProxy.Tests\Castle.DynamicProxy.Tests-vs2005.csproj", "{FE432670-73A1-499D-A353-28FC902A43C8}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Global
+	GlobalSection(TextTemplating) = postSolution
+		TextTemplating = 1
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

@@ -12,43 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Synchronize
+namespace Castle.MicroKernel.Proxy
 {
 	using System;
 	using System.Reflection;
-	using Castle.MicroKernel.Proxy;
 
 	/// <summary>
-	/// Proxy generation hook to filter all System methods when
-	/// proxying a Windows Forms Control.
+	/// Used during the target type inspection process.
+	/// Implementors have a chance to interfere in the
+	/// proxy generation process
 	/// </summary>
-	public class ControlComponentHook : IProxyHook
+	public interface IProxyHook
 	{
 		/// <summary>
-		/// Filters System methods.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="methodInfo">The method info.</param>
-		/// <returns>true if not a System namespace, false otherwise.</returns>
-		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
-		{
-			return !methodInfo.DeclaringType.Namespace.StartsWith("System.");
-		}
-
-		/// <summary>
-		/// Not used.
+		/// Invoked by the generation process to know if
+		/// the specified member should be proxied
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="memberInfo"></param>
-		public void NonVirtualMemberNotification(Type type, MemberInfo memberInfo)
-		{
-		}
+		/// <returns></returns>
+		bool ShouldInterceptMethod(Type type, MethodInfo memberInfo);
 
 		/// <summary>
-		/// Not used.
+		/// Invoked by the generation process to notify that a
+		/// member wasn't marked as virtual.
 		/// </summary>
-		public void MethodsInspected()
-		{
-		}
+		/// <param name="type"></param>
+		/// <param name="memberInfo"></param>
+		void NonVirtualMemberNotification(Type type, MemberInfo memberInfo);
+
+		/// <summary>
+		/// Invoked by the generation process to notify 
+		/// that the whole process is completed.
+		/// </summary>
+		void MethodsInspected();
 	}
 }

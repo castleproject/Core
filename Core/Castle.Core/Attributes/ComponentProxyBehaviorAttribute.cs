@@ -23,6 +23,7 @@ namespace Castle.Core
 	public class ComponentProxyBehaviorAttribute : Attribute
 	{
 		private bool useSingleInterfaceProxy;
+		private Type[] additionalInterfaces;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ComponentProxyBehaviorAttribute"/> class.
@@ -39,7 +40,24 @@ namespace Castle.Core
 		public bool UseSingleInterfaceProxy
 		{
 			get { return useSingleInterfaceProxy; }
-			set { useSingleInterfaceProxy = value;  }
+			set { useSingleInterfaceProxy = value; }
+		}
+
+		/// <summary>
+		///  Gets or sets the additional interfaces used during proxy generation.
+		/// </summary>
+		public Type[] AdditionalInterfaces
+		{
+			get
+			{
+				if (additionalInterfaces != null)
+				{
+					return additionalInterfaces;
+				}
+
+				return Type.EmptyTypes;
+			}
+			set { additionalInterfaces = value; }
 		}
 	}
 }
