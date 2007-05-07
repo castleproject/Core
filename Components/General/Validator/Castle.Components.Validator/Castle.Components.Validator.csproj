@@ -118,6 +118,11 @@
     <Compile Include="WebValidationConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Messages.es.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.es.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Messages.fr.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
