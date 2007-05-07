@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Fixed AR-151
+  "XmlGenerationVisitor.MakeCustomTypeAtt doesn't support generic types"
+
 - Applied Matthew Robinson's patch fixing AR-152
   "Incorporation of subselect fetch strategy"
  

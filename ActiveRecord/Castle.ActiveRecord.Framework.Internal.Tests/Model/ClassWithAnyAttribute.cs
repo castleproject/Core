@@ -55,18 +55,38 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { return _id; }
 		}
 
-		[Any(typeof (long), MetaType=typeof (string),NotNull = true,
+		[Any(typeof(long), MetaType=typeof(string), NotNull=true,
 			TypeColumn="BILLING_DETAILS_TYPE",
 			IdColumn="BILLING_DETAILS_ID",
 			Cascade=CascadeEnum.SaveUpdate)]
-		// [Any.MetaValue("CREDIT_CARD", typeof (CreditCard))]
-		[Any.MetaValue("BANK_ACCOUNT", typeof (BankAccount))]
+		[Any.MetaValue("BANK_ACCOUNT", typeof(BankAccount))]
 		public IPayment PaymentMethod
 		{
 			get { return null; }
-			set
-			{
-			}
+			set {}
+		}
+	}
+
+	[ActiveRecord]
+	public class ClassWithAnyAttributeUsingGenericId : ActiveRecordBase
+	{
+		private int _id = 0;
+
+		[PrimaryKey(Access = PropertyAccess.NosetterCamelcaseUnderscore)]
+		public int Id
+		{
+			get { return _id; }
+		}
+
+		[Any(typeof(long?), MetaType = typeof(string), NotNull = true,
+			TypeColumn = "BILLING_DETAILS_TYPE",
+			IdColumn = "BILLING_DETAILS_ID",
+			Cascade = CascadeEnum.SaveUpdate)]
+		[Any.MetaValue("BANK_ACCOUNT", typeof(BankAccount))]
+		public IPayment PaymentMethod
+		{
+			get { return null; }
+			set { }
 		}
 	}
 

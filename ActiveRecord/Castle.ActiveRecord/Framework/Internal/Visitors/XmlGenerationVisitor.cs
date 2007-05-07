@@ -1016,15 +1016,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				return MakeAtt(attName, type.Name);
 			}
+			else if (typeof(object).Assembly == type.Assembly)
+			{
+				return MakeAtt(attName, type.FullName);
+			}
 			else
 			{
-				if (typeof(object).Assembly == type.Assembly)
-				{
-					return MakeAtt(attName, type.FullName);
-				}
-				string[] parts = type.AssemblyQualifiedName.Split(',');
-				string name = string.Join(",", parts, 0, 2);
-				return MakeAtt(attName, name);
+				return MakeAtt(attName, type.FullName  + ", " + type.Assembly.GetName().Name);
 			}
 		}
 

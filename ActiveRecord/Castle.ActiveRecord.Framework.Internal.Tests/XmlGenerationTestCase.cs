@@ -315,6 +315,40 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
 		[Test]
+		public void AnyAttributeUsingGenericId()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClassWithAnyAttributeUsingGenericId));
+			Assert.IsNotNull(model);
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+
+			String xml = xmlVisitor.Xml;
+
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping  auto-import=\"true\" default-lazy=\"false\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.2\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithAnyAttributeUsingGenericId, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithAnyAttributeUsingGenericId\">\r\n" +
+				"    <id name=\"Id\" access=\"nosetter.camelcase-underscore\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <any name=\"PaymentMethod\" access=\"property\" id-type=\"System.Nullable`1[[System.Int64, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\" meta-type=\"System.String\" cascade=\"save-update\" not-null=\"true\">\r\n" +
+				"      <meta-value value=\"BANK_ACCOUNT\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BankAccount, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
+				"      <column name=\"BILLING_DETAILS_TYPE\" />\r\n" +
+				"      <column name=\"BILLING_DETAILS_ID\" />\r\n" +
+				"    </any>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
 		public void LazyForClass()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
