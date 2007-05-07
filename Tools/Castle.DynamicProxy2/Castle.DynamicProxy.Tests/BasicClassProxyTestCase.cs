@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.GenClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
@@ -205,6 +206,14 @@ namespace Castle.DynamicProxy.Tests
 			classProxy = (ClassWithConstructors) proxy;
 			Assert.AreEqual("name", classProxy.Name);
 			Assert.AreEqual(10, classProxy.X);
+		}
+
+		[Test]
+		public void ClassProxyShouldHaveParameterlessConstructor()
+		{
+			object proxy = generator.CreateClassProxy(typeof (ClassWithDefaultConstructor), new StandardInterceptor());
+			Assert.IsNotNull(Activator.CreateInstance(proxy.GetType()));
+
 		}
 
 		/// <summary>

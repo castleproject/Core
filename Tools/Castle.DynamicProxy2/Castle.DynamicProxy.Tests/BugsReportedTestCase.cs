@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy.Tests.BugsReported;
@@ -27,9 +28,9 @@ namespace Castle.DynamicProxy.Tests
 		public void InterfaceInheritance()
 		{
 			ICameraService proxy = (ICameraService)
-								   generator.CreateInterfaceProxyWithTarget(typeof(ICameraService),
-																			new CameraService(),
-																			new StandardInterceptor());
+			                       generator.CreateInterfaceProxyWithTarget(typeof (ICameraService),
+			                                                                new CameraService(),
+			                                                                new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 
@@ -41,9 +42,9 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyInterfaceWithSetterOnly()
 		{
 			IHaveOnlySetter proxy = (IHaveOnlySetter)
-									generator.CreateInterfaceProxyWithTarget(typeof(IHaveOnlySetter),
-																			 new HaveOnlySetter(),
-																			 new SkipCallingMethodInterceptor());
+			                        generator.CreateInterfaceProxyWithTarget(typeof (IHaveOnlySetter),
+			                                                                 new HaveOnlySetter(),
+			                                                                 new SkipCallingMethodInterceptor());
 
 			Assert.IsNotNull(proxy);
 
@@ -51,13 +52,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(NotImplementedException),
+		[ExpectedException(typeof (NotImplementedException),
 			"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
 			)]
 		public void CallingProceedOnAbstractMethodShouldThrowException()
 		{
 			AbstractClass proxy = (AbstractClass)
-								  generator.CreateClassProxy(typeof(AbstractClass), ProxyGenerationOptions.Default, new StandardInterceptor());
+			                      generator.CreateClassProxy(typeof (AbstractClass), ProxyGenerationOptions.Default, new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
 
@@ -68,8 +69,8 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyTypeThatInheritFromGenericType()
 		{
 			IUserRepository proxy = (IUserRepository)
-									generator.CreateInterfaceProxyWithoutTarget(typeof(IUserRepository),
-																				new SkipCallingMethodInterceptor());
+			                        generator.CreateInterfaceProxyWithoutTarget(typeof (IUserRepository),
+			                                                                    new SkipCallingMethodInterceptor());
 
 			Assert.IsNotNull(proxy);
 		}
@@ -77,7 +78,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void DYNPROXY_51_GenericMarkerInterface()
 		{
-			WithMixin p = (WithMixin)generator.CreateClassProxy(typeof(WithMixin), new Type[] { typeof(Marker<int>) }, new IInterceptor[0]);
+			WithMixin p = (WithMixin) generator.CreateClassProxy(typeof (WithMixin), new Type[] {typeof (Marker<int>)}, new IInterceptor[0]);
 
 			p.Method();
 		}
@@ -86,8 +87,8 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyingInterfaceWithComImport()
 		{
 			IHTMLEventObj2 proxy = (IHTMLEventObj2)
-								   generator.CreateInterfaceProxyWithoutTarget(typeof(IHTMLEventObj2),
-																			   new SkipCallingMethodInterceptor());
+			                       generator.CreateInterfaceProxyWithoutTarget(typeof (IHTMLEventObj2),
+			                                                                   new SkipCallingMethodInterceptor());
 
 			Assert.IsNotNull(proxy);
 		}
@@ -96,14 +97,14 @@ namespace Castle.DynamicProxy.Tests
 		public void InheritedInterfaces()
 		{
 			IFooExtended proxiedFoo =
-				(IFooExtended)generator.CreateInterfaceProxyWithTargetInterface(typeof(IFooExtended), new ImplementedFoo(), new StandardInterceptor());
+				(IFooExtended) generator.CreateInterfaceProxyWithTargetInterface(typeof (IFooExtended), new ImplementedFoo(), new StandardInterceptor());
 			proxiedFoo.FooExtended();
 		}
 
 		[Test]
 		public void ProtectedInternalAbstract()
 		{
-			object o = generator.CreateClassProxy(typeof (SomeClassWithProtectedAbstractClass), new IInterceptor[]{new StandardInterceptor()});
+			object o = generator.CreateClassProxy(typeof (SomeClassWithProtectedAbstractClass), new IInterceptor[] {new StandardInterceptor()});
 			Assert.IsNotNull(o);
 		}
 
@@ -112,6 +113,17 @@ namespace Castle.DynamicProxy.Tests
 		{
 			generator.CreateInterfaceProxyWithoutTarget(typeof (IAmInternal), new SkipCallingMethodInterceptor());
 		}
+
+		[Test, Ignore("Not idea why this is failing, looks like we are doing everything correctly here")]
+		public void ProxyingInterfaceWithGenericMethodsWithGenericClassConstraint()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof (IFactory32), new SkipCallingMethodInterceptor());
+		}
+	}
+
+	public interface IFactory32
+	{
+		T Create<T>() where T : List<T>;
 	}
 
 	internal interface IAmInternal
