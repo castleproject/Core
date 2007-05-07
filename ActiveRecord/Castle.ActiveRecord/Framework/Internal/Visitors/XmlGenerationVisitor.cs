@@ -957,6 +957,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 					return "select";
 				case FetchEnum.Join:
 					return "join";
+				case FetchEnum.SubSelect:
+					return "subselect";
 				default:
 					return null;
 			}

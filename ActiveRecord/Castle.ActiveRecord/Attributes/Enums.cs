@@ -120,7 +120,11 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Use a seperate SELECT statement to load the data
 		/// </summary>
-		Select
+		Select,
+		/// <summary>
+		/// Use a seperate SELECT statement to load the data, re-running the original query in a subselect
+		/// </summary>
+		SubSelect
 	}
 
 	/// <summary>
