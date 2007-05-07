@@ -126,10 +126,11 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				ConfigureDefaultViewEngine();
 			}
-
-			viewEngines = new ViewEngineInfo[viewEnginesList.Count];
-
-			viewEnginesList.CopyTo(viewEngines);
+			else
+			{
+				viewEngines = new ViewEngineInfo[viewEnginesList.Count];
+				viewEnginesList.CopyTo(viewEngines);
+			}
 		}
 
 		private void ResolveViewPath()
@@ -169,8 +170,10 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				viewPathRoot = "views";
 			}
-
-			viewPathRoot = viewPath.Value;
+			else
+			{
+				viewPathRoot = viewPath.Value;
+			}
 
 			XmlAttribute xhtmlRendering = section.Attributes["xhtmlRendering"];
 
