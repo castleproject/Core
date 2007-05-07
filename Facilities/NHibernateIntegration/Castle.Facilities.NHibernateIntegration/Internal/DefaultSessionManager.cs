@@ -16,7 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 {
 	using System;
 	using System.Collections;
-	
+	using System.Data;
 	using NHibernate;
 
 	using Castle.MicroKernel;
@@ -122,25 +122,42 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			if (shouldEnlist)
 			{
-				// TODO: propagate IsolationLevel, expose as transaction property
-
 				if (!transaction.DistributedTransaction)
 				{
 					transaction.Context["nh.session.enlisted"] = list;
 
-					transaction.Enlist(new ResourceAdapter(session.BeginTransaction()));
+					IsolationLevel level = TranslateIsolationLevel(transaction.IsolationMode);
+					transaction.Enlist(new ResourceAdapter(session.BeginTransaction(level)));
 
 					list.Add(session);
 				}
 
 				if (weAreSessionOwner)
 				{
-					transaction.RegisterSynchronization(
-						new SessionDisposeSynchronization(session));
+					transaction.RegisterSynchronization(new SessionDisposeSynchronization(session));
 				}
 			}
 
 			return true;
+		}
+
+		private static IsolationLevel TranslateIsolationLevel(IsolationMode mode)
+		{
+			switch(mode)
+			{
+				case IsolationMode.Chaos:
+					return IsolationLevel.Chaos;
+				case IsolationMode.ReadCommitted:
+					return IsolationLevel.ReadCommitted;
+				case IsolationMode.ReadUncommitted:
+					return IsolationLevel.ReadUncommitted;
+				case IsolationMode.RepeatableRead:
+					return IsolationLevel.RepeatableRead;
+				case IsolationMode.Serializable:
+					return IsolationLevel.Serializable;
+				default:
+					return IsolationLevel.Unspecified;
+			}
 		}
 
 		private ITransaction ObtainCurrentTransaction()

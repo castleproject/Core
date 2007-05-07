@@ -1,5 +1,8 @@
 Version beta 3
 
+- Fixed FACILITIES-80
+  "Isolation Mode not applied when integrated with Transaction Services"
+
 - Fixed FACILITIES-54
   "Integrate NHibernate facility with NHibernate 1.2"
 
