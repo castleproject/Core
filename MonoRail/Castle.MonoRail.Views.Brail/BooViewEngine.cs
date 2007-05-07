@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Views.Brail
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Configuration;
 	using System.IO;
 	using System.Reflection;
@@ -220,7 +221,7 @@ StringComparer.InvariantCultureIgnoreCase
 					WaitForFileToBecomeAvailableForReading(e);
 					CompileCommonScripts();
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					// we failed to recompile the commons scripts directory, but because we are running
 					// on another thread here, and exception would kill the application, so we log it 
@@ -313,8 +314,8 @@ StringComparer.InvariantCultureIgnoreCase
 		// Finally, an instance is created and returned	
 		public BrailBase GetCompiledScriptInstance(string file,
 												   TextWriter output,
-		                                           IRailsEngineContext context,
-		                                           Controller controller)
+												   IRailsEngineContext context,
+												   Controller controller)
 		{
 			bool batch = options.BatchCompile;
 			// normalize filename - replace / or \ to the system path seperator
@@ -359,10 +360,10 @@ StringComparer.InvariantCultureIgnoreCase
 		// request file.
 		public Type CompileScript(string filename, bool batch)
 		{
-			ICompilerInput[] inputs = GetInput(filename, batch);
+			IDictionary<ICompilerInput, string> inputs2FileName = GetInput(filename, batch);
 			string name = NormalizeName(filename);
 			Log("Compiling {0} to {1} with batch: {2}", filename, name, batch);
-			CompilationResult result = DoCompile(inputs, name);
+			CompilationResult result = DoCompile(inputs2FileName.Keys, name);
 
 			if (result.Context.Errors.Count > 0)
 			{
@@ -376,7 +377,7 @@ StringComparer.InvariantCultureIgnoreCase
 						.Append(errors)
 						.Append(Environment.NewLine);
 
-					foreach (ICompilerInput input in inputs)
+					foreach (ICompilerInput input in inputs2FileName.Keys)
 					{
 						msg.Append("Input (").Append(input.Name).Append(")")
 							.Append(Environment.NewLine);
@@ -389,12 +390,12 @@ StringComparer.InvariantCultureIgnoreCase
 				return CompileScript(filename, false);
 			}
 			Type type;
-			foreach (ICompilerInput input in inputs)
+			foreach (ICompilerInput input in inputs2FileName.Keys)
 			{
 				string typeName = Path.GetFileNameWithoutExtension(input.Name) + "_BrailView";
 				type = result.Context.GeneratedAssembly.GetType(typeName);
 				Log("Adding {0} to the cache", type.FullName);
-				compilations[filename] = type;
+				compilations[ inputs2FileName[input] ] = type;
 				constructors[type] = type.GetConstructor(new Type[]
 				                                         	{
 				                                         		typeof(BooViewEngine),
@@ -410,19 +411,23 @@ StringComparer.InvariantCultureIgnoreCase
 		// If batch compilation is set to true, this would return all the view scripts
 		// in the director (not recursive!)
 		// Otherwise, it would return just the single file
-		private ICompilerInput[] GetInput(string filename, bool batch)
+		private IDictionary<ICompilerInput, string> GetInput(string filename, bool batch)
 		{
+			Dictionary<ICompilerInput, string> input2FileName = new Dictionary<ICompilerInput, string>();
 			if (batch == false)
-				return new ICompilerInput[] { CreateInput(filename) };
-			ArrayList inputs = new ArrayList();
+			{
+				input2FileName.Add(CreateInput(filename), filename);
+				return input2FileName;
+			}
 			// use the System.IO.Path to get the folder name even though
 			// we are using the ViewSourceLoader to load the actual file
 			string directory = Path.GetDirectoryName(filename);
 			foreach (string file in ViewSourceLoader.ListViews(directory))
 			{
-				inputs.Add(CreateInput(file));
+				ICompilerInput input = CreateInput(file);
+				input2FileName.Add(input, file);
 			}
-			return (ICompilerInput[])inputs.ToArray(typeof(ICompilerInput));
+			return input2FileName;
 		}
 
 		// create an input from a resource name
@@ -459,9 +464,10 @@ StringComparer.InvariantCultureIgnoreCase
 		/// <param name="files"></param>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		private CompilationResult DoCompile(ICompilerInput[] files, string name)
+		private CompilationResult DoCompile(ICollection<ICompilerInput> files, string name)
 		{
-			BooCompiler compiler = SetupCompiler(files);
+			ICompilerInput[] filesAsArray = new List<ICompilerInput>(files).ToArray();
+			BooCompiler compiler = SetupCompiler(filesAsArray);
 			string filename = Path.Combine(baseSavePath, name);
 			compiler.Parameters.OutputAssembly = filename;
 			// this is here and not in SetupCompiler since CompileCommon is also
@@ -505,8 +511,9 @@ StringComparer.InvariantCultureIgnoreCase
 
 			// the demi.boo is stripped, but GetInput require it.
 			string demiFile = Path.Combine(options.CommonScriptsDirectory, "demi.brail");
-			ICompilerInput[] inputs = GetInput(demiFile, true);
-			BooCompiler compiler = SetupCompiler(inputs);
+			IDictionary<ICompilerInput, string> inputs = GetInput(demiFile, true);
+			ICompilerInput[] inputsAsArray = new List<ICompilerInput>(inputs.Keys).ToArray();
+			BooCompiler compiler = SetupCompiler(inputsAsArray);
 			string outputFile = Path.Combine(baseSavePath, "CommonScripts.dll");
 			compiler.Parameters.OutputAssembly = outputFile;
 			CompilerContext result = compiler.Run();
@@ -550,6 +557,7 @@ StringComparer.InvariantCultureIgnoreCase
 		public BooViewEngineOptions Options
 		{
 			get { return options; }
+			set { options = value; }
 		}
 
 		private static void InitializeConfig()
