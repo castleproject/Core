@@ -105,7 +105,7 @@ namespace NVelocity
 		/// <returns>keys as []</returns>
 		public override Object[] InternalGetKeys()
 		{
-			Object[] keys = new object[context.Count];
+			Object[] keys = new object[context.Keys.Count];
 			context.Keys.CopyTo(keys, 0);
 			return keys;
 		}
