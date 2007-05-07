@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public override string CreateBeforeFormClosed(string formId)
 			{
-				return AbstractHelper.ScriptBlock("new Validation('" + formId + "', " + 
+				return AbstractHelper.ScriptBlock(formId + "Validator = new Validation('" + formId + "', " + 
 					AjaxHelper.JavascriptOptions(jsOptions) + ");");
 			}
 
