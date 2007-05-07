@@ -106,6 +106,7 @@
     <Compile Include="SynchronizationImpl.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ThrowsExceptionResource.cs" />
     <Compile Include="TransactionManagerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

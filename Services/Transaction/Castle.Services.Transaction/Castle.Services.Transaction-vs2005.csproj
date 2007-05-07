@@ -100,6 +100,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CallContextActivityManager.cs" />
+    <Compile Include="CommitResourceException.cs" />
     <Compile Include="DefaultTransactionManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -117,6 +118,8 @@
     <Compile Include="ITransactionManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ResourceException.cs" />
+    <Compile Include="RollbackResourceException.cs" />
     <Compile Include="StandardTransaction.cs">
       <SubType>Code</SubType>
     </Compile>

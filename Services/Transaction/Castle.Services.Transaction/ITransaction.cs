@@ -92,5 +92,9 @@ namespace Castle.Services.Transaction
 		IsolationMode IsolationMode { get; }
 
 		bool DistributedTransaction { get; }
+
+		string Name { get; }
+
+		IResource[] Resources { get; }
 	}
 }

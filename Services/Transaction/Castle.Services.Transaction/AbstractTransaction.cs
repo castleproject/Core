@@ -17,7 +17,6 @@ namespace Castle.Services.Transaction
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
-
 	using Castle.Core.Logging;
 
 	/// <summary>
@@ -31,6 +30,7 @@ namespace Castle.Services.Transaction
 		private TransactionMode transactionMode;
 		private IsolationMode isolationMode;
 		private bool distributedTransaction;
+		private string name;
 		private ILogger logger = NullLogger.Instance;
 
 		internal IList resources;
@@ -42,11 +42,26 @@ namespace Castle.Services.Transaction
 			context = new HybridDictionary(true);
 		}
 
-		public AbstractTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction) : this()
+		public AbstractTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction)
+			: this(transactionMode, isolationMode, distributedTransaction, null)
+		{
+		}
+
+		public AbstractTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool distributedTransaction,
+		                           string name) : this()
 		{
 			this.transactionMode = transactionMode;
 			this.isolationMode = isolationMode;
 			this.distributedTransaction = distributedTransaction;
+
+			if (String.IsNullOrEmpty(name))
+			{
+				this.name = ObtainName();
+			}
+			else
+			{
+				this.name = name;
+			}
 		}
 
 		public ILogger Logger
@@ -74,7 +89,7 @@ namespace Castle.Services.Transaction
 
 			// We can't add the resource more than once
 			if (resources.Contains(resource)) return;
-			
+
 			if (Status == TransactionStatus.Active)
 			{
 				try
@@ -98,7 +113,7 @@ namespace Castle.Services.Transaction
 
 		public virtual void Begin()
 		{
-			logger.DebugFormat("Transaction {0} Begin", GetHashCode());
+			logger.DebugFormat("Transaction '{0}' Begin", Name);
 
 			AssertState(TransactionStatus.NoTransaction);
 			state = TransactionStatus.Active;
@@ -122,7 +137,7 @@ namespace Castle.Services.Transaction
 
 		public virtual void Rollback()
 		{
-			logger.DebugFormat("Transaction {0} Rollback", GetHashCode());
+			logger.DebugFormat("Transaction '{0}' Rollback", Name);
 
 			AssertState(TransactionStatus.Active);
 			state = TransactionStatus.RolledBack;
@@ -130,6 +145,7 @@ namespace Castle.Services.Transaction
 			PerformSynchronizations(false);
 
 			Exception error = null;
+			ArrayList failedResources = new ArrayList(resources.Count);
 
 			foreach(IResource resource in resources)
 			{
@@ -144,6 +160,8 @@ namespace Castle.Services.Transaction
 					logger.Error("Failed to rollback transaction on resource.", ex);
 
 					error = ex;
+
+					failedResources.Add(resource);
 				}
 			}
 
@@ -151,13 +169,15 @@ namespace Castle.Services.Transaction
 
 			if (error != null)
 			{
-				throw new TransactionException("Could not rollback transaction, one of the resources failed", error);
+				throw new RollbackResourceException("Could not rollback transaction, one (or more) resources failed.", error,
+				                                    (IResource) failedResources[failedResources.Count - 1],
+				                                    (IResource[]) failedResources.ToArray((typeof(IResource))));
 			}
 		}
 
 		public virtual void Commit()
 		{
-			logger.DebugFormat("Transaction {0} Commit", GetHashCode());
+			logger.DebugFormat("Transaction '{0}' Commit", Name);
 
 			AssertState(TransactionStatus.Active);
 			state = TransactionStatus.Committed;
@@ -165,6 +185,7 @@ namespace Castle.Services.Transaction
 			PerformSynchronizations(false);
 
 			Exception error = null;
+			ArrayList failedResources = new ArrayList(resources.Count);
 
 			foreach(IResource resource in resources)
 			{
@@ -177,8 +198,10 @@ namespace Castle.Services.Transaction
 					state = TransactionStatus.Invalid;
 
 					logger.Error("Failed to commit transaction on resource.", ex);
-					
+
 					error = ex;
+
+					failedResources.Add(resource);
 				}
 			}
 
@@ -186,7 +209,9 @@ namespace Castle.Services.Transaction
 
 			if (error != null)
 			{
-				throw new TransactionException("Could not commit transaction, one of the resources failed", error);
+				throw new CommitResourceException("Could not commit transaction, one (or more) of the resources failed", error,
+				                                  (IResource) failedResources[failedResources.Count - 1],
+				                                  (IResource[]) failedResources.ToArray((typeof(IResource))));
 			}
 		}
 
@@ -234,6 +259,20 @@ namespace Castle.Services.Transaction
 			get { return distributedTransaction; }
 		}
 
+		public string Name
+		{
+			get { return name; }
+		}
+
+		#region ITransaction Members
+
+		public IResource[] Resources
+		{
+			get { return (IResource[]) ((ArrayList) resources).ToArray(typeof(IResource)); }
+		}
+
+		#endregion
+
 		#endregion
 
 		#region IDisposable Members
@@ -254,6 +293,11 @@ namespace Castle.Services.Transaction
 			{
 				throw new TransactionException("Invalid transaction state to perform the requested action");
 			}
+		}
+
+		protected string ObtainName()
+		{
+			return Convert.ToString(GetHashCode());
 		}
 
 		private void PerformSynchronizations(bool runAfterCompletion)
