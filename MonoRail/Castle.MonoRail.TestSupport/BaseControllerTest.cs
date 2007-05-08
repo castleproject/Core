@@ -65,6 +65,9 @@ namespace Castle.MonoRail.TestSupport
 			BuildRailsContext(areaName, controllerName, actionName);
 			controller.InitializeFieldsFromServiceProvider(context);
 			controller.InitializeControllerState(areaName, controllerName, actionName);
+			ControllerLifecycleExecutor executor = new ControllerLifecycleExecutor(controller, context);
+			executor.Service(context);
+			executor.InitializeController(controller.AreaName, controller.Name, controller.Action);
 		}
 
 		private void BuildRailsContext(string areaName, string controllerName, string actionName)
