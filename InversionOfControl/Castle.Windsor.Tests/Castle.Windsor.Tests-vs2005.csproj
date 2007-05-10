@@ -331,6 +331,7 @@
     <Content Include="Proxy\typedFactory.xml" />
     <Content Include="Proxy\proxyBehaviorInvalidConfig.xml" />
     <Content Include="Proxy\proxyBehavior.xml" />
+    <Content Include="Proxy\typedFactoryCreateWithoutId.xml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

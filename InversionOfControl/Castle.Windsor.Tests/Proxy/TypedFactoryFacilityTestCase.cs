@@ -21,11 +21,15 @@ namespace Castle.Windsor.Tests
 
 	public interface ICalculatorFactory
 	{
-		ICalcService Create(String id);
-
+		ICalcService Create(String id);        
 		void Release(ICalcService calculator);
 	}
 
+    public interface ICalculatorFactoryCreateWithoutId
+    {
+        ICalcService Create();        
+    }
+    
 	[TestFixture]
 	public class TypedFactoryFacilityTestCase
 	{
@@ -44,6 +48,21 @@ namespace Castle.Windsor.Tests
 			Assert.AreEqual(3, calculator.Sum(1, 2));
 
 			calcFactory.Release(calculator);
+		}
+
+        [Test]        
+        public void TypedFactory_CreateMethodHasNoId_WorksFine()
+		{
+			IWindsorContainer container;
+
+            container = new WindsorContainer(ConfigHelper.ResolveConfigPath("Proxy/typedFactoryCreateWithoutId.xml"));
+
+            ICalculatorFactoryCreateWithoutId calcFactory = (ICalculatorFactoryCreateWithoutId)container.Resolve(typeof(ICalculatorFactoryCreateWithoutId));
+			Assert.IsNotNull(calcFactory);
+
+            ICalcService calculator = calcFactory.Create();
+            Assert.IsNotNull(calculator);
+			Assert.AreEqual(3, calculator.Sum(1, 2));
 		}
 	}
 }
