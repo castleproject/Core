@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Apply patches from Tim Haynes. 
+  "add a renderIfOnlyOnePage property to the DiggStylePagination View Component"
+  "Add NewRootInstanceIfInvalidKey AutoloadBehaviour to Castle.MonoRail.ActiveRecordSupport"
+
 - Applied Goodwill's patch adding PersisteFlashFilter and the fValidate's localization support. Fixed MR-246.
 
 - Fixed the use of Scaffolding without Layouts (MR-251).

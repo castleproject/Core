@@ -50,7 +50,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// create a new instance of the target type.
 		/// </summary>
 		NewInstanceIfInvalidKey,
-		
+
+		/// <summary>
+		/// Means that we should autoload target and nested types when the key is valid.
+		/// If the key is invalid, like <c>null</c>, 0 or an empty string, and the
+		/// instance is the root instance, then create a new instance of the target type.
+		/// If the key is invalid, and it's a nested instance, then set null on the nested type.
+		/// </summary>
+		NewRootInstanceIfInvalidKey,
+
 		/// <summary>
 		/// Means that we should autoload, but if the key is 
 		/// invalid, like <c>null</c>, 0 or an empty string, then just

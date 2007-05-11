@@ -129,12 +129,14 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				}
 				else
 				{
-					if (autoLoad == AutoLoadBehavior.NewInstanceIfInvalidKey)
+					if (autoLoad == AutoLoadBehavior.NewInstanceIfInvalidKey ||
+						(autoLoad == AutoLoadBehavior.NewRootInstanceIfInvalidKey && StackDepth == 0))
 					{
 						instance = base.CreateInstance(instanceType, paramPrefix, node);
 					}
 					else if (autoLoad == AutoLoadBehavior.NullIfInvalidKey ||
-							 autoLoad == AutoLoadBehavior.OnlyNested)
+							 autoLoad == AutoLoadBehavior.OnlyNested ||
+							 (autoLoad == AutoLoadBehavior.NewRootInstanceIfInvalidKey && StackDepth != 0))
 					{
 						instance = null;
 					}

@@ -28,6 +28,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// <c>page</c> (required): <see cref="IPaginatedPage"/> instance (<see cref="PaginationHelper"/>) <br/>
 	/// <c>url</c>: url to link to<br/>
 	/// <c>useInlineStyle</c>: defines if the outputted content will use inline style or css classnames (defaults to true)<br/>
+	/// <c>renderIfOnlyOnePage</c>: should the pagination render if there's only one page (defaults to true)<br/>
 	/// <c>paginatefunction</c>: a javascript function name to invoke on the page links (instead of a URL)<br/>
 	/// </para>
 	/// 
@@ -49,6 +50,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	{
 		private int adjacents = 2;
 		private bool useInlineStyle = true;
+		private bool renderIfOnlyOnePage = true;
 		private string url;
 		private string paginatefunction;
 		private IPaginatedPage page;
@@ -79,6 +81,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				useInlineStyle = Convert.ToBoolean(ComponentParams["useInlineStyle"]);
 			}
 
+			if (ComponentParams.Contains("renderIfOnlyOnePage"))
+			{
+				renderIfOnlyOnePage = Convert.ToBoolean(ComponentParams["renderIfOnlyOnePage"]);
+			}
+
 			if (ComponentParams.Contains("url"))
 			{
 				url = ComponentParams["url"].ToString();
@@ -98,43 +105,46 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Render()
 		{
-			StringWriter writer = new StringWriter();
-
-			StartBlock(writer);
-			WritePrev(writer);
-
-			if (page.LastIndex < (4 + (adjacents * 2))) // not enough links to make it worth breaking up
+			if (renderIfOnlyOnePage || page.LastIndex > 1)
 			{
-				WriteNumberedLinks(writer, 1, page.LastIndex);
-			}
-			else
-			{
-				if ((page.LastIndex - (adjacents * 2) > page.CurrentIndex) && // in the middle
-				    (page.CurrentIndex > (adjacents * 2)))
-				{
-					WriteNumberedLinks(writer, 1, 2);
-					WriteElipsis(writer);
-					WriteNumberedLinks(writer, page.CurrentIndex - adjacents, page.CurrentIndex + adjacents);
-					WriteElipsis(writer);
-					WriteNumberedLinks(writer, page.LastIndex - 1, page.LastIndex);
-				}
-				else if (page.CurrentIndex < (page.LastIndex / 2))
-				{
-					WriteNumberedLinks(writer, 1, 2 + (adjacents * 2));
-					WriteElipsis(writer);
-					WriteNumberedLinks(writer, page.LastIndex - 1, page.LastIndex);
-				}
-				else // at the end
-				{
-					WriteNumberedLinks(writer, 1, 2);
-					WriteElipsis(writer);
-					WriteNumberedLinks(writer, page.LastIndex - (2 + (adjacents * 2)), page.LastIndex);
-				}
-			}
+				StringWriter writer = new StringWriter();
 
-			WriteNext(writer);
-			EndBlock(writer);
-			RenderText(writer.ToString());
+				StartBlock(writer);
+				WritePrev(writer);
+
+				if (page.LastIndex < (4 + (adjacents * 2))) // not enough links to make it worth breaking up
+				{
+					WriteNumberedLinks(writer, 1, page.LastIndex);
+				}
+				else
+				{
+					if ((page.LastIndex - (adjacents * 2) > page.CurrentIndex) && // in the middle
+						(page.CurrentIndex > (adjacents * 2)))
+					{
+						WriteNumberedLinks(writer, 1, 2);
+						WriteElipsis(writer);
+						WriteNumberedLinks(writer, page.CurrentIndex - adjacents, page.CurrentIndex + adjacents);
+						WriteElipsis(writer);
+						WriteNumberedLinks(writer, page.LastIndex - 1, page.LastIndex);
+					}
+					else if (page.CurrentIndex < (page.LastIndex / 2))
+					{
+						WriteNumberedLinks(writer, 1, 2 + (adjacents * 2));
+						WriteElipsis(writer);
+						WriteNumberedLinks(writer, page.LastIndex - 1, page.LastIndex);
+					}
+					else // at the end
+					{
+						WriteNumberedLinks(writer, 1, 2);
+						WriteElipsis(writer);
+						WriteNumberedLinks(writer, page.LastIndex - (2 + (adjacents * 2)), page.LastIndex);
+					}
+				}
+
+				WriteNext(writer);
+				EndBlock(writer);
+				RenderText(writer.ToString());
+			}
 		}
 
 		/// <summary>
