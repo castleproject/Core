@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Resources;
-using System.Threading;
-
 namespace Castle.Components.Validator
 {
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using System.Resources;
+	using System.Threading;
 
 	/// <summary>
 	/// <see cref="IValidatorRegistry"/> implementation that
@@ -40,7 +39,7 @@ namespace Castle.Components.Validator
 		{
 			defaultResourceManager =
 				new ResourceManager("Castle.Components.Validator.Messages",
-				                    typeof (CachedValidationRegistry).Assembly);
+				                    typeof(CachedValidationRegistry).Assembly);
 		}
 
 		/// <summary>

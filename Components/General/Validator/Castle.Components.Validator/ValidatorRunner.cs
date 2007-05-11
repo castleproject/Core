@@ -51,16 +51,6 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets the extended properties, which allows <see cref="IValidator"/> 
-		/// implementation to store additional information to track state.
-		/// </summary>
-		/// <value>The extended properties.</value>
-		public IDictionary ExtendedProperties
-		{
-			get { return extendedProperties; }
-		}
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
 		/// </summary>
 		/// <param name="registry">The instance registry.</param>
@@ -197,6 +187,16 @@ namespace Castle.Components.Validator
 		public ErrorSummary GetErrorSummary(object instance)
 		{
 			return (ErrorSummary) errorPerInstance[instance];
+		}
+
+		/// <summary>
+		/// Gets the extended properties, which allows <see cref="IValidator"/> 
+		/// implementation to store additional information to track state.
+		/// </summary>
+		/// <value>The extended properties.</value>
+		public IDictionary ExtendedProperties
+		{
+			get { return extendedProperties; }
 		}
 
 		private IValidator[] GetValidators(object objectInstance, RunWhen runWhen)
