@@ -1,4 +1,4 @@
-// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -343,13 +343,22 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		}
 
 		/// <summary>
-		/// Resolves the template name into a velocity template file name.
+		/// Resolves the layout template name into a velocity template file name.
 		/// </summary>
-		protected string ResolveTemplateName(string area, string templateName)
+		protected string ResolveLayoutTemplateName(string templateName)
 		{
-			return String.Format("{0}{1}{2}",
-								area, Path.DirectorySeparatorChar,
-								ResolveTemplateName(templateName));
+			if (templateName.StartsWith("/"))
+			{
+				// User is using a folder diferent than the layouts folder
+
+				return ResolveTemplateName(templateName);
+			}
+			else
+			{
+				return String.Format("{0}{1}{2}",
+									TemplateKeys.LayoutPath, Path.DirectorySeparatorChar,
+									ResolveTemplateName(templateName));
+			}
 		}
 
 		protected virtual void BeforeMerge(VelocityEngine velocityEngine, Template template, IContext context)
@@ -358,38 +367,46 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private void ProcessLayout(String contents, Controller controller, IContext ctx, IRailsEngineContext context)
 		{
-			String layout = ResolveTemplateName(TemplateKeys.LayoutPath, controller.LayoutName);
+			String layout = ResolveLayoutTemplateName(controller.LayoutName);
 
+			BeforeApplyingLayout(layout, ref contents, controller, ctx, context);
+
+			RenderLayout(layout, contents, ctx, context, context.Response.Output);
+		}
+
+		protected virtual void BeforeApplyingLayout(string layout, ref string contents, 
+			Controller controller, IContext ctx, IRailsEngineContext context)
+		{
+		}
+
+		protected void RenderLayout(string layoutName, string contents, IContext ctx, IRailsEngineContext context, TextWriter output)
+		{
 			try
 			{
 				ctx.Put(TemplateKeys.ChildContent, contents);
 
-				Template template = velocity.GetTemplate(layout);
+				Template template = velocity.GetTemplate(layoutName);
 
 				BeforeMerge(velocity, template, ctx);
-				template.Merge(ctx, context.Response.Output);
+
+				template.Merge(ctx, output);
 			}
 			catch(Exception ex)
 			{
 				if (context.Request.IsLocal)
 				{
 					SendErrorDetails(ex, context.Response.Output);
-					return;
 				}
 				else
 				{
-					throw new RailsException("Could not obtain layout: " + layout, ex);
+					throw new RailsException("Error processing layout. Maybe the layout file does not exists? File: " + layoutName, ex);
 				}
 			}
 		}
 
 		private IContext CreateContext(IRailsEngineContext context, Controller controller)
 		{
-#if DOTNET2
 			Hashtable innerContext = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-#else
-			Hashtable innerContext = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
-#endif
 
 			innerContext.Add(TemplateKeys.Controller, controller);
 			innerContext.Add(TemplateKeys.Context, context);
