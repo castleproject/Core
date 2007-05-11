@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void LoadFromAssembly()
 		{
-			loader.AdditionalSources.Add(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
+			loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
 
 			Assert.IsFalse(loader.HasTemplate("Content/contentinassembly2.vm"));
 			Assert.IsTrue(loader.HasTemplate("Content/contentinassembly.vm"));
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void ListViews()
 		{
-			loader.AdditionalSources.Add(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
+			loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
 
 			string[] views = loader.ListViews("Content");
 			

@@ -164,6 +164,7 @@
     <Compile Include="Extensions\ExceptionChaining\LoggingExceptionHandler.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Filters\PersistFlashFilter.cs" />
+    <Compile Include="ServiceContainerAccessor.cs" />
     <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs" />
     <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs" />
     <Compile Include="Helpers\BehaviourHelper.cs" />

@@ -20,7 +20,6 @@ namespace Castle.MonoRail.Framework
 
 	using Castle.Core;
 	using Castle.MonoRail.Framework.Configuration;
-	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views;
 
 	/// <summary>
@@ -28,7 +27,7 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class FileAssemblyViewSourceLoader : IViewSourceLoader, IServiceEnabledComponent
 	{
-		private IList additionalSources = new ArrayList();
+		private IList additionalSources = ArrayList.Synchronized(new ArrayList());
 		private String viewRootDir;
 		private bool enableCache = true;
 		private FileSystemWatcher viewFolderWatcher;
@@ -42,7 +41,11 @@ namespace Castle.MonoRail.Framework
 			if (config != null)
 			{
 				viewRootDir = config.ViewEngineConfig.ViewPathRoot;
-				additionalSources = config.ViewEngineConfig.Sources;
+				
+				foreach(AssemblySourceInfo sourceInfo in config.ViewEngineConfig.Sources)
+				{
+					AddAssemblySource(sourceInfo);
+				}
 			}
 		}
 
@@ -110,9 +113,18 @@ namespace Castle.MonoRail.Framework
 			set { enableCache = value; }
 		}
 
-		public IList AdditionalSources
+		public IList AssemblySources
 		{
 			get { return additionalSources; }
+		}
+
+		/// <summary>
+		/// Adds the assembly source.
+		/// </summary>
+		/// <param name="assemblySourceInfo">The assembly source info.</param>
+		public void AddAssemblySource(AssemblySourceInfo assemblySourceInfo)
+		{
+			additionalSources.Add(assemblySourceInfo);
 		}
 
 		#region Handle File System Changes To Views
@@ -161,7 +173,6 @@ namespace Castle.MonoRail.Framework
 
 		private void InitViewFolderWatch()
 		{
-
 			viewFolderWatcher = new FileSystemWatcher(ViewRootDir);
 			viewFolderWatcher.IncludeSubdirectories = true;
 			viewFolderWatcher.Changed += new FileSystemEventHandler(viewFolderWatcher_Changed);
@@ -174,9 +185,11 @@ namespace Castle.MonoRail.Framework
 		{
 			//shouldn't ever happen, because we make sure that the watcher is only 
 			//active when there are subscribers, but checking will prevent possible concrureny issues with it.
-			FileSystemEventHandler temp = ViewChangedImpl;
-			if (temp != null)
-				temp(this, e);
+
+			if (ViewChangedImpl != null)
+			{
+				ViewChangedImpl(this, e);
+			}
 		}
 
 		#endregion
@@ -198,7 +211,7 @@ namespace Castle.MonoRail.Framework
 
 		private bool HasTemplateOnAssemblies(string templateName)
 		{
-			foreach (AssemblySourceInfo sourceInfo in additionalSources)
+			foreach(AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				if (sourceInfo.HasTemplate(templateName))
 				{
@@ -211,7 +224,7 @@ namespace Castle.MonoRail.Framework
 
 		private IViewSource GetStreamFromAdditionalSources(string templateName)
 		{
-			foreach (AssemblySourceInfo sourceInfo in additionalSources)
+			foreach(AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				if (sourceInfo.HasTemplate(templateName))
 				{
@@ -228,7 +241,7 @@ namespace Castle.MonoRail.Framework
 
 			if (dir.Exists)
 			{
-				foreach (FileInfo file in dir.GetFiles("*.*"))
+				foreach(FileInfo file in dir.GetFiles("*.*"))
 				{
 					views.Add(Path.Combine(dirName, file.Name));
 				}
@@ -237,7 +250,7 @@ namespace Castle.MonoRail.Framework
 
 		private void CollectViewsOnAssemblies(string dirName, ArrayList views)
 		{
-			foreach (AssemblySourceInfo sourceInfo in additionalSources)
+			foreach(AssemblySourceInfo sourceInfo in additionalSources)
 			{
 				sourceInfo.CollectViews(dirName, views);
 			}

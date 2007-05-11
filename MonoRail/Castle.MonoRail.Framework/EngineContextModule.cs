@@ -50,19 +50,7 @@ namespace Castle.MonoRail.Framework
 
 			lock(initLock)
 			{
-				if (container == null)
-				{
-					container = new MonoRailServiceContainer();
-					container.RegisterBaseService(typeof(IServerUtility), new ServerUtilityAdapter(context.Server));
-					container.Start();
-
-					ILoggerFactory loggerFactory = (ILoggerFactory) container.GetService(typeof(ILoggerFactory));
-
-					if (loggerFactory != null)
-					{
-						logger = loggerFactory.Create(typeof(EngineContextModule));
-					}
-				}
+				CreateAndStartContainer(context);
 			}
 
 			context.BeginRequest += new EventHandler(OnStartMonoRailRequest);
@@ -77,6 +65,29 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public void Dispose()
 		{
+		}
+
+		/// <summary>
+		/// Creates and starts MonoRail's service container.
+		/// </summary>
+		/// <param name="context"></param>
+		public void CreateAndStartContainer(HttpApplication context)
+		{
+			if (container == null)
+			{
+				container = new MonoRailServiceContainer();
+				container.RegisterBaseService(typeof(IServerUtility), new ServerUtilityAdapter(context.Server));
+				container.Start();
+
+				ILoggerFactory loggerFactory = (ILoggerFactory) container.GetService(typeof(ILoggerFactory));
+
+				if (loggerFactory != null)
+				{
+					logger = loggerFactory.Create(typeof(EngineContextModule));
+				}
+			}
+
+			ServiceContainerAccessor.ServiceContainer = container;
 		}
 
 		#region MonoRail Request Lifecycle

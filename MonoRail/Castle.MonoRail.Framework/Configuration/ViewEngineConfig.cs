@@ -72,7 +72,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		}
 
 		/// <summary>
-		/// Gets or sets the sources.
+		/// Gets or sets the additional assembly sources.
 		/// </summary>
 		/// <value>The sources.</value>
 		public AssemblySourceInfo[] Sources
