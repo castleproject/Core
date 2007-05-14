@@ -16,6 +16,7 @@ namespace Castle.Components.Validator
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Reflection;
 
 	/// <summary>
@@ -32,45 +33,20 @@ namespace Castle.Components.Validator
 	/// </example>
 	public class ValidatorRunner
 	{
-		private static readonly IDictionary type2Validator;
 		private readonly IDictionary extendedProperties = new Hashtable();
-		private readonly bool inferValidators;
 		private readonly IDictionary errorPerInstance;
 		private readonly IValidatorRegistry registry;
 
-		static ValidatorRunner()
-		{
-			type2Validator = new Hashtable();
-			type2Validator[typeof(Int16)] = typeof(IntegerValidator);
-			type2Validator[typeof(Int32)] = typeof(IntegerValidator);
-			type2Validator[typeof(Int64)] = typeof(IntegerValidator);
-			type2Validator[typeof(decimal)] = typeof(DecimalValidator);
-			type2Validator[typeof(Single)] = typeof(SingleValidator);
-			type2Validator[typeof(double)] = typeof(DoubleValidator);
-			type2Validator[typeof(DateTime)] = typeof(DateTimeValidator);
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
 		/// </summary>
-		/// <param name="registry">The instance registry.</param>
-		public ValidatorRunner(IValidatorRegistry registry) : this(true, registry)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
-		/// </summary>
-		/// <param name="inferValidators">if <c>true</c>, the runner will try 
-		/// to infer un-declared validators based on property types</param>
 		/// <param name="registry">The registry.</param>
-		public ValidatorRunner(bool inferValidators, IValidatorRegistry registry)
+		public ValidatorRunner(IValidatorRegistry registry)
 		{
 			if (registry == null) throw new ArgumentNullException("registry");
 
-			errorPerInstance = new Hashtable();
+			errorPerInstance = new HybridDictionary();
 
-			this.inferValidators = inferValidators;
 			this.registry = registry;
 		}
 
@@ -147,18 +123,6 @@ namespace Castle.Components.Validator
 			if (property == null) throw new ArgumentNullException("property");
 
 			IValidator[] validators = registry.GetValidators(this, parentType, property, runWhenPhase);
-
-			if (inferValidators && validators.Length == 0)
-			{
-				Type defaultValidatorForType = (Type) type2Validator[property.PropertyType];
-
-				if (defaultValidatorForType != null)
-				{
-					validators = new IValidator[] {(IValidator) Activator.CreateInstance(defaultValidatorForType)};
-
-					validators[0].Initialize(registry, property);
-				}
-			}
 
 			Array.Sort(validators, ValidatorComparer.Instance);
 
