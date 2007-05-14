@@ -1017,7 +1017,7 @@ namespace Castle.MonoRail.Framework
 		/// </remarks>
 		protected virtual ValidatorRunner CreateValidatorRunner(IValidatorRegistry validatorRegistry)
 		{
-			return new ValidatorRunner(true, validatorRegistry);
+			return new ValidatorRunner(validatorRegistry);
 		}
 
 		/// <summary>
