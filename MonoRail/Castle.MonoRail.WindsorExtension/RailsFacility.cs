@@ -43,13 +43,13 @@ namespace Castle.MonoRail.WindsorExtension
 			Kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
 			Kernel.AddComponent("rails.viewcomponentregistry", typeof(IViewComponentRegistry), typeof(DefaultViewComponentRegistry));
 
-			controllerTree = (IControllerTree)Kernel["rails.controllertree"];
-			componentRegistry = (IViewComponentRegistry)Kernel["rails.viewcomponentregistry"];
+			controllerTree = (IControllerTree) Kernel["rails.controllertree"];
+			componentRegistry = (IViewComponentRegistry) Kernel["rails.viewcomponentregistry"];
 
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 
-			MonoRailConfiguration.GetConfig().ServiceEntries.RegisterService(
-				ServiceIdentification.ControllerTree, typeof(ControllerTreeAccessor));
+//			MonoRailConfiguration.GetConfig().ServiceEntries.RegisterService(
+//				ServiceIdentification.ControllerTree, typeof(ControllerTreeAccessor));
 
 			AddBuiltInControllers();
 		}

@@ -223,16 +223,19 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		private void ConfigureWindsorIntegration()
 		{
-			const String windsorAssembly = "Castle.MonoRail.WindsorExtension";
+			const string windsorExtensionAssemblyName = "Castle.MonoRail.WindsorExtension";
 			
+			services.RegisterService(ServiceIdentification.ControllerTree, TypeLoadUtil.GetType(
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.ControllerTreeAccessor, " + windsorExtensionAssemblyName)));
+
 			controllersConfig.CustomControllerFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorControllerFactory, " + windsorAssembly));
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorControllerFactory, " + windsorExtensionAssemblyName));
 			
 			viewComponentsConfig.CustomViewComponentFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, " + windsorAssembly));
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, " + windsorExtensionAssemblyName));
 			
 			customFilterFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorFilterFactory, " + windsorAssembly));
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorFilterFactory, " + windsorExtensionAssemblyName));
 		}
 	}
 }

@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-241 
+  "When Windsor integration is enabled, the ControllerTree is empty"
+
 - Apply patches from Tim Haynes. 
   "add a renderIfOnlyOnePage property to the DiggStylePagination View Component"
   "Add NewRootInstanceIfInvalidKey AutoloadBehaviour to Castle.MonoRail.ActiveRecordSupport"
