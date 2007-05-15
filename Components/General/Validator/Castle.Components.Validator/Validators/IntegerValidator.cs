@@ -81,7 +81,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			generator.SetAsRequired(BuildErrorMessage());
+			generator.SetAsRequired(null);
 			generator.SetDigitsOnly(BuildErrorMessage());
 		}
 

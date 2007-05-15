@@ -170,9 +170,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			public void SetMinLength(int minLength, string violationMessage)
 			{
 				AddClass("validate-min-length-" + minLength);
-				
-				if (!string.IsNullOrEmpty(violationMessage))
-					AddTitle(violationMessage);
+				AddTitle(violationMessage);
 			}
 
 			public void SetMaxLength(int maxLength)
@@ -206,15 +204,18 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			private void AddTitle(string message)
 			{
-				string existingTitle = (string) attributes["title"];
+				if (!string.IsNullOrEmpty(message))
+				{
+					string existingTitle = (string)attributes["title"];
 
-				if (existingTitle != null)
-				{
-					attributes["title"] = existingTitle + ", " + message;
-				}
-				else
-				{
-					attributes["title"] = message;
+					if (existingTitle != null)
+					{
+						attributes["title"] = existingTitle + ", " + message;
+					}
+					else
+					{
+						attributes["title"] = message;
+					}
 				}
 			}
 
