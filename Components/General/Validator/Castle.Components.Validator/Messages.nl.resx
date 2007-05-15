@@ -124,7 +124,7 @@
     <value>Vul s.v.p. een geldige datum in</value>
   </data>
   <data name="decimal_invalid" xml:space="preserve">
-    <value>Vul s.v.p. een geldig getal</value>
+    <value>Vul s.v.p. een geldig getal in</value>
   </data>
   <data name="double_invalid" xml:space="preserve">
     <value>Vul s.v.p. een geldig getal in</value>
@@ -145,7 +145,7 @@
     <value>, </value>
   </data>
   <data name="integer_invalid" xml:space="preserve">
-    <value>Voer een geldig geheel getal in s.v.p.</value>
+    <value>Vul s.v.p. een geldig geheel getal in</value>
   </data>
   <data name="isrequired" xml:space="preserve">
     <value>Dit is een verplicht veld</value>
