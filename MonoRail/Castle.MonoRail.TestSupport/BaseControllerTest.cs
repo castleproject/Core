@@ -26,6 +26,9 @@ namespace Castle.MonoRail.TestSupport
 		private readonly int port;
 		private string virtualDir = "/";
 		private MockRailsEngineContext context;
+		private MockRequest request;
+		private MockResponse response;
+		private MockTrace trace;
 
 		protected BaseControllerTest() : this("app.com", "www", 80)
 		{
@@ -41,6 +44,21 @@ namespace Castle.MonoRail.TestSupport
 		protected MockRailsEngineContext Context
 		{
 			get { return context; }
+		}
+
+		public MockRequest Request
+		{
+			get { return request; }
+		}
+
+		public MockResponse Response
+		{
+			get { return response; }
+		}
+
+		public MockTrace Trace
+		{
+			get { return trace; }
 		}
 
 		protected void PrepareController(Controller controller, string areaName, string controllerName, string actionName)
@@ -73,23 +91,23 @@ namespace Castle.MonoRail.TestSupport
 		private void BuildRailsContext(string areaName, string controllerName, string actionName)
 		{
 			UrlInfo info = BuildUrlInfo(areaName, controllerName, actionName);
-			IRequest request = BuildRequest();
-			IResponse response = BuildResponse();
-			ITrace trace = BuildTrace();
-			context = BuildRailsEngineContext(request, response, trace, info);
+			request = BuildRequest();
+			response = BuildResponse();
+			trace = BuildTrace();
+			context = BuildRailsEngineContext(this.request, this.response, this.trace, info);
 		}
 
-		protected virtual IRequest BuildRequest()
+		protected virtual MockRequest BuildRequest()
 		{
 			return new MockRequest();
 		}
 
-		protected virtual IResponse BuildResponse()
+		protected virtual MockResponse BuildResponse()
 		{
 			return new MockResponse();
 		}
 
-		protected virtual ITrace BuildTrace()
+		protected virtual MockTrace BuildTrace()
 		{
 			return new MockTrace();
 		}
