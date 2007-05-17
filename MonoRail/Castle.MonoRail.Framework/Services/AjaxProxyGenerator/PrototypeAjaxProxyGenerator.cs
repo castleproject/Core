@@ -144,17 +144,17 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 						parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
 					}
 
-					string method = "get";
+					string httpRequestMethod = "get";
 					if (accessibleThroughAtt != null)
 					{
-						method = accessibleThroughAtt.Verb.ToString().ToLower();
+						httpRequestMethod = accessibleThroughAtt.Verb.ToString().ToLower();
 					}
 
 					functions.Append("callback)").Append(nl).Append("\t{").Append(nl);
 					functions.AppendFormat("\t\tvar r=new Ajax.Request('{0}', " +
 					                       "{{method: '{1}', asynchronous: !!callback, onComplete: callback, parameters: '{2}'}}); " + nl +
 					                       "\t\tif(!callback) return r.transport.responseText;" + nl,
-					                       url, method, parameters);
+					                       url, httpRequestMethod, parameters);
 					functions.Append("\t}").Append(nl);
 				}
 
