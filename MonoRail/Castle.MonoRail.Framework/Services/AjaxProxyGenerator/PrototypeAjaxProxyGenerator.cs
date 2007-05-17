@@ -126,6 +126,8 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 
 					AjaxActionAttribute ajaxActionAtt =
 						(AjaxActionAttribute) GetSingleAttribute(ajaxActionMethod, typeof(AjaxActionAttribute), true);
+					AccessibleThroughAttribute accessibleThroughAtt =
+						(AccessibleThroughAttribute) GetSingleAttribute(ajaxActionMethod, typeof(AccessibleThroughAttribute), true);
 
 					String url = baseUrl + methodName + "." + context.UrlInfo.Extension;
 					String functionName = ToCamelCase(ajaxActionAtt.Name != null ? ajaxActionAtt.Name : methodName);
@@ -142,11 +144,17 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 						parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
 					}
 
+					string method = "get";
+					if (accessibleThroughAtt != null)
+					{
+						method = accessibleThroughAtt.Verb.ToString().ToLower();
+					}
+
 					functions.Append("callback)").Append(nl).Append("\t{").Append(nl);
 					functions.AppendFormat("\t\tvar r=new Ajax.Request('{0}', " +
-					                       "{{parameters: '{1}', asynchronous: !!callback, onComplete: callback}}); " + nl +
+					                       "{{method: '{1}', asynchronous: !!callback, onComplete: callback, parameters: '{2}'}}); " + nl +
 					                       "\t\tif(!callback) return r.transport.responseText;" + nl,
-					                       url, parameters);
+					                       url, method, parameters);
 					functions.Append("\t}").Append(nl);
 				}
 
