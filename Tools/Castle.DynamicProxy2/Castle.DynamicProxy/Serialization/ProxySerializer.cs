@@ -17,13 +17,14 @@ namespace Castle.DynamicProxy.Serialization
 		public static BinaryFormatter Formatter = new BinaryFormatter();
 
 		public static void SerializeBaseProxyData (SerializationInfo info, object proxy, IInterceptor[] interceptors,
-				string[] interfaceNames, Type baseType)
+				string[] interfaceNames, Type baseType, ProxyGenerationOptions generationOptions)
 		{
 			info.SetType (typeof (ProxyObjectReference));
 
 			info.AddValue ("__interceptors", interceptors);
 			info.AddValue ("__interfaces", interfaceNames);
 			info.AddValue ("__baseType", baseType);
+			info.AddValue ("__generationOptions", generationOptions);
 		}
 
 		
@@ -48,9 +49,9 @@ namespace Castle.DynamicProxy.Serialization
 			}
 		}
 
-    /// <summary>
-    /// Used to circumvent a serialization bug, where direct self references and directly held delegates are not deserialized correctly.
-    /// </summary>
+		/// <summary>
+		/// Used to circumvent a serialization bug, where direct self references and directly held delegates are not deserialized correctly.
+		/// </summary>
 		[Serializable]
 		public class Indirection
 		{

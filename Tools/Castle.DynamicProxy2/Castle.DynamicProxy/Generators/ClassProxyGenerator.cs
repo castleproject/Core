@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Specialized;
 	using System.Runtime.Serialization;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
-  using Castle.DynamicProxy.Serialization;
+	using Castle.DynamicProxy.Serialization;
 
 	/// <summary>
 	/// 
@@ -103,6 +103,8 @@ namespace Castle.DynamicProxy.Generators
 				
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
+
+			  AddStaticGenerationOptionsField (emitter);
 
 				// Custom attributes
 
@@ -285,6 +287,7 @@ namespace Castle.DynamicProxy.Generators
 				// Build type
 
 				type = emitter.BuildType();
+			  InitializeStaticGenerationOptionsField (type, options);
 
 				AddToCache(cacheKey, type);
 			}
@@ -337,12 +340,12 @@ namespace Castle.DynamicProxy.Generators
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, 
 		                                               ArgumentReference arg1, ArgumentReference arg2)
 		{
-      codebuilder.AddStatement (new ExpressionStatement (new MethodInvocationExpression (null,
-        typeof (ProxySerializer).GetMethod ("SerializeClassProxyData"), arg1.ToExpression (),
-        new ConstReference (delegateToBaseGetObjectData).ToExpression (), new TypeTokenExpression (targetType),
-        SelfReference.Self.ToExpression())));
+			codebuilder.AddStatement (new ExpressionStatement (new MethodInvocationExpression (null,
+			  typeof (ProxySerializer).GetMethod ("SerializeClassProxyData"), arg1.ToExpression (),
+			  new ConstReference (delegateToBaseGetObjectData).ToExpression (), new TypeTokenExpression (targetType),
+			  SelfReference.Self.ToExpression())));
 
-      if (delegateToBaseGetObjectData)
+			if (delegateToBaseGetObjectData)
 			{
 				MethodInfo baseGetObjectData = targetType.GetMethod("GetObjectData", 
 					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });

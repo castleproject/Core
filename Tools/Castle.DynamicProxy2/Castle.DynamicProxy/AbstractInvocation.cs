@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
-  using System.Diagnostics;
+	using	System.Diagnostics;
 
 
 	[Serializable]

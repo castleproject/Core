@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Reflection;
 using Castle.DynamicProxy.Tests.BugsReported;
 using Castle.DynamicProxy.Tests.Interceptors;
 
@@ -415,5 +416,114 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreSame (otherProxy, otherProxy.This);
 		}
 
+		[Serializable]
+		class MethodFilterHook : IProxyGenerationHook
+		{
+			private string nameFilter;
+
+			public MethodFilterHook (string nameFilter)
+			{
+				this.nameFilter = nameFilter;
+			}
+
+			public bool ShouldInterceptMethod (Type type, MethodInfo memberInfo)
+			{
+				return memberInfo.Name == nameFilter;
+			}
+
+			public void NonVirtualMemberNotification (Type type, MemberInfo memberInfo)
+			{
+			}
+
+			public void MethodsInspected ()
+			{
+			}
+		}
+
+		public interface IMixedInterface
+		{
+		}
+
+		[Serializable]
+		public class SerializableMixin : IMixedInterface
+		{
+		}
+
+		[Test]
+		public void ProxyGenerationOptionsRespectedOnDeserialization ()
+		{
+			ProxyObjectReference.ResetScope();
+
+			MethodFilterHook hook = new MethodFilterHook ("get_Current");
+			ProxyGenerationOptions options = new ProxyGenerationOptions (hook);
+			options.AddMixinInstance (new SerializableMixin());
+
+			MySerializableClass proxy = (MySerializableClass) generator.CreateClassProxy (
+			    typeof (MySerializableClass),
+			    new Type[0],
+			    options,
+			    new StandardInterceptor());
+
+			Assert.AreEqual (proxy.GetType(), proxy.GetType().GetMethod ("get_Current").DeclaringType);
+			Assert.AreNotEqual (proxy.GetType(), proxy.GetType().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.AreEqual (proxy.GetType().BaseType, proxy.GetType().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.IsTrue (proxy is IMixedInterface);
+
+			MySerializableClass otherProxy = (MySerializableClass) SerializeAndDeserialize (proxy);
+			Assert.AreEqual (otherProxy.GetType(), otherProxy.GetType().GetMethod ("get_Current").DeclaringType);
+			Assert.AreNotEqual (otherProxy.GetType(), otherProxy.GetType().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.AreEqual (otherProxy.GetType().BaseType, otherProxy.GetType().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.IsTrue (otherProxy is IMixedInterface);
+		}
+
+		[Serializable]
+		class ComplexHolder
+		{
+			public Type Type;
+			public object Element;
+		}
+
+		// With naive serialization of ProxyGenerationOptions, the following test case fails due to problems with the order of deserialization:
+		// in ProxyObjectReference, the deserialized ProxyGenerationOptions will only contain null and default values. ProxyGenerationOptions must
+		// avoid serializing Type objects in order for this test case to pass.
+		[Test]
+		public void ProxyGenerationOptionsRespectedOnDeserializationComplex ()
+		{
+			ProxyObjectReference.ResetScope ();
+
+			MethodFilterHook hook = new MethodFilterHook ("get_Current");
+			ProxyGenerationOptions options = new ProxyGenerationOptions (hook);
+			options.AddMixinInstance (new SerializableMixin());
+
+			ComplexHolder holder = new ComplexHolder();
+			holder.Type = typeof (MySerializableClass);
+			holder.Element = generator.CreateClassProxy (typeof (MySerializableClass), new Type[0], options, new StandardInterceptor ());
+
+			// check holder elements
+			Assert.AreEqual (typeof (MySerializableClass), holder.Type);
+			Assert.IsNotNull (holder.Element);
+			Assert.IsTrue (holder.Element is MySerializableClass) ;
+			Assert.AreNotEqual (typeof (MySerializableClass), holder.Element.GetType ());
+
+			// check whether options were applied correctly
+			Assert.AreEqual (holder.Element.GetType (), holder.Element.GetType ().GetMethod ("get_Current").DeclaringType);
+			Assert.AreNotEqual (holder.Element.GetType (), holder.Element.GetType ().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.AreEqual (holder.Element.GetType ().BaseType, holder.Element.GetType ().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.IsTrue (holder.Element is IMixedInterface);
+
+			ComplexHolder otherHolder = (ComplexHolder) SerializeAndDeserialize (holder);
+
+			// check holder elements
+			Assert.AreEqual (typeof (MySerializableClass), otherHolder.Type);
+			Assert.IsNotNull (otherHolder.Element);
+			Assert.IsTrue (otherHolder.Element is MySerializableClass);
+			Assert.AreNotEqual(typeof (MySerializableClass), otherHolder.Element.GetType());
+
+			// check whether options were applied correctly
+			Assert.AreEqual (otherHolder.Element.GetType (), otherHolder.Element.GetType ().GetMethod ("get_Current").DeclaringType);
+			Assert.AreNotEqual (otherHolder.Element.GetType (), otherHolder.Element.GetType ().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.AreEqual (otherHolder.Element.GetType ().BaseType, otherHolder.Element.GetType ().GetMethod ("CalculateSumDistanceNow").DeclaringType);
+			Assert.IsTrue (otherHolder.Element is IMixedInterface);
+		}
 	}
 }

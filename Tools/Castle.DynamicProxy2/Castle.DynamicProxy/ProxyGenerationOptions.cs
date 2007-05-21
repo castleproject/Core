@@ -18,11 +18,13 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections;
+	using System.Runtime.Serialization;
 
 	/// <summary>
 	/// The proxy generation options, note that this is a statefull class with regard to mixin.
 	/// </summary>
-	public class ProxyGenerationOptions
+	[Serializable]
+	public class ProxyGenerationOptions : ISerializable
 	{
 		/// <summary>
 		/// Gets the default options
@@ -55,6 +57,19 @@ namespace Castle.DynamicProxy
 		public ProxyGenerationOptions()
 			: this(new AllMethodsHook())
 		{
+		}
+
+		private ProxyGenerationOptions(SerializationInfo info, StreamingContext context)
+		{
+			hook = (IProxyGenerationHook) info.GetValue ("hook", typeof (IProxyGenerationHook));
+			selector = (IInterceptorSelector) info.GetValue ("selector", typeof (IInterceptorSelector));
+			useSelector = info.GetBoolean ("useSelector");
+			mixins = (ArrayList) info.GetValue ("mixins", typeof (ArrayList));
+			
+			string baseTypeName = info.GetString ("baseTypeForInterfaceProxy");
+			baseTypeForInterfaceProxy = Type.GetType (baseTypeName);
+
+			Initialize();
 		}
 
 		public IProxyGenerationHook Hook
@@ -239,6 +254,18 @@ namespace Castle.DynamicProxy
 		public Dictionary<Type, int> GetMixinInterfacesAndPositions()
 		{
 			return mixinPositions;
+		}
+
+		public void GetObjectData (SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue ("hook", hook);
+			info.AddValue ("selector", selector);
+			info.AddValue ("useSelector", useSelector);
+			info.AddValue ("mixins", mixins);
+			// remaining mixin fields are not serialized, they are recalculated in the Initialize method called from the deserialization constructor
+
+			// avoid serializing Type objects, they lead to problems with deserialization order, see SerializableClassTestCase.ProxyGenerationOptionsRespectedOnDeserializationComplex
+			info.AddValue ("baseTypeForInterfaceProxy", baseTypeForInterfaceProxy.AssemblyQualifiedName);
 		}
 	}
 }

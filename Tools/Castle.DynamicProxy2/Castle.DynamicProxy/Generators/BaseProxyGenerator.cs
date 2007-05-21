@@ -60,6 +60,8 @@ namespace Castle.DynamicProxy.Generators
 		private IList generateNewSlot = new ArrayList();
 		protected IList methodsToSkip = new ArrayList();
 
+		private FieldReference generationOptionsField;
+
 		protected readonly Type targetType;
 		protected IProxyGenerationHook generationHook;
 		protected ConstructorInfo serializationConstructor;
@@ -74,6 +76,16 @@ namespace Castle.DynamicProxy.Generators
 			this.targetType = targetType;
 		}
 
+		protected void AddStaticGenerationOptionsField (AbstractTypeEmitter emitter)
+		{
+			generationOptionsField = emitter.CreateStaticField ("__generationOptions", typeof (ProxyGenerationOptions));
+		}
+
+		protected void InitializeStaticGenerationOptionsField (Type finishedType, ProxyGenerationOptions generationOptions)
+		{
+			FieldInfo field = finishedType.GetField (generationOptionsField.Reference.Name);
+			field.SetValue (null, generationOptions);
+		}
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
@@ -1477,6 +1489,9 @@ namespace Castle.DynamicProxy.Generators
 			/*// To prevent re-implementation of this interface.
 			_generated.Add(typeof(ISerializable));*/
 
+			if (generationOptionsField == null)
+				throw new InvalidOperationException ("AddStaticGenerationOptionsField must be called before ImplementGetObjectData.");
+
 			if (interfaces == null)
 				interfaces = new Type[0];
 
@@ -1502,7 +1517,8 @@ namespace Castle.DynamicProxy.Generators
 			getObjectData.CodeBuilder.AddStatement(
 				new ExpressionStatement(new MethodInvocationExpression(null, typeof (ProxySerializer).GetMethod("SerializeBaseProxyData"),
 				                                                       arg1.ToExpression(), SelfReference.Self.ToExpression(), interceptorsField.ToExpression(),
-				                                                       interfacesLocal.ToExpression(), new TypeTokenExpression(emitter.BaseType))));
+				                                                       interfacesLocal.ToExpression(), new TypeTokenExpression(emitter.BaseType),
+				                                                       generationOptionsField.ToExpression())));
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, arg1, arg2);
 

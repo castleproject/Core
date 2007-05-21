@@ -38,6 +38,7 @@ namespace Castle.DynamicProxy.Serialization
 		private IInterceptor[] _interceptors;
 		private ProxySerializer.Indirection _data;
 		private object _proxy;
+		private ProxyGenerationOptions _options;
 
 		/// <summary>
 		/// Usefull for test cases
@@ -51,6 +52,7 @@ namespace Castle.DynamicProxy.Serialization
 		{
 			_interceptors = (IInterceptor[])info.GetValue("__interceptors", typeof (IInterceptor[]));
 			_baseType = (Type)info.GetValue("__baseType", typeof(Type));
+			_options = (ProxyGenerationOptions) info.GetValue ("__generationOptions", typeof (ProxyGenerationOptions));
 
 			String[] _interfaceNames = (String[])info.GetValue("__interfaces", typeof(String[]));
 
@@ -100,7 +102,7 @@ namespace Castle.DynamicProxy.Serialization
 					throw new InvalidOperationException(string.Format("Got value {0} for the interface generator type, which is not known for the purpose of serialization.", generatorType));
 			}
 
-			Type proxy_type = generator.GenerateCode(target.GetType(), _interfaces , ProxyGenerationOptions.Default);
+			Type proxy_type = generator.GenerateCode(target.GetType(), _interfaces , _options);
 
 			proxy = Activator.CreateInstance(proxy_type, new object[] { _interceptors, target });
 			
@@ -115,7 +117,7 @@ namespace Castle.DynamicProxy.Serialization
 
 			ClassProxyGenerator cpGen = new ClassProxyGenerator(_scope, _baseType);
 
-			Type proxy_type = cpGen.GenerateCode(_interfaces, ProxyGenerationOptions.Default);
+			Type proxy_type = cpGen.GenerateCode(_interfaces, _options);
 			
 
 			if (delegateBaseSer)
@@ -165,8 +167,8 @@ namespace Castle.DynamicProxy.Serialization
 			// this class would never be serialized.
 		}
 
-    // Class proxies must be populated in this method, since only at this point all members held by _data.IndirectedObject
-    // have been fixed up.
+		// Class proxies must be populated in this method, since only at this point all members held by _data.IndirectedObject
+		// have been fixed up.
 		public void OnDeserialization (object sender)
 		{
 			if (_data != null)
@@ -176,8 +178,8 @@ namespace Castle.DynamicProxy.Serialization
 				MemberInfo[] members = FormatterServices.GetSerializableMembers (_baseType);
 				FormatterServices.PopulateObjectMembers (_proxy, members, objectData);
 				_data = null;
-      }
-      InvokeCallback (_proxy);
-    }
+			}
+			InvokeCallback (_proxy);
+		}
 	}
 }

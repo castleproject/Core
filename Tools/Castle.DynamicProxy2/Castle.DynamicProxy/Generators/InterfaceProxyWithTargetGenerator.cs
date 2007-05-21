@@ -105,6 +105,8 @@ namespace Castle.DynamicProxy.Generators
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 				emitter.DefineCustomAttribute(new SerializableAttribute());
 
+				AddStaticGenerationOptionsField (emitter);
+
 				// Custom attributes
 				ReplicateNonInheritableAttributes(targetType, emitter);
 
@@ -328,6 +330,7 @@ namespace Castle.DynamicProxy.Generators
 				// Crosses fingers and build type
 
 				generatedType = emitter.BuildType();
+				InitializeStaticGenerationOptionsField (generatedType, options);
 
 				/*foreach (MethodInfo m in generatedType.GetMethods())
 				{
