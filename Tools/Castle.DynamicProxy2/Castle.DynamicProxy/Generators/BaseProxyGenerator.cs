@@ -342,11 +342,12 @@ namespace Castle.DynamicProxy.Generators
 
 			Trace.Assert(method.IsGenericMethod == iinvocation.IsGenericTypeDefinition);
 			bool isGenericInvocationClass = false;
+			Type[] methodEmitterGenericArgs = null;
 			if (method.IsGenericMethod)
 			{
 				// bind generic method arguments to invocation's type arguments
-				Type[] genericMethodArgs = method.GetGenericArguments();
-				iinvocation = iinvocation.MakeGenericType(genericMethodArgs);
+				methodEmitterGenericArgs = methodEmitter.MethodBuilder.GetGenericArguments();
+				iinvocation = iinvocation.MakeGenericType(methodEmitterGenericArgs);
 				isGenericInvocationClass = true;
 			}
 
@@ -367,8 +368,7 @@ namespace Castle.DynamicProxy.Generators
 			else
 			{
 				// Not in the cache: generic method
-
-				methodInfoTokenExp = new MethodTokenExpression(method);
+				methodInfoTokenExp = new MethodTokenExpression(method.MakeGenericMethod(methodEmitterGenericArgs));
 			}
 
 			ConstructorInfo constructor = invocationImpl.Constructors[0].Builder;
@@ -392,7 +392,7 @@ namespace Castle.DynamicProxy.Generators
 				{
 					// Not in the cache: generic method
 
-					methodOnTargetTokenExp = new MethodTokenExpression(methodOnTarget);
+					methodOnTargetTokenExp = new MethodTokenExpression(methodOnTarget.MakeGenericMethod (methodEmitterGenericArgs));
 				}
 
 				newInvocImpl =
@@ -421,7 +421,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (method.ContainsGenericParameters)
 			{
-				EmitLoadGenricMethodArguments(methodEmitter, method, invocationImplLocal);
+				EmitLoadGenericMethodArguments(methodEmitter, method.MakeGenericMethod(methodEmitterGenericArgs), invocationImplLocal);
 			}
 
 			methodEmitter.CodeBuilder.AddStatement(
@@ -435,7 +435,7 @@ namespace Castle.DynamicProxy.Generators
 				MethodInvocationExpression getRetVal =
 					new MethodInvocationExpression(invocationImplLocal, typeof (AbstractInvocation).GetMethod("get_ReturnValue"));
 
-				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(new ConvertExpression(method.ReturnType, getRetVal)));
+				methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(new ConvertExpression(methodEmitter.ReturnType, getRetVal)));
 			}
 			else
 			{
@@ -445,7 +445,7 @@ namespace Castle.DynamicProxy.Generators
 			return methodEmitter;
 		}
 
-		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, LocalReference invocationImplLocal)
+		private void EmitLoadGenericMethodArguments(MethodEmitter methodEmitter, MethodInfo method, LocalReference invocationImplLocal)
 		{
 			Type[] genericParameters = Array.FindAll(method.GetGenericArguments(), delegate(Type t)
 			{

@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateInterfaceProxyWithoutTarget(typeof (IAmInternal), new SkipCallingMethodInterceptor());
 		}
 
-		[Test, Ignore("Not idea why this is failing, looks like we are doing everything correctly here")]
+		[Test]
 		public void ProxyingInterfaceWithGenericMethodsWithGenericClassConstraint()
 		{
 			generator.CreateInterfaceProxyWithoutTarget(typeof (IFactory32), new SkipCallingMethodInterceptor());
