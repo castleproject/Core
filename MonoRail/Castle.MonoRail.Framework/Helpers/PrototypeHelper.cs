@@ -243,6 +243,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			/// <param name="args"></param>
 			public void Call(object function, params object[] args)
 			{
+				if (String.IsNullOrEmpty(function.ToString()))
+					throw new ArgumentException("function",
+					                            "function cannot be null or an empty string.");
+
 				Record(this, function + "(" + BuildJSArguments(args) + ")");
 			}
 
