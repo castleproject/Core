@@ -170,7 +170,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			HybridDictionary dict = new HybridDictionary();
 #if DOTNET2
-			Regex connectionStringRegex = new Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[\d\w_.-]+)\}");
+			Regex connectionStringRegex = new Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[^}]+)\}");
 			string ConnectionStringKey = "hibernate.connection.connection_string";
 #endif
 			foreach(XmlNode addNode in node.SelectNodes("add"))
