@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Pushed processing of configuration into InPlaceConfigurationSource so both
+  ActiveRecord and ActiveRecordFacility could handle it in one place.
+
 - Fixed AR-151
   "XmlGenerationVisitor.MakeCustomTypeAtt doesn't support generic types"
 

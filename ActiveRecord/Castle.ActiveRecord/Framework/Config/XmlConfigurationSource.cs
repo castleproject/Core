@@ -19,7 +19,6 @@ namespace Castle.ActiveRecord.Framework.Config
 	using System.Collections.Specialized;
 	using System.Configuration;
 	using System.IO;
-	using System.Text.RegularExpressions;
 	using System.Xml;
 
 	/// <summary>
@@ -169,10 +168,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		protected IDictionary BuildProperties(XmlNode node)
 		{
 			HybridDictionary dict = new HybridDictionary();
-#if DOTNET2
-			Regex connectionStringRegex = new Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[^}]+)\}");
-			string ConnectionStringKey = "hibernate.connection.connection_string";
-#endif
+
 			foreach(XmlNode addNode in node.SelectNodes("add"))
 			{
 				XmlAttribute keyAtt = addNode.Attributes["key"];
@@ -189,16 +185,7 @@ namespace Castle.ActiveRecord.Framework.Config
 #endif
 				}
 				string value = valueAtt.Value;
-#if DOTNET2
 
-				if (keyAtt.Value == ConnectionStringKey
-				    && connectionStringRegex.IsMatch(value))
-				{
-					string connectionStringName = connectionStringRegex.Match(value).
-						Groups["ConnectionStringName"].Value;
-					value = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-				}
-#endif
 				dict.Add(keyAtt.Value, value);
 			}
 

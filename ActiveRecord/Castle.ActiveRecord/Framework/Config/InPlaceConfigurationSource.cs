@@ -16,6 +16,8 @@ namespace Castle.ActiveRecord.Framework.Config
 {
 	using System;
 	using System.Collections;
+	using System.Configuration;
+	using System.Text.RegularExpressions;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.Core.Configuration;
 
@@ -135,6 +137,8 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <param name="config">The config.</param>
 		public void Add(Type type, IConfiguration config)
 		{
+			ProcessConfiguration(config);
+
 			_type2Config[type] = config;
 		}
 
@@ -253,6 +257,36 @@ namespace Castle.ActiveRecord.Framework.Config
 			}
 
 			return conf;
+		}
+
+		/// <summary>
+		/// Processes the configuration applying any substitutions.
+		/// </summary>
+		/// <param name="config">The configuration</param>
+		private void ProcessConfiguration(IConfiguration config)
+		{
+#if DOTNET2
+			const string ConnectionStringKey = "hibernate.connection.connection_string";
+
+			for(int i = 0; i < config.Children.Count; ++i)
+			{
+				IConfiguration property = config.Children[i];
+
+				if (property.Name == ConnectionStringKey)
+				{
+					String value = property.Value;
+					Regex connectionStringRegex = new Regex(@"ConnectionString\s*=\s*\$\{(?<ConnectionStringName>[^}]+)\}");
+
+					if (connectionStringRegex.IsMatch(value))
+					{
+						string connectionStringName = connectionStringRegex.Match(value).
+							Groups["ConnectionStringName"].Value;
+						value = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+						config.Children[i] = new MutableConfiguration(property.Name, value);
+					}
+				}
+			}
+#endif
 		}
 	}
 }
