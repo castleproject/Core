@@ -57,7 +57,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			String expected = "<form  onsubmit=\"new Ajax.Request('something.rails', " 
 				+ "{onSuccess:function(request) { javascriptcode } , onFailure:function("
 				+ "request) { javascriptcode } , asynchronous:true, evalScripts:true, "
-				+ "parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\">";
+				+ "parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\" "
+				+ "action=\"something.rails\" method=\"post\" >";
 
 			String actual = helper.BuildFormRemoteTag( new DictHelper().CreateDict("url=something.rails", "onfailure=javascriptcode", "onsuccess=javascriptcode") );
 			

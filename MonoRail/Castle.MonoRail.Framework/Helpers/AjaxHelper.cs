@@ -359,7 +359,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			String formId = options.Contains("formId") ? ("id=\"" + (String) options["formId"] + "\"") : String.Empty;
 
-			return String.Format("<form {1} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, formId);
+			return String.Format("<form {1} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\" action=\"{2}\" method=\"post\" >", remoteFunc, formId, options["url"]);
 		}
 		
 		#endregion
