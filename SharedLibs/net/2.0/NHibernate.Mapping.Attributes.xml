@@ -1,0 +1,2796 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NHibernate.Mapping.Attributes</name>
+    </assembly>
+    <members>
+        <member name="T:NHibernate.Mapping.Attributes.AnyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.BaseAttribute">
+            <summary>
+            Attribute taking an order position.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.BaseAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.Mapping.Attributes.BaseAttribute"/> class.
+            </summary>
+            <remarks>
+            This constructor is only called by classes that derive from <see cref="T:NHibernate.Mapping.Attributes.BaseAttribute"/>.
+            </remarks>
+            <param name="position">The position at which the attribute has been declared.</param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.BaseAttribute.CompareTo(System.Object)">
+            <summary> Compares the current instance with another object of the same type. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BaseAttribute.Position">
+            <summary> The position at which the attribute has been declared. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.AnyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.AnyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.IdType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.IdTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.MetaType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.MetaTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.Insert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.InsertSpecified">
+            <summary> Tells if Insert has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.Update">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.UpdateSpecified">
+            <summary> Tells if Update has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.Index">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AnyAttribute.UniqueKey">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ArrayAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ArrayAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ArrayAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.ElementClass">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.OptimisticLock">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ArrayAttribute.OptimisticLockSpecified">
+            <summary> Tells if OptimisticLock has been specified. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.AttributeIdentifierAttribute">
+            <summary> Use this attribute to give a value to a field identified in a mapping attribute. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.AttributeIdentifierAttribute.#ctor(System.String)">
+            <summary> Default constructor </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AttributeIdentifierAttribute.Name">
+            <summary> Gets or sets the name used to identify the field (without the quotes). </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AttributeIdentifierAttribute.Value">
+            <summary> Gets or sets the value of the identified field. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AttributeIdentifierAttribute.ValueObject">
+            <summary> Gets or sets the value of the identified field. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AttributeIdentifierAttribute.ValueType">
+            <summary> Gets or sets the value of the identified field. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.AttributeIdentifierAttribute.ValueFormat">
+            <summary> Gets or sets the 'format' used by System.Enum.Format() in ValueObject. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.BagAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.BagAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.BagAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Lazy">
+            <summary>Enable the lazy loading of this collection</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Inverse">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.InverseSpecified">
+            <summary> Tells if Inverse has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Persister">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.PersisterType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.BatchSize">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.CollectionType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.CollectionTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.OptimisticLock">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.OptimisticLockSpecified">
+            <summary> Tells if OptimisticLock has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.Generic">
+            <summary>The concrete collection should use a generic version or an object-based version.</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.GenericSpecified">
+            <summary> Tells if Generic has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.BagAttribute.OrderBy">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CacheAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CacheAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CacheAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CacheAttribute.Region">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CacheAttribute.Usage">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CacheUsage">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CacheUsage.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CacheUsage.ReadOnly">
+            <summary>read-only</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CacheUsage.ReadWrite">
+            <summary>read-write</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CacheUsage.NonStrictReadWrite">
+            <summary>nonstrict-read-write</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CascadeStyle">
+            <summary>Rule as to how to operate on child objects (for more information, read topics about "persistence by reachability" or "transparent/transitive/cascading persistence")</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CascadeStyle.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CascadeStyle.All">
+            <summary>all</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CascadeStyle.AllDeleteOrphan">
+            <summary>all-delete-orphan</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CascadeStyle.None">
+            <summary>none</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CascadeStyle.SaveUpdate">
+            <summary>save-update</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CascadeStyle.Delete">
+            <summary>delete</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CascadeStyle.DeleteOrphan">
+            <summary>delete-orphan</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ClassAttribute">
+            <summary>Root of an entity class hierarchy. Entities have their own tables</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ClassAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ClassAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.NameType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Proxy">
+            <summary>default: no proxy interface</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.ProxyType">
+            <summary>default: no proxy interface</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Lazy">
+            <summary>Enable the lazy loading of this class in associations</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.DynamicUpdate">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.DynamicUpdateSpecified">
+            <summary> Tells if DynamicUpdate has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.DynamicInsert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.DynamicInsertSpecified">
+            <summary> Tells if DynamicInsert has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.SelectBeforeUpdate">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.SelectBeforeUpdateSpecified">
+            <summary> Tells if SelectBeforeUpdate has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Table">
+            <summary>default: unqualified classname</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Schema">
+            <summary>default: no value</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.DiscriminatorValue">
+            <summary>default: unqualified class name | none</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.DiscriminatorValueObject">
+            <summary>default: unqualified class name | none</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.DiscriminatorValueEnumFormat">
+            <summary>'format' used by System.Enum.Format() in DiscriminatorValueObject</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Mutable">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.MutableSpecified">
+            <summary> Tells if Mutable has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Polymorphism">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Persister">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.PersisterType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Where">
+            <summary>default: none</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.BatchSize">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.OptimisticLock">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ClassAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CollectionFetchMode">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CollectionFetchMode.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CollectionFetchMode.Select">
+            <summary>select</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CollectionFetchMode.Join">
+            <summary>join</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CollectionFetchMode.Subselect">
+            <summary>subselect</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CollectionIdAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CollectionIdAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CollectionIdAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CollectionIdAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CollectionIdAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CollectionIdAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CollectionIdAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ColumnAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ColumnAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ColumnAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.NotNull">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.NotNullSpecified">
+            <summary> Tells if NotNull has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.Unique">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.UniqueSpecified">
+            <summary> Tells if Unique has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.UniqueKey">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.SqlType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.Index">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ColumnAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ComponentAttribute">
+            <summary>Map properties of a child object to columns of the table of a parent class</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ComponentAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ComponentAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.Update">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.UpdateSpecified">
+            <summary> Tells if Update has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.Insert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentAttribute.InsertSpecified">
+            <summary> Tells if Insert has been specified. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ComponentPropertyAttribute">
+            <summary> Use this attribute to define a "component" on a property/field. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ComponentPropertyAttribute.#ctor">
+            <summary> Default constructor </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentPropertyAttribute.ComponentType">
+            <summary> Gets or sets the type of the component. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ComponentPropertyAttribute.PropertyName">
+            <summary> Gets or sets the name of the property which has the type of the component. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CompositeElementAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CompositeElementAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CompositeElementAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeElementAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeElementAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CompositeIdAttribute">
+            <summary>A composite key may be modelled by a .NET class with a property for each key column. The class must be Serializable and override equals() and hashCode()</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CompositeIdAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CompositeIdAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIdAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIdAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIdAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIdAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIdAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIdAttribute.UnsavedValue">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CompositeIndexAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CompositeIndexAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CompositeIndexAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIndexAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CompositeIndexAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CreateAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CreateAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.CreateAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.CreateAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.CustomSqlCheck">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CustomSqlCheck.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CustomSqlCheck.None">
+            <summary>none</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.CustomSqlCheck.RowCount">
+            <summary>rowcount</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.DatabaseObjectAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DatabaseObjectAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DatabaseObjectAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.DialectScopeAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DialectScopeAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DialectScopeAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DialectScopeAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.DiscriminatorAttribute">
+            <summary>Polymorphic data requires a column holding a class discriminator value. This value is not directly exposed to the application</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DiscriminatorAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DiscriminatorAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.NotNull">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.NotNullSpecified">
+            <summary> Tells if NotNull has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.Force">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.ForceSpecified">
+            <summary> Tells if Force has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.Insert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.InsertSpecified">
+            <summary> Tells if Insert has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DiscriminatorAttribute.Formula">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.DropAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DropAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DropAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DropAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.DynamicComponentAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DynamicComponentAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.DynamicComponentAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DynamicComponentAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DynamicComponentAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DynamicComponentAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DynamicComponentAttribute.Update">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DynamicComponentAttribute.UpdateSpecified">
+            <summary> Tells if Update has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DynamicComponentAttribute.Insert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.DynamicComponentAttribute.InsertSpecified">
+            <summary> Tells if Insert has been specified. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ElementAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ElementAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ElementAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.NotNull">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.NotNullSpecified">
+            <summary> Tells if NotNull has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.Unique">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ElementAttribute.UniqueSpecified">
+            <summary> Tells if Unique has been specified. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.FetchMode">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.FetchMode.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.FetchMode.Select">
+            <summary>select</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.FetchMode.Join">
+            <summary>join</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.FilterAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.FilterAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.FilterAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterAttribute.Condition">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.FilterDefAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.FilterDefAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.FilterDefAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterDefAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterDefAttribute.Condition">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterDefAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.FilterParamAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.FilterParamAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.FilterParamAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterParamAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.FilterParamAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.FlushMode">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.FlushMode.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.FlushMode.Auto">
+            <summary>auto</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.FlushMode.Never">
+            <summary>never</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.GeneratorAttribute">
+            <summary>Tells which algorithm to use to generate the identifier</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.GeneratorAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.GeneratorAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.GeneratorAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.HbmSerializer">
+            <summary>
+            Build hbm.xml files from entities (Class, Subclass or JoinedSubclass).
+            </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.String,System.Reflection.Assembly)">
+            <summary> Writes a hbm.xml file in the specified directory for each mapped class in the specified assembly. </summary>
+            <param name="directory">Directory where each serialized hbm.xml file will be written.</param>
+            <param name="assembly">Assembly used to extract user-defined types containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.Reflection.Assembly,System.String)">
+            <summary> Writes the mapping of all mapped classes of the specified assembly in the specified hbm.xml file. </summary>
+            <param name="assembly">Assembly used to extract user-defined types containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+            <param name="filePath">Where the xml is written.</param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.IO.Stream,System.Reflection.Assembly)">
+            <summary> Writes the mapping of all mapped classes of the specified assembly in the specified stream. </summary>
+            <param name="stream">Where the xml is written.</param>
+            <param name="assembly">Assembly used to extract user-defined types containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.Reflection.Assembly)">
+            <summary> Writes the mapping of all mapped classes of the specified assembly in a MemoryStream and returns it. </summary>
+            <param name="assembly">Assembly used to extract user-defined types containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+            <returns>Stream containing the XML mapping.</returns>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.Type)">
+            <summary> Writes the mapping of the specified class in a MemoryStream and returns it. </summary>
+            <param name="type">User-defined type containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+            <returns>Stream containing the XML mapping.</returns>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.String,System.Type)">
+            <summary> Writes the mapping of the specified class in the specified hbm.xml file. </summary>
+            <param name="filePath">Where the xml is written.</param>
+            <param name="type">User-defined type containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.IO.Stream,System.Type)">
+            <summary> Writes the mapping of the specified class in the specified stream. </summary>
+            <param name="stream">Where the xml is written.</param>
+            <param name="type">User-defined type containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmSerializer.Serialize(System.IO.Stream,System.Type,System.Xml.XmlTextWriter,System.Boolean)">
+            <summary> Writes the mapping of the specified class in the specified stream. </summary>
+            <param name="stream">Where the xml is written; can be null if you send the writer.</param>
+            <param name="type">User-defined type containing a valid attribute (can be [Class], [Subclass] or [JoinedSubclass]).</param>
+            <param name="writer">The XmlTextWriter used to write the xml; can be null if you send the stream. You can also create it yourself, but don't forget to write the StartElement ("hibernate-mapping") before.</param>
+            <param name="writeEndDocument">Tells if the EndElement of "hibernate-mapping" must be written; send false to append many classes in the same stream.</param>
+            <returns>The parameter writer if it was not null; else it is a new writer (created using the stream). Send it back to append many classes in this stream.</returns>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.Default">
+            <summary> Gets a static instance of HbmSerializer (if you don't want/need to create an instance). </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmWriter">
+            <summary> Gets or sets the HbmWriter to use. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.Validate">
+            <summary> Gets or sets whether generated xml files must be validated against NHibernate mapping schema. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.WriteDateComment">
+            <summary> Gets or sets whether generated xml files will contain a comment with the date/time of the generation. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.Error">
+            <summary> Gets errors that occur while serializing. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmDefaultLazy">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmSchema">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmDefaultCascade">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmDefaultAccess">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmDefaultAccessType">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmAutoImport">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmNamespace">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmAssembly">
+            <summary> Gets or sets this "hibernate-mapping" attribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmDefaultLazyIsSpecified">
+            <summary> Gets or sets if this "hibernate-mapping" attribute is specified </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmAutoImportIsSpecified">
+            <summary> Gets or sets if this "hibernate-mapping" attribute is specified </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmSchemaIsSpecified">
+            <summary> Gets or sets if this "hibernate-mapping" attribute is specified </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmDefaultAccessIsSpecified">
+            <summary> Gets or sets if this "hibernate-mapping" attribute is specified </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmAssemblyIsSpecified">
+            <summary> Gets or sets if this "hibernate-mapping" attribute is specified </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmNamespaceIsSpecified">
+            <summary> Gets or sets if this "hibernate-mapping" attribute is specified </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmSerializer.HbmDefaultCascadeIsSpecified">
+            <summary> Gets or sets if this "hibernate-mapping" attribute is specified </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.HbmWriter">
+            <summary> Write a XmlSchemaElement from attributes in a System.Type. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.FindAttributedMembers(NHibernate.Mapping.Attributes.BaseAttribute,System.Type,System.Type)">
+            <summary> Searches the members of the class for any member with the attribute defined. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.GetSortedAttributes(System.Reflection.MemberInfo)">
+            <summary> Return all (BaseAttribute derived) attributes in the MethodDeclaration sorted using their position. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.IsNextElement(NHibernate.Mapping.Attributes.BaseAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Tells if 'element1' come after 'element2' in rootType's 'sub-elements' order. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.GetXmlEnumValue(System.Type,System.Object)">
+            <summary> Gets the xml enum value from the associated attributed enum. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.GetAttributeValue(System.String,System.Type)">
+            <summary> Returns the value received or uses it as an identifier to find its value in a AttributeIdentifierAttribute in the mapped class. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteUserDefinedContent(System.Xml.XmlWriter,System.Type,System.Type,NHibernate.Mapping.Attributes.BaseAttribute)">
+            <summary> Write user-defined content; should be of the specified contentAttributeType. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteUserDefinedContent(System.Xml.XmlWriter,System.Reflection.MemberInfo,System.Type,NHibernate.Mapping.Attributes.BaseAttribute)">
+            <summary> Write user-defined content; should be of the specified contentAttributeType. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteFilter(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.FilterAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Filter XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSqlInsert(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.SqlInsertAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a SqlInsert XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSqlUpdate(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.SqlUpdateAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a SqlUpdate XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSqlDelete(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.SqlDeleteAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a SqlDelete XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSqlDeleteAll(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.SqlDeleteAllAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a SqlDeleteAll XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteLoader(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.LoaderAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Loader XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteResultSet(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ResultSetAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ResultSet XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteHibernateMapping(System.Xml.XmlWriter,System.Type)">
+            <summary> Write a HibernateMapping XML Element from attributes in a type. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedHibernateMappingTypes(System.Xml.XmlWriter,System.Type)">
+            <summary> Write HibernateMapping XML Elements from nested mapped classes in a not-mapped class. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteFilterParam(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.FilterParamAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a FilterParam XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteFilterDef(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.FilterDefAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a FilterDef XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteCreate(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.CreateAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Create XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDrop(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DropAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Drop XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDialectScope(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DialectScopeAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a DialectScope XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDatabaseObject(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DatabaseObjectAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a DatabaseObject XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteImport(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ImportAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Import XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteClass(System.Xml.XmlWriter,System.Type)">
+            <summary> Write a Class XML Element from attributes in a type. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedClassTypes(System.Xml.XmlWriter,System.Type)">
+            <summary> Write Class XML Elements from nested mapped classes in a not-mapped class. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteId(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.IdAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Id XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteCompositeId(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.CompositeIdAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a CompositeId XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDiscriminator(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DiscriminatorAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Discriminator XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteVersion(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.VersionAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Version XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteTimestamp(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.TimestampAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Timestamp XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSubclass(System.Xml.XmlWriter,System.Type)">
+            <summary> Write a Subclass XML Element from attributes in a type. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedSubclassTypes(System.Xml.XmlWriter,System.Type)">
+            <summary> Write Subclass XML Elements from nested mapped classes in a not-mapped class. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteJoinedSubclass(System.Xml.XmlWriter,System.Type)">
+            <summary> Write a JoinedSubclass XML Element from attributes in a type. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedJoinedSubclassTypes(System.Xml.XmlWriter,System.Type)">
+            <summary> Write JoinedSubclass XML Elements from nested mapped classes in a not-mapped class. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteProperty(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.PropertyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Property XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteMetaValue(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.MetaValueAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a MetaValue XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteAny(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.AnyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Any XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteArray(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ArrayAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Array XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteCache(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.CacheAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Cache XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteCollectionId(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.CollectionIdAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a CollectionId XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteColumn(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ColumnAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Column XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteComponent(System.Xml.XmlWriter,System.Type)">
+            <summary> Write a Component XML Element from attributes in a type. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedComponentTypes(System.Xml.XmlWriter,System.Type)">
+            <summary> Write Component XML Elements from nested mapped classes in a not-mapped class. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteDynamicComponent(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.DynamicComponentAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a DynamicComponent XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteCompositeElement(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.CompositeElementAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a CompositeElement XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteCompositeIndex(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.CompositeIndexAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a CompositeIndex XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteElement(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ElementAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Element XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteGenerator(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.GeneratorAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Generator XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteIdBag(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.IdBagAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a IdBag XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteIndex(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.IndexAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Index XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteIndexManyToAny(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.IndexManyToAnyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a IndexManyToAny XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteIndexManyToMany(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.IndexManyToManyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a IndexManyToMany XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteJcsCache(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.JcsCacheAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a JcsCache XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteKey(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.KeyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Key XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteKeyManyToOne(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.KeyManyToOneAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a KeyManyToOne XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteKeyProperty(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.KeyPropertyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a KeyProperty XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteManyToAny(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ManyToAnyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ManyToAny XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteManyToMany(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ManyToManyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ManyToMany XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteManyToOne(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ManyToOneAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ManyToOne XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteMeta(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.MetaAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Meta XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteNestedCompositeElement(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.NestedCompositeElementAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a NestedCompositeElement XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteOneToMany(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.OneToManyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a OneToMany XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteOneToOne(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.OneToOneAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a OneToOne XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteParam(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ParamAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Param XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteParent(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ParentAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Parent XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WritePrimitiveArray(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.PrimitiveArrayAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a PrimitiveArray XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteQuery(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.QueryAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Query XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteReturn(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ReturnAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Return XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteReturnDiscriminator(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ReturnDiscriminatorAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ReturnDiscriminator XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteReturnScalar(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ReturnScalarAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ReturnScalar XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteReturnColumn(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ReturnColumnAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ReturnColumn XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteReturnProperty(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ReturnPropertyAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ReturnProperty XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteReturnJoin(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ReturnJoinAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a ReturnJoin XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteLoadCollection(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.LoadCollectionAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a LoadCollection XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSynchronize(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.SynchronizeAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Synchronize XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSqlQuery(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.SqlQueryAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a SqlQuery XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteList(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.ListAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a List XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteBag(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.BagAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Bag XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteSet(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.SetAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Set XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteMap(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.MapAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Map XML Element from attributes in a member. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HbmWriter.WriteType(System.Xml.XmlWriter,System.Reflection.MemberInfo,NHibernate.Mapping.Attributes.TypeAttribute,NHibernate.Mapping.Attributes.BaseAttribute,System.Type)">
+            <summary> Write a Type XML Element from attributes in a member. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmWriter.DefaultHelper">
+            <summary> Gets or sets the HbmWriterHelper used by HbmWriter </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmWriter.StartQuote">
+            <summary> Gets or sets the beginning string used when declaring an identifier for an AttributeIdenfierAttribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmWriter.EndQuote">
+            <summary> Gets or sets the ending string used when declaring an identifier for an AttributeIdenfierAttribute </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmWriter.Patterns">
+            <summary> Gets or sets the Patterns to convert properties types (the key is the pattern string and the value is the replacement string) </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.HbmWriterEx">
+            <summary>
+            Customized HbmWriter.
+            Support ComponentPropertyAttribute.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.HbmWriterHelper">
+            <summary>
+            Return the value to use when a (required) attribute is not specified.
+            Note: Implementations of Get_XXX_YYY_DefaultValue()
+              return [type|property].Name; // YYY is the "identifier" of XXX
+              ThrowRequiredValueNotProvidedException(); // There is no way to get it
+            </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.HbmWriterHelperEx">
+            <summary>
+            Customized HbmWriterHelper.
+            Support ComponentPropertyAttribute.
+            </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HbmWriterHelperEx.DefaultValue">
+            <summary> Value returned by overridden methods. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.HibernateMappingAttribute">
+            <summary>hibernate-mapping is the document root</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HibernateMappingAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.HibernateMappingAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.Schema">
+            <summary>defaults to none used</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.DefaultCascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.DefaultAccess">
+            <summary>Default property access setting</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.DefaultAccessType">
+            <summary>Default property access setting</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.AutoImport">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.AutoImportSpecified">
+            <summary> Tells if AutoImport has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.Namespace">
+            <summary>Namespace used to find not-Fully Qualified Type Names</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.Assembly">
+            <summary>Assembly used to find not-Fully Qualified Type Names</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.DefaultLazy">
+            <summary>Default value of the lazy attribute for persistent classes and collections</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.HibernateMappingAttribute.DefaultLazySpecified">
+            <summary> Tells if DefaultLazy has been specified. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.IdAttribute">
+            <summary>Declares the id type, column and generation algorithm for an entity class. If a name attribute is given, the id is exposed to the application through the named property of the class. If not, the id is only exposed to the application via Session.getIdentifier()</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IdAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IdAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.UnsavedValue">
+            <summary>any|none|null|0|-1|...</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdAttribute.UnsavedValueObject">
+            <summary>any|none|null|0|-1|...</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.IdBagAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IdBagAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IdBagAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Lazy">
+            <summary>Enable the lazy loading of this collection</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Inverse">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.InverseSpecified">
+            <summary> Tells if Inverse has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Persister">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.PersisterType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.BatchSize">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.CollectionType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.CollectionTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.OptimisticLock">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.OptimisticLockSpecified">
+            <summary> Tells if OptimisticLock has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.Generic">
+            <summary>The concrete collection should use a generic version or an object-based version.</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.GenericSpecified">
+            <summary> Tells if Generic has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IdBagAttribute.OrderBy">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ImportAttribute">
+            <summary>An explicit query language "import"</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ImportAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ImportAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ImportAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ImportAttribute.Rename">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.IndexAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IndexAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IndexAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.IndexManyToAnyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IndexManyToAnyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IndexManyToAnyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToAnyAttribute.IdType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToAnyAttribute.IdTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToAnyAttribute.MetaType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToAnyAttribute.MetaTypeType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.IndexManyToManyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IndexManyToManyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.IndexManyToManyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToManyAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToManyAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToManyAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.IndexManyToManyAttribute.ForeignKey">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.JcsCacheAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.JcsCacheAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.JcsCacheAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JcsCacheAttribute.Region">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JcsCacheAttribute.Usage">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.JcsCacheUsage">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.JcsCacheUsage.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.JcsCacheUsage.ReadOnly">
+            <summary>read-only</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.JcsCacheUsage.ReadWrite">
+            <summary>read-write</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.JcsCacheUsage.NonStrictReadWrite">
+            <summary>nonstrict-read-write</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.JoinedSubclassAttribute">
+            <summary>Joined subclasses are used for the normalized table-per-subclass mapping strategy</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.NameType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.Proxy">
+            <summary>default: no proxy interface</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.ProxyType">
+            <summary>default: no proxy interface</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.Lazy">
+            <summary>Enable the lazy loading of this class in associations</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.DynamicUpdate">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.DynamicUpdateSpecified">
+            <summary> Tells if DynamicUpdate has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.DynamicInsert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.DynamicInsertSpecified">
+            <summary> Tells if DynamicInsert has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.SelectBeforeUpdate">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.SelectBeforeUpdateSpecified">
+            <summary> Tells if SelectBeforeUpdate has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.Extends">
+            <summary>Name of the root class. Required if the Joined Subclass is declared outside the declaration of its root class</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.ExtendsType">
+            <summary>Name of the root class. Required if the Joined Subclass is declared outside the declaration of its root class</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.Table">
+            <summary>default: unqualified classname</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.JoinedSubclassAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.KeyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.KeyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.KeyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyAttribute.ForeignKey">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.KeyManyToOneAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.ForeignKey">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyManyToOneAttribute.Lazy">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.KeyPropertyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.KeyPropertyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.KeyPropertyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyPropertyAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyPropertyAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyPropertyAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyPropertyAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyPropertyAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyPropertyAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.KeyPropertyAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.Laziness">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.Laziness.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.Laziness.False">
+            <summary>false</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.Laziness.Proxy">
+            <summary>proxy</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ListAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ListAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ListAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Lazy">
+            <summary>Enable the lazy loading of this collection</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Inverse">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.InverseSpecified">
+            <summary> Tells if Inverse has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Persister">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.PersisterType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.BatchSize">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.CollectionType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.CollectionTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.OptimisticLock">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.OptimisticLockSpecified">
+            <summary> Tells if OptimisticLock has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.Generic">
+            <summary>The concrete collection should use a generic version or an object-based version.</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ListAttribute.GenericSpecified">
+            <summary> Tells if Generic has been specified. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.LoadCollectionAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.LoadCollectionAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.LoadCollectionAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.LoadCollectionAttribute.Alias">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.LoadCollectionAttribute.Role">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.LoadCollectionAttribute.LockMode">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.LoaderAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.LoaderAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.LoaderAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.LoaderAttribute.QueryRef">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.LockMode">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.LockMode.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.LockMode.None">
+            <summary>none</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.LockMode.Read">
+            <summary>read</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.LockMode.Upgrade">
+            <summary>upgrade</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.LockMode.UpgradeNoWait">
+            <summary>upgrade-nowait</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.LockMode.Write">
+            <summary>write</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ManyToAnyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ManyToAnyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ManyToAnyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToAnyAttribute.IdType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToAnyAttribute.IdTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToAnyAttribute.MetaType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToAnyAttribute.MetaTypeType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ManyToManyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ManyToManyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ManyToManyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.ForeignKey">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.NotFound">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToManyAttribute.Lazy">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ManyToOneAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ManyToOneAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ManyToOneAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.NotNull">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.NotNullSpecified">
+            <summary> Tells if NotNull has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Unique">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.UniqueSpecified">
+            <summary> Tells if Unique has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.UniqueKey">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Index">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Update">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.UpdateSpecified">
+            <summary> Tells if Update has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Insert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.InsertSpecified">
+            <summary> Tells if Insert has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.ForeignKey">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.PropertyRef">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.NotFound">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ManyToOneAttribute.Lazy">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.MapAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MapAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MapAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Lazy">
+            <summary>Enable the lazy loading of this collection</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Inverse">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.InverseSpecified">
+            <summary> Tells if Inverse has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Persister">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.PersisterType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.BatchSize">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.CollectionType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.CollectionTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.OptimisticLock">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.OptimisticLockSpecified">
+            <summary> Tells if OptimisticLock has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Generic">
+            <summary>The concrete collection should use a generic version or an object-based version.</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.GenericSpecified">
+            <summary> Tells if Generic has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.OrderBy">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.Sort">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MapAttribute.SortType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.MappingException">
+            <summary>
+            Exception occuring when NHibernate.Mapping.Attributes finds an error in your mapping (using its .NET attributes).
+            Most of the time, the error is due to an omission of a required type/name in the mapping.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MappingException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.Mapping.Attributes.MappingException"/> class.
+            </summary>
+            <param name="message">The message that describes the error. </param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MappingException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.Mapping.Attributes.MappingException"/> class.
+            </summary>
+            <param name="message">The message that describes the error. </param>
+            <param name="innerException">
+            The exception that is the cause of the current exception. If the innerException parameter 
+            is not a null reference, the current exception is raised in a catch block that handles 
+            the inner exception.
+            </param>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MappingException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NHibernate.Mapping.Attributes.MappingException"/> class
+            with serialized data.
+            </summary>
+            <param name="info">
+            The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object 
+            data about the exception being thrown.
+            </param>
+            <param name="context">
+            The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.
+            </param>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.MetaAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MetaAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MetaAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MetaAttribute.Attribute">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MetaAttribute.Inherit">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MetaAttribute.InheritSpecified">
+            <summary> Tells if Inherit has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MetaAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.MetaValueAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MetaValueAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.MetaValueAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MetaValueAttribute.Value">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MetaValueAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.MetaValueAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.NestedCompositeElementAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.NotFoundMode">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.NotFoundMode.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.NotFoundMode.Ignore">
+            <summary>ignore</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.NotFoundMode.Exception">
+            <summary>exception</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.OneToManyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.OneToManyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.OneToManyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToManyAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToManyAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToManyAttribute.NotFound">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.OneToOneAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.OneToOneAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.OneToOneAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.ClassType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.Constrained">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.ConstrainedSpecified">
+            <summary> Tells if Constrained has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.ForeignKey">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.PropertyRef">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.OneToOneAttribute.Lazy">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.OptimisticLockMode">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OptimisticLockMode.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OptimisticLockMode.None">
+            <summary>none</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OptimisticLockMode.Version">
+            <summary>version</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OptimisticLockMode.Dirty">
+            <summary>dirty</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OptimisticLockMode.All">
+            <summary>all</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.OuterJoinStrategy">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OuterJoinStrategy.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OuterJoinStrategy.Auto">
+            <summary>auto</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OuterJoinStrategy.True">
+            <summary>true</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.OuterJoinStrategy.False">
+            <summary>false</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ParamAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ParamAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ParamAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ParamAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ParamAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ParentAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ParentAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ParentAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ParentAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.PolymorphismType">
+            <summary>Types of polymorphism</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.PolymorphismType.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.PolymorphismType.Implicit">
+            <summary>implicit</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.PolymorphismType.Explicit">
+            <summary>explicit</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PrimitiveArrayAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.PropertyAttribute">
+            <summary>Property of an entity class or component, component-element, composite-id, etc. Class Properties (get_ and set_ methods) are mapped to table columns</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.PropertyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.PropertyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Length">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.NotNull">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.NotNullSpecified">
+            <summary> Tells if NotNull has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Unique">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.UniqueSpecified">
+            <summary> Tells if Unique has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Update">
+            <summary>only supported for properties of a class (not component)</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.UpdateSpecified">
+            <summary> Tells if Update has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Insert">
+            <summary>only supported for properties of a class (not component)</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.InsertSpecified">
+            <summary> Tells if Insert has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.OptimisticLock">
+            <summary>only supported for properties of a class (not component)</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.OptimisticLockSpecified">
+            <summary> Tells if OptimisticLock has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Formula">
+            <summary>only supported for properties of a class (not component)</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.UniqueKey">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Index">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.PropertyAttribute.Generated">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.PropertyGeneration">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.PropertyGeneration.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.PropertyGeneration.Never">
+            <summary>never</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.PropertyGeneration.Insert">
+            <summary>insert</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.PropertyGeneration.Always">
+            <summary>always</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.QueryAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.QueryAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.QueryAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.QueryAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.QueryAttribute.FlushMode">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.QueryAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.RawXmlAttribute">
+            <summary> Use this attribute to add any XML at a specific place. </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.RawXmlAttribute.#ctor">
+            <summary> Default constructor </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.RawXmlAttribute.After">
+            <summary> Gets or sets the type of XML elements after which this XML will be added (omit to put on top). </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.RawXmlAttribute.Content">
+            <summary> Gets or sets the XML content. </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.RestrictedLaziness">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.RestrictedLaziness.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.RestrictedLaziness.False">
+            <summary>false</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.RestrictedLaziness.Proxy">
+            <summary>proxy</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ResultSetAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ResultSetAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ResultSetAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ResultSetAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ReturnAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnAttribute.Alias">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnAttribute.Class">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnAttribute.LockMode">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ReturnColumnAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnColumnAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnColumnAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnColumnAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ReturnDiscriminatorAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnDiscriminatorAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnDiscriminatorAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnDiscriminatorAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ReturnJoinAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnJoinAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnJoinAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnJoinAttribute.Alias">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnJoinAttribute.Property">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnJoinAttribute.LockMode">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ReturnPropertyAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnPropertyAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnPropertyAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnPropertyAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnPropertyAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.ReturnScalarAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnScalarAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.ReturnScalarAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnScalarAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.ReturnScalarAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SetAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SetAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SetAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Schema">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Lazy">
+            <summary>Enable the lazy loading of this collection</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.OuterJoin">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Fetch">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Cascade">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Where">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Inverse">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.InverseSpecified">
+            <summary> Tells if Inverse has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Persister">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.PersisterType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.BatchSize">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.CollectionType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.CollectionTypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.OptimisticLock">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.OptimisticLockSpecified">
+            <summary> Tells if OptimisticLock has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Generic">
+            <summary>The concrete collection should use a generic version or an object-based version.</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.GenericSpecified">
+            <summary> Tells if Generic has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.OrderBy">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.Sort">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SetAttribute.SortType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SqlDeleteAllAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlDeleteAllAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlDeleteAllAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlDeleteAllAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlDeleteAllAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SqlDeleteAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlDeleteAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlDeleteAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlDeleteAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlDeleteAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SqlInsertAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlInsertAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlInsertAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlInsertAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlInsertAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SqlQueryAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlQueryAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlQueryAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlQueryAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlQueryAttribute.ResultSetRef">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlQueryAttribute.FlushMode">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlQueryAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SqlUpdateAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlUpdateAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SqlUpdateAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlUpdateAttribute.Check">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SqlUpdateAttribute.Content">
+            <summary> Gets or sets the content of this element </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SubclassAttribute">
+            <summary>Subclass declarations are nested beneath the root class declaration to achieve polymorphic persistence</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SubclassAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SubclassAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.NameType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.Proxy">
+            <summary>default: no proxy interface</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.ProxyType">
+            <summary>default: no proxy interface</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.Lazy">
+            <summary>Enable the lazy loading of this class in associations</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.LazySpecified">
+            <summary> Tells if Lazy has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.DynamicUpdate">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.DynamicUpdateSpecified">
+            <summary> Tells if DynamicUpdate has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.DynamicInsert">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.DynamicInsertSpecified">
+            <summary> Tells if DynamicInsert has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.SelectBeforeUpdate">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.SelectBeforeUpdateSpecified">
+            <summary> Tells if SelectBeforeUpdate has been specified. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.Extends">
+            <summary>Name of the root class. Required if the Subclass is declared outside the declaration of its root class</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.ExtendsType">
+            <summary>Name of the root class. Required if the Subclass is declared outside the declaration of its root class</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.DiscriminatorValue">
+            <summary>default: unqualified class name | none</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.DiscriminatorValueObject">
+            <summary>default: unqualified class name | none</summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SubclassAttribute.DiscriminatorValueEnumFormat">
+            <summary>'format' used by System.Enum.Format() in DiscriminatorValueObject</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.SynchronizeAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SynchronizeAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.SynchronizeAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.SynchronizeAttribute.Table">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.TimestampAttribute">
+            <summary>Is equivalent to &lt;version type="timestamp"&gt;</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.TimestampAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.TimestampAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TimestampAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TimestampAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TimestampAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TimestampAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TimestampAttribute.UnsavedValue">
+            <summary>undefined|any|none|null|0|-1|... </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TimestampAttribute.UnsavedValueObject">
+            <summary>undefined|any|none|null|0|-1|... </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TimestampAttribute.Generated">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.TypeAttribute">
+            <summary> </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.TypeAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.TypeAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TypeAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.TypeAttribute.NameType">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.UnsavedValueType">
+            <summary>Values used to restrict composite-id, does not apply to meta/column/generator</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.UnsavedValueType.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.UnsavedValueType.Any">
+            <summary>any</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.UnsavedValueType.None">
+            <summary>none</summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.VersionAttribute">
+            <summary>Versioned data requires a column holding a version number. This is exposed to the application through a property of the .NET class</summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.VersionAttribute.#ctor">
+            <summary> Default constructor (position=0) </summary>
+        </member>
+        <member name="M:NHibernate.Mapping.Attributes.VersionAttribute.#ctor(System.Int32)">
+            <summary> Constructor taking the position of the attribute. </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.Name">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.Access">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.AccessType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.Column">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.Type">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.TypeType">
+            <summary> </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.UnsavedValue">
+            <summary>undefined|any|none|null|0|-1|... </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.UnsavedValueObject">
+            <summary>undefined|any|none|null|0|-1|... </summary>
+        </member>
+        <member name="P:NHibernate.Mapping.Attributes.VersionAttribute.Generated">
+            <summary> </summary>
+        </member>
+        <member name="T:NHibernate.Mapping.Attributes.VersionGeneration">
+            <summary> </summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.VersionGeneration.Unspecified">
+            <summary>Default value (don't use it)</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.VersionGeneration.Never">
+            <summary>never</summary>
+        </member>
+        <member name="F:NHibernate.Mapping.Attributes.VersionGeneration.Always">
+            <summary>always</summary>
+        </member>
+    </members>
+</doc>

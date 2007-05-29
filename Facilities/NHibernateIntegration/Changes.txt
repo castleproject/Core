@@ -1,5 +1,8 @@
 Version beta 3
 
+- Applied patch from Brian Chan 
+  "NHibernate.Mapping.Attribute Support"
+
 - Fixed FACILITIES-80
   "Isolation Mode not applied when integrated with Transaction Services"
 

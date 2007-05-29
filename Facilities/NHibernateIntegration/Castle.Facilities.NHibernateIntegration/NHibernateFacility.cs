@@ -20,6 +20,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System.Reflection;
 
 	using NHibernate;
+	using NHibernate.Mapping.Attributes;
 	using Configuration = NHibernate.Cfg.Configuration;
 
 	using Castle.Core.Configuration;
@@ -328,6 +329,10 @@ namespace Castle.Facilities.NHibernateIntegration
 				String assembly = item.Value;
 
 				cfg.AddAssembly(assembly);
+
+				HbmSerializer.Default.Validate = true;
+
+				cfg.AddInputStream(HbmSerializer.Default.Serialize(Assembly.Load(assembly)));
 			}
 		}
 
