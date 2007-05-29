@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Patch from Lee Henson fixing regression introduced in 3783 in Prototype Validator. (Could not use hyphens in element id's). 
+
 - Fixed MR-241 
   "When Windsor integration is enabled, the ControllerTree is empty"
 
