@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Changes from Lee Henson to add WizardStep support to TestSupport and provide a Generic BaseControllerTest. 
+
 - Patch from Maruis Marais allowing BuildFormRemoteTag to gracefully degrade when JavaScript is disabled. 
 
 - Patch from Lee Henson fixing regression introduced in 3783 in Prototype Validator. (Could not use hyphens in element id's). 
