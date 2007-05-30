@@ -150,9 +150,14 @@ namespace Castle.MonoRail.Framework
 			{
 				controller.LayoutName = null;
 			}
-
-			controller.InPlaceRenderSharedView(writer, Path.Combine(Constants.EmailTemplatePath, templateName));
-
+			if (templateName.StartsWith("/"))
+			{
+				controller.InPlaceRenderSharedView(writer, templateName);
+			}
+			else
+			{
+				controller.InPlaceRenderSharedView(writer, Path.Combine(Constants.EmailTemplatePath, templateName));
+			}
 			if (doNotApplyLayout)
 			{
 				controller.LayoutName = oldLayout;
