@@ -100,7 +100,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			IFooExtended proxiedFoo =
 				(IFooExtended)
-				generator.CreateInterfaceProxyWithTargetInterface(typeof(IFooExtended), new ImplementedFoo(),
+				generator.CreateInterfaceProxyWithTarget(typeof(IFooExtended), new ImplementedFoo(),
 				                                                  new StandardInterceptor());
 			proxiedFoo.FooExtended();
 		}
