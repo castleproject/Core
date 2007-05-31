@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
+
 	using System;
 
 	public class GenClassWithGenMethodsConstrained<T> where T : new()
@@ -41,5 +41,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			return new T();
 		}
 	}
-#endif
 }

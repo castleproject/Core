@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.Classes
 {
-#if DOTNET2
 	using System;
 
 	public class DiffAccessLevelOnProperties
@@ -67,5 +66,4 @@ namespace Castle.DynamicProxy.Tests.Classes
 			return String.Format("{0} {1} {2} {3} {4}", Age, Age2, Maxval, Maxval2, Name);
 		}
 	}
-#endif
 }

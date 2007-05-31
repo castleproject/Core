@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
-#if DOTNET2
+
 
 	[TestFixture]
 	public class GenericInterfaceProxyTestCase : BasePEVerifyTestCase
@@ -400,6 +400,4 @@ namespace Castle.DynamicProxy.Tests
 	{
 		void Method2<T2>(T2 t2) where T2 : class;
 	}
-
-#endif
 }

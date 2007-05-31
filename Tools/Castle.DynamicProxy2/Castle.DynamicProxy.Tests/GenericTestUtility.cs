@@ -3,7 +3,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Reflection;
 	using NUnit.Framework;
-#if DOTNET2
+
 	public class GenericTestUtility
 	{
 		public static void CheckMethodInfoIsClosed(MethodInfo method, Type returnType, params Type[] parameterTypes)
@@ -19,5 +19,4 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 	}
-#endif
 }

@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
 	using System.Collections;
 
 	public class ClassWithIndexer<TKey, TVal>
@@ -27,5 +26,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			set { map[key] = value; }
 		}
 	}
-#endif
 }

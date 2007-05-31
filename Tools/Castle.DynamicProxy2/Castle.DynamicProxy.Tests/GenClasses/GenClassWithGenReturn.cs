@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
+
 	public class GenClassWithGenReturn<T, Z> where T : new() where Z : new()
 	{
 		public virtual T DoSomethingT()
@@ -27,5 +27,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			return new Z();
 		}
 	}
-#endif
 }

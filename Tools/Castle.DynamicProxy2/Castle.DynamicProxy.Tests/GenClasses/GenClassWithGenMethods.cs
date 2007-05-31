@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
+
 	using System;
 
 	public class GenClassWithGenMethods<T> where T : new()
@@ -48,5 +48,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			savedParam = converter(value);
 		}
 	}
-#endif
 }

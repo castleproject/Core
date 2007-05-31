@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
+
 #pragma warning disable 693
 	public class GenClassNameClash<T, Z>
 	{
@@ -35,5 +35,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 		}
 	}
 #pragma warning restore 693
-#endif
 }

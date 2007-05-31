@@ -15,14 +15,13 @@
 namespace Castle.DynamicProxy
 {
 	using System.Reflection;
+	using System.Runtime.CompilerServices;
 	using System.Threading;
 
 	public class InternalsHelper
 	{
 		private static ReaderWriterLock internalsToDynProxyLock = new ReaderWriterLock();
-#if DOTNET2
 		private static System.Collections.Generic.IDictionary<Assembly, bool> internalsToDynProxy = new System.Collections.Generic.Dictionary<Assembly, bool>();
-#endif
 
 		/// <summary>
 		/// Determines whether this assembly has internals visisble to dynamic proxy.
@@ -30,7 +29,6 @@ namespace Castle.DynamicProxy
 		/// <param name="asm">The asm.</param>
 		public static bool IsInternalToDynamicProxy(Assembly asm)
 		{
-#if DOTNET2
 			internalsToDynProxyLock.AcquireReaderLock(-1);
 
 			if (internalsToDynProxy.ContainsKey(asm))
@@ -71,9 +69,6 @@ namespace Castle.DynamicProxy
 			{
 				internalsToDynProxyLock.ReleaseWriterLock();
 			}
-#else
-			return false;
-#endif
 		}
 
 		/// <summary>

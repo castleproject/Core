@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
+
 	public class ClassWithGenArgs<T>
 	{
 		private bool propVal;
@@ -69,5 +69,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			base.DoSomething();
 		}
 	}
-#endif
 }

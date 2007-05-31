@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenInterfaces
 {
-#if DOTNET2
 	using System.Collections.Generic;
 
 	public class GenExplicitImplementation<T> : InterfaceWithExplicitImpl<T>
@@ -29,5 +28,5 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 	{
 		IEnumerator<T> GetEnum1();
 	}
-#endif
+
 }

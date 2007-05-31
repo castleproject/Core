@@ -50,12 +50,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 		{
 			Type type = baseType;
 
-#if DOTNET2
 			if (baseType.IsGenericType)
 			{
 				type = baseType.GetGenericTypeDefinition();
 			}
-#endif
+
 			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 			return type.GetConstructor(flags, null, new Type[0], null);

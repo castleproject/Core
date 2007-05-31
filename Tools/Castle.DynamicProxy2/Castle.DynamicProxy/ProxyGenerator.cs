@@ -58,8 +58,6 @@ namespace Castle.DynamicProxy
 
 		#region CreateInterfaceProxyWithTarget
 
-#if DOTNET2
-
 		public T CreateInterfaceProxyWithTarget<T>(object target, params IInterceptor[] interceptors)
 		{
 			return (T) CreateInterfaceProxyWithTarget(typeof(T), target, ProxyGenerationOptions.Default, interceptors);
@@ -70,7 +68,6 @@ namespace Castle.DynamicProxy
 		{
 			return (T) CreateInterfaceProxyWithTarget(typeof(T), target, options, interceptors);
 		}
-#endif
 
 		public object CreateInterfaceProxyWithTarget(Type theInterface, object target, params IInterceptor[] interceptors)
 		{
@@ -179,7 +176,6 @@ namespace Castle.DynamicProxy
 
 		#region CreateInterfaceProxyWithoutTarget
 
-#if DOTNET2
 		public T CreateInterfaceProxyWithoutTarget<T>(IInterceptor interceptor)
 		{
 			return (T) CreateInterfaceProxyWithoutTarget(typeof(T), interceptor);
@@ -189,7 +185,6 @@ namespace Castle.DynamicProxy
 		{
 			return (T) CreateInterfaceProxyWithoutTarget(typeof(T), interceptors);
 		}
-#endif
 
 		public object CreateInterfaceProxyWithoutTarget(Type theInterface, IInterceptor interceptor)
 		{
@@ -237,7 +232,6 @@ namespace Castle.DynamicProxy
 
 		#region CreateClassProxy
 
-#if DOTNET2
 		public T CreateClassProxy<T>(params IInterceptor[] interceptors)
 		{
 			return (T) CreateClassProxy(typeof(T), ProxyGenerationOptions.Default, interceptors);
@@ -247,7 +241,6 @@ namespace Castle.DynamicProxy
 		{
 			return CreateClassProxy(targetType, ProxyGenerationOptions.Default, interceptors);
 		}
-#endif
 
 		/// <summary>
 		/// Creates the class proxy.
@@ -323,12 +316,10 @@ namespace Castle.DynamicProxy
 
 			Type proxyType = CreateClassProxyType(targetType, interfaces, options);
 
-#if DOTNET2
 			if (targetType.IsGenericTypeDefinition)
 			{
 				proxyType = proxyType.MakeGenericType(targetType.GetGenericArguments());
 			}
-#endif
 
 			object[] args = GetConstructorArguments(constructorArgs, interceptors, options);
 
@@ -382,17 +373,14 @@ namespace Castle.DynamicProxy
 
 		private static void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
-#if DOTNET2
 			if (type != null && type.IsGenericTypeDefinition)
 			{
 				throw new ArgumentException("You can't specify a generic type definition.", argumentName);
 			}
-#endif
 		}
 
 		private static void CheckNotGenericTypeDefinitions(IEnumerable types, string argumentName)
 		{
-#if DOTNET2
 			if (types != null)
 			{
 				foreach (Type t in types)
@@ -400,7 +388,6 @@ namespace Castle.DynamicProxy
 					CheckNotGenericTypeDefinition(t, argumentName);
 				}
 			}
-#endif
 		}
 	}
 }

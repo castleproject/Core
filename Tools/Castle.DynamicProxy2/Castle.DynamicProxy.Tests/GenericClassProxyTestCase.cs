@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-#if DOTNET2
+
 	using System;
 	using System.Collections;
 	using Castle.DynamicProxy.Tests.GenClasses;
@@ -322,5 +322,5 @@ namespace Castle.DynamicProxy.Tests
 			object o = generator.CreateClassProxy(typeof(GenClassWithGenReturn<,>), interceptor);
 		}
 	}
-#endif
+
 }

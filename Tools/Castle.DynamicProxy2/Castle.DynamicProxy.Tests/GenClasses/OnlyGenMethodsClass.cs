@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
+
 	public class OnlyGenMethodsClass
 	{
 		private bool invoked;
@@ -31,5 +31,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			return new Z();
 		}
 	}
-#endif
 }

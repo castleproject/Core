@@ -36,19 +36,11 @@ namespace Castle.DynamicProxy.Tests
 		public void RunPEVerifyOnGeneratedAssembly()
 		{
 			Process process = new Process();
-#if DOTNET2
 			string path = Path.Combine(ConfigurationManager.AppSettings["sdkDir"], "peverify.exe");
-#else
-			string path = Path.Combine(ConfigurationSettings.AppSettings["sdkDir"], "peverify.exe");
-#endif
 
 			if (!File.Exists(path))
 			{
-#if DOTNET2
 				path = Path.Combine(ConfigurationManager.AppSettings["x86SdkDir"], "peverify.exe");
-#else
-				path = Path.Combine(ConfigurationSettings.AppSettings["x86SdkDir"], "peverify.exe");
-#endif
 			}
 
 			if (!File.Exists(path))
@@ -75,6 +67,6 @@ namespace Castle.DynamicProxy.Tests
 				Assert.Fail("PeVerify reported error(s). " + text, result);
 			}
 		}
-#endif
 	}
+#endif
 }

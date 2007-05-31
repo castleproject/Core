@@ -26,9 +26,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
-#if DOTNET2
-	using System.Collections.Generic;
-#endif
 
 	public enum ConstructorVersion
 	{
@@ -772,9 +769,8 @@ namespace Castle.DynamicProxy.Generators
 
 			// invocation only needs to mirror the generic parameters of the MethodInfo
 			// targetType cannot be a generic type definition
-#if DOTNET2
 			nested.CreateGenericParameters(methodInfo.GetGenericArguments ());
-#endif
+
 			// Create the invocation fields
 
 			FieldReference targetRef = nested.CreateField("target", emitter.TypeBuilder);

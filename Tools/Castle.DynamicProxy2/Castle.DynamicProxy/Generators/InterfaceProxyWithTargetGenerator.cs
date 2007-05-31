@@ -25,10 +25,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-#if DOTNET2
-	using System.Collections.Generic;
-#endif
-
 
 	/// <summary>
 	/// 
@@ -386,10 +382,9 @@ namespace Castle.DynamicProxy.Generators
 		/// <returns></returns>
 		protected MethodInfo FindMethodOnTargetType(MethodInfo methodOnInterface, Type proxyTargetType, bool checkMixins)
 		{
-#if DOTNET2
-	// The code below assumes that the target
-	// class uses the same generic arguments
-	// as the interface generic arguments
+			// The code below assumes that the target
+			// class uses the same generic arguments
+			// as the interface generic arguments
 			List<MethodInfo> members = GetMembers(methodOnInterface, proxyTargetType);
 
 			if (members.Count == 0)
@@ -432,18 +427,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return (MethodInfo) members[0];
-
-#else
-			ParameterInfo[] parameters = methodOnInterface.GetParameters();
-			Type[] argTypes = new Type[parameters.Length];
-
-			for(int i = 0; i < parameters.Length; i++)
-			{
-				argTypes[i] = parameters[i].ParameterType;
-			}
-
-			return proxyTargetType.GetMethod(methodOnInterface.Name, argTypes);
-#endif
 		}
 
 		private static List<MethodInfo> GetMembers(MethodInfo methodOnInterface, Type proxyTargetType)

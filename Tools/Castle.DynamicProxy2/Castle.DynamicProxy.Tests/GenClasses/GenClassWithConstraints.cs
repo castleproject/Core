@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-#if DOTNET2
 	using System;
 
 	public class GenClassWithConstraints<T> where T : IComparable
@@ -31,5 +30,4 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			invoked = true;
 		}
 	}
-#endif
 }

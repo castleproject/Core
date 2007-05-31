@@ -18,8 +18,6 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections.Generic;
 	using Castle.DynamicProxy.Generators;
 	using NUnit.Framework;
-#if DOTNET2
-#endif
 
 	[TestFixture]
 	public class TypeEquivalentTestCase
@@ -35,7 +33,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(int), typeof(string)));
 		}
 
-#if DOTNET2
 		[Test]
 		public void GenericTypeParameter()
 		{
@@ -58,7 +55,7 @@ namespace Castle.DynamicProxy.Tests
 			Type T = genericArgs[0];
 			Type Z = genericArgs[1];
 
-			Type listOfT = typeof(List<T>).MakeGenericType(T);
+			Type listOfT = typeof(List<>).MakeGenericType(T);
 			Type listOfZ = typeof(List<>).MakeGenericType(Z);
 
 			Type listOfString = typeof(List<>).MakeGenericType(typeof(String));
@@ -73,7 +70,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(listOfT, listOfZ));
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(listOfZ, listOfT));
 		}
-#endif
 
 		[Test]
 		public void ArrayTypes()
@@ -88,7 +84,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(arrayOfStr.GetType(), arrayOfInt1.GetType()));
 		}
 
-#if DOTNET2
 		[Test]
 		public void GenericArrayTypes()
 		{
@@ -114,5 +109,4 @@ namespace Castle.DynamicProxy.Tests
 		{
 		}
 	}
-#endif
 }

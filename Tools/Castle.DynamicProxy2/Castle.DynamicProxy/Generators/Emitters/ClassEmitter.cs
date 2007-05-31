@@ -17,9 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Collections;
 	using System.Reflection;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 
 	[CLSCompliant(false)]
 	public class ClassEmitter : AbstractTypeEmitter
