@@ -756,6 +756,7 @@ namespace Castle.DynamicProxy.Generators
 			nestedCounter++;
 
 			Type[] interfaces = new Type[0];
+			
 			if (allowChangeTarget)
 			{
 				interfaces = new Type[] {typeof(IChangeProxyTarget)};
