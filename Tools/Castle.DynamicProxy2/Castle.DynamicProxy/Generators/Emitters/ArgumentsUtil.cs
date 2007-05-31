@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
-
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	[CLSCompliant(false)]
@@ -31,12 +30,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			reference.LoadReference(il);
 		}
-		
+
 		public static void InitializeArgumentsByPosition(ArgumentReference[] args)
 		{
-			for(int i=0; i < args.Length; ++i)
+			for(int i = 0; i < args.Length; ++i)
 			{
-				args[i].Position = i+1;
+				args[i].Position = i + 1;
 			}
 		}
 
@@ -44,9 +43,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			Type[] types = new Type[args.Length];
 
-			for(int i=0; i < args.Length; ++i)
+			for(int i = 0; i < args.Length; ++i)
 			{
-				args[i].Position = i+1;
+				args[i].Position = i + 1;
 				types[i] = args[i].Type;
 			}
 
@@ -56,10 +55,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
 		{
 			ArgumentReference[] arguments = new ArgumentReference[args.Length];
-			
-			for(int i=0; i < args.Length; ++i)
+
+			for(int i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference( args[i] );
+				arguments[i] = new ArgumentReference(args[i]);
 			}
 
 			return arguments;
@@ -68,10 +67,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
 		{
 			ArgumentReference[] arguments = new ArgumentReference[args.Length];
-			
-			for(int i=0; i < args.Length; ++i)
+
+			for(int i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference( args[i].ParameterType );
+				arguments[i] = new ArgumentReference(args[i].ParameterType);
 			}
 
 			return arguments;
@@ -80,8 +79,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public static Expression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
 		{
 			Expression[] expressions = new Expression[args.Length];
-			
-			for(int i=0; i < args.Length; ++i)
+
+			for(int i = 0; i < args.Length; ++i)
 			{
 				expressions[i] = args[i].ToExpression();
 			}

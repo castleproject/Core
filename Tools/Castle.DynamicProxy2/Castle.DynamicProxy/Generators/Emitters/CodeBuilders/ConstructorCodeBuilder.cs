@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
-
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	[CLSCompliant(false)]
@@ -44,7 +43,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 		{
 			AddStatement(
 				new ConstructorInvocationStatement(constructor,
-				ArgumentsUtil.ConvertArgumentReferenceToExpression(arguments)));
+				                                   ArgumentsUtil.ConvertArgumentReferenceToExpression(arguments)));
 		}
 
 		internal ConstructorInfo ObtainDefaultConstructor()
@@ -56,9 +55,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			{
 				type = baseType.GetGenericTypeDefinition();
 			}
-#endif			
+#endif
 			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-			
+
 			return type.GetConstructor(flags, null, new Type[0], null);
 		}
 	}

@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	using System;
 	using System.Collections;
 	using System.Reflection.Emit;
-
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	[CLSCompliant(false)]

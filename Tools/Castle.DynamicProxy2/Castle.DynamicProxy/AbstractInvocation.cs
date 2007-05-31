@@ -15,13 +15,11 @@
 
 namespace Castle.DynamicProxy
 {
-
 	using System;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
-	using	System.Diagnostics;
-
 
 	[Serializable]
 	public abstract class AbstractInvocation : IInvocation, ISerializable
@@ -58,7 +56,7 @@ namespace Castle.DynamicProxy
 			this.interfMethod = interfMethod;
 		}
 
-		public void SetGenericMethodArguments (Type[] arguments)
+		public void SetGenericMethodArguments(Type[] arguments)
 		{
 			genericMethodArguments = arguments;
 		}
@@ -98,9 +96,9 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		public MethodInfo GetConcreteMethod ()
+		public MethodInfo GetConcreteMethod()
 		{
-			return EnsureClosedMethod (Method);
+			return EnsureClosedMethod(Method);
 		}
 
 		public MethodInfo MethodInvocationTarget
@@ -108,17 +106,17 @@ namespace Castle.DynamicProxy
 			get { return targetMethod; }
 		}
 
-		public MethodInfo GetConcreteMethodInvocationTarget ()
+		public MethodInfo GetConcreteMethodInvocationTarget()
 		{
-			return EnsureClosedMethod (MethodInvocationTarget);
+			return EnsureClosedMethod(MethodInvocationTarget);
 		}
 
-		private MethodInfo EnsureClosedMethod (MethodInfo method)
+		private MethodInfo EnsureClosedMethod(MethodInfo method)
 		{
 			if (method.ContainsGenericParameters)
 			{
-				Debug.Assert (genericMethodArguments != null);
-				return method.GetGenericMethodDefinition ().MakeGenericMethod (genericMethodArguments);
+				Debug.Assert(genericMethodArguments != null);
+				return method.GetGenericMethodDefinition().MakeGenericMethod(genericMethodArguments);
 			}
 			else
 			{
@@ -159,7 +157,8 @@ namespace Castle.DynamicProxy
 			}
 			else if (execIndex > interceptors.Length)
 			{
-				throw new InvalidOperationException(@"Proceed() was called too many times. This usually signify a bug in the calling code");
+				throw new InvalidOperationException(
+					@"Proceed() was called too many times. This usually signify a bug in the calling code");
 			}
 			else
 			{

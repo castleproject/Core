@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy
 {
-
 	using System;
 	using System.Reflection;
 	using System.Runtime.Serialization;
@@ -32,7 +31,7 @@ namespace Castle.DynamicProxy
 
 		protected RemotableInvocation(SerializationInfo info, StreamingContext context)
 		{
-			parent = (IInvocation)info.GetValue("invocation", typeof(IInvocation));
+			parent = (IInvocation) info.GetValue("invocation", typeof(IInvocation));
 		}
 
 
@@ -88,9 +87,9 @@ namespace Castle.DynamicProxy
 			get { return parent.Method; }
 		}
 
-		public MethodInfo GetConcreteMethod ()
+		public MethodInfo GetConcreteMethod()
 		{
-			return parent.GetConcreteMethod ();
+			return parent.GetConcreteMethod();
 		}
 
 		/// <summary>
@@ -102,9 +101,9 @@ namespace Castle.DynamicProxy
 			get { return parent.MethodInvocationTarget; }
 		}
 
-		public MethodInfo GetConcreteMethodInvocationTarget ()
+		public MethodInfo GetConcreteMethodInvocationTarget()
 		{
-			return parent.GetConcreteMethodInvocationTarget ();
+			return parent.GetConcreteMethodInvocationTarget();
 		}
 
 		public object ReturnValue
@@ -117,7 +116,6 @@ namespace Castle.DynamicProxy
 		{
 			info.SetType(typeof(RemotableInvocation));
 			info.AddValue("invocation", new RemotableInvocation(this));
-
 		}
 	}
 }

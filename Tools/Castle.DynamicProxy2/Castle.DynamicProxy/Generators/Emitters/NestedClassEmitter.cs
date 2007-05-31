@@ -20,14 +20,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	[CLSCompliant(false)]
 	public class NestedClassEmitter : AbstractTypeEmitter
 	{
-		public NestedClassEmitter(ClassEmitter maintype, 
-			String name, Type baseType, Type[] interfaces)
+		public NestedClassEmitter(ClassEmitter maintype,
+		                          String name, Type baseType, Type[] interfaces)
 		{
-			typebuilder = maintype.TypeBuilder.DefineNestedType( 
-				name, 
-				TypeAttributes.Sealed|TypeAttributes.NestedPublic|TypeAttributes.Class, 
+			typebuilder = maintype.TypeBuilder.DefineNestedType(
+				name,
+				TypeAttributes.Sealed | TypeAttributes.NestedPublic | TypeAttributes.Class,
 				baseType, interfaces);
-			
+
 			maintype.nested.Add(this);
 		}
 	}

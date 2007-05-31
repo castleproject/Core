@@ -28,15 +28,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (method == null) throw new ArgumentNullException("method");
 			if (args == null) throw new ArgumentNullException("args");
-			
-			this.cmethod = method;
+
+			cmethod = method;
 			this.args = args;
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldarg_0);
-			
+
 			foreach(Expression exp in args)
 			{
 				exp.Emit(member, gen);

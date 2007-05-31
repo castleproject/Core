@@ -45,12 +45,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		public OpCode this[Type type]
-		{		
+		{
 			get
 			{
 				if (Dictionary.Contains(type))
 				{
-					return (OpCode)Dictionary[type];
+					return (OpCode) Dictionary[type];
 				}
 				return EmptyOpCode;
 			}

@@ -29,14 +29,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public NewInstanceExpression(ConstructorInfo constructor, params Expression[] args)
 		{
 			this.constructor = constructor;
-			this.arguments = args;
+			arguments = args;
 		}
 
 		public NewInstanceExpression(Type target, Type[] constructor_args, params Expression[] args)
 		{
-			this.type = target;
+			type = target;
 			this.constructor_args = constructor_args;
-			this.arguments = args;
+			arguments = args;
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)

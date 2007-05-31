@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Reflection.Emit;
 
-	abstract class OpCodeUtil
+	internal abstract class OpCodeUtil
 	{
 		/// <summary>
 		/// Emits a load opcode of the appropriate kind for a constant string or
@@ -33,13 +33,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 			else if (value is Int32)
 			{
-				OpCode code = LdcOpCodesDictionary.Instance[ value.GetType() ];
+				OpCode code = LdcOpCodesDictionary.Instance[value.GetType()];
 				gen.Emit(code, (int) value);
 			}
 			else if (value is bool)
 			{
-				OpCode code = LdcOpCodesDictionary.Instance[ value.GetType() ];
-				gen.Emit(code, Convert.ToInt32(value) );
+				OpCode code = LdcOpCodesDictionary.Instance[value.GetType()];
+				gen.Emit(code, Convert.ToInt32(value));
 			}
 			else
 			{
@@ -86,7 +86,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				OpCode opCode = LdindOpCodesDictionary.Instance[type];
 
-				if (Object.ReferenceEquals(opCode, LdindOpCodesDictionary.EmptyOpCode))
+				if (ReferenceEquals(opCode, LdindOpCodesDictionary.EmptyOpCode))
 				{
 					throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
 				}
@@ -126,7 +126,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				OpCode opCode = StindOpCodesDictionary.Instance[type];
 
-				if (Object.ReferenceEquals(opCode, StindOpCodesDictionary.EmptyOpCode))
+				if (ReferenceEquals(opCode, StindOpCodesDictionary.EmptyOpCode))
 				{
 					throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
 				}
@@ -145,10 +145,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static Type GetUnderlyingTypeOfEnum(Type enumType)
 		{
-			Enum baseType = (Enum)Activator.CreateInstance(enumType);
+			Enum baseType = (Enum) Activator.CreateInstance(enumType);
 			TypeCode code = baseType.GetTypeCode();
 
-			switch (code)
+			switch(code)
 			{
 				case TypeCode.SByte:
 					return typeof(SByte);

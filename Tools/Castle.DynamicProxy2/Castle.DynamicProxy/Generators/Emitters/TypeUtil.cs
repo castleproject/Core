@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public static Type[] Union(Type[] set1, Type[] set2)
 		{
 			ArrayList types = new ArrayList();
-			
+
 			if (set1 != null) types.AddRange(set1);
 			if (set2 != null) types.AddRange(set2);
 

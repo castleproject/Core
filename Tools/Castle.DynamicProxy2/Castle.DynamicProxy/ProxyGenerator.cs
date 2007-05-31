@@ -57,6 +57,7 @@ namespace Castle.DynamicProxy
 		#endregion
 
 		#region CreateInterfaceProxyWithTarget
+
 #if DOTNET2
 
 		public T CreateInterfaceProxyWithTarget<T>(object target, params IInterceptor[] interceptors)
@@ -79,13 +80,13 @@ namespace Castle.DynamicProxy
 		public object CreateInterfaceProxyWithTarget(Type theInterface, object target, ProxyGenerationOptions options,
 		                                             params IInterceptor[] interceptors)
 		{
-			return CreateInterfaceProxyWithTarget (theInterface, null, target, options, interceptors);
+			return CreateInterfaceProxyWithTarget(theInterface, null, target, options, interceptors);
 		}
 
 		public object CreateInterfaceProxyWithTarget(Type theInterface, Type[] interfaces,
 		                                             object target, params IInterceptor[] interceptors)
 		{
-		  return CreateInterfaceProxyWithTarget (theInterface, interfaces, target, ProxyGenerationOptions.Default, interceptors);
+			return CreateInterfaceProxyWithTarget(theInterface, interfaces, target, ProxyGenerationOptions.Default, interceptors);
 		}
 
 		public object CreateInterfaceProxyWithTarget(Type theInterface, Type[] interfaces, object target,
@@ -114,11 +115,11 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("Target does not implement interface " + theInterface.FullName, "target");
 			}
 
-			CheckNotGenericTypeDefinition (theInterface, "theInterface");
-			CheckNotGenericTypeDefinitions (interfaces, "interfaces");
+			CheckNotGenericTypeDefinition(theInterface, "theInterface");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 
-		  Type targetType = target.GetType();
-			Type generatedType = CreateInterfaceProxyTypeWithTarget (theInterface, interfaces, targetType, options);
+			Type targetType = target.GetType();
+			Type generatedType = CreateInterfaceProxyTypeWithTarget(theInterface, interfaces, targetType, options);
 
 			ArrayList argsForCtor = new ArrayList();
 			argsForCtor.AddRange(options.MixinInterfaceImplementationsAsArray());
@@ -168,7 +169,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("Target does not implement interface " + theInterface.FullName, "target");
 			}
 
-			CheckNotGenericTypeDefinition (theInterface, "theInterface");
+			CheckNotGenericTypeDefinition(theInterface, "theInterface");
 
 			Type generatedType = CreateInterfaceProxyTypeWithTargetInterface(theInterface, null, theInterface, options);
 			return Activator.CreateInstance(generatedType, new object[] {interceptors, target});
@@ -177,6 +178,7 @@ namespace Castle.DynamicProxy
 		#endregion
 
 		#region CreateInterfaceProxyWithoutTarget
+
 #if DOTNET2
 		public T CreateInterfaceProxyWithoutTarget<T>(IInterceptor interceptor)
 		{
@@ -188,6 +190,7 @@ namespace Castle.DynamicProxy
 			return (T) CreateInterfaceProxyWithoutTarget(typeof(T), interceptors);
 		}
 #endif
+
 		public object CreateInterfaceProxyWithoutTarget(Type theInterface, IInterceptor interceptor)
 		{
 			return CreateInterfaceProxyWithoutTarget(theInterface, new Type[0],
@@ -223,16 +226,17 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("Specified type is not an interface", "theInterface");
 			}
 
-			CheckNotGenericTypeDefinition (theInterface, "theInterface");
-			CheckNotGenericTypeDefinitions (interfaces, "interfaces");
+			CheckNotGenericTypeDefinition(theInterface, "theInterface");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 
-		  Type generatedType = CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
+			Type generatedType = CreateInterfaceProxyTypeWithoutTarget(theInterface, interfaces, options);
 			return Activator.CreateInstance(generatedType, new object[] {interceptors, new object(),});
 		}
 
 		#endregion
 
 		#region CreateClassProxy
+
 #if DOTNET2
 		public T CreateClassProxy<T>(params IInterceptor[] interceptors)
 		{
@@ -244,6 +248,7 @@ namespace Castle.DynamicProxy
 			return CreateClassProxy(targetType, ProxyGenerationOptions.Default, interceptors);
 		}
 #endif
+
 		/// <summary>
 		/// Creates the class proxy.
 		/// </summary>
@@ -312,25 +317,26 @@ namespace Castle.DynamicProxy
 			{
 				throw new ArgumentException("'targetType' must be a class", "targetType");
 			}
-			
-			CheckNotGenericTypeDefinition (targetType, "targetType");
-			CheckNotGenericTypeDefinitions (interfaces, "interfaces");
+
+			CheckNotGenericTypeDefinition(targetType, "targetType");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 
 			Type proxyType = CreateClassProxyType(targetType, interfaces, options);
 
-			#if DOTNET2
+#if DOTNET2
 			if (targetType.IsGenericTypeDefinition)
 			{
 				proxyType = proxyType.MakeGenericType(targetType.GetGenericArguments());
 			}
-			#endif
+#endif
 
 			object[] args = GetConstructorArguments(constructorArgs, interceptors, options);
 
 			return Activator.CreateInstance(proxyType, args);
 		}
 
-		private static object[] GetConstructorArguments(object[] constructorArgs, IInterceptor[] interceptors, ProxyGenerationOptions options)
+		private static object[] GetConstructorArguments(object[] constructorArgs, IInterceptor[] interceptors,
+		                                                ProxyGenerationOptions options)
 		{
 			ArrayList args = new ArrayList();
 			args.AddRange(options.MixinInterfaceImplementationsAsArray());

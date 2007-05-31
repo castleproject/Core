@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public FieldReference(FieldBuilder fieldbuilder)
 		{
 			this.fieldbuilder = fieldbuilder;
-			
+
 			if ((fieldbuilder.Attributes & FieldAttributes.Static) != 0)
 			{
 				isStatic = true;

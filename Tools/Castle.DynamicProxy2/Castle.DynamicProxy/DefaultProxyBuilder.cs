@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections;
-	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Generators;
 
 	[CLSCompliant(false)]
@@ -49,8 +48,8 @@ namespace Castle.DynamicProxy
 
 		public Type CreateClassProxy(Type theClass, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			AssertValidType (theClass);
-			AssertValidTypes (interfaces);
+			AssertValidType(theClass);
+			AssertValidTypes(interfaces);
 
 			ClassProxyGenerator generator = new ClassProxyGenerator(scope, theClass);
 
@@ -60,17 +59,19 @@ namespace Castle.DynamicProxy
 		public Type CreateInterfaceProxyTypeWithoutTarget(Type theInterface, Type[] interfaces, ProxyGenerationOptions options)
 		{
 			AssertValidType(theInterface);
-			AssertValidTypes (interfaces);
+			AssertValidTypes(interfaces);
 
-			InterfaceProxyGeneratorWithoutTarget generatorWithoutTarget = new InterfaceProxyGeneratorWithoutTarget(scope, theInterface);
+			InterfaceProxyGeneratorWithoutTarget generatorWithoutTarget =
+				new InterfaceProxyGeneratorWithoutTarget(scope, theInterface);
 
-			return generatorWithoutTarget.GenerateCode(typeof (object), interfaces, options);
+			return generatorWithoutTarget.GenerateCode(typeof(object), interfaces, options);
 		}
 
-		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType, ProxyGenerationOptions options)
+		public Type CreateInterfaceProxyTypeWithTarget(Type theInterface, Type[] interfaces, Type targetType,
+		                                               ProxyGenerationOptions options)
 		{
 			AssertValidType(theInterface);
-			AssertValidTypes (interfaces);
+			AssertValidTypes(interfaces);
 
 			InterfaceProxyWithTargetGenerator generator = new InterfaceProxyWithTargetGenerator(scope, theInterface);
 
@@ -81,7 +82,8 @@ namespace Castle.DynamicProxy
 		{
 			AssertValidType(theInterface);
 
-			InterfaceProxyWithTargetInterfaceGenerator generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, theInterface);
+			InterfaceProxyWithTargetInterfaceGenerator generator =
+				new InterfaceProxyWithTargetInterfaceGenerator(scope, theInterface);
 
 			return generator.GenerateCode(theInterface, null, options);
 		}
@@ -89,8 +91,9 @@ namespace Castle.DynamicProxy
 		private void AssertValidType(Type target)
 		{
 			bool isNestedAndInternal = target.IsNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
-			bool isInternalNotNested = target.IsVisible ==false && target.IsNested==false;
-			bool internalAndVisibleToDynProxy = (isInternalNotNested || isNestedAndInternal) && InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
+			bool isInternalNotNested = target.IsVisible == false && target.IsNested == false;
+			bool internalAndVisibleToDynProxy = (isInternalNotNested || isNestedAndInternal) &&
+			                                    InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
 			if (!target.IsPublic && !target.IsNestedPublic && !internalAndVisibleToDynProxy)
 			{
 				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
@@ -103,13 +106,13 @@ namespace Castle.DynamicProxy
 #endif
 		}
 
-		private void AssertValidTypes (IEnumerable targetTypes)
+		private void AssertValidTypes(IEnumerable targetTypes)
 		{
 			if (targetTypes != null)
 			{
-				foreach (Type t in targetTypes)
+				foreach(Type t in targetTypes)
 				{
-					AssertValidType (t);
+					AssertValidType(t);
 				}
 			}
 		}

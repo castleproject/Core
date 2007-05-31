@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
-using Castle.Core.Interceptor;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
 namespace Castle.DynamicProxy.Serialization
 {
+	using System;
+	using System.Reflection;
+	using System.Runtime.Serialization;
+	using System.Runtime.Serialization.Formatters.Binary;
+	using Castle.Core.Interceptor;
+
 	/// <summary>
 	/// Assists in serializing instances of the generated proxy types so that they can be deserialized via <see cref="ProxyObjectReference"/>.
 	/// </summary>
@@ -16,36 +13,38 @@ namespace Castle.DynamicProxy.Serialization
 	{
 		public static BinaryFormatter Formatter = new BinaryFormatter();
 
-		public static void SerializeBaseProxyData (SerializationInfo info, object proxy, IInterceptor[] interceptors,
-				string[] interfaceNames, Type baseType, ProxyGenerationOptions generationOptions)
+		public static void SerializeBaseProxyData(SerializationInfo info, object proxy, IInterceptor[] interceptors,
+		                                          string[] interfaceNames, Type baseType,
+		                                          ProxyGenerationOptions generationOptions)
 		{
-			info.SetType (typeof (ProxyObjectReference));
+			info.SetType(typeof(ProxyObjectReference));
 
-			info.AddValue ("__interceptors", interceptors);
-			info.AddValue ("__interfaces", interfaceNames);
-			info.AddValue ("__baseType", baseType);
-			info.AddValue ("__generationOptions", generationOptions);
+			info.AddValue("__interceptors", interceptors);
+			info.AddValue("__interfaces", interfaceNames);
+			info.AddValue("__baseType", baseType);
+			info.AddValue("__generationOptions", generationOptions);
 		}
 
-		
-		public static void SerializeInterfaceProxyData (SerializationInfo info, object target, int interfaceGeneratorType, string interfaceName)
+
+		public static void SerializeInterfaceProxyData(SerializationInfo info, object target, int interfaceGeneratorType,
+		                                               string interfaceName)
 		{
-			info.AddValue ("__target", target);
-			info.AddValue ("__interface_generator_type", interfaceGeneratorType);
-			info.AddValue ("__theInterface", interfaceName);
+			info.AddValue("__target", target);
+			info.AddValue("__interface_generator_type", interfaceGeneratorType);
+			info.AddValue("__theInterface", interfaceName);
 		}
 
-		public static void SerializeClassProxyData (SerializationInfo info, bool delegateToBase, Type targetType, object proxy)
+		public static void SerializeClassProxyData(SerializationInfo info, bool delegateToBase, Type targetType, object proxy)
 		{
-			info.AddValue ("__delegateToBase", delegateToBase);
+			info.AddValue("__delegateToBase", delegateToBase);
 
 			if (!delegateToBase)
 			{
-				MemberInfo[] members = FormatterServices.GetSerializableMembers (targetType);
+				MemberInfo[] members = FormatterServices.GetSerializableMembers(targetType);
 
-				Indirection memberValues = new Indirection(FormatterServices.GetObjectData (proxy, members));
+				Indirection memberValues = new Indirection(FormatterServices.GetObjectData(proxy, members));
 				// SubstitutIndirections (memberValues, proxy);
-				info.AddValue ("__data", memberValues);
+				info.AddValue("__data", memberValues);
 			}
 		}
 
@@ -57,7 +56,7 @@ namespace Castle.DynamicProxy.Serialization
 		{
 			public readonly object IndirectedObject;
 
-			public Indirection (object indirectedObject)
+			public Indirection(object indirectedObject)
 			{
 				IndirectedObject = indirectedObject;
 			}

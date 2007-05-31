@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reflection.Emit;
-
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Reflection;
+	using System.Reflection.Emit;
 
 	[CLSCompliant(false)]
 	public class EventEmitter : IMemberEmitter
@@ -50,9 +49,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void Generate()
 		{
 			MethodAttributes methodAttributes = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.SpecialName;
-			if(addMethod==null)
+			if (addMethod == null)
 				CreateAddMethod(methodAttributes);
-			if(removeMethod==null)
+			if (removeMethod == null)
 				CreateRemoveMethod(methodAttributes);
 
 			addMethod.Generate();
@@ -64,7 +63,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public MethodEmitter CreateAddMethod(MethodAttributes atts)
 		{
-			if(addMethod!=null)
+			if (addMethod != null)
 			{
 				throw new InvalidOperationException("An add method exists");
 			}
@@ -74,7 +73,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public MethodEmitter CreateRemoveMethod(MethodAttributes atts)
 		{
-			if(removeMethod!=null)
+			if (removeMethod != null)
 			{
 				throw new InvalidOperationException("A remove method exists");
 			}

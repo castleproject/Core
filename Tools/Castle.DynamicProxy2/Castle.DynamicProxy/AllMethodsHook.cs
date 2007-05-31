@@ -22,8 +22,8 @@ namespace Castle.DynamicProxy
 	{
 		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return methodInfo.DeclaringType != typeof(Object) && 
-			       methodInfo.DeclaringType != typeof(MarshalByRefObject) && 
+			return methodInfo.DeclaringType != typeof(Object) &&
+			       methodInfo.DeclaringType != typeof(MarshalByRefObject) &&
 			       methodInfo.DeclaringType != typeof(ContextBoundObject);
 		}
 

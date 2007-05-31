@@ -16,11 +16,10 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Collections;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using System.Collections;
-
 #if DOTNET2
 	using System.Collections.Generic;
 #endif
@@ -34,10 +33,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected PropertiesCollection properties;
 		protected EventCollection events;
 		protected internal NestedClassCollection nested;
-		#if DOTNET2
+#if DOTNET2
 		protected GenericTypeParameterBuilder[] genericTypeParams;
 		protected Dictionary<String, GenericTypeParameterBuilder> name2GenericType;
-		#endif
+#endif
 
 		public AbstractTypeEmitter()
 		{
@@ -86,7 +85,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 #endif
-			return (Type[]) types.ToArray(typeof (Type));
+			return (Type[]) types.ToArray(typeof(Type));
 		}
 
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
@@ -130,23 +129,27 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return member;
 		}
 
-		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments)
+		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType,
+		                                  params ArgumentReference[] arguments)
 		{
 			MethodEmitter member = new MethodEmitter(this, name, returnType, arguments);
 			methods.Add(member);
 			return member;
 		}
 
-		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType, MethodAttributes attributes, params ArgumentReference[] arguments)
+		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType, MethodAttributes attributes,
+		                                  params ArgumentReference[] arguments)
 		{
 			MethodEmitter member = new MethodEmitter(this, name, attributes, returnType, arguments);
 			methods.Add(member);
 			return member;
 		}
 
-		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, ReturnReferenceExpression returnType, params Type[] args)
+		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, ReturnReferenceExpression returnType,
+		                                  params Type[] args)
 		{
-			MethodEmitter member = new MethodEmitter(this, name, attrs, returnType, ArgumentsUtil.ConvertToArgumentReference(args));
+			MethodEmitter member =
+				new MethodEmitter(this, name, attrs, returnType, ArgumentsUtil.ConvertToArgumentReference(args));
 			methods.Add(member);
 			return member;
 		}
@@ -204,7 +207,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void DefineCustomAttribute(Attribute attribute)
 		{
 			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
-			if(customAttributeBuilder==null)
+			if (customAttributeBuilder == null)
 				return;
 			typebuilder.SetCustomAttribute(customAttributeBuilder);
 		}
@@ -212,7 +215,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void DefineCustomAttributeFor(FieldReference field, Attribute attribute)
 		{
 			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
-			if(customAttributeBuilder==null)
+			if (customAttributeBuilder == null)
 				return;
 			field.Reference.SetCustomAttribute(customAttributeBuilder);
 		}
@@ -262,7 +265,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			Type type = typebuilder.CreateType();
 
-			foreach (NestedClassEmitter builder in nested)
+			foreach(NestedClassEmitter builder in nested)
 			{
 				builder.BuildType();
 			}
@@ -277,22 +280,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				CreateDefaultConstructor();
 			}
 
-			foreach (IMemberEmitter builder in properties)
+			foreach(IMemberEmitter builder in properties)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach (IMemberEmitter builder in events)
+			foreach(IMemberEmitter builder in events)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach (IMemberEmitter builder in constructors)
+			foreach(IMemberEmitter builder in constructors)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach (IMemberEmitter builder in methods)
+			foreach(IMemberEmitter builder in methods)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();

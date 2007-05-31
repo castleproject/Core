@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Reflection;
-
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	[CLSCompliant(false)]
@@ -26,7 +25,8 @@ namespace Castle.DynamicProxy.Generators
 		private readonly PropertyEmitter emitter;
 		private readonly MethodInfo getMethod, setMethod;
 
-		public PropertyToGenerate(bool canRead, bool canWrite, PropertyEmitter emitter, MethodInfo getMethod, MethodInfo setMethod)
+		public PropertyToGenerate(bool canRead, bool canWrite, PropertyEmitter emitter, MethodInfo getMethod,
+		                          MethodInfo setMethod)
 		{
 			this.canRead = canRead;
 			this.canWrite = canWrite;

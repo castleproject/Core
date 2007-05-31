@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 
 	/// <summary>
@@ -61,13 +60,13 @@ namespace Castle.DynamicProxy
 
 		private ProxyGenerationOptions(SerializationInfo info, StreamingContext context)
 		{
-			hook = (IProxyGenerationHook) info.GetValue ("hook", typeof (IProxyGenerationHook));
-			selector = (IInterceptorSelector) info.GetValue ("selector", typeof (IInterceptorSelector));
-			useSelector = info.GetBoolean ("useSelector");
-			mixins = (ArrayList) info.GetValue ("mixins", typeof (ArrayList));
-			
-			string baseTypeName = info.GetString ("baseTypeForInterfaceProxy");
-			baseTypeForInterfaceProxy = Type.GetType (baseTypeName);
+			hook = (IProxyGenerationHook) info.GetValue("hook", typeof(IProxyGenerationHook));
+			selector = (IInterceptorSelector) info.GetValue("selector", typeof(IInterceptorSelector));
+			useSelector = info.GetBoolean("useSelector");
+			mixins = (ArrayList) info.GetValue("mixins", typeof(ArrayList));
+
+			string baseTypeName = info.GetString("baseTypeForInterfaceProxy");
+			baseTypeForInterfaceProxy = Type.GetType(baseTypeName);
 
 			Initialize();
 		}
@@ -139,9 +138,9 @@ namespace Castle.DynamicProxy
 		private bool MixinTypesAreEquals(ProxyGenerationOptions proxyGenerationOptions)
 		{
 			if (!Equals(mixinsTypes == null, proxyGenerationOptions.mixinsTypes == null)) return false;
-			if (mixins == null) return true;//both are null, nothing more to check
+			if (mixins == null) return true; //both are null, nothing more to check
 			if (mixinsTypes.Count != proxyGenerationOptions.mixinsTypes.Count) return false;
-			for (int i = 0; i < mixinsTypes.Count; i++)
+			for(int i = 0; i < mixinsTypes.Count; i++)
 			{
 				if (!Equals(mixinsTypes[i], proxyGenerationOptions.mixinsTypes[i])) return false;
 			}
@@ -152,7 +151,7 @@ namespace Castle.DynamicProxy
 		{
 			int result = hook != null ? hook.GetType().GetHashCode() : 0;
 			result = 29 * result + (selector != null ? selector.GetHashCode() : 0);
-			result = 29 * result + (GetMixinHashCode() );
+			result = 29 * result + (GetMixinHashCode());
 			result = 29 * result + (baseTypeForInterfaceProxy != null ? baseTypeForInterfaceProxy.GetHashCode() : 0);
 			result = 29 * result + useSelector.GetHashCode();
 			return result;
@@ -163,7 +162,7 @@ namespace Castle.DynamicProxy
 			int result = 0;
 			if (mixinsTypes == null)
 				return result;
-			foreach (object mixin in mixinsTypes)
+			foreach(object mixin in mixinsTypes)
 			{
 				result = 29 * result + mixin.GetHashCode();
 			}
@@ -218,23 +217,20 @@ namespace Castle.DynamicProxy
 
 			mixinsTypes = new List<Type>();
 			Dictionary<Type, object> interface2Mixin = new Dictionary<Type, object>();
-			
-			foreach (object mixin in MixinsAsArray())
+
+			foreach(object mixin in MixinsAsArray())
 			{
 				Type[] mixinInterfaces = mixin.GetType().GetInterfaces();
 
-				foreach (Type inter in mixinInterfaces)
+				foreach(Type inter in mixinInterfaces)
 				{
 					mixinsTypes.Add(inter);
 					interface2Mixin[inter] = mixin;
 				}
 			}
-			mixinsTypes.Sort(delegate(Type x, Type y)
-			{
-				return x.FullName.CompareTo(y.FullName);
-			});
+			mixinsTypes.Sort(delegate(Type x, Type y) { return x.FullName.CompareTo(y.FullName); });
 			mixinPositions = new Dictionary<Type, int>();
-			for (int i = 0; i < mixinsTypes.Count; i++)
+			for(int i = 0; i < mixinsTypes.Count; i++)
 			{
 				Type mixinType = mixinsTypes[i];
 				object mixin = interface2Mixin[mixinType];
@@ -246,7 +242,7 @@ namespace Castle.DynamicProxy
 
 		internal void Initialize()
 		{
-			if(!HasMixins)//there is no initialization if you don't have mixins
+			if (!HasMixins) //there is no initialization if you don't have mixins
 				return;
 			InspectAndRegisterMixinInterfaces();
 		}
@@ -256,16 +252,16 @@ namespace Castle.DynamicProxy
 			return mixinPositions;
 		}
 
-		public void GetObjectData (SerializationInfo info, StreamingContext context)
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue ("hook", hook);
-			info.AddValue ("selector", selector);
-			info.AddValue ("useSelector", useSelector);
-			info.AddValue ("mixins", mixins);
+			info.AddValue("hook", hook);
+			info.AddValue("selector", selector);
+			info.AddValue("useSelector", useSelector);
+			info.AddValue("mixins", mixins);
 			// remaining mixin fields are not serialized, they are recalculated in the Initialize method called from the deserialization constructor
 
 			// avoid serializing Type objects, they lead to problems with deserialization order, see SerializableClassTestCase.ProxyGenerationOptionsRespectedOnDeserializationComplex
-			info.AddValue ("baseTypeForInterfaceProxy", baseTypeForInterfaceProxy.AssemblyQualifiedName);
+			info.AddValue("baseTypeForInterfaceProxy", baseTypeForInterfaceProxy.AssemblyQualifiedName);
 		}
 	}
 }

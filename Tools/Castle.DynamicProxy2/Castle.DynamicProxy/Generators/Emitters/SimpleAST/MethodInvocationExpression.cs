@@ -25,17 +25,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		protected readonly Expression[] args;
 		protected readonly Reference owner;
 
-		public MethodInvocationExpression(MethodInfo method, params Expression[] args) : 
+		public MethodInvocationExpression(MethodInfo method, params Expression[] args) :
 			this(SelfReference.Self, method, args)
 		{
 		}
 
-		public MethodInvocationExpression(MethodEmitter method, params Expression[] args) : 
+		public MethodInvocationExpression(MethodEmitter method, params Expression[] args) :
 			this(SelfReference.Self, method.MethodBuilder, args)
 		{
 		}
 
-		public MethodInvocationExpression(Reference owner, MethodEmitter method, params Expression[] args) : 
+		public MethodInvocationExpression(Reference owner, MethodEmitter method, params Expression[] args) :
 			this(owner, method.MethodBuilder, args)
 		{
 		}

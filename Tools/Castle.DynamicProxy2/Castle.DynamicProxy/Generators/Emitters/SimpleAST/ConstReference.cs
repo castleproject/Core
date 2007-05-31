@@ -51,5 +51,4 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			throw new NotSupportedException();
 		}
 	}
-
 }

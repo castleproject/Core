@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		internal TypeConstructorEmitter(AbstractTypeEmitter maintype)
 		{
 			this.maintype = maintype;
-			
+
 			builder = maintype.TypeBuilder.DefineTypeInitializer();
 		}
 

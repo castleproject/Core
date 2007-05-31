@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 					OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, member.ReturnType);
 				}
 			}
-			
+
 			gen.Emit(OpCodes.Ret);
 		}
 	}

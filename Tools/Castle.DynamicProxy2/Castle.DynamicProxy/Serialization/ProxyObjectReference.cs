@@ -13,15 +13,13 @@
 // limitations under the License.
 
 
-using Castle.DynamicProxy.Generators;
-
 namespace Castle.DynamicProxy.Serialization
 {
 	using System;
-	using System.Collections;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
+	using Castle.DynamicProxy.Generators;
 
 	/// <summary>
 	/// Handles the deserialization of proxies.
@@ -50,15 +48,15 @@ namespace Castle.DynamicProxy.Serialization
 
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
 		{
-			_interceptors = (IInterceptor[])info.GetValue("__interceptors", typeof (IInterceptor[]));
-			_baseType = (Type)info.GetValue("__baseType", typeof(Type));
-			_options = (ProxyGenerationOptions) info.GetValue ("__generationOptions", typeof (ProxyGenerationOptions));
+			_interceptors = (IInterceptor[]) info.GetValue("__interceptors", typeof(IInterceptor[]));
+			_baseType = (Type) info.GetValue("__baseType", typeof(Type));
+			_options = (ProxyGenerationOptions) info.GetValue("__generationOptions", typeof(ProxyGenerationOptions));
 
-			String[] _interfaceNames = (String[])info.GetValue("__interfaces", typeof(String[]));
+			String[] _interfaceNames = (String[]) info.GetValue("__interfaces", typeof(String[]));
 
 			_interfaces = new Type[_interfaceNames.Length];
 
-			for (int i = 0; i < _interfaceNames.Length; i++)
+			for(int i = 0; i < _interfaceNames.Length; i++)
 			{
 				_interfaces[i] = Type.GetType(_interfaceNames[i]);
 			}
@@ -83,29 +81,32 @@ namespace Castle.DynamicProxy.Serialization
 			object proxy = null;
 
 			object target = info.GetValue("__target", typeof(object));
-			InterfaceGeneratorType generatorType = (InterfaceGeneratorType)info.GetInt32("__interface_generator_type");
+			InterfaceGeneratorType generatorType = (InterfaceGeneratorType) info.GetInt32("__interface_generator_type");
 			string interfaceName = info.GetString("__theInterface");
 			Type theInterface = Type.GetType(interfaceName, true, false);
 			InterfaceProxyWithTargetGenerator generator;
-			switch (generatorType)
+			switch(generatorType)
 			{
 				case InterfaceGeneratorType.WithTarget:
-					generator = new InterfaceProxyWithTargetGenerator(_scope,theInterface);
+					generator = new InterfaceProxyWithTargetGenerator(_scope, theInterface);
 					break;
 				case InterfaceGeneratorType.WithoutTarget:
 					generator = new InterfaceProxyGeneratorWithoutTarget(_scope, theInterface);
 					break;
 				case InterfaceGeneratorType.WithTargetInterface:
-					generator = new InterfaceProxyWithTargetInterfaceGenerator(_scope,	theInterface);
+					generator = new InterfaceProxyWithTargetInterfaceGenerator(_scope, theInterface);
 					break;
 				default:
-					throw new InvalidOperationException(string.Format("Got value {0} for the interface generator type, which is not known for the purpose of serialization.", generatorType));
+					throw new InvalidOperationException(
+						string.Format(
+							"Got value {0} for the interface generator type, which is not known for the purpose of serialization.",
+							generatorType));
 			}
 
-			Type proxy_type = generator.GenerateCode(target.GetType(), _interfaces , _options);
+			Type proxy_type = generator.GenerateCode(target.GetType(), _interfaces, _options);
 
-			proxy = Activator.CreateInstance(proxy_type, new object[] { _interceptors, target });
-			
+			proxy = Activator.CreateInstance(proxy_type, new object[] {_interceptors, target});
+
 			return proxy;
 		}
 
@@ -118,16 +119,16 @@ namespace Castle.DynamicProxy.Serialization
 			ClassProxyGenerator cpGen = new ClassProxyGenerator(_scope, _baseType);
 
 			Type proxy_type = cpGen.GenerateCode(_interfaces, _options);
-			
+
 
 			if (delegateBaseSer)
 			{
-				proxy = Activator.CreateInstance(proxy_type, new object[] { info, context });
+				proxy = Activator.CreateInstance(proxy_type, new object[] {info, context});
 			}
 			else
 			{
 				proxy = FormatterServices.GetSafeUninitializedObject(proxy_type);
-				_data = (ProxySerializer.Indirection) info.GetValue("__data", typeof (ProxySerializer.Indirection));
+				_data = (ProxySerializer.Indirection) info.GetValue("__data", typeof(ProxySerializer.Indirection));
 
 				SetInterceptor(proxy, proxy_type);
 			}
@@ -135,7 +136,7 @@ namespace Castle.DynamicProxy.Serialization
 			return proxy;
 		}
 
-		private void SetInterceptor (object proxy, Type proxy_type)
+		private void SetInterceptor(object proxy, Type proxy_type)
 		{
 			FieldInfo interceptorField = proxy_type.GetField("__interceptors");
 
@@ -145,7 +146,7 @@ namespace Castle.DynamicProxy.Serialization
 					"The SerializationInfo specifies an invalid proxy type, which has no __interceptors field.");
 			}
 
-			interceptorField.SetValue (proxy, _interceptors);
+			interceptorField.SetValue(proxy, _interceptors);
 		}
 
 		protected void InvokeCallback(object target)
@@ -169,17 +170,17 @@ namespace Castle.DynamicProxy.Serialization
 
 		// Class proxies must be populated in this method, since only at this point all members held by _data.IndirectedObject
 		// have been fixed up.
-		public void OnDeserialization (object sender)
+		public void OnDeserialization(object sender)
 		{
 			if (_data != null)
 			{
 				object[] objectData = (object[]) _data.IndirectedObject;
 
-				MemberInfo[] members = FormatterServices.GetSerializableMembers (_baseType);
-				FormatterServices.PopulateObjectMembers (_proxy, members, objectData);
+				MemberInfo[] members = FormatterServices.GetSerializableMembers(_baseType);
+				FormatterServices.PopulateObjectMembers(_proxy, members, objectData);
 				_data = null;
 			}
-			InvokeCallback (_proxy);
+			InvokeCallback(_proxy);
 		}
 	}
 }

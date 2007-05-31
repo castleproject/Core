@@ -13,15 +13,14 @@
 // limitations under the License.
 
 
-using System.Runtime.InteropServices;
-
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using System.Diagnostics;
+	using System.Runtime.InteropServices;
 
 	/// <summary>
 	/// Handles replication of custom attributes
@@ -33,19 +32,19 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		static CustomAttributeUtil()
 		{
 			//Reason - will cause "Method with non-zero RVA in an Import" exception when replicating it
-			attributesToSkip.Add(typeof (ComImportAttribute));
+			attributesToSkip.Add(typeof(ComImportAttribute));
 		}
 
 		public static CustomAttributeBuilder CreateCustomAttribute(Attribute attribute)
 		{
 			Type attType = attribute.GetType();
 
-			if(attributesToSkip.Contains(attType))
+			if (attributesToSkip.Contains(attType))
 				return null;
 
 			ConstructorInfo ci;
 
-			object[] ctorArgs = GetConstructorAndArgs(attType, attribute , out ci);
+			object[] ctorArgs = GetConstructorAndArgs(attType, attribute, out ci);
 
 			PropertyInfo[] properties;
 
@@ -60,18 +59,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			try
 			{
 				Activator.CreateInstance(attType, ctorArgs);
-				return new CustomAttributeBuilder(ci, ctorArgs, properties, propertyValues, fields, fieldValues);	
+				return new CustomAttributeBuilder(ci, ctorArgs, properties, propertyValues, fields, fieldValues);
 			}
 			catch
 			{
 				// there is no real way to log a warning here...
-				Trace.WriteLine(@"Dynamic Proxy 2: Unable to find matching parameters for replicating attribute "+attType.FullName+".");
+				Trace.WriteLine(@"Dynamic Proxy 2: Unable to find matching parameters for replicating attribute " + attType.FullName +
+				                ".");
 				return null;
 			}
-
 		}
 
-		private static object[] GetConstructorAndArgs(Type attType, Attribute attribute,out ConstructorInfo ci)
+		private static object[] GetConstructorAndArgs(Type attType, Attribute attribute, out ConstructorInfo ci)
 		{
 			object[] ctorArgs = new object[0];
 
@@ -93,7 +92,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			ArrayList selectedProps = new ArrayList();
 
-			foreach (PropertyInfo pi in attType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+			foreach(PropertyInfo pi in attType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
 			{
 				if (pi.CanRead && pi.CanWrite)
 				{
@@ -101,11 +100,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 
-			properties = (PropertyInfo[])selectedProps.ToArray(typeof(PropertyInfo));
+			properties = (PropertyInfo[]) selectedProps.ToArray(typeof(PropertyInfo));
 
 			object[] propertyValues = new object[properties.Length];
 
-			for (int i = 0; i < properties.Length; i++)
+			for(int i = 0; i < properties.Length; i++)
 			{
 				PropertyInfo propInfo = properties[i];
 				propertyValues[i] = propInfo.GetValue(attribute, null);
@@ -120,7 +119,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			object[] values = new object[fields.Length];
 
-			for (int i = 0; i < fields.Length; i++)
+			for(int i = 0; i < fields.Length; i++)
 			{
 				FieldInfo fieldInfo = fields[i];
 				values[i] = fieldInfo.GetValue(attribute);
@@ -135,27 +134,28 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// a/ we first try to match all the properties on the attributes by name (case insensitive) to the argument
 		/// b/ if we fail we try to match them by property type, with some smarts about convertions (i,e: can use Guid for string).
 		/// </summary>
-		private static void InitializeConstructorArgs(Type attType,Attribute attribute, object[] args, ParameterInfo[] parameterInfos)
+		private static void InitializeConstructorArgs(Type attType, Attribute attribute, object[] args,
+		                                              ParameterInfo[] parameterInfos)
 		{
-			for (int i = 0; i < args.Length; i++)
+			for(int i = 0; i < args.Length; i++)
 			{
-				args[i] = GetArgValue(attType,  attribute, parameterInfos[i]);
+				args[i] = GetArgValue(attType, attribute, parameterInfos[i]);
 			}
 		}
 
-		private static object GetArgValue(Type attType,Attribute attribute, ParameterInfo parameterInfo)
+		private static object GetArgValue(Type attType, Attribute attribute, ParameterInfo parameterInfo)
 		{
 			Type paramType = parameterInfo.ParameterType;
 
 			PropertyInfo[] propertyInfos = attType.GetProperties();
 			//first try to find a property with 
-			foreach (PropertyInfo propertyInfo in propertyInfos)
+			foreach(PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (propertyInfo.CanRead == false && propertyInfo.GetIndexParameters().Length != 0)
 				{
 					continue;
 				}
-				
+
 				if (string.Compare(propertyInfo.Name, parameterInfo.Name, true) == 0)
 				{
 					return ConvertValue(propertyInfo.GetValue(attribute, null), paramType);
@@ -165,7 +165,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			PropertyInfo bestMatch = null;
 			//now we try to find it by type
-			foreach (PropertyInfo propertyInfo in propertyInfos)
+			foreach(PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (propertyInfo.CanRead == false && propertyInfo.GetIndexParameters().Length != 0)
 					continue;
@@ -183,7 +183,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// Try to find a matching type, failing that, if the parameter is string, get the first property (under the assumption that
 		/// we can convert it.
 		/// </summary>
-		private static PropertyInfo ReplaceIfBetterMatch(ParameterInfo parameterInfo, PropertyInfo propertyInfo, PropertyInfo bestMatch)
+		private static PropertyInfo ReplaceIfBetterMatch(ParameterInfo parameterInfo, PropertyInfo propertyInfo,
+		                                                 PropertyInfo bestMatch)
 		{
 			bool notBestMatch = bestMatch == null || bestMatch.PropertyType != parameterInfo.ParameterType;
 			if (propertyInfo.PropertyType == parameterInfo.ParameterType && notBestMatch)

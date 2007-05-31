@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public MethodTokenExpression(MethodInfo method)
 		{
 			this.method = method;
-			this.declaringType = method.DeclaringType;
+			declaringType = method.DeclaringType;
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
@@ -41,12 +41,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			gen.Emit(OpCodes.Ldtoken, declaringType);
 #endif
 
-			MethodInfo minfo = Constants.GetMethodFromHandle1; 
+			MethodInfo minfo = Constants.GetMethodFromHandle1;
 
 #if DOTNET2 && !MONO
-			minfo = Constants.GetMethodFromHandle2; 
+			minfo = Constants.GetMethodFromHandle2;
 #endif
-			
+
 			gen.Emit(OpCodes.Call, minfo);
 			gen.Emit(OpCodes.Castclass, typeof(MethodInfo));
 		}

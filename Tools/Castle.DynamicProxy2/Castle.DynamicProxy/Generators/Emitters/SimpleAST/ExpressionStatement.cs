@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		private Expression expression;
 
-		public ExpressionStatement( Expression expression )
+		public ExpressionStatement(Expression expression)
 		{
 			this.expression = expression;
 		}

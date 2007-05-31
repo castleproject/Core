@@ -16,13 +16,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Reflection;
-	using System.Reflection.Emit;
 #if DOTNET2
 	using System.Collections.Generic;
 
 	delegate GenericTypeParameterBuilder[] ApplyGenArgs(String[] argumentNames);
-#endif 
-	class GenericUtil
+#endif
+
+	internal class GenericUtil
 	{
 #if DOTNET2
 		public static void PopulateGenericArguments(AbstractTypeEmitter parentEmitter,

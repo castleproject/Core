@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				throw new ApplicationException("ArgumentReference unitialized");
 			}
-			switch (Position)
+			switch(Position)
 			{
 				case 0:
 					gen.Emit(OpCodes.Ldarg_0);

@@ -39,10 +39,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override InterfaceGeneratorType GeneratorType
 		{
-			get
-			{
-				return InterfaceGeneratorType.WithTargetInterface;
-			}
+			get { return InterfaceGeneratorType.WithTargetInterface; }
 		}
 	}
 }

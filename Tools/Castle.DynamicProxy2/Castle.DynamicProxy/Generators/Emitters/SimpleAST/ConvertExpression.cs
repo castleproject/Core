@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public ConvertExpression(Type targetType, Type fromType, Expression right)
 		{
-			this.target = targetType;
+			target = targetType;
 			this.fromType = fromType;
 			this.right = right;
 		}
@@ -110,7 +110,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				gen.Emit(OpCodes.Castclass, target);
 			}
 #endif
-
 		}
 	}
 }

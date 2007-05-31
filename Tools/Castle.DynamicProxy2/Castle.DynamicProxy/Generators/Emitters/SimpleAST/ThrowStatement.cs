@@ -37,9 +37,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 			NewInstanceExpression creationStmt =
 				new NewInstanceExpression(ci, constRef.ToExpression());
-			
+
 			creationStmt.Emit(member, gen);
-			
+
 			gen.Emit(OpCodes.Throw);
 		}
 	}

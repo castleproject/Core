@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy
 {
 	using System.Reflection;
 	using System.Threading;
-	using System.Runtime.CompilerServices;
 
 	public class InternalsHelper
 	{
@@ -24,6 +23,7 @@ namespace Castle.DynamicProxy
 #if DOTNET2
 		private static System.Collections.Generic.IDictionary<Assembly, bool> internalsToDynProxy = new System.Collections.Generic.Dictionary<Assembly, bool>();
 #endif
+
 		/// <summary>
 		/// Determines whether this assembly has internals visisble to dynamic proxy.
 		/// </summary>

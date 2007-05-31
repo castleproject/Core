@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	[CLSCompliant(false)]
 	public class ConstructorCollection : CollectionBase
- 	{
+	{
 		public void Add(ConstructorEmitter constructor)
 		{
 			InnerList.Add(constructor);

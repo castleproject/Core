@@ -15,13 +15,13 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections;
 	using System.IO;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using System.Collections;
+	using System.Resources;
 	using System.Threading;
 	using Castle.DynamicProxy.Generators;
-	using System.Resources;
 
 	/// <summary>
 	/// Summary description for ModuleScope.
@@ -78,7 +78,7 @@ namespace Castle.DynamicProxy
 
 		public ModuleBuilder ObtainDynamicModule(bool signStrongName)
 		{
-			lock (_lockobj)
+			lock(_lockobj)
 			{
 				if (signStrongName && moduleBuilderWithStrongName == null)
 				{
@@ -143,7 +143,7 @@ namespace Castle.DynamicProxy
 				if (stream == null)
 					throw new MissingManifestResourceException(
 						"Should have a Castle.DynamicProxy.DynProxy.snk as an embedded resource, so Dynamic Proxy could sign generated assembly");
-				
+
 				int length = (int) stream.Length;
 				keyPair = new byte[length];
 				stream.Read(keyPair, 0, length);
@@ -181,7 +181,7 @@ namespace Castle.DynamicProxy
 				assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
 					assemblyName,
 					AssemblyBuilderAccess.Run);
-			
+
 				return assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
 			}
 		}

@@ -26,4 +26,3 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 	}
 }
-

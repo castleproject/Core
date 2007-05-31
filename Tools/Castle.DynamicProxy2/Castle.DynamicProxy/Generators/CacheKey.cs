@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy.Generators
 			if (interfaces != null && interfaces.Length != cacheKey.interfaces.Length) return false;
 			if (interfaces != null)
 			{
-				for(int i=0;i<interfaces.Length;i++)
+				for(int i = 0; i < interfaces.Length; i++)
 				{
 					if (!Equals(interfaces[i], cacheKey.interfaces[i])) return false;
 				}

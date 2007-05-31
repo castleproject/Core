@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[CLSCompliant(false)]
 	public class IndirectReference : TypeReference
 	{
-		public IndirectReference(TypeReference byRefReference) : 
+		public IndirectReference(TypeReference byRefReference) :
 			base(byRefReference, byRefReference.Type.GetElementType())
 		{
 			if (!byRefReference.Type.IsByRef)
@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			TypeReference[] result = new TypeReference[references.Length];
 
-			for (int i = 0; i < references.Length; i++)
+			for(int i = 0; i < references.Length; i++)
 			{
 				result[i] = WrapIfByRef(references[i]);
 			}
