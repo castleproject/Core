@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			set { propVal = value; }
 			get { return propVal; }
 		}
-		
+
 		public virtual void DoSomething()
 		{
 			invoked = true;
@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			invoked = true;
 		}
 	}
-	
+
 	public class SubClassWithGenArgs<T, Z, Y> : ClassWithGenArgs<T, Z>
 	{
 		public override void DoSomething()

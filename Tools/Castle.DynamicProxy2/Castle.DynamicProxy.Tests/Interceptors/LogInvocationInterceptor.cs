@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 		protected override void PreProceed(IInvocation invocation)
 		{
 			invocations.Add(invocation.Method.Name);
-			
+
 			sb.Append(String.Format("{0} ", invocation.Method.Name));
 		}
 

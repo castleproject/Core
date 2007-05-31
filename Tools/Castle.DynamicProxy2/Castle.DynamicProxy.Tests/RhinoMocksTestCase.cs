@@ -12,36 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
 #if DOTNET2
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7")]
+[assembly :
+	InternalsVisibleTo(
+		"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7"
+		)]
 #else
 //TODO: Find the 1.1 equivalent
 #endif
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
 	using System.Data;
+	using System.Runtime.InteropServices;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Interceptors;
-	using System;
-#if DOTNET2
-	using System.Collections.Generic;
-#endif
-	using System.Text;
 	using NUnit.Framework;
+#if DOTNET2
+#endif
 
 
 	[TestFixture]
 	public class RhinoMocksTestCase : BasePEVerifyTestCase
 	{
-
 #if DOTNET2
 		[Test]
 		public void GenericClassWithGenericMethod()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			IDoubleGeneric<int> proxy = (IDoubleGeneric<int>)generator.CreateInterfaceProxyWithTarget(typeof(IDoubleGeneric<int>),
-				new DoubleGenericImpl<int>(), logger);
+			IDoubleGeneric<int> proxy =
+				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithTarget(typeof(IDoubleGeneric<int>),
+				                                                               new DoubleGenericImpl<int>(), logger);
 			proxy.Call<string>(1, "");
 			Assert.AreEqual("Call", logger.Invocations[0]);
 		}
@@ -49,11 +52,13 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GenericClassWithGenericMethodWitoutTarget()
 		{
-			BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor interceptor = new BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor();
-			IDoubleGeneric<int> proxy = (IDoubleGeneric<int>)generator.CreateInterfaceProxyWithoutTarget(typeof(IDoubleGeneric<int>),
-				interceptor);
+			BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor interceptor =
+				new BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor();
+			IDoubleGeneric<int> proxy =
+				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithoutTarget(typeof(IDoubleGeneric<int>),
+				                                                                  interceptor);
 			object o = proxy.Call<string>(1, "");
-			Assert.AreEqual(3,o );
+			Assert.AreEqual(3, o);
 		}
 #endif
 
@@ -62,9 +67,9 @@ namespace Castle.DynamicProxy.Tests
 		public void UsingEvents_Interface()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			IWithEvents proxy = (IWithEvents)generator.CreateInterfaceProxyWithTarget(typeof(IWithEvents),
-				new FakeWithEvents(),
-				logger);
+			IWithEvents proxy = (IWithEvents) generator.CreateInterfaceProxyWithTarget(typeof(IWithEvents),
+			                                                                           new FakeWithEvents(),
+			                                                                           logger);
 
 			Assert.IsNotNull(proxy);
 
@@ -78,10 +83,10 @@ namespace Castle.DynamicProxy.Tests
 		public void UsingEvents_Class()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			FakeWithEvents proxy = (FakeWithEvents)generator.CreateClassProxy(
-				typeof(FakeWithEvents),
-				ProxyGenerationOptions.Default,
-				logger);
+			FakeWithEvents proxy = (FakeWithEvents) generator.CreateClassProxy(
+			                                        	typeof(FakeWithEvents),
+			                                        	ProxyGenerationOptions.Default,
+			                                        	logger);
 
 			Assert.IsNotNull(proxy);
 
@@ -94,7 +99,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void NeedingToCreateNewMethodTableSlot()
 		{
-			generator.CreateClassProxy(typeof(MultiClass), new Type[] { typeof(ISpecialMulti) });
+			generator.CreateClassProxy(typeof(MultiClass), new Type[] {typeof(ISpecialMulti)});
 		}
 
 		[Test]
@@ -114,8 +119,8 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyInternalMethod()
 		{
 			LogInvocationInterceptor logging = new LogInvocationInterceptor();
-			WithInternalMethod o = (WithInternalMethod)generator.CreateClassProxy(typeof(WithInternalMethod),
-				new Type[0], logging);
+			WithInternalMethod o = (WithInternalMethod) generator.CreateClassProxy(typeof(WithInternalMethod),
+			                                                                       new Type[0], logging);
 			o.Foo();
 			Assert.AreEqual("Foo ", logging.LogContents);
 		}
@@ -140,19 +145,26 @@ namespace Castle.DynamicProxy.Tests
 			void OriginalMethod1();
 			void OriginalMethod2();
 		}
+
 		public class MultiClass : IMulti
 		{
 			// NON-virtual method
-			public void OriginalMethod1() { }
+			public void OriginalMethod1()
+			{
+			}
+
 			// VIRTUAL method
-			public virtual void OriginalMethod2() { }
+			public virtual void OriginalMethod2()
+			{
+			}
 		}
+
 		public interface ISpecialMulti : IMulti
 		{
 			void ExtraMethod();
 		}
 
-		[System.Runtime.InteropServices.Guid("AFCF8240-61AF-4089-BD98-3CD4D719EDBA")]
+		[Guid("AFCF8240-61AF-4089-BD98-3CD4D719EDBA")]
 		public interface IWithGuid
 		{
 		}
@@ -163,7 +175,7 @@ namespace Castle.DynamicProxy.Tests
 		internal virtual void Foo()
 		{
 		}
-	}	
+	}
 
 #if DOTNET2
 	public interface IDoubleGeneric<One>

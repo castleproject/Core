@@ -27,17 +27,21 @@ namespace Castle.DynamicProxy.Tests
 		public void ParametersAreCopiedToProxiedObject()
 		{
 			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
-				generator.CreateClassProxy(typeof(ClassWithAttributesOnMethodParameters), new RequiredParamInterceptor());
-			
+			                                                    generator.CreateClassProxy(
+			                                                    	typeof(ClassWithAttributesOnMethodParameters),
+			                                                    	new RequiredParamInterceptor());
+
 			requiredObj.MethodOne(-1);
 		}
 
 		[Test]
 		public void CanGetParameterAttributeFromProxiedObject()
-		{			
+		{
 			ClassWithAttributesOnMethodParameters requiredObj = (ClassWithAttributesOnMethodParameters)
-				generator.CreateClassProxy(typeof(ClassWithAttributesOnMethodParameters), new RequiredParamInterceptor());
-			
+			                                                    generator.CreateClassProxy(
+			                                                    	typeof(ClassWithAttributesOnMethodParameters),
+			                                                    	new RequiredParamInterceptor());
+
 			requiredObj.MethodTwo(null);
 		}
 	}
@@ -49,21 +53,22 @@ namespace Castle.DynamicProxy.Tests
 			ParameterInfo[] parameters = invocation.Method.GetParameters();
 
 			object[] args = invocation.Arguments;
-			
-			for (int i = 0; i < parameters.Length; i++)
+
+			for(int i = 0; i < parameters.Length; i++)
 			{
 				if (parameters[i].IsDefined(typeof(RequiredAttribute), false))
 				{
-					RequiredAttribute required = parameters[i].GetCustomAttributes(typeof(RequiredAttribute), false)[0] as RequiredAttribute;
-					
+					RequiredAttribute required =
+						parameters[i].GetCustomAttributes(typeof(RequiredAttribute), false)[0] as RequiredAttribute;
+
 					if ((required.BadValue == null && args[i] == null) ||
-						(required.BadValue != null && required.BadValue.Equals(args[i])))
+					    (required.BadValue != null && required.BadValue.Equals(args[i])))
 					{
 						args[i] = required.DefaultValue;
 					}
 				}
 			}
-			
+
 			invocation.Proceed();
 		}
 	}
@@ -93,7 +98,7 @@ namespace Castle.DynamicProxy.Tests
 
 		public RequiredAttribute(object defaultValue)
 		{
-			this.hasDefault = true;
+			hasDefault = true;
 			this.defaultValue = defaultValue;
 		}
 

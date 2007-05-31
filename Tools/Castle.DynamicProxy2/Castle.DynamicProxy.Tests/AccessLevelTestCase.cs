@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
-	
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -31,7 +30,7 @@ namespace Castle.DynamicProxy.Tests
 			NonPublicConstructorClass proxy =
 				generator.CreateClassProxy(
 					typeof(NonPublicConstructorClass), new StandardInterceptor())
-						as NonPublicConstructorClass;
+				as NonPublicConstructorClass;
 
 			Assert.IsNotNull(proxy);
 
@@ -46,7 +45,7 @@ namespace Castle.DynamicProxy.Tests
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
 			NonPublicMethodsClass proxy = (NonPublicMethodsClass)
-				generator.CreateClassProxy(typeof(NonPublicMethodsClass), logger);
+			                              generator.CreateClassProxy(typeof(NonPublicMethodsClass), logger);
 
 			proxy.DoSomething();
 

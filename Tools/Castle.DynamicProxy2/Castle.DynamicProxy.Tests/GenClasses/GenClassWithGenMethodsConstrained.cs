@@ -35,9 +35,9 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 		public virtual T DoSomething<Z>(Z z) where Z : IComparable
 		{
 			invoked = true;
-			
+
 			savedParam = z;
-			
+
 			return new T();
 		}
 	}

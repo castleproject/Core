@@ -26,6 +26,6 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 		{
 			return new Z();
 		}
-}
+	}
 #endif
 }

@@ -44,11 +44,11 @@ namespace Castle.DynamicProxy.Test.Classes
 	[Serializable]
 	public class MySerializableClass2 : MySerializableClass, ISerializable
 	{
-		public MySerializableClass2() 
+		public MySerializableClass2()
 		{
 		}
 
-		public MySerializableClass2(SerializationInfo info, StreamingContext context) 
+		public MySerializableClass2(SerializationInfo info, StreamingContext context)
 		{
 			current = (DateTime) info.GetValue("dt", typeof(DateTime));
 		}

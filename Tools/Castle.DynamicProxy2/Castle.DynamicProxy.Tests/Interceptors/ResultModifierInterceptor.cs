@@ -21,11 +21,11 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 		protected override void PostProceed(IInvocation invocation)
 		{
 			object returnValue = invocation.ReturnValue;
-			
+
 			if (returnValue != null && returnValue.GetType() == typeof(int))
 			{
-				int value = (int)returnValue;
-				
+				int value = (int) returnValue;
+
 				invocation.ReturnValue = --value;
 			}
 			if (returnValue != null && returnValue.GetType() == typeof(bool))

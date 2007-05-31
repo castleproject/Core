@@ -19,10 +19,10 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 	public class DiffAccessLevelOnProperties
 	{
-		int age, age2;
-		int maxval, maxval2;
-		String name;
-		
+		private int age, age2;
+		private int maxval, maxval2;
+		private String name;
+
 		public void SetProperties()
 		{
 			Age = 10;

@@ -17,11 +17,9 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections;
 	using System.Reflection;
-	
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
-
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -40,16 +38,16 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 			LogHook hook = new LogHook(typeof(ServiceClass), true);
-			
+
 			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
 
 			ServiceClass proxy = (ServiceClass) generator.CreateClassProxy(
-				typeof(ServiceClass), options, logger);
+			                                    	typeof(ServiceClass), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(10, hook.AskedMembers.Count);
 			Assert.AreEqual(2, hook.NonVirtualMembers.Count);
-			
+
 			proxy.Sum(1, 2);
 			Assert.IsFalse(proxy.Valid);
 
@@ -65,8 +63,8 @@ namespace Castle.DynamicProxy.Tests
 			ProxyGenerationOptions options = new ProxyGenerationOptions(hook);
 
 			IService proxy = (IService)
-				generator.CreateInterfaceProxyWithTarget(
-					typeof(IService), new ServiceImpl(), options, logger);
+			                 generator.CreateInterfaceProxyWithTarget(
+			                 	typeof(IService), new ServiceImpl(), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(10, hook.AskedMembers.Count);
@@ -78,7 +76,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Sum get_Valid ", logger.LogContents);
 		}
 
-		class LogHook : IProxyGenerationHook
+		private class LogHook : IProxyGenerationHook
 		{
 			private readonly Type targetTypeToAssert;
 			private readonly bool screeningEnabled;

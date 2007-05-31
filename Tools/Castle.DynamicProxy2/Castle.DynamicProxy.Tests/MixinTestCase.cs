@@ -12,17 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using Castle.Core.Interceptor;
-using Castle.DynamicProxy.Test.Mixins;
-using NUnit.Framework;
-
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using Castle.Core.Interceptor;
+	using Castle.DynamicProxy.Test.Mixins;
+	using NUnit.Framework;
+
 	[TestFixture]
 	public class MixinTestCase : BasePEVerifyTestCase
 	{
@@ -46,7 +42,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.IsTrue(proxy is ISimpleMixin);
 
-			((ISimpleMixin)proxy).DoSomething();
+			((ISimpleMixin) proxy).DoSomething();
 		}
 
 		[Test]
@@ -74,7 +70,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(String.Empty, mixin.Name);
 			Assert.AreEqual(1, mixin.DoSomething());
 			Assert.IsTrue(mixinEventRaised);
-			
+
 			mixin.Name = "Fred";
 			Assert.AreEqual("Fred", mixin.Name);
 
@@ -246,26 +242,14 @@ namespace Castle.DynamicProxy.Tests
 
 			public virtual String Name
 			{
-				get
-				{
-					return _name;
-				}
-				set
-				{
-					_name = value;
-				}
+				get { return _name; }
+				set { _name = value; }
 			}
 
 			public virtual bool Started
 			{
-				get
-				{
-					return _started;
-				}
-				set
-				{
-					_started = value;
-				}
+				get { return _started; }
+				set { _started = value; }
 			}
 
 			public virtual int Calc(int x, int y)
@@ -275,7 +259,7 @@ namespace Castle.DynamicProxy.Tests
 
 			public virtual int Calc(int x, int y, int z, Single k)
 			{
-				return x + y + z + (int)k;
+				return x + y + z + (int) k;
 			}
 		}
 

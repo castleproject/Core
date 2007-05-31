@@ -1,23 +1,15 @@
-using System;
-
 namespace Castle.DynamicProxy.Tests.InterClasses
 {
+	using System;
+
 	/// <summary>
 	/// Summary description for IMyInterface.
 	/// </summary>
 	public interface IMyInterface2
 	{
-		String Name
-		{
-			get;
-			set;
-		}
+		String Name { get; set; }
 
-		bool Started
-		{
-			get;
-			set;
-		}
+		bool Started { get; set; }
 
 		int Calc(int x, int y);
 
@@ -36,26 +28,14 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 
 		public virtual String Name
 		{
-			get
-			{
-				return _name;
-			}
-			set
-			{
-				_name = value;
-			}
+			get { return _name; }
+			set { _name = value; }
 		}
 
 		public virtual bool Started
 		{
-			get
-			{
-				return _started;
-			}
-			set
-			{
-				_started = value;
-			}
+			get { return _started; }
+			set { _started = value; }
 		}
 
 		[MyAttribute("Calc1")]
@@ -67,17 +47,16 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 		[MyAttribute("Calc2")]
 		public virtual int Calc(int x, int y, int z, Single k)
 		{
-			return x + y + z + (int)k;
+			return x + y + z + (int) k;
 		}
 	}
 
 	public class MyInterfaceImplX : MyInterfaceImpl
 	{
-		
 	}
 
-	
-	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Property|AttributeTargets.Method)]
+
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Method)]
 	public class MyAttribute : Attribute
 	{
 		private string _name;
@@ -92,5 +71,4 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 			get { return _name; }
 		}
 	}
-
 }

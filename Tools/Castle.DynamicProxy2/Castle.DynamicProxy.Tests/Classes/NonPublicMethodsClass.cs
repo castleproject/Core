@@ -23,7 +23,6 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		protected virtual void DoOtherThing()
 		{
-
 		}
 	}
 }

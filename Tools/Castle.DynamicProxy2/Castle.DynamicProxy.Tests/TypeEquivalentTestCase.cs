@@ -14,13 +14,12 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-
 	using System;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 	using Castle.DynamicProxy.Generators;
 	using NUnit.Framework;
+#if DOTNET2
+#endif
 
 	[TestFixture]
 	public class TypeEquivalentTestCase
@@ -31,7 +30,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(string), typeof(string)));
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(int), typeof(int)));
 			Assert.IsTrue(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(long), typeof(long)));
-			
+
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(string), typeof(int)));
 			Assert.IsFalse(InterfaceProxyWithTargetGenerator.IsTypeEquivalent(typeof(int), typeof(string)));
 		}
@@ -55,11 +54,11 @@ namespace Castle.DynamicProxy.Tests
 		public void GenericTypesWithGenericParameter()
 		{
 			Type[] genericArgs = typeof(Nested<,>).GetGenericArguments();
-			
+
 			Type T = genericArgs[0];
 			Type Z = genericArgs[1];
-			
-			Type listOfT = typeof(List<>).MakeGenericType(T);
+
+			Type listOfT = typeof(List<T>).MakeGenericType(T);
 			Type listOfZ = typeof(List<>).MakeGenericType(Z);
 
 			Type listOfString = typeof(List<>).MakeGenericType(typeof(String));
@@ -113,7 +112,6 @@ namespace Castle.DynamicProxy.Tests
 
 		public class Nested<T, Z>
 		{
-			
 		}
 	}
 #endif

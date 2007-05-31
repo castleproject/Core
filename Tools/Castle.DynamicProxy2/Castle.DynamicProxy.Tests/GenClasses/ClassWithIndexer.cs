@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
 #if DOTNET2
-	using System;
 	using System.Collections;
 
 	public class ClassWithIndexer<TKey, TVal>

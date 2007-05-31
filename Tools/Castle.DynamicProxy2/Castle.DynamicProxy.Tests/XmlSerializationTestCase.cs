@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Tests
 	using System.Xml.Serialization;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Classes;
-	
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -27,15 +26,15 @@ namespace Castle.DynamicProxy.Tests
 		[Test, Ignore("Could not come up with a solution for this")]
 		public void ProxyIsXmlSerializable()
 		{
-			ClassToSerialize proxy = (ClassToSerialize) 
-				generator.CreateClassProxy(typeof(ClassToSerialize), new StandardInterceptor());
+			ClassToSerialize proxy = (ClassToSerialize)
+			                         generator.CreateClassProxy(typeof(ClassToSerialize), new StandardInterceptor());
 
 			XmlSerializer serializer = new XmlSerializer(proxy.GetType());
-			
+
 			StringWriter writer = new StringWriter();
-			
+
 			serializer.Serialize(writer, proxy);
-			
+
 			StringReader reader = new StringReader(writer.GetStringBuilder().ToString());
 
 			object newObj = serializer.Deserialize(reader);

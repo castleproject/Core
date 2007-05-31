@@ -15,13 +15,12 @@
 namespace Castle.DynamicProxy.Tests.GenInterfaces
 {
 #if DOTNET2
-	using System;
-
+	
 	public interface GenInterface<T> where T : new()
 	{
 		T DoSomething(T t);
 	}
-	
+
 	public class GenInterfaceImpl<T> : GenInterface<T> where T : new()
 	{
 		public T DoSomething(T t)

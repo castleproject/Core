@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Tests
 		public void EnsureProxyHasAttributesOnClassAndMethods()
 		{
 			AttributedClass instance = (AttributedClass)
-				generator.CreateClassProxy(typeof(AttributedClass), new StandardInterceptor());
+			                           generator.CreateClassProxy(typeof(AttributedClass), new StandardInterceptor());
 
 			object[] attributes = instance.GetType().GetCustomAttributes(typeof(NonInheritableAttribute), false);
 			Assert.AreEqual(1, attributes.Length);
@@ -41,7 +41,7 @@ namespace Castle.DynamicProxy.Tests
 		public void EnsureProxyHasAttributesOnClassAndMethods_ComplexAttributes()
 		{
 			AttributedClass2 instance = (AttributedClass2)
-				generator.CreateClassProxy(typeof(AttributedClass2), new StandardInterceptor());
+			                            generator.CreateClassProxy(typeof(AttributedClass2), new StandardInterceptor());
 
 			object[] attributes = instance.GetType().GetCustomAttributes(typeof(ComplexNonInheritableAttribute), false);
 			Assert.AreEqual(1, attributes.Length);
@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Tests
 			attributes = instance.GetType().GetMethod("Do2").GetCustomAttributes(typeof(ComplexNonInheritableAttribute), false);
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOfType(typeof(ComplexNonInheritableAttribute), attributes[0]);
-			att = (ComplexNonInheritableAttribute)attributes[0];
+			att = (ComplexNonInheritableAttribute) attributes[0];
 			// (3, 4, "Do2", IsSomething=true)
 			Assert.AreEqual(3, att.Id);
 			Assert.AreEqual(4, att.Num);

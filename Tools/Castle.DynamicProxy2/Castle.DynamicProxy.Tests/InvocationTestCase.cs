@@ -26,15 +26,15 @@ namespace Castle.DynamicProxy.Tests
 		public void InvocationForConcreteClassProxy()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			
+
 			object proxy = generator.CreateClassProxy(typeof(ServiceClass), interceptor);
 
 			ServiceClass instance = (ServiceClass) proxy;
 
 			instance.Sum(20, 25);
-			
+
 			Assert.IsNotNull(interceptor.Invocation);
-			
+
 			Assert.IsNotNull(interceptor.Invocation.Arguments);
 			Assert.AreEqual(2, interceptor.Invocation.Arguments.Length);
 			Assert.AreEqual(20, interceptor.Invocation.Arguments[0]);
@@ -42,15 +42,15 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(20, interceptor.Invocation.GetArgumentValue(0));
 			Assert.AreEqual(25, interceptor.Invocation.GetArgumentValue(1));
 			Assert.AreEqual(45, interceptor.Invocation.ReturnValue);
-			
+
 			Assert.IsNotNull(interceptor.Invocation.Proxy);
 			Assert.IsInstanceOfType(typeof(ServiceClass), interceptor.Invocation.Proxy);
-			
+
 			Assert.IsNotNull(interceptor.Invocation.InvocationTarget);
 			Assert.IsInstanceOfType(typeof(ServiceClass), interceptor.Invocation.InvocationTarget);
 			Assert.IsNotNull(interceptor.Invocation.TargetType);
 			Assert.AreSame(typeof(ServiceClass), interceptor.Invocation.TargetType);
-			
+
 			Assert.IsNotNull(interceptor.Invocation.Method);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
 			Assert.AreSame(interceptor.Invocation.Method, interceptor.Invocation.MethodInvocationTarget);

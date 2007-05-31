@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		IList<T> Find<T>(string query);
 
 		IList<String> FindStrings(string query);
-		
+
 		void Populate<T>(IList<T> list);
 	}
 
@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		{
 		}
 	}
-	
+
 	public class Proxy : GenInterfaceWithGenericTypes
 	{
 		private readonly IInterceptor[] interceptors;
@@ -73,34 +73,34 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		public void Populate<T>(IList<T> list)
 		{
 			Find3Invo<T> inv = new Find3Invo<T>(target, interceptors, typeof(Proxy),
-												null, null, new object[] { list });
+			                                    null, null, new object[] {list});
 			inv.Proceed();
 		}
 
 		public IList Find(string[,] query)
 		{
-			Find1Invo inv = new Find1Invo(target, interceptors, typeof(Proxy), 
-			                              null, null, new object[] { query });
+			Find1Invo inv = new Find1Invo(target, interceptors, typeof(Proxy),
+			                              null, null, new object[] {query});
 			inv.Proceed();
-			
+
 			return (IList) inv.ReturnValue;
 		}
 
 		public IList Find(string query)
 		{
 			Find1InvoA inv = new Find1InvoA(target, interceptors, typeof(Proxy),
-										  null, null, new object[] { query });
+			                                null, null, new object[] {query});
 			inv.Proceed();
 
-			return (IList)inv.ReturnValue;
+			return (IList) inv.ReturnValue;
 		}
-		
+
 		public IList<T> Find<T>(string query)
 		{
-			Find2Invo<T> inv = new Find2Invo<T>(target, interceptors, typeof(Proxy), 
-			                                    null, null, new object[] { query });
+			Find2Invo<T> inv = new Find2Invo<T>(target, interceptors, typeof(Proxy),
+			                                    null, null, new object[] {query});
 			inv.Proceed();
-			
+
 			return (IList<T>) inv.ReturnValue;
 		}
 
@@ -113,7 +113,8 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		{
 			private readonly GenInterfaceWithGenericTypesImpl target;
 
-			public Find2Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
+			public Find2Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
+			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
 				: base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
 			{
 				this.target = target;
@@ -124,20 +125,21 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 				ReturnValue = target.Find<T>((String) GetArgumentValue(0));
 			}
 		}
-		
+
 		public class Find1Invo : AbstractInvocation
 		{
 			private readonly GenInterfaceWithGenericTypesImpl target;
 
-			public Find1Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments) : 
-				base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
+			public Find1Invo(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
+			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments) :
+			                 	base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
 			{
 				this.target = target;
 			}
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = target.Find((String[,])GetArgumentValue(0));
+				ReturnValue = target.Find((String[,]) GetArgumentValue(0));
 			}
 		}
 
@@ -145,16 +147,17 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		{
 			private readonly GenInterfaceWithGenericTypesImpl target;
 
-			public Find1InvoA(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType, MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
+			public Find1InvoA(GenInterfaceWithGenericTypesImpl target, IInterceptor[] interceptors, Type targetType,
+			                  MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
 				:
-				base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
+					base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
 			{
 				this.target = target;
 			}
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = target.Find((String)GetArgumentValue(0));
+				ReturnValue = target.Find((String) GetArgumentValue(0));
 			}
 		}
 
@@ -162,8 +165,8 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		{
 			private readonly GenInterfaceWithGenericTypesImpl target;
 
-			public Find3Invo(GenInterfaceWithGenericTypesImpl target, 
-			                 IInterceptor[] interceptors, Type targetType, 
+			public Find3Invo(GenInterfaceWithGenericTypesImpl target,
+			                 IInterceptor[] interceptors, Type targetType,
 			                 MethodInfo targetMethod, MethodInfo interfMethod, object[] arguments)
 				: base(target, target, interceptors, targetType, targetMethod, interfMethod, arguments)
 			{
@@ -172,7 +175,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 			protected override void InvokeMethodOnTarget()
 			{
-				target.Populate((List<T>)GetArgumentValue(0));
+				target.Populate((List<T>) GetArgumentValue(0));
 			}
 		}
 	}

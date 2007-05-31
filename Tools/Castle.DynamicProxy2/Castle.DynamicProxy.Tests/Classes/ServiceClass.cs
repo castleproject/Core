@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		public virtual short Sum(short b1, short b2)
 		{
-			return (short)(b1 + b2);
+			return (short) (b1 + b2);
 		}
 
 		public virtual float Sum(float b1, float b2)
@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		public virtual UInt16 Sum(UInt16 b1, UInt16 b2)
 		{
-			return (UInt16)(b1 + b2);
+			return (UInt16) (b1 + b2);
 		}
 
 		public virtual UInt32 Sum(UInt32 b1, UInt32 b2)
@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 		{
 			get { return false; }
 		}
-		
+
 		public void NonVirtualMethod()
 		{
 		}
@@ -76,10 +76,9 @@ namespace Castle.DynamicProxy.Tests.Classes
 		{
 			get { return false; }
 		}
-		
+
 		public class InernalClass
 		{
-			
 		}
 	}
 
@@ -97,10 +96,9 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		public virtual void DoSomethingElse()
 		{
-
 		}
 	}
-	
+
 	public class ExtendedServiceClass : ServiceClass
 	{
 		public virtual UInt64 Sum2(UInt64 b1, UInt64 b2)

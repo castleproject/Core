@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 	public class ClassWithIndexer
 	{
 		private IDictionary map = new Hashtable();
-		
+
 		public virtual int this[String key]
 		{
 			get { return (int) map[key]; }

@@ -21,10 +21,10 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		where T : struct
 	{
 		private T[] innerItems;
-		
+
 		public GenInterfaceWithGenArray()
 		{
-			innerItems = new T[] { new T(), new T(), new T() };
+			innerItems = new T[] {new T(), new T(), new T()};
 		}
 
 		public void CopyTo(T[] items)
@@ -37,12 +37,12 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 			return innerItems;
 		}
 	}
-	
+
 	public interface IGenInterfaceWithGenArray<T>
 		where T : struct
 	{
 		void CopyTo(T[] items);
-		
+
 		T[] CreateItems();
 	}
 #endif

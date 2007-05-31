@@ -19,8 +19,8 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 	public interface ICamera
 	{
 		int Id { get; }
-		string Name { get; set;}
-		string IPNumber { get; set;}
+		string Name { get; set; }
+		string IPNumber { get; set; }
 	}
 
 	public interface ICameraServiceBase
@@ -42,7 +42,6 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 
 		public void Record(ICamera cam)
 		{
-			
 		}
 	}
 }

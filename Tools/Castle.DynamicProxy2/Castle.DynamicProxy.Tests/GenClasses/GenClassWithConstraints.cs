@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 #if DOTNET2
 	using System;
 
-	public class GenClassWithConstraints<T> where T: IComparable
+	public class GenClassWithConstraints<T> where T : IComparable
 	{
 		private bool invoked;
 

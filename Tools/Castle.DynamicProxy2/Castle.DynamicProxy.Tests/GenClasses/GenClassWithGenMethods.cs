@@ -35,16 +35,16 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 		public virtual T DoSomething<Z>(Z z)
 		{
 			invoked = true;
-			
+
 			savedParam = z;
-			
+
 			return new T();
 		}
 
 		public virtual void DoSomethingElse<T2>(Converter<int, T2> converter, int value)
 		{
 			invoked = true;
-			
+
 			savedParam = converter(value);
 		}
 	}

@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 	public class GenInterfaceHierarchy<T> : IGenInterfaceHierarchySpecialization<T>
 	{
 		private List<T> items = new List<T>();
-		
+
 		public int Count()
 		{
 			return items.Count;
@@ -35,7 +35,6 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public void Add()
 		{
-			
 		}
 
 		public void Add(T item)
@@ -64,7 +63,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 	public interface IGenInterfaceHierarchyBase<T>
 	{
 		void Add();
-		
+
 		void Add(T item);
 
 		T Get();

@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Test.Classes
 
 	public interface IMarkerInterface
 	{
-		
 	}
 
 	[Serializable]

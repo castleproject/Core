@@ -18,20 +18,22 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections.Generic;
 	using System.Data;
 	using Castle.Core.Interceptor;
-	using Castle.DynamicProxy.Tests.InterClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;
+	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class BasicInterfaceProxyWithoutTargetTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[ExpectedException(typeof(NotImplementedException), "This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method")]
+		[ExpectedException(typeof(NotImplementedException),
+			"This is a DynamicProxy2 error: the interceptor attempted to 'Proceed' for a method without a target, for example, an interface method or an abstract method"
+			)]
 		public void BasicInterfaceProxyWithValidTarget_ThrowsIfInterceptorCallsProceed()
 		{
 			IService service = (IService)
-				generator.CreateInterfaceProxyWithoutTarget(
-					typeof(IService), new StandardInterceptor());
+			                   generator.CreateInterfaceProxyWithoutTarget(
+			                   	typeof(IService), new StandardInterceptor());
 
 			service.Sum(1, 2);
 		}
@@ -40,20 +42,20 @@ namespace Castle.DynamicProxy.Tests
 		public void CanReplaceReturnValueOfInterfaceMethod()
 		{
 			IService service = (IService)
-				generator.CreateInterfaceProxyWithoutTarget(
-					typeof(IService), new ReturnThreeInterceptor());
+			                   generator.CreateInterfaceProxyWithoutTarget(
+			                   	typeof(IService), new ReturnThreeInterceptor());
 
 			int result = service.Sum(2, 2);
 			Assert.AreEqual(3, result);
 		}
 
 		[Test]
-		[ExpectedException(typeof(DBConcurrencyException),"Because I feel like it")]
+		[ExpectedException(typeof(DBConcurrencyException), "Because I feel like it")]
 		public void CanThrowExceptionFromInterceptorOfInterfaceMethod()
 		{
 			IService service = (IService)
-			generator.CreateInterfaceProxyWithoutTarget(
-				typeof(IService), new ThrowingInterceptor());
+			                   generator.CreateInterfaceProxyWithoutTarget(
+			                   	typeof(IService), new ThrowingInterceptor());
 
 			service.Sum(2, 2);
 		}
@@ -69,8 +71,8 @@ namespace Castle.DynamicProxy.Tests
 		public void ProducesInvocationsThatCantChangeTarget()
 		{
 			IService service = (IService)
-				generator.CreateInterfaceProxyWithoutTarget(
-					typeof(IService), new AssertCannotChangeTargetInterceptor(), new ReturnThreeInterceptor());
+			                   generator.CreateInterfaceProxyWithoutTarget(
+			                   	typeof(IService), new AssertCannotChangeTargetInterceptor(), new ReturnThreeInterceptor());
 
 			int result = service.Sum(2, 2);
 			Assert.AreEqual(3, result);
