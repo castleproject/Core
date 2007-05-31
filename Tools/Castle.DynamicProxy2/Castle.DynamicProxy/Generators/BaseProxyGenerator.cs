@@ -1544,7 +1544,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-
 		protected bool VerifyIfBaseImplementsGetObjectData(Type baseType)
 		{
 			// If base type implements ISerializable, we have to make sure

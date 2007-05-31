@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Tests
 			process.StartInfo.RedirectStandardOutput = true; //if the output is redirected, the process hangs.
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = ModuleScope.FILE_NAME + " /ignore=0x80131854";
+			process.StartInfo.Arguments = ModuleScope.FILE_NAME + " /ignore=0x80131854,0x801318E1";
 			process.Start();
 			string text = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
