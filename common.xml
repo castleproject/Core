@@ -11,6 +11,10 @@
 	<!-- Controls whether tests are run. Setting this is as input to the build disables *all* tests. -->
 	<property name="common.run-tests" value="true" overwrite="false" />
 
+	<!-- Check which nant version we're using - fail if it's not the minium  -->
+	<property name="current.nant-version" value="${assemblyname::get-version(assembly::get-name(nant::get-assembly()))}" />
+	<property name="required.nant-version" value="0.85.2478.0" /> <!-- Nant 0.85 release version -->
+
 	<!-- properties used to connect to database for testing -->
 	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />
 	<property name="ar.connection.driver_class" value="NHibernate.Driver.SqlClientDriver" overwrite="false" />
@@ -176,7 +180,7 @@
 	</target>
 
 	<target name="common.init"
-		depends="set-framework-configuration set-project-configuration"
+		depends="set-framework-configuration set-project-configuration common.check-nant-version"
 		description="Initializes build properties">
 
 		<fileset id="project.sources" failonempty="true">
@@ -230,5 +234,9 @@
 			<echo message="WARNING: nunit-console not found, using less predictable NAnt &lt;nunit2&gt; task" unless="${nunit.found}"/>
 		</if>
 	</target>
-		
+
+	<target name="common.check-nant-version">
+		<fail if="${current.nant-version&lt;required.nant-version}" message="Not using minimum required Nant version: ${required.nant-version} (current version: ${current.nant-version}). Please upgrade your copy of nant." />
+	</target>
+
 </project>
