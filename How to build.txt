@@ -1,4 +1,7 @@
-Everything should compile fine using NAnt 0.85 RC3. Anyway, the following are some useful tips if things go wrong for some reason.
+Everything should compile fine using NAnt 0.85 final. 
+You can find the latest version at http://nant.sourceforge.net/ 
+
+Anyway, the following are some useful tips if things go wrong for some reason.
 
 Where to start the build?
 =========================
