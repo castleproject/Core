@@ -95,16 +95,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 						if (interfacesConstraints.Length != 0)
 						{
-							for (int j = 0; j < interfacesConstraints.Length; ++j)
-							{
-								interfacesConstraints[j] = SubstituteGenericArguments (interfacesConstraints[j], genericArguments, genericTypeParams);
-							}
-							genericTypeParams[i].SetInterfaceConstraints (interfacesConstraints);
+							genericTypeParams[i].SetInterfaceConstraints(interfacesConstraints);
 						}
 
 						if (baseClassConstraint != null)
 						{
-							baseClassConstraint = SubstituteGenericArguments (baseClassConstraint, genericArguments, genericTypeParams);
 							genericTypeParams[i].SetBaseTypeConstraint(baseClassConstraint);
 						}
 					}
@@ -126,30 +121,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return genericTypeParams;
 		}
-
-		private static Type SubstituteGenericArguments (Type type, Type[] argumentsToSubstitute, GenericTypeParameterBuilder[] substitutes)
-		{
-			if (type.IsGenericType)
-			{
-				Type[] genericArguments = type.GetGenericArguments ();
-				type = type.GetGenericTypeDefinition ();
-
-				for (int i = 0; i < genericArguments.Length; ++i)
-				{
-					int substitutionIndex = Array.IndexOf (argumentsToSubstitute, genericArguments[i]);
-					if (substitutionIndex != -1)
-					{
-						genericArguments[i] = substitutes[substitutionIndex];
-					}
-				}
-				return type.MakeGenericType (genericArguments);
-			}
-			else
-			{
-				return type;
-			}
-		}
-
 
 		public static Type[] ExtractParametersTypes(ParameterInfo[] baseMethodParameters,
 		                                            Dictionary<String, GenericTypeParameterBuilder> name2GenericType)

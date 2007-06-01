@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenInterfaces
 {
-
 	using System;
 
 	public class GenInterfaceWithGenArray<T> : IGenInterfaceWithGenArray<T>
@@ -45,5 +44,4 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		T[] CreateItems();
 	}
-
 }

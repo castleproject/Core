@@ -20,27 +20,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using System.Runtime.InteropServices;
 
-	/// <summary>
-	/// Handles replication of custom attributes
-	/// </summary>
-	public static class CustomAttributeUtil
+	internal class CustomAttributeUtil
 	{
-		private static IList attributesToSkip = ArrayList.Synchronized(new ArrayList());
-
-		static CustomAttributeUtil()
-		{
-			//Reason - will cause "Method with non-zero RVA in an Import" exception when replicating it
-			attributesToSkip.Add(typeof(ComImportAttribute));
-		}
-
 		public static CustomAttributeBuilder CreateCustomAttribute(Attribute attribute)
 		{
 			Type attType = attribute.GetType();
-
-			if (attributesToSkip.Contains(attType))
-				return null;
 
 			ConstructorInfo ci;
 

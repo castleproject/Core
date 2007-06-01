@@ -25,6 +25,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void EnsureProxyHasAttributesOnClassAndMethods()
 		{
+			ProxyGenerator generator = new ProxyGenerator();
+
 			AttributedClass instance = (AttributedClass)
 			                           generator.CreateClassProxy(typeof(AttributedClass), new StandardInterceptor());
 
@@ -40,6 +42,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void EnsureProxyHasAttributesOnClassAndMethods_ComplexAttributes()
 		{
+			ProxyGenerator generator = new ProxyGenerator();
+
 			AttributedClass2 instance = (AttributedClass2)
 			                            generator.CreateClassProxy(typeof(AttributedClass2), new StandardInterceptor());
 

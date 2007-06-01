@@ -40,15 +40,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void CanGetProxyInterceptors()
-		{
-			object proxy = generator.CreateInterfaceProxyWithTarget(
-				typeof(IService), new ServiceImpl(), new LogInvocationInterceptor());
-			IInterceptor[] interceptors = ((IProxyTargetAccessor) proxy).GetInterceptors();
-			Assert.AreEqual(1, interceptors.Length);
-		}
-
-		[Test]
 		public void Caching()
 		{
 			IService service = (IService)
@@ -120,18 +111,18 @@ namespace Castle.DynamicProxy.Tests
 		public void CantCreateInterfaceTargetedProxyWithoutInterface()
 		{
 			IService2 service = (IService2)
-								generator.CreateInterfaceProxyWithTarget(
+			                    generator.CreateInterfaceProxyWithTargetInterface(
 			                    	typeof(Service2), new Service2());
 		}
 
-		[Test, Ignore("IChangeTargetInterceptor support was broken")]
+		[Test]
 		public void InterfaceTargetTypeProducesInvocationsThatCanChangeTarget()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 			AssertCanChangeTargetInterceptor invocationChecker = new AssertCanChangeTargetInterceptor();
 
 			IService2 service = (IService2)
-			                    generator.CreateInterfaceProxyWithTarget(
+			                    generator.CreateInterfaceProxyWithTargetInterface(
 			                    	typeof(IService2), new Service2(), invocationChecker, logger);
 
 			service.DoOperation2();
@@ -139,13 +130,13 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("DoOperation2 ", logger.LogContents);
 		}
 
-		[Test, Ignore("IChangeTargetInterceptor support was broken")]
+		[Test]
 		public void ChangingInvocationTargetSucceeds()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 
 			IService service = (IService)
-			                   generator.CreateInterfaceProxyWithTarget(
+			                   generator.CreateInterfaceProxyWithTargetInterface(
 			                   	typeof(IService), new AlwaysThrowsServiceImpl(), new ChangeTargetInterceptor(new ServiceImpl()),
 			                   	logger);
 

@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Reflection;
 
-	[Serializable]
 	public class AllMethodsHook : IProxyGenerationHook
 	{
 		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)

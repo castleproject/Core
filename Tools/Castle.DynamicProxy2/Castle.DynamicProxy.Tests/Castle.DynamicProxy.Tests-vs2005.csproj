@@ -108,12 +108,9 @@
     <Compile Include="Classes\ClassWithCharRetType.cs" />
     <Compile Include="Classes\ClassWithConstructors.cs" />
     <Compile Include="Classes\MySerializableClass.cs" />
-    <Compile Include="GenClasses\ClassWithDefaultConstructor.cs" />
-    <Compile Include="GenericTestUtility.cs" />
     <Compile Include="GenInterfaces\GenInterfaceHierarchy.cs" />
     <Compile Include="GenInterfaces\GenExplicitImplementation.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenArray.cs" />
-    <Compile Include="GenInterfaces\OnlyGenMethodsInterface.cs" />
     <Compile Include="Interceptors\ChangeTargetInterceptor.cs" />
     <Compile Include="Interceptors\KeepDataInterceptor.cs" />
     <Compile Include="InterClasses\AlwaysThrowsServiceImpl.cs" />
@@ -125,9 +122,6 @@
     <Compile Include="InterClasses\InterfaceWithIndexer.cs" />
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
-    <Compile Include="Mixins\ComplexMixin.cs" />
-    <Compile Include="Mixins\OtherMixin.cs" />
-    <Compile Include="Mixins\SimpleMixin.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />
@@ -136,6 +130,7 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Mixins\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

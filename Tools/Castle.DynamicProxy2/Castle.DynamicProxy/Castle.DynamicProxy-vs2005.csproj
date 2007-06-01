@@ -269,7 +269,6 @@
     <Compile Include="ProxyGenerator.cs" />
     <Compile Include="RemotableInvocation.cs" />
     <Compile Include="Serialization\ProxyObjectReference.cs" />
-    <Compile Include="Serialization\ProxySerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\CastleKey.snk">

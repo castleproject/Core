@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-
 #pragma warning disable 693
 	public class GenClassNameClash<T, Z>
 	{

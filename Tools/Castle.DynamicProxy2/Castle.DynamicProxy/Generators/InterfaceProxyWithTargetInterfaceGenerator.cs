@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override void CreateInvocationForMethod(ClassEmitter emitter, MethodInfo method, Type proxyTargetType)
 		{
-			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType, true);
+			MethodInfo methodOnTarget = FindMethodOnTargetType(method, proxyTargetType);
 
 			method2methodOnTarget[method] = methodOnTarget;
 

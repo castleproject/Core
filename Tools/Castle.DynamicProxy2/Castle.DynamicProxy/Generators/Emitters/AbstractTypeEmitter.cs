@@ -76,7 +76,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
 			List<Type> types = new List<Type>();
-
 			foreach (Type genType in genericMethod.GetGenericArguments())
 			{
 				types.Add(name2GenericType[genType.Name]);
@@ -135,13 +134,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			methods.Add(member);
 			return member;
 		}
-
-		//		public EasyRuntimeMethod CreateRuntimeMethod(String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments)
-		//		{
-		//			EasyRuntimeMethod member = new EasyRuntimeMethod(this, name, returnType, arguments);
-		//			methods.Add(member);
-		//			return member;
-		//		}
 
 		public FieldReference CreateStaticField(string name, Type fieldType)
 		{

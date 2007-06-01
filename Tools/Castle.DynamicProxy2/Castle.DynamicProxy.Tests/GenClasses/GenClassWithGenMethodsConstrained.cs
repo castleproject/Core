@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-
 	using System;
 
 	public class GenClassWithGenMethodsConstrained<T> where T : new()

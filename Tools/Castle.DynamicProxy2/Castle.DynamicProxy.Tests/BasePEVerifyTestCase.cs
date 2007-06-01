@@ -14,10 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using System;
-	using System.Configuration;
-	using System.Diagnostics;
-	using System.IO;
 	using NUnit.Framework;
 
 	public abstract class BasePEVerifyTestCase
@@ -30,12 +26,13 @@ namespace Castle.DynamicProxy.Tests
 			generator = new ProxyGenerator(new PersistentProxyBuilder());
 		}
 
-#if !MONO // mono doesn't have PEVerify
-
+#if MONO // mono doesn't have PEVerify
+		
 		[TearDown]
 		public void RunPEVerifyOnGeneratedAssembly()
 		{
 			Process process = new Process();
+
 			string path = Path.Combine(ConfigurationManager.AppSettings["sdkDir"], "peverify.exe");
 
 			if (!File.Exists(path))
@@ -45,17 +42,15 @@ namespace Castle.DynamicProxy.Tests
 
 			if (!File.Exists(path))
 			{
-				throw new FileNotFoundException(
-					"Please check the sdkDir configuration setting and set it to the location of peverify.exe");
+				throw new FileNotFoundException("Please check the sdkDir configuration setting and set it to the location of peverify.exe");
 			}
 
 			process.StartInfo.FileName = path;
-			process.StartInfo.RedirectStandardOutput = true; //if the output is redirected, the process hangs.
+			process.StartInfo.RedirectStandardOutput = false; //if the output is redirected, the process hangs.
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = ModuleScope.FILE_NAME + " /ignore=0x80131854,0x801318E1";
+			process.StartInfo.Arguments = ModuleScope.FILE_NAME;
 			process.Start();
-			string text = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
 
 			string result = process.ExitCode + " code ";
@@ -64,9 +59,9 @@ namespace Castle.DynamicProxy.Tests
 
 			if (process.ExitCode != 0)
 			{
-				Assert.Fail("PeVerify reported error(s). " + text, result);
+				Assert.Fail("PeVerify reported error(s).", result);
 			}
 		}
-	}
 #endif
+	}
 }

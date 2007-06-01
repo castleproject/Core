@@ -72,7 +72,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, logger.Invocations.Count);
 		}
 
-		[Test, Ignore("[MD]: Error: Method has a duplicate, token=0x0600000a. [token:0x06000008]")]
+		[Test]
 		public void UsingEvents_Class()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
@@ -89,7 +89,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, logger.Invocations.Count);
 		}
 
-		[Test, Ignore("[MD]: Error: Method has a duplicate, token=0x0600000a. [token:0x06000008]")]
+		[Test]
 		public void NeedingToCreateNewMethodTableSlot()
 		{
 			generator.CreateClassProxy(typeof(MultiClass), new Type[] {typeof(ISpecialMulti)});

@@ -28,5 +28,4 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 	{
 		IEnumerator<T> GetEnum1();
 	}
-
 }

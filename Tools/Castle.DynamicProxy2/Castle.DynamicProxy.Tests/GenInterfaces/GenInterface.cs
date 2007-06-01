@@ -26,5 +26,4 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 			return t;
 		}
 	}
-
 }

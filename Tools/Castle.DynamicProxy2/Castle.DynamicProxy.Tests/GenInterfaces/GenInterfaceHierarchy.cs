@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenInterfaces
 {
-
 	using System.Collections.Generic;
 
 	public class GenInterfaceHierarchy<T> : IGenInterfaceHierarchySpecialization<T>
@@ -70,5 +69,4 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		T[] GetAll();
 	}
-
 }

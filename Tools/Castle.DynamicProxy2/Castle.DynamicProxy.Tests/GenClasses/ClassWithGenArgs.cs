@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-
 	public class ClassWithGenArgs<T>
 	{
 		private bool propVal;

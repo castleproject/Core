@@ -178,5 +178,4 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 			}
 		}
 	}
-
 }

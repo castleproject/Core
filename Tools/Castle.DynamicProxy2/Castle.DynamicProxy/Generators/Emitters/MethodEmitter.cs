@@ -15,11 +15,11 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using System.Collections.Generic;
 
 	[CLSCompliant(false)]
 	public class MethodEmitter : IMemberEmitter
@@ -70,7 +70,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get { return genericTypeParams; }
 		}
-
 
 		/// <summary>
 		/// Inspect the base method for generic definitions

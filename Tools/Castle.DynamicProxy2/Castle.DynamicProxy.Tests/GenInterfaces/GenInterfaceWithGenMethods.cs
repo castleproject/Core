@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenInterfaces
 {
-
 	public interface GenInterfaceWithGenMethods<T>
 	{
 		void DoSomething<Z>(Z z, T t);
@@ -26,5 +25,4 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 		{
 		}
 	}
-
 }

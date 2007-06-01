@@ -15,18 +15,18 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Runtime.InteropServices;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class BugsReportedTestCase : BasePEVerifyTestCase
+	public class BugsReportedTestCase
 	{
 		[Test]
 		public void InterfaceInheritance()
 		{
+			ProxyGenerator generator = new ProxyGenerator();
+
 			ICameraService proxy = (ICameraService)
 			                       generator.CreateInterfaceProxyWithTarget(typeof(ICameraService),
 			                                                                new CameraService(),
@@ -41,6 +41,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyInterfaceWithSetterOnly()
 		{
+			ProxyGenerator generator = new ProxyGenerator();
+
 			IHaveOnlySetter proxy = (IHaveOnlySetter)
 			                        generator.CreateInterfaceProxyWithTarget(typeof(IHaveOnlySetter),
 			                                                                 new HaveOnlySetter(),
@@ -57,6 +59,8 @@ namespace Castle.DynamicProxy.Tests
 			)]
 		public void CallingProceedOnAbstractMethodShouldThrowException()
 		{
+			ProxyGenerator generator = new ProxyGenerator();
+
 			AbstractClass proxy = (AbstractClass)
 			                      generator.CreateClassProxy(typeof(AbstractClass), ProxyGenerationOptions.Default,
 			                                                 new StandardInterceptor());
@@ -69,6 +73,8 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyTypeThatInheritFromGenericType()
 		{
+			ProxyGenerator generator = new ProxyGenerator();
+
 			IUserRepository proxy = (IUserRepository)
 			                        generator.CreateInterfaceProxyWithoutTarget(typeof(IUserRepository),
 			                                                                    new SkipCallingMethodInterceptor());
@@ -77,95 +83,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		[Ignore("Need to discuss why we are calling interf.GetGenericArguments() in class emitter")]
 		public void DYNPROXY_51_GenericMarkerInterface()
 		{
+			ProxyGenerator gen = new ProxyGenerator();
 			WithMixin p =
-				(WithMixin) generator.CreateClassProxy(typeof(WithMixin), new Type[] {typeof(Marker<int>)}, new IInterceptor[0]);
-
+				(WithMixin) gen.CreateClassProxy(typeof(WithMixin), new Type[] {typeof(Marker<int>)}, new IInterceptor[0]);
 			p.Method();
 		}
-
-		[Test]
-		public void ProxyingInterfaceWithComImport()
-		{
-			IHTMLEventObj2 proxy = (IHTMLEventObj2)
-			                       generator.CreateInterfaceProxyWithoutTarget(typeof(IHTMLEventObj2),
-			                                                                   new SkipCallingMethodInterceptor());
-
-			Assert.IsNotNull(proxy);
-		}
-
-		[Test]
-		public void InheritedInterfaces()
-		{
-			IFooExtended proxiedFoo =
-				(IFooExtended)
-				generator.CreateInterfaceProxyWithTarget(typeof(IFooExtended), new ImplementedFoo(),
-				                                                  new StandardInterceptor());
-			proxiedFoo.FooExtended();
-		}
-
-		[Test]
-		public void ProtectedInternalAbstract()
-		{
-			object o =
-				generator.CreateClassProxy(typeof(SomeClassWithProtectedAbstractClass),
-				                           new IInterceptor[] {new StandardInterceptor()});
-			Assert.IsNotNull(o);
-		}
-
-		[Test]
-		public void ProxyingInternalInterface()
-		{
-			generator.CreateInterfaceProxyWithoutTarget(typeof(IAmInternal), new SkipCallingMethodInterceptor());
-		}
-
-		[Test]
-		public void ProxyingInterfaceWithGenericMethodsWithGenericClassConstraint()
-		{
-			generator.CreateInterfaceProxyWithoutTarget(typeof(IFactory32), new SkipCallingMethodInterceptor());
-		}
-	}
-
-	public interface IFactory32
-	{
-		T Create<T>() where T : List<T>;
-	}
-
-	internal interface IAmInternal
-	{
-		void Foo();
-	}
-
-	public abstract class SomeClassWithProtectedAbstractClass
-	{
-		protected internal abstract void Quack();
-	}
-
-	public interface IFoo
-	{
-		void Foo();
-	}
-
-	public interface IFooExtended : IFoo
-	{
-		void FooExtended();
-	}
-
-	public class ImplementedFoo : IFooExtended
-	{
-		public void FooExtended()
-		{
-		}
-
-		public void Foo()
-		{
-		}
-	}
-
-	[ComImport, Guid("3050F48B-98B5-11CF-BB82-00AA00BDCE0B")]
-	public interface IHTMLEventObj2
-	{
 	}
 
 	public interface IRepository<TEntity, TKey>

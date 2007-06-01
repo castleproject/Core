@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests.GenClasses
 {
-
 	public class OnlyGenMethodsClass
 	{
 		private bool invoked;
