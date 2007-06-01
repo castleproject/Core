@@ -43,17 +43,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (IsAuthenticated())
 			{
-				if (Context.HasSection(LoggedSection))
-				{
-					Context.RenderSection(LoggedSection);
-				}
+				Context.RenderSection(LoggedSection);
 			}
 			else
 			{
-				if (Context.HasSection(NotLoggedSection))
-				{
-					Context.RenderSection(NotLoggedSection);
-				}
+				Context.RenderSection(NotLoggedSection);
 			}
 		}
 

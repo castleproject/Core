@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework
 	using System.Collections.Specialized;
 	using System.IO;
 	using System.Collections;
+	using System.Reflection;
 	using System.Web;
 
 	/// <summary>
@@ -36,19 +37,71 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		private IRailsEngineContext railsContext;
 
+		private string[] sectionsFromAttribute;
+
 		#region "Internal" core methods
 
 		/// <summary>
 		/// Invoked by the framework.
 		/// </summary>
-		/// <param name="railsContext">Request context</param>
-		/// <param name="context">ViewComponent context</param>
-		public void Init(IRailsEngineContext railsContext, IViewComponentContext context)
+		/// <param name="engineContext">Request context</param>
+		/// <param name="componentContext">ViewComponent context</param>
+		public void Init(IRailsEngineContext engineContext, IViewComponentContext componentContext)
 		{
-			this.railsContext = railsContext;
-			this.context = context;
+			railsContext = engineContext;
+			context = componentContext;
+
+			BindComponentParameters();
 
 			Initialize();
+		}
+
+		/// <summary>
+		/// Binds the component parameters.
+		/// </summary>
+		private void BindComponentParameters()
+		{
+			PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+		
+			foreach(PropertyInfo property in properties)
+			{
+				if (!property.CanWrite) continue;
+
+				object[] attributes = property.GetCustomAttributes(typeof(ViewComponentParamAttribute), true);
+			
+				if (attributes.Length == 1)
+				{
+					BindParameter((ViewComponentParamAttribute)attributes[0], property);
+				}
+			}
+		}
+
+		private void BindParameter(ViewComponentParamAttribute paramAtt, PropertyInfo property)
+		{
+			string compParamKey = string.IsNullOrEmpty(paramAtt.ParamName) ? property.Name : paramAtt.ParamName;
+
+			object value = ComponentParams[compParamKey];
+
+			if (value == null)
+			{
+				if (paramAtt.Required && property.GetValue(this, null) == null)
+				{
+					throw new ViewComponentException(string.Format("The parameter '{0}' is required by " + 
+						"the ViewComponent {1} but was not passed or had a null value", compParamKey, GetType().Name));
+				}
+			}
+			else
+			{
+				try
+				{
+					property.SetValue(this, value, null);
+				}
+				catch(Exception ex)
+				{
+					throw new ViewComponentException(string.Format("Error trying to set value for parameter '{0}' " +
+						"on ViewComponent {1}: {2}", compParamKey, GetType().Name, ex.Message), ex);
+				}
+			}
 		}
 
 		#endregion
@@ -81,7 +134,31 @@ namespace Castle.MonoRail.Framework
 		/// <returns><see langword="true"/> if section is supported</returns>
 		public virtual bool SupportsSection(string name)
 		{
-			return false;
+			// TODO: We need to cache this
+
+			if (sectionsFromAttribute == null)
+			{
+				object[] attributes = GetType().GetCustomAttributes(typeof(ViewComponentDetailsAttribute), true);
+
+				if (attributes.Length != 0)
+				{
+					ViewComponentDetailsAttribute detailsAtt = (ViewComponentDetailsAttribute) attributes[0];
+
+					if (!string.IsNullOrEmpty(detailsAtt.Sections))
+					{
+						sectionsFromAttribute = detailsAtt.Sections.Split(',');
+					}
+				}
+
+				if (sectionsFromAttribute == null)
+				{
+					sectionsFromAttribute = new string[0];
+				}
+			}
+
+			return Array.Find(sectionsFromAttribute, 
+				delegate(string item)
+					{ return string.Equals(item, StringComparer.InvariantCultureIgnoreCase); }) != null;
 		}
 
 		#endregion

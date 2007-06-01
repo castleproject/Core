@@ -34,8 +34,8 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// 
 	/// <para>
 	/// Supported sections: <br/>
-	/// <c>start</c>: invoked with <c>page</c> <br/>
-	/// <c>end</c>: invoked with <c>page</c> <br/>
+	/// <c>startblock</c>: invoked with <c>page</c> <br/>
+	/// <c>endblock</c>: invoked with <c>page</c> <br/>
 	/// <c>link</c>: invoked with <c>pageIndex</c>, <c>url</c> and <c>text</c> 
 	/// so you can build a custom link <br/>
 	/// </para>
@@ -48,6 +48,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// </remarks>
 	public class DiggStylePagination : ViewComponent
 	{
+		private const string StartSection = "startblock";
+		private const string EndSection = "endblock";
+		private const string LinkSection = "link";
+
 		private int adjacents = 2;
 		private bool useInlineStyle = true;
 		private bool renderIfOnlyOnePage = true;
@@ -55,42 +59,61 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private string paginatefunction;
 		private IPaginatedPage page;
 
+		[ViewComponentParam(Required = true)]
+		public IPaginatedPage Page
+		{
+			get { return page; }
+			set { page = value; }
+		}
+
+		[ViewComponentParam]
+		public string PaginateFunction
+		{
+			get { return paginatefunction; }
+			set { paginatefunction = value; }
+		}
+
+		[ViewComponentParam]
+		public int Adjacents
+		{
+			get { return adjacents; }
+			set { adjacents = value; }
+		}
+
+		[ViewComponentParam]
+		public bool UseInlineStyle
+		{
+			get { return useInlineStyle; }
+			set { useInlineStyle = value; }
+		}
+
+		[ViewComponentParam]
+		public bool RenderIfOnlyOnePage
+		{
+			get { return renderIfOnlyOnePage; }
+			set { renderIfOnlyOnePage = value; }
+		}
+
+		[ViewComponentParam]
+		public string Url
+		{
+			get { return url; }
+			set { url = value; }
+		}
+
 		/// <summary>
 		/// Called by the framework once the component instance
 		/// is initialized
 		/// </summary>
 		public override void Initialize()
 		{
-			page = (IPaginatedPage) ComponentParams["page"];
-
 			if (page == null)
 			{
 				throw new ViewComponentException("The DiggStylePagination requires a view component " + 
 					"parameter named 'page' which should contain 'IPaginatedPage' instance");
 			}
 
-			paginatefunction = (string) ComponentParams["paginatefunction"];
-
-			if (ComponentParams.Contains("adjacents"))
-			{
-				adjacents = Convert.ToInt32(ComponentParams["adjacents"]);
-			}
-
-			if (ComponentParams.Contains("useInlineStyle"))
-			{
-				useInlineStyle = Convert.ToBoolean(ComponentParams["useInlineStyle"]);
-			}
-
-			if (ComponentParams.Contains("renderIfOnlyOnePage"))
-			{
-				renderIfOnlyOnePage = Convert.ToBoolean(ComponentParams["renderIfOnlyOnePage"]);
-			}
-
-			if (ComponentParams.Contains("url"))
-			{
-				url = ComponentParams["url"].ToString();
-			}
-			else
+			if (url == null)
 			{
 				url = RailsContext.Request.FilePath;
 			}
@@ -147,18 +170,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 		}
 
-		/// <summary>
-		/// Implementor should return true only if the 
-		/// <c>name</c> is a known section the view component
-		/// supports.
-		/// </summary>
-		/// <param name="name">section being added</param>
-		/// <returns><see langword="true"/> if section is supported</returns>
-		public override bool SupportsSection(string name)
-		{
-			return "start" == name || "end" == name || "link" == name;
-		}
-
 		private void WritePrev(StringWriter writer)
 		{
 			WriteLink(writer, page.PreviousIndex, "&laquo; prev", !page.HasPrevious);
@@ -171,9 +182,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void StartBlock(StringWriter writer)
 		{
-			if (Context.HasSection("start"))
+			if (Context.HasSection(StartSection))
 			{
-				Context.RenderSection("start", writer);
+				Context.RenderSection(StartSection, writer);
 			}
 			else
 			{
@@ -190,9 +201,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void EndBlock(StringWriter writer)
 		{
-			if (Context.HasSection("end"))
+			if (Context.HasSection(EndSection))
 			{
-				Context.RenderSection("end", writer);
+				Context.RenderSection(EndSection, writer);
 			}
 			else
 			{
@@ -254,13 +265,13 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		protected void WritePageLink(TextWriter writer, int pageIndex, String text, IDictionary htmlAttributes)
 		{
-			if (Context.HasSection("link"))
+			if (Context.HasSection(LinkSection))
 			{
 				PropertyBag["pageIndex"] = pageIndex;
 				PropertyBag["text"] = text;
 				PropertyBag["url"] = url;
 
-				Context.RenderSection("link", writer);
+				Context.RenderSection(LinkSection, writer);
 			}
 			else
 			{

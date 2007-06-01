@@ -20,15 +20,16 @@ namespace Castle.MonoRail.Framework
 	/// Decorates a ViewComponent to associate a custom name with it.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class), Serializable]
-	public class ViewComponentAttribute : Attribute
+	public class ViewComponentDetailsAttribute : Attribute
 	{
 		private readonly string name;
+		private string sections;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ViewComponentAttribute"/> class.
+		/// Initializes a new instance of the <see cref="ViewComponentDetailsAttribute"/> class.
 		/// </summary>
 		/// <param name="name">The specified ViewComponent's Name</param>
-		public ViewComponentAttribute(String name)
+		public ViewComponentDetailsAttribute(String name)
 		{
 			this.name = name;
 		}
@@ -39,6 +40,16 @@ namespace Castle.MonoRail.Framework
 		public string Name
 		{
 			get { return name; }
+		}
+
+		/// <summary>
+		/// Sets the nested sections that this ViewComponent supports.
+		/// </summary>
+		/// <value>The nested sections names, comma separated.</value>
+		public string Sections
+		{
+			get { return sections; }
+			set { sections = value; }
 		}
 	}
 }

@@ -158,6 +158,7 @@
     <Compile Include="Attributes\SkipRescueAttribute.cs" />
     <Compile Include="Attributes\ViewComponentDetailsAttribute.cs" />
     <Compile Include="Attributes\TransformFilterAttribute.cs" />
+    <Compile Include="Attributes\ViewComponentParamAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
     <Compile Include="Extensions\ExceptionChaining\FilteredExceptionHandler.cs" />
@@ -453,6 +454,8 @@
     <Compile Include="Test\MockResponse.cs" />
     <Compile Include="Test\MockServerUtility.cs" />
     <Compile Include="Test\MockTrace.cs" />
+    <Compile Include="Test\MockViewComponentContext.cs" />
+    <Compile Include="Test\MockViewEngine.cs" />
     <Compile Include="TransformFilter.cs" />
     <Compile Include="TransformFilters\Formatters\WikiFormatter.cs" />
     <Compile Include="TransformFilters\LowerCaseTransformFilter.cs" />
