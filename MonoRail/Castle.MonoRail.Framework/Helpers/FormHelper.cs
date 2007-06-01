@@ -126,13 +126,19 @@ namespace Castle.MonoRail.Framework.Helpers
 		public string FormTag(IDictionary parameters)
 		{
 			string url = null;
-			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
 
 			// Creates action attribute
 			if (CommonUtils.ObtainEntryAndRemove(parameters, "noaction", "false") == "false")
 			{
 				url = UrlHelper.For(parameters);
 			}
+
+			return FormTag(url, parameters);
+		}
+
+		public string FormTag(string url, IDictionary parameters)
+		{
+			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
 
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
 
@@ -143,12 +149,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (url != null)
 			{
-				formContent = "<form action='" + url + "' method='" + method + "' " + 
+				formContent = "<form action='" + url + "' method='" + method + "' " +
 					"id='" + currentFormId + "' " + GetAttributes(parameters) + ">";
 			}
 			else
 			{
-				formContent = "<form method='" + method +  "' id='" + currentFormId + "' " + GetAttributes(parameters) + ">";
+				formContent = "<form method='" + method + "' id='" + currentFormId + "' " + GetAttributes(parameters) + ">";
 			}
 
 			return formContent + afterFormTag;
