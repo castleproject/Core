@@ -19,6 +19,11 @@ namespace Castle.MonoRail.TestSupport
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Test;
 
+	public delegate void ContextInitializer(MockRailsEngineContext context);
+
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public abstract class BaseControllerTest
 	{
 		private readonly string domain;
@@ -61,6 +66,21 @@ namespace Castle.MonoRail.TestSupport
 			get { return trace; }
 		}
 
+		protected void PrepareController(Controller controller)
+		{
+			PrepareController(controller, null);
+		}
+
+		protected void PrepareController(Controller controller, ContextInitializer contextInitializer)
+		{
+			PrepareController(controller, "", "Controller", "Action");
+		}
+
+		protected void PrepareController(Controller controller, string controllerName, string actionName)
+		{
+			PrepareController(controller, "", controllerName, actionName);
+		}
+
 		protected void PrepareController(Controller controller, string areaName, string controllerName, string actionName)
 		{
 			if (controller == null)
@@ -88,13 +108,13 @@ namespace Castle.MonoRail.TestSupport
 			executor.InitializeController(controller.AreaName, controller.Name, controller.Action);
 		}
 
-		private void BuildRailsContext(string areaName, string controllerName, string actionName)
+		protected void BuildRailsContext(string areaName, string controllerName, string actionName)
 		{
 			UrlInfo info = BuildUrlInfo(areaName, controllerName, actionName);
 			request = BuildRequest();
 			response = BuildResponse();
 			trace = BuildTrace();
-			context = BuildRailsEngineContext(this.request, this.response, this.trace, info);
+			context = BuildRailsEngineContext(request, response, trace, info);
 		}
 
 		protected virtual MockRequest BuildRequest()

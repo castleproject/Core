@@ -105,6 +105,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseControllerTest.cs" />
+    <Compile Include="BaseViewComponentTest.cs" />
     <Compile Include="GenericBaseControllerTest.cs" />
     <Compile Include="GenericBaseWizardStepTest.cs" />
     <Compile Include="MonoRailTestWorkerRequest.cs">
