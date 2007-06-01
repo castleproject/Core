@@ -666,8 +666,7 @@ namespace Castle.DynamicProxy.Generators
 			MethodInfo callbackMethod,
 			ConstructorVersion version)
 		{
-			return
-				BuildInvocationNestedType(emitter, targetType, targetForInvocation, methodInfo, callbackMethod, version, false);
+			return BuildInvocationNestedType(emitter, targetType, targetForInvocation, methodInfo, callbackMethod, version, false);
 		}
 
 		/// <summary>
@@ -694,6 +693,7 @@ namespace Castle.DynamicProxy.Generators
 			nestedCounter++;
 
 			Type[] interfaces = new Type[0];
+			
 			if (allowChangeTarget)
 			{
 				interfaces = new Type[] {typeof(IChangeProxyTarget)};
@@ -764,6 +764,7 @@ namespace Castle.DynamicProxy.Generators
 			// Idea: instead of grab parameters one by one
 			// we should grab an array
 			Hashtable byRefArguments = new Hashtable();
+
 			for(int i = 0; i < parameters.Length; i++)
 			{
 				ParameterInfo param = parameters[i];
@@ -811,6 +812,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			baseMethodInvExp = new MethodInvocationExpression(targetField, callbackMethod, args);
+			baseMethodInvExp.VirtualCall = true;
 
 			LocalReference ret_local = null;
 

@@ -60,6 +60,7 @@ namespace Castle.DynamicProxy.Tests
 		public void UsingEvents_Interface()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+			
 			IWithEvents proxy = (IWithEvents) generator.CreateInterfaceProxyWithTarget(typeof(IWithEvents),
 			                                                                           new FakeWithEvents(),
 			                                                                           logger);
