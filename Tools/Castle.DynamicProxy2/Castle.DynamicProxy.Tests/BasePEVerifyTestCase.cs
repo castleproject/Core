@@ -14,6 +14,10 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Configuration;
+	using System.Diagnostics;
+	using System.IO;
 	using NUnit.Framework;
 
 	public abstract class BasePEVerifyTestCase
@@ -26,7 +30,7 @@ namespace Castle.DynamicProxy.Tests
 			generator = new ProxyGenerator(new PersistentProxyBuilder());
 		}
 
-#if MONO // mono doesn't have PEVerify
+#if !MONO // mono doesn't have PEVerify
 		
 		[TearDown]
 		public void RunPEVerifyOnGeneratedAssembly()

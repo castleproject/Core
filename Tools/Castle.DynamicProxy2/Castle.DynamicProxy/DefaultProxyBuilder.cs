@@ -23,8 +23,7 @@ namespace Castle.DynamicProxy
 	{
 		protected ModuleScope scope = null;
 
-		public DefaultProxyBuilder()
-			: this(new ModuleScope())
+		public DefaultProxyBuilder() : this(new ModuleScope())
 		{
 		}
 
@@ -98,10 +97,6 @@ namespace Castle.DynamicProxy
 			if (!target.IsPublic && !target.IsNestedPublic && !internalAndVisibleToDynProxy)
 			{
 				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
-			}
-			if (target.IsGenericTypeDefinition)
-			{
-				throw new GeneratorException("Type is a generic type definition, so a proxy cannot be generated. Type: " + target.FullName);
 			}
 		}
 
