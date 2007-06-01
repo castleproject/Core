@@ -184,7 +184,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			StringBuilder contents = new StringBuilder();
 
-			foreach (DictionaryEntry entry in attributes)
+			foreach(DictionaryEntry entry in attributes)
 			{
 				if (entry.Value == null || entry.Value.ToString() == string.Empty)
 				{

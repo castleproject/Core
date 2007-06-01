@@ -1082,6 +1082,43 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region FileField
+
+		/// <summary>
+		/// Generates an input file element.
+		/// <para>
+		/// Dirrently than other operations exposed by this helper, 
+		/// no value is extracted for this operation
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to be based on when creating the element name.</param>
+		/// <returns>The generated form element</returns>
+		public string FileField(string target)
+		{
+			return FileField(target, null);
+		}
+
+		/// <summary>
+		/// Generates an input file element.
+		/// <para>
+		/// Dirrently than other operations exposed by this helper, 
+		/// no value is extracted for this operation
+		/// </para>
+		/// </summary>
+		/// <param name="target">The object to be based on when creating the element name.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		public string FileField(string target, IDictionary attributes)
+		{
+			target = RewriteTargetIfWithinObjectScope(target);
+
+			ApplyValidation(InputElementType.Text, target, ref attributes);
+
+			return CreateInputElement("file", target, string.Empty, attributes);
+		}
+
+		#endregion
+
 		#region Select
 
 		/// <summary>
