@@ -45,6 +45,18 @@ Disabling all tests
 
   > nant -D:common.run-tests=false
 
+Selecting a different test framework (EXPERIMENTAL)
+-------------------
+
+NUnit (default)
+  > nant -D:testrunner=NUnit
+
+MbUnit:
+  > nant -D:testrunner=MbUnit
+
+N.B.
+MbUnit or NUnit needs to be on the path, otherwise NAnt's built-in nunit2 task will be used.
+
 Compiling a Debug version
 -------------------------
 
