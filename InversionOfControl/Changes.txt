@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Apply patch from Sam Camp that fixes problems with Remoting Facility Sample and RecoverableComponent. 
+
 - Updated TypedFactoryFacility to not require a target instance
   when proxying.
 
