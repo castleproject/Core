@@ -50,11 +50,12 @@ namespace Castle.DynamicProxy.Tests
 			}
 
 			process.StartInfo.FileName = path;
-			process.StartInfo.RedirectStandardOutput = false; //if the output is redirected, the process hangs.
+			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			process.StartInfo.Arguments = ModuleScope.FILE_NAME;
 			process.Start();
+			string processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
 
 			string result = process.ExitCode + " code ";
@@ -63,7 +64,7 @@ namespace Castle.DynamicProxy.Tests
 
 			if (process.ExitCode != 0)
 			{
-				Assert.Fail("PeVerify reported error(s).", result);
+				Assert.Fail("PeVerify reported error(s): " + processOutput, result);
 			}
 		}
 #endif

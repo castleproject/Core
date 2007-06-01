@@ -112,7 +112,7 @@ namespace Castle.DynamicProxy
 			}
 			else if (execIndex > interceptors.Length)
 			{
-				throw new ApplicationException("Blah");
+				throw new InvalidOperationException(@"Proceed() cannot delegate to another interceptor. This usually signify a bug in the calling code");
 			}
 			else
 			{

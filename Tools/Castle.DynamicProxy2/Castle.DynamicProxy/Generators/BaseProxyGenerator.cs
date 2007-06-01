@@ -1407,11 +1407,10 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual void ImplementGetObjectData(ClassEmitter emitter, FieldReference interceptorsField,
 		                                              Type[] interfaces)
 		{
-			/*// To prevent re-implementation of this interface.
-			_generated.Add(typeof(ISerializable));*/
-
 			if (interfaces == null)
+			{
 				interfaces = new Type[0];
+			}
 
 			Type[] get_type_args = new Type[] {typeof(String), typeof(bool), typeof(bool)};
 			Type[] key_and_object = new Type[] {typeof(String), typeof(Object)};

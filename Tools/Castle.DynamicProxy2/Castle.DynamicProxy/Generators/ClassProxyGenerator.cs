@@ -310,7 +310,8 @@ namespace Castle.DynamicProxy.Generators
 				                               new TypeTokenExpression(typeof(IInterceptor[])));
 
 			constr.CodeBuilder.AddStatement(new AssignStatement(
-			                                	interceptorField, getInterceptorInvocation));
+												interceptorField,
+												new ConvertExpression(typeof(IInterceptor[]), typeof(object), getInterceptorInvocation)));
 
 			constr.CodeBuilder.AddStatement(new ReturnStatement());
 		}
