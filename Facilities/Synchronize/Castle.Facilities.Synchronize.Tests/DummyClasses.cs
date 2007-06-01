@@ -15,7 +15,6 @@
 namespace Castle.Facilities.Synchronize.Tests
 {
 	using System;
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Threading;
 	using System.Windows.Forms;
@@ -30,9 +29,7 @@ namespace Castle.Facilities.Synchronize.Tests
 	{
 		public DummyForm()
 		{
-            //According to MSDN: referencing the 'Handle' property will force the handle to be created.
-            if (this.Handle == IntPtr.Zero)
-                throw new InvalidOperationException("DummyForm have a null window handle");
+			IntPtr handle = Handle;
 		}
 
 		public virtual void AddControl(Control control)

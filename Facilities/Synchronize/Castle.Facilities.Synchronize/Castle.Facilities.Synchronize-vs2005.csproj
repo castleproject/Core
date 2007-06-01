@@ -59,6 +59,7 @@
     <Compile Include="ControlComponentActivator.cs" />
     <Compile Include="ControlComponentHook.cs" />
     <Compile Include="ControlComponentInspector.cs" />
+    <Compile Include="ControlUtils.cs" />
     <Compile Include="SynchronizeAttribute.cs" />
     <Compile Include="SynchronizeComponentInspector.cs" />
     <Compile Include="SynchronizeContextReference.cs" />

@@ -1,6 +1,8 @@
 Change history
 --------------
 
+- Resolved issue (FACILITIES-83) when built in Release mode.
+
 - Ensure that handle is always created when Control is instantiated.  This
   was only occuring when the thread differed from UI thread.
 
