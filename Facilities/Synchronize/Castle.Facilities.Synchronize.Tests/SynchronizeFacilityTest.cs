@@ -223,7 +223,10 @@ namespace Castle.Facilities.Synchronize.Tests
 			                                         	});
 
 			Form form = new Form();
-			Debug.Assert(form.Handle != IntPtr.Zero);
+            //According to MSDN: referencing the 'Handle' property will force the handle to be created.
+            if (form.Handle == IntPtr.Zero)
+                throw new InvalidOperationException("DummyForm have a null window handle");
+
 			form.BeginInvoke((MethodInvoker) delegate { thread.Start(); });
 
 			Application.Run();

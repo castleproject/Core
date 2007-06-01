@@ -15,7 +15,6 @@
 namespace Castle.Facilities.Synchronize
 {
 	using System;
-	using System.Diagnostics;
 	using System.Runtime.Remoting;
 	using System.Windows.Forms;
 	using Castle.Core;
@@ -73,8 +72,9 @@ namespace Castle.Facilities.Synchronize
 		private static void EnsureHandleCreated(object component)
 		{
 			Control control = (Control)GetUnproxiedInstance(component);
-			IntPtr handle = control.Handle;
-			Debug.Assert(handle != IntPtr.Zero);			
+            //According to MSDN: referencing the 'Handle' property will force the handle to be created.
+            if (control.Handle == IntPtr.Zero)
+                throw new InvalidOperationException("Control have a null window handle");
 		}
 
 		private static object GetUnproxiedInstance(object instance)
