@@ -35,15 +35,13 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private bool delegateToBaseGetObjectData = false;
 
-		public ClassProxyGenerator(ModuleScope scope, Type targetType)
-			: base(scope, targetType)
+		public ClassProxyGenerator(ModuleScope scope, Type targetType): base(scope, targetType)
 		{
 		}
 
 		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
 		{
 			Type type;
-
 
 			ReaderWriterLock rwlock = Scope.RWLock;
 
@@ -85,11 +83,15 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				AddDefaultInterfaces(interfaceList);
+				
 				if (targetType.IsSerializable)
 				{
 					delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType);
+					
 					if (!interfaceList.Contains(typeof(ISerializable)))
+					{
 						interfaceList.Add(typeof(ISerializable));
+					}
 				}
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
@@ -170,7 +172,9 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach(MethodInfo method in methods)
 				{
-					if (method.IsSpecialName && (method.Name.StartsWith("get_") || method.Name.StartsWith("set_")) ||
+					if (method.IsSpecialName && 
+						(method.Name.StartsWith("get_") || method.Name.StartsWith("set_") ||
+						method.Name.StartsWith("add_") || method.Name.StartsWith("remove_")) || 
 					    methodsToSkip.Contains(method))
 					{
 						continue;
