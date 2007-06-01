@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Tests
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = ModuleScope.FILE_NAME;
+			process.StartInfo.Arguments = ModuleScope.FILE_NAME + " /VERBOSE";
 			process.Start();
 			string processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
@@ -64,7 +64,7 @@ namespace Castle.DynamicProxy.Tests
 
 			if (process.ExitCode != 0)
 			{
-				Assert.Fail("PeVerify reported error(s): " + processOutput, result);
+				Assert.Fail("PeVerify reported error(s): " + Environment.NewLine + processOutput, result);
 			}
 		}
 #endif
