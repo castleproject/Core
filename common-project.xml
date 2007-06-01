@@ -235,7 +235,7 @@
 				<attribute type="AssemblyCopyrightAttribute" value="${assembly.copyright}" />
 				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
 				<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.version.informational}" />
-				<attribute type="AssemblyFileVersionAttribute" value="${assembly.version}" />
+				<attribute type="AssemblyFileVersionAttribute" value="${assembly.version.informational}" />
 				<attribute type="AssemblyDelaySignAttribute" value="false" />
 				
 				<!-- For some reason, NAnt doesn't detect that APTCA has a public no-argument constructor -->
