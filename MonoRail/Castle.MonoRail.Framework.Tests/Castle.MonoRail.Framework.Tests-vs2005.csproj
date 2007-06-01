@@ -200,6 +200,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DefaultUrlTokenizerTestCase.cs" />
+    <Compile Include="ViewComponents\AuthenticatedContentTestCase.cs" />
+    <Compile Include="ViewComponents\DiggStylePaginationTestCase.cs" />
     <Compile Include="WikiFormatterTestCase.cs" />
   </ItemGroup>
   <ItemGroup>

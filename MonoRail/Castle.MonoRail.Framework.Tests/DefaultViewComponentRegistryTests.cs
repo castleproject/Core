@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 	}
 
-	[ViewComponent("DifferentName")]
+	[ViewComponentDetails("DifferentName")]
 	public class ATestViewComponent : ViewComponent
 	{
 	}
