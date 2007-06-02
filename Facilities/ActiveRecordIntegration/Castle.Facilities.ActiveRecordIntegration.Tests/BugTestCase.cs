@@ -22,9 +22,6 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 	[TestFixture]
 	public class BugTestCase : AbstractActiveRecordTest
 	{
-		/// <summary>
-		/// <seealso cref="http://support.castleproject.org//browse/FACILITIES-66" />
-		/// </summary>
 		[Test]
 		[ExpectedException(typeof(FacilityException),
 			"You need to specify at least one assembly that contains the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>"

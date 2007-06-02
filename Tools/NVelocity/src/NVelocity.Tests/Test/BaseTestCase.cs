@@ -145,8 +145,6 @@ namespace NVelocity.Test
 		/// Whether the output matches the contents
 		/// of the comparison file.
 		/// </returns>
-		/// Exception Test failure condition.
-		/// </exception>
 		protected internal virtual bool IsMatch(String resultsDir, String compareDir, String baseFileName, String resultExt, String compareExt)
 		{
 			Boolean SHOW_RESULTS = true;

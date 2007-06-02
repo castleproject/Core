@@ -105,8 +105,8 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertReplyEqualTo( @"My View contents for Cookies\Index" );
 			
-			/// One of the cookies will be the asp.net used by the flash property
-			///Assert.AreEqual( 3, Response.Cookies.Count );
+			// One of the cookies will be the asp.net used by the flash property
+			// Assert.AreEqual( 3, Response.Cookies.Count );
 
 			AssertHasCookie( "cookiename" );
 			AssertHasCookie( "cookiename2" );
