@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
 namespace Castle.MonoRail.TestSupport
 {
 	using Castle.MonoRail.Framework;
 
-	public class GenericBaseWizardStepTest<W, C> : GenericBaseControllerTest<C> where W : WizardStepPage where C : Controller
+	public class GenericBaseWizardStepTest<W, C> : GenericBaseControllerTest<C> 
+		where W : WizardStepPage 
+		where C : Controller
 	{
 		protected W wizardStep;
 
 		protected bool RunIsPreConditionSatisfied()
 		{
 			object[] args = new object[] { Context };
-			return (bool)ReflectionHelper.RunInstanceMethod(typeof(WizardStepPage), wizardStep, "IsPreConditionSatisfied", ref args);
+			return (bool) ReflectionHelper.RunInstanceMethod(typeof(WizardStepPage), 
+				wizardStep, "IsPreConditionSatisfied", ref args);
 		}
 
 		protected void RunRenderWizardView()
@@ -33,4 +35,3 @@ namespace Castle.MonoRail.TestSupport
 		}
 	}
 }
-#endif

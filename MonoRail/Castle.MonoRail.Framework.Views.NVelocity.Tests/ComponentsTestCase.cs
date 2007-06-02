@@ -208,12 +208,27 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertReplyContains("This is a view used by a component");
 		}
 
-		void AssertOutput(String expected, object output)
+		[Test]
+		public void AutoParameterBindingMustBeAbleToPerformSimpleConversions()
+		{
+			DoGet("usingcomponent2/autoparameterbinding1.rails");
+			AssertReplyContains("'1' 'xpto' 'something.castle?val=1'");
+		}
+
+		[Test]
+		public void AutoParameterBinding_IdIsARequiredParameter()
+		{
+			DoGet("usingcomponent2/autoparameterbinding2.rails");
+			AssertReplyContains("The parameter 'Id' is required by the ViewComponent " + 
+				"AutoParameterBinding but was not passed or had a null value");
+		}
+
+		private void AssertOutput(String expected, object output)
 		{
 			Assert.AreEqual(NormalizeWhitespace(expected), NormalizeWhitespace(output.ToString()));
 		}
 
-		String NormalizeWhitespace(String s)
+		private static string NormalizeWhitespace(String s)
 		{
 			return s.Replace("\r\n", "\n");
 		}

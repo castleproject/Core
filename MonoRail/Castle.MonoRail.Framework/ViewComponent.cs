@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Components.Binder;
+
 namespace Castle.MonoRail.Framework
 {
 	using System;
@@ -61,6 +63,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		private void BindComponentParameters()
 		{
+			IConverter converter = new DefaultConverter();
+
 			PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 		
 			foreach(PropertyInfo property in properties)
@@ -71,12 +75,12 @@ namespace Castle.MonoRail.Framework
 			
 				if (attributes.Length == 1)
 				{
-					BindParameter((ViewComponentParamAttribute)attributes[0], property);
+					BindParameter((ViewComponentParamAttribute) attributes[0], property, converter);
 				}
 			}
 		}
 
-		private void BindParameter(ViewComponentParamAttribute paramAtt, PropertyInfo property)
+		private void BindParameter(ViewComponentParamAttribute paramAtt, PropertyInfo property, IConverter converter)
 		{
 			string compParamKey = string.IsNullOrEmpty(paramAtt.ParamName) ? property.Name : paramAtt.ParamName;
 
@@ -84,9 +88,10 @@ namespace Castle.MonoRail.Framework
 
 			if (value == null)
 			{
-				if (paramAtt.Required && property.GetValue(this, null) == null)
+				if (paramAtt.Required && 
+					(property.PropertyType.IsValueType || property.GetValue(this, null) == null))
 				{
-					throw new ViewComponentException(string.Format("The parameter '{0}' is required by " + 
+					throw new ViewComponentException(string.Format("The parameter '{0}' is required by " +
 						"the ViewComponent {1} but was not passed or had a null value", compParamKey, GetType().Name));
 				}
 			}
@@ -94,7 +99,18 @@ namespace Castle.MonoRail.Framework
 			{
 				try
 				{
-					property.SetValue(this, value, null);
+					bool succeeded;
+
+					object converted = converter.Convert(property.PropertyType, value.GetType(), value, out succeeded);
+
+					if (succeeded)
+					{
+						property.SetValue(this, converted, null);
+					}
+					else
+					{
+						throw new Exception("Could not convert '" + value + "' to type " + property.PropertyType);
+					}
 				}
 				catch(Exception ex)
 				{

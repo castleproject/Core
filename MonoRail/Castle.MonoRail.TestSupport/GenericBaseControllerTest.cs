@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
 namespace Castle.MonoRail.TestSupport
 {
 	using Castle.MonoRail.Framework;
@@ -22,4 +21,3 @@ namespace Castle.MonoRail.TestSupport
 		protected C controller;
 	}
 }
-#endif

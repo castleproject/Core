@@ -114,6 +114,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\AutoParameterBinding.cs" />
     <Compile Include="Components\BlockComponent1.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -276,8 +277,10 @@
     <None Include="views\testwizard\page3.vm" />
     <None Include="views\testwizard\page4.vm" />
     <None Include="views\userlist.vm" />
+    <None Include="views\UsingComponent2\AutoParameterBinding1.vm" />
     <None Include="views\UsingComponent2\ComponentAndParams1.vm" />
     <None Include="views\UsingComponent2\ComponentWithInvalidSections.vm" />
+    <None Include="views\UsingComponent2\AutoParameterBinding2.vm" />
     <None Include="views\UsingComponent2\GridComponent1.vm" />
     <None Include="views\UsingComponent2\GridComponent2.vm" />
     <None Include="views\UsingComponent\CaptureFor.vm" />

@@ -200,11 +200,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			{
 				INode paramNode = node.GetChild(i);
 
-				String nodeContent = paramNode.Literal.TrimStart('"', '\'').TrimEnd('"', '\'');
+				string nodeContent = paramNode.Literal.TrimStart('"', '\'').TrimEnd('"', '\'');
 
-				String[] parts = nodeContent.Split('=');
+				string[] parts = nodeContent.Split(new char[] {'='}, 2, StringSplitOptions.RemoveEmptyEntries);
 
-				if (parts.Length == 2 && parts[1].StartsWith("$"))
+				if (parts.Length == 2 && parts[1].IndexOf("$") != -1)
 				{
 					SimpleNode inlineNode = rsvc.Parse(new StringReader(parts[1]), context.CurrentTemplateName, false);
 

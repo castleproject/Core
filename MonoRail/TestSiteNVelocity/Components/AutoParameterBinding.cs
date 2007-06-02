@@ -12,31 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace TestSiteNVelocity.Components
 {
-	using System.Collections;
 	using Castle.MonoRail.Framework;
 
-	[DefaultAction("Default")]
-	public class UsingComponent2Controller : Controller
+	public class AutoParameterBinding : ViewComponent
 	{
-		public void Default()
+		private int id;
+		private string name;
+		private string url;
+
+		[ViewComponentParam(Required = true)]
+		public int Id
 		{
+			get { return id; }
+			set { id = value; }
 		}
 
-		public void GridComponent1()
+		[ViewComponentParam]
+		public string Name
 		{
-			FillPropertyBag();
+			get { return name; }
+			set { name = value; }
 		}
 
-		private void FillPropertyBag()
+		[ViewComponentParam]
+		public string Url
 		{
-			ArrayList items = new ArrayList();
+			get { return url; }
+			set { url = value; }
+		}
 
-			items.Add(new Contact("hammett", "111"));
-			items.Add(new Contact("Peter Griffin", "222"));
-
-			PropertyBag.Add("contacts", items);
+		public override void Render()
+		{
+			RenderText(string.Format("'{0}' '{1}' '{2}'", id, name, url));
 		}
 	}
 }

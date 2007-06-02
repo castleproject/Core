@@ -17,24 +17,9 @@ namespace TestSiteNVelocity.Controllers
 	using System.Collections;
 	using Castle.MonoRail.Framework;
 
+	[DefaultAction("Default")]
 	public class UsingComponentController : Controller
 	{
-		public void CaptureForDirective()
-		{
-		}
-
-		public void CaptureFor()
-		{
-		}
-
-		public void CaptureForAppend()
-		{
-		}
-
-		public void CaptureForAppendBefore()
-		{
-		}
-
 		public void InlineComponentUsingTemplatedRender()
 		{
 			PropertyBag.Add("var1", "v1");
@@ -42,11 +27,7 @@ namespace TestSiteNVelocity.Controllers
 			PropertyBag.Add("fromPropertyBag", "items from property bag");
 		}
 
-		public void Index()
-		{
-		}
-
-		public void Index1()
+		public void Default()
 		{
 		}
 
@@ -60,22 +41,6 @@ namespace TestSiteNVelocity.Controllers
 			PropertyBag.Add("items", items);
 		}
 
-		public void Index4()
-		{
-		}
-
-		public void Index5()
-		{
-		}
-
-		public void Index6()
-		{
-		}
-
-		public void Index7()
-		{
-		}
-
 		public void Index8()
 		{
 			ArrayList items = new ArrayList();
@@ -84,10 +49,6 @@ namespace TestSiteNVelocity.Controllers
 			items.Add("2");
 
 			PropertyBag.Add("items", items);
-		}
-
-		public void Index9()
-		{
 		}
 
 		public void Index10()

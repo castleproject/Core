@@ -18,10 +18,7 @@ namespace Castle.MonoRail.TestSupport
 	using System.Net;
 	using System.Web;
 	using System.Collections;
-	using System.Collections.Specialized;
-
 	using Castle.MonoRail.Framework.Internal.Test;
-
 
 	[Serializable]
 	public class TestResponse : MarshalByRefObject

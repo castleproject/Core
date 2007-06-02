@@ -18,10 +18,6 @@ namespace Castle.MonoRail.TestSupport
 	using System.IO;
 	using System.Web;
 
-
-	/// <summary>
-	/// 
-	/// </summary>
 	public class WebAppHost : MarshalByRefObject
 	{
 		public string appVirtualPath;

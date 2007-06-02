@@ -111,7 +111,9 @@
     <Compile Include="MonoRailTestWorkerRequest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ReflectionHelper.cs" />
+    <Compile Include="ReflectionHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TestRequest.cs">
       <SubType>Code</SubType>
     </Compile>
