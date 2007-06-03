@@ -1,5 +1,9 @@
 Beta 1
 ======
+
+- Applied patch by David N. Godfrey that converted most of ActiveRecord's validators
+  to the Castle Validator component.
+
 - Added a way to use external resources to override the default messages.
 
 - Applied Brian DeMarzo's patch fixing COMP-20

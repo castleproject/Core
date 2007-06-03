@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Attributes\ValidateCreditCardAttribute.cs" />
     <Compile Include="Attributes\ValidateDateAttribute.cs" />
     <Compile Include="Attributes\ValidateCollectionNotEmptyAttribute.cs" />
     <Compile Include="Attributes\ValidateDateTimeAttribute.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
     <Compile Include="Validators\CollectionNotEmptyValidator.cs" />
+    <Compile Include="Validators\CreditCardValidator.cs" />
     <Compile Include="Validators\GroupNotEmptyValidator.cs" />
     <Compile Include="Validators\DateTimeValidator.cs" />
     <Compile Include="Validators\DateValidator.cs" />

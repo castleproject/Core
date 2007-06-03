@@ -53,6 +53,7 @@
     <Compile Include="ValidatorRunnerTestCase.cs" />
     <Compile Include="ValidatorsExecutionOrderTestCase.cs" />
     <Compile Include="ValidatorTests\CollectionNotEmptyValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\CreditCardValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\GroupNotEmptyValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\NotSameValueValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\DateValidatorTestCase.cs" />

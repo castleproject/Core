@@ -55,14 +55,7 @@ namespace Castle.Components.Validator
 		/// </returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
-			PropertyInfo property = instance.GetType().GetProperty(propertyToCompare);
-
-			if (property == null)
-			{
-				throw new ValidationInternalError("Could not find property " + propertyToCompare + " on type " + instance.GetType());
-			}
-
-			object referenceValue = property.GetValue(instance, null);
+			object referenceValue = GetFieldOrPropertyValue(instance, propertyToCompare);
 
 			if (fieldValue == null && referenceValue == null)
 			{

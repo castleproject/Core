@@ -21,7 +21,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 	[TestFixture]
 	public class SameAsValidatorTestCase
 	{
-		private SameAsValidator validator1, validator2;
+		private SameAsValidator validator1, validator2, validator3;
 		private TestTarget target;
 
 		[SetUp]
@@ -36,6 +36,10 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validator2 = new SameAsValidator("ComparableField2");
 			validator2.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField2"));
 
+			// Use public field instead of public property
+			validator3 = new SameAsValidator("ComparableField3");
+			validator3.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField1"));
+
 			target = new TestTarget();
 		}
 
@@ -44,6 +48,10 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		{
 			Assert.IsFalse(validator1.IsValid(target, ""));
 			Assert.IsFalse(validator1.IsValid(target, "abc"));
+			Assert.IsFalse(validator3.IsValid(target, "abc"));
+
+			target.ComparableField1 = "abc";
+			Assert.IsFalse(validator1.IsValid(target, null));
 		}
 
 		[Test]
@@ -56,8 +64,13 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		[Test]
 		public void ValidForString()
 		{
+			Assert.IsTrue(validator1.IsValid(target, null));
+
 			target.ComparableField1 = "hammett";
 			Assert.IsTrue(validator1.IsValid(target, "hammett"));
+
+			target.ComparableField3 = "hammett";
+			Assert.IsTrue(validator3.IsValid(target, "hammett"));
 		}
 
 		[Test]
@@ -97,6 +110,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 				get { return comparableField2; }
 				set { comparableField2 = value; }
 			}
+
+			public string ComparableField3;
 		}
 	}
 }

@@ -186,4 +186,7 @@
   <data name="time_invalid" xml:space="preserve">
     <value>Field value is invalid (not a valid time)</value>
   </data>
+  <data name="credit_card_invalid" xml:space="preserve">
+    <value>Field value does not appear to be a valid credit card number, or is of an unsupported type.</value>
+  </data>
 </root>

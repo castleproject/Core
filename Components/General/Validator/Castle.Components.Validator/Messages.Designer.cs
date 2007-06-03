@@ -242,5 +242,19 @@ namespace Castle.Components.Validator
 		{
 			get { return ResourceManager.GetString("time_invalid", resourceCulture); }
 		}
-	}
+		/// <summary>
+		///   Looks up a localized string similar to Field must be within a given set of values..
+		/// </summary>
+		internal static string set_invalid
+		{
+			get { return ResourceManager.GetString("set_invalid", resourceCulture); }
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Field value does not appear to be a valid credit card number, or is of an unsupported type..
+		/// </summary>
+		internal static string credit_card_invalid
+		{
+			get { return ResourceManager.GetString("credit_card_invalid", resourceCulture); }
+		}	}
 }
