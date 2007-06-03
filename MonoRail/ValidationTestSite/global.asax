@@ -1,1 +1,0 @@
-<%@ Application Inherits="ValidationTestSite.GlobalApplication"  %>
