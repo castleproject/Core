@@ -40,10 +40,21 @@ namespace Castle.MonoRail.Framework
 		/// Processes the view - using the templateName 
 		/// to obtain the correct template
 		/// and writes the results to the System.TextWriter. 
-		/// No layout is applied!
+		/// <para>
+		/// Please note that no layout is applied
+		/// </para>
 		/// </summary>
 		void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
 
+		/// <summary>
+		/// Processes a partial view = using the partialName
+		/// to obtain the correct template and writes the 
+		/// results to the System.TextWriter.
+		/// </summary>
+		/// <param name="output">The output.</param>
+		/// <param name="context">The context.</param>
+		/// <param name="controller">The controller.</param>
+		/// <param name="partialName">The partial name.</param>
 		void ProcessPartial(TextWriter output, IRailsEngineContext context, Controller controller, String partialName);
 
 		/// <summary>

@@ -17,10 +17,12 @@ namespace TestSiteARSupport.Model
 	using System;
 	using System.Collections.Generic;
 	using Castle.ActiveRecord;
-	using Iesi.Collections;
+	using Castle.Components.Validator;
+	using Iesi.Collections.Generic;
+	using ValidateEmailAttribute=Castle.Components.Validator.ValidateEmailAttribute;
 
 	[ActiveRecord("TSAS_Account")]
-	public class Account : ActiveRecordValidationBase
+	public class Account : ActiveRecordBase
 	{
 		private int id;
 		private String name;
@@ -28,7 +30,7 @@ namespace TestSiteARSupport.Model
 		private String password;
 		private String confirmationpassword;
 		private ProductLicense productLicense;
-		private ISet permissions;
+		private ISet<AccountPermission> permissions;
 		private IList<User> users = new List<User>();
 
 		[PrimaryKey]
@@ -38,28 +40,28 @@ namespace TestSiteARSupport.Model
 			set { id = value; }
 		}
 
-		[Property, ValidateNotEmpty]
+		[Property, ValidateNonEmpty]
 		public string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
-		[Property, ValidateNotEmpty, ValidateEmail]
+		[Property, ValidateNonEmpty, ValidateEmail]
 		public string Email
 		{
 			get { return email; }
 			set { email = value; }
 		}
 
-		[Property, ValidateNotEmpty, ValidateConfirmation("ConfirmationPassword")]
+		[Property, ValidateNonEmpty]
 		public string Password
 		{
 			get { return password; }
 			set { password = value; }
 		}
 
-		[ValidateNotEmpty]
+		[ValidateNonEmpty, ValidateSameAs("ConfirmationPassword")]
 		public string ConfirmationPassword
 		{
 			get { return confirmationpassword; }
@@ -73,9 +75,10 @@ namespace TestSiteARSupport.Model
 			set { productLicense = value; }
 		}
 
-		[HasAndBelongsToMany( typeof(AccountPermission), Table="AccountAccountPermission", 
-			 ColumnRef="permission_id", ColumnKey="account_id", Inverse=false)]
-		public ISet Permissions
+		[HasAndBelongsToMany( typeof(AccountPermission), 
+			Table="AccountAccountPermission", 
+			ColumnRef="permission_id", ColumnKey="account_id", Inverse=false)]
+		public ISet<AccountPermission> Permissions
 		{
 			get { return permissions; }
 			set { permissions = value; }

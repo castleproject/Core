@@ -14,32 +14,30 @@
 
 namespace TestSiteARSupport.Controllers
 {
-	using System;
-	using Castle.Components.Binder;
 	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
 	using TestSiteARSupport.Model;
 
+	[Scaffolding(typeof(User))]
 	public class UserController : ARSmartDispatcherController
 	{
-		public void New()
-		{
-		}
-
-		[AccessibleThrough(Verb.Post)]
-		public void Insert([ARDataBind("user", AutoLoad=AutoLoadBehavior.OnlyNested)] User user)
-		{
-			ErrorList errorList = (ErrorList) BoundInstanceErrors[user];
-			
-			PropertyBag.Add("errorlist", errorList);
-			
-			if (errorList.Count == 0)
-			{
-				user.Create();
-				
-				PropertyBag.Add("user", user);
-			}
-		}
-
+//		public void New()
+//		{
+//		}
+//
+//		[AccessibleThrough(Verb.Post)]
+//		public void Insert([ARDataBind("user", AutoLoad=AutoLoadBehavior.OnlyNested)] User user)
+//		{
+//			ErrorList errorList = (ErrorList) BoundInstanceErrors[user];
+//			
+//			PropertyBag.Add("errorlist", errorList);
+//			
+//			if (errorList.Count == 0)
+//			{
+//				user.Create();
+//				
+//				PropertyBag.Add("user", user);
+//			}
+//		}
 	}
 }

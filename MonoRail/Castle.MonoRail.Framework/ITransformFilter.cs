@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	/// <summary>
-	/// Dictates the contract for transformfilters. 
+	/// Dictates the contract for transform filters. 
 	/// </summary>
 	public interface ITransformFilter
 	{

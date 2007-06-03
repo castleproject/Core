@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 
 	/// <summary>
-	/// Pendent
+	/// Exposes the operations that can be performed by <see cref="ViewComponent"/>s
 	/// </summary>
 	public interface IViewComponentContext
 	{
@@ -40,10 +40,10 @@ namespace Castle.MonoRail.Framework
 		bool HasSection(String sectionName);
 
 		/// <summary>
-		/// Pendent
+		/// Renders the view specified to the writer.
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="writer"></param>
+		/// <param name="name">The view template name</param>
+		/// <param name="writer">A writer to output</param>
 		void RenderView(String name, TextWriter writer);
 
 		/// <summary>
@@ -58,20 +58,22 @@ namespace Castle.MonoRail.Framework
 		void RenderBody(TextWriter writer);
 
 		/// <summary>
-		/// Renders the the specified section
+		/// Renders the the specified section. 
+		/// No exception will the throw if the section cannot be found.
 		/// </summary>
 		/// <param name="sectionName">Name of the section.</param>
 		void RenderSection(String sectionName);
 
 		/// <summary>
-		/// Renders the the specified section
+		/// Renders the the specified section.
+		/// No exception will the throw if the section cannot be found.
 		/// </summary>
 		/// <param name="sectionName">Name of the section.</param>
-		/// <param name="writer">The writer.</param>
+		/// <param name="writer">The writer to output the section content.</param>
 		void RenderSection(String sectionName, TextWriter writer);
 
 		/// <summary>
-		/// Gets the writer used to render the component
+		/// Gets the writer used to render the view component
 		/// </summary>
 		/// <value>The writer.</value>
 		TextWriter Writer { get; }

@@ -14,7 +14,6 @@
 
 namespace TestSiteARSupport.Model
 {
-	using System;
 	using Castle.ActiveRecord;
 
 	[ActiveRecord]
@@ -23,7 +22,6 @@ namespace TestSiteARSupport.Model
 		private int id;
 		private string from;
 		private string text;
-		private Condition condition;
 
 		public Comment()
 		{
@@ -54,13 +52,6 @@ namespace TestSiteARSupport.Model
 		{
 			get { return text; }
 			set { text = value; }
-		}
-
-		[BelongsTo]
-		public Condition Condition
-		{
-			get { return condition; }
-			set { condition = value; }
 		}
 
 		public static Comment[] FindAll()

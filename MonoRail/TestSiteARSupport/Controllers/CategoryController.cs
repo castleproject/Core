@@ -14,14 +14,11 @@
 
 namespace TestSiteARSupport.Controllers
 {
-	using System;
-	
 	using Castle.Components.Binder;
 	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
 	
 	using TestSiteARSupport.Model;
-
 	
 	public class CategoryController : ARSmartDispatcherController
 	{
@@ -30,8 +27,7 @@ namespace TestSiteARSupport.Controllers
 		}
 
 		[AccessibleThrough(Verb.Post)]
-		public void Insert([ARDataBind("category", AutoLoad = AutoLoadBehavior.OnlyNested)] Category category, 
-		                   [DataBind("Partner")] Dummy dummy)
+		public void Insert([ARDataBind("category", AutoLoad = AutoLoadBehavior.OnlyNested)] Category category)
 		{
 			ErrorList errorList = (ErrorList) BoundInstanceErrors[category];
 			

@@ -18,7 +18,7 @@ namespace TestSiteARSupport.Model
 	using Castle.ActiveRecord;
 
 	[ActiveRecord("TSAS_SimplePerson")]
-	public class SimplePerson : ActiveRecordValidationBase
+	public class SimplePerson : ActiveRecordBase
 	{
 		private String _id;
 		private String _name;

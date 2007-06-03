@@ -17,7 +17,11 @@ namespace Castle.MonoRail.Framework
 	using System;
 
 	/// <summary>
-	/// Decorates a ViewComponent to associate a custom name with it.
+	/// Decorates a <see cref="ViewComponent"/> to associate a custom name with it.
+	/// <para>
+	/// Optionally you can associate the section names supported by the 
+	/// <see cref="ViewComponent"/>.
+	/// </para>
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class), Serializable]
 	public class ViewComponentDetailsAttribute : Attribute
@@ -43,7 +47,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Sets the nested sections that this ViewComponent supports.
+		/// Sets the nested sections that this <see cref="ViewComponent"/> supports.
 		/// </summary>
 		/// <value>The nested sections names, comma separated.</value>
 		public string Sections

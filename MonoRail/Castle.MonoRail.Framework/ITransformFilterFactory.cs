@@ -23,7 +23,18 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface ITransformFilterFactory
 	{
+		/// <summary>
+		/// Creates the specified transform filter type.
+		/// </summary>
+		/// <param name="transformFilterType">Type of the transform filter.</param>
+		/// <param name="baseStream">The base stream.</param>
+		/// <returns></returns>
 		ITransformFilter Create(Type transformFilterType, Stream baseStream);
+
+		/// <summary>
+		/// Releases the specified transform filter.
+		/// </summary>
+		/// <param name="transformFilter">The transform filter.</param>
 		void Release(ITransformFilter transformFilter);
 	}
 }

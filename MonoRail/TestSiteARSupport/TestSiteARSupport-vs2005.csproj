@@ -41,7 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL" />
+    <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\net\2.0\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL" />
     <Reference Include="NHibernate, Version=2.0.0.1001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -63,8 +66,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPermissionController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
-    <Compile Include="Controllers\ConditionController.cs" />
-    <Compile Include="Controllers\ConditionTypeController.cs" />
     <Compile Include="Controllers\PersonUserController.cs" />
     <Compile Include="Controllers\ProductLicenseController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -72,9 +73,6 @@
     <Compile Include="Model\AccountPermission.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Comment.cs" />
-    <Compile Include="Model\Condition.cs" />
-    <Compile Include="Model\ConditionType.cs" />
-    <Compile Include="Model\Dummy.cs" />
     <Compile Include="Model\PersonBase.cs" />
     <Compile Include="Model\PersonUser.cs" />
     <Compile Include="Model\ProductLicense.cs" />
@@ -86,6 +84,14 @@
     <ProjectReference Include="..\..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
       <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
       <Name>Castle.Components.Binder-vs2005</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\General\Validator\Castle.Components.Validator\Castle.Components.Validator.csproj">
+      <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
+      <Name>Castle.Components.Validator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.MonoRail.ActiveRecordScaffold\Castle.MonoRail.ActiveRecordScaffold-vs2005.csproj">
+      <Project>{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}</Project>
+      <Name>Castle.MonoRail.ActiveRecordScaffold-vs2005</Name>
     </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport-vs2005.csproj">
       <Project>{2409063E-BE05-4596-A677-758096D1C759}</Project>
@@ -120,12 +126,6 @@
     <None Include="Views\Category\new.vm" />
     <None Include="Views\Category\removeconfirm.vm" />
     <None Include="Views\Category\update.vm" />
-    <None Include="Views\ConditionType\insert.vm" />
-    <None Include="Views\ConditionType\new.vm" />
-    <None Include="Views\Condition\edit.vm" />
-    <None Include="Views\Condition\insert.vm" />
-    <None Include="Views\Condition\new.vm" />
-    <None Include="Views\Condition\update.vm" />
     <None Include="Views\PersonUser\delete.vm" />
     <None Include="Views\PersonUser\edit.vm" />
     <None Include="Views\PersonUser\insert.vm" />

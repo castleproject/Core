@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Components.Binder;
-
 namespace Castle.MonoRail.Framework
 {
 	using System;
@@ -22,10 +20,43 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.Reflection;
 	using System.Web;
+	using Castle.Components.Binder;
 
 	/// <summary>
-	/// Base class for UI Components
+	/// Base class for reusable UI Components. 
+	/// <para>
+	/// Implementors should override <see cref="ViewComponent.Initialize"/>
+	/// for implement proper initialization (if necessary). 
+	/// Also implement <see cref="ViewComponent.Render"/> as by default it 
+	/// will render a <c>default</c> view on <c>[ViewFolderRoot]/components/[componentname]</c>.
+	/// </para>
+	/// <para>
+	/// You can also override <see cref="ViewComponent.SupportsSection"/> if your component supports 
+	/// neste sections (ie templates provided on the view that uses the view component.
+	/// </para>
 	/// </summary>
+	/// <example>
+	/// A very simplist view component that renders the time.
+	/// <code>
+	/// public class ShowTime : ViewComponent
+	/// {
+	///		public override void Initialize()
+	///		{
+	///		}
+	/// 
+	///		public override void Render()
+	///		{
+	///			RenderText("Time: " + DateTime.Now.ToString());
+	///		}
+	/// }
+	/// </code>
+	/// <para>
+	/// This can be used from the view using the following syntax (NVelocity view engine)
+	/// </para>
+	/// <code>
+	/// #component(ShowTime)
+	/// </code>
+	/// </example>
 	public abstract class ViewComponent
 	{
 		/// <summary>

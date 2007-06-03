@@ -15,14 +15,14 @@
 namespace TestSiteARSupport.Model
 {
 	using System;
-
 	using Castle.ActiveRecord;
+	using Castle.Components.Validator;
 
 	[ActiveRecord("TSAS_Categories")]
 	public class Category : ActiveRecordBase
 	{
-		private Guid _id;
-		private String _name;
+		private Guid id;
+		private String name;
 
 		public Category()
 		{
@@ -30,26 +30,26 @@ namespace TestSiteARSupport.Model
 
 		public Category(String name)
 		{
-			_name = name;
+			this.name = name;
 		}
 
 		[PrimaryKey(PrimaryKeyType.Guid)]
 		public Guid Id
 		{
-			get { return _id; }
-			set { _id = value; }
+			get { return id; }
+			set { id = value; }
 		}
 
-		[Property, ValidateNotEmptyAttribute]
+		[Property, ValidateNonEmpty]
 		public String Name
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return name; }
+			set { name = value; }
 		}
 
 		public static Category[] FindAll()
 		{
-			return (Category[]) FindAll(typeof(Category));
+			return (Category[]) FindAll(typeof (Category));
 		}
 	}
 }

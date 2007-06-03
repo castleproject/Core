@@ -31,18 +31,6 @@ namespace TestSiteARSupport
 			ActiveRecordStarter.Initialize( Assembly.GetExecutingAssembly(), source );
 			
 			ActiveRecordStarter.CreateSchema();
-			
-			Comment comment = new Comment("hammett", "test 1");
-			comment.Create();
-			
-			comment = new Comment("someone", "test 2");
-			comment.Create();
-			
-			comment = new Comment("john doe", "test 3");
-			comment.Create();
-			
-			comment = new Comment("mary jane", "test 4");
-			comment.Create();
 		}
 	}
 }

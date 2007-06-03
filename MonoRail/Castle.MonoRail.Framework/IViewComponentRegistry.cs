@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework
 	public interface IViewComponentRegistry
 	{
 		void AddViewComponent(string name, Type type);
+		
 		Type GetViewComponent(string name);
 	}
 }

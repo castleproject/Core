@@ -19,7 +19,7 @@ namespace TestSiteARSupport.Model
 	using Castle.ActiveRecord;
 	
 	[ActiveRecord("TSAS_PersonBase"), JoinedBase]
-	public abstract class PersonBase : ActiveRecordValidationBase
+	public abstract class PersonBase : ActiveRecordBase
 	{
 		private int id;
 		private string first;
