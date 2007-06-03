@@ -22,6 +22,7 @@ namespace Castle.ActiveRecord
 
 	using NHibernate;
 	using NHibernate.Expression;
+	using Castle.Components.Validator;
 
 	/// <summary>
 	/// Allow custom executions using the NHibernate's ISession.
@@ -131,6 +132,8 @@ namespace Castle.ActiveRecord
 			}
 			catch(Exception ex)
 			{
+				holder.FailSession(session);
+
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
 				if (ex.InnerException is ValidationException)
 				{
@@ -191,17 +194,18 @@ namespace Castle.ActiveRecord
 					session.Flush();
 				}
 			}
-			catch(Exception ex)
+			catch (ValidationException)
 			{
-				// NHibernate catches our ValidationException, and as such it is the innerexception here
-				if (ex.InnerException is ValidationException)
-				{
-					throw ex.InnerException;
-				}
-				else
-				{
-					throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
-				}
+				holder.FailSession(session);
+
+				throw;
+
+			}
+			catch (Exception ex)
+			{
+				holder.FailSession(session);
+
+				throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
 			}
 			finally
 			{
@@ -237,6 +241,8 @@ namespace Castle.ActiveRecord
 			}
 			catch(Exception ex)
 			{
+				holder.FailSession(session);
+
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
 				if (ex.InnerException is ValidationException)
 				{
@@ -275,6 +281,8 @@ namespace Castle.ActiveRecord
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				// NHibernate catches our ValidationException, and as such it is the innerexception here
 				if (ex.InnerException is ValidationException)
 				{
@@ -316,10 +324,14 @@ namespace Castle.ActiveRecord
 			}
 			catch (ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
 			}
 			finally
@@ -351,10 +363,14 @@ namespace Castle.ActiveRecord
 			}
 			catch (ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
 			}
 			finally
@@ -452,10 +468,14 @@ namespace Castle.ActiveRecord
 			}
 			catch (ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform Update for " + instance.GetType().Name, ex);
 			}
 			finally
@@ -523,9 +543,17 @@ namespace Castle.ActiveRecord
 					session.Flush();
 				}
 			}
+			catch (ValidationException)
+			{
+				holder.FailSession(session);
+
+				throw;
+			}
 			catch(Exception ex)
 			{
-				// NHibernate catches our ValidationException, and as such it is the innerexception here
+				holder.FailSession(session);
+
+				// NHibernate catches our ValidationException on Create so it could be the innerexception here
 				if (ex.InnerException is ValidationException)
 				{
 					throw ex.InnerException;
@@ -572,10 +600,14 @@ namespace Castle.ActiveRecord
 			}
 			catch (ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Error performing Execute for " + targetType.Name, ex);
 			}
 			finally
@@ -608,6 +640,8 @@ namespace Castle.ActiveRecord
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform EnumerateQuery for " + rootType.Name, ex);
 			}
 			finally
@@ -639,6 +673,8 @@ namespace Castle.ActiveRecord
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform ExecuteQuery for " + rootType.Name, ex);
 			}
 			finally
@@ -821,10 +857,14 @@ namespace Castle.ActiveRecord
 			}
 			catch(ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch(Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
 			}
 			finally
@@ -872,10 +912,14 @@ namespace Castle.ActiveRecord
 			}
 			catch (ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
 			}
 			finally
@@ -996,15 +1040,21 @@ namespace Castle.ActiveRecord
 			}
 			catch (ObjectNotFoundException ex)
 			{
+				holder.FailSession(session);
+
 				String message = String.Format("Could not find {0} with id {1}", targetType.Name, id);
 				throw new NotFoundException(message, ex);
 			}
 			catch (ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform FindByPrimaryKey for " + targetType.Name + ". Id: " + id, ex);
 			}
 			finally
@@ -1142,10 +1192,14 @@ namespace Castle.ActiveRecord
 			}
 			catch (ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch (Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform SlicedFindAll for " + targetType.Name, ex);
 			}
 			finally
@@ -1181,10 +1235,14 @@ namespace Castle.ActiveRecord
 			}
 			catch(ValidationException)
 			{
+				holder.FailSession(session);
+
 				throw;
 			}
 			catch(Exception ex)
 			{
+				holder.FailSession(session);
+
 				throw new ActiveRecordException("Could not perform SlicedFindAll for " + targetType.Name, ex);
 			}
 			finally

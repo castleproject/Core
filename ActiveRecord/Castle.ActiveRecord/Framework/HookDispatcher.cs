@@ -63,7 +63,7 @@ namespace Castle.ActiveRecord.Framework
 
 			if (hookTarget != null)
 			{
-				return hookTarget.BeforeLoad(new DictionaryAdapter(propertyNames, state));
+				return hookTarget.BeforeLoad(id, new DictionaryAdapter(propertyNames, state));
 			}
 
 			return false;

@@ -393,6 +393,15 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// This is called when a session has a failure
+		/// </summary>
+		/// <param name="session">the session</param>
+		public override void FailSession(ISession session)
+		{
+			VoteRollBack();
+		}
+
+		/// <summary>
 		/// Discards the sessions.
 		/// </summary>
 		/// <param name="sessions">The sessions.</param>

@@ -207,6 +207,12 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		}
 
 		/// <summary>
+		/// Marks the session as failed
+		/// </summary>
+		/// <param name="session">The session</param>
+		public abstract void FailSession(ISession session);
+
+		/// <summary>
 		/// Sets the flush mode.
 		/// </summary>
 		/// <param name="session">The session.</param>

@@ -21,10 +21,11 @@ namespace Castle.ActiveRecord
 	
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
+	using Castle.Components.Validator;
 
 	/// <summary>
 	/// Extends <see cref="ActiveRecordBase"/> adding automatic validation support.
-	/// <seealso cref="ActiveRecordValidationBase.IsValid"/>
+	/// <seealso cref="ActiveRecordValidationBase.IsValid()"/>
 	/// </summary>
 	/// <example>
 	/// <code>
@@ -48,51 +49,19 @@ namespace Castle.ActiveRecord
 	///	</code>
 	/// </example>
 	[Serializable]
-	public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T>, NHibernate.Classic.IValidatable where T : class
+	public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T> where T : class
 	{
-		/// <summary>
-		/// List of validators that should be executed for this class
-		/// </summary>
-		private ArrayList __validators = new ArrayList();
+		[NonSerialized]
+		private ValidatorRunner __runner = new ValidatorRunner(ActiveRecordModelBuilder.ValidatorRegistry);
 
 		[System.Xml.Serialization.XmlIgnore]
 		private IDictionary __failedProperties;
-
-		/// <summary>
-		/// List of error messages
-		/// </summary>
-		private String[] _errorMessages;
 
 		/// <summary>
 		/// Constructs an ActiveRecordValidationBase
 		/// </summary>
 		public ActiveRecordValidationBase()
 		{
-			CollectValidators(typeof(T));
-		}
-
-		/// <summary>
-		/// Collect the validations applied to this class properties.
-		/// </summary>
-		/// <param name="targetType"></param>
-		private void CollectValidators(Type targetType)
-		{
-			ActiveRecordModel model = Framework.Internal.ActiveRecordModel.GetModel(targetType);
-
-			if (model == null)
-			{
-				throw new ActiveRecordException(
-					string.Format("Seems that the framework wasn't initialized properly. ActiveRecordModel could not obtained. Please make sure you have an [ActiveRecord] attribute on class {0}",targetType.Name));
-			}
-
-			__validators.AddRange(model.Validators);
-
-			while(model.Parent != null)
-			{
-				__validators.AddRange(model.Parent.Validators);
-
-				model = model.Parent;
-			}
 		}
 
 		/// <summary>
@@ -102,37 +71,37 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public virtual bool IsValid()
 		{
-			ArrayList errorlist = new ArrayList();
+			return IsValid(RunWhen.Everytime);
+		}
+
+		/// <summary>
+		/// Performs the fields validation for the specified action.
+		/// </summary>
+		/// <param name="runWhen">Use validators appropriate to the action being performed.</param>
+		/// <returns>True if no validation error was found</returns>
+		public virtual bool IsValid(RunWhen runWhen)
+		{
 			__failedProperties = new Hashtable();
 
-			foreach(IValidator validator in __validators)
+			if (__runner == null)
 			{
-				if (!validator.Perform(this))
+				__runner = new ValidatorRunner(ActiveRecordModelBuilder.ValidatorRegistry);
+			}
+
+			bool returnValue = __runner.IsValid(this, runWhen);
+
+			if (!returnValue)
+			{
+				Type type = this.GetType();
+				ErrorSummary summary = __runner.GetErrorSummary(this);
+
+				foreach (string property in summary.InvalidProperties)
 				{
-					String errorMessage = validator.ErrorMessage;
-
-					errorlist.Add(errorMessage);
-
-					ArrayList items = null;
-
-					if (__failedProperties.Contains(validator.Property))
-					{
-						items = (ArrayList) __failedProperties[validator.Property];
-					}
-					else
-					{
-						items = new ArrayList();
-
-						__failedProperties[validator.Property] = items;
-					}
-
-					items.Add(errorMessage);
+					__failedProperties.Add(type.GetProperty(property), new ArrayList(summary.GetErrorsForProperty(property)));
 				}
 			}
 
-			_errorMessages = (String[]) errorlist.ToArray(typeof(String));
-
-			return errorlist.Count == 0;
+			return returnValue;
 		}
 
 		/// <summary>
@@ -142,12 +111,17 @@ namespace Castle.ActiveRecord
 		{
 			get
 			{
-				if (_errorMessages == null)
+				if (__runner == null)
+				{
+					__runner = new ValidatorRunner(ActiveRecordModelBuilder.ValidatorRegistry);
+				}
+
+				if (__runner.GetErrorSummary(this) == null)
 				{
 					IsValid();
 				}
 
-				return _errorMessages;
+				return __runner.GetErrorSummary(this).ErrorMessages;
 			}
 		}
 
@@ -155,17 +129,43 @@ namespace Castle.ActiveRecord
 		/// Maps a specific PropertyInfo to a list of
 		/// error messages. Useful for frameworks.
 		/// </summary>
+		[System.Xml.Serialization.XmlIgnore]
 		public virtual IDictionary PropertiesValidationErrorMessage
 		{
 			get { return __failedProperties; }
 		}
 
-		void NHibernate.Classic.IValidatable.Validate()
+		/// <summary>
+		/// Override the base hook to call validators required for create.
+		/// </summary>
+		/// <param name="state">The current state of the object</param>
+		/// <returns>Returns true if the state has changed otherwise false</returns>
+		protected internal override bool BeforeSave(IDictionary state)
 		{
-			if (!IsValid())
+			if (!IsValid(RunWhen.Insert))
 			{
 				OnNotValid();
 			}
+
+			return base.BeforeSave(state);
+		}
+
+		/// <summary>
+		/// Override the base hook to call validators required for update.
+		/// </summary>
+		/// <param name="id">object id</param>
+		/// <param name="previousState">The previous state of the object</param>
+		/// <param name="currentState">The current state of the object</param>
+		/// <param name="types">Property types</param>
+		/// <returns>Returns true if the state has changed otherwise false</returns>
+		protected internal override bool OnFlushDirty(object id, IDictionary previousState, IDictionary currentState, NHibernate.Type.IType[] types)
+		{
+			if (!IsValid(RunWhen.Update))
+			{
+				OnNotValid();
+			}
+
+			return base.OnFlushDirty(id, previousState, currentState, types);
 		}
 
 		/// <summary>

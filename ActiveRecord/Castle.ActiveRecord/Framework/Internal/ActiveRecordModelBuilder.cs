@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using Castle.Components.Validator;
 
 	/// <summary>
 	/// Bulids an <see cref="ActiveRecordModel"/> from a type and does some inital validation.
@@ -30,6 +31,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                                                                BindingFlags.NonPublic | BindingFlags.Instance;
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
+
+		private static IValidatorRegistry validatorRegistry = new CachedValidationRegistry();
 
 		/// <summary>
 		/// Creates a <see cref="ActiveRecordModel"/> from the specified type.
@@ -60,6 +63,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public ActiveRecordModelCollection Models
 		{
 			get { return coll; }
+		}
+
+		/// <summary>
+		/// Gets the validator registry used to create the validators
+		/// </summary>
+		public static IValidatorRegistry ValidatorRegistry
+		{
+			get { return validatorRegistry; }
 		}
 
 		/// <summary>
@@ -177,14 +188,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				object[] valAtts = prop.GetCustomAttributes(typeof(AbstractValidationAttribute), true);
 
-				foreach(AbstractValidationAttribute valAtt in valAtts)
+				foreach (AbstractValidationAttribute valAtt in valAtts)
 				{
-					valAtt.Validator.Initialize(prop);
+					IValidator validator = valAtt.Build();
+					validator.Initialize(validatorRegistry, prop);
 
-					model.Validators.Add(valAtt.Validator);
+					model.Validators.Add(validator);
 				}
 
-				foreach(object attribute in prop.GetCustomAttributes(false))
+				foreach (object attribute in prop.GetCustomAttributes(false))
 				{
 					if (attribute is PrimaryKeyAttribute)
 					{

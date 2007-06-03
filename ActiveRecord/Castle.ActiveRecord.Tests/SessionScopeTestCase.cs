@@ -12,21 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.ActiveRecord.Framework.Scopes;
-
 namespace Castle.ActiveRecord.Tests
 {
 	using System;
-
-	using NUnit.Framework;
-
-	using NHibernate;
-
-    using Castle.ActiveRecord.Tests.Model;
-
+	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Scopes;
+	using Castle.ActiveRecord.Tests.Model;
 	using Castle.ActiveRecord.Tests.Model.LazyModel;
-    using Castle.ActiveRecord.Framework;
-
+	using NHibernate;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class SessionScopeTestCase : AbstractActiveRecordTest
@@ -226,6 +220,50 @@ namespace Castle.ActiveRecord.Tests
 						object dummy = cat.Name;
 					}
 				}
+			}
+		}
+
+		[Test]
+		public void AnExceptionInvalidatesTheScopeAndPreventItsFlushing()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog blog;
+			Post post;
+
+			// Prepare
+			using(new SessionScope())
+			{
+				blog = new Blog();
+				blog.Author = "hammett";
+				blog.Name = "some name";
+				blog.Save();
+
+				post = new Post(blog, "title", "contents", "castle");
+				post.Save();
+			}
+
+			using(SessionScope session = new SessionScope())
+			{
+				Assert.IsFalse(session.HasSessionError);
+
+				try
+				{
+					// Forcing an exception
+					post = new Post(new Blog(100), "title", "contents", "castle");
+					post.SaveAndFlush();
+					Assert.Fail("Expecting exception as this operation violates a FK constraint");
+				}
+				catch(ActiveRecordException)
+				{
+					// Exception expected
+				}
+
+				Assert.IsTrue(session.HasSessionError);
 			}
 		}
 

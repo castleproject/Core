@@ -32,6 +32,15 @@ namespace Castle.ActiveRecord.Tests.Model
 		private IList _recentposts;
 		private bool onSaveCalled, onUpdateCalled, onDeleteCalled, onLoadCalled;
 
+		public Blog()
+		{
+		}
+
+		public Blog(int _id)
+		{
+			this._id = _id;
+		}
+
 		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id
 		{

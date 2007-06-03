@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #if DOTNET2
+using Castle.Components.Validator;
 namespace Castle.ActiveRecord.Tests.Validation.Model.GenericModel
 {
 	public abstract class AbstractTimeSlot<t> : ActiveRecordValidationBase
@@ -28,7 +29,7 @@ namespace Castle.ActiveRecord.Tests.Validation.Model.GenericModel
             set { myId = value; }
         }
 
-        [Property, ValidateNotEmpty, ValidateIsUnique]
+        [Property, ValidateNonEmpty, ValidateIsUnique]
         public string Name
         {
             get { return myName; }
@@ -36,7 +37,7 @@ namespace Castle.ActiveRecord.Tests.Validation.Model.GenericModel
         }
 
         [Property]
-        [ValidateNotEmpty]
+        [ValidateNonEmpty]
         public int Hour
         {
             get { return myHour; }
@@ -50,7 +51,7 @@ namespace Castle.ActiveRecord.Tests.Validation.Model.GenericModel
         private int myDay;
 
         [Property]
-        [ValidateNotEmpty]
+        [ValidateNonEmpty]
         public int Day
         {
             get { return myDay; }

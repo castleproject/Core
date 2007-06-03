@@ -22,6 +22,7 @@
 			<include name="HashCodeProvider.dll" />
 			<include name="Castle.Core.dll" />
 			<include name="Castle.DynamicProxy.dll" />
+			<include name="Castle.Components.Validator.dll" />
 			<include name="System.Data.dll" />
 			<include name="System.Web.dll" />
 			<include name="System.Configuration.dll" />

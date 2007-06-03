@@ -80,6 +80,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Components.Validator, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Validator.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
@@ -170,24 +174,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Attributes\TimestampAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Attributes\Validations\AbstractValidationAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Attributes\Validations\ValidateConfirmationAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Attributes\Validations\ValidateEmailAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Attributes\Validations\ValidateIsUniqueAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Attributes\Validations\ValidateNotEmptyAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Attributes\Validations\ValidateRegExpAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Attributes\VersionAttribute.cs">
@@ -345,30 +331,6 @@
     <Compile Include="Framework\TransactionException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Framework\ValidationException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\Validators\AbstractValidator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\Validators\ConfirmationValidator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\Validators\EmailValidator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\Validators\IsUniqueValidator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\Validators\IValidator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\Validators\NullCheckValidator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\Validators\RegularExpressionValidator.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\CompositeUserTypeAttribute.cs" />
@@ -377,8 +339,7 @@
     <Compile Include="Attributes\ImportAttribute.cs" />
     <Compile Include="Attributes\NestedParentReferenceAttribute.cs" />
     <Compile Include="Attributes\RawXmlMappingAttribute.cs" />
-    <Compile Include="Attributes\Validations\ValidateCreditCardAttribute.cs" />
-    <Compile Include="Attributes\Validations\ValidateLengthAttribute.cs" />
+    <Compile Include="Attributes\Validations\ValidateIsUniqueAttribute.cs" />
     <Compile Include="Framework\ActiveRecordBase.Generic.cs" />
     <Compile Include="Framework\ActiveRecordHooksBase.cs" />
     <Compile Include="Framework\ARSchemaCreator.cs" />
@@ -412,8 +373,8 @@
     <Compile Include="Framework\Scopes\HybridWebThreadScopeInfo.cs" />
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
     <Compile Include="Framework\SessionScopeWebModule.cs" />
-    <Compile Include="Framework\Validators\CreditCardValidator.cs" />
-    <Compile Include="Framework\Validators\LengthValidator.cs" />
+    <Compile Include="Framework\ValidationHookDispatcher.cs" />
+    <Compile Include="Framework\Validators\IsUniqueValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\CastleKey.snk">

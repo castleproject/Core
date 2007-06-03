@@ -15,11 +15,13 @@
 namespace Castle.ActiveRecord.Framework.Validators
 {
 	using System;
+	using System.Collections;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.ActiveRecord.Framework.Scopes;
 	using NHibernate;
 	using NHibernate.Classic;
 	using NHibernate.Expression;
+	using Castle.Components.Validator;
 
 	
 	/// <summary>
@@ -47,7 +49,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 		/// <param name="instance"></param>
 		/// <param name="fieldValue"></param>
 		/// <returns><c>true</c> if the field is OK</returns>
-		public override bool Perform(object instance, object fieldValue)
+		public override bool IsValid(object instance, object fieldValue)
 		{
 			Type instanceType = instance.GetType();
 			ActiveRecordModel model = ActiveRecordBase.GetModel(instance.GetType());
@@ -116,6 +118,31 @@ namespace Castle.ActiveRecord.Framework.Validators
 		protected override string BuildErrorMessage()
 		{
 			return String.Format("{0} is currently in use. Please pick up a new {0}.", Property.Name);
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this validator supports web validation.
+		/// </summary>
+		/// <value>
+		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// </value>
+		public override bool SupportsWebValidation
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Applies the web validation by setting up one or
+		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// </summary>
+		/// <param name="config">The config.</param>
+		/// <param name="inputType">Type of the input.</param>
+		/// <param name="generator">The generator.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <param name="target">The target.</param>
+		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
+												IWebValidationGenerator generator, IDictionary attributes, string target)
+		{
 		}
 	}
 }

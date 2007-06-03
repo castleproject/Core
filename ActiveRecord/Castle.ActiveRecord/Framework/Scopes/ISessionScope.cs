@@ -124,5 +124,12 @@ namespace Castle.ActiveRecord
 		/// <param name="interceptor">the NHibernate interceptor</param>
 		/// <returns>the newly created session</returns>
 		ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor);
+
+		/// <summary>
+		/// This method will be called if a session action fails. 
+		/// The scope may then decide to use an different approach to flush/dispose it.
+		/// </summary>
+		/// <param name="session">The session that failed</param>
+		void FailSession(ISession session);
 	}
 }

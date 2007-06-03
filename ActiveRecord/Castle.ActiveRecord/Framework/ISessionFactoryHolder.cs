@@ -79,6 +79,12 @@ namespace Castle.ActiveRecord.Framework
 		void ReleaseSession(ISession session);
 
 		/// <summary>
+		/// Called if an action on the session fails
+		/// </summary>
+		/// <param name="session"></param>
+		void FailSession(ISession session);
+
+		/// <summary>
 		/// Gets the type of the root.
 		/// </summary>
 		/// <param name="type">The type.</param>

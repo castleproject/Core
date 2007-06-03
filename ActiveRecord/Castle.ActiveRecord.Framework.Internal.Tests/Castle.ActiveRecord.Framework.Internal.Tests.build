@@ -17,6 +17,7 @@
 			<include name="nunit.framework.dll"/>
 			<include name="NHibernate.dll" />
 			<include name="Castle.ActiveRecord.dll" />
+			<include name="Castle.Components.Validator.dll" />
 			<include name="System.Configuration.dll" />
 		</assemblyfileset>
 	</target>

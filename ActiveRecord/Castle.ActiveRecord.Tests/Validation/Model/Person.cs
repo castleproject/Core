@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Tests.Validation.Model
 {
 	using System;
+	using Castle.Components.Validator;
 
 	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="x")]
 	public class Person : ActiveRecordValidationBase
@@ -34,7 +35,7 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 			set { id = value; }
 		}
 
-		[Property, ValidateNotEmpty]
+		[Property, ValidateNonEmpty]
 		public string Name
 		{
 			get { return name; }

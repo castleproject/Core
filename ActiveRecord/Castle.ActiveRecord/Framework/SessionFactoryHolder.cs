@@ -217,6 +217,23 @@ namespace Castle.ActiveRecord.Framework
 		}
 
 		/// <summary>
+		/// Called if an action on the session fails
+		/// </summary>
+		/// <param name="session"></param>
+		public void FailSession(ISession session)
+		{
+			if (threadScopeInfo.HasInitializedScope)
+			{
+				ISessionScope scope = threadScopeInfo.GetRegisteredScope();
+				scope.FailSession(session);
+			}
+			else
+			{
+				session.Clear();
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the implementation of <see cref="IThreadScopeInfo"/>
 		/// </summary>
 		/// <value></value>

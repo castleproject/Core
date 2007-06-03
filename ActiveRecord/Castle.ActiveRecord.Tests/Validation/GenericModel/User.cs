@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Tests.Validation.GenericModel
 {
 	using System;
+	using Castle.Components.Validator;
 
 	[ActiveRecord("users")]
 	public class User : ActiveRecordValidationBase<User>
@@ -33,35 +34,35 @@ namespace Castle.ActiveRecord.Tests.Validation.GenericModel
 			set { id = value; }
 		}
 
-		[ValidateNotEmpty, Property]
+		[ValidateNonEmpty, Property]
 		public string Login
 		{
 			get { return login; }
 			set { login = value; }
 		}
 
-		[ValidateNotEmpty, Property]
+		[ValidateNonEmpty, Property]
 		public string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
-		[ValidateEmail, ValidateNotEmpty, Property]
+		[ValidateEmail, ValidateNonEmpty, Property]
 		public string Email
 		{
 			get { return email; }
 			set { email = value; }
 		}
 
-		[ValidateConfirmation("ConfirmationPassword"), ValidateNotEmpty, Property]
+		[ValidateSameAs("ConfirmationPassword"), ValidateNonEmpty, Property]
 		public string Password
 		{
 			get { return password; }
 			set { password = value; }
 		}
 
-		[ValidateNotEmpty, Property]
+		[ValidateNonEmpty, Property]
 		public string ConfirmationPassword
 		{
 			get { return confirmationPassword; }

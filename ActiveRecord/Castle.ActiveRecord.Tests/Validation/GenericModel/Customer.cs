@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Tests.Validation.GenericModel
 {
 	using System;
+	using Castle.Components.Validator;
 
 	[ActiveRecord(DiscriminatorValue="y")]
 	public class Customer : Person
@@ -26,14 +27,14 @@ namespace Castle.ActiveRecord.Tests.Validation.GenericModel
 		{
 		}
 
-		[Property, ValidateNotEmpty]
+		[Property, ValidateNonEmpty]
 		public string ContactName
 		{
 			get { return contactName; }
 			set { contactName = value; }
 		}
 
-		[Property, ValidateNotEmpty]
+		[Property, ValidateNonEmpty]
 		public string Phone
 		{
 			get { return phone; }
