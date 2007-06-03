@@ -62,6 +62,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return BindObject(from, targetType, prefix);
 		}
 
+		protected void BindObjectInstance(object instance, ParamStore from, String prefix, AutoLoadBehavior autoLoad)
+		{
+			SetAutoLoadBehavior(autoLoad);
+			BindObjectInstance(instance, from, prefix);
+		}
+
+		protected void BindObjectInstance(object instance, String prefix, AutoLoadBehavior autoLoad)
+		{
+			SetAutoLoadBehavior(autoLoad);
+			BindObjectInstance(instance, ParamStore.Params, prefix);
+		}
+
 		protected void SetAutoLoadBehavior(AutoLoadBehavior autoLoad)
 		{
 			ARDataBinder binder = (ARDataBinder) Binder;
