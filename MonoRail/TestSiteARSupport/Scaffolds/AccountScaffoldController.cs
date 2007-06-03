@@ -12,34 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteARSupport.Model
+namespace TestSiteARSupport.Controllers
 {
-	using Castle.ActiveRecord;
-	
-	[ActiveRecord("TSAS_PersonUser")]
-	public class PersonUser : PersonBase
-	{
-		private string userid;
-		private string username;
-		private string password;
+	using Castle.MonoRail.Framework;
+	using TestSiteARSupport.Model;
 
-		[JoinedKey("user_id")]
-		public string UserId
-		{
-			get { return userid; }
-			set { userid = value; }
-		}
-		[Property("user_name")]
-		public string UserName
-		{
-			get { return username; }
-			set { username = value; }
-		}
-		[Property]
-		public string Password
-		{
-			get { return password; }
-			set { password = value; }
-		}
+	[Scaffolding(typeof(Account))]
+	public class AccountScaffoldController : Controller
+	{
 	}
 }

@@ -1,26 +1,21 @@
-
 <h2>Remove ${model.Type.Name}</h2>
 
 <p>
 Do you really want to remove this $model.Type.Name ?
 </p>
 
-#set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
-
 #if($useModelName)
-$PresentationHelper.Form( "remove${model.Type.Name}", "scaffoldingform", "post", $validatorForm )
+$Form.FormTag("%{action='remove${model.Type.Name}'}")
 #else
-$PresentationHelper.Form( "remove", "scaffoldingform", "post", $validatorForm )
+$Form.FormTag("%{action='remove'}")
 #end
 
-$HtmlHelper.HiddenField("id")
+$Form.HiddenField("id")
 
-<input type="submit" value="Yes" />  
+$Form.Submit("Yes")
+$Form.Button("No", "%{onclick='javascript:history.go(-1);'}")
 
-<input type="button" value="No" onclick="javascript:history.go(-1);" />
-
-</form>
-
+$Form.EndFormTag()
 
 <p>
 $PresentationHelper.LinkToBack("Back", null) | 

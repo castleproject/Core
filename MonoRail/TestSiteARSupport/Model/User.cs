@@ -16,10 +16,11 @@ namespace TestSiteARSupport.Model
 {
 	using System;
 	using Castle.ActiveRecord;
+	using Castle.Components.Validator;
 	using NHibernate.Expression;
 
 	[ActiveRecord("TSAS_User")]
-	public class User : ActiveRecordBase
+	public class User
 	{
 		private int id;
 		private String name;
@@ -32,7 +33,7 @@ namespace TestSiteARSupport.Model
 			set { id = value; }
 		}
 
-		[Property]
+		[Property, ValidateNonEmpty]
 		public string Name
 		{
 			get { return name; }
@@ -48,7 +49,7 @@ namespace TestSiteARSupport.Model
 
 		public static User[] FindAll()
 		{
-			return (User[]) ActiveRecordBase.FindAll(typeof(User), new Order[] { Order.Asc("Name") });
+			return ActiveRecordMediator<User>.FindAll(new Order[] { Order.Asc("Name") });
 		}
 	}
 }

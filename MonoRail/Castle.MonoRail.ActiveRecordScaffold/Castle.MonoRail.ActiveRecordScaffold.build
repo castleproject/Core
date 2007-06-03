@@ -23,6 +23,7 @@
 			<include name="Castle.Components.Binder.dll" />
 			<include name="Castle.Components.Common.TemplateEngine.dll" />
 			<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+			<include name="Castle.Components.Validator.dll" />
 		</assemblyfileset>
 
 		<resourcefileset id="project.resources" prefix="${project::get-name()}" dynamicprefix="true">

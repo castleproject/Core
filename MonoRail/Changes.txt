@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Tim Haines' patch adding BindObject overloads that accept the AutoLoadBehavior enum, 
+  to the ARSmartDispatcherController 
+
 - Changes from Lee Henson to add WizardStep support to TestSupport and provide a Generic BaseControllerTest. 
 
 - Patch from Maruis Marais allowing BuildFormRemoteTag to gracefully degrade when JavaScript is disabled. 

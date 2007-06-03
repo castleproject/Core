@@ -14,8 +14,6 @@
 
 namespace TestSiteARSupport.Controllers
 {
-	using System;
-	
 	using Castle.Components.Binder;
 	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;

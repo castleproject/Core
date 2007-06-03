@@ -16,6 +16,7 @@ namespace TestSiteARSupport.Model
 {
 	using System;
 	using Castle.ActiveRecord;
+	using Castle.Components.Validator;
 
 	[ActiveRecord("TSAS_SimplePerson")]
 	public class SimplePerson : ActiveRecordBase
@@ -31,7 +32,7 @@ namespace TestSiteARSupport.Model
 			set { _id = value; }
 		}
 
-		[Property, ValidateRegExpAttribute(@"^(?:\w| )+$")]
+		[Property, ValidateRegExp(@"^(?:\w| )+$")]
 		public String Name
 		{
 			get { return _name; }

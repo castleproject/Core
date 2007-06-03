@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html>
 	<head>
 	<title>$model.Type.Name</title>
@@ -57,15 +56,6 @@ input, select, textarea
 {
 	border: 1px solid gray;
 }
-input.errHilite, select.errHilite, textarea.errHilite 
-{
-	border: 1px solid #DDC;
-	background-color: #FFE;
-}
-label.errHilite 
-{
-	color: red;
-}
 ul#errors 
 {
 	margin-top: 1em;
@@ -99,6 +89,25 @@ div#scaffoldmain
 	margin-left: 5px;
 	margin-top: 5px;
 }
+.validation-advice 
+{
+	position: inherit;
+	margin: 5px 0;
+	padding: 5px;
+	background-color: #CC3300;
+	color: #FFF;
+	font-weight: bold;
+}
+.custom-advice 
+{
+	position: inherit;
+	margin: 5px 0;
+	padding: 5px;
+	background-color: #C8AA00;
+	color : #FFF;
+	font-weight: bold;
+}
+
 	  </style>
 	</head>
 

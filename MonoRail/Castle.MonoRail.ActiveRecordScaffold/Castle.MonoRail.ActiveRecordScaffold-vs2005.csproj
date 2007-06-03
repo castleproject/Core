@@ -86,6 +86,10 @@
       <Name>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine</Name>
       <HintPath>..\..\build\net-2.0\debug\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Components.Validator, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\net-2.0\debug\Castle.Components.Validator.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>

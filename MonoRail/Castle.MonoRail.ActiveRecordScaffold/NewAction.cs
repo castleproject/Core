@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 	using Castle.Components.Common.TemplateEngine;
@@ -48,13 +47,12 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			if (instance == null)
 			{
 				instance = Activator.CreateInstance(Model.Type);
-				
-//				instance = binder.BindObject(Model.Type, 
-//				                             Model.Type.Name, 
-//				                             builder.BuildSourceNode(controller.Request.QueryString) );
 			}
 
-			controller.PropertyBag["prefix"] = Model.Type.Name;
+			string prefix = Model.Type.Name;
+
+			controller.PropertyBag["prefix"] = prefix;
+			controller.PropertyBag[prefix + "type"] = Model.Type;
 			controller.PropertyBag["instance"] = instance;
 		}
 

@@ -20,23 +20,16 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 	using System.Text;
 	using System.Reflection;
 	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
-	using Castle.ActiveRecord.Framework.Validators;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
-	using Iesi.Collections;
 
 	public class ARFormHelper : FormHelper
 	{
-		private static readonly object[] Empty = new object[0];
-
 		private StringBuilder stringBuilder = new StringBuilder(1024);
 
 		private IDictionary model2nestedInstance = new Hashtable();
 		
-		private FormHelper formHelper = new FormHelper();
-
 		private static readonly int[] Months = { 1,2,3,4,5,6,7,8,9,10,11,12 };
 		private static readonly int[] Days = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
 		                                       11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
@@ -55,13 +48,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			}
 		}
 		
-		public override void SetController(Controller controller)
-		{
-			base.SetController(controller);
-			
-			formHelper.SetController(controller);
-		}
-
 		public ICollection GetModelHierarchy(ActiveRecordModel model, object instance)
 		{
 			ArrayList list = new ArrayList();
@@ -314,7 +300,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				attrs.Add("firstOption", "Empty");
 			}
 
-			stringBuilder.Append(formHelper.Select(propName, items, attrs));
+			stringBuilder.Append(Select(propName, items, attrs));
 
 			return stringBuilder.ToString();
 		}
@@ -346,7 +332,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			
 			attrs["value"] = keyModel.Property.Name;
 			
-			FormHelper.CheckboxList list = formHelper.CreateCheckboxList(prefix, source, attrs);
+			FormHelper.CheckboxList list = CreateCheckboxList(prefix, source, attrs);
 			
 			foreach(object item in list)
 			{
@@ -387,7 +373,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			
 			attrs["value"] = keyModel.Property.Name;
 			
-			FormHelper.CheckboxList list = formHelper.CreateCheckboxList(prefix, source, attrs);
+			FormHelper.CheckboxList list = CreateCheckboxList(prefix, source, attrs);
 			
 			foreach(object item in list)
 			{
@@ -408,14 +394,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 		                                      object value, bool unique, bool notNull, String columnType, int length)
 		{
 			IDictionary htmlAttributes = new Hashtable();
-
-			String validators = PopulateCustomValidators(
-				notNull ? "blank" : "bok", propType, property, model.Validators);
-			
-			if (validators != String.Empty)
-			{
-				htmlAttributes["validators"] = validators;
-			}
 			
 			if (propType == typeof(String))
 			{
@@ -435,11 +413,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			}
 			else if (propType == typeof(Int16) || propType == typeof(Int32) || propType == typeof(Int64))
 			{
-				stringBuilder.AppendFormat(TextField(propName, htmlAttributes));
+				stringBuilder.AppendFormat(NumberField(propName, htmlAttributes));
 			}
 			else if (propType == typeof(Single) || propType == typeof(Double))
 			{
-				stringBuilder.AppendFormat(TextField(propName, htmlAttributes));
+				stringBuilder.AppendFormat(NumberField(propName, htmlAttributes));
 			}
 			else if (propType == typeof(DateTime))
 			{
@@ -465,105 +443,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 					                          RadioField(propName, name), LabelFor(name, name)));
 				}
 			}
-		}
-
-		private String PopulateCustomValidators(string initialValidation, Type type, 
-		                                        PropertyInfo property, IList validators)
-		{
-			ArrayList list = new ArrayList();
-
-			if (property != null)
-			{
-				foreach(IValidator validator in validators)
-				{
-					if (validator.Property == property)
-					{
-						if (validator is NullCheckValidator && initialValidation.Equals("bok"))
-						{
-							initialValidation = "blank";
-						}
-						else if (validator is EmailValidator)
-						{
-							list.Add("email|1");
-						}
-						else if (validator is ConfirmationValidator)
-						{
-							// TODO: Change ConfirmationValidator to expose the confirmation target
-							// Validate equality with a 2nd field.
-							// list.Add("equalto");
-						}
-					}
-				}
-			}
-
-			if (type == typeof(Int32))
-			{
-				list.Add("number|0|" + Int32.MinValue.ToString() + "|" + Int32.MaxValue.ToString());
-			}
-			else if (type == typeof(Int16))
-			{
-				list.Add("number|0|" + Int16.MinValue.ToString() + "|" + Int16.MaxValue.ToString());
-			}
-			else if (type == typeof(Int64))
-			{
-				list.Add("number|0|" + Int64.MinValue.ToString() + "|" + Int64.MaxValue.ToString());
-			}
-
-			if (list.Count == 0)
-			{
-				return initialValidation.Equals("bok") ? "" : initialValidation;
-			}
-			else
-			{
-				if (initialValidation.Equals("bok"))
-				{
-					list.Add(initialValidation);
-				}
-				else
-				{
-					list.Insert(0, initialValidation);
-				}
-				return String.Join("|", (String[]) list.ToArray(typeof(String)));
-			}
-		}
-
-		private static object InitializeRelationPropertyIfNull(object instance, PropertyInfo property)
-		{
-			object container = property.GetValue(instance, Empty);
-
-			if (container == null)
-			{
-				if (property.PropertyType == typeof(IList))
-				{
-					container = new ArrayList();
-				}
-				else if (property.PropertyType == typeof(ISet))
-				{
-					container = new HashedSet();
-				}
-
-				property.SetValue(instance, container, Empty);
-			}
-
-			return container;
-		}
-
-		private static Array CreateArrayFromExistingIds(PrimaryKeyModel keyModel, ICollection container)
-		{
-			if (container == null || container.Count == 0) return null;
-
-			Array array = Array.CreateInstance(keyModel.Property.PropertyType, container.Count);
-
-			int index = 0;
-
-			foreach(object item in container)
-			{
-				object val = keyModel.Property.GetValue(item, Empty);
-
-				array.SetValue(val, index++);
-			}
-
-			return array;
 		}
 
 		private static string CreatePropName(ActiveRecordModel model, String prefix, String name)

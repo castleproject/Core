@@ -14,8 +14,6 @@
 
 namespace TestSiteARSupport.Controllers
 {
-	using System;
-
 	using Castle.Components.Binder;
 	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
@@ -24,7 +22,6 @@ namespace TestSiteARSupport.Controllers
 	
 	public class PersonUserController : ARSmartDispatcherController
 	{
-
 		public void New()
 		{
 			PropertyBag["user"] = new PersonUser();

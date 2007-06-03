@@ -169,7 +169,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
 			
-			//additional form parameters. fValidate creates onsubmit here.
+			// Additional form parameters. fValidate creates onsubmit here.
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
 			string afterFormTag = validationConfig.CreateAfterFormOpened(currentFormId);
@@ -183,12 +183,18 @@ namespace Castle.MonoRail.Framework.Helpers
 				string onSubmitFunc = CommonUtils.ObtainEntryAndRemove(parameters, "onsubmit");
 				//remove return to make it compatible for ajax condition
 				if (onSubmitFunc.StartsWith("return ", StringComparison.InvariantCultureIgnoreCase))
+				{
 					onSubmitFunc = onSubmitFunc.Substring(7);
+				}
 				if (onSubmitFunc.EndsWith(";", StringComparison.InvariantCultureIgnoreCase))
+				{
 					onSubmitFunc = onSubmitFunc.Remove(onSubmitFunc.Length - 1);
+				}
 				string conditionFunc = CommonUtils.ObtainEntryAndRemove(parameters, "condition", string.Empty);
 				if (!string.IsNullOrEmpty(conditionFunc))
+				{
 					conditionFunc += " && ";
+				}
 				conditionFunc += onSubmitFunc;
 				
 				parameters["condition"] = conditionFunc;
@@ -196,8 +202,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			bool isMethodAssigned = parameters.Contains("method");
 			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
 			parameters["url"] = url;
-			//reassign method so in case if there is no value the default is assigned.
-			if (isMethodAssigned) parameters["method"] = method;
+			// reassign method so in case if there is no value the default is assigned.
+			if (isMethodAssigned)
+			{
+				parameters["method"] = method;
+			}
+
 			String remoteFunc = RemoteFunction(parameters);
 
 			string formContent = String.Format("<form id='{1}' method='{2}' {3} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, currentFormId, method,GetAttributes(parameters));
@@ -205,6 +215,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			return formContent + afterFormTag;
 		}
 
+		/// <summary>
+		/// Generates an end form element.
+		/// </summary>
+		/// <returns></returns>
 		public string EndFormTag()
 		{
 			string beforeEndTag = validationConfig.CreateBeforeFormClosed(currentFormId);

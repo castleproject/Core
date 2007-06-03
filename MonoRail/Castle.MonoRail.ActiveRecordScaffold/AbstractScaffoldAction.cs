@@ -249,8 +249,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected static void SetUpHelpers(Controller controller)
 		{
-			ARFormHelper htmlHelper = new ARFormHelper();
-			htmlHelper.SetController(controller);
+			ARFormHelper formHelper = new ARFormHelper();
+			formHelper.SetController(controller);
 	
 			ValidationHelper validationHelper = new ValidationHelper();
 			validationHelper.SetController(controller);
@@ -261,7 +261,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
             PaginationHelper paginationHelper = new PaginationHelper();
             paginationHelper.SetController(controller);
 
-			controller.PropertyBag["HtmlHelper"] = htmlHelper;
+			ScriptaculousHelper scriptaculous = new ScriptaculousHelper();
+			scriptaculous.SetController(controller);
+
+			AjaxHelper ajaxHelper = new AjaxHelper();
+			ajaxHelper.SetController(controller);
+
+			controller.PropertyBag["Scriptaculous"] = scriptaculous;
+			controller.PropertyBag["Ajax"] = ajaxHelper;
+			controller.PropertyBag["Form"] = formHelper;
 			controller.PropertyBag["ValidationHelper"] = validationHelper;
 			controller.PropertyBag["PresentationHelper"] = presentationHelper;
             controller.PropertyBag["PaginationHelper"] = paginationHelper;
