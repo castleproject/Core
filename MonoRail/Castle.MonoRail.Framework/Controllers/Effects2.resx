@@ -61,16 +61,186 @@
   <data name="functions" xml:space="preserve">
     <value><![CDATA[
 
-// script.aculo.us effects.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
+// script.aculo.us scriptaculous.js v1.7.1_beta3, Fri May 25 17:19:41 +0200 2007
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-// Contributors:
-//  Justin Palmer (http://encytemedia.com/)
-//  Mark Pilgrim (http://diveintomark.org/)
-//  Martin Bialasinki
+// Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 // 
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/ 
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// For details, see the script.aculo.us web site: http://script.aculo.us/
+
+var Scriptaculous = {
+  Version: '1.7.1_beta3',
+  require: function(libraryName) {
+    // inserting via DOM fails in Safari 2.0, so brute force approach
+    document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
+  },
+  REQUIRED_PROTOTYPE: '1.5.1',
+  load: function() {
+    function convertVersionString(versionString){
+      var r = versionString.split('.');
+      return parseInt(r[0])*100000 + parseInt(r[1])*1000 + parseInt(r[2]);
+    }
+ 
+    if((typeof Prototype=='undefined') || 
+       (typeof Element == 'undefined') || 
+       (typeof Element.Methods=='undefined') ||
+       (convertVersionString(Prototype.Version) < 
+        convertVersionString(Scriptaculous.REQUIRED_PROTOTYPE)))
+       throw("script.aculo.us requires the Prototype JavaScript framework >= " +
+        Scriptaculous.REQUIRED_PROTOTYPE);
+  }
+}
+
+Scriptaculous.load();
+
+var Builder = {
+  NODEMAP: {
+    AREA: 'map',
+    CAPTION: 'table',
+    COL: 'table',
+    COLGROUP: 'table',
+    LEGEND: 'fieldset',
+    OPTGROUP: 'select',
+    OPTION: 'select',
+    PARAM: 'object',
+    TBODY: 'table',
+    TD: 'table',
+    TFOOT: 'table',
+    TH: 'table',
+    THEAD: 'table',
+    TR: 'table'
+  },
+  // note: For Firefox < 1.5, OPTION and OPTGROUP tags are currently broken,
+  //       due to a Firefox bug
+  node: function(elementName) {
+    elementName = elementName.toUpperCase();
+    
+    // try innerHTML approach
+    var parentTag = this.NODEMAP[elementName] || 'div';
+    var parentElement = document.createElement(parentTag);
+    try { // prevent IE "feature": http://dev.rubyonrails.org/ticket/2707
+      parentElement.innerHTML = "<" + elementName + "></" + elementName + ">";
+    } catch(e) {}
+    var element = parentElement.firstChild || null;
+      
+    // see if browser added wrapping tags
+    if(element && (element.tagName.toUpperCase() != elementName))
+      element = element.getElementsByTagName(elementName)[0];
+    
+    // fallback to createElement approach
+    if(!element) element = document.createElement(elementName);
+    
+    // abort if nothing could be created
+    if(!element) return;
+
+    // attributes (or text)
+    if(arguments[1])
+      if(this._isStringOrNumber(arguments[1]) ||
+        (arguments[1] instanceof Array) ||
+        arguments[1].tagName) {
+          this._children(element, arguments[1]);
+        } else {
+          var attrs = this._attributes(arguments[1]);
+          if(attrs.length) {
+            try { // prevent IE "feature": http://dev.rubyonrails.org/ticket/2707
+              parentElement.innerHTML = "<" +elementName + " " +
+                attrs + "></" + elementName + ">";
+            } catch(e) {}
+            element = parentElement.firstChild || null;
+            // workaround firefox 1.0.X bug
+            if(!element) {
+              element = document.createElement(elementName);
+              for(attr in arguments[1]) 
+                element[attr == 'class' ? 'className' : attr] = arguments[1][attr];
+            }
+            if(element.tagName.toUpperCase() != elementName)
+              element = parentElement.getElementsByTagName(elementName)[0];
+          }
+        } 
+
+    // text, or array of children
+    if(arguments[2])
+      this._children(element, arguments[2]);
+
+     return element;
+  },
+  _text: function(text) {
+     return document.createTextNode(text);
+  },
+
+  ATTR_MAP: {
+    'className': 'class',
+    'htmlFor': 'for'
+  },
+
+  _attributes: function(attributes) {
+    var attrs = [];
+    for(attribute in attributes)
+      attrs.push((attribute in this.ATTR_MAP ? this.ATTR_MAP[attribute] : attribute) +
+          '="' + attributes[attribute].toString().escapeHTML().gsub(/"/,'&quot;') + '"');
+    return attrs.join(" ");
+  },
+  _children: function(element, children) {
+    if(children.tagName) {
+      element.appendChild(children);
+      return;
+    }
+    if(typeof children=='object') { // array can hold nodes and text
+      children.flatten().each( function(e) {
+        if(typeof e=='object')
+          element.appendChild(e)
+        else
+          if(Builder._isStringOrNumber(e))
+            element.appendChild(Builder._text(e));
+      });
+    } else
+      if(Builder._isStringOrNumber(children))
+        element.appendChild(Builder._text(children));
+  },
+  _isStringOrNumber: function(param) {
+    return(typeof param=='string' || typeof param=='number');
+  },
+  build: function(html) {
+    var element = this.node('div');
+    $(element).update(html.strip());
+    return element.down();
+  },
+  dump: function(scope) { 
+    if(typeof scope != 'object' && typeof scope != 'function') scope = window; //global scope 
+  
+    var tags = ("A ABBR ACRONYM ADDRESS APPLET AREA B BASE BASEFONT BDO BIG BLOCKQUOTE BODY " +
+      "BR BUTTON CAPTION CENTER CITE CODE COL COLGROUP DD DEL DFN DIR DIV DL DT EM FIELDSET " +
+      "FONT FORM FRAME FRAMESET H1 H2 H3 H4 H5 H6 HEAD HR HTML I IFRAME IMG INPUT INS ISINDEX "+
+      "KBD LABEL LEGEND LI LINK MAP MENU META NOFRAMES NOSCRIPT OBJECT OL OPTGROUP OPTION P "+
+      "PARAM PRE Q S SAMP SCRIPT SELECT SMALL SPAN STRIKE STRONG STYLE SUB SUP TABLE TBODY TD "+
+      "TEXTAREA TFOOT TH THEAD TITLE TR TT U UL VAR").split(/\s+/);
+  
+    tags.each( function(tag){ 
+      scope[tag] = function() { 
+        return Builder.node.apply(Builder, [tag].concat($A(arguments)));  
+      } 
+    });
+  }
+}
+
 
 // converts rgb() and #xxx to #xxxxxx format,  
 // returns self (or first argument) if not convertable  
@@ -108,16 +278,8 @@ Element.collectTextNodesIgnoreClass = function(element, className) {
 Element.setContentZoom = function(element, percent) {
   element = $(element);  
   element.setStyle({fontSize: (percent/100) + 'em'});   
-  if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
+  if(Prototype.Browser.WebKit) window.scrollBy(0,0);
   return element;
-}
-
-Element.getOpacity = function(element){
-  return $(element).getStyle('opacity');
-}
-
-Element.setOpacity = function(element, value){
-  return $(element).setStyle({opacity:value});
 }
 
 Element.getInlineOpacity = function(element){
@@ -152,7 +314,7 @@ var Effect = {
       throw("Effect.tagifyText requires including script.aculo.us' builder.js library");
       
     var tagifyStyle = 'position:relative';
-    if(/MSIE/.test(navigator.userAgent) && !window.opera) tagifyStyle += ';zoom:1';
+    if(Prototype.Browser.IE) tagifyStyle += ';zoom:1';
     
     element = $(element);
     $A(element.childNodes).each( function(child) {
@@ -215,7 +377,8 @@ Effect.Transitions = {
     return 1-pos;
   },
   flicker: function(pos) {
-    return ((-Math.cos(pos*Math.PI)/4) + 0.75) + Math.random()/4;
+    var pos = ((-Math.cos(pos*Math.PI)/4) + 0.75) + Math.random()/4;
+    return (pos > 1 ? 1 : pos);
   },
   wobble: function(pos) {
     return (-Math.cos(pos*Math.PI*(9*pos))/2) + 0.5;
@@ -242,7 +405,7 @@ Effect.ScopedQueue = Class.create();
 Object.extend(Object.extend(Effect.ScopedQueue.prototype, Enumerable), {
   initialize: function() {
     this.effects  = [];
-    this.interval = null;
+    this.interval = null;    
   },
   _each: function(iterator) {
     this.effects._each(iterator);
@@ -276,7 +439,7 @@ Object.extend(Object.extend(Effect.ScopedQueue.prototype, Enumerable), {
     if(!effect.options.queue.limit || (this.effects.length < effect.options.queue.limit))
       this.effects.push(effect);
     
-    if(!this.interval) 
+    if(!this.interval)
       this.interval = setInterval(this.loop.bind(this), 15);
   },
   remove: function(effect) {
@@ -289,7 +452,7 @@ Object.extend(Object.extend(Effect.ScopedQueue.prototype, Enumerable), {
   loop: function() {
     var timePos = new Date().getTime();
     for(var i=0, len=this.effects.length;i<len;i++) 
-      if(this.effects[i]) this.effects[i].loop(timePos);
+      this.effects[i] && this.effects[i].loop(timePos);
   }
 });
 
@@ -309,7 +472,7 @@ Effect.Queue = Effect.Queues.get('global');
 Effect.DefaultOptions = {
   transition: Effect.Transitions.sinoidal,
   duration:   1.0,   // seconds
-  fps:        60.0,  // max. 60fps due to Effect.Queue implementation
+  fps:        100,   // 100= assume 66fps max.
   sync:       false, // true for combining
   from:       0.0,
   to:         1.0,
@@ -321,11 +484,35 @@ Effect.Base = function() {};
 Effect.Base.prototype = {
   position: null,
   start: function(options) {
+    function codeForEvent(options,eventName){
+      return (
+        (options[eventName+'Internal'] ? 'this.options.'+eventName+'Internal(this);' : '') +
+        (options[eventName] ? 'this.options.'+eventName+'(this);' : '')
+      );
+    }
+    if(options.transition === false) options.transition = Effect.Transitions.linear;
     this.options      = Object.extend(Object.extend({},Effect.DefaultOptions), options || {});
     this.currentFrame = 0;
     this.state        = 'idle';
     this.startOn      = this.options.delay*1000;
-    this.finishOn     = this.startOn + (this.options.duration*1000);
+    this.finishOn     = this.startOn+(this.options.duration*1000);
+    this.fromToDelta  = this.options.to-this.options.from;
+    this.totalTime    = this.finishOn-this.startOn;
+    this.totalFrames  = this.options.fps*this.options.duration;
+    
+    eval('this.render = function(pos){ '+
+      'if(this.state=="idle"){this.state="running";'+
+      codeForEvent(options,'beforeSetup')+
+      (this.setup ? 'this.setup();':'')+ 
+      codeForEvent(options,'afterSetup')+
+      '};if(this.state=="running"){'+
+      'pos=this.options.transition(pos)*'+this.fromToDelta+'+'+this.options.from+';'+
+      'this.position=pos;'+
+      codeForEvent(options,'beforeUpdate')+
+      (this.update ? 'this.update(pos);':'')+
+      codeForEvent(options,'afterUpdate')+
+      '}}');
+    
     this.event('beforeStart');
     if(!this.options.sync)
       Effect.Queues.get(typeof this.options.queue == 'string' ? 
@@ -341,29 +528,12 @@ Effect.Base.prototype = {
         this.event('afterFinish');
         return;  
       }
-      var pos   = (timePos - this.startOn) / (this.finishOn - this.startOn);
-      var frame = Math.round(pos * this.options.fps * this.options.duration);
+      var pos   = (timePos - this.startOn) / this.totalTime,
+          frame = Math.round(pos * this.totalFrames);
       if(frame > this.currentFrame) {
         this.render(pos);
         this.currentFrame = frame;
       }
-    }
-  },
-  render: function(pos) {
-    if(this.state == 'idle') {
-      this.state = 'running';
-      this.event('beforeSetup');
-      if(this.setup) this.setup();
-      this.event('afterSetup');
-    }
-    if(this.state == 'running') {
-      if(this.options.transition) pos = this.options.transition(pos);
-      pos *= (this.options.to-this.options.from);
-      pos += this.options.from;
-      this.position = pos;
-      this.event('beforeUpdate');
-      if(this.update) this.update(pos);
-      this.event('afterUpdate');
     }
   },
   cancel: function() {
@@ -421,7 +591,7 @@ Object.extend(Object.extend(Effect.Opacity.prototype, Effect.Base.prototype), {
     this.element = $(element);
     if(!this.element) throw(Effect._elementDoesNotExistError);
     // make this work on IE on elements without 'layout'
-    if(/MSIE/.test(navigator.userAgent) && !window.opera && (!this.element.currentStyle.hasLayout))
+    if(Prototype.Browser.IE && (!this.element.currentStyle.hasLayout))
       this.element.setStyle({zoom: 1});
     var options = Object.extend({
       from: this.element.getOpacity() || 0.0,
@@ -1016,7 +1186,7 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
           effect.element.addClassName(effect.options.style);
           effect.transforms.each(function(transform) {
             if(transform.style != 'opacity')
-              effect.element.style[transform.style.camelize()] = '';
+              effect.element.style[transform.style] = '';
           });
         }
       } else this.style = options.style.parseStyle();
@@ -1032,26 +1202,28 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
       });
     }
     this.transforms = this.style.map(function(pair){
-      var property = pair[0].underscore().dasherize(), value = pair[1], unit = null;
+      var property = pair[0], value = pair[1], unit = null;
 
       if(value.parseColor('#zzzzzz') != '#zzzzzz') {
         value = value.parseColor();
         unit  = 'color';
       } else if(property == 'opacity') {
         value = parseFloat(value);
-        if(/MSIE/.test(navigator.userAgent) && !window.opera && (!this.element.currentStyle.hasLayout))
+        if(Prototype.Browser.IE && (!this.element.currentStyle.hasLayout))
           this.element.setStyle({zoom: 1});
-      } else if(Element.CSS_LENGTH.test(value)) 
-        var components = value.match(/^([\+\-]?[0-9\.]+)(.*)$/),
-          value = parseFloat(components[1]), unit = (components.length == 3) ? components[2] : null;
+      } else if(Element.CSS_LENGTH.test(value)) {
+          var components = value.match(/^([\+\-]?[0-9\.]+)(.*)$/);
+          value = parseFloat(components[1]);
+          unit = (components.length == 3) ? components[2] : null;
+      }
 
       var originalValue = this.element.getStyle(property);
-      return $H({ 
-        style: property, 
+      return { 
+        style: property.camelize(), 
         originalValue: unit=='color' ? parseColor(originalValue) : parseFloat(originalValue || 0), 
         targetValue: unit=='color' ? parseColor(value) : value,
         unit: unit
-      });
+      };
     }.bind(this)).reject(function(transform){
       return (
         (transform.originalValue == transform.targetValue) ||
@@ -1063,17 +1235,19 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
     });
   },
   update: function(position) {
-    var style = $H(), value = null;
-    this.transforms.each(function(transform){
-      value = transform.unit=='color' ?
-        $R(0,2).inject('#',function(m,v,i){
-          return m+(Math.round(transform.originalValue[i]+
-            (transform.targetValue[i] - transform.originalValue[i])*position)).toColorPart() }) : 
+    var style = {}, transform, i = this.transforms.length;
+    while(i--)
+      style[(transform = this.transforms[i]).style] = 
+        transform.unit=='color' ? '#'+
+          (Math.round(transform.originalValue[0]+
+            (transform.targetValue[0]-transform.originalValue[0])*position)).toColorPart() +
+          (Math.round(transform.originalValue[1]+
+            (transform.targetValue[1]-transform.originalValue[1])*position)).toColorPart() +
+          (Math.round(transform.originalValue[2]+
+            (transform.targetValue[2]-transform.originalValue[2])*position)).toColorPart() :
         transform.originalValue + Math.round(
           ((transform.targetValue - transform.originalValue) * position) * 1000)/1000 + transform.unit;
-      style[transform.style] = value;
-    });
-    this.element.setStyle(style);
+    this.element.setStyle(style, true);
   }
 });
 
@@ -1120,14 +1294,14 @@ Element.CSS_PROPERTIES = $w(
 Element.CSS_LENGTH = /^(([\+\-]?[0-9\.]+)(em|ex|px|in|cm|mm|pt|pc|\%))|0$/;
 
 String.prototype.parseStyle = function(){
-  var element = Element.extend(document.createElement('div'));
+  var element = document.createElement('div');
   element.innerHTML = '<div style="' + this + '"></div>';
-  var style = element.down().style, styleRules = $H();
+  var style = element.childNodes[0].style, styleRules = $H();
   
   Element.CSS_PROPERTIES.each(function(property){
     if(style[property]) styleRules[property] = style[property]; 
   });
-  if(/MSIE/.test(navigator.userAgent) && !window.opera && this.indexOf('opacity') > -1) {
+  if(Prototype.Browser.IE && this.indexOf('opacity') > -1) {
     styleRules.opacity = this.match(/opacity:\s*((?:0|1)?(?:\.\d*)?)/)[1];
   }
   return styleRules;
@@ -1138,292 +1312,980 @@ Element.morph = function(element, style) {
   return element;
 };
 
-['setOpacity','getOpacity','getInlineOpacity','forceRerendering','setContentZoom',
+['getInlineOpacity','forceRerendering','setContentZoom',
  'collectTextNodes','collectTextNodesIgnoreClass','morph'].each( 
   function(f) { Element.Methods[f] = Element[f]; }
 );
 
 Element.Methods.visualEffect = function(element, effect, options) {
-  s = effect.gsub(/_/, '-').camelize();
+  s = effect.dasherize().camelize();
   effect_class = s.charAt(0).toUpperCase() + s.substring(1);
   new Effect[effect_class](element, options);
   return $(element);
 };
 
-Element.addMethods();// script.aculo.us builder.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
+Element.addMethods();
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/
+var Droppables = {
+  drops: [],
 
-var Builder = {
-  NODEMAP: {
-    AREA: 'map',
-    CAPTION: 'table',
-    COL: 'table',
-    COLGROUP: 'table',
-    LEGEND: 'fieldset',
-    OPTGROUP: 'select',
-    OPTION: 'select',
-    PARAM: 'object',
-    TBODY: 'table',
-    TD: 'table',
-    TFOOT: 'table',
-    TH: 'table',
-    THEAD: 'table',
-    TR: 'table'
+  remove: function(element) {
+    this.drops = this.drops.reject(function(d) { return d.element==$(element) });
   },
-  // note: For Firefox < 1.5, OPTION and OPTGROUP tags are currently broken,
-  //       due to a Firefox bug
-  node: function(elementName) {
-    elementName = elementName.toUpperCase();
+
+  add: function(element) {
+    element = $(element);
+    var options = Object.extend({
+      greedy:     true,
+      hoverclass: null,
+      tree:       false
+    }, arguments[1] || {});
+
+    // cache containers
+    if(options.containment) {
+      options._containers = [];
+      var containment = options.containment;
+      if((typeof containment == 'object') && 
+        (containment.constructor == Array)) {
+        containment.each( function(c) { options._containers.push($(c)) });
+      } else {
+        options._containers.push($(containment));
+      }
+    }
     
-    // try innerHTML approach
-    var parentTag = this.NODEMAP[elementName] || 'div';
-    var parentElement = document.createElement(parentTag);
-    try { // prevent IE "feature": http://dev.rubyonrails.org/ticket/2707
-      parentElement.innerHTML = "<" + elementName + "></" + elementName + ">";
-    } catch(e) {}
-    var element = parentElement.firstChild || null;
+    if(options.accept) options.accept = [options.accept].flatten();
+
+    Element.makePositioned(element); // fix IE
+    options.element = element;
+
+    this.drops.push(options);
+  },
+  
+  findDeepestChild: function(drops) {
+    deepest = drops[0];
       
-    // see if browser added wrapping tags
-    if(element && (element.tagName.toUpperCase() != elementName))
-      element = element.getElementsByTagName(elementName)[0];
+    for (i = 1; i < drops.length; ++i)
+      if (Element.isParent(drops[i].element, deepest.element))
+        deepest = drops[i];
     
-    // fallback to createElement approach
-    if(!element) element = document.createElement(elementName);
+    return deepest;
+  },
+
+  isContained: function(element, drop) {
+    var containmentNode;
+    if(drop.tree) {
+      containmentNode = element.treeNode; 
+    } else {
+      containmentNode = element.parentNode;
+    }
+    return drop._containers.detect(function(c) { return containmentNode == c });
+  },
+  
+  isAffected: function(point, element, drop) {
+    return (
+      (drop.element!=element) &&
+      ((!drop._containers) ||
+        this.isContained(element, drop)) &&
+      ((!drop.accept) ||
+        (Element.classNames(element).detect( 
+          function(v) { return drop.accept.include(v) } ) )) &&
+      Position.within(drop.element, point[0], point[1]) );
+  },
+
+  deactivate: function(drop) {
+    if(drop.hoverclass)
+      Element.removeClassName(drop.element, drop.hoverclass);
+    this.last_active = null;
+  },
+
+  activate: function(drop) {
+    if(drop.hoverclass)
+      Element.addClassName(drop.element, drop.hoverclass);
+    this.last_active = drop;
+  },
+
+  show: function(point, element) {
+    if(!this.drops.length) return;
+    var affected = [];
     
-    // abort if nothing could be created
-    if(!element) return;
-
-    // attributes (or text)
-    if(arguments[1])
-      if(this._isStringOrNumber(arguments[1]) ||
-        (arguments[1] instanceof Array)) {
-          this._children(element, arguments[1]);
-        } else {
-          var attrs = this._attributes(arguments[1]);
-          if(attrs.length) {
-            try { // prevent IE "feature": http://dev.rubyonrails.org/ticket/2707
-              parentElement.innerHTML = "<" +elementName + " " +
-                attrs + "></" + elementName + ">";
-            } catch(e) {}
-            element = parentElement.firstChild || null;
-            // workaround firefox 1.0.X bug
-            if(!element) {
-              element = document.createElement(elementName);
-              for(attr in arguments[1]) 
-                element[attr == 'class' ? 'className' : attr] = arguments[1][attr];
-            }
-            if(element.tagName.toUpperCase() != elementName)
-              element = parentElement.getElementsByTagName(elementName)[0];
-            }
-        } 
-
-    // text, or array of children
-    if(arguments[2])
-      this._children(element, arguments[2]);
-
-     return element;
-  },
-  _text: function(text) {
-     return document.createTextNode(text);
+    if(this.last_active) this.deactivate(this.last_active);
+    this.drops.each( function(drop) {
+      if(Droppables.isAffected(point, element, drop))
+        affected.push(drop);
+    });
+        
+    if(affected.length>0) {
+      drop = Droppables.findDeepestChild(affected);
+      Position.within(drop.element, point[0], point[1]);
+      if(drop.onHover)
+        drop.onHover(element, drop.element, Position.overlap(drop.overlap, drop.element));
+      
+      Droppables.activate(drop);
+    }
   },
 
-  ATTR_MAP: {
-    'className': 'class',
-    'htmlFor': 'for'
+  fire: function(event, element) {
+    if(!this.last_active) return;
+    Position.prepare();
+
+    if (this.isAffected([Event.pointerX(event), Event.pointerY(event)], element, this.last_active))
+      if (this.last_active.onDrop) {
+        this.last_active.onDrop(element, this.last_active.element, event); 
+        return true; 
+      }
   },
 
-  _attributes: function(attributes) {
-    var attrs = [];
-    for(attribute in attributes)
-      attrs.push((attribute in this.ATTR_MAP ? this.ATTR_MAP[attribute] : attribute) +
-          '="' + attributes[attribute].toString().escapeHTML() + '"');
-    return attrs.join(" ");
+  reset: function() {
+    if(this.last_active)
+      this.deactivate(this.last_active);
+  }
+}
+
+var Draggables = {
+  drags: [],
+  observers: [],
+  
+  register: function(draggable) {
+    if(this.drags.length == 0) {
+      this.eventMouseUp   = this.endDrag.bindAsEventListener(this);
+      this.eventMouseMove = this.updateDrag.bindAsEventListener(this);
+      this.eventKeypress  = this.keyPress.bindAsEventListener(this);
+      
+      Event.observe(document, "mouseup", this.eventMouseUp);
+      Event.observe(document, "mousemove", this.eventMouseMove);
+      Event.observe(document, "keypress", this.eventKeypress);
+    }
+    this.drags.push(draggable);
   },
-  _children: function(element, children) {
-    if(typeof children=='object') { // array can hold nodes and text
-      children.flatten().each( function(e) {
-        if(typeof e=='object')
-          element.appendChild(e)
-        else
-          if(Builder._isStringOrNumber(e))
-            element.appendChild(Builder._text(e));
+  
+  unregister: function(draggable) {
+    this.drags = this.drags.reject(function(d) { return d==draggable });
+    if(this.drags.length == 0) {
+      Event.stopObserving(document, "mouseup", this.eventMouseUp);
+      Event.stopObserving(document, "mousemove", this.eventMouseMove);
+      Event.stopObserving(document, "keypress", this.eventKeypress);
+    }
+  },
+  
+  activate: function(draggable) {
+    if(draggable.options.delay) { 
+      this._timeout = setTimeout(function() { 
+        Draggables._timeout = null; 
+        window.focus(); 
+        Draggables.activeDraggable = draggable; 
+      }.bind(this), draggable.options.delay); 
+    } else {
+      window.focus(); // allows keypress events if window isn't currently focused, fails for Safari
+      this.activeDraggable = draggable;
+    }
+  },
+  
+  deactivate: function() {
+    this.activeDraggable = null;
+  },
+  
+  updateDrag: function(event) {
+    if(!this.activeDraggable) return;
+    var pointer = [Event.pointerX(event), Event.pointerY(event)];
+    // Mozilla-based browsers fire successive mousemove events with
+    // the same coordinates, prevent needless redrawing (moz bug?)
+    if(this._lastPointer && (this._lastPointer.inspect() == pointer.inspect())) return;
+    this._lastPointer = pointer;
+    
+    this.activeDraggable.updateDrag(event, pointer);
+  },
+  
+  endDrag: function(event) {
+    if(this._timeout) { 
+      clearTimeout(this._timeout); 
+      this._timeout = null; 
+    }
+    if(!this.activeDraggable) return;
+    this._lastPointer = null;
+    this.activeDraggable.endDrag(event);
+    this.activeDraggable = null;
+  },
+  
+  keyPress: function(event) {
+    if(this.activeDraggable)
+      this.activeDraggable.keyPress(event);
+  },
+  
+  addObserver: function(observer) {
+    this.observers.push(observer);
+    this._cacheObserverCallbacks();
+  },
+  
+  removeObserver: function(element) {  // element instead of observer fixes mem leaks
+    this.observers = this.observers.reject( function(o) { return o.element==element });
+    this._cacheObserverCallbacks();
+  },
+  
+  notify: function(eventName, draggable, event) {  // 'onStart', 'onEnd', 'onDrag'
+    if(this[eventName+'Count'] > 0)
+      this.observers.each( function(o) {
+        if(o[eventName]) o[eventName](eventName, draggable, event);
       });
-    } else
-      if(Builder._isStringOrNumber(children)) 
-         element.appendChild(Builder._text(children));
+    if(draggable.options[eventName]) draggable.options[eventName](draggable, event);
   },
-  _isStringOrNumber: function(param) {
-    return(typeof param=='string' || typeof param=='number');
-  },
-  build: function(html) {
-    var element = this.node('div');
-    $(element).update(html.strip());
-    return element.down();
-  },
-  dump: function(scope) { 
-    if(typeof scope != 'object' && typeof scope != 'function') scope = window; //global scope 
   
-    var tags = ("A ABBR ACRONYM ADDRESS APPLET AREA B BASE BASEFONT BDO BIG BLOCKQUOTE BODY " +
-      "BR BUTTON CAPTION CENTER CITE CODE COL COLGROUP DD DEL DFN DIR DIV DL DT EM FIELDSET " +
-      "FONT FORM FRAME FRAMESET H1 H2 H3 H4 H5 H6 HEAD HR HTML I IFRAME IMG INPUT INS ISINDEX "+
-      "KBD LABEL LEGEND LI LINK MAP MENU META NOFRAMES NOSCRIPT OBJECT OL OPTGROUP OPTION P "+
-      "PARAM PRE Q S SAMP SCRIPT SELECT SMALL SPAN STRIKE STRONG STYLE SUB SUP TABLE TBODY TD "+
-      "TEXTAREA TFOOT TH THEAD TITLE TR TT U UL VAR").split(/\s+/);
-  
-    tags.each( function(tag){ 
-      scope[tag] = function() { 
-        return Builder.node.apply(Builder, [tag].concat($A(arguments)));  
-      } 
+  _cacheObserverCallbacks: function() {
+    ['onStart','onEnd','onDrag'].each( function(eventName) {
+      Draggables[eventName+'Count'] = Draggables.observers.select(
+        function(o) { return o[eventName]; }
+      ).length;
     });
   }
 }
-// script.aculo.us builder.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/
+/*--------------------------------------------------------------------------*/
 
-var Builder = {
-  NODEMAP: {
-    AREA: 'map',
-    CAPTION: 'table',
-    COL: 'table',
-    COLGROUP: 'table',
-    LEGEND: 'fieldset',
-    OPTGROUP: 'select',
-    OPTION: 'select',
-    PARAM: 'object',
-    TBODY: 'table',
-    TD: 'table',
-    TFOOT: 'table',
-    TH: 'table',
-    THEAD: 'table',
-    TR: 'table'
-  },
-  // note: For Firefox < 1.5, OPTION and OPTGROUP tags are currently broken,
-  //       due to a Firefox bug
-  node: function(elementName) {
-    elementName = elementName.toUpperCase();
+var Draggable = Class.create();
+Draggable._dragging    = {};
+
+Draggable.prototype = {
+  initialize: function(element) {
+    var defaults = {
+      handle: false,
+      reverteffect: function(element, top_offset, left_offset) {
+        var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
+        new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: dur,
+          queue: {scope:'_draggable', position:'end'}
+        });
+      },
+      endeffect: function(element) {
+        var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0;
+        new Effect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity, 
+          queue: {scope:'_draggable', position:'end'},
+          afterFinish: function(){ 
+            Draggable._dragging[element] = false 
+          }
+        }); 
+      },
+      zindex: 1000,
+      revert: false,
+      quiet: false,
+      scroll: false,
+      scrollSensitivity: 20,
+      scrollSpeed: 15,
+      snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
+      delay: 0
+    };
     
-    // try innerHTML approach
-    var parentTag = this.NODEMAP[elementName] || 'div';
-    var parentElement = document.createElement(parentTag);
-    try { // prevent IE "feature": http://dev.rubyonrails.org/ticket/2707
-      parentElement.innerHTML = "<" + elementName + "></" + elementName + ">";
-    } catch(e) {}
-    var element = parentElement.firstChild || null;
-      
-    // see if browser added wrapping tags
-    if(element && (element.tagName.toUpperCase() != elementName))
-      element = element.getElementsByTagName(elementName)[0];
-    
-    // fallback to createElement approach
-    if(!element) element = document.createElement(elementName);
-    
-    // abort if nothing could be created
-    if(!element) return;
-
-    // attributes (or text)
-    if(arguments[1])
-      if(this._isStringOrNumber(arguments[1]) ||
-        (arguments[1] instanceof Array)) {
-          this._children(element, arguments[1]);
-        } else {
-          var attrs = this._attributes(arguments[1]);
-          if(attrs.length) {
-            try { // prevent IE "feature": http://dev.rubyonrails.org/ticket/2707
-              parentElement.innerHTML = "<" +elementName + " " +
-                attrs + "></" + elementName + ">";
-            } catch(e) {}
-            element = parentElement.firstChild || null;
-            // workaround firefox 1.0.X bug
-            if(!element) {
-              element = document.createElement(elementName);
-              for(attr in arguments[1]) 
-                element[attr == 'class' ? 'className' : attr] = arguments[1][attr];
-            }
-            if(element.tagName.toUpperCase() != elementName)
-              element = parentElement.getElementsByTagName(elementName)[0];
-            }
-        } 
-
-    // text, or array of children
-    if(arguments[2])
-      this._children(element, arguments[2]);
-
-     return element;
-  },
-  _text: function(text) {
-     return document.createTextNode(text);
-  },
-
-  ATTR_MAP: {
-    'className': 'class',
-    'htmlFor': 'for'
-  },
-
-  _attributes: function(attributes) {
-    var attrs = [];
-    for(attribute in attributes)
-      attrs.push((attribute in this.ATTR_MAP ? this.ATTR_MAP[attribute] : attribute) +
-          '="' + attributes[attribute].toString().escapeHTML() + '"');
-    return attrs.join(" ");
-  },
-  _children: function(element, children) {
-    if(typeof children=='object') { // array can hold nodes and text
-      children.flatten().each( function(e) {
-        if(typeof e=='object')
-          element.appendChild(e)
-        else
-          if(Builder._isStringOrNumber(e))
-            element.appendChild(Builder._text(e));
+    if(!arguments[1] || typeof arguments[1].endeffect == 'undefined')
+      Object.extend(defaults, {
+        starteffect: function(element) {
+          element._opacity = Element.getOpacity(element);
+          Draggable._dragging[element] = true;
+          new Effect.Opacity(element, {duration:0.2, from:element._opacity, to:0.7}); 
+        }
       });
-    } else
-      if(Builder._isStringOrNumber(children)) 
-         element.appendChild(Builder._text(children));
+    
+    var options = Object.extend(defaults, arguments[1] || {});
+
+    this.element = $(element);
+    
+    if(options.handle && (typeof options.handle == 'string'))
+      this.handle = this.element.down('.'+options.handle, 0);
+    
+    if(!this.handle) this.handle = $(options.handle);
+    if(!this.handle) this.handle = this.element;
+    
+    if(options.scroll && !options.scroll.scrollTo && !options.scroll.outerHTML) {
+      options.scroll = $(options.scroll);
+      this._isScrollChild = Element.childOf(this.element, options.scroll);
+    }
+
+    Element.makePositioned(this.element); // fix IE    
+
+    this.delta    = this.currentDelta();
+    this.options  = options;
+    this.dragging = false;   
+
+    this.eventMouseDown = this.initDrag.bindAsEventListener(this);
+    Event.observe(this.handle, "mousedown", this.eventMouseDown);
+    
+    Draggables.register(this);
   },
-  _isStringOrNumber: function(param) {
-    return(typeof param=='string' || typeof param=='number');
-  },
-  build: function(html) {
-    var element = this.node('div');
-    $(element).update(html.strip());
-    return element.down();
-  },
-  dump: function(scope) { 
-    if(typeof scope != 'object' && typeof scope != 'function') scope = window; //global scope 
   
-    var tags = ("A ABBR ACRONYM ADDRESS APPLET AREA B BASE BASEFONT BDO BIG BLOCKQUOTE BODY " +
-      "BR BUTTON CAPTION CENTER CITE CODE COL COLGROUP DD DEL DFN DIR DIV DL DT EM FIELDSET " +
-      "FONT FORM FRAME FRAMESET H1 H2 H3 H4 H5 H6 HEAD HR HTML I IFRAME IMG INPUT INS ISINDEX "+
-      "KBD LABEL LEGEND LI LINK MAP MENU META NOFRAMES NOSCRIPT OBJECT OL OPTGROUP OPTION P "+
-      "PARAM PRE Q S SAMP SCRIPT SELECT SMALL SPAN STRIKE STRONG STYLE SUB SUP TABLE TBODY TD "+
-      "TEXTAREA TFOOT TH THEAD TITLE TR TT U UL VAR").split(/\s+/);
+  destroy: function() {
+    Event.stopObserving(this.handle, "mousedown", this.eventMouseDown);
+    Draggables.unregister(this);
+  },
   
-    tags.each( function(tag){ 
-      scope[tag] = function() { 
-        return Builder.node.apply(Builder, [tag].concat($A(arguments)));  
-      } 
-    });
+  currentDelta: function() {
+    return([
+      parseInt(Element.getStyle(this.element,'left') || '0'),
+      parseInt(Element.getStyle(this.element,'top') || '0')]);
+  },
+  
+  initDrag: function(event) {
+    if(typeof Draggable._dragging[this.element] != 'undefined' &&
+      Draggable._dragging[this.element]) return;
+    if(Event.isLeftClick(event)) {    
+      // abort on form elements, fixes a Firefox issue
+      var src = Event.element(event);
+      if((tag_name = src.tagName.toUpperCase()) && (
+        tag_name=='INPUT' ||
+        tag_name=='SELECT' ||
+        tag_name=='OPTION' ||
+        tag_name=='BUTTON' ||
+        tag_name=='TEXTAREA')) return;
+        
+      var pointer = [Event.pointerX(event), Event.pointerY(event)];
+      var pos     = Position.cumulativeOffset(this.element);
+      this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
+      
+      Draggables.activate(this);
+      Event.stop(event);
+    }
+  },
+  
+  startDrag: function(event) {
+    this.dragging = true;
+    
+    if(this.options.zindex) {
+      this.originalZ = parseInt(Element.getStyle(this.element,'z-index') || 0);
+      this.element.style.zIndex = this.options.zindex;
+    }
+    
+    if(this.options.ghosting) {
+      this._clone = this.element.cloneNode(true);
+      Position.absolutize(this.element);
+      this.element.parentNode.insertBefore(this._clone, this.element);
+    }
+    
+    if(this.options.scroll) {
+      if (this.options.scroll == window) {
+        var where = this._getWindowScroll(this.options.scroll);
+        this.originalScrollLeft = where.left;
+        this.originalScrollTop = where.top;
+      } else {
+        this.originalScrollLeft = this.options.scroll.scrollLeft;
+        this.originalScrollTop = this.options.scroll.scrollTop;
+      }
+    }
+    
+    Draggables.notify('onStart', this, event);
+        
+    if(this.options.starteffect) this.options.starteffect(this.element);
+  },
+  
+  updateDrag: function(event, pointer) {
+    if(!this.dragging) this.startDrag(event);
+    
+    if(!this.options.quiet){
+      Position.prepare();
+      Droppables.show(pointer, this.element);
+    }
+    
+    Draggables.notify('onDrag', this, event);
+    
+    this.draw(pointer);
+    if(this.options.change) this.options.change(this);
+    
+    if(this.options.scroll) {
+      this.stopScrolling();
+      
+      var p;
+      if (this.options.scroll == window) {
+        with(this._getWindowScroll(this.options.scroll)) { p = [ left, top, left+width, top+height ]; }
+      } else {
+        p = Position.page(this.options.scroll);
+        p[0] += this.options.scroll.scrollLeft + Position.deltaX;
+        p[1] += this.options.scroll.scrollTop + Position.deltaY;
+        p.push(p[0]+this.options.scroll.offsetWidth);
+        p.push(p[1]+this.options.scroll.offsetHeight);
+      }
+      var speed = [0,0];
+      if(pointer[0] < (p[0]+this.options.scrollSensitivity)) speed[0] = pointer[0]-(p[0]+this.options.scrollSensitivity);
+      if(pointer[1] < (p[1]+this.options.scrollSensitivity)) speed[1] = pointer[1]-(p[1]+this.options.scrollSensitivity);
+      if(pointer[0] > (p[2]-this.options.scrollSensitivity)) speed[0] = pointer[0]-(p[2]-this.options.scrollSensitivity);
+      if(pointer[1] > (p[3]-this.options.scrollSensitivity)) speed[1] = pointer[1]-(p[3]-this.options.scrollSensitivity);
+      this.startScrolling(speed);
+    }
+    
+    // fix AppleWebKit rendering
+    if(Prototype.Browser.WebKit) window.scrollBy(0,0);
+    
+    Event.stop(event);
+  },
+  
+  finishDrag: function(event, success) {
+    this.dragging = false;
+    
+    if(this.options.quiet){
+      Position.prepare();
+      var pointer = [Event.pointerX(event), Event.pointerY(event)];
+      Droppables.show(pointer, this.element);
+    }
+
+    if(this.options.ghosting) {
+      Position.relativize(this.element);
+      Element.remove(this._clone);
+      this._clone = null;
+    }
+
+    var dropped = false; 
+    if(success) { 
+      dropped = Droppables.fire(event, this.element); 
+      if (!dropped) dropped = false; 
+    }
+    if(dropped && this.options.onDropped) this.options.onDropped(this.element);
+    Draggables.notify('onEnd', this, event);
+
+    var revert = this.options.revert;
+    if(revert && typeof revert == 'function') revert = revert(this.element);
+    
+    var d = this.currentDelta();
+    if(revert && this.options.reverteffect) {
+      if (dropped == 0 || revert != 'failure')
+        this.options.reverteffect(this.element,
+          d[1]-this.delta[1], d[0]-this.delta[0]);
+    } else {
+      this.delta = d;
+    }
+
+    if(this.options.zindex)
+      this.element.style.zIndex = this.originalZ;
+
+    if(this.options.endeffect) 
+      this.options.endeffect(this.element);
+      
+    Draggables.deactivate(this);
+    Droppables.reset();
+  },
+  
+  keyPress: function(event) {
+    if(event.keyCode!=Event.KEY_ESC) return;
+    this.finishDrag(event, false);
+    Event.stop(event);
+  },
+  
+  endDrag: function(event) {
+    if(!this.dragging) return;
+    this.stopScrolling();
+    this.finishDrag(event, true);
+    Event.stop(event);
+  },
+  
+  draw: function(point) {
+    var pos = Position.cumulativeOffset(this.element);
+    if(this.options.ghosting) {
+      var r   = Position.realOffset(this.element);
+      pos[0] += r[0] - Position.deltaX; pos[1] += r[1] - Position.deltaY;
+    }
+    
+    var d = this.currentDelta();
+    pos[0] -= d[0]; pos[1] -= d[1];
+    
+    if(this.options.scroll && (this.options.scroll != window && this._isScrollChild)) {
+      pos[0] -= this.options.scroll.scrollLeft-this.originalScrollLeft;
+      pos[1] -= this.options.scroll.scrollTop-this.originalScrollTop;
+    }
+    
+    var p = [0,1].map(function(i){ 
+      return (point[i]-pos[i]-this.offset[i]) 
+    }.bind(this));
+    
+    if(this.options.snap) {
+      if(typeof this.options.snap == 'function') {
+        p = this.options.snap(p[0],p[1],this);
+      } else {
+      if(this.options.snap instanceof Array) {
+        p = p.map( function(v, i) {
+          return Math.round(v/this.options.snap[i])*this.options.snap[i] }.bind(this))
+      } else {
+        p = p.map( function(v) {
+          return Math.round(v/this.options.snap)*this.options.snap }.bind(this))
+      }
+    }}
+    
+    var style = this.element.style;
+    if((!this.options.constraint) || (this.options.constraint=='horizontal'))
+      style.left = p[0] + "px";
+    if((!this.options.constraint) || (this.options.constraint=='vertical'))
+      style.top  = p[1] + "px";
+    
+    if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
+  },
+  
+  stopScrolling: function() {
+    if(this.scrollInterval) {
+      clearInterval(this.scrollInterval);
+      this.scrollInterval = null;
+      Draggables._lastScrollPointer = null;
+    }
+  },
+  
+  startScrolling: function(speed) {
+    if(!(speed[0] || speed[1])) return;
+    this.scrollSpeed = [speed[0]*this.options.scrollSpeed,speed[1]*this.options.scrollSpeed];
+    this.lastScrolled = new Date();
+    this.scrollInterval = setInterval(this.scroll.bind(this), 10);
+  },
+  
+  scroll: function() {
+    var current = new Date();
+    var delta = current - this.lastScrolled;
+    this.lastScrolled = current;
+    if(this.options.scroll == window) {
+      with (this._getWindowScroll(this.options.scroll)) {
+        if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
+          var d = delta / 1000;
+          this.options.scroll.scrollTo( left + d*this.scrollSpeed[0], top + d*this.scrollSpeed[1] );
+        }
+      }
+    } else {
+      this.options.scroll.scrollLeft += this.scrollSpeed[0] * delta / 1000;
+      this.options.scroll.scrollTop  += this.scrollSpeed[1] * delta / 1000;
+    }
+    
+    Position.prepare();
+    Droppables.show(Draggables._lastPointer, this.element);
+    Draggables.notify('onDrag', this);
+    if (this._isScrollChild) {
+      Draggables._lastScrollPointer = Draggables._lastScrollPointer || $A(Draggables._lastPointer);
+      Draggables._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
+      Draggables._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
+      if (Draggables._lastScrollPointer[0] < 0)
+        Draggables._lastScrollPointer[0] = 0;
+      if (Draggables._lastScrollPointer[1] < 0)
+        Draggables._lastScrollPointer[1] = 0;
+      this.draw(Draggables._lastScrollPointer);
+    }
+    
+    if(this.options.change) this.options.change(this);
+  },
+  
+  _getWindowScroll: function(w) {
+    var T, L, W, H;
+    with (w.document) {
+      if (w.document.documentElement && documentElement.scrollTop) {
+        T = documentElement.scrollTop;
+        L = documentElement.scrollLeft;
+      } else if (w.document.body) {
+        T = body.scrollTop;
+        L = body.scrollLeft;
+      }
+      if (w.innerWidth) {
+        W = w.innerWidth;
+        H = w.innerHeight;
+      } else if (w.document.documentElement && documentElement.clientWidth) {
+        W = documentElement.clientWidth;
+        H = documentElement.clientHeight;
+      } else {
+        W = body.offsetWidth;
+        H = body.offsetHeight
+      }
+    }
+    return { top: T, left: L, width: W, height: H };
   }
 }
-// script.aculo.us controls.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005, 2006 Ivan Krstic (http://blogs.law.harvard.edu/ivan)
-//           (c) 2005, 2006 Jon Tirsen (http://www.tirsen.com)
-// Contributors:
-//  Richard Livsey
-//  Rahul Bhargava
-//  Rob Wills
-// 
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/
+/*--------------------------------------------------------------------------*/
+
+var SortableObserver = Class.create();
+SortableObserver.prototype = {
+  initialize: function(element, observer) {
+    this.element   = $(element);
+    this.observer  = observer;
+    this.lastValue = Sortable.serialize(this.element);
+  },
+  
+  onStart: function() {
+    this.lastValue = Sortable.serialize(this.element);
+  },
+  
+  onEnd: function() {
+    Sortable.unmark();
+    if(this.lastValue != Sortable.serialize(this.element))
+      this.observer(this.element)
+  }
+}
+
+var Sortable = {
+  SERIALIZE_RULE: /^[^_\-](?:[A-Za-z0-9\-\_]*)[_](.*)$/,
+  
+  sortables: {},
+  
+  _findRootElement: function(element) {
+    while (element.tagName.toUpperCase() != "BODY") {  
+      if(element.id && Sortable.sortables[element.id]) return element;
+      element = element.parentNode;
+    }
+  },
+
+  options: function(element) {
+    element = Sortable._findRootElement($(element));
+    if(!element) return;
+    return Sortable.sortables[element.id];
+  },
+  
+  destroy: function(element){
+    var s = Sortable.options(element);
+    
+    if(s) {
+      Draggables.removeObserver(s.element);
+      s.droppables.each(function(d){ Droppables.remove(d) });
+      s.draggables.invoke('destroy');
+      
+      delete Sortable.sortables[s.element.id];
+    }
+  },
+
+  create: function(element) {
+    element = $(element);
+    var options = Object.extend({ 
+      element:     element,
+      tag:         'li',       // assumes li children, override with tag: 'tagname'
+      dropOnEmpty: false,
+      tree:        false,
+      treeTag:     'ul',
+      overlap:     'vertical', // one of 'vertical', 'horizontal'
+      constraint:  'vertical', // one of 'vertical', 'horizontal', false
+      containment: element,    // also takes array of elements (or id's); or false
+      handle:      false,      // or a CSS class
+      only:        false,
+      delay:       0,
+      hoverclass:  null,
+      ghosting:    false,
+      quiet:       false, 
+      scroll:      false,
+      scrollSensitivity: 20,
+      scrollSpeed: 15,
+      format:      this.SERIALIZE_RULE,
+      
+      // these take arrays of elements or ids and can be 
+      // used for better initialization performance
+      elements:    false,
+      handles:     false,
+      
+      onChange:    Prototype.emptyFunction,
+      onUpdate:    Prototype.emptyFunction
+    }, arguments[1] || {});
+
+    // clear any old sortable with same element
+    this.destroy(element);
+
+    // build options for the draggables
+    var options_for_draggable = {
+      revert:      true,
+      quiet:       options.quiet,
+      scroll:      options.scroll,
+      scrollSpeed: options.scrollSpeed,
+      scrollSensitivity: options.scrollSensitivity,
+      delay:       options.delay,
+      ghosting:    options.ghosting,
+      constraint:  options.constraint,
+      handle:      options.handle };
+
+    if(options.starteffect)
+      options_for_draggable.starteffect = options.starteffect;
+
+    if(options.reverteffect)
+      options_for_draggable.reverteffect = options.reverteffect;
+    else
+      if(options.ghosting) options_for_draggable.reverteffect = function(element) {
+        element.style.top  = 0;
+        element.style.left = 0;
+      };
+
+    if(options.endeffect)
+      options_for_draggable.endeffect = options.endeffect;
+
+    if(options.zindex)
+      options_for_draggable.zindex = options.zindex;
+
+    // build options for the droppables  
+    var options_for_droppable = {
+      overlap:     options.overlap,
+      containment: options.containment,
+      tree:        options.tree,
+      hoverclass:  options.hoverclass,
+      onHover:     Sortable.onHover
+    }
+    
+    var options_for_tree = {
+      onHover:      Sortable.onEmptyHover,
+      overlap:      options.overlap,
+      containment:  options.containment,
+      hoverclass:   options.hoverclass
+    }
+
+    // fix for gecko engine
+    Element.cleanWhitespace(element); 
+
+    options.draggables = [];
+    options.droppables = [];
+
+    // drop on empty handling
+    if(options.dropOnEmpty || options.tree) {
+      Droppables.add(element, options_for_tree);
+      options.droppables.push(element);
+    }
+
+    (options.elements || this.findElements(element, options) || []).each( function(e,i) {
+      var handle = options.handles ? $(options.handles[i]) :
+        (options.handle ? $(e).getElementsByClassName(options.handle)[0] : e); 
+      options.draggables.push(
+        new Draggable(e, Object.extend(options_for_draggable, { handle: handle })));
+      Droppables.add(e, options_for_droppable);
+      if(options.tree) e.treeNode = element;
+      options.droppables.push(e);      
+    });
+    
+    if(options.tree) {
+      (Sortable.findTreeElements(element, options) || []).each( function(e) {
+        Droppables.add(e, options_for_tree);
+        e.treeNode = element;
+        options.droppables.push(e);
+      });
+    }
+
+    // keep reference
+    this.sortables[element.id] = options;
+
+    // for onupdate
+    Draggables.addObserver(new SortableObserver(element, options.onUpdate));
+
+  },
+
+  // return all suitable-for-sortable elements in a guaranteed order
+  findElements: function(element, options) {
+    return Element.findChildren(
+      element, options.only, options.tree ? true : false, options.tag);
+  },
+  
+  findTreeElements: function(element, options) {
+    return Element.findChildren(
+      element, options.only, options.tree ? true : false, options.treeTag);
+  },
+
+  onHover: function(element, dropon, overlap) {
+    if(Element.isParent(dropon, element)) return;
+
+    if(overlap > .33 && overlap < .66 && Sortable.options(dropon).tree) {
+      return;
+    } else if(overlap>0.5) {
+      Sortable.mark(dropon, 'before');
+      if(dropon.previousSibling != element) {
+        var oldParentNode = element.parentNode;
+        element.style.visibility = "hidden"; // fix gecko rendering
+        dropon.parentNode.insertBefore(element, dropon);
+        if(dropon.parentNode!=oldParentNode) 
+          Sortable.options(oldParentNode).onChange(element);
+        Sortable.options(dropon.parentNode).onChange(element);
+      }
+    } else {
+      Sortable.mark(dropon, 'after');
+      var nextElement = dropon.nextSibling || null;
+      if(nextElement != element) {
+        var oldParentNode = element.parentNode;
+        element.style.visibility = "hidden"; // fix gecko rendering
+        dropon.parentNode.insertBefore(element, nextElement);
+        if(dropon.parentNode!=oldParentNode) 
+          Sortable.options(oldParentNode).onChange(element);
+        Sortable.options(dropon.parentNode).onChange(element);
+      }
+    }
+  },
+  
+  onEmptyHover: function(element, dropon, overlap) {
+    var oldParentNode = element.parentNode;
+    var droponOptions = Sortable.options(dropon);
+        
+    if(!Element.isParent(dropon, element)) {
+      var index;
+      
+      var children = Sortable.findElements(dropon, {tag: droponOptions.tag, only: droponOptions.only});
+      var child = null;
+            
+      if(children) {
+        var offset = Element.offsetSize(dropon, droponOptions.overlap) * (1.0 - overlap);
+        
+        for (index = 0; index < children.length; index += 1) {
+          if (offset - Element.offsetSize (children[index], droponOptions.overlap) >= 0) {
+            offset -= Element.offsetSize (children[index], droponOptions.overlap);
+          } else if (offset - (Element.offsetSize (children[index], droponOptions.overlap) / 2) >= 0) {
+            child = index + 1 < children.length ? children[index + 1] : null;
+            break;
+          } else {
+            child = children[index];
+            break;
+          }
+        }
+      }
+      
+      dropon.insertBefore(element, child);
+      
+      Sortable.options(oldParentNode).onChange(element);
+      droponOptions.onChange(element);
+    }
+  },
+
+  unmark: function() {
+    if(Sortable._marker) Sortable._marker.hide();
+  },
+
+  mark: function(dropon, position) {
+    // mark on ghosting only
+    var sortable = Sortable.options(dropon.parentNode);
+    if(sortable && !sortable.ghosting) return; 
+
+    if(!Sortable._marker) {
+      Sortable._marker = 
+        ($('dropmarker') || Element.extend(document.createElement('DIV'))).
+          hide().addClassName('dropmarker').setStyle({position:'absolute'});
+      document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
+    }    
+    var offsets = Position.cumulativeOffset(dropon);
+    Sortable._marker.setStyle({left: offsets[0]+'px', top: offsets[1] + 'px'});
+    
+    if(position=='after')
+      if(sortable.overlap == 'horizontal') 
+        Sortable._marker.setStyle({left: (offsets[0]+dropon.clientWidth) + 'px'});
+      else
+        Sortable._marker.setStyle({top: (offsets[1]+dropon.clientHeight) + 'px'});
+    
+    Sortable._marker.show();
+  },
+  
+  _tree: function(element, options, parent) {
+    var children = Sortable.findElements(element, options) || [];
+  
+    for (var i = 0; i < children.length; ++i) {
+      var match = children[i].id.match(options.format);
+
+      if (!match) continue;
+      
+      var child = {
+        id: encodeURIComponent(match ? match[1] : null),
+        element: element,
+        parent: parent,
+        children: [],
+        position: parent.children.length,
+        container: $(children[i]).down(options.treeTag)
+      }
+      
+      /* Get the element containing the children and recurse over it */
+      if (child.container)
+        this._tree(child.container, options, child)
+      
+      parent.children.push (child);
+    }
+
+    return parent; 
+  },
+
+  tree: function(element) {
+    element = $(element);
+    var sortableOptions = this.options(element);
+    var options = Object.extend({
+      tag: sortableOptions.tag,
+      treeTag: sortableOptions.treeTag,
+      only: sortableOptions.only,
+      name: element.id,
+      format: sortableOptions.format
+    }, arguments[1] || {});
+    
+    var root = {
+      id: null,
+      parent: null,
+      children: [],
+      container: element,
+      position: 0
+    }
+    
+    return Sortable._tree(element, options, root);
+  },
+
+  /* Construct a [i] index for a particular node */
+  _constructIndex: function(node) {
+    var index = '';
+    do {
+      if (node.id) index = '[' + node.position + ']' + index;
+    } while ((node = node.parent) != null);
+    return index;
+  },
+
+  sequence: function(element) {
+    element = $(element);
+    var options = Object.extend(this.options(element), arguments[1] || {});
+    
+    return $(this.findElements(element, options) || []).map( function(item) {
+      return item.id.match(options.format) ? item.id.match(options.format)[1] : '';
+    });
+  },
+
+  setSequence: function(element, new_sequence) {
+    element = $(element);
+    var options = Object.extend(this.options(element), arguments[2] || {});
+    
+    var nodeMap = {};
+    this.findElements(element, options).each( function(n) {
+        if (n.id.match(options.format))
+            nodeMap[n.id.match(options.format)[1]] = [n, n.parentNode];
+        n.parentNode.removeChild(n);
+    });
+   
+    new_sequence.each(function(ident) {
+      var n = nodeMap[ident];
+      if (n) {
+        n[1].appendChild(n[0]);
+        delete nodeMap[ident];
+      }
+    });
+  },
+  
+  serialize: function(element) {
+    element = $(element);
+    var options = Object.extend(Sortable.options(element), arguments[1] || {});
+    var name = encodeURIComponent(
+      (arguments[1] && arguments[1].name) ? arguments[1].name : element.id);
+    
+    if (options.tree) {
+      return Sortable.tree(element, arguments[1]).children.map( function (item) {
+        return [name + Sortable._constructIndex(item) + "[id]=" + 
+                encodeURIComponent(item.id)].concat(item.children.map(arguments.callee));
+      }).flatten().join('&');
+    } else {
+      return Sortable.sequence(element, arguments[1]).map( function(item) {
+        return name + "[]=" + encodeURIComponent(item);
+      }).join('&');
+    }
+  }
+}
+
+// Returns true if child is contained within element
+Element.isParent = function(child, element) {
+  if (!child.parentNode || child == element) return false;
+  if (child.parentNode == element) return true;
+  return Element.isParent(child.parentNode, element);
+}
+
+Element.findChildren = function(element, only, recursive, tagName) {   
+  if(!element.hasChildNodes()) return null;
+  tagName = tagName.toUpperCase();
+  if(only) only = [only].flatten();
+  var elements = [];
+  $A(element.childNodes).each( function(e) {
+    if(e.tagName && e.tagName.toUpperCase()==tagName &&
+      (!only || (Element.classNames(e).detect(function(v) { return only.include(v) }))))
+        elements.push(e);
+    if(recursive) {
+      var grandchildren = Element.findChildren(e, only, recursive, tagName);
+      if(grandchildren) elements.push(grandchildren);
+    }
+  });
+
+  return (elements.length>0 ? elements.flatten() : []);
+}
+
+Element.offsetSize = function (element, type) {
+  return element['offset' + ((type=='vertical' || type=='height') ? 'Height' : 'Width')];
+}
+
 
 // Autocompleter.Base handles all the autocompletion functionality 
 // that's independent of the data source for autocompletion. This
@@ -1457,7 +2319,8 @@ var Autocompleter = {}
 Autocompleter.Base = function() {};
 Autocompleter.Base.prototype = {
   baseInitialize: function(element, update, options) {
-    this.element     = $(element); 
+    element          = $(element)
+    this.element     = element; 
     this.update      = $(update);  
     this.hasFocus    = false; 
     this.changed     = false; 
@@ -1497,15 +2360,20 @@ Autocompleter.Base.prototype = {
 
     Element.hide(this.update);
 
-    Event.observe(this.element, "blur", this.onBlur.bindAsEventListener(this));
-    Event.observe(this.element, "keypress", this.onKeyPress.bindAsEventListener(this));
+    Event.observe(this.element, 'blur', this.onBlur.bindAsEventListener(this));
+    Event.observe(this.element, 'keypress', this.onKeyPress.bindAsEventListener(this));
+
+    // Turn autocomplete back on when the user leaves the page, so that the
+    // field's value will be remembered on Mozilla-based browsers.
+    Event.observe(window, 'beforeunload', function(){ 
+      element.setAttribute('autocomplete', 'on'); 
+    });
   },
 
   show: function() {
     if(Element.getStyle(this.update, 'display')=='none') this.options.onShow(this.element, this.update);
     if(!this.iefix && 
-      (navigator.appVersion.indexOf('MSIE')>0) &&
-      (navigator.userAgent.indexOf('Opera')<0) &&
+      (Prototype.Browser.IE) &&
       (Element.getStyle(this.update, 'position')=='absolute')) {
       new Insertion.After(this.update, 
        '<iframe id="' + this.update.id + '_iefix" '+
@@ -1555,17 +2423,17 @@ Autocompleter.Base.prototype = {
        case Event.KEY_UP:
          this.markPrevious();
          this.render();
-         if(navigator.appVersion.indexOf('AppleWebKit')>0) Event.stop(event);
+         if(Prototype.Browser.WebKit) Event.stop(event);
          return;
        case Event.KEY_DOWN:
          this.markNext();
          this.render();
-         if(navigator.appVersion.indexOf('AppleWebKit')>0) Event.stop(event);
+         if(Prototype.Browser.WebKit) Event.stop(event);
          return;
       }
      else 
        if(event.keyCode==Event.KEY_TAB || event.keyCode==Event.KEY_RETURN || 
-         (navigator.appVersion.indexOf('AppleWebKit') > 0 && event.keyCode == 0)) return;
+         (Prototype.Browser.WebKit > 0 && event.keyCode == 0)) return;
 
     this.changed = true;
     this.hasFocus = true;
@@ -1611,7 +2479,6 @@ Autocompleter.Base.prototype = {
         this.index==i ? 
           Element.addClassName(this.getEntry(i),"selected") : 
           Element.removeClassName(this.getEntry(i),"selected");
-        
       if(this.hasFocus) { 
         this.show();
         this.active = true;
@@ -1713,7 +2580,6 @@ Autocompleter.Base.prototype = {
   onObserverEvent: function() {
     this.changed = false;   
     if(this.getToken().length>=this.options.minChars) {
-      this.startIndicator();
       this.getUpdatedChoices();
     } else {
       this.active = false;
@@ -1754,7 +2620,9 @@ Object.extend(Object.extend(Ajax.Autocompleter.prototype, Autocompleter.Base.pro
   },
 
   getUpdatedChoices: function() {
-    entry = encodeURIComponent(this.options.paramName) + '=' + 
+    this.startIndicator();
+    
+    var entry = encodeURIComponent(this.options.paramName) + '=' + 
       encodeURIComponent(this.getToken());
 
     this.options.parameters = this.options.callback ?
@@ -1762,7 +2630,7 @@ Object.extend(Object.extend(Ajax.Autocompleter.prototype, Autocompleter.Base.pro
 
     if(this.options.defaultParams) 
       this.options.parameters += '&' + this.options.defaultParams;
-
+    
     new Ajax.Request(this.url, this.options);
   },
 
@@ -1891,9 +2759,14 @@ Ajax.InPlaceEditor.prototype = {
     this.options = Object.extend({
       paramName: "value",
       okButton: true,
+      okLink: false,
       okText: "ok",
+      cancelButton: false,
       cancelLink: true,
       cancelText: "cancel",
+      textBeforeControls: '',
+      textBetweenControls: '',
+      textAfterControls: '',
       savingText: "Saving...",
       clickToEditText: "Click to edit",
       okText: "ok",
@@ -1981,23 +2854,52 @@ Ajax.InPlaceEditor.prototype = {
       var br = document.createElement("br");
       this.form.appendChild(br);
     }
+    
+    if (this.options.textBeforeControls)
+      this.form.appendChild(document.createTextNode(this.options.textBeforeControls));
 
     if (this.options.okButton) {
-      okButton = document.createElement("input");
+      var okButton = document.createElement("input");
       okButton.type = "submit";
       okButton.value = this.options.okText;
       okButton.className = 'editor_ok_button';
       this.form.appendChild(okButton);
     }
+    
+    if (this.options.okLink) {
+      var okLink = document.createElement("a");
+      okLink.href = "#";
+      okLink.appendChild(document.createTextNode(this.options.okText));
+      okLink.onclick = this.onSubmit.bind(this);
+      okLink.className = 'editor_ok_link';
+      this.form.appendChild(okLink);
+    }
+    
+    if (this.options.textBetweenControls && 
+      (this.options.okLink || this.options.okButton) && 
+      (this.options.cancelLink || this.options.cancelButton))
+      this.form.appendChild(document.createTextNode(this.options.textBetweenControls));
+      
+    if (this.options.cancelButton) {
+      var cancelButton = document.createElement("input");
+      cancelButton.type = "submit";
+      cancelButton.value = this.options.cancelText;
+      cancelButton.onclick = this.onclickCancel.bind(this);
+      cancelButton.className = 'editor_cancel_button';
+      this.form.appendChild(cancelButton);
+    }
 
     if (this.options.cancelLink) {
-      cancelLink = document.createElement("a");
+      var cancelLink = document.createElement("a");
       cancelLink.href = "#";
       cancelLink.appendChild(document.createTextNode(this.options.cancelText));
       cancelLink.onclick = this.onclickCancel.bind(this);
-      cancelLink.className = 'editor_cancel';      
+      cancelLink.className = 'editor_cancel editor_cancel_link';      
       this.form.appendChild(cancelLink);
     }
+    
+    if (this.options.textAfterControls)
+      this.form.appendChild(document.createTextNode(this.options.textAfterControls));
   },
   hasHTMLLineBreaks: function(string) {
     if (!this.options.handleLineBreaks) return false;
@@ -2247,956 +3149,7 @@ Form.Element.DelayedObserver.prototype = {
     this.callback(this.element, $F(this.element));
   }
 };
-// script.aculo.us dragdrop.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005, 2006 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
-// 
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/
-
-if(typeof Effect == 'undefined')
-  throw("dragdrop.js requires including script.aculo.us' effects.js library");
-
-var Droppables = {
-  drops: [],
-
-  remove: function(element) {
-    this.drops = this.drops.reject(function(d) { return d.element==$(element) });
-  },
-
-  add: function(element) {
-    element = $(element);
-    var options = Object.extend({
-      greedy:     true,
-      hoverclass: null,
-      tree:       false
-    }, arguments[1] || {});
-
-    // cache containers
-    if(options.containment) {
-      options._containers = [];
-      var containment = options.containment;
-      if((typeof containment == 'object') && 
-        (containment.constructor == Array)) {
-        containment.each( function(c) { options._containers.push($(c)) });
-      } else {
-        options._containers.push($(containment));
-      }
-    }
-    
-    if(options.accept) options.accept = [options.accept].flatten();
-
-    Element.makePositioned(element); // fix IE
-    options.element = element;
-
-    this.drops.push(options);
-  },
-  
-  findDeepestChild: function(drops) {
-    deepest = drops[0];
-      
-    for (i = 1; i < drops.length; ++i)
-      if (Element.isParent(drops[i].element, deepest.element))
-        deepest = drops[i];
-    
-    return deepest;
-  },
-
-  isContained: function(element, drop) {
-    var containmentNode;
-    if(drop.tree) {
-      containmentNode = element.treeNode; 
-    } else {
-      containmentNode = element.parentNode;
-    }
-    return drop._containers.detect(function(c) { return containmentNode == c });
-  },
-  
-  isAffected: function(point, element, drop) {
-    return (
-      (drop.element!=element) &&
-      ((!drop._containers) ||
-        this.isContained(element, drop)) &&
-      ((!drop.accept) ||
-        (Element.classNames(element).detect( 
-          function(v) { return drop.accept.include(v) } ) )) &&
-      Position.within(drop.element, point[0], point[1]) );
-  },
-
-  deactivate: function(drop) {
-    if(drop.hoverclass)
-      Element.removeClassName(drop.element, drop.hoverclass);
-    this.last_active = null;
-  },
-
-  activate: function(drop) {
-    if(drop.hoverclass)
-      Element.addClassName(drop.element, drop.hoverclass);
-    this.last_active = drop;
-  },
-
-  show: function(point, element) {
-    if(!this.drops.length) return;
-    var affected = [];
-    
-    if(this.last_active) this.deactivate(this.last_active);
-    this.drops.each( function(drop) {
-      if(Droppables.isAffected(point, element, drop))
-        affected.push(drop);
-    });
-        
-    if(affected.length>0) {
-      drop = Droppables.findDeepestChild(affected);
-      Position.within(drop.element, point[0], point[1]);
-      if(drop.onHover)
-        drop.onHover(element, drop.element, Position.overlap(drop.overlap, drop.element));
-      
-      Droppables.activate(drop);
-    }
-  },
-
-  fire: function(event, element) {
-    if(!this.last_active) return;
-    Position.prepare();
-
-    if (this.isAffected([Event.pointerX(event), Event.pointerY(event)], element, this.last_active))
-      if (this.last_active.onDrop) 
-        this.last_active.onDrop(element, this.last_active.element, event);
-  },
-
-  reset: function() {
-    if(this.last_active)
-      this.deactivate(this.last_active);
-  }
-}
-
-var Draggables = {
-  drags: [],
-  observers: [],
-  
-  register: function(draggable) {
-    if(this.drags.length == 0) {
-      this.eventMouseUp   = this.endDrag.bindAsEventListener(this);
-      this.eventMouseMove = this.updateDrag.bindAsEventListener(this);
-      this.eventKeypress  = this.keyPress.bindAsEventListener(this);
-      
-      Event.observe(document, "mouseup", this.eventMouseUp);
-      Event.observe(document, "mousemove", this.eventMouseMove);
-      Event.observe(document, "keypress", this.eventKeypress);
-    }
-    this.drags.push(draggable);
-  },
-  
-  unregister: function(draggable) {
-    this.drags = this.drags.reject(function(d) { return d==draggable });
-    if(this.drags.length == 0) {
-      Event.stopObserving(document, "mouseup", this.eventMouseUp);
-      Event.stopObserving(document, "mousemove", this.eventMouseMove);
-      Event.stopObserving(document, "keypress", this.eventKeypress);
-    }
-  },
-  
-  activate: function(draggable) {
-    if(draggable.options.delay) { 
-      this._timeout = setTimeout(function() { 
-        Draggables._timeout = null; 
-        window.focus(); 
-        Draggables.activeDraggable = draggable; 
-      }.bind(this), draggable.options.delay); 
-    } else {
-      window.focus(); // allows keypress events if window isn't currently focused, fails for Safari
-      this.activeDraggable = draggable;
-    }
-  },
-  
-  deactivate: function() {
-    this.activeDraggable = null;
-  },
-  
-  updateDrag: function(event) {
-    if(!this.activeDraggable) return;
-    var pointer = [Event.pointerX(event), Event.pointerY(event)];
-    // Mozilla-based browsers fire successive mousemove events with
-    // the same coordinates, prevent needless redrawing (moz bug?)
-    if(this._lastPointer && (this._lastPointer.inspect() == pointer.inspect())) return;
-    this._lastPointer = pointer;
-    
-    this.activeDraggable.updateDrag(event, pointer);
-  },
-  
-  endDrag: function(event) {
-    if(this._timeout) { 
-      clearTimeout(this._timeout); 
-      this._timeout = null; 
-    }
-    if(!this.activeDraggable) return;
-    this._lastPointer = null;
-    this.activeDraggable.endDrag(event);
-    this.activeDraggable = null;
-  },
-  
-  keyPress: function(event) {
-    if(this.activeDraggable)
-      this.activeDraggable.keyPress(event);
-  },
-  
-  addObserver: function(observer) {
-    this.observers.push(observer);
-    this._cacheObserverCallbacks();
-  },
-  
-  removeObserver: function(element) {  // element instead of observer fixes mem leaks
-    this.observers = this.observers.reject( function(o) { return o.element==element });
-    this._cacheObserverCallbacks();
-  },
-  
-  notify: function(eventName, draggable, event) {  // 'onStart', 'onEnd', 'onDrag'
-    if(this[eventName+'Count'] > 0)
-      this.observers.each( function(o) {
-        if(o[eventName]) o[eventName](eventName, draggable, event);
-      });
-    if(draggable.options[eventName]) draggable.options[eventName](draggable, event);
-  },
-  
-  _cacheObserverCallbacks: function() {
-    ['onStart','onEnd','onDrag'].each( function(eventName) {
-      Draggables[eventName+'Count'] = Draggables.observers.select(
-        function(o) { return o[eventName]; }
-      ).length;
-    });
-  }
-}
-
-/*--------------------------------------------------------------------------*/
-
-var Draggable = Class.create();
-Draggable._dragging    = {};
-
-Draggable.prototype = {
-  initialize: function(element) {
-    var defaults = {
-      handle: false,
-      reverteffect: function(element, top_offset, left_offset) {
-        var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-        new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: dur,
-          queue: {scope:'_draggable', position:'end'}
-        });
-      },
-      endeffect: function(element) {
-        var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0;
-        new Effect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity, 
-          queue: {scope:'_draggable', position:'end'},
-          afterFinish: function(){ 
-            Draggable._dragging[element] = false 
-          }
-        }); 
-      },
-      zindex: 1000,
-      revert: false,
-      scroll: false,
-      scrollSensitivity: 20,
-      scrollSpeed: 15,
-      snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
-      delay: 0
-    };
-    
-    if(!arguments[1] || typeof arguments[1].endeffect == 'undefined')
-      Object.extend(defaults, {
-        starteffect: function(element) {
-          element._opacity = Element.getOpacity(element);
-          Draggable._dragging[element] = true;
-          new Effect.Opacity(element, {duration:0.2, from:element._opacity, to:0.7}); 
-        }
-      });
-    
-    var options = Object.extend(defaults, arguments[1] || {});
-
-    this.element = $(element);
-    
-    if(options.handle && (typeof options.handle == 'string'))
-      this.handle = this.element.down('.'+options.handle, 0);
-    
-    if(!this.handle) this.handle = $(options.handle);
-    if(!this.handle) this.handle = this.element;
-    
-    if(options.scroll && !options.scroll.scrollTo && !options.scroll.outerHTML) {
-      options.scroll = $(options.scroll);
-      this._isScrollChild = Element.childOf(this.element, options.scroll);
-    }
-
-    Element.makePositioned(this.element); // fix IE    
-
-    this.delta    = this.currentDelta();
-    this.options  = options;
-    this.dragging = false;   
-
-    this.eventMouseDown = this.initDrag.bindAsEventListener(this);
-    Event.observe(this.handle, "mousedown", this.eventMouseDown);
-    
-    Draggables.register(this);
-  },
-  
-  destroy: function() {
-    Event.stopObserving(this.handle, "mousedown", this.eventMouseDown);
-    Draggables.unregister(this);
-  },
-  
-  currentDelta: function() {
-    return([
-      parseInt(Element.getStyle(this.element,'left') || '0'),
-      parseInt(Element.getStyle(this.element,'top') || '0')]);
-  },
-  
-  initDrag: function(event) {
-    if(typeof Draggable._dragging[this.element] != 'undefined' &&
-      Draggable._dragging[this.element]) return;
-    if(Event.isLeftClick(event)) {    
-      // abort on form elements, fixes a Firefox issue
-      var src = Event.element(event);
-      if((tag_name = src.tagName.toUpperCase()) && (
-        tag_name=='INPUT' ||
-        tag_name=='SELECT' ||
-        tag_name=='OPTION' ||
-        tag_name=='BUTTON' ||
-        tag_name=='TEXTAREA')) return;
-        
-      var pointer = [Event.pointerX(event), Event.pointerY(event)];
-      var pos     = Position.cumulativeOffset(this.element);
-      this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
-      
-      Draggables.activate(this);
-      Event.stop(event);
-    }
-  },
-  
-  startDrag: function(event) {
-    this.dragging = true;
-    
-    if(this.options.zindex) {
-      this.originalZ = parseInt(Element.getStyle(this.element,'z-index') || 0);
-      this.element.style.zIndex = this.options.zindex;
-    }
-    
-    if(this.options.ghosting) {
-      this._clone = this.element.cloneNode(true);
-      Position.absolutize(this.element);
-      this.element.parentNode.insertBefore(this._clone, this.element);
-    }
-    
-    if(this.options.scroll) {
-      if (this.options.scroll == window) {
-        var where = this._getWindowScroll(this.options.scroll);
-        this.originalScrollLeft = where.left;
-        this.originalScrollTop = where.top;
-      } else {
-        this.originalScrollLeft = this.options.scroll.scrollLeft;
-        this.originalScrollTop = this.options.scroll.scrollTop;
-      }
-    }
-    
-    Draggables.notify('onStart', this, event);
-        
-    if(this.options.starteffect) this.options.starteffect(this.element);
-  },
-  
-  updateDrag: function(event, pointer) {
-    if(!this.dragging) this.startDrag(event);
-    Position.prepare();
-    Droppables.show(pointer, this.element);
-    Draggables.notify('onDrag', this, event);
-    
-    this.draw(pointer);
-    if(this.options.change) this.options.change(this);
-    
-    if(this.options.scroll) {
-      this.stopScrolling();
-      
-      var p;
-      if (this.options.scroll == window) {
-        with(this._getWindowScroll(this.options.scroll)) { p = [ left, top, left+width, top+height ]; }
-      } else {
-        p = Position.page(this.options.scroll);
-        p[0] += this.options.scroll.scrollLeft + Position.deltaX;
-        p[1] += this.options.scroll.scrollTop + Position.deltaY;
-        p.push(p[0]+this.options.scroll.offsetWidth);
-        p.push(p[1]+this.options.scroll.offsetHeight);
-      }
-      var speed = [0,0];
-      if(pointer[0] < (p[0]+this.options.scrollSensitivity)) speed[0] = pointer[0]-(p[0]+this.options.scrollSensitivity);
-      if(pointer[1] < (p[1]+this.options.scrollSensitivity)) speed[1] = pointer[1]-(p[1]+this.options.scrollSensitivity);
-      if(pointer[0] > (p[2]-this.options.scrollSensitivity)) speed[0] = pointer[0]-(p[2]-this.options.scrollSensitivity);
-      if(pointer[1] > (p[3]-this.options.scrollSensitivity)) speed[1] = pointer[1]-(p[3]-this.options.scrollSensitivity);
-      this.startScrolling(speed);
-    }
-    
-    // fix AppleWebKit rendering
-    if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
-    
-    Event.stop(event);
-  },
-  
-  finishDrag: function(event, success) {
-    this.dragging = false;
-
-    if(this.options.ghosting) {
-      Position.relativize(this.element);
-      Element.remove(this._clone);
-      this._clone = null;
-    }
-
-    if(success) Droppables.fire(event, this.element);
-    Draggables.notify('onEnd', this, event);
-
-    var revert = this.options.revert;
-    if(revert && typeof revert == 'function') revert = revert(this.element);
-    
-    var d = this.currentDelta();
-    if(revert && this.options.reverteffect) {
-      this.options.reverteffect(this.element, 
-        d[1]-this.delta[1], d[0]-this.delta[0]);
-    } else {
-      this.delta = d;
-    }
-
-    if(this.options.zindex)
-      this.element.style.zIndex = this.originalZ;
-
-    if(this.options.endeffect) 
-      this.options.endeffect(this.element);
-      
-    Draggables.deactivate(this);
-    Droppables.reset();
-  },
-  
-  keyPress: function(event) {
-    if(event.keyCode!=Event.KEY_ESC) return;
-    this.finishDrag(event, false);
-    Event.stop(event);
-  },
-  
-  endDrag: function(event) {
-    if(!this.dragging) return;
-    this.stopScrolling();
-    this.finishDrag(event, true);
-    Event.stop(event);
-  },
-  
-  draw: function(point) {
-    var pos = Position.cumulativeOffset(this.element);
-    if(this.options.ghosting) {
-      var r   = Position.realOffset(this.element);
-      pos[0] += r[0] - Position.deltaX; pos[1] += r[1] - Position.deltaY;
-    }
-    
-    var d = this.currentDelta();
-    pos[0] -= d[0]; pos[1] -= d[1];
-    
-    if(this.options.scroll && (this.options.scroll != window && this._isScrollChild)) {
-      pos[0] -= this.options.scroll.scrollLeft-this.originalScrollLeft;
-      pos[1] -= this.options.scroll.scrollTop-this.originalScrollTop;
-    }
-    
-    var p = [0,1].map(function(i){ 
-      return (point[i]-pos[i]-this.offset[i]) 
-    }.bind(this));
-    
-    if(this.options.snap) {
-      if(typeof this.options.snap == 'function') {
-        p = this.options.snap(p[0],p[1],this);
-      } else {
-      if(this.options.snap instanceof Array) {
-        p = p.map( function(v, i) {
-          return Math.round(v/this.options.snap[i])*this.options.snap[i] }.bind(this))
-      } else {
-        p = p.map( function(v) {
-          return Math.round(v/this.options.snap)*this.options.snap }.bind(this))
-      }
-    }}
-    
-    var style = this.element.style;
-    if((!this.options.constraint) || (this.options.constraint=='horizontal'))
-      style.left = p[0] + "px";
-    if((!this.options.constraint) || (this.options.constraint=='vertical'))
-      style.top  = p[1] + "px";
-    
-    if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
-  },
-  
-  stopScrolling: function() {
-    if(this.scrollInterval) {
-      clearInterval(this.scrollInterval);
-      this.scrollInterval = null;
-      Draggables._lastScrollPointer = null;
-    }
-  },
-  
-  startScrolling: function(speed) {
-    if(!(speed[0] || speed[1])) return;
-    this.scrollSpeed = [speed[0]*this.options.scrollSpeed,speed[1]*this.options.scrollSpeed];
-    this.lastScrolled = new Date();
-    this.scrollInterval = setInterval(this.scroll.bind(this), 10);
-  },
-  
-  scroll: function() {
-    var current = new Date();
-    var delta = current - this.lastScrolled;
-    this.lastScrolled = current;
-    if(this.options.scroll == window) {
-      with (this._getWindowScroll(this.options.scroll)) {
-        if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
-          var d = delta / 1000;
-          this.options.scroll.scrollTo( left + d*this.scrollSpeed[0], top + d*this.scrollSpeed[1] );
-        }
-      }
-    } else {
-      this.options.scroll.scrollLeft += this.scrollSpeed[0] * delta / 1000;
-      this.options.scroll.scrollTop  += this.scrollSpeed[1] * delta / 1000;
-    }
-    
-    Position.prepare();
-    Droppables.show(Draggables._lastPointer, this.element);
-    Draggables.notify('onDrag', this);
-    if (this._isScrollChild) {
-      Draggables._lastScrollPointer = Draggables._lastScrollPointer || $A(Draggables._lastPointer);
-      Draggables._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
-      Draggables._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
-      if (Draggables._lastScrollPointer[0] < 0)
-        Draggables._lastScrollPointer[0] = 0;
-      if (Draggables._lastScrollPointer[1] < 0)
-        Draggables._lastScrollPointer[1] = 0;
-      this.draw(Draggables._lastScrollPointer);
-    }
-    
-    if(this.options.change) this.options.change(this);
-  },
-  
-  _getWindowScroll: function(w) {
-    var T, L, W, H;
-    with (w.document) {
-      if (w.document.documentElement && documentElement.scrollTop) {
-        T = documentElement.scrollTop;
-        L = documentElement.scrollLeft;
-      } else if (w.document.body) {
-        T = body.scrollTop;
-        L = body.scrollLeft;
-      }
-      if (w.innerWidth) {
-        W = w.innerWidth;
-        H = w.innerHeight;
-      } else if (w.document.documentElement && documentElement.clientWidth) {
-        W = documentElement.clientWidth;
-        H = documentElement.clientHeight;
-      } else {
-        W = body.offsetWidth;
-        H = body.offsetHeight
-      }
-    }
-    return { top: T, left: L, width: W, height: H };
-  }
-}
-
-/*--------------------------------------------------------------------------*/
-
-var SortableObserver = Class.create();
-SortableObserver.prototype = {
-  initialize: function(element, observer) {
-    this.element   = $(element);
-    this.observer  = observer;
-    this.lastValue = Sortable.serialize(this.element);
-  },
-  
-  onStart: function() {
-    this.lastValue = Sortable.serialize(this.element);
-  },
-  
-  onEnd: function() {
-    Sortable.unmark();
-    if(this.lastValue != Sortable.serialize(this.element))
-      this.observer(this.element)
-  }
-}
-
-var Sortable = {
-  SERIALIZE_RULE: /^[^_\-](?:[A-Za-z0-9\-\_]*)[_](.*)$/,
-  
-  sortables: {},
-  
-  _findRootElement: function(element) {
-    while (element.tagName.toUpperCase() != "BODY") {  
-      if(element.id && Sortable.sortables[element.id]) return element;
-      element = element.parentNode;
-    }
-  },
-
-  options: function(element) {
-    element = Sortable._findRootElement($(element));
-    if(!element) return;
-    return Sortable.sortables[element.id];
-  },
-  
-  destroy: function(element){
-    var s = Sortable.options(element);
-    
-    if(s) {
-      Draggables.removeObserver(s.element);
-      s.droppables.each(function(d){ Droppables.remove(d) });
-      s.draggables.invoke('destroy');
-      
-      delete Sortable.sortables[s.element.id];
-    }
-  },
-
-  create: function(element) {
-    element = $(element);
-    var options = Object.extend({ 
-      element:     element,
-      tag:         'li',       // assumes li children, override with tag: 'tagname'
-      dropOnEmpty: false,
-      tree:        false,
-      treeTag:     'ul',
-      overlap:     'vertical', // one of 'vertical', 'horizontal'
-      constraint:  'vertical', // one of 'vertical', 'horizontal', false
-      containment: element,    // also takes array of elements (or id's); or false
-      handle:      false,      // or a CSS class
-      only:        false,
-      delay:       0,
-      hoverclass:  null,
-      ghosting:    false,
-      scroll:      false,
-      scrollSensitivity: 20,
-      scrollSpeed: 15,
-      format:      this.SERIALIZE_RULE,
-      onChange:    Prototype.emptyFunction,
-      onUpdate:    Prototype.emptyFunction
-    }, arguments[1] || {});
-
-    // clear any old sortable with same element
-    this.destroy(element);
-
-    // build options for the draggables
-    var options_for_draggable = {
-      revert:      true,
-      scroll:      options.scroll,
-      scrollSpeed: options.scrollSpeed,
-      scrollSensitivity: options.scrollSensitivity,
-      delay:       options.delay,
-      ghosting:    options.ghosting,
-      constraint:  options.constraint,
-      handle:      options.handle };
-
-    if(options.starteffect)
-      options_for_draggable.starteffect = options.starteffect;
-
-    if(options.reverteffect)
-      options_for_draggable.reverteffect = options.reverteffect;
-    else
-      if(options.ghosting) options_for_draggable.reverteffect = function(element) {
-        element.style.top  = 0;
-        element.style.left = 0;
-      };
-
-    if(options.endeffect)
-      options_for_draggable.endeffect = options.endeffect;
-
-    if(options.zindex)
-      options_for_draggable.zindex = options.zindex;
-
-    // build options for the droppables  
-    var options_for_droppable = {
-      overlap:     options.overlap,
-      containment: options.containment,
-      tree:        options.tree,
-      hoverclass:  options.hoverclass,
-      onHover:     Sortable.onHover
-    }
-    
-    var options_for_tree = {
-      onHover:      Sortable.onEmptyHover,
-      overlap:      options.overlap,
-      containment:  options.containment,
-      hoverclass:   options.hoverclass
-    }
-
-    // fix for gecko engine
-    Element.cleanWhitespace(element); 
-
-    options.draggables = [];
-    options.droppables = [];
-
-    // drop on empty handling
-    if(options.dropOnEmpty || options.tree) {
-      Droppables.add(element, options_for_tree);
-      options.droppables.push(element);
-    }
-
-    (this.findElements(element, options) || []).each( function(e) {
-      // handles are per-draggable
-      var handle = options.handle ? 
-        $(e).down('.'+options.handle,0) : e;    
-      options.draggables.push(
-        new Draggable(e, Object.extend(options_for_draggable, { handle: handle })));
-      Droppables.add(e, options_for_droppable);
-      if(options.tree) e.treeNode = element;
-      options.droppables.push(e);      
-    });
-    
-    if(options.tree) {
-      (Sortable.findTreeElements(element, options) || []).each( function(e) {
-        Droppables.add(e, options_for_tree);
-        e.treeNode = element;
-        options.droppables.push(e);
-      });
-    }
-
-    // keep reference
-    this.sortables[element.id] = options;
-
-    // for onupdate
-    Draggables.addObserver(new SortableObserver(element, options.onUpdate));
-
-  },
-
-  // return all suitable-for-sortable elements in a guaranteed order
-  findElements: function(element, options) {
-    return Element.findChildren(
-      element, options.only, options.tree ? true : false, options.tag);
-  },
-  
-  findTreeElements: function(element, options) {
-    return Element.findChildren(
-      element, options.only, options.tree ? true : false, options.treeTag);
-  },
-
-  onHover: function(element, dropon, overlap) {
-    if(Element.isParent(dropon, element)) return;
-
-    if(overlap > .33 && overlap < .66 && Sortable.options(dropon).tree) {
-      return;
-    } else if(overlap>0.5) {
-      Sortable.mark(dropon, 'before');
-      if(dropon.previousSibling != element) {
-        var oldParentNode = element.parentNode;
-        element.style.visibility = "hidden"; // fix gecko rendering
-        dropon.parentNode.insertBefore(element, dropon);
-        if(dropon.parentNode!=oldParentNode) 
-          Sortable.options(oldParentNode).onChange(element);
-        Sortable.options(dropon.parentNode).onChange(element);
-      }
-    } else {
-      Sortable.mark(dropon, 'after');
-      var nextElement = dropon.nextSibling || null;
-      if(nextElement != element) {
-        var oldParentNode = element.parentNode;
-        element.style.visibility = "hidden"; // fix gecko rendering
-        dropon.parentNode.insertBefore(element, nextElement);
-        if(dropon.parentNode!=oldParentNode) 
-          Sortable.options(oldParentNode).onChange(element);
-        Sortable.options(dropon.parentNode).onChange(element);
-      }
-    }
-  },
-  
-  onEmptyHover: function(element, dropon, overlap) {
-    var oldParentNode = element.parentNode;
-    var droponOptions = Sortable.options(dropon);
-        
-    if(!Element.isParent(dropon, element)) {
-      var index;
-      
-      var children = Sortable.findElements(dropon, {tag: droponOptions.tag, only: droponOptions.only});
-      var child = null;
-            
-      if(children) {
-        var offset = Element.offsetSize(dropon, droponOptions.overlap) * (1.0 - overlap);
-        
-        for (index = 0; index < children.length; index += 1) {
-          if (offset - Element.offsetSize (children[index], droponOptions.overlap) >= 0) {
-            offset -= Element.offsetSize (children[index], droponOptions.overlap);
-          } else if (offset - (Element.offsetSize (children[index], droponOptions.overlap) / 2) >= 0) {
-            child = index + 1 < children.length ? children[index + 1] : null;
-            break;
-          } else {
-            child = children[index];
-            break;
-          }
-        }
-      }
-      
-      dropon.insertBefore(element, child);
-      
-      Sortable.options(oldParentNode).onChange(element);
-      droponOptions.onChange(element);
-    }
-  },
-
-  unmark: function() {
-    if(Sortable._marker) Sortable._marker.hide();
-  },
-
-  mark: function(dropon, position) {
-    // mark on ghosting only
-    var sortable = Sortable.options(dropon.parentNode);
-    if(sortable && !sortable.ghosting) return; 
-
-    if(!Sortable._marker) {
-      Sortable._marker = 
-        ($('dropmarker') || Element.extend(document.createElement('DIV'))).
-          hide().addClassName('dropmarker').setStyle({position:'absolute'});
-      document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
-    }    
-    var offsets = Position.cumulativeOffset(dropon);
-    Sortable._marker.setStyle({left: offsets[0]+'px', top: offsets[1] + 'px'});
-    
-    if(position=='after')
-      if(sortable.overlap == 'horizontal') 
-        Sortable._marker.setStyle({left: (offsets[0]+dropon.clientWidth) + 'px'});
-      else
-        Sortable._marker.setStyle({top: (offsets[1]+dropon.clientHeight) + 'px'});
-    
-    Sortable._marker.show();
-  },
-  
-  _tree: function(element, options, parent) {
-    var children = Sortable.findElements(element, options) || [];
-  
-    for (var i = 0; i < children.length; ++i) {
-      var match = children[i].id.match(options.format);
-
-      if (!match) continue;
-      
-      var child = {
-        id: encodeURIComponent(match ? match[1] : null),
-        element: element,
-        parent: parent,
-        children: [],
-        position: parent.children.length,
-        container: $(children[i]).down(options.treeTag)
-      }
-      
-      /* Get the element containing the children and recurse over it */
-      if (child.container)
-        this._tree(child.container, options, child)
-      
-      parent.children.push (child);
-    }
-
-    return parent; 
-  },
-
-  tree: function(element) {
-    element = $(element);
-    var sortableOptions = this.options(element);
-    var options = Object.extend({
-      tag: sortableOptions.tag,
-      treeTag: sortableOptions.treeTag,
-      only: sortableOptions.only,
-      name: element.id,
-      format: sortableOptions.format
-    }, arguments[1] || {});
-    
-    var root = {
-      id: null,
-      parent: null,
-      children: [],
-      container: element,
-      position: 0
-    }
-    
-    return Sortable._tree(element, options, root);
-  },
-
-  /* Construct a [i] index for a particular node */
-  _constructIndex: function(node) {
-    var index = '';
-    do {
-      if (node.id) index = '[' + node.position + ']' + index;
-    } while ((node = node.parent) != null);
-    return index;
-  },
-
-  sequence: function(element) {
-    element = $(element);
-    var options = Object.extend(this.options(element), arguments[1] || {});
-    
-    return $(this.findElements(element, options) || []).map( function(item) {
-      return item.id.match(options.format) ? item.id.match(options.format)[1] : '';
-    });
-  },
-
-  setSequence: function(element, new_sequence) {
-    element = $(element);
-    var options = Object.extend(this.options(element), arguments[2] || {});
-    
-    var nodeMap = {};
-    this.findElements(element, options).each( function(n) {
-        if (n.id.match(options.format))
-            nodeMap[n.id.match(options.format)[1]] = [n, n.parentNode];
-        n.parentNode.removeChild(n);
-    });
-   
-    new_sequence.each(function(ident) {
-      var n = nodeMap[ident];
-      if (n) {
-        n[1].appendChild(n[0]);
-        delete nodeMap[ident];
-      }
-    });
-  },
-  
-  serialize: function(element) {
-    element = $(element);
-    var options = Object.extend(Sortable.options(element), arguments[1] || {});
-    var name = encodeURIComponent(
-      (arguments[1] && arguments[1].name) ? arguments[1].name : element.id);
-    
-    if (options.tree) {
-      return Sortable.tree(element, arguments[1]).children.map( function (item) {
-        return [name + Sortable._constructIndex(item) + "[id]=" + 
-                encodeURIComponent(item.id)].concat(item.children.map(arguments.callee));
-      }).flatten().join('&');
-    } else {
-      return Sortable.sequence(element, arguments[1]).map( function(item) {
-        return name + "[]=" + encodeURIComponent(item);
-      }).join('&');
-    }
-  }
-}
-
-// Returns true if child is contained within element
-Element.isParent = function(child, element) {
-  if (!child.parentNode || child == element) return false;
-  if (child.parentNode == element) return true;
-  return Element.isParent(child.parentNode, element);
-}
-
-Element.findChildren = function(element, only, recursive, tagName) {    
-  if(!element.hasChildNodes()) return null;
-  tagName = tagName.toUpperCase();
-  if(only) only = [only].flatten();
-  var elements = [];
-  $A(element.childNodes).each( function(e) {
-    if(e.tagName && e.tagName.toUpperCase()==tagName &&
-      (!only || (Element.classNames(e).detect(function(v) { return only.include(v) }))))
-        elements.push(e);
-    if(recursive) {
-      var grandchildren = Element.findChildren(e, only, recursive, tagName);
-      if(grandchildren) elements.push(grandchildren);
-    }
-  });
-
-  return (elements.length>0 ? elements.flatten() : []);
-}
-
-Element.offsetSize = function (element, type) {
-  return element['offset' + ((type=='vertical' || type=='height') ? 'Height' : 'Width')];
-}
-// script.aculo.us slider.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
-
-// Copyright (c) 2005, 2006 Marty Haught, Thomas Fuchs 
-//
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/
 
 if(!Control) var Control = {};
 Control.Slider = Class.create();
@@ -3435,8 +3388,7 @@ Control.Slider.prototype = {
    if(this.active) {
       if(!this.dragging) this.dragging = true;
       this.draw(event);
-      // fix AppleWebKit rendering
-      if(navigator.appVersion.indexOf('AppleWebKit')>0) window.scrollBy(0,0);
+      if(Prototype.Browser.WebKit) window.scrollBy(0,0);
       Event.stop(event);
    }
   },
@@ -3468,6 +3420,58 @@ Control.Slider.prototype = {
       this.options.onChange(this.values.length>1 ? this.values : this.value, this);
     this.event = null;
   }
+}
+
+Sound = {
+  tracks: {},
+  _enabled: true,
+  template:
+    new Template('<embed style="height:0" id="sound_#{track}_#{id}" src="#{url}" loop="false" autostart="true" hidden="true"/>'),
+  enable: function(){
+    Sound._enabled = true;
+  },
+  disable: function(){
+    Sound._enabled = false;
+  },
+  play: function(url){
+    if(!Sound._enabled) return;
+    var options = Object.extend({
+      track: 'global', url: url, replace: false
+    }, arguments[1] || {});
+    
+    if(options.replace && this.tracks[options.track]) {
+      $R(0, this.tracks[options.track].id).each(function(id){
+        var sound = $('sound_'+options.track+'_'+id);
+        sound.Stop && sound.Stop();
+        sound.remove();
+      })
+      this.tracks[options.track] = null;
+    }
+      
+    if(!this.tracks[options.track])
+      this.tracks[options.track] = { id: 0 }
+    else
+      this.tracks[options.track].id++;
+      
+    options.id = this.tracks[options.track].id;
+    if (Prototype.Browser.IE) {
+      var sound = document.createElement('bgsound');
+      sound.setAttribute('id','sound_'+options.track+'_'+options.id);
+      sound.setAttribute('src',options.url);
+      sound.setAttribute('loop','1');
+      sound.setAttribute('autostart','true');
+      $$('body')[0].appendChild(sound);
+    }  
+    else
+      new Insertion.Bottom($$('body')[0], Sound.template.evaluate(options));
+  }
+};
+
+if(Prototype.Browser.Gecko && navigator.userAgent.indexOf("Win") > 0){
+  if(navigator.plugins && $A(navigator.plugins).detect(function(p){ return p.name.indexOf('QuickTime') != -1 }))
+    Sound.template = new Template('<object id="sound_#{track}_#{id}" width="0" height="0" type="audio/mpeg" data="#{url}"/>')
+  else
+    Sound.play = function(){}
 }
 
 ]]>
