@@ -24,7 +24,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		public void JsFunctions()
 		{
 			DoGet("ajax/JsFunctions.rails");
-            string expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails?RC3_0003\"></script>";
+            string expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails?RC3_0006\"></script>";
 			AssertSuccess();
 			AssertReplyEqualTo(expected);
 		}
@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		{
 			DoGet("ajax/BuildFormRemoteTag.rails");
 			string expected =
-				"<form  onsubmit=\"new Ajax.Request('url', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\">";
+				"<form  onsubmit=\"new Ajax.Request('url', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\" action=\"url\" method=\"post\" >";
 			AssertSuccess();
 			AssertReplyEqualTo(expected);
 		}
