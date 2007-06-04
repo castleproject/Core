@@ -69,11 +69,14 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPermissionController.cs" />
-    <Compile Include="Controllers\AccountScaffoldController.cs" />
+    <Compile Include="Scaffolds\AccountPermissionScaffoldController.cs" />
+    <Compile Include="Scaffolds\AccountScaffoldController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Scaffolds\CategoryScaffoldController.cs" />
     <Compile Include="Controllers\PersonUserController.cs" />
+    <Compile Include="Scaffolds\PersonUserScaffoldController.cs" />
     <Compile Include="Controllers\ProductLicenseController.cs" />
-    <Compile Include="Controllers\UserScaffoldController.cs" />
+    <Compile Include="Scaffolds\UserScaffoldController.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\AccountPermission.cs" />
     <Compile Include="Model\Category.cs" />
@@ -131,6 +134,7 @@
     <None Include="Views\Category\new.vm" />
     <None Include="Views\Category\removeconfirm.vm" />
     <None Include="Views\Category\update.vm" />
+    <None Include="Views\Layouts\default.vm" />
     <None Include="Views\PersonUser\delete.vm" />
     <None Include="Views\PersonUser\edit.vm" />
     <None Include="Views\PersonUser\insert.vm" />

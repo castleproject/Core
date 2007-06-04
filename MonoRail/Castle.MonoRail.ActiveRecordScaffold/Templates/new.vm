@@ -28,37 +28,37 @@ $Form.FormTag("%{action='create', id='scaffoldingform'}")
 
 #foreach($field in $curmodel.Fields)
 #if($Form.CanHandle($field))
-<p>$Form.CreateControl($curmodel, $prefix, $field, $instance)</p>
+<div>$Form.CreateControl($curmodel, $prefix, $field, $instance)</div>
 #end
 #end
 
 #foreach($prop in $curmodel.Properties)
 #if($Form.CanHandle($prop))
-<p>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</p>
+<div>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</div>
 #end
 #end
 
 #foreach($prop in $curmodel.NotMappedProperties)
 #if($Form.CanHandle($prop))
-<p>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</p>
+<div>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</div>
 #end
 #end
 
 #foreach($prop in $curmodel.BelongsTo)
 #if($Form.CanHandle($prop))
-<p>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</p>
+<div>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</div>
 #end
 #end
 
 #foreach($prop in $curmodel.HasMany)
 #if($Form.CanHandle($prop))
-<p>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</p>
+<div>$Form.CreateControl($curmodel, $prefix, $prop, $instance)</div>
 #end
 #end
 
 #foreach($prop in $curmodel.HasAndBelongsToMany)
 #if($Form.CanHandle($prop))
-<p valign="top">$Form.CreateControl($curmodel, $prefix, $prop, $instance)</p>
+<div valign="top">$Form.CreateControl($curmodel, $prefix, $prop, $instance)</div>
 #end
 #end
 

@@ -1,7 +1,3 @@
-<html>
-<body>
-$Ajax.InstallScripts()
-$Form.InstallScripts()
 
 $Form.FormTag("%{action='Insert'}")
   <p>

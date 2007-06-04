@@ -23,9 +23,7 @@ namespace Castle.Monorail.JSONSupport.Tests
 		public void Serialize()
 		{
 			Person p = new Person("Json", 23);
-
 			JSONHelper helper = new JSONHelper();
-
 			Assert.AreEqual("{\"Name\":\"Json\",\"Age\":23}", helper.ToJSON(p));
 		}
 	}

@@ -14,7 +14,11 @@
 
 namespace TestSiteARSupport.Controllers
 {
-	public class PersonUserScaffoldController
+	using Castle.MonoRail.Framework;
+	using TestSiteARSupport.Model;
+
+	[Scaffolding(typeof(PersonUser))]
+	public class PersonUserScaffoldController : Controller
 	{
 	}
 }

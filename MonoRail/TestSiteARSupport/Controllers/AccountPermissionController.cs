@@ -20,7 +20,7 @@ namespace TestSiteARSupport.Controllers
 
 	using TestSiteARSupport.Model;
 
-	
+	[Layout("default")]
 	public class AccountPermissionController : ARSmartDispatcherController
 	{
 		public void New()

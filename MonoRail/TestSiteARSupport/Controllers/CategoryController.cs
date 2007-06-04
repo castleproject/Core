@@ -19,7 +19,8 @@ namespace TestSiteARSupport.Controllers
 	using Castle.MonoRail.Framework;
 	
 	using TestSiteARSupport.Model;
-	
+
+	[Layout("default")]
 	public class CategoryController : ARSmartDispatcherController
 	{
 		public void New()

@@ -14,7 +14,11 @@
 
 namespace TestSiteARSupport.Controllers
 {
-	public class CategoryScaffoldController
+	using Castle.MonoRail.Framework;
+	using TestSiteARSupport.Model;
+
+	[Scaffolding(typeof(Category))]
+	public class CategoryScaffoldController : Controller
 	{
 	}
 }

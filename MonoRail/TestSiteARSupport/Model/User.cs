@@ -33,7 +33,7 @@ namespace TestSiteARSupport.Model
 			set { id = value; }
 		}
 
-		[Property, ValidateNonEmpty]
+		[Property(NotNull=true), ValidateNonEmpty]
 		public string Name
 		{
 			get { return name; }

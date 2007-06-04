@@ -1,5 +1,3 @@
-<html>
-<body>
 <form action="insert.castle" method="post">
   <p>
   Name: 
@@ -38,5 +36,3 @@
   <input type="submit" id="insertbutton" value="Insert" />
 
 </form>
-</body>
-</html>

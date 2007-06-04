@@ -33,6 +33,17 @@ namespace TestSiteARSupport.Model
 		private ISet<AccountPermission> permissions;
 		private IList<User> users = new List<User>();
 
+		public Account()
+		{
+		}
+
+		public Account(string name, string email, string password)
+		{
+			this.name = name;
+			this.email = email;
+			this.password = password;
+		}
+
 		[PrimaryKey]
 		public int Id
 		{
@@ -89,6 +100,11 @@ namespace TestSiteARSupport.Model
 		{
 			get { return users; }
 			set { users = value; }
+		}
+
+		public override string ToString()
+		{
+			return name;
 		}
 
 		public static Account[] FindAll()

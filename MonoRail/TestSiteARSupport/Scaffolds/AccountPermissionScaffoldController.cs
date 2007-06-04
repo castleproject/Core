@@ -14,7 +14,11 @@
 
 namespace TestSiteARSupport.Controllers
 {
-	public class AccountPermissionScaffoldController
+	using Castle.MonoRail.Framework;
+	using TestSiteARSupport.Model;
+
+	[Scaffolding(typeof(AccountPermission))]
+	public class AccountPermissionScaffoldController : Controller
 	{
 	}
 }

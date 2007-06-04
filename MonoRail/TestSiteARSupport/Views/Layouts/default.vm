@@ -1,0 +1,13 @@
+<html>
+
+$Ajax.InstallScripts()
+$Scriptaculous.InstallScripts()
+$Form.InstallScripts()
+
+<body>
+
+$childContents
+
+</body>
+
+</html>

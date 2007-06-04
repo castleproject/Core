@@ -23,6 +23,7 @@
 			<include name="Castle.ActiveRecord.dll" />
 			<include name="Castle.MonoRail.Framework.dll" />
 			<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
+			<include name="Castle.MonoRail.ActiveRecordScaffold.dll" />
 			<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 			<include name="System.Web.dll" />
 		</assemblyfileset>

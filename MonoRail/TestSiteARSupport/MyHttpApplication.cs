@@ -20,7 +20,6 @@ namespace TestSiteARSupport
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
-	using TestSiteARSupport.Model;
 
 	public class MyHttpApplication : HttpApplication
 	{
@@ -30,7 +29,7 @@ namespace TestSiteARSupport
 
 			ActiveRecordStarter.Initialize( Assembly.GetExecutingAssembly(), source );
 			
-			ActiveRecordStarter.CreateSchema();
+			// ActiveRecordStarter.CreateSchema();
 		}
 	}
 }

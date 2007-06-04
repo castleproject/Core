@@ -298,6 +298,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			if (!belongsToModel.BelongsToAtt.NotNull)
 			{
 				attrs.Add("firstOption", "Empty");
+				attrs.Add("firstOptionValue", "");
 			}
 
 			stringBuilder.Append(Select(propName, items, attrs));
