@@ -28,6 +28,11 @@ namespace TestSiteARSupport.Model
 		{
 		}
 
+		public AccountPermission(string name)
+		{
+			this.name = name;
+		}
+
 		[PrimaryKey]
 		public int Id
 		{

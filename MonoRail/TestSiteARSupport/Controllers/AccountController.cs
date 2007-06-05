@@ -74,7 +74,7 @@ namespace TestSiteARSupport.Controllers
 		}
 		
 		[AccessibleThrough(Verb.Post)]
-		public void Update([ARDataBind("account", AutoLoad=AutoLoadBehavior.Always, Expect="account.Permissions", Validate=true)] Account account)
+		public void Update([ARDataBind("account", AutoLoad=AutoLoadBehavior.NullIfInvalidKey, Expect="account.Permissions,account.Users", Validate=true)] Account account)
 		{
 			ErrorList errorList = BoundInstanceErrors[account];
 			ErrorSummary summary = GetErrorSummary(account);

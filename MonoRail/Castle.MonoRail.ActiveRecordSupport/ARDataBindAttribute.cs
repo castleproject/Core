@@ -116,7 +116,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		/// <summary>
 		/// Gets or sets the names of the collection that are expected to be binded.
-		/// If the binder don't found any value to an expected collection, it will clear to collection.
+		/// If the binder does not find any value to an expected collection, it will clear to collection.
 		/// </summary>
 		/// <value>The expect collections names, in a csv fashion.</value>
 		public string Expect

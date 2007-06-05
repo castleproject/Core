@@ -26,6 +26,15 @@ namespace TestSiteARSupport.Model
 		private String name;
 		private Account account;
 
+		public User()
+		{
+		}
+
+		public User(string name)
+		{
+			this.name = name;
+		}
+
 		[PrimaryKey]
 		public int Id
 		{
