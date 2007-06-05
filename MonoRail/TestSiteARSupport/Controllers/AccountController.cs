@@ -38,9 +38,9 @@ namespace TestSiteARSupport.Controllers
 		}
 
 		[AccessibleThrough(Verb.Post)]
-		public void Insert([ARDataBind("account", AutoLoad=AutoLoadBehavior.OnlyNested)] Account account)
+		public void Insert([ARDataBind("account", AutoLoad=AutoLoadBehavior.OnlyNested, Validate=true)] Account account)
 		{
-			ErrorList errorList = (ErrorList) BoundInstanceErrors[account];
+			ErrorList errorList = BoundInstanceErrors[account];
 			
 			PropertyBag.Add("errorlist", errorList);
 			

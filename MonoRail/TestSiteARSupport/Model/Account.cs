@@ -86,7 +86,7 @@ namespace TestSiteARSupport.Model
 			set { productLicense = value; }
 		}
 
-		[HasAndBelongsToMany( typeof(AccountPermission), 
+		[HasAndBelongsToMany(
 			Table="AccountAccountPermission", 
 			ColumnRef="permission_id", ColumnKey="account_id", Inverse=false)]
 		public ISet<AccountPermission> Permissions
@@ -95,7 +95,7 @@ namespace TestSiteARSupport.Model
 			set { permissions = value; }
 		}
 
-		[HasMany(typeof(User))]
+		[HasMany]
 		public IList<User> Users
 		{
 			get { return users; }

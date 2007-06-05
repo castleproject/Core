@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -34,12 +35,11 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public abstract class SmartDispatcherController : Controller
 	{
-		protected IDictionary boundInstances = new HybridDictionary();
-
 		private DataBinder binder;
 		private TreeBuilder treeBuilder = new TreeBuilder();
 		private CompositeNode paramsNode, formNode, queryStringNode;
-		private IDictionary validationSummaryPerInstance = new Hashtable();
+		private IDictionary<object, ErrorSummary> validationSummaryPerInstance = new Dictionary<object, ErrorSummary>();
+		protected IDictionary<object, ErrorList> boundInstances = new Dictionary<object, ErrorList>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SmartDispatcherController"/> class.
@@ -62,7 +62,7 @@ namespace Castle.MonoRail.Framework
 			get { return binder; }
 		}
 
-		public IDictionary BoundInstanceErrors
+		public IDictionary<object, ErrorList> BoundInstanceErrors
 		{
 			get { return boundInstances; }
 			set { boundInstances = value; }
@@ -72,7 +72,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets the validation summary (key is the object instance)
 		/// </summary>
 		/// <value>The validation summary per instance.</value>
-		public IDictionary ValidationSummaryPerInstance
+		public IDictionary<object, ErrorSummary> ValidationSummaryPerInstance
 		{
 			get { return validationSummaryPerInstance; }
 		}
@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework
 		/// <returns>Error summary instance (can be null if the DataBinder wasn't configured to validate)</returns>
 		protected ErrorSummary GetErrorSummary(object instance)
 		{
-			return (ErrorSummary) validationSummaryPerInstance[instance];
+			return validationSummaryPerInstance[instance];
 		}
 
 		/// <summary>
