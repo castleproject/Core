@@ -66,6 +66,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private int formCount;
 		private string currentFormId;
+		private bool isValidationDisabled;
 		private Stack objectStack = new Stack();
 		private IWebValidatorProvider validatorProvider = new PrototypeWebValidator();
 		private WebValidationConfiguration validationConfig = new WebValidationConfiguration();
@@ -136,15 +137,31 @@ namespace Castle.MonoRail.Framework.Helpers
 			return FormTag(url, parameters);
 		}
 
+		/// <summary>
+		/// Creates a form tag based on the parameters.
+		/// <para>
+		/// Javascript validation can also be bound to 
+		/// the form and|or elements nested as long as the helper is 
+		/// able to reach the <see cref="Type"/> of the object used on your view code
+		/// </para>
+		/// <para>
+		/// The action attribute generation will use <see cref="UrlHelper"/>
+		/// </para>
+		/// </summary>
+		/// <param name="url">The hardcoded url.</param>
+		/// <param name="parameters">The parameters for the tag or for action and form validation generation.</param>
+		/// <returns></returns>
 		public string FormTag(string url, IDictionary parameters)
 		{
 			string method = CommonUtils.ObtainEntryAndRemove(parameters, "method", "post");
-
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
 
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
-			string afterFormTag = validationConfig.CreateAfterFormOpened(currentFormId);
+			string afterFormTag = IsValidationEnabled ? 
+				validationConfig.CreateAfterFormOpened(currentFormId) : 
+				String.Empty;
+
 			string formContent;
 
 			if (url != null)
@@ -169,10 +186,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			currentFormId = CommonUtils.ObtainEntryAndRemove(parameters, "id", "form" + ++formCount);
 			
-			// Additional form parameters. fValidate creates onsubmit here.
 			validationConfig = validatorProvider.CreateConfiguration(parameters);
 
-			string afterFormTag = validationConfig.CreateAfterFormOpened(currentFormId);
+			string afterFormTag = IsValidationEnabled ?
+				validationConfig.CreateAfterFormOpened(currentFormId) :
+				String.Empty;
 
 			string url = UrlHelper.For(parameters);
 
@@ -216,13 +234,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Generates an end form element.
+		/// Renders an end form element.
 		/// </summary>
 		/// <returns></returns>
 		public string EndFormTag()
 		{
-			string beforeEndTag = validationConfig.CreateBeforeFormClosed(currentFormId);
-
+			string beforeEndTag = IsValidationEnabled ? 
+				validationConfig.CreateBeforeFormClosed(currentFormId) : 
+				String.Empty;
+			
 			return beforeEndTag + "</form>";
 		}
 
@@ -1323,18 +1343,34 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Configures the use of fValidate for form fields validation
+		/// Configures this FormHelper instance to use fValidate for form fields validation
+		/// </summary>
+		public void UsePrototypeValidation()
+		{
+			UseWebValidatorProvider(new PrototypeWebValidator());
+		}
+
+		/// <summary>
+		/// Configures this FormHelper instance to use fValidate for form fields validation
 		/// </summary>
 		public void UsefValidate()
 		{
 			UseWebValidatorProvider(new FValidateWebValidator());
 		}
 
+		/// <summary>
+		/// Disables the validation.
+		/// </summary>
+		public void DisableValidation()
+		{
+			isValidationDisabled = true;
+		}
+
 		protected virtual void ApplyValidation(InputElementType inputType, string target, ref IDictionary attributes)
 		{
 			bool disableValidation = CommonUtils.ObtainEntryAndRemove(attributes, "disablevalidation", "false") == "true";
 
-			if (!IsValidationEnabledForScope && disableValidation)
+			if (!IsValidationEnabled && disableValidation)
 			{
 				return;
 			}
@@ -1374,11 +1410,13 @@ namespace Castle.MonoRail.Framework.Helpers
 			return validators.ToArray();
 		}
 
-		private bool IsValidationEnabledForScope
+		private bool IsValidationEnabled
 		{
 			get
 			{
-				if (objectStack.Count == 0) return false;
+				if (isValidationDisabled) return false;
+
+				if (objectStack.Count == 0) return true;
 
 				return ((FormScopeInfo)objectStack.Peek()).IsValidationEnabled;
 			}

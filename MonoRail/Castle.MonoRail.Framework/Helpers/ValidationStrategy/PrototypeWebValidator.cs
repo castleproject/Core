@@ -19,6 +19,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Internal;
 
+	/// <summary>
+	/// Implements support for really easy field validation 
+	/// http://tetlaw.id.au/view/javascript/really-easy-field-validation
+	/// </summary>
 	public class PrototypeWebValidator : IWebValidatorProvider
 	{
 		/// <summary>
@@ -99,9 +103,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		#region Validation Generator
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public class PrototypeValidationGenerator : IWebValidationGenerator
 		{
 			private readonly InputElementType inputType;

@@ -31,8 +31,8 @@ $PresentationHelper.LinkToNew( $model, $useModelName, "Create a new $model.Type.
   #end
   
   <td align="center" nowrap="nowrap" width="1%">
-$PresentationHelper.LinkToEdit( $model, $useModelName, "edit", $rowid, $DictHelper.CreateDict() )
-$PresentationHelper.LinkToConfirm( $model, $useModelName, "remove", $rowid, $DictHelper.CreateDict() )
+$PresentationHelper.LinkToEdit( $model, $useModelName, "edit", $rowid, "%{class='editlink'}" )
+$PresentationHelper.LinkToConfirm( $model, $useModelName, "remove", $rowid, "%{class='deletelink'}" )
   </td>
   </tr>
 #end
