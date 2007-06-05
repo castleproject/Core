@@ -16,8 +16,9 @@ namespace Castle.ActiveRecord.Tests.Validation
 {
 	using System;
 	using System.Collections;
+	using System.Globalization;
 	using System.Reflection;
-
+	using System.Threading;
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Validation.Model;
@@ -47,6 +48,9 @@ namespace Castle.ActiveRecord.Tests.Validation
 		[Test]
 		public void ErrorMessages()
 		{
+			Thread.CurrentThread.CurrentCulture =
+				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
+
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(User) );
 
 			User user = new User();
