@@ -66,9 +66,8 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			generator.SetAsRequired(BuildErrorMessage());
+			generator.SetAsRequired(target, BuildErrorMessage());
 			// TODO: web validation for DateTime
-			// generator.SetDigitsOnly(BuildErrorMessage());
 		}
 
 		/// <summary>

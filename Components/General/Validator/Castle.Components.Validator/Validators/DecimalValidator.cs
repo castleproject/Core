@@ -66,8 +66,8 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			generator.SetAsRequired(null);
-			generator.SetNumberOnly(BuildErrorMessage());
+			generator.SetAsRequired(target, null);
+			generator.SetNumberOnly(target, BuildErrorMessage());
 		}
 
 		/// <summary>

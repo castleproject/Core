@@ -16,6 +16,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
+	using System.Text;
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -42,12 +44,13 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <summary>
 		/// Pendent
 		/// </summary>
+		/// <param name="config"></param>
 		/// <param name="inputType"></param>
 		/// <param name="attributes"></param>
 		/// <returns></returns>
-		public IWebValidationGenerator CreateGenerator(InputElementType inputType, IDictionary attributes)
+		public IWebValidationGenerator CreateGenerator(WebValidationConfiguration config, InputElementType inputType, IDictionary attributes)
 		{
-			return new PrototypeValidationGenerator(inputType, attributes);
+			return new PrototypeValidationGenerator((PrototypeValidationConfiguration) config, inputType, attributes);
 		}
 
 		#region Configuration
@@ -58,13 +61,29 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		public class PrototypeValidationConfiguration : WebValidationConfiguration
 		{
 			private IDictionary jsOptions = new Hashtable();
+			private List<CustomRule> rules = new List<CustomRule>();
 
 			public override string CreateBeforeFormClosed(string formId)
 			{
-                return AbstractHelper.ScriptBlock(string.Format(
-                    "if (!window.prototypeValidators) prototypeValidators = $A([]);\n" +
-                    "prototypeValidators['{0}'] = new Validation('{0}', {1});",
-                    formId, AjaxHelper.JavascriptOptions(jsOptions)));
+				StringBuilder sb = new StringBuilder();
+
+				sb.Append("if (!window.prototypeValidators) prototypeValidators = $A([]);\n");
+				sb.AppendFormat("var validator = new Validation('{0}', {1});\n", formId, AjaxHelper.JavascriptOptions(jsOptions));
+				sb.AppendFormat("prototypeValidators['{0}'] = validator;\n", formId);
+
+				if (rules.Count != 0)
+				{
+					sb.Append("Validation.addAllThese([\n");
+
+					foreach(CustomRule rule in rules)
+					{
+						sb.AppendFormat("['{0}', '{1}', {{ {2} }}]\n", rule.className, rule.violationMessage, rule.rule);
+					}
+
+					sb.Append("]);\n");
+				}
+
+                return AbstractHelper.ScriptBlock(sb.ToString());
 			}
 
 			public override void Configure(IDictionary parameters)
@@ -97,6 +116,23 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					jsOptions["onCreateAdvice"] = onCreateAdvice;
 				}
 			}
+
+			public void AddCustomRule(string className, string violationMessage, string rule)
+			{
+				rules.Add(new CustomRule(className, rule, violationMessage));
+			}
+
+			class CustomRule
+			{
+				public string className, rule, violationMessage;
+
+				public CustomRule(string className, string rule, string violationMessage)
+				{
+					this.className = className;
+					this.rule = rule;
+					this.violationMessage = violationMessage;
+				}
+			}
 		}
 
 		#endregion
@@ -105,21 +141,24 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		public class PrototypeValidationGenerator : IWebValidationGenerator
 		{
+			private readonly PrototypeValidationConfiguration config;
 			private readonly InputElementType inputType;
 			private readonly IDictionary attributes;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="PrototypeValidationGenerator"/> class.
 			/// </summary>
+			/// <param name="config">Validation configuration instance</param>
 			/// <param name="inputType">Type of the input.</param>
 			/// <param name="attributes">The attributes.</param>
-			public PrototypeValidationGenerator(InputElementType inputType, IDictionary attributes)
+			public PrototypeValidationGenerator(PrototypeValidationConfiguration config, InputElementType inputType, IDictionary attributes)
 			{
+				this.config = config;
 				this.inputType = inputType;
 				this.attributes = attributes;
 			}
 
-			public void SetAsRequired(string violationMessage)
+			public void SetAsRequired(string target, string violationMessage)
 			{
 				if (inputType == InputElementType.Text)
 				{
@@ -136,47 +175,47 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
-			public void SetDigitsOnly(string violationMessage)
+			public void SetDigitsOnly(string target, string violationMessage)
 			{
 				AddClass("validate-digits");
 				AddTitle(violationMessage);
 			}
 
-			public void SetNumberOnly(string violationMessage)
+			public void SetNumberOnly(string target, string violationMessage)
 			{
 				AddClass("validate-number");
 				AddTitle(violationMessage);
 			}
 
-			public void SetEmail(string violationMessage)
+			public void SetEmail(string target, string violationMessage)
 			{
 				AddClass("validate-email");
 				AddTitle(violationMessage);
 			}
 
-			public void SetRegExp(string regExp, string violationMessage)
+			public void SetRegExp(string target, string regExp, string violationMessage)
 			{
 				AddClass("validate-regex-" + regExp);
 				AddTitle(violationMessage);
 			}
 
-			public void SetExactLength(int length)
+			public void SetExactLength(string target, int length)
 			{
 				// Not supported by the prototype validation
 			}
 
-			public void SetMinLength(int minLength)
+			public void SetMinLength(string target, int minLength)
 			{
-				SetMinLength(minLength, null);
+				SetMinLength(target, minLength, null);
 			}
 
-			public void SetMinLength(int minLength, string violationMessage)
+			public void SetMinLength(string target, int minLength, string violationMessage)
 			{
 				AddClass("validate-min-length-" + minLength);
 				AddTitle(violationMessage);
 			}
 
-			public void SetMaxLength(int maxLength)
+			public void SetMaxLength(string target, int maxLength)
 			{
 				// Not supported by the prototype validation, 
 				// but we can set the maxlength on the input element
@@ -187,19 +226,20 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				}
 			}
 
-			public void SetLengthRange(int minLength, int maxLength)
+			public void SetLengthRange(string target, int minLength, int maxLength)
 			{
-				SetMinLength(minLength);
-				SetMaxLength(maxLength);
+				SetMinLength(target, minLength);
+				SetMaxLength(target, maxLength);
 			}
 
-			public void SetAsSameAs(string comparisonFieldName, string violationMessage)
+			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
-				AddClass("validate-same-as-" + comparisonFieldName);
-				AddTitle(violationMessage);
+				string rule = "validate-same-as-" + comparisonFieldName.ToLowerInvariant();
+				AddClass(rule);
+				config.AddCustomRule(rule, violationMessage, "equalToField : '" + GetPrefixedFieldld(target, comparisonFieldName.ToLowerInvariant()) + "'");
 			}
 
-			public void SetDate(string violationMessage)
+			public void SetDate(string target, string violationMessage)
 			{
 				AddClass("validate-date");
 				AddTitle(violationMessage);
@@ -234,6 +274,13 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				{
 					attributes["class"] = className;
 				}
+			}
+
+			private static string GetPrefixedFieldld(string target, string field)
+			{
+				string[] parts = target.Split('.');
+
+				return string.Join("_", parts, 0, parts.Length - 1) + "_" + field;
 			}
 		}
 

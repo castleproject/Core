@@ -35,8 +35,8 @@ $Form.FormTag("%{action='Insert'}")
 #end
   </p>
 
-  <input type="submit" id="insertbutton" value="Insert" />
+	<a href="javascript:validator.validate();void(0)">Validate it</a>
+
+  <input type="submit" id="insertbutton" value="Insert"  />
 
 $Form.EndFormTag()
-</body>
-</html>

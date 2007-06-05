@@ -17,8 +17,6 @@ namespace Castle.Components.Validator
 	using System;
 	using System.Collections;
 	using System.Reflection;
-	using System.Resources;
-	using System.Threading;
 
 	/// <summary>
 	/// Abstract <see cref="IValidator"/> implementation
@@ -55,15 +53,14 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public object GetFieldOrPropertyValue(object instance, string fieldOrPropertyName)
 		{
-			PropertyInfo pi =
-				instance.GetType().GetProperty(fieldOrPropertyName,
-				                               BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+			const BindingFlags flags = BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public;
+			Type targetType = instance.GetType();
+
+			PropertyInfo pi = targetType.GetProperty(fieldOrPropertyName, flags);
 
 			if (pi == null)
 			{
-				FieldInfo fi =
-					instance.GetType().GetField(fieldOrPropertyName,
-					                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+				FieldInfo fi = targetType.GetField(fieldOrPropertyName, flags);
 
 				if (fi != null)
 				{
@@ -76,7 +73,7 @@ namespace Castle.Components.Validator
 			}
 
 			throw new ValidationException("No public instance field or property named " + fieldOrPropertyName + " for type " +
-			                              instance.GetType().FullName);
+										  targetType.FullName);
 		}
 
 		/// <summary>
@@ -147,24 +144,6 @@ namespace Castle.Components.Validator
 		                                       InputElementType inputType, IWebValidationGenerator generator,
 		                                       IDictionary attributes, string target)
 		{
-			if (target.Contains("."))
-			{
-				string[] parts = target.Split('.');
-
-				if (attributes.Contains("class"))
-				{
-					string[] classNames = attributes["class"].ToString().Split(' ');
-
-					if (!Array.Exists(classNames, delegate(string className) { return className.StartsWith("validator-prefix-id-"); }))
-					{
-						attributes["class"] += " validator-id-prefix-" + parts[0] + "_";
-					}
-				}
-				else
-				{
-					attributes.Add("class", "validator-id-prefix-" + parts[0] + "_");
-				}
-			}
 		}
 
 		/// <summary>

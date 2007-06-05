@@ -163,23 +163,23 @@ namespace Castle.Components.Validator
 
 			if (exactLength != int.MinValue)
 			{
-				generator.SetExactLength(exactLength);
+				generator.SetExactLength(target, exactLength);
 			}
 			else
 			{
 				if (minLength != int.MinValue && maxLength != int.MaxValue)
 				{
-					generator.SetLengthRange(minLength, maxLength);
+					generator.SetLengthRange(target, minLength, maxLength);
 				}
 				else
 				{
 					if (minLength != int.MinValue)
 					{
-						generator.SetMinLength(minLength);
+						generator.SetMinLength(target, minLength);
 					}
 					if (maxLength != int.MaxValue)
 					{
-						generator.SetMaxLength(maxLength);
+						generator.SetMaxLength(target, maxLength);
 					}
 				}
 			}

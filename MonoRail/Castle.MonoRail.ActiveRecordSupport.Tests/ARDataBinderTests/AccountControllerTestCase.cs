@@ -12,26 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
+namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 {
-	using System.Collections;
-	using Castle.Components.Validator;
+	using NUnit.Framework;
 
-	/// <summary>
-	/// Pendent
-	/// </summary>
-	public interface IWebValidatorProvider
+	[TestFixture]
+	public class AccountControllerTestCase : BaseAcceptanceTestCase
 	{
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <returns></returns>
-		WebValidationConfiguration CreateConfiguration(IDictionary parameters);
+		protected override void CreateTestData()
+		{
+			
+		}
 
-		/// <summary>
-		/// Pendent
-		/// </summary>
-		/// <returns></returns>
-		IWebValidationGenerator CreateGenerator(WebValidationConfiguration config, InputElementType inputType, IDictionary attributes);
+		public void CreateAccount()
+		{
+			
+		}
 	}
 }

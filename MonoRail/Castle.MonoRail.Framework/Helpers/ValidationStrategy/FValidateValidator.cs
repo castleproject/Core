@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// Pendent
 		/// </summary>
 		/// <returns></returns>
-		public IWebValidationGenerator CreateGenerator(InputElementType inputType, IDictionary attributes)
+		public IWebValidationGenerator CreateGenerator(WebValidationConfiguration config, InputElementType inputType, IDictionary attributes)
 		{
 			return new FValidateGenerator(inputType, attributes);
 		}
@@ -102,71 +102,69 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				this.attributes = attributes;
 			}
 
-			public void SetAsRequired(string violationMessage)
+			public void SetAsRequired(string target, string violationMessage)
 			{
-				AddValidator("blank");
+				AddValidator(target, "blank");
 				AddErrorMessage(violationMessage);
 			}
 
-			public void SetRegExp(string regExp, string violationMessage)
+			public void SetRegExp(string target, string regExp, string violationMessage)
 			{
 				throw new NotImplementedException();
 			}
 
-			public void SetEmail(string violationMessage)
+			public void SetEmail(string target, string violationMessage)
 			{
-				AddValidator("email|1");
+				AddValidator(target, "email|1");
 				AddErrorMessage(violationMessage);
 			}
 
-			public void SetDigitsOnly(string violationMessage)
+			public void SetDigitsOnly(string target, string violationMessage)
 			{
 				// TODO
 			}
 
-			public void SetNumberOnly(string violationMessage)
+			public void SetNumberOnly(string target, string violationMessage)
 			{
 				// TODO
 			}
 
-			public void SetExactLength(int length)
+			public void SetExactLength(string target, int length)
 			{
 				// Not supported
 			}
 
-			public void SetMinLength(int minLength)
+			public void SetMinLength(string target, int minLength)
 			{
-				SetMinLength(minLength, null);
-				// AddErrorMessage(violationMessage);
+				SetMinLength(target, minLength, null);
 			}
 
-			public void SetMinLength(int minLength, string violationMessage)
+			public void SetMinLength(string target, int minLength, string violationMessage)
 			{
-				AddValidator("length|" + minLength);
+				AddValidator(target, "length|" + minLength);
 			}
 
-			public void SetMaxLength(int maxLength)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void SetLengthRange(int minLength, int maxLength)
-			{
-				AddValidator("length|" + minLength + "|" + maxLength);
-				// AddErrorMessage(violationMessage);
-			}
-
-			public void SetAsSameAs(string comparisonFieldName, string violationMessage)
+			public void SetMaxLength(string target, int maxLength)
 			{
 				throw new NotImplementedException();
 			}
 
-			public void SetDate(string violationMessage)
+			public void SetLengthRange(string target, int minLength, int maxLength)
+			{
+				AddValidator(target, "length|" + minLength + "|" + maxLength);
+			}
+
+			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{
 				throw new NotImplementedException();
 			}
 
-			private void AddValidator(string validator)
+			public void SetDate(string target, string violationMessage)
+			{
+				throw new NotImplementedException();
+			}
+
+			private void AddValidator(string target, string validator)
 			{
 				string existingValidators = (string) attributes["validators"];
 

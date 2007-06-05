@@ -111,7 +111,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			generator.SetRegExp(expression, BuildErrorMessage());
+			generator.SetRegExp(target, expression, BuildErrorMessage());
 		}
 	}
 }

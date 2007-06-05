@@ -19,7 +19,7 @@ namespace Castle.Components.Validator
 	/// <summary>
 	/// Represents the base of a web configuration.
 	/// </summary>
-	public class WebValidationConfiguration
+	public abstract class WebValidationConfiguration
 	{
 		/// <summary>
 		/// Configures the JS library based on the supplied parameters.

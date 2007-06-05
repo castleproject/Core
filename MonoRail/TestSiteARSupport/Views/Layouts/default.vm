@@ -1,12 +1,13 @@
 <html>
-
+<head>
 $Ajax.InstallScripts()
 $Scriptaculous.InstallScripts()
 $Form.InstallScripts()
+</head>
 
 <body>
 
-$childContents
+${childContent}
 
 </body>
 

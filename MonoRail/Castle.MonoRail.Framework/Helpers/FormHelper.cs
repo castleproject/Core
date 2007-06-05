@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		private bool isValidationDisabled;
 		private Stack objectStack = new Stack();
 		private IWebValidatorProvider validatorProvider = new PrototypeWebValidator();
-		private WebValidationConfiguration validationConfig = new WebValidationConfiguration();
+		private WebValidationConfiguration validationConfig;
 
 		protected ILogger logger = NullLogger.Instance;
 
@@ -239,9 +239,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string EndFormTag()
 		{
-			string beforeEndTag = IsValidationEnabled ? 
-				validationConfig.CreateBeforeFormClosed(currentFormId) : 
-				String.Empty;
+			string beforeEndTag = string.Empty;
+
+			if (validationConfig != null)
+			{
+				beforeEndTag = IsValidationEnabled ?
+					validationConfig.CreateBeforeFormClosed(currentFormId) :
+					String.Empty;
+			}
 			
 			return beforeEndTag + "</form>";
 		}
@@ -1375,7 +1380,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				return;
 			}
 
-			if (Controller.Validator == null)
+			if (Controller.Validator == null || validationConfig == null)
 			{
 				return;
 			}
@@ -1387,7 +1392,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			IValidator[] validators = CollectValidators(RequestContext.All, target);
 
-			IWebValidationGenerator generator = validatorProvider.CreateGenerator(inputType, attributes);
+			IWebValidationGenerator generator = validatorProvider.CreateGenerator(validationConfig, inputType, attributes);
 
 			foreach(IValidator validator in validators)
 			{

@@ -39,6 +39,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ARDataBinderTests\AccountControllerTestCase.cs" />
     <Compile Include="BaseAcceptanceTestCase.cs" />
     <Compile Include="BaseARTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,9 +58,6 @@
       <Project>{26AA3359-6571-4575-845D-ED05E4EDB586}</Project>
       <Name>TestSiteARSupport-vs2005</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ARDataBinderTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

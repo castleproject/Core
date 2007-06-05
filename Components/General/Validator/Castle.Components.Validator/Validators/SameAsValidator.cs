@@ -96,7 +96,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			generator.SetAsSameAs(propertyToCompare, BuildErrorMessage());
+			generator.SetAsSameAs(target, propertyToCompare, BuildErrorMessage());
 		}
 
 		/// <summary>

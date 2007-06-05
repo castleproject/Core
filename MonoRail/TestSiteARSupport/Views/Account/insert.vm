@@ -1,5 +1,3 @@
-<html>
-<body>
 
 #foreach($error in $errorlist)
   binding error $error.Key $error.Parent $error.Property $error.Exception <br/>
@@ -12,5 +10,3 @@
 <span id="pl">$account.ProductLicense.Id</span>
 <span id="permissions">#foreach($it in $account.Permissions)$it.Id,#end</span>
 
-</body>
-</html>

@@ -24,77 +24,89 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// Sets the digits only.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetDigitsOnly(string violationMessage);
+		void SetDigitsOnly(string target, string violationMessage);
 
 		/// <summary>
 		/// Sets the number only.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetNumberOnly(string violationMessage);
+		void SetNumberOnly(string target, string violationMessage);
 
 		/// <summary>
 		/// Sets as required.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetAsRequired(string violationMessage);
+		void SetAsRequired(string target, string violationMessage);
 
 		/// <summary>
 		/// Sets the reg exp.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="regExp">The reg exp.</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetRegExp(string regExp, string violationMessage);
+		void SetRegExp(string target, string regExp, string violationMessage);
 
 		/// <summary>
 		/// Sets the email.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetEmail(string violationMessage);
+		void SetEmail(string target, string violationMessage);
 
 		/// <summary>
 		/// Sets the length of the exact.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="length">The length.</param>
-		void SetExactLength(int length);
+		void SetExactLength(string target, int length);
 
 		/// <summary>
 		/// Sets the length of the min.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="minLength">Length of the min.</param>
-		void SetMinLength(int minLength);
+		void SetMinLength(string target, int minLength);
 
 		/// <summary>
 		/// Sets the length of the min.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="minLength">Length of the min.</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetMinLength(int minLength, string violationMessage);
+		void SetMinLength(string target, int minLength, string violationMessage);
 
 		/// <summary>
 		/// Sets the length of the max.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="maxLength">Length of the max.</param>
-		void SetMaxLength(int maxLength);
+		void SetMaxLength(string target, int maxLength);
 
 		/// <summary>
 		/// Sets the length range.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="minLength">Length of the min.</param>
 		/// <param name="maxLength">Length of the max.</param>
-		void SetLengthRange(int minLength, int maxLength);
+		void SetLengthRange(string target, int minLength, int maxLength);
 
 		/// <summary>
 		/// Set as same as.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetAsSameAs(string comparisonFieldName, string violationMessage);
+		void SetAsSameAs(string target, string comparisonFieldName, string violationMessage);
 
 		/// <summary>
 		/// Set date.
 		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="violationMessage">The violation message.</param>
-		void SetDate(string violationMessage);
+		void SetDate(string target, string violationMessage);
 	}
 }

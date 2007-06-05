@@ -22,7 +22,7 @@ namespace TestSiteARSupport.Model
 	using ValidateEmailAttribute=Castle.Components.Validator.ValidateEmailAttribute;
 
 	[ActiveRecord("TSAS_Account")]
-	public class Account : ActiveRecordBase
+	public class Account : ActiveRecordValidationBase
 	{
 		private int id;
 		private String name;
@@ -72,7 +72,7 @@ namespace TestSiteARSupport.Model
 			set { password = value; }
 		}
 
-		[ValidateNonEmpty, ValidateSameAs("ConfirmationPassword")]
+		[ValidateSameAs("Password")]
 		public string ConfirmationPassword
 		{
 			get { return confirmationpassword; }

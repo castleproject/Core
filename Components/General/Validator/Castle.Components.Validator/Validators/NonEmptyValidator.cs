@@ -60,7 +60,7 @@ namespace Castle.Components.Validator
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
 
-			generator.SetAsRequired(BuildErrorMessage());
+			generator.SetAsRequired(target, BuildErrorMessage());
 		}
 
 		/// <summary>

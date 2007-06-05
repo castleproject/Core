@@ -14,7 +14,9 @@
 
 namespace TestSiteARSupport.Controllers
 {
+	using Castle.ActiveRecord;
 	using Castle.Components.Binder;
+	using Castle.Components.Validator;
 	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
 	
@@ -25,6 +27,7 @@ namespace TestSiteARSupport.Controllers
 	{
 		public void New()
 		{
+			PropertyBag["accounttype"] = typeof(Account);
 			PropertyBag.Add("licenses", ProductLicense.FindAll());
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
 			PropertyBag.Add("users", User.FindAll());
@@ -32,6 +35,7 @@ namespace TestSiteARSupport.Controllers
 
 		public void New2()
 		{
+			PropertyBag["accounttype"] = typeof(Account);
 			PropertyBag.Add("licenses", ProductLicense.FindAll());
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
 			PropertyBag.Add("users", User.FindAll());
@@ -41,6 +45,7 @@ namespace TestSiteARSupport.Controllers
 		public void Insert([ARDataBind("account", AutoLoad=AutoLoadBehavior.OnlyNested, Validate=true)] Account account)
 		{
 			ErrorList errorList = BoundInstanceErrors[account];
+			ErrorSummary summary = GetErrorSummary(account);
 			
 			PropertyBag.Add("errorlist", errorList);
 			
@@ -52,19 +57,28 @@ namespace TestSiteARSupport.Controllers
 			}
 		}
 		
-		public void Edit([ARFetch("id", false, true)] Account account)
+		public void Edit(int id)
 		{
+			if (Flash.Contains("account"))
+			{
+				PropertyBag["account"] = Flash["account"];
+			}
+			else
+			{
+				PropertyBag["account"] = ActiveRecordMediator<Account>.FindByPrimaryKey(id);
+			}
+
 			PropertyBag.Add("licenses", ProductLicense.FindAll());
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
-			PropertyBag.Add("account", account);
 			PropertyBag.Add("users", User.FindAll());
 		}
 		
 		[AccessibleThrough(Verb.Post)]
-		public void Update([ARDataBind("account", AutoLoad=AutoLoadBehavior.Always, Expect="account.Permissions")] Account account)
+		public void Update([ARDataBind("account", AutoLoad=AutoLoadBehavior.Always, Expect="account.Permissions", Validate=true)] Account account)
 		{
-			ErrorList errorList = (ErrorList) BoundInstanceErrors[account];
-			
+			ErrorList errorList = BoundInstanceErrors[account];
+			ErrorSummary summary = GetErrorSummary(account);
+
 			PropertyBag.Add("errorlist", errorList);
 			
 			if (errorList.Count == 0)
@@ -81,7 +95,7 @@ namespace TestSiteARSupport.Controllers
 		}
 		
 		[AccessibleThrough(Verb.Post)]
-		public void Delete([ARDataBind("account", AutoLoad=AutoLoadBehavior.Always)] Account account)
+		public void Delete([ARFetch("account", false, true)] Account account)
 		{
 			account.Delete();
 		}
