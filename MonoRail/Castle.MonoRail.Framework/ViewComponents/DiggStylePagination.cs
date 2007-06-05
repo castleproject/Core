@@ -283,7 +283,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				}
 				else
 				{
-					href = url + "?page=" + pageIndex;
+					string separator = "?";
+					if (url.IndexOf('?') > 0)
+						separator = "&";
+
+					href = url + separator + "page=" + pageIndex;
 				}
 
 				if (useInlineStyle)
