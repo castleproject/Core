@@ -122,6 +122,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			PropertyBag["page"] = page;
 		}
 
+		public override bool SupportsSection(string name)
+		{
+			return name == StartSection || name == EndSection || name == LinkSection;
+		}
+
 		/// <summary>
 		/// Called by the framework so the component can 
 		/// render its content

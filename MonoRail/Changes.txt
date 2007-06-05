@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fix SupportsSection implementation in ViewComponent (was comparing section name equality against StringComparer.InvariantCultureIgnoreCase). 
+  Also add a SupportsSection implementation to DiggStylePagination. Patches from Tim Haines. 
+
 - Small change to DiggStylePagination to allow supplying querystring parameters in the url. Suggested by kalle.stenflo@gmail.com.
 
 - Applied Tim Haines' patch adding BindObject overloads that accept the AutoLoadBehavior enum, 

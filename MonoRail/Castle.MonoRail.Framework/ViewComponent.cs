@@ -202,10 +202,10 @@ namespace Castle.MonoRail.Framework
 					sectionsFromAttribute = new string[0];
 				}
 			}
-
+			
 			return Array.Find(sectionsFromAttribute, 
 				delegate(string item)
-					{ return string.Equals(item, StringComparer.InvariantCultureIgnoreCase); }) != null;
+					{ return string.Equals(item, name, StringComparison.InvariantCultureIgnoreCase); }) != null;
 		}
 
 		#endregion
