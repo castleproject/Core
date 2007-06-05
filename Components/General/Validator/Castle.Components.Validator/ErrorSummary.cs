@@ -16,7 +16,7 @@ namespace Castle.Components.Validator
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Collections.Generic;
 	using System.Reflection;
 
 	/// <summary>
@@ -28,7 +28,8 @@ namespace Castle.Components.Validator
 	{
 		private int errorsCount;
 		private int invalidPropertiesCount;
-		private IDictionary property2Messages = new HybridDictionary(true);
+		private IDictionary<string, string[]> property2Messages = 
+			new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Gets the total of validation errors since the last validation check.
@@ -95,11 +96,14 @@ namespace Castle.Components.Validator
 		{
 			if (name == null) throw new ArgumentNullException("name");
 
-			ArrayList list = (ArrayList) property2Messages[name];
+			if (!property2Messages.ContainsKey(name))
+			{
+				return new string[0];
+			}
 
-			if (list == null) return new string[0];
+			string[] messages = property2Messages[name];
 
-			return (string[]) list.ToArray(typeof(string));
+			return messages;
 		}
 
 		/// <summary>
@@ -125,14 +129,17 @@ namespace Castle.Components.Validator
 			if (property == null) throw new ArgumentNullException("property");
 			if (message == null) throw new ArgumentNullException("message");
 
-			if (!property2Messages.Contains(property))
+			if (!property2Messages.ContainsKey(property))
 			{
-				property2Messages[property] = new ArrayList();
+				property2Messages[property] = new string[] { message };
 			}
-
-			IList list = (IList) property2Messages[property];
-
-			list.Add(message);
+			else
+			{
+				string[] messages = property2Messages[property];
+				Array.Resize(ref messages, messages.Length + 1);
+				messages[messages.Length - 1] = message;
+				property2Messages[property] = messages;
+			}
 
 			errorsCount++;
 			invalidPropertiesCount = property2Messages.Count;
