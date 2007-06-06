@@ -1703,7 +1703,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (isIndexed)
 			{
-#if DOTNET2
 				if (type.IsGenericType)
 				{
 					Type[] args = type.GetGenericArguments();
@@ -1711,7 +1710,7 @@ namespace Castle.MonoRail.Framework.Helpers
 						throw new BindingException("Expected the generic indexed property '{0}' to be of 1 element", type.Name);
 					type = args[0];
 				}
-#endif
+
 				if (type.IsArray)
 				{
 					type = type.GetElementType();
@@ -2011,7 +2010,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			bool validList = false;
 
-#if DOTNET2
 			if (list == null && instanceType.IsGenericType)
 			{
 				Type[] genArgs = instanceType.GetGenericArguments();
@@ -2021,7 +2019,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				validList = genList.IsAssignableFrom(genTypeDef);
 			}
-#endif
 			
 			if (!validList && list == null)
 			{
@@ -2041,7 +2038,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			IList list = instance as IList;
 
-#if DOTNET2
 			if (list == null && instance != null && instance.GetType().IsGenericType)
 			{
 				Type instanceType = instance.GetType();
@@ -2066,7 +2062,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				return indexerPropInfo.GetValue(instance, new object[] { index });
 			}
-#endif
 			
 			if (list == null || list.Count == 0 || index + 1 > list.Count)
 			{
