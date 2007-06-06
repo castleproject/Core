@@ -75,9 +75,18 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				{
 					sb.Append("Validation.addAllThese([\n");
 
+					bool addedFirstRule = false;
+					string Comma = "";
+
 					foreach(CustomRule rule in rules)
 					{
-						sb.AppendFormat("['{0}', '{1}', {{ {2} }}]\n", rule.className, rule.violationMessage, rule.rule);
+						sb.AppendFormat("{0} ['{1}', '{2}', {{ {3} }}]\n", Comma, rule.className, rule.violationMessage, rule.rule);
+
+						if (!addedFirstRule)
+						{
+							addedFirstRule = true;
+							Comma = ",";
+						}
 					}
 
 					sb.Append("]);\n");
@@ -201,7 +210,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetExactLength(string target, int length)
 			{
-				// Not supported by the prototype validation
+				SetExactLength(target, length, null);
+			}
+
+			public void SetExactLength(string target, int length, string violationMessage)
+			{
+				string rule = "validate-exact-length-" + length;
+				AddClass(rule);
+				config.AddCustomRule(rule, violationMessage, "minLength: " + length + ", maxLength: " + length);
 			}
 
 			public void SetMinLength(string target, int minLength)
