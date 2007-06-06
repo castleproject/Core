@@ -1348,7 +1348,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Configures this FormHelper instance to use fValidate for form fields validation
+		/// Configures this FormHelper instance to use Prototype for form fields validation
 		/// </summary>
 		public void UsePrototypeValidation()
 		{
