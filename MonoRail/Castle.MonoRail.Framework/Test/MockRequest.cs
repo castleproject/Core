@@ -31,6 +31,7 @@ namespace Castle.MonoRail.Framework.Test
 		private string httpMethod = "GET";
 		private string filePath = null;
 		private Uri uri = null;
+		private Uri referrer = null;
 
 		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
 		private string userHostAddress = "127.0.0.1";
@@ -78,6 +79,12 @@ namespace Castle.MonoRail.Framework.Test
 		public Uri Uri
 		{
 			get { return uri; }
+		}
+
+		public Uri Referrer
+		{
+			get { return referrer; }
+			set { referrer = value; }
 		}
 
 		public string HttpMethod

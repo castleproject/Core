@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Add support to BaseControllerTest (well MockRequest actually) for Mocking Url Referer. Patch from Colin Ramsay. 
+
 - Fix SupportsSection implementation in ViewComponent (was comparing section name equality against StringComparer.InvariantCultureIgnoreCase). 
   Also add a SupportsSection implementation to DiggStylePagination. Patches from Tim Haines. 
 
