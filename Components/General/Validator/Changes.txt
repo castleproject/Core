@@ -1,6 +1,9 @@
 Beta 1
 ======
 
+- Applied Yuri's patch fixing COMP-21
+  "NullableType Validators, Correct web-validation for primitive types"
+
 - Applied patch by Tim Haines fixing COMP-26
   "Date Validator doesn't validate nulls. Problem occurs server side and client side."
 

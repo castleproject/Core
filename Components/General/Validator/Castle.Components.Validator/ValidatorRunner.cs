@@ -16,7 +16,7 @@ namespace Castle.Components.Validator
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Collections.Generic;
 	using System.Reflection;
 
 	/// <summary>
@@ -33,19 +33,51 @@ namespace Castle.Components.Validator
 	/// </example>
 	public class ValidatorRunner
 	{
+		private readonly static IDictionary<Type, Type> type2Validator;
 		private readonly IDictionary extendedProperties = new Hashtable();
-		private readonly IDictionary errorPerInstance;
+		private readonly IDictionary<object, ErrorSummary> errorPerInstance;
+		private readonly bool inferValidators;
 		private readonly IValidatorRegistry registry;
+
+		static ValidatorRunner()
+		{
+			type2Validator = new Dictionary<Type, Type>();
+			type2Validator[typeof(Int16)] = typeof(IntegerValidator);
+			type2Validator[typeof(Nullable<Int16>)] = typeof(NullableIntegerValidator);
+			type2Validator[typeof(Int32)] = typeof(IntegerValidator);
+			type2Validator[typeof(Nullable<Int32>)] = typeof(NullableIntegerValidator);
+			type2Validator[typeof(Int64)] = typeof(IntegerValidator);
+			type2Validator[typeof(Nullable<Int64>)] = typeof(NullableIntegerValidator);
+			type2Validator[typeof(Decimal)] = typeof(DecimalValidator);
+			type2Validator[typeof(Nullable<Decimal>)] = typeof(NullableDecimalValidator);
+			type2Validator[typeof(Single)] = typeof(SingleValidator);
+			type2Validator[typeof(Nullable<Single>)] = typeof(NullableSingleValidator);
+			type2Validator[typeof(Double)] = typeof(DoubleValidator);
+			type2Validator[typeof(Nullable<Double>)] = typeof(NullableDoubleValidator);
+			type2Validator[typeof(DateTime)] = typeof(DateTimeValidator);
+			type2Validator[typeof(Nullable<DateTime>)] = typeof(NullableDateTimeValidator);
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
 		/// </summary>
 		/// <param name="registry">The registry.</param>
-		public ValidatorRunner(IValidatorRegistry registry)
+		public ValidatorRunner(IValidatorRegistry registry) : this(false, registry)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidatorRunner"/> class.
+		/// </summary>
+		/// <param name="inferValidators">If true, the runner will try to infer the validators based on data types</param>
+		/// <param name="registry">The registry.</param>
+		public ValidatorRunner(bool inferValidators, IValidatorRegistry registry)
 		{
 			if (registry == null) throw new ArgumentNullException("registry");
 
-			errorPerInstance = new HybridDictionary();
+			this.inferValidators = inferValidators;
+
+			errorPerInstance = new Dictionary<object, ErrorSummary>();
 
 			this.registry = registry;
 		}
@@ -124,6 +156,18 @@ namespace Castle.Components.Validator
 
 			IValidator[] validators = registry.GetValidators(this, parentType, property, runWhenPhase);
 
+			if (inferValidators && validators.Length == 0)
+			{
+				Type defaultValidatorForType = (Type) type2Validator[property.PropertyType];
+
+				if (defaultValidatorForType != null)
+				{
+					validators = new IValidator[] {(IValidator) Activator.CreateInstance(defaultValidatorForType)};
+
+					validators[0].Initialize(registry, property);
+				}
+			}
+
 			Array.Sort(validators, ValidatorComparer.Instance);
 
 			return validators;
@@ -136,7 +180,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public bool HasErrors(object instance)
 		{
-			ErrorSummary summary = (ErrorSummary) errorPerInstance[instance];
+			ErrorSummary summary = errorPerInstance[instance];
 
 			if (summary == null) return false;
 
@@ -150,7 +194,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public ErrorSummary GetErrorSummary(object instance)
 		{
-			return (ErrorSummary) errorPerInstance[instance];
+			return errorPerInstance[instance];
 		}
 
 		/// <summary>
