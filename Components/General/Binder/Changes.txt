@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Fixed COMP-27
+  "Validators in a Chain - ValidateNonEmpty fails with BelongsTo"
+
 - Changed DefaultConverter behavior:
   
   -> If we are dealing with a primitive, non-null values will always

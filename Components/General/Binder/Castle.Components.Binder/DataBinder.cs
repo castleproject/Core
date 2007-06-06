@@ -16,6 +16,7 @@ namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Reflection;
 	using System.Web;
@@ -46,7 +47,7 @@ namespace Castle.Components.Binder
 
 		private Stack instanceStack;
 
-		private IDictionary validationErrorSummaryPerInstance = new Hashtable();
+		private IDictionary<object, ErrorSummary> validationErrorSummaryPerInstance = new Dictionary<object, ErrorSummary>();
 
 		private IBinderTranslator binderTranslator;
 
@@ -146,9 +147,18 @@ namespace Castle.Components.Binder
 		public object BindObject(Type targetType, string prefix, string excludedProperties, string allowedProperties,
 		                         CompositeNode treeRoot)
 		{
-			if (targetType == null) throw new ArgumentNullException("targetType");
-			if (prefix == null) throw new ArgumentNullException("prefix");
-			if (treeRoot == null) throw new ArgumentNullException("treeRoot");
+			if (targetType == null)
+			{
+				throw new ArgumentNullException("targetType");
+			}
+			if (prefix == null)
+			{
+				throw new ArgumentNullException("prefix");
+			}
+			if (treeRoot == null)
+			{
+				throw new ArgumentNullException("treeRoot");
+			}
 
 			errors = new ArrayList();
 			instanceStack = new Stack();
@@ -167,9 +177,18 @@ namespace Castle.Components.Binder
 		public void BindObjectInstance(object instance, string prefix, string excludedProperties, string allowedProperties,
 		                               CompositeNode treeRoot)
 		{
-			if (instance == null) throw new ArgumentNullException("instance");
-			if (prefix == null) throw new ArgumentNullException("prefix");
-			if (treeRoot == null) throw new ArgumentNullException("treeRoot");
+			if (instance == null)
+			{
+				throw new ArgumentNullException("instance");
+			}
+			if (prefix == null)
+			{
+				throw new ArgumentNullException("prefix");
+			}
+			if (treeRoot == null)
+			{
+				throw new ArgumentNullException("treeRoot");
+			}
 
 			errors = new ArrayList();
 			instanceStack = new Stack();
@@ -212,7 +231,7 @@ namespace Castle.Components.Binder
 		/// <param name="instance">The instance.</param>
 		public ErrorSummary GetValidationSummary(object instance)
 		{
-			return (ErrorSummary) validationErrorSummaryPerInstance[instance];
+			return validationErrorSummaryPerInstance[instance];
 		}
 
 		#endregion
@@ -234,18 +253,19 @@ namespace Castle.Components.Binder
 				return BindSpecialObjectInstance(instanceType, paramPrefix, node, out succeeded);
 			}
 
-			if (ShouldIgnoreType(instanceType)) return null;
+			if (ShouldIgnoreType(instanceType))
+			{
+				return null;
+			}
 
 			if (instanceType.IsArray)
 			{
 				return InternalBindObjectArray(instanceType, paramPrefix, node, out succeeded);
 			}
-#if DOTNET2
 			else if (IsGenericList(instanceType))
 			{
 				return InternalBindGenericList(instanceType, paramPrefix, node, out succeeded);
 			}
-#endif
 			else
 			{
 				succeeded = true;
@@ -257,7 +277,10 @@ namespace Castle.Components.Binder
 
 		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, Node node)
 		{
-			if (node == null) return;
+			if (node == null)
+			{
+				return;
+			}
 
 			if (node.NodeType != NodeType.Composite && node.NodeType != NodeType.Indexed)
 			{
@@ -271,7 +294,10 @@ namespace Castle.Components.Binder
 
 		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, CompositeNode node)
 		{
-			if (node == null || instance == null) return;
+			if (node == null || instance == null)
+			{
+				return;
+			}
 
 			BeforeBinding(instance, prefix, node);
 
@@ -294,20 +320,31 @@ namespace Castle.Components.Binder
 
 			foreach(PropertyInfo prop in props)
 			{
-				if (ShouldIgnoreProperty(prop, nodeFullName)) continue;
+				if (ShouldIgnoreProperty(prop, nodeFullName))
+				{
+					continue;
+				}
 
 				Type propType = prop.PropertyType;
 				String paramName = prop.Name;
 
 				String translatedParamName = Translate(instanceType, paramName);
 
-				if (translatedParamName == null) continue;
+				if (translatedParamName == null)
+				{
+					continue;
+				}
+
+				bool isSimpleProperty = IsSimpleProperty(propType);
 
 				// There are some caveats by running the validators here. 
 				// We should follow the validator's execution order...
-				if (CheckForValidationFailures(instance, instanceType, prop, node, translatedParamName, prefix, summary))
+				if (isSimpleProperty)
 				{
-					continue;
+					if (CheckForValidationFailures(instance, instanceType, prop, node, translatedParamName, prefix, summary))
+					{
+						continue;
+					}
 				}
 
 				BeforeBindingProperty(instance, prop, prefix, node);
@@ -316,31 +353,31 @@ namespace Castle.Components.Binder
 				{
 					bool conversionSucceeded;
 
-					if (IsSimpleProperty(propType))
+					if (isSimpleProperty)
 					{
 						object value = ConvertToSimpleValue(propType, translatedParamName, node, out conversionSucceeded);
 
 						if (conversionSucceeded)
 						{
-						    SetPropertyValue(instance, prop, value);
+							SetPropertyValue(instance, prop, value);
 						}
 					}
 					else
 					{
+						// if the property is an object, we look if it is already instanciated
+						object value = prop.GetValue(instance, null);
+
 						Node nestedNode = node.GetChildNode(paramName);
 
 						if (nestedNode != null)
 						{
-							// if the property is an object, we look if it is already instanciated
-							object value = prop.GetValue(instance, null);
-
 							if (ShouldRecreateInstance(value, propType, paramName, nestedNode))
 							{
 								value = InternalBindObject(propType, paramName, nestedNode, out conversionSucceeded);
 
 								if (conversionSucceeded)
 								{
-                                    SetPropertyValue(instance, prop, value);
+									SetPropertyValue(instance, prop, value);
 								}
 							}
 							else
@@ -348,6 +385,8 @@ namespace Castle.Components.Binder
 								InternalRecursiveBindObjectInstance(value, paramName, nestedNode);
 							}
 						}
+
+						CheckForValidationFailures(instance, instanceType, prop, value, translatedParamName, prefix, summary);
 					}
 				}
 				catch(Exception ex)
@@ -361,31 +400,36 @@ namespace Castle.Components.Binder
 			AfterBinding(instance, prefix, node);
 		}
 
-        /// <summary>
-        /// Sets the property value of the object we are binding.
-        /// Databinders that require different ways to access properties
-        /// can override this method.
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <param name="prop"></param>
-        /// <param name="value"></param>
-	    protected virtual void SetPropertyValue(object instance, PropertyInfo prop, object value)
-	    {
-            if (!prop.CanWrite) return;
-	        prop.SetValue(instance, value, null);
-	    }
-
-	    protected bool CheckForValidationFailures(object instance, Type instanceType,
-		                                          PropertyInfo prop, CompositeNode node,
-		                                          string name, string prefix, ErrorSummary summary)
+		/// <summary>
+		/// Sets the property value of the object we are binding.
+		/// Databinders that require different ways to access properties
+		/// can override this method.
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="prop"></param>
+		/// <param name="value"></param>
+		protected virtual void SetPropertyValue(object instance, PropertyInfo prop, object value)
 		{
-			bool hasFailure = false;
+			if (!prop.CanWrite)
+			{
+				return;
+			}
+			prop.SetValue(instance, value, null);
+		}
 
-			if (validator == null) return false;
+		protected bool CheckForValidationFailures(object instance, Type instanceType,
+		                                          PropertyInfo prop, CompositeNode node,
+		                                          string name, string prefix,
+		                                          ErrorSummary summary)
+		{
+			object value = null;
+
+			if (validator == null)
+			{
+				return false;
+			}
 
 			IValidator[] validators = validator.GetValidators(instanceType, prop);
-
-			object value = null;
 
 			if (validators.Length != 0)
 			{
@@ -393,7 +437,7 @@ namespace Castle.Components.Binder
 
 				if (valNode != null && valNode.NodeType == NodeType.Leaf)
 				{
-					value = ((LeafNode) valNode).Value;
+					value = ((LeafNode)valNode).Value;
 				}
 
 				if (value == null && IsDateTimeType(prop.PropertyType))
@@ -408,6 +452,23 @@ namespace Castle.Components.Binder
 					return false;
 				}
 			}
+
+			return CheckForValidationFailures(instance, instanceType, prop, value, name, prefix, summary);
+		}
+
+		protected bool CheckForValidationFailures(object instance, Type instanceType,
+		                                          PropertyInfo prop, object value,
+		                                          string name, string prefix,
+		                                          ErrorSummary summary)
+		{
+			bool hasFailure = false;
+
+			if (validator == null)
+			{
+				return false;
+			}
+
+			IValidator[] validators = validator.GetValidators(instanceType, prop);
 
 			foreach(IValidator validatorItem in validators)
 			{
@@ -468,7 +529,7 @@ namespace Castle.Components.Binder
 			{
 				return false;
 			}
-			Type listType = typeof(System.Collections.Generic.IList<>).MakeGenericType(genericArgs[0]);
+			Type listType = typeof(IList<>).MakeGenericType(genericArgs[0]);
 			return listType.IsAssignableFrom(instanceType);
 		}
 
@@ -837,7 +898,10 @@ namespace Castle.Components.Binder
 
 		private object RelaxedConvertLeafNode(Type desiredType, Node node, object defaultValue)
 		{
-			if (node == null) return defaultValue;
+			if (node == null)
+			{
+				return defaultValue;
+			}
 
 			if (node.NodeType != NodeType.Leaf)
 			{
@@ -878,7 +942,10 @@ namespace Castle.Components.Binder
 		{
 			get
 			{
-				if (instanceStack.Count == 0) return null;
+				if (instanceStack.Count == 0)
+				{
+					return null;
+				}
 
 				return instanceStack.Peek();
 			}
@@ -900,7 +967,7 @@ namespace Castle.Components.Binder
 
 		private void NormalizeList(String[] list)
 		{
-			for (int i = 0; i < list.Length; i++)
+			for(int i = 0; i < list.Length; i++)
 			{
 				list[i] = "root." + list[i].Trim();
 			}
@@ -942,7 +1009,10 @@ namespace Castle.Components.Binder
 			                propType == typeof(Decimal) ||
 			                propType == typeof(HttpPostedFile);
 
-			if (isSimple) return true;
+			if (isSimple)
+			{
+				return true;
+			}
 
 			TypeConverter tconverter = TypeDescriptor.GetConverter(propType);
 
