@@ -180,7 +180,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public bool HasErrors(object instance)
 		{
-			ErrorSummary summary = errorPerInstance[instance];
+			ErrorSummary summary = GetErrorSummary(instance);
 
 			if (summary == null) return false;
 
@@ -194,7 +194,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		public ErrorSummary GetErrorSummary(object instance)
 		{
-			return errorPerInstance[instance];
+			return errorPerInstance.ContainsKey(instance) ? errorPerInstance[instance] : null;
 		}
 
 		/// <summary>
