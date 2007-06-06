@@ -125,5 +125,14 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 
 			Assert.AreEqual("started 1  &laquo; prev  1  1 \r\n<span class=\"current\">2</span>\r\n 3  3  3  next &raquo; ended", Output);
 		}
+
+		[Test]
+		public void SupportsSections()
+		{
+			Assert.IsTrue(diggComponent.SupportsSection("startblock"), "Supports startblock Section");
+			Assert.IsTrue(diggComponent.SupportsSection("endblock"), "Supports endblock Section");
+			Assert.IsTrue(diggComponent.SupportsSection("link"), "Supports Links Section");
+			Assert.IsFalse(diggComponent.SupportsSection("NotSupported"), "Unsupported section");
+		}
 	}
 }
