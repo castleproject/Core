@@ -42,7 +42,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			Years = new int[lastYear - 1950];
 			
-			for(int year = 1950; year < lastYear; year++)
+			for(int year = 1950; year < lastYear + 50; year++)
 			{
 				Years[year - 1950] = year;
 			}
