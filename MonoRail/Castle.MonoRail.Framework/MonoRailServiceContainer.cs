@@ -384,9 +384,14 @@ namespace Castle.MonoRail.Framework
 				services.RegisterService(ServiceIdentification.ExecutorFactory, typeof(DefaultControllerLifecycleExecutorFactory));
 
 				if (!services.HasService(ServiceIdentification.TransformationFilterFactory))
+				{
 					services.RegisterService(ServiceIdentification.TransformationFilterFactory, typeof(DefaultTransformFilterFactory));
+				}
 				if (!services.HasService(ServiceIdentification.TransformFilterDescriptorProvider))
-					services.RegisterService(ServiceIdentification.TransformFilterDescriptorProvider, typeof(DefaultTransformFilterDescriptorProvider));
+				{
+					services.RegisterService(ServiceIdentification.TransformFilterDescriptorProvider,
+					                         typeof(DefaultTransformFilterDescriptorProvider));
+				}
 			}
 			if (!services.HasService(ServiceIdentification.UrlBuilder))
 			{
@@ -396,8 +401,10 @@ namespace Castle.MonoRail.Framework
 			{
 				services.RegisterService(ServiceIdentification.UrlTokenizer, typeof(DefaultUrlTokenizer));
 			}
-
-			services.RegisterService(ServiceIdentification.ValidatorRegistry, typeof(CachedValidationRegistry));
+			if (!services.HasService(ServiceIdentification.ValidatorRegistry))
+			{
+				services.RegisterService(ServiceIdentification.ValidatorRegistry, typeof(CachedValidationRegistry));
+			}
 
 			if (!services.HasService(ServiceIdentification.AjaxProxyGenerator))
 			{

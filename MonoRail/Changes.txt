@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Kyle Marshall's patch fixing MR-261
+  "The default ValidatorRegistry is not overriddable in the monorail configuration"
+
 - Add support to BaseControllerTest (well MockRequest actually) for Mocking Url Referer. Patch from Colin Ramsay. 
 
 - Fix SupportsSection implementation in ViewComponent (was comparing section name equality against StringComparer.InvariantCultureIgnoreCase). 
