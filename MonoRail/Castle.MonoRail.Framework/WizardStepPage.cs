@@ -95,12 +95,7 @@ namespace Castle.MonoRail.Framework
 		{
 			_wizardcontroller = wizardController;
 
-//			context = wizardController.Context;
-//
-//			UrlInfo urlInfo = context.UrlInfo;
-//
-//			InitializeFieldsFromServiceProvider(wizardController.Context);
-//			InitializeControllerState(urlInfo.Area, urlInfo.Controller, urlInfo.Action);
+			PropertyBag = wizardController.PropertyBag;
 		}
 
 		/// <summary>

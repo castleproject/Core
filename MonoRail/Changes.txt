@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-260
+  "PropertyBag in WizardStep is null when access via key"
+
 - Applied Kyle Marshall's patch fixing MR-261
   "The default ValidatorRegistry is not overriddable in the monorail configuration"
 
