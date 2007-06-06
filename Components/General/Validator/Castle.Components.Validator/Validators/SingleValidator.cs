@@ -27,7 +27,7 @@ namespace Castle.Components.Validator
 		/// <summary>
 		/// If the <c>fieldValue</c> is not null, an attempt to convert the
 		/// content to a Single is performed, and the field is considered value
-		/// if the conversion is successful.
+		/// if the conversion is successful.  Null and empty are allowed.
 		/// </summary>
 		/// <param name="instance">The target type instance</param>
 		/// <param name="fieldValue">The property/field value. It can be null.</param>
@@ -36,7 +36,7 @@ namespace Castle.Components.Validator
 		/// </returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
-			if (fieldValue == null) return false;
+			if (fieldValue == null || fieldValue.ToString() == "") return true;
 
 			Single doubleValue;
 			return Single.TryParse(fieldValue.ToString(), out doubleValue);
@@ -66,8 +66,6 @@ namespace Castle.Components.Validator
 		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
 			base.ApplyWebValidation(config, inputType, generator, attributes, target);
-
-			generator.SetAsRequired(target, null);
 			generator.SetDigitsOnly(target, BuildErrorMessage());
 		}
 

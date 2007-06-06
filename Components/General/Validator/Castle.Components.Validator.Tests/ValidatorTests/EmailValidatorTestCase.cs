@@ -49,6 +49,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsTrue(validator.IsValid(target, "hammett@uol.com.br"));
 			Assert.IsTrue(validator.IsValid(target, "hammett@apache.org"));
 			Assert.IsTrue(validator.IsValid(target, "hamilton.verissimo@something.com.br"));
+			Assert.IsTrue(validator.IsValid(target, null));
+			Assert.IsTrue(validator.IsValid(target, ""));
 		}
 
 		public class TestTarget

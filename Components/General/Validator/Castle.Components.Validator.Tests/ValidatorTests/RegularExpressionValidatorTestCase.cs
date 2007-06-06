@@ -14,11 +14,51 @@
 
 namespace Castle.Components.Validator.Tests.ValidatorTests
 {
+	using System.Globalization;
+	using System.Threading;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class RegularExpressionValidatorTestCase
 	{
-		// TODO: Implement this test case
+		// TODO: Improve this test case
+		private RegularExpressionValidator validator;
+		private TestTarget target;
+
+		[SetUp]
+		public void Init()
+		{
+			Thread.CurrentThread.CurrentCulture =
+				Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-us");
+
+			validator = new RegularExpressionValidator("abc");
+			validator.Initialize(new CachedValidationRegistry(), typeof(TestTarget).GetProperty("TargetField"));
+			target = new TestTarget();
+		}
+
+		[Test]
+		public void InvalidRegularExpression()
+		{
+			Assert.IsFalse(validator.IsValid(target, "def"));
+		}
+
+		[Test]
+		public void ValidRegularExpression()
+		{
+			Assert.IsTrue(validator.IsValid(target, "abc"));
+			Assert.IsTrue(validator.IsValid(target, null));
+			Assert.IsTrue(validator.IsValid(target, ""));
+		}
+
+		public class TestTarget
+		{
+			private string targetField;
+
+			public string TargetField
+			{
+				get { return targetField; }
+				set { targetField = value; }
+			}
+		}
 	}
 }

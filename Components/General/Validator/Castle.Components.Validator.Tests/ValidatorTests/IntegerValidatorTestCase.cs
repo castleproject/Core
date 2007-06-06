@@ -41,8 +41,6 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsFalse(validator.IsValid(target, "abc"));
 			Assert.IsFalse(validator.IsValid(target, "100.11"));
 			Assert.IsFalse(validator.IsValid(target, "-99.8"));
-			Assert.IsFalse(validator.IsValid(target, null));
-			Assert.IsFalse(validator.IsValid(target, ""));
 		}
 
 		[Test]
@@ -50,6 +48,8 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		{
 			Assert.IsTrue(validator.IsValid(target, "100"));
 			Assert.IsTrue(validator.IsValid(target, "-99"));
+			Assert.IsTrue(validator.IsValid(target, null));
+			Assert.IsTrue(validator.IsValid(target, ""));
 		}
 
 		public class TestTarget

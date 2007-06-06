@@ -1,6 +1,9 @@
 Beta 1
 ======
 
+- Applied patch by Tim Haines fixing COMP-26
+  "Date Validator doesn't validate nulls. Problem occurs server side and client side."
+
 - Applied patch by David N. Godfrey that converted most of ActiveRecord's validators
   to the Castle Validator component.
 

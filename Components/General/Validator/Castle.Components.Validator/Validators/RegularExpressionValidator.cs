@@ -66,14 +66,14 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Validate that the property value match the given regex
+		/// Validate that the property value match the given regex.  Null or empty values are allowed.
 		/// </summary>
 		/// <param name="instance"></param>
 		/// <param name="fieldValue"></param>
 		/// <returns><c>true</c> if the field is OK</returns>
 		public override bool IsValid(object instance, object fieldValue)
 		{
-			if (fieldValue != null)
+			if (fieldValue != null && fieldValue.ToString() != "")
 			{
 				string value = fieldValue.ToString();
 
