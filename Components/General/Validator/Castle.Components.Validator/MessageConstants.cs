@@ -21,7 +21,7 @@ namespace Castle.Components.Validator
 		public const string ExactLengthMessage = "exactlength";
 		public const string LengthTooLongMessage = "length_toolong";
 		public const string LengthTooShortMessage = "length_tooshort";
-		public const string LenghtInRangeMessage = "length_invalidrange";
+		public const string LengthInRangeMessage = "length_invalidrange";
 		public const string InvalidEmailMessage = "email";
 		public const string InvalidIntegerMessage = "integer_invalid";
 		public const string InvalidDateMessage = "date_invalid";

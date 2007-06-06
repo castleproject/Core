@@ -65,6 +65,14 @@ namespace Castle.Components.Validator
 		void SetExactLength(string target, int length);
 
 		/// <summary>
+		/// Sets the length of the exact.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="length">The length.</param>
+		/// /// <param name="violationMessage">The violation message.</param>
+		void SetExactLength(string target, int length, string violationMessage);
+
+		/// <summary>
 		/// Sets the length of the min.
 		/// </summary>
 		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
@@ -87,12 +95,29 @@ namespace Castle.Components.Validator
 		void SetMaxLength(string target, int maxLength);
 
 		/// <summary>
+		/// Sets the length of the max.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="maxLength">Length of the max.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetMaxLength(string target, int maxLength, string violationMessage);
+
+		/// <summary>
 		/// Sets the length range.
 		/// </summary>
 		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
 		/// <param name="minLength">Length of the min.</param>
 		/// <param name="maxLength">Length of the max.</param>
 		void SetLengthRange(string target, int minLength, int maxLength);
+
+		/// <summary>
+		/// Sets the length range.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="minLength">Length of the min.</param>
+		/// <param name="maxLength">Length of the max.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetLengthRange(string target, int minLength, int maxLength, string violationMessage);
 
 		/// <summary>
 		/// Set as same as.

@@ -163,23 +163,27 @@ namespace Castle.Components.Validator
 
 			if (exactLength != int.MinValue)
 			{
-				generator.SetExactLength(target, exactLength);
+				string message = string.Format(GetString(MessageConstants.ExactLengthMessage), exactLength);
+				generator.SetExactLength(target, exactLength, message);
 			}
 			else
 			{
 				if (minLength != int.MinValue && maxLength != int.MaxValue)
 				{
-					generator.SetLengthRange(target, minLength, maxLength);
+					string message = string.Format(GetString(MessageConstants.LengthInRangeMessage), minLength, maxLength);
+					generator.SetLengthRange(target, minLength, maxLength, message);
 				}
 				else
 				{
 					if (minLength != int.MinValue)
 					{
-						generator.SetMinLength(target, minLength);
+						string message = string.Format(GetString(MessageConstants.LengthTooShortMessage), minLength);
+						generator.SetMinLength(target, minLength, message);
 					}
 					if (maxLength != int.MaxValue)
 					{
-						generator.SetMaxLength(target, maxLength);
+						string message = string.Format(GetString(MessageConstants.LengthTooLongMessage), maxLength);
+						generator.SetMaxLength(target, maxLength, message);
 					}
 				}
 			}
@@ -206,7 +210,7 @@ namespace Castle.Components.Validator
 			else if (minLength != int.MinValue || maxLength != int.MaxValue)
 			{
 				return
-					string.Format(GetString(MessageConstants.LenghtInRangeMessage), minLength, maxLength);
+					string.Format(GetString(MessageConstants.LengthInRangeMessage), minLength, maxLength);
 			}
 			else
 			{
