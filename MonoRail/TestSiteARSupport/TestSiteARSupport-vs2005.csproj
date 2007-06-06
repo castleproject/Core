@@ -121,6 +121,7 @@
     <None Include="Views\AccountPermission\new.vm" />
     <None Include="Views\AccountPermission\removeconfirm.vm" />
     <None Include="Views\AccountPermission\update.vm" />
+    <None Include="Views\Account\edit2.vm" />
     <None Include="Views\Account\delete.vm" />
     <None Include="Views\Account\edit.vm" />
     <None Include="Views\Account\insert.vm" />

@@ -32,6 +32,7 @@ namespace Castle.MonoRail.Framework.Test
 		private readonly ITrace trace;
 		private readonly UrlInfo urlInfo;
 		private string physicalPath = AppDomain.CurrentDomain.BaseDirectory;
+		private string urlReferrer;
 		private IDictionary session = new HybridDictionary(true);
 		private IDictionary contextItems = new HybridDictionary(true);
 		private Flash flash = new Flash();
@@ -72,7 +73,8 @@ namespace Castle.MonoRail.Framework.Test
 
 		public string UrlReferrer
 		{
-			get { throw new NotImplementedException(); }
+			get { return urlReferrer; }
+			set { urlReferrer = value; }
 		}
 
 		public HttpContext UnderlyingContext

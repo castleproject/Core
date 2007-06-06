@@ -22,10 +22,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.Components.Binder;
 	using Iesi.Collections;
 	using NHibernate.Property;
-#if DOTNET2
 	using Iesi.Collections.Generic;
 	using System.Collections.Generic;
-#endif
 
 	/// <summary>
 	/// Extends <see cref="DataBinder"/> class with some 
@@ -481,7 +479,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		private bool IsContainerType(Type type)
 		{
 			bool isContainerType = type == typeof(IList) || type == typeof(ISet);
-#if DOTNET2
+
 			if (!isContainerType && type.IsGenericType)
 			{
 				Type[] genericArgs = type.GetGenericArguments();
@@ -490,13 +488,12 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 				isContainerType = genType.IsAssignableFrom(type);
 			}
-#endif
+
 			return isContainerType;
 		}
 
 		private object CreateContainer(Type type)
 		{
-#if DOTNET2
 			if (type.IsGenericType)
 			{
 				if (type.GetGenericTypeDefinition() == typeof(ISet<>))
@@ -513,7 +510,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				}
 			}
 			else
-#endif
 			{
 				if (type == typeof(IList))
 				{
@@ -551,7 +547,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 			else if (container != null)
 			{
-#if DOTNET2
 				Type itemType = item.GetType();
 
 				Type collectionType = typeof(ICollection<>).MakeGenericType(itemType);
@@ -562,7 +557,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 					addMethod.Invoke(container, new object[] {item});
 				}
-#endif
 			}
 		}
 

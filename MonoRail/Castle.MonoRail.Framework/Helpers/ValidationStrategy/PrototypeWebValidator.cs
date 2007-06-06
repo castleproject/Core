@@ -227,25 +227,38 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetMinLength(string target, int minLength, string violationMessage)
 			{
-				AddClass("validate-min-length-" + minLength);
-				AddTitle(violationMessage);
+				string rule = "validate-min-length-" + minLength;
+				AddClass(rule);
+				config.AddCustomRule(rule, violationMessage, "minLength: " + minLength);
 			}
 
 			public void SetMaxLength(string target, int maxLength)
 			{
-				// Not supported by the prototype validation, 
-				// but we can set the maxlength on the input element
+				SetMaxLength(target, maxLength, null);
+			}
 
+			public void SetMaxLength(string target, int maxLength, string violationMessage)
+			{
 				if (inputType == InputElementType.Text)
 				{
 					attributes["maxlength"] = maxLength;
 				}
+
+				string rule = "validate-max-length-" + maxLength;
+				AddClass(rule);
+				config.AddCustomRule(rule, violationMessage, "maxLength: " + maxLength);
 			}
 
 			public void SetLengthRange(string target, int minLength, int maxLength)
 			{
 				SetMinLength(target, minLength);
 				SetMaxLength(target, maxLength);
+			}
+
+			public void SetLengthRange(string target, int minLength, int maxLength, string violationMessage)
+			{
+				SetMinLength(target, minLength, violationMessage);
+				SetMaxLength(target, maxLength, violationMessage);
 			}
 
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)

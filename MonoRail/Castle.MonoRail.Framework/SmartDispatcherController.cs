@@ -379,7 +379,6 @@ namespace Castle.MonoRail.Framework
 			boundInstances[instance] = binder.ErrorList;
 		}
 
-		#if DOTNET2
 		protected T BindObject<T>(String prefix)
 		{
 			return (T) BindObject(typeof(T), prefix);
@@ -394,7 +393,6 @@ namespace Castle.MonoRail.Framework
 		{
 			return (T) BindObject(from, typeof(T), prefix, excludedProperties, allowedProperties);
 		}
-		#endif
 		
 		protected ErrorList GetDataBindErrors(object instance)
 		{

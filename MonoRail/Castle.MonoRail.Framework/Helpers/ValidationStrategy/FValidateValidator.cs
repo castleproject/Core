@@ -134,6 +134,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				// Not supported
 			}
 
+			public void SetExactLength(string target, int length, string violationMessage)
+			{
+				// Not supported
+			}
+
 			public void SetMinLength(string target, int minLength)
 			{
 				SetMinLength(target, minLength, null);
@@ -146,10 +151,20 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetMaxLength(string target, int maxLength)
 			{
-				throw new NotImplementedException();
+				SetMaxLength(target, maxLength, null);
+			}
+
+			public void SetMaxLength(string target, int maxLength, string violationMessage)
+			{
+				// Not supported
 			}
 
 			public void SetLengthRange(string target, int minLength, int maxLength)
+			{
+				AddValidator(target, "length|" + minLength + "|" + maxLength);
+			}
+
+			public void SetLengthRange(string target, int minLength, int maxLength, string violationMessage)
 			{
 				AddValidator(target, "length|" + minLength + "|" + maxLength);
 			}

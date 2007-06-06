@@ -111,8 +111,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 			ie.TextField("account_password").TypeText("123987");
 			ie.TextField("account_confirmationpassword").TypeText("123987");
 
-			ie.SelectList("account_ProductLicense_id").Select("Please Select");
-
 			ie.CheckBox("account_Permissions_0_").Checked = false;
 			ie.CheckBox("account_Permissions_1_").Checked = false;
 
@@ -126,8 +124,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 			Assert.AreEqual("My first account", account.Name);
 			Assert.AreEqual("johndoe@gmail.com", account.Email);
 			Assert.AreEqual("123987", account.Password);
-
-			Assert.IsNull(account.ProductLicense);
 
 			Assert.AreEqual(0, account.Permissions.Count);
 			Assert.AreEqual(0, account.Users.Count);

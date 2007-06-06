@@ -46,7 +46,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		[TearDown]
 		public virtual void TearDown()
 		{
-			ActiveRecordStarter.DropSchema();
+//			ActiveRecordStarter.DropSchema();
 		}
 
 		protected virtual void CreateTestData()

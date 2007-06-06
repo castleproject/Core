@@ -17,9 +17,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 
 	/// <summary>
 	/// Used as callback handler to obtain the items 
@@ -148,8 +146,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region CreatePagination<T>
 
-		#if DOTNET2
-
 		/// <summary>
 		/// Creates a <see cref="Page"/> which is a sliced view of
 		/// the data source
@@ -177,8 +173,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return new GenericPage<T>(datasource, currentPage, pageSize);
 		}
-
-		#endif
 
 		#endregion
 
@@ -351,8 +345,6 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 	}
 
-#if DOTNET2
-
 	/// <summary>
 	/// Represents the sliced data and offers
 	/// a few read only properties to create a pagination bar.
@@ -408,8 +400,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 	}
-
-#endif
 
 	/// <summary>
 	/// Abstract implementation of <see cref="IPaginatedPage"/>

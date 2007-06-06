@@ -32,7 +32,7 @@ namespace TestSiteARSupport.Controllers
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
 			PropertyBag.Add("users", User.FindAll());
 		}
-
+		
 		public void New2()
 		{
 			PropertyBag["accounttype"] = typeof(Account);
@@ -72,6 +72,18 @@ namespace TestSiteARSupport.Controllers
 			PropertyBag.Add("permissions", AccountPermission.FindAll());
 			PropertyBag.Add("users", User.FindAll());
 		}
+
+		public void Edit2(int id)
+		{
+			if (!Flash.Contains("account"))
+			{
+				PropertyBag["account"] = ActiveRecordMediator<Account>.FindByPrimaryKey(id);
+			}
+
+			PropertyBag.Add("licenses", ProductLicense.FindAll());
+			PropertyBag.Add("permissions", AccountPermission.FindAll());
+			PropertyBag.Add("users", User.FindAll());
+		}
 		
 		[AccessibleThrough(Verb.Post)]
 		public void Update([ARDataBind("account", AutoLoad=AutoLoadBehavior.NullIfInvalidKey, Expect="account.Permissions,account.Users", Validate=true)] Account account)
@@ -80,6 +92,7 @@ namespace TestSiteARSupport.Controllers
 			ErrorSummary summary = GetErrorSummary(account);
 
 			PropertyBag.Add("errorlist", errorList);
+			PropertyBag.Add("summary", summary);
 			
 			if (errorList.Count == 0)
 			{

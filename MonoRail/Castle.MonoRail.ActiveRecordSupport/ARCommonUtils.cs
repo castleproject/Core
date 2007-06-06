@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.ActiveRecordSupport
 {
-	using System;
-
 	using Castle.ActiveRecord.Framework.Internal;
 
 
