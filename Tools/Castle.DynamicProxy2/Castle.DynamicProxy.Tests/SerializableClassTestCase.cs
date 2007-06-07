@@ -142,7 +142,7 @@ namespace Castle.DynamicProxy.Test
 			Assert.IsTrue(otherProxy is IMarkerInterface);
 		}
 
-		[Test, Ignore("HashtableProxy55bd225f8003451d95fd14299b8c13b4::.ctor][mdToken=0x6000004][offset 0x00000009] Unable to resolve token.")]
+		[Test]
 		public void HashtableSerialization()
 		{
 			ProxyObjectReference.ResetScope();

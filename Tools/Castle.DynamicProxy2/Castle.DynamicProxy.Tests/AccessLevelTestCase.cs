@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace Castle.DynamicProxy.Tests
 {
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
+	using System.Collections;
 
 	[TestFixture]
 	public class AccessLevelTestCase : BasePEVerifyTestCase
@@ -52,6 +55,13 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, logger.Invocations.Count);
 			Assert.AreEqual("DoSomething", logger.Invocations[0]);
 			Assert.AreEqual("DoOtherThing", logger.Invocations[1]);
+		}
+
+		[Test]
+		public void InternalConstructorIsNotReplicated()
+		{
+			object proxy = generator.CreateClassProxy (typeof (Hashtable), new StandardInterceptor ());
+			Assert.IsNull (proxy.GetType ().GetConstructor (new Type[] { typeof (IInterceptor[]), typeof (bool)}));
 		}
 	}
 }

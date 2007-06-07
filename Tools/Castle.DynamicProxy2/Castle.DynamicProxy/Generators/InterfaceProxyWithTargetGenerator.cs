@@ -162,7 +162,6 @@ namespace Castle.DynamicProxy.Generators
 
 				ConstructorEmitter typeInitializer = GenerateStaticConstructor(emitter);
 
-				// InterfaceProxyGeneratorWithTargetInterface gets duplicate method exceptions from BaseProxyGenerator with this... -jlewalle
 				if (!proxyTargetType.IsInterface)
 				{
 					CacheMethodTokens(emitter,

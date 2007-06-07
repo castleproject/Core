@@ -143,7 +143,7 @@ namespace Castle.DynamicProxy.Tests
 			                                            new LogInvocationInterceptor());
 		}
 
-		[Test, Ignore("[MD]: Error: Method has a duplicate, token=0x06000005. [token:0x06000004]")]
+		[Test]
 		public void NonGenInterfaceWithParentGenClassImplementingGenInterface()
 		{
 			generator.CreateInterfaceProxyWithoutTarget(typeof(IUserRepository),

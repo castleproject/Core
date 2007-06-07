@@ -988,9 +988,8 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach(ConstructorInfo constructor in constructors)
 			{
-				if (constructor.IsPrivate) continue;
-
-				GenerateConstructor(emitter, constructor, fields);
+				if (constructor.IsPublic || constructor.IsFamily)
+					GenerateConstructor(emitter, constructor, fields);
 			}
 		}
 
@@ -1029,6 +1028,11 @@ namespace Castle.DynamicProxy.Generators
 		protected void AddFieldToCacheMethodTokenAndStatementsToInitialize(
 			MethodInfo method, ConstructorEmitter typeInitializerConstructor, ClassEmitter classEmitter)
 		{
+			// Ignore all methods that have anything to do with generics - these currently cause a number of runtime bugs
+			// E.g. duplicate methods returned by Type.GetMethods()
+			if (method.ContainsGenericParameters || method.IsGenericMethod || method.DeclaringType.IsGenericType)
+				return;
+
 			if (!method2TokenField.ContainsKey(method))
 			{
 				FieldReference fieldCache =
