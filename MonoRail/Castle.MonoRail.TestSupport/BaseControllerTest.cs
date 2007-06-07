@@ -29,11 +29,11 @@ namespace Castle.MonoRail.TestSupport
 		private readonly string domain;
 		private readonly string domainPrefix;
 		private readonly int port;
-		private string virtualDir = "/";
-		private MockRailsEngineContext context;
-		private MockRequest request;
-		private MockResponse response;
-		private MockTrace trace;
+		private readonly string virtualDir = "/";
+		private IRailsEngineContext context;
+		private IRequest request;
+		private IResponse response;
+		private ITrace trace;
 
 		protected BaseControllerTest() : this("app.com", "www", 80)
 		{
@@ -46,22 +46,22 @@ namespace Castle.MonoRail.TestSupport
 			this.port = port;
 		}
 
-		protected MockRailsEngineContext Context
+		protected IRailsEngineContext Context
 		{
 			get { return context; }
 		}
 
-		public MockRequest Request
+		public IRequest Request
 		{
 			get { return request; }
 		}
 
-		public MockResponse Response
+		public IResponse Response
 		{
 			get { return response; }
 		}
 
-		public MockTrace Trace
+		public ITrace Trace
 		{
 			get { return trace; }
 		}
@@ -117,22 +117,22 @@ namespace Castle.MonoRail.TestSupport
 			context = BuildRailsEngineContext(request, response, trace, info);
 		}
 
-		protected virtual MockRequest BuildRequest()
+		protected virtual IRequest BuildRequest()
 		{
 			return new MockRequest();
 		}
 
-		protected virtual MockResponse BuildResponse()
+		protected virtual IResponse BuildResponse()
 		{
 			return new MockResponse();
 		}
 
-		protected virtual MockTrace BuildTrace()
+		protected virtual ITrace BuildTrace()
 		{
 			return new MockTrace();
 		}
 
-		protected virtual MockRailsEngineContext BuildRailsEngineContext(IRequest request, IResponse response, ITrace trace, UrlInfo urlInfo)
+		protected virtual IRailsEngineContext BuildRailsEngineContext(IRequest request, IResponse response, ITrace trace, UrlInfo urlInfo)
 		{
 			return new MockRailsEngineContext(request, response, trace, urlInfo);
 		}
