@@ -17,6 +17,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Collections;
 	using System.Reflection;
+#if DOTNET2
+	using System.Collections.Generic;
+#endif
 
 	[CLSCompliant(false)]
 	public class ClassEmitter : AbstractTypeEmitter
@@ -36,32 +39,36 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			bool isAssemblySigned = IsAssemblySigned(baseType);
 
 			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
-
-			if (baseType.IsGenericType)
-			{
-			 	CreateGenericParameters(baseType.GetGenericArguments());
-			 
-				baseType = baseType.MakeGenericType(genericTypeParams);
-			}
+			
+			InitializeGenericArgumentsFromBases (ref baseType, ref interfaces);
 
 			if (interfaces != null)
 			{
 				foreach(Type inter in interfaces)
 				{
-					if (inter.IsGenericType && inter.IsGenericTypeDefinition)
-					{
-						CreateGenericParameters(inter.GetGenericArguments());
-
-						typebuilder.AddInterfaceImplementation(inter.MakeGenericType(GenericTypeParams));
-					}
-					else
-					{
-						typebuilder.AddInterfaceImplementation(inter);
-					}
+					typebuilder.AddInterfaceImplementation(inter);
 				}
 			}
 
 			typebuilder.SetParent(baseType);
+		}
+
+		// The ambivalent generic parameter handling of base type and interfaces has been removed from the ClassEmitter, it isn't used by the proxy
+		// generators anyway. If a concrete user needs to support generic bases, a subclass can override this method (and not call this base
+		// implementation), call CreateGenericParameters and replace baseType and interfaces by versions bound to the newly created GenericTypeParams.
+		protected virtual void InitializeGenericArgumentsFromBases (ref Type baseType, ref Type[] interfaces)
+		{
+			if (baseType.IsGenericTypeDefinition)
+			{
+				throw new NotSupportedException ("ClassEmitter does not support open generic base types. Type: " + baseType.FullName);
+			}
+			foreach (Type inter in interfaces)
+			{
+				if (inter.IsGenericTypeDefinition)
+				{
+					throw new NotSupportedException ("ClassEmitter does not support open generic interfaces. Type: " + inter.FullName);
+				}
+			}
 		}
 
 		private bool IsAssemblySigned(Type baseType)

@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
@@ -65,6 +66,25 @@ namespace Castle.DynamicProxy.Generators
 			this.targetType = targetType;
 		}
 
+
+		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
+		{
+			if (type != null && type.IsGenericTypeDefinition)
+			{
+				throw new ArgumentException("Type cannot be a generic type definition. Type: " + type.FullName, argumentName);
+			}
+		}
+
+		protected void CheckNotGenericTypeDefinitions(IEnumerable types, string argumentName)
+		{
+			if (types != null)
+			{
+				foreach (Type t in types)
+				{
+					CheckNotGenericTypeDefinition(t, argumentName);
+				}
+			}
+		}
 		protected ModuleScope Scope
 		{
 			get { return scope; }
@@ -72,6 +92,9 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual ClassEmitter BuildClassEmitter(String typeName, Type parentType, IList interfaceList)
 		{
+			CheckNotGenericTypeDefinition(parentType, "parentType");
+			CheckNotGenericTypeDefinitions(interfaceList, "interfaceList");
+
 			Type[] interfaces = new Type[interfaceList.Count];
 
 			interfaceList.CopyTo(interfaces, 0);
@@ -81,6 +104,9 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual ClassEmitter BuildClassEmitter(String typeName, Type parentType, Type[] interfaces)
 		{
+			CheckNotGenericTypeDefinition(parentType, "parentType");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaceList");
+
 			if (interfaces == null)
 			{
 				interfaces = new Type[0];
@@ -121,6 +147,8 @@ namespace Castle.DynamicProxy.Generators
 			ConstructorVersion version,
 			MethodInfo methodOnTarget)
 		{
+			CheckNotGenericTypeDefinition(targetType, "targetType");
+
 			MethodAttributes atts = ObtainMethodAttributes(method);
 			MethodEmitter methodEmitter = emitter.CreateMethod(method.Name, atts);
 
@@ -143,6 +171,9 @@ namespace Castle.DynamicProxy.Generators
 			FieldReference interceptorsField,
 			ConstructorEmitter typeInitializerConstructor)
 		{
+			CheckNotGenericTypeDefinition(targetType, "targetType");
+			CheckNotGenericTypeDefinition(_interface, "_interface");
+
 			PropertyToGenerate[] propsToGenerate;
 			EventToGenerate[] eventsToGenerate;
 			MethodInfo[] methods =
@@ -281,33 +312,21 @@ namespace Castle.DynamicProxy.Generators
 			ConstructorVersion version,
 			MethodInfo methodOnTarget)
 		{
+			CheckNotGenericTypeDefinition(targetType, "targetType");
+
 			methodEmitter.CopyParametersAndReturnTypeFrom(method, emitter);
 
 			TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(methodEmitter.Arguments);
 
 			Type iinvocation = invocationImpl.TypeBuilder;
 
-			Type[] set1 = null;
-			Type[] set2 = null;
-
-			if (iinvocation.IsGenericType)
-			{
-				// get type generics
-				set1 = targetType.GetGenericArguments();
-			}
-
+			Trace.Assert(method.IsGenericMethod == iinvocation.IsGenericTypeDefinition);
+			bool isGenericInvocationClass = false;
 			if (method.IsGenericMethod)
 			{
-				// get method generics
-				set2 = method.GetGenericArguments();
-			}
-
-			bool isGenericInvocationClass = false;
-
-			if (set1 != null || set2 != null)
-			{
-				iinvocation = iinvocation.MakeGenericType(TypeUtil.Union(set1, set2));
-
+				// bind generic method arguments to invocation's type arguments
+				Type[] genericMethodArgs = method.GetGenericArguments();
+				iinvocation = iinvocation.MakeGenericType(genericMethodArgs);
 				isGenericInvocationClass = true;
 			}
 
@@ -390,6 +409,11 @@ namespace Castle.DynamicProxy.Generators
 
 			methodEmitter.CodeBuilder.AddStatement(new AssignStatement(invocationImplLocal, newInvocImpl));
 
+			if (method.ContainsGenericParameters)
+			{
+				EmitLoadGenricMethodArguments(methodEmitter, method, invocationImplLocal);
+			}
+
 			methodEmitter.CodeBuilder.AddStatement(
 				new ExpressionStatement(new MethodInvocationExpression(invocationImplLocal, Constants.AbstractInvocationProceed)));
 
@@ -409,6 +433,27 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return methodEmitter;
+		}
+
+		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, LocalReference invocationImplLocal)
+		{
+			Type[] genericParameters = Array.FindAll(method.GetGenericArguments(), delegate(Type t)
+			{
+				return t.IsGenericParameter;
+			});
+			LocalReference genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof (Type[]));
+			methodEmitter.CodeBuilder.AddStatement(
+				new AssignStatement(genericParamsArrayLocal, new NewArrayExpression(genericParameters.Length, typeof (Type))));
+
+			for (int i = 0; i < genericParameters.Length; ++i)
+			{
+				methodEmitter.CodeBuilder.AddStatement(
+					new AssignArrayStatement(genericParamsArrayLocal, i, new TypeTokenExpression(genericParameters[i])));
+			}
+			MethodInfo setGenericsArgs = typeof (AbstractInvocation).GetMethod("SetGenericMethodArguments",new Type[] {typeof (Type[])});
+			methodEmitter.CodeBuilder.AddStatement(new ExpressionStatement(
+               	new MethodInvocationExpression(invocationImplLocal,setGenericsArgs,
+			        new ReferenceExpression(genericParamsArrayLocal))));
 		}
 
 		private static void CopyOutAndRefParameters(
@@ -666,6 +711,8 @@ namespace Castle.DynamicProxy.Generators
 			MethodInfo callbackMethod,
 			ConstructorVersion version)
 		{
+			CheckNotGenericTypeDefinition(targetType, "targetType");
+			CheckNotGenericTypeDefinition(targetForInvocation, "targetForInvocation");
 			return BuildInvocationNestedType(emitter, targetType, targetForInvocation, methodInfo, callbackMethod, version, false);
 		}
 
@@ -690,6 +737,9 @@ namespace Castle.DynamicProxy.Generators
 			ConstructorVersion version,
 			bool allowChangeTarget)
 		{
+			CheckNotGenericTypeDefinition(targetType, "targetType");
+			CheckNotGenericTypeDefinition(targetForInvocation, "targetForInvocation");
+
 			nestedCounter++;
 
 			Type[] interfaces = new Type[0];
@@ -705,8 +755,11 @@ namespace Castle.DynamicProxy.Generators
 				                       typeof(AbstractInvocation),
 				                       interfaces);
 
-			Type[] genTypes = TypeUtil.Union(targetType.GetGenericArguments(), methodInfo.GetGenericArguments());
-			nested.CreateGenericParameters(genTypes);
+			// invocation only needs to mirror the generic parameters of the MethodInfo
+			// targetType cannot be a generic type definition
+#if DOTNET2
+			nested.CreateGenericParameters(methodInfo.GetGenericArguments ());
+#endif
 			// Create the invocation fields
 
 			FieldReference targetRef = nested.CreateField("target", targetForInvocation);
@@ -988,7 +1041,8 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach(ConstructorInfo constructor in constructors)
 			{
-				if (constructor.IsPublic || constructor.IsFamily)
+				if (constructor.IsPublic || constructor.IsFamily
+						|| (constructor.IsAssembly && InternalsHelper.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly)))
 					GenerateConstructor(emitter, constructor, fields);
 			}
 		}
@@ -1028,11 +1082,6 @@ namespace Castle.DynamicProxy.Generators
 		protected void AddFieldToCacheMethodTokenAndStatementsToInitialize(
 			MethodInfo method, ConstructorEmitter typeInitializerConstructor, ClassEmitter classEmitter)
 		{
-			// Ignore all methods that have anything to do with generics - these currently cause a number of runtime bugs
-			// E.g. duplicate methods returned by Type.GetMethods()
-			if (method.ContainsGenericParameters || method.IsGenericMethod || method.DeclaringType.IsGenericType)
-				return;
-
 			if (!method2TokenField.ContainsKey(method))
 			{
 				FieldReference fieldCache =
@@ -1246,7 +1295,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-			MethodInfo[] methods = type.GetMethods(flags);
+			MethodInfo[] methods = MethodFinder.GetAllInstanceMethods (type, flags);
 
 			foreach(MethodInfo method in methods)
 			{

@@ -40,10 +40,13 @@ namespace Castle.DynamicProxy.Generators
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface)
 			: base(scope, theInterface)
 		{
+			CheckNotGenericTypeDefinition (theInterface, "theInterface");
 		}
 
 		public Type GenerateCode(Type proxyTargetType, Type[] interfaces, ProxyGenerationOptions options)
 		{
+			CheckNotGenericTypeDefinition (proxyTargetType, "proxyTargetType");
+			CheckNotGenericTypeDefinitions (interfaces, "interfaces");
 			Type generatedType;
 
 			ReaderWriterLock rwlock = Scope.RWLock;
@@ -164,8 +167,8 @@ namespace Castle.DynamicProxy.Generators
 
 				if (!proxyTargetType.IsInterface)
 				{
-					CacheMethodTokens(emitter,
-					                  proxyTargetType.GetMethods(BindingFlags.Public | BindingFlags.Instance),
+					CacheMethodTokens(emitter, MethodFinder.GetAllInstanceMethods (proxyTargetType,
+					                  BindingFlags.Public | BindingFlags.Instance),
 					                  typeInitializer);
 				}
 
@@ -320,7 +323,7 @@ namespace Castle.DynamicProxy.Generators
 
 				generatedType = emitter.BuildType();
 
-				/*foreach (MethodInfo m in generatedType.GetMethods())
+				/*foreach (MethodInfo m in TypeFinder.GetMethods(generatedType, BindingFlags.Instance | BindingFlags.Public))
 				{
 					ParameterInfo[] parameters = m.GetParameters();
 
@@ -390,7 +393,7 @@ namespace Castle.DynamicProxy.Generators
 				// Before throwing an exception, we look for an explicit
 				// interface method implementation
 
-				MethodInfo[] privateMethods = proxyTargetType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+				MethodInfo[] privateMethods = MethodFinder.GetAllInstanceMethods (proxyTargetType, BindingFlags.NonPublic | BindingFlags.Instance);
 
 				foreach (MethodInfo methodInfo in privateMethods)
 				{

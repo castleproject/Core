@@ -13,9 +13,11 @@
 // limitations under the License.
 
 
+
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using Castle.Core.Interceptor;
@@ -32,6 +34,7 @@ namespace Castle.DynamicProxy
 		private object returnValue;
 		private object[] arguments;
 		private int execIndex = -1;
+		private Type[] genericMethodArguments = null;
 
 		protected AbstractInvocation(
 			object target, object proxy, IInterceptor[] interceptors,
@@ -54,6 +57,16 @@ namespace Castle.DynamicProxy
 			this.interfMethod = interfMethod;
 		}
 
+		public void SetGenericMethodArguments (Type[] arguments)
+		{
+			genericMethodArguments = arguments;
+		}
+
+		public Type[] GenericArguments
+		{
+			get { return genericMethodArguments; }
+		}
+
 		public object Proxy
 		{
 			get { return proxy; }
@@ -71,7 +84,22 @@ namespace Castle.DynamicProxy
 
 		public MethodInfo Method
 		{
-			get { return interfMethod == null ? targetMethod : interfMethod; }
+			get
+			{
+				if (interfMethod == null)
+				{
+					return targetMethod;
+				}
+				else
+				{
+					return interfMethod;
+				}
+			}
+		}
+
+		public MethodInfo GetConcreteMethod ()
+		{
+			return EnsureClosedMethod (Method);
 		}
 
 		public MethodInfo MethodInvocationTarget
@@ -79,10 +107,28 @@ namespace Castle.DynamicProxy
 			get { return targetMethod; }
 		}
 
+		public MethodInfo GetConcreteMethodInvocationTarget ()
+		{
+			return EnsureClosedMethod (MethodInvocationTarget);
+		}
+
+		private MethodInfo EnsureClosedMethod (MethodInfo method)
+		{
+			if (method.ContainsGenericParameters)
+			{
+				Debug.Assert (genericMethodArguments != null);
+				return method.GetGenericMethodDefinition ().MakeGenericMethod (genericMethodArguments);
+			}
+			else
+			{
+				return method;
+			}
+		}
+
 		public object ReturnValue
 		{
 			get { return returnValue; }
-			set { returnValue = value; }
+			set { returnValue = value; }	
 		}
 
 		public object[] Arguments

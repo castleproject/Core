@@ -37,10 +37,12 @@ namespace Castle.DynamicProxy.Generators
 
 		public ClassProxyGenerator(ModuleScope scope, Type targetType): base(scope, targetType)
 		{
+			CheckNotGenericTypeDefinition (targetType, "targetType");
 		}
 
 		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
 		{
+			CheckNotGenericTypeDefinitions (interfaces, "interfaces");
 			Type type;
 
 			ReaderWriterLock rwlock = Scope.RWLock;
@@ -181,8 +183,6 @@ namespace Castle.DynamicProxy.Generators
 					}
 
 					NestedClassEmitter nestedClass = method2Invocation[method];
-
-					// TODO: Should the targetType be a generic definition or instantiation?
 
 					MethodEmitter newProxiedMethod = CreateProxiedMethod(
 						targetType, method, emitter, nestedClass, interceptorsField, SelfReference.Self,

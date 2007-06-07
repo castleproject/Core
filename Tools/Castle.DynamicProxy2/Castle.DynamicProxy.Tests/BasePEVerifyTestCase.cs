@@ -64,6 +64,7 @@ namespace Castle.DynamicProxy.Tests
 
 			if (process.ExitCode != 0)
 			{
+				Console.WriteLine (processOutput);
 				Assert.Fail("PeVerify reported error(s): " + Environment.NewLine + processOutput, result);
 			}
 		}

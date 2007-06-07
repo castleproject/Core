@@ -45,6 +45,11 @@ namespace Castle.DynamicProxy
 			return parent.GetArgumentValue(index);
 		}
 
+		public Type[] GenericArguments
+		{
+			get { return parent.GenericArguments; }
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -82,6 +87,11 @@ namespace Castle.DynamicProxy
 			get { return parent.Method; }
 		}
 
+		public MethodInfo GetConcreteMethod ()
+		{
+			return parent.GetConcreteMethod ();
+		}
+
 		/// <summary>
 		/// For interface proxies, this will point to the
 		/// <see cref="MethodInfo"/> on the target class
@@ -89,6 +99,11 @@ namespace Castle.DynamicProxy
 		public MethodInfo MethodInvocationTarget
 		{
 			get { return parent.MethodInvocationTarget; }
+		}
+
+		public MethodInfo GetConcreteMethodInvocationTarget ()
+		{
+			return parent.GetConcreteMethodInvocationTarget ();
 		}
 
 		public object ReturnValue

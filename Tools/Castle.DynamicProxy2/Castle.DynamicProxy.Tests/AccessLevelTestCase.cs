@@ -63,5 +63,19 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy (typeof (Hashtable), new StandardInterceptor ());
 			Assert.IsNull (proxy.GetType ().GetConstructor (new Type[] { typeof (IInterceptor[]), typeof (bool)}));
 		}
+
+		internal class InternalClass
+		{
+			internal InternalClass()
+			{
+			}
+		}
+
+		[Test]
+		public void InternalConstructorIsReplicatedWhenInternalsVisibleTo ()
+		{
+			object proxy = generator.CreateClassProxy (typeof (InternalClass), new StandardInterceptor ());
+			Assert.IsNotNull (proxy.GetType ().GetConstructor (new Type[] { typeof (IInterceptor[])}));
+		}
 	}
 }
