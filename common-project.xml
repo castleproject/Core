@@ -260,7 +260,7 @@
 	<target name="common.run-tests"
 		description="Run NUnit tests">
 
-		<if test="${common.run-tests}">
+		<if test="${common.testrunner.enabled}">
 			<call target="common.find-nunit" />
 
 			<echo message="Running tests in '${project::get-name()}'" />
@@ -269,15 +269,17 @@
 				program="${mbunit-console}" 
 				workingdir="${build.dir}"
 				commandline="${project::get-name()}.dll /rf:${testresults.dir} /rnf:${project::get-name()}.dll-results /rt:Xml"
+				failonerror="${common.testrunner.failonerror}"
 			/>
 			<!-- Use nunit-console.exe if found, otherwise fall back to nunit2 task -->
 			<exec if="${nunit.found and string::to-lower(testrunner)=='nunit'}"
 				program="${nunit-console}" 
 				workingdir="${build.dir}" 
 				commandline="${project::get-name()}.dll /xml:${testresults.dir}/${project::get-name()}.dll-results.xml /config:${build.dir}/${project::get-name()}.dll.config /nologo"
+				failonerror="${common.testrunner.failonerror}"
 				 />
 
-			<nunit2 unless="${nunit.found}" if="${string::to-lower(testrunner)=='nunit'}">
+			<nunit2 unless="${nunit.found}" if="${string::to-lower(testrunner)=='nunit'}" failonerror="${common.testrunner.failonerror}">
 				<formatter 
 					type="Xml" 
 					usefile="true" 
@@ -289,7 +291,7 @@
 					appconfig="${build.dir}/${project::get-name()}.dll.config" />
 			</nunit2>
 		</if>
-		<if test="${not common.run-tests}">
+		<if test="${not common.testrunner.enabled}">
 			<echo message="Tests are disabled for '${project::get-name()}'" />
 		</if>
 

@@ -10,6 +10,8 @@
 
 	<!-- Controls whether tests are run. Setting this is as input to the build disables *all* tests. -->
 	<property name="common.run-tests" value="true" overwrite="false" />
+	<property name="common.testrunner.enabled" value="${common.run-tests}" overwrite="false" />
+	<property name="common.testrunner.failonerror" value="true" overwrite="false" /> <!--  Whether to keep building when tests are failing -->
 
 	<!-- Check which nant version we're using - fail if it's not the minium  -->
 	<property name="current.nant-version" value="${assemblyname::get-version(assembly::get-name(nant::get-assembly()))}" />
