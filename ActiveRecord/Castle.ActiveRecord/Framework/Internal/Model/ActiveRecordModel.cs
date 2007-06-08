@@ -453,7 +453,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		private static Type GetNonProxy(Type type)
 		{
-			if (type.GetField("__interceptor") != null)
+			if (type.GetField("__interceptor") != null ||//Dynamic Proxy 1.0
+				type.GetField("__interceptors")!=null) //Dynamic Proxy 2.0
 			{
 				type = type.BaseType;
 			}
