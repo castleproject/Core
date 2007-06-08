@@ -23,7 +23,7 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeUserType
 	using NHibernate.Type;
 	using NHibernate.UserTypes;
 
-	[ActiveRecord]
+	[ActiveRecord(DiscriminatorColumn = "CitizenType", DiscriminatorType = "byte", DiscriminatorValue = "1")]
 	public class Citizen : ActiveRecordBase<Citizen>
 	{
 		private int id;
@@ -53,6 +53,11 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeUserType
 			get { return manufacturerName; }
 			set { manufacturerName = value; }
 		}
+	}
+
+	[ActiveRecord(DiscriminatorValue = "2")]
+	public class SecondCitizen : Citizen
+	{
 	}
 
 	/// <summary>

@@ -25,7 +25,7 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void CompositeUserTypeConfig()
 		{
-			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Citizen));
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Citizen), typeof(SecondCitizen));
 
 			Recreate();
 

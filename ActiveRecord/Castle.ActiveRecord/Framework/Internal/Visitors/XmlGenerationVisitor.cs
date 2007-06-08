@@ -185,9 +185,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes(model.HasAndBelongsToMany);
 				VisitNodes(model.Components);
 				VisitNodes(model.OneToOnes);
+				VisitNodes(model.CompositeUserType);
 				VisitNodes(model.JoinedClasses);
 				VisitNodes(model.Classes);
-				VisitNodes(model.CompositeUserType);
 				Dedent();
 				Append("</class>");
 			}
