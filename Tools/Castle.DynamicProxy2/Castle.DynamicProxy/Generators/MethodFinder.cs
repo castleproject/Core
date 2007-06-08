@@ -8,21 +8,30 @@ namespace Castle.DynamicProxy.Generators
 
 	// Returns the methods implemented by a type. Use this instead of Type.GetMethods() to work around a CLR issue
 	// where duplicate MethodInfos are returned by Type.GetMethods() after a token of a generic type's method was loaded.
-	class MethodFinder
+	public class MethodFinder
 	{
 		private static Hashtable _cachedMethodInfosByType = new Hashtable();
+		private static object _lockObject = new object();
 
 		public static MethodInfo[] GetAllInstanceMethods (Type type, BindingFlags flags)
 		{
 			if ((flags & ~(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) != 0)
 				throw new ArgumentException ("MethodFinder only supports the Public, NonPublic, and Instance binding flags.", "flags");
 
-			if (!_cachedMethodInfosByType.ContainsKey (type))
+			MethodInfo[] methodsInCache;
+			lock (_lockObject)
 			{
-				_cachedMethodInfosByType.Add (type, type.GetMethods (BindingFlags.Public | BindingFlags.NonPublic
-						| BindingFlags.Instance));
+				if (!_cachedMethodInfosByType.ContainsKey (type))
+				{
+					// We always load all instance methods into the cache, we will filter them later
+					_cachedMethodInfosByType.Add (
+							type,
+							type.GetMethods (
+									BindingFlags.Public | BindingFlags.NonPublic
+									| BindingFlags.Instance));
+				}
+				methodsInCache = (MethodInfo[]) _cachedMethodInfosByType[type];
 			}
-			MethodInfo[] methodsInCache = (MethodInfo[]) _cachedMethodInfosByType[type];
 			return MakeFilteredCopy (methodsInCache, flags & (BindingFlags.Public | BindingFlags.NonPublic));
 		}
 

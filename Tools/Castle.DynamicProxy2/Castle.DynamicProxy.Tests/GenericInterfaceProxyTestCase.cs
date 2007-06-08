@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections;
+	using System.Reflection;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.Interceptors;
@@ -336,9 +337,32 @@ namespace Castle.DynamicProxy.Tests
 		[Ignore ("Currently, we trigger the bug, and work around it - see MethodFinder")]
 		public void TypeGetMethodsIsStable ()
 		{
-			Assert.AreEqual (4, typeof (IGenInterfaceHierarchyBase<int>).GetMethods ().Length);
 			ProxyWithGenInterfaceWithBase ();
 			Assert.AreEqual (4, typeof (IGenInterfaceHierarchyBase<int>).GetMethods ().Length);
+		}
+
+		[Test (Description = "There is a strange CLR bug resulting from our loading the tokens of methods in generic types. "
+				+ "This test ensures we correctly work around it.")]
+		public void MethodFinderIsStable ()
+		{
+			ProxyWithGenInterfaceWithBase ();
+			Assert.AreEqual (4, MethodFinder.GetAllInstanceMethods (typeof (IGenInterfaceHierarchyBase<int>), BindingFlags.Public | BindingFlags.Instance).Length);
+		}
+
+		[Test (Description = "There is a strange CLR bug resulting from our loading the tokens of methods in generic types. "
+				+ "This test ensures we do not trigger it across AppDomains. If we do, MethodFinder must provide a cross-AppDomain workaround.")]
+		public void TypeGetMethodsIsStableInDifferentAppDomains ()
+		{
+			ProxyWithGenInterfaceWithBase ();
+			AppDomain newDomain = AppDomain.CreateDomain ("NewDomain", AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
+			try
+			{
+				newDomain.DoCallBack (delegate { Assert.AreEqual (4, typeof (IGenInterfaceHierarchyBase<int>).GetMethods().Length); });
+			}
+			finally
+			{
+				AppDomain.Unload (newDomain);
+			}
 		}
 	}
 }
