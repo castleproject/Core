@@ -43,8 +43,8 @@ namespace Castle.MicroKernel.ComponentActivator
 		/// <param name="onCreation"></param>
 		/// <param name="onDestruction"></param>
 		public DefaultComponentActivator(ComponentModel model, IKernel kernel,
-		                                 ComponentInstanceDelegate onCreation,
-		                                 ComponentInstanceDelegate onDestruction)
+										 ComponentInstanceDelegate onCreation,
+										 ComponentInstanceDelegate onDestruction)
 			: base(model, kernel, onCreation, onDestruction)
 		{
 		}
@@ -104,7 +104,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 					cinfo.Invoke(instance, arguments);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new ComponentActivatorException(
 						"ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex);
@@ -117,7 +117,7 @@ namespace Castle.MicroKernel.ComponentActivator
 				{
 					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, arguments);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex);
 				}
@@ -142,7 +142,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void ApplyConcerns(object[] steps, object instance)
 		{
-			foreach(ILifecycleConcern concern in steps)
+			foreach (ILifecycleConcern concern in steps)
 			{
 				concern.Apply(Model, instance);
 			}
@@ -165,11 +165,11 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			int winnerPoints = 0;
 
-			foreach(ConstructorCandidate candidate in Model.Constructors)
+			foreach (ConstructorCandidate candidate in Model.Constructors)
 			{
 				int candidatePoints = 0;
 
-				foreach(DependencyModel dep in candidate.Dependencies)
+				foreach (DependencyModel dep in candidate.Dependencies)
 				{
 					if (CanSatisfyDependency(context, dep))
 					{
@@ -213,10 +213,10 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			int index = 0;
 
-			foreach(DependencyModel dependency in constructor.Dependencies)
+			foreach (DependencyModel dependency in constructor.Dependencies)
 			{
 				object value;
-				using(new DependencyTrackingScope(context, Model, constructor.Constructor, dependency))
+				using (new DependencyTrackingScope(context, Model, constructor.Constructor, dependency))
 				{
 					value = Kernel.Resolver.Resolve(context, context.Handler, Model, dependency);
 				}
@@ -231,12 +231,16 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			instance = GetUnproxiedInstance(instance);
 
-			foreach(PropertySet property in Model.Properties)
+			foreach (PropertySet property in Model.Properties)
 			{
-				object value;
-				using(new DependencyTrackingScope(context, Model, property.Property, property.Dependency))
+				object value = null;
+
+				using (new DependencyTrackingScope(context, Model, property.Property, property.Dependency))
 				{
-					value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
+					if (Kernel.Resolver.CanResolve(context, context.Handler, Model, property.Dependency))
+					{
+						value = Kernel.Resolver.Resolve(context, context.Handler, Model, property.Dependency);
+					}
 				}
 
 				if (value == null) continue;
@@ -245,9 +249,9 @@ namespace Castle.MicroKernel.ComponentActivator
 
 				try
 				{
-					setMethod.Invoke(instance, new object[] {value});
+					setMethod.Invoke(instance, new object[] { value });
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					String message =
 						String.Format(

@@ -64,15 +64,12 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(DependencyResolverException),
-			@"Cycle detected in configuration.
-Component int.repos has a dependency on Castle.Windsor.Tests.IRepository`1[System.Int32], but it doesn't provide an override.
-You must provide an override if a component has a dependency on a service that it - itself - provides"
-			)]
-		public void ThrowsExceptionIfTryToResolveComponentWithDependencyOnItself()
+		public void WillUseDefaultCtorOnGenericComponentIfTryingToResolveOnSameComponent()
 		{
 			IWindsorContainer container = new WindsorContainer(new XmlInterpreter(GetFilePath("RecursiveDecoratorConfig.xml")));
-			container.Resolve<IRepository<int>>();
+            LoggingRepositoryDecorator<int> resolve = (LoggingRepositoryDecorator<int>)container.Resolve<IRepository<int>>();
+            Assert.IsNull(resolve.Inner);
+
 		}
 
 		[Test]

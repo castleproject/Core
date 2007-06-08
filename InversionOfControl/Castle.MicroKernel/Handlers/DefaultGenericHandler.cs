@@ -36,7 +36,8 @@ namespace Castle.MicroKernel.Handlers
 		/// Initializes a new instance of the <see cref="DefaultGenericHandler"/> class.
 		/// </summary>
 		/// <param name="model"></param>
-		public DefaultGenericHandler(ComponentModel model) : base(model)
+		public DefaultGenericHandler(ComponentModel model)
+			: base(model)
 		{
 			type2SubHandler = new Dictionary<Type, IHandler>();
 		}
@@ -47,7 +48,8 @@ namespace Castle.MicroKernel.Handlers
 
 			IHandler handler = GetSubHandler(context, implType);
 
-			return handler.Resolve(context);
+			using (context.ResolvingHandler(handler))
+				return handler.Resolve(context);
 		}
 
 		public override void Release(object instance)
@@ -59,7 +61,7 @@ namespace Castle.MicroKernel.Handlers
 
 		protected IHandler GetSubHandler(CreationContext context, Type genericType)
 		{
-			lock(type2SubHandler)
+			lock (type2SubHandler)
 			{
 				IHandler handler;
 

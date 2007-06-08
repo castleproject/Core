@@ -29,7 +29,8 @@ namespace Castle.MicroKernel.Handlers
 		/// Initializes a new instance of the <see cref="DefaultHandler"/> class.
 		/// </summary>
 		/// <param name="model"></param>
-		public DefaultHandler(ComponentModel model) : base(model)
+		public DefaultHandler(ComponentModel model)
+			: base(model)
 		{
 		}
 
@@ -46,9 +47,9 @@ namespace Castle.MicroKernel.Handlers
 				AssertNotWaitingForDependency();
 			}
 
-			object instance = lifestyleManager.Resolve(context);
+			using (context.ResolvingHandler(this))
+				return lifestyleManager.Resolve(context);
 
-			return instance;
 		}
 
 		/// <summary>
@@ -65,7 +66,7 @@ namespace Castle.MicroKernel.Handlers
 			if (CurrentState == HandlerState.WaitingDependency)
 			{
 				String message = String.Format("Can't create component '{1}' " +
-					"as it has dependencies to be satisfied. {0}", 
+					"as it has dependencies to be satisfied. {0}",
 					ObtainDependencyDetails(new ArrayList()), ComponentModel.Name);
 
 				throw new HandlerException(message);

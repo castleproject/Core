@@ -118,7 +118,12 @@ namespace Castle.Windsor.Tests
 			this.inner = inner;
 		}
 
-		public T Get(int id)
+	    public IRepository<T> Inner
+	    {
+	        get { return inner; }
+	    }
+
+	    public T Get(int id)
 		{
 			Console.WriteLine("Getting {0}", id);
 			return inner.Get(id);

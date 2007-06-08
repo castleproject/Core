@@ -17,6 +17,8 @@ namespace Castle.Windsor.Tests.Components
 	public interface IView
 	{
 		void Display();
+
+        IController Controller { get; set; }
 	}
 
 	public interface IController
@@ -41,14 +43,19 @@ namespace Castle.Windsor.Tests.Components
 
 	public class Controller : IController
 	{
-		private IView View;
+		private IView view;
 
 		public Controller(IView view)
 		{
-			View = view;
+			this.view = view;
 		}
 
-		public void Process()
+	    public IView View
+	    {
+	        get { return view; }
+	    }
+
+	    public void Process()
 		{
 		}
 	}

@@ -43,6 +43,14 @@ namespace Castle.MicroKernel
 		/// </summary>
 		private readonly IHandler handler;
 
+		/// <summary>
+		/// The list of handlers that are used to resolve
+		/// the component.
+		/// We track that in order to try to avoid attempts to resolve a service
+		/// with itself.
+		/// </summary>
+		private readonly IList handlersChain = new ArrayList();
+
 		private readonly IDictionary additionalArguments;
 
 		/// <summary>
@@ -51,24 +59,18 @@ namespace Castle.MicroKernel
 		/// </summary>
 		private readonly DependencyModelCollection dependencies;
 
-		#if DOTNET2
-		
+#if DOTNET2
+
 		private readonly Type[] genericArguments;
-		
-		#endif
+
+#endif
 
 		public CreationContext(IHandler handler, IDictionary additionalArguments)
 		{
 			this.handler = handler;
+			handlersChain.Add(handler);
 			this.additionalArguments = additionalArguments;
 			dependencies = new DependencyModelCollection();
-		}
-
-		public CreationContext(IHandler handler, CreationContext parentContext)
-		{
-			this.handler = handler;
-			additionalArguments = parentContext.additionalArguments;
-			dependencies = new DependencyModelCollection(parentContext.Dependencies);
 		}
 
 		public CreationContext(DependencyModel[] dependencies)
@@ -83,7 +85,7 @@ namespace Castle.MicroKernel
 			this.dependencies = new DependencyModelCollection(dependencies);
 		}
 
-		#if DOTNET2
+#if DOTNET2
 
 		public CreationContext(IHandler handler, Type typeToExtractGenericArguments, IDictionary additionalArguments)
 			: this(handler, additionalArguments)
@@ -91,43 +93,44 @@ namespace Castle.MicroKernel
 			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
 		}
 
-		public CreationContext(IHandler handler, Type typeToExtractGenericArguments, 
-		                       CreationContext parentContext) : this(handler, parentContext.Dependencies)
+		public CreationContext(IHandler handler, Type typeToExtractGenericArguments,
+							   CreationContext parentContext)
+			: this(handler, parentContext.Dependencies)
 		{
 			additionalArguments = parentContext.additionalArguments;
 			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
 		}
 
-		#endif
+#endif
 
-		#region ISubDependencyResolver 
+		#region ISubDependencyResolver
 
-		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver, 
-		                      ComponentModel model, DependencyModel dependency)
+		public object Resolve(CreationContext context, ISubDependencyResolver parentResolver,
+							  ComponentModel model, DependencyModel dependency)
 		{
 			if (additionalArguments != null)
 			{
 				return additionalArguments[dependency.DependencyKey];
 			}
-			
+
 			return null;
 		}
 
-		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, 
-		                       ComponentModel model, DependencyModel dependency)
+		public bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver,
+							   ComponentModel model, DependencyModel dependency)
 		{
 			if (dependency.DependencyKey == null) return false;
-			
+
 			if (additionalArguments != null)
 			{
 				return additionalArguments.Contains(dependency.DependencyKey);
 			}
-			
+
 			return false;
 		}
 
 		#endregion
-		
+
 		public bool HasAdditionalParameters
 		{
 			get { return additionalArguments != null && additionalArguments.Count != 0; }
@@ -150,7 +153,7 @@ namespace Castle.MicroKernel
 
 		#endregion
 
-		#if DOTNET2
+#if DOTNET2
 
 		public Type[] GenericArguments
 		{
@@ -162,6 +165,38 @@ namespace Castle.MicroKernel
 			return typeToExtractGenericArguments.GetGenericArguments();
 		}
 
-		#endif
+#endif
+
+		/// <summary>
+		/// Check if we are now in the middle of resolving this handler, 
+		/// and as such, we shouldn't try to resolve that.
+		/// </summary>
+		public bool HandlerIsCurrentlyBeingResolved(IHandler handlerToTest)
+		{
+			return this.handlersChain.Contains(handlerToTest);
+		}
+
+		public IDisposable ResolvingHandler(IHandler handlerBeingResolved)
+		{
+			this.handlersChain.Add(handlerBeingResolved);
+			return new RemoveHandlerFromCurrentlyResolving(this, handlerBeingResolved);
+		}
+
+		private class RemoveHandlerFromCurrentlyResolving : IDisposable
+		{
+			private CreationContext parent;
+			private IHandler handler;
+
+			public RemoveHandlerFromCurrentlyResolving(CreationContext parent, IHandler handler)
+			{
+				this.parent = parent;
+				this.handler = handler;
+			}
+
+			public void Dispose()
+			{
+				parent.handlersChain.Remove(handler);
+			}
+		}
 	}
 }
