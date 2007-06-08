@@ -16,7 +16,6 @@ namespace Castle.Facilities.Synchronize.Tests
 {
 	using System;
 	using System.Configuration;
-	using System.Diagnostics;
 	using System.Threading;
 	using System.Windows.Forms;
 	using Castle.Core;
@@ -155,7 +154,7 @@ namespace Castle.Facilities.Synchronize.Tests
 			DummyForm form = new DummyForm();
 			IClassUsingContext<DummyForm> client = container.Resolve<IClassUsingContext<DummyForm>>();
 			ExecuteInThread(delegate { client.DoWork(form); });
-			Assert.IsNull(uncaughtException, "Expected no exception - exception is: {0}\nStacktrace: \n{1}", uncaughtException.Message, uncaughtException.StackTrace);
+			Assert.IsNull(uncaughtException, "Expected no exception");
 		}
 
 		[Test, ExpectedException(typeof(FacilityException))]
