@@ -6,7 +6,6 @@
 >
     
 	<property name="root.dir" value="../.." />
-	<property name="common.testrunner.failonerror" value="false" />
 	<include buildfile="${root.dir}/common-project.xml" />
 
 	<fileset id="buildfiles.all">
