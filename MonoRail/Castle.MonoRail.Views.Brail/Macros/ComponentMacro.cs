@@ -123,8 +123,6 @@ namespace Castle.MonoRail.Views.Brail
 			removeProperties.Arguments.Add(AstUtil.CreateReferenceExpression("componentContext.ComponentParameters"));
 			block.Add(removeProperties);
 
-			block.Add(removeProperties);
-
 			return block;
 		}
 

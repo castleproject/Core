@@ -29,5 +29,14 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertSuccess();
 			AssertReplyEqualTo("<body id=\"123\">");
 		}
+
+
+        [Test]
+        public void MR_262_DynamicComponents()
+        {
+            DoGet("usingcomponents/DynamicComponents.rails");
+            AssertSuccess();
+            AssertReplyEqualTo("default component view picked up automaticallyThis is a view used by a component");
+        }
 	}
 }

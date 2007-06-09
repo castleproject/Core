@@ -1,0 +1,7 @@
+<?brail
+
+for component as string in components:
+	RenderComponent(component)
+end
+
+?>

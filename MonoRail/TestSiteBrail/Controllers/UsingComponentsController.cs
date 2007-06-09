@@ -30,6 +30,16 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
             this.LayoutName = "layout_with_captureFor";
         }
 
+        public void DynamicComponents()
+        {
+            PropertyBag["components"] = new string[]
+                {
+                    "SimpleInlineViewComponent3", 
+                    "SimpleInlineViewComponent2"
+                };
+
+        }
+
         public void Index1()
         {
         }

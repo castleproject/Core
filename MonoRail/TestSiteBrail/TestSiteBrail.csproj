@@ -163,6 +163,7 @@
     <None Include="Views\jsgeneration\visualeffect.brailjs" />
     <None Include="Views\jsgeneration\_partial1.brail" />
     <None Include="Views\resourced\indexingResources.brail" />
+    <None Include="Views\usingcomponents\dynamicComponents.brail" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Boo.Lang, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">

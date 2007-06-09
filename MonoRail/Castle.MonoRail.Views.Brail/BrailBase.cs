@@ -298,6 +298,27 @@ namespace Castle.MonoRail.Views.Brail
 				return;
 			viewComponentsParameters.Remove(propertiesToRemove);
 		}
+        public void RenderComponent(string componentName)
+        {
+            RenderComponent(componentName, new Hashtable());
+        }
+        public void RenderComponent(string componentName, IDictionary parameters)
+        {
+            BrailViewComponentContext componentContext =
+                new BrailViewComponentContext(this, null, componentName, OutputStream, 
+                new Hashtable(StringComparer.InvariantCultureIgnoreCase));
+            this.AddViewComponentProperties(componentContext.ComponentParameters);
+            IViewComponentFactory componentFactory = (IViewComponentFactory)this.context.GetService(typeof(IViewComponentFactory));
+            ViewComponent component = componentFactory.Create(componentName);
+            component.Init(this.context, componentContext);
+            component.Render();
+            if (componentContext.ViewToRender != null)
+            {
+                this.OutputSubView("/" + componentContext.ViewToRender, componentContext.ComponentParameters);
+            }
+            this.RemoveViewComponentProperties(componentContext.ComponentParameters);
+
+        }
 
 		/// <summary>
 		/// Initialize all the properties that a script may need
