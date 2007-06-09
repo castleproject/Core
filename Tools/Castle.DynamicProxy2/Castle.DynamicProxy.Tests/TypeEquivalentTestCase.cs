@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Tests
 			Type T = genericArgs[0];
 			Type Z = genericArgs[1];
 
-			Type listOfT = typeof(List<T>).MakeGenericType(T);
+			Type listOfT = typeof(List<>).MakeGenericType(T);
 			Type listOfZ = typeof(List<>).MakeGenericType(Z);
 
 			Type listOfString = typeof(List<>).MakeGenericType(typeof(String));
