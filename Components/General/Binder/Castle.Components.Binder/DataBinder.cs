@@ -231,7 +231,7 @@ namespace Castle.Components.Binder
 		/// <param name="instance">The instance.</param>
 		public ErrorSummary GetValidationSummary(object instance)
 		{
-			return validationErrorSummaryPerInstance[instance];
+			return validationErrorSummaryPerInstance.ContainsKey(instance) ? validationErrorSummaryPerInstance[instance] : null;
 		}
 
 		#endregion

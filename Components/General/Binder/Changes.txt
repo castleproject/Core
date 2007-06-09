@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Applied Adam Tybor's patch fixing MR-266
+  "Fix for GetErrorSummary() throwing an KeyNotFoundException for SmartDispatch Controller and Binder"
+
 - Fixed COMP-27
   "Validators in a Chain - ValidateNonEmpty fails with BelongsTo"
 
