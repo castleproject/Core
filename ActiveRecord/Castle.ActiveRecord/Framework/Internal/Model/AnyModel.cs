@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using Castle.ActiveRecord;
 
 	/// <summary>
-	/// Model for [Any] association, a polymorphic assoication without common base class
+	/// Model for [Any] association, a polymorphic association without common base class
 	/// </summary>
 	[Serializable]
 	public class AnyModel : IVisitable

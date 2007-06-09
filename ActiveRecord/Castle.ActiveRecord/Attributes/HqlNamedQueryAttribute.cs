@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord
 	/// It represents the &lt;query&gt; element.
 	/// </summary>
 	/// <example>
-	/// [assemly: HqlNamedQuery("allAdultUsers", "from User where user.Age > 21")]
+	/// [assembly: HqlNamedQuery("allAdultUsers", "from User where user.Age > 21")]
 	/// </example>
 	[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true), Serializable]
 	public class HqlNamedQueryAttribute : Attribute
