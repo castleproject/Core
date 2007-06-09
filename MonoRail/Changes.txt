@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Mathias Doenitz's patch fixing MR-265
+  "(Re)enable initialization of Controller.AreaName, Controller.Name and Controller.Action before invoking Controller.Initialize()."
+
 - Applied Adam Tybor's patch fixing MR-266
   "Fix for GetErrorSummary() throwing an KeyNotFoundException for SmartDispatch Controller and Binder"
 

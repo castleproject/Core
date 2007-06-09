@@ -132,8 +132,8 @@ namespace Castle.MonoRail.Framework
 		/// <param name="actionName">The action name</param>
 		public void InitializeController(string areaName, string controllerName, string actionName)
 		{
-			InitializeControllerFieldsFromServiceProvider();
 			controller.InitializeControllerState(areaName, controllerName, actionName);
+			InitializeControllerFieldsFromServiceProvider();
 			controller.LayoutName = ObtainDefaultLayoutName();
 			CreateAndInitializeHelpers();
 			CreateFiltersDescriptors();
