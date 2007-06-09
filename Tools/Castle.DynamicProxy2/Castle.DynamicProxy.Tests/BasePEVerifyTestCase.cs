@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if !MONO // mono doesn't have PEVerify
-		
+
 		[TearDown]
 		public void RunPEVerifyOnGeneratedAssembly()
 		{
@@ -46,7 +46,8 @@ namespace Castle.DynamicProxy.Tests
 
 			if (!File.Exists(path))
 			{
-				throw new FileNotFoundException("Please check the sdkDir configuration setting and set it to the location of peverify.exe");
+				throw new FileNotFoundException(
+					"Please check the sdkDir configuration setting and set it to the location of peverify.exe");
 			}
 
 			process.StartInfo.FileName = path;
@@ -64,7 +65,7 @@ namespace Castle.DynamicProxy.Tests
 
 			if (process.ExitCode != 0)
 			{
-				Console.WriteLine (processOutput);
+				Console.WriteLine(processOutput);
 				Assert.Fail("PeVerify reported error(s): " + Environment.NewLine + processOutput, result);
 			}
 		}
