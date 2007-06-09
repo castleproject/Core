@@ -95,7 +95,7 @@ namespace Castle.MicroKernel
 		/// Constructs a DefaultKernel with no component
 		/// proxy support.
 		/// </summary>
-		public DefaultKernel()
+		public DefaultKernel() 
 			: this(new NotSupportedProxyFactory())
 		{
 		}
