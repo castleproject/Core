@@ -14,24 +14,33 @@
 
 namespace Castle.Facilities.FactorySupport.Tests
 {
+	using System.Collections.Generic;
 	using Castle.MicroKernel;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class FactorySupportProgrammaticTestCase
 	{
+		private IKernel kernel;
+		private FactorySupportFacility facility;
+
+		[SetUp]
+		public void Init()
+		{
+			facility = new FactorySupportFacility();
+			kernel = new DefaultKernel();
+		}
+
 		[Test]
 		public void FactoryResolveWithProposedFacilityPatch()
 		{
-			IKernel kernel = new DefaultKernel();
-			FactorySupportFacility facility = new FactorySupportFacility();
 			kernel.AddFacility("factory.support", facility);
 
 			string serviceKey = "someService";
 			facility.AddFactory<ISomeService, ServiceFactory>(serviceKey, "Create");
 
-			ISomeService service = kernel.Resolve(serviceKey, 
-				typeof(ISomeService)) as ISomeService;
+			ISomeService service = kernel.Resolve(serviceKey,
+			                                      typeof(ISomeService)) as ISomeService;
 
 			Assert.IsTrue(ServiceFactory.CreateWasCalled);
 			Assert.IsInstanceOfType(typeof(ServiceImplementation), service);
@@ -54,6 +63,7 @@ namespace Castle.Facilities.FactorySupport.Tests
 			get { return _someValue; }
 			set { _someValue = value; }
 		}
+
 		public ServiceImplementation(int someValue)
 		{
 			_someValue = someValue;
@@ -61,20 +71,19 @@ namespace Castle.Facilities.FactorySupport.Tests
 
 		public void SomeOperation()
 		{
-
 		}
 	}
 
 	public class ServiceFactory
 	{
 		public static bool CreateWasCalled;
-		
+
 		public ServiceImplementation Create()
 		{
 			CreateWasCalled = true;
 			return new ServiceImplementation(12);
 		}
 	}
-	
+
 	#endregion
 }

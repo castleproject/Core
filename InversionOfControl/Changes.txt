@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied Marcus Widerberg's patch fixing FACILITIES-84
+  "FactorySupport - Allow parameters to factory method to be set at resolvetime"
+
 - Applied Marcus Widerberg's patch fixing FACILITIES-82
   "Programmatic configuration for FactorySupport"
 
