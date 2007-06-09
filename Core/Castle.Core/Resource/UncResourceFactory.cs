@@ -16,7 +16,6 @@ namespace Castle.Core.Resource
 {
 	using System;
 
-
 	public class UncResourceFactory : IResourceFactory
 	{
 		public UncResourceFactory()

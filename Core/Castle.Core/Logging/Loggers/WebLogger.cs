@@ -26,7 +26,7 @@ namespace Castle.Core.Logging
 	public class WebLogger : LevelFilteredLogger
 	{
 		private static readonly LoggerLevel DefaultLogLevel = LoggerLevel.Debug;
-		
+
 		/// <summary>
 		/// Creates a new WebLogger with the priority set to DEBUG.
 		/// </summary>
@@ -74,14 +74,14 @@ namespace Castle.Core.Logging
 			{
 				String category = String.Format("[{0}]", level.ToString());
 				String formattedMessage = String.Format("{0} {1}", name, message);
-				
+
 				ctx.Write(category, formattedMessage);
 
 				if (exception != null)
 				{
 					formattedMessage = String.Format("{0}: {1} {2}Stack Trace: {3}",
-						exception.GetType(), exception.Message, Environment.NewLine, exception.StackTrace);
-					
+					                                 exception.GetType(), exception.Message, Environment.NewLine, exception.StackTrace);
+
 					ctx.Warn(category, formattedMessage);
 				}
 			}
@@ -98,7 +98,7 @@ namespace Castle.Core.Logging
 			{
 				throw new ArgumentNullException("newName", "To create a child logger you must supply a non null name");
 			}
-			
+
 			return new WebLogger(String.Format("{0}.{1}", Name, newName), Level);
 		}
 	}

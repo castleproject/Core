@@ -47,7 +47,6 @@ namespace Castle.Core.Resource
 
 		public override void Dispose()
 		{
-			
 		}
 	}
 }

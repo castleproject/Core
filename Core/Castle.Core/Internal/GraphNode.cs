@@ -78,7 +78,7 @@ namespace Castle.Core
 			get
 			{
 				if (incoming == null) return new GraphNode[0];
-				return (GraphNode[]) incoming.ToArray( typeof(GraphNode) );
+				return (GraphNode[]) incoming.ToArray(typeof(GraphNode));
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace Castle.Core
 			get
 			{
 				if (outgoing == null) return new GraphNode[0];
-				return (GraphNode[]) outgoing.ToArray( typeof(GraphNode) );
+				return (GraphNode[]) outgoing.ToArray(typeof(GraphNode));
 			}
 		}
 
@@ -103,6 +103,6 @@ namespace Castle.Core
 		private void RemoveDependent(GraphNode graphNode)
 		{
 			Outgoing.Remove(graphNode);
-		}		
-	}	
+		}
+	}
 }

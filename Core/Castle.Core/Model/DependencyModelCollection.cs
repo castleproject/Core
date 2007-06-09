@@ -56,7 +56,7 @@ namespace Castle.Core
 		{
 			InnerList.Add(model);
 		}
-		
+
 		/// <summary>
 		/// Removes the specified model.
 		/// </summary>

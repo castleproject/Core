@@ -28,7 +28,7 @@ namespace Castle.Core.Logging
 	/// </remarks>
 	[Serializable]
 	public class StreamLogger : LevelFilteredLogger, IDisposable
-	{		        
+	{
 		private StreamWriter writer;
 
 		/// <summary>
@@ -84,7 +84,8 @@ namespace Castle.Core.Logging
 		///	The buffer size that will be used for this stream.
 		///	<see cref="System.IO.StreamWriter"/>
 		///	</param>
-		public StreamLogger(String name, Stream stream, Encoding encoding, int bufferSize) : this(name, new StreamWriter(stream, encoding, bufferSize))
+		public StreamLogger(String name, Stream stream, Encoding encoding, int bufferSize)
+			: this(name, new StreamWriter(stream, encoding, bufferSize))
 		{
 		}
 
@@ -118,7 +119,7 @@ namespace Castle.Core.Logging
 			{
 				writer.Close();
 			}
-		
+
 			writer = null;
 		}
 
@@ -137,24 +138,24 @@ namespace Castle.Core.Logging
 		protected override void Log(LoggerLevel level, String name, String message, Exception exception)
 		{
 			if (writer == null) return; // just in case it's been disposed
-			
+
 			writer.WriteLine("[{0}] '{1}' {2}", level.ToString(), name, message);
 
 			if (exception != null)
 			{
-				writer.WriteLine("[{0}] '{1}' {2}: {3} {4}", 
-					level.ToString(), 
-					name, 
-					exception.GetType().FullName, 
-					exception.Message, 
-					exception.StackTrace);
+				writer.WriteLine("[{0}] '{1}' {2}: {3} {4}",
+				                 level.ToString(),
+				                 name,
+				                 exception.GetType().FullName,
+				                 exception.Message,
+				                 exception.StackTrace);
 			}
 		}
 
 		public override ILogger CreateChildLogger(string name)
 		{
 			// TODO: We could create a ChildStreamLogger that didn't take ownership of the stream
-			
+
 			throw new NotSupportedException("A streamlogger does not support child loggers");
 		}
 	}

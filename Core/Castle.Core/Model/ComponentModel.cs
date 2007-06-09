@@ -17,10 +17,11 @@ namespace Castle.Core
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
-
+	using System.Diagnostics;
 	using Castle.Core.Configuration;
 
 	#region Enums
+
 	/// <summary>
 	/// Enumeration used to mark the component's lifestyle.
 	/// </summary>
@@ -57,7 +58,7 @@ namespace Castle.Core
 		/// </summary>
 		PerWebRequest
 	}
-	
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -68,114 +69,111 @@ namespace Castle.Core
 		All,
 		DeclaredOnly
 	}
-	
+
 	#endregion
 
 	/// <summary>
 	/// Represents the collection of information and
 	/// meta information collected about a component.
 	/// </summary>
-#if DOTNET2
-	[System.Diagnostics.DebuggerDisplay("{Implementation} / {Service}")]
-#endif
+	[DebuggerDisplay("{Implementation} / {Service}")]
 	[Serializable]
 	public sealed class ComponentModel : GraphNode
 	{
 		public const string SkipRegistration = "skip.registration";
 
-        #region Fields
+		#region Fields
 
-        /// <summary>Name (key) of the component</summary>
-        private String name;
+		/// <summary>Name (key) of the component</summary>
+		private String name;
 
-        /// <summary>Service exposed</summary>
-        private Type service;
+		/// <summary>Service exposed</summary>
+		private Type service;
 
-        /// <summary>Implementation for the service</summary>
-        private Type implementation;
+		/// <summary>Implementation for the service</summary>
+		private Type implementation;
 
-        /// <summary>Extended properties</summary>
-        [NonSerialized]
-        private IDictionary extended;
+		/// <summary>Extended properties</summary>
+		[NonSerialized] private IDictionary extended;
 
-        /// <summary>Lifestyle for the component</summary>
-        private LifestyleType lifestyleType;
-		
+		/// <summary>Lifestyle for the component</summary>
+		private LifestyleType lifestyleType;
+
 		private PropertiesInspectionBehavior inspectionBehavior;
 
-        /// <summary>Custom lifestyle, if any</summary>
-        private Type customLifestyle;
+		/// <summary>Custom lifestyle, if any</summary>
+		private Type customLifestyle;
 
-        /// <summary>Custom activator, if any</summary>
-        private Type customComponentActivator;
+		/// <summary>Custom activator, if any</summary>
+		private Type customComponentActivator;
 
-        /// <summary>Dependencies the kernel must resolve</summary>
-        private DependencyModelCollection dependencies;
+		/// <summary>Dependencies the kernel must resolve</summary>
+		private DependencyModelCollection dependencies;
 
-        /// <summary>All available constructors</summary>
-        private ConstructorCandidateCollection constructors;
+		/// <summary>All available constructors</summary>
+		private ConstructorCandidateCollection constructors;
 
-        /// <summary>All potential properties that can be setted by the kernel</summary>
-        private PropertySetCollection properties;
+		/// <summary>All potential properties that can be setted by the kernel</summary>
+		private PropertySetCollection properties;
 
-        //private MethodMetaModelCollection methodMetaModels;
+		//private MethodMetaModelCollection methodMetaModels;
 
-        /// <summary>Steps of lifecycle</summary>
-        private LifecycleStepCollection lifecycleSteps;
+		/// <summary>Steps of lifecycle</summary>
+		private LifecycleStepCollection lifecycleSteps;
 
-        /// <summary>External parameters</summary>
-        private ParameterModelCollection parameters;
+		/// <summary>External parameters</summary>
+		private ParameterModelCollection parameters;
 
-        /// <summary>Configuration node associated</summary>
-        private IConfiguration configuration;
+		/// <summary>Configuration node associated</summary>
+		private IConfiguration configuration;
 
-        /// <summary>Interceptors associated</summary>
-        private InterceptorReferenceCollection interceptors;
+		/// <summary>Interceptors associated</summary>
+		private InterceptorReferenceCollection interceptors;
 
 		private bool requiresGenericArguments;
 
-        #endregion
+		#endregion
 
-        /// <summary>
-        /// Constructs a ComponentModel
-        /// </summary>
-        public ComponentModel(String name, Type service, Type implementation)
-        {
-            this.name = name;
-            this.service = service;
-            this.implementation = implementation;
-            this.lifestyleType = LifestyleType.Undefined;
-        	this.inspectionBehavior = PropertiesInspectionBehavior.Undefined;
-        }
+		/// <summary>
+		/// Constructs a ComponentModel
+		/// </summary>
+		public ComponentModel(String name, Type service, Type implementation)
+		{
+			this.name = name;
+			this.service = service;
+			this.implementation = implementation;
+			lifestyleType = LifestyleType.Undefined;
+			inspectionBehavior = PropertiesInspectionBehavior.Undefined;
+		}
 
-        /// <summary>
-        /// Sets or returns the component key
-        /// </summary>
-        public String Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+		/// <summary>
+		/// Sets or returns the component key
+		/// </summary>
+		public String Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
 
 		/// <summary>
 		/// Gets or sets the service exposed.
 		/// </summary>
 		/// <value>The service.</value>
-        public Type Service
-        {
-            get { return service; }
-            set { service = value; }
-        }
+		public Type Service
+		{
+			get { return service; }
+			set { service = value; }
+		}
 
 		/// <summary>
 		/// Gets or sets the component implementation.
 		/// </summary>
 		/// <value>The implementation.</value>
-        public Type Implementation
-        {
-            get { return implementation; }
-            set { implementation = value; }
-        }
+		public Type Implementation
+		{
+			get { return implementation; }
+			set { implementation = value; }
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the component requires generic arguments.
@@ -193,86 +191,86 @@ namespace Castle.Core
 		/// Gets or sets the extended properties.
 		/// </summary>
 		/// <value>The extended properties.</value>
-        public IDictionary ExtendedProperties
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (extended == null) extended = new HybridDictionary();
-                }
-                return extended;
-            }
-            set { extended = value; }
-        }
+		public IDictionary ExtendedProperties
+		{
+			get
+			{
+				lock(this)
+				{
+					if (extended == null) extended = new HybridDictionary();
+				}
+				return extended;
+			}
+			set { extended = value; }
+		}
 
 		/// <summary>
 		/// Gets the constructors candidates.
 		/// </summary>
 		/// <value>The constructors.</value>
-        public ConstructorCandidateCollection Constructors
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (constructors == null) constructors = new ConstructorCandidateCollection();
-                }
-                return constructors;
-            }
-        }
+		public ConstructorCandidateCollection Constructors
+		{
+			get
+			{
+				lock(this)
+				{
+					if (constructors == null) constructors = new ConstructorCandidateCollection();
+				}
+				return constructors;
+			}
+		}
 
 		/// <summary>
 		/// Gets the properties set.
 		/// </summary>
 		/// <value>The properties.</value>
-        public PropertySetCollection Properties
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (properties == null) properties = new PropertySetCollection();
-                }
-                return properties;
-            }
-        }
+		public PropertySetCollection Properties
+		{
+			get
+			{
+				lock(this)
+				{
+					if (properties == null) properties = new PropertySetCollection();
+				}
+				return properties;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the configuration.
 		/// </summary>
 		/// <value>The configuration.</value>
-        public IConfiguration Configuration
-        {
-            get { return configuration; }
-            set { configuration = value; }
-        }
+		public IConfiguration Configuration
+		{
+			get { return configuration; }
+			set { configuration = value; }
+		}
 
 		/// <summary>
 		/// Gets the lifecycle steps.
 		/// </summary>
 		/// <value>The lifecycle steps.</value>
-        public LifecycleStepCollection LifecycleSteps
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
-                }
-                return lifecycleSteps;
-            }
-        }
+		public LifecycleStepCollection LifecycleSteps
+		{
+			get
+			{
+				lock(this)
+				{
+					if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
+				}
+				return lifecycleSteps;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the lifestyle type.
 		/// </summary>
 		/// <value>The type of the lifestyle.</value>
-        public LifestyleType LifestyleType
-        {
-            get { return lifestyleType; }
-            set { lifestyleType = value; }
-        }
+		public LifestyleType LifestyleType
+		{
+			get { return lifestyleType; }
+			set { lifestyleType = value; }
+		}
 
 		/// <summary>
 		/// Gets or sets the strategy for
@@ -290,69 +288,69 @@ namespace Castle.Core
 		/// </summary>
 		/// <value>The custom lifestyle.</value>
 		public Type CustomLifestyle
-        {
-            get { return customLifestyle; }
-            set { customLifestyle = value; }
-        }
+		{
+			get { return customLifestyle; }
+			set { customLifestyle = value; }
+		}
 
 		/// <summary>
 		/// Gets or sets the custom component activator.
 		/// </summary>
 		/// <value>The custom component activator.</value>
-        public Type CustomComponentActivator
-        {
-            get { return customComponentActivator; }
-            set { customComponentActivator = value; }
-        }
+		public Type CustomComponentActivator
+		{
+			get { return customComponentActivator; }
+			set { customComponentActivator = value; }
+		}
 
 		/// <summary>
 		/// Gets the interceptors.
 		/// </summary>
 		/// <value>The interceptors.</value>
-        public InterceptorReferenceCollection Interceptors
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (interceptors == null) interceptors = new InterceptorReferenceCollection();
-                }
-                return interceptors;
-            }
-        }
+		public InterceptorReferenceCollection Interceptors
+		{
+			get
+			{
+				lock(this)
+				{
+					if (interceptors == null) interceptors = new InterceptorReferenceCollection();
+				}
+				return interceptors;
+			}
+		}
 
 		/// <summary>
 		/// Gets the parameter collection.
 		/// </summary>
 		/// <value>The parameters.</value>
-        public ParameterModelCollection Parameters
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (parameters == null) parameters = new ParameterModelCollection();
-                }
-                return parameters;
-            }
-        }
+		public ParameterModelCollection Parameters
+		{
+			get
+			{
+				lock(this)
+				{
+					if (parameters == null) parameters = new ParameterModelCollection();
+				}
+				return parameters;
+			}
+		}
 
-        /// <summary>
-        /// Dependencies are kept within constructors and
-        /// properties. Others dependencies must be 
-        /// registered here, so the kernel (as a matter 
-        /// of fact the handler) can check them
-        /// </summary>
-        public DependencyModelCollection Dependencies
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (dependencies == null) dependencies = new DependencyModelCollection();
-                }
-                return dependencies;
-            }
+		/// <summary>
+		/// Dependencies are kept within constructors and
+		/// properties. Others dependencies must be 
+		/// registered here, so the kernel (as a matter 
+		/// of fact the handler) can check them
+		/// </summary>
+		public DependencyModelCollection Dependencies
+		{
+			get
+			{
+				lock(this)
+				{
+					if (dependencies == null) dependencies = new DependencyModelCollection();
+				}
+				return dependencies;
+			}
 		}
 	}
 }

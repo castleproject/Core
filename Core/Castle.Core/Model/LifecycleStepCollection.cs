@@ -48,7 +48,7 @@ namespace Castle.Core
 		public object[] GetCommissionSteps()
 		{
 			object[] steps = new object[commissionSteps.Count];
-			commissionSteps.CopyTo( steps, 0 );
+			commissionSteps.CopyTo(steps, 0);
 			return steps;
 		}
 
@@ -59,7 +59,7 @@ namespace Castle.Core
 		public object[] GetDecommissionSteps()
 		{
 			object[] steps = new object[decommissionSteps.Count];
-			decommissionSteps.CopyTo( steps, 0 );
+			decommissionSteps.CopyTo(steps, 0);
 			return steps;
 		}
 
@@ -90,17 +90,17 @@ namespace Castle.Core
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="stepImplementation"></param>
-		public void Add( LifecycleStepType type, object stepImplementation )
+		public void Add(LifecycleStepType type, object stepImplementation)
 		{
 			if (stepImplementation == null) throw new ArgumentNullException("stepImplementation");
 
 			if (type == LifecycleStepType.Commission)
 			{
-				commissionSteps.Add( stepImplementation );				
+				commissionSteps.Add(stepImplementation);
 			}
 			else
 			{
-				decommissionSteps.Add( stepImplementation );
+				decommissionSteps.Add(stepImplementation);
 			}
 		}
 

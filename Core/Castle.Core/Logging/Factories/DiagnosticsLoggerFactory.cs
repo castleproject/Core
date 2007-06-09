@@ -20,7 +20,7 @@ namespace Castle.Core.Logging
 	public class DiagnosticsLoggerFactory : AbstractLoggerFactory
 	{
 		private static readonly String DefaultLogName = "CastleDefaultLogger";
-		
+
 		public override ILogger Create(string name)
 		{
 			return new DiagnosticsLogger(DefaultLogName, name);

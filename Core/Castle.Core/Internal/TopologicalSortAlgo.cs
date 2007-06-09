@@ -14,11 +14,13 @@
 
 namespace Castle.Core.Internal
 {
+	using System.Diagnostics;
+
 	public abstract class TopologicalSortAlgo
 	{
 		public static IVertex[] Sort(IVertex[] graphNodes)
 		{
-			ColorsSet colors = new ColorsSet( graphNodes );
+			ColorsSet colors = new ColorsSet(graphNodes);
 			TimestampSet discovery = new TimestampSet();
 			TimestampSet finish = new TimestampSet();
 			LinkedList list = new LinkedList();
@@ -33,11 +35,11 @@ namespace Castle.Core.Internal
 				}
 			}
 
-			return (IVertex[]) list.ToArray( typeof(IVertex) );
+			return (IVertex[]) list.ToArray(typeof(IVertex));
 		}
 
-		private static void Visit(IVertex node, ColorsSet colors, 
-			TimestampSet discovery, TimestampSet finish, LinkedList list, ref int time)
+		private static void Visit(IVertex node, ColorsSet colors,
+		                          TimestampSet discovery, TimestampSet finish, LinkedList list, ref int time)
 		{
 			colors.Set(node, VertexColor.Gray);
 
@@ -54,7 +56,7 @@ namespace Castle.Core.Internal
 			finish.Register(node, time++);
 
 #if DEBUG
-			System.Diagnostics.Debug.Assert( discovery.TimeOf(node) < finish.TimeOf(node) );
+			Debug.Assert(discovery.TimeOf(node) < finish.TimeOf(node));
 #endif
 
 			list.AddFirst(node);

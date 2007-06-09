@@ -71,7 +71,7 @@ namespace Castle.Core.Resource
 			if (resource == null) throw new ArgumentNullException("resource");
 			if (basePath == null) throw new ArgumentNullException("basePath");
 
-			if (!resource.IsFile) 
+			if (!resource.IsFile)
 				throw new ArgumentException("The specified resource is not a file", "resource");
 
 			return CreateStreamFromPath(resource.Path, basePath);
@@ -79,9 +79,9 @@ namespace Castle.Core.Resource
 
 		private Stream CreateStreamFromPath(String filePath, String basePath)
 		{
-			if (filePath == null) 
+			if (filePath == null)
 				throw new ArgumentNullException("filePath");
-			if (basePath == null) 
+			if (basePath == null)
 				throw new ArgumentNullException("basePath");
 
 			if (!Path.IsPathRooted(filePath) || !File.Exists(filePath))
@@ -89,7 +89,7 @@ namespace Castle.Core.Resource
 				// For a relative path, we use the basePath to
 				// resolve the full path
 
-				filePath = Path.Combine( basePath, filePath );
+				filePath = Path.Combine(basePath, filePath);
 			}
 
 			CheckFileExists(filePath);

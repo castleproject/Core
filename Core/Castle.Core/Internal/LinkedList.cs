@@ -57,37 +57,37 @@ namespace Castle.Core.Internal
 			{
 				internalhead = new LinkNode(value);
 			}
-			else 
+			else
 			{
 				LinkNode p, q;
-				for(p = internalhead; (q = p.Next) != null; p = q);
+				for(p = internalhead; (q = p.Next) != null; p = q) ;
 				p.Next = new LinkNode(value, null, p);
 			}
 
 			return internalcount++;
-		} 
+		}
 
 		public virtual int Add(object value)
 		{
 			if (internalhead == null)
 			{
 				internalhead = new LinkNode(value);
-				
+
 				internaltail = internalhead;
 			}
 			else
 			{
-			    // Added this code because internaltail seems to be null in come cases
-			    if (internaltail==null)
-			    {
-				    internaltail = internalhead;
-				    
-				    while(internaltail.Next != null)
-				        internaltail = internaltail.Next;
-			    }
-			    
+				// Added this code because internaltail seems to be null in come cases
+				if (internaltail == null)
+				{
+					internaltail = internalhead;
+
+					while(internaltail.Next != null)
+						internaltail = internaltail.Next;
+				}
+
 				internaltail.Next = new LinkNode(value, null, internaltail);
-				
+
 				internaltail = internaltail.Next;
 			}
 
@@ -185,7 +185,7 @@ namespace Castle.Core.Internal
 		{
 			ValidateIndex(index);
 			LinkNode node = internalhead;
-			for (int i = 0; i < index; i++)
+			for(int i = 0; i < index; i++)
 			{
 				node = node.Next;
 			}
@@ -211,19 +211,19 @@ namespace Castle.Core.Internal
 		{
 			if (internalhead != null)
 			{
-				if (internalhead.Value.Equals( value ))
+				if (internalhead.Value.Equals(value))
 				{
 					if (internalhead == internaltail) internaltail = null;
-					
+
 					internalhead = internalhead.Next;
-					
+
 					internalcount--;
 				}
-				else if (internaltail.Value.Equals( value ))
+				else if (internaltail.Value.Equals(value))
 				{
 					internaltail.Previous.Next = null;
 					internaltail = internaltail.Previous;
-					
+
 					internalcount--;
 				}
 				else
@@ -274,7 +274,7 @@ namespace Castle.Core.Internal
 
 		public Array ToArray(Type type)
 		{
-			Array array = Array.CreateInstance( type, Count );
+			Array array = Array.CreateInstance(type, Count);
 
 			int index = 0;
 
@@ -312,7 +312,7 @@ namespace Castle.Core.Internal
 	}
 
 	[Serializable]
-	class LinkNode
+	internal class LinkNode
 	{
 		private object _value;
 		private LinkNode _next;
@@ -348,7 +348,7 @@ namespace Castle.Core.Internal
 		}
 	}
 
-	class LinkedListEnumerator : IEnumerator
+	internal class LinkedListEnumerator : IEnumerator
 	{
 		private LinkNode internalhead;
 		private LinkNode _current;

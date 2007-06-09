@@ -41,6 +41,6 @@ namespace Castle.Core.Resource
 				return new AssemblyResource(uri, basePath);
 			else
 				return new AssemblyResource(uri);
-		}		
+		}
 	}
 }

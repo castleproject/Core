@@ -16,8 +16,8 @@ namespace Castle.Core.Resource
 {
 	using System;
 	using System.IO;
-	using System.Text;
 	using System.Runtime.Remoting;
+	using System.Text;
 
 	/// <summary>
 	/// 

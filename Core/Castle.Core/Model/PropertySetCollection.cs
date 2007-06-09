@@ -40,7 +40,7 @@ namespace Castle.Core
 		{
 			InnerList.Clear();
 		}
-		
+
 		/// <summary>
 		/// Finds a PropertySet the by PropertyInfo.
 		/// </summary>
@@ -55,7 +55,7 @@ namespace Castle.Core
 					return prop;
 				}
 			}
-			
+
 			return null;
 		}
 	}

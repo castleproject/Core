@@ -15,7 +15,6 @@
 namespace Castle.Core
 {
 	using System;
-
 	using Castle.Core.Configuration;
 
 	/// <summary>

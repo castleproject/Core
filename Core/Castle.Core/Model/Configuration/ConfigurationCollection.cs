@@ -21,7 +21,7 @@ namespace Castle.Core.Configuration
 	/// A collection of <see cref="IConfiguration"/> objects.
 	/// </summary>
 	[Serializable]
-	public class ConfigurationCollection: ReadOnlyCollectionBase
+	public class ConfigurationCollection : ReadOnlyCollectionBase
 	{
 		/// <summary>
 		/// Creates a new instance of <c>ConfigurationCollection</c>.
@@ -35,7 +35,7 @@ namespace Castle.Core.Configuration
 		/// </summary>
 		public ConfigurationCollection(ConfigurationCollection value)
 		{
-			this.AddRange(value);
+			AddRange(value);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Castle.Core.Configuration
 		/// </summary>
 		public ConfigurationCollection(IConfiguration[] value)
 		{
-			this.AddRange(value);
+			AddRange(value);
 		}
 
 		/// <summary>
@@ -58,21 +58,15 @@ namespace Castle.Core.Configuration
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// <paramref name="index"/> is outside the valid range of indexes for the collection.
 		/// </exception>
-		public IConfiguration this[int index] 
+		public IConfiguration this[int index]
 		{
-			get 
-			{
-				return (IConfiguration) InnerList[index];
-			}
-			set 
-			{
-				InnerList[index] = value;
-			}
+			get { return (IConfiguration) InnerList[index]; }
+			set { InnerList[index] = value; }
 		}
 
-		public IConfiguration this[String name] 
+		public IConfiguration this[String name]
 		{
-			get 
+			get
 			{
 				foreach(IConfiguration config in InnerList)
 				{
@@ -93,7 +87,7 @@ namespace Castle.Core.Configuration
 		/// <returns>
 		/// The index at which the new element was inserted.
 		/// </returns>
-		public IConfiguration Add(IConfiguration value) 
+		public IConfiguration Add(IConfiguration value)
 		{
 			InnerList.Add(value);
 			return value;
@@ -103,11 +97,11 @@ namespace Castle.Core.Configuration
 		/// Adds an array of <see cref="IConfiguration"/>.
 		/// </summary>
 		/// <param name="value">The Array of <see cref="IConfiguration"/> to add.</param>
-		public void AddRange(IConfiguration[] value) 
+		public void AddRange(IConfiguration[] value)
 		{
 			foreach(IConfiguration configuration in value)
 			{
-				this.Add(configuration);
+				Add(configuration);
 			}
 		}
 
@@ -115,11 +109,11 @@ namespace Castle.Core.Configuration
 		/// Adds a <see cref="ConfigurationCollection"/>.
 		/// </summary>
 		/// <param name="value">The <see cref="ConfigurationCollection"/> to add.</param>
-		public void AddRange(ConfigurationCollection value) 
+		public void AddRange(ConfigurationCollection value)
 		{
 			foreach(IConfiguration configuration in value)
 			{
-				this.Add(configuration);
+				Add(configuration);
 			}
 		}
 
@@ -144,7 +138,7 @@ namespace Castle.Core.Configuration
 		/// <see langword="true"/> if the <see cref="IConfiguration"/> is contained in the collection; 
 		/// otherwise, <see langword="false"/>.
 		/// </returns>
-		public bool Contains(IConfiguration value) 
+		public bool Contains(IConfiguration value)
 		{
 			return InnerList.Contains(value);
 		}
@@ -157,7 +151,7 @@ namespace Castle.Core.Configuration
 		/// <exception cref="ArgumentException">
 		/// <paramref name="value"/> is not found in the collection.
 		/// </exception>
-		public void Remove(IConfiguration value) 
+		public void Remove(IConfiguration value)
 		{
 			InnerList.Remove(value);
 		}

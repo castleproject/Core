@@ -63,7 +63,6 @@ namespace Castle.Core.Configuration
 		public virtual ConfigurationCollection Children
 		{
 			get { return children; }
-
 		}
 
 		/// <summary>
@@ -75,7 +74,6 @@ namespace Castle.Core.Configuration
 		public virtual NameValueCollection Attributes
 		{
 			get { return attributes; }
-
 		}
 
 		/// <summary>

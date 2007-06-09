@@ -15,7 +15,7 @@
 namespace Castle.Core.Internal
 {
 	using System.Collections;
-	
+
 	internal enum VertexColor
 	{
 		NotInThisSet,
@@ -42,7 +42,7 @@ namespace Castle.Core.Internal
 	{
 		private Hashtable items = new Hashtable();
 
-		public ColorsSet( IVertex[] items )
+		public ColorsSet(IVertex[] items)
 		{
 			foreach(IVertex item in items)
 			{

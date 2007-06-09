@@ -16,7 +16,6 @@ namespace Castle.Core.Resource
 {
 	using System;
 
-
 	/// <summary>
 	/// 
 	/// </summary>

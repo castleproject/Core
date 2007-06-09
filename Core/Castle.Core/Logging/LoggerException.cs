@@ -17,7 +17,6 @@ namespace Castle.Core.Logging
 	using System;
 	using System.Runtime.Serialization;
 
-
 	[Serializable]
 	public class LoggerException : Exception
 	{

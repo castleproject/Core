@@ -15,11 +15,10 @@
 namespace Castle.Core.Resource
 {
 	using System;
-	using System.IO;
-	using System.Xml;
-	using System.Text;
 	using System.Configuration;
-
+	using System.IO;
+	using System.Text;
+	using System.Xml;
 
 	public class ConfigResource : AbstractResource
 	{
@@ -38,21 +37,13 @@ namespace Castle.Core.Resource
 		{
 			this.sectionName = sectionName;
 
-#if DOTNET2
-			XmlNode node = (XmlNode)ConfigurationManager.GetSection(sectionName);
-#else
-			XmlNode node = (XmlNode) ConfigurationSettings.GetConfig(sectionName);
-#endif
+			XmlNode node = (XmlNode) ConfigurationManager.GetSection(sectionName);
 
 			if (node == null)
 			{
 				String message = String.Format(
 					"Could not find section '{0}' in the configuration file associated with this domain.", sectionName);
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			// TODO: Check whether it's CData section
@@ -61,7 +52,7 @@ namespace Castle.Core.Resource
 
 		public override TextReader GetStreamReader()
 		{
-			return new StringReader( configSectionNode.OuterXml );
+			return new StringReader(configSectionNode.OuterXml);
 		}
 
 		public override TextReader GetStreamReader(Encoding encoding)
@@ -75,7 +66,7 @@ namespace Castle.Core.Resource
 		}
 
 		public override void Dispose()
-		{			
+		{
 		}
 
 		public override string ToString()

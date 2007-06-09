@@ -16,7 +16,6 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
-	using System.Globalization;
 	using Castle.Core.Configuration;
 
 	/// <summary>
@@ -32,13 +31,7 @@ namespace Castle.Core
 		/// </summary>
 		public ParameterModelCollection()
 		{
-			dictionary = new Hashtable(
-#if DOTNET2
-				StringComparer.CurrentCultureIgnoreCase);
-#else
-				CaseInsensitiveHashCodeProvider.Default,
-				CaseInsensitiveComparer.Default);
-#endif
+			dictionary = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
 		}
 
 		/// <summary>
@@ -48,7 +41,7 @@ namespace Castle.Core
 		/// <param name="value">The value.</param>
 		public void Add(String name, String value)
 		{
-			dictionary.Add( name, new ParameterModel(name, value) );
+			dictionary.Add(name, new ParameterModel(name, value));
 		}
 
 		/// <summary>
@@ -58,7 +51,7 @@ namespace Castle.Core
 		/// <param name="configNode">The config node.</param>
 		public void Add(String name, IConfiguration configNode)
 		{
-			dictionary.Add( name, new ParameterModel(name, configNode) );
+			dictionary.Add(name, new ParameterModel(name, configNode));
 		}
 
 		/// <summary>

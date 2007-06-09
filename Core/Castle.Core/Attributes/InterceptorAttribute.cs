@@ -29,7 +29,7 @@ namespace Castle.Core
 		/// a key to a interceptor
 		/// </summary>
 		/// <param name="componentKey"></param>
-		public InterceptorAttribute( String componentKey )
+		public InterceptorAttribute(String componentKey)
 		{
 			interceptorRef = new InterceptorReference(componentKey);
 		}
@@ -39,7 +39,7 @@ namespace Castle.Core
 		/// a service
 		/// </summary>
 		/// <param name="interceptorType"></param>
-		public InterceptorAttribute( Type interceptorType )
+		public InterceptorAttribute(Type interceptorType)
 		{
 			interceptorRef = new InterceptorReference(interceptorType);
 		}

@@ -37,8 +37,8 @@ namespace Castle.Core
 			}
 			else
 			{
-				if (candidate.Constructor.GetParameters().Length < 
-					fewerArgumentsCandidate.Constructor.GetParameters().Length)
+				if (candidate.Constructor.GetParameters().Length <
+				    fewerArgumentsCandidate.Constructor.GetParameters().Length)
 				{
 					fewerArgumentsCandidate = candidate;
 				}

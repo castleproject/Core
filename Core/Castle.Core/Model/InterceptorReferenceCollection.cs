@@ -16,7 +16,6 @@ namespace Castle.Core
 {
 	using System;
 	using System.Collections;
-
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -33,7 +32,7 @@ namespace Castle.Core
 		/// <param name="interceptor">The interceptor.</param>
 		public void Add(InterceptorReference interceptor)
 		{
-			list.Add( interceptor );
+			list.Add(interceptor);
 		}
 
 		/// <summary>
@@ -61,7 +60,7 @@ namespace Castle.Core
 		/// <param name="interceptor">The interceptor.</param>
 		public void Insert(int index, InterceptorReference interceptor)
 		{
-			list.Insert( index, interceptor );
+			list.Insert(index, interceptor);
 		}
 
 		/// <summary>

@@ -44,7 +44,7 @@ namespace Castle.Core
 			get
 			{
 				if (methodInfo2Model == null) methodInfo2Model = new HybridDictionary();
-				
+
 				return methodInfo2Model;
 			}
 		}

@@ -51,7 +51,7 @@ namespace Castle.Core.Resource
 
 		public override IResource CreateRelative(String resourceName)
 		{
-			return new UncResource( Path.Combine(basePath, resourceName) );
+			return new UncResource(Path.Combine(basePath, resourceName));
 		}
 
 		public override string ToString()
@@ -66,23 +66,23 @@ namespace Castle.Core.Resource
 
 		private Stream CreateStreamFromUri(CustomUri resource, String basePath)
 		{
-			if (resource == null) 
+			if (resource == null)
 				throw new ArgumentNullException("resource");
-			if (!resource.IsUnc) 
+			if (!resource.IsUnc)
 				throw new ArgumentException("Resource must be an Unc", "resource");
-			if (!resource.IsFile) 
+			if (!resource.IsFile)
 				throw new ArgumentException("The specified resource is not a file", "resource");
 
 			String filePath = resource.Path;
 
 			if (!File.Exists(filePath) && basePath != null)
 			{
-				filePath = Path.Combine( basePath, filePath );
+				filePath = Path.Combine(basePath, filePath);
 			}
 
 			this.filePath = Path.GetFileName(filePath);
 			this.basePath = Path.GetDirectoryName(filePath);
-			
+
 			CheckFileExists(filePath);
 
 			return File.OpenRead(filePath);

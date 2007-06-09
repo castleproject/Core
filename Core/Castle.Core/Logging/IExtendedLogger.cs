@@ -14,8 +14,6 @@
 
 namespace Castle.Core.Logging
 {
-	using System.Collections;
-
 	/// <summary>
 	/// Provides an interface that supports <see cref="ILogger"/> and
 	/// allows the storage and retrieval of Contexts. These are supported in

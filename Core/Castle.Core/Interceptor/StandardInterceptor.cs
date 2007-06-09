@@ -28,12 +28,10 @@ namespace Castle.Core.Interceptor
 
 		protected virtual void PreProceed(IInvocation invocation)
 		{
-
 		}
 
 		protected virtual void PostProceed(IInvocation invocation)
 		{
-
 		}
 	}
 }

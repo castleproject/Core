@@ -45,7 +45,7 @@ namespace Castle.Core
 		public DependencyModel(DependencyType type, String dependencyKey,
 		                       Type targetType, bool isOptional)
 		{
-			this.dependencyType = type;
+			dependencyType = type;
 			this.dependencyKey = dependencyKey;
 			this.targetType = targetType;
 			this.isOptional = isOptional;
