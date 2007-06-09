@@ -20,7 +20,6 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System.Reflection;
 
 	using NHibernate;
-	using NHibernate.Mapping.Attributes;
 	using Configuration = NHibernate.Cfg.Configuration;
 
 	using Castle.Core.Configuration;
@@ -74,6 +73,8 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// </example>
 	public class NHibernateFacility : AbstractFacility
 	{
+		private const String nHMappingAttributesAssemblyName = "NHibernate.Mapping.Attributes";
+		
 		protected override void Init()
 		{
 			AssertHasConfig();
@@ -320,6 +321,42 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		/// <summary>
+		/// If <paramref name="targetAssembly"/> has a reference on
+		/// <c>NHibernate.Mapping.Attributes</c> : use the NHibernate mapping
+		/// attributes contained in that assembly to update NHibernate
+		/// configuration (<paramref name="cfg"/>). Else do nothing
+		/// </summary>
+		/// <remarks>
+		/// To avoid an unnecessary dependency on the library
+		/// <c>NHibernate.Mapping.Attributes.dll</c> when using this
+		/// facility without NHibernate mapping attributes, all calls to that
+		/// library are made using reflexion.
+		/// </remarks>
+		/// <param name="cfg">NHibernate configuration</param>
+		/// <param name="targetAssembly">Target assembly name</param>
+		protected void GenerateMappingFromAttributesIfNeeded(Configuration cfg, String targetAssembly)
+		{
+			//Get an array of all assemblies referenced by targetAssembly
+			AssemblyName[] refAssemblies = Assembly.Load(targetAssembly).GetReferencedAssemblies();
+
+			//If assembly "NHibernate.Mapping.Attributes" is referenced in targetAssembly
+			if (Array.Exists<AssemblyName>(refAssemblies, delegate(AssemblyName an) { return an.Name.Equals(nHMappingAttributesAssemblyName); }))
+			{
+			//Obtains, by reflexion, the necessary tools to generate NH mapping from attributes
+			Type HbmSerializerType = Type.GetType(String.Concat(nHMappingAttributesAssemblyName, ".HbmSerializer, ", nHMappingAttributesAssemblyName));
+			Object hbmSerializer = Activator.CreateInstance(HbmSerializerType);
+			PropertyInfo validate = HbmSerializerType.GetProperty("Validate");
+			MethodInfo serialize = HbmSerializerType.GetMethod("Serialize", new Type[] { typeof(Assembly) });
+
+			//Enable validation of mapping documents generated from the mapping attributes
+			validate.SetValue(hbmSerializer, true, null);
+
+			//Generates a stream of mapping documents from all decorated classes in targetAssembly and add it to NH config
+			cfg.AddInputStream((MemoryStream)serialize.Invoke(hbmSerializer, new object[] { Assembly.Load(targetAssembly) }));
+			}
+		}
+
 		protected void RegisterAssemblies(Configuration cfg, IConfiguration facilityConfig)
 		{
 			if (facilityConfig == null) return;
@@ -330,9 +367,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 				cfg.AddAssembly(assembly);
 
-				HbmSerializer.Default.Validate = true;
-
-				cfg.AddInputStream(HbmSerializer.Default.Serialize(Assembly.Load(assembly)));
+				GenerateMappingFromAttributesIfNeeded(cfg, assembly);
 			}
 		}
 

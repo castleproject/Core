@@ -1,5 +1,8 @@
 Version beta 3
 
+- Applied David Bachmann's patch fixing FACILITIES-88
+  "Remove NH Facility dependency on NHibernate.Mapping.Attribute.dll"
+
 - Applied patch from Brian Chan 
   "NHibernate.Mapping.Attribute Support"
 
