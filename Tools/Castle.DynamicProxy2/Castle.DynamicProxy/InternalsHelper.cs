@@ -80,8 +80,8 @@ namespace Castle.DynamicProxy
 		/// </returns>
 		public static bool IsInternal(MethodInfo method)
 		{
-			return (method.Attributes & MethodAttributes.FamANDAssem) != 0 //internal
-			       && (method.Attributes & MethodAttributes.Family) == 0; //b
+			return method.IsAssembly || (method.IsFamilyAndAssembly
+			                             && !method.IsFamilyOrAssembly);
 		}
 	}
 }

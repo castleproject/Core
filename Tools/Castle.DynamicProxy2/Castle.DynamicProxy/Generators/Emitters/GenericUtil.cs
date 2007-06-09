@@ -12,60 +12,64 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
+
 namespace Castle.DynamicProxy.Generators.Emitters
 {
-	using System;
-	using System.Reflection;
-	using System.Collections.Generic;
-	using System.Reflection.Emit;
-
-	delegate GenericTypeParameterBuilder[] ApplyGenArgs(String[] argumentNames);
+	internal delegate GenericTypeParameterBuilder[] ApplyGenArgs(String[] argumentNames);
 
 	internal class GenericUtil
 	{
-		public static void PopulateGenericArguments(AbstractTypeEmitter parentEmitter,
-		                                            Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
+		public static void PopulateGenericArguments(
+			AbstractTypeEmitter parentEmitter,
+			Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
 		{
 			if (parentEmitter.GenericTypeParams == null) return;
 
-			foreach(GenericTypeParameterBuilder genType in parentEmitter.GenericTypeParams)
+			foreach (GenericTypeParameterBuilder genType in parentEmitter.GenericTypeParams)
 			{
 				name2GenericType.Add(genType.Name, genType);
 			}
 		}
 
-		public static GenericTypeParameterBuilder[] DefineGenericArguments(Type[] genericArguments,
-		                                                                   TypeBuilder builder,
-		                                                                   Dictionary<String, GenericTypeParameterBuilder>
-		                                                                   	name2GenericType)
+		public static GenericTypeParameterBuilder[] DefineGenericArguments(
+			Type[] genericArguments,
+			TypeBuilder builder,
+			Dictionary<String, GenericTypeParameterBuilder>
+				name2GenericType)
 		{
 			return DefineGenericArguments(genericArguments, name2GenericType, delegate(String[] args)
-			                                                                  	{
-			                                                                  		return builder.DefineGenericParameters(args);
-			                                                                  	});
+			{
+				return builder.DefineGenericParameters(args);
+			});
 		}
 
-		public static GenericTypeParameterBuilder[] DefineGenericArguments(Type[] genericArguments,
-		                                                                   MethodBuilder builder,
-		                                                                   Dictionary<String, GenericTypeParameterBuilder>
-		                                                                   	name2GenericType)
+		public static GenericTypeParameterBuilder[] DefineGenericArguments(
+			Type[] genericArguments,
+			MethodBuilder builder,
+			Dictionary<String, GenericTypeParameterBuilder>
+				name2GenericType)
 		{
 			return DefineGenericArguments(genericArguments, name2GenericType, delegate(String[] args)
-			                                                                  	{
-			                                                                  		return builder.DefineGenericParameters(args);
-			                                                                  	});
+			{
+				return builder.DefineGenericParameters(args);
+			});
 		}
 
-		private static GenericTypeParameterBuilder[] DefineGenericArguments(Type[] genericArguments,
-		                                                                    Dictionary<String, GenericTypeParameterBuilder>
-		                                                                    	name2GenericType,
-		                                                                    ApplyGenArgs gen)
+		private static GenericTypeParameterBuilder[] DefineGenericArguments(
+			Type[] genericArguments,
+			Dictionary<String, GenericTypeParameterBuilder>
+				name2GenericType,
+			ApplyGenArgs gen)
 		{
 			GenericTypeParameterBuilder[] genericTypeParams = null;
 
 			String[] argumentNames = new String[genericArguments.Length];
 
-			for(int i = 0; i < argumentNames.Length; i++)
+			for (int i = 0; i < argumentNames.Length; i++)
 			{
 				argumentNames[i] = genericArguments[i].Name;
 			}
@@ -74,7 +78,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				genericTypeParams = gen(argumentNames);
 
-				for(int i = 0; i < genericTypeParams.Length; i++)
+				for (int i = 0; i < genericTypeParams.Length; i++)
 				{
 					try
 					{
@@ -84,26 +88,31 @@ namespace Castle.DynamicProxy.Generators.Emitters
 						genericTypeParams[i].SetGenericParameterAttributes(attributes);
 
 						Type[] interfacesConstraints = Array.FindAll(types, delegate(Type type)
-						                                                    	{
-						                                                    		return type.IsInterface;
-						                                                    	});
+						{
+							return type.IsInterface;
+						});
 
 						Type baseClassConstraint = Array.Find(types, delegate(Type type)
-						                                             	{
-						                                             		return type.IsClass;
-						                                             	});
+						{
+							return type.IsClass;
+						});
 
 						if (interfacesConstraints.Length != 0)
 						{
+							for (int j = 0; j < interfacesConstraints.Length; ++j)
+							{
+								interfacesConstraints[j] = SubstituteGenericArguments(interfacesConstraints[j], genericArguments, genericTypeParams);
+							}
 							genericTypeParams[i].SetInterfaceConstraints(interfacesConstraints);
 						}
 
 						if (baseClassConstraint != null)
 						{
+							baseClassConstraint = SubstituteGenericArguments(baseClassConstraint, genericArguments, genericTypeParams);
 							genericTypeParams[i].SetBaseTypeConstraint(baseClassConstraint);
 						}
 					}
-					catch(NotSupportedException)
+					catch (NotSupportedException)
 					{
 						// Doesnt matter
 
@@ -122,12 +131,37 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return genericTypeParams;
 		}
 
-		public static Type[] ExtractParametersTypes(ParameterInfo[] baseMethodParameters,
-		                                            Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
+		private static Type SubstituteGenericArguments(
+			Type type, Type[] argumentsToSubstitute, GenericTypeParameterBuilder[] substitutes)
+		{
+			if (type.IsGenericType)
+			{
+				Type[] genericArguments = type.GetGenericArguments();
+				type = type.GetGenericTypeDefinition();
+
+				for (int i = 0; i < genericArguments.Length; ++i)
+				{
+					int substitutionIndex = Array.IndexOf(argumentsToSubstitute, genericArguments[i]);
+					if (substitutionIndex != -1)
+					{
+						genericArguments[i] = substitutes[substitutionIndex];
+					}
+				}
+				return type.MakeGenericType(genericArguments);
+			}
+			else
+			{
+				return type;
+			}
+		}
+
+		public static Type[] ExtractParametersTypes(
+			ParameterInfo[] baseMethodParameters,
+			Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
 		{
 			Type[] newParameters = new Type[baseMethodParameters.Length];
 
-			for(int i = 0; i < baseMethodParameters.Length; i++)
+			for (int i = 0; i < baseMethodParameters.Length; i++)
 			{
 				ParameterInfo param = baseMethodParameters[i];
 				Type paramType = param.ParameterType;
@@ -138,13 +172,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return newParameters;
 		}
 
-		public static Type ExtractCorrectType(Type paramType,
-		                                      Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
+		public static Type ExtractCorrectType(
+			Type paramType,
+			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
 			if (paramType.IsArray)
 			{
 				int rank = paramType.GetArrayRank();
-				
+
 				Type underlyingType = paramType.GetElementType();
 
 				if (underlyingType.IsGenericParameter)
@@ -185,7 +220,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			Type[] newParameters = new Type[baseMethodParameters.Length];
 
-			for(int i = 0; i < baseMethodParameters.Length; i++)
+			for (int i = 0; i < baseMethodParameters.Length; i++)
 			{
 				ParameterInfo param = baseMethodParameters[i];
 				Type paramType = param.ParameterType;

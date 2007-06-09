@@ -15,7 +15,7 @@
 using System.Runtime.CompilerServices;
 
 #if DOTNET2
-[assembly :
+[assembly:
 	InternalsVisibleTo(
 		"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7"
 		)]
@@ -29,6 +29,7 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using NUnit.Framework;
+	using System.Collections.Generic;
 
 	[TestFixture]
 	public class RhinoMocksTestCase : BasePEVerifyTestCase
@@ -38,8 +39,8 @@ namespace Castle.DynamicProxy.Tests
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
 			IDoubleGeneric<int> proxy =
-				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithTarget(typeof(IDoubleGeneric<int>),
-				                                                               new DoubleGenericImpl<int>(), logger);
+				(IDoubleGeneric<int>)generator.CreateInterfaceProxyWithTarget(typeof(IDoubleGeneric<int>),
+																			   new DoubleGenericImpl<int>(), logger);
 			proxy.Call<string>(1, "");
 			Assert.AreEqual("Call", logger.Invocations[0]);
 		}
@@ -50,8 +51,8 @@ namespace Castle.DynamicProxy.Tests
 			BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor interceptor =
 				new BasicInterfaceProxyWithoutTargetTestCase.ReturnThreeInterceptor();
 			IDoubleGeneric<int> proxy =
-				(IDoubleGeneric<int>) generator.CreateInterfaceProxyWithoutTarget(typeof(IDoubleGeneric<int>),
-				                                                                  interceptor);
+				(IDoubleGeneric<int>)generator.CreateInterfaceProxyWithoutTarget(typeof(IDoubleGeneric<int>),
+																				  interceptor);
 			object o = proxy.Call<string>(1, "");
 			Assert.AreEqual(3, o);
 		}
@@ -60,10 +61,10 @@ namespace Castle.DynamicProxy.Tests
 		public void UsingEvents_Interface()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			
-			IWithEvents proxy = (IWithEvents) generator.CreateInterfaceProxyWithTarget(typeof(IWithEvents),
-			                                                                           new FakeWithEvents(),
-			                                                                           logger);
+
+			IWithEvents proxy = (IWithEvents)generator.CreateInterfaceProxyWithTarget(typeof(IWithEvents),
+																					   new FakeWithEvents(),
+																					   logger);
 
 			Assert.IsNotNull(proxy);
 
@@ -77,10 +78,10 @@ namespace Castle.DynamicProxy.Tests
 		public void UsingEvents_Class()
 		{
 			LogInvocationInterceptor logger = new LogInvocationInterceptor();
-			FakeWithEvents proxy = (FakeWithEvents) generator.CreateClassProxy(
-			                                        	typeof(FakeWithEvents),
-			                                        	ProxyGenerationOptions.Default,
-			                                        	logger);
+			FakeWithEvents proxy = (FakeWithEvents)generator.CreateClassProxy(
+														typeof(FakeWithEvents),
+														ProxyGenerationOptions.Default,
+														logger);
 
 			Assert.IsNotNull(proxy);
 
@@ -93,7 +94,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test, Ignore("I dont think the effort to fix this edge case is worthwhile")]
 		public void NeedingToCreateNewMethodTableSlot()
 		{
-			generator.CreateClassProxy(typeof(MultiClass), new Type[] {typeof(ISpecialMulti)});
+			generator.CreateClassProxy(typeof(MultiClass), new Type[] { typeof(ISpecialMulti) });
 		}
 
 		[Test]
@@ -104,19 +105,64 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ProxyingInternalInterface()
+		{
+			object o = generator.CreateInterfaceProxyWithoutTarget(typeof(IFoo), new StandardInterceptor());
+			Assert.IsNotNull(o);
+		}
+
+		[Test]
 		public void CanProxyDataSet()
 		{
 			generator.CreateClassProxy(typeof(DataSet), new Type[0], new StandardInterceptor());
 		}
 
 		[Test]
+		public void ProxyingComInteraces()
+		{
+			object o = generator
+				.CreateInterfaceProxyWithoutTarget(typeof(IComServiceProvider), new StandardInterceptor());
+			Assert.IsNotNull(o);
+		}
+
+		[Test]
+		public void ProxyingGenericClassWithGenericClassConstraint()
+		{
+			object o = generator
+				.CreateInterfaceProxyWithoutTarget(typeof(IFactory2), new StandardInterceptor());
+			Assert.IsNotNull(o);
+		}
+
+		[Test]
 		public void ProxyInternalMethod()
 		{
 			LogInvocationInterceptor logging = new LogInvocationInterceptor();
-			WithInternalMethod o = (WithInternalMethod) generator.CreateClassProxy(typeof(WithInternalMethod),
-			                                                                       new Type[0], logging);
+			WithInternalMethod o = (WithInternalMethod)generator.CreateClassProxy(typeof(WithInternalMethod),
+																				   new Type[0], logging);
 			o.Foo();
 			Assert.AreEqual("Foo ", logging.LogContents);
+		}
+
+		[Test]
+		public void ProxyingProtectedInternalAbstractMethod()
+		{
+			LogInvocationInterceptor logging = new LogInvocationInterceptor();
+			SomeClassWithProtectedInternalAbstractClass o = (SomeClassWithProtectedInternalAbstractClass)generator.CreateClassProxy(typeof(SomeClassWithProtectedInternalAbstractClass),
+																				   new Type[0], logging);
+			Assert.IsNotNull(o);
+		}
+
+		[Test]
+		public void InternalClassWithInternalMethodAndProperty()
+		{
+			LogInvocationInterceptor logging = new LogInvocationInterceptor();
+			InternalClassWithInternalMembers o = (InternalClassWithInternalMembers)generator.CreateClassProxy(typeof(InternalClassWithInternalMembers),
+																				   new Type[0], logging);
+			Assert.IsNotNull(o);
+			o.TestMethod();
+			Assert.AreEqual(1, logging.Invocations.Count);
+			string t = o.TestProperty;
+			Assert.AreEqual(2, logging.Invocations.Count);
 		}
 
 		public interface IWithEvents
@@ -176,11 +222,48 @@ namespace Castle.DynamicProxy.Tests
 		object Call<T>(One one, T two);
 	}
 
+	internal interface IFoo
+	{
+		int Bar();
+	}
+
 	public class DoubleGenericImpl<One> : IDoubleGeneric<One>
 	{
 		public object Call<T>(One one, T two)
 		{
 			return two;
+		}
+	}
+
+	[ComImport, Guid("6D5140C1-7436-11CE-8034-00AA006009FA"),
+	 InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	public interface IComServiceProvider
+	{
+		[return: MarshalAs(UnmanagedType.IUnknown)]
+		object QueryService([In] ref Guid guidService, [In] ref Guid riid);
+	}
+
+	public interface IFactory2
+	{
+		T Create<T>() where T : List<T>;
+	}
+
+	public abstract class
+		SomeClassWithProtectedInternalAbstractClass
+	{
+		protected internal abstract void Quack();
+	}
+
+	internal class InternalClassWithInternalMembers
+	{
+		internal virtual string TestMethod()
+		{
+			return "TestMethod";
+		}
+
+		internal virtual string TestProperty
+		{
+			get { return "TestProperty"; }
 		}
 	}
 }
