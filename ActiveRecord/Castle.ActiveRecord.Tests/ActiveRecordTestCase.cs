@@ -34,6 +34,7 @@ namespace Castle.ActiveRecord.Tests
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog));
 		}
 
+
 		[Test]
 		public void SimpleOperations()
 		{
@@ -324,6 +325,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
+
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -709,5 +711,28 @@ namespace Castle.ActiveRecord.Tests
 			               	Expression.Eq("Name", "/\ndrew's Blog"),
 			               	Expression.Eq("Author", "Andrew Peters")));
 		}
+
+		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Could not perform Save for BlogWithBrokenField")]
+		public void SaveWithBadTableSchemaThrowsException()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog), typeof(Post));
+			Recreate();
+
+			ActiveRecordStarter.ResetInitializationFlag();
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(BlogWithBrokenField), typeof(Blog), typeof(Post));
+
+			//Make sure a normal save works
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			BlogWithBrokenField brokenBlog = new BlogWithBrokenField();
+			brokenBlog.Name = "hammett's blog";
+			brokenBlog.Author = "hamilton verissimo";
+			brokenBlog.Broken = true;
+			brokenBlog.Save();
+		}
+
 	}
 }

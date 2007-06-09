@@ -305,6 +305,7 @@
     <Compile Include="LazyTestCase.cs" />
     <Compile Include="Model\AnyModel\Models.cs" />
     <Compile Include="Model\CompositeUserType\Product.cs" />
+    <Compile Include="Model\BlogWithBrokenField.cs" />
     <Compile Include="Model\GenericModel\AbstractClass.cs" />
     <Compile Include="Validation\GenericModel\TimeSlotFixedDate.cs" />
     <Compile Include="Model\Octopus.cs" />
