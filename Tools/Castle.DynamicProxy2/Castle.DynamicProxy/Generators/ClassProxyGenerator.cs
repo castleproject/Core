@@ -97,21 +97,21 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
+				
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 
 				// Custom attributes
 
 				ReplicateNonInheritableAttributes(targetType, emitter);
 
-				// Implement builtin Interfaces
-
-				ImplementProxyTargetAccessor(targetType, emitter);
-
 				// Fields generations
 
 				FieldReference interceptorsField =
 					emitter.CreateField("__interceptors", typeof(IInterceptor[]));
 
+				// Implement builtin Interfaces
+				ImplementProxyTargetAccessor(targetType, emitter,interceptorsField);
+				
 				emitter.DefineCustomAttributeFor(interceptorsField, new XmlIgnoreAttribute());
 
 				// Collect methods

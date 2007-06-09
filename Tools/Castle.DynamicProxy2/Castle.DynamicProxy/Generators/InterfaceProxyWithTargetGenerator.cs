@@ -111,9 +111,8 @@ namespace Castle.DynamicProxy.Generators
 				emitter.DefineCustomAttributeFor(targetField, new XmlIgnoreAttribute());
 
 				// Implement builtin Interfaces
-
-				ImplementProxyTargetAccessor(targetType, emitter);
-
+				ImplementProxyTargetAccessor(targetType, emitter,interceptorsField);
+				
 				// Collect methods
 
 				PropertyToGenerate[] propsToGenerate;

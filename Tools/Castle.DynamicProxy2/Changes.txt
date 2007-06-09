@@ -1,6 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
 
+- Applied Adam Tybor's patch fixing DYNPROXY-61 
+  "Need GetInterceptors from IProxyTargetAccessor back for NHibernate Trunk"
+
 - Disabled replication of internal constructors on class proxies.
 
 - Disabled token caching for any methods having anything to do with generics to avoid triggering different CLR bugs (e.g. duplicate methods returned by Type.GetMethods).
