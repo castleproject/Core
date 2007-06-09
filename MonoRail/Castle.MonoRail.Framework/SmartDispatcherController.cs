@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework
 		/// <returns>Error summary instance (can be null if the DataBinder wasn't configured to validate)</returns>
 		protected ErrorSummary GetErrorSummary(object instance)
 		{
-			return validationSummaryPerInstance[instance];
+			return validationSummaryPerInstance.ContainsKey(instance) ? validationSummaryPerInstance[instance] : null;
 		}
 
 		/// <summary>

@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Adam Tybor's patch fixing MR-266
+  "Fix for GetErrorSummary() throwing an KeyNotFoundException for SmartDispatch Controller and Binder"
+
 - Fixed MR-260
   "PropertyBag in WizardStep is null when access via key"
 
