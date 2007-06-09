@@ -153,6 +153,16 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void VirtualMethodCallsFromTheConstructor()
+		{
+			LogInvocationInterceptor logging = new LogInvocationInterceptor();
+			MakeVirtualCallFromCtor o = (MakeVirtualCallFromCtor)generator.CreateClassProxy(typeof(MakeVirtualCallFromCtor),
+																				   new Type[0], logging);
+			Assert.AreEqual(1, logging.Invocations.Count);
+			Assert.IsNotNull(o);
+		}
+
+		[Test]
 		public void InternalClassWithInternalMethodAndProperty()
 		{
 			LogInvocationInterceptor logging = new LogInvocationInterceptor();
@@ -264,6 +274,22 @@ namespace Castle.DynamicProxy.Tests
 		internal virtual string TestProperty
 		{
 			get { return "TestProperty"; }
+		}
+	}
+
+	public class MakeVirtualCallFromCtor
+	{
+		private string name;
+
+		public MakeVirtualCallFromCtor()
+		{
+			Name = "Blah";
+		}
+
+		public virtual string Name
+		{
+			get { return name; }
+			set { name = value; }
 		}
 	}
 }
