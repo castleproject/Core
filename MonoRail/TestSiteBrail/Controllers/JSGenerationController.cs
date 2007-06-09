@@ -32,5 +32,10 @@ namespace TestSiteBrail.Controllers
 
 			RenderView(Action);
 		}
+
+        public void MR264()
+        {
+            
+        }
 	}
 }

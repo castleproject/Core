@@ -154,6 +154,8 @@
     <None Include="Views\jsgeneration\elementreplacehtml.brailjs" />
     <None Include="Views\jsgeneration\index.brail" />
     <None Include="Views\jsgeneration\InsertHtml.brailjs" />
+    <None Include="Views\jsgeneration\mr264.brailjs" />
+    <None Include="Views\jsgeneration\mr264_partial.brail" />
     <None Include="Views\jsgeneration\multipleactions.brailjs" />
     <None Include="Views\jsgeneration\replace.brailjs" />
     <None Include="Views\jsgeneration\replacehtml.brailjs" />
