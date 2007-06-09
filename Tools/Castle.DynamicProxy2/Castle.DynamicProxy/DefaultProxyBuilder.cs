@@ -98,12 +98,10 @@ namespace Castle.DynamicProxy
 			{
 				throw new GeneratorException("Type is not public, so a proxy cannot be generated. Type: " + target.FullName);
 			}
-#if DOTNET2
 			if (target.IsGenericTypeDefinition)
 			{
 				throw new GeneratorException ("Type is a generic tyspe definition, so a proxy cannot be generated. Type: " + target.FullName);
 			}
-#endif
 		}
 
 		private void AssertValidTypes(IEnumerable targetTypes)

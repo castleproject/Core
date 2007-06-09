@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -57,7 +55,7 @@ namespace Castle.DynamicProxy
 			this.interfMethod = interfMethod;
 		}
 
-		public void SetGenericMethodArguments (Type[] arguments)
+		public void SetGenericMethodArguments(Type[] arguments)
 		{
 			genericMethodArguments = arguments;
 		}
@@ -97,9 +95,9 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		public MethodInfo GetConcreteMethod ()
+		public MethodInfo GetConcreteMethod()
 		{
-			return EnsureClosedMethod (Method);
+			return EnsureClosedMethod(Method);
 		}
 
 		public MethodInfo MethodInvocationTarget
@@ -107,28 +105,15 @@ namespace Castle.DynamicProxy
 			get { return targetMethod; }
 		}
 
-		public MethodInfo GetConcreteMethodInvocationTarget ()
+		public MethodInfo GetConcreteMethodInvocationTarget()
 		{
-			return EnsureClosedMethod (MethodInvocationTarget);
-		}
-
-		private MethodInfo EnsureClosedMethod (MethodInfo method)
-		{
-			if (method.ContainsGenericParameters)
-			{
-				Debug.Assert (genericMethodArguments != null);
-				return method.GetGenericMethodDefinition ().MakeGenericMethod (genericMethodArguments);
-			}
-			else
-			{
-				return method;
-			}
+			return EnsureClosedMethod(MethodInvocationTarget);
 		}
 
 		public object ReturnValue
 		{
 			get { return returnValue; }
-			set { returnValue = value; }	
+			set { returnValue = value; }
 		}
 
 		public object[] Arguments
@@ -138,13 +123,11 @@ namespace Castle.DynamicProxy
 
 		public void SetArgumentValue(int index, object value)
 		{
-			//TODO: Boundary checks
 			arguments[index] = value;
 		}
 
 		public object GetArgumentValue(int index)
 		{
-			//TODO: Boundary checks
 			return arguments[index];
 		}
 
@@ -158,7 +141,8 @@ namespace Castle.DynamicProxy
 			}
 			else if (execIndex > interceptors.Length)
 			{
-				throw new InvalidOperationException(@"Proceed() cannot delegate to another interceptor. This usually signify a bug in the calling code");
+				throw new InvalidOperationException(
+					@"Proceed() cannot delegate to another interceptor. This usually signify a bug in the calling code");
 			}
 			else
 			{
@@ -166,12 +150,25 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		protected abstract void InvokeMethodOnTarget();
-
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.SetType(typeof(RemotableInvocation));
 			info.AddValue("invocation", new RemotableInvocation(this));
+		}
+
+		protected abstract void InvokeMethodOnTarget();
+
+		private MethodInfo EnsureClosedMethod(MethodInfo method)
+		{
+			if (method.ContainsGenericParameters)
+			{
+				Debug.Assert(genericMethodArguments != null);
+				return method.GetGenericMethodDefinition().MakeGenericMethod(genericMethodArguments);
+			}
+			else
+			{
+				return method;
+			}
 		}
 	}
 }

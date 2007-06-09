@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Threading;
@@ -24,8 +25,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using System.Collections.Generic;
-
 
 	/// <summary>
 	/// 
@@ -40,13 +39,13 @@ namespace Castle.DynamicProxy.Generators
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type theInterface)
 			: base(scope, theInterface)
 		{
-			CheckNotGenericTypeDefinition (theInterface, "theInterface");
+			CheckNotGenericTypeDefinition(theInterface, "theInterface");
 		}
 
 		public Type GenerateCode(Type proxyTargetType, Type[] interfaces, ProxyGenerationOptions options)
 		{
-			CheckNotGenericTypeDefinition (proxyTargetType, "proxyTargetType");
-			CheckNotGenericTypeDefinitions (interfaces, "interfaces");
+			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			Type generatedType;
 
 			ReaderWriterLock rwlock = Scope.RWLock;
@@ -167,8 +166,8 @@ namespace Castle.DynamicProxy.Generators
 
 				if (!proxyTargetType.IsInterface)
 				{
-					CacheMethodTokens(emitter, MethodFinder.GetAllInstanceMethods (proxyTargetType,
-					                  BindingFlags.Public | BindingFlags.Instance),
+					CacheMethodTokens(emitter, MethodFinder.GetAllInstanceMethods(proxyTargetType,
+					                                                              BindingFlags.Public | BindingFlags.Instance),
 					                  typeInitializer);
 				}
 
@@ -376,16 +375,15 @@ namespace Castle.DynamicProxy.Generators
 			// as the interface generic arguments
 
 			MemberInfo[] members = proxyTargetType.FindMembers(MemberTypes.Method,
-												   BindingFlags.Public | BindingFlags.Instance,
-				delegate(MemberInfo mi, object criteria)
-				{
-					if (mi.Name != criteria.ToString()) return false;
+			                                                   BindingFlags.Public | BindingFlags.Instance,
+			                                                   delegate(MemberInfo mi, object criteria)
+			                                                   	{
+			                                                   		if (mi.Name != criteria.ToString()) return false;
 
-					MethodInfo methodInfo = (MethodInfo)mi;
+			                                                   		MethodInfo methodInfo = (MethodInfo) mi;
 
-					return IsEquivalentMethod(methodInfo, methodOnInterface);
-
-				}, methodOnInterface.Name);
+			                                                   		return IsEquivalentMethod(methodInfo, methodOnInterface);
+			                                                   	}, methodOnInterface.Name);
 
 
 			if (members.Length == 0)
@@ -393,9 +391,10 @@ namespace Castle.DynamicProxy.Generators
 				// Before throwing an exception, we look for an explicit
 				// interface method implementation
 
-				MethodInfo[] privateMethods = MethodFinder.GetAllInstanceMethods (proxyTargetType, BindingFlags.NonPublic | BindingFlags.Instance);
+				MethodInfo[] privateMethods =
+					MethodFinder.GetAllInstanceMethods(proxyTargetType, BindingFlags.NonPublic | BindingFlags.Instance);
 
-				foreach (MethodInfo methodInfo in privateMethods)
+				foreach(MethodInfo methodInfo in privateMethods)
 				{
 					// We make sure it is a method used for explicit implementation
 
@@ -407,22 +406,26 @@ namespace Castle.DynamicProxy.Generators
 					if (IsEquivalentMethod(methodInfo, methodOnInterface))
 					{
 						throw new GeneratorException(String.Format("DynamicProxy cannot create an interface (with target) " +
-							"proxy for '{0}' as the target '{1}' has an explicit implementation of one of the methods exposed by the interface. " +
-							"The runtime prevents use from invoking the private method on the target. Method {2}", methodOnInterface.DeclaringType.Name, methodInfo.DeclaringType.Name, methodInfo.Name));
+						                                           "proxy for '{0}' as the target '{1}' has an explicit implementation of one of the methods exposed by the interface. " +
+						                                           "The runtime prevents use from invoking the private method on the target. Method {2}",
+						                                           methodOnInterface.DeclaringType.Name, methodInfo.DeclaringType.Name,
+						                                           methodInfo.Name));
 					}
 				}
 			}
 
 			if (members.Length > 1)
 			{
-				throw new GeneratorException("Found more than one method on target " + proxyTargetType.FullName + " matching " + methodOnInterface.Name);
+				throw new GeneratorException("Found more than one method on target " + proxyTargetType.FullName + " matching " +
+				                             methodOnInterface.Name);
 			}
 			else if (members.Length == 0)
 			{
-				throw new GeneratorException("Could not find a matching method on " + proxyTargetType.FullName + ". Method " + methodOnInterface.Name);
+				throw new GeneratorException("Could not find a matching method on " + proxyTargetType.FullName + ". Method " +
+				                             methodOnInterface.Name);
 			}
 
-			return (MethodInfo)members[0];
+			return (MethodInfo) members[0];
 		}
 
 		/// <summary>

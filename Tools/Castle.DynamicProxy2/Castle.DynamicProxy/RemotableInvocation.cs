@@ -87,9 +87,9 @@ namespace Castle.DynamicProxy
 			get { return parent.Method; }
 		}
 
-		public MethodInfo GetConcreteMethod ()
+		public MethodInfo GetConcreteMethod()
 		{
-			return parent.GetConcreteMethod ();
+			return parent.GetConcreteMethod();
 		}
 
 		/// <summary>
@@ -101,9 +101,9 @@ namespace Castle.DynamicProxy
 			get { return parent.MethodInvocationTarget; }
 		}
 
-		public MethodInfo GetConcreteMethodInvocationTarget ()
+		public MethodInfo GetConcreteMethodInvocationTarget()
 		{
-			return parent.GetConcreteMethodInvocationTarget ();
+			return parent.GetConcreteMethodInvocationTarget();
 		}
 
 		public object ReturnValue

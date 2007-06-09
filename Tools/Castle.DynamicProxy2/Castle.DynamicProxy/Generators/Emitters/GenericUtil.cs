@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
-
 namespace Castle.DynamicProxy.Generators.Emitters
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Reflection;
+	using System.Reflection.Emit;
+
 	internal delegate GenericTypeParameterBuilder[] ApplyGenArgs(String[] argumentNames);
 
 	internal class GenericUtil
@@ -29,22 +29,19 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (parentEmitter.GenericTypeParams == null) return;
 
-			foreach (GenericTypeParameterBuilder genType in parentEmitter.GenericTypeParams)
+			foreach(GenericTypeParameterBuilder genType in parentEmitter.GenericTypeParams)
 			{
 				name2GenericType.Add(genType.Name, genType);
 			}
 		}
 
 		public static GenericTypeParameterBuilder[] DefineGenericArguments(
-			Type[] genericArguments,
-			TypeBuilder builder,
-			Dictionary<String, GenericTypeParameterBuilder>
-				name2GenericType)
+			Type[] genericArguments, TypeBuilder builder, 
+			Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
 		{
-			return DefineGenericArguments(genericArguments, name2GenericType, delegate(String[] args)
-			{
-				return builder.DefineGenericParameters(args);
-			});
+			return
+				DefineGenericArguments(genericArguments, name2GenericType,
+				                       delegate(String[] args) { return builder.DefineGenericParameters(args); });
 		}
 
 		public static GenericTypeParameterBuilder[] DefineGenericArguments(
@@ -53,10 +50,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Dictionary<String, GenericTypeParameterBuilder>
 				name2GenericType)
 		{
-			return DefineGenericArguments(genericArguments, name2GenericType, delegate(String[] args)
-			{
-				return builder.DefineGenericParameters(args);
-			});
+			return
+				DefineGenericArguments(genericArguments, name2GenericType,
+				                       delegate(String[] args) { return builder.DefineGenericParameters(args); });
 		}
 
 		private static GenericTypeParameterBuilder[] DefineGenericArguments(
@@ -69,7 +65,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			String[] argumentNames = new String[genericArguments.Length];
 
-			for (int i = 0; i < argumentNames.Length; i++)
+			for(int i = 0; i < argumentNames.Length; i++)
 			{
 				argumentNames[i] = genericArguments[i].Name;
 			}
@@ -78,7 +74,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				genericTypeParams = gen(argumentNames);
 
-				for (int i = 0; i < genericTypeParams.Length; i++)
+				for(int i = 0; i < genericTypeParams.Length; i++)
 				{
 					try
 					{
@@ -87,21 +83,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 						genericTypeParams[i].SetGenericParameterAttributes(attributes);
 
-						Type[] interfacesConstraints = Array.FindAll(types, delegate(Type type)
-						{
-							return type.IsInterface;
-						});
+						Type[] interfacesConstraints = Array.FindAll(types, delegate(Type type) { return type.IsInterface; });
 
-						Type baseClassConstraint = Array.Find(types, delegate(Type type)
-						{
-							return type.IsClass;
-						});
+						Type baseClassConstraint = Array.Find(types, delegate(Type type) { return type.IsClass; });
 
 						if (interfacesConstraints.Length != 0)
 						{
-							for (int j = 0; j < interfacesConstraints.Length; ++j)
+							for(int j = 0; j < interfacesConstraints.Length; ++j)
 							{
-								interfacesConstraints[j] = SubstituteGenericArguments(interfacesConstraints[j], genericArguments, genericTypeParams);
+								interfacesConstraints[j] =
+									SubstituteGenericArguments(interfacesConstraints[j], genericArguments, genericTypeParams);
 							}
 							genericTypeParams[i].SetInterfaceConstraints(interfacesConstraints);
 						}
@@ -112,7 +103,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 							genericTypeParams[i].SetBaseTypeConstraint(baseClassConstraint);
 						}
 					}
-					catch (NotSupportedException)
+					catch(NotSupportedException)
 					{
 						// Doesnt matter
 
@@ -139,7 +130,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				Type[] genericArguments = type.GetGenericArguments();
 				type = type.GetGenericTypeDefinition();
 
-				for (int i = 0; i < genericArguments.Length; ++i)
+				for(int i = 0; i < genericArguments.Length; ++i)
 				{
 					int substitutionIndex = Array.IndexOf(argumentsToSubstitute, genericArguments[i]);
 					if (substitutionIndex != -1)
@@ -161,7 +152,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			Type[] newParameters = new Type[baseMethodParameters.Length];
 
-			for (int i = 0; i < baseMethodParameters.Length; i++)
+			for(int i = 0; i < baseMethodParameters.Length; i++)
 			{
 				ParameterInfo param = baseMethodParameters[i];
 				Type paramType = param.ParameterType;
@@ -220,7 +211,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			Type[] newParameters = new Type[baseMethodParameters.Length];
 
-			for (int i = 0; i < baseMethodParameters.Length; i++)
+			for(int i = 0; i < baseMethodParameters.Length; i++)
 			{
 				ParameterInfo param = baseMethodParameters[i];
 				Type paramType = param.ParameterType;

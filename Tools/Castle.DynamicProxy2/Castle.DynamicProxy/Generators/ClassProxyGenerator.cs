@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
@@ -25,7 +26,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using System.Collections.Generic;
 
 	/// <summary>
 	/// 
@@ -35,14 +35,14 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private bool delegateToBaseGetObjectData = false;
 
-		public ClassProxyGenerator(ModuleScope scope, Type targetType): base(scope, targetType)
+		public ClassProxyGenerator(ModuleScope scope, Type targetType) : base(scope, targetType)
 		{
-			CheckNotGenericTypeDefinition (targetType, "targetType");
+			CheckNotGenericTypeDefinition(targetType, "targetType");
 		}
 
 		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
 		{
-			CheckNotGenericTypeDefinitions (interfaces, "interfaces");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			Type type;
 
 			ReaderWriterLock rwlock = Scope.RWLock;
@@ -85,11 +85,11 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				AddDefaultInterfaces(interfaceList);
-				
+
 				if (targetType.IsSerializable)
 				{
 					delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType);
-					
+
 					if (!interfaceList.Contains(typeof(ISerializable)))
 					{
 						interfaceList.Add(typeof(ISerializable));
@@ -174,9 +174,9 @@ namespace Castle.DynamicProxy.Generators
 
 				foreach(MethodInfo method in methods)
 				{
-					if (method.IsSpecialName && 
-						(method.Name.StartsWith("get_") || method.Name.StartsWith("set_") ||
-						method.Name.StartsWith("add_") || method.Name.StartsWith("remove_")) || 
+					if (method.IsSpecialName &&
+					    (method.Name.StartsWith("get_") || method.Name.StartsWith("set_") ||
+					     method.Name.StartsWith("add_") || method.Name.StartsWith("remove_")) ||
 					    methodsToSkip.Contains(method))
 					{
 						continue;
@@ -310,8 +310,9 @@ namespace Castle.DynamicProxy.Generators
 				                               new TypeTokenExpression(typeof(IInterceptor[])));
 
 			constr.CodeBuilder.AddStatement(new AssignStatement(
-												interceptorField,
-												new ConvertExpression(typeof(IInterceptor[]), typeof(object), getInterceptorInvocation)));
+			                                	interceptorField,
+			                                	new ConvertExpression(typeof(IInterceptor[]), typeof(object),
+			                                	                      getInterceptorInvocation)));
 
 			constr.CodeBuilder.AddStatement(new ReturnStatement());
 		}

@@ -49,6 +49,6 @@ namespace Castle.DynamicProxy.Generators
 		public static MethodInfo GetMethodFromHandle2 =
 			typeof(MethodBase).GetMethod(
 				"GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
-				new Type[] { typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle) }, null);
+				new Type[] {typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle)}, null);
 	}
 }

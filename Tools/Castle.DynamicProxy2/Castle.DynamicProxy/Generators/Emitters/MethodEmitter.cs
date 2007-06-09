@@ -15,11 +15,11 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using System.Collections.Generic;
 
 	[CLSCompliant(false)]
 	public class MethodEmitter : IMemberEmitter
@@ -30,6 +30,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private MethodCodeBuilder codebuilder;
 		private AbstractTypeEmitter maintype;
 		private GenericTypeParameterBuilder[] genericTypeParams;
+
 		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
 			new Dictionary<string, GenericTypeParameterBuilder>();
 
@@ -129,7 +130,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return arguments; }
 		}
 
-		public /*internal*/ MethodBuilder MethodBuilder
+		public MethodBuilder MethodBuilder
 		{
 			get { return builder; }
 		}
@@ -161,8 +162,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void DefineCustomAttribute(Attribute attribute)
 		{
 			CustomAttributeBuilder customAttributeBuilder = CustomAttributeUtil.CreateCustomAttribute(attribute);
+			
 			if (customAttributeBuilder == null)
+			{
 				return;
+			}
+			
 			builder.SetCustomAttribute(customAttributeBuilder);
 		}
 
@@ -171,7 +176,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			foreach(ParameterInfo parameterInfo in info)
 			{
 				builder.DefineParameter(parameterInfo.Position + 1, parameterInfo.Attributes, parameterInfo.Name);
-				// builder.DefineGenericParameters()
 			}
 		}
 	}

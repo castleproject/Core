@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy
 {
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 	using System.Threading;
@@ -21,7 +22,7 @@ namespace Castle.DynamicProxy
 	public class InternalsHelper
 	{
 		private static ReaderWriterLock internalsToDynProxyLock = new ReaderWriterLock();
-		private static System.Collections.Generic.IDictionary<Assembly, bool> internalsToDynProxy = new System.Collections.Generic.Dictionary<Assembly, bool>();
+		private static IDictionary<Assembly, bool> internalsToDynProxy = new Dictionary<Assembly, bool>();
 
 		/// <summary>
 		/// Determines whether this assembly has internals visisble to dynamic proxy.
@@ -48,11 +49,11 @@ namespace Castle.DynamicProxy
 				}
 
 				InternalsVisibleToAttribute[] atts = (InternalsVisibleToAttribute[])
-													 asm.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
+				                                     asm.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
 
 				bool found = false;
 
-				foreach (InternalsVisibleToAttribute internals in atts)
+				foreach(InternalsVisibleToAttribute internals in atts)
 				{
 					if (internals.AssemblyName.Contains(ModuleScope.ASSEMBLY_NAME))
 					{

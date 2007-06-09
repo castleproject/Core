@@ -17,10 +17,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using System.Collections.Generic;
 
 	[CLSCompliant(false)]
 	public abstract class AbstractTypeEmitter
@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			ArrayList types = new ArrayList();
 
-			foreach (Type genType in genericType.GetGenericArguments())
+			foreach(Type genType in genericType.GetGenericArguments())
 			{
 				if (genType.IsGenericParameter)
 				{
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
 			List<Type> types = new List<Type>();
-			foreach (Type genType in genericMethod.GetGenericArguments())
+			foreach(Type genType in genericMethod.GetGenericArguments())
 			{
 				types.Add(name2GenericType[genType.Name]);
 			}
