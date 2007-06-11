@@ -88,18 +88,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException),
-			ExpectedMessage = "MethodFinder only supports the Public, NonPublic, and Instance binding flags."
-			                  + "\r\nParameter name: flags")]
+		[ExpectedException(typeof(ArgumentException))]
 		public void GetMethodsThrowsOnStatic()
 		{
 			MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException),
-			ExpectedMessage = "MethodFinder only supports the Public, NonPublic, and Instance binding flags."
-			                  + "\r\nParameter name: flags")]
+		[ExpectedException(typeof(ArgumentException))]
 		public void GetMethodsThrowsOnOtherFlags()
 		{
 			MethodFinder.GetAllInstanceMethods(typeof(object),
