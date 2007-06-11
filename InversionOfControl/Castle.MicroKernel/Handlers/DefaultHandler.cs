@@ -48,8 +48,9 @@ namespace Castle.MicroKernel.Handlers
 			}
 
 			using (context.ResolvingHandler(this))
-				return lifestyleManager.Resolve(context);
-
+			{
+			    return lifestyleManager.Resolve(context);
+			}
 		}
 
 		/// <summary>

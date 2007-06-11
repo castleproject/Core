@@ -16,79 +16,82 @@
 
 namespace Castle.MicroKernel.Handlers
 {
-	using System;
-	using System.Collections.Generic;
-	using Castle.Core;
+    using System;
+    using System.Collections.Generic;
+    using Castle.Core;
 
-	/// <summary>
-	/// Summary description for DefaultGenericHandler.
-	/// </summary>
-	/// <remarks>
-	/// TODO: Consider refactoring AbstractHandler moving lifestylemanager
-	/// creation to DefaultHandler
-	/// </remarks>
-	[Serializable]
-	public class DefaultGenericHandler : AbstractHandler
-	{
-		private readonly IDictionary<Type, IHandler> type2SubHandler;
+    /// <summary>
+    /// Summary description for DefaultGenericHandler.
+    /// </summary>
+    /// <remarks>
+    /// TODO: Consider refactoring AbstractHandler moving lifestylemanager
+    /// creation to DefaultHandler
+    /// </remarks>
+    [Serializable]
+    public class DefaultGenericHandler : AbstractHandler
+    {
+        private readonly IDictionary<Type, IHandler> type2SubHandler;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DefaultGenericHandler"/> class.
-		/// </summary>
-		/// <param name="model"></param>
-		public DefaultGenericHandler(ComponentModel model)
-			: base(model)
-		{
-			type2SubHandler = new Dictionary<Type, IHandler>();
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultGenericHandler"/> class.
+        /// </summary>
+        /// <param name="model"></param>
+        public DefaultGenericHandler(ComponentModel model)
+            : base(model)
+        {
+            type2SubHandler = new Dictionary<Type, IHandler>();
+        }
 
-		public override object Resolve(CreationContext context)
-		{
-			Type implType = ComponentModel.Implementation.MakeGenericType(context.GenericArguments);
+        public override object Resolve(CreationContext context)
+        {
+            Type implType = ComponentModel.Implementation.MakeGenericType(context.GenericArguments);
 
-			IHandler handler = GetSubHandler(context, implType);
+            IHandler handler = GetSubHandler(context, implType);
 
-			using (context.ResolvingHandler(handler))
-				return handler.Resolve(context);
-		}
+            //so the generic version wouldn't be considered as well
+            using (context.ResolvingHandler(this))
+            {
+                return handler.Resolve(context);
+            }
+        }
 
-		public override void Release(object instance)
-		{
-			IHandler handler = GetSubHandler(CreationContext.Empty, instance.GetType());
+        public override void Release(object instance)
+        {
+            IHandler handler = GetSubHandler(CreationContext.Empty, instance.GetType());
 
-			handler.Release(instance);
-		}
+            handler.Release(instance);
+        }
 
-		protected IHandler GetSubHandler(CreationContext context, Type genericType)
-		{
-			lock (type2SubHandler)
-			{
-				IHandler handler;
+        protected IHandler GetSubHandler(CreationContext context, Type genericType)
+        {
+            lock (type2SubHandler)
+            {
+                IHandler handler;
 
-				if (type2SubHandler.ContainsKey(genericType))
-				{
-					handler = type2SubHandler[genericType];
-				}
-				else
-				{
-					Type service = ComponentModel.Service.MakeGenericType(context.GenericArguments);
+                if (type2SubHandler.ContainsKey(genericType))
+                {
+                    handler = type2SubHandler[genericType];
+                }
+                else
+                {
+                    Type service = ComponentModel.Service.MakeGenericType(context.GenericArguments);
 
-					ComponentModel newModel = Kernel.ComponentModelBuilder.BuildModel(
-						ComponentModel.Name, service, genericType, null);
+                    ComponentModel newModel = Kernel.ComponentModelBuilder.BuildModel(
+                        ComponentModel.Name, service, genericType, null);
 
-					newModel.ExtendedProperties[ComponentModel.SkipRegistration] = true;
+                    newModel.ExtendedProperties[ComponentModel.SkipRegistration] = true;
 
-					Kernel.AddCustomComponent(newModel);
+                    Kernel.AddCustomComponent(newModel);
 
-					handler = Kernel.HandlerFactory.Create(newModel);
+                    handler = Kernel.HandlerFactory.Create(newModel);
 
-					type2SubHandler[genericType] = handler;
-				}
+                    type2SubHandler[genericType] = handler;
+                }
 
-				return handler;
-			}
-		}
-	}
+                return handler;
+            }
+        }
+    }
 }
 
 #endif

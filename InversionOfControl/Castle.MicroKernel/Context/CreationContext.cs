@@ -49,7 +49,7 @@ namespace Castle.MicroKernel
 		/// We track that in order to try to avoid attempts to resolve a service
 		/// with itself.
 		/// </summary>
-		private readonly IList handlersChain = new ArrayList();
+        private readonly ArrayList handlersChain = new ArrayList();
 
 		private readonly IDictionary additionalArguments;
 
@@ -68,7 +68,6 @@ namespace Castle.MicroKernel
 		public CreationContext(IHandler handler, IDictionary additionalArguments)
 		{
 			this.handler = handler;
-			handlersChain.Add(handler);
 			this.additionalArguments = additionalArguments;
 			dependencies = new DependencyModelCollection();
 		}
@@ -79,10 +78,11 @@ namespace Castle.MicroKernel
 			this.dependencies = new DependencyModelCollection(dependencies);
 		}
 
-		public CreationContext(IHandler handler, DependencyModelCollection dependencies)
+		public CreationContext(IHandler handler, DependencyModelCollection dependencies, IList handlersChain)
 			: this(handler, (IDictionary)null)
 		{
 			this.dependencies = new DependencyModelCollection(dependencies);
+            this.handlersChain.AddRange(handlersChain);
 		}
 
 #if DOTNET2
@@ -95,7 +95,7 @@ namespace Castle.MicroKernel
 
 		public CreationContext(IHandler handler, Type typeToExtractGenericArguments,
 							   CreationContext parentContext)
-			: this(handler, parentContext.Dependencies)
+			: this(handler, parentContext.Dependencies, parentContext.handlersChain)
 		{
 			additionalArguments = parentContext.additionalArguments;
 			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
@@ -173,19 +173,19 @@ namespace Castle.MicroKernel
 		/// </summary>
 		public bool HandlerIsCurrentlyBeingResolved(IHandler handlerToTest)
 		{
-			return this.handlersChain.Contains(handlerToTest);
+			return handlersChain.Contains(handlerToTest);
 		}
 
 		public IDisposable ResolvingHandler(IHandler handlerBeingResolved)
 		{
-			this.handlersChain.Add(handlerBeingResolved);
+			handlersChain.Add(handlerBeingResolved);
 			return new RemoveHandlerFromCurrentlyResolving(this, handlerBeingResolved);
 		}
 
 		private class RemoveHandlerFromCurrentlyResolving : IDisposable
 		{
-			private CreationContext parent;
-			private IHandler handler;
+			private readonly CreationContext parent;
+			private readonly IHandler handler;
 
 			public RemoveHandlerFromCurrentlyResolving(CreationContext parent, IHandler handler)
 			{

@@ -325,6 +325,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="DotNet2Config\chainOfRespnsability.config" />
+    <None Include="DotNet2Config\chainOfRespnsability_smart.config" />
     <EmbeddedResource Include="Configuration2\env_config.xml" />
     <EmbeddedResource Include="Configuration2\eval_config.xml" />
     <Content Include="Configuration2\synchtest_config.xml" />
