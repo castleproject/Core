@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<components>
+		<component id="my demo"
+				   service="Castle.Facilities.WcfIntegration.Demo.IAmUsingWindsor, Castle.Facilities.WcfIntegration.Demo"
+				   type="Castle.Facilities.WcfIntegration.Demo.UsingWindsor, Castle.Facilities.WcfIntegration.Demo">
+			<parameters>
+				<number>42</number>
+			</parameters>
+		</component>
+	</components>
+</configuration>

@@ -1,0 +1,2 @@
+<% @ServiceHost Service="my demo" 
+	Factory="Castle.Facilities.WcfIntegration.WindsorServiceHostFactory, Castle.Facilities.WcfIntegration" %>
