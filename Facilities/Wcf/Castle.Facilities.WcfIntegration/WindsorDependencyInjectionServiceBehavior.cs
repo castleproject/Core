@@ -1,14 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
-using System.ServiceModel.Dispatcher;
-using Castle.Windsor;
+﻿// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.ServiceModel;
+	using System.ServiceModel.Channels;
+	using System.ServiceModel.Description;
+	using System.ServiceModel.Dispatcher;
+	using Windsor;
+
 	public class WindsorDependencyInjectionServiceBehavior : IServiceBehavior
 	{
 		private readonly IWindsorContainer container;
@@ -17,6 +31,8 @@ namespace Castle.Facilities.WcfIntegration
 		{
 			this.container = container;
 		}
+
+		#region IServiceBehavior Members
 
 		///<summary>
 		///Provides the ability to inspect the service host and the service description to confirm that the service can run successfully.
@@ -34,8 +50,9 @@ namespace Castle.Facilities.WcfIntegration
 		///<param name="bindingParameters">Custom objects to which binding elements have access.</param>
 		///<param name="serviceDescription">The service description of the service.</param>
 		///<param name="endpoints">The service endpoints.</param>
-		public void AddBindingParameters(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase,
-		                                 Collection<ServiceEndpoint> endpoints, BindingParameterCollection bindingParameters)
+		public void AddBindingParameters(
+			ServiceDescription serviceDescription, ServiceHostBase serviceHostBase,
+			Collection<ServiceEndpoint> endpoints, BindingParameterCollection bindingParameters)
 		{
 		}
 
@@ -57,12 +74,14 @@ namespace Castle.Facilities.WcfIntegration
 						{
 							ed.DispatchRuntime.InstanceProvider =
 								new WindsorInstanceProvider(container,
-									contractNameToContractType[ed.ContractName]
+								                            contractNameToContractType[ed.ContractName]
 									);
 						}
 					}
 				}
 			}
 		}
+
+		#endregion
 	}
 }

@@ -1,21 +1,29 @@
-using System;
-using System.ServiceModel;
-using System.ServiceModel.Activation;
-using System.Web;
-using Castle.MicroKernel;
-using Castle.Windsor;
+﻿// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace Castle.Facilities.WcfIntegration
 {
+	using System;
+	using System.ServiceModel;
+	using System.ServiceModel.Activation;
+	using MicroKernel;
+	using Windsor;
+
 	public class WindsorServiceHostFactory : ServiceHostFactory
 	{
-		public static void RegisterContainer(IWindsorContainer container)
-		{
-			WindsorServiceHostFactory.globalContainer = container;
-		}
-
-		private readonly IWindsorContainer container;
 		private static IWindsorContainer globalContainer;
+		private readonly IWindsorContainer container;
 
 		public WindsorServiceHostFactory()
 			: this(globalContainer)
@@ -30,6 +38,16 @@ namespace Castle.Facilities.WcfIntegration
 				                                "Container was null, did you forgot to call WindsorServiceHostFactory.RegisterContainer() ?");
 			}
 			this.container = container;
+		}
+
+		private IWindsorContainer Container
+		{
+			get { return container; }
+		}
+
+		public static void RegisterContainer(IWindsorContainer container)
+		{
+			globalContainer = container;
 		}
 
 		public override ServiceHostBase CreateServiceHost(string constructorString, Uri[] baseAddresses)
@@ -52,14 +70,6 @@ namespace Castle.Facilities.WcfIntegration
 					string.Format("Could not find a component with {0} {1}, did you forget to register it?", constructorStringType, constructorString));
 
 			return CreateServiceHost(handler.ComponentModel.Implementation, baseAddresses);
-		}
-
-		private IWindsorContainer Container
-		{
-			get
-			{
-				return container;
-			}
 		}
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
