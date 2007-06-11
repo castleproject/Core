@@ -1,7 +1,3 @@
-$Ajax.InstallScripts()
-$Scriptaculous.InstallScripts()
-$Form.InstallScripts()
-
 <h2>New ${model.Type.Name}</h2>
 
 #if($flash.errors)
