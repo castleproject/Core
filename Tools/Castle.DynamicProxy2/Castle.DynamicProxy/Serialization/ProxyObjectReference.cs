@@ -89,7 +89,7 @@ namespace Castle.DynamicProxy.Serialization
 					generator = new InterfaceProxyWithTargetGenerator(_scope, theInterface);
 					break;
 				case InterfaceGeneratorType.WithoutTarget:
-					generator = new InterfaceProxyGeneratorWithoutTarget(_scope, theInterface);
+					generator = new InterfaceProxyWithoutTargetGenerator(_scope, theInterface);
 					break;
 				case InterfaceGeneratorType.WithTargetInterface:
 					generator = new InterfaceProxyWithTargetInterfaceGenerator(_scope, theInterface);

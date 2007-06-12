@@ -61,8 +61,8 @@ namespace Castle.DynamicProxy
 			AssertValidType(theInterface);
 			AssertValidTypes(interfaces);
 
-			InterfaceProxyGeneratorWithoutTarget generatorWithoutTarget =
-				new InterfaceProxyGeneratorWithoutTarget(scope, theInterface);
+			InterfaceProxyWithoutTargetGenerator generatorWithoutTarget =
+				new InterfaceProxyWithoutTargetGenerator(scope, theInterface);
 
 			return generatorWithoutTarget.GenerateCode(typeof(object), interfaces, options);
 		}

@@ -245,7 +245,7 @@
     <Compile Include="Generators\GeneratorException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Generators\InterfaceProxyGeneratorWithoutTarget.cs" />
+    <Compile Include="Generators\InterfaceProxyWithoutTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetGenerator.cs" />
     <Compile Include="Generators\InterfaceProxyWithTargetInterfaceGenerator.cs" />
     <Compile Include="Generators\MethodFinder.cs" />

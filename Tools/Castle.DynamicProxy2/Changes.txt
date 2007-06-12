@@ -1,5 +1,7 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Renamed InterfaceProxyGeneratorWithoutTarget to InterfaceProxyWithoutTargetGenerator
+
 - Fixed DYNPROXY-62
   "Some tests in MethodFinderTestCase failed because of culture specific exception messages"
 
