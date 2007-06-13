@@ -245,7 +245,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Generates and executes the drop scripts for the database.
+		/// Generates the drop scripts for the database saving them to the supplied file name. 
 		/// </summary>
 		public static void GenerateDropScripts(String fileName)
 		{
