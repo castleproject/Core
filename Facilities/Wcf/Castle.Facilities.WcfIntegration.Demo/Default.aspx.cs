@@ -18,7 +18,7 @@ namespace Castle.Facilities.WcfIntegration.Demo
 	using System.Web.UI;
 	using UsingWindsorSvc;
 
-	public partial class _Default : Page
+	public partial class Default : Page
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{

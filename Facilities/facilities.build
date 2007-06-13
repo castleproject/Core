@@ -24,6 +24,9 @@
 		<include name="Prevalence/Prevalence.build" />
 		<include name="Synchronize/Synchronize.build" />
 		<include name="Db4o/Db4o.build" />
+		
+		<!-- probably need a better way to detect if .Net 3.0 is installed -->
+		<include name="Wcf/default.build" if="${file::exists('C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.ServiceModel.dll')}"/>
 	</fileset>
 
 	<target name="build" depends="common.build" />
