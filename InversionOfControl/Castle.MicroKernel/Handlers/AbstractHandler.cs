@@ -393,6 +393,10 @@ namespace Castle.MicroKernel.Handlers
 				}
 			}
 
+			if (state == HandlerState.Valid)
+			{
+				DisconnectEvents();
+			}
 		}
 
 		/// <summary>
@@ -530,10 +534,9 @@ namespace Castle.MicroKernel.Handlers
 				SetNewState(HandlerState.Valid);
 				stateChanged = true;
 
-				// We don't need these anymore
+				DisconnectEvents();
 
-				Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
-				Kernel.AddedAsChildKernel -= new EventHandler(OnAddedAsChildKernel);
+				// We don't need these anymore
 
 				dependenciesByKey = null;
 				dependenciesByService = null;
@@ -679,6 +682,12 @@ namespace Castle.MicroKernel.Handlers
 			{
 				OnHandlerStateChanged(this, EventArgs.Empty);
 			}
+		}
+
+		private void DisconnectEvents()
+		{
+			Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
+			Kernel.AddedAsChildKernel -= new EventHandler(OnAddedAsChildKernel);
 		}
 	}
 }

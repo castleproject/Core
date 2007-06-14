@@ -24,11 +24,7 @@ namespace Castle.MicroKernel.Releasers
 	public class AllComponentsReleasePolicy : IReleasePolicy
 	{
 		private IDictionary instance2Handler = Hashtable.Synchronized(
-#if DOTNET2
 			new Hashtable(new Util.ReferenceEqualityComparer()));
-#else
-			new Hashtable(CaseInsensitiveHashCodeProvider.Default, new Util.ReferenceComparer()));
-#endif
 
 		public AllComponentsReleasePolicy()
 		{

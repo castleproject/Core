@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel.Releasers
 {
 	using System;
-
 	using Castle.Core;
 
 	/// <summary>

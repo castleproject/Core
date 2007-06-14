@@ -86,7 +86,6 @@ namespace Castle.MicroKernel
 			remove { events.RemoveHandler(ComponentUnregisteredEvent, value); }
 		}
 
-
 		/// <summary>
 		/// Pending
 		/// </summary>
@@ -136,13 +135,11 @@ namespace Castle.MicroKernel
 			remove { events.RemoveHandler(ComponentModelCreatedEvent, value); }
 		}
 
-
 		public event DependencyDelegate DependencyResolving
 		{
 			add { events.AddHandler(DependencyResolvingEvent, value); }
 			remove { events.RemoveHandler(DependencyResolvingEvent, value); }
 		}
-
 
 		protected virtual void RaiseComponentRegistered(String key, IHandler handler)
 		{
