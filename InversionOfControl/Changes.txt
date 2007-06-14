@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied Alex Henderson's patch that makes the ComponentModel available
+  to the ILifestyleManager
+
 - Applied Adam Mills's patch fixing IOC-74
   "BinaryComponentName VisitNode null check"
 

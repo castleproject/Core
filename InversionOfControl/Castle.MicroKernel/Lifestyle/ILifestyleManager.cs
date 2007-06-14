@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel
 {
 	using System;
+	using Castle.Core;
 
 	/// <summary>
 	/// The <c>ILifestyleManager</c> implements 
@@ -34,7 +35,8 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="componentActivator"></param>
 		/// <param name="kernel"></param>
-		void Init(IComponentActivator componentActivator, IKernel kernel);
+		/// <param name="model"></param>
+		void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model);
 
 		/// <summary>
 		/// Implementors should return the component instance based 

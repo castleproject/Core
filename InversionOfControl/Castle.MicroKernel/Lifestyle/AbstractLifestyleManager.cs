@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel.Lifestyle
 {
 	using System;
+	using Castle.Core;
 
 	/// <summary>
 	/// Summary description for AbstractLifestyleManager.
@@ -24,11 +25,13 @@ namespace Castle.MicroKernel.Lifestyle
 	{
 		private IKernel kernel;
 		private IComponentActivator componentActivator;
+		private ComponentModel model;
 
-		public virtual void Init(IComponentActivator componentActivator, IKernel kernel)
+		public virtual void Init(IComponentActivator componentActivator, IKernel kernel, ComponentModel model)
 		{
 			this.componentActivator = componentActivator;
 			this.kernel = kernel;
+			this.model = model;
 		}
 
 		public virtual object Resolve(CreationContext context)
@@ -38,8 +41,8 @@ namespace Castle.MicroKernel.Lifestyle
 
 		public virtual void Release(object instance)
 		{
-			componentActivator.Destroy( instance );
-		}	
+			componentActivator.Destroy(instance);
+		}
 
 		public abstract void Dispose();
 
@@ -51,6 +54,11 @@ namespace Castle.MicroKernel.Lifestyle
 		protected IComponentActivator ComponentActivator
 		{
 			get { return componentActivator; }
+		}
+
+		protected ComponentModel Model
+		{
+			get { return model; }
 		}
 	}
 }

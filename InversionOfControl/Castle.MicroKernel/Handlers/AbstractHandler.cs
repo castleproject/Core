@@ -15,17 +15,18 @@
 namespace Castle.MicroKernel.Handlers
 {
 	using System;
-	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Diagnostics;
+	using System.Text;
 	using Castle.Core;
-	using Castle.MicroKernel;
+	using Castle.MicroKernel.Lifestyle;
 
 	/// <summary>
 	/// Implements the basis of <see cref="IHandler"/>
 	/// </summary>
 	[Serializable]
-	[System.Diagnostics.DebuggerDisplay("Model: {ComponentModel.Service} / {ComponentModel.Implementation} ")]
+	[DebuggerDisplay("Model: {ComponentModel.Service} / {ComponentModel.Implementation} ")]
 	public abstract class AbstractHandler : MarshalByRefObject, IHandler, IExposeDependencyInfo, IDisposable
 	{
 		private readonly ComponentModel model;
@@ -175,13 +176,13 @@ namespace Castle.MicroKernel.Handlers
 		#region ISubDependencyResolver Members
 
 		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
-		                      DependencyModel dependency)
+		                              DependencyModel dependency)
 		{
 			return customParameters[dependency.DependencyKey];
 		}
 
 		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
-		                       DependencyModel dependency)
+		                               DependencyModel dependency)
 		{
 			if (dependency.DependencyKey == null)
 			{
@@ -309,19 +310,19 @@ namespace Castle.MicroKernel.Handlers
 
 			if (type == LifestyleType.Undefined || type == LifestyleType.Singleton)
 			{
-				manager = new Lifestyle.SingletonLifestyleManager();
+				manager = new SingletonLifestyleManager();
 			}
 			else if (type == LifestyleType.Thread)
 			{
-				manager = new Lifestyle.PerThreadLifestyleManager();
+				manager = new PerThreadLifestyleManager();
 			}
 			else if (type == LifestyleType.Transient)
 			{
-				manager = new Lifestyle.TransientLifestyleManager();
+				manager = new TransientLifestyleManager();
 			}
 			else if (type == LifestyleType.PerWebRequest)
 			{
-				manager = new Lifestyle.PerWebRequestLifestyleManager();
+				manager = new PerWebRequestLifestyleManager();
 			}
 			else if (type == LifestyleType.Custom)
 			{
@@ -342,10 +343,10 @@ namespace Castle.MicroKernel.Handlers
 					maxSize = (int) ComponentModel.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize];
 				}
 
-				manager = new Lifestyle.PoolableLifestyleManager(initial, maxSize);
+				manager = new PoolableLifestyleManager(initial, maxSize);
 			}
 
-			manager.Init(activator, Kernel);
+			manager.Init(activator, Kernel, model);
 
 			return manager;
 		}
@@ -442,7 +443,7 @@ namespace Castle.MicroKernel.Handlers
 				{
 					return;
 				}
-				
+
 				DependenciesByService.Add(dependency.TargetType, dependency);
 			}
 			else
@@ -541,7 +542,6 @@ namespace Castle.MicroKernel.Handlers
 				dependenciesByKey = null;
 				dependenciesByService = null;
 			}
-
 		}
 
 		/// <summary>
