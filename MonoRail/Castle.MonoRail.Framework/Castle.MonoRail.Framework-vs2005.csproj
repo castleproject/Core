@@ -144,7 +144,7 @@
     <Compile Include="Attributes\LocalizationFilterAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\PersistFlashFilterAttribute.cs" />
+    <Compile Include="Attributes\PersistFlashAttribute.cs" />
     <Compile Include="Attributes\RescueAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
