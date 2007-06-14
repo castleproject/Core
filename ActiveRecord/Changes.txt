@@ -1,6 +1,10 @@
 Release Candidate 2
 ===================
 
+- Applied Lee Henson's patch change Exists implementation to use ISession.Get 
+  This is required for lazy loaded classes as the old implementation would always 
+  return true for them.
+
 - Applied patch by David N. Godfrey that
   - Refactored ActiveRecord to rely on Castle.Components.Validator to perform validations
   - Fixed an old behavior where ActiveRecord didn't notify the session scope about sessions
