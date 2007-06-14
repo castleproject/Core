@@ -4,6 +4,11 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Georges Benatti's patch 
+  adding the attribute matchHostNameAndPath to the routing node on the configuration. 
+  
+  If set to 'true', the regular expression is matched against the whole url. Defaults to 'false'
+
 - Added ability to customise Next/Prev links in DiggStylePagination.
    Patch from Markus Zywitza.
 

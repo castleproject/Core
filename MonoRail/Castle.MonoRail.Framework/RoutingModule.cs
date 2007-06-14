@@ -15,21 +15,27 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Web;
 	using System.Collections;
-
+	using System.Web;
 	using Castle.MonoRail.Framework.Configuration;
 
 	/// <summary>
-	/// Provides routing services in response to rules defined in 
+	/// Provides routing basic services in response to rules defined in 
 	/// <see cref="MonoRailConfiguration.RoutingRules"/>.
+	/// <remarks>
+	/// This class delegates the resolving of the path that will be evaluated
+	/// to derivided classes.
+	/// </remarks>
 	/// </summary>
 	public class RoutingModule : IHttpModule
 	{
 		internal static readonly String OriginalPathKey = "rails.original_path";
-
 		private IList routingRules;
 
+		/// <summary>
+		/// Initializes a module and prepares it to handle requests.
+		/// </summary>
+		/// <param name="context">An <see cref="T:System.Web.HttpApplication"></see> that provides access to the methods, properties, and events common to all application objects within an ASP.NET application</param>
 		public void Init(HttpApplication context)
 		{
 			context.BeginRequest += new EventHandler(OnBeginRequest);
@@ -37,10 +43,18 @@ namespace Castle.MonoRail.Framework
 			routingRules = MonoRailConfiguration.GetConfig().RoutingRules;
 		}
 
+		/// <summary>
+		/// Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"></see>.
+		/// </summary>
 		public void Dispose()
 		{
 		}
 
+		/// <summary>
+		/// Called when [begin request].
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
 		private void OnBeginRequest(object sender, EventArgs e)
 		{
 			if (routingRules.Count == 0) return;
@@ -48,18 +62,19 @@ namespace Castle.MonoRail.Framework
 			HttpContext context = HttpContext.Current;
 			HttpRequest request = context.Request;
 
-			String virtualPath = request.FilePath;
 			String newPath;
 
-			SaveOriginalPath(context, virtualPath);
+			String sourcePath = GetSourcePath();
 
-			if(FindMatchAndReplace(virtualPath, out newPath))
+			SaveOriginalPath(context, sourcePath);
+
+			if (FindMatchAndReplace(sourcePath, out newPath))
 			{
 				// Handle things differently depending on wheter we need 
 				// to keep a query string or not
 
 				int queryStringIndex = newPath.IndexOf('?');
-				
+
 				if (queryStringIndex == -1)
 				{
 					context.RewritePath(newPath);
@@ -71,6 +86,49 @@ namespace Castle.MonoRail.Framework
 					context.RewritePath(path, request.PathInfo, queryString);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the source path.
+		/// </summary>
+		/// <returns></returns>
+		protected string GetSourcePath()
+		{
+			if (ShouldUseHostAndPath())
+			{
+				return GetHostNameAndPath();
+			}
+			else
+			{
+				return GetPath();
+			}
+		}
+
+		private bool ShouldUseHostAndPath()
+		{
+			return MonoRailConfiguration.GetConfig().MatchHostNameAndPath;
+		}
+
+		private string GetHostNameAndPath()
+		{
+			HttpContext context = HttpContext.Current;
+			HttpRequest request = context.Request;
+
+			String host = request.Headers["host"];
+
+			if (String.IsNullOrEmpty(host))
+			{
+				return request.FilePath;
+			}
+			else
+			{
+				return host + request.FilePath;
+			}
+		}
+
+		private static string GetPath()
+		{
+			return HttpContext.Current.Request.FilePath;
 		}
 
 		private bool FindMatchAndReplace(String currentPath, out String newPath)
@@ -86,12 +144,12 @@ namespace Castle.MonoRail.Framework
 					//Append the query string
 					String queryString = HttpContext.Current.Request.Url.Query;
 
-					if(queryString.Length > 0)
+					if (queryString.Length > 0)
 					{
 						//If we already have some query string params on the new path...
 						bool hasParams = (newPath.LastIndexOf("?") != -1);
 
-						if(hasParams)
+						if (hasParams)
 						{
 							//...make sure we append the query string nicely rather than adding another ?
 							queryString = queryString.Replace("?", "&");
@@ -106,7 +164,7 @@ namespace Castle.MonoRail.Framework
 
 			return false;
 		}
-		
+
 		/// <summary>
 		/// Returns the original path 
 		/// (before rewriting occured), or <c>null</c> 

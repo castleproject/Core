@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private static readonly String SectionName = "monorail";
 		private static readonly String AlternativeSectionName = "monoRail";
 
-		private bool checkClientIsConnected, useWindsorIntegration;
+		private bool checkClientIsConnected, useWindsorIntegration, matchHostNameAndPath;
 		private Type customFilterFactory;
 		private XmlNode configurationSection;
 
@@ -57,6 +57,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			defaultUrls = new DefaultUrlCollection();
 			
 			checkClientIsConnected = false;
+			matchHostNameAndPath = false;
 		}
 
 		/// <summary>
@@ -70,23 +71,13 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		public static MonoRailConfiguration GetConfig()
 		{
-#if DOTNET2
 			MonoRailConfiguration config =
 				System.Configuration.ConfigurationManager.GetSection(MonoRailConfiguration.SectionName) as MonoRailConfiguration;
-#else
-			MonoRailConfiguration config = 
-				ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName) as MonoRailConfiguration;
-#endif
 
 			if (config == null)
 			{
-#if DOTNET2
 				config = 
 					System.Configuration.ConfigurationManager.GetSection(MonoRailConfiguration.AlternativeSectionName) as MonoRailConfiguration;
-#else
-				config = 
-					ConfigurationSettings.GetConfig(MonoRailConfiguration.AlternativeSectionName) as MonoRailConfiguration;
-#endif
 			}
 
 			if (config == null)
@@ -114,7 +105,8 @@ namespace Castle.MonoRail.Framework.Configuration
 			defaultUrls.Deserialize(node);
 
 			ProcessFilterFactoryNode(node.SelectSingleNode("customFilterFactory"));
-			
+			ProcessMatchHostNameAndPath(node.SelectSingleNode("routing"));
+
 			XmlAttribute checkClientIsConnectedAtt = node.Attributes["checkClientIsConnected"];
 
 			if (checkClientIsConnectedAtt != null && checkClientIsConnectedAtt.Value != String.Empty)
@@ -192,6 +184,11 @@ namespace Castle.MonoRail.Framework.Configuration
 			get { return useWindsorIntegration; }
 		}
 
+	    public bool MatchHostNameAndPath
+	    {
+            get { return matchHostNameAndPath;  }
+	    }
+
 		public XmlNode ConfigurationSection
 		{
 			get { return configurationSection; }
@@ -211,14 +208,22 @@ namespace Castle.MonoRail.Framework.Configuration
 			if (type == null)
 			{
 				String message = "The custom filter factory node must specify a 'type' attribute";
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			customFilterFactory = TypeLoadUtil.GetType(type.Value);
+		}
+
+		private void ProcessMatchHostNameAndPath(XmlNode node)
+		{
+			if (node == null) return;
+
+			XmlAttribute matchHostNameAndPathAtt = node.Attributes["matchHostNameAndPath"];
+
+			if (matchHostNameAndPathAtt != null && matchHostNameAndPathAtt.Value != String.Empty)
+			{
+				matchHostNameAndPath = String.Compare(matchHostNameAndPathAtt.Value, "true", true) == 0;
+			}
 		}
 
 		private void ConfigureWindsorIntegration()
