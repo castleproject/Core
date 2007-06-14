@@ -22,7 +22,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 	using Castle.MonoRail.Framework.Internal;
 
-
+	///<summary>
+	/// Manages resource (views) loading and processing, calls and is also
+	/// called by NVelocity to allow recursive expansion of templates
+	///</summary>
 	public class CustomResourceManager : IResourceManager
 	{
 		private IRuntimeServices runtimeServices;
@@ -38,8 +41,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			this.runtimeServices = runtimeServices;
 
-			IServiceProvider serviceProvider = (IServiceProvider) 
-				runtimeServices.GetApplicationAttribute(NVelocityViewEngine.ServiceProvider);
+			IServiceProvider serviceProvider =
+				(IServiceProvider) runtimeServices.GetApplicationAttribute(NVelocityViewEngine.ServiceProvider);
 
 			cacheProvider = (ICacheProvider) serviceProvider.GetService(typeof(ICacheProvider));
 		}
@@ -63,7 +66,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				resource.ResourceLoader = resourceLoaderAdapter;
 
-				resource.Process();
+				ProcessResourceWithSensibleExceptionWrapping(resourceName, resource);
 
 				if (resource.Data == null)
 				{
@@ -83,7 +86,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				if (resource.IsSourceModified())
 				{
-					resource.Process();
+					ProcessResourceWithSensibleExceptionWrapping(resourceName, resource);
 				}
 			}
 
@@ -93,6 +96,19 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public string GetLoaderNameForResource(string resourceName)
 		{
 			return "default";
+		}
+
+		private void ProcessResourceWithSensibleExceptionWrapping(string resourceName,
+		                                                          global::NVelocity.Runtime.Resource.Resource resource)
+		{
+			try
+			{
+				resource.Process();
+			}
+			catch(Exception e)
+			{
+				throw new ResourceProcessingException(resourceName, e);
+			}
 		}
 
 		private void InitializeResource(Resource resource, string resourceName, string encoding)

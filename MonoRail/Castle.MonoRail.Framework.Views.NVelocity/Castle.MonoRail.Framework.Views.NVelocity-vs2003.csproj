@@ -138,6 +138,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                 <File
+                    RelPath = "ResourceProcessingException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "TemplateKeys.cs"
                     SubType = "Code"
@@ -172,4 +177,5 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
 
