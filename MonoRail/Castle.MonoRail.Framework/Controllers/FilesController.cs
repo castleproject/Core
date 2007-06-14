@@ -16,23 +16,23 @@ namespace Castle.MonoRail.Framework.Controllers
 {
 	using System;
 	using System.Web;
+	using Castle.MonoRail.Framework.Attributes;
+	using Castle.MonoRail.Framework.Filters;
 	using Castle.MonoRail.Framework.Helpers;
-    using Castle.MonoRail.Framework.Attributes;
-    using Castle.MonoRail.Framework.Filters;
 
 	/// <summary>
 	/// Buit in <see cref="Controller"/> containing the files requireds by helpers and other 
 	/// parts of MonoRail.
 	/// </summary>
 	[ControllerDetails(Area="MonoRail")]
-	[PersistFlashFilter]
 	[LocalizationFilter(Store = RequestStore.QueryString, Key = "locale")]
-	[Resource("Behaviour","Castle.MonoRail.Framework.Controllers.Behaviour", CultureName="neutral")]
-	[Resource("Ajax","Castle.MonoRail.Framework.Controllers.Ajax", CultureName="neutral")]
+	[Resource("Behaviour", "Castle.MonoRail.Framework.Controllers.Behaviour", CultureName="neutral")]
+	[Resource("Ajax", "Castle.MonoRail.Framework.Controllers.Ajax", CultureName="neutral")]
 	[Resource("Effects2", "Castle.MonoRail.Framework.Controllers.Effects2", CultureName="neutral")]
 	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat", CultureName="neutral")]
 	[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation", CultureName="neutral")]
 	[Resource("FormHelper", "Castle.MonoRail.Framework.Controllers.FormHelper", CultureName="neutral")]
+	[PersistFlash]
 	public sealed class FilesController : Controller
 	{
 		/// <summary>
@@ -40,8 +40,8 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		[Cache(HttpCacheability.Public, Duration=86400)] // 1 day
 		public void AjaxScripts()
-		{	
-			RenderJavascriptFile( "Ajax", "jsfunctions" );
+		{
+			RenderJavascriptFile("Ajax", "jsfunctions");
 		}
 
 		/// <summary>
@@ -49,15 +49,15 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void BehaviourScripts()
 		{
-			RenderJavascriptFile( "Behaviour", "jsfunctions" );
+			RenderJavascriptFile("Behaviour", "jsfunctions");
 		}
-		
+
 		/// <summary>
 		/// Script used by <see cref="EffectsFatHelper"/>.
 		/// </summary>
 		public void EffectsFatScripts()
 		{
-			RenderJavascriptFile( "EffectsFat", "fatfunctions" );
+			RenderJavascriptFile("EffectsFat", "fatfunctions");
 		}
 
 		/// <summary>
@@ -65,7 +65,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void Effects2()
 		{
-			RenderJavascriptFile( "Effects2", "functions" );
+			RenderJavascriptFile("Effects2", "functions");
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void ValidateConfig()
 		{
-			RenderJavascriptFile( "Validation", "fValidateConfig" );
+			RenderJavascriptFile("Validation", "fValidateConfig");
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void ValidateCore()
 		{
-			RenderJavascriptFile( "Validation", "fValidateCore" );
+			RenderJavascriptFile("Validation", "fValidateCore");
 		}
 
 		/// <summary>
@@ -89,16 +89,16 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void ValidateValidators()
 		{
-			RenderJavascriptFile( "Validation", "fValidateValidators" );
+			RenderJavascriptFile("Validation", "fValidateValidators");
 		}
 
 		/// <summary>
 		/// Script used by <see cref="ValidationHelper"/>.
 		/// </summary>
-        [Resource("ValidationLang", "Castle.MonoRail.Framework.Controllers.ValidationLang")]
+		[Resource("ValidationLang", "Castle.MonoRail.Framework.Controllers.ValidationLang")]
 		public void ValidateLang()
 		{
-			RenderJavascriptFile( "ValidationLang", "fValidateLang" );
+			RenderJavascriptFile("ValidationLang", "fValidateLang");
 		}
 
 		/// <summary>
@@ -109,11 +109,11 @@ namespace Castle.MonoRail.Framework.Controllers
 			RenderJavascriptFile("FormHelper", "jsfunctions");
 		}
 
-		private void RenderJavascriptFile( String resourceName, String resourceKey )
+		private void RenderJavascriptFile(String resourceName, String resourceKey)
 		{
-            Response.ContentType = "text/javascript";
-            string fileContent = GetResourceValue(resourceName, resourceKey);
-            RenderText(fileContent);
+			Response.ContentType = "text/javascript";
+			string fileContent = GetResourceValue(resourceName, resourceKey);
+			RenderText(fileContent);
 		}
 
 		private String GetResourceValue(String resName, String resKey)

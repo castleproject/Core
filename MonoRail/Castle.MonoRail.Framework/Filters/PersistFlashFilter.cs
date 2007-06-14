@@ -14,18 +14,14 @@
 
 namespace Castle.MonoRail.Framework.Filters
 {
-    using Castle.MonoRail.Framework.Attributes;
+	using Castle.MonoRail.Framework.Attributes;
 
 	/// <summary>
-	/// Persist entire flash content or specific flash entry after all actions of the controller.
-	/// See <see>PersistFlashFilterAttribute</see> for details.
+	/// Persist entire flash content after an action execution on the controller.
+	/// <seealso cref="PersistFlashAttribute"/>
 	/// </summary>
-    public class PersistFlashFilter : IFilter, IFilterAttributeAware
-    {
-        private PersistFlashFilterAttribute attribute;
- 
-		#region IFilter Members
-
+	public class PersistFlashFilter : IFilter
+	{
 		/// <summary>
 		/// Implementors should perform they filter logic and
 		/// return <c>true</c> if the action should be processed.
@@ -37,37 +33,11 @@ namespace Castle.MonoRail.Framework.Filters
 		/// 	<c>true</c> if the action
 		/// should be invoked, otherwise <c>false</c>
 		/// </returns>
-        public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
-        {
-            if (attribute.FlashKeys == null)
-            {
-            	controller.Flash.Keep();
-            }
-            else
-            {
-            	foreach (string flashKey in attribute.FlashKeys)
-            	{
-            		controller.Flash.Keep(flashKey);
-            	}
-            }
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		{
+			controller.Flash.Keep();
 
-            return true;
-
-        }
-
-        #endregion
-
-        #region IFilterAttributeAware Members
-
-		/// <summary>
-		/// Sets the filter.
-		/// </summary>
-		/// <value>The filter.</value>
-        public FilterAttribute Filter
-        {
-            set { attribute = (PersistFlashFilterAttribute)value; }
-        }
-
-        #endregion
-    }
+			return true;
+		}
+	}
 }
