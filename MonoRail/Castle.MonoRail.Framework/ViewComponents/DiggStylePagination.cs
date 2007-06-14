@@ -36,8 +36,10 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	/// Supported sections: <br/>
 	/// <c>startblock</c>: invoked with <c>page</c> <br/>
 	/// <c>endblock</c>: invoked with <c>page</c> <br/>
-	/// <c>link</c>: invoked with <c>pageIndex</c>, <c>url</c> and <c>text</c> 
+	/// <c>link</c>: invoked with <c>pageIndex</c>, <c>url</c> and <c>text</c>
 	/// so you can build a custom link <br/>
+	/// <c>prev</c>: text displayed instead of "&lt;%lt;prev"
+	/// <c>next</c>: text displayed instead of "next&gt;%gt;"
 	/// </para>
 	/// </summary>
 	/// 
@@ -51,6 +53,8 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		private const string StartSection = "startblock";
 		private const string EndSection = "endblock";
 		private const string LinkSection = "link";
+		private const string NextSection = "next";
+		private const string PrevSection = "prev";
 
 		private int adjacents = 2;
 		private bool useInlineStyle = true;
@@ -109,7 +113,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		{
 			if (page == null)
 			{
-				throw new ViewComponentException("The DiggStylePagination requires a view component " + 
+				throw new ViewComponentException("The DiggStylePagination requires a view component " +
 					"parameter named 'page' which should contain 'IPaginatedPage' instance");
 			}
 
@@ -124,7 +128,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		public override bool SupportsSection(string name)
 		{
-			return name == StartSection || name == EndSection || name == LinkSection;
+			return name == StartSection || name == EndSection || name == LinkSection || name == PrevSection || name == NextSection;
 		}
 
 		/// <summary>
@@ -177,12 +181,26 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void WritePrev(StringWriter writer)
 		{
-			WriteLink(writer, page.PreviousIndex, "&laquo; prev", !page.HasPrevious);
+			string caption = "&laquo; prev";
+			if (Context.HasSection(PrevSection))
+			{
+				TextWriter capWriter = new StringWriter();
+				Context.RenderSection(PrevSection, capWriter);
+				caption = capWriter.ToString().Trim();
+			}
+			WriteLink(writer, page.PreviousIndex, caption, !page.HasPrevious);
 		}
 
 		private void WriteNext(StringWriter writer)
 		{
-			WriteLink(writer, page.NextIndex, "next &raquo;", !page.HasNext);
+			string caption = "next &raquo;";
+			if (Context.HasSection(NextSection))
+			{
+				TextWriter capWriter = new StringWriter();
+				Context.RenderSection(NextSection, capWriter);
+				caption = capWriter.ToString().Trim();
+			}
+			WriteLink(writer, page.NextIndex, caption, !page.HasNext);
 		}
 
 		private void StartBlock(StringWriter writer)
@@ -214,7 +232,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			{
 				writer.Write("\r\n</div>\r\n");
 			}
-			
+
 		}
 
 		private void WriteElipsis(TextWriter writer)
@@ -224,7 +242,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 		private void WriteNumberedLinks(TextWriter writer, int startIndex, int endIndex)
 		{
-			for(int i = startIndex; i <= endIndex; i++)
+			for (int i = startIndex; i <= endIndex; i++)
 			{
 				WriteNumberedLink(writer, i);
 			}
