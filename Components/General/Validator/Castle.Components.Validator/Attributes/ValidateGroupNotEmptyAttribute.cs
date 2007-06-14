@@ -25,12 +25,22 @@ namespace Castle.Components.Validator
 	{
 		private string group;
 		private static IDictionary groupsPerType = Hashtable.Synchronized(new Hashtable());
-
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidateGroupNotEmptyAttribute"/> class.
 		/// </summary>
 		/// <param name="group">The group.</param>
 		public ValidateGroupNotEmptyAttribute(string group)
+		{
+			this.group = group;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateGroupNotEmptyAttribute"/> class.
+		/// </summary>
+		/// <param name="group">The group.</param>
+		/// <param name="errorMessage">The error message.</param>
+		public ValidateGroupNotEmptyAttribute(string group, string errorMessage) : base(errorMessage)
 		{
 			this.group = group;
 		}

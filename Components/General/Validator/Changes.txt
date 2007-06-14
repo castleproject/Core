@@ -1,6 +1,10 @@
 Beta 1
 ======
 
+- Applied Gokhan Altinoren's patch fixing COMP-28
+  "There isn't a ctor to set error message in 
+   ValidateGroupNotEmptyAttribute and ValidateCollectionNotEmptyAttribute"
+
 - Applied Yuri's patch fixing COMP-21
   "NullableType Validators, Correct web-validation for primitive types"
 

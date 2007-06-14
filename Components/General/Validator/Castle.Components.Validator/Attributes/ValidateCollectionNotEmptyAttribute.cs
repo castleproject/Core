@@ -20,6 +20,21 @@ namespace Castle.Components.Validator
 	public class ValidateCollectionNotEmptyAttribute : AbstractValidationAttribute
 	{
 		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateCollectionNotEmptyAttribute"/> class.
+		/// </summary>
+		public ValidateCollectionNotEmptyAttribute()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ValidateCollectionNotEmptyAttribute"/> class.
+		/// </summary>
+		/// <param name="errorMessage">The error message.</param>
+		public ValidateCollectionNotEmptyAttribute(string errorMessage) : base(errorMessage)
+		{
+		}
+
+		/// <summary>
 		/// Constructs and configures an <see cref="T:Castle.Components.Validator.IValidator"/>
 		/// instance based on the properties set on the attribute instance.
 		/// </summary>
