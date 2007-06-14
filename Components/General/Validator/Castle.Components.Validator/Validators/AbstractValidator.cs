@@ -174,7 +174,7 @@ namespace Castle.Components.Validator
 			if (!String.IsNullOrEmpty(ErrorMessage))
 			{
 				// No localization for now
-				return (ErrorMessage);
+				return ErrorMessage;
 			}
 			return String.Format(GetString(MessageKey), Name);
 		}

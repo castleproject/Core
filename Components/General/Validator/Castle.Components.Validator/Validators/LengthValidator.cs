@@ -118,6 +118,7 @@ namespace Castle.Components.Validator
 			if (fieldValue == null) return true;
 
 			int length = fieldValue.ToString().Length;
+			if (length == 0) return true;
 
 			if (exactLength != int.MinValue)
 			{

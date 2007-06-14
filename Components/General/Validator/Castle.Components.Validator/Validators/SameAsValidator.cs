@@ -56,6 +56,15 @@ namespace Castle.Components.Validator
 		public override bool IsValid(object instance, object fieldValue)
 		{
 			object referenceValue = GetFieldOrPropertyValue(instance, propertyToCompare);
+			
+			if (fieldValue is string && string.IsNullOrEmpty((string)fieldValue))
+			{
+				fieldValue = null;
+			}
+			if (fieldValue is string && string.IsNullOrEmpty((string)referenceValue))
+			{
+				referenceValue = null;
+			}
 
 			if (fieldValue == null && referenceValue == null)
 			{

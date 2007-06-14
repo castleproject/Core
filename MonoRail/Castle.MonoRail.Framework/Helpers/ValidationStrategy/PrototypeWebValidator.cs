@@ -218,6 +218,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				string rule = "validate-exact-length-" + length;
 				AddClass(rule);
 				config.AddCustomRule(rule, violationMessage, "minLength: " + length + ", maxLength: " + length);
+				AddTitle(violationMessage);
 			}
 
 			public void SetMinLength(string target, int minLength)
@@ -230,6 +231,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				string rule = "validate-min-length-" + minLength;
 				AddClass(rule);
 				config.AddCustomRule(rule, violationMessage, "minLength: " + minLength);
+				AddTitle(violationMessage);
 			}
 
 			public void SetMaxLength(string target, int maxLength)
@@ -247,6 +249,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				string rule = "validate-max-length-" + maxLength;
 				AddClass(rule);
 				config.AddCustomRule(rule, violationMessage, "maxLength: " + maxLength);
+				AddTitle(violationMessage);
 			}
 
 			public void SetLengthRange(string target, int minLength, int maxLength)
@@ -257,8 +260,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetLengthRange(string target, int minLength, int maxLength, string violationMessage)
 			{
-				SetMinLength(target, minLength, violationMessage);
-				SetMaxLength(target, maxLength, violationMessage);
+				SetMinLength(target, minLength, null);
+				SetMaxLength(target, maxLength, null);
+				AddTitle(violationMessage);
 			}
 
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
@@ -266,6 +270,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				string rule = "validate-same-as-" + comparisonFieldName.ToLowerInvariant();
 				AddClass(rule);
 				config.AddCustomRule(rule, violationMessage, "equalToField : '" + GetPrefixedFieldld(target, comparisonFieldName.ToLowerInvariant()) + "'");
+				AddTitle(violationMessage);
 			}
 
 			public void SetDate(string target, string violationMessage)
@@ -280,9 +285,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				{
 					string existingTitle = (string)attributes["title"];
 
+					if (!message.EndsWith("."))
+					{
+						message += ".";
+					}
+
 					if (existingTitle != null)
 					{
-						attributes["title"] = existingTitle + ", " + message;
+						attributes["title"] = existingTitle + " " + message;
 					}
 					else
 					{

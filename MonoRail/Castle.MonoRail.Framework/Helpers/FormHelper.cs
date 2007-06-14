@@ -1408,9 +1408,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			List<IValidator> validators = new List<IValidator>();
 
 			ObtainTargetProperty(requestContext, target, delegate(PropertyInfo property)
-         	{
-         		validators.AddRange(Controller.Validator.GetValidators(property.DeclaringType, property));
-         	});
+			{
+				validators.AddRange(Controller.Validator.GetValidators(property.DeclaringType, property));
+			});
 
 			return validators.ToArray();
 		}

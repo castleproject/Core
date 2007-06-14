@@ -53,12 +53,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 			helper.FormTag(DictHelper.Create("noaction=true"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyfield\" " + 
-				"name=\"model.nonemptyfield\" value=\"\" class=\"required\" " + 
-				"title=\"This is a required field\" />", helper.TextField("model.nonemptyfield"));
+				"name=\"model.nonemptyfield\" value=\"\" class=\"required\" " +
+				"title=\"This is a required field.\" />", helper.TextField("model.nonemptyfield"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"model_emailfield\" " +
 				"name=\"model.emailfield\" value=\"\" class=\"validate-email\" " +
-				"title=\"Email doesnt look right\" />", helper.TextField("model.emailfield"));
+				"title=\"Email doesnt look right.\" />", helper.TextField("model.emailfield"));
 
 			// Attribute order cannot be guaranted, so this test may fail ocasionally
 			// Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyemailfield\" " +
@@ -76,11 +76,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 
 			Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyfield\" " +
 				"name=\"model.nonemptyfield\" value=\"\" class=\"required\" " +
-				"title=\"This is a required field\" />", helper.TextField("nonemptyfield"));
+				"title=\"This is a required field.\" />", helper.TextField("nonemptyfield"));
 
 			Assert.AreEqual("<input type=\"text\" id=\"model_emailfield\" " +
 				"name=\"model.emailfield\" value=\"\" class=\"validate-email\" " +
-				"title=\"Email doesnt look right\" />", helper.TextField("emailfield"));
+				"title=\"Email doesnt look right.\" />", helper.TextField("emailfield"));
 
 			// Attribute order cannot be guaranted, so this test may fail ocasionally
 			// Assert.AreEqual("<input type=\"text\" id=\"model_nonemptyemailfield\" " +
@@ -98,7 +98,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 
 			Assert.AreEqual("<select id=\"model_city\" " +
 				"name=\"model.city\" class=\"validate-selection\" " +
-				"title=\"This is a required field\" >\r\n" + 
+				"title=\"This is a required field.\" >\r\n" + 
 				"<option value=\"0\">---</option>\r\n" +
 				"<option value=\"Sao Paulo\">Sao Paulo</option>\r\n" +
 				"<option value=\"Sao Carlos\">Sao Carlos</option>\r\n" +
@@ -116,7 +116,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers.Validations
 
 			Assert.AreEqual("<select id=\"model_city_id\" " +
 				"name=\"model.city.id\" class=\"validate-selection\" " +
-				"title=\"This is a required field\" >\r\n" +
+				"title=\"This is a required field.\" >\r\n" +
 				"<option value=\"0\">---</option>\r\n" +
 				"<option value=\"1\">1</option>\r\n" +
 				"<option value=\"2\">2</option>\r\n" +

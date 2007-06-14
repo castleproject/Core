@@ -1,6 +1,9 @@
 Beta 1
 ======
 
+- Applied Brian DeMarzo's patch fixing COMP-30
+  "Improved handling of empty strings, client valiator script tweaks"
+
 - Applied Gokhan Altinoren's patch fixing COMP-28
   "There isn't a ctor to set error message in 
    ValidateGroupNotEmptyAttribute and ValidateCollectionNotEmptyAttribute"

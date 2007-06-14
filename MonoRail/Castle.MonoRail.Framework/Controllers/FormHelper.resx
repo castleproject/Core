@@ -259,10 +259,10 @@ Validator.prototype = {
 }
 Validator.methods = {
 	pattern : function(v,elm,opt) {return Validation.get('IsEmpty').test(v) || opt.test(v)},
-	minLength : function(v,elm,opt) {return v.length >= opt},
-	maxLength : function(v,elm,opt) {return v.length <= opt},
-	min : function(v,elm,opt) {return v >= parseFloat(opt)}, 
-	max : function(v,elm,opt) {return v <= parseFloat(opt)},
+	minLength : function(v,elm,opt) {return Validation.get('IsEmpty').test(v) || v.length >= opt},
+	maxLength : function(v,elm,opt) {return Validation.get('IsEmpty').test(v) || v.length <= opt},
+	min : function(v,elm,opt) {return Validation.get('IsEmpty').test(v) || v >= parseFloat(opt)}, 
+	max : function(v,elm,opt) {return Validation.get('IsEmpty').test(v) || v <= parseFloat(opt)},
 	notOneOf : function(v,elm,opt) {return $A(opt).all(function(value) {
 		return v != value;
 	})},
