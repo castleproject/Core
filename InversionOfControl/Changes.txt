@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied Adam Mills's patch fixing IOC-74
+  "BinaryComponentName VisitNode null check"
+
 - Fixed IOC-67
   "RemoveComponent needs to unwire handlers and remove them"
 
