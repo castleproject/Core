@@ -95,6 +95,7 @@ namespace Castle.MicroKernel.Tests
 		public void ComponentUnregistersProperly()
 		{
 			IKernel kernel = new DefaultKernel();
+
 			kernel.AddSubSystem(SubSystemConstants.NamingKey,
 			                    new KeySearchNamingSubSystem(delegate(string key) { return key.StartsWith("2"); }));
 
@@ -112,6 +113,9 @@ namespace Castle.MicroKernel.Tests
 
 			Assert.IsNotNull(common);
 			Assert.AreEqual(typeof(CommonImpl1), common.GetType());
+
+			kernel.RemoveComponent("1.common");
+			Assert.AreEqual(0, kernel.GetHandlers(typeof(ICommon)).Length);
 		}
 
 		[Test]
