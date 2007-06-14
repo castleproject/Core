@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IOC-47
+  "Components created by FactoryActivator have their dependencies checked"
+
 - Applied Marcus Widerberg's patch fixing FACILITIES-84
   "FactorySupport - Allow parameters to factory method to be set at resolvetime"
 

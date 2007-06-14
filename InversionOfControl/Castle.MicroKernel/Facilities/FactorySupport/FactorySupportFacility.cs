@@ -50,11 +50,13 @@ namespace Castle.Facilities.FactorySupport
 
 			if (instanceAccessor != null)
 			{
+				model.Constructors.Clear();
 				model.ExtendedProperties.Add("instance.accessor", instanceAccessor);
 				model.CustomComponentActivator = typeof(AccessorActivator);
 			}
 			else if (factoryId != null)
 			{
+				model.Constructors.Clear();
 				model.ExtendedProperties.Add("factoryId", factoryId);
 				model.ExtendedProperties.Add("factoryCreate", factoryCreate);
 				model.CustomComponentActivator = typeof(FactoryActivator);
