@@ -142,7 +142,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void ApplyConcerns(object[] steps, object instance)
 		{
-			foreach (ILifecycleConcern concern in steps)
+			foreach(ILifecycleConcern concern in steps)
 			{
 				concern.Apply(Model, instance);
 			}
@@ -165,11 +165,11 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			int winnerPoints = 0;
 
-			foreach (ConstructorCandidate candidate in Model.Constructors)
+			foreach(ConstructorCandidate candidate in Model.Constructors)
 			{
 				int candidatePoints = 0;
 
-				foreach (DependencyModel dep in candidate.Dependencies)
+				foreach(DependencyModel dep in candidate.Dependencies)
 				{
 					if (CanSatisfyDependency(context, dep))
 					{

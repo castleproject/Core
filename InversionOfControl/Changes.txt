@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IOC-59
+  "Child component unable to correctly resolve parent service added after the component"
+
 - Fixed IOC-47
   "Components created by FactoryActivator have their dependencies checked"
 

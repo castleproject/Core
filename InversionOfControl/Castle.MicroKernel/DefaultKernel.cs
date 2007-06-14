@@ -960,7 +960,7 @@ namespace Castle.MicroKernel
 
 			for (int i = 0; i < vertices.Length; i++)
 			{
-				ComponentModel model = (ComponentModel)vertices[i];
+				ComponentModel model = (ComponentModel) vertices[i];
 
 				// Prevent the removal of a component that belongs 
 				// to other container
@@ -972,19 +972,27 @@ namespace Castle.MicroKernel
 
 		private void UnsubscribeFromParentKernel()
 		{
-			if (Parent != null)
+			if (parentKernel != null)
 			{
-				Parent.ComponentRegistered -= new ComponentDataDelegate(RaiseComponentRegistered);
+				parentKernel.HandlerRegistered -= new HandlerDelegate(HandlerRegisteredOnParentKernel);
+				parentKernel.ComponentRegistered -= new ComponentDataDelegate(RaiseComponentRegistered);
+				parentKernel.ComponentUnregistered -= new ComponentDataDelegate(RaiseComponentUnregistered);
 			}
 		}
 
 		private void SubscribeToParentKernel()
 		{
-			if (Parent != null)
+			if (parentKernel != null)
 			{
+				parentKernel.HandlerRegistered += new HandlerDelegate(HandlerRegisteredOnParentKernel);
 				parentKernel.ComponentRegistered += new ComponentDataDelegate(RaiseComponentRegistered);
 				parentKernel.ComponentUnregistered += new ComponentDataDelegate(RaiseComponentUnregistered);
 			}
+		}
+
+		private void HandlerRegisteredOnParentKernel(IHandler handler, ref bool stateChanged)
+		{
+			RaiseHandlerRegistered(handler);
 		}
 
 		private void DisposeComponentsInstancesWithinTracker()
@@ -994,7 +1002,7 @@ namespace Castle.MicroKernel
 
 		private void DisposeSubKernels()
 		{
-			foreach (IKernel childKernel in childKernels)
+			foreach(IKernel childKernel in childKernels)
 			{
 				childKernel.Dispose();
 			}

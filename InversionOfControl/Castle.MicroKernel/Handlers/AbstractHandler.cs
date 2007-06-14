@@ -24,10 +24,8 @@ namespace Castle.MicroKernel.Handlers
 	/// <summary>
 	/// Implements the basis of <see cref="IHandler"/>
 	/// </summary>
-#if DOTNET2
-	[System.Diagnostics.DebuggerDisplay("Model: {ComponentModel.Service} / {ComponentModel.Implementation} ")]
-#endif
 	[Serializable]
+	[System.Diagnostics.DebuggerDisplay("Model: {ComponentModel.Service} / {ComponentModel.Implementation} ")]
 	public abstract class AbstractHandler : MarshalByRefObject, IHandler, IExposeDependencyInfo, IDisposable
 	{
 		private readonly ComponentModel model;
@@ -321,6 +319,10 @@ namespace Castle.MicroKernel.Handlers
 			{
 				manager = new Lifestyle.TransientLifestyleManager();
 			}
+			else if (type == LifestyleType.PerWebRequest)
+			{
+				manager = new Lifestyle.PerWebRequestLifestyleManager();
+			}
 			else if (type == LifestyleType.Custom)
 			{
 				manager = (ILifestyleManager)
@@ -341,10 +343,6 @@ namespace Castle.MicroKernel.Handlers
 				}
 
 				manager = new Lifestyle.PoolableLifestyleManager(initial, maxSize);
-			}
-			else if (type == LifestyleType.PerWebRequest)
-			{
-				manager = new Lifestyle.PerWebRequestLifestyleManager();
 			}
 
 			manager.Init(activator, Kernel);
@@ -394,6 +392,7 @@ namespace Castle.MicroKernel.Handlers
 					AddDependency(dependency);
 				}
 			}
+
 		}
 
 		/// <summary>
@@ -530,16 +529,20 @@ namespace Castle.MicroKernel.Handlers
 			{
 				SetNewState(HandlerState.Valid);
 				stateChanged = true;
-				Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
 
 				// We don't need these anymore
+
+				Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
+				Kernel.AddedAsChildKernel -= new EventHandler(OnAddedAsChildKernel);
+
 				dependenciesByKey = null;
 				dependenciesByService = null;
 			}
+
 		}
 
 		/// <summary>
-		/// Invoked whe the container receives a parent container reference.
+		/// Invoked when the container receives a parent container reference.
 		/// </summary>
 		/// <remarks>
 		/// This method implementation checks whether the parent container

@@ -58,18 +58,33 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			Assert.IsNotNull(spamservice.TemplateEngine);
 		}
 
-		[Test, Ignore("Not passing")]
+		[Test]
+		public void ChildDependenciesIsSatisfiedEvenWhenComponentTakesLongToBeAddedToParentContainer()
+		{
+			DefaultKernel container = new DefaultKernel();
+			DefaultKernel childContainer = new DefaultKernel();
+
+			container.AddChildKernel(childContainer);
+			childContainer.AddComponent("component", typeof(Component));
+
+			container.AddComponent("service1", typeof(IService), typeof(Service));
+
+			Component comp = (Component) childContainer[typeof(Component)];
+		}
+
+		[Test, Ignore("This need to be discussed")]
 		public void SameLevelDependenciesSatisfied()
 		{
-			IKernel subkernel = new DefaultKernel();
+			IKernel child = new DefaultKernel();
 
 			kernel.AddComponent("templateengine", typeof(DefaultTemplateEngine));
 			kernel.AddComponent("spamservice", typeof(DefaultSpamService));
 
-			kernel.AddChildKernel(subkernel);
-			subkernel.AddComponent("mailsender", typeof(DefaultMailSenderService));
+			kernel.AddChildKernel(child);
+			
+			child.AddComponent("mailsender", typeof(DefaultMailSenderService));
 
-			DefaultSpamService spamservice = (DefaultSpamService) subkernel["spamservice"];
+			DefaultSpamService spamservice = (DefaultSpamService) child["spamservice"];
 
 			Assert.IsNotNull(spamservice);
 			Assert.IsNotNull(spamservice.MailSender);
@@ -327,6 +342,24 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			{
 				Assert.AreEqual(expectedSender, sender);
 				events.Add(Removed);
+			}
+		}
+
+		public class Component
+		{
+			public Component(IService service)
+			{
+			}
+		}
+
+		public interface IService
+		{
+		}
+
+		public class Service : IService
+		{
+			public Service()
+			{
 			}
 		}
 	}

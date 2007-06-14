@@ -15,7 +15,6 @@
 namespace Castle.MicroKernel
 {
 	using System;
-
 	using Castle.Core;
 
 	/// <summary>
@@ -25,7 +24,7 @@ namespace Castle.MicroKernel
 	/// <param name="handler">handler that holds this component and is capable of 
 	/// creating an instance of it.
 	/// </param>
-	public delegate void ComponentDataDelegate( String key, IHandler handler );
+	public delegate void ComponentDataDelegate(String key, IHandler handler);
 
 	/// <summary>
 	/// Represents a delegate which holds basic information about a component
@@ -33,13 +32,13 @@ namespace Castle.MicroKernel
 	/// </summary>
 	/// <param name="model">Component meta information</param>
 	/// <param name="instance">Component instance</param>
-	public delegate void ComponentInstanceDelegate( ComponentModel model, object instance );
+	public delegate void ComponentInstanceDelegate(ComponentModel model, object instance);
 
 	/// <summary>
 	/// Represents a delegate which holds the information about the 
 	/// component
 	/// </summary>
-	public delegate void ComponentModelDelegate( ComponentModel model );
+	public delegate void ComponentModelDelegate(ComponentModel model);
 
 	/// <summary>
 	/// Represents a delegate which holds a handler
@@ -48,7 +47,7 @@ namespace Castle.MicroKernel
 	/// creating an instance of it.
 	/// </param>
 	/// <param name="stateChanged"></param>
-	public delegate void HandlerDelegate( IHandler handler, ref bool stateChanged );
+	public delegate void HandlerDelegate(IHandler handler, ref bool stateChanged);
 
 	/// <summary>
 	/// Represents a delegate which holds dependency
@@ -83,7 +82,7 @@ namespace Castle.MicroKernel
 		/// another kernel.
 		/// </summary>
 		event EventHandler AddedAsChildKernel;
-		
+
 		/// <summary>
 		/// Event fired when the kernel was removed from being a child
 		/// of another kernel.

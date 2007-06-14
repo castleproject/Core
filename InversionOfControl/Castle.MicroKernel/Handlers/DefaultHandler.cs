@@ -29,8 +29,7 @@ namespace Castle.MicroKernel.Handlers
 		/// Initializes a new instance of the <see cref="DefaultHandler"/> class.
 		/// </summary>
 		/// <param name="model"></param>
-		public DefaultHandler(ComponentModel model)
-			: base(model)
+		public DefaultHandler(ComponentModel model) : base(model)
 		{
 		}
 
