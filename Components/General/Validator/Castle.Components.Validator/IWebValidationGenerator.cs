@@ -14,6 +14,8 @@
 
 namespace Castle.Components.Validator
 {
+	using System;
+
 	/// <summary>
 	/// Abstracts an JS validation library implementation. 
 	/// Each implementation should map the calls to their 
@@ -119,6 +121,42 @@ namespace Castle.Components.Validator
 		/// <param name="violationMessage">The violation message.</param>
 		void SetLengthRange(string target, int minLength, int maxLength, string violationMessage);
 
+		/// <summary>
+		/// Sets the value range.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="minValue">Value of the min.</param>
+		/// <param name="maxValue">Value of the max.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetValueRange(string target, int minValue, int maxValue, string violationMessage);
+
+		/// <summary>
+		/// Sets the value range.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="minValue">Value of the min.</param>
+		/// <param name="maxValue">Value of the max.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetValueRange(string target, decimal minValue, decimal maxValue, string violationMessage);
+
+		/// <summary>
+		/// Sets the value range.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="minValue">Value of the min.</param>
+		/// <param name="maxValue">Value of the max.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage);
+
+		/// <summary>
+		/// Sets the value range.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="minValue">Value of the min.</param>
+		/// <param name="maxValue">Value of the max.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetValueRange(string target, string minValue, string maxValue, string violationMessage);
+		
 		/// <summary>
 		/// Set as same as.
 		/// </summary>

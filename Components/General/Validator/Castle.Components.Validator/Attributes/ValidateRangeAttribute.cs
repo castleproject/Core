@@ -46,6 +46,29 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
+		/// Initializes an decimal-based range validator.
+		/// </summary>
+		/// <param name="min">The minimum value, or <c>decimal.MinValue</c> if this should not be tested.</param>
+		/// <param name="max">The maximum value, or <c>decimal.MaxValue</c> if this should not be tested.</param>
+		public ValidateRangeAttribute(decimal min, decimal max)
+		{
+			validator = new RangeValidator(min, max);
+		}
+
+		/// <summary>
+		/// Initializes an decimal-based range validator.
+		/// </summary>
+		/// <param name="min">The minimum value, or <c>decimal.MinValue</c> if this should not be tested.</param>
+		/// <param name="max">The maximum value, or <c>decimal.MaxValue</c> if this should not be tested.</param>
+		/// <param name="errorMessage">The error message to be displayed if the validation fails.</param>
+		public ValidateRangeAttribute(decimal min, decimal max, string errorMessage)
+			: base(errorMessage)
+		{
+			validator = new RangeValidator(min, max);
+		}
+
+
+		/// <summary>
 		/// Initializes a string-based range validator.
 		/// </summary>
 		/// <param name="min">The minimum value, or <c>String.Empty</c> if this should not be tested.</param>

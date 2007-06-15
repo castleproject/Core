@@ -28,6 +28,10 @@ namespace Castle.Components.Validator
 		/// </summary>
 		Integer,
 		/// <summary>
+		/// <see cref="RangeValidator"/> is dealing with a range of decimals
+		/// </summary>
+		Decimal,
+		/// <summary>
 		/// <see cref="RangeValidator"/> is dealing with a range of dates
 		/// </summary>
 		DateTime,
@@ -57,6 +61,20 @@ namespace Castle.Components.Validator
 			AssertValid(max, min);
 
 			type = RangeValidationType.Integer;
+			this.min = min;
+			this.max = max;
+		}
+
+		/// <summary>
+		/// Initializes an decimal-based range validator.
+		/// </summary>
+		/// <param name="min">The minimum value, or <c>decimal.MinValue</c> if this should not be tested.</param>
+		/// <param name="max">The maximum value, or <c>decimal.MaxValue</c> if this should not be tested.</param>
+		public RangeValidator(decimal min, decimal max)
+		{
+			AssertValid(max, min);
+
+			type = RangeValidationType.Decimal;
 			this.min = min;
 			this.max = max;
 		}
@@ -137,6 +155,8 @@ namespace Castle.Components.Validator
 				{
 					case RangeValidationType.Integer:
 						return GetIntValue(max, int.MaxValue);
+					case RangeValidationType.Decimal:
+						return GetDecimalValue(max, decimal.MaxValue);
 					case RangeValidationType.DateTime:
 						return GetDateTimeValue(max, DateTime.MaxValue);
 					case RangeValidationType.String:
@@ -183,6 +203,21 @@ namespace Castle.Components.Validator
 							if (int.TryParse(fieldValue.ToString(), out intValue))
 							{
 								valid = intValue >= (int) min && intValue <= (int) max;
+							}
+						}
+						break;
+					case RangeValidationType.Decimal:
+						decimal decimalValue;
+						try
+						{
+							decimalValue = (decimal)fieldValue;
+							valid = decimalValue >= (decimal)min && decimalValue <= (decimal)max;
+						}
+						catch
+						{
+							if (decimal.TryParse(fieldValue.ToString(), out decimalValue))
+							{
+								valid = decimalValue >= (decimal)min && decimalValue <= (decimal)max;
 							}
 						}
 						break;
@@ -233,7 +268,7 @@ namespace Castle.Components.Validator
 		/// </value>
 		public override bool SupportsWebValidation
 		{
-			get { return false; }
+			get { return true; }
 		}
 
 		/// <summary>
@@ -248,6 +283,25 @@ namespace Castle.Components.Validator
 		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
 		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
 		{
+			base.ApplyWebValidation(config, inputType, generator, attributes, target);
+
+			switch(type)
+			{
+				case RangeValidationType.Integer:
+					generator.SetValueRange(target, (int)min,(int)max, BuildErrorMessage());
+					break;
+				case RangeValidationType.Decimal:
+					generator.SetValueRange(target, (decimal)min, (decimal)max, BuildErrorMessage());
+					break;
+				case RangeValidationType.DateTime:
+					generator.SetValueRange(target, (DateTime)min, (DateTime)max, BuildErrorMessage());
+					break;
+				case RangeValidationType.String:
+					generator.SetValueRange(target, (string)min, (string)max, BuildErrorMessage());
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 
 		/// <summary>
@@ -269,6 +323,11 @@ namespace Castle.Components.Validator
 			if (type == RangeValidationType.Integer)
 			{
 				return BuildIntegerErrorMessage((int) min, (int) max);
+			}
+
+			if (type == RangeValidationType.Decimal)
+			{
+				return BuildDecimalErrorMessage((decimal)min, (decimal)max);
 			}
 
 			throw new InvalidOperationException();
@@ -299,6 +358,33 @@ namespace Castle.Components.Validator
 				throw new InvalidOperationException();
 			}
 		}
+
+		/// <summary>
+		/// Gets the error message string for Decimal validation
+		/// </summary>
+		/// <returns>an error message</returns>
+		protected string BuildDecimalErrorMessage(decimal min, decimal max)
+		{
+			if (min == decimal.MinValue && max != decimal.MaxValue)
+			{
+				// range against max value only
+				return string.Format(GetString(MessageConstants.RangeTooHighMessage), max);
+			}
+			else if (min != decimal.MinValue && max == decimal.MaxValue)
+			{
+				// range against min value only
+				return string.Format(GetString(MessageConstants.RangeTooLowMessage), min);
+			}
+			else if (min != decimal.MinValue || max != decimal.MaxValue)
+			{
+				return string.Format(GetString(MessageConstants.RangeTooHighOrLowMessage), min, max);
+			}
+			else
+			{
+				throw new InvalidOperationException();
+			}
+		}
+
 
 		/// <summary>
 		/// Gets the error message string for DateTime validation
@@ -387,6 +473,23 @@ namespace Castle.Components.Validator
 			}
 		}
 
+		private static void AssertValid(decimal min, decimal max)
+		{
+			if (min == decimal.MinValue && max == decimal.MaxValue)
+			{
+				throw new ArgumentException(
+					"Both min and max were set in such as way that neither would be tested. At least one must be tested.");
+			}
+			if (min > max)
+			{
+				throw new ArgumentException("The min parameter must be less than or equal to the max parameter.");
+			}
+			if (max < min)
+			{
+				throw new ArgumentException("The max parameter must be greater than or equal to the min parameter.");
+			}
+		}
+
 		private static void AssertValid(DateTime min, DateTime max)
 		{
 			if (min == DateTime.MinValue && max == DateTime.MaxValue)
@@ -419,6 +522,8 @@ namespace Castle.Components.Validator
 				{
 					case RangeValidationType.Integer:
 						return GetIntValue(min, int.MinValue);
+					case RangeValidationType.Decimal:
+						return GetDecimalValue(min, decimal.MinValue);
 					case RangeValidationType.DateTime:
 						return GetDateTimeValue(min, DateTime.MinValue);
 					case RangeValidationType.String:
@@ -449,6 +554,14 @@ namespace Castle.Components.Validator
 			return intValue;
 		}
 
+		private decimal GetDecimalValue(object value, decimal defaultValue)
+		{
+			decimal decimalValue = defaultValue;
+			if (value == null || !decimal.TryParse(value.ToString(), out decimalValue))
+				value = defaultValue;
+			return decimalValue;
+		}
+		
 		private DateTime GetDateTimeValue(object value, DateTime defaultValue)
 		{
 			DateTime dtValue = defaultValue;

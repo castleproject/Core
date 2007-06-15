@@ -25,6 +25,9 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		private RangeValidator validatorIntLow,
 		                       validatorIntHigh,
 		                       validatorIntLowOrHigh,
+							   validatorDecimalLow,
+							   validatorDecimalHigh,
+							   validatorDecimalLowOrHigh,
 		                       validatorDateTimeLow,
 		                       validatorDateTimeHigh,
 		                       validatorDateTimeLowOrHigh,
@@ -33,6 +36,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		                       validatorStringLowOrHigh;
 
 		private TestTargetInt intTarget;
+		private TestTargetDecimal decimalTarget;
 		private TestTargetDateTime dateTimeTarget;
 		private TestTargetString stringTarget;
 
@@ -52,6 +56,18 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			validatorIntLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
 
 			intTarget = new TestTargetInt();
+
+			// decimal validation
+			validatorDecimalLow = new RangeValidator(0, decimal.MaxValue);
+			validatorDecimalLow.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
+
+			validatorDecimalHigh = new RangeValidator(decimal.MinValue, 0);
+			validatorDecimalHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
+
+			validatorDecimalLowOrHigh = new RangeValidator(RangeValidationType.Decimal, "-1", "1");
+			validatorDecimalLowOrHigh.Initialize(new CachedValidationRegistry(), typeof(TestTargetInt).GetProperty("TargetField"));
+
+			decimalTarget = new TestTargetDecimal();
 
 			// DateTime validation
 			validatorDateTimeLow = new RangeValidator(DateTime.Now, DateTime.MaxValue);
@@ -88,6 +104,18 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 				set { targetField = value; }
 			}
 		}
+
+		public class TestTargetDecimal
+		{
+			private decimal targetField;
+
+			public decimal TargetField
+			{
+				get { return targetField; }
+				set { targetField = value; }
+			}
+		}
+
 
 		public class TestTargetDateTime
 		{
@@ -150,6 +178,45 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 
 		#endregion
 
+		#region Decimal range tests
+
+		[Test]
+		public void RangeDecimalTooLowValidator()
+		{
+			//fail when compare to non-number
+			Assert.IsFalse(validatorDecimalLow.IsValid(decimalTarget, "abc"));
+			//fail when compare to number too low
+			Assert.IsFalse(validatorDecimalLow.IsValid(decimalTarget, -1));
+			//pass when compare to number not too low
+			Assert.IsTrue(validatorDecimalLow.IsValid(decimalTarget, 1));
+		}
+
+		[Test]
+		public void RangeDecimalTooHighValidator()
+		{
+			//fail when compare to non-number
+			Assert.IsFalse(validatorDecimalHigh.IsValid(decimalTarget, "abc"));
+			//fail when compare to number too high
+			Assert.IsFalse(validatorDecimalHigh.IsValid(decimalTarget, 1));
+			//pass when compare to number not too high
+			Assert.IsTrue(validatorDecimalHigh.IsValid(decimalTarget, -1));
+		}
+
+		[Test]
+		public void RangeDecimalTooLowOrHighValidator()
+		{
+			//fail when compare to non-number
+			Assert.IsFalse(validatorDecimalLowOrHigh.IsValid(decimalTarget, "abc"));
+			//fail when compare to number too low
+			Assert.IsFalse(validatorDecimalLowOrHigh.IsValid(decimalTarget, -2));
+			//fail when compare to number too high
+			Assert.IsFalse(validatorDecimalLowOrHigh.IsValid(decimalTarget, 2));
+			//pass when compare to number not too high
+			Assert.IsTrue(validatorDecimalLowOrHigh.IsValid(decimalTarget, 0));
+		}
+
+		#endregion
+
 		#region DateTime range tests
 
 		[Test]
@@ -195,29 +262,29 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		public void RangeStringTooLowValidator()
 		{
 			//fail when compare to string too low
-			Assert.IsFalse(validatorStringLow.IsValid(intTarget, "aaa"));
+			Assert.IsFalse(validatorStringLow.IsValid(stringTarget, "aaa"));
 			//pass when compare to string not too low
-			Assert.IsTrue(validatorStringLow.IsValid(intTarget, "ccc"));
+			Assert.IsTrue(validatorStringLow.IsValid(stringTarget, "ccc"));
 		}
 
 		[Test]
 		public void RangeStringTooHighValidator()
 		{
 			//fail when compare to string too high
-			Assert.IsFalse(validatorStringHigh.IsValid(intTarget, "zzz"));
+			Assert.IsFalse(validatorStringHigh.IsValid(stringTarget, "zzz"));
 			//pass when compare to string not too high
-			Assert.IsTrue(validatorStringHigh.IsValid(intTarget, "xxx"));
+			Assert.IsTrue(validatorStringHigh.IsValid(stringTarget, "xxx"));
 		}
 
 		[Test]
 		public void RangeStringTooLowOrHighValidator()
 		{
 			//fail when compare to string too low
-			Assert.IsFalse(validatorStringLowOrHigh.IsValid(intTarget, "a"));
+			Assert.IsFalse(validatorStringLowOrHigh.IsValid(stringTarget, "a"));
 			//fail when compare to string too high
-			Assert.IsFalse(validatorStringLowOrHigh.IsValid(intTarget, "z"));
+			Assert.IsFalse(validatorStringLowOrHigh.IsValid(stringTarget, "z"));
 			//pass when compare to string not too low or high
-			Assert.IsTrue(validatorStringLowOrHigh.IsValid(intTarget, "m"));
+			Assert.IsTrue(validatorStringLowOrHigh.IsValid(stringTarget, "m"));
 		}
 
 		#endregion
