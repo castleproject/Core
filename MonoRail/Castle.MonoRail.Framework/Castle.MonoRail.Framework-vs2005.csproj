@@ -165,6 +165,8 @@
     <Compile Include="Extensions\ExceptionChaining\LoggingExceptionHandler.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Filters\PersistFlashFilter.cs" />
+    <Compile Include="Helpers\ValidationStrategy\ZebdaWebValidator.cs" />
+    <Compile Include="Helpers\ZebdaHelper.cs" />
     <Compile Include="ServiceContainerAccessor.cs" />
     <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs" />
     <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs" />
@@ -577,6 +579,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controllers\ValidationLang.zh-tw.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\ZebdaValidation.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Aspx\ControllerBinder\Design\Castle.gif" />

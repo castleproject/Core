@@ -892,7 +892,14 @@ namespace Castle.MonoRail.Framework.Helpers
 				computedTarget += "." + suffix;
 			}
 
-			return CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
+			string result = CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
+
+			string hiddenElementId = elementId + "H";
+			string hiddenElementValue = CommonUtils.ObtainEntryAndRemove(attributes, "falseValue", "false");
+
+			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
+
+			return result;
 		}
 
 		/// <summary>
@@ -1362,9 +1369,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Configures this FormHelper instance to use fValidate for form fields validation
 		/// </summary>
-		public void UsefValidate()
+		public void UseZValidate()
 		{
 			UseWebValidatorProvider(new FValidateWebValidator());
+		}
+
+		/// <summary>
+		/// Configures this FormHelper instance to use Zebda for form fields validation
+		/// </summary>
+		public void UseZebdaValidation()
+		{
+			UseWebValidatorProvider(new ZebdaWebValidator());
 		}
 
 		/// <summary>

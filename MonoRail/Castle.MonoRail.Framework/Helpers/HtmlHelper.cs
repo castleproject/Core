@@ -399,6 +399,36 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<a href=\"{0}\">{1}</a>", url, name);
 		}
 
+		///<overloads>This method has three overloads.</overloads>
+		/// <summary>
+		/// Creates an anchor (link) to the <paramref name="action"/> on the current controller.
+		/// <code>
+		/// &lt;a href=&quot;/website/currentController/actionArg.rails&quot;&gt;nameArg&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="name">Name for the link.</param>
+		/// <param name="options">link options</param>
+		/// <returns>HTML string with anchor to the specified <paramref name="options"/>.</returns>
+		/// <remarks>Calling <c>LinkTo( "nameArg", DictHelper.CreateDict("controller=home","action=index") )</c> results in:
+		/// <code>&lt;a href=&quot;/websiter/home/index.rails&quot;&gt;nameArg&lt;/a&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <b>LinkTo</b>:
+		/// <code>
+		/// $HtmlHelper.LinkTo( "linkName", DictHelper.CreateDict("controller=home","action=index") )
+		/// </code>
+		/// </example>
+		public String LinkTo(String name, IDictionary options)
+		{
+			string url = UrlHelper.For(options);
+			// remove the common action attribute 
+			CommonUtils.ObtainEntryAndRemove(options, "area");
+			CommonUtils.ObtainEntryAndRemove(options, "controller");
+			CommonUtils.ObtainEntryAndRemove(options, "action");
+
+			// and consider the other options to be link attributes
+			return String.Format("<a href=\"{0}\" {2}>{1}</a>", url, name, GetAttributes(options));
+		}
+
 		/// <summary>
 		/// Creates an anchor (link) to the <paramref name="action"/> on the specified <paramref name="controller"/>.
 		/// <code>
@@ -410,12 +440,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="action">Action to link to.</param>
 		/// <returns>HTML string with anchor to the specified <paramref name="controller"/>
 		/// and <paramref name="action"/>.</returns>
-		/// <remarks>Calling <c>LinkTo( "nameArg", "controllerArg", "actionArg" )</c> results in:
+		/// <remarks>Calling <c>LinkTo( "nameArg", options )</c> results in:
 		/// <code>&lt;a href=&quot;/website/controllerArg/actionArg.rails&quot;&gt;nameArg&lt;/a&gt;</code>
 		/// </remarks>
 		/// <example>This example shows how to use <b>LinkTo</b>:
 		/// <code>
-		/// $HtmlHelper.LinkTo( "linkName", "someController", "requiredAction" )
+		/// $HtmlHelper.LinkTo( "linkName", {@action:} )
 		/// </code>
 		/// </example>
 		public String LinkTo(String name, String controller, String action)

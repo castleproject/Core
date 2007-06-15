@@ -32,6 +32,7 @@ namespace Castle.MonoRail.Framework.Controllers
 	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat", CultureName="neutral")]
 	[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation", CultureName="neutral")]
 	[Resource("FormHelper", "Castle.MonoRail.Framework.Controllers.FormHelper", CultureName="neutral")]
+	[Resource("ZebdaValidation", "Castle.MonoRail.Framework.Controllers.ZebdaValidation", CultureName="neutral")]
 	[PersistFlash]
 	public sealed class FilesController : Controller
 	{
@@ -99,6 +100,14 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateLang()
 		{
 			RenderJavascriptFile("ValidationLang", "fValidateLang");
+		}
+
+		/// <summary>
+		/// Install the zebda validation script
+		/// </summary>
+		public void ZebdaScripts()
+		{
+			RenderJavascriptFile( "ZebdaValidation", "jsfunctions" );
 		}
 
 		/// <summary>

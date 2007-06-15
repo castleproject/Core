@@ -264,6 +264,54 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				SetMaxLength(target, maxLength, null);
 				AddTitle(violationMessage);
 			}
+			
+			/// <summary>
+			/// Sets the value range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minValue">Value of the min.</param>
+			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetValueRange(string target, int minValue, int maxValue, string violationMessage)
+			{
+				
+			}
+
+			/// <summary>
+			/// Sets the value range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minValue">Value of the min.</param>
+			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetValueRange(string target, decimal minValue, decimal maxValue, string violationMessage)
+			{
+				
+			}
+
+			/// <summary>
+			/// Sets the value range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minValue">Value of the min.</param>
+			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage)
+			{
+				
+			}
+
+			/// <summary>
+			/// Sets the value range.
+			/// </summary>
+			/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+			/// <param name="minValue">Value of the min.</param>
+			/// <param name="maxValue">Value of the max.</param>
+			/// <param name="violationMessage">The violation message.</param>
+			public void SetValueRange(string target, string minValue, string maxValue, string violationMessage)
+			{
+				
+			}
 
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
 			{

@@ -616,7 +616,8 @@ namespace Castle.MonoRail.Framework
 						new EffectsFatHelper(), new ScriptaculousHelper(), 
 						new DateFormatHelper(), new HtmlHelper(),
 						new ValidationHelper(), new DictHelper(),
-						new PaginationHelper(), new FormHelper()
+						new PaginationHelper(), new FormHelper(),
+						new ZebdaHelper()
 					};
 
 			foreach(AbstractHelper helper in builtInHelpers)
