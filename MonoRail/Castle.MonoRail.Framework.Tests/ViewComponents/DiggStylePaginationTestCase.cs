@@ -109,6 +109,25 @@ namespace Castle.MonoRail.Framework.Tests.ViewComponents
 		}
 
 		[Test]
+		public void PageWithPrevNextPrintsCustomizedLinks()
+		{
+			SectionRender["startblock"] = delegate(IDictionary context, TextWriter writer) { writer.Write("started"); };
+			SectionRender["endblock"] = delegate(IDictionary context, TextWriter writer) { writer.Write("ended"); };
+			SectionRender["prev"] = delegate(IDictionary context, TextWriter writer) { writer.Write("customprev"); };
+			SectionRender["next"] = delegate(IDictionary context, TextWriter writer) { writer.Write("customnext"); };
+
+			diggComponent.UseInlineStyle = false;
+			diggComponent.Page = singlePage;
+			PrepareViewComponent(diggComponent);
+			diggComponent.Render();
+
+			Assert.AreEqual("started<span class=\"disabled\">customprev</span>\r\n" +
+				"<span class=\"current\">1</span>\r\n" +
+				"<span class=\"disabled\">customnext</span>ended", Output);
+		}
+
+
+		[Test]
 		public void PageWithLinksPrintsLinks()
 		{
 			SectionRender["startblock"] = delegate(IDictionary context, TextWriter writer) { writer.Write("started"); };
