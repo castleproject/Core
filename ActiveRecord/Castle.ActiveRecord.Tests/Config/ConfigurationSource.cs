@@ -27,16 +27,7 @@ namespace Castle.ActiveRecord.Tests.Config
 		[Test]
 		public void TestLoadDefaultThreadScopeConfig()
 		{
-			String xmlConfig =
-				@"<activerecord>
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
-
+			String xmlConfig = @"<activerecord>" + GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
 			//null == use default. == typeof(ThreadScopeInfo);
 			Type expectedType = null;
@@ -44,18 +35,11 @@ namespace Castle.ActiveRecord.Tests.Config
 			AssertConfig(xmlConfig, expectedType, null);
 		}
 
+
 		[Test]
 		public void TestLoadWebThreadScopeInfo()
 		{
-			String xmlConfig =
-				@"<activerecord isWeb=""true"">
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
+			String xmlConfig = @"<activerecord isWeb=""true"">" + GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
 			Type expectedType = typeof(WebThreadScopeInfo);
 
@@ -66,15 +50,7 @@ namespace Castle.ActiveRecord.Tests.Config
 		[Test]
 		public void TestDefaultSessionFactoryHolder()
 		{
-			String xmlConfig =
-				@"<activerecord isWeb=""true"">
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
+			String xmlConfig = @"<activerecord isWeb=""true"">" + GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
 			Type sfh = typeof(SessionFactoryHolder);
 
@@ -86,14 +62,8 @@ namespace Castle.ActiveRecord.Tests.Config
 		public void TestCustomSessionFactoryholder()
 		{
 			String xmlConfig =
-				@"<activerecord isWeb=""true"" sessionfactoryholdertype=""Castle.ActiveRecord.Tests.Config.MySessionFactoryHolder, Castle.ActiveRecord.Tests"">
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
+				@"<activerecord isWeb=""true"" sessionfactoryholdertype=""Castle.ActiveRecord.Tests.Config.MySessionFactoryHolder, Castle.ActiveRecord.Tests"">"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
 			Type sfh = typeof(MySessionFactoryHolder);
 
@@ -105,65 +75,64 @@ namespace Castle.ActiveRecord.Tests.Config
 		public void TestDebug()
 		{
 			String xmlConfig =
-				@"<activerecord isDebug=""true"" isWeb=""true"" sessionfactoryholdertype=""Castle.ActiveRecord.Tests.Config.MySessionFactoryHolder, Castle.ActiveRecord.Tests"">
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
+				@"<activerecord isDebug=""true"" isWeb=""true"" sessionfactoryholdertype=""Castle.ActiveRecord.Tests.Config.MySessionFactoryHolder, Castle.ActiveRecord.Tests"">"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
-			AssertConfig(xmlConfig, null, null, true, false);
+			AssertConfig(xmlConfig, null, null, true, false, false);
 		}
 
 		[Test]
 		public void TestPluralizeTableNames()
 		{
 			String xmlConfig1 =
-				@"<activerecord pluralizeTableNames=""true"">
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
+				@"<activerecord pluralizeTableNames=""true"">"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
-			AssertConfig(xmlConfig1, null, null, false, true);
+			AssertConfig(xmlConfig1, null, null, false, true, false);
 
 			String xmlConfig2 =
-				@"<activerecord pluralizeTableNames=""false"">
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
+				@"<activerecord pluralizeTableNames=""false"">"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
-			AssertConfig(xmlConfig2, null, null, false, false);
+			AssertConfig(xmlConfig2, null, null, false, false, false);
 
 			String xmlConfig3 =
-				@"<activerecord>
-						<config>
-							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
-							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
-							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
-							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
-						</config>
-					</activerecord>";
+				@"<activerecord>"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
 
-			AssertConfig(xmlConfig3, null, null, false, false);
+			AssertConfig(xmlConfig3, null, null, false, false, false);
 		}
+
+		[Test]
+		public void TestVerifyModelsAgainstDBSchema()
+		{
+			String xmlConfig1 =
+				@"<activerecord verifyModelsAgainstDBSchema=""true"">"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig1, null, null, false, false, true);
+
+			String xmlConfig2 =
+				@"<activerecord verifyModelsAgainstDBSchema=""false"">"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig2, null, null, false, false, false);
+
+			String xmlConfig3 =
+				@"<activerecord>"
+						+ GetDefaultHibernateConfigAndCloseActiveRecordSection();
+
+			AssertConfig(xmlConfig3, null, null, false, false, false);
+		}
+
 
 		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType)
 		{
-			AssertConfig(xmlConfig, webinfotype, sessionFactoryHolderType, false, false);
+			AssertConfig(xmlConfig, webinfotype, sessionFactoryHolderType, false, false, false);
 		}
 
 		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType, bool isDebug,
-		                                 bool pluralize)
+										 bool pluralize, bool verifyModelsAgainstDBSchema)
 		{
 			StringReader sr = new StringReader(xmlConfig);
 
@@ -172,19 +141,32 @@ namespace Castle.ActiveRecord.Tests.Config
 			if (null != webinfotype)
 			{
 				Assert.IsTrue(c.ThreadScopeInfoImplementation == webinfotype,
-				              "Expected {0}, Got {1}", webinfotype, c.ThreadScopeInfoImplementation);
+							  "Expected {0}, Got {1}", webinfotype, c.ThreadScopeInfoImplementation);
 			}
 
 			if (null != sessionFactoryHolderType)
 			{
 				Assert.IsTrue(c.SessionFactoryHolderImplementation == sessionFactoryHolderType,
-				              "Expected {0}, Got {1}", sessionFactoryHolderType, c.SessionFactoryHolderImplementation);
+							  "Expected {0}, Got {1}", sessionFactoryHolderType, c.SessionFactoryHolderImplementation);
 			}
 
 			Assert.IsTrue(c.Debug == isDebug);
 			Assert.IsTrue(c.PluralizeTableNames == pluralize);
+			Assert.IsTrue(c.VerifyModelsAgainstDBSchema == verifyModelsAgainstDBSchema);
+		}
+
+		private static string GetDefaultHibernateConfigAndCloseActiveRecordSection()
+		{
+			return @"	<config>
+							<add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
+							<add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
+							<add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
+							<add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
+						</config>
+					</activerecord>";
 		}
 	}
+
 
 	public class MySessionFactoryHolder : SessionFactoryHolder
 	{

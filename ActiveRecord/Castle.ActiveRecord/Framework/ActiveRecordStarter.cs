@@ -25,6 +25,7 @@ namespace Castle.ActiveRecord
 	using Castle.Core.Configuration;
 	using NHibernate.Cfg;
 	using Iesi.Collections;
+	using NHibernate.Expression;
 	using NHibernate.Tool.hbm2ddl;
 	using Environment=NHibernate.Cfg.Environment;
 
@@ -122,6 +123,7 @@ namespace Castle.ActiveRecord
 				isInitialized = true;
 			}
 		}
+
 
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
@@ -558,9 +560,35 @@ namespace Castle.ActiveRecord
 				semanticVisitor.VisitNodes(models);
 
 				if (ModelsCreated != null)
+				{
 					ModelsCreated(models, source);
+				}
 
 				AddXmlToNHibernateCfg(holder, models);
+
+				if (source.VerifyModelsAgainstDBSchema)
+				{
+					VerifySchema(models);
+				}
+			}
+		}
+
+		private static void VerifySchema(ActiveRecordModelCollection models)
+		{
+			foreach(ActiveRecordModel model in models)
+			{
+				if (!model.Type.IsAbstract)
+				{
+					try
+					{
+						ActiveRecordMediator.FindAll(model.Type, Expression.Sql("1=0"));	
+					}
+					catch (Exception ex)
+					{
+						throw new ActiveRecordException("Error verifying the schema for model " + model.Type.Name, ex);
+					}
+					
+				}
 			}
 		}
 

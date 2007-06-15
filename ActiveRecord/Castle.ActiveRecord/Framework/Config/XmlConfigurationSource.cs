@@ -77,6 +77,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			XmlAttribute isDebug = section.Attributes["isDebug"];
 			XmlAttribute lazyByDefault = section.Attributes["default-lazy"];
 			XmlAttribute pluralize = section.Attributes["pluralizeTableNames"];
+			XmlAttribute verifyModelsAgainstDBSchemaAtt = section.Attributes["verifyModelsAgainstDBSchema"];
 
 			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value,
 			                    threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
@@ -98,6 +99,8 @@ namespace Castle.ActiveRecord.Framework.Config
 			SetIsLazyByDefault(lazyByDefault != null && lazyByDefault.Value == "true");
 
 			SetPluralizeTableNames(pluralize != null && pluralize.Value == "true");
+
+			SetVerifyModelsAgainstDBSchema(verifyModelsAgainstDBSchemaAtt != null && verifyModelsAgainstDBSchemaAtt.Value == "true");
 
 			PopulateConfigNodes(section);
 		}

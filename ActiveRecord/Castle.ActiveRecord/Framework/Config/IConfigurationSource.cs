@@ -69,5 +69,14 @@ namespace Castle.ActiveRecord.Framework
 		/// 	<c>true</c> if table names should be pluralized by default; otherwise, <c>false</c>.
 		/// </value>
 		bool PluralizeTableNames { get; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the models should be verified against the db schema on Initialisation.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if models should be verified; otherwise, <c>false</c>.
+		/// </value>
+		bool VerifyModelsAgainstDBSchema { get; }
+
 	}
 }

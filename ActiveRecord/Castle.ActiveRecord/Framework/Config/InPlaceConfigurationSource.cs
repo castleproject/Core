@@ -33,6 +33,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		private bool debug = false;
 		private bool isLazyByDefault;
 		private bool pluralizeTableNames;
+		private bool verifyModelsAgainstDBSchema = false;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InPlaceConfigurationSource"/> class.
@@ -116,6 +117,18 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			get { return pluralizeTableNames; }
 			set { pluralizeTableNames = value; }
+		}
+
+		/// <summary>
+		/// Gets or Sets a value indicating whether the models should be verified against the db schema on Initialisation.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if models should be verified; otherwise, <c>false</c>.
+		/// </value>
+		public bool VerifyModelsAgainstDBSchema
+		{
+			get { return verifyModelsAgainstDBSchema; }
+			set { verifyModelsAgainstDBSchema = value; }
 		}
 
 		#endregion
@@ -238,6 +251,15 @@ namespace Castle.ActiveRecord.Framework.Config
 			isLazyByDefault = lazyByDefault;
 		}
 
+		/// <summary>
+		/// Sets the debug flag.
+		/// </summary>
+		/// <param name="verifyModelsAgainstDBSchema">if set to <c>true</c> Active Record will verify the models against the db schema on startup.</param>
+		protected void SetVerifyModelsAgainstDBSchema(bool verifyModelsAgainstDBSchema)
+		{
+			this.verifyModelsAgainstDBSchema = verifyModelsAgainstDBSchema;
+		}
+		
 		/// <summary>
 		/// Sets the pluralizeTableNames flag.
 		/// </summary>
