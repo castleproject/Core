@@ -1369,7 +1369,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Configures this FormHelper instance to use fValidate for form fields validation
 		/// </summary>
-		public void UseZValidate()
+		public void UsefValidate()
 		{
 			UseWebValidatorProvider(new FValidateWebValidator());
 		}
