@@ -86,7 +86,7 @@ namespace Castle.Components.Validator
 		/// <param name="max">The maximum value, or <c>DateTime.MaxValue</c> if this should not be tested.</param>
 		public RangeValidator(DateTime min, DateTime max)
 		{
-			AssertValid(min, max);
+			AssertValid(max, min);
 
 			type = RangeValidationType.DateTime;
 			this.min = min;
@@ -473,7 +473,7 @@ namespace Castle.Components.Validator
 			}
 		}
 
-		private static void AssertValid(decimal min, decimal max)
+		private static void AssertValid(decimal max, decimal min)
 		{
 			if (min == decimal.MinValue && max == decimal.MaxValue)
 			{
@@ -490,7 +490,7 @@ namespace Castle.Components.Validator
 			}
 		}
 
-		private static void AssertValid(DateTime min, DateTime max)
+		private static void AssertValid(DateTime max, DateTime min)
 		{
 			if (min == DateTime.MinValue && max == DateTime.MaxValue)
 			{
