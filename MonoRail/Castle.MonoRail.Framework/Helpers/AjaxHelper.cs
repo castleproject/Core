@@ -813,6 +813,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				if (options.Contains("update"))
 				{
 					contents.AppendFormat( "'{0}', ", options["update"] );
+					options.Remove("update");
 				}
 				else
 				{
@@ -824,11 +825,17 @@ namespace Castle.MonoRail.Framework.Helpers
 					{
 						contents.AppendFormat( "success:'{0}'", options["success"] );
 						commaFirst = true;
+						options.Remove("success");
 					}
+
 					if (options.Contains("failure"))
 					{
-						if (commaFirst) contents.Append(",");
+						if (commaFirst)
+						{
+							contents.Append(",");
+						}
 						contents.AppendFormat( "failure:'{0}'", options["failure"] );
+						options.Remove("failure");
 					}
 
 					contents.Append("}, ");
@@ -843,18 +850,25 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (options.Contains("before"))
 			{
 				contents = new StringBuilder( String.Format("{0}; {1}", options["before"], contents) );
+
+				options.Remove("before");
 			}
 
 			if (options.Contains("after"))
 			{
 				contents = new StringBuilder( String.Format("{1}; {0}", options["after"], contents) );
+
+				options.Remove("after");
 			}
 
 			if (options.Contains("condition"))
 			{
 				String old = contents.ToString();
+
 				contents = new StringBuilder( 
 					String.Format("if ( {0} ) {{ {1}; }}", options["condition"], old) );
+
+				options.Remove("condition");
 			}
 
 			return contents.ToString();
