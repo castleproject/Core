@@ -123,6 +123,7 @@
     <Compile Include="BasicFunctionalityTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\ViewEngineConfigTestCase.cs" />
     <Compile Include="Controllers\Clients\ClientCartController.cs" />
     <Compile Include="Controllers\Clients\ClientContactController.cs" />
     <Compile Include="Controllers\Clients\ClientHomeController.cs">
