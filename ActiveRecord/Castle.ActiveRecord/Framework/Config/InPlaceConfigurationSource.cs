@@ -21,8 +21,15 @@ namespace Castle.ActiveRecord.Framework.Config
 	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.Core.Configuration;
 
+	/// <summary>
+	/// Enum for database types support for configuration construction. 
+	/// Not to be confused by databases supported by ActiveRecord
+	/// </summary>
 	public enum DatabaseType
 	{
+		/// <summary>
+		/// Microsoft SQL Server
+		/// </summary>
 		MSSQLServer
 	}
 
