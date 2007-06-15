@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Changed the BaseControllerTest vdir to "" instead "/"
+
+- Added the Declare(String variable) to IJSGenerator inteface
+
 - Applied Tim Haines' patch changing FormHelper to make calls to FormatIfNecessary 
 
 - Applied chris ortman's patch fixing MR-271

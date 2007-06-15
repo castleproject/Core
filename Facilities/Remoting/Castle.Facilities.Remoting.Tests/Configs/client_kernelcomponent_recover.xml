@@ -6,7 +6,7 @@
     <facility 
 		id="remote.facility" 
 		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
-		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfigClient.config"
+		remotingConfigurationFile="../../../Facilities/Remoting/Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfigClient.config"
 		isClient="true"
 		remoteKernelUri="tcp://localhost:2133/kernel.rem"
 		baseUri="tcp://localhost:2133" />

@@ -236,6 +236,20 @@ namespace Castle.MonoRail.Framework.Helpers
 				Record(this, variable + " = " + expression);
 			}
 
+			#region IJSGenerator Members
+
+			/// <summary>
+			/// Declares the specified variable as null.
+			/// </summary>
+			/// <param name="variable">The variable name.</param>
+			public void Declare(string variable)
+			{
+				Record(this, string.Format("var {0} = null", variable));
+				Record(this, Environment.NewLine);
+			}
+
+			#endregion
+
 			/// <summary>
 			/// 
 			/// </summary>

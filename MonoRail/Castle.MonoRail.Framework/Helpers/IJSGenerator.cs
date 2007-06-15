@@ -108,6 +108,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="expression"></param>
 		void Assign(String variable, String expression);
 
+
+		/// <summary>
+		/// Declares the specified variable as null.
+		/// </summary>
+		/// <param name="variable">The variable name.</param>
+		void Declare(String variable);
+
 		/// <summary>
 		/// 
 		/// </summary>

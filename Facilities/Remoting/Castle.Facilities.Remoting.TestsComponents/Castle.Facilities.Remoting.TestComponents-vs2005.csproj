@@ -110,6 +110,9 @@
       <Name>Castle.Core-vs2005</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Castle.Facilities.Remoting.TestsComponents.build" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

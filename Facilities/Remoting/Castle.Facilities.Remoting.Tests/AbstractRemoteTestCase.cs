@@ -79,7 +79,9 @@ namespace Castle.Facilities.Remoting.Tests
 		
 		protected string BuildConfigPath(string configFile)
 		{
-			return ConfigHelper.ResolveConfigPath(Path.Combine(@"Configs/", configFile));
+			string baseDir = System.Configuration.ConfigurationManager.AppSettings["configPath"];
+
+			return ConfigHelper.ResolveConfigPath(Path.Combine(baseDir, configFile));
 		}
 	}
 

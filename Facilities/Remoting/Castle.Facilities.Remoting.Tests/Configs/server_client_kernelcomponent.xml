@@ -8,7 +8,7 @@
 		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
 		isServer="true"
 		registryUri="kernel.rem"
-		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfig2.config"
+		remotingConfigurationFile="../../../Facilities/Remoting/Castle.Facilities.Remoting.Tests/Configs/RemotingTcpConfig2.config"
 		isClient="true"
 		remoteKernelUri="tcp://localhost:2133/kernel.rem"
 		baseUri="tcp://localhost:2133" />

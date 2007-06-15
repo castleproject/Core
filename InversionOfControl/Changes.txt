@@ -22,7 +22,7 @@ RC 4
 - Applied Marcus Widerberg's patch fixing FACILITIES-82
   "Programmatic configuration for FactorySupport"
 
-- Apply patch from Sam Camp that fixes problems with Remoting Facility Sample and RecoverableComponent. 
+- Reverted by Henry -> Apply patch from Sam Camp that fixes problems with Remoting Facility Sample and RecoverableComponent. 
 
 - Updated TypedFactoryFacility to not require a target instance
   when proxying.

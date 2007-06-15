@@ -29,7 +29,7 @@ namespace Castle.MonoRail.TestSupport
 		private readonly string domain;
 		private readonly string domainPrefix;
 		private readonly int port;
-		private readonly string virtualDir = "/";
+		private string virtualDir = "";
 		private IRailsEngineContext context;
 		private IRequest request;
 		private IResponse response;
