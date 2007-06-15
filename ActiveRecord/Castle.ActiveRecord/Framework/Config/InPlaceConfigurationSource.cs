@@ -21,6 +21,11 @@ namespace Castle.ActiveRecord.Framework.Config
 	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.Core.Configuration;
 
+	public enum DatabaseType
+	{
+		MSSQLServer
+	}
+
 	/// <summary>
 	/// Usefull for test cases.
 	/// </summary>
@@ -30,10 +35,10 @@ namespace Castle.ActiveRecord.Framework.Config
 		private Type threadScopeInfoImplementation;
 		private Type sessionFactoryHolderImplementation;
 		private Type namingStrategyImplementation;
-		private bool debug = false;
+		private bool debug;
 		private bool isLazyByDefault;
 		private bool pluralizeTableNames;
-		private bool verifyModelsAgainstDBSchema = false;
+		private bool verifyModelsAgainstDBSchema;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InPlaceConfigurationSource"/> class.
@@ -132,6 +137,76 @@ namespace Castle.ActiveRecord.Framework.Config
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Builds a InPlaceConfigurationSource set up to access a MS SQL server database using integrated security.
+		/// </summary>
+		/// <param name="server">The server.</param>
+		/// <param name="initialCatalog">The initial catalog.</param>
+		/// <returns></returns>
+		public static InPlaceConfigurationSource BuildForMSSqlServer(string server, string initialCatalog)
+		{
+			if (string.IsNullOrEmpty(server)) throw new ArgumentNullException("server");
+			if (string.IsNullOrEmpty(initialCatalog)) throw new ArgumentNullException("initialCatalog");
+
+			return Build(DatabaseType.MSSQLServer, "Server=" + server + ";initial catalog=" + initialCatalog + ";Integrated Security=SSPI");
+		}
+
+		/// <summary>
+		/// Builds a InPlaceConfigurationSource set up to access a MS SQL server database using the specified username and password.
+		/// </summary>
+		/// <param name="server">The server.</param>
+		/// <param name="initialCatalog">The initial catalog.</param>
+		/// <param name="username">The username.</param>
+		/// <param name="password">The password.</param>
+		/// <returns></returns>
+		public static InPlaceConfigurationSource BuildForMSSqlServer(string server, string initialCatalog, string username, string password)
+		{
+			if (string.IsNullOrEmpty(server)) throw new ArgumentNullException("server");
+			if (string.IsNullOrEmpty(initialCatalog)) throw new ArgumentNullException("initialCatalog");
+			if (string.IsNullOrEmpty(username)) throw new ArgumentNullException("username");
+			if (string.IsNullOrEmpty(password)) throw new ArgumentNullException("password");
+
+			return Build(DatabaseType.MSSQLServer, "Server=" + server + ";initial catalog=" + initialCatalog + ";User id=" + username + ";password=" + password);
+		}
+
+		/// <summary>
+		/// Builds an InPlaceConfiguratioSource for the specified database.
+		/// </summary>
+		/// <param name="database">The database.</param>
+		/// <param name="connectionString">The connection string.</param>
+		/// <returns></returns>
+		public static InPlaceConfigurationSource Build(DatabaseType database, string connectionString)
+		{
+			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
+
+			InPlaceConfigurationSource config = new InPlaceConfigurationSource();
+
+			Hashtable parameters = new Hashtable();
+			parameters["hibernate.connection.provider"] = "NHibernate.Connection.DriverConnectionProvider";
+
+			if (database == DatabaseType.MSSQLServer)
+			{
+				parameters["hibernate.connection.driver_class"] = "NHibernate.Driver.SqlClientDriver";
+				parameters["hibernate.dialect"] = "NHibernate.Dialect.MsSql2000Dialect";
+				parameters["hibernate.connection.connection_string"] = connectionString;
+			}
+
+			config.Add(typeof(ActiveRecordBase), parameters);
+
+			return config;
+		}
+
+		/// <summary>
+		/// Sets a value indicating whether this instance is running in web app.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is running in web app; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsRunningInWebApp
+		{
+			set { SetUpThreadInfoType(value, null); }
+		}
 
 		/// <summary>
 		/// Adds the specified type with the properties
@@ -287,7 +362,6 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <param name="config">The configuration</param>
 		private void ProcessConfiguration(IConfiguration config)
 		{
-#if DOTNET2
 			const string ConnectionStringKey = "hibernate.connection.connection_string";
 
 			for(int i = 0; i < config.Children.Count; ++i)
@@ -308,7 +382,6 @@ namespace Castle.ActiveRecord.Framework.Config
 					}
 				}
 			}
-#endif
 		}
 	}
 }
