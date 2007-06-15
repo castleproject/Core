@@ -1561,7 +1561,7 @@ namespace Castle.DynamicProxy.Generators
 			                                       	new MethodInvocationExpression(arg1, addValueMethod,
 			                                       	                               new ConstReference("__baseType").
 			                                       	                               	ToExpression(),
-			                                       	                               new TypeTokenExpression(emitter.BaseType))));
+			                                       	                               new ConstReference (emitter.BaseType.AssemblyQualifiedName).ToExpression())));
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, arg1, arg2);
 

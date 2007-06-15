@@ -559,6 +559,11 @@ namespace Castle.DynamicProxy.Generators
 			                         	                               new ConstReference("__target").ToExpression(),
 			                         	                               targetField.ToExpression())));
 
+			codebuilder.AddStatement (new ExpressionStatement (
+			                         	new MethodInvocationExpression (arg1, addValueMethod,
+			                         	                               new ConstReference ("__targetFieldType").ToExpression (),
+			                         	                               new ConstReference (targetField.Reference.FieldType.AssemblyQualifiedName).ToExpression())));
+
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(arg1, addIntMethod,
 			                         	                               new ConstReference("__interface_generator_type").

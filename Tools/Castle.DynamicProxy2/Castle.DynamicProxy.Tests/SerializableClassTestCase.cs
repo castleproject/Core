@@ -184,7 +184,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore ("TODO: Reimplement serialization without default constructors, see revision 3725, DP-53")]
 		public void SerializatingObjectsWithoutDefaultConstructor ()
 		{
 			ProxyObjectReference.ResetScope ();
@@ -231,7 +230,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore ("TODO: Reimplement serialization with delegates/events, see revision 3751, DP-56")]
 		public void SerializeObjectsWithDelegateToOtherObject ()
 		{
 			ProxyObjectReference.ResetScope ();
@@ -267,7 +265,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore ("TODO: Reimplement serialization with delegates/events, see revision 3751, DP-56")]
 		public void SerializeObjectsWithDelegateToThisObject ()
 		{
 			ProxyObjectReference.ResetScope ();
@@ -299,7 +296,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore ("TODO: Reimplement serialization with delegates/events, see revision 3751, DP-56")]
 		public void SerializeObjectsWithIndirectDelegateToThisObject ()
 		{
 			ProxyObjectReference.ResetScope ();
@@ -332,7 +328,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore ("TODO: Reimplement serialization with delegates/events, see revision 3751, DP-56")]
 		public void SerializeObjectsWithIndirectDelegateToMember ()
 		{
 			ProxyObjectReference.ResetScope ();
@@ -376,7 +371,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore ("TODO: Reimplement serialization with delegates/events, see revision 3751, DP-56")]
 		public void SerializeClassWithIndirectSelfReference ()
 		{
 			ProxyObjectReference.ResetScope ();
@@ -403,7 +397,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore ("TODO: Reimplement serialization with delegates/events, see revision 3751, DP-56")]
 		public void SerializeClassWithDirectAndIndirectSelfReference ()
 		{
 			ProxyObjectReference.ResetScope ();

@@ -42,13 +42,26 @@ namespace Castle.DynamicProxy.Generators
 					// We always load all instance methods into the cache, we will filter them later
 					_cachedMethodInfosByType.Add(
 						type,
-						type.GetMethods(
+						RemoveDuplicates (type.GetMethods(
 							BindingFlags.Public | BindingFlags.NonPublic
-							| BindingFlags.Instance));
+							| BindingFlags.Instance)));
 				}
 				methodsInCache = (MethodInfo[]) _cachedMethodInfosByType[type];
 			}
 			return MakeFilteredCopy(methodsInCache, flags & (BindingFlags.Public | BindingFlags.NonPublic));
+		}
+
+		private static object RemoveDuplicates (MethodInfo[] infos)
+		{
+			Dictionary<MethodInfo, object> uniqueInfos = new Dictionary<MethodInfo, object> (MethodSignatureComparer.Instance);
+			foreach (MethodInfo info in infos)
+			{
+				if (!uniqueInfos.ContainsKey (info))
+					uniqueInfos.Add (info, null);
+			}
+			MethodInfo[] result = new MethodInfo[uniqueInfos.Count];
+			uniqueInfos.Keys.CopyTo (result, 0);
+			return result;
 		}
 
 		private static MethodInfo[] MakeFilteredCopy(MethodInfo[] methodsInCache, BindingFlags visibilityFlags)
