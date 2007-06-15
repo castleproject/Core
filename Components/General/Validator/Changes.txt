@@ -1,6 +1,9 @@
 Beta 1
 ======
 
+- Added a decimal range validator
+- Made the range validator web enabled
+
 - Applied Brian DeMarzo's patch fixing COMP-30
   "Improved handling of empty strings, client valiator script tweaks"
 
