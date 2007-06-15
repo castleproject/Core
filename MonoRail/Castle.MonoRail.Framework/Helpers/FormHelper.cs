@@ -1497,6 +1497,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The generated form element</returns>
 		protected virtual string CreateInputElement(string type, string id, string target, string value, IDictionary attributes)
 		{
+			value = FormatIfNecessary(value, attributes);
+
 			if (Controller.Context != null) // We have a context
 			{
 				value = HtmlEncode(value);
@@ -1523,7 +1525,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		protected virtual string CreateInputElement(string type, string value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"{0}\" value=\"{1}\" {2}/>",
-								 type, value, GetAttributes(attributes));
+								 type, FormatIfNecessary(value, attributes), GetAttributes(attributes));
 		}
 
 		protected string FormatIfNecessary(object value, IDictionary attributes)
