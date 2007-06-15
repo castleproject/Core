@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
-
 namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
 	
-	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Validator;
 
@@ -92,7 +89,7 @@ namespace Castle.ActiveRecord
 
 			if (!returnValue)
 			{
-				Type type = this.GetType();
+				Type type = GetType();
 				ErrorSummary summary = __runner.GetErrorSummary(this);
 
 				foreach (string property in summary.InvalidProperties)
@@ -183,5 +180,3 @@ namespace Castle.ActiveRecord
 		}
 	}
 }
-
-#endif
