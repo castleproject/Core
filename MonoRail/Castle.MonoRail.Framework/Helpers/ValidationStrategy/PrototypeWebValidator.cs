@@ -61,7 +61,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		public class PrototypeValidationConfiguration : WebValidationConfiguration
 		{
 			private IDictionary jsOptions = new Hashtable();
-			private List<CustomRule> rules = new List<CustomRule>();
+			private Dictionary<String, CustomRule> rules = new Dictionary<String, CustomRule>();
 
 			public override string CreateBeforeFormClosed(string formId)
 			{
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					bool addedFirstRule = false;
 					string Comma = "";
 
-					foreach(CustomRule rule in rules)
+					foreach(CustomRule rule in rules.Values)
 					{
 						sb.AppendFormat("{0} ['{1}', '{2}', {{ {3} }}]\n", Comma, rule.className, rule.violationMessage, rule.rule);
 
@@ -92,7 +92,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 					sb.Append("]);\n");
 				}
 
-                return AbstractHelper.ScriptBlock(sb.ToString());
+				return AbstractHelper.ScriptBlock(sb.ToString());
 			}
 
 			public override void Configure(IDictionary parameters)
@@ -128,7 +128,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void AddCustomRule(string className, string violationMessage, string rule)
 			{
-				rules.Add(new CustomRule(className, rule, violationMessage));
+				rules[className] = new CustomRule(className, rule, violationMessage);
 			}
 
 			class CustomRule
@@ -274,7 +274,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, int minValue, int maxValue, string violationMessage)
 			{
-				
 			}
 
 			/// <summary>
@@ -298,7 +297,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage)
 			{
-				
 			}
 
 			/// <summary>
@@ -310,7 +308,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			/// <param name="violationMessage">The violation message.</param>
 			public void SetValueRange(string target, string minValue, string maxValue, string violationMessage)
 			{
-				
 			}
 
 			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
@@ -331,8 +328,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			{
 				if (!string.IsNullOrEmpty(message))
 				{
-					string existingTitle = (string)attributes["title"];
-
+					string existingTitle = (string) attributes["title"];
+					
 					if (!message.EndsWith("."))
 					{
 						message += ".";
