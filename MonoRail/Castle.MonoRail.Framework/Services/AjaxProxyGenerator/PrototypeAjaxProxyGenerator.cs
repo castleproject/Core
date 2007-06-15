@@ -65,7 +65,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 				logger = loggerFactory.Create(typeof(PrototypeAjaxProxyGenerator));
 			}
 
-			this.controllerDescriptorBuilder =
+			controllerDescriptorBuilder =
 				(IControllerDescriptorProvider) provider.GetService(typeof(IControllerDescriptorProvider));
 		}
 
@@ -80,6 +80,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 		/// <param name="area">area which the controller belongs to</param>
 		public String GenerateJSProxy(IRailsEngineContext context, string proxyName, string area, string controller)
 		{
+			IServerUtility server = context.Server;
 			String nl = Environment.NewLine;
 			String cacheKey = (area + "|" + controller).ToLower(CultureInfo.InvariantCulture);
 			String result = (String) ajaxProxyCache[cacheKey];
@@ -135,13 +136,25 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 					functions.AppendFormat(nl + "\t{0}: function(", functionName);
 
 					StringBuilder parameters = new StringBuilder("_=");
+					Type jsonBinderAttType = Type.GetType("Castle.Monorail.JSONSupport.JSONBinderAttribute, Castle.Monorail.JSONSupport", false);
 
 					foreach(ParameterInfo pi in ajaxActionMethod.GetParameters())
 					{
 						string paramName = GetParameterName(pi);
 
 						functions.AppendFormat("{0}, ", paramName);
-						parameters.AppendFormat("\\x26{0}='+{0}+'", paramName);
+
+						string paramValue = paramName;
+						if (jsonBinderAttType != null)
+						{
+							object jsonBinderAtt = GetSingleAttribute(pi, jsonBinderAttType, false);
+							if (jsonBinderAtt != null)
+							{
+								// toJSON requires Prototype 1.5.1
+								paramValue = "Object.toJSON(" + paramName + ")";
+							}
+						}
+						parameters.AppendFormat("\\x26{0}='+{1}+'", paramName, server.UrlEncode(paramValue));
 					}
 
 					string httpRequestMethod = "get";
@@ -192,7 +205,9 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 
 			// use the default parameter name, if none of the parameter binders define a new name
 			if (paramName == null || paramName.Length == 0)
+			{
 				paramName = pi.Name;
+			}
 
 			return ToCamelCase(paramName);
 		}

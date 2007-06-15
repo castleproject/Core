@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Ricardo Stuven's patch fixing MR-258
+  "JSON serialization in Ajax calls"
+
 - Applied goodwill's patch fixing MR-212
   "Script Helpers (e.g. $Scriptaculous) installscript function clear flash unexpected"
 
