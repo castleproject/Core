@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied chris ortman's patch fixing MR-271
+  "AdditionalSources not loaded when using the viewEngines element"
+
 - Applied Ricardo Stuven's patch fixing MR-258
   "JSON serialization in Ajax calls"
 

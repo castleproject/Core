@@ -47,6 +47,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				ConfigureSingleViewEngine(section);
 			}
 
+			LoadAdditionalSources(section);
 			ResolveViewPath();
 		}
 
@@ -207,14 +208,13 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			viewEngines = new ViewEngineInfo[] {new ViewEngineInfo(engineType, enableXhtmlRendering)};
 
-			LoadAdditionalSources(section);
 		}
 
 		private void LoadAdditionalSources(XmlNode section)
 		{
 			ArrayList items = new ArrayList();
 
-			foreach(XmlElement assemblyNode in section.SelectNodes("additionalSources/assembly"))
+			foreach(XmlElement assemblyNode in section.SelectNodes("/monorail/*/additionalSources/assembly"))
 			{
 				String assemblyName = assemblyNode.GetAttribute("name");
 				String ns = assemblyNode.GetAttribute("namespace");
