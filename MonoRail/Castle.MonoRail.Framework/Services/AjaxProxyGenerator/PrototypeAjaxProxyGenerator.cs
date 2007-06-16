@@ -33,10 +33,15 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 	{
 		private static readonly Hashtable ajaxProxyCache = Hashtable.Synchronized(new Hashtable());
 
-		private static readonly Type ARFetcherType =
-			TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName(
-					"Castle.MonoRail.ActiveRecordSupport.ARFetchAttribute, Castle.MonoRail.ActiveRecordSupport"), true);
+		private static readonly Type 
+			ARFetchAttType =
+				TypeLoadUtil.GetType(
+					TypeLoadUtil.GetEffectiveTypeName(
+						"Castle.MonoRail.ActiveRecordSupport.ARFetchAttribute, Castle.MonoRail.ActiveRecordSupport"), true),
+			JsonBinderAttType = 
+				TypeLoadUtil.GetType(
+					TypeLoadUtil.GetEffectiveTypeName(
+						"Castle.Monorail.JSONSupport.JSONBinderAttribute, Castle.Monorail.JSONSupport"), true);
 
 		private IControllerDescriptorProvider controllerDescriptorBuilder;
 
@@ -80,7 +85,6 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 		/// <param name="area">area which the controller belongs to</param>
 		public String GenerateJSProxy(IRailsEngineContext context, string proxyName, string area, string controller)
 		{
-			IServerUtility server = context.Server;
 			String nl = Environment.NewLine;
 			String cacheKey = (area + "|" + controller).ToLower(CultureInfo.InvariantCulture);
 			String result = (String) ajaxProxyCache[cacheKey];
@@ -136,25 +140,31 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 					functions.AppendFormat(nl + "\t{0}: function(", functionName);
 
 					StringBuilder parameters = new StringBuilder("_=");
-					Type jsonBinderAttType = Type.GetType("Castle.Monorail.JSONSupport.JSONBinderAttribute, Castle.Monorail.JSONSupport", false);
 
 					foreach(ParameterInfo pi in ajaxActionMethod.GetParameters())
 					{
 						string paramName = GetParameterName(pi);
 
-						functions.AppendFormat("{0}, ", paramName);
-
+						// by default, just forward the parameter taken by the function as the request parameter value
 						string paramValue = paramName;
-						if (jsonBinderAttType != null)
+
+						if (JsonBinderAttType != null)
 						{
-							object jsonBinderAtt = GetSingleAttribute(pi, jsonBinderAttType, false);
+							// if we have a [JSONBinder] mark on the parameter, we can serialize the parameter using prototype's Object.toJSON().
+							object jsonBinderAtt = GetSingleAttribute(pi, JsonBinderAttType, false);
 							if (jsonBinderAtt != null)
 							{
-								// toJSON requires Prototype 1.5.1
-								paramValue = "Object.toJSON(" + paramName + ")";
+								// toJSON requires Prototype 1.5.1. Users of [JSONBinder] should be aware of that.
+								paramName = (string) GetPropertyValue(jsonBinderAtt, "EntryKey");
+								paramValue = "Object.toJSON(" + paramValue + ")";
 							}
 						}
-						parameters.AppendFormat("\\x26{0}='+{1}+'", paramName, server.UrlEncode(paramValue));
+
+						functions.AppendFormat("{0}, ", paramName);
+
+						// appends " &<paramName>=' + <paramValue> + ' " to the string.
+						// the paramValue will run on the client-side, so it can be a parameter name, or a function call like Object.toJSON().
+						parameters.Append('\\x26').Append(paramName).Append("='+").Append(paramValue).Append("+'");
 					}
 
 					string httpRequestMethod = "get";
@@ -193,15 +203,17 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 				paramName = ((DataBindAttribute) parameterAttribute).Prefix;
 			}
 
-			if (ARFetcherType != null)
+			if (ARFetchAttType != null)
 			{
 				// change the parameter name, if using [ARFetch]
-				parameterAttribute = GetSingleAttribute(pi, ARFetcherType, true);
+				parameterAttribute = GetSingleAttribute(pi, ARFetchAttType, true);
 				if (parameterAttribute != null)
 				{
 					paramName = Convert.ToString(GetPropertyValue(parameterAttribute, "RequestParameterName"));
 				}
 			}
+
+			// the parameter name change for [JsonAttribute] is made from within GenerateJSProxy.
 
 			// use the default parameter name, if none of the parameter binders define a new name
 			if (paramName == null || paramName.Length == 0)

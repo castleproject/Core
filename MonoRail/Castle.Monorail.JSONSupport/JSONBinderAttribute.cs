@@ -30,6 +30,8 @@ namespace Castle.Monorail.JSONSupport
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JSONBinderAttribute"/> class.
+		/// For use with <see cref="Castle.MonoRail.Framework.Helpers.AjaxHelper.GenerateJSProxy" />,
+		/// make sure you are using Prototype 1.5.1 or later.
 		/// </summary>
 		/// <param name="entryKey">The entry key, which is the form or 
 		/// querystring key that identifies the JSON persisted content</param>
@@ -40,6 +42,11 @@ namespace Castle.Monorail.JSONSupport
 			this.entryKey = entryKey;
 		}
 
+		public string EntryKey
+		{
+			get { return this.entryKey; }
+		}
+		
 		public int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			return controller.Params[entryKey] != null ? 1 : 0; 
