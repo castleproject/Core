@@ -164,7 +164,7 @@ namespace Castle.MonoRail.Framework.Services.AjaxProxyGenerator
 
 						// appends " &<paramName>=' + <paramValue> + ' " to the string.
 						// the paramValue will run on the client-side, so it can be a parameter name, or a function call like Object.toJSON().
-						parameters.Append('\\x26').Append(paramName).Append("='+").Append(paramValue).Append("+'");
+						parameters.Append("\\x26").Append(paramName).Append("='+").Append(paramValue).Append("+'");
 					}
 
 					string httpRequestMethod = "get";
