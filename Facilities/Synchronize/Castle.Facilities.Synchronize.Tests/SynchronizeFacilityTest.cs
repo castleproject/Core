@@ -39,9 +39,12 @@ namespace Castle.Facilities.Synchronize.Tests
 			container = new WindsorContainer();
 
 			container.AddFacility("sync.facility", new SynchronizeFacility());
+			container.AddComponent("sync.context", typeof(SynchronizationContext));
 			container.AddComponent("dummy.form.class", typeof(DummyForm));
 			container.AddComponent("dummy.form.service", typeof(IDummyForm), typeof(DummyForm));
 			container.AddComponent("class.in.context", typeof(ClassUsingFormInContext));
+			container.AddComponent("sync.class.no.context", typeof(SyncClassWithoutContext));
+			container.AddComponent("sync.class.override.context", typeof(SyncClassOverrideContext));
 
 			MutableConfiguration componentNode = new MutableConfiguration("component");
 			componentNode.Attributes[Constants.SynchronizedAttrib] = "true";
@@ -98,6 +101,20 @@ namespace Castle.Facilities.Synchronize.Tests
 
 			Assert.AreNotEqual(sync1, sync2);
 			Assert.AreNotEqual(sync1.GetHashCode(), sync2.GetHashCode());
+		}
+
+		[Test]
+		public void Synchronize_NoContextSpecified_DoesNotUseContext()
+		{
+			SyncClassWithoutContext sync = container.Resolve<SyncClassWithoutContext>();
+			sync.DoWork();
+		}
+
+		[Test]
+		public void Synchronize_OverrideContext_UsesContext()
+		{
+			SyncClassOverrideContext sync = container.Resolve<SyncClassOverrideContext>();
+			sync.DoWork();
 		}
 
 		[Test]

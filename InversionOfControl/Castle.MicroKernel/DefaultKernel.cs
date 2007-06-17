@@ -742,9 +742,21 @@ namespace Castle.MicroKernel
 
 #if DOTNET2
 			// a complete generic type, Foo<Bar>, need to check if Foo<T> is registered
-			if (result.Length == 0 && service.IsGenericType && !service.IsGenericTypeDefinition)
+			if (service.IsGenericType && !service.IsGenericTypeDefinition)
 			{
-				result = NamingSubSystem.GetHandlers(service.GetGenericTypeDefinition());
+				IHandler[] genericResult = NamingSubSystem.GetHandlers(service.GetGenericTypeDefinition());
+
+				if (result == null)
+				{
+					result = genericResult;
+				}
+				else
+				{
+					IHandler[] mergedResult = new IHandler[result.Length + genericResult.Length];
+					result.CopyTo(mergedResult, 0);
+					genericResult.CopyTo(mergedResult, result.Length);
+					result = mergedResult;
+				}
 			}
 #endif
 

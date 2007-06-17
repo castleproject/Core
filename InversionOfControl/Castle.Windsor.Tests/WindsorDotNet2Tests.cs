@@ -282,7 +282,11 @@ namespace Castle.Windsor.Tests
             Assert.IsTrue(resolve is CacheResultFinder<int>);
             Assert.IsTrue(resolve.Finder is DatabaseResultFinder<int>);
             Assert.IsTrue(resolve.Finder.Finder is WebServiceResultFinder<int>);
-            Assert.IsTrue(resolve.Finder.Finder.Finder ==null);
+            Assert.IsNull(resolve.Finder.Finder.Finder);
+
+			IResultFinder<String> resolve2 = container.Resolve<IResultFinder<String>>();
+			Assert.IsTrue(resolve2 is ResultFinderStringDecorator);
+			Assert.IsNotNull(resolve2.Finder);
         }
 
         public string GetFilePath(string fileName)
@@ -382,6 +386,26 @@ namespace Castle.Windsor.Tests
             return default(T);
         }
     }
+
+	public class ResultFinderStringDecorator : IResultFinder<String>
+	{
+		private IResultFinder<String> finder;
+
+		public ResultFinderStringDecorator(IResultFinder<String> finder)
+		{
+			this.finder = finder;
+		}
+
+		public IResultFinder<String> Finder
+		{
+			get { return finder; }
+		}
+
+		public String Process(ISpecification specification)
+		{
+			return String.Empty;
+		}
+	}
 
     public interface ISpecification
     {

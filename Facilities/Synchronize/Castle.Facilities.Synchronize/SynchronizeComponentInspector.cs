@@ -21,12 +21,10 @@ namespace Castle.Facilities.Synchronize
 	using System.Reflection;
 	using Castle.Core;
 	using Castle.Core.Configuration;
-	using Castle.DynamicProxy;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.ModelBuilder.Inspectors;
 	using Castle.MicroKernel.Proxy;
-	using Castle.Windsor.Proxy;
 
 	/// <summary>
 	/// Obtain synchronization configuration based on the

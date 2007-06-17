@@ -47,6 +47,22 @@ namespace Castle.Facilities.Synchronize.Tests
 		}
 	}
 
+	[Synchronize]
+	public class SyncClassWithoutContext
+	{
+		[Synchronize]
+		public virtual void DoWork()
+		{
+			
+		}
+	}
+
+	[Synchronize(typeof(SynchronizationContext))]
+	public class SyncClassOverrideContext : SyncClassWithoutContext
+	{
+		
+	}
+
 	[Synchronize(typeof(WindowsFormsSynchronizationContext))]
 	public class ClassUsingFormInContext : ClassUsingForm
 	{

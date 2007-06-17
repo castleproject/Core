@@ -1,6 +1,12 @@
 RC 4
 ====
 
+- Fixed IOC-79
+  "Kernel.GetHandlers(Type) does not consider generic handlers when satisfying the type"
+
+- Updated StartableFacilityTestCase to correctly demonstrate the facility and
+  added a unit test to demonstrate IOC-80
+ 
 - Applied Alex Henderson's patch that makes the ComponentModel available
   to the ILifestyleManager
 
