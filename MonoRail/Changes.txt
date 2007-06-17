@@ -4,6 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied goodwill's patch fixing MR-275
+  "DefaultRailsEngineContext triggers RTE on ApplicationPhysicalPath 
+   when running under ASPX Dev Server with virtual directory"
+
 - Changed the BaseControllerTest vdir to "" instead "/"
 
 - Added the Declare(String variable) to IJSGenerator inteface
