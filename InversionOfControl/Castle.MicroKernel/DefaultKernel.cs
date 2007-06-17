@@ -746,7 +746,7 @@ namespace Castle.MicroKernel
 			{
 				IHandler[] genericResult = NamingSubSystem.GetHandlers(service.GetGenericTypeDefinition());
 
-				if (result == null)
+				if (result.Length == 0)
 				{
 					result = genericResult;
 				}
