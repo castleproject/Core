@@ -14,7 +14,7 @@
 
 		<assemblyfileset id="project.references" basedir="${build.dir}">
 			<include name="Castle.MonoRail.Framework.dll" />
-
+			<include name="Castle.Core.dll" />
 			<include name="Newtonsoft.Json.dll" />
 		</assemblyfileset>
 	</target>
