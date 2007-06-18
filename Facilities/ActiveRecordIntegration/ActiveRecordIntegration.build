@@ -6,7 +6,7 @@
 >
     
 	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
-	<property name="common.run-tests" value="${activerecord.test}" />
+	<property name="common.testrunner.enabled" value="${activerecord.test}" />
 
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />

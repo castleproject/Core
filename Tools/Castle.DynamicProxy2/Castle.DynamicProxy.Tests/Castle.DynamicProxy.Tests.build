@@ -10,7 +10,7 @@
 	<include buildfile="${root.dir}/common-project.xml" />
 	
 	<property name="dp2.test" value="true" unless="${property::exists('dp2.test')}" />
-	<property name="common.run-tests" value="${dp2.test}" />
+	<property name="common.testrunner.enabled" value="${dp2.test}" />
 
 	<target name="init" depends="common.init">
 		<property name="assembly.is-cls-compliant" value="false" />

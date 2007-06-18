@@ -6,7 +6,7 @@
 >
     
 	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
-	<property name="common.run-tests" value="${nhibernate.test}" />
+	<property name="common.testrunner.enabled" value="${nhibernate.test}" />
 
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />

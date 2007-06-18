@@ -6,7 +6,7 @@
 >
 
 	<property name="monorail.test" value="true" unless="${property::exists('monorail.test')}" />
-	<property name="common.run-tests" value="${monorail.test}" />
+	<property name="common.testrunner.enabled" value="${monorail.test}" />
 
 	<property name="root.dir" value=".." />
 	<include buildfile="${root.dir}/common-project.xml" />

@@ -6,7 +6,7 @@
 >
    
 	<property name="ibatis.test" value="true" unless="${property::exists('ibatis.test')}" />
-	<property name="common.run-tests" value="${ibatis.test}" />
+	<property name="common.testrunner.enabled" value="${ibatis.test}" />
  
 	<property name="root.dir" value="../.." />
 	<include buildfile="${root.dir}/common-project.xml" />

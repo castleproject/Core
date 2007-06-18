@@ -43,7 +43,7 @@ Build options
 Disabling all tests
 -------------------
 
-  > nant -D:common.run-tests=false
+  > nant -D:common.testrunner.enabled=false
 
 Selecting a different test framework (EXPERIMENTAL)
 -------------------
