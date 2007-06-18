@@ -114,6 +114,9 @@
 			</fileset>
 		</copy>
 		
+		<!-- Copy family-specific libraries installed on the system-->
+		<copy file="${path::combine(nant::get-base-directory(), 'NAnt.Core.dll')}" todir="${lib.family.dir}" />
+
 		<!-- Copy family-specific libraries -->
 		<!-- 
 			The build of log4net works just fine for all versions of .NET.

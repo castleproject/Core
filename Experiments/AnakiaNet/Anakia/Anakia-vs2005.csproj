@@ -76,7 +76,7 @@
   <ItemGroup>
     <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\SharedLibs\net\2.0\NAnt.Core.dll</HintPath>
+      <HintPath>..\..\..\SharedLibs\net\NAnt.Core.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity">
       <Name>NVelocity</Name>
