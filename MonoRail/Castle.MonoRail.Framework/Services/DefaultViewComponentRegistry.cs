@@ -36,12 +36,14 @@ namespace Castle.MonoRail.Framework.Services
 
 			if (name2Type.Contains(name))
 			{
-				throw new RailsException(String.Format("ViewComponent '{0}' already registered as {1}!", name, name2Type[name]));
+				throw new RailsException(String.Format("ViewComponent '{0}' seems to be registered already. " + 
+					"This is due to it being registered more than once or a name clash", name));
 			}
 			
 			if (!typeof(ViewComponent).IsAssignableFrom(type))
 			{
-				throw new RailsException(String.Format("ViewComponent '{0}' is NOT a ViewComponent {1}!", name, type));
+				throw new RailsException(String.Format("You tried to register '{0}' as a view component but it " + 
+					"doesn't seem the extend the ViewComponent abstract class: {1}", name, type.FullName));
 			}
 
 			name2Type[name] = type;
@@ -53,7 +55,10 @@ namespace Castle.MonoRail.Framework.Services
 
 			if (!name2Type.Contains(name))
 			{
-				throw new RailsException(String.Format("ViewComponent '{0}' not registered!", name));
+				throw new RailsException(String.Format("ViewComponent '{0}' could not be found. Was it registered? " + 
+					"If you have enabled Windsor Integration, then it's likely that you have forgot to register the " + 
+					"view component as a Windsor component. If you are sure you did it, then make sure the name used " + 
+					"is the component id or the key passed to ViewComponentDetailsAttribute", name));
 			}
 
 			return (Type) name2Type[name];
