@@ -287,14 +287,14 @@
             The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination. 
             </param>
         </member>
-        <member name="T:IBatisNet.Common.Logging.Impl.ConsoleOutLogger">
+        <member name="T:IBatisNet.Common.Logging.Impl.AbstractLogger">
             <summary>
-            Logger sending everything to the standard output error stream.
+            Base class that implements the ILog interface.
             </summary>
         </member>
         <member name="T:IBatisNet.Common.Logging.ILog">
             <summary>
-            A simple logging interface abstracting logging APIs. 
+            A simple logging interface abstracting logging APIs. Inspired by log4net.
             </summary>
         </member>
         <member name="M:IBatisNet.Common.Logging.ILog.Debug(System.Object)">
@@ -397,293 +397,331 @@
             Checks if this logger is enabled for the <see cref="F:IBatisNet.Common.Logging.LogLevel.Warn"/> level.
             </summary>
         </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.#ctor(System.String,IBatisNet.Common.Logging.LogLevel,System.Boolean,System.Boolean,System.String)">
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Write(IBatisNet.Common.Logging.LogLevel,System.Object,System.Exception)">
             <summary>
-            
+            Concrete classes should override this method to perform the actual logging.
             </summary>
-            <param name="logName"></param>
             <param name="logLevel"></param>
-            <param name="showDateTime">Include the current time in the log message </param>
-            <param name="showLogName">Include the instance name in the log message</param>
-            <param name="dateTimeFormat">The date and time format to use in the log message </param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Write(IBatisNet.Common.Logging.LogLevel,System.Object,System.Exception)">
-            <summary>
-            Do the actual logging.
-            This method assembles the message and write
-            the content of the message accumulated in the specified
-            StringBuffer to the appropriate output destination. The
-            default implementation writes to System.Console.Error.<p/>
-            </summary>
-            <param name="level"></param>
             <param name="message"></param>
             <param name="e"></param>
         </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.IsLevelEnabled(IBatisNet.Common.Logging.LogLevel)">
+            <summary>
+            Concrete classes should override this method to determine if a particular <see cref="T:IBatisNet.Common.Logging.LogLevel"/>
+            is enabled.
+            </summary>
+            <param name="logLevel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Debug(System.Object)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Debug"/> message.
+            </summary>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Debug(System.Object,System.Exception)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Debug"/> message with an optional <see cref="T:System.Exception"/>.
+            </summary>
+            <param name="message">The message to log.</param>
+            <param name="e">
+            The	<see cref="T:System.Exception"/> associated with the message. If there isn't any
+            <see cref="T:System.Exception"/> associated with the message, pass <see langword="null"/>.
+            </param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Error(System.Object)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Error"/> message.
+            </summary>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Error(System.Object,System.Exception)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Error"/> message with an optional <see cref="T:System.Exception"/>.
+            </summary>
+            <param name="message">The message to log.</param>
+            <param name="e">
+            The	<see cref="T:System.Exception"/> associated with the message. If there isn't any
+            <see cref="T:System.Exception"/> associated with the message, pass <see langword="null"/>.
+            </param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Fatal(System.Object)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Fatal"/> message.
+            </summary>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Fatal(System.Object,System.Exception)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Fatal"/> message with an optional <see cref="T:System.Exception"/>.
+            </summary>
+            <param name="message">The message to log.</param>
+            <param name="e">
+            The	<see cref="T:System.Exception"/> associated with the message. If there isn't any
+            <see cref="T:System.Exception"/> associated with the message, pass <see langword="null"/>.
+            </param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Info(System.Object)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Info"/> message.
+            </summary>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Info(System.Object,System.Exception)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Info"/> message with an optional <see cref="T:System.Exception"/>.
+            </summary>
+            <param name="message">The message to log.</param>
+            <param name="e">
+            The	<see cref="T:System.Exception"/> associated with the message. If there isn't any
+            <see cref="T:System.Exception"/> associated with the message, pass <see langword="null"/>.
+            </param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Warn(System.Object)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Warn"/> message.
+            </summary>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.AbstractLogger.Warn(System.Object,System.Exception)">
+            <summary>
+            Log a <see cref="F:IBatisNet.Common.Logging.LogLevel.Warn"/> message with an optional <see cref="T:System.Exception"/>.
+            </summary>
+            <param name="message">The message to log.</param>
+            <param name="e">
+            The	<see cref="T:System.Exception"/> associated with the message. If there isn't any
+            <see cref="T:System.Exception"/> associated with the message, pass <see langword="null"/>.
+            </param>
+        </member>
+        <member name="P:IBatisNet.Common.Logging.Impl.AbstractLogger.IsDebugEnabled">
+            <summary>
+            Returns <see langword="true"/> if the current <see cref="T:IBatisNet.Common.Logging.LogLevel"/> is greater than or
+            equal to <see cref="F:IBatisNet.Common.Logging.LogLevel.Debug"/>. If it is, all messages will be sent to <see cref="P:System.Console.Out"/>.
+            </summary>
+        </member>
+        <member name="P:IBatisNet.Common.Logging.Impl.AbstractLogger.IsErrorEnabled">
+            <summary>
+            Returns <see langword="true"/> if the current <see cref="T:IBatisNet.Common.Logging.LogLevel"/> is greater than or
+            equal to <see cref="F:IBatisNet.Common.Logging.LogLevel.Error"/>. If it is, only messages with a <see cref="T:IBatisNet.Common.Logging.LogLevel"/> of
+            <see cref="F:IBatisNet.Common.Logging.LogLevel.Error"/> and <see cref="F:IBatisNet.Common.Logging.LogLevel.Fatal"/> will be sent to <see cref="P:System.Console.Out"/>.
+            </summary>
+        </member>
+        <member name="P:IBatisNet.Common.Logging.Impl.AbstractLogger.IsFatalEnabled">
+            <summary>
+            Returns <see langword="true"/> if the current <see cref="T:IBatisNet.Common.Logging.LogLevel"/> is greater than or
+            equal to <see cref="F:IBatisNet.Common.Logging.LogLevel.Fatal"/>. If it is, only messages with a <see cref="T:IBatisNet.Common.Logging.LogLevel"/> of
+            <see cref="F:IBatisNet.Common.Logging.LogLevel.Fatal"/> will be sent to <see cref="P:System.Console.Out"/>.
+            </summary>
+        </member>
+        <member name="P:IBatisNet.Common.Logging.Impl.AbstractLogger.IsInfoEnabled">
+            <summary>
+            Returns <see langword="true"/> if the current <see cref="T:IBatisNet.Common.Logging.LogLevel"/> is greater than or
+            equal to <see cref="F:IBatisNet.Common.Logging.LogLevel.Info"/>. If it is, only messages with a <see cref="T:IBatisNet.Common.Logging.LogLevel"/> of
+            <see cref="F:IBatisNet.Common.Logging.LogLevel.Info"/>, <see cref="F:IBatisNet.Common.Logging.LogLevel.Warn"/>, <see cref="F:IBatisNet.Common.Logging.LogLevel.Error"/>, and 
+            <see cref="F:IBatisNet.Common.Logging.LogLevel.Fatal"/> will be sent to <see cref="P:System.Console.Out"/>.
+            </summary>
+        </member>
+        <member name="P:IBatisNet.Common.Logging.Impl.AbstractLogger.IsWarnEnabled">
+            <summary>
+            Returns <see langword="true"/> if the current <see cref="T:IBatisNet.Common.Logging.LogLevel"/> is greater than or
+            equal to <see cref="F:IBatisNet.Common.Logging.LogLevel.Warn"/>. If it is, only messages with a <see cref="T:IBatisNet.Common.Logging.LogLevel"/> of
+            <see cref="F:IBatisNet.Common.Logging.LogLevel.Warn"/>, <see cref="F:IBatisNet.Common.Logging.LogLevel.Error"/>, and <see cref="F:IBatisNet.Common.Logging.LogLevel.Fatal"/> 
+            will be sent to <see cref="P:System.Console.Out"/>.
+            </summary>
+        </member>
+        <member name="T:IBatisNet.Common.Logging.Impl.ConsoleOutLogger">
+            <summary>
+            Sends log messages to <see cref="P:System.Console.Out"/>.
+            </summary>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.#ctor(System.String,IBatisNet.Common.Logging.LogLevel,System.Boolean,System.Boolean,System.String)">
+            <summary>
+            Creates and initializes a logger that writes messages to <see cref="P:System.Console.Out"/>.
+            </summary>
+            <param name="logName">The name, usually type name of the calling class, of the logger.</param>
+            <param name="logLevel">The current logging threshold. Messages recieved that are beneath this threshold will not be logged.</param>
+            <param name="showDateTime">Include the current time in the log message.</param>
+            <param name="showLogName">Include the instance name in the log message.</param>
+            <param name="dateTimeFormat">The date and time format to use in the log message.</param>
+        </member>
+        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Write(IBatisNet.Common.Logging.LogLevel,System.Object,System.Exception)">
+            <summary>
+            Do the actual logging by constructing the log message using a <see cref="T:System.Text.StringBuilder"/> then
+            sending the output to <see cref="P:System.Console.Out"/>.
+            </summary>
+            <param name="level">The <see cref="T:IBatisNet.Common.Logging.LogLevel"/> of the message.</param>
+            <param name="message">The log message.</param>
+            <param name="e">An optional <see cref="T:System.Exception"/> associated with the message.</param>
+        </member>
         <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.IsLevelEnabled(IBatisNet.Common.Logging.LogLevel)">
             <summary>
-            Is the given log level currently enabled ?
+            Determines if the given log level is currently enabled.
             </summary>
             <param name="level"></param>
             <returns></returns>
         </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Debug(System.Object)">
-            <summary>
-            Log a debug message.
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Debug(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Error(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Error(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Fatal(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Fatal(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Info(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Info(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Warn(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.Warn(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.IsDebugEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.IsErrorEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.IsFatalEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.IsInfoEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.ConsoleOutLogger.IsWarnEnabled">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="T:IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA">
             <summary>
-            Description résumée de ConsoleOutLoggerFA.
+            Factory for creating <see cref="T:IBatisNet.Common.Logging.ILog"/> instances that write data to <see cref="P:System.Console.Out"/>.
             </summary>
         </member>
         <member name="T:IBatisNet.Common.Logging.ILoggerFactoryAdapter">
             <summary>
-            LoggerFactoryAdapter interface is used internally by LogManager
-            Only developers wishing to write new SLF4J adapters need to
-            worry about this interface.
+            Defines the members that logging implementations must implement.
             </summary>
+            <remarks>
+            Classes that implement this interface may optional implement a constructor that accepts 
+            a <see cref="T:System.Collections.Specialized.NameValueCollection"/> which will contain zero or more user supplied configuration
+            properties.
+            <para>
+            The IBatisNet.Common assembly ships with the following built-in <see cref="T:IBatisNet.Common.Logging.ILoggerFactoryAdapter"/> implementations:
+            </para>
+            <list type="table">
+            <item><term><see cref="T:IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA"/></term><description>Writes output to Console.Out</description></item>
+            <item><term><see cref="T:IBatisNet.Common.Logging.Impl.TraceLoggerFA"/></term><description>Writes output to the System.Diagnostics.Trace sub-system</description></item>
+            <item><term><see cref="T:IBatisNet.Common.Logging.Impl.NoOpLoggerFA"/></term><description>Ignores all messages</description></item>
+            </list>
+            </remarks>
         </member>
         <member name="M:IBatisNet.Common.Logging.ILoggerFactoryAdapter.GetLogger(System.Type)">
             <summary>
-            Get a ILog instance by type 
+            Get a <see cref="T:IBatisNet.Common.Logging.ILog"/> instance by type.
             </summary>
             <param name="type"></param>
             <returns></returns>
         </member>
         <member name="M:IBatisNet.Common.Logging.ILoggerFactoryAdapter.GetLogger(System.String)">
             <summary>
-            Get a ILog instance by type name 
+            Get a <see cref="T:IBatisNet.Common.Logging.ILog"/> instance by name.
             </summary>
             <param name="name"></param>
             <returns></returns>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA.#ctor(System.Collections.Specialized.NameValueCollection)">
             <summary>
-            Constructor
+            Looks for level, showDateTime, showLogName, dateTimeFormat items from 
+            <paramref name="properties" /> for use when the GetLogger methods are called.
             </summary>
-            <param name="properties"></param>
+            <param name="properties">Contains user supplied configuration information.</param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA.GetLogger(System.Type)">
             <summary>
-            Get a ILog instance by type 
+            Get a ILog instance by <see cref="T:System.Type"/>.
             </summary>
-            <param name="type"></param>
-            <returns></returns>
+            <param name="type">Usually the <see cref="T:System.Type"/> of the current class.</param>
+            <returns>An ILog instance that will write data to <see cref="P:System.Console.Out"/>.</returns>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA.GetLogger(System.String)">
             <summary>
-            Get a ILog instance by type name 
+            Get a ILog instance by name.
             </summary>
-            <param name="name"></param>
-            <returns></returns>
+            <param name="name">Usually a <see cref="T:System.Type"/>'s Name or FullName property.</param>
+            <returns>An ILog instance that will write data to <see cref="P:System.Console.Out"/>.</returns>
         </member>
         <member name="T:IBatisNet.Common.Logging.Impl.NoOpLogger">
             <summary>
-            Summary description for NoOpLogger.
-            </summary>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.#ctor">
-            <summary>
-            A NOP implementation.
+            Silently ignores all log messages.
             </summary>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Debug(System.Object)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Debug(System.Object,System.Exception)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
             <param name="e"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Error(System.Object)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Error(System.Object,System.Exception)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
             <param name="e"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Fatal(System.Object)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Fatal(System.Object,System.Exception)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
             <param name="e"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Info(System.Object)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Info(System.Object,System.Exception)">
             <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Trace(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Trace(System.Object,System.Exception)">
-            <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
             <param name="e"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Warn(System.Object)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLogger.Warn(System.Object,System.Exception)">
             <summary>
-            
+            Ignores message.
             </summary>
             <param name="message"></param>
             <param name="e"></param>
         </member>
         <member name="P:IBatisNet.Common.Logging.Impl.NoOpLogger.IsDebugEnabled">
             <summary>
-            
+            Always returns <see langword="false" />.
             </summary>
         </member>
         <member name="P:IBatisNet.Common.Logging.Impl.NoOpLogger.IsErrorEnabled">
             <summary>
-            
+            Always returns <see langword="false" />.
             </summary>
         </member>
         <member name="P:IBatisNet.Common.Logging.Impl.NoOpLogger.IsFatalEnabled">
             <summary>
-            
+            Always returns <see langword="false" />.
             </summary>
         </member>
         <member name="P:IBatisNet.Common.Logging.Impl.NoOpLogger.IsInfoEnabled">
             <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.NoOpLogger.IsTraceEnabled">
-            <summary>
-            
+            Always returns <see langword="false" />.
             </summary>
         </member>
         <member name="P:IBatisNet.Common.Logging.Impl.NoOpLogger.IsWarnEnabled">
             <summary>
-            
+            Always returns <see langword="false" />.
             </summary>
         </member>
         <member name="T:IBatisNet.Common.Logging.Impl.NoOpLoggerFA">
             <summary>
-            Summary description for NoOpLoggerFA.
+            Factory for creating "no operation" loggers that do nothing and whose Is*Enabled properties always 
+            return false.
             </summary>
+            <remarks>
+            This factory creates a single instance of <see cref="T:IBatisNet.Common.Logging.Impl.NoOpLogger"/> and always returns that 
+            instance whenever an <see cref="T:IBatisNet.Common.Logging.ILog"/> instance is requested.
+            </remarks>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.NoOpLoggerFA.#ctor">
             <summary>
@@ -711,26 +749,25 @@
         </member>
         <member name="T:IBatisNet.Common.Logging.Impl.TraceLogger">
             <summary>
-            Logger sending everything to the trace output stream.
+            Logger that sends output to the <see cref="T:System.Diagnostics.Trace"/> sub-system.
             </summary>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.#ctor(System.String,IBatisNet.Common.Logging.LogLevel,System.Boolean,System.Boolean,System.String)">
             <summary>
-            
+            Creates a new instance of the TraceLogger.
             </summary>
-            <param name="logName"></param>
-            <param name="logLevel"></param>
+            <param name="logName">The name for this instance (usually the fully qualified class name).</param>
+            <param name="logLevel">
+            The logging threshold. Log messages created with a <see cref="T:IBatisNet.Common.Logging.LogLevel"/>
+            beneath this threshold will not be logged.
+            </param>
             <param name="showDateTime">Include the current time in the log message </param>
             <param name="showLogName">Include the instance name in the log message</param>
             <param name="dateTimeFormat">The date and time format to use in the log message </param>
         </member>
         <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Write(IBatisNet.Common.Logging.LogLevel,System.Object,System.Exception)">
             <summary>
-            Do the actual logging.
-            This method assembles the message and write
-            the content of the message accumulated in the specified
-            StringBuffer to the appropriate output destination. The
-            default implementation writes to System.Console.Error.<p/>
+            Responsible for assembling and writing the log message to the tracing sub-system.
             </summary>
             <param name="level"></param>
             <param name="message"></param>
@@ -742,96 +779,6 @@
             </summary>
             <param name="level"></param>
             <returns></returns>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Debug(System.Object)">
-            <summary>
-            Log a debug message.
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Debug(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Error(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Error(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Fatal(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Fatal(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Info(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Info(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Warn(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:IBatisNet.Common.Logging.Impl.TraceLogger.Warn(System.Object,System.Exception)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.TraceLogger.IsDebugEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.TraceLogger.IsErrorEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.TraceLogger.IsFatalEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.TraceLogger.IsInfoEnabled">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:IBatisNet.Common.Logging.Impl.TraceLogger.IsWarnEnabled">
-            <summary>
-            
-            </summary>
         </member>
         <member name="T:IBatisNet.Common.Logging.Impl.TraceLoggerFA">
             <summary>
@@ -860,8 +807,40 @@
         </member>
         <member name="T:IBatisNet.Common.Logging.ConfigurationSectionHandler">
             <summary>
-            Summary description for ConfigurationSectionHandler.
+            Used in an application's configuration file (App.Config or Web.Config) to configure the logging subsystem.
             </summary>
+            <remarks>
+            <example>
+            An example configuration section that writes IBatisNet messages to the Console using the built-in Console Logger.
+            <code lang="XML" escaped="true">
+            <configuration>
+            	<configSections>
+            		<sectionGroup name="iBATIS">
+            			<section name="logging" type="IBatisNet.Common.Logging.ConfigurationSectionHandler, IBatisNet.Common" />
+            		</sectionGroup>	
+            	</configSections>
+            	<iBATIS>
+            		<logging>
+            			<logFactoryAdapter type="IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA, IBatisNet.Common">
+            				<arg key="showLogName" value="true" />
+            				<arg key="showDataTime" value="true" />
+            				<arg key="level" value="ALL" />
+            				<arg key="dateTimeFormat" value="yyyy/MM/dd HH:mm:ss:SSS" />
+            			</logFactoryAdapter>
+            		</logging>
+            	</iBATIS>
+            </configuration>
+            </code> 
+            </example>
+            <para>
+            The following aliases are recognized for the type attribute of logFactoryAdapter: 
+            </para>
+            <list type="table">
+            <item><term>CONSOLE</term><description>Alias for IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA, IBatisNet.Common</description></item>
+            <item><term>TRACE</term><description>Alias for IBatisNet.Common.Logging.Impl.TraceLoggerFA, IBatisNet.Common</description></item>
+            <item><term>NOOP</term><description>Alias IBatisNet.Common.Logging.Impl.NoOpLoggerFA, IBatisNet.Common</description></item>
+            </list>
+            </remarks>
         </member>
         <member name="M:IBatisNet.Common.Logging.ConfigurationSectionHandler.#ctor">
             <summary>
@@ -870,23 +849,31 @@
         </member>
         <member name="M:IBatisNet.Common.Logging.ConfigurationSectionHandler.ReadConfiguration(System.Xml.XmlNode)">
             <summary>
-            
+            Retrieves the <see cref="T:System.Type"/> of the logger the use by looking at the logFactoryAdapter element
+            of the logging configuration element.
             </summary>
             <param name="section"></param>
-            <returns></returns>
+            <returns>
+            A <see cref="T:IBatisNet.Common.Logging.LogSetting"/> object containing the specified type that implements 
+            <see cref="T:IBatisNet.Common.Logging.ILoggerFactoryAdapter"/> along with zero or more properties that will be 
+            passed to the logger factory adapter's constructor as an <see cref="T:System.Collections.IDictionary"/>.
+            </returns>
         </member>
         <member name="M:IBatisNet.Common.Logging.ConfigurationSectionHandler.Create(System.Object,System.Object,System.Xml.XmlNode)">
             <summary>
-            
+            Verifies that the logFactoryAdapter element appears once in the configuration section.
             </summary>
-            <param name="parent"></param>
-            <param name="configContext"></param>
-            <param name="section"></param>
-            <returns></returns>
+            <param name="parent">The parent of the current item.</param>
+            <param name="configContext">Additional information about the configuration process.</param>
+            <param name="section">The configuration section to apply an XPath query too.</param>
+            <returns>
+            A <see cref="T:IBatisNet.Common.Logging.LogSetting"/> object containing the specified logFactoryAdapter type
+            along with user supplied configuration properties.
+            </returns>
         </member>
         <member name="T:IBatisNet.Common.Logging.LogLevel">
             <summary>
-            The 8 logging levels used by Log are (in order): 
+            The 7 logging levels used by Log are (in order): 
             </summary>
         </member>
         <member name="F:IBatisNet.Common.Logging.LogLevel.All">
@@ -921,16 +908,13 @@
         </member>
         <member name="F:IBatisNet.Common.Logging.LogLevel.Off">
             <summary>
-            
+            Do not log anything.
             </summary>
         </member>
         <member name="T:IBatisNet.Common.Logging.LogManager">
             <summary>
-            The LogManager can produce ILogFactory for various logging APIs,
-            most notably for log4net. 
-            Other implemenations such as
-            * SimpleLogger
-            * NoOpLogger are also supported.
+            Uses the specified <see cref="T:IBatisNet.Common.Logging.ILoggerFactoryAdapter"/> to create <see cref="T:IBatisNet.Common.Logging.ILog"/> instances
+            that are used to log messages. Inspired by log4net.
             </summary>
         </member>
         <member name="M:IBatisNet.Common.Logging.LogManager.#ctor">
@@ -971,28 +955,45 @@
             <summary>
             Gets or sets the adapter.
             </summary>
+            <remarks>
+            <para>
+            The IBatisNet.Common assembly ships with the following built-in <see cref="T:IBatisNet.Common.Logging.ILoggerFactoryAdapter"/> implementations:
+            </para>
+            <list type="table">
+            <item><term><see cref="T:IBatisNet.Common.Logging.Impl.ConsoleOutLoggerFA"/></term><description>Writes output to Console.Out</description></item>
+            <item><term><see cref="T:IBatisNet.Common.Logging.Impl.TraceLoggerFA"/></term><description>Writes output to the System.Diagnostics.Trace sub-system</description></item>
+            <item><term><see cref="T:IBatisNet.Common.Logging.Impl.NoOpLoggerFA"/></term><description>Ignores all messages</description></item>
+            </list>
+            </remarks>
             <value>The adapter.</value>
         </member>
         <member name="T:IBatisNet.Common.Logging.LogSetting">
             <summary>
-            Setting for a logger.
+            Container used to hold configuration information from config file.
             </summary>
         </member>
         <member name="M:IBatisNet.Common.Logging.LogSetting.#ctor(System.Type,System.Collections.Specialized.NameValueCollection)">
             <summary>
             
             </summary>
-            <param name="factoryAdapterType"></param>
-            <param name="properties"></param>
+            <param name="factoryAdapterType">
+            The <see cref="T:IBatisNet.Common.Logging.ILoggerFactoryAdapter"/> type 
+            that will be used for creating <see cref="T:IBatisNet.Common.Logging.ILog"/>
+            </param>
+            <param name="properties">
+            Additional user supplied properties that are passed to the 
+            <paramref name="factoryAdapterType"/>'s constructor.
+            </param>
         </member>
         <member name="P:IBatisNet.Common.Logging.LogSetting.FactoryAdapterType">
             <summary>
-            
+            The <see cref="T:IBatisNet.Common.Logging.ILoggerFactoryAdapter"/> type that will be used for creating <see cref="T:IBatisNet.Common.Logging.ILog"/>
+            instances.
             </summary>
         </member>
         <member name="P:IBatisNet.Common.Logging.LogSetting.Properties">
             <summary>
-            
+            Additional user supplied properties that are passed to the <see cref="P:IBatisNet.Common.Logging.LogSetting.FactoryAdapterType"/>'s constructor.
             </summary>
         </member>
         <member name="T:IBatisNet.Common.Pagination.IPaginatedList">
@@ -1508,6 +1509,16 @@
             Abstract base class for member accessor
             </summary>
         </member>
+        <member name="F:IBatisNet.Common.Utilities.Objects.Members.BaseAccessor.propertyName">
+            <summary>
+            The property name
+            </summary>
+        </member>
+        <member name="F:IBatisNet.Common.Utilities.Objects.Members.BaseAccessor.targetType">
+            <summary>
+            The target type
+            </summary>
+        </member>
         <member name="F:IBatisNet.Common.Utilities.Objects.Members.BaseAccessor.nullInternal">
             <summary>
             The null internal value used by this member type 
@@ -1523,6 +1534,13 @@
             Static constructor
             "Initialize a private IDictionary with type-opCode pairs 
             </summary>
+        </member>
+        <member name="M:IBatisNet.Common.Utilities.Objects.Members.BaseAccessor.GetPropertyInfo(System.Type)">
+            <summary>
+            Gets the property info.
+            </summary>
+            <param name="target">The target type.</param>
+            <returns></returns>
         </member>
         <member name="M:IBatisNet.Common.Utilities.Objects.Members.BaseAccessor.GetNullInternal(System.Type)">
             <summary>
@@ -3108,14 +3126,14 @@
             changes to a specified file. Because multiple change notifications
             may be raised when the file is modified, a timer is used to
             compress the notifications into a single event. The timer
-            waits for <see cref="F:IBatisNet.Common.Utilities.ConfigWatcherHandler.TimoutMillis"/> time before delivering
+            waits for the specified time before delivering
             the event notification. If any further <see cref="T:System.IO.FileSystemWatcher"/>
             change notifications arrive while the timer is waiting it
-            is reset and waits again for <see cref="F:IBatisNet.Common.Utilities.ConfigWatcherHandler.TimoutMillis"/> to
-            elaps.
+            is reset and waits again for the specified time to
+            elapse.
             </remarks>
         </member>
-        <member name="F:IBatisNet.Common.Utilities.ConfigWatcherHandler.TimoutMillis">
+        <member name="F:IBatisNet.Common.Utilities.ConfigWatcherHandler.TIMEOUT_MILLISECONDS">
             <summary>
             The default amount of time to wait after receiving notification
             before reloading the config file.
@@ -4342,6 +4360,12 @@
         <member name="P:IBatisNet.Common.IDalSession.Transaction">
             <summary>
             The Transaction use by the session.
+            </summary>
+        </member>
+        <member name="P:IBatisNet.Common.IDalSession.IsTransactionStart">
+            <summary>
+            Indicates if a transaction is open  on
+            the session.
             </summary>
         </member>
         <member name="T:IBatisNet.Common.ProviderDeSerializer">
