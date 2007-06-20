@@ -25,24 +25,51 @@ namespace Castle.Core
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class CastleComponentAttribute : LifestyleAttribute
 	{
-		private Type service;
-		private String key;
+		private readonly Type service;
+		private readonly string key;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CastleComponentAttribute"/> class.
+		/// </summary>
+		/// <param name="key">The key.</param>
 		public CastleComponentAttribute(String key) : this(key, null)
 		{
 		}
 
-		public CastleComponentAttribute(String key, Type service) : base(LifestyleType.Undefined)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CastleComponentAttribute"/> class.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="service">The service.</param>
+		public CastleComponentAttribute(String key, Type service) : this(key, service, LifestyleType.Undefined)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CastleComponentAttribute"/> class.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <param name="service">The service.</param>
+		/// <param name="lifestyle">The lifestyle.</param>
+		public CastleComponentAttribute(String key, Type service, LifestyleType lifestyle) : base(lifestyle)
 		{
 			this.key = key;
 			this.service = service;
 		}
 
+		/// <summary>
+		/// Gets the service.
+		/// </summary>
+		/// <value>The service.</value>
 		public Type Service
 		{
 			get { return service; }
 		}
 
+		/// <summary>
+		/// Gets the key.
+		/// </summary>
+		/// <value>The key.</value>
 		public String Key
 		{
 			get { return key; }

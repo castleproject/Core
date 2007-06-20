@@ -1,6 +1,9 @@
 Release Candidate 3
 ===================
 
+- Applied Bill Pierce's patch fixing CORE-9 
+  "Allow CastleComponent Attribute to Specify Lifestyle in Constructor"
+
 - Added UseSingleInterfaceProxy to CompomentModel to control the proxying
   behavior while maintaining backward compatibility.
   Added the corresponding ComponentProxyBehaviorAttribute.
