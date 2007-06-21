@@ -30,10 +30,10 @@ namespace Castle.MonoRail.TestSupport
 		private readonly string domainPrefix;
 		private readonly int port;
 		private string virtualDir = "";
-		private IRailsEngineContext context;
-		private IRequest request;
-		private IResponse response;
-		private ITrace trace;
+		private MockRailsEngineContext context;
+		private MockRequest request;
+		private MockResponse response;
+		private MockTrace trace;
 
 		protected BaseControllerTest() : this("app.com", "www", 80)
 		{
@@ -46,22 +46,22 @@ namespace Castle.MonoRail.TestSupport
 			this.port = port;
 		}
 
-		protected IRailsEngineContext Context
+		protected MockRailsEngineContext Context
 		{
 			get { return context; }
 		}
 
-		public IRequest Request
+		public MockRequest Request
 		{
 			get { return request; }
 		}
 
-		public IResponse Response
+		public MockResponse Response
 		{
 			get { return response; }
 		}
 
-		public ITrace Trace
+		public MockTrace Trace
 		{
 			get { return trace; }
 		}
@@ -117,22 +117,22 @@ namespace Castle.MonoRail.TestSupport
 			context = BuildRailsEngineContext(request, response, trace, info);
 		}
 
-		protected virtual IRequest BuildRequest()
+		protected virtual MockRequest BuildRequest()
 		{
 			return new MockRequest();
 		}
 
-		protected virtual IResponse BuildResponse()
+		protected virtual MockResponse BuildResponse()
 		{
 			return new MockResponse();
 		}
 
-		protected virtual ITrace BuildTrace()
+		protected virtual MockTrace BuildTrace()
 		{
 			return new MockTrace();
 		}
 
-		protected virtual IRailsEngineContext BuildRailsEngineContext(IRequest request, IResponse response, ITrace trace, UrlInfo urlInfo)
+		protected virtual MockRailsEngineContext BuildRailsEngineContext(IRequest request, IResponse response, ITrace trace, UrlInfo urlInfo)
 		{
 			return new MockRailsEngineContext(request, response, trace, urlInfo);
 		}
@@ -140,7 +140,8 @@ namespace Castle.MonoRail.TestSupport
 		protected virtual UrlInfo BuildUrlInfo(string areaName, string controllerName, string actionName)
 		{
 			return new UrlInfo(domain, domainPrefix, virtualDir, "http", port,
-				Path.Combine(Path.Combine(areaName, controllerName), actionName), areaName, controllerName, actionName, "rails");
+				Path.Combine(Path.Combine(areaName, controllerName), actionName), 
+					areaName, controllerName, actionName, "rails");
 		}
 	}
 }
