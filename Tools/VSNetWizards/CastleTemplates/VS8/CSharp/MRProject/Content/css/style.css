@@ -1,0 +1,18 @@
+body
+{
+	background-color: white;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: small;
+}		
+form .formrow
+{
+	padding: 3px;
+}
+.validation-advice 
+{
+	background-color:#FF3300;
+	color:#FFFFFF;
+	font-weight:bold;
+	margin:5px 0pt;
+	padding:5px;
+}

@@ -1,9 +1,0 @@
-<h2>Results for "Validate Login"</h2>
-
-<b>Username:</b> $!username<br/>
-<b>Password:</b> $!password<br/>
-<b>Auto Login:</b> $!autoLogin<br/>
-
-<p>
-	<strong>Click $Url.Link('here', "%{action='Index'}") to go back to the login form.</strong>
-</p>

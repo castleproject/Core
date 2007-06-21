@@ -1,19 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-		<title>$!{title}</title>
-
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Sample application - $!{title}</title>
+	<link rel="stylesheet" href="$siteroot/Content/css/style.css" type="text/css" media="screen" />
 $!head
-
-		<style type="text/css" media="screen">
-body
-{
-	background-color: white;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: small;
-}		
-		</style>
+		
 $Ajax.InstallScripts()
 $Behaviour.InstallScripts()
 $Scriptaculous.InstallScripts()
@@ -23,13 +15,16 @@ $Form.InstallScripts()
 $!scripts
 </script>
 
-	</head>
-	<body>
+</head>
+
+<body>
 
 $childContent
 
-<hr>
+<hr/>
+
 $Url.Link('Main page', "%{controller='Home', action='Index'}")
 	
-	</body>
+</body>
+
 </html>

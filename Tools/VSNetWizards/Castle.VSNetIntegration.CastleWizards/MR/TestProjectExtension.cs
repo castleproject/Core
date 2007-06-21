@@ -70,9 +70,9 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 			Utils.AddReference(testProject, context.Projects[Constants.ProjectMain]);
 
-			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "ContactControllerTestCase.cs");
-			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "HomeControllerTestCase.cs");
-			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "LoginControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "Controllers\\ContactControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "Controllers\\HomeControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "Controllers\\LoginControllerTestCase.cs");
 
 			context.Projects.Add(Constants.ProjectTest, testProject);
 		}
@@ -83,15 +83,6 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 		private void OnPostProcess(object sender, ExtensionContext context)
 		{
-			if (!panel.WantsTestProject) return;
-
-			Project project = context.Projects[Constants.ProjectMain];
-			Project testProject = context.Projects[Constants.ProjectTest];
-
-			String name = project.Name;
-			
-			Utils.PerformReplacesOn(testProject, name, localTestProjectPath, "HomeControllerTestCase.cs");
-			Utils.PerformReplacesOn(testProject, name, context.LocalProjectPath, "App.config");
 		}
 		
 		private void AddPanels(object sender, WizardDialog dlg, ExtensionContext context)
@@ -103,11 +94,6 @@ namespace Castle.VSNetIntegration.CastleWizards
 		
 		private void OnSetupBuildEvent(object sender, ExtensionContext context)
 		{
-			if (!panel.WantsTestProject) return;
-			
-			Project testProject = context.Projects[Constants.ProjectTest];
-
-			Utils.AddCommonPostBuildEvent(testProject);
 		}
 	}
 }

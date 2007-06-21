@@ -1,28 +1,28 @@
-<h2>Please enter your username and password to log in</h2>
+<h2>Please enter your username and password</h2>
 
-<form action="$UrlHelper.For("%{action='ValidateLogin'}")" method="post">
+$Form.FormTag("%{action='Authenticate'}")
 
 <table>
 	<tr>
 		<th>Username:</th>
-		<td>$FormHelper.TextField("username")</td>
+		<td>$Form.TextField("username")</td>
 	</tr>
 
 	<tr>
 		<th>Password: </th>
-		<td>$FormHelper.PasswordField("password")</td>
+		<td>$Form.PasswordField("password")</td>
 	</tr>
 
 	<tr>
 		<th>Auto Login:</th>
-		<td>$FormHelper.CheckboxField("autoLogin")</td>
+		<td>$Form.CheckboxField("autoLogin")</td>
 	</tr>
 
 	<tr>
 		<td colspan="2" align="right">
-			<input type="submit" value="Log in">
+			$Form.Submit("Log in")
 		</td>
 	</tr>
 </table>
 
-</form>
+$Form.EndFormTag()

@@ -1,6 +1,6 @@
 
 The MonoRail project is set up and ready to run 
-with Cassini (which allows debugging).
+using VS.Net web project support
 
 Some considerations if you are using 
 Windsor integration:

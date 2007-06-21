@@ -112,7 +112,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			XmlElement facilitiesElem = (XmlElement) dom.SelectSingleNode("configuration/facilities");
 
 			facilitiesElem.AppendChild(dom.CreateComment(" For more information on ActiveRecord configuration "));
-			facilitiesElem.AppendChild(dom.CreateComment(" visit http://www.castleproject.org/index.php/ActiveRecord:Configuration_Reference "));
+			facilitiesElem.AppendChild(dom.CreateComment(" visit http://www.castleproject.org/activerecord/documentation/trunk/manual/xmlconfigref.html "));
 
 			XmlElement arElem = dom.CreateElement("facility");
 			

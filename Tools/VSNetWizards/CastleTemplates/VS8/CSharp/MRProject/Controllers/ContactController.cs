@@ -2,41 +2,41 @@ namespace !NAMESPACE!.Controllers
 {
 	using System.Collections.Generic;
 	using Castle.MonoRail.Framework;
+	using !NAMESPACE!.Models;
 
 	[Layout("default"), Rescue("generalerror")]
 	public class ContactController : SmartDispatcherController
 	{
-		public void aboutUs()
+		public void Index()
 		{
-			AddAgesToPropertyBag();
-			AddCountriesToPropertyBag();
-
-			// You can, for example, query the database for some
+			// Here you could, for example, query the database for some
 			// information about your company, and make it available
 			// to the template using the "PropertyBag" property. 
+			AddCountriesToPropertyBag();
+
+			// The following line is required to allow automatic validation
+			PropertyBag["contacttype"] = typeof(ContactInfo);
 		}
 
-		private void AddAgesToPropertyBag()
+		[AccessibleThrough(Verb.Post)]
+		public void SendContact([DataBind("contact")] ContactInfo info)
 		{
-			List<string> ages = new List<string>();
+			// We could save, send through email or something else. 
+			// For now, we just show the data back
 
-			ages.Add("10 - 15");
-			ages.Add("16 - 21");
-			ages.Add("22 - 28");
-			ages.Add("29 - 35");
-			ages.Add("36+");
+			PropertyBag["contact"] = info;
 
-			PropertyBag["ages"] = ages;
+			RenderView("Confirmation");
 		}
 
 		private void AddCountriesToPropertyBag()
 		{
-			Dictionary<string, string> countries = new Dictionary<string, string>();
+			List<Country> countries = new List<Country>();
 
-			countries.Add("BR", "Brazil");
-			countries.Add("CA", "Canada");
-			countries.Add("US", "United States");
-			countries.Add("RU", "Russia");
+			countries.Add(new Country(1, "Brazil"));
+			countries.Add(new Country(2, "Canada"));
+			countries.Add(new Country(3, "United States"));
+			countries.Add(new Country(4, "Russia"));
 
 			PropertyBag["countries"] = countries;
 		}

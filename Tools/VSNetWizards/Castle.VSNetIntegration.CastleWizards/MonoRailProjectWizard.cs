@@ -73,6 +73,8 @@ namespace Castle.VSNetIntegration.CastleWizards
 			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Controllers\\HomeController.cs");
 			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Controllers\\LoginController.cs");
 			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Controllers\\ContactController.cs");
+			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Models\\ContactInfo.cs");
+			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Models\\Country.cs");
 			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "global.asax");
 
 			context.Projects.Add(Constants.ProjectMain, project);
@@ -145,9 +147,9 @@ namespace Castle.VSNetIntegration.CastleWizards
 				castleElem.AppendChild(includeFacElem);
 				castleElem.AppendChild(includeControllersElem);
 				castleElem.AppendChild(includeComponentsElem);
-				
-				webConfigDoc.DocumentElement.AppendChild(webConfigDoc.CreateComment("Container configuration. For more information see http://www.castleproject.org/index.php/IoC:Configuration"));
-				webConfigDoc.DocumentElement.AppendChild(webConfigDoc.CreateComment("and http://www.castleproject.org/index.php/IoC:Component_parameters%2C_configuration_and_type_converters"));
+
+				webConfigDoc.DocumentElement.AppendChild(webConfigDoc.CreateComment("Container configuration. For more information see http://www.castleproject.org/container/documentation/trunk/manual/windsorconfigref.html"));
+				webConfigDoc.DocumentElement.AppendChild(webConfigDoc.CreateComment("and http://www.castleproject.org/container/documentation/trunk/usersguide/compparams.html"));
 				webConfigDoc.DocumentElement.AppendChild(castleElem);
 
 				ProjectItem configItem = project.ProjectItems.AddFolder("config", EnvConstants.vsProjectItemKindPhysicalFolder);
@@ -280,8 +282,8 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 			configSectionsNode.AppendChild(castleSectionElem);
 
-			XmlComment comment = webConfigDoc.CreateComment("For more on Brail " + 
-				"configuration see http://www.castleproject.org/index.php/MonoRail:Brail#Configuring_Brail:");
+			XmlComment comment = webConfigDoc.CreateComment("For more on Brail " +
+				"configuration see http://www.castleproject.org/monorail/documentation/trunk/viewengines/brail/index.html");
 			XmlElement brailElem = webConfigDoc.CreateElement("brail");
 
 			brailElem.SetAttribute("debug", "false");
@@ -345,12 +347,13 @@ namespace Castle.VSNetIntegration.CastleWizards
 		private void AddLoginViews(Project project)
 		{
 			AddView(project, "Login", "Index");
-			AddView(project, "Login", "ValidateLogin");
+			AddView(project, "Login", "authenticate");
 		}
 
 		private void AddContactViews(Project project)
 		{
-			AddView(project, "Contact", "AboutUs");
+			AddView(project, "Contact", "index");
+			AddView(project, "Contact", "confirmation");
 		}
 
 		private void AddView(Project project, string controller, string action)

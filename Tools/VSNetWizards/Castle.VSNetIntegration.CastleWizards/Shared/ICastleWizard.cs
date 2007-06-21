@@ -17,19 +17,11 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 	using System.Runtime.InteropServices;
 	
 	using Castle.VSNetIntegration.CastleWizards.Shared.Dialogs;
-
-
 	
 	public delegate void WizardEventHandler(object sender, ExtensionContext context);
-
 	public delegate void WizardUIEventHandler(object sender, WizardDialog dlg, ExtensionContext context);
 
-
-#if DOTNET2
 	[ComVisible(true)]
-#else
-	[ComVisible(false)]
-#endif
 	public interface ICastleWizard
 	{
 		event WizardEventHandler OnAddProjects;

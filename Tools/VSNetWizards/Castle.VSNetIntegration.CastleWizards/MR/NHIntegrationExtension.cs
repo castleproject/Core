@@ -99,7 +99,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			XmlElement modulesElem = (XmlElement) dom.SelectSingleNode("configuration/system.web/httpModules");
 
 			modulesElem.AppendChild(dom.CreateComment(" For more information on what this does "));
-			modulesElem.AppendChild(dom.CreateComment(" visit http://www.castleproject.org/index.php/Facility:NHibernate_in_Web_apps "));
+			modulesElem.AppendChild(dom.CreateComment(" visit http://www.castleproject.org/container/facilities/trunk/nhibernate/webapp.html "));
 
 			XmlElement sessionModElem = dom.CreateElement("add");
 			
@@ -114,7 +114,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			XmlElement facilitiesElem = (XmlElement) dom.SelectSingleNode("configuration/facilities");
 
 			facilitiesElem.AppendChild(dom.CreateComment(" For more information on the configuration schema "));
-			facilitiesElem.AppendChild(dom.CreateComment(" visit http://www.castleproject.org/index.php/Facility:NHibernate "));
+			facilitiesElem.AppendChild(dom.CreateComment(" visit http://www.castleproject.org/container/facilities/trunk/nhibernate/index.html "));
 
 			XmlElement nhElem = dom.CreateElement("facility");
 			

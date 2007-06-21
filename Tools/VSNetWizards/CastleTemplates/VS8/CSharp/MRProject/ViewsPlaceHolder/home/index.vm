@@ -3,13 +3,14 @@ Title - Home
 #end
 
 #capturefor(scripts)
-function sayHello() {
-	return "Hello";
+function sayHello() 
+{
+	return alert("Hello");
 }
 #end
 
 #capturefor(head)
-<!-- Here you can include some stylesheets -->
+<!-- Here you can include some content to appear on the layout, inside head. For example, stylesheets -->
 #end
 
 <h1>
@@ -18,6 +19,6 @@ function sayHello() {
 
 <ul>
   <li>$Url.Link('A simple use of parameters', "%{controller='Login',action='index'}")</li>
-  <li>$Url.Link('A simple example form using FormHelper', "%{controller='Contact',action='aboutUs'}")</li>
+  <li>$Url.Link('A simple example form using FormHelper', "%{controller='Contact',action='index'}")</li>
   <li>$Url.Link('Access an action that will throw an exception so you can see a rescue page', "%{action='BlowItAway'}")</li>
 </ul>

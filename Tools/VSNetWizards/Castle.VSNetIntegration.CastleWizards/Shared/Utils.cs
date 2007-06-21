@@ -60,6 +60,11 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 				}
 			}
 
+			if (item == null)
+			{
+				throw new Exception("Path for ProjectItem not found: " + filename);
+			}
+
 			PerformReplacesOn(project, projectName, localProjectPath, item);
 		}
 

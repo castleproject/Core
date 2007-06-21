@@ -9,7 +9,7 @@ namespace !NAMESPACE!.Controllers
 	{
 		public void Index()
 		{
-			PropertyBag["accessDate"] = DateTime.Now;
+			PropertyBag["AccessDate"] = DateTime.Now;
 		}
 
 		public void BlowItAway()

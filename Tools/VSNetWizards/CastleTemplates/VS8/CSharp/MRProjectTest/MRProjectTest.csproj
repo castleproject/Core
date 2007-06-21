@@ -95,15 +95,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ContactControllerTestCase.cs" />
-    <Compile Include="HomeControllerTestCase.cs">
+    <Compile Include="Controllers\ContactControllerTestCase.cs" />
+    <Compile Include="Controllers\HomeControllerTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LoginControllerTestCase.cs" />
+    <Compile Include="Controllers\LoginControllerTestCase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
