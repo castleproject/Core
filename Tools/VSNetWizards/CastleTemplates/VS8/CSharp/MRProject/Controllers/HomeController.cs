@@ -9,7 +9,12 @@ namespace !NAMESPACE!.Controllers
 	{
 		public void Index()
 		{
-			
+			PropertyBag["accessDate"] = DateTime.Now;
+		}
+
+		public void BlowItAway()
+		{
+			throw new Exception("Exception thrown from a MonoRail action");
 		}
 	}
 }

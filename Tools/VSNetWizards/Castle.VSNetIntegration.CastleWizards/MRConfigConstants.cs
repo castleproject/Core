@@ -22,11 +22,15 @@ namespace Castle.VSNetIntegration.CastleWizards
 		public static readonly String Web = "web.config";
 
 		public static readonly String Properties = "properties.config";
+		public static readonly String PropertiesConfig = @"Config\properties.config";
 
 		public static readonly String Facilities = "facilities.config";
+		public static readonly String FacilitiesConfig = @"Config\facilities.config";
 	
 		public static readonly String Controllers = "controllers.config";
+		public static readonly String ControllersConfig = @"Config\controllers.config";
 
 		public static readonly String Components = "components.config";
+		public static readonly String ComponentsConfig = @"Config\components.config";
 	}
 }

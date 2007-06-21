@@ -37,7 +37,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			return new Pair[] {
 				new Pair("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider"),
 				new Pair("hibernate.command_timeout", "5000"),
-				new Pair("hibernate.cache.use_query_cache", "true"), 
+				new Pair("hibernate.cache.use_query_cache", "false"), 
 				new Pair("hibernate.connection.isolation", "ReadCommitted"),
 				new Pair("hibernate.show_sql", "false"),
 			};

@@ -1,0 +1,36 @@
+<h2>Contact our company - FormHelper usage example</h2>
+
+<form action="?">
+	<table>
+		<tr>
+			<th>Your name: </th>
+			<td>$FormHelper.TextField("name")</td>
+		</tr>
+
+		<tr>
+			<th>Age: </th>
+			<td>$FormHelper.Select("age", $ages)</td>
+		</tr>
+
+		<tr>
+			<th>Country: </th>
+			<td>$FormHelper.Select("country", $countries, "%{value='Key', text='Value'}")</td>
+		</tr>
+
+		<tr>
+			<th>Subject: </th>
+			<td>$FormHelper.TextField("subject")</td>
+		</tr>
+
+		<tr>
+			<th>Message: </th>
+			<td>$FormHelper.TextArea("message")</td>
+		</tr>
+
+		<tr>
+			<td colspan="2" align="right">
+				<input type="submit">
+			</td>
+		</tr>
+	</table>
+</form>

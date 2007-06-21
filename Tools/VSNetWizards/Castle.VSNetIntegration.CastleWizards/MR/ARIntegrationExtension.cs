@@ -75,11 +75,11 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 			RegisterSessionScopeHttpModule(webConfigDom);
 
-			XmlDocument facilitiesDom = (XmlDocument) context.Properties[MRConfigConstants.Facilities];
+			XmlDocument facilitiesDom = (XmlDocument) context.Properties[MRConfigConstants.FacilitiesConfig];
 
 			RegisterAndConfigureFacility(facilitiesDom);
 
-			XmlDocument propDom = (XmlDocument) context.Properties[MRConfigConstants.Properties];
+			XmlDocument propDom = (XmlDocument) context.Properties[MRConfigConstants.PropertiesConfig];
 
 			RegisterConnectionStringAsProperty(propDom);
 		}

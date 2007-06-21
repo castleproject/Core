@@ -26,6 +26,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 	public class TestProjectExtension : IWizardExtension
 	{
 		private string localTestProjectPath;
+		private string testProjectName;
 		private MRTestPanel panel;
 
 		#region IWizardExtension implementation
@@ -55,15 +56,23 @@ namespace Castle.VSNetIntegration.CastleWizards
 			if (!panel.WantsTestProject) return;
 			
 			String testProjectFile = context.GetTemplateFileName(@"CSharp\MRProjectTest\MRProjectTest.csproj");
+			testProjectName = context.ProjectName + ".Tests";
 
-			localTestProjectPath = new DirectoryInfo(Path.Combine(context.LocalProjectPath, @"..\" + context.ProjectName + ".Tests")).FullName;
+			localTestProjectPath = new DirectoryInfo(Path.Combine(context.LocalProjectPath, 
+				@"..\" + testProjectName)).FullName;
 
 			Utils.EnsureDirExists(localTestProjectPath);
 
-			Project testProject = 
-				context.DteInstance.Solution.AddFromTemplate(testProjectFile, 
-				                                             localTestProjectPath, 
-				                                             context.ProjectName + ".Tests.csproj", false);
+			Project testProject = context.DteInstance.Solution
+				.AddFromTemplate(testProjectFile, 
+					localTestProjectPath, 
+					context.ProjectName + ".Tests.csproj", false);
+
+			Utils.AddReference(testProject, context.Projects[Constants.ProjectMain]);
+
+			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "ContactControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "HomeControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "LoginControllerTestCase.cs");
 
 			context.Projects.Add(Constants.ProjectTest, testProject);
 		}

@@ -89,6 +89,36 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 				"copy \"$(ProjectDir)\\App.config\" \"$(TargetPath).config\"";
 		}
 
+		public static XmlDocument CreateXmlDomForConfig(ExtensionContext context, Project project, ProjectItem item, String file)
+		{
+			if (context.Properties[Constants.ConfigFileList] == null)
+			{
+				context.Properties[Constants.ConfigFileList] = new ArrayList();
+			}
+
+			Window codeWindow = item.Open(EnvConstants.vsViewKindCode);
+
+			codeWindow.Activate();
+
+			TextDocument objTextDoc = ((EnvDTE.TextDocument)(
+				codeWindow.Document.Object("TextDocument")));
+
+			EditPoint objEditPt = objTextDoc.StartPoint.CreateEditPoint();
+			objEditPt.StartOfDocument();
+			String content = objEditPt.GetText(objTextDoc.EndPoint);
+
+			codeWindow.Close(vsSaveChanges.vsSaveChangesYes);
+
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(content);
+
+			context.Properties[file] = doc;
+
+			(context.Properties[Constants.ConfigFileList] as IList).Add(file);
+
+			return doc;
+		}
+
 		public static XmlDocument CreateXmlDomForConfig(ExtensionContext context, Project project, String file)
 		{
 			if (context.Properties[Constants.ConfigFileList] == null)

@@ -1,6 +1,7 @@
 namespace !NAMESPACE!.Tests
 {
 	using System;
+	using !NAMESPACE!.Controllers;
 
 	using Castle.MonoRail.TestSupport;
 	
@@ -12,12 +13,18 @@ namespace !NAMESPACE!.Tests
 		[Test]
 		public void IndexAction()
 		{
-			DoGet("home/index.rails");
+			HomeController controller = new HomeController();
+			controller.Index();
 
-			// Use the assert family of methods available in the base class
-			// for example:
-			// AssertReplyContains("something");
-			// AssertReplyStartsWith("something");
+			Assert.IsNotNull(controller.PropertyBag["accessDate"]);
+		}
+
+		[Test]
+		[ExpectedException(typeof(Exception), "Exception thrown from a MonoRail action")]
+		public void BlowItAwayAction()
+		{
+			HomeController controller = new HomeController();
+			controller.BlowItAway();
 		}
 	}
 }

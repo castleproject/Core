@@ -62,14 +62,18 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\css\" />
     <Folder Include="Content\images\" />
+    <Folder Include="Views\Contact\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\layouts\" />
+    <Folder Include="Views\Login\" />
     <Folder Include="Views\rescues\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

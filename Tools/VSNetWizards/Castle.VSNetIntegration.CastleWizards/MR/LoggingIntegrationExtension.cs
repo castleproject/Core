@@ -73,7 +73,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 		{
 			if (!HasSelected(context)) return;
 
-			XmlDocument facilitiesDom = (XmlDocument) context.Properties[MRConfigConstants.Facilities];
+			XmlDocument facilitiesDom = (XmlDocument) context.Properties[MRConfigConstants.FacilitiesConfig];
 
 			RegisterAndConfigureFacility(facilitiesDom, context);
 		}
@@ -103,9 +103,9 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 		private bool HasSelected(ExtensionContext context)
 		{
-			return ((bool) context.Properties["enableWindsorIntegration"]) == true &&
+			return ((bool) context.Properties["enableWindsorIntegration"]) &&
 				context.Properties.Contains("Logging") &&
-				((bool) context.Properties["Logging"]) == true;
+				((bool) context.Properties["Logging"]);
 		}
 	}
 }
