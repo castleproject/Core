@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Test
 	public delegate void TestSectionRender(IDictionary context, TextWriter writer);
 	public delegate void TestViewRender(string name, IDictionary context, TextWriter writer);
 
-	public class MockViewComponentContext : IViewComponentContext
+	public class MockViewComponentContext : IMockViewComponentContext
 	{
 		private string viewToRender;
 		private string componentName;

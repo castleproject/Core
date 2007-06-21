@@ -450,6 +450,8 @@
     <Compile Include="SmartDispatcherController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Test\IMockResponse.cs" />
+    <Compile Include="Test\IMockViewComponentContext.cs" />
     <Compile Include="Test\MockCacheProvider.cs" />
     <Compile Include="Test\MockRailsEngineContext.cs" />
     <Compile Include="Test\MockRequest.cs" />

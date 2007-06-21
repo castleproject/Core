@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Test
 	using System.IO;
 	using System.Web;
 
-	public class MockResponse : IResponse
+	public class MockResponse : IMockResponse
 	{
 		private int statusCode = 400;
 		private string contentType = "text/html";

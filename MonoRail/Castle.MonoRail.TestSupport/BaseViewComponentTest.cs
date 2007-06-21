@@ -22,8 +22,8 @@ namespace Castle.MonoRail.TestSupport
 
 	public abstract class BaseViewComponentTest : BaseControllerTest
 	{
-		private MockViewComponentContext componentContext;
-		private MockViewEngine viewEngine;
+		private IMockViewComponentContext componentContext;
+		private IViewEngine viewEngine;
 		private StringWriter writer;
 
 		public IDictionary<string, TestSectionRender> SectionRender;
@@ -62,12 +62,12 @@ namespace Castle.MonoRail.TestSupport
 			OnViewRender = null;
 		}
 
-		protected virtual MockViewEngine BuildViewEngine()
+		protected virtual IViewEngine BuildViewEngine()
 		{
 			return new MockViewEngine(".view", ".jsview", true, true);
 		}
 
-		protected virtual MockViewComponentContext BuildViewComponentContext(string viewComponentName)
+		protected virtual IMockViewComponentContext BuildViewComponentContext(string viewComponentName)
 		{
 			MockViewComponentContext compContext = new MockViewComponentContext(viewComponentName, writer, viewEngine);
 
