@@ -5,7 +5,9 @@
 	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
     
-	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
+	<if test="${not property::exists('activerecord.test')}">
+		<property name="activerecord.test" value="${common.run-tests}" />
+	</if>
 	<property name="common.testrunner.enabled" value="${activerecord.test}" />
 
 	<property name="root.dir" value="../.." />

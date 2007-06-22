@@ -8,7 +8,9 @@
 	<property name="root.dir" value=".." />
 	<include buildfile="${root.dir}/common-project.xml" />
 
-	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
+	<if test="${not property::exists('activerecord.test')}">
+		<property name="activerecord.test" value="${common.run-tests}" />
+	</if>
 	<property name="common.testrunner.enabled" value="${activerecord.test}" />
 
 	<fileset id="buildfiles.all">

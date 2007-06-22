@@ -5,7 +5,9 @@
 	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
 
-	<property name="monorail.test" value="true" unless="${property::exists('monorail.test')}" />
+	<if test="${not property::exists('monorail.test')}">
+		<property name="monorail.test" value="${common.run-tests}" />
+	</if>
 	<property name="common.testrunner.enabled" value="${monorail.test}" />
 
 	<property name="root.dir" value=".." />

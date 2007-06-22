@@ -5,7 +5,9 @@
 	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
 >
     
-	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
+	<if test="${not property::exists('nhibernate.test')}">
+		<property name="nhibernate.test" value="${common.run-tests}" />
+	</if>
 	<property name="common.testrunner.enabled" value="${nhibernate.test}" />
 
 	<property name="root.dir" value="../.." />
