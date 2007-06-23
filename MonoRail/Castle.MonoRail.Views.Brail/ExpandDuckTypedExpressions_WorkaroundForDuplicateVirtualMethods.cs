@@ -55,11 +55,11 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			base.InitializeDuckTypingServices();
 			IType duckTypingServices = TypeSystemServices.Map(GetType());
-			RuntimeServices_Invoke = ResolveMethod(duckTypingServices, "Invoke");
-			RuntimeServices_SetProperty = ResolveMethod(duckTypingServices, "SetProperty");
-			RuntimeServices_GetProperty = ResolveMethod(duckTypingServices, "GetProperty");
-			RuntimeServices_SetSlice = ResolveMethod(duckTypingServices, "SetSlice");
-			RuntimeServices_GetSlice = ResolveMethod(duckTypingServices, "GetSlice");
+			RuntimeServices_Invoke = GetResolvedMethod(duckTypingServices, "Invoke");
+			RuntimeServices_SetProperty = GetResolvedMethod(duckTypingServices, "SetProperty");
+			RuntimeServices_GetProperty = GetResolvedMethod(duckTypingServices, "GetProperty");
+			RuntimeServices_SetSlice = GetResolvedMethod(duckTypingServices, "SetSlice");
+			RuntimeServices_GetSlice = GetResolvedMethod(duckTypingServices, "GetSlice");
 		}
 
 		public static object Invoke(object target, string name, object[] args)
@@ -327,7 +327,7 @@ namespace Castle.MonoRail.Views.Brail
 			return args.Length == 2 && target is System.Array;
 		}
 
-		private IMethod ResolveMethod(IType type, string name)
+		private IMethod GetResolvedMethod(IType type, string name)
 		{
 			IMethod method = NameResolutionService.ResolveMethod(type, name);
 			if (null == method) throw new System.ArgumentException(string.Format("Method '{0}' not found in type '{1}'", type, name));
