@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Views.Brail
 			MethodInvocationExpression initContext = new MethodInvocationExpression();
 			initContext.Target = AstUtil.CreateReferenceExpression("Castle.MonoRail.Views.Brail.BrailViewComponentContext");
 			initContext.Arguments.Extend(
-				new object[]
+				new Expression[]
 					{
 					    new SelfLiteralExpression(),
 						macroBody, componentName,
@@ -95,7 +95,7 @@ namespace Castle.MonoRail.Views.Brail
 			MethodInvocationExpression initComponent = new MethodInvocationExpression(
 				AstUtil.CreateReferenceExpression("component.Init"));
 			initComponent.Arguments.Extend(
-				new object[] {AstUtil.CreateReferenceExpression("context"), new ReferenceExpression("componentContext")});
+				new Expression[] {AstUtil.CreateReferenceExpression("context"), new ReferenceExpression("componentContext")});
 
 			block.Add(initComponent);    
 		    

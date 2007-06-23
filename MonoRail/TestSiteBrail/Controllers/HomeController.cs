@@ -165,6 +165,11 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 		{
 			
 		}
+
+        public void DuckOverloadToString()
+        {
+            PropertyBag["birthday"] = new DateTime(1981, 12, 20);
+        }
     }
 }
 

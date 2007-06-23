@@ -242,5 +242,13 @@ Contents for heyhello View
 			DoGet("home/usingQuotes.rails");
 			AssertReplyEqualTo(expected);
 		}
+
+        [Test]
+        public void DuckOverloadToString()
+        {
+            DoGet("home/DuckOverloadToString.rails");
+            AssertReplyEqualTo("20-12-1981");
+            
+        }
 	}
 }
