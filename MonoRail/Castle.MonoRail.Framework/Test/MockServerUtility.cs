@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework.Test
 
 	public class MockServerUtility : IServerUtility
 	{
-		public string MapPath(string virtualPath)
+		public virtual string MapPath(string virtualPath)
 		{
 			throw new NotImplementedException();
 		}
@@ -33,12 +33,12 @@ namespace Castle.MonoRail.Framework.Test
 			return content.Replace("&", "&amp;");
 		}
 
-		public string UrlPathEncode(string content)
+		public virtual string UrlPathEncode(string content)
 		{
 			throw new NotImplementedException();
 		}
 
-		public string JavaScriptEscape(string content)
+		public virtual string JavaScriptEscape(string content)
 		{
 			throw new NotImplementedException();
 		}

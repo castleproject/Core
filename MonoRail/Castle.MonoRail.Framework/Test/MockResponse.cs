@@ -50,88 +50,88 @@ namespace Castle.MonoRail.Framework.Test
 			headers[name] = value;
 		}
 
-		public void BinaryWrite(byte[] buffer)
+		public virtual void BinaryWrite(byte[] buffer)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void BinaryWrite(Stream stream)
+		public virtual void BinaryWrite(Stream stream)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Clear()
+		public virtual void Clear()
 		{
 			throw new NotImplementedException();
 		}
 
-		public void ClearContent()
+		public virtual void ClearContent()
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Write(string s)
+		public virtual void Write(string s)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Write(object obj)
+		public virtual void Write(object obj)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Write(char ch)
+		public virtual void Write(char ch)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Write(char[] buffer, int index, int count)
+		public virtual void Write(char[] buffer, int index, int count)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void WriteFile(string fileName)
+		public virtual void WriteFile(string fileName)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Redirect(string controller, string action)
+		public virtual void Redirect(string controller, string action)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Redirect(string area, string controller, string action)
+		public virtual void Redirect(string area, string controller, string action)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Redirect(string url)
+		public virtual void Redirect(string url)
 		{
 			wasRedirected = true;
 			redirectedTo = url;
 		}
 
-		public void Redirect(string url, bool endProcess)
+		public virtual void Redirect(string url, bool endProcess)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void CreateCookie(string name, string value)
+		public virtual void CreateCookie(string name, string value)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void CreateCookie(string name, string value, DateTime expiration)
+		public virtual void CreateCookie(string name, string value, DateTime expiration)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void CreateCookie(HttpCookie cookie)
+		public virtual void CreateCookie(HttpCookie cookie)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void RemoveCookie(string name)
+		public virtual void RemoveCookie(string name)
 		{
 			throw new NotImplementedException();
 		}

@@ -35,17 +35,17 @@ namespace Castle.MonoRail.Framework.Test
 		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
 		private string userHostAddress = "127.0.0.1";
 
-		public byte[] BinaryRead(int count)
+		public virtual byte[] BinaryRead(int count)
 		{
 			throw new NotImplementedException();
 		}
 
-		public string ReadCookie(string name)
+		public virtual string ReadCookie(string name)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void ValidateInput()
+		public virtual void ValidateInput()
 		{
 			throw new NotImplementedException();
 		}
@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework.Test
 			get { return filePath; }
 		}
 
-		public string this[string key]
+		public virtual string this[string key]
 		{
 			get { throw new NotImplementedException(); }
 		}

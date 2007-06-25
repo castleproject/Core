@@ -66,7 +66,7 @@ namespace Castle.MonoRail.Framework.Test
 			get { return request.HttpMethod; }
 		}
 
-		public string Url
+		public virtual string Url
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -122,7 +122,7 @@ namespace Castle.MonoRail.Framework.Test
 			get { return flash; }
 		}
 
-		public void Transfer(string path, bool preserveForm)
+		public virtual void Transfer(string path, bool preserveForm)
 		{
 			throw new NotImplementedException();
 		}

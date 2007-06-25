@@ -18,32 +18,32 @@ namespace Castle.MonoRail.Framework.Test
 
 	public class MockTrace : ITrace
 	{
-		public void Warn(string message)
+		public virtual void Warn(string message)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Warn(string category, string message)
+		public virtual void Warn(string category, string message)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Warn(string category, string message, Exception errorInfo)
+		public virtual void Warn(string category, string message, Exception errorInfo)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Write(string message)
+		public virtual void Write(string message)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Write(string category, string message)
+		public virtual void Write(string category, string message)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Write(string category, string message, Exception errorInfo)
+		public virtual void Write(string category, string message, Exception errorInfo)
 		{
 			throw new NotImplementedException();
 		}
