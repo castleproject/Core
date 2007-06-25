@@ -56,9 +56,10 @@ namespace Castle.DynamicProxy.Generators
 		private Hashtable method2TokenField = new Hashtable();
 		private IList generateNewSlot = new ArrayList();
 		protected IList methodsToSkip = new ArrayList();
+		private ProxyGenerationOptions proxyGenerationOptions;
+		private FieldReference proxyGenerationOptionsField;
 
 		protected readonly Type targetType;
-		protected IProxyGenerationHook generationHook;
 		protected ConstructorInfo serializationConstructor;
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
@@ -67,6 +68,31 @@ namespace Castle.DynamicProxy.Generators
 			this.targetType = targetType;
 		}
 
+		public ProxyGenerationOptions ProxyGenerationOptions
+		{
+			get {
+				if (proxyGenerationOptions == null)
+				{
+					throw new InvalidOperationException ("ProxyGenerationOptions must be set before being retrieved.");
+				}
+				return proxyGenerationOptions;
+			}
+		}
+
+		protected void SetGenerationOptions (ProxyGenerationOptions options, ClassEmitter emitter)
+		{
+			if (proxyGenerationOptions != null)
+			{
+				throw new InvalidOperationException ("ProxyGenerationOptions can only be set once.");
+			}
+			proxyGenerationOptions = options;
+			proxyGenerationOptionsField = emitter.CreateStaticField ("proxyGenerationOptions", typeof (ProxyGenerationOptions));
+		}
+
+		protected void InitializeStaticFields (Type builtType)
+		{
+			builtType.GetField (proxyGenerationOptionsField.Reference.Name).SetValue (null, ProxyGenerationOptions);
+		}
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
@@ -1201,7 +1227,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (method.DeclaringType != typeof(object) && method.DeclaringType != typeof(MarshalByRefObject))
 				{
-					generationHook.NonVirtualMemberNotification(targetType, method);
+					ProxyGenerationOptions.Hook.NonVirtualMemberNotification(targetType, method);
 				}
 
 				return false;
@@ -1220,7 +1246,7 @@ namespace Castle.DynamicProxy.Generators
 				return false;
 			}
 
-			return generationHook.ShouldInterceptMethod(targetType, method);
+			return ProxyGenerationOptions.Hook.ShouldInterceptMethod(targetType, method);
 			;
 		}
 
@@ -1562,6 +1588,12 @@ namespace Castle.DynamicProxy.Generators
 			                                       	                               new ConstReference("__baseType").
 			                                       	                               	ToExpression(),
 			                                       	                               new ConstReference (emitter.BaseType.AssemblyQualifiedName).ToExpression())));
+
+			getObjectData.CodeBuilder.AddStatement(new ExpressionStatement(
+			                                       	new MethodInvocationExpression(arg1, addValueMethod,
+			                                       	                               new ConstReference("__proxyGenerationOptions").
+			                                       	                               	ToExpression(),
+			                                       	                               proxyGenerationOptionsField.ToExpression())));
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, arg1, arg2);
 

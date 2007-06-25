@@ -16,8 +16,10 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections;
+	using System.Runtime.Serialization;
 
-	public class ProxyGenerationOptions
+	[Serializable]
+	public class ProxyGenerationOptions : ISerializable
 	{
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
 
@@ -43,6 +45,26 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		public ProxyGenerationOptions() : this(new AllMethodsHook())
 		{
+		}
+
+		private ProxyGenerationOptions (SerializationInfo info, StreamingContext context)
+		{
+			hook = (IProxyGenerationHook) info.GetValue ("hook", typeof (IProxyGenerationHook));
+			selector = (IInterceptorSelector) info.GetValue ("selector", typeof (IInterceptorSelector));
+			mixins = (ArrayList) info.GetValue ("mixins", typeof (ArrayList));
+			baseTypeForInterfaceProxy = Type.GetType (info.GetString ("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
+			useSingleInterfaceProxy = info.GetBoolean ("useSingleInterfaceProxy");
+			useSelector = info.GetBoolean ("useSelector");
+		}
+
+		public void GetObjectData (SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue ("hook", hook);
+			info.AddValue ("selector", selector);
+			info.AddValue ("mixins", mixins);
+			info.AddValue ("baseTypeForInterfaceProxy.AssemblyQualifiedName", baseTypeForInterfaceProxy.AssemblyQualifiedName);
+			info.AddValue ("useSingleInterfaceProxy", useSingleInterfaceProxy);
+			info.AddValue ("useSelector", useSelector);
 		}
 
 		public IProxyGenerationHook Hook

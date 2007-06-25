@@ -71,8 +71,6 @@ namespace Castle.DynamicProxy.Generators
 					return cacheType;
 				}
 
-				generationHook = options.Hook;
-
 				String newName = targetType.Name + "Proxy" + Guid.NewGuid().ToString("N");
 
 				// Add Interfaces that the proxy implements 
@@ -97,6 +95,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				ClassEmitter emitter = BuildClassEmitter(newName, targetType, interfaceList);
+				SetGenerationOptions (options, emitter);
 				
 				emitter.DefineCustomAttribute(new XmlIncludeAttribute(targetType));
 
@@ -266,6 +265,7 @@ namespace Castle.DynamicProxy.Generators
 				// Build type
 
 				type = emitter.BuildType();
+				InitializeStaticFields (type);
 
 				AddToCache(cacheKey, type);
 			}

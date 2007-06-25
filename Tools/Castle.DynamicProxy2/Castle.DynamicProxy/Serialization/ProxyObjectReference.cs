@@ -35,6 +35,7 @@ namespace Castle.DynamicProxy.Serialization
 		private readonly Type _baseType;
 		private readonly Type[] _interfaces;
 		private readonly object _proxy;
+		private readonly ProxyGenerationOptions _proxyGenerationOptions;
 
 		private bool _isInterfaceProxy;
 		private bool _delegateToBase;
@@ -60,6 +61,7 @@ namespace Castle.DynamicProxy.Serialization
 			for(int i = 0; i < _interfaceNames.Length; i++)
 				_interfaces[i] = Type.GetType(_interfaceNames[i]);
 
+			_proxyGenerationOptions = (ProxyGenerationOptions) info.GetValue ("__proxyGenerationOptions", typeof (ProxyGenerationOptions));
 			_proxy = RecreateProxy ();
 		}
 
@@ -108,7 +110,7 @@ namespace Castle.DynamicProxy.Serialization
 							generatorType));
 			}
 
-			Type proxy_type = generator.GenerateCode(targetType, _interfaces, ProxyGenerationOptions.Default);
+			Type proxy_type = generator.GenerateCode(targetType, _interfaces, _proxyGenerationOptions);
 			return FormatterServices.GetSafeUninitializedObject (proxy_type);
 		}
 
@@ -118,7 +120,7 @@ namespace Castle.DynamicProxy.Serialization
 
 			ClassProxyGenerator cpGen = new ClassProxyGenerator(_scope, _baseType);
 
-			Type proxy_type = cpGen.GenerateCode(_interfaces, ProxyGenerationOptions.Default);
+			Type proxy_type = cpGen.GenerateCode(_interfaces, _proxyGenerationOptions);
 
 
 			if (_delegateToBase)
