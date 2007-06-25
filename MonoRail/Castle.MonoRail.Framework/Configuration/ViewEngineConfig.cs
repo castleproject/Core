@@ -86,7 +86,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		{
 			viewPathRoot = engines.GetAttribute("viewPathRoot");
 
-			if (viewPathRoot == null)
+			if (viewPathRoot == null || viewPathRoot == String.Empty)
 			{
 				viewPathRoot = "views";
 			}

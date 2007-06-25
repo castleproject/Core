@@ -76,6 +76,37 @@ namespace Castle.MonoRail.Framework.Tests.Configuration
 			Assert.IsTrue(config.Sources.Length > 0, "Additional sources not loaded");
 
 		}
+
+		[Test]
+		public void ShouldUseDirectoryNamedViews_IfNoViewPathRootGiven()
+		{
+			// Multiple view engine config
+			string configXml = @"
+<monorail>
+	<viewEngines>
+		<add type=""Castle.MonoRail.Framework.Tests.Configuration.TestViewEngine, Castle.MonoRail.Framework.Tests"" />
+	</viewEngines>
+</monorail>";
+
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(configXml);
+			ViewEngineConfig config = new ViewEngineConfig();
+			config.Deserialize(doc.DocumentElement);
+
+			Assert.AreEqual(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "views"), config.ViewPathRoot);
+
+			// Single view engine config
+			configXml = @"
+<monorail>
+	<viewEngine customEngine=""Castle.MonoRail.Framework.Tests.Configuration.TestViewEngine, Castle.MonoRail.Framework.Tests"" />
+</monorail>";
+
+			doc.LoadXml(configXml);
+
+			config.Deserialize(doc.DocumentElement);
+
+			Assert.AreEqual(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "views"), config.ViewPathRoot);
+		}
 	}
 
 	public class TestViewEngine : ViewEngineBase
