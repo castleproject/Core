@@ -1,0 +1,7 @@
+<%
+dsl Html:
+	html:
+		output "${ChildOutput}"
+	end
+end
+%>

@@ -49,6 +49,11 @@ namespace Castle.MonoRail.Views.Brail
 		/// </summary>
 		protected BrailBase parent;
 
+        /// <summary>
+        /// Reference to the DSL service
+        /// </summary>
+        private DslProvider _dsl;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BrailBase"/> class.
 		/// </summary>
@@ -88,6 +93,35 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			get { return viewEngine; }
 		}
+
+        /// <summary>
+        /// Gets the DSL provider
+        /// </summary>
+        /// <value>Reference to the current DSL Provider</value>
+        public DslProvider Dsl
+        {
+            get
+            {
+                BrailBase view = this;
+                if (null == view._dsl)
+                {
+                    view._dsl = new DslProvider(view);
+                }
+
+                return view._dsl;
+                //while (view.parent != null)
+                //{
+                //    view = view.parent;
+                //}
+
+                //if (view._dsl == null)
+                //{
+                //    view._dsl = new DslProvider(view);
+                //}
+
+                //return view._dsl;
+            }
+        }
 
 		/// <summary>
 		/// Output the subview to the client, this is either a relative path "SubView" which
@@ -337,6 +371,7 @@ StringComparer.InvariantCultureIgnoreCase
 				CaseInsensitiveComparer.Default
 #endif
 );
+            //properties.Add("dsl", new DslWrapper(this));
 			properties.Add("Controller", myController);
 			properties.Add("request", myContext.Request);
 			properties.Add("response", myContext.Response);

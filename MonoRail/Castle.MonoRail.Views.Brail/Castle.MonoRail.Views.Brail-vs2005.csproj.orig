@@ -70,11 +70,8 @@
     <Compile Include="BrailPreProcessor.cs" />
     <Compile Include="BrailViewComponentContext.cs" />
     <Compile Include="BrailJSGenerator.cs" />
-    <Compile Include="DslWrapper.cs" />
     <Compile Include="ExpandDuckTypedExpressions_WorkaroundForDuplicateVirtualMethods.cs">
     </Compile>
-    <Compile Include="HtmlExtension.cs" />
-    <Compile Include="IDslLanguageExtension.cs" />
     <Compile Include="Macros\CodeBuilderHelper.cs" />
     <Compile Include="Macros\ComponentMacro.cs" />
     <Compile Include="CustomTypeSystem.cs" />
@@ -82,12 +79,10 @@
     <Compile Include="Macros\OutputMacro.cs" />
     <Compile Include="Attributes\OutputMethodAttribute.cs" />
     <Compile Include="Macros\SectionMacro.cs" />
-    <Compile Include="Macros\DslMacro.cs" />
     <Compile Include="ReplaceUknownWithParameters.cs" />
     <Compile Include="ResourceToDuck.cs" />
     <Compile Include="ReturnValueVisitor.cs" />
     <Compile Include="TransformToBrailStep.cs" />
-    <Compile Include="XmlExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">

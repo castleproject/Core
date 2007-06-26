@@ -54,10 +54,13 @@
     <Compile Include="BrailRoutingTestCase.cs" />
     <Compile Include="BrailSubViewTestCase.cs" />
     <Compile Include="ComponentsTestCase.cs" />
+    <Compile Include="Controllers\DslController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="BrailBugsTestCase.cs" />
     <Compile Include="DirectRenderTestCase.cs" />
+    <Compile Include="DslFixture.cs" />
+    <Compile Include="DslLayoutFixture.cs" />
     <Compile Include="HappenedOnTheFieldFixture.cs" />
     <Compile Include="JSGenerationTestCase.cs" />
     <Compile Include="JustViewFixture.cs" />
@@ -73,6 +76,9 @@
   <ItemGroup>
     <None Include="Views\components\SimpleInlineViewComponent2\mycompview1.brail" />
     <None Include="Views\components\SimpleInlineViewComponent3\default.brail" />
+    <None Include="Views\dsl\attributeOutput.brail" />
+    <None Include="Views\dsl\expandParameters.brail" />
+    <None Include="Views\dsl\registerHtml.brail" />
     <None Include="Views\home\bag.brail" />
     <None Include="Views\home\display.brail" />
     <None Include="Views\home\index.brail" />

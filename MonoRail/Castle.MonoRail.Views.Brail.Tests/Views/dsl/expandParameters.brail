@@ -1,0 +1,9 @@
+<%
+dsl Html:
+	html:
+		p:
+			text "hello, ${SayHelloTo}"
+		end
+	end
+end
+%>

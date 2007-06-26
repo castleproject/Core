@@ -110,6 +110,7 @@
     <Compile Include="Controllers\BugsController.cs" />
     <Compile Include="Controllers\DefaultLayoutController.cs" />
     <Compile Include="Controllers\DirectRenderController.cs" />
+    <Compile Include="Controllers\DslController.cs" />
     <Compile Include="Controllers\DummySubView.cs" />
     <Compile Include="Controllers\ExceptionController.cs" />
     <Compile Include="Controllers\FilterBadHeader.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Controllers\XmlController.cs" />
     <Compile Include="Helpers\DateFormatHelper.cs" />
     <None Include="Views\bugs\mr_233.brail" />
+    <None Include="Views\dsl\testSubViewOutput.brail" />
     <None Include="Views\HappenedOnTheField\JustComponent.brail" />
     <None Include="Views\home\complexNestedExpressions.brail" />
     <None Include="Views\home\complexNestedExpressions2.brail" />
@@ -163,6 +165,7 @@
     <None Include="Views\jsgeneration\replacehtmlwithpartial.brailjs" />
     <None Include="Views\jsgeneration\visualeffect.brailjs" />
     <None Include="Views\jsgeneration\_partial1.brail" />
+    <None Include="Views\layouts\dsl.brail" />
     <None Include="Views\resourced\indexingResources.brail" />
     <None Include="Views\usingcomponents\dynamicComponents.brail" />
   </ItemGroup>
@@ -202,6 +205,10 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\dsl\testXml.brail" />
+    <None Include="Views\dsl\testSubViewWithComponents.brail" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
