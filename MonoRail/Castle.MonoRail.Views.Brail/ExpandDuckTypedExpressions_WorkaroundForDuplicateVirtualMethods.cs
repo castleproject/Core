@@ -218,7 +218,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static BindingFlags ResolveFlagsToUse(Type type, BindingFlags flags)
 		{
-			if (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+            if (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen") || type.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2"))
 			{
 				return flags | BindingFlags.DeclaredOnly;
 			}
