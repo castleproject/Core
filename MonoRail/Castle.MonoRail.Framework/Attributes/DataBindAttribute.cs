@@ -138,7 +138,7 @@ namespace Castle.MonoRail.Framework
 		{
 			CompositeNode node = controller.ObtainParamsNode(From);
 
-			DataBinder binder = controller.Binder;
+			IDataBinder binder = controller.Binder;
 
 			return binder.CanBindObject(parameterInfo.ParameterType, prefix, node) ? 10 : 0;
 		}
@@ -153,7 +153,7 @@ namespace Castle.MonoRail.Framework
 		/// <returns>The bound instance</returns>
 		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			DataBinder binder = controller.Binder;
+			IDataBinder binder = controller.Binder;
 
 			ConfigureValidator(controller, binder);
 
@@ -167,7 +167,7 @@ namespace Castle.MonoRail.Framework
 			return instance;
 		}
 
-		protected void ConfigureValidator(SmartDispatcherController controller, DataBinder binder)
+		protected void ConfigureValidator(SmartDispatcherController controller, IDataBinder binder)
 		{
 			if (validate)
 			{
@@ -179,7 +179,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		protected void PopulateValidatorErrorSummary(SmartDispatcherController controller, DataBinder binder, object instance)
+		protected void PopulateValidatorErrorSummary(SmartDispatcherController controller, IDataBinder binder, object instance)
 		{
 			if (validate)
 			{
@@ -188,7 +188,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		protected void BindInstanceErrors(SmartDispatcherController controller, DataBinder binder, object instance)
+		protected void BindInstanceErrors(SmartDispatcherController controller, IDataBinder binder, object instance)
 		{
 			if (instance != null)
 			{

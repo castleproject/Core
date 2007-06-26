@@ -66,7 +66,7 @@ namespace Castle.MonoRail.Framework
 		{			
 		}
 
-		public WizardStepPage(DataBinder binder) : base(binder)
+		public WizardStepPage(IDataBinder binder) : base(binder)
 		{			
 		}
 

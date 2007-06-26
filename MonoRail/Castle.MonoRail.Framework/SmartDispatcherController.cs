@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public abstract class SmartDispatcherController : Controller
 	{
-		private DataBinder binder;
+		private IDataBinder binder;
 		private TreeBuilder treeBuilder = new TreeBuilder();
 		private CompositeNode paramsNode, formNode, queryStringNode;
 		private IDictionary<object, ErrorSummary> validationSummaryPerInstance = new Dictionary<object, ErrorSummary>();
@@ -52,12 +52,12 @@ namespace Castle.MonoRail.Framework
 		/// Initializes a new instance of the <see cref="SmartDispatcherController"/> class.
 		/// </summary>
 		/// <param name="binder">The binder.</param>
-		protected SmartDispatcherController(DataBinder binder)
+		protected SmartDispatcherController(IDataBinder binder)
 		{
 			this.binder = binder;
 		}
 
-		public DataBinder Binder
+		public IDataBinder Binder
 		{
 			get { return binder; }
 		}
