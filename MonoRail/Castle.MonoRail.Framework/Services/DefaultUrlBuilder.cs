@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework.Services
 
 		#region IUrlBuilder
 
-		public string BuildUrl(UrlInfo current, IDictionary parameters)
+		public virtual string BuildUrl(UrlInfo current, IDictionary parameters)
 		{
 			bool applySubdomain = false;
 			bool createAbsolutePath = CommonUtils.ObtainEntryAndRemove(parameters, "absolute", "false") == "true";
@@ -111,7 +111,7 @@ namespace Castle.MonoRail.Framework.Services
 				current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix);
 		}
 
-		public string BuildUrl(UrlInfo current, string controller, string action)
+		public virtual string BuildUrl(UrlInfo current, string controller, string action)
 		{
 			Hashtable parameters = new Hashtable();
 			parameters["controller"] = controller;
@@ -119,16 +119,7 @@ namespace Castle.MonoRail.Framework.Services
 			return BuildUrl(current, parameters);
 		}
 
-		public string BuildUrl(UrlInfo current, string controller, string action, IDictionary queryStringParams)
-		{
-			Hashtable parameters = new Hashtable();
-			parameters["controller"] = controller;
-			parameters["action"] = action;
-			parameters["querystring"] = queryStringParams;
-			return BuildUrl(current, parameters);
-		}
-
-		public string BuildUrl(UrlInfo current, string controller, string action, NameValueCollection queryStringParams)
+		public virtual string BuildUrl(UrlInfo current, string controller, string action, IDictionary queryStringParams)
 		{
 			Hashtable parameters = new Hashtable();
 			parameters["controller"] = controller;
@@ -137,7 +128,16 @@ namespace Castle.MonoRail.Framework.Services
 			return BuildUrl(current, parameters);
 		}
 
-		public string BuildUrl(UrlInfo current, string area, string controller, string action)
+		public virtual string BuildUrl(UrlInfo current, string controller, string action, NameValueCollection queryStringParams)
+		{
+			Hashtable parameters = new Hashtable();
+			parameters["controller"] = controller;
+			parameters["action"] = action;
+			parameters["querystring"] = queryStringParams;
+			return BuildUrl(current, parameters);
+		}
+
+		public virtual string BuildUrl(UrlInfo current, string area, string controller, string action)
 		{
 			Hashtable parameters = new Hashtable();
 			parameters["area"] = area;
@@ -146,7 +146,7 @@ namespace Castle.MonoRail.Framework.Services
 			return BuildUrl(current, parameters);
 		}
 
-		public string BuildUrl(UrlInfo current, string area, string controller, string action, IDictionary queryStringParams)
+		public virtual string BuildUrl(UrlInfo current, string area, string controller, string action, IDictionary queryStringParams)
 		{
 			Hashtable parameters = new Hashtable();
 			parameters["area"] = area;
@@ -156,7 +156,7 @@ namespace Castle.MonoRail.Framework.Services
 			return BuildUrl(current, parameters);
 		}
 
-		public string BuildUrl(UrlInfo current, string area, string controller, string action,
+		public virtual string BuildUrl(UrlInfo current, string area, string controller, string action,
 		                       NameValueCollection queryStringParams)
 		{
 			Hashtable parameters = new Hashtable();
@@ -169,7 +169,7 @@ namespace Castle.MonoRail.Framework.Services
 
 		#endregion
 
-		private string InternalBuildUrl(string area, string controller, string action, string protocol,
+		protected virtual string InternalBuildUrl(string area, string controller, string action, string protocol,
 		                                string port, string domain, string subdomain, string appVirtualDir, string extension, 
 		                                bool absolutePath, bool applySubdomain, string suffix)
 		{
