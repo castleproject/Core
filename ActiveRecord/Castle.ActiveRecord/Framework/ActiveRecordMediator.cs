@@ -349,7 +349,7 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType">The target type.</param>
 		/// <param name="criteria">The criteria expression</param>
 		/// <returns>The count result</returns>
-		public static int Count(Type targetType, ICriterion[] criteria) {
+		public static int Count(Type targetType, params ICriterion[] criteria) {
 			return ActiveRecordBase.Count(targetType, criteria);
 		}
 

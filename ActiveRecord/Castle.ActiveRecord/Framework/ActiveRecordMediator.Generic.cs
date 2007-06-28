@@ -286,7 +286,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="criteria">The criteria expression</param>
 		/// <returns>The count result</returns>
-		public static int Count(ICriterion[] criteria)
+		public static int Count(params ICriterion[] criteria)
 		{
 			return ActiveRecordBase.Count(typeof(T), criteria);
 		}
