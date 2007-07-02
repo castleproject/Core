@@ -208,6 +208,7 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(2, dict["key2"]);
 			Assert.AreEqual(3, dict["key3"]);
 		}
+
 #endif
 
 		[Test]

@@ -18,6 +18,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using Castle.Core.Configuration;
 
 	[Serializable]
@@ -32,10 +33,14 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override bool CanHandleType(Type type)
 		{
-			return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(IList<>)
-			                              || type.GetGenericTypeDefinition() == typeof(ICollection<>)
-			                              || type.GetGenericTypeDefinition() == typeof(List<>)
-			                              || type.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+			if (!type.IsGenericType) return false;
+
+			Type genericDef = type.GetGenericTypeDefinition();
+
+			return (genericDef == typeof(IList<>)
+			        || genericDef == typeof(ICollection<>)
+			        || genericDef == typeof(List<>)
+			        || genericDef == typeof(IEnumerable<>));
 		}
 
 		public override object PerformConversion(String value, Type targetType)
@@ -45,10 +50,10 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override object PerformConversion(IConfiguration configuration, Type targetType)
 		{
-			System.Diagnostics.Debug.Assert(CanHandleType(targetType));
+			Debug.Assert(CanHandleType(targetType));
 
 			Type[] argTypes = targetType.GetGenericArguments();
-			
+
 			if (argTypes.Length != 1)
 			{
 				throw new ConverterException("Expected type with one generic argument.");
@@ -81,6 +86,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			public object ConvertConfigurationToCollection(IConfiguration configuration)
 			{
 				List<T> list = new List<T>();
+
 				foreach(IConfiguration itemConfig in configuration.Children)
 				{
 					T item = (T) parent.Context.Composition.PerformConversion(itemConfig.Value, typeof(T));

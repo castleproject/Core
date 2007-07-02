@@ -32,10 +32,11 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override bool CanHandleType(Type type)
 		{
-			return
-				type.IsGenericType &&
-				(type.GetGenericTypeDefinition() == typeof(IDictionary<,>) ||
-				 type.GetGenericTypeDefinition() == typeof(Dictionary<,>));
+			if (!type.IsGenericType) return false;
+
+			Type genericDef = type.GetGenericTypeDefinition();
+
+			return (genericDef == typeof(IDictionary<,>) || genericDef == typeof(Dictionary<,>));
 		}
 
 		public override object PerformConversion(String value, Type targetType)
