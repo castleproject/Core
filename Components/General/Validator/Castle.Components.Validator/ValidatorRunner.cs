@@ -23,6 +23,10 @@ namespace Castle.Components.Validator
 	/// Coordinates the gathering and execution of validators.
 	/// <seealso cref="IValidatorRegistry"/>
 	/// </summary>
+	/// <remarks>
+	/// This class is not thread safe and should not be shared. It should only be 
+	/// used in small scopes and discarded.
+	/// </remarks>
 	/// <example>
 	/// ValidatorRunner runner = new ValidatorRunner(new CachedValidationRegistry());
 	/// 
