@@ -183,8 +183,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (validate)
 			{
-				ErrorSummary summary = binder.GetValidationSummary(instance);
-				controller.ValidationSummaryPerInstance[instance] = summary;
+				controller.PopulateValidatorErrorSummary(instance);
 			}
 		}
 

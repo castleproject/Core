@@ -113,7 +113,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { autoLoad = value; }
 		}
 
-
 		/// <summary>
 		/// Gets or sets the names of the collection that are expected to be binded.
 		/// If the binder does not find any value to an expected collection, it will clear to collection.

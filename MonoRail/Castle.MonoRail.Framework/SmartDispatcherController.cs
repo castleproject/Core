@@ -77,6 +77,11 @@ namespace Castle.MonoRail.Framework
 			get { return validationSummaryPerInstance; }
 		}
 
+		protected internal void PopulateValidatorErrorSummary(object instance)
+		{
+			ValidationSummaryPerInstance[instance] = binder.GetValidationSummary(instance);
+		}
+
 		/// <summary>
 		/// Gets the error summary.
 		/// <para>
@@ -361,6 +366,7 @@ namespace Castle.MonoRail.Framework
 			object instance = binder.BindObject(targetType, prefix, excludedProperties, allowedProperties, node);
 
 			boundInstances[instance] = binder.ErrorList;
+			PopulateValidatorErrorSummary(instance);
 
 			return instance;
 		}
@@ -377,6 +383,7 @@ namespace Castle.MonoRail.Framework
 			binder.BindObjectInstance(instance, prefix, node);
 
 			boundInstances[instance] = binder.ErrorList;
+			PopulateValidatorErrorSummary(instance);
 		}
 
 		protected T BindObject<T>(String prefix)
@@ -393,10 +400,16 @@ namespace Castle.MonoRail.Framework
 		{
 			return (T) BindObject(from, typeof(T), prefix, excludedProperties, allowedProperties);
 		}
-		
+
+		/// <summary>
+		/// Gets a list of errors that were thrown during the 
+		/// object process, like conversion errors.
+		/// </summary>
+		/// <param name="instance">The instance that was populated by a binder.</param>
+		/// <returns>List of errors</returns>
 		protected ErrorList GetDataBindErrors(object instance)
 		{
-			return boundInstances[instance] as ErrorList;
+			return boundInstances[instance];
 		}
 		
 		/// <summary>
