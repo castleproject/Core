@@ -15,7 +15,7 @@
 namespace Castle.Components.Validator
 {
 	/// <summary>
-	/// Defines an html element type
+	/// Defines a html element type
 	/// </summary>
 	public enum InputElementType
 	{

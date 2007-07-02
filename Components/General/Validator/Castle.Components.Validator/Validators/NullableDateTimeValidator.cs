@@ -15,7 +15,6 @@
 namespace Castle.Components.Validator
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>
 	/// This is a meta validator. 
