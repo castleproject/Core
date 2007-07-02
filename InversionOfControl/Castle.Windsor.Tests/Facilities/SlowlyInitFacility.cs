@@ -23,10 +23,5 @@ namespace Castle.Windsor.Tests.Facilities
 		{
 			Thread.Sleep(1000);
 		}
-
-		public override void Dispose()
-		{
-			base.Dispose();
-		}
 	}
 }

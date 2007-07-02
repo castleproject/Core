@@ -16,6 +16,7 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using Castle.Core;
 	using Castle.Core.Configuration;
 	using Castle.Facilities.FactorySupport;
 	using Castle.MicroKernel.Tests.ClassComponents;
@@ -35,7 +36,6 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
 		{
 			kernel.AddFacility("factories", new FactorySupportFacility());
 			kernel.AddComponentInstance("a", new CustomerImpl());
-
 		}
 		
 		[Test]
@@ -52,14 +52,31 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
 			kernel.Resolve("serviceComponent", typeof(ServiceDependentComponent));
 			kernel.Resolve("stringdictComponent", typeof(StringDictionaryDependentComponent));
 		}
-		
-		private void AddComponent(string key, Type type, string factoryMethod)
+
+		[Test, Ignore("Bug confirmed, but cant fix it without undesired side effects")]
+		public void KernelDoesNotTryToWireComponentsPropertiesWithFactoryConfiguration()
+		{
+			kernel.AddFacility("factories", new FactorySupportFacility());
+			kernel.AddComponent("a", typeof(Factory));
+
+			ComponentModel model = AddComponent("cool.service", typeof(MyCoolServiceWithProperties), "CreateCoolService");
+
+			model.Parameters.Add("someProperty", "Abc");
+
+			MyCoolServiceWithProperties service = (MyCoolServiceWithProperties) kernel["cool.service"];
+
+			Assert.IsNotNull(service);
+			Assert.IsNull(service.SomeProperty);
+		}
+
+		private ComponentModel AddComponent(string key, Type type, string factoryMethod)
 		{
 			MutableConfiguration config = new MutableConfiguration(key);
 			config.Attributes["factoryId"] = "a";
 			config.Attributes["factoryCreate"] = factoryMethod;
 			kernel.ConfigurationStore.AddComponentConfiguration(key, config);
 			kernel.AddComponent(key, type);
+			return kernel.GetHandler(key).ComponentModel;
 		}
 		
 		public class Factory
@@ -77,6 +94,22 @@ namespace Castle.MicroKernel.Tests.Facilities.FactorySupport
 			public static ServiceDependentComponent CreateWithService()
 			{
 				return new ServiceDependentComponent(null);
+			}
+
+			public static MyCoolServiceWithProperties CreateCoolService(string someProperty)
+			{
+				return new MyCoolServiceWithProperties();
+			}
+		}
+
+		public class MyCoolServiceWithProperties
+		{
+			private string someProperty;
+
+			public string SomeProperty
+			{
+				get { return someProperty; }
+				set { someProperty = value; }
 			}
 		}
 

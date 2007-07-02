@@ -17,14 +17,11 @@ namespace Castle.Facilities.FactorySupport
 	using System;
 	using System.Collections;
 	using System.Reflection;
-
 	using Castle.Core;
-
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
-
 
 	/// <summary>
 	/// 
@@ -96,7 +93,7 @@ namespace Castle.Facilities.FactorySupport
 
 				ArrayList methodArgs = new ArrayList();
 
-				foreach (ParameterInfo parameter in parameters)
+				foreach(ParameterInfo parameter in parameters)
 				{
 					Type paramType = parameter.ParameterType;
 
