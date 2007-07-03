@@ -211,10 +211,7 @@ namespace Castle.MonoRail.Framework
 
 				if (calculated) continue;
 
-				if (requestParameterName == null)
-				{
-					requestParameterName = GetRequestParameterName(param);
-				}
+				requestParameterName = GetRequestParameterName(param);
 				
 				//
 				// Otherwise
