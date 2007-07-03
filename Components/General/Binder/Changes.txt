@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Applied Brian Chan's patch fixing MR-282
+  "Binding to a nested IList<> or not null nested List<> fails"
+
 - Applied Adam Tybor's patch fixing MR-289
   "Array Binding for Prototype Style Serialization"
 

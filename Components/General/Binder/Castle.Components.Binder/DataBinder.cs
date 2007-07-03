@@ -581,7 +581,7 @@ namespace Castle.Components.Binder
 
 		protected virtual bool ShouldRecreateInstance(object value, Type type, String prefix, Node node)
 		{
-			return value == null || type.IsArray;
+			return value == null || type.IsArray || IsGenericList(type);
 		}
 
 		protected virtual bool ShouldIgnoreType(Type instanceType)
@@ -815,7 +815,10 @@ namespace Castle.Components.Binder
 					convertedNodes = ConvertComplexNodesToList(elemType, indexedNode, out conversionSucceeded);
 				}
 
-				IList target = (IList) CreateInstance(desiredType, key, node);
+				Type desiredImplType = desiredType.IsInterface
+				                       	? typeof(List<>).MakeGenericType(elemType)
+				                       	: desiredType;
+				IList target = (IList)CreateInstance(desiredImplType, key, node);
 
 				foreach(object elem in convertedNodes)
 				{

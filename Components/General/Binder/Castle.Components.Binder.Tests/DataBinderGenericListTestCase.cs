@@ -119,6 +119,56 @@ namespace Castle.Components.Binder.Tests
 		}
 
 		[Test]
+		public void InstantiatedListNestedBind()
+		{
+			string data = @"
+				cust.addresses1[0].street = st1
+				cust.addresses1[0].number = 1
+				cust.addresses1[1].street = st2
+				cust.addresses1[1].number = 2
+			";
+
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+
+			object instance = binder.BindObject(typeof(Customer2), "cust", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			Customer2 cust = instance as Customer2;
+			Assert.IsNotNull(cust);
+			Assert.IsNotNull(cust.Addresses1);
+			Assert.AreEqual(2, cust.Addresses1.Count);
+			Assert.AreEqual(1, cust.Addresses1[0].Number);
+			Assert.AreEqual(2, cust.Addresses1[1].Number);
+			Assert.AreEqual("st1", cust.Addresses1[0].Street);
+			Assert.AreEqual("st2", cust.Addresses1[1].Street);
+		}
+
+		[Test]
+		public void IListNestedBind()
+		{
+			string data = @"
+				cust.addresses2[0].street = st1
+				cust.addresses2[0].number = 1
+				cust.addresses2[1].street = st2
+				cust.addresses2[1].number = 2
+			";
+
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+
+			object instance = binder.BindObject(typeof(Customer2), "cust", builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			Customer2 cust = instance as Customer2;
+			Assert.IsNotNull(cust);
+			Assert.IsNotNull(cust.Addresses2);
+			Assert.AreEqual(2, cust.Addresses2.Count);
+			Assert.AreEqual(1, cust.Addresses2[0].Number);
+			Assert.AreEqual(2, cust.Addresses2[1].Number);
+			Assert.AreEqual("st1", cust.Addresses2[0].Street);
+			Assert.AreEqual("st2", cust.Addresses2[1].Street);
+		}
+
+		[Test]
 		public void IListBind()
 		{
 			string data = @"
@@ -149,6 +199,10 @@ namespace Castle.Components.Binder.Tests
 	class Customer2
 	{
 		private List<Address> addresses;
+		
+		private List<Address> addresses1 = new List<Address>();
+
+		private IList<Address> addresses2;
 
 		private List<int> months;
 
@@ -158,6 +212,18 @@ namespace Castle.Components.Binder.Tests
 		{
 			get { return addresses; }
 			set { addresses = value; }
+		}
+
+		public List<Address> Addresses1
+		{
+			get { return addresses1; }
+			set { addresses1 = value; }
+		}
+
+		public IList<Address> Addresses2
+		{
+			get { return addresses2; }
+			set { addresses2 = value; }
 		}
 
 		public List<int> Months
