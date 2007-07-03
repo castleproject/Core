@@ -78,11 +78,6 @@ namespace Castle.Windsor.Proxy
 				}
 				else
 				{
-					if (proxyGenOptions.BaseTypeForInterfaceProxy == null)
-					{
-						proxyGenOptions.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
-					}
-
 					if (!proxyOptions.UseSingleInterfaceProxy)
 					{
 						interfaces = CollectInterfaces(interfaces, model);
@@ -110,6 +105,11 @@ namespace Castle.Windsor.Proxy
 			if (proxyOptions.Hook != null)
 			{
 				proxyGenOptions.Hook = new ProxyGenerationHookAdapter(proxyOptions.Hook);
+			}
+
+			if (proxyOptions.UseMarshalByRefAsBaseClass)
+			{
+				proxyGenOptions.BaseTypeForInterfaceProxy = typeof(MarshalByRefObject);
 			}
 
 			return proxyGenOptions;

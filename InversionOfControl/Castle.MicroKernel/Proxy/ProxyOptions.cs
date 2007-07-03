@@ -25,6 +25,7 @@ namespace Castle.MicroKernel.Proxy
 		private IProxyHook hook;
 		private ArrayList interfaceList;
 		private bool useSingleInterfaceProxy;
+		private bool useMarshalByRefAsBaseClass;
 		private bool omitTarget;
 
 		/// <summary>
@@ -62,6 +63,16 @@ namespace Castle.MicroKernel.Proxy
 		{
 			get { return useSingleInterfaceProxy; }
 			set { useSingleInterfaceProxy = value; }
+		}
+
+		/// <summary>
+		/// Determines if the interface proxied component should inherit 
+		/// from <see cref="MarshalByRefObject"/>
+		/// </summary>
+		public bool UseMarshalByRefAsBaseClass
+		{
+			get { return useMarshalByRefAsBaseClass; }
+			set { useMarshalByRefAsBaseClass = value; }
 		}
 
 		/// <summary>

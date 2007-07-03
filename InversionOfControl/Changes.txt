@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Refactored proxy options support. Now you can use the attribute 'marshalByRefProxy' 
+  on the external configuration, or the ComponentProxyBehaviorAttribute
+
 - Fixed IOC-79
   "Kernel.GetHandlers(Type) does not consider generic handlers when satisfying the type"
 

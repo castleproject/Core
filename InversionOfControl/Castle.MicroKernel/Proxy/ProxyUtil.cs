@@ -29,8 +29,7 @@ namespace Castle.MicroKernel.Proxy
 		/// <returns>The associated proxy options for the component model.</returns>
 		public static ProxyOptions ObtainProxyOptions(ComponentModel model, bool createOnDemand)
 		{
-			ProxyOptions options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey]
-			                       as ProxyOptions;
+			ProxyOptions options = model.ExtendedProperties[ProxyConstants.ProxyOptionsKey] as ProxyOptions;
 
 			if (options == null && createOnDemand)
 			{

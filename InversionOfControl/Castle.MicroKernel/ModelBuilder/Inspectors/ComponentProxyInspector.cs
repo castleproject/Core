@@ -21,8 +21,13 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
-	/// Inspects the component configuration looking for information
+	/// Inspects the component configuration and type looking for information
 	/// that can influence the generation of a proxy for that component.
+	/// <para>
+	/// We specifically look for <c>useSingleInterfaceProxy</c> and <c>marshalByRefProxy</c> 
+	/// on the component configuration or the <see cref="ComponentProxyBehaviorAttribute"/> 
+	/// attribute.
+	/// </para>
 	/// </summary>
 	[Serializable]
 	public class ComponentProxyInspector : IContributeComponentModelConstruction
@@ -32,95 +37,97 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		/// look for the <see cref="ComponentProxyBehaviorAttribute"/> attribute in 
 		/// the implementation type.
 		/// </summary>
-		/// <param name="kernel"></param>
-		/// <param name="model"></param>
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-			if (!ReadProxyBehaviorFromConfiguration(kernel, model))
-			{
-				ReadProxyBehaviorFromType(model);
-			}
+			ReadProxyBehavior(kernel, model);
 		}
 
 		/// <summary>
 		/// Reads the proxy behavior associated with the 
-		/// component configuration and applies it to the model.
+		/// component configuration/type and applies it to the model.
 		/// </summary>
 		/// <exception cref="System.Configuration.ConfigurationException">
 		/// If the conversion fails
 		/// </exception>
 		/// <param name="kernel"></param>
 		/// <param name="model"></param>
-		/// <returns></returns>
-		protected virtual bool ReadProxyBehaviorFromConfiguration(IKernel kernel, ComponentModel model)
+		protected virtual void ReadProxyBehavior(IKernel kernel, ComponentModel model)
 		{
-			if (model.Configuration != null)
+			ComponentProxyBehaviorAttribute proxyBehaviorAtt = GetProxyBehaviorFromType(model.Implementation);
+
+			if (proxyBehaviorAtt == null)
 			{
-				String useSingleInterfaceProxyAttrib = model.Configuration.Attributes["useSingleInterfaceProxy"];
+				proxyBehaviorAtt = new ComponentProxyBehaviorAttribute();
+			}
 
-				if (useSingleInterfaceProxyAttrib != null)
+			string useSingleInterfaceProxyAttrib = model.Configuration != null ? model.Configuration.Attributes["useSingleInterfaceProxy"] : null;
+			string marshalByRefProxyAttrib = model.Configuration != null ? model.Configuration.Attributes["marshalByRefProxy"] : null;
+
+			ITypeConverter converter = (ITypeConverter)kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+
+			if (useSingleInterfaceProxyAttrib != null)
+			{
+				try
 				{
-					try
-					{
-						ITypeConverter converter = (ITypeConverter) kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
-
-						bool useSingleInterfaceproxy = (bool) converter.PerformConversion(useSingleInterfaceProxyAttrib, typeof(bool));
-
-						ComponentProxyBehaviorAttribute behavior = new ComponentProxyBehaviorAttribute();
-						behavior.UseSingleInterfaceProxy = useSingleInterfaceproxy;
-
-						ApplyProxyBehavior(behavior, model);
-					}
-					catch
-					{
-						String message = String.Format(
-							"Could not convert the specified attribute value " +
-							"'{0}' to a boolean value", useSingleInterfaceProxyAttrib);
-
-#if DOTNET2
-						throw new ConfigurationErrorsException(message);
-#else
-						throw new ConfigurationException(message);
-#endif
-					}
-
-					return true;
+					proxyBehaviorAtt.UseSingleInterfaceProxy = (bool)
+						converter.PerformConversion(useSingleInterfaceProxyAttrib, typeof(bool));
+				}
+				catch(ConverterException ex)
+				{
+					throw new ConfigurationErrorsException("Could not convert attribute " + 
+						"'useSingleInterfaceProxy' to bool. Value is " + useSingleInterfaceProxyAttrib, ex);
 				}
 			}
 
-			return false;
+			if (marshalByRefProxyAttrib != null)
+			{
+				try
+				{
+					proxyBehaviorAtt.UseMarshalByRefProxy = (bool)
+						converter.PerformConversion(marshalByRefProxyAttrib, typeof(bool));
+				}
+				catch(ConverterException ex)
+				{
+					throw new ConfigurationErrorsException("Could not convert attribute " + 
+						"'marshalByRefProxy' to bool. Value is " + marshalByRefProxyAttrib, ex);
+				}
+			}
+
+			ApplyProxyBehavior(proxyBehaviorAtt, model);
 		}
 
 		/// <summary>
-		/// Check if the type exposes the <see cref="ComponentProxyBehaviorAttribute"/>.
+		/// Returns a <see cref="ComponentProxyBehaviorAttribute"/> instance if the type
+		/// uses the attribute. Otherwise returns null.
 		/// </summary>
-		/// <param name="model"></param>
-		protected virtual void ReadProxyBehaviorFromType(ComponentModel model)
+		/// <param name="implementation"></param>
+		protected virtual ComponentProxyBehaviorAttribute GetProxyBehaviorFromType(Type implementation)
 		{
-			object[] attributes = model.Implementation.GetCustomAttributes(
+			object[] attributes = implementation.GetCustomAttributes(
 				typeof(ComponentProxyBehaviorAttribute), true);
 
 			if (attributes.Length != 0)
 			{
-				ComponentProxyBehaviorAttribute behavior = (ComponentProxyBehaviorAttribute) attributes[0];
-
-				ApplyProxyBehavior(behavior, model);
+				return (ComponentProxyBehaviorAttribute) attributes[0];
 			}
+
+			return null;
 		}
 
 		private static void ApplyProxyBehavior(ComponentProxyBehaviorAttribute behavior, ComponentModel model)
 		{
-			if (behavior.UseSingleInterfaceProxy)
+			if (behavior.UseSingleInterfaceProxy || behavior.UseMarshalByRefProxy)
 			{
-				EnsureComponentRegisteredAsService(model);
+				EnsureComponentRegisteredWithInterface(model);
 			}
 
 			ProxyOptions options = ProxyUtil.ObtainProxyOptions(model, true);
+
 			options.UseSingleInterfaceProxy = behavior.UseSingleInterfaceProxy;
 			options.AddAdditionalInterfaces(behavior.AdditionalInterfaces);
 		}
 
-		private static void EnsureComponentRegisteredAsService(ComponentModel model)
+		private static void EnsureComponentRegisteredWithInterface(ComponentModel model)
 		{
 			if (!model.Service.IsInterface)
 			{

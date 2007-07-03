@@ -26,8 +26,7 @@ namespace Castle.Windsor.Tests
 		[Test, ExpectedException(typeof(ConfigurationErrorsException))]
 		public void InvalidProxyBehaviorFromConfiguration()
 		{
-			IWindsorContainer container =
-				new WindsorContainer(ConfigHelper.ResolveConfigPath("Proxy/proxyBehaviorInvalidConfig.xml"));
+			new WindsorContainer(ConfigHelper.ResolveConfigPath("Proxy/proxyBehaviorInvalidConfig.xml"));
 		}
 
 		[Test, ExpectedException(typeof(ComponentRegistrationException))]
