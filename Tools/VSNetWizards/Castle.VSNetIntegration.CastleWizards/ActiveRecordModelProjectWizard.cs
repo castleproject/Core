@@ -59,13 +59,13 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 			Project project = 
 				context.DteInstance.Solution.AddFromTemplate(projectFile, LocalProjectPath, ProjectName + ".csproj", Exclusive);
-			
-			project.Properties.Item("DefaultNamespace").Value = ProjectName;
+
+			project.Properties.Item("DefaultNamespace").Value = NameSpace;
 
 			Project testProject = 
 				context.DteInstance.Solution.AddFromTemplate(testProjectFile, localTestProjectPath, ProjectName + ".Tests.csproj", false);
 
-			testProject.Properties.Item("DefaultNamespace").Value = ProjectName + ".Tests";
+			testProject.Properties.Item("DefaultNamespace").Value = NameSpace + ".Tests";
 
 			context.Projects.Add(Constants.ProjectMain, project);
 			context.Projects.Add(Constants.ProjectTest, testProject);
@@ -96,7 +96,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 		{
 			Project testProject = context.Projects[Constants.ProjectTest];
 
-			Utils.PerformReplacesOn(testProject, ProjectName, LocalProjectPath, "AbstractModelTestCase.cs");
+			Utils.PerformReplacesOn(testProject, NameSpace, LocalProjectPath, "AbstractModelTestCase.cs");
 
 			base.PostProcess(context);
 		}

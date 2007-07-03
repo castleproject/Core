@@ -16,11 +16,11 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 {
 	using System;
 	using System.Collections;
+	using System.Globalization;
 	using System.IO;
+	using System.Text;
 	using System.Xml;
-
 	using EnvDTE;
-
 	using EnvConstants = EnvDTE.Constants;
 
 	public class Utils
@@ -41,8 +41,8 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 			vsProject.References.Add(assembly);
 		}
 
-		public static void PerformReplacesOn(Project project, String projectName, 
-			String localProjectPath, String filename)
+		public static void PerformReplacesOn(Project project, String projectName,
+		                                     String localProjectPath, String filename)
 		{
 			String[] elems = filename.Split('\\');
 
@@ -68,13 +68,13 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 			PerformReplacesOn(project, projectName, localProjectPath, item);
 		}
 
-		public static void PerformReplacesOn(Project project, String projectName, 
-			String localProjectPath, ProjectItem item)
+		public static void PerformReplacesOn(Project project, String projectName,
+		                                     String localProjectPath, ProjectItem item)
 		{
 			Window codeWindow = item.Open(EnvConstants.vsViewKindTextView);
-	
+
 			codeWindow.Activate();
-	
+
 			ReplaceToken(codeWindow, "!NAMESPACE!", projectName);
 			ReplaceToken(codeWindow, "!APPPHYSICALDIR!", localProjectPath);
 
@@ -90,11 +90,12 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 		{
 			VSLangProj.VSProject vsProject = (VSLangProj.VSProject) project.Object;
 
-			vsProject.Project.Properties.Item("PostBuildEvent").Value = 
+			vsProject.Project.Properties.Item("PostBuildEvent").Value =
 				"copy \"$(ProjectDir)\\App.config\" \"$(TargetPath).config\"";
 		}
 
-		public static XmlDocument CreateXmlDomForConfig(ExtensionContext context, Project project, ProjectItem item, String file)
+		public static XmlDocument CreateXmlDomForConfig(ExtensionContext context, Project project, ProjectItem item,
+		                                                String file)
 		{
 			if (context.Properties[Constants.ConfigFileList] == null)
 			{
@@ -105,8 +106,8 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 
 			codeWindow.Activate();
 
-			TextDocument objTextDoc = ((EnvDTE.TextDocument)(
-				codeWindow.Document.Object("TextDocument")));
+			TextDocument objTextDoc = ((EnvDTE.TextDocument) (
+			                                                 	codeWindow.Document.Object("TextDocument")));
 
 			EditPoint objEditPt = objTextDoc.StartPoint.CreateEditPoint();
 			objEditPt.StartOfDocument();
@@ -134,11 +135,11 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 			ProjectItem item = project.ProjectItems.Item(file);
 
 			Window codeWindow = item.Open(EnvConstants.vsViewKindCode);
-	
+
 			codeWindow.Activate();
 
-			TextDocument objTextDoc = ( ( EnvDTE.TextDocument )(
-				codeWindow.Document.Object( "TextDocument" ) ) );
+			TextDocument objTextDoc = ((EnvDTE.TextDocument) (
+			                                                 	codeWindow.Document.Object("TextDocument")));
 
 			EditPoint objEditPt = objTextDoc.StartPoint.CreateEditPoint();
 			objEditPt.StartOfDocument();
@@ -155,13 +156,74 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 
 			return doc;
 		}
-		
+
 		public static void EnsureDirExists(string path)
 		{
 			if (!Directory.Exists(path))
 			{
 				Directory.CreateDirectory(path);
 			}
+		}
+
+		/// <summary>
+		/// Create a valid C# identifier from an input string
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static string CreateValidIdentifierFromName(string name)
+		{
+			StringBuilder validIdentifier = new StringBuilder();
+			foreach(char c in name)
+			{
+				// Only allow valid identifier elements
+				//  letter-character
+				//  decimal-digit-character
+				//  connecting-character
+				//  combining-character
+				//  formatting character
+
+				UnicodeCategory category = Char.GetUnicodeCategory(c);
+				switch(category)
+				{
+					case UnicodeCategory.LetterNumber:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.LowercaseLetter:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.UppercaseLetter:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.TitlecaseLetter:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.ModifierLetter:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.OtherLetter:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.NonSpacingMark:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.SpacingCombiningMark:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.DecimalDigitNumber:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.ConnectorPunctuation:
+						validIdentifier.Append(c);
+						break;
+					case UnicodeCategory.Format:
+						validIdentifier.Append(c);
+						break;
+					default:
+						continue;
+				}
+			}
+
+			return validIdentifier.ToString();
 		}
 	}
 }

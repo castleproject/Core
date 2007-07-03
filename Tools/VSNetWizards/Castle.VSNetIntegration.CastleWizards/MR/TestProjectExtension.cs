@@ -57,6 +57,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			
 			String testProjectFile = context.GetTemplateFileName(@"CSharp\MRProjectTest\MRProjectTest.csproj");
 			testProjectName = context.ProjectName + ".Tests";
+			string nameSpace = Utils.CreateValidIdentifierFromName(context.ProjectName);
 
 			localTestProjectPath = new DirectoryInfo(Path.Combine(context.LocalProjectPath, 
 				@"..\" + testProjectName)).FullName;
@@ -70,9 +71,9 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 			Utils.AddReference(testProject, context.Projects[Constants.ProjectMain]);
 
-			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "Controllers\\ContactControllerTestCase.cs");
-			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "Controllers\\HomeControllerTestCase.cs");
-			Utils.PerformReplacesOn(testProject, context.ProjectName, localTestProjectPath, "Controllers\\LoginControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, nameSpace, localTestProjectPath, "Controllers\\ContactControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, nameSpace, localTestProjectPath, "Controllers\\HomeControllerTestCase.cs");
+			Utils.PerformReplacesOn(testProject, nameSpace, localTestProjectPath, "Controllers\\LoginControllerTestCase.cs");
 
 			context.Projects.Add(Constants.ProjectTest, testProject);
 		}

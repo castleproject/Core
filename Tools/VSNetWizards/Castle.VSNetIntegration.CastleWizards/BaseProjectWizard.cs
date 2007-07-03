@@ -46,6 +46,7 @@ namespace Castle.VSNetIntegration.Shared
 		private String localProjectPath;
 		private String installationDirectory;
 		private String solutionName;
+		private String nameSpace;
 		private bool exclusive;
 		private ExtensionContext context;
 		private EventHandlerList eventList = new EventHandlerList();
@@ -272,6 +273,16 @@ namespace Castle.VSNetIntegration.Shared
 		{
 			get { return exclusive; }
 		}
+
+	    public String NameSpace
+	    {
+	        get 
+            {
+                if (nameSpace == null)
+                    nameSpace = Utils.CreateValidIdentifierFromName(ProjectName);
+                return nameSpace;
+            }
+	    }
 
 		#endregion
 

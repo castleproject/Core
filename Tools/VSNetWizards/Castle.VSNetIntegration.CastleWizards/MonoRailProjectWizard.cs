@@ -68,14 +68,14 @@ namespace Castle.VSNetIntegration.CastleWizards
 			Project project = 
 				context.DteInstance.Solution.AddFromTemplate(projectFile, LocalProjectPath, ProjectName + ".csproj", Exclusive);
 
-			project.Properties.Item("DefaultNamespace").Value = ProjectName;
+		    project.Properties.Item("DefaultNamespace").Value = NameSpace;
 
-			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Controllers\\HomeController.cs");
-			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Controllers\\LoginController.cs");
-			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Controllers\\ContactController.cs");
-			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Models\\ContactInfo.cs");
-			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "Models\\Country.cs");
-			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "global.asax");
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Controllers\\HomeController.cs");
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Controllers\\LoginController.cs");
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Controllers\\ContactController.cs");
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Models\\ContactInfo.cs");
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Models\\Country.cs");
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "global.asax");
 
 			context.Projects.Add(Constants.ProjectMain, project);
 
@@ -316,7 +316,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 
 			project.ProjectItems.AddFromTemplate(globalAppFile, "GlobalApplication.cs");
 			
-			Utils.PerformReplacesOn(project, ProjectName, LocalProjectPath, "GlobalApplication.cs");
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "GlobalApplication.cs");
 		}
 
 		private void UpdateProjectToUseCassini(Project project)
