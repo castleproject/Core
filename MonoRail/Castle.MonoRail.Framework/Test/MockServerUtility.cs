@@ -15,12 +15,13 @@
 namespace Castle.MonoRail.Framework.Test
 {
 	using System;
+	using System.IO;
 
 	public class MockServerUtility : IServerUtility
 	{
 		public virtual string MapPath(string virtualPath)
 		{
-			throw new NotImplementedException();
+			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, virtualPath);
 		}
 
 		public virtual string HtmlEncode(string content)

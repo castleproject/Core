@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-284
+  "MockServerUtility.MapPath throws NotImplementedException"
+
 - Applied Bill Pierce's patch fixing MR-278
   "Add UrlDecode to IServerUtility"
 
