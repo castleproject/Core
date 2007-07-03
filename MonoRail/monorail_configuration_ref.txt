@@ -78,7 +78,7 @@
 		<extension type="Extension.Type.Name, Assembly" />
 	</extensions>
 
-	<routing matchHostNameAndPath="true|false">
+	<routing matchHostNameAndPath="true|false" excludeAppPath="true|false">
 		<rule>
 			<pattern>(/blog/posts/)(\d+)/(\d+)/(.)*$</pattern>
 			<replace><![CDATA[ /blog/view.rails?year=$2&month=$3 ]]></replace>

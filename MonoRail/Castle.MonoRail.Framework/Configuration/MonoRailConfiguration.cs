@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private static readonly String SectionName = "monorail";
 		private static readonly String AlternativeSectionName = "monoRail";
 
-		private bool checkClientIsConnected, useWindsorIntegration, matchHostNameAndPath;
+		private bool checkClientIsConnected, useWindsorIntegration, matchHostNameAndPath, excludeAppPath;
 		private Type customFilterFactory;
 		private XmlNode configurationSection;
 
@@ -55,9 +55,10 @@ namespace Castle.MonoRail.Framework.Configuration
 			extensions = new ExtensionEntryCollection();
 			services = new ServiceEntryCollection();
 			defaultUrls = new DefaultUrlCollection();
-			
+
 			checkClientIsConnected = false;
 			matchHostNameAndPath = false;
+			excludeAppPath = false;
 		}
 
 		/// <summary>
@@ -65,24 +66,24 @@ namespace Castle.MonoRail.Framework.Configuration
 		/// </summary>
 		/// <param name="section"></param>
 		public MonoRailConfiguration(XmlNode section) : this()
-		{			
+		{
 			configurationSection = section;
 		}
 
 		public static MonoRailConfiguration GetConfig()
 		{
 			MonoRailConfiguration config =
-				System.Configuration.ConfigurationManager.GetSection(MonoRailConfiguration.SectionName) as MonoRailConfiguration;
+				ConfigurationManager.GetSection(SectionName) as MonoRailConfiguration;
 
 			if (config == null)
 			{
-				config = 
-					System.Configuration.ConfigurationManager.GetSection(MonoRailConfiguration.AlternativeSectionName) as MonoRailConfiguration;
+				config =
+					ConfigurationManager.GetSection(AlternativeSectionName) as MonoRailConfiguration;
 			}
 
 			if (config == null)
 			{
-				throw new ApplicationException("You have to provide a small configuration to use " + 
+				throw new ApplicationException("You have to provide a small configuration to use " +
 				                               "MonoRail. Check the samples or the documentation");
 			}
 
@@ -90,7 +91,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		}
 
 		#region ISerializedConfig implementation
-		
+
 		public void Deserialize(XmlNode node)
 		{
 			viewEngineConfig.Deserialize(node);
@@ -98,7 +99,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			controllersConfig.Deserialize(node);
 			viewComponentsConfig.Deserialize(node);
 			scaffoldConfig.Deserialize(node);
-			
+
 			services.Deserialize(node);
 			extensions.Deserialize(node);
 			routingRules.Deserialize(node);
@@ -106,6 +107,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			ProcessFilterFactoryNode(node.SelectSingleNode("customFilterFactory"));
 			ProcessMatchHostNameAndPath(node.SelectSingleNode("routing"));
+			ProcessExcludeAppPath(node.SelectSingleNode("routing"));
 
 			XmlAttribute checkClientIsConnectedAtt = node.Attributes["checkClientIsConnected"];
 
@@ -113,7 +115,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				checkClientIsConnected = String.Compare(checkClientIsConnectedAtt.Value, "true", true) == 0;
 			}
-			
+
 			XmlAttribute useWindsorAtt = node.Attributes["useWindsorIntegration"];
 
 			if (useWindsorAtt != null && useWindsorAtt.Value != String.Empty)
@@ -126,9 +128,9 @@ namespace Castle.MonoRail.Framework.Configuration
 				}
 			}
 		}
-		
+
 		#endregion
-		
+
 		public SmtpConfig SmtpConfig
 		{
 			get { return smtpConfig; }
@@ -184,10 +186,15 @@ namespace Castle.MonoRail.Framework.Configuration
 			get { return useWindsorIntegration; }
 		}
 
-	    public bool MatchHostNameAndPath
-	    {
-            get { return matchHostNameAndPath;  }
-	    }
+		public bool MatchHostNameAndPath
+		{
+			get { return matchHostNameAndPath; }
+		}
+
+		public bool ExcludeAppPath
+		{
+			get { return excludeAppPath; }
+		}
 
 		public XmlNode ConfigurationSection
 		{
@@ -226,21 +233,40 @@ namespace Castle.MonoRail.Framework.Configuration
 			}
 		}
 
+		private void ProcessExcludeAppPath(XmlNode node)
+		{
+			if (node == null) return;
+
+			// maybe a check to make sure both matchHostNameAndPathAtt & includeAppPath 
+			// are not both set as that wouldn't make sense?
+			XmlAttribute excludeAppPathAtt = node.Attributes["excludeAppPath"];
+
+			if (excludeAppPathAtt != null && excludeAppPathAtt.Value != String.Empty)
+			{
+				excludeAppPath = String.Compare(excludeAppPathAtt.Value, "true", true) == 0;
+			}
+		}
+
 		private void ConfigureWindsorIntegration()
 		{
 			const string windsorExtensionAssemblyName = "Castle.MonoRail.WindsorExtension";
-			
+
 			services.RegisterService(ServiceIdentification.ControllerTree, TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.ControllerTreeAccessor, " + windsorExtensionAssemblyName)));
+			                                                               	TypeLoadUtil.GetEffectiveTypeName(
+			                                                               		"Castle.MonoRail.WindsorExtension.ControllerTreeAccessor, " +
+			                                                               		windsorExtensionAssemblyName)));
 
 			controllersConfig.CustomControllerFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorControllerFactory, " + windsorExtensionAssemblyName));
-			
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorControllerFactory, " +
+				                                  windsorExtensionAssemblyName));
+
 			viewComponentsConfig.CustomViewComponentFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, " + windsorExtensionAssemblyName));
-			
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, " +
+				                                  windsorExtensionAssemblyName));
+
 			customFilterFactory = TypeLoadUtil.GetType(
-				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorFilterFactory, " + windsorExtensionAssemblyName));
+				TypeLoadUtil.GetEffectiveTypeName("Castle.MonoRail.WindsorExtension.WindsorFilterFactory, " +
+				                                  windsorExtensionAssemblyName));
 		}
 	}
 }

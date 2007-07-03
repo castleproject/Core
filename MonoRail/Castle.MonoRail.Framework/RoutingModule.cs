@@ -92,11 +92,15 @@ namespace Castle.MonoRail.Framework
 		/// Gets the source path.
 		/// </summary>
 		/// <returns></returns>
-		protected string GetSourcePath()
+		protected static string GetSourcePath()
 		{
-			if (ShouldUseHostAndPath())
+			if (ShouldUseHostAndPath)
 			{
 				return GetHostNameAndPath();
+			}
+			else if (ExcludeAppPath)
+			{
+				return GetPathWithoutAppPath();
 			}
 			else
 			{
@@ -104,12 +108,23 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		private bool ShouldUseHostAndPath()
+		private static bool ShouldUseHostAndPath
 		{
-			return MonoRailConfiguration.GetConfig().MatchHostNameAndPath;
+			get
+			{
+				return MonoRailConfiguration.GetConfig().MatchHostNameAndPath;
+			}
 		}
 
-		private string GetHostNameAndPath()
+		private static bool ExcludeAppPath
+		{
+			get
+			{
+				return MonoRailConfiguration.GetConfig().ExcludeAppPath;
+			}
+		}
+
+		private static string GetHostNameAndPath()
 		{
 			HttpContext context = HttpContext.Current;
 			HttpRequest request = context.Request;
@@ -124,6 +139,16 @@ namespace Castle.MonoRail.Framework
 			{
 				return host + request.FilePath;
 			}
+		}
+		
+		private static string GetPathWithoutAppPath()
+		{
+			//if ApplicationPath.Length == 1 then it must be "/" which we don't want to remove
+			
+			string appPath = HttpContext.Current.Request.ApplicationPath;
+			string filePath = HttpContext.Current.Request.FilePath;
+
+			return (appPath.Length == 1) ? filePath : filePath.Remove(0, appPath.Length);
 		}
 
 		private static string GetPath()
@@ -156,6 +181,16 @@ namespace Castle.MonoRail.Framework
 						}
 
 						newPath += queryString;
+					}
+					
+					if (ExcludeAppPath)
+					{
+						string appPath = HttpContext.Current.Request.ApplicationPath;
+
+						if (appPath.Length > 1)
+						{
+							newPath = appPath + newPath;
+						}
 					}
 
 					return true;
