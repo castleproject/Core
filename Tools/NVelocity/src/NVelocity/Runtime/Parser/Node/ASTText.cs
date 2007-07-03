@@ -6,7 +6,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 	public class ASTText : SimpleNode
 	{
-		private char[] ctext;
+		private string text;
 
 		public ASTText(int id) : base(id)
 		{
@@ -14,6 +14,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public ASTText(Parser p, int id) : base(p, id)
 		{
+		}
+
+		public string Text
+		{
+			get { return text; }
 		}
 
 		/// <summary>
@@ -28,16 +33,14 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			Token t = FirstToken;
 
-			String text = NodeUtils.tokenLiteral(t);
-
-			ctext = text.ToCharArray();
+			text = NodeUtils.tokenLiteral(t);
 
 			return data;
 		}
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
-			writer.Write(ctext, 0, ctext.Length);
+			writer.Write(text);
 			return true;
 		}
 	}

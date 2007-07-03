@@ -231,7 +231,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 			for(int i=0; i < inlineNode.ChildrenCount; i++)
 			{
-				values.Add(inlineNode.GetChild(i).Value(context));
+				INode node = inlineNode.GetChild(i);
+
+				if (node.Type == ParserTreeConstants.TEXT)
+				{
+					values.Add(((ASTText)node).Text);
+				}
+				else
+				{
+					values.Add(node.Value(context));
+				}
 			}
 
 			if (values.Count == 0)
@@ -242,8 +251,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			{
 				return values[0];
 			}
-			
-			return values.ToArray();
+			else
+			{
+				StringBuilder sb = new StringBuilder();
+				foreach(object value in values)
+				{
+					sb.Append(value);
+				}
+				return sb.ToString();
+			}
 		}
 
 		/// <summary>

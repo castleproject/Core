@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-281 
+  "View components params problem"
+
 - Applied Markus Zywitza's patch adding a Fold method to TextHelper. 
   His description "Shortens a text to the specified length (using full words only and
 adding an ellipsis at the end) and wraps it into a span-element that
