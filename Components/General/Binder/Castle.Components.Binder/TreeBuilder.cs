@@ -18,9 +18,6 @@ namespace Castle.Components.Binder
 	using System.Collections.Specialized;
 	using System.Web;
 
-	/// <summary>
-	/// 
-	/// </summary>
 	public class TreeBuilder
 	{
 		public CompositeNode BuildSourceNode(NameValueCollection nameValueCollection)
@@ -41,8 +38,21 @@ namespace Castle.Components.Binder
 				String[] values = nameValueCollection.GetValues(key);
 
 				if (values == null) continue;
-				
-				if (values.Length == 1)
+
+				if (values.Length == 1 && key.EndsWith("[]"))
+				{
+					if (values[0] == string.Empty)
+					{
+						values = new string[0];
+					}
+					else
+					{
+						values = values[0].Split(',');
+					}
+					string singleKeyName = key.Substring(0, key.Length - 2);
+					ProcessNode(root, typeof(String[]), singleKeyName, values);
+				}
+				else if (values.Length == 1)
 				{
 					ProcessNode(root, typeof(String), key, values[0]);
 				}

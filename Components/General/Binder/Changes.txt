@@ -1,6 +1,9 @@
 Beta 2
 ======
 
+- Applied Adam Tybor's patch fixing MR-289
+  "Array Binding for Prototype Style Serialization"
+
 - Applied Adam Tybor's patch fixing MR-266
   "Fix for GetErrorSummary() throwing an KeyNotFoundException for SmartDispatch Controller and Binder"
 

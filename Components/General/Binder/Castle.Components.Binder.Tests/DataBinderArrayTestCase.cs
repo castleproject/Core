@@ -164,6 +164,45 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual("Mary", sc[1].Name);
 		}
 
+		[Test]
+		public void CanHandleProtoTypeSimpleArray()
+		{
+			string data = @"abc[]=Foo,Bar";
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+			object instance = binder.BindObject(typeof(string[]), "abc", builder.BuildSourceNode(args));
+			Assert.IsNotNull(instance);
+			string[] sc = instance as string[];
+			Assert.IsNotNull(sc);
+			Assert.AreEqual(2, sc.Length);
+			Assert.AreEqual("Foo", sc[0]);
+			Assert.AreEqual("Bar", sc[1]);
+		}
+
+		[Test]
+		public void CanHandleProtoTypeSimpleArrayWhenOnlyOneElementIsThere()
+		{
+			string data = @"abc[]=Foo";
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+			object instance = binder.BindObject(typeof(string[]), "abc", builder.BuildSourceNode(args));
+			Assert.IsNotNull(instance);
+			string[] sc = instance as string[];
+			Assert.IsNotNull(sc);
+			Assert.AreEqual(1, sc.Length);
+			Assert.AreEqual("Foo", sc[0]);
+		}
+
+		[Test]
+		public void CanHandleProtoTypeSimpleArrayWhenItIsEmpty()
+		{
+			string data = @"abc[]=";
+			NameValueCollection args = TestUtils.ParseNameValueString(data);
+			object instance = binder.BindObject(typeof(string[]), "abc", builder.BuildSourceNode(args));
+			Assert.IsNotNull(instance);
+			string[] sc = instance as string[];
+			Assert.IsNotNull(sc);
+			Assert.AreEqual(0, sc.Length);
+		}
+
 		[Test, Ignore("Behavior changed")] // Expected Exception
 		public void InvalidData()
 		{
