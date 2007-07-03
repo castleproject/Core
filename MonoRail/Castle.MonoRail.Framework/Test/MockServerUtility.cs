@@ -23,14 +23,19 @@ namespace Castle.MonoRail.Framework.Test
 			throw new NotImplementedException();
 		}
 
-		public string HtmlEncode(string content)
+		public virtual string HtmlEncode(string content)
 		{
 			return content;
 		}
 
-		public string UrlEncode(string content)
+		public virtual string UrlEncode(string content)
 		{
 			return content.Replace("&", "&amp;");
+		}
+
+		public virtual string UrlDecode(string content)
+		{
+			return content.Replace("&amp", "&");
 		}
 
 		public virtual string UrlPathEncode(string content)

@@ -26,6 +26,11 @@ namespace TestSite.Controllers
 			RenderText( Context.Server.UrlEncode(content) );
 		}
 
+		public void UrlDecode(String content)
+		{
+			RenderText(Context.Server.UrlDecode(content));
+		}
+
 		public void HtmlEncode(String content)
 		{
 			RenderText( Context.Server.HtmlEncode(content) );

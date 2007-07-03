@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Bill Pierce's patch fixing MR-278
+  "Add UrlDecode to IServerUtility"
+
 - Applied Bryan Brown's patch fixing MR-273. This one adds a new attribute to 
   the routing configuration node: 'excludeAppPath'
   "Automatically handle ApplicationPath in the routing module"

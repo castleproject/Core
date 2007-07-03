@@ -33,6 +33,14 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
+		public void UrlDecode()
+		{
+			DoGet("ServerUtility/UrlDecode.rails", "content=this+is+a+path");
+
+			AssertReplyEqualTo("this is a path");
+		}
+
+		[Test]
 		public void HtmlEncode()
 		{
 			DoGet("ServerUtility/HtmlEncode.rails", "content=<html>content</html>");

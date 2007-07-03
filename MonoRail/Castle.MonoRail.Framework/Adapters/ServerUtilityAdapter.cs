@@ -67,6 +67,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		}
 
 		/// <summary>
+		/// URL decodes a string and returns the decoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL decode.</param>
+		/// <returns>The URL decoded text.</returns>
+		public String UrlDecode(String content)
+		{
+			return server.UrlDecode(content);
+		}
+
+		/// <summary>
 		/// URL encodes the path portion of a URL string and returns the encoded string.  
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>

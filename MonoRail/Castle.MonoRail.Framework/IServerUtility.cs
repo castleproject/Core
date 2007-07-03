@@ -42,6 +42,13 @@ namespace Castle.MonoRail.Framework
 		String UrlEncode(String content);
 
 		/// <summary>
+		/// URL decodes a string and returns the decoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL decode.</param>
+		/// <returns>The URL decoded text.</returns>
+		String UrlDecode(String content);
+
+		/// <summary>
 		/// URL encodes the path portion of a URL string and returns the encoded string.  
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
