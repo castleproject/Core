@@ -123,6 +123,7 @@
     <Compile Include="StandardTransaction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TLSActivityManager.cs" />
     <Compile Include="TransactionException.cs">
       <SubType>Code</SubType>
     </Compile>
