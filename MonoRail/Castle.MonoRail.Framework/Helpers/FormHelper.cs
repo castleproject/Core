@@ -532,9 +532,21 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The generated form element</returns>
 		public string TextArea(string target, IDictionary attributes)
 		{
-			target = RewriteTargetIfWithinObjectScope(target);
+			string targetForValue = RewriteTargetIfWithinObjectScope(target);
+			object value = ObtainValue(targetForValue);
+			return TextAreaValue(target, value, attributes);
+		}
 
-			object value = ObtainValue(target);
+		/// <summary>
+		/// Generates a textarea element with a specified value.
+		/// </summary>
+		/// <param name="target">The target to base the element name on.</param>
+		/// <param name="value">The value to apply to the field.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		public string TextAreaValue(string target, object value, IDictionary attributes)
+		{
+			target = RewriteTargetIfWithinObjectScope(target);
 
 			value = value == null ? "" : HtmlEncode(value.ToString());
 
@@ -542,8 +554,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			ApplyValidation(InputElementType.Text, target, ref attributes);
 
-			return String.Format("<textarea id=\"{0}\" name=\"{1}\" {2}>{3}</textarea>", 
-				id, target, GetAttributes(attributes), value);
+			return String.Format("<textarea id=\"{0}\" name=\"{1}\" {2}>{3}</textarea>",
+				id, target, GetAttributes(attributes), FormatIfNecessary(value, attributes));
 		}
 
 		#endregion

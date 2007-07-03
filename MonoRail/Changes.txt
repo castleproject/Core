@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Tim Haines' patch adding TextAreaValue to FormHelper 
+
 - Fixed MR-281 
   "View components params problem"
 
