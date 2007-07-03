@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied Lee Henson's patch fixing IOC-86
+  "Additional generic AddComponent overloads"
+
 - Applied Ido Samuelson patch fixing IOC-85
   "IKernel to support generics to add/resolve components."
 

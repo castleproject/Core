@@ -93,6 +93,114 @@ namespace Castle.Windsor
 		/// <param name="extendedProperties"></param>
 		void AddComponentWithProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
 
+		#if DOTNET2
+
+		/// <summary>
+		/// Adds a component to be managed by the container.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		void AddComponent<T>();
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>		
+		void AddComponent<T>(String key);
+
+		/// <summary>
+		/// Adds a component to be managed by the container.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		void AddComponentWithLifestyle<T>(LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>		
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		void AddComponentWithLifestyle<T>(String key, LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		void AddComponent<I, T>() where T : I;
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		void AddComponent<I, T>(String key) where T : I;
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		void AddComponentWithLifestyle<I, T>(LifestyleType lifestyle) where T : I;
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		void AddComponentWithLifestyle<I, T>(String key, LifestyleType lifestyle) where T : I;
+
+		/// <summary>
+		/// Adds a concrete class as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithProperties<T>(IDictionary extendedProperties);
+
+		/// <summary>
+		/// Adds a concrete class as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="key"></param>		
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithProperties<T>(String key, IDictionary extendedProperties);
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="I"></typeparam>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithLifestyle<I, T>(IDictionary extendedProperties) where T : I;
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// </summary>
+		/// <typeparam name="I"></typeparam>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="key"></param>
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithLifestyle<I, T>(String key, IDictionary extendedProperties) where T : I;
+
+		#endif
+
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>

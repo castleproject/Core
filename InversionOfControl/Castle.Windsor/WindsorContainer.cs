@@ -311,6 +311,152 @@ namespace Castle.Windsor
 		}
 
 		/// <summary>
+		/// Adds a component to be managed by the container.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		public void AddComponent<T>()
+		{
+			Type t = typeof(T);
+			AddComponent(t.FullName, t);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>		
+		public void AddComponent<T>(string key)
+		{
+			AddComponent(key, typeof(T));
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		public void AddComponentWithLifestyle<T>(LifestyleType lifestyle)
+		{
+			Type t = typeof(T);
+			AddComponentWithLifestyle(t.FullName, t, lifestyle);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		public void AddComponent<I, T>(string key) where T : I
+		{
+			AddComponent(key, typeof(I), typeof(T));
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		public void AddComponentWithLifestyle<I, T>(LifestyleType lifestyle) where T : I
+		{
+			Type t = typeof(T);
+			AddComponentWithLifestyle(t.FullName, typeof(I), t, lifestyle);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>		
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		public void AddComponentWithLifestyle<T>(string key, LifestyleType lifestyle)
+		{
+			AddComponentWithLifestyle(key, typeof(T), lifestyle);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		public void AddComponent<I, T>() where T : I
+		{
+			Type t = typeof(T);
+			AddComponent(t.FullName, typeof(I), t);
+		}
+
+		/// <summary>
+		/// Adds a component to be managed by the container
+		/// </summary>
+		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
+		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
+		/// <param name="key">The key by which the component gets indexed.</param>
+		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
+		public void AddComponentWithLifestyle<I, T>(string key, LifestyleType lifestyle) where T : I
+		{
+			AddComponentWithLifestyle(key, typeof(I), typeof(T), lifestyle);
+		}
+
+		/// <summary>
+		/// Adds a concrete class as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extendedProperties"></param>
+		public void AddComponentWithProperties<T>(IDictionary extendedProperties)
+		{
+			Type t = typeof(T);
+			AddComponentWithProperties(t.FullName, t, extendedProperties);
+		}
+
+		/// <summary>
+		/// Adds a concrete class as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="key"></param>		
+		/// <param name="extendedProperties"></param>
+		public void AddComponentWithProperties<T>(string key, IDictionary extendedProperties)
+		{
+			AddComponentWithProperties(key, typeof(T), extendedProperties);
+		}
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// The key to obtain the component will be the FullName of the type.
+		/// </summary>
+		/// <typeparam name="I"></typeparam>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="extendedProperties"></param>
+		public void AddComponentWithLifestyle<I, T>(IDictionary extendedProperties) where T : I
+		{
+			Type t = typeof(T);
+			AddComponentWithProperties(t.FullName, typeof(I), t, extendedProperties);
+		}
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component and specify the extended properties.
+		/// Used by facilities, mostly.
+		/// </summary>
+		/// <typeparam name="I"></typeparam>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="key"></param>
+		/// <param name="extendedProperties"></param>
+		public void AddComponentWithLifestyle<I, T>(string key, IDictionary extendedProperties) where T : I
+		{
+			AddComponentWithProperties(key, typeof(I), typeof(T), extendedProperties);
+		}
+
+		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
