@@ -6,6 +6,7 @@ Release Candidate 3
 
 - Applied Bryan Brown's patch fixing MR-273. This one adds a new attribute to 
   the routing configuration node: 'excludeAppPath'
+  "Automatically handle ApplicationPath in the routing module"
 
 - Applied goodwill's patch fixing MR-275
   "DefaultRailsEngineContext triggers RTE on ApplicationPhysicalPath 

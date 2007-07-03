@@ -168,17 +168,23 @@ namespace Castle.MonoRail.Framework
 		private void DisposeViewFolderWatch()
 		{
 			ViewChangedImpl -= new FileSystemEventHandler(viewFolderWatcher_Changed);
-			viewFolderWatcher.Dispose();
+			if (viewFolderWatcher != null)
+			{
+				viewFolderWatcher.Dispose();
+			}
 		}
 
 		private void InitViewFolderWatch()
 		{
-			viewFolderWatcher = new FileSystemWatcher(ViewRootDir);
-			viewFolderWatcher.IncludeSubdirectories = true;
-			viewFolderWatcher.Changed += new FileSystemEventHandler(viewFolderWatcher_Changed);
-			viewFolderWatcher.Created += new FileSystemEventHandler(viewFolderWatcher_Changed);
-			viewFolderWatcher.Deleted += new FileSystemEventHandler(viewFolderWatcher_Changed);
-			viewFolderWatcher.EnableRaisingEvents = true;
+			if (Directory.Exists(ViewRootDir))
+			{
+				viewFolderWatcher = new FileSystemWatcher(ViewRootDir);
+				viewFolderWatcher.IncludeSubdirectories = true;
+				viewFolderWatcher.Changed += new FileSystemEventHandler(viewFolderWatcher_Changed);
+				viewFolderWatcher.Created += new FileSystemEventHandler(viewFolderWatcher_Changed);
+				viewFolderWatcher.Deleted += new FileSystemEventHandler(viewFolderWatcher_Changed);
+				viewFolderWatcher.EnableRaisingEvents = true;
+			}
 		}
 
 		private void viewFolderWatcher_Changed(object sender, FileSystemEventArgs e)

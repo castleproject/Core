@@ -81,6 +81,63 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 	}
 
+	[TestFixture]
+	public class FileAssemblyViewSourceLoaderWithoutViewDirectoryTestCase
+	{
+		private FileAssemblyViewSourceLoader loader;
+
+		[SetUp]
+		public void SetUp()
+		{
+			loader = new FileAssemblyViewSourceLoader();
+			loader.ViewRootDir = Path.GetFullPath(@"c:\idontexist");
+			loader.Service(new TestServiceContainer());
+		}
+
+		[Test]
+		public void DoesNotThrowException_IfSubscribingToViewSourceChangedEvent_AndViewFolderIsMissing()
+		{
+			loader.ViewChanged += delegate
+			                      {
+			                      	//do nothing
+			                      };
+		}
+
+		[Test]
+		public void LoadFromAssembly()
+		{
+			loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
+
+			Assert.IsFalse(loader.HasTemplate("Content/contentinassembly2.vm"));
+			Assert.IsTrue(loader.HasTemplate("Content/contentinassembly.vm"));
+			Assert.IsNotNull(loader.GetViewSource("Content/contentinassembly.vm"));
+
+			Assert.IsFalse(loader.HasTemplate("Content\\contentinassembly2.vm"));
+			Assert.IsTrue(loader.HasTemplate("Content\\contentinassembly.vm"));
+			Assert.IsNotNull(loader.GetViewSource("Content\\contentinassembly.vm"));
+		}
+
+		[Test]
+		public void ListViews()
+		{
+			loader.AddAssemblySource(new AssemblySourceInfo("Castle.MonoRail.Framework.Tests", "Castle.MonoRail.Framework.Tests"));
+
+			string[] views = loader.ListViews("Content");
+
+			Assert.IsNotNull(views);
+			Assert.AreEqual(1, views.Length);
+			//Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "contentinassembly.vm", views[0]);
+			//Assert.AreEqual(@"Content" + Path.DirectorySeparatorChar + "notinassembly.vm", views[1]);
+			Assert.AreEqual(@"content.contentinassembly.vm", views[0]);
+
+			foreach (string view in views)
+			{
+				Assert.IsTrue(loader.HasTemplate(view));
+				Assert.IsNotNull(loader.GetViewSource(view));
+			}
+		}
+	}
+
 	internal class TestServiceContainer : AbstractServiceContainer
 	{
 		public TestServiceContainer()
