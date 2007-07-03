@@ -190,5 +190,39 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 			}
 		}
+
+		/// <summary>
+		/// Shortens a text to the specified length and wraps it into a span-
+		/// element that has the title-property with the full text associated.
+		/// This is convenient for displaying properties in tables that might
+		/// have very much content (desription fields etc.) without destroying
+		/// the table's layout.
+		/// Due to the title-property of the surrounding span-element, the full
+		/// text is displayed in the browser while hovering over the shortened
+		/// text.
+		/// </summary>
+		/// <param name="text">The text to display</param>
+		/// <param name="maxLength">The maximum number of character to display</param>
+		/// <returns>The generated HTML</returns>
+		public string Fold(string text, int maxLength)
+		{
+			// Empty text
+			if (text == null) return "";
+			
+			// maxLenght <= 0 switches off folding
+			// Determine whether text must be cut
+			if (maxLength <= 0 || text.Length < maxLength) return text;
+
+			System.Text.StringBuilder caption = new System.Text.StringBuilder();
+			foreach (string word in text.Split())
+			{
+				if (caption.Length + word.Length + 1 > maxLength - 1) break;
+				if (caption.Length > 0) caption.Append(" "); // Adding space
+				caption.Append(word);
+			}
+
+			caption.Append("&hellip;");
+			return string.Format("<span title=\"{1}\">{0}</span>", caption, text.Replace("\"", "&quot;"));
+		}
 	}
 }
