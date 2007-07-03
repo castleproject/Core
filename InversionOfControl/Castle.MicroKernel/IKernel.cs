@@ -16,7 +16,6 @@ namespace Castle.MicroKernel
 {
 	using System;
 	using System.Collections;
-
 	using Castle.Core;
 
 	/// <summary>
@@ -142,7 +141,113 @@ namespace Castle.MicroKernel
 		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
 		/// </exception>
 		void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle, bool overwriteLifestyle);
-		
+
+#if DOTNET2
+
+		/// <summary>
+		/// Adds a concrete class as a component
+		/// </summary>
+		void AddComponent<T>();
+
+		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified T using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		void AddComponent<T>(LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">
+		/// If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.
+		/// </param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified T using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentException" />
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		void AddComponent<T>(LifestyleType lifestyle, bool overwriteLifestyle);
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component
+		/// </summary>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		void AddComponent<T>(Type serviceType);
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified T using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		void AddComponent<T>(Type serviceType, LifestyleType lifestyle);
+
+		/// <summary>
+		/// Adds a concrete class and an interface 
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">
+		/// If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.
+		/// </param>
+		/// <remarks>
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		void AddComponent<T>(Type serviceType, LifestyleType lifestyle, bool overwriteLifestyle);
+
+		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="instance"></param>
+		void AddComponentInstance<T>(object instance);
+
+		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="serviceType"></param>
+		/// <param name="instance"></param>
+		void AddComponentInstance<T>(Type serviceType, object instance);
+
+
+#endif
+
 		/// <summary>
 		/// Adds a concrete class as a component and specify the extended properties.
 		/// Used by facilities, mostly.
@@ -237,7 +342,7 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		object Resolve(String key, IDictionary arguments);
 
-		#if DOTNET2
+#if DOTNET2
 
 		/// <summary>
 		/// Returns a component instance by the key
@@ -246,6 +351,20 @@ namespace Castle.MicroKernel
 		/// <param name="service"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service);
+
+		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		T Resolve<T>(IDictionary arguments) where T : class;
+
+		/// <summary>
+		/// Returns the component instance by the component key
+		/// </summary>
+		/// <returns></returns>
+		T Resolve<T>() where T : class;
 
 		/// <summary>
 		/// Returns component instances that implement TService
@@ -262,9 +381,9 @@ namespace Castle.MicroKernel
 		/// <param name="arguments"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service, IDictionary arguments);
-		
-		#endif
-		
+
+#endif
+
 		/// <summary>
 		/// Associates objects with a component handler,
 		/// allowing it to use the specified dictionary
@@ -273,7 +392,7 @@ namespace Castle.MicroKernel
 		/// <param name="service"></param>
 		/// <param name="dependencies"></param>
 		void RegisterCustomDependencies(Type service, IDictionary dependencies);
-		
+
 		/// <summary>
 		/// Associates objects with a component handler,
 		/// allowing it to use the specified dictionary
@@ -290,7 +409,7 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="instance"></param>
 		void ReleaseComponent(object instance);
-		
+
 		/// <summary>
 		/// Constructs an implementation of <see cref="IComponentActivator"/>
 		/// for the given <see cref="ComponentModel"/>

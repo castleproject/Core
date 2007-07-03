@@ -34,6 +34,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		[NonSerialized]
 		private IConversionManager converter;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PropertiesDependenciesModelInspector"/> class.
+		/// </summary>
 		public PropertiesDependenciesModelInspector()
 		{
 		}

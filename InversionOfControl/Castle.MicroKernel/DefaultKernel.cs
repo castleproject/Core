@@ -15,20 +15,22 @@
 namespace Castle.MicroKernel
 {
 	using System;
-	using System.Reflection;
 	using System.Collections;
+	using System.Collections.Generic;
+	using System.Reflection;
 	using System.Runtime.Serialization;
-
 	using Castle.Core;
 	using Castle.Core.Internal;
-
+	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.ModelBuilder;
-	using Castle.MicroKernel.Resolvers;
-	using Castle.MicroKernel.Releasers;
-	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Proxy;
+	using Castle.MicroKernel.Releasers;
+	using Castle.MicroKernel.Resolvers;
 	using Castle.MicroKernel.SubSystems.Configuration;
+	using Castle.MicroKernel.SubSystems.Conversion;
+	using Castle.MicroKernel.SubSystems.Naming;
+	using Castle.MicroKernel.SubSystems.Resource;
 
 	/// <summary>
 	/// Default implementation of <see cref="IKernel"/>. 
@@ -94,7 +96,7 @@ namespace Castle.MicroKernel
 		/// Constructs a DefaultKernel with no component
 		/// proxy support.
 		/// </summary>
-		public DefaultKernel() 
+		public DefaultKernel()
 			: this(new NotSupportedProxyFactory())
 		{
 		}
@@ -138,7 +140,7 @@ namespace Castle.MicroKernel
 		{
 			MemberInfo[] members = FormatterServices.GetSerializableMembers(GetType(), context);
 
-			object[] kernelmembers = (object[])info.GetValue("members", typeof(object[]));
+			object[] kernelmembers = (object[]) info.GetValue("members", typeof(object[]));
 
 			FormatterServices.PopulateObjectMembers(this, members, kernelmembers);
 		}
@@ -150,16 +152,16 @@ namespace Castle.MicroKernel
 		protected virtual void RegisterSubSystems()
 		{
 			AddSubSystem(SubSystemConstants.ConfigurationStoreKey,
-				new DefaultConfigurationStore());
+			             new DefaultConfigurationStore());
 
 			AddSubSystem(SubSystemConstants.ConversionManagerKey,
-				new SubSystems.Conversion.DefaultConversionManager());
+			             new DefaultConversionManager());
 
 			AddSubSystem(SubSystemConstants.NamingKey,
-				new SubSystems.Naming.DefaultNamingSubSystem());
+			             new DefaultNamingSubSystem());
 
 			AddSubSystem(SubSystemConstants.ResourceKey,
-				new SubSystems.Resource.DefaultResourceSubSystem());
+			             new DefaultResourceSubSystem());
 		}
 
 		#endregion
@@ -276,12 +278,14 @@ namespace Castle.MicroKernel
 		/// <exception cref="ArgumentException">
 		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
 		/// </exception>
-		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle, bool overwriteLifestyle)
+		public void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle,
+		                         bool overwriteLifestyle)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (serviceType == null) throw new ArgumentNullException("serviceType");
 			if (classType == null) throw new ArgumentNullException("classType");
-			if (LifestyleType.Undefined == lifestyle) throw new ArgumentException("The specified lifestyle must be Thread, Transient, or Singleton.", "lifestyle");
+			if (LifestyleType.Undefined == lifestyle)
+				throw new ArgumentException("The specified lifestyle must be Thread, Transient, or Singleton.", "lifestyle");
 
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, serviceType, classType, null);
 
@@ -321,7 +325,8 @@ namespace Castle.MicroKernel
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
 		/// <param name="parameters"></param>
-		public virtual void AddComponentWithExtendedProperties(String key, Type serviceType, Type classType, IDictionary parameters)
+		public virtual void AddComponentWithExtendedProperties(String key, Type serviceType, Type classType,
+		                                                       IDictionary parameters)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			if (parameters == null) throw new ArgumentNullException("parameters");
@@ -349,7 +354,7 @@ namespace Castle.MicroKernel
 
 			if (skipRegistration != null)
 			{
-				RegisterHandler(model.Name, handler, (bool)skipRegistration);
+				RegisterHandler(model.Name, handler, (bool) skipRegistration);
 			}
 			else
 			{
@@ -404,6 +409,161 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
+		/// Adds a concrete class as a component
+		/// </summary>
+		public void AddComponent<T>()
+		{
+			Type classType = typeof(T);
+			AddComponent(classType.FullName, classType);
+		}
+
+		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified T using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		public void AddComponent<T>(LifestyleType lifestyle)
+		{
+			Type classType = typeof(T);
+			AddComponent(classType.FullName, classType, lifestyle);
+		}
+
+		/// <summary>
+		/// Adds a concrete class
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified T using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentException"/>
+		/// Thrown if 
+		/// <paramref name="lifestyle"/>
+		///  is 
+		/// <see cref="LifestyleType.Undefined"/>
+		/// .
+		public void AddComponent<T>(LifestyleType lifestyle, bool overwriteLifestyle)
+		{
+			Type classType = typeof(T);
+			AddComponent(classType.FullName, classType, lifestyle, overwriteLifestyle);
+		}
+
+		/// <summary>
+		/// Adds a concrete class and an interface
+		/// as a component
+		/// </summary>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		public void AddComponent<T>(Type serviceType)
+		{
+			Type classType = typeof(T);
+			AddComponent(classType.FullName, serviceType, classType);
+		}
+
+		/// <summary>
+		/// Adds a concrete class and an interface
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <remarks>
+		/// If you have indicated a lifestyle for the specified T using
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		public void AddComponent<T>(Type serviceType, LifestyleType lifestyle)
+		{
+			Type classType = typeof(T);
+			AddComponent(classType.FullName, serviceType, classType, lifestyle);
+		}
+
+		/// <summary>
+		/// Adds a concrete class and an interface
+		/// as a component with the specified <paramref name="lifestyle"/>.
+		/// </summary>
+		/// <param name="serviceType">The service <see cref="Type"/> that this component implements.</param>
+		/// <param name="lifestyle">The specified <see cref="LifestyleType"/> for the component.</param>
+		/// <param name="overwriteLifestyle">If <see langword="true"/>, then ignores all other configurations
+		/// for lifestyle and uses the value in the <paramref name="lifestyle"/> parameter.</param>
+		/// <remarks>
+		/// attributes, this method will not overwrite that lifestyle. To do that, use the
+		/// <see cref="AddComponent(string,Type,Type,LifestyleType,bool)"/> method.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// are <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if <paramref name="lifestyle"/> is <see cref="LifestyleType.Undefined"/>.
+		/// </exception>
+		public void AddComponent<T>(Type serviceType, LifestyleType lifestyle, bool overwriteLifestyle)
+		{
+			Type classType = typeof(T);
+			AddComponent(classType.FullName, serviceType, classType, lifestyle, overwriteLifestyle);
+		}
+
+		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="instance"></param>
+		public void AddComponentInstance<T>(object instance)
+		{
+			Type serviceType = typeof(T);
+			AddComponentInstance(serviceType.FullName, instance);
+		}
+
+		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="serviceType"></param>
+		/// <param name="instance"></param>
+		public void AddComponentInstance<T>(Type serviceType, object instance)
+		{
+			Type classType = typeof(T);
+			AddComponentInstance(classType.FullName, serviceType, instance);
+		}
+
+		/// <summary>
+		/// Returns the component instance by the service type
+		/// using dynamic arguments
+		/// </summary>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
+		public T Resolve<T>(IDictionary arguments) where T : class
+		{
+			Type serviceType = typeof(T);
+			return Resolve(serviceType.FullName, arguments) as T;
+		}
+
+		/// <summary>
+		/// Returns the component instance by the component key
+		/// </summary>
+		/// <returns></returns>
+		public T Resolve<T>() where T : class
+		{
+			Type serviceType = typeof(T);
+			return Resolve(serviceType.FullName, serviceType) as T;
+		}
+
+		/// <summary>
 		/// Returns true if the specified component was
 		/// found and could be removed (i.e. no other component depends on it)
 		/// </summary>
@@ -431,7 +591,7 @@ namespace Castle.MicroKernel
 						NamingSubSystem.UnRegister(handler.ComponentModel.Service);
 					}
 
-					foreach (ComponentModel model in handler.ComponentModel.Dependents)
+					foreach(ComponentModel model in handler.ComponentModel.Dependents)
 					{
 						model.RemoveDepender(handler.ComponentModel);
 					}
@@ -582,7 +742,7 @@ namespace Castle.MicroKernel
 		{
 			IHandler handler = GetHandler(service);
 
-			foreach (DictionaryEntry entry in dependencies)
+			foreach(DictionaryEntry entry in dependencies)
 			{
 				handler.AddCustomDependencyValue(entry.Key.ToString(), entry.Value);
 			}
@@ -592,7 +752,7 @@ namespace Castle.MicroKernel
 		{
 			IHandler handler = GetHandler(key);
 
-			foreach (DictionaryEntry entry in dependencies)
+			foreach(DictionaryEntry entry in dependencies)
 			{
 				handler.AddCustomDependencyValue(entry.Key.ToString(), entry.Value);
 			}
@@ -624,12 +784,12 @@ namespace Castle.MicroKernel
 
 		public TService[] ResolveServices<TService>()
 		{
-			System.Collections.Generic.List<TService> services = new System.Collections.Generic.List<TService>();
+			List<TService> services = new List<TService>();
 			IHandler[] handlers = GetHandlers(typeof(TService));
-			foreach (IHandler handler in handlers)
+			foreach(IHandler handler in handlers)
 			{
 				if (handler.CurrentState == HandlerState.Valid)
-					services.Add((TService)ResolveComponent(handler));
+					services.Add((TService) ResolveComponent(handler));
 			}
 
 			return services.ToArray();
@@ -863,7 +1023,8 @@ namespace Castle.MicroKernel
 				{
 					if ((parentKernel != value) && (parentKernel != null))
 					{
-						throw new KernelException("You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.");
+						throw new KernelException(
+							"You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.");
 					}
 					parentKernel = value;
 					SubscribeToParentKernel();
@@ -886,23 +1047,24 @@ namespace Castle.MicroKernel
 			if (model.CustomComponentActivator == null)
 			{
 				activator = new DefaultComponentActivator(model, this,
-								new ComponentInstanceDelegate(RaiseComponentCreated),
-								new ComponentInstanceDelegate(RaiseComponentDestroyed));
+				                                          new ComponentInstanceDelegate(RaiseComponentCreated),
+				                                          new ComponentInstanceDelegate(RaiseComponentDestroyed));
 			}
 			else
 			{
 				try
 				{
 					activator = (IComponentActivator)
-						Activator.CreateInstance(model.CustomComponentActivator,
-							new object[] {
-						        model, 
-						        this,
-						        new ComponentInstanceDelegate(RaiseComponentCreated),
-						        new ComponentInstanceDelegate(RaiseComponentDestroyed)
-						    });
+					            Activator.CreateInstance(model.CustomComponentActivator,
+					                                     new object[]
+					                                     	{
+					                                     		model,
+					                                     		this,
+					                                     		new ComponentInstanceDelegate(RaiseComponentCreated),
+					                                     		new ComponentInstanceDelegate(RaiseComponentDestroyed)
+					                                     	});
 				}
-				catch (Exception e)
+				catch(Exception e)
 				{
 					throw new KernelException("Could not instantiate custom activator", e);
 				}
@@ -924,7 +1086,7 @@ namespace Castle.MicroKernel
 
 				IHandler[] handlers = NamingSubSystem.GetHandlers();
 
-				foreach (IHandler handler in handlers)
+				foreach(IHandler handler in handlers)
 				{
 					nodes[index++] = handler.ComponentModel;
 				}
@@ -958,7 +1120,7 @@ namespace Castle.MicroKernel
 
 		private void TerminateFacilities()
 		{
-			foreach (IFacility facility in facilities)
+			foreach(IFacility facility in facilities)
 			{
 				facility.Terminate();
 			}
@@ -969,7 +1131,7 @@ namespace Castle.MicroKernel
 			GraphNode[] nodes = GraphNodes;
 			IVertex[] vertices = TopologicalSortAlgo.Sort(nodes);
 
-			for (int i = 0; i < vertices.Length; i++)
+			for(int i = 0; i < vertices.Length; i++)
 			{
 				ComponentModel model = (ComponentModel) vertices[i];
 
@@ -1025,7 +1187,7 @@ namespace Castle.MicroKernel
 
 			if (handler is IDisposable)
 			{
-				((IDisposable)handler).Dispose();
+				((IDisposable) handler).Dispose();
 			}
 		}
 
@@ -1091,7 +1253,7 @@ namespace Castle.MicroKernel
 		}
 
 		protected CreationContext CreateCreationContext(IHandler handler, Type typeToExtractGenericArguments,
-														IDictionary additionalArguments)
+		                                                IDictionary additionalArguments)
 		{
 #if DOTNET2
 			return new CreationContext(handler, typeToExtractGenericArguments, additionalArguments);
@@ -1120,5 +1282,6 @@ namespace Castle.MicroKernel
 		}
 
 		#endregion
+
 	}
 }

@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied Ido Samuelson patch fixing IOC-85
+  "IKernel to support generics to add/resolve components."
+
 - Refactored proxy options support. Now you can use the attribute 'marshalByRefProxy' 
   on the external configuration, or the ComponentProxyBehaviorAttribute
 
