@@ -23,6 +23,7 @@ namespace Castle.Core
 	public class ComponentProxyBehaviorAttribute : Attribute
 	{
 		private bool useSingleInterfaceProxy;
+		private bool useMarshalByRefProxy;
 		private Type[] additionalInterfaces;
 
 		/// <summary>
@@ -30,7 +31,16 @@ namespace Castle.Core
 		/// </summary>
 		public ComponentProxyBehaviorAttribute()
 		{
-			useSingleInterfaceProxy = false;
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the generated 
+		/// interface proxy should inherit from <see cref="MarshalByRefObject"/>.
+		/// </summary>
+		public bool UseMarshalByRefProxy
+		{
+			get { return useMarshalByRefProxy; }
+			set { useMarshalByRefProxy = value; }
 		}
 
 		/// <summary>
