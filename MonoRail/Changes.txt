@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Aaron Jensen's patch fixing MR-288
+  "ApplicationPhysicalPath returns request path instead of / path"
+
 - Fixed MR-284
   "MockServerUtility.MapPath throws NotImplementedException"
 
