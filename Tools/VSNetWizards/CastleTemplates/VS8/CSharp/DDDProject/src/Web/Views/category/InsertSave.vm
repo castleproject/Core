@@ -1,0 +1,9 @@
+<script type="text/javascript">
+#if (!$error)
+	var e = $("product_Category_Id");
+	e.options[e.options.length] = new Option('$category.Name', $category.Id);
+	e.selectedIndex = e.options.length - 1;
+#else
+	alert("Error while trying to create the category: " + $error.Message);
+#end
+</script>

@@ -1,0 +1,94 @@
+#capturefor(title)Product Listing#end
+
+#capturefor(scripts)
+var toDelete = new Array();
+
+function addToDelete(e) {
+	if (e.checked) {
+		if (toDelete.indexOf(e.value) == -1) {
+			toDelete.push(e.value);
+		}
+	}
+	else {
+		var index = toDelete.indexOf(e.value);
+
+		if (index > -1) {
+			toDelete[index] = null;
+		}
+	}
+}
+
+function deleteSelected() {
+	var template = new Template("<input type='hidden' name='product[#{counter}]' value='#{value}'>");
+	var contents = "";
+	var counter = 0;
+
+	toDelete.each(function(item) {
+		if (item > null) {
+			contents += template.evaluate({counter: counter, value: item});
+			counter++;
+		}
+	});
+
+	if (contents.length > 0) {
+		new Insertion.Bottom("form1", contents);
+		$("form1").submit();
+	}
+}
+#end
+
+<h3>Products - Main page</h3>
+
+$Form.FormTag("%{action='Delete'}")
+
+
+#blockcomponent(SmartGrid with "source=$products")
+	#tableStart
+		<table class="grid editable" width="400px" cellspacing="4" cellpadding="4">
+	#end
+
+	#Id
+	#end
+
+	#IdHeader
+	#end
+
+	#NameHeader
+		<th class="grid_header">Product Name</th>
+	#end
+
+	#MoreHeader
+		<th class="grid_header">Delete</th>
+	#end
+
+	#Name
+		<td>$Url.Link($value, "%{action='Edit', querystring={id=$item.Id}}")</td>
+	#end
+
+	#Price
+		<td width="100">$value.ToString("C")</td>
+	#end
+
+	#More
+		<td><input type="checkbox" value="$item.Id" onClick="addToDelete(this);"> </td>
+	#end
+
+	#empty
+		No products were found. Click "New Product" to insert a new record
+	#end
+
+	#footer
+		<tr>
+			<td colspan="4" id="last">
+				$Url.Link("New Product", "%{action='Insert'}")
+
+				#if ($products.Count > 0)
+					|
+					<a href="#delete" onClick="deleteSelected();">Delete Selected</a>
+				#end
+			</td>
+		</tr>
+	#end
+#end
+
+$Form.EndFormTag()

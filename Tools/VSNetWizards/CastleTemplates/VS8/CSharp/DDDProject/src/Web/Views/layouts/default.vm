@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Project60 $!title</title>
+
+<style type="text/css" media="all">
+@import "$siteRoot/content/css/style.css";
+$!stylesheet
+</style>
+
+<style type="text/css">
+
+</style>
+
+$Ajax.InstallScripts()
+$Form.InstallScripts()
+$Behaviour.InstallScripts()
+$Scriptaculous.InstallScripts()
+
+<script type="text/javascript">
+$!scripts
+</script>
+
+</head>
+<body>
+	
+$childContent	
+
+</body>
+</html>

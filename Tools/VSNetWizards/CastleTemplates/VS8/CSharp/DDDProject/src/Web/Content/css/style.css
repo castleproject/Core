@@ -1,0 +1,34 @@
+body {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: small;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+table.listing {
+	padding: 4px;
+	border: 2px solid #ccc;
+}
+
+.grid {
+	border: 1px solid #000;
+}
+
+.grid .grid_header {
+	color: blue;
+	border-bottom: 1px solid #000;
+}
+
+.grid .grid_alternateItem {
+	background-color: #FFFFCF;
+}
+
+.grid #last {
+	border-top: 2px solid #000;
+}

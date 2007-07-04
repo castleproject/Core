@@ -1,0 +1,23 @@
+<h3>Insert a new product</h3>
+
+$Form.FormTag("%{action='InsertSave'}")
+
+<table>
+	<tr>
+		<th>Product name</th>
+		<td>$Form.TextField("product.name")</td>
+	</tr>
+
+	<tr>
+		<th>Price</th>
+		<td>$Form.TextField("product.price")</td>
+	</tr>
+
+	<tr>
+		<td colspan="2" align="right">
+			<input type="submit">
+		</td>
+	</tr>
+</table>
+
+$Form.EndFormTag()

@@ -12,18 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.VSNetIntegration.CastleWizards.Shared
+namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 {
-	using System;
+	using Castle.VSNetIntegration.CastleWizards.Shared;
 
-	public sealed class Constants
+	public partial class DDDPanel : WizardPanel
 	{
-		public static readonly String ProjectMain = "main";
-
-		public static readonly String ProjectTest = "test.project";
-
-		public static readonly String ProjectWeb = "web.project";
-
-		public static readonly String ConfigFileList = "configfiles";
+		public DDDPanel()
+		{
+			InitializeComponent();
+		}
 	}
 }
