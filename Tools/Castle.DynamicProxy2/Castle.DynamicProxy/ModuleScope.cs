@@ -279,11 +279,11 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// Saves the specified generated assembly at the specified path.
+		/// Saves the specified generated assembly with the specified file name.
 		/// </summary>
 		/// <param name="strongNamed">True if the generated assembly with a strong name should be saved (see <see cref="StrongNamedModule"/>);
 		///   false if the generated assembly without a strong name should be saved (see <see cref="WeakNamedModule"/>.</param>
-		/// <param name="assemblyFileName">The path to save the assembly to.</param>
+		/// <param name="assemblyFileName">The file name for the saved assembly.</param>
 		/// <remarks>
 		/// <para>
 		/// If this <see cref="ModuleScope"/> was created without indicating the assembly should be saved, this method does nothing.

@@ -168,6 +168,16 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		[ExpectedException (typeof (ArgumentException))]
+		public void CannotSaveToADifferentDirectory ()
+		{
+			ModuleScope scope = new ModuleScope (true);
+			scope.ObtainDynamicModuleWithWeakName ();
+
+			scope.SaveAssembly (false, Path.GetTempPath() +  "\\StrongNamedAssembly.dll");
+		}
+
+		[Test]
 		public void ExplicitSaveThrowsWhenSpecifiedAssemblyNotGeneratedStrongName ()
 		{
 			ModuleScope scope = new ModuleScope (true);
