@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Tests
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			process.StartInfo.Arguments = ModuleScope.FILE_NAME + " /VERBOSE";
+			process.StartInfo.Arguments = ModuleScope.DEFAULT_FILE_NAME + " /VERBOSE";
 			process.Start();
 			string processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();

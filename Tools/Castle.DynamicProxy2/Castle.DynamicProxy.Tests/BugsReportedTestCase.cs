@@ -83,7 +83,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("Need to discuss why we are calling interf.GetGenericArguments() in class emitter")]
 		public void DYNPROXY_51_GenericMarkerInterface()
 		{
 			ProxyGenerator gen = new ProxyGenerator();

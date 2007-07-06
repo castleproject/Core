@@ -126,6 +126,7 @@
     <Compile Include="InterClasses\IService2.cs" />
     <Compile Include="InvocationTestCase.cs" />
     <Compile Include="MethodFinderTestCase.cs" />
+    <Compile Include="ModuleScopeTestCase.cs" />
     <Compile Include="OutRefParams.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
     <Compile Include="SerializableClassTestCase.cs" />

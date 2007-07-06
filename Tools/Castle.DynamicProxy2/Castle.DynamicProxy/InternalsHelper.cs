@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy
 
 				foreach(InternalsVisibleToAttribute internals in atts)
 				{
-					if (internals.AssemblyName.Contains(ModuleScope.ASSEMBLY_NAME))
+					if (internals.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME))
 					{
 						found = true;
 						break;
