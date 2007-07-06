@@ -40,8 +40,8 @@ namespace Castle.Components.Validator
 		private readonly static IDictionary<Type, Type> type2Validator;
 		private readonly IDictionary extendedProperties = new Hashtable();
 		private readonly IDictionary<object, ErrorSummary> errorPerInstance;
-		private readonly IValidatorRegistry registry;
 		private readonly bool inferValidators;
+		private readonly IValidatorRegistry registry;
 
 		static ValidatorRunner()
 		{
@@ -124,7 +124,9 @@ namespace Castle.Components.Validator
 			{
 				if (!validator.IsValid(objectInstance))
 				{
-					summary.RegisterErrorMessage(validator.FriendlyName, validator.ErrorMessage);
+					string name = validator.FriendlyName ?? validator.Name;
+
+					summary.RegisterErrorMessage(name, validator.ErrorMessage);
 
 					isValid = false;
 				}
