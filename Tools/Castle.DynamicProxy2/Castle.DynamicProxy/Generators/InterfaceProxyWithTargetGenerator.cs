@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators
 
 			rwlock.AcquireReaderLock(-1);
 
-			CacheKey cacheKey = new CacheKey(targetType, interfaces, options);
+			CacheKey cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
 
 			Type cacheType = GetFromCache(cacheKey);
 

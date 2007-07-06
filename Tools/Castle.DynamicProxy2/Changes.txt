@@ -1,5 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
+
+- Applied Adam Tybor's patch fixing DYNPROXY-63
+  "ProxyType not included in CacheKey"
+
 - Reimplemented serialization of ProxyGenerationOptions, see revision 3803, DP-59
 
 - Added method signature filtering to MethodFinder (see MethodSignatureComparer) because there were
