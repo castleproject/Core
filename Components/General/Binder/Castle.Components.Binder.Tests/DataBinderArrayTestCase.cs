@@ -194,13 +194,53 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void CanHandleProtoTypeSimpleArrayWhenItIsEmpty()
 		{
-			string data = @"abc[]=";
-			NameValueCollection args = TestUtils.ParseNameValueString(data);
+			NameValueCollection args = new NameValueCollection();
+			args.Add("abc[]", "");
 			object instance = binder.BindObject(typeof(string[]), "abc", builder.BuildSourceNode(args));
 			Assert.IsNotNull(instance);
 			string[] sc = instance as string[];
 			Assert.IsNotNull(sc);
 			Assert.AreEqual(0, sc.Length);
+		}
+
+		[Test]
+		public void CanHandleProtoTypeSimpleArrayWithoutSplittingWhenEmpty()
+		{
+			NameValueCollection args = new NameValueCollection();
+			args.Add("abc[]", null);
+			object instance = binder.BindObject(typeof(string[]), "abc", builder.BuildSourceNode(args));
+			Assert.IsNotNull(instance as string[]);
+			string[] sc = instance as string[];
+			Assert.IsNotNull(sc);
+			Assert.AreEqual(0, sc.Length);
+		}
+
+		[Test]
+		public void CanHandleProtoTypeSimpleArrayWithoutSplitting()
+		{
+			NameValueCollection args = new NameValueCollection();
+			args.Add("abc[]", "foo");
+			args.Add("abc[]", "bar");
+			object instance = binder.BindObject(typeof(string[]), "abc", builder.BuildSourceNode(args));
+			Assert.IsNotNull(instance as string[]);
+			string[] sc = instance as string[];
+			Assert.IsNotNull(sc);
+			Assert.AreEqual(2, sc.Length);
+			Assert.AreEqual("foo", sc[0]);
+			Assert.AreEqual("bar", sc[1]);
+		}
+
+		[Test]
+		public void CanHandleProtoTypeSimpleArrayWithoutSplittingWithOneElement()
+		{
+			NameValueCollection args = new NameValueCollection();
+			args.Add("abc[]", "foo");
+			object instance = binder.BindObject(typeof(string[]), "abc", builder.BuildSourceNode(args));
+			Assert.IsNotNull(instance as string[]);
+			string[] sc = instance as string[];
+			Assert.IsNotNull(sc);
+			Assert.AreEqual(1, sc.Length);
+			Assert.AreEqual("foo", sc[0]);
 		}
 
 		[Test, Ignore("Behavior changed")] // Expected Exception

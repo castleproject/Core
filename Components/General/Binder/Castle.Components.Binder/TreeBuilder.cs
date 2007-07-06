@@ -18,6 +18,9 @@ namespace Castle.Components.Binder
 	using System.Collections.Specialized;
 	using System.Web;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class TreeBuilder
 	{
 		public CompositeNode BuildSourceNode(NameValueCollection nameValueCollection)
@@ -34,23 +37,22 @@ namespace Castle.Components.Binder
 			foreach(String key in nameValueCollection.Keys)
 			{
 				if (key == null) continue;
-
+				string singleKeyName = NormalizeKey(key);
 				String[] values = nameValueCollection.GetValues(key);
 
 				if (values == null) continue;
-
+				
 				if (values.Length == 1 && key.EndsWith("[]"))
 				{
 					if (values[0] == string.Empty)
 					{
-						values = new string[0];
+						ProcessNode(root, typeof(String[]), singleKeyName, new string[0]);
 					}
 					else
 					{
 						values = values[0].Split(',');
+						ProcessNode(root, typeof(String[]), singleKeyName, values);
 					}
-					string singleKeyName = key.Substring(0, key.Length - 2);
-					ProcessNode(root, typeof(String[]), singleKeyName, values);
 				}
 				else if (values.Length == 1)
 				{
@@ -58,7 +60,7 @@ namespace Castle.Components.Binder
 				}
 				else
 				{
-					ProcessNode(root, typeof(String[]), key, values);
+					ProcessNode(root, typeof(String[]), singleKeyName, values);
 				}
 			}
 		}
@@ -76,7 +78,12 @@ namespace Castle.Components.Binder
 				ProcessNode(root, typeof(HttpPostedFile), key, value);
 			}
 		}
-		
+
+		private string NormalizeKey(string key)
+		{
+				return key.EndsWith("[]") ? key.Substring(0, key.Length - 2) : key;
+		}
+
 		private void ProcessNode(CompositeNode node, Type type, String name, object value)
 		{
 			if (name == null || name == String.Empty)
