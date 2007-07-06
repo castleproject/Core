@@ -245,11 +245,26 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			Assert.AreEqual(
 				"<select id=\"user_registration\" name=\"user.registration\" >" + Environment.NewLine + 
-				"<option value=\"1\">unregistered</option>" + Environment.NewLine + "<option value=\"2\">pending</option>" + Environment.NewLine + "<option value=\"6\">registered</option>" + Environment.NewLine + "</select>",
+				"<option value=\"1\">unregistered</option>" + Environment.NewLine + 
+				"<option value=\"2\">pending</option>" + Environment.NewLine + 
+				"<option selected=\"selected\" value=\"6\">registered</option>" + Environment.NewLine + 
+				"</select>",
 				helper.Select("user.registration", Enum.GetValues(typeof(SimpleUser.RegistrationEnum))));
+		}
+
+		[Test]
+		public void UsingEnumsAsText()
+		{
+			Assert.AreEqual(
+				"<select id=\"user_registration\" name=\"user.registration\" >" + Environment.NewLine +
+				"<option value=\"unregistered\">unregistered</option>" + Environment.NewLine +
+				"<option value=\"pending\">pending</option>" + Environment.NewLine +
+				"<option selected=\"selected\" value=\"registered\">registered</option>" + Environment.NewLine + 
+				"</select>",
+				helper.Select("user.registration", Enum.GetNames(typeof(SimpleUser.RegistrationEnum))));
 		}	
-		
-#if DOTNET2		
+
+#if DOTNET2
 
 		[Test]
 		public void UsingInterface()

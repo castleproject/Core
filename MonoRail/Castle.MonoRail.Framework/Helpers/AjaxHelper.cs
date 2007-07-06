@@ -740,12 +740,6 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 			}
 
-			// This looks like a bug. Commented
-			// if (options.Contains("with"))
-			// {
-			// 	options["callback"] = String.Format( "function(element, value) { return {0} }", options["with"] );
-			// }
-
 			if (options.Contains("indicator"))
 			{
 				options["indicator"] = String.Format( "'{0}'", options["indicator"] );

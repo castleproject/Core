@@ -555,7 +555,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private String name;
 		private ArrayList roles = new ArrayList();
 		private bool isActive;
-		private RegistrationEnum registration;
+		private RegistrationEnum registration = RegistrationEnum.registered;
 
 		public int Id
 		{

@@ -53,23 +53,6 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
-		/// </summary>
-		/// <param name="config">The config.</param>
-		/// <param name="inputType">Type of the input.</param>
-		/// <param name="generator">The generator.</param>
-		/// <param name="attributes">The attributes.</param>
-		/// <param name="target">The target.</param>
-		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
-		{
-			base.ApplyWebValidation(config, inputType, generator, attributes, target);
-
-			// TODO: web validation for DateTime
-		}
-
-		/// <summary>
 		/// Returns the key used to internationalize error messages
 		/// </summary>
 		/// <value></value>
