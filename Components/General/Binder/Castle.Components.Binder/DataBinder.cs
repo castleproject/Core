@@ -475,7 +475,7 @@ namespace Castle.Components.Binder
 				if (!validatorItem.IsValid(instance, value))
 				{
 					errors.Add(new DataBindError(prefix, prop.Name, validatorItem.ErrorMessage));
-					summary.RegisterErrorMessage(prop, validatorItem.ErrorMessage);
+					summary.RegisterErrorMessage(validatorItem.FriendlyName, validatorItem.ErrorMessage);
 					hasFailure = true;
 				}
 			}
