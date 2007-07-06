@@ -283,7 +283,7 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name="strongNamed">True if the generated assembly with a strong name should be saved (see <see cref="StrongNamedModule"/>);
 		///   false if the generated assembly without a strong name should be saved (see <see cref="WeakNamedModule"/>.</param>
-		/// <param name="path">The path to save the assembly to.</param>
+		/// <param name="assemblyFileName">The path to save the assembly to.</param>
 		/// <remarks>
 		/// <para>
 		/// If this <see cref="ModuleScope"/> was created without indicating the assembly should be saved, this method does nothing.
@@ -291,7 +291,7 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">No assembly has been generated that matches the <paramref name="strongNamed"/> parameter.
 		/// </exception>
-		public void SaveAssembly (bool strongNamed, string path)
+		public void SaveAssembly (bool strongNamed, string assemblyFileName)
 		{
 			if (!savePhysicalAssembly)
 				return;
@@ -312,12 +312,12 @@ namespace Castle.DynamicProxy
 					assemblyBuilder = (AssemblyBuilder) WeakNamedModule.Assembly;
 			}
 
-			if (File.Exists (path))
+			if (File.Exists (assemblyFileName))
 			{
-				File.Delete (path);
+				File.Delete (assemblyFileName);
 			}
 
-			assemblyBuilder.Save (path);
+			assemblyBuilder.Save (assemblyFileName);
 		}
 	}
 }
