@@ -62,6 +62,59 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ImplicitModulePaths ()
+		{
+			ModuleScope scope = new ModuleScope (true);
+			Assert.AreEqual (ModuleScope.DEFAULT_FILE_NAME, scope.StrongNamedModuleName);
+			Assert.AreEqual (Path.Combine (Environment.CurrentDirectory, ModuleScope.DEFAULT_FILE_NAME),
+					scope.ObtainDynamicModuleWithStrongName ().FullyQualifiedName);
+			Assert.IsNull (scope.StrongNamedModuleDirectory);
+
+			Assert.AreEqual (ModuleScope.DEFAULT_FILE_NAME, scope.WeakNamedModuleName);
+			Assert.AreEqual (Path.Combine (Environment.CurrentDirectory, ModuleScope.DEFAULT_FILE_NAME),
+					scope.ObtainDynamicModuleWithWeakName ().FullyQualifiedName);
+			Assert.IsNull (scope.WeakNamedModuleDirectory);
+		}
+
+		[Test]
+		public void ExplicitModulePaths ()
+		{
+			ModuleScope scope = new ModuleScope (true, "Strong", "StrongModule.dll", "Weak", "WeakModule.dll");
+			Assert.AreEqual ("StrongModule.dll", scope.StrongNamedModuleName);
+			Assert.AreEqual (Path.Combine (Environment.CurrentDirectory, "StrongModule.dll"), scope.ObtainDynamicModuleWithStrongName ().FullyQualifiedName);
+			Assert.IsNull (scope.StrongNamedModuleDirectory);
+
+			Assert.AreEqual ("WeakModule.dll", scope.WeakNamedModuleName);
+			Assert.AreEqual (Path.Combine (Environment.CurrentDirectory, "WeakModule.dll"), scope.ObtainDynamicModuleWithWeakName ().FullyQualifiedName);
+			Assert.IsNull (scope.WeakNamedModuleDirectory);
+
+			scope = new ModuleScope (true, "Strong", @"c:\Foo\StrongModule.dll", "Weak", @"d:\Bar\WeakModule.dll");
+			Assert.AreEqual ("StrongModule.dll", scope.StrongNamedModuleName);
+			Assert.AreEqual (@"c:\Foo\StrongModule.dll", scope.ObtainDynamicModuleWithStrongName ().FullyQualifiedName);
+			Assert.AreEqual (@"c:\Foo", scope.StrongNamedModuleDirectory);
+
+			Assert.AreEqual ("WeakModule.dll", scope.WeakNamedModuleName);
+			Assert.AreEqual (@"d:\Bar\WeakModule.dll", scope.ObtainDynamicModuleWithWeakName ().FullyQualifiedName);
+			Assert.AreEqual (@"d:\Bar", scope.WeakNamedModuleDirectory);
+		}
+
+		private static void CheckSignedSavedAssembly (string path)
+		{
+			Assert.IsTrue (File.Exists (path));
+
+			AssemblyName assemblyName = AssemblyName.GetAssemblyName (path);
+			Assert.AreEqual (ModuleScope.DEFAULT_ASSEMBLY_NAME, assemblyName.Name);
+
+			byte[] keyPairBytes = ModuleScope.GetKeyPair ();
+			StrongNameKeyPair keyPair = new StrongNameKeyPair (keyPairBytes);
+			byte[] loadedPublicKey = assemblyName.GetPublicKey ();
+
+			Assert.AreEqual (keyPair.PublicKey.Length, loadedPublicKey.Length);
+			for (int i = 0; i < keyPair.PublicKey.Length; ++i)
+				Assert.AreEqual (keyPair.PublicKey[i], loadedPublicKey[i]);
+		}
+
+		[Test]
 		public void SaveSigned ()
 		{
 			ModuleScope scope = new ModuleScope (true);
@@ -76,22 +129,6 @@ namespace Castle.DynamicProxy.Tests
 
 			CheckSignedSavedAssembly(path);
 			File.Delete (path);
-		}
-
-		private static void CheckSignedSavedAssembly (string path)
-		{
-			Assert.IsTrue (File.Exists (path));
-
-			AssemblyName assemblyName = AssemblyName.GetAssemblyName (path);
-			Assert.AreEqual (ModuleScope.DEFAULT_ASSEMBLY_NAME, assemblyName.Name);
-
-			byte[] keyPairBytes = ModuleScope.GetKeyPair ();
-			StrongNameKeyPair keyPair = new StrongNameKeyPair (keyPairBytes);
-			byte[] loadedPublicKey = assemblyName.GetPublicKey();
-
-			Assert.AreEqual (keyPair.PublicKey.Length, loadedPublicKey.Length);
-			for (int i = 0; i < keyPair.PublicKey.Length; ++i)
-				Assert.AreEqual (keyPair.PublicKey[i], loadedPublicKey[i]);
 		}
 
 		[Test]
@@ -109,6 +146,32 @@ namespace Castle.DynamicProxy.Tests
 
 			CheckUnsignedSavedAssembly(path);
 			File.Delete (path);
+		}
+
+		[Test]
+		public void SaveWithPath ()
+		{
+			string strongModulePath = Path.GetTempFileName ();
+			string weakModulePath = Path.GetTempFileName ();
+
+			File.Delete (strongModulePath);
+			File.Delete (weakModulePath);
+
+			Assert.IsFalse (File.Exists (strongModulePath));
+			Assert.IsFalse (File.Exists (weakModulePath));
+
+			ModuleScope scope = new ModuleScope (true, "Strong", strongModulePath, "Weak", weakModulePath);
+			scope.ObtainDynamicModuleWithStrongName ();
+			scope.ObtainDynamicModuleWithWeakName ();
+
+			scope.SaveAssembly (true);
+			scope.SaveAssembly (false);
+
+			Assert.IsTrue (File.Exists (strongModulePath));
+			Assert.IsTrue (File.Exists (weakModulePath));
+
+			File.Delete (strongModulePath);
+			File.Delete (weakModulePath);
 		}
 
 		private static void CheckUnsignedSavedAssembly (string path)
@@ -148,13 +211,13 @@ namespace Castle.DynamicProxy.Tests
 			scope.ObtainDynamicModuleWithStrongName ();
 			scope.ObtainDynamicModuleWithWeakName ();
 
-			scope.SaveAssembly (true, "StrongNamedAssembly.dll");
-			scope.SaveAssembly (false, "WeakNamedAssembly.dll");
-			CheckSignedSavedAssembly ("StrongNamedAssembly.dll");
-			CheckUnsignedSavedAssembly ("WeakNamedAssembly.dll");
+			scope.SaveAssembly (true);
+			CheckSignedSavedAssembly (ModuleScope.DEFAULT_FILE_NAME);
 
-			File.Delete ("StrongNamedAssembly.dll");
-			File.Delete ("WeakNamedAssembly.dll");
+			scope.SaveAssembly (false);
+			CheckUnsignedSavedAssembly (ModuleScope.DEFAULT_FILE_NAME);
+
+			File.Delete (ModuleScope.DEFAULT_FILE_NAME);
 		}
 
 		[Test]
@@ -164,26 +227,17 @@ namespace Castle.DynamicProxy.Tests
 			ModuleScope scope = new ModuleScope (true);
 			scope.ObtainDynamicModuleWithStrongName ();
 
-			scope.SaveAssembly (false, "StrongNamedAssembly.dll");
+			scope.SaveAssembly (false);
 		}
 
 		[Test]
-		[ExpectedException (typeof (ArgumentException))]
-		public void CannotSaveToADifferentDirectory ()
-		{
-			ModuleScope scope = new ModuleScope (true);
-			scope.ObtainDynamicModuleWithWeakName ();
-
-			scope.SaveAssembly (false, Path.GetTempPath() +  "\\StrongNamedAssembly.dll");
-		}
-
-		[Test]
+		[ExpectedException (typeof (InvalidOperationException))]
 		public void ExplicitSaveThrowsWhenSpecifiedAssemblyNotGeneratedStrongName ()
 		{
 			ModuleScope scope = new ModuleScope (true);
 			scope.ObtainDynamicModuleWithWeakName ();
 
-			scope.SaveAssembly (false, "WeakNamedAssembly.dll");
+			scope.SaveAssembly (true);
 		}
 
 		[Test]
@@ -200,7 +254,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void GeneratedAssembliesWithCustomName ()
 		{
-			ModuleScope scope = new ModuleScope (false, "Strong", "Weak");
+			ModuleScope scope = new ModuleScope (false, "Strong", "Module1.dll", "Weak", "Module2,dll");
 			ModuleBuilder strong = scope.ObtainDynamicModuleWithStrongName ();
 			ModuleBuilder weak = scope.ObtainDynamicModuleWithWeakName ();
 

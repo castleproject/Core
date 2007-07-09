@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			bool isAssemblySigned = IsAssemblySigned(baseType);
 			foreach(Type type in interfaces)
 			{
-				isAssemblySigned |= IsAssemblySigned(type);
+				isAssemblySigned &= IsAssemblySigned(type);
 			}
 
 			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
@@ -74,23 +74,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private bool IsAssemblySigned(Type baseType)
 		{
-			if (baseType == typeof(object) ||
-			    baseType == typeof(MarshalByRefObject) ||
-			    baseType == typeof(ContextBoundObject))
-			{
-				return false;
-			}
-
 			lock(signedAssemblyCache)
 			{
 				if (signedAssemblyCache.Contains(baseType.Assembly) == false)
 				{
-					byte[] key = baseType.Assembly.GetName().GetPublicKey();
-					bool isSigned = key != null && key.Length != 0;
+					bool isSigned = ContainsPublicKey(baseType.Assembly);
 					signedAssemblyCache.Add(baseType.Assembly, isSigned);
 				}
 				return (bool) signedAssemblyCache[baseType.Assembly];
 			}
+		}
+
+		public static bool ContainsPublicKey (Assembly assembly)
+		{
+			byte[] key = assembly.GetName ().GetPublicKey ();
+			return key != null && key.Length != 0;
 		}
 	}
 }

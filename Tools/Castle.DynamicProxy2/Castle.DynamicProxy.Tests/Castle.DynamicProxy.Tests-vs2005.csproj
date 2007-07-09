@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BasePEVerifyTestCase.cs" />
     <Compile Include="BasicClassProxyTestCase.cs" />
     <Compile Include="BasicInterfaceProxyTestCase.cs" />
@@ -100,6 +99,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BasicInterfaceProxyWithoutTargetTestCase.cs" />
     <Compile Include="BugsReportedTestCase.cs" />
     <Compile Include="BugsReported\Camera.cs" />

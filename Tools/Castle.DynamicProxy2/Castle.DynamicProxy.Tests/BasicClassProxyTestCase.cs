@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
+
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -24,6 +26,7 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
 	using ClassWithIndexer=Castle.DynamicProxy.Tests.Classes.ClassWithIndexer;
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	[TestFixture]
 	public class BasicClassProxyTestCase : BasePEVerifyTestCase
@@ -243,6 +246,72 @@ namespace Castle.DynamicProxy.Tests
 		{
 			MethodInfo methodInfo = type.GetMethod("MyTestMethod");
 			return methodInfo.GetParameters();
+		}
+
+		[Test]
+		public void ProxyForBaseTypeFromSignedAssembly ()
+		{
+			Type t = typeof (Hashtable);
+			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t.Assembly));
+			object proxy = generator.CreateClassProxy (t, new StandardInterceptor ());
+			Assert.IsTrue (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+		}
+
+		[Test]
+		public void ProxyForBaseTypeAndInterfaceFromSignedAssembly ()
+		{
+			Type t1 = typeof (Hashtable);
+			Type t2 = typeof (IServiceProvider);
+			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t1.Assembly));
+			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			object proxy = generator.CreateClassProxy (t1, new Type[] {t2}, new StandardInterceptor ());
+			Assert.IsTrue (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+		}
+
+		[Test]
+		[Ignore ("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeFromUnsignedAssembly ()
+		{
+			Type t = typeof (MyClass);
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t.Assembly));
+			object proxy = generator.CreateClassProxy (t, new StandardInterceptor ());
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+		}
+
+		[Test]
+		[Ignore ("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeAndInterfaceFromUnsignedAssembly ()
+		{
+			Type t1 = typeof (MyClass);
+			Type t2 = typeof (IService);
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t1.Assembly));
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+		}
+
+		[Test]
+		[Ignore ("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1 ()
+		{
+			Type t1 = typeof (MyClass);
+			Type t2 = typeof (IServiceProvider);
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t1.Assembly));
+			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+		}
+
+		[Test]
+		[Ignore ("To get this running, the Tests project must not be signed.")]
+		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies2 ()
+		{
+			Type t1 = typeof (Hashtable);
+			Type t2 = typeof (IService);
+			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t1.Assembly));
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
+			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
 		}
 	}
 }
