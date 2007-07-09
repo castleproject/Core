@@ -442,6 +442,31 @@ namespace Castle.ActiveRecord
 			ActiveRecordBase.SaveAndFlush(instance);
 		}
 
+        /// <summary>
+        /// Saves a copy of instance to the database
+        /// </summary>
+        /// <param name="instance">The transient instance to be copied</param>
+        /// <returns>The saved ActiveRecord instance</returns>
+        public static object SaveCopy(object instance)
+        {
+            return ActiveRecordBase.SaveCopy(instance);
+        }
+
+        /// <summary>
+        /// Saves a copy of the instance to the database and flushes the session. If the primary key is unitialized
+        /// it creates the instance on the database. Otherwise it updates it.
+        /// <para>
+        /// If the primary key is assigned, then you must invoke <see cref="Create(object)"/>
+        /// or <see cref="Update(object)"/> instead.
+        /// </para>
+        /// </summary>
+        /// <param name="instance">The transient instance to be copied</param>
+        /// <returns>The saved ActiveRecord instance</returns>
+        public static void SaveCopyAndFlush(object instance)
+        {
+            ActiveRecordBase.SaveCopyAndFlush(instance);
+        }
+
 		/// <summary>
 		/// Creates (Saves) a new instance to the database.
 		/// </summary>

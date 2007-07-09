@@ -516,6 +516,36 @@ namespace Castle.ActiveRecord
 			InternalSave(instance, true);
 		}
 
+        /// <summary>
+        /// Saves a copy of the instance to the database. If the primary key is unitialized
+        /// it creates the instance on the database. Otherwise it updates it.
+        /// <para>
+        /// If the primary key is assigned, then you must invoke <see cref="Create()"/>
+        /// or <see cref="Update()"/> instead.
+        /// </para>
+        /// </summary>
+        /// <param name="instance">The transient instance to be saved</param>
+        /// <returns>The saved ActiveRecord instance</returns>
+        protected internal static object SaveCopy(object instance)
+        {
+            return InternalSaveCopy(instance, false);
+        }
+
+        /// <summary>
+        /// Saves a copy of the instance to the database and flushes the session. If the primary key is unitialized
+        /// it creates the instance on the database. Otherwise it updates it.
+        /// <para>
+        /// If the primary key is assigned, then you must invoke <see cref="Create()"/>
+        /// or <see cref="Update()"/> instead.
+        /// </para>
+        /// </summary>
+        /// <param name="instance">The transient instance to be saved</param>
+        /// <returns>The saved ActiveRecord instance</returns>
+        protected internal static object SaveCopyAndFlush(object instance)
+        {
+            return InternalSaveCopy(instance, true);
+        }
+
 		/// <summary>
 		/// Saves the instance to the database. If the primary key is unitialized
 		/// it creates the instance on the database. Otherwise it updates it.
@@ -568,8 +598,62 @@ namespace Castle.ActiveRecord
 				holder.ReleaseSession(session);
 			}
 		}
-		
-		
+
+        /// <summary>
+        /// Saves a copy of the instance to the database. If the primary key is unitialized
+        /// it creates the instance on the database. Otherwise it updates it.
+        /// <para>
+        /// If the primary key is assigned, then you must invoke <see cref="Create()"/>
+        /// or <see cref="Update()"/> instead.
+        /// </para>
+        /// </summary>
+        /// <param name="instance">The transient instance to be saved</param>
+        /// <param name="flush">if set to <c>true</c>, the operation will be followed by a session flush.</param>
+        /// <returns>The saved ActiveRecord instance.</returns>
+        private static object InternalSaveCopy(object instance, bool flush)
+        {
+            if (instance == null) throw new ArgumentNullException("instance");
+
+            EnsureInitialized(instance.GetType());
+
+            ISession session = holder.CreateSession(instance.GetType());
+
+            try
+            {
+                object persistent = session.SaveOrUpdateCopy(instance);
+
+                if (flush)
+                {
+                    session.Flush();
+                }
+
+                return persistent;
+            }
+            catch (ValidationException)
+            {
+                holder.FailSession(session);
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                holder.FailSession(session);
+
+                // NHibernate catches our ValidationException on Create so it could be the innerexception here
+                if (ex.InnerException is ValidationException)
+                {
+                    throw ex.InnerException;
+                }
+                else
+                {
+                    throw new ActiveRecordException("Could not perform SaveCopy for " + instance.GetType().Name, ex);
+                }
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
 
 		#endregion
 
@@ -1343,6 +1427,38 @@ namespace Castle.ActiveRecord
 		{
 			SaveAndFlush(this);
 		}
+
+        /// <summary>
+        /// Saves a copy of the instance information to the database.
+        /// May Create or Update the instance depending 
+        /// on whether it has a valid ID.
+        /// </summary>
+        /// <returns>An saved ActiveRecord instance</returns>
+        /// <remarks>
+        /// If within a <see cref="SessionScope"/> the operation
+        /// is going to be on hold until NHibernate (or you) decides to flush
+        /// the session.
+        /// </remarks>
+        public virtual object SaveCopy()
+        {
+            return SaveCopy(this);
+        }
+
+        /// <summary>
+        /// Saves a copy of the instance information to the database.
+        /// May Create or Update the instance depending 
+        /// on whether it has a valid ID.
+        /// </summary>
+        /// <returns>A saved ActiveRecord instance</returns>
+        /// <remarks>
+        /// Even within a <see cref="SessionScope"/> the operation
+        /// is going to be flushed immediately. This might have side effects such as
+        /// flushing (persisting) others operations that were on hold.
+        /// </remarks>
+        public virtual object SaveCopyAndFlush()
+        {
+            return SaveCopyAndFlush(this);
+        }
 
 		/// <summary>
 		/// Creates (Saves) a new instance to the database.

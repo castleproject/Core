@@ -212,6 +212,16 @@ namespace Castle.ActiveRecord
 			ActiveRecordMediator.Save(instance);
 		}
 
+        /// <summary>
+        /// Saves a copy of the instance to the database
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns>The saved instance</returns>
+        public static T SaveCopy(T instance)
+        {
+            return (T) ActiveRecordMediator.SaveCopy(instance);
+        }
+
 		/// <summary>
 		/// Creates (Saves) a new instance to the database.
 		/// </summary>

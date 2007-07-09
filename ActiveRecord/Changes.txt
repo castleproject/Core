@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Added support for SaveOrUpdateCopy() which facilities working with detached objects.
+
 - Applied Tim Haines' patch adding the ability to verify if the models match the db 
   structure. This can be done by setting the "verifyModelsAgainstDBSchema" attribute to true on
   the ActiveRecord configuration node, or using the method VerifySchema on ActiveRecordStarter

@@ -138,6 +138,21 @@ namespace Castle.ActiveRecord
 			ActiveRecordBase.Save(instance);
 		}
 
+        /// <summary>
+        /// Saves a copy of the instance to the database. If the primary key is unitialized
+        /// it creates the instance on the database. Otherwise it updates it.
+        /// <para>
+        /// If the primary key is assigned, then you must invoke <see cref="Create"/>
+        /// or <see cref="Update"/> instead.
+        /// </para>
+        /// </summary>
+        /// <param name="instance">The transient instance to be saved</param>
+        /// <returns>The saved ActiveRecord instance.</returns>
+        protected internal static T SaveCopy(T instance)
+        {
+            return (T) ActiveRecordBase.SaveCopy(instance);
+        }
+
 		#endregion
 
 		#endregion
