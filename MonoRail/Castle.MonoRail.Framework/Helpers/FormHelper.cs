@@ -506,6 +506,68 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region NumberFieldValue
+
+		/// <summary>
+		/// Generates an input text element with a javascript that prevents
+		/// chars other than numbers from being entered. The value is not gathered 
+		/// from the context, instead you specify it on the second argument
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value">The current value to output.</param>
+		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
+		public string NumberFieldValue(string target, object value)
+		{
+			return NumberFieldValue(target, value, null);
+		}
+
+		/// <summary>
+		/// Generates an input text element with a javascript that prevents
+		/// chars other than numbers from being entered. The value is not gathered 
+		/// from the context, instead you specify it on the second argument
+		/// <para>
+		/// You can optionally pass an <c>exceptions</c> value through the dictionary.
+		/// It must be a comma separated list of chars that can be accepted on the field. 
+		/// For example:
+		/// </para>
+		/// <code>
+		/// FormHelper.NumberField("product.price", {exceptions='13,10,11'})
+		/// </code>
+		/// In this case the key codes 13, 10 and 11 will be accepted on the field.
+		/// <para>
+		/// You can aslo optionally pass an <c>forbid</c> value through the dictionary.
+		/// It must be a comma separated list of chars that cannot be accepted on the field. 
+		/// For example:
+		/// </para>
+		/// <code>
+		/// FormHelper.NumberField("product.price", {forbid='46'})
+		/// </code>
+		/// In this case the key code 46 (period) will not be accepted on the field.
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value">The current value to output.</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		/// <remarks>
+		/// You must invoke <see cref="FormHelper.InstallScripts"/> before using it
+		/// </remarks>
+		public string NumberFieldValue(string target, object value, IDictionary attributes)
+		{
+			target = RewriteTargetIfWithinObjectScope(target);
+
+			attributes = attributes != null ? attributes : new Hashtable();
+
+			ApplyNumberOnlyOptions(attributes);
+			ApplyValidation(InputElementType.Text, target, ref attributes);
+
+			return CreateInputElement("text", target, value, attributes);
+		}
+
+		#endregion
+
 		#region TextArea
 
 		/// <summary>
