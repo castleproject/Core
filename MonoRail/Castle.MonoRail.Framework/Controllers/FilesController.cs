@@ -48,6 +48,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Script used by <see cref="AjaxHelper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void BehaviourScripts()
 		{
 			RenderJavascriptFile("Behaviour", "jsfunctions");
@@ -56,6 +57,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Script used by <see cref="EffectsFatHelper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void EffectsFatScripts()
 		{
 			RenderJavascriptFile("EffectsFat", "fatfunctions");
@@ -64,6 +66,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Script used by <see cref="Effects2Helper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void Effects2()
 		{
 			RenderJavascriptFile("Effects2", "functions");
@@ -72,6 +75,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Script used by <see cref="ValidationHelper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void ValidateConfig()
 		{
 			RenderJavascriptFile("Validation", "fValidateConfig");
@@ -80,6 +84,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Script used by <see cref="ValidationHelper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void ValidateCore()
 		{
 			RenderJavascriptFile("Validation", "fValidateCore");
@@ -88,6 +93,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Script used by <see cref="ValidationHelper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void ValidateValidators()
 		{
 			RenderJavascriptFile("Validation", "fValidateValidators");
@@ -97,6 +103,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// Script used by <see cref="ValidationHelper"/>.
 		/// </summary>
 		[Resource("ValidationLang", "Castle.MonoRail.Framework.Controllers.ValidationLang")]
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void ValidateLang()
 		{
 			RenderJavascriptFile("ValidationLang", "fValidateLang");
@@ -105,6 +112,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Install the zebda validation script
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void ZebdaScripts()
 		{
 			RenderJavascriptFile( "ZebdaValidation", "jsfunctions" );
@@ -113,6 +121,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// <summary>
 		/// Script used by <see cref="AjaxHelper"/>.
 		/// </summary>
+		[Cache(HttpCacheability.Public, Duration = 86400)] // 1 day
 		public void FormHelperScript()
 		{
 			RenderJavascriptFile("FormHelper", "jsfunctions");
