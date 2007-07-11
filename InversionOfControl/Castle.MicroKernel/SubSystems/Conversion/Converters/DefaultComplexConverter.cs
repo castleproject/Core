@@ -154,7 +154,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			if (config.Value == null && config.Children.Count != 0)
 			{
-				return this.Context.Composition.PerformConversion(config.Children[0], type);
+				return this.Context.Composition.PerformConversion(config, type);
 			}
 			else
 			{

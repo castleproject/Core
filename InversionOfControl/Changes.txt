@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IoC-87
+  "DefaultComplextConverter does not properly handle nested components"
+
 - Applied Lee Henson's patch fixing IOC-86
   "Additional generic AddComponent overloads"
 
