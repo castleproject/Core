@@ -204,7 +204,7 @@ namespace Castle.MonoRail.Views.Brail
 		public object TryGetParameter(string name)
 		{
 			ParameterSearch search = GetParameterInternal(name);
-			return search.Value;
+			return new IgnoreNull(search.Value);
 		}
 
 		/// <summary>

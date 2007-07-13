@@ -30,32 +30,39 @@ namespace Castle.MonoRail.Views.Brail
 		public object QuackGet(string name, object[] parameters)
 		{
 			if (target == null)
-				return null;
+				return this;
 			PropertyInfo property = target.GetType().GetProperty(name);
 			if (property == null)
 				throw new RailsException("Could not find property " + name + " on " + target.GetType().FullName);
-            return property.GetValue(target, parameters);
+            return new IgnoreNull(property.GetValue(target, parameters));
 		}
 
 		public object QuackSet(string name, object[] parameters, object obj)
 		{
 			if (target == null)
-				return null;
+				return this;
 			PropertyInfo property = target.GetType().GetProperty(name);
 			if (property == null)
 				throw new RailsException("Could not find property " + name + " on " + target.GetType().FullName);
 			property.SetValue(target, obj, parameters);
-			return null;
+			return this;
 		}
 
 		public object QuackInvoke(string name, object[] args)
 		{
 			if (target == null)
-				return null;
+				return this;
 			MethodInfo method = target.GetType().GetMethod(name);
 			if (method == null)
 				throw new RailsException("Could not find method " + name + " on " + target.GetType().FullName);
-			return method.Invoke(target, args);
+			return new IgnoreNull(method.Invoke(target, args));
+		}
+		
+		public override string ToString()
+		{
+			if(target == null)
+				return string.Empty;
+			return target.ToString();
 		}
 	}
 }

@@ -247,8 +247,14 @@ Contents for heyhello View
         public void DuckOverloadToString()
         {
             DoGet("home/DuckOverloadToString.rails");
-            AssertReplyEqualTo("20-12-1981");
-            
+            AssertReplyEqualTo("20-12-1981");   
+        }
+
+        [Test]
+        public void NullPropagation()
+        {
+            DoGet("home/NullPropagation.rails");
+            AssertReplyIsBlank();
         }
 	}
 }

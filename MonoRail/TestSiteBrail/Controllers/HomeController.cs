@@ -170,6 +170,11 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
         {
             PropertyBag["birthday"] = new DateTime(1981, 12, 20);
         }
+
+        public void NullPropagation()
+        {
+            
+        }
     }
 }
 
