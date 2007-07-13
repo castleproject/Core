@@ -129,20 +129,20 @@ namespace Castle.MonoRail.Views.Brail
 		/// actually relative to ViewDirRoot
 		/// </summary>
 		/// <param name="subviewName"></param>
-		public void OutputSubView(string subviewName)
+		public string OutputSubView(string subviewName)
 		{
-			OutputSubView(subviewName, new Hashtable());
+			return OutputSubView(subviewName, new Hashtable());
 		}
 
 		/// <summary>
 		/// Similiar to the OutputSubView(string) function, but with a bunch of parameters that are used
 		/// just for this subview. This parameters are /not/ inheritable.
 		/// </summary>
-		/// <param name="subviewName"></param>
-		/// <param name="parameters"></param>
-		public void OutputSubView(string subviewName, IDictionary parameters)
+		/// <returns>An empty string, just to make it possible to use inline ${OutputSubView("foo")}</returns>
+		public string OutputSubView(string subviewName, IDictionary parameters)
 		{
 			OutputSubView(subviewName, outputStream, parameters);
+		    return string.Empty;
 		}
 
 		/// <summary>

@@ -46,5 +46,13 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			AssertSuccess();
 			AssertReplyContains("Success");
 		}
+
+        [Test]
+        public void MR_299_Inline_SubView()
+        {
+            DoGet("bugs/inlineSubView.rails");
+            AssertReplyContains("Success");
+	
+        }
 	}
 }
