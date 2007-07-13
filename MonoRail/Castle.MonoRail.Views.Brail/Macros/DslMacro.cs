@@ -159,6 +159,21 @@ namespace Castle.MonoRail.Views.Brail
                 }
             }
 
+            public override void OnForStatement(ForStatement node)
+            {
+                base.OnForStatement(node);
+            }
+
+            public override void OnDeclaration(Declaration node)
+            {
+                if (!_skippedReferences.ContainsKey(node.Name))
+                {
+                    _skippedReferences.Add(node.Name, node);
+                }
+
+                base.OnDeclaration(node);
+            }
+
             public override void OnReferenceExpression(ReferenceExpression node)
             {
                 if (node.ParentNode is BinaryExpression || _skippedReferences.ContainsKey(node.Name))

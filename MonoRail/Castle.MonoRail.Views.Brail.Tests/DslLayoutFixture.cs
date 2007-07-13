@@ -38,10 +38,10 @@ namespace Castle.MonoRail.Views.Brail.Tests
         }
 
         [Test]
-        [Ignore("We have issue with parameters references")]
+        //[Ignore("We have issue with parameters references")]
         public void XmlDsl()
         {
-            string expected = "to be verified";
+            string expected = "<html><?xml version=\"1.0\" encoding=\"utf-16\"?><rss><channel><title>RSS DSL</title><item><title>Title: Ayende</title><description>Description: Ayende</description></item><item><title>Title: Rahien</title><description>Description: Rahien</description></item></channel></rss></html>";
             DoGet("dsl/testXml.rails");
             AssertReplyEqualTo(expected);
         }
