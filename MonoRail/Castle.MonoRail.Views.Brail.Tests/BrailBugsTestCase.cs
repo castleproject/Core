@@ -38,5 +38,13 @@ namespace Castle.MonoRail.Views.Brail.Tests
             AssertSuccess();
             AssertReplyEqualTo("default component view picked up automaticallyThis is a view used by a component");
         }
+
+		[Test]
+		public void MR_285_ViewName_Is_Reserved_CompilerKeyword()
+		{
+			DoGet("bugs/add.rails");
+			AssertSuccess();
+			AssertReplyContains("Success");
+		}
 	}
 }

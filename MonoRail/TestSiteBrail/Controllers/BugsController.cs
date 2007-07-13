@@ -25,6 +25,12 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 			//Brail tag in double quotation marks is giving an error 
 			PropertyBag["page_id"] = 123;
 		}
+
+		public void Add()
+		{
+			
+		}
 	}
 }
+
 

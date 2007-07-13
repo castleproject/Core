@@ -117,7 +117,7 @@ StringComparer.InvariantCultureIgnoreCase
 									 string templateName)
 		{
 			Log("Starting to process request for {0}", templateName);
-			string file = templateName + ViewFileExtension;
+			string file = templateName.ToUpper() + ViewFileExtension;
 			BrailBase view;
 			// Output may be the layout's child output if a layout exists
 			// or the context.Response.Output if the layout is null
@@ -280,11 +280,11 @@ StringComparer.InvariantCultureIgnoreCase
 		{
 			if (Path.HasExtension(templateName))
 			{
-				return templateName;
+				return templateName.ToUpper();
 			}
 			else
 			{
-				return templateName + extention;
+				return templateName.ToUpper() + extention;
 			}
 		}
 
@@ -637,7 +637,10 @@ StringComparer.InvariantCultureIgnoreCase
 
 		public bool ConditionalPreProcessingOnly(string name)
 		{
-			return Path.GetExtension(name) == JSGeneratorFileExtension;
+            return String.Equals(
+                Path.GetExtension(name), 
+                JSGeneratorFileExtension, 
+                StringComparison.InvariantCultureIgnoreCase); 
 		}
 	}
 }

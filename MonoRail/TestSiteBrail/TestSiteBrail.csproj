@@ -207,6 +207,7 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Views\bugs\add.brail" />
     <None Include="Views\dsl\testXml.brail" />
     <None Include="Views\dsl\testSubViewWithComponents.brail" />
     <None Include="Views\home\NullPropagation.brail" />
