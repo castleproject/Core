@@ -14,18 +14,34 @@
 
 namespace Castle.ActiveRecord.Tests.Model
 {
-	//Used in SaveWithBadTableSchemaThrowsException
-    [ActiveRecord("BlogTable")]
-	public class BlogWithBrokenField : Blog
-	{
-		public bool _broken;
+    [ActiveRecord("ShipTable")]
+    public class Ship
+    {
+        private int id;
+        private string name;
+        [PrimaryKey]
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+        [Property]
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+    }
 
-		[Property]
-		public bool Broken
-		{
-			get { return _broken; }
-			set { _broken = value; }
-		}
-	}
-
+    [ActiveRecord("ShipTable")]
+    public class ShipWithBorkenField : Ship
+    {
+        private int passangers;
+        [Property]
+        public int Passangers
+        {
+            get { return passangers; }
+            set { passangers = value; }
+        }
+    }
 }

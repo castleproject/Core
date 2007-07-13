@@ -32,20 +32,20 @@ namespace Castle.ActiveRecord.Tests
 			ActiveRecordStarter.Initialize(config, typeof(Post));
 		}
 
-		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Error verifying the schema for model BlogWithBrokenField")]
+        [Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Error verifying the schema for model ShipWithBorkenField")]
 		public void VerificationOnWithMissingFieldError()
 		{
 			// Create the tables first
 			XmlConfigurationSource config = (XmlConfigurationSource)GetConfigSource();
 			config.VerifyModelsAgainstDBSchema = false;
-			ActiveRecordStarter.Initialize(config, typeof(Blog), typeof(Post));
+			ActiveRecordStarter.Initialize(config, typeof(Ship));
 			Recreate();
 
 			// Then test Broken field
 			config.VerifyModelsAgainstDBSchema = true;
 
 			ActiveRecordStarter.ResetInitializationFlag();
-			ActiveRecordStarter.Initialize(config, typeof(BlogWithBrokenField), typeof(Post));
+            ActiveRecordStarter.Initialize(config, typeof(ShipWithBorkenField));
 		}
 
 		[Test]

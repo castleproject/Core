@@ -303,6 +303,7 @@
     <Compile Include="AnyRelationTestCase.cs" />
     <Compile Include="CompositeUserTypeTestCase.cs" />
     <Compile Include="Model\BlogWithBrokenField.cs" />
+    <Compile Include="Model\Ship.cs" />
     <Compile Include="VerifyModelsAgainstDBSchemaTestCase.cs" />
     <Compile Include="LazyTestCase.cs" />
     <Compile Include="Model\AnyModel\Models.cs" />
