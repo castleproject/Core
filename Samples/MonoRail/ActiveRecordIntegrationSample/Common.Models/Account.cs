@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Components.Validator;
+
 namespace Common.Models
 {
 	using System;
@@ -41,28 +43,28 @@ namespace Common.Models
 			set { id = value; }
 		}
 
-		[Property, ValidateNotEmpty]
+		[Property, ValidateNonEmpty]
 		public string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
-		[Property, ValidateNotEmpty, ValidateEmail]
+		[Property, ValidateNonEmpty, ValidateEmail]
 		public string Email
 		{
 			get { return email; }
 			set { email = value; }
 		}
 
-		[Property, ValidateNotEmpty, ValidateConfirmation("ConfirmationPassword")]
+		[Property, ValidateNonEmpty, ValidateSameAs("ConfirmationPassword")]
 		public string Password
 		{
 			get { return password; }
 			set { password = value; }
 		}
 
-		[ValidateNotEmpty]
+		[ValidateNonEmpty]
 		public string ConfirmationPassword
 		{
 			get { return confirmationpassword; }

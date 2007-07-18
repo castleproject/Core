@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Components.Validator;
+
 namespace Common.Models
 {
 	using System;
@@ -31,7 +33,7 @@ namespace Common.Models
 			set { _id = value; }
 		}
 
-		[Property, ValidateRegExpAttribute(@"^(?:\w| )+$")]
+		[Property, ValidateRegExp(@"^(?:\w| )+$")]
 		public String Name
 		{
 			get { return _name; }

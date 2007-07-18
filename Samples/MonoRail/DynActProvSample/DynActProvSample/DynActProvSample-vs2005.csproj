@@ -4,12 +4,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0241A68F-5728-4EA1-A620-A62AC43072A0}</ProjectGuid>
+    <ProjectGuid>{4CB76D61-0719-448B-909A-CCEC33A7D5CF}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GettingStartedSample</RootNamespace>
-    <AssemblyName>GettingStartedSample</AssemblyName>
+    <RootNamespace>DynActProvSample</RootNamespace>
+    <AssemblyName>DynActProvSample</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,10 +44,6 @@
     <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\build\net-2.0\debug\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.MonoRail.ActiveRecordScaffold, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\build\net-2.0\debug\Castle.MonoRail.ActiveRecordScaffold.dll</HintPath>
     </Reference>
     <Reference Include="Castle.MonoRail.ActiveRecordSupport, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -84,34 +80,32 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\css\base.css" />
     <Content Include="Default.aspx" />
     <Content Include="global.asax" />
     <Content Include="Readme.txt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\ContactController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ProductController.cs" />
-    <Compile Include="Controllers\SupplierController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CrudActionProvider.cs" />
     <Compile Include="GlobalApplication.cs" />
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\Supplier.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Views\contact\confirmation.vm" />
-    <None Include="Views\contact\contactform.vm" />
-    <None Include="Views\Home\data.vm" />
-    <None Include="Views\Home\index.vm" />
+    <None Include="Views\category2\confirmdelete.vm" />
+    <None Include="Views\category2\edit.vm" />
+    <None Include="Views\category2\list.vm" />
+    <None Include="Views\category2\new.vm" />
+    <None Include="Views\category\confirmdelete.vm" />
+    <None Include="Views\category\edit.vm" />
+    <None Include="Views\category\new.vm" />
+    <None Include="Views\category\list.vm" />
     <None Include="Views\layouts\default.vm" />
-    <None Include="Views\Product\edit.vm" />
-    <None Include="Views\Product\list.vm" />
-    <None Include="Views\Product\new.vm" />
     <None Include="Views\rescues\generalerror.vm" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\css\" />
     <Folder Include="Content\images\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -128,8 +122,8 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4017</DevelopmentServerPort>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>98</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

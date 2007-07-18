@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBindSample", "DataBindSample\DataBindSample.csproj", "{0FCA8F7F-3D66-4459-91A4-EF93CE22938E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationSample", "LocalizationSample\LocalizationSample-vs2003.csproj", "{A8A7C6ED-106F-4B8F-9212-15367A3D8525}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -11,10 +11,10 @@ Global
 	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{0FCA8F7F-3D66-4459-91A4-EF93CE22938E}.Debug.ActiveCfg = Debug|.NET
-		{0FCA8F7F-3D66-4459-91A4-EF93CE22938E}.Debug.Build.0 = Debug|.NET
-		{0FCA8F7F-3D66-4459-91A4-EF93CE22938E}.Release.ActiveCfg = Release|.NET
-		{0FCA8F7F-3D66-4459-91A4-EF93CE22938E}.Release.Build.0 = Release|.NET
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Debug.ActiveCfg = Debug|.NET
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Debug.Build.0 = Debug|.NET
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Release.ActiveCfg = Release|.NET
+		{A8A7C6ED-106F-4B8F-9212-15367A3D8525}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

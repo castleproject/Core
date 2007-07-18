@@ -20,7 +20,7 @@ namespace LocalizationSample.Controllers
 	using Castle.MonoRail.Framework.Filters;
 
 	[Layout("default")]
-	[Resource("text", "LocalizationSample.Resources.Home")]
+	[Resource("textres", "LocalizationSample.Resources.Home")]
 	[LocalizationFilter(RequestStore.Cookie, "locale")]
 	public class HomeController : SmartDispatcherController
 	{

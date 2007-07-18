@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActiveRecordIntegrationSample", "ActiveRecordIntegrationSample\ActiveRecordIntegrationSample.csproj", "{A46C69F2-68D3-4FE5-B637-EF6B5C9F4D21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActiveRecordIntegrationSample", "ActiveRecordIntegrationSample\ActiveRecordIntegrationSample-vs2003.csproj", "{A46C69F2-68D3-4FE5-B637-EF6B5C9F4D21}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

@@ -1,7 +1,7 @@
 <html>
 <head>
-$AjaxHelper.GetJavascriptFunctions()
-$Effects2Helper.GetJavascriptFunctions()
+$Ajax.InstallScripts()
+$Scriptaculous.InstallScripts()
 
   <style type="text/css">
     body {

@@ -34,17 +34,14 @@ namespace ActiveRecordIntegrationSample.Components
 
 		public override void Render()
 		{
- 			IPaginatedPage page = PaginationHelper.CreatePagination(elements, 5);
+			int currentPage = 1;
+			Int32.TryParse(RailsContext.Request.Params[PaginationHelper.PageParameterName] as string, out currentPage);
+			IPaginatedPage page = PaginationHelper.CreatePagination(elements, 5, currentPage);
 			
 			PropertyBag["page"] = page;
 			PropertyBag["name"] = name;
 			
 			base.Render();
-		}
-
-		public override bool SupportsSection(string name)
-		{
-			return base.SupportsSection(name);
 		}
 	}
 }
