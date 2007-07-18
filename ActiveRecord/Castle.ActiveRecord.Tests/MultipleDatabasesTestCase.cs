@@ -14,6 +14,7 @@
 
 namespace Castle.ActiveRecord.Tests
 {
+	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Tests.Model;
 	
 	using NUnit.Framework;
@@ -95,5 +96,25 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(1, blogs.Length);
 			Assert.AreEqual(1, hands.Length);
 		}
+
+		[Test]
+		[Ignore]
+		[ExpectedException(typeof(ActiveRecordInitializationException))]
+		public void MultipleDatabaseInvalidConfigWhenNotRegisterBaseClass() {
+
+			base.Init();
+
+			//Not registering the base class should not cause AR to silently ignore the configuration 
+			//for the type meaning all classes would use a single database. 
+
+			//if there is a type in the config which is not registered - but a subclass is then we should throw.
+
+			ActiveRecordStarter.Initialize(GetConfigSource(),
+				typeof(Blog), typeof(Post), typeof(Hand));
+
+			Recreate();
+		}
+
+
 	}
 }
