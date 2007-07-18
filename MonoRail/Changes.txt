@@ -129,7 +129,6 @@ shortened text."
 
 - Added the Expect property to the ARDataBindAttr. Now it will clear the collections 
   that are declared as expected, if not can be found on the resquest params. (MR-163)
-	 
 
 - Applied Colin Ramsay's patch fixing MR-232
   "HtmlHelper.InputButton should create <button> not <input type="button">"
@@ -226,7 +225,7 @@ shortened text."
    need to add event handlers in the codebehind that call Controller.Send
 
 - Brail now has Ruby's like symbols, using @symbol.
-    For instnace, component DiggStylePagination, ${ @useInlineStyle : true }
+    For instance, component DiggStylePagination, ${ @useInlineStyle : true }
 	
 - Brail can now accept " inside a ${ }, which used to break the parser previously.
 

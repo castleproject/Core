@@ -37,7 +37,9 @@
 		<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/Castle.MonoRail.Framework.Views.NVelocity.Tests.build" />
 		<include name="Castle.MonoRail.WindsorExtension.Tests/Castle.MonoRail.WindsorExtension.Tests.build" />
 		<include name="Castle.Monorail.JSONSupport.Tests/Castle.Monorail.JSONSupport.Tests.build" />
+		<!--
 		<include name="Castle.MonoRail.Views.Brail.Tests/Castle.MonoRail.Views.Brail.Tests.build" />
+		-->
 	</fileset>
 
 	<target name="build" depends="common.build" />
