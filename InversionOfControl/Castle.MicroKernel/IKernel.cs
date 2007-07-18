@@ -326,6 +326,11 @@ namespace Castle.MicroKernel
 
 		/// <summary>
 		/// Returns the component instance by the service type
+		/// </summary>
+		object Resolve(Type service);
+
+		/// <summary>
+		/// Returns the component instance by the service type
 		/// using dynamic arguments
 		/// </summary>
 		/// <param name="service"></param>

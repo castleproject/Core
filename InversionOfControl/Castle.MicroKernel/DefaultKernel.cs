@@ -550,7 +550,7 @@ namespace Castle.MicroKernel
 		public T Resolve<T>(IDictionary arguments) where T : class
 		{
 			Type serviceType = typeof(T);
-			return Resolve(serviceType.FullName, arguments) as T;
+			return Resolve(serviceType, arguments) as T;
 		}
 
 		/// <summary>
@@ -560,7 +560,7 @@ namespace Castle.MicroKernel
 		public T Resolve<T>() where T : class
 		{
 			Type serviceType = typeof(T);
-			return Resolve(serviceType.FullName, serviceType) as T;
+			return (T) Resolve(serviceType);
 		}
 
 		/// <summary>
@@ -691,6 +691,16 @@ namespace Castle.MicroKernel
 
 				return ResolveComponent(handler, service);
 			}
+		}
+
+		/// <summary>
+		/// Returns the component instance by the service type
+		/// </summary>
+		public object Resolve(Type service)
+		{
+			if (service == null) throw new ArgumentNullException("service");
+
+			return this[service];
 		}
 
 		/// <summary>
