@@ -35,5 +35,9 @@ namespace Castle.Services.Transaction
 		                               IResource[] failedResources) : base(info, context, lastFailedResource, failedResources)
 		{
 		}
+		
+		public CommitResourceException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
 	}
 }

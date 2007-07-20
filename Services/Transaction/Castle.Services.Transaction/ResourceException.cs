@@ -23,6 +23,11 @@ namespace Castle.Services.Transaction
 		private IResource lastFailedResource = null;
 		private IResource[] failedResources = null;
 
+
+		public ResourceException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
+
 		public ResourceException(string message, IResource lastFailedResource, IResource[] failedResources) : base(message)
 		{
 			this.lastFailedResource = lastFailedResource;
