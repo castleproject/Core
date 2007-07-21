@@ -20,7 +20,6 @@ namespace Castle.MonoRail.Framework
 	/// Implemented by attributes that wants to perform 
 	/// some conversion to populate a smart dispatcher 
 	/// action argument.
-	/// <seealso cref="FlashBinderAttribute"/>
 	/// <seealso cref="DataBindAttribute"/>
 	/// </summary>
 	public interface IParameterBinder

@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- FlashBinderAttribute was removed as I doesnt work with the new 
+  MonoRail design (changed to make the cache support work)
+
 - Applied Tim Haines' patch adding TextAreaValue to FormHelper 
 
 - Fixed MR-281 

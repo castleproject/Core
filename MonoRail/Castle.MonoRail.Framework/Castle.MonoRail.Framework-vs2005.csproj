@@ -136,7 +136,6 @@
     <Compile Include="Attributes\FilterAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\FlashBinderAttribute.cs" />
     <Compile Include="Attributes\HelperAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
