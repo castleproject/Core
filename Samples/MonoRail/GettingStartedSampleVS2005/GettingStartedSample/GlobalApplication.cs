@@ -22,7 +22,6 @@ namespace GettingStartedSample
 	
 	using GettingStartedSample.Models;
 	
-
 	public class GlobalApplication : HttpApplication
 	{
 		public GlobalApplication()
