@@ -3,7 +3,7 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0241A68F-5728-4EA1-A620-A62AC43072A0}</ProjectGuid>
+    <ProjectGuid>{E2534CB7-B53E-4206-AAD7-6F01D754B573}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -153,7 +153,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-    <ProjectExtensions>
+  <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
@@ -168,5 +168,4 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-
 </Project>

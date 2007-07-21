@@ -48,6 +48,12 @@ namespace MoviesDemo.Controllers
 			PropertyBag["movie"] = Movie.Find(movieId);
 		}
 
+		/// <summary>
+		/// This is a rather simplistic implementation of a save action.
+		/// It's only OK as the Movie class does not have any relation. 
+		/// For a more reliable method, check ARDataBindAttribute on 
+		/// the documentation 
+		/// </summary>
 		public void Save([DataBind("movie")] Movie movie)
 		{
 			if (movie.Id == 0)

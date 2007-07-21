@@ -17,7 +17,9 @@ namespace MoviesDemo.Helpers
 	using System;
 	using Castle.MonoRail.Framework.Helpers;
 
-
+	/// <summary>
+	/// Rather simplistic example of a helper
+	/// </summary>
 	public class StringHelper : AbstractHelper
 	{
 		public string Format(string format, object arg)

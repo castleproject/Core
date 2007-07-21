@@ -1,9 +1,9 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0241A68F-5728-4EA1-A620-A62AC43072A0}</ProjectGuid>
+    <ProjectGuid>{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -75,37 +75,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.ActiveRecord">
-      <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.ActiveRecord.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Components.Binder">
-      <Name>Castle.Components.Binder</Name>
-      <HintPath>C:\Program Files\CastleProject\Bin\net-2.0\Castle.Components.Binder.dll</HintPath>
-      <AssemblyFolderKey>hklm\dn\castle</AssemblyFolderKey>
-    </Reference>
-    <Reference Include="Castle.Components.Common.EmailSender">
-      <Name>Castle.Components.Common.EmailSender</Name>
-      <HintPath>C:\Program Files\CastleProject\Bin\net-2.0\Castle.Components.Common.EmailSender.dll</HintPath>
-      <AssemblyFolderKey>hklm\dn\castle</AssemblyFolderKey>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <Name>Castle.Core</Name>
-      <HintPath>C:\Program Files\CastleProject\Bin\net-2.0\Castle.Core.dll</HintPath>
-      <AssemblyFolderKey>hklm\dn\castle</AssemblyFolderKey>
-    </Reference>
-    <Reference Include="Castle.MonoRail.Framework">
-      <Name>Castle.MonoRail.Framework</Name>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.MonoRail.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.MonoRail.Framework.Views.NVelocity">
-      <Name>Castle.MonoRail.Framework.Views.NVelocity</Name>
-      <HintPath>..\..\..\build\net-2.0\debug\Castle.MonoRail.Framework.Views.NVelocity.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate">
-      <Name>NHibernate</Name>
-      <HintPath>..\..\..\build\net-2.0\debug\NHibernate.dll</HintPath>
-    </Reference>
+    <Reference Include="Castle.ActiveRecord, Version=0.0.1.3, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Components.Binder, Version=0.0.1.1, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Components.Common.EmailSender, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Components.Validator, Version=0.0.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.MonoRail.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="NHibernate, Version=1.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -176,7 +152,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-    <ProjectExtensions>
+  <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
@@ -191,5 +167,4 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-
 </Project>
