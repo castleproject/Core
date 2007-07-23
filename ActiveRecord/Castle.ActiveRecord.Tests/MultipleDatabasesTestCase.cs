@@ -98,7 +98,7 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
-		[Ignore]
+		[Ignore("This still needs to be fixed")]
 		[ExpectedException(typeof(ActiveRecordInitializationException))]
 		public void MultipleDatabaseInvalidConfigWhenNotRegisterBaseClass() {
 
@@ -108,6 +108,8 @@ namespace Castle.ActiveRecord.Tests
 			//for the type meaning all classes would use a single database. 
 
 			//if there is a type in the config which is not registered - but a subclass is then we should throw.
+
+			//AFAIK - fixing this requires exposing _type2Config to ActiveRecordStarter.
 
 			ActiveRecordStarter.Initialize(GetConfigSource(),
 				typeof(Blog), typeof(Post), typeof(Hand));
