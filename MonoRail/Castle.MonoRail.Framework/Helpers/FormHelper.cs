@@ -837,10 +837,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Generates a hidden form element.
-		/// <para>
-		/// The value is extracted from the target (if available)
-		/// </para>
+		/// Generates a hidden form element with the specified value
 		/// </summary>
 		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
 		/// <param name="value">The value for the hidden field</param>
@@ -870,6 +867,18 @@ namespace Castle.MonoRail.Framework.Helpers
 			value = value != null ? value : String.Empty;
 
 			return CreateInputElement("hidden", id, target, value.ToString(), attributes);
+		}
+		
+		/// <summary>
+		/// Generates a hidden form element with the specified value
+		/// </summary>
+		/// <param name="target">The object to get the value from and to be based on to create the element name.</param>
+		/// <param name="value">The value for the hidden field</param>
+		/// <param name="attributes">Attributes for the FormHelper method and for the html element it generates</param>
+		/// <returns>The generated form element</returns>
+		public string HiddenField(string target, object value, IDictionary attributes)
+		{
+			return CreateInputElement("hidden", target, value, attributes);
 		}
 
 		#endregion
