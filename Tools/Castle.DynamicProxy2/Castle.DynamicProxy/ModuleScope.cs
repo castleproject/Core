@@ -344,6 +344,9 @@ namespace Castle.DynamicProxy
 		/// generated.</exception>
 		public void SaveAssembly ()
 		{
+			if (!savePhysicalAssembly)
+				return;
+
 			if (StrongNamedModule != null && WeakNamedModule != null)
 					throw new InvalidOperationException ("Both a strong-named and a weak-named assembly have been generated.");
 			else if (StrongNamedModule != null)

@@ -1,5 +1,7 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Fixed bug in ModuleScope, see DYNPROXY-64
+
 - Fixed bug in LoadArrayElementExpression, see DYNPROXY-57
 
 - Changed signing behavior for generated assembly, assembly is now only signed if all involved types (base type, interfaces) are also signed

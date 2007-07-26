@@ -205,6 +205,16 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void SaveWithFlagFalseDoesntThrowsWhenMultipleAssembliesGenerated ()
+		{
+			ModuleScope scope = new ModuleScope (false);
+			scope.ObtainDynamicModuleWithStrongName ();
+			scope.ObtainDynamicModuleWithWeakName ();
+
+			scope.SaveAssembly ();
+		}
+
+		[Test]
 		public void ExplicitSaveWorksEvenWhenMultipleAssembliesGenerated ()
 		{
 			ModuleScope scope = new ModuleScope (true);
