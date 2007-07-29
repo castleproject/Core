@@ -16,29 +16,31 @@ namespace Castle.MonoRail.Framework.Test
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Security.Principal;
 	using System.Web;
 	using Castle.Components.Common.EmailSender;
-	using Castle.Components.Common.EmailSender.Smtp;
 	using Castle.Components.Validator;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Services;
 
 	public class MockRailsEngineContext : AbstractServiceContainer, IRailsEngineContext
 	{
+		private readonly string physicalPath = AppDomain.CurrentDomain.BaseDirectory;
 		private readonly IRequest request;
 		private readonly IResponse response;
 		private readonly ITrace trace;
 		private readonly UrlInfo urlInfo;
-		private string physicalPath = AppDomain.CurrentDomain.BaseDirectory;
+		private readonly Flash flash = new Flash();
+		private readonly ICacheProvider cacheProvider = new MockCacheProvider();
+		private readonly IServerUtility serverUtility = new MockServerUtility();
+		private readonly IDictionary session = new HybridDictionary(true);
+		private readonly IDictionary contextItems = new HybridDictionary(true);
+		private readonly List<RenderedEmailTemplate> renderedEmailTemplates = new List<RenderedEmailTemplate>();
+		private readonly List<Message> messagesSent = new List<Message>();
 		private string urlReferrer;
-		private IDictionary session = new HybridDictionary(true);
-		private IDictionary contextItems = new HybridDictionary(true);
-		private Flash flash = new Flash();
 		private IPrincipal currentUser = new GenericPrincipal(new GenericIdentity("user", "test"), new string[0]);
-		private ICacheProvider cacheProvider = new MockCacheProvider();
-		private IServerUtility serverUtility = new MockServerUtility();
 		private Exception lastException;
 		private Controller currentController;
 
@@ -176,6 +178,16 @@ namespace Castle.MonoRail.Framework.Test
 
 		#endregion
 
+		public List<RenderedEmailTemplate> RenderedEmailTemplates
+		{
+			get { return renderedEmailTemplates; }
+		}
+
+		public List<Message> MessagesSent
+		{
+			get { return messagesSent; }
+		}
+
 		private void RegisterServices()
 		{
 			DefaultUrlBuilder urlBuilder = new DefaultUrlBuilder();
@@ -184,8 +196,8 @@ namespace Castle.MonoRail.Framework.Test
 
 			AddService(typeof(IValidatorRegistry), new CachedValidationRegistry());
 
-			AddService(typeof(IEmailTemplateService), new EmailTemplateService());
-			AddService(typeof(IEmailSender), new SmtpSender("hostname"));
+			AddService(typeof(IEmailTemplateService), new MockEmailTemplateService(this));
+			AddService(typeof(IEmailSender), new MockSmtpSender(this));
 
 			AddService(typeof(IHelperDescriptorProvider), new DefaultHelperDescriptorProvider());
 			AddService(typeof(IFilterDescriptorProvider), new DefaultFilterDescriptorProvider());
@@ -199,6 +211,39 @@ namespace Castle.MonoRail.Framework.Test
 			AddService(typeof(IControllerDescriptorProvider), controllerDescProvider);
 
 			AddService(typeof(IViewEngineManager), new DefaultViewEngineManager());
+			AddService(typeof(IScaffoldingSupport), new MockScaffoldingSupport());
+		}
+
+		internal void AddMailTemplateRendered(string templateName, IDictionary parameters)
+		{
+			renderedEmailTemplates.Add(new RenderedEmailTemplate(templateName, parameters));
+		}
+
+		internal void AddEmailMessageSent(Message message)
+		{
+			messagesSent.Add(message);
+		}
+
+		public class RenderedEmailTemplate
+		{
+			private readonly string name;
+			private readonly IDictionary parameters;
+
+			public RenderedEmailTemplate(string name, IDictionary parameters)
+			{
+				this.name = name;
+				this.parameters = parameters;
+			}
+
+			public string Name
+			{
+				get { return name; }
+			}
+
+			public IDictionary Parameters
+			{
+				get { return parameters; }
+			}
 		}
 	}
 }

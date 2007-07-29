@@ -16,8 +16,9 @@ namespace Castle.MonoRail.TestSupport
 {
 	using System;
 	using System.IO;
-	using Castle.MonoRail.Framework;
+	using Castle.Components.Common.EmailSender;
 	using Castle.MonoRail.Framework.Test;
+	using Framework;
 
 	public delegate void ContextInitializer(MockRailsEngineContext context);
 
@@ -30,7 +31,7 @@ namespace Castle.MonoRail.TestSupport
 		private readonly string domainPrefix;
 		private readonly int port;
 		protected string virtualDir = "";
-		private IRailsEngineContext context;
+		private MockRailsEngineContext context;
 		private IRequest request;
 		private IMockResponse response;
 		private ITrace trace;
@@ -132,7 +133,8 @@ namespace Castle.MonoRail.TestSupport
 			return new MockTrace();
 		}
 
-		protected virtual IRailsEngineContext BuildRailsEngineContext(IRequest request, IResponse response, ITrace trace, UrlInfo urlInfo)
+		protected virtual MockRailsEngineContext BuildRailsEngineContext(IRequest request, IResponse response, ITrace trace,
+		                                                                 UrlInfo urlInfo)
 		{
 			return new MockRailsEngineContext(request, response, trace, urlInfo);
 		}
@@ -140,8 +142,30 @@ namespace Castle.MonoRail.TestSupport
 		protected virtual UrlInfo BuildUrlInfo(string areaName, string controllerName, string actionName)
 		{
 			return new UrlInfo(domain, domainPrefix, virtualDir, "http", port,
-				Path.Combine(Path.Combine(areaName, controllerName), actionName), 
-					areaName, controllerName, actionName, "rails");
+			                   Path.Combine(Path.Combine(areaName, controllerName), actionName),
+			                   areaName, controllerName, actionName, "rails");
+		}
+
+		protected bool HasRenderedEmailTemplateNamed(string templateName)
+		{
+			MockRailsEngineContext.RenderedEmailTemplate template = 
+				context.RenderedEmailTemplates.Find(
+					delegate(MockRailsEngineContext.RenderedEmailTemplate emailTemplate)
+    				{
+    					return templateName.Equals(emailTemplate.Name, StringComparison.OrdinalIgnoreCase);
+    				});
+			
+			return template != null;
+		}
+
+		protected Message[] MessagesSent
+		{
+			get { return context.MessagesSent.ToArray(); }
+		}
+
+		protected MockRailsEngineContext.RenderedEmailTemplate[] RenderedEmailTemplates
+		{
+			get { return context.RenderedEmailTemplates.ToArray(); }
 		}
 	}
 }

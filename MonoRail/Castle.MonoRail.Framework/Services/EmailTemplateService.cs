@@ -150,6 +150,7 @@ namespace Castle.MonoRail.Framework
 			{
 				controller.LayoutName = null;
 			}
+
 			if (templateName.StartsWith("/"))
 			{
 				controller.InPlaceRenderSharedView(writer, templateName);
@@ -158,6 +159,7 @@ namespace Castle.MonoRail.Framework
 			{
 				controller.InPlaceRenderSharedView(writer, Path.Combine(Constants.EmailTemplatePath, templateName));
 			}
+			
 			if (doNotApplyLayout)
 			{
 				controller.LayoutName = oldLayout;
@@ -166,12 +168,12 @@ namespace Castle.MonoRail.Framework
 			String body = writer.ToString();
 			
 			// process delivery addresses from template.
-			MatchCollection matches1 = Constants.readdress.Matches(body);
-			
-			for(int i=0; i< matches1.Count; i++)
+			MatchCollection matches = Constants.readdress.Matches(body);
+
+			for(int i = 0; i < matches.Count; i++)
 			{
-				String header  = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
-				String address = matches1[i].Groups[Constants.ValueKey].ToString();
+				String header = matches[i].Groups[Constants.HeaderKey].ToString().ToLower();
+				String address = matches[i].Groups[Constants.ValueKey].ToString();
 
 				switch(header)
 				{
@@ -204,12 +206,12 @@ namespace Castle.MonoRail.Framework
 			}
 
 			// process subject and X headers from template
-			MatchCollection matches2 = Constants.reheader.Matches(body);
+			matches = Constants.reheader.Matches(body);
 			
-			for(int i=0; i< matches2.Count; i++)
+			for(int i=0; i< matches.Count; i++)
 			{
-				String header	= matches2[i].Groups[Constants.HeaderKey].ToString();
-				String strval	= matches2[i].Groups[Constants.ValueKey].ToString();
+				String header = matches[i].Groups[Constants.HeaderKey].ToString();
+				String strval = matches[i].Groups[Constants.ValueKey].ToString();
 
 				if (header.ToLower(System.Globalization.CultureInfo.InvariantCulture) == Constants.Subject)
 				{
