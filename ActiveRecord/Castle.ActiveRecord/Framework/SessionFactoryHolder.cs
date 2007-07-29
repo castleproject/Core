@@ -18,12 +18,9 @@ namespace Castle.ActiveRecord.Framework
 	using System.Threading;
 	using System.Collections;
 	using System.Runtime.CompilerServices;
-	
 	using Iesi.Collections;
-	
 	using NHibernate;
 	using NHibernate.Cfg;
-
 	using Castle.ActiveRecord.Framework.Scopes;
 
 	/// <summary>
@@ -38,7 +35,7 @@ namespace Castle.ActiveRecord.Framework
 		private Hashtable type2SessFactory = Hashtable.Synchronized(new Hashtable());
 		private ReaderWriterLock readerWriterLock = new ReaderWriterLock();
 		private IThreadScopeInfo threadScopeInfo;
-		
+
 		/// <summary>
 		/// Raised when a root type is registered.
 		/// </summary>
@@ -99,13 +96,7 @@ namespace Castle.ActiveRecord.Framework
 
 			try
 			{
-				
-				ISessionFactory sessFactory = null;
-
-				if (type2SessFactory.Contains(normalizedtype))
-				{
-					sessFactory = type2SessFactory[normalizedtype] as ISessionFactory;
-				}
+				ISessionFactory sessFactory = type2SessFactory[normalizedtype] as ISessionFactory;
 
 				if (sessFactory != null)
 				{
@@ -116,6 +107,12 @@ namespace Castle.ActiveRecord.Framework
 
 				try
 				{
+					sessFactory = type2SessFactory[normalizedtype] as ISessionFactory;
+
+					if (sessFactory != null)
+					{
+						return sessFactory;
+					}
 					Configuration cfg = GetConfiguration(normalizedtype);
 
 					sessFactory = cfg.BuildSessionFactory();
@@ -133,6 +130,19 @@ namespace Castle.ActiveRecord.Framework
 			{
 				readerWriterLock.ReleaseReaderLock();
 			}
+		}
+
+		///<summary>
+		/// This method allows direct registration
+		/// of a session factory to a type, bypassing the normal preperation that AR
+		/// usually does. 
+		/// The main usage is in testing, so you would be able to switch the session factory
+		/// for each test.
+		/// Note that this will override the current session factory for the baseType.
+		///</summary>
+		public void RegisterSessionFactory(ISessionFactory sessionFactory, Type baseType)
+		{
+			type2SessFactory[baseType] = sessionFactory;
 		}
 
 		/// <summary>
@@ -162,7 +172,10 @@ namespace Castle.ActiveRecord.Framework
 		{
 			while(type != typeof(object))
 			{
-				if (type2Conf.ContainsKey(type)) return type;
+				if (type2Conf.ContainsKey(type))
+				{
+					return type;
+				}
 
 				type = type.BaseType;
 
@@ -252,8 +265,8 @@ namespace Castle.ActiveRecord.Framework
 			ISessionScope scope = threadScopeInfo.GetRegisteredScope();
 			ISessionFactory sessionFactory = GetSessionFactory(type);
 #if DEBUG
-			System.Diagnostics.Debug.Assert( scope != null );
-			System.Diagnostics.Debug.Assert( sessionFactory != null );
+			System.Diagnostics.Debug.Assert(scope != null);
+			System.Diagnostics.Debug.Assert(sessionFactory != null);
 #endif
 			if (scope.IsKeyKnown(sessionFactory))
 			{
@@ -272,7 +285,7 @@ namespace Castle.ActiveRecord.Framework
 					session = OpenSession(sessionFactory);
 				}
 #if DEBUG
-				System.Diagnostics.Debug.Assert( session != null );
+				System.Diagnostics.Debug.Assert(session != null);
 #endif
 				scope.RegisterSession(sessionFactory, session);
 
@@ -282,7 +295,6 @@ namespace Castle.ActiveRecord.Framework
 
 		private void ReleaseScopedSession(ISession session)
 		{
-			
 		}
 	}
 }

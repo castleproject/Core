@@ -95,5 +95,15 @@ namespace Castle.ActiveRecord.Framework
 		/// Gets or sets the implementation of <see cref="IThreadScopeInfo"/>
 		/// </summary>
 		IThreadScopeInfo ThreadScopeInfo { get; set; }
+
+		///<summary>
+		/// This method allows direct registration
+		/// of a session factory to a type, bypassing the normal preperation that AR
+		/// usually does. 
+		/// The main usage is in testing, so you would be able to switch the session factory
+		/// for each test.
+		/// Note that this will override the current session factory for the baseType.
+		///</summary>
+		void RegisterSessionFactory(ISessionFactory sessionFactory, Type baseType);
 	}
 }
