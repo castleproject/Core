@@ -124,7 +124,6 @@ namespace Castle.ActiveRecord
 			}
 		}
 
-
 		/// <summary>
 		/// Initialize the mappings using the configuration and 
 		/// checking all the types on the specified <c>Assembly</c>
@@ -549,7 +548,7 @@ namespace Castle.ActiveRecord
 		private static void RegisterTypes(ISessionFactoryHolder holder, IConfigurationSource source, Type[] types,
 										  bool ignoreProblematicTypes)
 		{
-			lock (lockConfig)
+			lock(lockConfig)
 			{
 				ActiveRecordModelCollection models = BuildModels(holder, source, types, ignoreProblematicTypes);
 
@@ -587,7 +586,6 @@ namespace Castle.ActiveRecord
 					{
 						throw new ActiveRecordException("Error verifying the schema for model " + model.Type.Name, ex);
 					}
-					
 				}
 			}
 		}

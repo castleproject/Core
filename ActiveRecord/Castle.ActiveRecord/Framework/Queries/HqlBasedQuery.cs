@@ -212,7 +212,7 @@ namespace Castle.ActiveRecord.Queries
 
 					if (queryModifiers != null)
 					{
-						foreach (IQueryModifier mod in queryModifiers)
+						foreach(IQueryModifier mod in queryModifiers)
 						{
 							SqlQueryReturnDefinition returnDef = mod as SqlQueryReturnDefinition;
 

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
-
 namespace Castle.ActiveRecord.Queries
 {
 	using System;
@@ -142,8 +140,11 @@ namespace Castle.ActiveRecord.Queries
 		private IEnumerable<T> GenericEnumerate(ISession session)
 		{
 			IEnumerable en = InternalEnumerateFromBase(session);
+			
 			foreach(T item in en)
+			{
 				yield return item;
+			}
 		}
 
 		/// <summary>
@@ -166,5 +167,3 @@ namespace Castle.ActiveRecord.Queries
 		}
 	}
 }
-
-#endif
