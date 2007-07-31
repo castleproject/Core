@@ -80,7 +80,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 					foreach(CustomRule rule in rules.Values)
 					{
-						sb.AppendFormat("{0} ['{1}', '{2}', {{ {3} }}]\n", Comma, rule.className, rule.violationMessage, rule.rule);
+						sb.AppendFormat("{0} ['{1}', '{2}', {{ {3} }}]\n", 
+							Comma, rule.className, rule.violationMessage.Replace("'", "\'"), rule.rule);
 
 						if (!addedFirstRule)
 						{
@@ -133,7 +134,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			class CustomRule
 			{
-				public string className, rule, violationMessage;
+				public readonly string className, rule, violationMessage;
 
 				public CustomRule(string className, string rule, string violationMessage)
 				{

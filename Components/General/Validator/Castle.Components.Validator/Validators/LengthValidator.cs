@@ -165,26 +165,26 @@ namespace Castle.Components.Validator
 			if (exactLength != int.MinValue)
 			{
 				string message = string.Format(GetString(MessageConstants.ExactLengthMessage), exactLength);
-				generator.SetExactLength(target, exactLength, message);
+				generator.SetExactLength(target, exactLength, ErrorMessage ?? message);
 			}
 			else
 			{
 				if (minLength != int.MinValue && maxLength != int.MaxValue)
 				{
 					string message = string.Format(GetString(MessageConstants.LengthInRangeMessage), minLength, maxLength);
-					generator.SetLengthRange(target, minLength, maxLength, message);
+					generator.SetLengthRange(target, minLength, maxLength, ErrorMessage ?? message);
 				}
 				else
 				{
 					if (minLength != int.MinValue)
 					{
 						string message = string.Format(GetString(MessageConstants.LengthTooShortMessage), minLength);
-						generator.SetMinLength(target, minLength, message);
+						generator.SetMinLength(target, minLength, ErrorMessage ?? message);
 					}
 					if (maxLength != int.MaxValue)
 					{
 						string message = string.Format(GetString(MessageConstants.LengthTooLongMessage), maxLength);
-						generator.SetMaxLength(target, maxLength, message);
+						generator.SetMaxLength(target, maxLength, ErrorMessage ?? message);
 					}
 				}
 			}
