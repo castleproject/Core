@@ -103,15 +103,15 @@ namespace Castle.Components.Validator
 		private string BuildErrorMessage()
 		{
 			StringBuilder sb = new StringBuilder();
-			
+
 			string seperator =
 				validationRegistry.GetStringFromResource(MessageConstants.GroupNotEmptySeperator);
-			
-			foreach (string name in properties.Values)
+
+			foreach(string name in properties.Values)
 			{
 				sb.Append(name).Append(seperator);
 			}
-			
+
 			if (sb.Length > 0)
 			{
 				sb.Remove(sb.Length - seperator.Length, seperator.Length);
@@ -141,7 +141,7 @@ namespace Castle.Components.Validator
 		{
 			bool result = false;
 
-			foreach (PropertyInfo info in properties.Keys)
+			foreach(PropertyInfo info in properties.Keys)
 			{
 				object o = info.GetValue(instance, null);
 
@@ -164,28 +164,28 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// <see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// <see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public bool SupportsWebValidation
+		public bool SupportsBrowserValidation
 		{
 			get { return false; }
 		}
 
 		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// Applies the browser validation by setting up one or
+		/// more input rules on <see cref="IBrowserValidationGenerator"/>.
 		/// </summary>
 		/// <param name="config">The config.</param>
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="name">The name.</param>
-		public void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                               IWebValidationGenerator generator, IDictionary attributes,
-		                               string name)
+		public void ApplyBrowserValidation(BrowserValidationConfiguration config, InputElementType inputType,
+		                                   IBrowserValidationGenerator generator, IDictionary attributes,
+		                                   string name)
 		{
 		}
 

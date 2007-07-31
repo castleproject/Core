@@ -210,14 +210,14 @@ namespace Castle.Components.Validator
 						decimal decimalValue;
 						try
 						{
-							decimalValue = (decimal)fieldValue;
-							valid = decimalValue >= (decimal)min && decimalValue <= (decimal)max;
+							decimalValue = (decimal) fieldValue;
+							valid = decimalValue >= (decimal) min && decimalValue <= (decimal) max;
 						}
 						catch
 						{
 							if (decimal.TryParse(fieldValue.ToString(), out decimalValue))
 							{
-								valid = decimalValue >= (decimal)min && decimalValue <= (decimal)max;
+								valid = decimalValue >= (decimal) min && decimalValue <= (decimal) max;
 							}
 						}
 						break;
@@ -261,43 +261,44 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// 	<see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public override bool SupportsWebValidation
+		public override bool SupportsBrowserValidation
 		{
 			get { return true; }
 		}
 
 		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// Applies the browser validation by setting up one or
+		/// more input rules on <see cref="IBrowserValidationGenerator"/>.
 		/// </summary>
 		/// <param name="config">The config.</param>
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
-		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
+		public override void ApplyBrowserValidation(BrowserValidationConfiguration config, InputElementType inputType,
+		                                            IBrowserValidationGenerator generator, IDictionary attributes,
+		                                            string target)
 		{
-			base.ApplyWebValidation(config, inputType, generator, attributes, target);
+			base.ApplyBrowserValidation(config, inputType, generator, attributes, target);
 
 			switch(type)
 			{
 				case RangeValidationType.Integer:
-					generator.SetValueRange(target, (int)min,(int)max, BuildErrorMessage());
+					generator.SetValueRange(target, (int) min, (int) max, BuildErrorMessage());
 					break;
 				case RangeValidationType.Decimal:
-					generator.SetValueRange(target, (decimal)min, (decimal)max, BuildErrorMessage());
+					generator.SetValueRange(target, (decimal) min, (decimal) max, BuildErrorMessage());
 					break;
 				case RangeValidationType.DateTime:
-					generator.SetValueRange(target, (DateTime)min, (DateTime)max, BuildErrorMessage());
+					generator.SetValueRange(target, (DateTime) min, (DateTime) max, BuildErrorMessage());
 					break;
 				case RangeValidationType.String:
-					generator.SetValueRange(target, (string)min, (string)max, BuildErrorMessage());
+					generator.SetValueRange(target, (string) min, (string) max, BuildErrorMessage());
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -327,7 +328,7 @@ namespace Castle.Components.Validator
 
 			if (type == RangeValidationType.Decimal)
 			{
-				return BuildDecimalErrorMessage((decimal)min, (decimal)max);
+				return BuildDecimalErrorMessage((decimal) min, (decimal) max);
 			}
 
 			throw new InvalidOperationException();
@@ -561,7 +562,7 @@ namespace Castle.Components.Validator
 				value = defaultValue;
 			return decimalValue;
 		}
-		
+
 		private DateTime GetDateTimeValue(object value, DateTime defaultValue)
 		{
 			DateTime dtValue = defaultValue;

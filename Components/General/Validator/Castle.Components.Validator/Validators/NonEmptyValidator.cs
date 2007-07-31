@@ -36,29 +36,30 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// 	<see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public override bool SupportsWebValidation
+		public override bool SupportsBrowserValidation
 		{
 			get { return true; }
 		}
 
 		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// Applies the browser validation by setting up one or
+		/// more input rules on <see cref="IBrowserValidationGenerator"/>.
 		/// </summary>
 		/// <param name="config">The config.</param>
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
-		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
+		public override void ApplyBrowserValidation(BrowserValidationConfiguration config, InputElementType inputType,
+		                                            IBrowserValidationGenerator generator, IDictionary attributes,
+		                                            string target)
 		{
-			base.ApplyWebValidation(config, inputType, generator, attributes, target);
+			base.ApplyBrowserValidation(config, inputType, generator, attributes, target);
 
 			generator.SetAsRequired(target, BuildErrorMessage());
 		}

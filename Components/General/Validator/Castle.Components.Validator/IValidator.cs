@@ -25,9 +25,9 @@ namespace Castle.Components.Validator
 	/// </para>
 	/// <para>
 	/// The validation should happen at <c>IsValid</c>, and if the validator can configure
-	/// a client-side validation script, it should use the <see cref="SupportsWebValidation"/>
+	/// a client-side validation script, it should use the <see cref="SupportsBrowserValidation"/>
 	/// to indicate that it does support client-side validation and also implement the 
-	/// <see cref="ApplyWebValidation"/> to configure it.
+	/// <see cref="ApplyBrowserValidation"/> to configure it.
 	/// </para>
 	/// </summary>
 	public interface IValidator
@@ -86,24 +86,24 @@ namespace Castle.Components.Validator
 		bool IsValid(object instance, object fieldValue);
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// <see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// <see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		bool SupportsWebValidation { get; }
+		bool SupportsBrowserValidation { get; }
 
 		/// <summary>
-		/// Applies the web validation by setting up one or 
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// Applies the browser validation by setting up one or 
+		/// more input rules on <see cref="IBrowserValidationGenerator"/>.
 		/// </summary>
 		/// <param name="config">The config.</param>
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
-		void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                        IWebValidationGenerator generator, IDictionary attributes, string target);
+		void ApplyBrowserValidation(BrowserValidationConfiguration config, InputElementType inputType,
+		                            IBrowserValidationGenerator generator, IDictionary attributes, string target);
 
 		/// <summary>
 		/// Gets the property name. The <see cref="FriendlyName"/>

@@ -21,7 +21,7 @@ namespace Castle.Components.Validator
 	/// Each implementation should map the calls to their 
 	/// own approach to enforce validation.
 	/// </summary>
-	public interface IWebValidationGenerator
+	public interface IBrowserValidationGenerator
 	{
 		/// <summary>
 		/// Sets the digits only.

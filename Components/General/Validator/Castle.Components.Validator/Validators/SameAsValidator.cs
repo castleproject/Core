@@ -15,7 +15,6 @@
 namespace Castle.Components.Validator
 {
 	using System.Collections;
-	using System.Reflection;
 
 	/// <summary>
 	/// Validates that the content has the same 
@@ -56,12 +55,12 @@ namespace Castle.Components.Validator
 		public override bool IsValid(object instance, object fieldValue)
 		{
 			object referenceValue = GetFieldOrPropertyValue(instance, propertyToCompare);
-			
-			if (fieldValue is string && string.IsNullOrEmpty((string)fieldValue))
+
+			if (fieldValue is string && string.IsNullOrEmpty((string) fieldValue))
 			{
 				fieldValue = null;
 			}
-			if (fieldValue is string && string.IsNullOrEmpty((string)referenceValue))
+			if (fieldValue is string && string.IsNullOrEmpty((string) referenceValue))
 			{
 				referenceValue = null;
 			}
@@ -81,29 +80,30 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// 	<see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public override bool SupportsWebValidation
+		public override bool SupportsBrowserValidation
 		{
 			get { return true; }
 		}
 
 		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// Applies the browser validation by setting up one or
+		/// more input rules on <see cref="IBrowserValidationGenerator"/>.
 		/// </summary>
 		/// <param name="config">The config.</param>
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
-		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-		                                        IWebValidationGenerator generator, IDictionary attributes, string target)
+		public override void ApplyBrowserValidation(BrowserValidationConfiguration config, InputElementType inputType,
+		                                            IBrowserValidationGenerator generator, IDictionary attributes,
+		                                            string target)
 		{
-			base.ApplyWebValidation(config, inputType, generator, attributes, target);
+			base.ApplyBrowserValidation(config, inputType, generator, attributes, target);
 
 			generator.SetAsSameAs(target, propertyToCompare, BuildErrorMessage());
 		}

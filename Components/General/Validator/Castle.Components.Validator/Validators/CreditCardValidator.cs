@@ -38,12 +38,14 @@ namespace Castle.Components.Validator
 	public class CreditCardValidator : AbstractValidator
 	{
 		private CardType allowedTypes = CardType.All;
-		private string[] exceptions = new string[] { };
+		private string[] exceptions = new string[] {};
 
 		/// <summary>
 		/// Initializes a new credit card validator.
 		/// </summary>
-		public CreditCardValidator() { }
+		public CreditCardValidator()
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new credit card validator.
@@ -75,27 +77,28 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// 	<see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public override bool SupportsWebValidation
+		public override bool SupportsBrowserValidation
 		{
 			get { return false; }
 		}
 
 		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// Applies the browser validation by setting up one or
+		/// more input rules on <see cref="IBrowserValidationGenerator"/>.
 		/// </summary>
 		/// <param name="config">The config.</param>
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
-		public override void ApplyWebValidation(WebValidationConfiguration config, InputElementType inputType,
-												IWebValidationGenerator generator, IDictionary attributes, string target)
+		public override void ApplyBrowserValidation(BrowserValidationConfiguration config, InputElementType inputType,
+		                                            IBrowserValidationGenerator generator, IDictionary attributes,
+		                                            string target)
 		{
 		}
 
@@ -137,7 +140,7 @@ namespace Castle.Components.Validator
 
 			//Strip any spaces or dashes
 			string cardNumber = string.Empty;
-			foreach (char digit in cardNumberRaw.ToCharArray())
+			foreach(char digit in cardNumberRaw.ToCharArray())
 			{
 				if (char.IsNumber(digit))
 				{
@@ -156,7 +159,7 @@ namespace Castle.Components.Validator
 			}
 
 			//Check if it's in the exceptions
-			foreach (string exception in exceptions)
+			foreach(string exception in exceptions)
 			{
 				if (cardNumber == exception)
 				{
@@ -187,7 +190,7 @@ namespace Castle.Components.Validator
 			int offset = length % 2;
 			byte[] digits = new ASCIIEncoding().GetBytes(cardNumber);
 
-			for (int i = 0; i < length; i++)
+			for(int i = 0; i < length; i++)
 			{
 				digits[i] -= 48;
 				if (((i + offset) % 2) == 0)

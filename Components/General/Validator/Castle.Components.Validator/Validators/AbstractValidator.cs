@@ -73,7 +73,7 @@ namespace Castle.Components.Validator
 			}
 
 			throw new ValidationException("No public instance field or property named " + fieldOrPropertyName + " for type " +
-										  targetType.FullName);
+			                              targetType.FullName);
 		}
 
 		/// <summary>
@@ -124,25 +124,25 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// <see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// <see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public abstract bool SupportsWebValidation { get; }
+		public abstract bool SupportsBrowserValidation { get; }
 
 		/// <summary>
-		/// Applies the web validation by setting up one or
-		/// more input rules on <see cref="IWebValidationGenerator"/>.
+		/// Applies the browser validation by setting up one or
+		/// more input rules on <see cref="IBrowserValidationGenerator"/>.
 		/// </summary>
 		/// <param name="config">The config.</param>
 		/// <param name="inputType">Type of the input.</param>
 		/// <param name="generator">The generator.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="target">The target.</param>
-		public virtual void ApplyWebValidation(WebValidationConfiguration config,
-		                                       InputElementType inputType, IWebValidationGenerator generator,
-		                                       IDictionary attributes, string target)
+		public virtual void ApplyBrowserValidation(BrowserValidationConfiguration config,
+		                                           InputElementType inputType, IBrowserValidationGenerator generator,
+		                                           IDictionary attributes, string target)
 		{
 		}
 

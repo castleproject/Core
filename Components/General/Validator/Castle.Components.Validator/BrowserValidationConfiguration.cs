@@ -17,9 +17,9 @@ namespace Castle.Components.Validator
 	using System.Collections;
 
 	/// <summary>
-	/// Represents the base of a web configuration.
+	/// Represents the base of a browser configuration.
 	/// </summary>
-	public abstract class WebValidationConfiguration
+	public abstract class BrowserValidationConfiguration
 	{
 		/// <summary>
 		/// Configures the JS library based on the supplied parameters.

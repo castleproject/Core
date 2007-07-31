@@ -84,7 +84,7 @@
     </Compile>
     <Compile Include="InputElementType.cs" />
     <Compile Include="IValidatorRegistry.cs" />
-    <Compile Include="IWebValidationGenerator.cs" />
+    <Compile Include="IBrowserValidationGenerator.cs" />
     <Compile Include="MessageConstants.cs" />
     <Compile Include="Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -123,7 +123,7 @@
     <Compile Include="Validators\SameAsValidator.cs" />
     <Compile Include="Validators\SetValidator.cs" />
     <Compile Include="Validators\SingleValidator.cs" />
-    <Compile Include="WebValidationConfiguration.cs" />
+    <Compile Include="BrowserValidationConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messages.es.resx">

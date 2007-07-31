@@ -44,12 +44,12 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this validator supports web validation.
+		/// Gets a value indicating whether this validator supports browser validation.
 		/// </summary>
 		/// <value>
-		/// 	<see langword="true"/> if web validation is supported; otherwise, <see langword="false"/>.
+		/// 	<see langword="true"/> if browser validation is supported; otherwise, <see langword="false"/>.
 		/// </value>
-		public override bool SupportsWebValidation
+		public override bool SupportsBrowserValidation
 		{
 			get { return false; }
 		}
