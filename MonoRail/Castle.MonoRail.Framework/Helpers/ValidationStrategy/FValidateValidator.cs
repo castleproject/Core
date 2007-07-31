@@ -18,13 +18,13 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	using System.Collections;
 	using Castle.Components.Validator;
 
-	public class FValidateWebValidator : IWebValidatorProvider
+	public class FValidateWebValidator : IBrowserValidatorProvider
 	{
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <returns></returns>
-		public WebValidationConfiguration CreateConfiguration(IDictionary parameters)
+		public BrowserValidationConfiguration CreateConfiguration(IDictionary parameters)
 		{
 			FValidateConfiguration config = new FValidateConfiguration();
 			config.Configure(parameters);
@@ -35,14 +35,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// Pendent
 		/// </summary>
 		/// <returns></returns>
-		public IWebValidationGenerator CreateGenerator(WebValidationConfiguration config, InputElementType inputType, IDictionary attributes)
+		public IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config, InputElementType inputType, IDictionary attributes)
 		{
 			return new FValidateGenerator(inputType, attributes);
 		}
 
 		#region Configuration
 
-		public class FValidateConfiguration : WebValidationConfiguration
+		public class FValidateConfiguration : BrowserValidationConfiguration
 		{
 			public override void Configure(IDictionary parameters)
 			{
@@ -86,7 +86,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		#region Generator
 
-		public class FValidateGenerator : IWebValidationGenerator
+		public class FValidateGenerator : IBrowserValidationGenerator
 		{
 			private readonly InputElementType inputType;
 			private readonly IDictionary attributes;

@@ -68,8 +68,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		private string currentFormId;
 		private bool isValidationDisabled;
 		private Stack objectStack = new Stack();
-		private IWebValidatorProvider validatorProvider = new PrototypeWebValidator();
-		private WebValidationConfiguration validationConfig;
+		private IBrowserValidatorProvider validatorProvider = new PrototypeWebValidator();
+		private BrowserValidationConfiguration validationConfig;
 
 		protected ILogger logger = NullLogger.Instance;
 
@@ -89,8 +89,8 @@ namespace Castle.MonoRail.Framework.Helpers
 				logger = loggerFactory.Create(typeof(FormHelper));
 			}
 
-			IWebValidatorProvider validatorProv = (IWebValidatorProvider)
-				provider.GetService(typeof(IWebValidatorProvider));
+			IBrowserValidatorProvider validatorProv = (IBrowserValidatorProvider)
+				provider.GetService(typeof(IBrowserValidatorProvider));
 
 			if (validatorProv != null)
 			{
@@ -1434,7 +1434,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// web validator to generate field validation.
 		/// </summary>
 		/// <param name="provider">The validation provider.</param>
-		public void UseWebValidatorProvider(IWebValidatorProvider provider)
+		public void UseWebValidatorProvider(IBrowserValidatorProvider provider)
 		{
 			if (provider == null) throw new ArgumentNullException("provider");
 
@@ -1494,13 +1494,13 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			IValidator[] validators = CollectValidators(RequestContext.All, target);
 
-			IWebValidationGenerator generator = validatorProvider.CreateGenerator(validationConfig, inputType, attributes);
+			IBrowserValidationGenerator generator = validatorProvider.CreateGenerator(validationConfig, inputType, attributes);
 
 			foreach(IValidator validator in validators)
 			{
-				if (validator.SupportsWebValidation)
+				if (validator.SupportsBrowserValidation)
 				{
-					validator.ApplyWebValidation(validationConfig, inputType, generator, attributes, target);
+					validator.ApplyBrowserValidation(validationConfig, inputType, generator, attributes, target);
 				}
 			}
 		}

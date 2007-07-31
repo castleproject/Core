@@ -20,18 +20,18 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public interface IWebValidatorProvider
+	public interface IBrowserValidatorProvider
 	{
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <returns></returns>
-		WebValidationConfiguration CreateConfiguration(IDictionary parameters);
+		BrowserValidationConfiguration CreateConfiguration(IDictionary parameters);
 
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <returns></returns>
-		IWebValidationGenerator CreateGenerator(WebValidationConfiguration config, InputElementType inputType, IDictionary attributes);
+		IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config, InputElementType inputType, IDictionary attributes);
 	}
 }

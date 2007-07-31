@@ -20,19 +20,19 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	using System.Text;
 	using System.Threading;
 	using Castle.Components.Validator;
-	using Castle.MonoRail.Framework.Internal;
+	using Internal;
 
 	/// <summary>
 	/// Provides an interface for the Zebda client side JS validator
 	/// http://labs.cavorite.com/zebda
 	/// </summary>
-	public class ZebdaWebValidator : IWebValidatorProvider
+	public class ZebdaWebValidator : IBrowserValidatorProvider
 	{
 		/// <summary>
 		/// Read the configuration
 		/// </summary>
 		/// <returns></returns>
-		public WebValidationConfiguration CreateConfiguration(IDictionary parameters)
+		public BrowserValidationConfiguration CreateConfiguration(IDictionary parameters)
 		{
 			ZebdaValidationConfiguration config = new ZebdaValidationConfiguration();
 			config.Configure(parameters);
@@ -44,12 +44,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// Pendent
 		/// </summary>
 		/// <returns></returns>
-		public IWebValidationGenerator CreateGenerator(WebValidationConfiguration config, InputElementType inputType,
-		                                               IDictionary attributes)
+		public IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config, InputElementType inputType,
+		                                                   IDictionary attributes)
 		{
 			return new ZebdaWebValidationGenerator(inputType, attributes);
 		}
-
 	}
 
 	#region Configuration
@@ -57,7 +56,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	///<summary>
 	/// Configuration for the Zebda validation
 	///</summary>
-	public class ZebdaValidationConfiguration : WebValidationConfiguration
+	public class ZebdaValidationConfiguration : BrowserValidationConfiguration
 	{
 		private IDictionary jsOptions = new Hashtable();
 
@@ -73,7 +72,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			StringBuilder script = new StringBuilder();
 			script.Append("$('" + formId + "').setAttribute('z:options','" + AjaxHelper.JavascriptOptions(jsOptions) + "')");
 			script.AppendLine(";");
-			
+
 			script.Append("$('" + formId + "').setAttribute('z:display','" + display + "')");
 			script.AppendLine(";");
 
@@ -97,7 +96,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			if (dateFormat == string.Empty)
 			{
-				dateFormat =  cultureInfo.DateTimeFormat.ShortDatePattern;
+				dateFormat = cultureInfo.DateTimeFormat.ShortDatePattern;
 			}
 
 			if (thousandSeparator == string.Empty)
@@ -113,7 +112,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			jsOptions["inline"] = immediate;
 			jsOptions["inlineFilters"] = inlineFilters;
 			jsOptions["dateFormat"] = "\\'" + dateFormat + "\\'";
-			jsOptions["thousandSeparator"] = "\\'" + thousandSeparator + "\\'"; 
+			jsOptions["thousandSeparator"] = "\\'" + thousandSeparator + "\\'";
 			jsOptions["decimalSeparator"] = "\\'" + decimalSeparator + "\\'";
 			jsOptions["display"] = display;
 		}
@@ -126,9 +125,8 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	/// <summary>
 	/// The generator for the Zebda JS validator
 	/// </summary>
-	public class ZebdaWebValidationGenerator : IWebValidationGenerator
+	public class ZebdaWebValidationGenerator : IBrowserValidationGenerator
 	{
-		private readonly InputElementType inputType;
 		private readonly IDictionary attributes;
 
 		/// <summary>
@@ -138,7 +136,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <param name="attributes">The attributes.</param>
 		public ZebdaWebValidationGenerator(InputElementType inputType, IDictionary attributes)
 		{
-			this.inputType = inputType;
 			this.attributes = attributes;
 		}
 
@@ -324,7 +321,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <param name="violationMessage">The violation message.</param>
 		public void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage)
 		{
-			
 		}
 
 		/// <summary>
@@ -336,7 +332,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <param name="violationMessage">The violation message.</param>
 		public void SetValueRange(string target, string minValue, string maxValue, string violationMessage)
 		{
-			
 		}
 
 		/// <summary>
@@ -372,7 +367,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			if (attributeName.IndexOf("z:") == -1)
 				attributeName = "z:" + attributeName;
 
-			string existingAttributeValue = (string)attributes[attributeName];
+			string existingAttributeValue = (string) attributes[attributeName];
 
 			if (existingAttributeValue != null)
 			{
@@ -386,7 +381,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		private void AddClass(string className)
 		{
-			string existingClass = (string)attributes["class"];
+			string existingClass = (string) attributes["class"];
 
 			if (existingClass != null)
 			{
@@ -397,7 +392,6 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				attributes["class"] = className;
 			}
 		}
-
 	}
 
 	#endregion

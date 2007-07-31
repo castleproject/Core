@@ -25,14 +25,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 	/// Implements support for really easy field validation 
 	/// http://tetlaw.id.au/view/javascript/really-easy-field-validation
 	/// </summary>
-	public class PrototypeWebValidator : IWebValidatorProvider
+	public class PrototypeWebValidator : IBrowserValidatorProvider
 	{
 		/// <summary>
 		/// Pendent
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public WebValidationConfiguration CreateConfiguration(IDictionary parameters)
+		public BrowserValidationConfiguration CreateConfiguration(IDictionary parameters)
 		{
 			PrototypeValidationConfiguration config = new PrototypeValidationConfiguration();
 
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <param name="inputType"></param>
 		/// <param name="attributes"></param>
 		/// <returns></returns>
-		public IWebValidationGenerator CreateGenerator(WebValidationConfiguration config, InputElementType inputType, IDictionary attributes)
+		public IBrowserValidationGenerator CreateGenerator(BrowserValidationConfiguration config, InputElementType inputType, IDictionary attributes)
 		{
 			return new PrototypeValidationGenerator((PrototypeValidationConfiguration) config, inputType, attributes);
 		}
@@ -58,7 +58,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 		/// <summary>
 		/// 
 		/// </summary>
-		public class PrototypeValidationConfiguration : WebValidationConfiguration
+		public class PrototypeValidationConfiguration : BrowserValidationConfiguration
 		{
 			private IDictionary jsOptions = new Hashtable();
 			private Dictionary<String, CustomRule> rules = new Dictionary<String, CustomRule>();
@@ -149,7 +149,7 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 		#region Validation Generator
 
-		public class PrototypeValidationGenerator : IWebValidationGenerator
+		public class PrototypeValidationGenerator : IBrowserValidationGenerator
 		{
 			private readonly PrototypeValidationConfiguration config;
 			private readonly InputElementType inputType;

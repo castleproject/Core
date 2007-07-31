@@ -178,7 +178,7 @@
     <Compile Include="Helpers\PrototypeHelper.cs" />
     <Compile Include="Helpers\UrlHelper.cs" />
     <Compile Include="Helpers\ValidationStrategy\FValidateValidator.cs" />
-    <Compile Include="Helpers\ValidationStrategy\IWebValidatorProvider.cs" />
+    <Compile Include="Helpers\ValidationStrategy\IBrowserValidatorProvider.cs" />
     <Compile Include="Helpers\ValidationStrategy\PrototypeWebValidator.cs" />
     <Compile Include="ICachePolicyConfigurer.cs" />
     <Compile Include="Configuration\ControllersConfig.cs" />
