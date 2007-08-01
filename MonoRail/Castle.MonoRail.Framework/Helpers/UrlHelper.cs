@@ -40,5 +40,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return "<a " + GetAttributes(anchorAttributes) + " href=\"" + For(parameters) + "\">" + innerContent + "</a>";
 		}
+
+		public string ButtonLink(string innerContent, IDictionary parameters)
+		{
+			return "<button type=\"button\" onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
+		}
+
+		public string ButtonLink(string innerContent, IDictionary parameters, IDictionary anchorAttributes)
+		{
+			return "<button type=\"button\"" + GetAttributes(anchorAttributes) + " onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
+		}
 	}
 }
