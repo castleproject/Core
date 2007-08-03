@@ -367,6 +367,20 @@ namespace Castle.MicroKernel.Handlers
 				return;
 			}
 
+            // Property dependencies may not be optional
+
+            foreach (PropertySet property in ComponentModel.Properties)
+            {
+                DependencyModel dependency = property.Dependency;
+
+                if (!dependency.IsOptional &&
+                    (dependency.DependencyType == DependencyType.Service ||
+                     dependency.DependencyType == DependencyType.ServiceOverride))
+                {
+                    AddDependency(dependency);
+                }
+            }
+
 			// The following dependencies were added by - for example - 
 			// facilities, for some reason, and we need to satisfy the non-optional
 

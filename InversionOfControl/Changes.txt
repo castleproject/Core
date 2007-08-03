@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Check for required Properties before determining the Handlers initial state
+
 - Fixed IoC-87
   "DefaultComplextConverter does not properly handle nested components"
 
