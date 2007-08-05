@@ -104,6 +104,7 @@
     <Compile Include="Model\ParameterModelCollection.cs" />
     <Compile Include="Model\PropertySet.cs" />
     <Compile Include="Model\PropertySetCollection.cs" />
+    <Compile Include="Pair.cs" />
     <Compile Include="Resource\AbstractResource.cs" />
     <Compile Include="Resource\AbstractStreamResource.cs" />
     <Compile Include="Resource\AssemblyResource.cs" />

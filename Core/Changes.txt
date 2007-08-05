@@ -1,6 +1,8 @@
 Release Candidate 3
 ===================
 
+- Added Pair<T,S> class. 
+
 - Applied Bill Pierce's patch fixing CORE-9 
   "Allow CastleComponent Attribute to Specify Lifestyle in Constructor"
 
