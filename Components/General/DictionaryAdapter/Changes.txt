@@ -1,0 +1,6 @@
+RC 4
+====
+
+- Return default(T) for value type properties not in the dictionary
+
+- Moved for CastleContrib/Castle.Tools.CodeGenerator
