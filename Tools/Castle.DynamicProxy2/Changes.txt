@@ -1,5 +1,7 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Added constructors to ClassEmitter, removed "serializable" ctor parameter, it wasn't used
+
 - Fixed bug in ModuleScope, see DYNPROXY-64
 
 - Fixed bug in LoadArrayElementExpression, see DYNPROXY-57

@@ -17,22 +17,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using System.Reflection.Emit;
 
 	[CLSCompliant(false)]
 	public class ClassEmitter : AbstractTypeEmitter
 	{
 		private static IDictionary signedAssemblyCache = new Hashtable();
 
-		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, bool serializable)
+		public ClassEmitter (ModuleScope modulescope, String name, Type baseType, Type[] interfaces)
+			: this (modulescope, name, baseType, interfaces, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable)
 		{
-			TypeAttributes flags =
-				TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
+		}
 
-			if (serializable)
-			{
-				flags |= TypeAttributes.Serializable;
-			}
-
+		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags)
+		{
 			bool isAssemblySigned = IsAssemblySigned(baseType);
 			foreach(Type type in interfaces)
 			{
@@ -52,6 +50,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			typebuilder.SetParent(baseType);
+		}
+
+		public ClassEmitter (TypeBuilder typeBuilder)
+		{
+			this.typebuilder = typeBuilder;
 		}
 
 		// The ambivalent generic parameter handling of base type and interfaces has been removed from the ClassEmitter, it isn't used by the proxy

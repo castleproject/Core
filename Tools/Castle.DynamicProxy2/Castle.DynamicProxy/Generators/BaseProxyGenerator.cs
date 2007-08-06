@@ -140,7 +140,7 @@ namespace Castle.DynamicProxy.Generators
 				interfaces = new Type[0];
 			}
 
-			return new ClassEmitter(Scope, typeName, parentType, interfaces, true);
+			return new ClassEmitter(Scope, typeName, parentType, interfaces);
 		}
 
 		/// <summary>
