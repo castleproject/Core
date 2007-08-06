@@ -1427,6 +1427,35 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region Enum 
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="enumType"></param>
+		/// <returns></returns>
+		public static Pair<int, string>[] EnumToPairs(Type enumType)
+		{
+			if (enumType == null) throw new ArgumentNullException("enumType");
+			if (!enumType.IsEnum) throw new ArgumentException("enumType must be an Enum", "enumType");
+
+			Array values = Enum.GetValues(enumType);
+			string[] names = Enum.GetNames(enumType);
+
+			List<Pair<int, string>> listOfPairs = new List<Pair<int, string>>();
+			int index = 0;
+
+			foreach(string name in names)
+			{
+				int value = (int) values.GetValue(index++);
+				listOfPairs.Add(new Pair<int, string>(value, TextHelper.PascalCaseToWord(name)));
+			}
+
+			return listOfPairs.ToArray();
+		}
+
+		#endregion 
+
 		#region Validation
 
 		/// <summary>

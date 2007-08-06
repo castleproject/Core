@@ -27,6 +27,38 @@ namespace Castle.MonoRail.Framework.Helpers
 		public const string DefaultConnector = "and";
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="camelizedText"></param>
+		/// <returns></returns>
+		public static string PascalCaseToWord(string camelizedText)
+		{
+			if (camelizedText == null) throw new ArgumentNullException("camelizedText");
+
+			if (camelizedText == string.Empty) return string.Empty;
+
+			StringBuilder sbText = new StringBuilder(camelizedText.Length + 4);
+
+			char[] chars = camelizedText.ToCharArray();
+
+			sbText.Append(chars[0]);
+
+			for(int i=1; i < chars.Length; i++)
+			{
+				char c = chars[i];
+
+				if (Char.IsUpper(c))
+				{
+					sbText.Append(' ');
+				}
+
+				sbText.Append(c);
+			}
+
+			return sbText.ToString();
+		}
+
+		/// <summary>
 		/// Builds a phrase listing a series of strings with with proper sentence semantics,
 		/// i.e. separating elements with &quot;, &quot; and prefacing the last element with
 		/// the specified <paramref name="connector"/>.

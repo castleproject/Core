@@ -27,6 +27,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	{
         private TextHelper helper = new TextHelper();
 
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void PascalCaseToWord_CannotAcceptNulls()
+		{
+			TextHelper.PascalCaseToWord(null);
+		}
+
+		[Test]
+		public void PascalCaseToWord_SeparatesWordsBasedOnCase()
+		{
+			Assert.AreEqual("Sequence Info", TextHelper.PascalCaseToWord("SequenceInfo"));
+		}
+
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ToSentenceWithNull()
