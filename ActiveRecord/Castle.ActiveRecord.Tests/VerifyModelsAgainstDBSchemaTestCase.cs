@@ -14,10 +14,9 @@
 
 namespace Castle.ActiveRecord.Tests
 {
-	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
-	using Castle.ActiveRecord.Framework.Internal;
-	using Castle.ActiveRecord.Tests.Model;
+	using Framework;
+	using Model;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -26,33 +25,35 @@ namespace Castle.ActiveRecord.Tests
 		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Error verifying the schema for model Post")]
 		public void VerificationOnWithMissingTableError()
 		{
-			XmlConfigurationSource config = (XmlConfigurationSource)GetConfigSource();
+			XmlConfigurationSource config = (XmlConfigurationSource) GetConfigSource();
 			config.VerifyModelsAgainstDBSchema = true;
 
 			ActiveRecordStarter.Initialize(config, typeof(Post));
 		}
 
-        [Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Error verifying the schema for model ShipWithBorkenField")]
+		[Test,
+		 ExpectedExceptionAttribute(typeof(ActiveRecordException),
+		 	"Error verifying the schema for model ModelClassWithBrokenField")]
 		public void VerificationOnWithMissingFieldError()
 		{
 			// Create the tables first
-			XmlConfigurationSource config = (XmlConfigurationSource)GetConfigSource();
+			XmlConfigurationSource config = (XmlConfigurationSource) GetConfigSource();
 			config.VerifyModelsAgainstDBSchema = false;
-			ActiveRecordStarter.Initialize(config, typeof(Ship));
+			ActiveRecordStarter.Initialize(config, typeof(ModelClassUsedToCreateTableForClassWithBrokenField));
 			Recreate();
 
 			// Then test Broken field
 			config.VerifyModelsAgainstDBSchema = true;
 
 			ActiveRecordStarter.ResetInitializationFlag();
-            ActiveRecordStarter.Initialize(config, typeof(ShipWithBorkenField));
+			ActiveRecordStarter.Initialize(config, typeof(ModelClassWithBrokenField));
 		}
 
 		[Test]
 		public void VerificationOnWithNoError()
 		{
 			// Create the tables first
-			XmlConfigurationSource config = (XmlConfigurationSource)GetConfigSource();
+			XmlConfigurationSource config = (XmlConfigurationSource) GetConfigSource();
 			config.VerifyModelsAgainstDBSchema = false;
 			ActiveRecordStarter.Initialize(config, typeof(Blog), typeof(Post));
 			Recreate();
@@ -66,7 +67,7 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void VerificationOffWithMissingTableError()
 		{
-			XmlConfigurationSource config = (XmlConfigurationSource)GetConfigSource();
+			XmlConfigurationSource config = (XmlConfigurationSource) GetConfigSource();
 			config.VerifyModelsAgainstDBSchema = false;
 
 			ActiveRecordStarter.Initialize(config, typeof(Post));
@@ -76,14 +77,14 @@ namespace Castle.ActiveRecord.Tests
 		public void VerificationOffWithMissingFieldError()
 		{
 			// Create the tables first
-			XmlConfigurationSource config = (XmlConfigurationSource)GetConfigSource();
+			XmlConfigurationSource config = (XmlConfigurationSource) GetConfigSource();
 			config.VerifyModelsAgainstDBSchema = false;
-			ActiveRecordStarter.Initialize(config, typeof(Blog), typeof(Post));
+			ActiveRecordStarter.Initialize(config, typeof(ModelClassUsedToCreateTableForClassWithBrokenField));
 			Recreate();
 
 			// Then test Broken field
 			ActiveRecordStarter.ResetInitializationFlag();
-			ActiveRecordStarter.Initialize(config, typeof(BlogWithBrokenField), typeof(Blog), typeof(Post));
+			ActiveRecordStarter.Initialize(config, typeof(ModelClassWithBrokenField));
 		}
 	}
 }

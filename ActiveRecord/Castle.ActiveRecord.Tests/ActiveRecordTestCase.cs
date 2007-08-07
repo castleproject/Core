@@ -712,26 +712,18 @@ namespace Castle.ActiveRecord.Tests
 			               	Expression.Eq("Author", "Andrew Peters")));
 		}
 
-		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Could not perform Save for BlogWithBrokenField")]
+		[Test, ExpectedExceptionAttribute(typeof(ActiveRecordException), "Could not perform Save for ModelClassWithBrokenField")]
 		public void SaveWithBadTableSchemaThrowsException()
 		{
-			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog), typeof(Post));
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(ModelClassUsedToCreateTableForClassWithBrokenField));
 			Recreate();
 
 			ActiveRecordStarter.ResetInitializationFlag();
-			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(BlogWithBrokenField), typeof(Blog), typeof(Post));
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(ModelClassWithBrokenField));
 
-			//Make sure a normal save works
-			Blog blog = new Blog();
-			blog.Name = "hammett's blog";
-			blog.Author = "hamilton verissimo";
-			blog.Save();
-
-			BlogWithBrokenField brokenBlog = new BlogWithBrokenField();
-			brokenBlog.Name = "hammett's blog";
-			brokenBlog.Author = "hamilton verissimo";
-			brokenBlog.Broken = true;
-			brokenBlog.Save();
+			ModelClassWithBrokenField brokenClass = new ModelClassWithBrokenField();
+			brokenClass.Broken = true;
+			brokenClass.Save();
 		}
 
 	}
