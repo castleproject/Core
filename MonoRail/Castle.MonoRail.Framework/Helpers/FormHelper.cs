@@ -1447,7 +1447,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			foreach(string name in names)
 			{
-				int value = (int) values.GetValue(index++);
+				int value = Convert.ToInt32(values.GetValue(index++));
 				listOfPairs.Add(new Pair<int, string>(value, TextHelper.PascalCaseToWord(name)));
 			}
 
