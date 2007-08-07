@@ -360,9 +360,7 @@ namespace Castle.ActiveRecord
 
 		private static bool TypeDefinesADatabaseBoundary(Type type)
 		{
-			return (type.IsAbstract &&
-					typeof(ActiveRecordBase).IsAssignableFrom(type) &&
-					!IsTypeHierarchyBase(type));
+			return (type.IsAbstract && !IsTypeHierarchyBase(type));
 		}
 
 		private static bool ShouldIgnoreType(Type type)

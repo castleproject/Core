@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Mike Thomas' suggestion to make AR work with multiple databases without the
+  ARBase usage. This fixes AR-160
+
 - Added support for SaveOrUpdateCopy() which facilities working with detached objects.
 
 - Applied Tim Haines' patch adding the ability to verify if the models match the db 

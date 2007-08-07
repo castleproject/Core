@@ -97,6 +97,9 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(1, hands.Length);
 		}
 
+		/// <summary>
+		/// hammett's comment: I don't think this can be fixed (at least not easily)
+		/// </summary>
 		[Test]
 		[Ignore("This still needs to be fixed")]
 		[ExpectedException(typeof(ActiveRecordInitializationException))]
