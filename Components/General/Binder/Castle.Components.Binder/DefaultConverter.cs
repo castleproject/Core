@@ -16,6 +16,7 @@ namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Web;
 
@@ -70,10 +71,10 @@ namespace Castle.Components.Binder
 					return input;
 				}
 			}
-			
+
 			return Convert(desiredType, input, out conversionSucceeded);
 		}
-		
+
 		/// <summary>
 		/// Convert the input param into the desired type
 		/// </summary>
@@ -105,13 +106,15 @@ namespace Castle.Components.Binder
 					{
 						return null;
 					}
-					
+
 					return conversionSucceeded ? input.ToString().Trim(' ') : null;
 				}
 				else if (desiredType.IsArray)
 				{
-					return conversionSucceeded ? 
-						ConvertToArray(desiredType, input, ref conversionSucceeded) : null;
+					return conversionSucceeded
+					       	?
+					       		ConvertToArray(desiredType, input, ref conversionSucceeded)
+					       	: null;
 				}
 				else if (desiredType.IsEnum)
 				{
@@ -147,8 +150,10 @@ namespace Castle.Components.Binder
 #if DOTNET2
 				else if (DataBinder.IsGenericList(desiredType))
 				{
-					return conversionSucceeded ? 
-					       ConvertGenericList(desiredType, input, ref conversionSucceeded) : null;
+					return conversionSucceeded
+					       	?
+					       		ConvertGenericList(desiredType, input, ref conversionSucceeded)
+					       	: null;
 				}
 #endif
 				else
@@ -163,12 +168,12 @@ namespace Castle.Components.Binder
 			catch(Exception inner)
 			{
 				conversionSucceeded = false;
-				
-				ThrowInformativeException(desiredType, input, inner); return null;
+
+				ThrowInformativeException(desiredType, input, inner);
+				return null;
 			}
 		}
 
-#if DOTNET2		
 		private object ConvertNullable(Type desiredType, object input, ref bool conversionSucceeded)
 		{
 			Type underlyingType = Nullable.GetUnderlyingType(desiredType);
@@ -199,25 +204,27 @@ namespace Castle.Components.Binder
 
 			input = FixInputForMonoIfNeeded(elemType, input);
 
-			Type listType = typeof(System.Collections.Generic.List<>).MakeGenericType(elemType);
+			Type listType = typeof(List<>).MakeGenericType(elemType);
 			IList result = (IList) Activator.CreateInstance(listType);
 			Array values = input as Array;
-			
+
 			bool elementConversionSucceeded;
 
-			for (int i = 0; i < values.Length; i++)
+			for(int i = 0; i < values.Length; i++)
 			{
 				result.Add(Convert(elemType, values.GetValue(i), out elementConversionSucceeded));
 
 				// if at least one list element get converted 
 				// we consider the conversion a success
-				if (elementConversionSucceeded && !conversionSucceeded) conversionSucceeded = true;
+				if (elementConversionSucceeded && !conversionSucceeded)
+				{
+					conversionSucceeded = true;
+				}
 			}
 
 			return result;
 		}
-#endif
-		
+
 		/// <summary>
 		/// Fix for mod_mono issue where array values are passed as a comma seperated String.
 		/// </summary>
@@ -243,10 +250,11 @@ namespace Castle.Components.Binder
 				}
 				else
 				{
-					throw new BindingException("Cannot convert to collection of {0} from type {1}", elemType.FullName, input.GetType().FullName);
+					throw new BindingException("Cannot convert to collection of {0} from type {1}", elemType.FullName,
+					                           input.GetType().FullName);
 				}
 			}
-			
+
 			return input;
 		}
 
@@ -261,7 +269,7 @@ namespace Castle.Components.Binder
 			}
 
 			String value = NormalizeInput(input);
-	
+
 			if (value == String.Empty)
 			{
 				conversionSucceeded = true;
@@ -284,7 +292,7 @@ namespace Castle.Components.Binder
 			}
 
 			String value = NormalizeInput(input);
-	
+
 			if (value == String.Empty)
 			{
 				conversionSucceeded = true;
@@ -301,7 +309,7 @@ namespace Castle.Components.Binder
 			conversionSucceeded = true;
 
 			String value = NormalizeInput(input);
-			
+
 			if (IsBool(desiredType))
 			{
 				return SpecialBoolConversion(value, input, ref conversionSucceeded);
@@ -322,7 +330,7 @@ namespace Castle.Components.Binder
 			}
 		}
 
-		private object SpecialBoolConversion(string value, object input, ref bool conversionSucceeded)
+		private static object SpecialBoolConversion(string value, object input, ref bool conversionSucceeded)
 		{
 			if (input == null)
 			{
@@ -331,7 +339,7 @@ namespace Castle.Components.Binder
 			}
 			else if (value == String.Empty)
 			{
-				conversionSucceeded = true;
+				conversionSucceeded = false;
 				return false;
 			}
 			else
@@ -343,7 +351,7 @@ namespace Castle.Components.Binder
 
 				bool performNumericConversion = false;
 
-				foreach (char c in value.ToCharArray())
+				foreach(char c in value.ToCharArray())
 				{
 					if (Char.IsNumber(c))
 					{
@@ -363,65 +371,6 @@ namespace Castle.Components.Binder
 			}
 		}
 
-		private bool IsBool(Type desiredType)
-		{
-			bool isBool = desiredType == typeof(Boolean);
-#if DOTNET2
-			if (!isBool)
-			{
-				isBool = desiredType == typeof(bool?);
-			}
-#endif
-			return isBool;
-		}
-
-		private object ConvertEnum(Type desiredType, object input, ref bool conversionSucceeded)
-		{
-			conversionSucceeded = true;
-
-			if (input == null)
-			{
-				conversionSucceeded = false;
-				return null;
-			}
-
-			String value = NormalizeInput(input);
-	
-			if (value == String.Empty)
-			{
-				conversionSucceeded = false;
-				return null;
-			}
-			else
-			{
-				return Enum.Parse(desiredType, value, true);
-			}
-		}
-
-		private object ConvertDate(object input, ref bool conversionSucceeded)
-		{
-			conversionSucceeded = true;
-
-			if (input == null)
-			{
-				conversionSucceeded = false;
-				return null;
-			}
-
-			String value = NormalizeInput(input);
-
-			if (value == String.Empty)
-			{
-				conversionSucceeded = false;
-				
-				return null;
-			}
-			else
-			{
-				return DateTime.Parse(value);
-			}
-		}
-		
 		private object ConvertToArray(Type desiredType, object input, ref bool conversionSucceeded)
 		{
 			Type elemType = desiredType.GetElementType();
@@ -436,20 +385,82 @@ namespace Castle.Components.Binder
 				bool elementConversionSucceeded;
 
 				result.SetValue(Convert(elemType, values.GetValue(i), out elementConversionSucceeded), i);
-				
+
 				// if at least one array element get converted 
 				// we consider the conversion a success
-				if (elementConversionSucceeded && !conversionSucceeded) conversionSucceeded = true;
+				if (elementConversionSucceeded && !conversionSucceeded)
+				{
+					conversionSucceeded = true;
+				}
 			}
 
 			return result;
 		}
-		
+
+		private static bool IsBool(Type desiredType)
+		{
+			bool isBool = desiredType == typeof(Boolean);
+
+			if (!isBool)
+			{
+				isBool = desiredType == typeof(bool?);
+			}
+
+			return isBool;
+		}
+
+		private static object ConvertEnum(Type desiredType, object input, ref bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+
+			if (input == null)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+
+			String value = NormalizeInput(input);
+
+			if (value == String.Empty)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+			else
+			{
+				return Enum.Parse(desiredType, value, true);
+			}
+		}
+
+		private static object ConvertDate(object input, ref bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+
+			if (input == null)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+
+			String value = NormalizeInput(input);
+
+			if (value == String.Empty)
+			{
+				conversionSucceeded = false;
+
+				return null;
+			}
+			else
+			{
+				return DateTime.Parse(value);
+			}
+		}
+
 		/// <summary>
 		/// Support for types that specify a TypeConverter, 
 		/// i.e.: NullableTypes
 		/// </summary>
-		private object ConvertUsingTypeConverter(Type desiredType, object input, ref bool conversionSucceeded)
+		private static object ConvertUsingTypeConverter(Type desiredType, object input, ref bool conversionSucceeded)
 		{
 			conversionSucceeded = true;
 
@@ -464,16 +475,16 @@ namespace Castle.Components.Binder
 				}
 				catch(Exception ex)
 				{
-					String message = String.Format("Conversion error: " + 
-						"Could not convert parameter with value '{0}' to {1}", input, desiredType);
+					String message = String.Format("Conversion error: " +
+					                               "Could not convert parameter with value '{0}' to {1}", input, desiredType);
 
 					throw new BindingException(message, ex);
 				}
 			}
 			else
 			{
-				String message = String.Format("Conversion error: " + 
-					"Could not convert parameter with value '{0}' to {1}", input, desiredType);
+				String message = String.Format("Conversion error: " +
+				                               "Could not convert parameter with value '{0}' to {1}", input, desiredType);
 
 				throw new BindingException(message);
 			}
@@ -485,7 +496,7 @@ namespace Castle.Components.Binder
 			{
 				return String.Empty;
 			}
-			else 
+			else
 			{
 				if (!input.GetType().IsArray)
 				{
@@ -494,19 +505,23 @@ namespace Castle.Components.Binder
 				else
 				{
 					Array array = (Array) input;
-					
+
 					String[] stArray = new string[array.GetLength(0)];
-					
+
 					for(int i = 0; i < stArray.Length; i++)
 					{
 						object itemVal = array.GetValue(i);
-						
-						if (itemVal != null) 
+
+						if (itemVal != null)
+						{
 							stArray[i] = itemVal.ToString();
+						}
 						else
+						{
 							stArray[i] = String.Empty;
+						}
 					}
-					
+
 					return String.Join(",", stArray);
 				}
 			}
@@ -514,9 +529,10 @@ namespace Castle.Components.Binder
 
 		private static void ThrowInformativeException(Type desiredType, object input, Exception inner)
 		{
-			String message = String.Format("Conversion error: " + 
-				"Could not convert parameter with value '{0}' to expected type {1}", input, desiredType);
-	
+			String message = String.Format("Conversion error: " +
+			                               "Could not convert parameter with value '{0}' to expected type {1}", input,
+			                               desiredType);
+
 			throw new BindingException(message, inner);
 		}
 	}

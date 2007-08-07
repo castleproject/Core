@@ -1,6 +1,12 @@
 Beta 2
 ======
 
+- Changed DefaultConversion behavior: empty string is now considered 
+  a non succeeded conversion. It used to be considered successful returning false. 
+
+  This might be a breaking change!
+
+
 - Applied Brian Chan's patch fixing MR-282
   "Binding to a nested IList<> or not null nested List<> fails"
 

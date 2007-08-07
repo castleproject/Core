@@ -16,9 +16,7 @@ namespace Castle.Components.Binder.Tests
 {
 	using System;
 	using System.Collections;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 	using System.Globalization;
 	using System.Threading;
 	using NUnit.Framework;
@@ -206,7 +204,7 @@ namespace Castle.Components.Binder.Tests
 		public void BooleanConvert()
 		{
 			Assert.AreEqual(false, Convert(typeof(bool), ""));
-			Assert.IsTrue(convSucceed);
+			Assert.IsFalse(convSucceed);
 
 			Assert.AreEqual(false, Convert(typeof(bool), "FalSE"));
 			Assert.IsTrue(convSucceed);
@@ -286,8 +284,6 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsTrue(convSucceed);
 		}
 
-#if DOTNET2
-
 		[Test]
 		public void NullableEnumConversion()
 		{
@@ -312,11 +308,6 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void NullableInt32Conversion()
 		{
-//			int? val = (int?) Convert(typeof(int?), "12");
-//			Assert.AreEqual(12, val);
-//			Assert.IsTrue(val.HasValue);
-//			Assert.IsTrue(convSucceed);
-
 			int? val = (int?) Convert(typeof(int?), "");
 			Assert.IsFalse(val.HasValue);
 			Assert.IsTrue(convSucceed);
@@ -381,6 +372,12 @@ namespace Castle.Components.Binder.Tests
 		[Test]
 		public void NullableBooleanConversion()
 		{
+			Assert.AreEqual(new bool?(), Convert(typeof(bool?), ""));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(new bool?(), Convert(typeof(bool?), null));
+			Assert.IsFalse(convSucceed);
+
 			Assert.AreEqual(new bool?(true), Convert(typeof(bool?), "1"));
 			Assert.IsTrue(convSucceed);
 
@@ -453,7 +450,6 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(0, result.Count);
 			Assert.IsTrue(convSucceed);
 		}
-#endif
 
 		private object Convert(Type desiredType, string input)
 		{
