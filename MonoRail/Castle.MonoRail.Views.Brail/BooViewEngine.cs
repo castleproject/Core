@@ -40,14 +40,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// compiled types (not instances) of all the views that Brail nows of.
 		/// </summary>
 		private Hashtable compilations = Hashtable.Synchronized(
-			new Hashtable(
-#if DOTNET2
-StringComparer.InvariantCultureIgnoreCase
-#else
-				CaseInsensitiveHashCodeProvider.Default,
-				CaseInsensitiveComparer.Default
-#endif
-));
+			new Hashtable(StringComparer.InvariantCultureIgnoreCase));
 
 		/// <summary>
 		/// used to hold the constructors of types, so we can avoid using
@@ -577,11 +570,7 @@ StringComparer.InvariantCultureIgnoreCase
 
 		private static void InitializeConfig(string sectionName)
 		{
-#if DOTNET2
 			options = ConfigurationManager.GetSection(sectionName) as BooViewEngineOptions;
-#else
-			options = System.Configuration.ConfigurationSettings.GetConfig(sectionName) as BooViewEngineOptions;
-#endif
 		}
 
 		private void Log(string msg, params object[] items)

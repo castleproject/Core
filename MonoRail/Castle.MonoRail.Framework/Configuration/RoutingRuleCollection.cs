@@ -36,21 +36,13 @@ namespace Castle.MonoRail.Framework.Configuration
 				{
 					String message = "A rule node must have a pattern (child) " + 
 						"node denoting the regular expression to be matched";
-#if DOTNET2
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 				if (replaceNode == null || replaceNode.ChildNodes.Count == 0 || replaceNode.ChildNodes[0] == null)
 				{
 					String message = "A rule node must have a replace (child) " + 
 						"node denoting the string to be replaced";
-#if DOTNET2
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 
 				String pattern = patternNode.ChildNodes[0].Value;

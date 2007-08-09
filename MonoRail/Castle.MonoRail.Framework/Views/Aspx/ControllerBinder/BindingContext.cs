@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if (DOTNET2 && NET)
+#if NET
 
 namespace Castle.MonoRail.Framework.Views.Aspx
 {

@@ -105,10 +105,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			string expected = now.ToShortDateString();
 			Assert.AreEqual(expected, helper.ToShortDate(now));
-
-#if DOTNET2
 			Assert.AreEqual(String.Empty, helper.ToShortDate(null));
-#endif
 		}
 
 		[Test]
@@ -118,10 +115,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			string expected = now.ToShortDateString() + " " + now.ToShortTimeString();
 			Assert.AreEqual(expected, helper.ToShortDateTime(now));
-
-#if DOTNET2
 			Assert.AreEqual(String.Empty, helper.ToShortDateTime(null));
-#endif
 		}
 	}
 }

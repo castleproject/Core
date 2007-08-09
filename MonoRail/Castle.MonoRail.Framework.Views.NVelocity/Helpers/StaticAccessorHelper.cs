@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Views.NVelocity
 {
-#if DOTNET2
 	using System.Reflection;
 	
 	/// <summary>
@@ -67,5 +66,4 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		#endregion
 	}
-#endif
 }

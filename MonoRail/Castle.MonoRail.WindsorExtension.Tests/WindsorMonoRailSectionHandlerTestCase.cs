@@ -26,11 +26,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 	[TestFixture]
 	public class WindsorMonoRailSectionHandlerTestCase
 	{
-#if DOTNET2
 		String dir = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "ConfigFiles/");
-#else
-		String dir = Path.Combine(ConfigurationSettings.AppSettings["tests.src"], "ConfigFiles/");
-#endif
 
 		[Test]
 		public void SimpleTest()

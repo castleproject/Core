@@ -363,14 +363,7 @@ namespace Castle.MonoRail.Views.Brail
 		/// <param name="myController"></param>
 		private void InitProperties(IRailsEngineContext myContext, Controller myController)
 		{
-			properties = new Hashtable(
-#if DOTNET2
-StringComparer.InvariantCultureIgnoreCase
-#else
-				CaseInsensitiveHashCodeProvider.Default,
-				CaseInsensitiveComparer.Default
-#endif
-);
+			properties = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
             //properties.Add("dsl", new DslWrapper(this));
 			properties.Add("Controller", myController);
 			properties.Add("request", myContext.Request);

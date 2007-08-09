@@ -277,8 +277,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			}
 		}
 
-#if DOTNET2
-
 		[Test]
 		public void CheckboxFieldListInDotNet2()
 		{
@@ -318,7 +316,5 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				index++;
 			}
 		}
-		
-#endif
 	}
 }

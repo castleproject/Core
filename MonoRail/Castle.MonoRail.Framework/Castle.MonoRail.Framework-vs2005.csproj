@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;DOTNET2,NET,ALLOWTEST</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET;ALLOWTEST</DefineConstants>
     <DocumentationFile>..\bin\temp\Castle.MonoRail.Framework.XML</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -55,7 +55,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DOTNET2 ALLOWTEST</DefineConstants>
+    <DefineConstants>TRACE;ALLOWTEST</DefineConstants>
     <DocumentationFile>bin\Release\Castle.MonoRail.Framework.XML</DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
     <FileAlignment>4096</FileAlignment>

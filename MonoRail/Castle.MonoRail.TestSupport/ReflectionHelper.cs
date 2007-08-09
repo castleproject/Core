@@ -19,15 +19,30 @@ namespace Castle.MonoRail.TestSupport
 
 	public static class ReflectionHelper
 	{
+		public static object RunInstanceMethod<ObjectType>(ObjectType objectInstance, string methodName)
+		{
+			return RunInstanceMethod(typeof(ObjectType), objectInstance, methodName);
+		}
+
 		public static object RunInstanceMethod(Type objectType, object objectInstance, string methodName)
 		{
 			object[] methodParameters = new object[0];
 			return RunInstanceMethod(objectType, objectInstance, methodName, ref methodParameters, BindingFlags.Default);
 		}
 
+		public static object RunInstanceMethod<ObjectType>(ObjectType objectInstance, string methodName, ref object[] methodParameters)
+		{
+			return RunInstanceMethod(typeof(ObjectType), objectInstance, methodName, ref methodParameters);
+		}
+
 		public static object RunInstanceMethod(Type objectType, object objectInstance, string methodName, ref object[] methodParameters)
 		{
 			return RunInstanceMethod(objectType, objectInstance, methodName, ref methodParameters, BindingFlags.Default);
+		}
+
+		public static object RunInstanceMethod<ObjectType>(ObjectType objectInstance, string methodName, ref object[] methodParameters, BindingFlags extraFlags)
+		{
+			return RunInstanceMethod(typeof(ObjectType), objectInstance, methodName, ref methodParameters, extraFlags);
 		}
 
 		public static object RunInstanceMethod(Type objectType, object objectInstance, string methodName, ref object[] methodParameters, BindingFlags extraFlags)
@@ -76,6 +91,11 @@ namespace Castle.MonoRail.TestSupport
 		{
 			FieldInfo fieldInfo = typeof(ObjectType).GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 			return (ReturnType)fieldInfo.GetValue(objectInstance);
+		}
+
+		public static void SetField<ObjectType>(ObjectType objectInstance, string fieldName, object fieldValue)
+		{
+			SetField(typeof(ObjectType), objectInstance, fieldName, fieldValue);
 		}
 
 		public static void SetField(Type objectType, object objectInstance, string fieldName, object fieldValue)

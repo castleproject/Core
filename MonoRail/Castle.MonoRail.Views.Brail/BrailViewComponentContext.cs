@@ -140,14 +140,7 @@ namespace Castle.MonoRail.Views.Brail
 		{
 			if (sections == null)
 			{
-				sections = new Hashtable(
-#if DOTNET2
-				System.StringComparer.InvariantCultureIgnoreCase
-#else
-				CaseInsensitiveHashCodeProvider.Default,
-				CaseInsensitiveComparer.Default
-#endif
-);
+				sections = new Hashtable(System.StringComparer.InvariantCultureIgnoreCase);
 			}
 			sections[name] = section;
 		}

@@ -16,9 +16,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
 	using System.Collections;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 	using System.Data;
 	using System.Globalization;
 	using System.IO;
@@ -264,7 +262,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.Select("user.registration", Enum.GetNames(typeof(SimpleUser.RegistrationEnum))));
 		}	
 
-#if DOTNET2
 
 		[Test]
 		public void UsingInterface()
@@ -290,7 +287,5 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				"<option value=\"1\">Jan</option>" + Environment.NewLine + "<option value=\"2\">Feb</option>" + Environment.NewLine + "</select>",
 				helper.Select("contact.dobmonth.id", list, DictHelper.Create("value=id", "text=name")));
 		}
-
-#endif
 	}
 }

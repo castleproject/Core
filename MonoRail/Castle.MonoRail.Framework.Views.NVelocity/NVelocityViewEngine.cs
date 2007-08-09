@@ -430,7 +430,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				innerContext[key] = value;
 			}
 
-#if DOTNET2
 			// list from : http://msdn2.microsoft.com/en-us/library/hfa3fa08.aspx
 			object[] builtInHelpers =
 				new object[]
@@ -457,7 +456,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				innerContext[helper.GetType().GetGenericArguments()[0].Name] = helper;
 			}
-#endif
 
 			foreach(object key in controller.Helpers.Keys)
 			{

@@ -56,7 +56,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		{
 			bool isValid = true;
 			
-#if DOTNET2
 			Type genType = typeof(ActiveRecordValidationBase<>).MakeGenericType(instance.GetType());
 			
 			if (genType.IsAssignableFrom(instance.GetType()))
@@ -74,9 +73,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 					prop2Validation = (IDictionary) getPropertiesValidationErrorMessage.Invoke(instance, null);
 				}
 			}
-			else
-#endif
-			if (instance is ActiveRecordValidationBase)
+			else if (instance is ActiveRecordValidationBase)
 			{
 				ActiveRecordValidationBase instanceBase = instance as ActiveRecordValidationBase;
 

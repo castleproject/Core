@@ -147,11 +147,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			{
 				String message = "The Type for the custom session could not be loaded. " + 
 					typeName;
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			try
@@ -162,11 +158,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			{
 				String message = "The Type for the custom session must " + 
 					"implement ICustomSessionFactory. " + typeName;
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			IConfigurableHandler configurableHandler = handler as IConfigurableHandler;

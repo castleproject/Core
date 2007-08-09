@@ -101,11 +101,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				if (typeName == null || typeName.Length == 0)
 				{
 					String message = "The attribute 'type' is required for the element 'add' under 'viewEngines'";
-#if DOTNET2
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 
 				Type engine = TypeLoadUtil.GetType(typeName, true);
@@ -113,11 +109,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				if (engine == null)
 				{
 					String message = "The type '" + typeName + "' could not be loaded";
-#if DOTNET2
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 
 				viewEnginesList.Add(new ViewEngineInfo(engine, xhtmlVal == "true"));
@@ -189,11 +181,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				catch(FormatException ex)
 				{
 					String message = "The xhtmlRendering attribute of the views node must be a boolean value.";
-#if DOTNET2
 					throw new ConfigurationErrorsException(message, ex);
-#else
-					throw new ConfigurationException(message,ex);
-#endif
 				}
 			}
 

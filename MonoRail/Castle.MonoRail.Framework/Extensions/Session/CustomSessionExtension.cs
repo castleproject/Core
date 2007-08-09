@@ -92,11 +92,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 				String message = "The CustomSessionExtension requires that " + 
 					"the type that implements ICustomSessionFactory be specified through the " + 
 					"'customSession' attribute on 'monorail' configuration node";
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			Type customSessType = TypeLoadUtil.GetType(customSessionAtt.Value);
@@ -105,11 +101,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 			{
 				String message = "The Type for the custom session could not be loaded. " + 
 					customSessionAtt.Value;
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			try
@@ -120,11 +112,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 			{
 				String message = "The Type for the custom session must " + 
 					"implement ICustomSessionFactory. " + customSessionAtt.Value;
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 

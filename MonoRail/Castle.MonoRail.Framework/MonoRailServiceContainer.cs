@@ -422,11 +422,7 @@ namespace Castle.MonoRail.Framework
 			{
 				String message = String.Format("Initialization Exception: " +
 				                               "Could not instantiate {0}", type.FullName);
-#if DOTNET2
 				throw new ConfigurationErrorsException(message, ex);
-#else
-				throw new ConfigurationException(message, ex);
-#endif
 			}
 		}
 
@@ -474,11 +470,7 @@ namespace Castle.MonoRail.Framework
 			{
 				String message = String.Format("Initialization Exception: " +
 				                               "Service {0} does not implement or extend {1}", impl.FullName, service.FullName);
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 	}

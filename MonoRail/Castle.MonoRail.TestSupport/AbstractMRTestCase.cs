@@ -109,11 +109,7 @@ namespace Castle.MonoRail.TestSupport
 				String message = String.Format("The path specified for the " +
 				                               "web project doesnt look as a web project dir (bin directory or web.config missing): {0}",
 				                               physicalDir);
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			host = (WebAppHost) ApplicationHost.CreateApplicationHost(
@@ -724,11 +720,7 @@ namespace Castle.MonoRail.TestSupport
 
 		protected virtual string GetPhysicalDir()
 		{
-#if DOTNET2
 			String dir = ConfigurationManager.AppSettings[PhysicalWebDirConfigKey];
-#else
-			String dir = ConfigurationSettings.AppSettings[PhysicalWebDirConfigKey];
-#endif
 
 			if (dir == null)
 			{
@@ -737,11 +729,7 @@ namespace Castle.MonoRail.TestSupport
 				                               "a key ('{0}') on your configuration file or override the method " +
 				                               "AbstractMRTestCase.GetPhysicalDir", PhysicalWebDirConfigKey);
 
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			return dir;
@@ -749,11 +737,8 @@ namespace Castle.MonoRail.TestSupport
 
 		protected virtual string GetVirtualDir()
 		{
-#if DOTNET2
 			String dir = ConfigurationManager.AppSettings[VirtualWebDirConfigKey];
-#else
-			String dir = ConfigurationSettings.AppSettings[VirtualWebDirConfigKey];
-#endif
+
 			if (dir == null)
 			{
 				dir = "/";

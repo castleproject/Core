@@ -45,11 +45,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				String message = "To add a default url rule, please specify the 'url', 'controller', 'action' and optionally 'area' attributes. " +
 					"Check the documentation for more information";
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			url = urlAtt.Value;

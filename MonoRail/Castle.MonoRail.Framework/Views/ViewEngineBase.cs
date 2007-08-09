@@ -46,11 +46,7 @@ namespace Castle.MonoRail.Framework
 			if (viewSourceLoader == null)
 			{
 				string message = "Could not obtain IViewSourceLoader";
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			ILoggerFactory loggerFactory = (ILoggerFactory) provider.GetService(typeof(ILoggerFactory));

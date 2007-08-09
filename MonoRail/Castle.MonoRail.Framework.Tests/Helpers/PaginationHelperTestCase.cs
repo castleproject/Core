@@ -16,9 +16,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 {
 	using System;
 	using System.Collections;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 	using NUnit.Framework;
 
 	using Castle.MonoRail.Framework.Helpers;
@@ -178,7 +176,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsTrue(page.HasPrevious);
 		}
 
-#if DOTNET2
 		[Test]
 		public void UsageWithGenerics()
 		{
@@ -234,6 +231,5 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.IsFalse(page.HasNext);
 			Assert.IsTrue(page.HasPrevious);
 		}
-#endif
 	}
 }

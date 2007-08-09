@@ -35,11 +35,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			if (typeAtt == null || typeAtt.Value == String.Empty)
 			{
 				String message = "Please specify the 'type' attribute to define an implementation for scaffolding support";
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 			
 			scaffoldImplType = TypeLoadUtil.GetType(typeAtt.Value);

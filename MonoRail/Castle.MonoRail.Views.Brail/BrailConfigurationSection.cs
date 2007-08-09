@@ -55,11 +55,7 @@ namespace Castle.MonoRail.Views.Brail
 
 		private static Exception GetConfigurationException(string error)
 		{
-#if DOTNET2
 			return new ConfigurationErrorsException(error);
-#else
-			return new ConfigurationException(dotNet2);
-#endif
 		}
 	}
 }
