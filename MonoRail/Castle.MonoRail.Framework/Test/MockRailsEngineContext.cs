@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Test
 		/// Gets the request type (GET, POST, etc)
 		/// </summary>
 		/// <value></value>
-		public String RequestType
+		public virtual String RequestType
 		{
 			get { return request.HttpMethod; }
 		}
@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework.Test
 			set { urlReferrer = value; }
 		}
 
-		public HttpContext UnderlyingContext
+		public virtual HttpContext UnderlyingContext
 		{
 			get 
 			{ 
@@ -89,37 +89,37 @@ namespace Castle.MonoRail.Framework.Test
 			}
 		}
 
-		public NameValueCollection Params
+		public virtual NameValueCollection Params
 		{
 			get { return request.Params; }
 		}
 
-		public IDictionary Session
+		public virtual IDictionary Session
 		{
 			get { return session; }
 		}
 
-		public IRequest Request
+		public virtual IRequest Request
 		{
 			get { return request; }
 		}
 
-		public IResponse Response
+		public virtual IResponse Response
 		{
 			get { return response; }
 		}
 
-		public ITrace Trace
+		public virtual ITrace Trace
 		{
 			get { return trace; }
 		}
 
-		public ICacheProvider Cache
+		public virtual ICacheProvider Cache
 		{
 			get { return cacheProvider; }
 		}
 
-		public Flash Flash
+		public virtual Flash Flash
 		{
 			get { return flash; }
 		}
@@ -145,32 +145,32 @@ namespace Castle.MonoRail.Framework.Test
 		/// I'm not sure about this one
 		/// TODO: Review it
 		/// </summary>
-		public string ApplicationPath
+		public virtual string ApplicationPath
 		{
 			get { return urlInfo.AppVirtualDir; }
 		}
 
-		public string ApplicationPhysicalPath
+		public virtual string ApplicationPhysicalPath
 		{
 			get { return physicalPath; }
 		}
 
-		public UrlInfo UrlInfo
+		public virtual UrlInfo UrlInfo
 		{
 			get { return urlInfo; }
 		}
 
-		public IServerUtility Server
+		public virtual IServerUtility Server
 		{
 			get { return serverUtility; }
 		}
 
-		public IDictionary Items
+		public virtual IDictionary Items
 		{
 			get { return contextItems; }
 		}
 
-		public Controller CurrentController
+		public virtual Controller CurrentController
 		{
 			get { return currentController; }
 			set { currentController = value; }
@@ -178,12 +178,12 @@ namespace Castle.MonoRail.Framework.Test
 
 		#endregion
 
-		public List<RenderedEmailTemplate> RenderedEmailTemplates
+		public virtual List<RenderedEmailTemplate> RenderedEmailTemplates
 		{
 			get { return renderedEmailTemplates; }
 		}
 
-		public List<Message> MessagesSent
+		public virtual List<Message> MessagesSent
 		{
 			get { return messagesSent; }
 		}

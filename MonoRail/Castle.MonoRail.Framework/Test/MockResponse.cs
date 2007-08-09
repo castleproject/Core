@@ -33,12 +33,12 @@ namespace Castle.MonoRail.Framework.Test
 		private HttpCachePolicy cachePolicy = null;
 		private NameValueCollection headers = new NameValueCollection();
 
-		public string RedirectedTo
+		public virtual string RedirectedTo
 		{
 			get { return redirectedTo; }
 		}
 
-		public NameValueCollection Headers
+		public virtual NameValueCollection Headers
 		{
 			get { return headers; }
 		}
@@ -165,22 +165,22 @@ namespace Castle.MonoRail.Framework.Test
 			set { charset = value; }
 		}
 
-		public TextWriter Output
+		public virtual TextWriter Output
 		{
 			get { return output; }
 		}
 
-		public Stream OutputStream
+		public virtual Stream OutputStream
 		{
 			get { return outputStream; }
 		}
 
-		public bool WasRedirected
+		public virtual bool WasRedirected
 		{
 			get { return wasRedirected; }
 		}
 
-		public bool IsClientConnected
+		public virtual bool IsClientConnected
 		{
 			get { return isClientConnected; }
 		}

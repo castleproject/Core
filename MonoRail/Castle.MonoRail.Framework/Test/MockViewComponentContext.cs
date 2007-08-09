@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework.Test
 
 		#region IViewComponentContext
 
-		public string ComponentName
+		public virtual string ComponentName
 		{
 			get { return componentName; }
 		}
@@ -100,17 +100,17 @@ namespace Castle.MonoRail.Framework.Test
 			}
 		}
 
-		public TextWriter Writer
+		public virtual TextWriter Writer
 		{
 			get { return writer; }
 		}
 
-		public IDictionary ContextVars
+		public virtual IDictionary ContextVars
 		{
 			get { return contextVars; }
 		}
 
-		public IDictionary ComponentParameters
+		public virtual IDictionary ComponentParameters
 		{
 			get { return componentParameters; }
 		}
@@ -121,7 +121,7 @@ namespace Castle.MonoRail.Framework.Test
 			set { viewToRender = value; }
 		}
 
-		public IViewEngine ViewEngine
+		public virtual IViewEngine ViewEngine
 		{
 			get { return viewEngine; }
 		}

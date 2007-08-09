@@ -50,42 +50,42 @@ namespace Castle.MonoRail.Framework.Test
 			throw new NotImplementedException();
 		}
 
-		public NameValueCollection Headers
+		public virtual NameValueCollection Headers
 		{
 			get { return headers; }
 		}
 
-		public IDictionary Files
+		public virtual IDictionary Files
 		{
 			get { return files; }
 		}
 
-		public NameValueCollection Params
+		public virtual NameValueCollection Params
 		{
 			get { return @params; }
 		}
 
-		public bool IsLocal
+		public virtual bool IsLocal
 		{
 			get { return isLocal; }
 		}
 
-		public string RawUrl
+		public virtual string RawUrl
 		{
 			get { return rawUrl; }
 		}
 
-		public Uri Uri
+		public virtual Uri Uri
 		{
 			get { return uri; }
 		}
 
-		public string HttpMethod
+		public virtual string HttpMethod
 		{
 			get { return httpMethod; }
 		}
 
-		public string FilePath
+		public virtual string FilePath
 		{
 			get { return filePath; }
 		}
@@ -95,22 +95,22 @@ namespace Castle.MonoRail.Framework.Test
 			get { throw new NotImplementedException(); }
 		}
 
-		public NameValueCollection QueryString
+		public virtual NameValueCollection QueryString
 		{
 			get { return queryString; }
 		}
 
-		public NameValueCollection Form
+		public virtual NameValueCollection Form
 		{
 			get { return form; }
 		}
 
-		public string[] UserLanguages
+		public virtual string[] UserLanguages
 		{
 			get { return userLanguages; }
 		}
 
-		public string UserHostAddress
+		public virtual string UserHostAddress
 		{
 			get { return userHostAddress; }
 		}

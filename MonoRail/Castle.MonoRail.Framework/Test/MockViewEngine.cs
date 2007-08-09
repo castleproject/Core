@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework.Test
 			this.xHtmlRendering = xHtmlRendering;
 		}
 
-		public bool SupportsJSGeneration
+		public virtual bool SupportsJSGeneration
 		{
 			get { return supportsJSGeneration; }
 		}
@@ -43,12 +43,12 @@ namespace Castle.MonoRail.Framework.Test
 			set { xHtmlRendering = value; }
 		}
 
-		public string ViewFileExtension
+		public virtual string ViewFileExtension
 		{
 			get { return viewFileExtension; }
 		}
 
-		public string JSGeneratorFileExtension
+		public virtual string JSGeneratorFileExtension
 		{
 			get { return jsGeneratorFileExtension; }
 		}
