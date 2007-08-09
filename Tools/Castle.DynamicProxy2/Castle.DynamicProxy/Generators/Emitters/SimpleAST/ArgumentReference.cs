@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	[CLSCompliant(false)]
 	public class ArgumentReference : TypeReference
 	{
 		private int position = -1;
@@ -25,6 +24,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public ArgumentReference(Type argumentType)
 			: base(argumentType)
 		{
+		}
+
+		public ArgumentReference (Type argumentType, int position)
+			: base (argumentType)
+		{
+			Position = position;
 		}
 
 		internal int Position

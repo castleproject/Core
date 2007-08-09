@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	[CLSCompliant(false)]
 	public class ClassEmitter : AbstractTypeEmitter
 	{
 		private static IDictionary signedAssemblyCache = new Hashtable();
@@ -30,31 +29,35 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags)
+			: base (CreateTypeBuilder (modulescope, name, baseType, interfaces, flags))
 		{
-			bool isAssemblySigned = IsAssemblySigned(baseType);
-			foreach(Type type in interfaces)
-			{
-				isAssemblySigned &= IsAssemblySigned(type);
-			}
-
-			typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType(name, flags);
-
 			InitializeGenericArgumentsFromBases(ref baseType, ref interfaces);
 
 			if (interfaces != null)
 			{
 				foreach(Type inter in interfaces)
 				{
-					typebuilder.AddInterfaceImplementation(inter);
+					TypeBuilder.AddInterfaceImplementation(inter);
 				}
 			}
 
-			typebuilder.SetParent(baseType);
+			TypeBuilder.SetParent(baseType);
+		}
+
+		private static TypeBuilder CreateTypeBuilder (ModuleScope modulescope, string name, Type baseType, Type[] interfaces, TypeAttributes flags)
+		{
+			bool isAssemblySigned = IsAssemblySigned (baseType);
+			foreach (Type type in interfaces)
+			{
+				isAssemblySigned &= IsAssemblySigned (type);
+			}
+
+			return modulescope.ObtainDynamicModule (isAssemblySigned).DefineType (name, flags);
 		}
 
 		public ClassEmitter (TypeBuilder typeBuilder)
+			: base (typeBuilder)
 		{
-			this.typebuilder = typeBuilder;
 		}
 
 		// The ambivalent generic parameter handling of base type and interfaces has been removed from the ClassEmitter, it isn't used by the proxy
@@ -75,7 +78,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		private bool IsAssemblySigned(Type baseType)
+		private static bool IsAssemblySigned(Type baseType)
 		{
 			lock(signedAssemblyCache)
 			{

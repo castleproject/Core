@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	/// <summary>
 	/// Summary description for PropertiesCollection.
 	/// </summary>
-	[CLSCompliant(false)]
 	public class PropertiesCollection : CollectionBase
 	{
 		public void Add(PropertyEmitter property)

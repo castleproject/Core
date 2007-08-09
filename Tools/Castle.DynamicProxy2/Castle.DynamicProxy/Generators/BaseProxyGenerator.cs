@@ -44,7 +44,6 @@ namespace Castle.DynamicProxy.Generators
 	/// - Add tests and fixes for 'leaking this' problem
 	/// - Mixin support
 	/// </remarks>
-	[CLSCompliant(false)]
 	public abstract class BaseProxyGenerator
 	{
 		private static MethodInfo invocation_getArgumentsMethod = typeof(AbstractInvocation).GetMethod("get_Arguments");
@@ -390,11 +389,11 @@ namespace Castle.DynamicProxy.Generators
 				methodInfoTokenExp = new MethodTokenExpression(method.MakeGenericMethod(genericMethodArgs));
 			}
 
-			ConstructorInfo constructor = invocationImpl.Constructors[0].Builder;
+			ConstructorInfo constructor = invocationImpl.Constructors[0].ConstructorBuilder;
 
 			if (isGenericInvocationClass)
 			{
-				constructor = TypeBuilder.GetConstructor(iinvocation, invocationImpl.Constructors[0].Builder);
+				constructor = TypeBuilder.GetConstructor(iinvocation, invocationImpl.Constructors[0].ConstructorBuilder);
 			}
 
 			NewInstanceExpression newInvocImpl;

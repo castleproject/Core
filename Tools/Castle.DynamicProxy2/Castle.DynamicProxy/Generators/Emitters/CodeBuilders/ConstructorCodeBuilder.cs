@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	[CLSCompliant(false)]
 	public class ConstructorCodeBuilder : AbstractCodeBuilder
 	{
 		private readonly Type baseType;
@@ -49,11 +48,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 		internal ConstructorInfo ObtainDefaultConstructor()
 		{
 			Type type = baseType;
-
-			if (baseType.IsGenericType)
-			{
-				type = baseType.GetGenericTypeDefinition();
-			}
+      if (type.ContainsGenericParameters)
+        type = type.GetGenericTypeDefinition();
 
 			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 

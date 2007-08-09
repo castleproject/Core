@@ -29,7 +29,6 @@ namespace Castle.DynamicProxy.Generators
 	/// <summary>
 	/// 
 	/// </summary>
-	[CLSCompliant(false)]
 	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		private FieldReference targetField;

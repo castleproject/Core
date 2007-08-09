@@ -30,7 +30,6 @@ namespace Castle.DynamicProxy.Generators
 	/// <summary>
 	/// 
 	/// </summary>
-	[CLSCompliant(false)]
 	public class ClassProxyGenerator : BaseProxyGenerator
 	{
 		private bool delegateToBaseGetObjectData = false;

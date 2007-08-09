@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Collections;
 
-	[CLSCompliant(false)]
 	public class MethodCollection : CollectionBase
 	{
 		public void Add(MethodEmitter method)

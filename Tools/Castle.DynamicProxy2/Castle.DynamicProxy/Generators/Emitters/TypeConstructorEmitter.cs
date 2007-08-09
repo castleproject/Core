@@ -17,14 +17,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	[CLSCompliant(false)]
 	public class TypeConstructorEmitter : ConstructorEmitter
 	{
-		internal TypeConstructorEmitter(AbstractTypeEmitter maintype)
+		internal TypeConstructorEmitter (AbstractTypeEmitter maintype)
+			: base (maintype, maintype.TypeBuilder.DefineTypeInitializer())
 		{
-			this.maintype = maintype;
-
-			builder = maintype.TypeBuilder.DefineTypeInitializer();
 		}
 
 		public override void EnsureValidCodeBlock()

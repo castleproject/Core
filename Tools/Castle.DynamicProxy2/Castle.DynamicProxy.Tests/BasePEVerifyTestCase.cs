@@ -33,6 +33,11 @@ namespace Castle.DynamicProxy.Tests
 #if !MONO // mono doesn't have PEVerify
 
 		[TearDown]
+		public virtual void TearDown ()
+		{
+			RunPEVerifyOnGeneratedAssembly ();
+		}
+
 		public void RunPEVerifyOnGeneratedAssembly()
 		{
 			Process process = new Process();

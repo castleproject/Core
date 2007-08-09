@@ -22,6 +22,12 @@ namespace Castle.DynamicProxy
 	public interface IProxyBuilder
 	{
 		/// <summary>
+		/// Gets the module scope used by this builder for generating code.
+		/// </summary>
+		/// <value>The module scope used by this builder.</value>
+		ModuleScope ModuleScope { get; }
+
+		/// <summary>
 		/// Implementors should return a proxy for the specified type.
 		/// </summary>
 		/// <param name="theClass">The proxy base class.</param>

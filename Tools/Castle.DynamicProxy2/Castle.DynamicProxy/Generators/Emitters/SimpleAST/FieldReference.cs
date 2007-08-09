@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	[CLSCompliant(false)]
 	public class FieldReference : Reference
 	{
 		private readonly FieldBuilder fieldbuilder;

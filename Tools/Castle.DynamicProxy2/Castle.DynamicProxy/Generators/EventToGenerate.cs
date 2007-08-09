@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	[CLSCompliant(false)]
 	public class EventToGenerate
 	{
 		private MethodInfo addMethod, removeMethod;

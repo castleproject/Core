@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	using System;
 	using System.Reflection.Emit;
 
-	[CLSCompliant(false)]
 	public class MethodCodeBuilder : AbstractCodeBuilder
 	{
 		private readonly Type baseType;

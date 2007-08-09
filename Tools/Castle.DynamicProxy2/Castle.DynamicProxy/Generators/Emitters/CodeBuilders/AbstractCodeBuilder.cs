@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	using System.Reflection.Emit;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	[CLSCompliant(false)]
 	public abstract class AbstractCodeBuilder
 	{
 		private bool isEmpty;
@@ -40,10 +39,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			get { return generator; }
 		}
 
-		public void AddStatement(Statement stmt)
+		public AbstractCodeBuilder AddStatement(Statement stmt)
 		{
 			SetNonEmpty();
 			stmts.Add(stmt);
+			return this;
 		}
 
 		public LocalReference DeclareLocal(Type type)

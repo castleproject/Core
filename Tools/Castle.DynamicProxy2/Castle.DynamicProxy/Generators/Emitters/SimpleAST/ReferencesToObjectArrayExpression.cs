@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	/// <summary>
 	/// 
 	/// </summary>
-	[CLSCompliant(false)]
 	public class ReferencesToObjectArrayExpression : Expression
 	{
 		private readonly TypeReference[] args;

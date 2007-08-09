@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	/// <summary>
 	/// Summary description for NewArrayExpression.
 	/// </summary>
-	[CLSCompliant(false)]
 	public class NewArrayExpression : Expression
 	{
 		private int size;

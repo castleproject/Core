@@ -18,10 +18,9 @@ namespace Castle.DynamicProxy
 	using System.Collections;
 	using Castle.DynamicProxy.Generators;
 
-	[CLSCompliant(false)]
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
-		protected ModuleScope scope = null;
+		private readonly ModuleScope scope;
 
 		public DefaultProxyBuilder() : this(new ModuleScope())
 		{
@@ -32,7 +31,7 @@ namespace Castle.DynamicProxy
 			this.scope = scope;
 		}
 
-		protected ModuleScope ModuleScope
+		public ModuleScope ModuleScope
 		{
 			get { return scope; }
 		}

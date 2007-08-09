@@ -21,14 +21,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	[CLSCompliant(false)]
 	public class MethodEmitter : IMemberEmitter
 	{
-		protected MethodBuilder builder;
-		protected ArgumentReference[] arguments;
+		private readonly MethodBuilder builder;
+		private readonly AbstractTypeEmitter maintype;
+
+		private ArgumentReference[] arguments;
 
 		private MethodCodeBuilder codebuilder;
-		private AbstractTypeEmitter maintype;
 		private GenericTypeParameterBuilder[] genericTypeParams;
 
 		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType =

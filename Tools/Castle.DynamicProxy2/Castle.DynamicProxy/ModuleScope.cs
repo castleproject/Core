@@ -26,7 +26,6 @@ namespace Castle.DynamicProxy
 	/// <summary>
 	/// Summary description for ModuleScope.
 	/// </summary>
-	[CLSCompliant(false)]
 	public class ModuleScope
 	{
 		/// <summary>

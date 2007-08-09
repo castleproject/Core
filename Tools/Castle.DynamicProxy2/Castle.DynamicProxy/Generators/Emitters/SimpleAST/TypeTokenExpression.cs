@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	[CLSCompliant(false)]
 	public class TypeTokenExpression : Expression
 	{
 		private readonly Type type;

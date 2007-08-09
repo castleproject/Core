@@ -22,7 +22,6 @@ namespace Castle.DynamicProxy
 	/// <remarks>
 	/// The saved assembly contains just the last generated type.
 	/// </remarks>
-	[CLSCompliant(false)]
 	public class PersistentProxyBuilder : DefaultProxyBuilder
 	{
 		/// <summary>
