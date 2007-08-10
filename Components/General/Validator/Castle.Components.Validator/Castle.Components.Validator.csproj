@@ -71,6 +71,11 @@
       <DependentUpon>Messages.lt.resx</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Messages.lv.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.lv.resx</DependentUpon>
+    </Compile>
     <Compile Include="Messages.nl.Designer.cs">
       <DependentUpon>Messages.nl.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -146,6 +151,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.lt.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Messages.lv.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.lv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
