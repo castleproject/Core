@@ -378,11 +378,6 @@ namespace Castle.MonoRail.Views.Brail
 				}
 			}
 
-			foreach (DictionaryEntry entry in myController.Helpers)
-			{
-				properties.Add(entry.Key, entry.Value);
-			}
-
 			foreach (string key in myController.Params.AllKeys)
 			{
 				if (key == null)
@@ -396,6 +391,11 @@ namespace Castle.MonoRail.Views.Brail
 			}
 
 			foreach (DictionaryEntry entry in myController.PropertyBag)
+			{
+				properties[entry.Key] = entry.Value;
+			}
+			
+			foreach (DictionaryEntry entry in myController.Helpers)
 			{
 				properties[entry.Key] = entry.Value;
 			}
