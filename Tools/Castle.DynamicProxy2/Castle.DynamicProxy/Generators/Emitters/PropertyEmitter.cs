@@ -69,8 +69,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				getMethod = new MethodEmitter(parentTypeEmitter, "get_" + builder.Name,
 				                              attrs,
-				                              new ReturnReferenceExpression(ReturnType),
-				                              ArgumentsUtil.ConvertToArgumentReference(parameters));
+				                              ReturnType,
+				                              parameters);
 			}
 
 			return getMethod;
@@ -104,8 +104,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			else
 			{
 				setMethod = new MethodEmitter(parentTypeEmitter, "set_" + builder.Name,
-				                              attrs, new ReturnReferenceExpression(typeof(void)),
-				                              ArgumentsUtil.ConvertToArgumentReference(parameters));
+				                              attrs, typeof(void),
+				                              parameters);
 			}
 
 			return setMethod;

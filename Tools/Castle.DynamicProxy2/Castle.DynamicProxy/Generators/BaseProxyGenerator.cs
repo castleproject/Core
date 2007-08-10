@@ -802,8 +802,8 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ArgumentReference argument1 = new ArgumentReference(typeof(object));
 				MethodEmitter methodEmitter =
-					nested.CreateMethod("ChangeInvocationTarget", new ReturnReferenceExpression(typeof(void)),
-					                    MethodAttributes.Public | MethodAttributes.Virtual, argument1);
+					nested.CreateMethod("ChangeInvocationTarget", MethodAttributes.Public | MethodAttributes.Virtual,
+					                    typeof(void), argument1);
 				methodEmitter.CodeBuilder.AddStatement(
 					new AssignStatement(targetRef,
 					                    new ConvertExpression(targetType, argument1.ToExpression())
@@ -840,7 +840,7 @@ namespace Castle.DynamicProxy.Generators
 			const MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.Virtual;
 
 			MethodEmitter method =
-				nested.CreateMethod("InvokeMethodOnTarget", new ReturnReferenceExpression(typeof(void)), methodAtts);
+				nested.CreateMethod ("InvokeMethodOnTarget", methodAtts, typeof (void));
 
 			Expression[] args = new Expression[parameters.Length];
 
@@ -956,7 +956,7 @@ namespace Castle.DynamicProxy.Generators
 			const MethodAttributes methodAtts = MethodAttributes.Public | MethodAttributes.Final | MethodAttributes.Virtual;
 
 			MethodEmitter method =
-				nested.CreateMethod("InvokeMethodOnTarget", new ReturnReferenceExpression(typeof(void)), methodAtts);
+				nested.CreateMethod("InvokeMethodOnTarget", methodAtts, typeof(void));
 
 			// TODO: throw exception
 
@@ -1142,13 +1142,13 @@ namespace Castle.DynamicProxy.Generators
 			MethodAttributes attributes = MethodAttributes.Virtual | MethodAttributes.Public;
 
 			MethodEmitter DynProxyGetTarget =
-				emitter.CreateMethod("DynProxyGetTarget", attributes, new ReturnReferenceExpression(typeof (object)));
+				emitter.CreateMethod("DynProxyGetTarget", attributes, typeof (object));
 
 			DynProxyGetTarget.CodeBuilder.AddStatement(
 				new ReturnStatement(new ConvertExpression(typeof (object), targetType, GetProxyTargetReference().ToExpression())));
 
 			MethodEmitter GetInterceptors =
-				emitter.CreateMethod("GetInterceptors", attributes, new ReturnReferenceExpression(typeof (IInterceptor[])));
+				emitter.CreateMethod("GetInterceptors", attributes, typeof (IInterceptor[]));
 
 			GetInterceptors.CodeBuilder.AddStatement(
 				new ReturnStatement(interceptorsField)
@@ -1536,7 +1536,7 @@ namespace Castle.DynamicProxy.Generators
 			ArgumentReference arg1 = new ArgumentReference(typeof(SerializationInfo));
 			ArgumentReference arg2 = new ArgumentReference(typeof(StreamingContext));
 			MethodEmitter getObjectData = emitter.CreateMethod("GetObjectData",
-			                                                   new ReturnReferenceExpression(typeof(void)), arg1, arg2);
+			                                                   typeof(void), arg1, arg2);
 
 			LocalReference typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof(Type));
 

@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Reflection;
 using Castle.DynamicProxy.Generators.Emitters;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 namespace Castle.DynamicProxy.Tests
 {
@@ -43,6 +45,29 @@ namespace Castle.DynamicProxy.Tests
 			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>), Type.EmptyTypes);
 			Type t = emitter.BuildType ();
 			Activator.CreateInstance (t);
+		}
+
+		[Test]
+		public void StaticMethodArguments ()
+		{
+			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>), Type.EmptyTypes);
+			MethodEmitter methodEmitter = emitter.CreateMethod ("StaticMethod", MethodAttributes.Public | MethodAttributes.Static,
+					typeof (string), typeof (string));
+			methodEmitter.CodeBuilder.AddStatement (new ReturnStatement (methodEmitter.Arguments[0]));
+			Type t = emitter.BuildType ();
+			Assert.AreEqual ("five", t.GetMethod ("StaticMethod").Invoke (null, new object[] { "five" }));
+		}
+
+		[Test]
+		public void InstanceMethodArguments ()
+		{
+			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>), Type.EmptyTypes);
+			MethodEmitter methodEmitter = emitter.CreateMethod ("InstanceMethod", MethodAttributes.Public,
+					typeof (string), typeof (string));
+			methodEmitter.CodeBuilder.AddStatement (new ReturnStatement (methodEmitter.Arguments[0]));
+			Type t = emitter.BuildType ();
+			object instance = Activator.CreateInstance (t);
+			Assert.AreEqual ("six", t.GetMethod ("InstanceMethod").Invoke (instance, new object[] { "six" }));
 		}
 	}
 }

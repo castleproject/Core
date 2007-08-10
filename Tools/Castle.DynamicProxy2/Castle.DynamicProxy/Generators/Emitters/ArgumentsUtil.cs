@@ -30,11 +30,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			reference.LoadReference(il);
 		}
 
-		public static void InitializeArgumentsByPosition(ArgumentReference[] args)
+		public static void InitializeArgumentsByPosition(ArgumentReference[] args, bool isStatic)
 		{
+			int offset = isStatic ? 0 : 1;
 			for(int i = 0; i < args.Length; ++i)
 			{
-				args[i].Position = i + 1;
+				args[i].Position = i + offset;
 			}
 		}
 

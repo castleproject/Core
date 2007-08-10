@@ -34,32 +34,24 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private Dictionary<String, GenericTypeParameterBuilder> name2GenericType =
 			new Dictionary<string, GenericTypeParameterBuilder>();
 
-		protected internal MethodEmitter()
+		protected internal MethodEmitter(MethodBuilder builder)
 		{
-		}
-
-		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
-		                       ReturnReferenceExpression returnRef, params ArgumentReference[] arguments) :
-		                       	this(
-		                       	maintype, name,
-		                       	MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public, returnRef,
-		                       	arguments)
-		{
+			this.builder = builder;
 		}
 
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name, MethodAttributes attrs)
+			: this (maintype.TypeBuilder.DefineMethod(name, attrs))
 		{
 			this.maintype = maintype;
-
-			builder = maintype.TypeBuilder.DefineMethod(name, attrs);
 		}
 
 		internal MethodEmitter(AbstractTypeEmitter maintype, String name,
-		                       MethodAttributes attrs, ReturnReferenceExpression returnRef,
-		                       params ArgumentReference[] arguments) : this(maintype, name, attrs)
+		                       MethodAttributes attrs, Type returnType,
+		                       params Type[] argumentTypes)
+			: this(maintype, name, attrs)
 		{
-			SetParameters(ArgumentsUtil.InitializeAndConvert(arguments));
-			SetReturnType(returnRef.Type);
+			SetParameters(argumentTypes);
+			SetReturnType(returnType);
 		}
 
 		public void SetReturnType(Type returnType)
@@ -109,7 +101,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				arguments[i] = new ArgumentReference(paramTypes[i]);
 			}
 
-			ArgumentsUtil.InitializeArgumentsByPosition(arguments);
+			ArgumentsUtil.InitializeArgumentsByPosition (arguments, MethodBuilder.IsStatic);
 		}
 
 		public virtual MethodCodeBuilder CodeBuilder

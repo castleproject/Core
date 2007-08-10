@@ -111,29 +111,33 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return member;
 		}
 
-		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType,
-		                                  params ArgumentReference[] arguments)
+		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, Type returnType)
 		{
-			MethodEmitter member = new MethodEmitter(this, name, returnType, arguments);
-			methods.Add(member);
-			return member;
+			return CreateMethod (name, attrs, returnType, new Type[0]);
 		}
 
-		public MethodEmitter CreateMethod(String name, ReturnReferenceExpression returnType, MethodAttributes attributes,
-		                                  params ArgumentReference[] arguments)
-		{
-			MethodEmitter member = new MethodEmitter(this, name, attributes, returnType, arguments);
-			methods.Add(member);
-			return member;
-		}
-
-		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, ReturnReferenceExpression returnType,
-		                                  params Type[] args)
+		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, Type returnType,
+		                                  params Type[] argumentTypes)
 		{
 			MethodEmitter member =
-				new MethodEmitter(this, name, attrs, returnType, ArgumentsUtil.ConvertToArgumentReference(args));
+				new MethodEmitter (this, name, attrs, returnType, argumentTypes);
 			methods.Add(member);
 			return member;
+		}
+
+		public MethodEmitter CreateMethod(String name, Type returnType,
+		                                  params ArgumentReference[] argumentReferences)
+		{
+			Type[] argumentTypes = ArgumentsUtil.InitializeAndConvert (argumentReferences);
+			const MethodAttributes defaultAttributes = MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;
+			return CreateMethod (name, defaultAttributes, returnType, argumentTypes);
+		}
+
+		public MethodEmitter CreateMethod(String name, MethodAttributes attrs, Type returnType,
+		                                  params ArgumentReference[] argumentReferences)
+		{
+			Type[] argumentTypes = ArgumentsUtil.InitializeAndConvert (argumentReferences);
+			return CreateMethod (name, attrs, returnType, argumentTypes);
 		}
 
 		public FieldReference CreateStaticField(string name, Type fieldType)
