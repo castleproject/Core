@@ -69,31 +69,31 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		/// <value>The column.</value>
 		int Column { get; }
-		
+
 		/// <summary>
 		/// Gets the line.
 		/// </summary>
 		/// <value>The line.</value>
 		int Line { get; }
-		
+
 		/// <summary>
 		/// Gets the end column.
 		/// </summary>
 		/// <value>The end column.</value>
 		int EndColumn { get; }
-		
+
 		/// <summary>
 		/// Gets the end line.
 		/// </summary>
 		/// <value>The end line.</value>
 		int EndLine { get; }
-		
+
 		/// <summary>
 		/// Gets the begin column.
 		/// </summary>
 		/// <value>The begin column.</value>
 		int BeginColumn { get; }
-		
+
 		/// <summary>
 		/// Gets the begin line.
 		/// </summary>

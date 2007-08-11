@@ -36,26 +36,28 @@ namespace NVelocity.Exception
 		/// <summary>
 		/// Wraps the passed in exception for examination later
 		/// </summary>
-		public MethodInvocationException(String message, Exception innerException, String methodName) 
+		public MethodInvocationException(String message, Exception innerException, String methodName)
 			: base(message, innerException)
 		{
 			this.methodName = methodName;
 		}
 
 		#region Serialization Support
-		protected MethodInvocationException(SerializationInfo info, StreamingContext context) 
+
+		protected MethodInvocationException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
 			methodName = info.GetString("methodName");
 			referenceName = info.GetString("referenceName");
 		}
-		
+
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("methodName", methodName);
 			info.AddValue("referenceName", referenceName);
 			base.GetObjectData(info, context);
 		}
+
 		#endregion
 
 		public String MethodName

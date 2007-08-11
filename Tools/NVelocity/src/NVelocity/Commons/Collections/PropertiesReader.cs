@@ -30,11 +30,11 @@ namespace Commons.Collections
 
 			try
 			{
-				while (true)
+				while(true)
 				{
 					String line = ReadLine();
 
-					if(line == null) return null;
+					if (line == null) return null;
 
 					line = line.Trim();
 
@@ -53,13 +53,12 @@ namespace Commons.Collections
 					}
 				}
 			}
-			catch (NullReferenceException)
+			catch(NullReferenceException)
 			{
 				return null;
 			}
 
 			return buffer.ToString();
 		}
-
 	}
 }

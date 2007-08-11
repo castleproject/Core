@@ -4,7 +4,7 @@ namespace NVelocity.Runtime.Parser.Node
 	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary> 
 	/// ASTStringLiteral support.
@@ -270,8 +270,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 
 					if ((c == '\'' && expectSingleCommaAtEnd) ||
-						(!expectSingleCommaAtEnd && c == ',') || 
-						(!inEvaluationContext && c == '}'))
+					    (!expectSingleCommaAtEnd && c == ',') ||
+					    (!inEvaluationContext && c == '}'))
 					{
 						ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
 

@@ -66,7 +66,7 @@ namespace NVelocity.App
 			{
 				AddObject(s);
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				Console.Out.WriteLine(e);
 			}
@@ -85,7 +85,7 @@ namespace NVelocity.App
 			{
 				AddObject(o);
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				Console.Out.WriteLine(e);
 			}
@@ -120,7 +120,7 @@ namespace NVelocity.App
 				if (f != null)
 					return f.GetValue((Type) classHash[fieldName]);
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 			}
 			return null;
@@ -132,7 +132,7 @@ namespace NVelocity.App
 		private void Inspect(Type clas)
 		{
 			FieldInfo[] fields = clas.GetFields();
-			for (int i = 0; i < fields.Length; i++)
+			for(int i = 0; i < fields.Length; i++)
 			{
 				// only if public and static
 				if (fields[i].IsPublic && fields[i].IsStatic)

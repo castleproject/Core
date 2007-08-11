@@ -40,7 +40,7 @@ namespace Commons.Collections
 		{
 			StringBuilder buffer = new StringBuilder();
 
-			while (HasMoreTokens())
+			while(HasMoreTokens())
 			{
 				String token = base.NextToken();
 				if (token.EndsWith(@"\"))
@@ -57,6 +57,5 @@ namespace Commons.Collections
 
 			return buffer.ToString().Trim();
 		}
-
 	}
 }

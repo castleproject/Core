@@ -16,7 +16,7 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.IO;
-	using NVelocity.Context;
+	using Context;
 
 	public class ASTIfStatement : SimpleNode
 	{
@@ -39,8 +39,8 @@ namespace NVelocity.Runtime.Parser.Node
 		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
 			// Check if the #if(expression) construct evaluates to true:
-	    // if so render and leave immediately because there
-	    // is nothing left to do!
+			// if so render and leave immediately because there
+			// is nothing left to do!
 			if (GetChild(0).Evaluate(context))
 			{
 				GetChild(1).Render(context, writer);
@@ -50,13 +50,13 @@ namespace NVelocity.Runtime.Parser.Node
 			int totalNodes = ChildrenCount;
 
 			// Now check the remaining nodes left in the
-	    // if construct. The nodes are either elseif
-	    // nodes or else nodes. Each of these node
-	    // types knows how to evaluate themselves. If
-	    // a node evaluates to true then the node will
-	    // render itself and this method will return
-	    // as there is nothing left to do.
-			for (int i = 2; i < totalNodes; i++)
+			// if construct. The nodes are either elseif
+			// nodes or else nodes. Each of these node
+			// types knows how to evaluate themselves. If
+			// a node evaluates to true then the node will
+			// render itself and this method will return
+			// as there is nothing left to do.
+			for(int i = 2; i < totalNodes; i++)
 			{
 				if (GetChild(i).Evaluate(context))
 				{
@@ -66,8 +66,8 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			// This is reached when an ASTIfStatement
-	    // consists of an if/elseif sequence where
-	    // none of the nodes evaluate to true.
+			// consists of an if/elseif sequence where
+			// none of the nodes evaluate to true.
 			return true;
 		}
 

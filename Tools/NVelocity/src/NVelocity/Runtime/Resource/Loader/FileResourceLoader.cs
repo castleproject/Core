@@ -17,11 +17,9 @@ namespace NVelocity.Runtime.Resource.Loader
 	using System;
 	using System.Collections;
 	using System.IO;
-
 	using Commons.Collections;
-	
 	using NVelocity.Exception;
-	using NVelocity.Util;
+	using Util;
 
 	/// <summary>
 	/// A loader for templates stored on the file system.
@@ -62,7 +60,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </returns>
 		public override Stream GetResourceStream(String templateName)
 		{
-			lock (this)
+			lock(this)
 			{
 				String template = null;
 				int size = paths.Count;
@@ -81,7 +79,8 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				if (template == null || template.Length == 0)
 				{
-					String msg = "File resource error : argument " + template + " contains .. and may be trying to access " + "content outside of template root.  Rejected.";
+					String msg = "File resource error : argument " + template + " contains .. and may be trying to access " +
+					             "content outside of template root.  Rejected.";
 
 					throw new ResourceNotFoundException(msg);
 				}
@@ -91,14 +90,14 @@ namespace NVelocity.Runtime.Resource.Loader
 					template = template.Substring(1);
 				}
 
-				for (int i = 0; i < size; i++)
+				for(int i = 0; i < size; i++)
 				{
 					String path = (String) paths[i];
 
 					//This fixes the Directory Seperators making sure that they are correct for the platform.
 					//This is a hack and very inefficient location to perform the fix.
 					//It should be done when the paths are first loaded and then its only done once.
-					if(path.IndexOf(Path.AltDirectorySeparatorChar) >= 0)
+					if (path.IndexOf(Path.AltDirectorySeparatorChar) >= 0)
 						path = path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
 					Stream inputStream = FindTemplate(path, template);
@@ -158,7 +157,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				return new BufferedStream(file.OpenRead());
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				rsvc.Debug("FileResourceLoader : " + ex.Message);
 				return null;

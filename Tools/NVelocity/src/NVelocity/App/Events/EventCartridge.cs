@@ -2,8 +2,8 @@ namespace NVelocity.App.Events
 {
 	using System;
 	using System.Collections;
-	using NVelocity.Context;
-	using NVelocity.Exception;
+	using Context;
+	using Exception;
 
 	/// <summary>
 	/// 'Package' of event handlers...
@@ -13,7 +13,7 @@ namespace NVelocity.App.Events
 		public event ReferenceInsertionEventHandler ReferenceInsertion;
 		public event NullSetEventHandler NullSet;
 		public event MethodExceptionEventHandler MethodExceptionEvent;
-		
+
 		/// <summary>
 		/// Called during Velocity merge before a reference value will
 		/// be inserted into the output stream.
@@ -26,10 +26,10 @@ namespace NVelocity.App.Events
 		/// </returns>
 		internal Object ReferenceInsert(Stack referenceStack, String reference, Object value)
 		{
-			if (this.ReferenceInsertion != null)
+			if (ReferenceInsertion != null)
 			{
 				ReferenceInsertionEventArgs args = new ReferenceInsertionEventArgs(referenceStack, reference, value);
-				this.ReferenceInsertion(this, args);
+				ReferenceInsertion(this, args);
 				value = args.NewValue;
 			}
 
@@ -44,11 +44,11 @@ namespace NVelocity.App.Events
 		/// <returns>true if to be logged, false otherwise</returns>
 		internal bool ShouldLogOnNullSet(String lhs, String rhs)
 		{
-			if (this.NullSet == null)
+			if (NullSet == null)
 				return true;
 
 			NullSetEventArgs e = new NullSetEventArgs(lhs, rhs);
-			this.NullSet(this, e);
+			NullSet(this, e);
 
 			return e.ShouldLog;
 		}
@@ -64,11 +64,11 @@ namespace NVelocity.App.Events
 		internal Object HandleMethodException(Type claz, String method, Exception e)
 		{
 			// if we don't have a handler, just throw what we were handed
-			if (this.MethodExceptionEvent == null)
+			if (MethodExceptionEvent == null)
 				throw new VelocityException(e.Message, e);
 
 			MethodExceptionEventArgs mea = new MethodExceptionEventArgs(claz, method, e);
-			this.MethodExceptionEvent(this, mea);
+			MethodExceptionEvent(this, mea);
 
 			if (mea.ValueToRender != null)
 				return mea.ValueToRender;

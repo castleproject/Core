@@ -15,7 +15,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// Handles the equivalence operator
@@ -67,7 +67,7 @@ namespace NVelocity.Runtime.Parser.Node
 			// for equality, they are allowed to be null references 
 			try
 			{
-				if ( ObjectComparer.CompareObjects( left, right ) == 0 )
+				if (ObjectComparer.CompareObjects(left, right) == 0)
 					return true;
 			}
 			catch

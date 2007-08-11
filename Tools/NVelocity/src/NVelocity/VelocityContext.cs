@@ -2,8 +2,7 @@ namespace NVelocity
 {
 	using System;
 	using System.Collections;
-
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// General purpose implemention of the application Context

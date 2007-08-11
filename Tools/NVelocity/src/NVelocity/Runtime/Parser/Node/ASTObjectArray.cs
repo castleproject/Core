@@ -2,7 +2,7 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.Collections;
-	using NVelocity.Context;
+	using Context;
 
 	public class ASTObjectArray : SimpleNode
 	{
@@ -29,7 +29,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			ArrayList objectArray = new ArrayList(size);
 
-			for (int i = 0; i < size; i++)
+			for(int i = 0; i < size; i++)
 				objectArray.Add(GetChild(i).Value(context));
 
 			return objectArray;

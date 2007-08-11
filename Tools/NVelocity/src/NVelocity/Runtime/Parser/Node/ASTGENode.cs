@@ -15,7 +15,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using NVelocity.Context;
+	using Context;
 
 	public class ASTGENode : SimpleNode
 	{
@@ -44,17 +44,19 @@ namespace NVelocity.Runtime.Parser.Node
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side (" + GetChild((left == null ? 0 : 1)).Literal + ") of '>=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side (" + GetChild((left == null ? 0 : 1)).Literal +
+				           ") of '>=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName +
+				           " [line " + Line + ", column " + Column + "]");
 				return false;
 			}
 
 			try
 			{
-				return ObjectComparer.CompareObjects( left, right ) >= 0;
+				return ObjectComparer.CompareObjects(left, right) >= 0;
 			}
-			catch ( ArgumentException ae )
+			catch(ArgumentException ae)
 			{
-				rsvc.Error( ae.Message );
+				rsvc.Error(ae.Message);
 
 				return false;
 			}

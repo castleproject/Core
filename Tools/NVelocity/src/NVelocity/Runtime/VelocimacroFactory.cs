@@ -2,7 +2,7 @@ namespace NVelocity.Runtime
 {
 	using System;
 	using System.Collections;
-	using NVelocity.Runtime.Directive;
+	using Directive;
 
 	/// <summary>  VelocimacroFactory.java
 	/// *
@@ -64,7 +64,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public VelocimacroFactory(IRuntimeServices rs)
 		{
-			this.rsvc = rs;
+			rsvc = rs;
 
 			/*
 		*  we always access in a synchronized(), so we 
@@ -101,7 +101,6 @@ namespace NVelocity.Runtime
 				// TODO: looks like original code must have returned the value that was replaced
 				//return b;
 			}
-
 		}
 
 		private bool Blather
@@ -126,7 +125,7 @@ namespace NVelocity.Runtime
 			/*
 	    *  maybe I'm just paranoid...
 	    */
-			lock (this)
+			lock(this)
 			{
 				/*
 		*   allow replacements while we add the libraries, if exist
@@ -161,7 +160,7 @@ namespace NVelocity.Runtime
 						macroLibVec.Add(libfiles);
 					}
 
-					for (int i = 0; i < macroLibVec.Count; i++)
+					for(int i = 0; i < macroLibVec.Count; i++)
 					{
 						String lib = (String) macroLibVec[i];
 
@@ -192,7 +191,7 @@ namespace NVelocity.Runtime
 								twonk.modificationTime = template.LastModified;
 								libModMap[lib] = twonk;
 							}
-							catch (System.Exception e)
+							catch(System.Exception e)
 							{
 								LogVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
 							}
@@ -239,11 +238,13 @@ namespace NVelocity.Runtime
 				{
 					ReplacementPermission = true;
 
-					LogVMMessageInfo("Velocimacro : allowInlineToOverride = true : VMs " + "defined inline may replace previous VM definitions");
+					LogVMMessageInfo("Velocimacro : allowInlineToOverride = true : VMs " +
+					                 "defined inline may replace previous VM definitions");
 				}
 				else
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineToOverride = false : VMs " + "defined inline may NOT replace previous VM definitions");
+					LogVMMessageInfo("Velocimacro : allowInlineToOverride = false : VMs " +
+					                 "defined inline may NOT replace previous VM definitions");
 				}
 
 				/*
@@ -259,11 +260,13 @@ namespace NVelocity.Runtime
 
 				if (TemplateLocalInline)
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineLocal = true : VMs " + "defined inline will be local to their defining template only.");
+					LogVMMessageInfo("Velocimacro : allowInlineLocal = true : VMs " +
+					                 "defined inline will be local to their defining template only.");
 				}
 				else
 				{
-					LogVMMessageInfo("Velocimacro : allowInlineLocal = false : VMs " + "defined inline will be  global in scope if allowed.");
+					LogVMMessageInfo("Velocimacro : allowInlineLocal = false : VMs " +
+					                 "defined inline will be  global in scope if allowed.");
 				}
 
 				vmManager.TemplateLocalInlineVM = TemplateLocalInline;
@@ -331,7 +334,7 @@ namespace NVelocity.Runtime
 			/*
 	    *  seems like all is good.  Lets do it.
 	    */
-			lock (this)
+			lock(this)
 			{
 				vmManager.AddVM(name, macroBody, argArray, sourceTemplate);
 			}
@@ -344,7 +347,7 @@ namespace NVelocity.Runtime
 				String s = "#" + argArray[0];
 				s += "(";
 
-				for (int i = 1; i < argArray.Length; i++)
+				for(int i = 1; i < argArray.Length; i++)
 				{
 					s += " ";
 					s += argArray[i];
@@ -383,7 +386,7 @@ namespace NVelocity.Runtime
 		*  see if this is a library template
 		*/
 
-				for (int i = 0; i < macroLibVec.Count; i++)
+				for(int i = 0; i < macroLibVec.Count; i++)
 				{
 					String lib = (String) macroLibVec[i];
 
@@ -450,7 +453,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public bool IsVelocimacro(String vm, String sourceTemplate)
 		{
-			lock (this)
+			lock(this)
 			{
 				/*
 		* first we check the locals to see if we have 
@@ -470,7 +473,7 @@ namespace NVelocity.Runtime
 		{
 			VelocimacroProxy vp = null;
 
-			lock (this)
+			lock(this)
 			{
 				/*
 		*  don't ask - do
@@ -549,7 +552,7 @@ namespace NVelocity.Runtime
 								}
 							}
 						}
-						catch (System.Exception e)
+						catch(System.Exception e)
 						{
 							LogVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
 						}
@@ -617,7 +620,6 @@ namespace NVelocity.Runtime
 			public VelocimacroFactory Enclosing_Instance
 			{
 				get { return enclosingInstance; }
-
 			}
 
 			public Template template;

@@ -73,7 +73,7 @@ namespace NVelocity.Runtime.Log
 			// now run through the list, trying each.  It's ok to
 			// fail with a class not found, as we do this to also
 			// search out a default simple file logger
-			foreach (String clazz in classes)
+			foreach(String clazz in classes)
 			{
 				if (clazz != null && clazz.Length > 0)
 				{
@@ -97,7 +97,7 @@ namespace NVelocity.Runtime.Log
 							rsvc.Error("The specifid logger class " + clazz + " isn't a valid LogSystem");
 						}
 					}
-					catch (ApplicationException ncdfe)
+					catch(ApplicationException ncdfe)
 					{
 						rsvc.Debug("Couldn't find class " + clazz + " or necessary supporting classes in classpath. Exception : " + ncdfe);
 					}
@@ -117,9 +117,12 @@ namespace NVelocity.Runtime.Log
 				als = new NullLogSystem();
 				als.Init(rsvc);
 			}
-			catch (ApplicationException ncdfe)
+			catch(ApplicationException ncdfe)
 			{
-				String errstr = "PANIC : NVelocity cannot find any of the" + " specified or default logging systems in the classpath," + " or the classpath doesn't contain the necessary classes" + " to support them." + " Please consult the documentation regarding logging." + " Exception : " + ncdfe;
+				String errstr = "PANIC : NVelocity cannot find any of the" +
+				                " specified or default logging systems in the classpath," +
+				                " or the classpath doesn't contain the necessary classes" + " to support them." +
+				                " Please consult the documentation regarding logging." + " Exception : " + ncdfe;
 
 				Console.Out.WriteLine(errstr);
 				Console.Error.WriteLine(errstr);
@@ -131,6 +134,5 @@ namespace NVelocity.Runtime.Log
 
 			return als;
 		}
-
 	}
 }

@@ -16,8 +16,8 @@ namespace NVelocity.Util.Introspection
 
 		public IntrospectionCacheData(Type contextData, object thingy)
 		{
-			this.Thingy = thingy;
-			this.ContextData = contextData;
+			Thingy = thingy;
+			ContextData = contextData;
 		}
 
 		/// <summary>

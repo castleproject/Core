@@ -1,16 +1,15 @@
-using NVelocity.Runtime.Resource;
-
 namespace NVelocity.App
 {
 	using System;
 	using System.IO;
 	using System.Text;
 	using Commons.Collections;
-	using NVelocity.Context;
-	using NVelocity.Exception;
-	using NVelocity.Runtime;
+	using Context;
+	using Exception;
 	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
+	using NVelocity.Runtime.Resource;
+	using Runtime;
 
 	/// <summary>
 	/// This class provides  services to the application
@@ -154,7 +153,7 @@ namespace NVelocity.App
 				encoding = RuntimeSingleton.getString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT);
 				reader = new StreamReader(new StreamReader(instream, Encoding.GetEncoding(encoding)).BaseStream);
 			}
-			catch (IOException uce)
+			catch(IOException uce)
 			{
 				String msg = "Unsupported input encoding : " + encoding + " for template " + logTag;
 				throw new ParseErrorException(msg, uce);
@@ -181,7 +180,7 @@ namespace NVelocity.App
 			{
 				nodeTree = RuntimeSingleton.Parse(reader, logTag);
 			}
-			catch (ParseException pex)
+			catch(ParseException pex)
 			{
 				throw new ParseErrorException(pex.Message, pex);
 			}
@@ -199,7 +198,7 @@ namespace NVelocity.App
 					{
 						nodeTree.Init(ica, RuntimeSingleton.RuntimeServices);
 					}
-					catch (Exception e)
+					catch(Exception e)
 					{
 						RuntimeSingleton.Error("Velocity.evaluate() : init exception for tag = " + logTag + " : " + e);
 					}
@@ -232,7 +231,8 @@ namespace NVelocity.App
 		/// <param name="context">Context object containing data/objects used for rendering.</param>
 		/// <param name="writer"> Writer for output stream</param>
 		/// <returns>true if Velocimacro exists and successfully invoked, false otherwise.</returns>
-		public static bool InvokeVelocimacro(String vmName, String logTag, String[] parameters, IContext context, TextWriter writer)
+		public static bool InvokeVelocimacro(String vmName, String logTag, String[] parameters, IContext context,
+		                                     TextWriter writer)
 		{
 			// check parms
 			if (vmName == null || parameters == null || context == null || writer == null || logTag == null)
@@ -254,7 +254,7 @@ namespace NVelocity.App
 			construct.Append(vmName);
 			construct.Append("(");
 
-			for (int i = 0; i < parameters.Length; i++)
+			for(int i = 0; i < parameters.Length; i++)
 			{
 				construct.Append(" $");
 				construct.Append(parameters[i]);
@@ -267,7 +267,7 @@ namespace NVelocity.App
 				bool retval = Evaluate(context, writer, logTag, construct.ToString());
 				return retval;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				RuntimeSingleton.Error("Velocity.invokeVelocimacro() : error " + e);
 			}
@@ -285,7 +285,10 @@ namespace NVelocity.App
 		[Obsolete("Use the overload that takes an encoding")]
 		public static bool MergeTemplate(String templateName, IContext context, TextWriter writer)
 		{
-			return MergeTemplate(templateName, RuntimeSingleton.getString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT), context, writer);
+			return
+				MergeTemplate(templateName,
+				              RuntimeSingleton.getString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT),
+				              context, writer);
 		}
 
 		/// <summary>

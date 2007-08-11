@@ -15,7 +15,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using NVelocity.Context;
+	using Context;
 
 	public class ASTNENode : SimpleNode
 	{
@@ -42,7 +42,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			try
 			{
-				return ObjectComparer.CompareObjects( left, right ) != 0;
+				return ObjectComparer.CompareObjects(left, right) != 0;
 			}
 			catch
 			{

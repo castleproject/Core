@@ -27,7 +27,7 @@ namespace NVelocity.Util.Introspection
 		/// </param>
 		public Info(String source, int line, int column)
 		{
-			this.templateName = source;
+			templateName = source;
 			this.line = line;
 			this.column = column;
 		}

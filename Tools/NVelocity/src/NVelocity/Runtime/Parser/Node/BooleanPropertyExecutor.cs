@@ -14,7 +14,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class BooleanPropertyExecutor : PropertyExecutor
 	{
-		public BooleanPropertyExecutor(IRuntimeLogger r, Introspector i, Type clazz, String propertyName) 
+		public BooleanPropertyExecutor(IRuntimeLogger r, Introspector i, Type clazz, String propertyName)
 			: base(r, i, clazz, propertyName)
 		{
 		}
@@ -35,7 +35,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				property = null;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				rlog.Error("PROGRAMMER ERROR : BooleanPropertyExector() : " + e);
 			}

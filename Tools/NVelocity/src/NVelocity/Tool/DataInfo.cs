@@ -2,7 +2,6 @@ namespace NVelocity.Tool
 {
 	using System;
 
-
 	/// <summary> ToolInfo implementation to handle "primitive" data types.
 	/// It currently supports String, Number, and Boolean data.
 	/// *
@@ -40,29 +39,35 @@ namespace NVelocity.Tool
 
 			if (type.ToUpper().Equals(TYPE_BOOLEAN.ToUpper()))
 			{
-				this.data = Boolean.Parse(value_);
+				data = Boolean.Parse(value_);
 			}
 			else if (type.ToUpper().Equals(TYPE_NUMBER.ToUpper()))
 			{
 				if (value_.IndexOf((Char) '.') >= 0)
 				{
 					//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Double.Double' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-					this.data = Double.Parse(value_);
+					data = Double.Parse(value_);
 				}
 				else
 				{
-					this.data = Int32.Parse(value_);
+					data = Int32.Parse(value_);
 				}
 			}
 			else
 			{
-				this.data = value_;
+				data = value_;
 			}
 		}
 
-		public String Key { get { return key; } }
+		public String Key
+		{
+			get { return key; }
+		}
 
-		public String Classname { get { return data.GetType().FullName; } }
+		public String Classname
+		{
+			get { return data.GetType().FullName; }
+		}
 
 		/// <summary> Returns the data. Always returns the same
 		/// object since the data is a constant. Initialization

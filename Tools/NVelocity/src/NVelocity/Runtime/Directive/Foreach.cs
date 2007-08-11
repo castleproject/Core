@@ -2,10 +2,8 @@ namespace NVelocity.Runtime.Directive
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.IO;
-
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util.Introspection;
 
@@ -20,7 +18,7 @@ namespace NVelocity.Runtime.Directive
 		static Foreach()
 		{
 			SectionNames = ForeachSectionEnum.GetNames(typeof(ForeachSectionEnum));
-			
+
 			Array.Sort(SectionNames, CaseInsensitiveComparer.Default);
 
 			for(int i = 0; i < SectionNames.Length; i++)
@@ -199,7 +197,10 @@ namespace NVelocity.Runtime.Directive
 					return ((IEnumerable) listObject).GetEnumerator();
 
 				case EnumType.Enumeration:
-					rsvc.Warn("Warning! The reference " + node.GetChild(2).FirstToken.Image + " is an Enumeration in the #foreach() loop at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName + ". Because it's not resetable," + " if used in more than once, this may lead to" + " unexpected results.");
+					rsvc.Warn("Warning! The reference " + node.GetChild(2).FirstToken.Image +
+					          " is an Enumeration in the #foreach() loop at [" + Line + "," + Column + "]" + " in template " +
+					          context.CurrentTemplateName + ". Because it's not resetable," +
+					          " if used in more than once, this may lead to" + " unexpected results.");
 					return (IEnumerator) listObject;
 
 				case EnumType.Array:
@@ -210,7 +211,9 @@ namespace NVelocity.Runtime.Directive
 
 				default:
 					/*  we have no clue what this is  */
-					rsvc.Warn("Could not determine type of enumerator (" + listObject.GetType().Name + ") in " + "#foreach loop for " + node.GetChild(2).FirstToken.Image + " at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName);
+					rsvc.Warn("Could not determine type of enumerator (" + listObject.GetType().Name + ") in " + "#foreach loop for " +
+					          node.GetChild(2).FirstToken.Image + " at [" + Line + "," + Column + "]" + " in template " +
+					          context.CurrentTemplateName);
 
 					return null;
 			}
@@ -283,9 +286,7 @@ namespace NVelocity.Runtime.Directive
 					}
 
 					counter++;
-
-				} 
-				while(enumerator.MoveNext());
+				} while(enumerator.MoveNext());
 			}
 
 			if (isFancyLoop)
@@ -317,7 +318,8 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		private void ProcessSection(ForeachSectionEnum sectionEnumType, INode[][] sections, IInternalContextAdapter context, TextWriter writer)
+		private void ProcessSection(ForeachSectionEnum sectionEnumType, INode[][] sections, IInternalContextAdapter context,
+		                            TextWriter writer)
 		{
 			int sectionIndex = (int) sectionEnumType;
 
@@ -332,11 +334,11 @@ namespace NVelocity.Runtime.Directive
 		private INode[][] PrepareSections(INode node)
 		{
 			bool isFancyLoop = false;
-			
+
 			int curSection = (int) ForeachSectionEnum.Each;
-			
+
 			ArrayList[] sections = new ArrayList[SectionNames.Length];
-			
+
 			int nodeCount = node.ChildrenCount;
 
 			for(int i = 0; i < nodeCount; i++)
@@ -348,7 +350,7 @@ namespace NVelocity.Runtime.Directive
 				{
 					isFancyLoop = true;
 					curSection = (int) ForeachSectionEnum.Parse(
-						typeof(ForeachSectionEnum), directive.DirectiveName, true);
+					                   	typeof(ForeachSectionEnum), directive.DirectiveName, true);
 				}
 				else
 				{
@@ -368,7 +370,7 @@ namespace NVelocity.Runtime.Directive
 			{
 				INode[][] result = new INode[sections.Length][];
 
-				for(int i=0; i < sections.Length; i++)
+				for(int i = 0; i < sections.Length; i++)
 				{
 					if (sections[i] != null)
 					{

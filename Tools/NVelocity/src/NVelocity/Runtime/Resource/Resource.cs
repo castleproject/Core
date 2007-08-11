@@ -15,7 +15,7 @@
 namespace NVelocity.Runtime.Resource
 {
 	using System;
-	using NVelocity.Runtime.Resource.Loader;
+	using Loader;
 
 	/// <summary>
 	/// This class represent a general text resource that
@@ -114,7 +114,7 @@ namespace NVelocity.Runtime.Resource
 			 *  see if we need to check now
 			 */
 
-			return ((DateTime.Now.Ticks - 621355968000000000)/10000 >= nextCheck);
+			return ((DateTime.Now.Ticks - 621355968000000000) / 10000 >= nextCheck);
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		public void Touch()
 		{
-			nextCheck = (DateTime.Now.Ticks - 621355968000000000)/10000 + (MILLIS_PER_SECOND*modificationCheckInterval);
+			nextCheck = (DateTime.Now.Ticks - 621355968000000000) / 10000 + (MILLIS_PER_SECOND * modificationCheckInterval);
 		}
 
 		/// <summary>
@@ -135,7 +135,7 @@ namespace NVelocity.Runtime.Resource
 		public Object Data
 		{
 			get { return data; }
-			set { this.data = value; }
+			set { data = value; }
 		}
 
 		/// <summary>
@@ -148,7 +148,7 @@ namespace NVelocity.Runtime.Resource
 		public String Encoding
 		{
 			get { return encoding; }
-			set { this.encoding = value; }
+			set { encoding = value; }
 		}
 
 		/// <summary>
@@ -161,12 +161,12 @@ namespace NVelocity.Runtime.Resource
 		public long LastModified
 		{
 			get { return lastModified; }
-			set { this.lastModified = value; }
+			set { lastModified = value; }
 		}
 
 		public long ModificationCheckInterval
 		{
-			set { this.modificationCheckInterval = value; }
+			set { modificationCheckInterval = value; }
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace NVelocity.Runtime.Resource
 		public String Name
 		{
 			get { return name; }
-			set { this.name = value; }
+			set { name = value; }
 		}
 
 		/// <summary>
@@ -191,7 +191,7 @@ namespace NVelocity.Runtime.Resource
 		public ResourceLoader ResourceLoader
 		{
 			get { return resourceLoader; }
-			set { this.resourceLoader = value; }
+			set { resourceLoader = value; }
 		}
 
 		public IRuntimeServices RuntimeServices

@@ -3,8 +3,8 @@ namespace NVelocity.Runtime.Parser.Node
 	using System;
 	using System.IO;
 	using System.Text;
-	using NVelocity.Context;
-	using NVelocity.Runtime.Exception;
+	using Context;
+	using Exception;
 
 	public class SimpleNode : INode
 	{
@@ -36,8 +36,7 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			get { return first; }
 
-			set { this.first = value; }
-
+			set { first = value; }
 		}
 
 		public Token LastToken
@@ -53,7 +52,7 @@ namespace NVelocity.Runtime.Parser.Node
 		public int Info
 		{
 			get { return info; }
-			set { this.info = value; }
+			set { info = value; }
 		}
 
 		public int Line
@@ -104,7 +103,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public int ChildrenCount
 		{
-			get { return ( children == null ) ? 0 : children.Length; }
+			get { return (children == null) ? 0 : children.Length; }
 		}
 
 		/// <summary>Accept the visitor. *
@@ -120,7 +119,7 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			if (children != null)
 			{
-				for (int i = 0; i < children.Length; ++i)
+				for(int i = 0; i < children.Length; ++i)
 				{
 					children[i].Accept(visitor, data);
 				}
@@ -151,7 +150,7 @@ namespace NVelocity.Runtime.Parser.Node
 			Console.Out.WriteLine(ToString(prefix));
 			if (children != null)
 			{
-				for (int i = 0; i < children.Length; ++i)
+				for(int i = 0; i < children.Length; ++i)
 				{
 					SimpleNode n = (SimpleNode) children[i];
 					if (n != null)
@@ -171,7 +170,7 @@ namespace NVelocity.Runtime.Parser.Node
 				Token t = first;
 				StringBuilder sb = new StringBuilder(t.Image);
 
-				while (t != last)
+				while(t != last)
 				{
 					t = t.Next;
 					sb.Append(t.Image);
@@ -191,13 +190,13 @@ namespace NVelocity.Runtime.Parser.Node
 
 			int i, k = ChildrenCount;
 
-			for (i = 0; i < k; i++)
+			for(i = 0; i < k; i++)
 			{
 				try
 				{
 					GetChild(i).Init(context, data);
 				}
-				catch (ReferenceException re)
+				catch(ReferenceException re)
 				{
 					rsvc.Error(re);
 				}
@@ -220,7 +219,7 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			int i, k = ChildrenCount;
 
-			for (i = 0; i < k; i++)
+			for(i = 0; i < k; i++)
 				GetChild(i).Render(context, writer);
 
 			return true;

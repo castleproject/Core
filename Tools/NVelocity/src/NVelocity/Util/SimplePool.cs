@@ -55,7 +55,7 @@ namespace NVelocity.Util
 		/// </summary>
 		public Object get()
 		{
-			lock (this)
+			lock(this)
 			{
 				if (current >= 0)
 				{

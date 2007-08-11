@@ -194,8 +194,8 @@ namespace Commons.Collections
 
 		public String Include
 		{
-			get { return ExtendedProperties.include; }
-			set { ExtendedProperties.include = value; }
+			get { return include; }
+			set { include = value; }
 		}
 
 		public new IEnumerable Keys
@@ -228,7 +228,7 @@ namespace Commons.Collections
 					{
 						reader = new PropertiesReader(new StreamReader(input, Encoding.GetEncoding(enc)));
 					}
-					catch (IOException)
+					catch(IOException)
 					{
 						// Get one with the default encoding...
 					}
@@ -241,11 +241,11 @@ namespace Commons.Collections
 
 				try
 				{
-					while (true)
+					while(true)
 					{
 						String line = reader.ReadProperty();
 
-						if (line==null) break;
+						if (line == null) break;
 
 						int equalSign = line.IndexOf((Char) '=');
 
@@ -420,7 +420,7 @@ namespace Commons.Collections
 				{
 					PropertiesTokenizer tokenizer = new PropertiesTokenizer((String) token);
 
-					while (tokenizer.HasMoreTokens())
+					while(tokenizer.HasMoreTokens())
 					{
 						String s = tokenizer.NextToken();
 
@@ -544,7 +544,7 @@ namespace Commons.Collections
 		/// </exception>
 		public void Save(TextWriter output, String Header)
 		{
-			lock (this)
+			lock(this)
 			{
 				if (output != null)
 				{
@@ -552,7 +552,7 @@ namespace Commons.Collections
 					if (Header != null)
 						w.WriteLine(Header);
 
-					foreach (String key in Keys)
+					foreach(String key in Keys)
 					{
 						Object value = this[key];
 						if (value == null)
@@ -562,10 +562,10 @@ namespace Commons.Collections
 							WriteKeyOutput(w, key, (String) value);
 						else if (value is IEnumerable)
 						{
-							foreach (String currentElement in (IEnumerable) value)
+							foreach(String currentElement in (IEnumerable) value)
 								WriteKeyOutput(w, key, currentElement);
 						}
-						
+
 						w.WriteLine();
 						w.Flush();
 					}
@@ -590,13 +590,13 @@ namespace Commons.Collections
 		/// </param>
 		public void Combine(ExtendedProperties c)
 		{
-			foreach (String key in c.Keys)
+			foreach(String key in c.Keys)
 			{
 				Object o = c[key];
 				// if the value is a String, escape it so that if there are delmiters that the value is not converted to a list
 				if (o is String)
 					o = ((String) o).Replace(",", @"\,");
-				
+
 				SetProperty(key, o);
 			}
 		}
@@ -616,7 +616,7 @@ namespace Commons.Collections
 				* things get *very* confusing
 				*/
 
-				for (int i = 0; i < keysAsListed.Count; i++)
+				for(int i = 0; i < keysAsListed.Count; i++)
 				{
 					if (((String) keysAsListed[i]).Equals(key))
 					{
@@ -649,7 +649,7 @@ namespace Commons.Collections
 		{
 			ArrayList matchingKeys = new ArrayList();
 
-			foreach (Object key in Keys)
+			foreach(Object key in Keys)
 			{
 				if (key is String && ((String) key).StartsWith(prefix))
 					matchingKeys.Add(key);
@@ -670,7 +670,7 @@ namespace Commons.Collections
 			ExtendedProperties c = new ExtendedProperties();
 			bool validSubset = false;
 
-			foreach (Object key in Keys)
+			foreach(Object key in Keys)
 			{
 				if (key is String && ((String) key).StartsWith(prefix))
 				{
@@ -712,7 +712,7 @@ namespace Commons.Collections
 		public override String ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			foreach (String key in Keys)
+			foreach(String key in Keys)
 			{
 				Object value = this[key];
 				sb.Append(key + " => " + ValueToString(value)).Append(Environment.NewLine);
@@ -725,7 +725,7 @@ namespace Commons.Collections
 			if (value is ArrayList)
 			{
 				String s = "ArrayList :: ";
-				foreach (Object o in (ArrayList) value)
+				foreach(Object o in (ArrayList) value)
 				{
 					if (!s.EndsWith(", "))
 					{
@@ -849,7 +849,7 @@ namespace Commons.Collections
 	    * Each token is of the form 'key=value'.
 	    */
 			Hashtable props = new Hashtable(defaultProps);
-			for (int i = 0; i < tokens.Length; i++)
+			for(int i = 0; i < tokens.Length; i++)
 			{
 				String token = tokens[i];
 				int equalSign = token.IndexOf((Char) '=');
@@ -911,7 +911,7 @@ namespace Commons.Collections
 			}
 
 			String[] tokens = new String[vector.Count];
-			for (int i = 0; i < tokens.Length; i++)
+			for(int i = 0; i < tokens.Length; i++)
 			{
 				tokens[i] = (String) vector[i];
 			}
@@ -1507,7 +1507,7 @@ namespace Commons.Collections
 			foreach(String key in p.Keys)
 			{
 				Object value = p.GetProperty(key);
-				
+
 				// if the value is a String, escape it so that if there are delmiters that the value is not converted to a list
 				if (value is String)
 					value = value.ToString().Replace(",", @"\,");

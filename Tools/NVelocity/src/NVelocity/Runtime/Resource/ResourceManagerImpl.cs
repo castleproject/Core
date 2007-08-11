@@ -18,8 +18,8 @@ namespace NVelocity.Runtime.Resource
 	using System.Collections;
 	using System.IO;
 	using Commons.Collections;
+	using Loader;
 	using NVelocity.Exception;
-	using NVelocity.Runtime.Resource.Loader;
 
 	/// <summary> 
 	/// Class to manage the text resource for the Velocity Runtime.
@@ -81,20 +81,22 @@ namespace NVelocity.Runtime.Resource
 		{
 			rsvc = rs;
 
-			rsvc.Info("Default ResourceManager initializing. (" + this.GetType() + ")");
+			rsvc.Info("Default ResourceManager initializing. (" + GetType() + ")");
 
 			ResourceLoader resourceLoader;
 
 			AssembleResourceLoaderInitializers();
 
-			for (int i=0; i < sourceInitializerList.Count; i++)
+			for(int i = 0; i < sourceInitializerList.Count; i++)
 			{
 				ExtendedProperties configuration = (ExtendedProperties) sourceInitializerList[i];
 				String loaderClass = configuration.GetString("class");
 
 				if (loaderClass == null)
 				{
-					rsvc.Error("Unable to find '" + configuration.GetString(RESOURCE_LOADER_IDENTIFIER) + ".resource.loader.class' specification in configuation." + " This is a critical value.  Please adjust configuration.");
+					rsvc.Error("Unable to find '" + configuration.GetString(RESOURCE_LOADER_IDENTIFIER) +
+					           ".resource.loader.class' specification in configuation." +
+					           " This is a critical value.  Please adjust configuration.");
 					continue;
 				}
 
@@ -118,16 +120,19 @@ namespace NVelocity.Runtime.Resource
 					Type type = Type.GetType(claz);
 					o = Activator.CreateInstance(type);
 				}
-				catch (Exception)
+				catch(Exception)
 				{
-					String err = "The specified class for ResourceCache (" + claz + ") does not exist (or is not accessible to the current classloader).";
+					String err = "The specified class for ResourceCache (" + claz +
+					             ") does not exist (or is not accessible to the current classloader).";
 					rsvc.Error(err);
 					o = null;
 				}
 
 				if (!(o is ResourceCache))
 				{
-					String err = "The specified class for ResourceCache (" + claz + ") does not implement NVelocity.Runtime.Resource.ResourceCache." + " Using default ResourceCache implementation.";
+					String err = "The specified class for ResourceCache (" + claz +
+					             ") does not implement NVelocity.Runtime.Resource.ResourceCache." +
+					             " Using default ResourceCache implementation.";
 					rsvc.Error(err);
 					o = null;
 				}
@@ -160,7 +165,7 @@ namespace NVelocity.Runtime.Resource
 
 			ArrayList resourceLoaderNames = rsvc.Configuration.GetVector(RuntimeConstants.RESOURCE_LOADER);
 
-			for (int i = 0; i < resourceLoaderNames.Count; i++)
+			for(int i = 0; i < resourceLoaderNames.Count; i++)
 			{
 				/*
 				 * The loader id might look something like the following:
@@ -179,7 +184,8 @@ namespace NVelocity.Runtime.Resource
 				 */
 				if (loaderConfiguration == null)
 				{
-					rsvc.Warn("ResourceManager : No configuration information for resource loader named '" + resourceLoaderNames[i] + "'. Skipping.");
+					rsvc.Warn("ResourceManager : No configuration information for resource loader named '" + resourceLoaderNames[i] +
+					          "'. Skipping.");
 					continue;
 				}
 
@@ -240,7 +246,7 @@ namespace NVelocity.Runtime.Resource
 				{
 					RefreshResource(resource, encoding);
 				}
-				catch (ResourceNotFoundException)
+				catch(ResourceNotFoundException)
 				{
 					/*
 					 *  something exceptional happened to that resource
@@ -252,13 +258,13 @@ namespace NVelocity.Runtime.Resource
 
 					return GetResource(resourceName, resourceType, encoding);
 				}
-				catch (ParseErrorException pee)
+				catch(ParseErrorException pee)
 				{
 					rsvc.Error("ResourceManager.GetResource() exception: " + pee);
 
 					throw;
 				}
-				catch (Exception eee)
+				catch(Exception eee)
 				{
 					rsvc.Error("ResourceManager.GetResource() exception: " + eee);
 
@@ -277,19 +283,19 @@ namespace NVelocity.Runtime.Resource
 						globalCache.put(resourceName, resource);
 					}
 				}
-				catch (ResourceNotFoundException)
+				catch(ResourceNotFoundException)
 				{
 					rsvc.Error("ResourceManager : unable to find resource '" + resourceName + "' in any resource loader.");
 
 					throw;
 				}
-				catch (ParseErrorException pee)
+				catch(ParseErrorException pee)
 				{
 					rsvc.Error("ResourceManager.GetResource() parse exception: " + pee);
 
 					throw;
 				}
-				catch (Exception ee)
+				catch(Exception ee)
 				{
 					rsvc.Error("ResourceManager.GetResource() exception new: " + ee);
 
@@ -336,7 +342,7 @@ namespace NVelocity.Runtime.Resource
 
 			ResourceLoader resourceLoader = null;
 
-			for (int i = 0; i < resourceLoaders.Count; i++)
+			for(int i = 0; i < resourceLoaders.Count; i++)
 			{
 				resourceLoader = (ResourceLoader) resourceLoaders[i];
 				resource.ResourceLoader = resourceLoader;
@@ -368,7 +374,7 @@ namespace NVelocity.Runtime.Resource
 						break;
 					}
 				}
-				catch (ResourceNotFoundException)
+				catch(ResourceNotFoundException)
 				{
 					/*
 					*  that's ok - it's possible to fail in
@@ -443,7 +449,8 @@ namespace NVelocity.Runtime.Resource
 
 					if (!resource.Encoding.Equals(encoding))
 					{
-						rsvc.Error("Declared encoding for template '" + resource.Name + "' is different on reload.  Old = '" + resource.Encoding + "'  New = '" + encoding);
+						rsvc.Error("Declared encoding for template '" + resource.Name + "' is different on reload.  Old = '" +
+						           resource.Encoding + "'  New = '" + encoding);
 
 						resource.Encoding = encoding;
 					}
@@ -514,7 +521,7 @@ namespace NVelocity.Runtime.Resource
 			/*
 	    *  loop through our loaders...
 	    */
-			for (int i = 0; i < resourceLoaders.Count; i++)
+			for(int i = 0; i < resourceLoaders.Count; i++)
 			{
 				resourceLoader = (ResourceLoader) resourceLoaders[i];
 
@@ -531,7 +538,7 @@ namespace NVelocity.Runtime.Resource
 						return resourceLoader.GetType().ToString();
 					}
 				}
-				catch (ResourceNotFoundException)
+				catch(ResourceNotFoundException)
 				{
 					// this isn't a problem.  keep going
 				}
@@ -545,7 +552,7 @@ namespace NVelocity.Runtime.Resource
 						{
 							input.Close();
 						}
-						catch (IOException)
+						catch(IOException)
 						{
 						}
 					}

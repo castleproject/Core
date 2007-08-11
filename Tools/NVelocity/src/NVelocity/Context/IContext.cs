@@ -1,7 +1,6 @@
 namespace NVelocity.Context
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>
 	/// Interface describing the application data context.  This set of

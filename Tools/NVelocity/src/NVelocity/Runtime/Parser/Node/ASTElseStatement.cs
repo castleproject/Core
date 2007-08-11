@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// This class is responsible for handling the Else VTL control statement.

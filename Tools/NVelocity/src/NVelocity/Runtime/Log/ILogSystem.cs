@@ -42,5 +42,4 @@ namespace NVelocity.Runtime.Log
 		/// </summary>
 		void LogVelocityMessage(LogLevel level, String message);
 	}
-
 }

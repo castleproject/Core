@@ -1,7 +1,6 @@
 namespace NVelocity.Context
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>  This class is the abstract base class for all conventional
 	/// Velocity Context  implementations.  Simply extend this class
@@ -37,7 +36,7 @@ namespace NVelocity.Context
 	/// </version>
 	[Serializable]
 	public abstract class AbstractContext : InternalContextBase, IContext
-	{ 
+	{
 		public Object[] Keys
 		{
 			get { return InternalGetKeys(); }
@@ -265,6 +264,6 @@ namespace NVelocity.Context
 			return InternalRemove(key);
 		}
 
-		public abstract int Count { get ; }
+		public abstract int Count { get; }
 	}
 }

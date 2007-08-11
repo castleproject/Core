@@ -2,8 +2,8 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.IO;
+	using Context;
 	using NVelocity.App.Events;
-	using NVelocity.Context;
 
 	/// <summary> 
 	/// Node for the #set directive
@@ -98,7 +98,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 					if (doit)
 					{
-						rsvc.Error("RHS of #set statement is null. Context will not be modified. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+						rsvc.Error("RHS of #set statement is null. Context will not be modified. " + context.CurrentTemplateName +
+						           " [line " + Line + ", column " + Column + "]");
 					}
 				}
 

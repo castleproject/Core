@@ -21,8 +21,7 @@ namespace Commons.Collections
 		/// <summary>
 		/// Maximum size 
 		/// </summary>
-		[NonSerialized] 
-		private int maxSize;
+		[NonSerialized] private int maxSize;
 
 		public LRUMap() : this(DEFAULT_MAX_SIZE)
 		{
@@ -138,7 +137,7 @@ namespace Commons.Collections
 			get
 			{
 				ArrayList retList = new ArrayList();
-				for (int i = 0; i < objectList.Count; i++)
+				for(int i = 0; i < objectList.Count; i++)
 				{
 					retList.Add(((DictionaryEntry) objectList[i]).Key);
 				}
@@ -151,7 +150,7 @@ namespace Commons.Collections
 			get
 			{
 				ArrayList retList = new ArrayList();
-				for (int i = 0; i < objectList.Count; i++)
+				for(int i = 0; i < objectList.Count; i++)
 				{
 					retList.Add(((DictionaryEntry) objectList[i]).Value);
 				}
@@ -166,7 +165,7 @@ namespace Commons.Collections
 
 		public void AddAll(IDictionary dictionary)
 		{
-			foreach (DictionaryEntry entry in dictionary)
+			foreach(DictionaryEntry entry in dictionary)
 			{
 				Add(entry.Key, entry.Value);
 			}
@@ -174,7 +173,7 @@ namespace Commons.Collections
 
 		private int IndexOf(object key)
 		{
-			for (int i = 0; i < objectList.Count; i++)
+			for(int i = 0; i < objectList.Count; i++)
 			{
 				if (((DictionaryEntry) objectList[i]).Key.Equals(key))
 				{
@@ -279,7 +278,7 @@ namespace Commons.Collections
 				get { return _table[key]; }
 				set
 				{
-					lock (_table.SyncRoot)
+					lock(_table.SyncRoot)
 					{
 						_table[key] = value;
 					}
@@ -293,7 +292,7 @@ namespace Commons.Collections
 
 			public override void Add(Object key, Object value)
 			{
-				lock (_table.SyncRoot)
+				lock(_table.SyncRoot)
 				{
 					_table.Add(key, value);
 				}
@@ -301,7 +300,7 @@ namespace Commons.Collections
 
 			public override void Clear()
 			{
-				lock (_table.SyncRoot)
+				lock(_table.SyncRoot)
 				{
 					_table.Clear();
 				}
@@ -348,7 +347,7 @@ namespace Commons.Collections
 			{
 				get
 				{
-					lock (_table.SyncRoot)
+					lock(_table.SyncRoot)
 					{
 						return _table.Keys;
 					}
@@ -359,7 +358,7 @@ namespace Commons.Collections
 			{
 				get
 				{
-					lock (_table.SyncRoot)
+					lock(_table.SyncRoot)
 					{
 						return _table.Values;
 					}
@@ -368,7 +367,7 @@ namespace Commons.Collections
 
 			public override void Remove(Object key)
 			{
-				lock (_table.SyncRoot)
+				lock(_table.SyncRoot)
 				{
 					_table.Remove(key);
 				}
@@ -386,6 +385,5 @@ namespace Commons.Collections
 //		return;
 //	    }
 		}
-
 	}
 }

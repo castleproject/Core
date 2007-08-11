@@ -6,9 +6,9 @@ namespace NVelocity.Runtime.Directive
 	using System.Collections;
 	using System.IO;
 	using System.Text;
-	using NVelocity.Context;
-	using NVelocity.Runtime.Parser;
+	using Context;
 	using NVelocity.Runtime.Parser.Node;
+	using Parser;
 
 	/// <summary>
 	/// Macro implements the macro definition directive of VTL.

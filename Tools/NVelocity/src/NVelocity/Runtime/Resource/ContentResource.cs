@@ -57,14 +57,14 @@ namespace NVelocity.Runtime.Resource
 
 				reader = new StreamReader(
 					new StreamReader(
-						resourceLoader.GetResourceStream(name), 
+						resourceLoader.GetResourceStream(name),
 						System.Text.Encoding.GetEncoding(encoding)).BaseStream);
 
 				char[] buf = new char[1024];
 				int len = 0;
 
 				// -1 in java, 0 in .Net
-				while ((len = reader.Read(buf, 0, 1024)) > 0)
+				while((len = reader.Read(buf, 0, 1024)) > 0)
 				{
 					sw.Write(buf, 0, len);
 				}
@@ -73,13 +73,13 @@ namespace NVelocity.Runtime.Resource
 
 				return true;
 			}
-			catch (ResourceNotFoundException e)
+			catch(ResourceNotFoundException e)
 			{
 				// Tell the ContentManager to continue to look through any
 				// remaining configured ResourceLoaders.
 				throw e;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				rsvc.Error("Cannot process content resource : " + e.ToString());
 				return false;
@@ -92,12 +92,11 @@ namespace NVelocity.Runtime.Resource
 					{
 						reader.Close();
 					}
-					catch (Exception)
+					catch(Exception)
 					{
 					}
 				}
 			}
-
 		}
 	}
 }

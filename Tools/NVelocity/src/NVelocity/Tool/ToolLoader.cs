@@ -33,7 +33,7 @@ namespace NVelocity.Tool
 				Object o = Activator.CreateInstance(type);
 				return o;
 			}
-			catch (Exception)
+			catch(Exception)
 			{
 				return null;
 			}

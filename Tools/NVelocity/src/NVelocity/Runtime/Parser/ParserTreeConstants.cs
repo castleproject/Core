@@ -53,6 +53,15 @@ namespace NVelocity.Runtime.Parser
 		public const int DIV_NODE = 35;
 		public const int MOD_NODE = 36;
 		public const int NOT_NODE = 37;
-		public static readonly String[] NodeName = new String[] {"process", "void", "EscapedDirective", "Escape", "Comment", "NumberLiteral", "StringLiteral", "Identifier", "Word", "Directive", "Block", "ObjectArray", "IntegerRange", "Method", "Reference", "True", "False", "Text", "IfStatement", "ElseStatement", "ElseIfStatement", "SetDirective", "Expression", "Assignment", "OrNode", "AndNode", "EQNode", "NENode", "LTNode", "GTNode", "LENode", "GENode", "AddNode", "SubtractNode", "MulNode", "DivNode", "ModNode", "NotNode"};
+
+		public static readonly String[] NodeName =
+			new String[]
+				{
+					"process", "void", "EscapedDirective", "Escape", "Comment", "NumberLiteral", "StringLiteral", "Identifier", "Word",
+					"Directive", "Block", "ObjectArray", "IntegerRange", "Method", "Reference", "True", "False", "Text", "IfStatement",
+					"ElseStatement", "ElseIfStatement", "SetDirective", "Expression", "Assignment", "OrNode", "AndNode", "EQNode",
+					"NENode", "LTNode", "GTNode", "LENode", "GENode", "AddNode", "SubtractNode", "MulNode", "DivNode", "ModNode",
+					"NotNode"
+				};
 	}
 }

@@ -29,7 +29,10 @@ namespace NVelocity.Runtime.Exception
 	[Serializable]
 	public class ReferenceException : Exception
 	{
-		public ReferenceException(String exceptionMessage, INode node) : base(exceptionMessage + " [line " + node.Line + ",column " + node.Column + "] : " + node.Literal + " is not a valid reference.")
+		public ReferenceException(String exceptionMessage, INode node)
+			: base(
+				exceptionMessage + " [line " + node.Line + ",column " + node.Column + "] : " + node.Literal +
+				" is not a valid reference.")
 		{
 		}
 

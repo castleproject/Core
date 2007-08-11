@@ -37,8 +37,8 @@ namespace NVelocity.Runtime.Parser
 		private int maxNextCharInd = 0;
 		private int inBuf = 0;
 
-		public VelocityCharStream(TextReader dstream, 
-			int startline, int startcolumn, int buffersize)
+		public VelocityCharStream(TextReader dstream,
+		                          int startline, int startcolumn, int buffersize)
 		{
 			inputStream = dstream;
 			line = startline;
@@ -133,7 +133,7 @@ namespace NVelocity.Runtime.Parser
 			int i = 0, j = 0, k = 0;
 			int nextColDiff = 0, columnDiff = 0;
 
-			while (i < len && bufline[j = start % bufsize] == bufline[k = ++start % bufsize])
+			while(i < len && bufline[j = start % bufsize] == bufline[k = ++start % bufsize])
 			{
 				bufline[j] = newLine;
 				nextColDiff = columnDiff + bufcolumn[k] - bufcolumn[j];
@@ -147,7 +147,7 @@ namespace NVelocity.Runtime.Parser
 				bufline[j] = newLine++;
 				bufcolumn[j] = newCol + columnDiff;
 
-				while (i++ < len)
+				while(i++ < len)
 				{
 					if (bufline[j = start % bufsize] != bufline[++start % bufsize])
 						bufline[j] = newLine++;
@@ -228,7 +228,7 @@ namespace NVelocity.Runtime.Parser
 					maxNextCharInd = (bufpos -= tokenBegin);
 				}
 			}
-			catch (Exception t)
+			catch(Exception t)
 			{
 				throw new ApplicationException(t.Message);
 			}
@@ -270,7 +270,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					i = inputStream.Read(buffer, maxNextCharInd, available - maxNextCharInd);
 				}
-				catch (Exception ex)
+				catch(Exception ex)
 				{
 					throw new IOException("exception reading from inputStream", ex);
 				}
@@ -283,7 +283,7 @@ namespace NVelocity.Runtime.Parser
 					maxNextCharInd += i;
 				return;
 			}
-			catch (IOException e)
+			catch(IOException e)
 			{
 				--bufpos;
 				Backup(0);
@@ -322,7 +322,7 @@ namespace NVelocity.Runtime.Parser
 					line += (column = 1);
 			}
 
-			switch (c)
+			switch(c)
 			{
 				case '\r':
 					prevCharIsCR = true;
@@ -339,7 +339,6 @@ namespace NVelocity.Runtime.Parser
 
 				default:
 					break;
-
 			}
 
 			bufline[bufpos] = line;

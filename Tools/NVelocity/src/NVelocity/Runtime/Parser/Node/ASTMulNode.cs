@@ -15,7 +15,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// Handles integer multiplication
@@ -57,7 +57,9 @@ namespace NVelocity.Runtime.Parser.Node
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side (" + GetChild((left == null ? 0 : 1)).Literal + ") of multiplication operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side (" + GetChild((left == null ? 0 : 1)).Literal +
+				           ") of multiplication operation has null value." + " Operation not possible. " +
+				           context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return null;
 			}
 

@@ -82,7 +82,7 @@ namespace NVelocity.Runtime.Resource
 		{
 			Resource resource = null;
 
-			switch (resourceType)
+			switch(resourceType)
 			{
 				case ResourceType.Template:
 					resource = new Template();

@@ -16,9 +16,6 @@ namespace NVelocity.Runtime.Resource.Loader
 {
 	using System;
 
-	using NVelocity.Util;
-
-
 	/// <summary>
 	/// Factory to grab a template loader.
 	/// </summary>
@@ -46,9 +43,10 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				return loader;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
-				rs.Error("Problem instantiating the template loader.\n" + "Look at your properties file and make sure the\n" + "name of the template loader is correct. Here is the\n" + "error: " + e);
+				rs.Error("Problem instantiating the template loader.\n" + "Look at your properties file and make sure the\n" +
+				         "name of the template loader is correct. Here is the\n" + "error: " + e);
 				throw new Exception("Problem initializing template loader: " + loaderClassName + "\nError is: " + e);
 			}
 		}

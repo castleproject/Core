@@ -16,8 +16,8 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.Reflection;
+	using Context;
 	using NVelocity.App.Events;
-	using NVelocity.Context;
 	using NVelocity.Exception;
 	using NVelocity.Util.Introspection;
 
@@ -86,7 +86,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			if (duck != null)
 			{
-				for (int j = 0; j < paramCount; j++)
+				for(int j = 0; j < paramCount; j++)
 				{
 					parameters[j] = GetChild(j + 1).Value(context);
 				}

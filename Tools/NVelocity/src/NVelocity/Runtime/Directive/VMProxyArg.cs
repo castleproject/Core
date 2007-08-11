@@ -2,11 +2,10 @@ namespace NVelocity.Runtime.Directive
 {
 	using System;
 	using System.IO;
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Exception;
-	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
-	using NVelocity.Util;
+	using Parser;
 
 	/// <summary>  
 	/// The function of this class is to proxy for the calling parameter to the VM.

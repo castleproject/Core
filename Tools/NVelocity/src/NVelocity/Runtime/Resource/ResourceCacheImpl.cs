@@ -68,7 +68,7 @@ namespace NVelocity.Runtime.Resource
 				cache = lruCache;
 			}
 
-			rsvc.Info("ResourceCache : initialized. (" + this.GetType() + ")");
+			rsvc.Info("ResourceCache : initialized. (" + GetType() + ")");
 		}
 
 		public Resource get(Object key)

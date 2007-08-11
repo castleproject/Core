@@ -2,8 +2,8 @@ namespace NVelocity.Runtime.Visitor
 {
 	using System;
 	using System.Text;
-	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
+	using Parser;
 
 	/// <summary> This class is simply a visitor implementation
 	/// that traverses the AST, produced by the Velocity
@@ -29,7 +29,7 @@ namespace NVelocity.Runtime.Visitor
 		private String IndentString()
 		{
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < indent; ++i)
+			for(int i = 0; i < indent; ++i)
 			{
 				sb.Append("  ");
 			}

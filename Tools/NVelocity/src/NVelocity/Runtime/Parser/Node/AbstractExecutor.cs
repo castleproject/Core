@@ -15,6 +15,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// Method to be executed.
 		/// </summary>
 		protected internal MethodInfo method = null;
+
 		protected internal PropertyInfo property = null;
 
 		/// <summary>
@@ -24,7 +25,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public bool IsAlive
 		{
-			get { return ( method != null || property != null ); }
+			get { return (method != null || property != null); }
 		}
 
 		public MethodInfo Method

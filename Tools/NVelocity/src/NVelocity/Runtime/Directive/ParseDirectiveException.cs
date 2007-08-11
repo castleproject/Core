@@ -29,19 +29,18 @@ namespace NVelocity.Runtime.Directive
 
 				try
 				{
-					while (!(filenameStack.Count == 0))
+					while(!(filenameStack.Count == 0))
 					{
 						returnStr += (String) filenameStack.Pop();
 						returnStr += " -> ";
 					}
 				}
-				catch (Exception)
+				catch(Exception)
 				{
 				}
 
 				return returnStr;
 			}
-
 		}
 
 		//UPGRADE_NOTE: The initialization of  'filenameStack' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'

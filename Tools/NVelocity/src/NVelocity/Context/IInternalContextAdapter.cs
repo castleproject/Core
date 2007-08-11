@@ -15,7 +15,8 @@ namespace NVelocity.Context
 	/// <version> $Id: InternalContextAdapter.cs,v 1.3 2003/10/27 13:54:08 corts Exp $
 	///
 	/// </version>
-	public interface IInternalContextAdapter : IInternalHousekeepingContext, IContext, IInternalWrapperContext, IInternalEventContext, IDictionary
+	public interface IInternalContextAdapter : IInternalHousekeepingContext, IContext, IInternalWrapperContext,
+	                                           IInternalEventContext, IDictionary
 	{
 		/// <summary>
 		/// Need to define this method here otherwise since both IDicationary and IContext

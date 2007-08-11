@@ -2,7 +2,7 @@ namespace NVelocity.Runtime.Visitor
 {
 	using System;
 	using System.IO;
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Runtime.Parser.Node;
 
 	/// <summary> This is the base class for all visitors.

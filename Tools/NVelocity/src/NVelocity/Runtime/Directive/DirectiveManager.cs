@@ -17,7 +17,6 @@ namespace NVelocity.Runtime.Directive
 	using System;
 	using System.Collections;
 
-
 	public class DirectiveManager : IDirectiveManager
 	{
 		private IDictionary name2Type = Hashtable.Synchronized(new Hashtable());

@@ -4,11 +4,11 @@ namespace NVelocity.App
 	using System.IO;
 	using System.Text;
 	using Commons.Collections;
-	using NVelocity.Context;
-	using NVelocity.Exception;
-	using NVelocity.Runtime;
+	using Context;
+	using Exception;
 	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
+	using Runtime;
 
 	/// <summary>
 	/// This class provides a separate new-able instance of the
@@ -175,7 +175,7 @@ namespace NVelocity.App
 				encoding = ri.GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT);
 				br = new StreamReader(new StreamReader(instream, Encoding.GetEncoding(encoding)).BaseStream);
 			}
-			catch (IOException uce)
+			catch(IOException uce)
 			{
 				String msg = "Unsupported input encoding : " + encoding + " for template " + logTag;
 				throw new ParseErrorException(msg, uce);
@@ -202,7 +202,7 @@ namespace NVelocity.App
 			{
 				nodeTree = ri.Parse(reader, logTag);
 			}
-			catch (ParseException pex)
+			catch(ParseException pex)
 			{
 				throw new ParseErrorException(pex.Message, pex);
 			}
@@ -220,7 +220,7 @@ namespace NVelocity.App
 					{
 						nodeTree.Init(ica, ri);
 					}
-					catch (Exception e)
+					catch(Exception e)
 					{
 						ri.Error("Velocity.evaluate() : init exception for tag = " + logTag + " : " + e);
 					}
@@ -275,7 +275,7 @@ namespace NVelocity.App
 			construct.Append(vmName);
 			construct.Append("(");
 
-			for (int i = 0; i < parameters.Length; i++)
+			for(int i = 0; i < parameters.Length; i++)
 			{
 				construct.Append(" $");
 				construct.Append(parameters[i]);
@@ -289,7 +289,7 @@ namespace NVelocity.App
 
 				return retval;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				ri.Error("VelocityEngine.invokeVelocimacro() : error " + e);
 				throw;
@@ -306,7 +306,9 @@ namespace NVelocity.App
 		[Obsolete("Use the overload that takes the encoding as parameter")]
 		public bool MergeTemplate(String templateName, IContext context, TextWriter writer)
 		{
-			return MergeTemplate(templateName, ri.GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT), context, writer);
+			return
+				MergeTemplate(templateName, ri.GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT),
+				              context, writer);
 		}
 
 		/// <summary>

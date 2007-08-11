@@ -3,7 +3,6 @@ namespace NVelocity.Util.Introspection
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.Reflection;
 	using System.Text;
 
@@ -14,7 +13,9 @@ namespace NVelocity.Util.Introspection
 	/// </summary>
 	public class ClassMap
 	{
-		private static readonly MethodInfo CACHE_MISS = typeof(ClassMap).GetMethod("MethodMiss", BindingFlags.Static|BindingFlags.NonPublic);
+		private static readonly MethodInfo CACHE_MISS =
+			typeof(ClassMap).GetMethod("MethodMiss", BindingFlags.Static | BindingFlags.NonPublic);
+
 		private static readonly Object OBJECT = new Object();
 
 		private readonly Type clazz;
@@ -23,6 +24,7 @@ namespace NVelocity.Util.Introspection
 		/// name and actual arguments used to find it.
 		/// </summary>
 		private readonly Dictionary<string, MethodInfo> methodCache = new Dictionary<string, MethodInfo>();
+
 		private readonly Dictionary<string, MemberInfo> propertyCache = new Dictionary<string, MemberInfo>();
 		private readonly MethodMap methodMap = new MethodMap();
 
@@ -114,7 +116,7 @@ namespace NVelocity.Util.Introspection
 		public PropertyInfo FindProperty(String name)
 		{
 			MemberInfo cacheEntry;
-			
+
 			if (propertyCache.TryGetValue(name, out cacheEntry))
 			{
 				if (cacheEntry == CACHE_MISS)

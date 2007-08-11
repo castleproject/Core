@@ -13,10 +13,10 @@ namespace NVelocity.App.Events
 
 	public class MethodExceptionEventArgs : EventArgs
 	{
-		Object valueToRender;
-		Exception exceptionThrown;
-		Type targetClass;
-		String targetMethod;
+		private Object valueToRender;
+		private Exception exceptionThrown;
+		private Type targetClass;
+		private String targetMethod;
 
 		public MethodExceptionEventArgs(Type targetClass, String targetMethod, Exception exceptionThrown)
 		{
@@ -24,15 +24,26 @@ namespace NVelocity.App.Events
 			this.targetMethod = targetMethod;
 			this.exceptionThrown = exceptionThrown;
 		}
-		
+
 		public Object ValueToRender
 		{
 			get { return valueToRender; }
 			set { valueToRender = value; }
 		}
 
-		public Exception ExceptionThrown { get { return exceptionThrown; } }
-		public Type TargetClass { get { return targetClass; } }
-		public String TargetMethod { get { return targetMethod; } }
+		public Exception ExceptionThrown
+		{
+			get { return exceptionThrown; }
+		}
+
+		public Type TargetClass
+		{
+			get { return targetClass; }
+		}
+
+		public String TargetMethod
+		{
+			get { return targetMethod; }
+		}
 	}
 }

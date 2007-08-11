@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// Please look at the Parser.jjt file which is
@@ -51,7 +51,8 @@ namespace NVelocity.Runtime.Parser.Node
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side of '&&' operation is null." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side of '&&' operation is null." + " Operation not possible. " +
+				           context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return false;
 			}
 

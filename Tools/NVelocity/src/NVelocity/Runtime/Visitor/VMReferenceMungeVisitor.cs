@@ -37,7 +37,7 @@ namespace NVelocity.Runtime.Visitor
 		public override Object Visit(ASTReference node, Object data)
 		{
 			// see if there is an override value for this
-	    // reference
+			// reference
 			String overrideVal = (String) argmap[node.Literal.Substring(1)];
 
 			// if so, set in the node

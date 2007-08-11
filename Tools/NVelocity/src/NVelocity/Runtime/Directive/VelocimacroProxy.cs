@@ -3,12 +3,11 @@ namespace NVelocity.Runtime.Directive
 	using System;
 	using System.Collections;
 	using System.IO;
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Exception;
-	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
-	using NVelocity.Runtime.Visitor;
-	using NVelocity.Util;
+	using Parser;
+	using Visitor;
 
 	/// <summary>
 	/// VelocimacroProxy
@@ -34,7 +33,7 @@ namespace NVelocity.Runtime.Directive
 		{
 			proxyArgHash = new Hashtable();
 		}
-		
+
 		/// <summary>
 		/// The major meat of VelocimacroProxy, init() checks the # of arguments, 
 		/// patches the macro body, renders the macro into an AST, and then inits 
@@ -52,7 +51,7 @@ namespace NVelocity.Runtime.Directive
 			if (NumArgs != i)
 			{
 				rsvc.Error("VM #" + macroName + ": error : too " + ((NumArgs > i) ? "few" : "many") + " arguments to macro. Wanted " +
-					NumArgs + " got " + i);
+				           NumArgs + " got " + i);
 
 				return;
 			}
@@ -120,7 +119,7 @@ namespace NVelocity.Runtime.Directive
 		public bool setupMacro(String[] callArgs, int[] callArgTypes)
 		{
 			setupProxyArgs(callArgs, callArgTypes);
-			
+
 			parseTree(callArgs);
 
 			return true;
@@ -227,7 +226,7 @@ namespace NVelocity.Runtime.Directive
 			}
 			return args;
 		}
-		
+
 		/// <summary>
 		/// The name of this Velocimacro.
 		/// </summary>
@@ -288,7 +287,7 @@ namespace NVelocity.Runtime.Directive
 
 		public String Namespace
 		{
-			set { this.ns = value; }
+			set { ns = value; }
 		}
 	}
 }

@@ -16,8 +16,8 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.Reflection;
+	using Context;
 	using NVelocity.App.Events;
-	using NVelocity.Context;
 	using NVelocity.Exception;
 	using NVelocity.Util.Introspection;
 
@@ -78,13 +78,13 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
-			if (identifier == "to_quote" && (o.GetType() == typeof(string) || 
-				o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
+			if (identifier == "to_quote" && (o.GetType() == typeof(string) ||
+			                                 o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
 			{
 				return "\"" + EscapeDoubleQuote(o.ToString()) + "\"";
 			}
-			else if (identifier == "to_squote" && (o.GetType() == typeof(string) || 
-				o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
+			else if (identifier == "to_squote" && (o.GetType() == typeof(string) ||
+			                                       o.GetType().IsPrimitive || o.GetType() == typeof(decimal)))
 			{
 				return "'" + EscapeSingleQuote(o.ToString()) + "'";
 			}
@@ -126,7 +126,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 				}
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				rsvc.Error("ASTIdentifier.execute() : identifier = " + identifier + " : " + e);
 			}
@@ -141,7 +141,7 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				return vg.Invoke(o);
 			}
-			catch (TargetInvocationException ite)
+			catch(TargetInvocationException ite)
 			{
 				EventCartridge ec = context.EventCartridge;
 
@@ -153,11 +153,11 @@ namespace NVelocity.Runtime.Parser.Node
 					{
 						return ec.HandleMethodException(o.GetType(), vg.MethodName, ite.InnerException);
 					}
-					catch (Exception)
+					catch(Exception)
 					{
 						String message = String.Format(
-							"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception", 
-							vg.MethodName, o != null ? o.GetType().FullName : "", 
+							"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
+							vg.MethodName, o != null ? o.GetType().FullName : "",
 							uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
 
 						throw new MethodInvocationException(message, ite.InnerException, vg.MethodName);
@@ -167,22 +167,22 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					// no event cartridge to override. Just throw
 					String message = String.Format(
-						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception", 
-						vg.MethodName, o != null ? o.GetType().FullName : "", 
+						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
+						vg.MethodName, o != null ? o.GetType().FullName : "",
 						uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
 
 					throw new MethodInvocationException(message, ite.InnerException, vg.MethodName);
 				}
 			}
-			catch (ArgumentException)
+			catch(ArgumentException)
 			{
 				return null;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				rsvc.Error("ASTIdentifier() : exception invoking method "
-					+ "for identifier '" + identifier + "' in "
-					+ o.GetType() + " : " + e);
+				           + "for identifier '" + identifier + "' in "
+				           + o.GetType() + " : " + e);
 			}
 
 			return null;

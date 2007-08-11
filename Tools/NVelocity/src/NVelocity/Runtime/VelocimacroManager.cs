@@ -3,11 +3,9 @@ namespace NVelocity.Runtime
 	using System;
 	using System.Collections;
 	using System.IO;
-
-	using NVelocity.Context;
-	using NVelocity.Runtime.Directive;
+	using Context;
+	using Directive;
 	using NVelocity.Runtime.Parser.Node;
-	using NVelocity.Util;
 
 	/// <summary> 
 	/// Manages VMs in namespaces.  Currently, two namespace modes are
@@ -53,7 +51,7 @@ namespace NVelocity.Runtime
 		internal VelocimacroManager(IRuntimeServices rs)
 		{
 			InitBlock();
-			this.rsvc = rs;
+			rsvc = rs;
 
 			/*
 		*  add the global namespace to the namespace hash. We always have that.
@@ -72,19 +70,16 @@ namespace NVelocity.Runtime
 		public bool NamespaceUsage
 		{
 			set { namespacesOn = value; }
-
 		}
 
 		public bool RegisterFromLib
 		{
 			set { registerFromLib = value; }
-
 		}
 
 		public bool TemplateLocalInlineVM
 		{
 			set { inlineLocalMode = value; }
-
 		}
 
 		/// <summary> Adds a VM definition to the cache.
@@ -211,7 +206,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public bool DumpNamespace(String ns)
 		{
-			lock (this)
+			lock(this)
 			{
 				if (UsingNamespaces(ns))
 				{
@@ -379,25 +374,21 @@ namespace NVelocity.Runtime
 				get { return fromLibrary; }
 
 				set { fromLibrary = value; }
-
 			}
 
 			public SimpleNode NodeTree
 			{
 				get { return nodeTree; }
-
 			}
 
 			public String SourceTemplate
 			{
 				get { return sourcetemplate; }
-
 			}
 
 			public VelocimacroManager Enclosing_Instance
 			{
 				get { return enclosingInstance; }
-
 			}
 
 			internal String macroname;
@@ -408,24 +399,25 @@ namespace NVelocity.Runtime
 			internal VelocimacroManager manager = null;
 			internal bool fromLibrary = false;
 
-			internal MacroEntry(VelocimacroManager enclosingInstance, VelocimacroManager vmm, String vmName, String macroBody, String[] argArray, String sourceTemplate)
+			internal MacroEntry(VelocimacroManager enclosingInstance, VelocimacroManager vmm, String vmName, String macroBody,
+			                    String[] argArray, String sourceTemplate)
 			{
 				InitBlock(enclosingInstance);
-				this.macroname = vmName;
-				this.argarray = argArray;
-				this.macrobody = macroBody;
-				this.sourcetemplate = sourceTemplate;
-				this.manager = vmm;
+				macroname = vmName;
+				argarray = argArray;
+				macrobody = macroBody;
+				sourcetemplate = sourceTemplate;
+				manager = vmm;
 			}
 
 
 			internal VelocimacroProxy CreateVelocimacro(String ns)
 			{
 				VelocimacroProxy vp = new VelocimacroProxy();
-				vp.Name = this.macroname;
-				vp.ArgArray = this.argarray;
-				vp.Macrobody = this.macrobody;
-				vp.NodeTree = this.nodeTree;
+				vp.Name = macroname;
+				vp.ArgArray = argarray;
+				vp.Macrobody = macrobody;
+				vp.NodeTree = nodeTree;
 				vp.Namespace = ns;
 				return vp;
 			}
@@ -450,7 +442,7 @@ namespace NVelocity.Runtime
 					nodeTree = Enclosing_Instance.rsvc.Parse(br, "VM:" + macroname, true);
 					nodeTree.Init(ica, null);
 				}
-				catch (System.Exception e)
+				catch(System.Exception e)
 				{
 					Enclosing_Instance.rsvc.Error("VelocimacroManager.parseTree() : exception " + macroname + " : " + e);
 				}

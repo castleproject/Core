@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// Please look at the Parser.jjt file which is what controls 

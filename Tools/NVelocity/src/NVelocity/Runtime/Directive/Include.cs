@@ -2,11 +2,11 @@ namespace NVelocity.Runtime.Directive
 {
 	using System;
 	using System.IO;
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Exception;
-	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
-	using NVelocity.Runtime.Resource;
+	using Parser;
+	using Resource;
 
 	/// <summary>
 	/// Pluggable directive that handles the #include() statement in VTL.
@@ -77,7 +77,7 @@ namespace NVelocity.Runtime.Directive
 			base.Init(rs, context, node);
 
 			// get the msg, and add the space so we don't have to
-	    // do it each time
+			// do it each time
 			outputMsgStart = rsvc.GetString(RuntimeConstants.ERRORMSG_START);
 			outputMsgStart = outputMsgStart + " ";
 
@@ -95,7 +95,7 @@ namespace NVelocity.Runtime.Directive
 			// get our arguments and check them
 			int argCount = node.ChildrenCount;
 
-			for (int i = 0; i < argCount; i++)
+			for(int i = 0; i < argCount; i++)
 			{
 				// we only handle StringLiterals and References right now
 				INode n = node.GetChild(i);
@@ -159,15 +159,17 @@ namespace NVelocity.Runtime.Directive
 
 				resource = rsvc.GetContent(arg, encoding);
 			}
-			catch (ResourceNotFoundException)
+			catch(ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
-				rsvc.Error("#include(): cannot find resource '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
+				rsvc.Error("#include(): cannot find resource '" + arg + "', called from template " + context.CurrentTemplateName +
+				           " at (" + Line + ", " + Column + ")");
 				throw;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
-				rsvc.Error("#include(): arg = '" + arg + "',  called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ") : " + e);
+				rsvc.Error("#include(): arg = '" + arg + "',  called from template " + context.CurrentTemplateName + " at (" + Line +
+				           ", " + Column + ") : " + e);
 			}
 
 			if (resource == null)

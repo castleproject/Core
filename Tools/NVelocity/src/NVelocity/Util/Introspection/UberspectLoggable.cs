@@ -1,7 +1,7 @@
 namespace NVelocity.Util.Introspection
 {
-	using NVelocity.Runtime;
-	
+	using Runtime;
+
 	/// <summary>  
 	/// Marker interface to let an uberspector indicate it can and wants to
 	/// log

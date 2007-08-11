@@ -2,7 +2,6 @@ namespace NVelocity.Tool
 {
 	using System;
 
-
 	/// <summary> Interface to simplify and abstract tool handling.
 	/// *
 	/// Implementations of this class should hold both the context

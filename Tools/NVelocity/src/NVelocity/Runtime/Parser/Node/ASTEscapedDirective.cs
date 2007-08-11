@@ -2,7 +2,7 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.IO;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// This class is responsible for handling EscapedDirectives

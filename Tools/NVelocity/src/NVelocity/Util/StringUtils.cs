@@ -35,7 +35,7 @@ namespace NVelocity.Util
 	{
 		/// <summary> Line separator for the OS we are operating on.
 		/// </summary>
-		private readonly static String EOL = Environment.NewLine;
+		private static readonly String EOL = Environment.NewLine;
 
 		/// <summary> <p>
 		/// Makes the first letter caps and the rest lowercase.
@@ -91,7 +91,7 @@ namespace NVelocity.Util
 						;
 					fr.Close();
 				}
-				catch (Exception e)
+				catch(Exception e)
 				{
 					Console.Out.WriteLine(e);
 					SupportClass.WriteStackTrace(e, Console.Error);
@@ -117,7 +117,7 @@ namespace NVelocity.Util
 		{
 			// Normalize the slashes and add leading slash if necessary
 			string normalized = path;
-			if(normalized.IndexOf(Path.AltDirectorySeparatorChar) >=0)
+			if (normalized.IndexOf(Path.AltDirectorySeparatorChar) >= 0)
 				normalized = normalized.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
 			if (!normalized.StartsWith(Path.DirectorySeparatorChar.ToString()))
@@ -126,7 +126,7 @@ namespace NVelocity.Util
 			}
 
 			// Resolve occurrences of "//" in the normalized path
-			while (true)
+			while(true)
 			{
 				int index = normalized.IndexOf("//");
 				if (index < 0) break;
@@ -134,7 +134,7 @@ namespace NVelocity.Util
 			}
 
 			// Resolve occurrences of "%20" in the normalized path
-			while (true)
+			while(true)
 			{
 				int index = normalized.IndexOf("%20");
 				if (index < 0) break;
@@ -142,7 +142,7 @@ namespace NVelocity.Util
 			}
 
 			// Resolve occurrences of "/./" in the normalized path
-			while (true)
+			while(true)
 			{
 				int index = normalized.IndexOf("/./");
 				if (index < 0)
@@ -151,7 +151,7 @@ namespace NVelocity.Util
 			}
 
 			// Resolve occurrences of "/../" in the normalized path
-			while (true)
+			while(true)
 			{
 				int index = normalized.IndexOf("/../");
 				if (index < 0)

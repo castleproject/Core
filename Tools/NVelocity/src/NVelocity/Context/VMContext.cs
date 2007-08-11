@@ -2,12 +2,11 @@ namespace NVelocity.Context
 {
 	using System;
 	using System.Collections;
-
 	using NVelocity.App.Events;
-	using NVelocity.Runtime;
 	using NVelocity.Runtime.Directive;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
+	using Runtime;
 
 	/// <summary>  This is a special, internal-use-only context implementation to be
 	/// used for the new Velocimacro implementation.
@@ -50,16 +49,16 @@ namespace NVelocity.Context
 				//return vmproxyhash.keySet().toArray();
 				throw new NotImplementedException();
 			}
-
 		}
 
 		public int Count
 		{
 			get { throw new NotImplementedException(); }
 		}
+
 		ICollection IDictionary.Keys
 		{
-			get { throw new NotImplementedException(); } 			
+			get { throw new NotImplementedException(); }
 		}
 
 		public ICollection Values
@@ -77,7 +76,7 @@ namespace NVelocity.Context
 			get { throw new NotImplementedException(); }
 		}
 
-		public object this[ object key ]
+		public object this[object key]
 		{
 			get { throw new NotImplementedException(); }
 			set { throw new NotImplementedException(); }
@@ -86,19 +85,16 @@ namespace NVelocity.Context
 		public String CurrentTemplateName
 		{
 			get { return innerContext.CurrentTemplateName; }
-
 		}
 
 		public Object[] TemplateNameStack
 		{
 			get { return innerContext.TemplateNameStack; }
-
 		}
 
 		public EventCartridge EventCartridge
 		{
 			get { return innerContext.EventCartridge; }
-
 		}
 
 		public Resource CurrentResource
@@ -106,7 +102,6 @@ namespace NVelocity.Context
 			get { return innerContext.CurrentResource; }
 
 			set { innerContext.CurrentResource = value; }
-
 		}
 
 		/// <summary>container for our VMProxy Objects
@@ -303,7 +298,7 @@ namespace NVelocity.Context
 
 		void IDictionary.Remove(Object key)
 		{
-			this.Remove(key);
+			Remove(key);
 		}
 
 		public void PushCurrentTemplateName(String s)
@@ -347,27 +342,27 @@ namespace NVelocity.Context
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool Contains( object key )
+		public bool Contains(object key)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Add( object key, object value )
+		public void Add(object key, object value)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Clear( )
+		public void Clear()
 		{
 			throw new NotImplementedException();
 		}
 
-		public IDictionaryEnumerator GetEnumerator( )
+		public IDictionaryEnumerator GetEnumerator()
 		{
 			throw new NotImplementedException();
 		}
 
-		IEnumerator IEnumerable.GetEnumerator( )
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			throw new NotImplementedException();
 		}

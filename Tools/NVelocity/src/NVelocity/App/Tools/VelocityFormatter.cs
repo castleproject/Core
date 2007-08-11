@@ -4,7 +4,7 @@ namespace NVelocity.App.Tools
 	using System.Collections;
 	using System.Globalization;
 	using System.Text;
-	using NVelocity.Context;
+	using Context;
 
 	/// <summary>
 	/// Formatting tool for inserting into the Velocity WebContext.  Can
@@ -113,7 +113,7 @@ namespace NVelocity.App.Tools
 
 			StringBuilder sb = new StringBuilder();
 			int arrayLen = ((double[]) array).Length;
-			for (int i = 0; i < arrayLen; i++)
+			for(int i = 0; i < arrayLen; i++)
 			{
 				// Use the Array.get method as this will automatically
 				// wrap primitive types in a suitable Object-derived
@@ -170,7 +170,7 @@ namespace NVelocity.App.Tools
 		{
 			StringBuilder sb = new StringBuilder();
 			Int32 size = list.Count;
-			for (int i = 0; i < size; i++)
+			for(int i = 0; i < size; i++)
 			{
 				sb.Append(list[i].ToString());
 				if (i < size - 2)
@@ -271,7 +271,7 @@ namespace NVelocity.App.Tools
 			/// <param name="alternates">A String[].
 			///
 			/// </param>
-			public VelocityAutoAlternator(params String[] alternates) 
+			public VelocityAutoAlternator(params String[] alternates)
 				: base(alternates)
 			{
 			}

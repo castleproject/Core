@@ -75,14 +75,14 @@ namespace NVelocity.Context
 		{
 			get
 			{
-				object[] keys = this.Keys;
+				object[] keys = Keys;
 				object[] values = new object[keys.Length];
 
-				for(int i=0; i < values.Length; i++)
+				for(int i = 0; i < values.Length; i++)
 				{
 					values[i] = Get(keys[i].ToString());
 				}
-				
+
 				return values;
 			}
 		}
@@ -97,7 +97,7 @@ namespace NVelocity.Context
 			get { return false; }
 		}
 
-		public object this[ object key ]
+		public object this[object key]
 		{
 			get { return Get(key.ToString()); }
 			set { Put(key.ToString(), value); }
@@ -248,7 +248,7 @@ namespace NVelocity.Context
 			context.Remove(key);
 		}
 
-		public void CopyTo( Array array, int index )
+		public void CopyTo(Array array, int index)
 		{
 			foreach(object value in Values)
 			{
@@ -271,12 +271,12 @@ namespace NVelocity.Context
 			get { return false; }
 		}
 
-		public bool Contains( object key )
+		public bool Contains(object key)
 		{
 			return context.ContainsKey(key);
 		}
 
-		public void Add( object key, object value )
+		public void Add(object key, object value)
 		{
 			context.Put(key.ToString(), value);
 		}
@@ -286,14 +286,14 @@ namespace NVelocity.Context
 			throw new NotImplementedException();
 		}
 
-		public IDictionaryEnumerator GetEnumerator( )
+		public IDictionaryEnumerator GetEnumerator()
 		{
 			return CreateEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return CreateEnumerator();			
+			return CreateEnumerator();
 		}
 
 		private InternalContextAdapterImplEnumerator CreateEnumerator()
@@ -309,7 +309,7 @@ namespace NVelocity.Context
 		private object[] keys;
 
 		public InternalContextAdapterImplEnumerator(IContext context)
-		{			
+		{
 			ctx = context;
 			keys = context.Keys;
 		}
@@ -328,7 +328,7 @@ namespace NVelocity.Context
 
 		public DictionaryEntry Entry
 		{
-			get { return new DictionaryEntry ( Key, Value ); }
+			get { return new DictionaryEntry(Key, Value); }
 		}
 
 		#endregion

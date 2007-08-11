@@ -15,14 +15,12 @@
 namespace NVelocity.Runtime.Resource.Loader
 {
 	using System;
-	using System.IO;
 	using System.Collections;
+	using System.IO;
 	using System.Reflection;
-
 	using Commons.Collections;
-	
 	using NVelocity.Exception;
-	using NVelocity.Util;
+	using Util;
 
 	public class AssemblyResourceLoader : ResourceLoader
 	{
@@ -66,7 +64,8 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			if (template == null || template.Length == 0)
 			{
-				String msg = "File resource error : argument " + template + " contains .. and may be trying to access " + "content outside of template root.  Rejected.";
+				String msg = "File resource error : argument " + template + " contains .. and may be trying to access " +
+				             "content outside of template root.  Rejected.";
 
 				throw new ResourceNotFoundException(msg);
 			}
@@ -82,17 +81,17 @@ namespace NVelocity.Runtime.Resource.Loader
 			foreach(String assemblyName in assemblyNames)
 			{
 				Assembly assm = null;
-				
+
 				try
 				{
-					assm = Assembly.Load( assemblyName );
+					assm = Assembly.Load(assemblyName);
 				}
 				catch(Exception ex)
 				{
 					throw new ResourceNotFoundException("Assembly could not be found " + assemblyName, ex);
 				}
 
-				Stream stream = assm.GetManifestResourceStream( template );
+				Stream stream = assm.GetManifestResourceStream(template);
 
 				if (stream != null)
 				{

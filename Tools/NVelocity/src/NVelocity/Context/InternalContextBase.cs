@@ -2,7 +2,6 @@ namespace NVelocity.Context
 {
 	using System;
 	using System.Collections;
-
 	using NVelocity.App.Events;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
@@ -26,7 +25,7 @@ namespace NVelocity.Context
 	/// </version>
 	[Serializable]
 	public class InternalContextBase : IInternalHousekeepingContext, IInternalEventContext
-	{ 
+	{
 		public InternalContextBase()
 		{
 			InitBlock();

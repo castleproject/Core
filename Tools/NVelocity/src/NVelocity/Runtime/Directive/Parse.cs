@@ -3,11 +3,11 @@ namespace NVelocity.Runtime.Directive
 	using System;
 	using System.IO;
 	using System.Text;
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Parser.Node;
-	using NVelocity.Runtime.Resource;
-	using Node = Parser.Node.INode;
+	using Resource;
+	using Node = NVelocity.Runtime.Parser.Node.INode;
 
 	/// <summary>
 	/// Pluggable directive that handles the #parse() statement in VTL.
@@ -54,14 +54,14 @@ namespace NVelocity.Runtime.Directive
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, Node node)
 		{
 			// did we get an argument?
-			if (!this.AssertArgument(node))
+			if (!AssertArgument(node))
 			{
 				return false;
 			}
 
 			// does it have a value?  If you have a null reference, then no.
 			Object value_;
-			if (!this.AssertNodeHasValue(node, context, out value_))
+			if (!AssertNodeHasValue(node, context, out value_))
 			{
 				return false;
 			}
@@ -89,14 +89,14 @@ namespace NVelocity.Runtime.Directive
 			// now use the Runtime resource loader to get the template
 			Template t = null;
 
-			t = this.GetTemplate(arg, encoding, context);
+			t = GetTemplate(arg, encoding, context);
 			if (t == null)
 			{
 				return false;
 			}
 
 			// and render it
-			if (!this.RenderTemplate(t, arg, writer, context))
+			if (!RenderTemplate(t, arg, writer, context))
 			{
 				return false;
 			}
@@ -142,7 +142,7 @@ namespace NVelocity.Runtime.Directive
 			{
 				StringBuilder path = new StringBuilder();
 
-				for (int i = 0; i < templateStack.Length; ++i)
+				for(int i = 0; i < templateStack.Length; ++i)
 				{
 					path.Append(" > " + templateStack[i]);
 				}
@@ -161,21 +161,23 @@ namespace NVelocity.Runtime.Directive
 			{
 				result = rsvc.GetTemplate(arg, encoding);
 			}
-			catch (ResourceNotFoundException)
+			catch(ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
-				rsvc.Error("#parse(): cannot find template '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
+				rsvc.Error("#parse(): cannot find template '" + arg + "', called from template " + context.CurrentTemplateName +
+				           " at (" + Line + ", " + Column + ")");
 				throw;
 			}
-			catch (ParseErrorException)
+			catch(ParseErrorException)
 			{
 				// the arg was found, but didn't parse - syntax error
 				// note it and throw
-				rsvc.Error("#parse(): syntax error in #parse()-ed template '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
+				rsvc.Error("#parse(): syntax error in #parse()-ed template '" + arg + "', called from template " +
+				           context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
 
 				throw;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				rsvc.Error("#parse() : arg = " + arg + ".  Exception : " + e);
 				result = null;

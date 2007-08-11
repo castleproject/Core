@@ -57,7 +57,7 @@ namespace NVelocity.Runtime.Parser.Node
 				if (method != null)
 					return;
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
 				rlog.Error("PROGRAMMER ERROR : PropertyExector() : " + e);
 			}

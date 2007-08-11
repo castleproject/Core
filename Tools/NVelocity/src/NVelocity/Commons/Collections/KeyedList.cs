@@ -149,7 +149,7 @@ namespace Commons.Collections
 			get
 			{
 				ArrayList retList = new ArrayList();
-				for (int i = 0; i < objectList.Count; i++)
+				for(int i = 0; i < objectList.Count; i++)
 				{
 					retList.Add(((DictionaryEntry) objectList[i]).Key);
 				}
@@ -162,7 +162,7 @@ namespace Commons.Collections
 			get
 			{
 				ArrayList retList = new ArrayList();
-				for (int i = 0; i < objectList.Count; i++)
+				for(int i = 0; i < objectList.Count; i++)
 				{
 					retList.Add(((DictionaryEntry) objectList[i]).Value);
 				}
@@ -177,7 +177,7 @@ namespace Commons.Collections
 
 		private int IndexOf(object key)
 		{
-			for (int i = 0; i < objectList.Count; i++)
+			for(int i = 0; i < objectList.Count; i++)
 			{
 				if (((DictionaryEntry) objectList[i]).Key.Equals(key))
 				{

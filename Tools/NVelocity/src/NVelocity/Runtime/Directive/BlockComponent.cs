@@ -16,10 +16,8 @@ namespace NVelocity.Runtime.Directive
 {
 	using System;
 	using System.IO;
-
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Runtime.Parser.Node;
-
 
 	public class BlockComponent : Directive
 	{
@@ -40,7 +38,7 @@ namespace NVelocity.Runtime.Directive
 		public override String Name
 		{
 			get { return "blockcomponent"; }
-			set {  }
+			set { }
 		}
 
 		public override DirectiveType Type

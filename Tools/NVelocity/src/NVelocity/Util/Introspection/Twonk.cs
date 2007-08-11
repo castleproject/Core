@@ -22,7 +22,7 @@ namespace NVelocity.Util.Introspection
 			bool low = false;
 			bool high = false;
 
-			for (int i = 0; i < vec.Length; i++)
+			for(int i = 0; i < vec.Length; i++)
 			{
 				if (vec[i] > other.vec[i])
 				{

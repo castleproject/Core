@@ -16,7 +16,7 @@ namespace NVelocity.Runtime.Directive
 {
 	using System;
 	using System.IO;
-	using NVelocity.Context;
+	using Context;
 	using NVelocity.Runtime.Parser.Node;
 
 	public class Component : Directive
@@ -32,14 +32,13 @@ namespace NVelocity.Runtime.Directive
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
-
 			return true;
 		}
 
 		public override String Name
 		{
 			get { return "component"; }
-			set {  }
+			set { }
 		}
 
 		public override DirectiveType Type

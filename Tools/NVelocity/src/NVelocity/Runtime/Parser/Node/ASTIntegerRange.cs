@@ -16,7 +16,7 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.Collections;
-	using NVelocity.Context;
+	using Context;
 
 	public class ASTIntegerRange : SimpleNode
 	{
@@ -51,14 +51,17 @@ namespace NVelocity.Runtime.Parser.Node
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side of range operator [n..m] has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side of range operator [n..m] has null value." +
+				           " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return null;
 			}
 
 			// if not an Integer, not much we can do either
 			if (!(left is Int32) || !(right is Int32))
 			{
-				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of range operator is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of range operator is not a valid type. " +
+				           "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName +
+				           " [line " + Line + ", column " + Column + "]");
 
 				return null;
 			}
@@ -78,7 +81,7 @@ namespace NVelocity.Runtime.Parser.Node
 			ArrayList foo = new ArrayList(num);
 			int val = l;
 
-			for (int i = 0; i < num; i++)
+			for(int i = 0; i < num; i++)
 			{
 				foo.Add(val);
 				val += delta;

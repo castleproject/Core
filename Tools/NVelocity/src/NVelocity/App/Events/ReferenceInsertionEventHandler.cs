@@ -5,17 +5,17 @@ namespace NVelocity.App.Events
 
 	public class ReferenceInsertionEventArgs : EventArgs
 	{
-		Stack referenceStack;
-		Object originalValue, newValue;
-		String rootString;
+		private Stack referenceStack;
+		private Object originalValue, newValue;
+		private String rootString;
 
 		public ReferenceInsertionEventArgs(Stack referenceStack, String rootString, Object value)
 		{
 			this.rootString = rootString;
 			this.referenceStack = referenceStack;
-			this.originalValue = this.newValue = value;
+			originalValue = newValue = value;
 		}
-		
+
 		public Stack GetCopyOfReferenceStack()
 		{
 			return (Stack) referenceStack.Clone();
@@ -37,7 +37,7 @@ namespace NVelocity.App.Events
 			set { newValue = value; }
 		}
 	}
-	
+
 	/// <summary>
 	/// Reference 'Stream insertion' event handler.  Called with object
 	/// that will be inserted into stream via value.toString().

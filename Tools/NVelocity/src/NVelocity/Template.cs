@@ -2,10 +2,8 @@ namespace NVelocity
 {
 	using System;
 	using System.IO;
-	using System.Text;
-
-	using NVelocity.Context;
-	using NVelocity.Exception;
+	using Context;
+	using Exception;
 	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Runtime.Resource;
@@ -73,18 +71,18 @@ namespace NVelocity
 					InitDocument();
 					return true;
 				}
-				catch (IOException uce)
+				catch(IOException uce)
 				{
 					String msg = "Template.process : Unsupported input encoding : " + encoding + " for template " + name;
 
 					throw errorCondition = new ParseErrorException(msg, uce);
 				}
-				catch (ParseException pex)
+				catch(ParseException pex)
 				{
 					// remember the error and convert
 					throw errorCondition = new ParseErrorException(pex.Message, pex);
 				}
-				catch (System.Exception e)
+				catch(System.Exception e)
 				{
 					// who knows?  Something from initDocument()
 					errorCondition = e;
@@ -194,7 +192,7 @@ namespace NVelocity
 			{
 				return resourceLoader.GetResourceStream(name);
 			}
-			catch (ResourceNotFoundException rnfe)
+			catch(ResourceNotFoundException rnfe)
 			{
 				//  remember and re-throw
 				errorCondition = rnfe;
