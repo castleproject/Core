@@ -90,7 +90,6 @@ namespace Commons.Collections
 	{
 		private static readonly Byte DEFAULT_BYTE = 0;
 		private static readonly Boolean DEFAULT_BOOLEAN = false;
-		private static readonly Int16 DEFAULT_INT16 = 0;
 		private static readonly Int32 DEFAULT_INT32 = 0;
 		private static readonly Single DEFAULT_SINGLE = 0;
 		private static readonly Int64 DEFAULT_INT64 = 0;
@@ -166,7 +165,7 @@ namespace Commons.Collections
 			basePath = new FileInfo(file).FullName;
 			basePath = basePath.Substring(0, (basePath.LastIndexOf(fileSeparator) + 1) - (0));
 
-			this.Load(new FileStream(file, FileMode.Open, FileAccess.Read));
+			Load(new FileStream(file, FileMode.Open, FileAccess.Read));
 
 			if (defaultFile != null)
 			{
@@ -303,7 +302,7 @@ namespace Commons.Collections
 								}
 								// TODO: make sure file is readable or handle exception appropriately
 								//if (file != null && tmpBool && file.canRead()) {
-								if (file != null && tmpBool)
+								if (tmpBool)
 								{
 									Load(new FileStream(file.FullName, FileMode.Open, FileAccess.Read));
 								}
@@ -315,7 +314,7 @@ namespace Commons.Collections
 						}
 					}
 				}
-				catch (NullReferenceException)
+				catch(NullReferenceException)
 				{
 					/*
 					 * Should happen only when EOF is reached.
@@ -974,7 +973,7 @@ namespace Commons.Collections
 				}
 				else
 				{
-					return ((defaultValue == null) ? new ArrayList() : defaultValue);
+					return (defaultValue ?? new ArrayList());
 				}
 			}
 			else
@@ -1072,7 +1071,7 @@ namespace Commons.Collections
 		/// </returns>
 		public String TestBoolean(String value_)
 		{
-			String s = ((String) value_).ToLower();
+			String s = value_.ToLower();
 
 			if (s.Equals("true") || s.Equals("on") || s.Equals("yes"))
 			{
@@ -1174,77 +1173,6 @@ namespace Commons.Collections
 			else
 			{
 				throw new InvalidCastException('\'' + key + "' doesn't map to a Byte object");
-			}
-		}
-
-		/// <summary> Get a short associated with the given configuration key.
-		/// *
-		/// </summary>
-		/// <param name="key">The configuration key.
-		/// </param>
-		/// <returns>The associated short if key is found and has valid
-		/// format, <see cref="DEFAULT_INT16"/> otherwise.
-		/// </returns>
-		/// <exception cref="Exception"> is thrown if the key doesn't
-		/// map to an existing object.
-		/// </exception>
-		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a Short.
-		/// </exception>
-		public short GetShort(String key)
-		{
-			Int16 s = GetShort(key, DEFAULT_INT16);
-			if ((Object) s != null)
-			{
-				return (short) s;
-			}
-			else
-			{
-				throw new Exception('\'' + key + "' doesn't map to an existing object");
-			}
-		}
-
-		/// <summary> Get a short associated with the given configuration key.
-		/// *
-		/// </summary>
-		/// <param name="key">The configuration key.
-		/// </param>
-		/// <param name="defaultValue">The default value.
-		/// </param>
-		/// <returns>The associated short if key is found and has valid
-		/// format, default value otherwise.
-		/// </returns>
-		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a Short.
-		/// </exception>
-		public Int16 GetShort(String key, Int16 defaultValue)
-		{
-			Object value_ = this[key];
-
-			if (value_ is Int16)
-			{
-				return (Int16) value_;
-			}
-			else if (value_ is String)
-			{
-				Int16 s = Int16.Parse((String) value_);
-				CollectionsUtil.PutElement(this, key, s);
-				return s;
-			}
-			else if (value_ == null)
-			{
-				if (defaults != null)
-				{
-					return defaults.GetShort(key, defaultValue);
-				}
-				else
-				{
-					return defaultValue;
-				}
-			}
-			else
-			{
-				throw new InvalidCastException('\'' + key + "' doesn't map to a Short object");
 			}
 		}
 

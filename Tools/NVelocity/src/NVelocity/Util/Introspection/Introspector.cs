@@ -2,7 +2,7 @@ namespace NVelocity.Util.Introspection
 {
 	using System;
 	using System.Reflection;
-	using NVelocity.Runtime;
+	using Runtime;
 
 	/// <summary> This basic function of this class is to return a Method
 	/// object for a particular class given the name of a method
@@ -50,8 +50,8 @@ namespace NVelocity.Util.Introspection
 		public override MethodInfo GetMethod(Type c, String name, Object[] parameters)
 		{
 			/*
-	    *  just delegate to the base class
-	    */
+			*  just delegate to the base class
+			*/
 
 			try
 			{

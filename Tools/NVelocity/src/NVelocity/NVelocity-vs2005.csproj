@@ -224,9 +224,6 @@
     <Compile Include="Runtime\Log\NullLogSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Runtime\Log\PrimordialLogSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Runtime\Parser\ICharStream.cs" />
     <Compile Include="Runtime\Parser\Node\AbstractExecutor.cs">
       <SubType>Code</SubType>

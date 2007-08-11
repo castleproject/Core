@@ -452,7 +452,7 @@ namespace NVelocity.Runtime
 				}
 				catch (System.Exception e)
 				{
-					Enclosing_Instance.rsvc.Error("VelocimacroManager.parseTree() : exception " + macroname + " : " + StringUtils.StackTrace(e));
+					Enclosing_Instance.rsvc.Error("VelocimacroManager.parseTree() : exception " + macroname + " : " + e);
 				}
 			}
 		}

@@ -53,7 +53,9 @@ namespace NVelocity.Util.Introspection
 		public virtual MethodInfo GetMethod(Type c, String name, Object[] parameters)
 		{
 			if (c == null)
+			{
 				throw new Exception("Introspector.getMethod(): Class method key was null: " + name);
+			}
 
 			ClassMap classMap = null;
 
@@ -66,14 +68,6 @@ namespace NVelocity.Util.Introspection
 				// so dump our caches.
 				if (classMap == null)
 				{
-					if (cachedClassNames.Contains(c.FullName))
-					{
-						// we have a map for a class with same name, but not
-						// this class we are looking at.  This implies a 
-						// classloader change, so dump
-						ClearCache();
-					}
-
 					classMap = CreateClassMap(c);
 				}
 			}
@@ -120,25 +114,11 @@ namespace NVelocity.Util.Introspection
 		protected internal ClassMap CreateClassMap(Type c)
 		{
 			ClassMap classMap = new ClassMap(c);
+
 			classMethodMaps[c] = classMap;
 			cachedClassNames.Add(c.FullName);
 
 			return classMap;
-		}
-
-		/// <summary>
-		/// Clears the classmap and classname caches
-		/// </summary>
-		protected virtual internal void ClearCache()
-		{
-			// since we are synchronizing on this
-			// object, we have to clear it rather than
-			// just dump it.
-			classMethodMaps.Clear();
-
-			// for speed, we can just make a new one
-			// and let the old one be GC'd
-			cachedClassNames = new ArrayList();
 		}
 	}
 }

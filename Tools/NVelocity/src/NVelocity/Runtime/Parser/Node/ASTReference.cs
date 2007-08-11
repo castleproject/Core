@@ -5,10 +5,10 @@ namespace NVelocity.Runtime.Parser.Node
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+	using Context;
+	using Exception;
 	using NVelocity.App.Events;
-	using NVelocity.Context;
 	using NVelocity.Exception;
-	using NVelocity.Runtime.Exception;
 
 	/// <summary>
 	/// Reference types
@@ -66,7 +66,6 @@ namespace NVelocity.Runtime.Parser.Node
 			get { return rootString; }
 		}
 
-		
 
 		public void SetLiteral(String value)
 		{
@@ -109,7 +108,9 @@ namespace NVelocity.Runtime.Parser.Node
 
 			// and if appropriate...
 			if (numChildren > 0)
+			{
 				identifier = GetChild(numChildren - 1).FirstToken.Image;
+			}
 
 			return data;
 		}
@@ -132,7 +133,9 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			if (result == null)
+			{
 				return null;
+			}
 
 			// Iteratively work 'down' (it's flat...) the reference
 			// to get the value, but check to make sure that
@@ -163,7 +166,7 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				// someone tossed their cookies
 				rsvc.Error("Method " + mie.MethodName + " threw exception for reference $" + rootString + " in template " +
-				           context.CurrentTemplateName + " at " + " [" + this.Line + "," + this.Column + "]");
+				           context.CurrentTemplateName + " at " + " [" + Line + "," + Column + "]");
 
 				mie.ReferenceName = rootString;
 				throw;
@@ -180,8 +183,7 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			if (referenceType == ReferenceType.Runt)
 			{
-				char[] c = rootString.ToCharArray();
-				writer.Write(c, 0, c.Length);
+				writer.Write(rootString);
 				return true;
 			}
 
@@ -200,8 +202,7 @@ namespace NVelocity.Runtime.Parser.Node
 				}
 				b.Append(nullString);
 
-				char[] c = b.ToString().ToCharArray();
-				writer.Write(c, 0, c.Length);
+				writer.Write(b);
 
 				return true;
 			}
@@ -227,8 +228,7 @@ namespace NVelocity.Runtime.Parser.Node
 				b.Append(morePrefix);
 				b.Append(nullString);
 
-				char[] c = b.ToString().ToCharArray();
-				writer.Write(c, 0, c.Length);
+				writer.Write(b);
 
 				if (referenceType != ReferenceType.Quiet &&
 				    rsvc.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true))
@@ -246,8 +246,7 @@ namespace NVelocity.Runtime.Parser.Node
 				b.Append(morePrefix);
 				b.Append(value);
 
-				char[] c = b.ToString().ToCharArray();
-				writer.Write(c, 0, c.Length);
+				writer.Write(b);
 
 				return true;
 			}
@@ -373,14 +372,14 @@ namespace NVelocity.Runtime.Parser.Node
 					catch(Exception ex)
 					{
 						rsvc.Error("ASTReference Map.put : exception : " + ex + " template = " + context.CurrentTemplateName + " [" +
-						           this.Line + "," + this.Column + "]");
+						           Line + "," + Column + "]");
 						return false;
 					}
 				}
 				else
 				{
 					rsvc.Error("ASTReference : cannot find " + identifier + " as settable property or key to Map in" + " template = " +
-					           context.CurrentTemplateName + " [" + this.Line + "," + this.Column + "]");
+					           context.CurrentTemplateName + " [" + Line + "," + Column + "]");
 					return false;
 				}
 			}
@@ -395,7 +394,7 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				// maybe a security exception?
 				rsvc.Error("ASTReference setValue() : exception : " + e + " template = " + context.CurrentTemplateName + " [" +
-				           this.Line + "," + this.Column + "]");
+				           Line + "," + Column + "]");
 				return false;
 			}
 
@@ -445,7 +444,7 @@ namespace NVelocity.Runtime.Parser.Node
 						return nullString;
 					}
 
-					while (i < len && t.Image[i] != '\\')
+					while(i < len && t.Image[i] != '\\')
 					{
 						i++;
 					}
@@ -454,7 +453,7 @@ namespace NVelocity.Runtime.Parser.Node
 					int start = i;
 					int count = 0;
 
-					while (i < len && t.Image[i++] == '\\')
+					while(i < len && t.Image[i++] == '\\')
 					{
 						count++;
 					}
@@ -483,7 +482,7 @@ namespace NVelocity.Runtime.Parser.Node
 					int i = 0;
 					int len = t.Image.Length;
 
-					while (i < len && t.Image[i] == '\\')
+					while(i < len && t.Image[i] == '\\')
 					{
 						i++;
 					}

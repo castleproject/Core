@@ -47,10 +47,10 @@ namespace NVelocity
 		[Test]
 		public void Multithreaded1()
 		{
-			const int threadCount = 20;
+			const int threadCount = 30;
 
 			Thread[] threads = new Thread[threadCount];
-			
+
 			for(int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal1));
@@ -65,12 +65,12 @@ namespace NVelocity
 		}
 
 		[Test]
-		public void Multithreaded2()
+		public void Multithreaded_ReuseVelocityEngineInstanceConcurrently()
 		{
-			const int threadCount = 20;
+			const int threadCount = 30;
 
 			Thread[] threads = new Thread[threadCount];
-			
+
 			for(int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal2));
@@ -84,11 +84,14 @@ namespace NVelocity
 			stopEvent.Set();
 		}
 
+		/// <summary>
+		/// This test starts a VelocityEngine for each execution
+		/// </summary>
 		public void ExecuteMethodUntilSignal1()
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while (!stopEvent.WaitOne(1, false))
+			while(!stopEvent.WaitOne(0, false))
 			{
 				VelocityEngine ve = new VelocityEngine();
 				ve.Init();
@@ -100,8 +103,8 @@ namespace NVelocity
 				c.Put("items", items);
 
 				bool ok = ve.Evaluate(c, sw,
-					"ContextTest.CaseInsensitive",
-					@"
+				                      "ContextTest.CaseInsensitive",
+				                      @"
 					#foreach( $item in $items )
 						$item,
 					#end
@@ -112,11 +115,14 @@ namespace NVelocity
 			}
 		}
 
+		/// <summary>
+		/// This test uses the previously created velocity engine
+		/// </summary>
 		public void ExecuteMethodUntilSignal2()
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while (!stopEvent.WaitOne(1, false))
+			while(!stopEvent.WaitOne(0, false))
 			{
 				StringWriter sw = new StringWriter();
 
@@ -125,18 +131,20 @@ namespace NVelocity
 				c.Put("items", items);
 
 				bool ok = ve.Evaluate(c, sw,
-					"ContextTest.CaseInsensitive",
-					@"
-					#foreach( $item in $items )
+				                      "ContextTest.CaseInsensitive",
+									  @"
+					#foreach($item in $items)
 						$item,
 					#end
+
+					$x.Print('hey') $x.Contents('test', '1')
 				");
 
 				Assert.IsTrue(ok, "Evalutation returned failure");
-				Assert.AreEqual("a,b,c,d,", Normalize(sw));
+				Assert.AreEqual("a,b,c,d,heytest,1", Normalize(sw));
 			}
 		}
-		
+
 		private string Normalize(StringWriter sw)
 		{
 			return Regex.Replace(sw.ToString(), "\\s+", "");

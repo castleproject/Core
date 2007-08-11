@@ -6,16 +6,12 @@ namespace NVelocity.Util
 	/// Simple object pool. Based on ThreadPool and few other classes
 	/// The pool will ignore overflow and return null if empty.
 	/// </summary>
-	/// <author>Gal Shachor</author>
-	/// <author>Costin</author>
-	/// <author><a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
-	/// <version>$Id: SimplePool.cs,v 1.4 2003/11/05 03:57:29 corts Exp $</version>
-	public sealed class SimplePool
+	public sealed class SimplePool<T> where T : class
 	{
 		/*
 	     * Where the objects are held.
 	     */
-		private Object[] pool;
+		private T[] pool;
 
 		/// <summary>  max amount of objects to be managed
 		/// set via CTOR
@@ -30,28 +26,20 @@ namespace NVelocity.Util
 		public SimplePool(int max)
 		{
 			this.max = max;
-			pool = new Object[max];
+			pool = new T[max];
 		}
 
 		/// <summary>
 		/// Add the object to the pool, silent nothing if the pool is full
 		/// </summary>
-		public void put(Object o)
+		public void put(T o)
 		{
 			int idx = - 1;
 
-			lock (this)
+			lock(this)
 			{
-				/*
-		*  if we aren't full
-		*/
-
 				if (current < max - 1)
 				{
-					/*
-		    *  then increment the 
-		    *  current index.
-		    */
 					idx = ++current;
 				}
 
@@ -69,16 +57,9 @@ namespace NVelocity.Util
 		{
 			lock (this)
 			{
-				/*
-		*  if we have any in the pool
-		*/
 				if (current >= 0)
 				{
-					/*
-		     *  remove the current one
-		     */
-
-					Object o = pool[current];
+					T o = pool[current];
 					pool[current] = null;
 					current--;
 
@@ -100,10 +81,9 @@ namespace NVelocity.Util
 		/// <summary>
 		/// for testing purposes, so we can examine the pool
 		/// </summary>
-		private Object[] getPool()
+		private T[] getPool()
 		{
 			return pool;
 		}
-
 	}
 }

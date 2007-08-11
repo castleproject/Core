@@ -4,10 +4,9 @@ namespace NVelocity.Util.Introspection
 	using System.Collections;
 	using System.Reflection;
 	using System.Text;
-
-	using NVelocity.Runtime;
 	using NVelocity.Runtime.Parser.Node;
-	
+	using Runtime;
+
 	/// <summary>  Implementation of Uberspect to provide the default introspective
 	/// functionality of Velocity
 	/// *
@@ -99,7 +98,7 @@ namespace NVelocity.Util.Introspection
 				executor = new BooleanPropertyExecutor(rlog, introspector, claz, identifier);
 			}
 
-			return (executor != null) ? new VelGetterImpl(executor) : null;
+			return new VelGetterImpl(executor);
 		}
 
 		/// <summary> Property setter
@@ -109,6 +108,7 @@ namespace NVelocity.Util.Introspection
 			Type claz = obj.GetType();
 
 			IVelMethod vm = null;
+
 			try
 			{
 				/*
@@ -126,7 +126,7 @@ namespace NVelocity.Util.Introspection
 						throw new MethodAccessException();
 					}
 				}
-				catch (MethodAccessException)
+				catch(MethodAccessException)
 				{
 					StringBuilder sb = new StringBuilder("set");
 					sb.Append(identifier);
@@ -146,7 +146,7 @@ namespace NVelocity.Util.Introspection
 						throw;
 				}
 			}
-			catch (MethodAccessException)
+			catch(MethodAccessException)
 			{
 				// right now, we only support the IDictionary interface
 				if (typeof(IDictionary).IsAssignableFrom(claz))
@@ -170,7 +170,7 @@ namespace NVelocity.Util.Introspection
 		{
 			public VelMethodImpl(MethodInfo m)
 			{
-				this.method = m;
+				method = m;
 			}
 
 			public bool Cacheable
@@ -201,9 +201,11 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public class VelGetterImpl : IVelPropertyGet
 		{
+			internal AbstractExecutor ae = null;
+
 			public VelGetterImpl(AbstractExecutor exec)
 			{
-				this.ae = exec;
+				ae = exec;
 			}
 
 			public bool Cacheable
@@ -220,12 +222,10 @@ namespace NVelocity.Util.Introspection
 
 					if (ae.Method != null)
 						return ae.Method.Name;
-					
+
 					return "undefined";
 				}
 			}
-
-			internal AbstractExecutor ae = null;
 
 			public Object Invoke(Object o)
 			{
@@ -235,6 +235,20 @@ namespace NVelocity.Util.Introspection
 
 		public class VelSetterImpl : IVelPropertySet
 		{
+			internal IVelMethod vm = null;
+			internal String putKey = null;
+
+			public VelSetterImpl(IVelMethod velmethod)
+			{
+				vm = velmethod;
+			}
+
+			public VelSetterImpl(IVelMethod velmethod, string key)
+			{
+				vm = velmethod;
+				putKey = key;
+			}
+
 			public bool Cacheable
 			{
 				get { return true; }
@@ -243,20 +257,6 @@ namespace NVelocity.Util.Introspection
 			public String MethodName
 			{
 				get { return vm.MethodName; }
-			}
-
-			internal IVelMethod vm = null;
-			internal String putKey = null;
-
-			public VelSetterImpl(IVelMethod velmethod)
-			{
-				this.vm = velmethod;
-			}
-
-			public VelSetterImpl(IVelMethod velmethod, string key)
-			{
-				this.vm = velmethod;
-				this.putKey = key;
 			}
 
 			public Object Invoke(Object o, Object value)

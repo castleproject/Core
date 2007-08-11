@@ -421,7 +421,7 @@ namespace NVelocity.Runtime.Directive
 						}
 						catch(Exception e)
 						{
-							rsvc.Error("VMProxyArg.setup() : exception " + callerReference + " : " + StringUtils.StackTrace(e));
+							rsvc.Error("VMProxyArg.setup() : exception " + callerReference + " : " + e);
 						}
 
 						break;
@@ -451,8 +451,8 @@ namespace NVelocity.Runtime.Directive
 				case ParserTreeConstants.WORD:
 					{
 						/*
-			*  this is technically an error...
-			*/
+						*  this is technically an error...
+						*/
 
 						rsvc.Error("Unsupported arg type : " + callerReference +
 						           "  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())");

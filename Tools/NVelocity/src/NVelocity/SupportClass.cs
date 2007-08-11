@@ -117,14 +117,14 @@ namespace NVelocity
 
 				public OleDbCommand PrepareStatement(OleDbConnection connection, string sql)
 				{
-					OleDbCommand command = this.CreateStatement(connection);
+					OleDbCommand command = CreateStatement(connection);
 					command.CommandText = sql;
 					return command;
 				}
 
 				public OleDbCommand PrepareCall(OleDbConnection connection, string sql)
 				{
-					OleDbCommand command = this.CreateStatement(connection);
+					OleDbCommand command = CreateStatement(connection);
 					command.CommandText = sql;
 					return command;
 				}
@@ -143,7 +143,6 @@ namespace NVelocity
 						TempProp.TransactionLevel = (IsolationLevel) level;
 						Add(connection, TempProp);
 					}
-
 				}
 
 				public int GetTransactionIsolation(OleDbConnection connection)
@@ -176,7 +175,6 @@ namespace NVelocity
 					public OleDbTransaction Transaction;
 					public IsolationLevel TransactionLevel;
 				}
-
 			}
 		}
 
@@ -192,29 +190,29 @@ namespace NVelocity
 
 			public Tokenizer(string source)
 			{
-				this.elements = new ArrayList();
-				this.elements.AddRange(source.Split(this.delimiters.ToCharArray()));
-				this.RemoveEmptyStrings();
+				elements = new ArrayList();
+				elements.AddRange(source.Split(delimiters.ToCharArray()));
+				RemoveEmptyStrings();
 				this.source = source;
 			}
 
 			public Tokenizer(string source, string delimiters)
 			{
-				this.elements = new ArrayList();
+				elements = new ArrayList();
 				this.delimiters = delimiters;
-				this.elements.AddRange(source.Split(this.delimiters.ToCharArray()));
-				this.RemoveEmptyStrings();
+				elements.AddRange(source.Split(this.delimiters.ToCharArray()));
+				RemoveEmptyStrings();
 				this.source = source;
 			}
 
 			public int Count
 			{
-				get { return (this.elements.Count); }
+				get { return (elements.Count); }
 			}
 
 			public bool HasMoreTokens()
 			{
-				return (this.elements.Count > 0);
+				return (elements.Count > 0);
 			}
 
 			public string NextToken()
@@ -224,13 +222,13 @@ namespace NVelocity
 					throw new System.Exception();
 				else
 				{
-					this.elements = new ArrayList();
-					this.elements.AddRange(this.source.Split(delimiters.ToCharArray()));
+					elements = new ArrayList();
+					elements.AddRange(source.Split(delimiters.ToCharArray()));
 					RemoveEmptyStrings();
-					result = (string) this.elements[0];
-					this.elements.RemoveAt(0);
-					this.source = this.source.Replace(result, "");
-					this.source = this.source.TrimStart(this.delimiters.ToCharArray());
+					result = (string) elements[0];
+					elements.RemoveAt(0);
+					source = source.Replace(result, "");
+					source = source.TrimStart(delimiters.ToCharArray());
 					return result;
 				}
 			}
@@ -244,10 +242,10 @@ namespace NVelocity
 			private void RemoveEmptyStrings()
 			{
 				//VJ++ does not treat empty strings as tokens
-				for(int index = 0; index < this.elements.Count; index++)
-					if ((string) this.elements[index] == "")
+				for(int index = 0; index < elements.Count; index++)
+					if ((string) elements[index] == "")
 					{
-						this.elements.RemoveAt(index);
+						elements.RemoveAt(index);
 						index--;
 					}
 			}
@@ -293,28 +291,28 @@ namespace NVelocity
 			// CONSTRUCTORS
 			public TextNumberFormat()
 			{
-				this.numberFormat = new NumberFormatInfo();
-				this.numberFormatType = (int) formatTypes.General;
-				this.groupingActivated = true;
-				this.separator = this.GetSeparator((int) formatTypes.General);
-				this.digits = 3;
+				numberFormat = new NumberFormatInfo();
+				numberFormatType = (int) formatTypes.General;
+				groupingActivated = true;
+				separator = GetSeparator((int) formatTypes.General);
+				digits = 3;
 			}
 
 			private TextNumberFormat(formatTypes theType, int digits)
 			{
-				this.numberFormat = NumberFormatInfo.CurrentInfo;
-				this.numberFormatType = (int) theType;
-				this.groupingActivated = true;
-				this.separator = this.GetSeparator((int) theType);
+				numberFormat = NumberFormatInfo.CurrentInfo;
+				numberFormatType = (int) theType;
+				groupingActivated = true;
+				separator = GetSeparator((int) theType);
 				this.digits = digits;
 			}
 
 			private TextNumberFormat(formatTypes theType, CultureInfo cultureNumberFormat, int digits)
 			{
-				this.numberFormat = cultureNumberFormat.NumberFormat;
-				this.numberFormatType = (int) theType;
-				this.groupingActivated = true;
-				this.separator = this.GetSeparator((int) theType);
+				numberFormat = cultureNumberFormat.NumberFormat;
+				numberFormatType = (int) theType;
+				groupingActivated = true;
+				separator = GetSeparator((int) theType);
 				this.digits = digits;
 			}
 
@@ -361,30 +359,30 @@ namespace NVelocity
 
 			public override bool Equals(Object textNumberObject)
 			{
-				return Object.Equals((Object) this, textNumberObject);
+				return Equals((Object) this, textNumberObject);
 			}
 
 			public string FormatDouble(double number)
 			{
-				if (this.groupingActivated)
+				if (groupingActivated)
 				{
-					return number.ToString(this.GetCurrentFormatString() + this.digits, this.numberFormat);
+					return number.ToString(GetCurrentFormatString() + digits, numberFormat);
 				}
 				else
 				{
-					return (number.ToString(this.GetCurrentFormatString() + this.digits, this.numberFormat)).Replace(this.separator, "");
+					return (number.ToString(GetCurrentFormatString() + digits, numberFormat)).Replace(separator, "");
 				}
 			}
 
 			public string FormatLong(long number)
 			{
-				if (this.groupingActivated)
+				if (groupingActivated)
 				{
-					return number.ToString(this.GetCurrentFormatString() + this.digits, this.numberFormat);
+					return number.ToString(GetCurrentFormatString() + digits, numberFormat);
 				}
 				else
 				{
-					return (number.ToString(this.GetCurrentFormatString() + this.digits, this.numberFormat)).Replace(this.separator, "");
+					return (number.ToString(GetCurrentFormatString() + digits, numberFormat)).Replace(separator, "");
 				}
 			}
 
@@ -395,24 +393,24 @@ namespace NVelocity
 
 			public override int GetHashCode()
 			{
-				return this.GetHashCode();
+				return GetHashCode();
 			}
 
 			private string GetCurrentFormatString()
 			{
 				string currentFormatString = "n"; //Default value
-				switch(this.numberFormatType)
+				switch(numberFormatType)
 				{
 					case (int) formatTypes.Currency:
 						currentFormatString = "c";
 						break;
 
 					case (int) formatTypes.General:
-						currentFormatString = "n" + this.numberFormat.NumberDecimalDigits;
+						currentFormatString = "n" + numberFormat.NumberDecimalDigits;
 						break;
 
 					case (int) formatTypes.Number:
-						currentFormatString = "n" + this.numberFormat.NumberDecimalDigits;
+						currentFormatString = "n" + numberFormat.NumberDecimalDigits;
 						break;
 
 					case (int) formatTypes.Percent:
@@ -429,19 +427,19 @@ namespace NVelocity
 				switch(numberFormatType)
 				{
 					case (int) formatTypes.Currency:
-						separatorItem = this.numberFormat.CurrencyGroupSeparator;
+						separatorItem = numberFormat.CurrencyGroupSeparator;
 						break;
 
 					case (int) formatTypes.General:
-						separatorItem = this.numberFormat.NumberGroupSeparator;
+						separatorItem = numberFormat.NumberGroupSeparator;
 						break;
 
 					case (int) formatTypes.Number:
-						separatorItem = this.numberFormat.NumberGroupSeparator;
+						separatorItem = numberFormat.NumberGroupSeparator;
 						break;
 
 					case (int) formatTypes.Percent:
-						separatorItem = this.numberFormat.PercentGroupSeparator;
+						separatorItem = numberFormat.PercentGroupSeparator;
 						break;
 				}
 				return separatorItem;
@@ -449,14 +447,14 @@ namespace NVelocity
 
 			public bool GroupingUsed
 			{
-				get { return (this.groupingActivated); }
-				set { this.groupingActivated = value; }
+				get { return (groupingActivated); }
+				set { groupingActivated = value; }
 			}
 
 			public int Digits
 			{
-				get { return this.digits; }
-				set { this.digits = value; }
+				get { return digits; }
+				set { digits = value; }
 			}
 		}
 
@@ -603,6 +601,5 @@ namespace NVelocity
 
 			return classType.GetConstructor(constructor).Invoke(new Object[] {});
 		}
-
 	}
 }

@@ -11,11 +11,6 @@ namespace NVelocity.Runtime.Parser.Node
 	/// what controls the generation of this class.
 	/// *
 	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ASTEscape.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
 	public class ASTEscape : SimpleNode
 	{
 		private String text = "";
@@ -43,8 +38,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
-			char[] c = text.ToCharArray();
-			writer.Write(c, 0, c.Length);
+			writer.Write(text);
 			return true;
 		}
 	}

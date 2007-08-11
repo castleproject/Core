@@ -2,12 +2,10 @@ namespace NVelocity.Runtime
 {
 	using System;
 	using System.IO;
-
 	using Commons.Collections;
-
 	using NVelocity.Runtime.Parser.Node;
-	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
+	using Resource;
 
 	/// <summary> Interface for internal runtime services that are needed by the
 	/// various components w/in Velocity.  This was taken from the old
@@ -97,17 +95,6 @@ namespace NVelocity.Runtime
 		/// </param>
 		Object GetProperty(String key);
 
-		// <summary> Initialize the Velocity Runtime with a Properties
-		// object.
-		// *
-		// </summary>
-		// <param name="">Properties
-		//
-		// </param>
-		// TODO
-		//void  init(System.Configuration.AppSettingsReader p);
-		
-		
 		/// <summary>
 		/// Initialize the Velocity Runtime with the name of
 		/// ExtendedProperties object.

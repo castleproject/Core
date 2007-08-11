@@ -67,7 +67,7 @@ namespace NVelocity.Runtime
 		/// The default number of parser instances to create.
 		/// Configurable via the parameter named by the <see cref="PARSER_POOL_SIZE"/> constant.
 		/// </summary>
-		public const int NUMBER_OF_PARSERS = 20;
+		public const int NUMBER_OF_PARSERS = 40;
 
 		/// <summary>
 		/// <see cref="NUMBER_OF_PARSERS"/>

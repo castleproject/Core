@@ -12,29 +12,29 @@ namespace Commons.Collections
 
 		public StringTokenizer(string source)
 		{
-			this.elements = new ArrayList();
-			this.elements.AddRange(source.Split(this.delimiters.ToCharArray()));
-			this.RemoveEmptyStrings();
+			elements = new ArrayList();
+			elements.AddRange(source.Split(delimiters.ToCharArray()));
+			RemoveEmptyStrings();
 			this.source = source;
 		}
 
 		public StringTokenizer(string source, string delimiters)
 		{
-			this.elements = new ArrayList();
+			elements = new ArrayList();
 			this.delimiters = delimiters;
-			this.elements.AddRange(source.Split(this.delimiters.ToCharArray()));
-			this.RemoveEmptyStrings();
+			elements.AddRange(source.Split(this.delimiters.ToCharArray()));
+			RemoveEmptyStrings();
 			this.source = source;
 		}
 
 		public int Count
 		{
-			get { return (this.elements.Count); }
+			get { return (elements.Count); }
 		}
 
 		public virtual bool HasMoreTokens()
 		{
-			return (this.elements.Count > 0);
+			return (elements.Count > 0);
 		}
 
 		public virtual string NextToken()
@@ -46,13 +46,13 @@ namespace Commons.Collections
 			}
 			else
 			{
-				this.elements = new ArrayList();
-				this.elements.AddRange(this.source.Split(delimiters.ToCharArray()));
+				elements = new ArrayList();
+				elements.AddRange(source.Split(delimiters.ToCharArray()));
 				RemoveEmptyStrings();
-				result = (string) this.elements[0];
-				this.elements.RemoveAt(0);
-				this.source = this.source.Replace(result, "");
-				this.source = this.source.TrimStart(this.delimiters.ToCharArray());
+				result = (string) elements[0];
+				elements.RemoveAt(0);
+				source = source.Replace(result, "");
+				source = source.TrimStart(delimiters.ToCharArray());
 				return result;
 			}
 		}
@@ -66,13 +66,12 @@ namespace Commons.Collections
 		private void RemoveEmptyStrings()
 		{
 			//VJ++ does not treat empty strings as tokens
-			for (int index = 0; index < this.elements.Count; index++)
-				if ((string) this.elements[index] == "")
+			for(int index = 0; index < elements.Count; index++)
+				if ((string) elements[index] == "")
 				{
-					this.elements.RemoveAt(index);
+					elements.RemoveAt(index);
 					index--;
 				}
 		}
-
 	}
 }

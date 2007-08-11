@@ -5,16 +5,14 @@ namespace NVelocity.Runtime
 	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
-
 	using Commons.Collections;
-
+	using Directive;
+	using Log;
 	using NVelocity.Exception;
-	using NVelocity.Runtime.Directive;
-	using NVelocity.Runtime.Log;
 	using NVelocity.Runtime.Parser.Node;
-	using NVelocity.Runtime.Resource;
-	using NVelocity.Util;
 	using NVelocity.Util.Introspection;
+	using Resource;
+	using Util;
 
 	/// <summary> 
 	/// This is the Runtime system for Velocity. It is the
@@ -63,50 +61,15 @@ namespace NVelocity.Runtime
 	{
 		private DefaultTraceListener debugOutput = new DefaultTraceListener();
 
-		public ExtendedProperties Configuration
-		{
-			get { return configuration; }
-
-			set
-			{
-				if (overridingProperties == null)
-				{
-					overridingProperties = value;
-				}
-				else
-				{
-					// Avoid possible ConcurrentModificationException
-					if (overridingProperties != value)
-					{
-						overridingProperties.Combine(value);
-					}
-				}
-			}
-
-		}
-
-		public Introspector Introspector
-		{
-			get { return introspector; }
-		}
-
 		/// <summary>
 		/// VelocimacroFactory object to manage VMs
 		/// </summary>
 		private VelocimacroFactory vmFactory = null;
 
 		/// <summary>
-		/// The Runtime logger.  We start with an instance of
-		/// a 'primordial logger', which just collects log messages
-		/// then, when the log system is initialized, we dump
-		/// all messages out of the primordial one into the real one.
-		/// </summary>
-		private ILogSystem logSystem;
-
-		/// <summary>
 		/// The Runtime parser pool
 		/// </summary>
-		private SimplePool parserPool;
+		private SimplePool<Parser.Parser> parserPool;
 
 		/// <summary>
 		/// Indicate whether the Runtime has been fully initialized.
@@ -159,7 +122,7 @@ namespace NVelocity.Runtime
 
 		public RuntimeInstance()
 		{
-			logSystem = new PrimordialLogSystem();
+			// logSystem = new PrimordialLogSystem();
 			configuration = new ExtendedProperties();
 
 			// create a VM factory, resource manager
@@ -173,9 +136,35 @@ namespace NVelocity.Runtime
 			applicationAttributes = new Hashtable();
 		}
 
+		public ExtendedProperties Configuration
+		{
+			get { return configuration; }
+
+			set
+			{
+				if (overridingProperties == null)
+				{
+					overridingProperties = value;
+				}
+				else
+				{
+					// Avoid possible ConcurrentModificationException
+					if (overridingProperties != value)
+					{
+						overridingProperties.Combine(value);
+					}
+				}
+			}
+		}
+
+		public Introspector Introspector
+		{
+			get { return introspector; }
+		}
+
 		public void Init()
 		{
-			lock (this)
+			lock(this)
 			{
 				if (initialized == false)
 				{
@@ -211,16 +200,19 @@ namespace NVelocity.Runtime
 				{
 					o = SupportClass.CreateNewInstance(Type.GetType(rm));
 				}
-				catch (System.Exception)
+				catch(System.Exception)
 				{
-					String err = "The specified class for Uberspect (" + rm + ") does not exist (or is not accessible to the current classlaoder.";
+					String err = "The specified class for Uberspect (" + rm +
+					             ") does not exist (or is not accessible to the current classlaoder.";
 					Error(err);
 					throw new System.Exception(err);
 				}
 
 				if (!(o is IUberspect))
 				{
-					String err = "The specified class for Uberspect (" + rm + ") does not implement org.apache.velocity.util.introspector.Uberspect." + " Velocity not initialized correctly.";
+					String err = "The specified class for Uberspect (" + rm +
+					             ") does not implement org.apache.velocity.util.introspector.Uberspect." +
+					             " Velocity not initialized correctly.";
 
 					Error(err);
 					throw new System.Exception(err);
@@ -238,7 +230,8 @@ namespace NVelocity.Runtime
 			else
 			{
 				// someone screwed up.  Lets not fool around...
-				String err = "It appears that no class was specified as the" + " Uberspect.  Please ensure that all configuration" + " information is correct.";
+				String err = "It appears that no class was specified as the" + " Uberspect.  Please ensure that all configuration" +
+				             " information is correct.";
 
 				Error(err);
 				throw new System.Exception(err);
@@ -255,9 +248,10 @@ namespace NVelocity.Runtime
 			try
 			{
 				// TODO: this was modified in v1.4 to use the classloader
-				configuration.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants.DEFAULT_RUNTIME_PROPERTIES));
+				configuration.Load(
+					Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants.DEFAULT_RUNTIME_PROPERTIES));
 			}
-			catch (System.Exception ex)
+			catch(System.Exception ex)
 			{
 				debugOutput.WriteLine("Cannot get NVelocity Runtime default properties!\n" + ex.Message);
 				debugOutput.Flush();
@@ -345,7 +339,7 @@ namespace NVelocity.Runtime
 		private void initializeProperties()
 		{
 			// Always lay down the default properties first as
-	    // to provide a solid base.
+			// to provide a solid base.
 			if (configuration.IsInitialized() == false)
 			{
 				setDefaultProperties();
@@ -382,8 +376,8 @@ namespace NVelocity.Runtime
 		private void initializeResourceManager()
 		{
 			// Which resource manager?
-			IResourceManager rmInstance = (IResourceManager) 
-				applicationAttributes[RuntimeConstants.RESOURCE_MANAGER_CLASS];
+			IResourceManager rmInstance = (IResourceManager)
+			                              applicationAttributes[RuntimeConstants.RESOURCE_MANAGER_CLASS];
 
 			String rm = GetString(RuntimeConstants.RESOURCE_MANAGER_CLASS);
 
@@ -399,7 +393,7 @@ namespace NVelocity.Runtime
 					Type rmType = Type.GetType(rm);
 					o = Activator.CreateInstance(rmType);
 				}
-				catch (System.Exception)
+				catch(System.Exception)
 				{
 					String err = "The specified class for Resourcemanager (" + rm + ") does not exist.";
 					Error(err);
@@ -408,7 +402,8 @@ namespace NVelocity.Runtime
 
 				if (!(o is IResourceManager))
 				{
-					String err = "The specified class for ResourceManager (" + rm + ") does not implement ResourceManager. NVelocity not initialized correctly.";
+					String err = "The specified class for ResourceManager (" + rm +
+					             ") does not implement ResourceManager. NVelocity not initialized correctly.";
 					Error(err);
 					throw new System.Exception(err);
 				}
@@ -425,7 +420,8 @@ namespace NVelocity.Runtime
 			else
 			{
 				// someone screwed up.  Lets not fool around...
-				String err = "It appears that no class was specified as the ResourceManager.  Please ensure that all configuration information is correct.";
+				String err =
+					"It appears that no class was specified as the ResourceManager.  Please ensure that all configuration information is correct.";
 				Error(err);
 				throw new System.Exception(err);
 			}
@@ -442,25 +438,25 @@ namespace NVelocity.Runtime
 			 * logging into the logging manager.
 			 */
 
-			if (logSystem is PrimordialLogSystem)
-			{
-				PrimordialLogSystem pls = (PrimordialLogSystem) logSystem;
-				// logSystem = LogManager.createLogSystem(this);
-				logSystem = new NullLogSystem();
-
-				/*
-				 * in the event of failure, lets do something to let it 
-				 * limp along.
-				 */
-				if (logSystem == null)
-				{
-					logSystem = new NullLogSystem();
-				}
-				else
-				{
-					pls.DumpLogMessages(logSystem);
-				}
-			}
+//			if (logSystem is PrimordialLogSystem)
+//			{
+//				PrimordialLogSystem pls = (PrimordialLogSystem) logSystem;
+//				// logSystem = LogManager.createLogSystem(this);
+//				logSystem = new NullLogSystem();
+//
+//				/*
+//				 * in the event of failure, lets do something to let it 
+//				 * limp along.
+//				 */
+//				if (logSystem == null)
+//				{
+//					logSystem = new NullLogSystem();
+//				}
+//				else
+//				{
+//					pls.DumpLogMessages(logSystem);
+//				}
+//			}
 		}
 
 
@@ -491,11 +487,14 @@ namespace NVelocity.Runtime
 
 			try
 			{
-				directiveProperties.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants.DEFAULT_RUNTIME_DIRECTIVES));
+				directiveProperties.Load(
+					Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants.DEFAULT_RUNTIME_DIRECTIVES));
 			}
-			catch (System.Exception ex)
+			catch(System.Exception ex)
 			{
-				throw new System.Exception("Error loading directive.properties! " + "Something is very wrong if these properties " + "aren't being located. Either your Velocity " + "distribution is incomplete or your Velocity " + "jar file is corrupted!\n" + ex.Message);
+				throw new System.Exception("Error loading directive.properties! " + "Something is very wrong if these properties " +
+				                           "aren't being located. Either your Velocity " +
+				                           "distribution is incomplete or your Velocity " + "jar file is corrupted!\n" + ex.Message);
 			}
 
 			/*
@@ -506,7 +505,7 @@ namespace NVelocity.Runtime
 			*/
 			IEnumerator directiveClasses = directiveProperties.Values.GetEnumerator();
 
-			while (directiveClasses.MoveNext())
+			while(directiveClasses.MoveNext())
 			{
 				String directiveClass = (String) directiveClasses.Current;
 				// loadDirective(directiveClass);
@@ -517,7 +516,7 @@ namespace NVelocity.Runtime
 			*  now the user's directives
 			*/
 			String[] userdirective = configuration.GetStringArray("userdirective");
-			for (int i = 0; i < userdirective.Length; i++)
+			for(int i = 0; i < userdirective.Length; i++)
 			{
 				// loadDirective(userdirective[i]);
 				directiveManager.Register(userdirective[i]);
@@ -530,21 +529,21 @@ namespace NVelocity.Runtime
 
 			if (directiveManagerTypeName == null)
 			{
-				throw new System.Exception("Looks like there's no 'directive.manager' " + 
-					"configured. NVelocity can't go any further");
+				throw new System.Exception("Looks like there's no 'directive.manager' " +
+				                           "configured. NVelocity can't go any further");
 			}
 
 			directiveManagerTypeName = directiveManagerTypeName.Replace(';', ',');
 
-			Type dirMngType = Type.GetType( directiveManagerTypeName, false, false );
+			Type dirMngType = Type.GetType(directiveManagerTypeName, false, false);
 
 			if (dirMngType == null)
 			{
-				throw new System.Exception( 
-					String.Format("The type {0} could not be resolved", directiveManagerTypeName) );
+				throw new System.Exception(
+					String.Format("The type {0} could not be resolved", directiveManagerTypeName));
 			}
 
-			this.directiveManager = (IDirectiveManager) Activator.CreateInstance( dirMngType );
+			directiveManager = (IDirectiveManager) Activator.CreateInstance(dirMngType);
 		}
 
 		/// <summary> Initializes the Velocity parser pool.
@@ -554,20 +553,17 @@ namespace NVelocity.Runtime
 		{
 			int numParsers = GetInt(RuntimeConstants.PARSER_POOL_SIZE, RuntimeConstants.NUMBER_OF_PARSERS);
 
-			parserPool = new SimplePool(numParsers);
+			parserPool = new SimplePool<Parser.Parser>(numParsers);
 
-			for (int i = 0; i < numParsers; i++)
+			for(int i = 0; i < numParsers; i++)
 			{
 				parserPool.put(CreateNewParser());
 			}
-
-			Info("Created: " + numParsers + " parsers.");
 		}
 
 		/// <summary> Returns a JavaCC generated Parser.
 		/// </summary>
 		/// <returns>Parser javacc generated parser
-		///
 		/// </returns>
 		public Parser.Parser CreateNewParser()
 		{
@@ -613,7 +609,8 @@ namespace NVelocity.Runtime
 			{
 				// if we couldn't get a parser from the pool
 				// make one and log it.
-				Error("Runtime : ran out of parsers. Creating new.  " + " Please increment the parser.pool.size property." + " The current value is too small.");
+				Error("Runtime : ran out of parsers. Creating new.  " + " Please increment the parser.pool.size property." +
+				      " The current value is too small.");
 
 				parser = CreateNewParser();
 
@@ -710,7 +707,7 @@ namespace NVelocity.Runtime
 		public ContentResource GetContent(String name)
 		{
 			// the encoding is irrelvant as we don't do any converstion
-	    // the bytestream should be dumped to the output stream
+			// the bytestream should be dumped to the output stream
 			return GetContent(name, GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT));
 		}
 
@@ -768,22 +765,11 @@ namespace NVelocity.Runtime
 		/// <param name="message">message to log</param>
 		private void Log(LogLevel level, Object message)
 		{
-			String output;
-
-			// now,  see if the logging stacktrace is on
-	    // and modify the message to suit
-			if (showStackTrace() && (message is System.Exception || message is System.Exception))
-			{
-				output = StringUtils.StackTrace((System.Exception) message);
-			}
-			else
-			{
-				output = message.ToString();
-			}
+// 			String output = message.ToString();
 
 			// just log it, as we are guaranteed now to have some
-	    // kind of logger - save the if()
-			logSystem.LogVelocityMessage(level, output);
+			// kind of logger - save the if()
+//			logSystem.LogVelocityMessage(level, output);
 		}
 
 		/// <summary>

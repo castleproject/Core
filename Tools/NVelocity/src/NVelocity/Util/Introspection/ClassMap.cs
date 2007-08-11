@@ -2,6 +2,7 @@ namespace NVelocity.Util.Introspection
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Reflection;
 	using System.Text;
@@ -13,16 +14,16 @@ namespace NVelocity.Util.Introspection
 	/// </summary>
 	public class ClassMap
 	{
-		private readonly static CacheMiss CACHE_MISS = new CacheMiss();
-		private readonly static Object OBJECT = new Object();
+		private static readonly MethodInfo CACHE_MISS = typeof(ClassMap).GetMethod("MethodMiss", BindingFlags.Static|BindingFlags.NonPublic);
+		private static readonly Object OBJECT = new Object();
 
 		private readonly Type clazz;
 
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
 		/// name and actual arguments used to find it.
 		/// </summary>
-		private readonly IDictionary methodCache = new HybridDictionary(true);
-		private readonly IDictionary propertyCache = new HybridDictionary(true);
+		private readonly Dictionary<string, MethodInfo> methodCache = new Dictionary<string, MethodInfo>();
+		private readonly Dictionary<string, MemberInfo> propertyCache = new Dictionary<string, MemberInfo>();
 		private readonly MethodMap methodMap = new MethodMap();
 
 		/// <summary> Standard constructor
@@ -47,7 +48,7 @@ namespace NVelocity.Util.Introspection
 			get { return clazz; }
 		}
 
-		private sealed class CacheMiss
+		private static void MethodMiss()
 		{
 		}
 
@@ -68,14 +69,16 @@ namespace NVelocity.Util.Introspection
 		public MethodInfo FindMethod(String name, Object[] parameters)
 		{
 			String methodKey = MakeMethodKey(name, parameters);
-			Object cacheEntry = methodCache[methodKey];
+			MethodInfo cacheEntry;
 
-			if (cacheEntry == CACHE_MISS)
+			if (methodCache.TryGetValue(methodKey, out cacheEntry))
 			{
-				return null;
+				if (cacheEntry == CACHE_MISS)
+				{
+					return null;
+				}
 			}
-
-			if (cacheEntry == null)
+			else
 			{
 				try
 				{
@@ -88,12 +91,12 @@ namespace NVelocity.Util.Introspection
 					throw;
 				}
 
-				methodCache[methodKey] = cacheEntry == null ? CACHE_MISS : cacheEntry;
+				methodCache[methodKey] = cacheEntry ?? CACHE_MISS;
 			}
 
 			// Yes, this might just be null.
 
-			return (MethodInfo) cacheEntry;
+			return cacheEntry;
 		}
 
 		/// <summary>
@@ -110,10 +113,15 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public PropertyInfo FindProperty(String name)
 		{
-			Object cacheEntry = propertyCache[name];
-
-			if (cacheEntry == CACHE_MISS)
-				return null;
+			MemberInfo cacheEntry;
+			
+			if (propertyCache.TryGetValue(name, out cacheEntry))
+			{
+				if (cacheEntry == CACHE_MISS)
+				{
+					return null;
+				}
+			}
 
 			// Yes, this might just be null.
 			return (PropertyInfo) cacheEntry;
@@ -155,7 +163,7 @@ namespace NVelocity.Util.Introspection
 		/// the concatenation of the name and the
 		/// types of the method parameters.
 		/// </summary>
-		private String MakeMethodKey(MethodInfo method)
+		private static String MakeMethodKey(MethodInfo method)
 		{
 			StringBuilder methodKey = new StringBuilder(method.Name);
 

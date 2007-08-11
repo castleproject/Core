@@ -107,7 +107,7 @@ namespace NVelocity.Runtime.Directive
 				if (e is MethodInvocationException)
 					throw;
 
-				rsvc.Error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + StringUtils.StackTrace(e));
+				rsvc.Error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + e);
 			}
 
 			return true;
@@ -167,7 +167,7 @@ namespace NVelocity.Runtime.Directive
 			}
 			catch(Exception e)
 			{
-				rsvc.Error("VelocimacroManager.parseTree() : exception " + macroName + " : " + StringUtils.StackTrace(e));
+				rsvc.Error("VelocimacroManager.parseTree() : exception " + macroName + " : " + e);
 			}
 		}
 
