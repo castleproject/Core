@@ -1,6 +1,10 @@
 Release Candidate 2
 ===================
 
+- Applied Michael Thomas' patch fixing AR-165
+  "UniqueKey property on BelongsToAttributed does not cause generation of unique-key 
+   attribute in associated many-to-one xml element"
+
 - Applied Lee Henson's patch fixing AR-167
   "A CompositeKey class with multiple Equals() overloads throws exception"
 
