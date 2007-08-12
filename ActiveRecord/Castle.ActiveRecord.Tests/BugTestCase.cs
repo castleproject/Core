@@ -1,4 +1,4 @@
- // Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 namespace Castle.ActiveRecord.Tests
 {
 	using System.Collections;
-	
+	using System.Collections.Generic;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -25,8 +25,17 @@ namespace Castle.ActiveRecord.Tests
 		public void SemanticVisitorBug()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(),
-				typeof(Bank), typeof(Customer), typeof(Card));
-			
+			                               typeof(Bank), typeof(Customer), typeof(Card));
+
+			Recreate();
+		}
+
+		[Test]
+		public void AR170Test()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(),
+			                               typeof(HierarchyItem), typeof(Folder), typeof(FolderBase));
+
 			Recreate();
 		}
 
@@ -34,7 +43,7 @@ namespace Castle.ActiveRecord.Tests
 		public void InheritanceBug()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(),
-				typeof(Parent), typeof(Child), typeof(GrandChild));
+			                               typeof(Parent), typeof(Child), typeof(GrandChild));
 		}
 	}
 
@@ -142,6 +151,54 @@ namespace Castle.ActiveRecord.Tests
 	[ActiveRecord]
 	public class GrandChild : Child
 	{
+	}
+
+	#endregion
+
+	#region AR-170
+
+	[ActiveRecord("HierarchyItems",
+		DiscriminatorColumn = "Type",
+		DiscriminatorType = "String",
+		DiscriminatorValue = "HierarchyItem")]
+	public class HierarchyItem : ActiveRecordBase
+	{
+		private int _id;
+		private Folder _parent;
+
+		[PrimaryKey]
+		public int Id
+		{
+			get { return _id; }
+			set { _id = value; }
+		}
+
+		[BelongsTo]
+		public Folder Parent
+		{
+			get { return _parent; }
+			set { _parent = value; }
+		}
+	}
+
+	[ActiveRecord("FolderBases",
+		DiscriminatorValue = "FolderBase")]
+	public abstract class FolderBase : HierarchyItem
+	{
+		public abstract IList<HierarchyItem> Children { get; }
+	}
+
+	[ActiveRecord("PhysicalFolders",
+		DiscriminatorValue = "PhysicalFolder")]
+	public class Folder : FolderBase
+	{
+		private IList<HierarchyItem> children = new List<HierarchyItem>();
+
+		[HasMany(Access = PropertyAccess.FieldCamelcase)]
+		public override IList<HierarchyItem> Children
+		{
+			get { return children; }
+		}
 	}
 
 	#endregion
