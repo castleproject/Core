@@ -102,8 +102,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseProjectWizard.cs" />
-    <Compile Include="DDD\TestProjectExtension.cs" />
-    <Compile Include="DDD\WebProjectExtension.cs" />
     <Compile Include="Dialogs\Panels\ARIntegrationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,12 +113,6 @@
     </Compile>
     <Compile Include="Dialogs\Panels\ContainerIntegrationPanel.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Dialogs\Panels\DDDPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Dialogs\Panels\DDDPanel.Designer.cs">
-      <DependentUpon>DDDPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Panels\LoggingPanel.cs">
       <SubType>UserControl</SubType>
@@ -134,7 +126,6 @@
     <Compile Include="Dialogs\Panels\NHIntegrationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DomainDrivenProject.cs" />
     <Compile Include="MonoRailProjectWizard.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -182,10 +173,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Panels\ContainerIntegrationPanel.resx">
       <DependentUpon>ContainerIntegrationPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Panels\DDDPanel.resx">
-      <DependentUpon>DDDPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Panels\LoggingPanel.resx">
       <DependentUpon>LoggingPanel.cs</DependentUpon>
