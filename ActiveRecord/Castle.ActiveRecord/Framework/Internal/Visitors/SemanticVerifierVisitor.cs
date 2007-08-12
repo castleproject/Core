@@ -200,8 +200,30 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			Type compositeKeyClassType = model.Property.PropertyType;
 
-			MethodInfo eq = compositeKeyClassType.GetMethod("Equals", flags);
-			MethodInfo hc = compositeKeyClassType.GetMethod("GetHashCode", flags);
+			MethodInfo eq = null;
+			MethodInfo hc = null;
+
+			new List<MethodInfo>(compositeKeyClassType.GetMethods(flags)).ForEach(delegate(MethodInfo method)
+					{
+						if (method.Name.Equals("Equals"))
+						{
+							ParameterInfo[] parameters = method.GetParameters();
+
+							if ((parameters.Length == 1) && (parameters[0].ParameterType == typeof(object)))
+							{
+								eq = method;
+							}
+						}
+						else if (method.Name.Equals("GetHashCode"))
+						{
+							ParameterInfo[] parameters = method.GetParameters();
+
+							if (parameters.Length == 0)
+							{
+								hc = method;
+							}
+						}
+					});
 
 			if (eq == null || hc == null)
 			{
