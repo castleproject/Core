@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Michael Thomas' suggestion to fix AR-170
+  "Indeterministic crashes when creating the NHibernate Mapping"
+
 - Applied Lee Henson's patch fixing AR-172
   "Support for collection-type attribute on HasMany"
 

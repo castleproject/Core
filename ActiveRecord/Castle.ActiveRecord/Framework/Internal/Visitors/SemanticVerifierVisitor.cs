@@ -19,10 +19,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 	using System.Text;
 	using Iesi.Collections;
-#if DOTNET2
 	using Iesi.Collections.Generic;
 	using System.Collections.Generic;
-#endif
 	using Castle.ActiveRecord;
 	using NHibernate.Id;
 	using NHibernate.Persister.Entity;
@@ -32,13 +30,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 	/// association. The goal is to raise clear exceptions with tips of how 
 	/// to fix any error.
 	/// It also tries to infer as much information from the class / attribute model as possible so it can
-	/// complete the missing infomration without the user needing to specify it.
+	/// complete the missing information without the user needing to specify it.
 	/// </summary>
 	public class SemanticVerifierVisitor : AbstractDepthFirstVisitor
 	{
 		private readonly ActiveRecordModelCollection arCollection;
+		private readonly StringBuilder columnPrefix = new StringBuilder();
 		private ActiveRecordModel currentModel;
-		private StringBuilder columnPrefix = new StringBuilder();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SemanticVerifierVisitor"/> class.

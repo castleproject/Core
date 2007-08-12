@@ -69,12 +69,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNode(model.Version);
 			VisitNode(model.Timestamp);
 			VisitNodes(model.JoinedClasses);
+			VisitNodes(model.BelongsTo);
 			VisitNodes(model.Classes);
 			VisitNodes(model.Fields);
 			VisitNodes(model.Anys);
 			VisitNodes(model.Properties);
 			VisitNodes(model.OneToOnes);
-			VisitNodes(model.BelongsTo);
 			VisitNodes(model.HasMany);
 			VisitNodes(model.HasAndBelongsToMany);
 			VisitNodes(model.HasManyToAny);
