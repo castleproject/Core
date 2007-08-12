@@ -441,7 +441,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, null, null, null, null, model.Configuration, att.Index,
 			                att.IndexType,
-			                att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize);
+			                att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
 
 		/// <summary>
@@ -594,7 +594,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                model.HasManyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, att.Element, null, null,
 			                model.DependentObjectModel, att.Index, att.IndexType,
-			                att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize);
+							att.Cache, att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
 
 		/// <summary>
@@ -610,7 +610,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
 			                att.Where, att.Sort, att.ColumnKey, att.CompositeKeyColumnKeys, null, att.ColumnRef,
 			                att.CompositeKeyColumnRefs, model.CollectionID, att.Index, att.IndexType, att.Cache,
-			                att.NotFoundBehaviour, att.Fetch, att.BatchSize);
+							att.NotFoundBehaviour, att.Fetch, att.BatchSize, att.CollectionType);
 		}
 
 		/// <summary>
@@ -726,7 +726,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		                             string columnKey, string[] compositeKeyColumnKeys, string element,
 		                             string columnRef, string[] compositeKeyColumnRefs,
 		                             IVisitable extraModel, string index, string indexType, CacheEnum cache,
-		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch, int batchSize)
+		                             NotFoundBehaviour notFoundBehaviour, FetchEnum fetch, int batchSize, Type collectionType)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 			String notFoundMode = TranslateNotFoundBehaviourEnum(notFoundBehaviour);
@@ -741,7 +741,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</bag>";
 
-				AppendF("<bag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
+				AppendF("<bag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -751,14 +751,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
-				        WriteIfNonNull("fetch", fetchString),
-                        WriteIfNotOne("batch-size", batchSize));
+				        WriteIfNonNull("fetch", fetchString),						
+                        WriteIfNotOne("batch-size", batchSize),
+						WriteIfNonNull("collection-type", MakeTypeName(collectionType)));
 			}
 			else if (type == RelationType.Set)
 			{
 				closingTag = "</set>";
 
-				AppendF("<set{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}>",
+				AppendF("<set{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -770,13 +771,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("where", where),
 				        WriteIfNonNull("sort", sort),
                         WriteIfNonNull("fetch", fetchString),
-                        WriteIfNotOne("batch-size", batchSize));
+						WriteIfNotOne("batch-size", batchSize),
+						WriteIfNonNull("collection-type", MakeTypeName(collectionType)));
 			}
 			else if (type == RelationType.IdBag)
 			{
 				closingTag = "</idbag>";
 
-				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
+				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -786,7 +788,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where),
                         WriteIfNonNull("fetch", fetchString),
-                        WriteIfNotOne("batch-size", batchSize));
+						WriteIfNotOne("batch-size", batchSize),
+						WriteIfNonNull("collection-type", MakeTypeName(collectionType)));
 
 				VisitNode(extraModel);
 			}
@@ -794,7 +797,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</map>";
 
-				AppendF("<map{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}>",
+				AppendF("<map{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -806,12 +809,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("where", where),
 				        WriteIfNonNull("sort", sort),
                         WriteIfNonNull("fetch", fetchString),
-                        WriteIfNotOne("batch-size", batchSize));
+						WriteIfNotOne("batch-size", batchSize),
+						WriteIfNonNull("collection-type", MakeTypeName(collectionType)));
 			}
 			else if (type == RelationType.List)
 			{
 				closingTag = "</list>";
-				AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
+				AppendF("<list{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -821,7 +825,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("where", where),
                         WriteIfNonNull("fetch", fetchString),
-                        WriteIfNotOne("batch-size", batchSize));
+						WriteIfNotOne("batch-size", batchSize),
+						WriteIfNonNull("collection-type", MakeTypeName(collectionType)));
 			}
 
 

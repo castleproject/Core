@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Lee Henson's patch fixing AR-172
+  "Support for collection-type attribute on HasMany"
+
 - Applied Gautier's patch fixing AR-173
   "Add a type parameter to the methods : CreateSchema, DropSchema, 
   GenerateCreationScript and GenerateDropScript"

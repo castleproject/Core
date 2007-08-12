@@ -56,6 +56,11 @@ namespace Castle.ActiveRecord
 		protected FetchEnum fetchMethod = FetchEnum.Unspecified;
 
 		/// <summary>
+		/// Provides a custom collection type.
+		/// </summary>
+		protected Type customCollectionType;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="HasManyAttribute"/> class.
 		/// </summary>
 		public HasManyAttribute()
@@ -123,6 +128,15 @@ namespace Castle.ActiveRecord
 		{
 			get { return fetchMethod; }
 			set { fetchMethod = value; }
+		}
+
+		/// <summary>
+		/// Provides a custom collection type.
+		/// </summary>
+		public Type CollectionType
+		{
+			get { return customCollectionType; }
+			set { customCollectionType = value; }
 		}
 	}
 }

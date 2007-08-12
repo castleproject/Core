@@ -44,6 +44,7 @@ namespace Castle.ActiveRecord
 		private String columnKey;
 		private String[] compositeKeyColumnKeys;
 		private FetchEnum fetchMethod = FetchEnum.Unspecified;
+		private Type customCollectionType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HasAndBelongsToManyAttribute"/> class.
@@ -120,6 +121,15 @@ namespace Castle.ActiveRecord
 		{
 			get { return fetchMethod; }
 			set { fetchMethod = value; }
+		}
+
+		/// <summary>
+		/// Provides a custom collection type.
+		/// </summary>
+		public Type CollectionType
+		{
+			get { return customCollectionType; }
+			set { customCollectionType = value; }
 		}
 	}
 }
