@@ -15,7 +15,8 @@ li
 	padding: 4px;
 }
 		</style>
-		$AjaxHelper.GetJavascriptFunctions()
+		$Ajax.InstallScripts()
+		$Form.InstallScripts()
 	</head>
 	<body>
 

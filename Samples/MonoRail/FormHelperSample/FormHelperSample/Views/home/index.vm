@@ -3,59 +3,104 @@
 The following are samples of FormHelper usage
 </p>
 
-<table width="60%" border="0" cellpadding="5">
+<table style="width: 800px" border="0" cellpadding="5">
+	<tr>
+		<td valign="top" style="width: 60%;">
 
-<tr>
-<td valign="top">
-<h2>Simple elements</h2>
+		<h2>Simple elements</h2>
 
-<ul>
-<li> <a href="../simpleelements/textfieldindex.castle">TextField</a> </li> 
+		<ul>
+			<li> $Url.Link('TextField', "%{controller='simpleelements',action='textfieldindex'}") </li> 
+			<li> NumberField/NumberFieldValue </li>
+			<li> $Url.Link('TextFieldFormat', "%{controller='simpleelements',action='textfieldformatindex'}")  </li> 
+			<li> $Url.Link('TextFieldValue', "%{controller='simpleelements',action='textfieldvalueindex'}")  </li> 
+			<li> $Url.Link('TextArea', "%{controller='simpleelements',action='textareaindex'}")  </li>
+			<li> TextAreaValue </li> 
+			<li> $Url.Link('PasswordField', "%{controller='simpleelements',action='passwordfieldindex'}")  </li> 
+			
+			<li> PasswordNumberField </li>
+			
+			<li> $Url.Link('HiddenField', "%{controller='simpleelements',action='hiddenfieldindex'}")  </li> 
+			<li> FileField  </li> 
 
-<li> <a href="../simpleelements/textfieldformatindex.castle">TextFieldFormat</a> </li> 
+		</ul>
 
-<li> <a href="../simpleelements/textfieldvalueindex.castle">TextFieldValue</a> </li> 
+		</td>
 
-<li> <a href="../simpleelements/textareaindex.castle">TextArea</a> </li> 
+		<td valign="top" style="width: 40%;">
 
-<li> <a href="../simpleelements/passwordfieldindex.castle">PasswordField</a> </li> 
+		<h2>Radio</h2>
 
-<li> <a href="../simpleelements/hiddenfieldindex.castle">HiddenField</a> </li> 
-</ul>
+		<ul>
+			<li> $Url.Link('RadioField', "%{controller='radiosample',action='radio'}") </li> 
+		</ul>
 
-</td>
+		<h2>Checkboxes</h2>
 
-<td valign="top">
-<h2>Radio</h2>
+		<ul>
+			<li> $Url.Link('CheckboxField', "%{controller='checkboxsample',action='CheckboxIndex'}") </li> 
+			<li> $Url.Link('CheckboxList', "%{controller='checkboxsample',action='CheckboxListIndex'}") </li> 
+		</ul>
 
-<ul>
-<li> <a href="../radiosample/radio.castle">RadioField</a> </li> 
-</ul>
+		<h2>Select</h2>
 
+		<ul>
+			<li> $Url.Link('Select', "%{controller='selectsample',action='SelectIndex'}") </li> 
+		</ul>
 
-<h2>Checkboxes</h2>
+		</td>
+	</tr>
+	
+	<tr>
+		<td valign="top">
+		
+		<h2>Form Validation</h2>
+		
+		<ul>
+			<li> Disabling validation </li>
+			<li> Prototype Validation, fValidate and Zebda Validation </li>
+		</ul>
+		
+		</td>
 
+		<td valign="top">
+		
+		<h2>Arrays/collections</h2>
+		
+		<ul>
+			<li> Path to arrays </li>
+		</ul>
+		
+		</td>
+		
+	</tr>
 
-<ul>
-<li> <a href="../checkboxsample/CheckboxIndex.castle">CheckboxField</a> </li> 
-
-<li> <a href="../checkboxsample/CheckboxListIndex.castle">CheckboxList</a> </li> 
-</ul>
-
-
-
-<h2>Select</h2>
-
-<ul>
-<li> <a href="../selectsample/SelectIndex.castle">Select</a> </li> 
-
-</ul>
-
-</td>
-</tr>
+	<tr>
+		<td valign="top">
+		
+		<h2>More</h2>
+		
+		<ul>
+			<li> Specifying attributes (class, style, id) </li>
+			<li> Input masks </li>
+			<li> Formating (textformat) </li>
+			<li> Using Enums (EnumToPairs) </li>
+		</ul>
+		
+		</td>
+		
+		<td valign="top">
+		
+		<h2>And More</h2>
+		
+		<ul>
+			<li> FormTag/EndFormTag </li>
+			<li> AjaxFormTag </li>
+			<li> LabelFor </li>
+			<li> Submit/Button/ButtonElement </li>
+		</ul>
+		
+		</td>
+	</tr>
 
 </table>
-
-
-
-

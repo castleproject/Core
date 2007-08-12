@@ -5,5 +5,3 @@
 
 <p> The user #if($agreement) agreed #else did not agree #end with the license </p>
 
-
-$Form.EndFormTag()
