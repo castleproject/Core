@@ -977,10 +977,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			string result = CreateInputElement("checkbox", elementId, computedTarget, item.Value, attributes);
 
-			string hiddenElementId = elementId + "H";
-			string hiddenElementValue = CommonUtils.ObtainEntryAndRemove(attributes, "falseValue", "false");
-
-			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
+			// I need a test case to justify this case
+//			string hiddenElementId = elementId + "H";
+//			string hiddenElementValue = CommonUtils.ObtainEntryAndRemove(attributes, "falseValue", "false");
+//
+//			result += CreateInputElement("hidden", hiddenElementId, target, hiddenElementValue, null);
 
 			return result;
 		}

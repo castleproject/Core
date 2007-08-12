@@ -72,6 +72,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		/// </summary>
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
+			if (context == null)
+				throw new RailsException("context is null");
+
+			if (contextAdapter == null)
+				throw new RailsException("contextAdapter is null");
+
+			if (contextAdapter.ContextVars == null)
+				throw new RailsException("contextAdapter.ContextVars is null");
+
 			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
 			{
 				context.Put(entry.Key.ToString(), entry.Value);

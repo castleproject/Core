@@ -557,6 +557,16 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private bool isActive;
 		private RegistrationEnum registration = RegistrationEnum.registered;
 
+		public SimpleUser()
+		{
+		}
+
+		public SimpleUser(int id, bool isActive)
+		{
+			this.id = id;
+			this.isActive = isActive;
+		}
+
 		public int Id
 		{
 			get { return id; }
