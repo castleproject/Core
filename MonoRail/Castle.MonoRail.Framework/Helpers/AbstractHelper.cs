@@ -91,13 +91,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </remarks>
 		protected void MergeOptions(IDictionary userOptions, IDictionary defaultOptions)
 		{
-			foreach(DictionaryEntry entry in defaultOptions)
-			{
-				if (!userOptions.Contains(entry.Key))
-				{
-					userOptions[entry.Key] = entry.Value;
-				}
-			}
+			CommonUtils.MergeOptions(userOptions, defaultOptions);
 		}
 		
 		protected IRailsEngineContext CurrentContext

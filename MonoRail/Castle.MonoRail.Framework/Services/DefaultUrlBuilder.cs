@@ -86,11 +86,20 @@ namespace Castle.MonoRail.Framework.Services
 
 			object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
 
-			if (queryString != null)
+			if (queryString == null && parameters.Count != 0)
+			{
+				suffix = CommonUtils.BuildQueryString(serverUtil, parameters, encode);
+			}
+			else if (queryString != null)
 			{
 				if (queryString is IDictionary)
 				{
-					suffix = CommonUtils.BuildQueryString(serverUtil, (IDictionary) queryString, encode);
+					IDictionary qsDictionary = (IDictionary) queryString;
+					
+					// Copy all existing entries on parameters to querystring dictionary
+					CommonUtils.MergeOptions(qsDictionary, parameters);
+
+					suffix = CommonUtils.BuildQueryString(serverUtil, qsDictionary, encode);
 				}
 				else if (queryString is NameValueCollection)
 				{
