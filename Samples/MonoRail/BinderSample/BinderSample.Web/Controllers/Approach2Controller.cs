@@ -30,10 +30,9 @@ namespace BinderSample.Web.Controllers
 		public void EditPublisher(int publisherId)
 		{
 			PropertyBag.Add("publisher", Publisher.Find(publisherId));
-
-			RenderView("EditPublisher");
 		}
 
+		[AccessibleThrough(Verb.Post)]
 		public void Update([DataBind("publisher")] Publisher formpublisher,
 			[DataBind("book")] Book[] formBooks)
 		{
@@ -52,7 +51,9 @@ namespace BinderSample.Web.Controllers
 
 			publisher.Save();
 
-			EditPublisher(publisher.Id);
+			Flash["message"] = "Changes saved";
+
+			RedirectToAction("EditPublisher", "publisherId=" + publisher.Id);
 		}
 	}
 }

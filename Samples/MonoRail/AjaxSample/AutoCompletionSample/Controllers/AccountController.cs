@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace MonoRail.AjaxSample.Controllers
+namespace AutoCompletionSample.Controllers
 {
-    using System;
-    using System.Collections;
-    using Castle.MonoRail.Framework;
-    
-    
-    public class AccountController : SmartDispatcherController
-    {
-        public void Index()
-        {
-        }
+	using System;
+	using System.Collections;
+	using Castle.MonoRail.Framework;
+
+	public class AccountController : SmartDispatcherController
+	{
+		public void Index()
+		{
+		}
 
 		public void GetSearchItems(String name)
 		{
@@ -56,5 +55,5 @@ namespace MonoRail.AjaxSample.Controllers
 			
 			return items;
 		}
-    }
+	}
 }

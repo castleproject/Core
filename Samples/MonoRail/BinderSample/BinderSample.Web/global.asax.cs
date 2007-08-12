@@ -16,10 +16,10 @@ namespace BinderSample.Web
 {
 	using System;
 	using System.Web;
-	using System.Configuration;
 	
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Config;
 
 	using Model;
 
@@ -31,12 +31,13 @@ namespace BinderSample.Web
 		
 		protected void Application_Start(Object sender, EventArgs e)
 		{
-			IConfigurationSource source = 
-				ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
+			IConfigurationSource source = ActiveRecordSectionHandler.Instance;
 
 			ActiveRecordStarter.Initialize( source, typeof(Book), typeof(Publisher));
 
 			ActiveRecordStarter.GenerateCreationScripts("../schema.sql");
+
+			// ActiveRecordStarter.CreateSchema();
 		}
  
 		protected void Session_Start(Object sender, EventArgs e)
@@ -60,26 +61,6 @@ namespace BinderSample.Web
 			{
 				HttpContext.Current.Trace.Warn( "Error", "Problems with the session:" + ex.Message, ex );
 			}
-		}
-
-		protected void Application_AuthenticateRequest(Object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_Error(Object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Session_End(Object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_End(Object sender, EventArgs e)
-		{
-
 		}
 	}
 }

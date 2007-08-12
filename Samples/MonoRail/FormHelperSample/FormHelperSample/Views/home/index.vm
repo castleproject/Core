@@ -10,17 +10,17 @@ The following are samples of FormHelper usage
 <h2>Simple elements</h2>
 
 <ul>
-<li> <a href="../simpleelements/textfieldindex.rails">TextField</a> </li> 
+<li> <a href="../simpleelements/textfieldindex.castle">TextField</a> </li> 
 
-<li> <a href="../simpleelements/textfieldformatindex.rails">TextFieldFormat</a> </li> 
+<li> <a href="../simpleelements/textfieldformatindex.castle">TextFieldFormat</a> </li> 
 
-<li> <a href="../simpleelements/textfieldvalueindex.rails">TextFieldValue</a> </li> 
+<li> <a href="../simpleelements/textfieldvalueindex.castle">TextFieldValue</a> </li> 
 
-<li> <a href="../simpleelements/textareaindex.rails">TextArea</a> </li> 
+<li> <a href="../simpleelements/textareaindex.castle">TextArea</a> </li> 
 
-<li> <a href="../simpleelements/passwordfieldindex.rails">PasswordField</a> </li> 
+<li> <a href="../simpleelements/passwordfieldindex.castle">PasswordField</a> </li> 
 
-<li> <a href="../simpleelements/hiddenfieldindex.rails">HiddenField</a> </li> 
+<li> <a href="../simpleelements/hiddenfieldindex.castle">HiddenField</a> </li> 
 </ul>
 
 </td>
@@ -29,7 +29,7 @@ The following are samples of FormHelper usage
 <h2>Radio</h2>
 
 <ul>
-<li> <a href="../radiosample/radio.rails">RadioField</a> </li> 
+<li> <a href="../radiosample/radio.castle">RadioField</a> </li> 
 </ul>
 
 
@@ -37,9 +37,9 @@ The following are samples of FormHelper usage
 
 
 <ul>
-<li> <a href="../checkboxsample/CheckboxIndex.rails">CheckboxField</a> </li> 
+<li> <a href="../checkboxsample/CheckboxIndex.castle">CheckboxField</a> </li> 
 
-<li> <a href="../checkboxsample/CheckboxListIndex.rails">CheckboxList</a> </li> 
+<li> <a href="../checkboxsample/CheckboxListIndex.castle">CheckboxList</a> </li> 
 </ul>
 
 
@@ -47,7 +47,7 @@ The following are samples of FormHelper usage
 <h2>Select</h2>
 
 <ul>
-<li> <a href="../selectsample/SelectIndex.rails">Select</a> </li> 
+<li> <a href="../selectsample/SelectIndex.castle">Select</a> </li> 
 
 </ul>
 

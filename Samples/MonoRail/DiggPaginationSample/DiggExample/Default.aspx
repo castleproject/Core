@@ -2,7 +2,7 @@
 <script runat="server">
   protected override void OnLoad(EventArgs e)
   {
-    Response.Redirect("~/home/index.rails");
+    Response.Redirect("~/home/index.castle");
     base.OnLoad(e);
   }
 </script>
@@ -16,7 +16,7 @@
 </head>
 <body>
   <p>
-    If you were not redirected, please <a href="home/index.rails">click here</a>.
+    If you were not redirected, please <a href="home/index.castle">click here</a>.
   </p>
 </body>
 </html>

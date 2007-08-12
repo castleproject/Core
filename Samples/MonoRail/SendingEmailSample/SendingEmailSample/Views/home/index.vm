@@ -18,16 +18,16 @@ The <tt>Message</tt> is configured based on the headers
 on the view template.
 </p>
 
-<form action="SendSimple.rails" method="post">
+$Form.FormTag("%{action='SendSimple'}")
 
-<p> To: $FormHelper.TextField("to") </p> 
-<p> Subject: $FormHelper.TextFieldValue("subject", "Welcome to Castle MonoRail") </p> 
+<p> To: $Form.TextField("to") </p> 
+<p> Subject: $Form.TextFieldValue("subject", "Welcome to Castle MonoRail") </p> 
 
-<hr noshade="SendSimple.rails" size="1" />
+<hr size="1" />
 
-<input type="submit" value="Send" />
+$Form.Submit("Send")
 
-</form>
+$Form.EndFormTag()
 
 <h3>Simple html email</h3>
 
@@ -40,15 +40,15 @@ and the view <tt>htmlemail.vm</tt>.
 The <tt>Message</tt> is configured manually.
 </p>
 
-<form action="SendHtml.rails" method="post">
+$Form.FormTag("%{action='SendHtml'}")
 
-<p> To: $FormHelper.TextField("to") </p> 
-<p> Subject: $FormHelper.TextFieldValue("subject", "Welcome to Castle MonoRail") </p> 
+<p> To: $Form.TextField("to") </p> 
+<p> Subject: $Form.TextFieldValue("subject", "Welcome to Castle MonoRail") </p> 
 
 <hr noshade="" size="1" />
 
-<input type="submit" value="Send" />
+$Form.Submit("Send")
 
-</form>
+$Form.EndFormTag()
 
 

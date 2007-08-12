@@ -1,24 +1,24 @@
 <h2>Edit Category</h2>
 
-<form action="update.rails" method="post">
+$Form.FormTag("%{action='update'}")
 
-$FormHelper.HiddenField("category.id")
+$Form.HiddenField("category.id")
 
 <table border="0" width="300px" cellpadding="3" cellspacing="2">
 <tr>
 	<td>
-	$FormHelper.LabelFor("category.name", "Name:")
+	$Form.LabelFor("category.name", "Name:")
 	</td>
 	
 	<td>
-	$FormHelper.TextField("category.name")
+	$Form.TextField("category.name")
 	</td>
 </tr>
 
 </table>
 
 <p>
-	<input type="submit" value="Update" />
+	$Form.Submit("Update")
 </p>
 
-</form>
+$Form.EndFormTag()

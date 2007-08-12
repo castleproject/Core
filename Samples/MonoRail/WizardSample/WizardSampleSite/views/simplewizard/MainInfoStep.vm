@@ -12,33 +12,33 @@
 
 <p>
 
-<form action="maininfostep-save.rails" method="post">
+$Form.FormTag("%{action='maininfostep-save'}")
 
 <table width="80%" border="0" cellpadding="2" cellspacing="3">
   
   <tr>
     <td>Full name: </td>
-    <td>$FormHelper.TextField("account.name")</td>
+    <td>$Form.TextField("account.name")</td>
   </tr>
 
   <tr>
     <td>User name: </td>
-    <td>$FormHelper.TextField("account.username")</td>
+    <td>$Form.TextField("account.username")</td>
   </tr>
 
   <tr>
     <td>E-mail: </td>
-    <td>$FormHelper.TextField("account.email")</td>
+    <td>$Form.TextField("account.email")</td>
   </tr>
   
   <tr>
     <td>Password: </td>
-    <td>$FormHelper.PasswordField("account.pwd")</td>
+    <td>$Form.PasswordField("account.pwd")</td>
   </tr>
 
   <tr>
     <td>Confirm: </td>
-    <td>$FormHelper.PasswordField("account.pwdconfirmation")</td>
+    <td>$Form.PasswordField("account.pwdconfirmation")</td>
   </tr>
   
 </table>
@@ -57,9 +57,9 @@
   &nbsp;
   &nbsp;
   
-  $HtmlHelper.SubmitButton("Next")
+  $Form.Submit("Next")
 </p>
 
-</form>
+$Form.EndFormTag()
 
 </p>

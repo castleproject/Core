@@ -24,10 +24,11 @@
 
 <div class="container">
 
-<a href="${siteRoot}/code/showCode.rails?file=Views/AjaxArea/observerform/index.vm">Check this view source code</a>.
+<a href="${siteRoot}/code/showCode.castle?file=Views/AjaxArea/observerform/index.vm">Check this view source code</a>.
 
 <p>
-  <form id="mainform">
+  $Form.FormTag("%{noaction='true',id='mainform'}")
+
   Name: <input type="text" name="name" id="name"><br>
   Age: <input type="text" name="age" id="age"><br>
   <br>
@@ -35,8 +36,8 @@
   Validation message:
   <span id="message"></span>
   
-  </form>
-  $AjaxHelperOld.ObserveForm("mainform", 3, "Validate.rails", "message", null) 
+  $Form.EndFormTag()
+  $AjaxHelperOld.ObserveForm("mainform", 3, "Validate.castle", "message", null) 
 </p>
 
 </div>

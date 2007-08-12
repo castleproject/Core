@@ -3,13 +3,13 @@ Please inform your interests so we can select very special offers and
 send you spam:
 </p>
 
-<form action="subscribestep-save.rails" method="post">
+$Form.FormTag("%{action='subscribestep-save'}")
 
 <h4>Interests</h4>
 
 <ul>
 
-#set($list = $FormHelper.CreateCheckboxList("account.Interests", $source))
+#set($list = $Form.CreateCheckboxList("account.Interests", $source))
 #foreach($it in $list)
   <li>
   $list.Item()    $it
@@ -22,4 +22,6 @@ send you spam:
   $WizardHelper.LinkToPrevious("Back")
 #end
 
-$HtmlHelper.SubmitButton("Next")
+$Form.SubmitButton("Next")
+
+$Form.EndFormTag()

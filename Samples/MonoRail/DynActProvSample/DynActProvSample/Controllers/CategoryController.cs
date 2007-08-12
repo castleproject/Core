@@ -15,8 +15,6 @@
 namespace DynActProvSample.Controllers
 {
 	using System;
-	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework;
 	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
 	using DynActProvSample.Models;

@@ -1,12 +1,12 @@
 
 <h3>CheckboxList</h3>
 
-<form action="ProcessCheckboxList.rails" method="post">
+$Form.FormTag("%{action='ProcessCheckboxList'}")
 
 <p>Prime numbers (simple arrays)</p>
 
 <p>
-#set($items = $FormHelper.CreateCheckboxList("selectedPrimes", $primenumbers))
+#set($items = $Form.CreateCheckboxList("selectedPrimes", $primenumbers))
 
 #foreach($elem in $items)
   $items.Item()  $elem   <br/>
@@ -18,14 +18,13 @@ Blog categories:
 </p>
 
 <p>
-#set($items = $FormHelper.CreateCheckboxList("blog.categories", $categories, "%{value='Id'}"))
+#set($items = $Form.CreateCheckboxList("blog.categories", $categories, "%{value='Id'}"))
 
 #foreach($elem in $items)
   $items.Item()  $elem.Name   <br/>
 #end
 </p>
 
-<input type="submit" value="Send" />
+$Form.Submit("Send")
 
-</form>
-
+$Form.EndFormTag()

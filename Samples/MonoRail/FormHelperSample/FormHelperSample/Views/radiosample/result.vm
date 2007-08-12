@@ -6,5 +6,4 @@
 <p> The user #if($agreement) agreed #else did not agree #end with the license </p>
 
 
-</form>
-
+$Form.EndFormTag()

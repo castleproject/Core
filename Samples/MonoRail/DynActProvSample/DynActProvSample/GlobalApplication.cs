@@ -14,7 +14,6 @@
 
 namespace DynActProvSample
 {
-	using System;
 	using System.Web;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Config;
@@ -31,7 +30,7 @@ namespace DynActProvSample
 			ActiveRecordStarter.Initialize(
 				ActiveRecordSectionHandler.Instance, typeof(Category));
 			
-			// ActiveRecordStarter.CreateSchema();
+			ActiveRecordStarter.CreateSchema();
 		}
 
 		public void Application_OnEnd() 

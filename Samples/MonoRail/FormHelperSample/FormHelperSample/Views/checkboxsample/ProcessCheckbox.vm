@@ -5,5 +5,4 @@
 
 <p> enabled2: #foreach($v in $enabled2) $v &nbsp;&nbsp; #end  </p>
 
-</form>
-
+$Form.EndFormTag()

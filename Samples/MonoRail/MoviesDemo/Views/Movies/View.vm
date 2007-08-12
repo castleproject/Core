@@ -4,4 +4,4 @@
 <strong>$text.dateAddedLong:</strong> $movie.Added.ToString( "D" )<br />
 <strong>$text.scoreLong:</strong> $movie.Score /10
 <br /><br />
-<a href="$siteRoot/Movies/List.rails">$text.backToList</a>
+<a href="$siteRoot/Movies/List.castle">$text.backToList</a>

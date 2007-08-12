@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace AuthenticationUsingForms.Controllers
+namespace AuthenticationUsingFilters.Controllers
 {
 	using System;
-	using AuthenticationUsingFilters.Model;
 	using Castle.MonoRail.Framework;
+	using Model;
 
 	[Layout("default")]
 	public class LoginController : SmartDispatcherController
@@ -55,7 +55,7 @@ namespace AuthenticationUsingForms.Controllers
 			}
 		}
 
-		private bool IsValid(string username, string password)
+		private static bool IsValid(string username, string password)
 		{
 			return username != null && password != null;
 		}

@@ -14,7 +14,6 @@
 
 namespace FormHelperSample.Controllers
 {
-	using System;
 	using Castle.MonoRail.Framework;
 	using FormHelperSample.Models;
 

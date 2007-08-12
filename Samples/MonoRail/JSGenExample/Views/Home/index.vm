@@ -23,5 +23,5 @@
 <div id="container" style="display: none;"></div>
 
 <p id="addnewcustomerlink">
-	$Ajax.LinkToRemote("Add customer", "NewCustomer.rails", "%{}")
+	$Ajax.LinkToRemote("Add customer", "NewCustomer.castle", "%{}")
 </p>

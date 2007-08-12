@@ -82,7 +82,6 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="global.asax" />
-    <Content Include="Readme.txt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -23,24 +23,24 @@
 <p align="center">
 <table width="75%" border="0" cellpadding="9" cellspacing="8" align="center">
   <tr>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/controllersarea/home/index.rails">Controllers</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/filtersarea/home/index.rails">Filters</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/layoutsarea/home/index.rails">Layouts</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/controllersarea/home/index.castle">Controllers</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/filtersarea/home/index.castle">Filters</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/layoutsarea/home/index.castle">Layouts</a></td>
   </tr>
   <tr>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/databindarea/home/index.rails">DataBind</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/resourcesarea/home/index.rails">Resources/Localization</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/scaffoldarea/home/index.rails">Scaffolding</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/databindarea/home/index.castle">DataBind</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/resourcesarea/home/index.castle">Resources/Localization</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/scaffoldarea/home/index.castle">Scaffolding</a></td>
   </tr>
   <tr>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/rescuesarea/home/index.rails">Rescues</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/areas/home/index.rails">Areas</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/helpersarea/home/index.rails">Helpers</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/rescuesarea/home/index.castle">Rescues</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/areas/home/index.castle">Areas</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/helpersarea/home/index.castle">Helpers</a></td>
   </tr>
   <tr>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/home/index.rails">Ajax support</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/advancedarea/home/index.rails">Advanced</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/morearea/home/index.rails">More</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/home/index.castle">Ajax support</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/advancedarea/home/index.castle">Advanced</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/morearea/home/index.castle">More</a></td>
   </tr>
 </table>
 </p>

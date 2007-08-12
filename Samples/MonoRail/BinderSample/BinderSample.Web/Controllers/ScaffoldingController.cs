@@ -14,12 +14,10 @@
 
 namespace BinderSample.Web.Controllers
 {
-	using System;
-
 	using Castle.MonoRail.Framework;
-
 	using BinderSample.Web.Model;
 
+	[Layout("scaffold")]
 	[Scaffolding(typeof(Book)), Scaffolding(typeof(Publisher))]
 	public class ScaffoldingController : Controller
 	{

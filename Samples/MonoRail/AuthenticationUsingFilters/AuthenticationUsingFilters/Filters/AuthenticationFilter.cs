@@ -14,7 +14,6 @@
 
 namespace AuthenticationUsingFilters.Filters
 {
-	using System;
 	using System.Collections.Specialized;
 	using AuthenticationUsingFilters.Model;
 	

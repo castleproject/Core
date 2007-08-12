@@ -174,7 +174,11 @@
     <Content Include="css\default.css" />
     <Content Include="default.htm" />
     <Content Include="global.asax" />
-    <Content Include="images\cor_diagram2.gif" />
+    <Content Include="images\sc-confirmation.jpg" />
+    <Content Include="images\sc-list.jpg" />
+    <Content Include="images\sc-new-errors.jpg" />
+    <Content Include="images\sc-new.jpg" />
+    <Content Include="images\sc-removed.jpg" />
     <Content Include="images\title.jpg" />
     <None Include="Views\AdvancedArea\home\index.vm" />
     <None Include="Views\AjaxArea\formremotetag\contactlist.vm" />

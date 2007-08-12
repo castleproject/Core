@@ -3,7 +3,7 @@
     <title>$commonText.htmlTitle</title>
     <script language="javascript">
     function setCulture( localeId ) {
-        var url = '$siteRoot/Preferences/Locale.rails?localeId=' + localeId + '&refUrl=' + encodeURIComponent(location.href);
+        var url = '$siteRoot/Preferences/Locale.castle?localeId=' + localeId + '&refUrl=' + encodeURIComponent(location.href);
         location.href = url;
     }
     </script>

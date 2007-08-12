@@ -1,9 +1,11 @@
-<a href="index1.rails">Basic Pagination</a><br />
-<a href="index2.rails">#prev and #next</a><br />
-<a href="index3.rails">Single Page</a><br />
-<a href="index4.rails">Single Page (no pagination)</a><br />
-<a href="index5.rails">Single Page (no pagination, no surrounding HTML)</a><br />
-<a href="index6.rails">Custom CSS</a><br />
-<a href="index7.rails">Ellipsis Fiddling</a><br />
-<a href="index8.rails">Custom Url with parameters</a><br />
-<a href="index9.rails">#link</a><br />
+<h2>This sample demostrate the usage of DiggStylePagination ViewComponent</h2>
+
+<a href="index1.castle">Basic Pagination</a><br />
+<a href="index2.castle">#prev and #next</a><br />
+<a href="index3.castle">Single Page</a><br />
+<a href="index4.castle">Single Page (no pagination)</a><br />
+<a href="index5.castle">Single Page (no pagination, no surrounding HTML)</a><br />
+<a href="index6.castle">Custom CSS</a><br />
+<a href="index7.castle">Ellipsis Fiddling</a><br />
+<a href="index8.castle">Custom Url with parameters</a><br />
+<a href="index9.castle">#link</a><br />

@@ -1,8 +1,9 @@
 <div style="width: 400px; background: #ffffef; border: 1px solid gray; padding: 10px;">
-	$Ajax.BuildFormRemoteTag("AddCustomer.rails", "%{}")
+	$Ajax.BuildFormRemoteTag("AddCustomer.castle", "%{}")
 	
 	<div style="float: right; width: 90px; text-align:center;">
-		<input type="submit" value="Save" /> <br/><br/>
+		$Form.Submit("Save")
+		<br/><br/>
 		<input type="button" value="Cancel" onclick="Effect.toggle('container', 'appear');Element.show('addnewcustomerlink');" /> <br/>
 	</div>
 	
@@ -16,5 +17,5 @@
 		E-mail: $Form.TextField("customer.email") <br/>
 	</div>
 	
-	</form>
+	$Form.EndFormTag()
 </div>

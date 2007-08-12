@@ -5,26 +5,25 @@
 </p>
 #end
 
-<form method="post" action="login.rails?ReturnUrl=$ReturnUrl">
+$Form.FormTag("%{action='login',ReturnUrl=$ReturnUrl}")
 
 <fieldset style="width: 400px;">
 	<legend>Authentication</legend>
 	
 	<p>
-	Username: $FormHelper.TextField("username")
+	Username: $Form.TextField("username")
 	</p>
 	<p>
-	Password: $FormHelper.PasswordField("password")
+	Password: $Form.PasswordField("password")
 	</p>
 	<p>
-	<label for="remember">Remember Me</label> $FormHelper.CheckboxField("rememberme", "%{id='remember'}") 
+	<label for="remember">Remember Me</label> $Form.CheckboxField("rememberme", "%{id='remember'}") 
 	</p>
 	
 	<hr noshade="true" size="1" />
 	
-	<input type="submit" value="Log in" />
-	
+	$Form.Submit("Log in")
 	
 </fieldset>
 
-</form>
+$Form.EndFormTag()

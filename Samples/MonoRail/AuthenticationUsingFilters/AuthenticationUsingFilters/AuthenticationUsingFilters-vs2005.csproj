@@ -145,13 +145,13 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-    <ProjectExtensions>
+  <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4017</DevelopmentServerPort>
+          <DevelopmentServerPort>2661</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
@@ -160,5 +160,4 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-
 </Project>

@@ -1,8 +1,8 @@
 <h2>Delete Category</h2>
 
-<form action="delete.rails" method="post">
+$Form.FormTag("%{action='delete'}")
 
-$FormHelper.HiddenField("category.id")
+$Form.HiddenField("category.id")
 
 <table border="0" width="300px" cellpadding="3" cellspacing="2">
 <tr>
@@ -18,7 +18,7 @@ $FormHelper.HiddenField("category.id")
 </table>
 
 <p>
-	<input type="submit" value="Delete" />
+	$Form.Submit("Delete")
 </p>
 
-</form>
+$Form.EndFormTag()

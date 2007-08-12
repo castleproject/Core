@@ -16,8 +16,8 @@ body
 	
 	<h3>Simple Form</h3>
 	
-	<form action="PostMessage.rails" method="post">
-	
+	$Form.FormTag("%{action='PostMessage'}")
+
 	<table border="0" cellspacing="5" cellpadding="5">
 	<tr>
 		<td> <label for="name">Name:</label> </td>
@@ -43,10 +43,9 @@ body
 	
 	<hr noshade="" size="1" />
 	
-	<input type="submit" value="Send" />
+	$Form.Submit("Send")
 	
-	</form>
-	
+	$Form.EndFormTag()
 
 
 
@@ -56,8 +55,8 @@ body
 	The first approach is to repeat form element names
 	</p>
 
-	<form action="PostMessages.rails" method="post">
-	
+	$Form.FormTag("%{action='PostMessages'}")
+
 	<table border="0" cellspacing="5" cellpadding="5">
 #foreach($item in [1..5])
 	<tr>
@@ -69,10 +68,9 @@ body
 
 	<hr noshade="" size="1" />
 	
-	<input type="submit" value="Send" />
+	$Form.Submit("Send")
 	
-	</form>
-
+	$Form.EndFormTag()
 
 
 	<h3>Using Arrays - Approach 2</h3>
@@ -82,8 +80,8 @@ body
 	<tt>name[index]</tt> for example <tt>name[1]</tt>.
 	</p>
 
-	<form action="PostMessages.rails" method="post">
-	
+	$Form.FormTag("%{action='PostMessages'}")
+
 	<table border="0" cellspacing="5" cellpadding="5">
 #foreach($item in [1..5])
 	<tr>
@@ -95,9 +93,9 @@ body
 
 	<hr noshade="" size="1" />
 	
-	<input type="submit" value="Send" />
+	$Form.Submit("Send")
 	
-	</form>
+	$Form.EndFormTag()
 	
 	</body>
 </html>

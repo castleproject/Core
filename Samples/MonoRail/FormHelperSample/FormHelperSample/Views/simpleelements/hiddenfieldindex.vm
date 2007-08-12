@@ -4,11 +4,11 @@
 
 
 <p>
-somekey: $FormHelper.HiddenField("somekey")
+somekey: $Form.HiddenField("somekey")
 </p>
 
 <p>
-simplevalue: $FormHelper.HiddenField("simplevalue")
+simplevalue: $Form.HiddenField("simplevalue")
 </p>
 
 

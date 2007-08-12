@@ -8,11 +8,11 @@ $textres.intro
 
 <hr noshade="yes" size="1"/>
 
-<form method="post" action="SetLanguage.rails" id="form1">
+$Form.FormTag("%{action='SetLanguage',id='form1'}")
 <select name="langCode" onchange="document.getElementById('form1').submit();">
-    <option>Please select a language</option>
+	<option>Please select a language</option>
 	<option value="es">Spanish</option>
 	<option value="pt">Portuguese</option>
 	<option value="en">English</option>
 </select>
-</form>
+$Form.EndFormTag()

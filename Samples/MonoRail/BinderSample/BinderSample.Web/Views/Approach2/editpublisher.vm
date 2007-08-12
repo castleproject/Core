@@ -1,13 +1,17 @@
 
 <h3>Using DataBinder with Arrays</h3>
 
-$HtmlHelper.Form("update.rails")
+#if($Flash.message)
+<div>$Flash.message</div>
+#end
+
+$Form.FormTag("%{action='update'}")
 
 <h4>Publisher</h4>
 
-$HtmlHelper.InputHidden("publisher.id", $publisher.Id)
+$Form.HiddenField("publisher.id")
 
-Name: $HtmlHelper.InputText("publisher.name", $publisher.Name)
+Name: $Form.TextField("publisher.name")
 
 <h4>Books</h4>
 
@@ -24,11 +28,11 @@ Name: $HtmlHelper.InputText("publisher.name", $publisher.Name)
     $book.Id
     </td>
     <td>
-  $HtmlHelper.InputHidden("book[${counter}].Id", $book.Id)
-  $HtmlHelper.InputText("book[${counter}].Name", $book.name)
+  $Form.HiddenField("book[${counter}].Id", $book.Id)
+  $Form.TextFieldValue("book[${counter}].Name", $book.name)
     </td>
     <td>
-  $HtmlHelper.InputText("book[${counter}].Author", $book.author)
+  $Form.TextFieldValue("book[${counter}].Author", $book.author)
     </td>
   </tr>
 #set($counter = $counter + 1)
@@ -37,6 +41,6 @@ Name: $HtmlHelper.InputText("publisher.name", $publisher.Name)
 
 <br/>
 
-$HtmlHelper.SubmitButton("Save")
+$Form.Submit("Save")
 
-$HtmlHelper.EndForm()
+$Form.EndFormTag()

@@ -66,7 +66,7 @@ namespace MoviesDemo.Controllers
 			}
 
 			//Redirect so a refresh doesn't post again
-			Response.Redirect("~/Movies/View.rails?movieId=" + movie.Id);
+			Response.Redirect("~/Movies/View.castle?movieId=" + movie.Id);
 
 			CancelView();
 		}

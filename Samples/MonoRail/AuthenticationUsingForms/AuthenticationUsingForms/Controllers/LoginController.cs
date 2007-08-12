@@ -39,11 +39,11 @@ namespace AuthenticationUsingForms.Controllers
 			{
 				CancelView();
 				
-				FormsAuthentication.RedirectFromLoginPage(username, rememberme, Context.ApplicationPath);
+				FormsAuthentication.RedirectFromLoginPage(username, rememberme, "/");
 
 //				The RedirectFromLoginPage is roughly equivalent to 
 //
-//				FormsAuthentication.SetAuthCookie(username, rememberme, Context.ApplicationPath);
+//				FormsAuthentication.SetAuthCookie(username, rememberme, "/");
 //				
 //				if (ReturnUrl != null)
 //				{

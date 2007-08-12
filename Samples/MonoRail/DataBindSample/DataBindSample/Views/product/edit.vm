@@ -1,6 +1,6 @@
 <h3>Edit Product</h3>
 
-<form method="post" action="create.rails">
+$Form.FormTag("%{action='update'}")
 
 <table border="0" cellspacing="5" cellpadding="5" width="100%">
 <tr>
@@ -73,8 +73,7 @@
 
 <hr noshade="" size="1" />
 
-<input type="submit" value="Update product information" />
+$Form.Submit("Update product information")
 
-</form>
-
+$Form.EndFormTag()
 	

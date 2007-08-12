@@ -39,33 +39,33 @@ namespace DynActProvSample.Controllers
 	/// <summary>
 	/// Includes dynamic actions on the controller
 	/// </summary>
-public class CrudActionProvider : IDynamicActionProvider
-{
-	public void IncludeActions(Controller controller)
+	public class CrudActionProvider : IDynamicActionProvider
 	{
-		Type controllerType = controller.GetType();
-
-		object[] atts = controllerType.GetCustomAttributes(typeof(CrudAttribute), false);
-
-		if (atts.Length == 0)
+		public void IncludeActions(Controller controller)
 		{
-			throw new Exception("CrudAttribute not used on " + controllerType.Name);
+			Type controllerType = controller.GetType();
+
+			object[] atts = controllerType.GetCustomAttributes(typeof(CrudAttribute), false);
+
+			if (atts.Length == 0)
+			{
+				throw new Exception("CrudAttribute not used on " + controllerType.Name);
+			}
+
+			CrudAttribute crudAtt = (CrudAttribute) atts[0];
+
+			Type arType = crudAtt.ActiveRecordType;
+			String prefix = arType.Name.ToLower();
+
+			controller.DynamicActions["list"] = new ListAction(arType);
+			controller.DynamicActions["new"] = new NewAction();
+			controller.DynamicActions["create"] = new CreateAction(arType, prefix);
+			controller.DynamicActions["edit"] = new EditAction(arType, prefix);
+			controller.DynamicActions["update"] = new UpdateAction(arType, prefix);
+			controller.DynamicActions["confirmdelete"] = new ConfirmDeleteAction(arType, prefix);
+			controller.DynamicActions["delete"] = new DeleteAction(arType, prefix);
 		}
-
-		CrudAttribute crudAtt = (CrudAttribute)atts[0];
-
-		Type arType = crudAtt.ActiveRecordType;
-		String prefix = arType.Name.ToLower();
-
-		controller.DynamicActions["list"] = new ListAction(arType);
-		controller.DynamicActions["new"] = new NewAction();
-		controller.DynamicActions["create"] = new CreateAction(arType, prefix);
-		controller.DynamicActions["edit"] = new EditAction(arType, prefix);
-		controller.DynamicActions["update"] = new UpdateAction(arType, prefix);
-		controller.DynamicActions["confirmdelete"] = new ConfirmDeleteAction(arType, prefix);
-		controller.DynamicActions["delete"] = new DeleteAction(arType, prefix);
 	}
-}
 
 	public class ListAction : IDynamicAction
 	{
@@ -91,7 +91,7 @@ public class CrudActionProvider : IDynamicActionProvider
 			controller.RenderView("new");
 		}
 	}
-	
+
 	public class CreateAction : IDynamicAction
 	{
 		private readonly Type arType;
@@ -106,7 +106,7 @@ public class CrudActionProvider : IDynamicActionProvider
 		public void Execute(Controller controller)
 		{
 			object instance = null;
-			
+
 			try
 			{
 				ARSmartDispatcherController arController =
@@ -122,7 +122,7 @@ public class CrudActionProvider : IDynamicActionProvider
 					builder.BuildSourceNode(controller.Form));
 
 				ActiveRecordMediator.Create(instance);
-				
+
 				controller.Redirect(controller.Name, "list");
 			}
 			catch(Exception ex)
@@ -150,9 +150,9 @@ public class CrudActionProvider : IDynamicActionProvider
 		{
 			int id = Convert.ToInt32(controller.Query["id"]);
 
-			controller.PropertyBag[prefix] = 
+			controller.PropertyBag[prefix] =
 				ActiveRecordMediator.FindByPrimaryKey(arType, id);
-			
+
 			controller.RenderView("edit");
 		}
 	}
@@ -179,7 +179,7 @@ public class CrudActionProvider : IDynamicActionProvider
 
 				ARDataBinder binder = (ARDataBinder) arController.Binder;
 				binder.AutoLoad = AutoLoadBehavior.Always;
-				
+
 				TreeBuilder builder = new TreeBuilder();
 
 				instance = binder.BindObject(
@@ -190,7 +190,7 @@ public class CrudActionProvider : IDynamicActionProvider
 
 				controller.Redirect(controller.Name, "list");
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				controller.Flash["errormessage"] = ex.Message;
 				controller.Flash[prefix] = instance;
@@ -215,7 +215,7 @@ public class CrudActionProvider : IDynamicActionProvider
 		{
 			int id = Convert.ToInt32(controller.Query["id"]);
 
-			controller.PropertyBag[prefix] = 
+			controller.PropertyBag[prefix] =
 				ActiveRecordMediator.FindByPrimaryKey(arType, id);
 
 			controller.RenderView("confirmdelete");
@@ -240,14 +240,14 @@ public class CrudActionProvider : IDynamicActionProvider
 			try
 			{
 				int id = Convert.ToInt32(controller.Form[prefix + ".id"]);
-				
+
 				instance = ActiveRecordMediator.FindByPrimaryKey(arType, id);
 
 				ActiveRecordMediator.Delete(instance);
 
 				controller.Redirect(controller.Name, "list");
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				controller.Flash["errormessage"] = ex.Message;
 				controller.Flash[prefix] = instance;

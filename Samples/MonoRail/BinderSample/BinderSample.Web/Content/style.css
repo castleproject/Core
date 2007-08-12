@@ -92,3 +92,7 @@ div#scaffoldmain
 	margin-left: 5px;
 	margin-top: 5px;
 }
+div#scaffoldmain div
+{
+	margin: 8px 0 6px 0;
+}

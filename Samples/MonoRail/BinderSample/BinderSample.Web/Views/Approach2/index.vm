@@ -5,8 +5,7 @@
 
 <ul>
 #foreach($pub in $publishers)
-  <li><a href="editpublisher.rails?publisherId=$pub.id">$pub</a></li>
+  <li>$Url.Link($pub.ToString(),"%{action='editpublisher',publisherId=$pub.id}")</li>
 #end
 </ul>
 
-$HtmlHelper.EndForm()

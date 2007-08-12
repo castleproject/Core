@@ -6,7 +6,7 @@
 <body>
 
 <p>
-  <a href="${siteroot}/SimpleWizard/start.rails">Start simple wizard</a>
+  <a href="${siteroot}/SimpleWizard/start.castle">Start simple wizard</a>
 </p>
 
 </body>

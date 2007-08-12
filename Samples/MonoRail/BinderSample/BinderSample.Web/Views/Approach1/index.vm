@@ -1,12 +1,11 @@
 
-<h3>Using only DataBind attribute</h3>
+<h3>Using the DataBind attribute and SmartDispatcherController</h3>
 
 <h4>Publishers</h4>
 
 <ul>
 #foreach($pub in $publishers)
-  <li><a href="editpublisher.rails?publisherId=$pub.id">$pub</a></li>
+  <li>$Url.Link($pub.ToString(),"%{action='editpublisher',publisherId=$pub.id}")</li>
 #end
 </ul>
 
-$HtmlHelper.EndForm()

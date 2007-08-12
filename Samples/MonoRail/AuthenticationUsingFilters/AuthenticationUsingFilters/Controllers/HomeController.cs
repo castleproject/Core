@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace AuthenticationUsingForms.Controllers
+namespace AuthenticationUsingFilters.Controllers
 {
-	using System;
-	using AuthenticationUsingFilters.Filters;
 	using Castle.MonoRail.Framework;
+	using Filters;
 
 	[Layout("default")]
 	[Filter(ExecuteEnum.BeforeAction, typeof(AuthenticationFilter))]

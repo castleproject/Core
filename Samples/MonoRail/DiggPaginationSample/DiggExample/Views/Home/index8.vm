@@ -8,10 +8,10 @@
 #end
 <tr>
     <td colspan="2">
-#set ($url="index8.rails?desc=$desc")
+#set ($url="index8.castle?desc=$desc")
 #component(DiggStylePagination with "page=$items" "url=$url")
     </td>
 </tr>
 </table>
-<a href="index8.rails">Ascending list</a> &mdash; 
-<a href="index8.rails?desc=true">Descending list</a>
+<a href="index8.castle">Ascending list</a> &mdash; 
+<a href="index8.castle?desc=true">Descending list</a>

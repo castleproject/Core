@@ -22,5 +22,4 @@
 
 </p>
 
-</form>
-
+$Form.EndFormTag()

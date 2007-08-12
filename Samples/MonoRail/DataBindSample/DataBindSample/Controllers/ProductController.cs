@@ -14,8 +14,6 @@
 
 namespace DataBindSample.Controllers
 {
-	using System;
-
 	using Castle.MonoRail.Framework;
 	using DataBindSample.Model;
 
@@ -100,7 +98,7 @@ namespace DataBindSample.Controllers
 		/// In a real application we'd be loading
 		/// this from the database
 		/// </summary>
-		private Category[] FindAllCategories()
+		private static Category[] FindAllCategories()
 		{
 			return new Category[]
 				{

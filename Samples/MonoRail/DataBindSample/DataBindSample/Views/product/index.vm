@@ -2,12 +2,19 @@
 <h3>Product Administration</h3>
 
 <p>
-- <a href="new.rails">Create product</a>
+Please note: this sample does not use the FormHelper to generate the form elements 
+just for the sake of being really obvious on how the elements names will look like.
+In real world, we recommend the use of the FormHelper.
 </p>
 
 <p>
-- <a href="edit.rails?id=1">Edit product</a>
+- <a href="new.castle">Create product</a>
 </p>
+
+<p>
+- <a href="edit.castle?id=1">Edit product</a>
+</p>
+	
 	
 <hr noshade="yes" size="1" />
 
