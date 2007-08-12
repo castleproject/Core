@@ -17,13 +17,8 @@ namespace SampleSite
 	using System;
 	using System.Web;
 
-
 	public class MyHttpApplication : HttpApplication
 	{
-		public MyHttpApplication()
-		{
-		}
-
 		public void Application_OnStart() 
 		{
 		}

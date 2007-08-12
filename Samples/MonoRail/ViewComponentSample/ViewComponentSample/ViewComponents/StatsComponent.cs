@@ -22,11 +22,11 @@ namespace ViewComponentSample.ViewComponents
 		private static Random rnd = new Random();
 		private string pageName;
 
-		public override void Initialize()
+		[ViewComponentParam]
+		public string PageName
 		{
-			pageName =  (String) ComponentParams["pagename"];
-			
-			base.Initialize();
+			get { return pageName; }
+			set { pageName = value; }
 		}
 
 		public override void Render()

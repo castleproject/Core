@@ -18,5 +18,5 @@
 </table>
 
 <br /><br />
-$StringHelper.Format( $text.movieCount, $movies.Length )<br />
+<br />
 <a href="$siteRoot/Movies/Edit.castle?movieId=0">Add a movie</a>

@@ -14,7 +14,6 @@
 
 namespace MoviesDemo.Controllers
 {
-	using System;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Filters;
 	using MoviesDemo.Helpers;

@@ -27,17 +27,53 @@ namespace ViewComponentSample.ViewComponents
 		private object cellpadding;
 		private object cellspacing;
 
-		public override void Initialize()
+		[ViewComponentParam(Required = true)]
+		public ICollection Elements
 		{
-			elements = (ICollection) ComponentParams["elements"];
-			
-			border = ComponentParams["border"];
-			style = (String) ComponentParams["style"];
-			cellpadding = ComponentParams["cellpadding"];
-			cellspacing = ComponentParams["cellspacing"];
-			
-			base.Initialize();
+			get { return elements; }
+			set { elements = value; }
 		}
+
+		[ViewComponentParam]
+		public object Border
+		{
+			get { return border; }
+			set { border = value; }
+		}
+
+		[ViewComponentParam]
+		public string Style
+		{
+			get { return style; }
+			set { style = value; }
+		}
+
+		[ViewComponentParam]
+		public object Cellpadding
+		{
+			get { return cellpadding; }
+			set { cellpadding = value; }
+		}
+
+		[ViewComponentParam]
+		public object Cellspacing
+		{
+			get { return cellspacing; }
+			set { cellspacing = value; }
+		}
+
+		// Another approach to read parameters:
+//		public override void Initialize()
+//		{
+//			elements = (ICollection) ComponentParams["elements"];
+//			
+//			border = ComponentParams["border"];
+//			style = (String) ComponentParams["style"];
+//			cellpadding = ComponentParams["cellpadding"];
+//			cellspacing = ComponentParams["cellspacing"];
+//			
+//			base.Initialize();
+//		}
 
 		public override void Render()
 		{

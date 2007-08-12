@@ -127,7 +127,9 @@
     <Compile Include="GlobalApplication.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Content Include="default.aspx" />
+    <Content Include="default.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="global.asax" />
     <None Include="Views\home\emailsent.vm" />
     <None Include="Views\home\index.vm" />
@@ -136,8 +138,10 @@
     <None Include="Views\mail\simple.vm" />
     <None Include="Views\rescues\problemsendingemail.vm" />
     <None Include="Web.config" />
-    <Folder Include="Content\css" />
-    <Folder Include="Content\images" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\css\" />
+    <Folder Include="Content\images\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

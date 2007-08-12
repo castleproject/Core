@@ -11,6 +11,8 @@ body
 	font-size: small;
 }		
 		</style>
+		$Ajax.InstallScripts()
+		$Form.InstallScripts()
 	</head>
 	<body>
 

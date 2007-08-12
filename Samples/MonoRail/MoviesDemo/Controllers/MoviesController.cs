@@ -28,17 +28,7 @@ namespace MoviesDemo.Controllers
 
 		public void Edit(int movieId)
 		{
-			Movie movie;
-
-			if (movieId > 0)
-			{
-				movie = Movie.Find(movieId);
-			}
-			else
-			{
-				movie = new Movie();
-				movie.Added = DateTime.Today;
-			}
+			Movie movie = Movie.Find(movieId);
 
 			PropertyBag["movie"] = movie;
 		}

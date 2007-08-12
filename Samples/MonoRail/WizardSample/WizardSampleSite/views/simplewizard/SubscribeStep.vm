@@ -22,6 +22,6 @@ $Form.FormTag("%{action='subscribestep-save'}")
   $WizardHelper.LinkToPrevious("Back")
 #end
 
-$Form.SubmitButton("Next")
+$Form.Submit("Next")
 
 $Form.EndFormTag()

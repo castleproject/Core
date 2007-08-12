@@ -172,6 +172,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Content Include="css\default.css" />
+    <Content Include="default.aspx" />
     <Content Include="default.htm" />
     <Content Include="global.asax" />
     <Content Include="images\sc-confirmation.jpg" />
