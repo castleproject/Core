@@ -198,6 +198,28 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Generates and executes the creation scripts for the database using 
+		/// the specified baseClass to know which database it should create the schema for.
+		/// </summary>
+		public static void CreateSchema(Type baseClass)
+		{
+			CheckInitialized();
+
+			Configuration config = ActiveRecordBase.holder.GetConfiguration(baseClass);
+
+			SchemaExport export = CreateSchemaExport(config);
+
+			try
+			{
+				export.Create(false, true);
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not create the schema", ex);
+			}
+		}
+
+		/// <summary>
 		/// Executes the specified script to create/drop/change the database schema
 		/// </summary>
 		public static void CreateSchemaFromFile(String scriptFileName)
@@ -247,6 +269,28 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Generates and executes the Drop scripts for the database using 
+		/// the specified baseClass to know which database it should create the scripts for.
+		/// </summary>
+		public static void DropSchema(Type baseClass)
+		{
+			CheckInitialized();
+
+			Configuration config = ActiveRecordBase.holder.GetConfiguration(baseClass);
+
+			SchemaExport export = CreateSchemaExport(config);
+
+			try
+			{
+				export.Drop(false, true);
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not drop the schema", ex);
+			}
+		}
+
+		/// <summary>
 		/// Generates the drop scripts for the database saving them to the supplied file name. 
 		/// </summary>
 		/// <remarks>
@@ -279,6 +323,29 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Generates the drop scripts for the database saving them to the supplied file name. 
+		/// The baseType is used to identify which database should we act upon.
+		/// </summary>
+		public static void GenerateDropScripts(Type baseType, String fileName)
+		{
+			CheckInitialized();
+
+			Configuration config = ActiveRecordBase.holder.GetConfiguration(baseType);
+
+			SchemaExport export = CreateSchemaExport(config);
+
+			try
+			{
+				export.SetOutputFile(fileName);
+				export.Drop(false, false);
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not generate drop schema scripts", ex);
+			}
+		}
+
+		/// <summary>
 		/// Generates the creation scripts for the database
 		/// </summary>
 		/// <remarks>
@@ -307,6 +374,29 @@ namespace Castle.ActiveRecord
 				}
 
 				isFirstExport = false;
+			}
+		}
+
+		/// <summary>
+		/// Generates the creation scripts for the database
+		/// The baseType is used to identify which database should we act upon.
+		/// </summary>
+		public static void GenerateCreationScripts(Type baseType, String fileName)
+		{
+			CheckInitialized();
+
+			Configuration config = ActiveRecordBase.holder.GetConfiguration(baseType);
+
+			SchemaExport export = CreateSchemaExport(config);
+
+			try
+			{
+				export.SetOutputFile(fileName);
+				export.Create(false, false);
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not create the schema scripts", ex);
 			}
 		}
 

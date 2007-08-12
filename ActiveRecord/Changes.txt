@@ -1,6 +1,10 @@
 Release Candidate 2
 ===================
 
+- Applied Gautier's patch fixing AR-173
+  "Add a type parameter to the methods : CreateSchema, DropSchema, 
+  GenerateCreationScript and GenerateDropScript"
+
 - Fixed AR-174
   "GenerateCreationScripts and GenerateDropScripts generate the scripts for only one database"
 
