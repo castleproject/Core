@@ -373,7 +373,6 @@
     <Compile Include="Framework\Scopes\HybridWebThreadScopeInfo.cs" />
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
     <Compile Include="Framework\SessionScopeWebModule.cs" />
-    <Compile Include="Framework\ValidationHookDispatcher.cs" />
     <Compile Include="Framework\Validators\IsUniqueValidator.cs" />
   </ItemGroup>
   <ItemGroup>

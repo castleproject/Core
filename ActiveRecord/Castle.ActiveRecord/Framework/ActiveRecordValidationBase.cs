@@ -17,7 +17,6 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 
-	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Validator;
 
@@ -26,18 +25,20 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	/// <example>
 	/// <code>
+	/// using Castle.Components.Validator;
+	/// 
 	/// public class Customer : ActiveRecordBase
 	/// {
 	///		...
 	///		
-	///		[Property, ValidateNotEmpty]
+	///		[Property, ValidateNonEmpty]
 	///		public int Name
 	///		{
 	///			get { return _name; }
 	///			set { _name = value; }
 	///		}
 	///		
-	///		[Property, ValidateNotEmpty, ValidateEmail]
+	///		[Property, ValidateNonEmpty, ValidateEmail]
 	///		public int Email
 	///		{
 	///			get { return _email; }
@@ -174,7 +175,8 @@ namespace Castle.ActiveRecord
 		/// </remarks>
 		protected virtual void OnNotValid()
 		{
-			throw new ValidationException( "Can't save or update as there is one (or more) field that has not passed the validation test", ValidationErrorMessages );
+			throw new ValidationException("Can't save or update as there is one (or more) " + 
+				"field that has not passed the validation test", ValidationErrorMessages);
 		}
 	}
 }
