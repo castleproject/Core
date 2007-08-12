@@ -14,9 +14,8 @@
 
 namespace Castle.ActiveRecord.Tests
 {
-	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Tests.Model;
-	
+	using Framework;
+	using Model;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -25,11 +24,11 @@ namespace Castle.ActiveRecord.Tests
 		[SetUp]
 		public void Setup()
 		{
-			base.Init();
-			
-			ActiveRecordStarter.Initialize( GetConfigSource(), 
-				typeof(Blog), typeof(Post), typeof(Hand), typeof(Test2ARBase) );
-			
+			Init();
+
+			ActiveRecordStarter.Initialize(GetConfigSource(),
+			                               typeof(Blog), typeof(Post), typeof(Hand), typeof(Test2ARBase));
+
 			Recreate();
 		}
 
@@ -49,10 +48,10 @@ namespace Castle.ActiveRecord.Tests
 		private static void CreateBlog()
 		{
 			Blog blog = new Blog();
-	
+
 			blog.Author = "Henry";
 			blog.Name = "Senseless";
-            blog.Save();
+			blog.Save();
 		}
 
 		[Test]
@@ -72,9 +71,9 @@ namespace Castle.ActiveRecord.Tests
 		private static void CreateHand()
 		{
 			Hand hand = new Hand();
-	
+
 			hand.Side = "Right";
-	
+
 			hand.Save();
 		}
 
@@ -96,30 +95,5 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(1, blogs.Length);
 			Assert.AreEqual(1, hands.Length);
 		}
-
-		/// <summary>
-		/// hammett's comment: I don't think this can be fixed (at least not easily)
-		/// </summary>
-		[Test]
-		[Ignore("This still needs to be fixed")]
-		[ExpectedException(typeof(ActiveRecordInitializationException))]
-		public void MultipleDatabaseInvalidConfigWhenNotRegisterBaseClass() {
-
-			base.Init();
-
-			//Not registering the base class should not cause AR to silently ignore the configuration 
-			//for the type meaning all classes would use a single database. 
-
-			//if there is a type in the config which is not registered - but a subclass is then we should throw.
-
-			//AFAIK - fixing this requires exposing _type2Config to ActiveRecordStarter.
-
-			ActiveRecordStarter.Initialize(GetConfigSource(),
-				typeof(Blog), typeof(Post), typeof(Hand));
-
-			Recreate();
-		}
-
-
 	}
 }

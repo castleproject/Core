@@ -137,16 +137,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		/// <summary>
-		/// Remove the generic part from the typename.
+		/// Remove the generic part from the type name.
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
 		private static string GetSafeName(string name)
 		{
-			if (name.IndexOf("`") == -1)
-				return name;
+			int index = name.IndexOf("`");
 
-			return name.Substring(0, name.IndexOf("`"));
+			if (index == -1) return name;
+
+			return name.Substring(0, index);
 		}
 
 		private void ProcessFields(Type type, ActiveRecordModel model)

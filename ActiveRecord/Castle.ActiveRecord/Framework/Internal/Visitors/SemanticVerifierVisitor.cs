@@ -717,7 +717,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private RelationType GuessRelation(PropertyInfo property, RelationType type)
+		private static RelationType GuessRelation(PropertyInfo property, RelationType type)
 		{
 			if (type != RelationType.Guess)
 				return type;

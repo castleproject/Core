@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 	using System.Data;
+	using System.IO;
 	using System.Reflection;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
@@ -248,11 +249,16 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Generates the drop scripts for the database saving them to the supplied file name. 
 		/// </summary>
+		/// <remarks>
+		/// If ActiveRecord was configured to access more than one database, a file is going
+		/// to be generate for each, based on the path and the <c>fileName</c> specified.
+		/// </remarks>
 		public static void GenerateDropScripts(String fileName)
 		{
-			// TODO: The export append to the file or erase it?
-
 			CheckInitialized();
+
+			bool isFirstExport = true;
+			int fileCount = 1;
 
 			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
@@ -260,24 +266,31 @@ namespace Castle.ActiveRecord
 
 				try
 				{
-					export.SetOutputFile(fileName);
+					export.SetOutputFile(isFirstExport ? fileName : CreateAnotherFile(fileName, fileCount++));
 					export.Drop(false, false);
 				}
 				catch(Exception ex)
 				{
 					throw new ActiveRecordException("Could not drop the schema", ex);
 				}
+
+				isFirstExport = false;
 			}
 		}
 
 		/// <summary>
 		/// Generates the creation scripts for the database
 		/// </summary>
+		/// <remarks>
+		/// If ActiveRecord was configured to access more than one database, a file is going
+		/// to be generate for each, based on the path and the <c>fileName</c> specified.
+		/// </remarks>
 		public static void GenerateCreationScripts(String fileName)
 		{
-			// TODO: The export append to the file or erase it?
-
 			CheckInitialized();
+
+			bool isFirstExport = true;
+			int fileCount = 1;
 
 			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
@@ -285,13 +298,15 @@ namespace Castle.ActiveRecord
 
 				try
 				{
-					export.SetOutputFile(fileName);
+					export.SetOutputFile(isFirstExport ? fileName : CreateAnotherFile(fileName, fileCount++));
 					export.Create(false, false);
 				}
-				catch (Exception ex)
+				catch(Exception ex)
 				{
 					throw new ActiveRecordException("Could not create the schema", ex);
 				}
+
+				isFirstExport = false;
 			}
 		}
 
@@ -612,12 +627,12 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Retrive all classies decorated with ActiveRecordAttribute or have been configured
+		/// Retrieve all classes decorated with ActiveRecordAttribute or that have been configured
 		/// as a AR base class.
 		/// </summary>
-		/// <param name="assembly">Assembly to retrive types from</param>
-		/// <param name="list">Array to store retrived types in</param>
-		/// <param name="source">IConfigurationSource to inspect AR base declerations from</param>
+		/// <param name="assembly">Assembly to retrieve types from</param>
+		/// <param name="list">Array to store retrieved types in</param>
+		/// <param name="source">IConfigurationSource to inspect AR base declarations from</param>
 		private static void CollectValidActiveRecordTypesFromAssembly(Assembly assembly, ArrayList list,
 																	  IConfigurationSource source)
 		{
@@ -633,6 +648,22 @@ namespace Castle.ActiveRecord
 					list.Add(type);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Generate a file name based on the original file name specified, using the 
+		/// count to give it some order.
+		/// </summary>
+		/// <param name="originalFileName"></param>
+		/// <param name="fileCount"></param>
+		/// <returns></returns>
+		public static string CreateAnotherFile(string originalFileName, int fileCount)
+		{
+			string path = Path.GetDirectoryName(originalFileName);
+			string fileName = Path.GetFileNameWithoutExtension(originalFileName);
+			string extension = Path.GetExtension(originalFileName);
+
+			return Path.Combine(path, string.Format("{0}_{1}{2}", fileName, fileCount, extension));
 		}
 	}
 }
