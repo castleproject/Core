@@ -259,6 +259,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
 		public String LineBreaksToHtml(String content)
 		{
+			if (content == null) return string.Empty;
+
 			// TODO: Replace by a regular expression, which should be much more efficient
 
 			return content.Replace("\r", "").Replace("\n", "<br/>");
