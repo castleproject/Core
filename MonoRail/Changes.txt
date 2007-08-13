@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- The DefaultUrlBuilder now accepts a basePath parameter, which basically overrides the path information.
+
 - Fixed MR-317
   "ARDataBind handles BelongsTo attribute in Nested component incorrectly."
 

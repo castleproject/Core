@@ -86,6 +86,13 @@ namespace Castle.MonoRail.Framework.Services
 
 			object queryString = CommonUtils.ObtainObjectEntryAndRemove(parameters, "querystring");
 
+			string basePath = null;
+
+			if (parameters.Contains("basepath"))
+			{
+				basePath = CommonUtils.ObtainEntryAndRemove(parameters, "basepath");
+			}
+
 			if (queryString == null && parameters.Count != 0)
 			{
 				suffix = CommonUtils.BuildQueryString(serverUtil, parameters, encode);
@@ -117,7 +124,7 @@ namespace Castle.MonoRail.Framework.Services
 			}
 
 			return InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain,
-				current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix);
+				current.AppVirtualDir, current.Extension, createAbsolutePath, applySubdomain, suffix, basePath);
 		}
 
 		public virtual string BuildUrl(UrlInfo current, string controller, string action)
@@ -182,6 +189,15 @@ namespace Castle.MonoRail.Framework.Services
 		                                string port, string domain, string subdomain, string appVirtualDir, string extension, 
 		                                bool absolutePath, bool applySubdomain, string suffix)
 		{
+			return
+				InternalBuildUrl(area, controller, action, protocol, port, domain, subdomain, appVirtualDir, extension, absolutePath,
+				                 applySubdomain, suffix, null);
+		}
+
+		protected virtual string InternalBuildUrl(string area, string controller, string action, string protocol,
+		                                string port, string domain, string subdomain, string appVirtualDir, string extension,
+										bool absolutePath, bool applySubdomain, string suffix, string basePath)
+		{
 			if (area == null) throw new ArgumentNullException("area");
 			if (controller == null) throw new ArgumentNullException("controller");
 			if (action == null) throw new ArgumentNullException("action");
@@ -189,7 +205,33 @@ namespace Castle.MonoRail.Framework.Services
 
 			string path;
 
-			if (appVirtualDir.Length > 1 && !appVirtualDir.StartsWith("/"))
+			if (basePath != null)
+			{
+				path = InternalBuildUrlUsingBasePath(action, area, basePath, controller);
+			}
+			else
+			{
+				path = InternalBuildUsingAppVirtualDir(absolutePath, action, applySubdomain, appVirtualDir, area, controller, domain, port, protocol, subdomain);
+			}
+
+			if (useExtensions)
+			{
+				path += "." + extension;
+			}
+
+			if (suffix != null && suffix != String.Empty)
+			{
+				path += "?" + suffix;
+			}
+
+			return path;
+		}
+
+		private static string InternalBuildUsingAppVirtualDir(bool absolutePath, string action, bool applySubdomain, string appVirtualDir, string area, string controller, string domain, string port, string protocol, string subdomain)
+		{
+			string path;
+
+			if (appVirtualDir.Length > 1 && !(appVirtualDir[0] == '/'))
 			{
 				appVirtualDir = "/" + appVirtualDir;
 			}
@@ -201,16 +243,6 @@ namespace Castle.MonoRail.Framework.Services
 			else
 			{
 				path = appVirtualDir + "/" + controller + "/" + action;
-			}
-
-			if (useExtensions)
-			{
-				path += "." + extension;
-			}
-
-			if (suffix != null && suffix != String.Empty)
-			{
-				path += "?" + suffix;
 			}
 
 			if (absolutePath)
@@ -231,12 +263,28 @@ namespace Castle.MonoRail.Framework.Services
 					url += ":" + port;
 				}
 
-				return url + path;
+				path = url + path;
+			}
+
+			return path;
+		}
+
+		private static string InternalBuildUrlUsingBasePath(string action, string area, string basePath, string controller)
+		{
+			string path;
+
+			basePath = basePath[basePath.Length - 1] == '/' ? basePath.Substring(0, basePath.Length - 1) : basePath;
+
+			if (basePath.EndsWith(area))
+			{
+				path = basePath + "/" + controller + "/" + action;
 			}
 			else
 			{
-				return path;
+				path = basePath + "/" + area + "/" + controller + "/" + action;
 			}
+
+			return path;
 		}
 	}
 }

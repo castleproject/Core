@@ -103,5 +103,32 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual("http://testsub.domain.com/app/home/list.rails", urlBuilder.BuildUrl(withSubDomain, DictHelper.Create("absolute=true", "action=list", "subdomain=test")));
 			Assert.AreEqual("http://something.else/app/home/list.rails", urlBuilder.BuildUrl(withSubDomain, DictHelper.Create("absolute=true", "action=list", "domain=something.else")));
 		}
+
+		[Test]
+		public void UseBasePathMustDiscardTheAppVirtualDirInfo()
+		{
+			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
+				DictHelper.Create("basepath=http://localhost/", "area=theArea", "controller=home", "action=index")));
+
+			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
+				DictHelper.Create("basepath=http://localhost", "area=theArea", "controller=home", "action=index")));
+		}
+
+		[Test]
+		public void UseBasePathMustDiscardTheAreaIfTheValueIsDuplicated()
+		{
+			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
+				DictHelper.Create("basepath=http://localhost/theArea", "area=theArea", "controller=home", "action=index")));
+
+			Assert.AreEqual("http://localhost/theArea/home/index.rails", urlBuilder.BuildUrl(areaUrl,
+				DictHelper.Create("basepath=http://localhost/theArea/", "area=theArea", "controller=home", "action=index")));
+		}
+
+		[Test]
+		public void UseBasePathWithQuerystring()
+		{
+			Assert.AreEqual("http://localhost/theArea/home/index.rails?key=value", urlBuilder.BuildUrl(areaUrl,
+				DictHelper.Create("basepath=http://localhost/theArea", "area=theArea", "controller=home", "action=index", "querystring=key=value")));
+		}
 	}
 }
