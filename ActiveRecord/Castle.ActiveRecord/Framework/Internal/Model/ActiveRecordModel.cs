@@ -50,6 +50,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private bool isDiscriminatorSubClass;
 		private bool isJoinedSubClass;
 		private bool isNestedType;
+		private bool isNestedCompositeType;
 
 		private ActiveRecordAttribute arAtt;
 		private ActiveRecordModel parent;
@@ -76,7 +77,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private IList hilos = new ArrayList();
 		private IList notMappedProperties = new ArrayList();
 		private IList validators = new ArrayList();
-		private bool isNestedCompositeType;
 		private IList compositeUserType = new ArrayList();
 
 		/// <summary>
@@ -178,8 +178,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return isNestedCompositeType; }
 			set { isNestedCompositeType = value; }
 		}
-
-
 
 		/// <summary>
 		/// Gets or sets the active record attribute

@@ -105,7 +105,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Gets or sets the schema for this relation (dbo., etc)
 		/// </summary>
-		/// <value>The schema.</value>
+		/// <value>The schema name.</value>
 		public String Schema
 		{
 			get { return schema; }
@@ -152,7 +152,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Gets or sets the order by clause for this relation
+		/// Gets or sets the order by clause for this relation. This is a SQL order, not HQL.
 		/// </summary>
 		public String OrderBy
 		{
@@ -170,7 +170,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Only used with sets
+		/// Only used with sets. The value can be <c>unsorted</c>, <c>natural</c> and the name of a class implementing <c>System.Collections.IComparer</c>
 		/// </summary>
 		public String Sort
 		{
@@ -179,7 +179,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Only used with maps or list
+		/// Only used with maps or lists
 		/// </summary>
 		public string Index
 		{
