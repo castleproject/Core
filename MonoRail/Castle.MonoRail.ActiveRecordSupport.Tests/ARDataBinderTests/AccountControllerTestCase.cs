@@ -58,16 +58,16 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ARDataBinderTests
 			Assert.IsTrue(ie.Elements.Exists("advice-required-account_email"));
 			Assert.IsTrue(ie.Elements.Exists("advice-required-account_password"));
 
-			Assert.AreEqual("This is a required field", ie.Element("advice-required-account_name").InnerHtml);
-			Assert.AreEqual("Please enter a valid email address. For example fred@domain.com, This is a required field", ie.Element("advice-required-account_email").InnerHtml);
-			Assert.AreEqual("This is a required field", ie.Element("advice-required-account_password").InnerHtml);
+			Assert.AreEqual("This is a required field.", ie.Element("advice-required-account_name").InnerHtml);
+			Assert.AreEqual("Please enter a valid email address. For example fred@domain.com. This is a required field.", ie.Element("advice-required-account_email").InnerHtml);
+			Assert.AreEqual("This is a required field.", ie.Element("advice-required-account_password").InnerHtml);
 
 			// Passwords wont match
 			ie.TextField("account_password").TypeText("123");
 			ie.TextField("account_confirmationpassword").TypeText("321");
 
 			Assert.IsTrue(ie.Elements.Exists("advice-validate-same-as-password-account_confirmationpassword"));
-			Assert.AreEqual("Fields do not match", ie.Element("advice-validate-same-as-password-account_confirmationpassword").InnerHtml);
+			Assert.AreEqual("Fields do not match.", ie.Element("advice-validate-same-as-password-account_confirmationpassword").InnerHtml);
 
 			// This should fix it
 			ie.TextField("account_password").TypeText("123987");

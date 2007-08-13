@@ -46,6 +46,7 @@ namespace Castle.Components.Binder
 		private string[] allowedPropertyList;
 
 		private Stack instanceStack;
+		private Stack<string> prefixStack;
 
 		private IDictionary<object, ErrorSummary> validationErrorSummaryPerInstance = new Dictionary<object, ErrorSummary>();
 
@@ -162,6 +163,7 @@ namespace Castle.Components.Binder
 
 			errors = new ArrayList();
 			instanceStack = new Stack();
+			prefixStack = new Stack<string>();
 
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
@@ -192,6 +194,7 @@ namespace Castle.Components.Binder
 
 			errors = new ArrayList();
 			instanceStack = new Stack();
+			prefixStack = new Stack<string>();
 
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
@@ -306,7 +309,7 @@ namespace Castle.Components.Binder
 				return;
 			}
 
-			PushInstance(instance);
+			PushInstance(instance, prefix);
 
 			ErrorSummary summary = new ErrorSummary();
 
@@ -395,7 +398,7 @@ namespace Castle.Components.Binder
 				}
 			}
 
-			PopInstance(instance);
+			PopInstance(instance, prefix);
 
 			AfterBinding(instance, prefix, node);
 		}
@@ -514,8 +517,6 @@ namespace Castle.Components.Binder
 			return ConvertToArray(instanceType, paramPrefix, node, out succeeded);
 		}
 
-#if DOTNET2
-
 		internal static bool IsGenericList(Type instanceType)
 		{
 			if (!instanceType.IsGenericType)
@@ -548,7 +549,6 @@ namespace Castle.Components.Binder
 
 			return ConvertToGenericList(instanceType, paramPrefix, node, out succeeded);
 		}
-#endif
 
 		#endregion
 
@@ -591,12 +591,12 @@ namespace Castle.Components.Binder
 		protected virtual bool ShouldIgnoreType(Type instanceType)
 		{
 			bool ignore = instanceType.IsAbstract || instanceType.IsInterface;
-#if DOTNET2
+
 			if (ignore && instanceType.IsGenericType)
 			{
 				ignore = !IsGenericList(instanceType);
 			}
-#endif
+
 			return ignore;
 		}
 
@@ -780,8 +780,6 @@ namespace Castle.Components.Binder
 			return validItems;
 		}
 
-#if DOTNET2
-
 		private object ConvertToGenericList(Type desiredType, String key, Node node, out bool conversionSucceeded)
 		{
 			Type[] genericArgs = desiredType.GetGenericArguments();
@@ -837,7 +835,6 @@ namespace Castle.Components.Binder
 				                           "to the param is not a leaf node nor an indexed node. Key {0}", key);
 			}
 		}
-#endif
 
 		private string TryGetDateWithUTCFormat(CompositeNode treeRoot, string paramName, out bool conversionSucceeded)
 		{
@@ -932,14 +929,13 @@ namespace Castle.Components.Binder
 			{
 				return true;
 			}
-#if DOTNET2
 			else if (desiredType.Name == "Nullable`1")
 			{
 				Type[] args = desiredType.GetGenericArguments();
 
 				return (args.Length == 1 && args[0] == typeof(DateTime));
 			}
-#endif
+
 			return false;
 		}
 
@@ -958,6 +954,32 @@ namespace Castle.Components.Binder
 			}
 		}
 
+		protected string PrefixOnStack
+		{
+			get
+			{
+				if (prefixStack.Count == 0)
+				{
+					return null;
+				}
+
+				return prefixStack.Peek();
+			}
+		}
+
+		protected string ParentPrefixOnStack
+		{
+			get
+			{
+				if (prefixStack.Count < 2)
+				{
+					return null;
+				}
+
+				return prefixStack.ToArray()[prefixStack.Count - 2];
+			}
+		}
+
 		protected String[] CreateNormalizedList(String csv)
 		{
 			if (csv == null || csv.Trim() == String.Empty)
@@ -969,6 +991,29 @@ namespace Castle.Components.Binder
 				String[] list = csv.Split(',');
 				NormalizeList(list);
 				return list;
+			}
+		}
+
+		protected virtual void PushInstance(object instance, string prefix)
+		{
+			instanceStack.Push(instance);
+			prefixStack.Push(prefix);
+		}
+
+		protected virtual void PopInstance(object instance, string prefix)
+		{
+			object actual = instanceStack.Pop();
+
+			if (actual != instance)
+			{
+				throw new BindingException("Unexpected item on the stack: found {0}, expecting {1}", actual, instance);
+			}
+
+			string actualPrefix = prefixStack.Pop();
+
+			if (actualPrefix != prefix)
+			{
+				throw new BindingException("Unexpected prefix on the stack: found {0}, expecting {1}", actualPrefix, prefix);
 			}
 		}
 
@@ -1024,21 +1069,6 @@ namespace Castle.Components.Binder
 			TypeConverter tconverter = TypeDescriptor.GetConverter(propType);
 
 			return tconverter.CanConvertFrom(typeof(String));
-		}
-
-		private void PushInstance(object instance)
-		{
-			instanceStack.Push(instance);
-		}
-
-		private void PopInstance(object instance)
-		{
-			object actual = instanceStack.Pop();
-
-			if (actual != instance)
-			{
-				throw new BindingException("Unexpected item on the stack: found {0}, expecting {1}", actual, instance);
-			}
 		}
 
 		#endregion

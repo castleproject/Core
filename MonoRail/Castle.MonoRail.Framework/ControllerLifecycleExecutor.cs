@@ -606,7 +606,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		private void CreateStandardHelpers(HybridDictionary helpers)
+		private void CreateStandardHelpers(IDictionary helpers)
 		{
 			AbstractHelper[] builtInHelpers =
 				new AbstractHelper[]

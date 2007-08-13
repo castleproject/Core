@@ -33,7 +33,10 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 			account1 = new Account("AdWords", "email1@gmail.net", "abc123");
 			account2 = new Account("AdSense", "email1@gmail.net", "abc123");
 			account3 = new Account("Orkut", "email1@gmail.net", "abc123");
-		
+
+			account1.Password = account2.Password = account3.Password = "123abcd";
+			account1.ConfirmationPassword = account2.ConfirmationPassword = account3.ConfirmationPassword = "123abcd";
+
 			account1.Create();
 			account2.Create();
 			account3.Create();
@@ -49,7 +52,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 			Assert.AreEqual("http://localhost:88/UserScaffold/new.castle", ie.Url);
 
 			Assert.IsTrue(ie.Elements.Exists("advice-required-User_Name"));
-			Assert.AreEqual("This is a required field", ie.Element("advice-required-User_Name").InnerHtml);
+			Assert.AreEqual("This is a required field.", ie.Element("advice-required-User_Name").InnerHtml);
 
 			ie.TextField("User_Name").TypeText("John Doe");
 			ie.SelectList("User_Account_Id").SelectByValue(account1.Id.ToString());
@@ -84,7 +87,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests.ScaffoldingTests
 			Assert.AreEqual("http://localhost:88/UserScaffold/edit.castle?id=" + user.Id, ie.Url);
 
 			Assert.IsTrue(ie.Elements.Exists("advice-required-User_Name"));
-			Assert.AreEqual("This is a required field", ie.Element("advice-required-User_Name").InnerHtml);
+			Assert.AreEqual("This is a required field.", ie.Element("advice-required-User_Name").InnerHtml);
 
 			ie.TextField("User_Name").TypeText("Mary Jane");
 			ie.SelectList("User_Account_Id").SelectByValue(account2.Id.ToString());

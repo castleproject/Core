@@ -41,6 +41,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		private AutoLoadBehavior autoLoad;
 		private bool persistchanges;
 		private string[] expectCollPropertiesList;
+		private Stack<ActiveRecordModel> modelStack = new Stack<ActiveRecordModel>();
 
 		/// <summary>
 		/// Gets or sets a value indicating if the changes should be persisted.
@@ -62,6 +63,53 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { autoLoad = value; }
 		}
 
+		protected override void PushInstance(object instance, string prefix)
+		{
+			ActiveRecordModel model = ActiveRecordModel.GetModel(instance.GetType());
+
+			if (model == null && modelStack.Count != 0)
+			{
+				foreach(NestedModel nestedModel in CurrentARModel.Components)
+				{
+					if (string.Compare(nestedModel.Property.Name, prefix, true) == 0)
+					{
+						model = nestedModel.Model;
+						break;
+					}
+				}
+			}
+
+			if (model != null)
+			{
+				modelStack.Push(model);
+			}
+
+			base.PushInstance(instance, prefix);
+		}
+
+		protected override void PopInstance(object instance, string prefix)
+		{
+			ActiveRecordModel model = ActiveRecordModel.GetModel(instance.GetType());
+
+			if (model == null && CurrentARModel != null && CurrentARModel.IsNestedType)
+			{
+				modelStack.Pop();
+			}
+
+			if (model != null)
+			{
+				ActiveRecordModel actualModel = modelStack.Pop();
+				
+				if (actualModel != model)
+				{
+					throw new BindingException("Unexpected ARModel on the stack: found {0}, expecting {1}", 
+						actualModel.ToString(), model.ToString());
+				}
+			}
+
+			base.PopInstance(instance, prefix);
+		}
+
 		/// <summary>
 		/// Gets the current AR model.
 		/// </summary>
@@ -70,8 +118,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			get
 			{
-				object stackInstance = InstanceOnStack;
-				return ActiveRecordModel.GetModel(stackInstance.GetType());
+				return modelStack.Count == 0 ? null : modelStack.Peek();
 			}
 		}
 
