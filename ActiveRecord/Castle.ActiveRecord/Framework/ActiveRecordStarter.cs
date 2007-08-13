@@ -500,16 +500,18 @@ namespace Castle.ActiveRecord
 			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
 			AssemblyXmlGenerator assemblyXmlGenerator = new AssemblyXmlGenerator();
 			ISet assembliesGeneratedXmlFor = new HashedSet();
-			foreach (ActiveRecordModel model in models)
+			foreach(ActiveRecordModel model in models)
 			{
-				Configuration cfg = holder.GetConfiguration(holder.GetRootType(model.Type));
-				if(cfg==null)
+				Configuration config = holder.GetConfiguration(holder.GetRootType(model.Type));
+
+				if (config==null)
 				{
 					throw new ActiveRecordException(
 						string.Format(
 							"Could not find configuration for {0} or its root type {1} this is usually an indication that the configuration has not been setup correctly.",
 							model.Type, holder.GetRootType(model.Type)));
 				}
+
 				if (!model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
 				{
 					xmlVisitor.Reset();
@@ -519,7 +521,7 @@ namespace Castle.ActiveRecord
 
 					if (xml != String.Empty)
 					{
-						cfg.AddXmlString(xml);
+						AddXmlString(config, xml, model);
 					}
 				}
 
@@ -528,14 +530,28 @@ namespace Castle.ActiveRecord
 					assembliesGeneratedXmlFor.Add(model.Type.Assembly);
 
 					string[] configurations = assemblyXmlGenerator.CreateXmlConfigurations(model.Type.Assembly);
+					
 					foreach(string xml in configurations)
 					{
-						if(xml != string.Empty)
-							cfg.AddXmlString(xml);
+						if (xml != string.Empty)
+						{
+							config.AddXmlString(xml);
+						}
 					}
 				}
 			}
+		}
 
+		private static void AddXmlString(Configuration config, string xml, ActiveRecordModel model)
+		{
+			try
+			{
+				config.AddXmlString(xml);
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Error adding information from class " + model.Type.FullName + " to NHibernate. Check the inner exception for more information", ex);
+			}
 		}
 
 		private static Type[] GetExportedTypesFromAssembly(Assembly assembly)
