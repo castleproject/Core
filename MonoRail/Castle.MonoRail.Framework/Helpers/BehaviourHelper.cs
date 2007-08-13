@@ -82,7 +82,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="jsFunctionName">The function to be invoked in response to the event</param>
 		public String Register(String selector, String eventName, String jsFunctionName)
 		{
-			String val = behaviourCommaNeeded ? "," : String.Empty +
+			String val = (behaviourCommaNeeded ? "," : String.Empty) +
 					"\t'" + selector + "' : function(e){ e." + eventName + " = " + jsFunctionName + "; }" +
 				   Environment.NewLine;
 
