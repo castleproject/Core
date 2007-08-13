@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Relaxed the need for Types that represent database boundaries to extend
+  from ActiveRecordBase.  Following AR-160 changes.
+
 - Applied Michael Thomas' patch fixing AR-165
   "UniqueKey property on BelongsToAttributed does not cause generation of unique-key 
    attribute in associated many-to-one xml element"

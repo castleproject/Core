@@ -744,12 +744,9 @@ namespace Castle.ActiveRecord
 		{
 			Type[] types = GetExportedTypesFromAssembly(assembly);
 
-			Type activeRecordBaseType = typeof(ActiveRecordBase);
-
 			foreach(Type type in types)
 			{
-				if (IsActiveRecordType(type) ||
-					(source.GetConfiguration(type) != null && activeRecordBaseType.IsAssignableFrom(type)))
+				if (IsActiveRecordType(type) || source.GetConfiguration(type) != null)
 				{
 					list.Add(type);
 				}
