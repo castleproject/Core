@@ -4,7 +4,10 @@ Change history
 Release Candidate 3
 ===================
 
-- Fixed MR-306
+- Applied goodwill's patch fixing MR-305
+  "fValidate fix a bug on unassociated label for element"
+
+- Applied Oleg Snurnikov's patch fixing MR-306
   "PrototypeWebValidator - regular expression validation"
 
 - Fixed MR-311 
