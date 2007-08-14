@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-311 
+  "The '\' character in templates goes unescaped when processed via NJS"
+
 - The DefaultUrlBuilder now accepts a basePath parameter, which basically overrides the path information.
 
 - Fixed MR-317

@@ -346,7 +346,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				       "catch(e)\n" +
 				       "{\n" +
 				       "alert('JS error ' + e.toString());\n" +
-				       "alert('Generated content: \\n" + JsEscapeWithSQuotes(lines.ToString()) + "');\n}";
+				       "alert(\"Generated content: \\n" + JsEscapeWithSQuotes(lines.ToString()) + "\");\n}";
 			}
 
 			#endregion
@@ -393,7 +393,6 @@ namespace Castle.MonoRail.Framework.Helpers
 				return tempBuffer.ToString();
 			}
 
-			//TODO: Should just the stringbuilder be passed here?
 			public static void ReplaceTailByPeriod(IJSGenerator generator)
 			{
 				int len = generator.Lines.Length;
@@ -422,7 +421,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			#region Internal and private methods
 
-			private string JsEscape(string content)
+			private static string JsEscape(string content)
 			{
 				content = Regex.Replace(content, "(\r\n)|(\r)|(\n)", "\\n", RegexOptions.Multiline);
 				content = Regex.Replace(content, "\\\"", "\\\"", RegexOptions.Multiline);
