@@ -26,6 +26,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	{
 		private int cols = 3;
 		private IEnumerable enumerable;
+		private bool dontRenderUneededTableForEmptyLists = false;
 
 		/// <summary>
 		/// Called by the framework once the component instance
@@ -42,6 +43,9 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					throw new ViewComponentException("ColumnRenderer: 'cols' parameter must be greater than zero");
 				}
 			}
+			if (ComponentParams.Contains("emptyness")) {
+				dontRenderUneededTableForEmptyLists = Convert.ToBoolean(ComponentParams["emptyness"]);
+			}
 
 			enumerable = (IEnumerable) ComponentParams["items"];
 		}
@@ -52,6 +56,11 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Render()
 		{
+			if (IsEmptyAndShouldNotRenderBrokenTableTags())
+			{
+				NoElements();
+				return;
+			}
 			StartTable();
 
 			bool hasElements = false;
@@ -64,7 +73,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 				if (Context.HasSection("firstelement"))
 				{
 					StartRow();
-					
+
 					StartColumn();
 
 					Context.RenderSection("firstelement");
@@ -97,7 +106,6 @@ namespace Castle.MonoRail.Framework.ViewComponents
 					{
 						toFinishRow = itemIndex + cols;
 					}
-
 				}
 
 				if (itemIndex < toFinishRow)
@@ -118,6 +126,19 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 
 			EndTable();
+		}
+
+
+		private bool IsEmptyAndShouldNotRenderBrokenTableTags()
+		{
+			if (dontRenderUneededTableForEmptyLists)
+			{
+				if (enumerable == null || !enumerable.GetEnumerator().MoveNext())
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -217,11 +238,18 @@ namespace Castle.MonoRail.Framework.ViewComponents
 			}
 			else
 			{
-				StartRow();
-				StartColumn();
-				RenderText("Empty");
-				EndColumn();
-				EndRow();
+				if (dontRenderUneededTableForEmptyLists)
+				{
+					RenderText("Empty");
+				}
+				else
+				{
+					StartRow();
+					StartColumn();
+					RenderText("Empty");
+					EndColumn();
+					EndRow();
+				}
 			}
 		}
 

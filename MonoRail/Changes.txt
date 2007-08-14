@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied patch by Rafael Teixeira fixing MR-298
+  "ColumnRenderer with an empty enumeration still renders table start and end sections"
+
 - Fixed MR-300
   "DataBindAttribute in a ARSmartDispatcherController inherit the behavior from ARDataBinder"
 
