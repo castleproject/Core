@@ -271,7 +271,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (value != null)
 			{
-				objectStack.Push(new FormScopeInfo(target, disableValidation == "true"));
+				objectStack.Push(new FormScopeInfo(target, disableValidation != "true"));
 			}
 			else
 			{
@@ -279,7 +279,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				if (value != null)
 				{
-					objectStack.Push(new FormScopeInfo(target, disableValidation == "true"));
+					objectStack.Push(new FormScopeInfo(target, disableValidation != "true"));
 				}
 				else
 				{
