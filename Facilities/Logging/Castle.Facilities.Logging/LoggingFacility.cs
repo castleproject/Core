@@ -68,11 +68,74 @@ namespace Castle.Facilities.Logging
 		private ILoggerFactory factory;
 		private LoggerImplementation logApi;
 
+		//Configuration
+		private LoggerImplementation? loggingApiConfig = null;
+		private string customLoggerFactoryConfig = null;
+		private string configFileConfig = null;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LoggingFacility"/> class.
 		/// </summary>
 		public LoggingFacility()
 		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoggingFacility"/> class.
+		/// </summary>
+		/// <param name="loggingApi">
+		/// The LoggerImplementation that should be used
+		/// </param>
+		public LoggingFacility(LoggerImplementation loggingApi) : this(loggingApi, null)
+		{
+
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoggingFacility"/> class.
+		/// </summary>
+		/// <param name="loggingApi">
+		/// The LoggerImplementation that should be used
+		/// </param>
+		/// <param name="configFile">
+		/// The configuration file that should be used by the chosen LoggerImplementation
+		/// </param>
+		public LoggingFacility(LoggerImplementation loggingApi, string configFile) : this(loggingApi, null, configFile)
+		{
+
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoggingFacility"/> class using a custom LoggerImplementation
+		/// </summary>
+		/// <param name="configFile">
+		/// The configuration file that should be used by the chosen LoggerImplementation
+		/// </param>
+		/// <param name="customLoggerFactory">
+		/// The type name of the type of the custom logger factory.
+		/// </param>
+		public LoggingFacility(string customLoggerFactory, string configFile) : this(LoggerImplementation.Custom, customLoggerFactory, configFile)
+		{
+		
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoggingFacility"/> class.
+		/// </summary>
+		/// <param name="loggingApi">
+		/// The LoggerImplementation that should be used
+		/// </param>
+		/// <param name="configFile">
+		/// The configuration file that should be used by the chosen LoggerImplementation
+		/// </param>
+		/// <param name="customLoggerFactory">
+		/// The type name of the type of the custom logger factory. (only used when loggingApi is set to LoggerImplementation.Custom)
+		/// </param>
+		public LoggingFacility(LoggerImplementation loggingApi, string customLoggerFactory, string configFile)
+		{
+			this.loggingApiConfig = loggingApi;
+			this.customLoggerFactoryConfig = customLoggerFactory;
+			this.configFileConfig = configFile;
 		}
 
 		protected override void Init()
@@ -122,14 +185,29 @@ namespace Castle.Facilities.Logging
 		{
 			logApi = LoggerImplementation.Console;
 
-			String typeAtt = FacilityConfig.Attributes["loggingApi"];
-			String customAtt = FacilityConfig.Attributes["customLoggerFactory"];
-			String configFileAtt = FacilityConfig.Attributes["configFile"];
+
+			String typeAtt = (FacilityConfig  != null) ? FacilityConfig.Attributes["loggingApi"] : null;
+			String customAtt = (FacilityConfig  != null)  ? FacilityConfig.Attributes["customLoggerFactory"] : null;
+			String configFileAtt = (FacilityConfig  != null) ? FacilityConfig.Attributes["configFile"] : null;
 
 			if (typeAtt != null)
 			{
 				logApi = (LoggerImplementation)
-				         converter.PerformConversion(typeAtt, typeof(LoggerImplementation));
+						 converter.PerformConversion(typeAtt, typeof(LoggerImplementation));
+			}
+			else if (loggingApiConfig.HasValue)
+			{
+				logApi = loggingApiConfig.Value;
+			}
+
+			if (customAtt == null)
+			{
+				customAtt = customLoggerFactoryConfig;
+			}
+
+			if (configFileAtt == null)
+			{
+				configFileAtt = configFileConfig;
 			}
 
 			CreateProperLoggerFactory(customAtt, configFileAtt);
@@ -196,8 +274,8 @@ namespace Castle.Facilities.Logging
 					if (customType == null)
 					{
 						String message = "If you specify loggingApi='custom' " +
-						                 "then you must use the attribute customLoggerFactory to inform the " +
-						                 "type name of the custom logger factory";
+										 "then you must use the attribute customLoggerFactory to inform the " +
+										 "type name of the custom logger factory";
 #if DOTNET2
 						throw new ConfigurationErrorsException(message);
 #else
@@ -206,12 +284,12 @@ namespace Castle.Facilities.Logging
 					}
 
 					loggerFactoryType = (Type)
-					                    converter.PerformConversion(customType, typeof(Type));
+										converter.PerformConversion(customType, typeof(Type));
 
 					if (!typeof(ILoggerFactory).IsAssignableFrom(loggerFactoryType) && !typeof(IExtendedLoggerFactory).IsAssignableFrom(loggerFactoryType))
 					{
 						throw new FacilityException("The specified type '" + customType +
-						                            "' does not implement either ILoggerFactory or IExtendedLoggerFactory.");
+													"' does not implement either ILoggerFactory or IExtendedLoggerFactory.");
 					}
 					break;
 				case LoggerImplementation.Null:
@@ -254,7 +332,7 @@ namespace Castle.Facilities.Logging
 		private void SetUpTypeConverter()
 		{
 			converter = Kernel.GetSubSystem(
-			            	SubSystemConstants.ConversionManagerKey) as IConversionManager;
+							SubSystemConstants.ConversionManagerKey) as IConversionManager;
 		}
 	}
 }

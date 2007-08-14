@@ -1,4 +1,7 @@
 
+- Applied Tom Allard's patch fixing FACILITIES-93
+  "Extra constructors on LoggingFacility"
+
 - Added test case supplied by chris ortman
 
 - Register base logger and factory when using extended logger.

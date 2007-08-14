@@ -32,42 +32,37 @@ namespace Castle.Facilities.Logging.Tests
 		protected virtual IWindsorContainer CreateConfiguredContainer(LoggerImplementation loggerApi, String custom)
 		{
 			IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
+			string configFile = string.Empty;
 
-			MutableConfiguration confignode = new MutableConfiguration("facility");
-
-			confignode.Attributes.Add("loggingApi", loggerApi.ToString());
+   
 			switch (loggerApi)
 			{
-				case LoggerImplementation.Custom:
-					{
-						confignode.Attributes.Add("customLoggerFactory", custom);
-						break;
-					}
 				case LoggerImplementation.Log4net:
 					{
-						confignode.Attributes.Add("configFile", "log4net.facilities.test.config");
+						configFile = "log4net.facilities.test.config";
 						break;
 					}
 				case LoggerImplementation.NLog:
 					{
-						confignode.Attributes.Add("configFile", "NLog.facilities.test.config");
+						configFile = "NLog.facilities.test.config";
 						break;
 					}
 				case LoggerImplementation.ExtendedLog4net:
 					{
-						confignode.Attributes.Add("configFile", "log4net.facilities.test.config");
+						configFile = "log4net.facilities.test.config";
 						break;
 					}
 				case LoggerImplementation.ExtendedNLog:
 					{
-						confignode.Attributes.Add("configFile", "NLog.facilities.test.config");
+						configFile = "NLog.facilities.test.config";
 						break;
 					}
 			}
 
-			container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);
 
-			container.AddFacility("logging", new LoggingFacility());
+			LoggingFacility facility = new LoggingFacility(loggerApi, custom, configFile);
+
+			container.AddFacility("logging", facility);
 
 			return container;
 		}
