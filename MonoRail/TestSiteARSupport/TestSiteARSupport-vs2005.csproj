@@ -69,6 +69,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountPermissionController.cs" />
+    <Compile Include="Controllers\MR296.cs" />
     <Compile Include="Scaffolds\AccountPermissionScaffoldController.cs" />
     <Compile Include="Scaffolds\AccountScaffoldController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -136,6 +137,7 @@
     <None Include="Views\Category\removeconfirm.vm" />
     <None Include="Views\Category\update.vm" />
     <None Include="Views\Layouts\default.vm" />
+    <None Include="Views\MR296\edit.vm" />
     <None Include="Views\PersonUser\delete.vm" />
     <None Include="Views\PersonUser\edit.vm" />
     <None Include="Views\PersonUser\insert.vm" />

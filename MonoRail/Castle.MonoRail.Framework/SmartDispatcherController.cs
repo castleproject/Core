@@ -77,13 +77,13 @@ namespace Castle.MonoRail.Framework
 			get { return validationSummaryPerInstance; }
 		}
 
-		protected internal void PopulateValidatorErrorSummary(object instance)
+		protected internal void PopulateValidatorErrorSummary(object instance, IDataBinder binderUsedForBinding)
 		{
-			ValidationSummaryPerInstance[instance] = binder.GetValidationSummary(instance);
+			ValidationSummaryPerInstance[instance] = binderUsedForBinding.GetValidationSummary(instance);
 		}
 
 		/// <summary>
-		/// Gets the error summary.
+		/// Gets the error summary associated with validation errors.
 		/// <para>
 		/// Will only work for instances populated by the <c>DataBinder</c>
 		/// </para>
@@ -111,6 +111,17 @@ namespace Castle.MonoRail.Framework
 			if (summary == null) return false;
 
 			return summary.ErrorsCount != 0;
+		}
+
+		/// <summary>
+		/// Gets a list of errors that were thrown during the 
+		/// object process, like conversion errors.
+		/// </summary>
+		/// <param name="instance">The instance that was populated by a binder.</param>
+		/// <returns>List of errors</returns>
+		protected ErrorList GetDataBindErrors(object instance)
+		{
+			return boundInstances[instance];
 		}
 
 		protected internal override void InvokeMethod(MethodInfo method, IRequest request, IDictionary actionArgs)
@@ -363,7 +374,7 @@ namespace Castle.MonoRail.Framework
 			object instance = binder.BindObject(targetType, prefix, excludedProperties, allowedProperties, node);
 
 			boundInstances[instance] = binder.ErrorList;
-			PopulateValidatorErrorSummary(instance);
+			PopulateValidatorErrorSummary(instance, binder);
 
 			return instance;
 		}
@@ -380,7 +391,7 @@ namespace Castle.MonoRail.Framework
 			binder.BindObjectInstance(instance, prefix, node);
 
 			boundInstances[instance] = binder.ErrorList;
-			PopulateValidatorErrorSummary(instance);
+			PopulateValidatorErrorSummary(instance, binder);
 		}
 
 		protected T BindObject<T>(String prefix)
@@ -396,17 +407,6 @@ namespace Castle.MonoRail.Framework
 		protected T BindObject<T>(ParamStore from, String prefix, String excludedProperties, String allowedProperties)
 		{
 			return (T) BindObject(from, typeof(T), prefix, excludedProperties, allowedProperties);
-		}
-
-		/// <summary>
-		/// Gets a list of errors that were thrown during the 
-		/// object process, like conversion errors.
-		/// </summary>
-		/// <param name="instance">The instance that was populated by a binder.</param>
-		/// <returns>List of errors</returns>
-		protected ErrorList GetDataBindErrors(object instance)
-		{
-			return boundInstances[instance];
 		}
 		
 		/// <summary>

@@ -58,7 +58,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		protected object BindObject(ParamStore from, Type targetType, String prefix, AutoLoadBehavior autoLoad)
 		{
 			SetAutoLoadBehavior(autoLoad);
-
 			return BindObject(from, targetType, prefix);
 		}
 

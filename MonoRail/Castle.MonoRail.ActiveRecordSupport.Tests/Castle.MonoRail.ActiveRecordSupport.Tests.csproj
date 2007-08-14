@@ -47,9 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ARDataBinderTests\AccountControllerTestCase.cs" />
+    <Compile Include="ARDataBinderTests\MR296.cs" />
     <Compile Include="BaseAcceptanceTestCase.cs" />
     <Compile Include="BaseARTestCase.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScaffoldingTests\UserScaffoldTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +65,12 @@
       <Project>{26AA3359-6571-4575-845D-ED05E4EDB586}</Project>
       <Name>TestSiteARSupport-vs2005</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

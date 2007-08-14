@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied patch by Chirs Ortman fixing MR-296
+  "Dont get validation summary when binding with AR attribute but controller inherits smart dispatcher controller"
+
 - Applied patch by Rafael Teixeira fixing MR-298
   "ColumnRenderer with an empty enumeration still renders table start and end sections"
 

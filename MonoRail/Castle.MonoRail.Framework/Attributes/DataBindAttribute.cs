@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework
 	using System.Reflection;
 
 	using Castle.Components.Binder;
-	using Castle.Components.Validator;
 
 	/// <summary>
 	/// Defines where the parameters should be obtained from
@@ -138,7 +137,7 @@ namespace Castle.MonoRail.Framework
 		{
 			CompositeNode node = controller.ObtainParamsNode(From);
 
-			IDataBinder binder = controller.Binder;
+			IDataBinder binder = CreateBinder();
 
 			return binder.CanBindObject(parameterInfo.ParameterType, prefix, node) ? 10 : 0;
 		}
@@ -153,7 +152,7 @@ namespace Castle.MonoRail.Framework
 		/// <returns>The bound instance</returns>
 		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			IDataBinder binder = new DataBinder();
+			IDataBinder binder = CreateBinder();
 
 			ConfigureValidator(controller, binder);
 
@@ -165,6 +164,11 @@ namespace Castle.MonoRail.Framework
 			PopulateValidatorErrorSummary(controller, binder, instance);
 
 			return instance;
+		}
+
+		protected virtual IDataBinder CreateBinder()
+		{
+			return new DataBinder();
 		}
 
 		protected void ConfigureValidator(SmartDispatcherController controller, IDataBinder binder)
@@ -183,7 +187,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (validate)
 			{
-				controller.PopulateValidatorErrorSummary(instance);
+				controller.PopulateValidatorErrorSummary(instance, binder);
 			}
 		}
 

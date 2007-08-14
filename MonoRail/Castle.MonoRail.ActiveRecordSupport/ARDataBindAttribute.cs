@@ -126,7 +126,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			ARDataBinder binder = new ARDataBinder();
+			ARDataBinder binder = (ARDataBinder) CreateBinder();
 
 			ConfigureValidator(controller, binder);
 
@@ -140,6 +140,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			PopulateValidatorErrorSummary(controller, binder, instance);
 
 			return instance;
+		}
+
+		protected override IDataBinder CreateBinder()
+		{
+			return new ARDataBinder();
 		}
 	}
 }
