@@ -126,12 +126,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			ARDataBinder binder = controller.Binder as ARDataBinder;
-
-			if (binder == null)
-			{
-				binder = new ARDataBinder();
-			}
+			ARDataBinder binder = new ARDataBinder();
 
 			ConfigureValidator(controller, binder);
 

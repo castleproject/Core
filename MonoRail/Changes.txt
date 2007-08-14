@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-300
+  "DataBindAttribute in a ARSmartDispatcherController inherit the behavior from ARDataBinder"
+
 - Applied minor patch by James Su fixing MR-303
   "Behavior is not consistent between FormToAttributed and LinkToAttributed in HtmlHelper"
 

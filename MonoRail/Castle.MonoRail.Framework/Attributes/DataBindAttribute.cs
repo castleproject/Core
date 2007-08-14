@@ -153,7 +153,7 @@ namespace Castle.MonoRail.Framework
 		/// <returns>The bound instance</returns>
 		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			IDataBinder binder = controller.Binder;
+			IDataBinder binder = new DataBinder();
 
 			ConfigureValidator(controller, binder);
 
