@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Fixed MR-306
+  "PrototypeWebValidator - regular expression validation"
+
 - Fixed MR-311 
   "The '\' character in templates goes unescaped when processed via NJS"
 

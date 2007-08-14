@@ -207,7 +207,9 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 
 			public void SetRegExp(string target, string regExp, string violationMessage)
 			{
-				AddClass("validate-regex-" + regExp);
+				string rule = "validate-regex" + regExp.GetHashCode();
+				AddClass(rule);
+				config.AddCustomRule(rule, violationMessage, "pattern : new RegExp(\"" + regExp + "\")");
 				AddTitle(violationMessage);
 			}
 
