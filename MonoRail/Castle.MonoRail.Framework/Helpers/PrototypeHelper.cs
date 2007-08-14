@@ -258,8 +258,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			public void Call(object function, params object[] args)
 			{
 				if (String.IsNullOrEmpty(function.ToString()))
-					throw new ArgumentException("function",
-					                            "function cannot be null or an empty string.");
+					throw new ArgumentException("function cannot be null or an empty string.", "function");
 
 				Record(this, function + "(" + BuildJSArguments(args) + ")");
 			}
@@ -423,13 +422,16 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			private static string JsEscape(string content)
 			{
+				// This means: replace all variations of line breaks by a \n
 				content = Regex.Replace(content, "(\r\n)|(\r)|(\n)", "\\n", RegexOptions.Multiline);
-				content = Regex.Replace(content, "\\\"", "\\\"", RegexOptions.Multiline);
+				// This is a lookbehind. It means: replace all " -- that are not preceded by \ -- by \"
+				content = Regex.Replace(content, "(?<!\\\\)\"", "\\\"", RegexOptions.Multiline);
 				return content;
 			}
 
-			private string JsEscapeWithSQuotes(string content)
+			private static string JsEscapeWithSQuotes(string content)
 			{
+				// This replaces all ' references by \'
 				return Regex.Replace(JsEscape(content), "(\')", "\\'", RegexOptions.Multiline);
 			}
 
