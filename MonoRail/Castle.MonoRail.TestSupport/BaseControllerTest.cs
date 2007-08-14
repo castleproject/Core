@@ -15,6 +15,8 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
 	using System.IO;
 	using Castle.Components.Common.EmailSender;
 	using Castle.MonoRail.Framework.Test;
@@ -35,6 +37,7 @@ namespace Castle.MonoRail.TestSupport
 		private IRequest request;
 		private IMockResponse response;
 		private ITrace trace;
+		private IDictionary cookies;
 
 		protected BaseControllerTest() : this("app.com", "www", 80)
 		{
@@ -45,6 +48,16 @@ namespace Castle.MonoRail.TestSupport
 			this.domain = domain;
 			this.domainPrefix = domainPrefix;
 			this.port = port;
+		}
+
+		protected virtual void OnSetUp()
+		{
+			
+		}
+
+		public IDictionary Cookies
+		{
+			get { return cookies; }
 		}
 
 		protected IRailsEngineContext Context
@@ -101,6 +114,8 @@ namespace Castle.MonoRail.TestSupport
 				throw new ArgumentNullException("actionName");
 			}
 
+			cookies = new HybridDictionary(true);
+
 			BuildRailsContext(areaName, controllerName, actionName);
 			controller.InitializeFieldsFromServiceProvider(context);
 			controller.InitializeControllerState(areaName, controllerName, actionName);
@@ -120,12 +135,12 @@ namespace Castle.MonoRail.TestSupport
 
 		protected virtual IRequest BuildRequest()
 		{
-			return new MockRequest();
+			return new MockRequest(cookies);
 		}
 
 		protected virtual IMockResponse BuildResponse()
 		{
-			return new MockResponse();
+			return new MockResponse(cookies);
 		}
 
 		protected virtual ITrace BuildTrace()
@@ -151,9 +166,9 @@ namespace Castle.MonoRail.TestSupport
 			MockRailsEngineContext.RenderedEmailTemplate template = 
 				context.RenderedEmailTemplates.Find(
 					delegate(MockRailsEngineContext.RenderedEmailTemplate emailTemplate)
-    				{
-    					return templateName.Equals(emailTemplate.Name, StringComparison.OrdinalIgnoreCase);
-    				});
+					{
+						return templateName.Equals(emailTemplate.Name, StringComparison.OrdinalIgnoreCase);
+					});
 			
 			return template != null;
 		}

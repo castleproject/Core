@@ -20,11 +20,12 @@ namespace Castle.MonoRail.Framework.Test
 
 	public class MockRequest : IRequest
 	{
-		private IDictionary files = new Hashtable();
 		private NameValueCollection form = new NameValueCollection();
 		private NameValueCollection headers = new NameValueCollection();
 		private NameValueCollection queryString = new NameValueCollection();
 		private NameValueCollection @params = new NameValueCollection();
+		private IDictionary cookies;
+		private IDictionary files = new Hashtable();
 
 		private bool isLocal = true;
 		private string rawUrl = null;
@@ -35,14 +36,19 @@ namespace Castle.MonoRail.Framework.Test
 		private string[] userLanguages = new string[] { "en-ES", "pt-BR" };
 		private string userHostAddress = "127.0.0.1";
 
+		public MockRequest(IDictionary cookies)
+		{
+			this.cookies = cookies;
+		}
+
 		public virtual byte[] BinaryRead(int count)
 		{
 			throw new NotImplementedException();
 		}
-
+		
 		public virtual string ReadCookie(string name)
 		{
-			throw new NotImplementedException();
+			return (string) cookies[name];
 		}
 
 		public virtual void ValidateInput()

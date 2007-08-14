@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied goodwill's patch adding cookie support to BaseControllerTest MR-304
+
 - Applied goodwill's patch fixing MR-305
   "fValidate fix a bug on unassociated label for element"
 

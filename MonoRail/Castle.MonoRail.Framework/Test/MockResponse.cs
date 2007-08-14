@@ -15,12 +15,15 @@
 namespace Castle.MonoRail.Framework.Test
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Specialized;
 	using System.IO;
+	using System.Net;
 	using System.Web;
 
 	public class MockResponse : IMockResponse
 	{
+		private readonly IDictionary cookies;
 		private int statusCode = 400;
 		private string contentType = "text/html";
 		private string cacheControlHeader = null;
@@ -32,6 +35,11 @@ namespace Castle.MonoRail.Framework.Test
 		private Stream outputStream = new MemoryStream();
 		private HttpCachePolicy cachePolicy = null;
 		private NameValueCollection headers = new NameValueCollection();
+
+		public MockResponse(IDictionary cookies)
+		{
+			this.cookies = cookies;
+		}
 
 		public virtual string RedirectedTo
 		{
@@ -118,22 +126,22 @@ namespace Castle.MonoRail.Framework.Test
 
 		public virtual void CreateCookie(string name, string value)
 		{
-			throw new NotImplementedException();
+			cookies.Add(name,value);
 		}
 
 		public virtual void CreateCookie(string name, string value, DateTime expiration)
 		{
-			throw new NotImplementedException();
+			CreateCookie(name,value);
 		}
 
 		public virtual void CreateCookie(HttpCookie cookie)
 		{
-			throw new NotImplementedException();
-		}
+			throw new NotSupportedException();
+		}	
 
 		public virtual void RemoveCookie(string name)
 		{
-			throw new NotImplementedException();
+			cookies.Remove(name);
 		}
 
 		public int StatusCode
