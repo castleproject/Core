@@ -1,5 +1,9 @@
 Beta 1 Version 1.0.0.0
 ======================
+
+- Applied Pawel Pabich's suggestion fixing DYNPROXY-65 
+  "OpCodeUtil.GetUnderlyingTypeOfEnum doesn't handle unsigned integers"
+
 - Fixed bug in ArgumentReference occurring when emitting static methods
 
 - Removed ClsCompliant(false) from all the public types in DynamicProxy

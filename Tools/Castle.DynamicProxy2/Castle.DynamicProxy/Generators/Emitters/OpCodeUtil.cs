@@ -160,6 +160,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					return typeof(Int32);
 				case TypeCode.Int64:
 					return typeof(Int64);
+				case TypeCode.UInt16: 
+					return typeof(UInt16);
+				case TypeCode.UInt32:
+					return typeof(UInt32);
+				case TypeCode.UInt64:
+					return typeof(UInt64); 
 				default:
 					throw new NotSupportedException();
 			}
