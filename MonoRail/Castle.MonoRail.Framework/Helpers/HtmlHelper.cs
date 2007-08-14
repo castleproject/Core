@@ -273,9 +273,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>HTML string with form opening tag.</returns>
 		public String FormToAttributed(String controller, String action, object id, string method, IDictionary attributes)
 		{
-			String url = Controller.Context.ApplicationPath;
-			String extension = Controller.Context.UrlInfo.Extension;
-			String formAction = String.Format("{0}/{1}/{2}.{3}", url, controller, action, extension);
+			string formAction = UrlHelper.For(DictHelper.Create("controller=" + controller, "action=" + action));
 
 			if (id != null)
 			{
