@@ -93,6 +93,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			IViewRenderer renderer = (IViewRenderer) directiveNode.Directive;
 
 			contextAdapter = new NVelocityViewContextAdapter(componentName, node, viewEngine, renderer);
+			contextAdapter.Context = context;
 
 			ProcessSubSections();
 
@@ -105,7 +106,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				bodyNode = node.GetChild(node.ChildrenCount - 1);
 			}
 
-			contextAdapter.Context = context;
 			contextAdapter.BodyNode = bodyNode;
 			contextAdapter.ComponentParams = componentParams;
 			contextAdapter.TextWriter = writer;

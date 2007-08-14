@@ -27,21 +27,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	/// </summary>
 	public class BlockComponentDirective : AbstractComponentDirective
 	{
-		private IList sectionsCreated = new ArrayList();
+		private readonly IList sectionsCreated = new ArrayList();
 
-		public BlockComponentDirective(IViewComponentFactory viewComponentFactory, IViewEngine viewEngine)
-			: base(viewComponentFactory, viewEngine)
+		public BlockComponentDirective(IViewComponentFactory viewComponentFactory, IViewEngine viewEngine) : base(viewComponentFactory, viewEngine)
 		{
 		}
 
-		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
-		{
-			base.Init(rs, context, node);
-		}
-		
 		protected override void ProcessSubSections()
 		{
-			foreach (SubSectionDirective section in sectionsCreated)
+			foreach(SubSectionDirective section in sectionsCreated)
 			{
 				if (!Component.SupportsSection(section.Name))
 				{
