@@ -13,8 +13,6 @@
 // limitations under the License.
 namespace Castle.Components.Binder.Tests
 {
-#if DOTNET2
-	
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Globalization;
@@ -238,6 +236,4 @@ namespace Castle.Components.Binder.Tests
 			set { years = new List<int>(value); }
 		}
 	}
-	
-#endif
 }
