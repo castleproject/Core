@@ -128,13 +128,11 @@ namespace Castle.Components.Binder
 				{
 					return ConvertPrimitive(desiredType, input, ref conversionSucceeded);
 				}
-#if DOTNET2
 				else if (desiredType.IsGenericType &&
 				         desiredType.GetGenericTypeDefinition() == typeof(Nullable<>))
 				{
 					return ConvertNullable(desiredType, input, ref conversionSucceeded);
 				}
-#endif
 				else if (desiredType == typeof(Guid))
 				{
 					return ConvertGuid(input, ref conversionSucceeded);
@@ -147,15 +145,12 @@ namespace Castle.Components.Binder
 				{
 					return input;
 				}
-#if DOTNET2
 				else if (DataBinder.IsGenericList(desiredType))
 				{
 					return conversionSucceeded
-					       	?
-					       		ConvertGenericList(desiredType, input, ref conversionSucceeded)
+					       	? ConvertGenericList(desiredType, input, ref conversionSucceeded)
 					       	: null;
 				}
-#endif
 				else
 				{
 					return ConvertUsingTypeConverter(desiredType, input, ref conversionSucceeded);
