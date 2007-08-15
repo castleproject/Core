@@ -1,4 +1,3 @@
-#if DOTNET2
 
 #region Modification Notes
 
@@ -554,4 +553,3 @@ namespace AspectSharp.Lang
 #endregion
 
 }
-#endif
