@@ -24,8 +24,8 @@
 	<property name="ar.connection.connection_string.2" value="Server=(local);initial catalog=test2;Integrated Security=SSPI" overwrite="false" />
 
 	<!-- 
-		Path to the folder that contain the external assemblies.  For net-1.1 the values will
-		be lib, lib/net, and lib/net/1.1 respectively.
+		Path to the folder that contain the external assemblies.  For net-2.0 the values will
+		be lib, lib/net, and lib/net/2.0 respectively.
 	-->
 	<property name="lib.dir" value="SharedLibs" dynamic="true" />
 	<property name="lib.family.dir" value="${path::combine(lib.dir, framework::get-family(framework::get-target-framework()))}" dynamic="true" />
@@ -109,23 +109,6 @@
 
 		<!-- Where is WiX? -->
 		<property name="wix.dir" value="%ProgramFiles%\wix" overwrite="false" />
-	</target>
-
-	<target name="set-net-1.1-framework-configuration">
-		<property name="nant.settings.currentframework" value="net-1.1" />
-		<property name="current.build.defines" value="${build.defines},NET,DOTNET1" />
-		<property name="link.sdkdoc.version" value="SDK_v1_1" />
-		<property name="merge.targetplatform" value="v1.1" />
-		<!-- If DevEnvDir exists, we grab it, otherwise we try if the default location (if it exists) -->
-		<if test="${environment::variable-exists('DevEnvDir')}">
-			<property name="dev.env.dir" value="${environment::get-variable('DevEnvDir')}" />
-		</if>
-		<if test="${not environment::variable-exists('DevEnvDir')}">
-			<property name="default.dev.env.dir" value="%ProgramFiles%\Microsoft Visual Studio .NET 2003\Common7\IDE" />
-			<if test="${directory::exists(default.dev.env.dir)}">
-				<property name="dev.env.dir" value="${default.dev.env.dir}" />
-			</if>
-		</if>
 	</target>
 
 	<target name="set-net-2.0-framework-configuration">
