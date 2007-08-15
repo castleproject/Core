@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, method);
-#if DOTNET2 && !MONO
+#if !MONO
 			if (declaringType == null)
 			{
 				throw new GeneratorException("declaringType can't be null for this situation");
@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 			MethodInfo minfo = Constants.GetMethodFromHandle1;
 
-#if DOTNET2 && !MONO
+#if !MONO
 			minfo = Constants.GetMethodFromHandle2;
 #endif
 
