@@ -170,7 +170,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 				if (IsValidKey(id))
 				{
-					instance = ActiveRecordMediator.FindByPrimaryKey(instanceType, id, true);
+					instance = FindByPrimaryKey(instanceType, id);
 				}
 				else
 				{
@@ -311,7 +311,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 							if (convSucceeded)
 							{
-								object item = ActiveRecordMediator.FindByPrimaryKey(targetType, keyConverted, true);
+								object item = FindByPrimaryKey(targetType, keyConverted);
 								AddToContainer(container, item);
 							}
 						}
@@ -323,7 +323,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 						if (convSucceeded)
 						{
-							object item = ActiveRecordMediator.FindByPrimaryKey(targetType, keyConverted, true);
+							object item = FindByPrimaryKey(targetType, keyConverted);
 							AddToContainer(container, item);
 						}
 					}
@@ -331,6 +331,16 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			return container;
+		}
+
+		protected virtual object FindByPrimaryKey(Type targetType, object id)
+		{
+			return FindByPrimaryKey(targetType, id, true);
+		}
+
+		protected virtual object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
+		{
+			return ActiveRecordMediator.FindByPrimaryKey(targetType, id, throwOnNotFound);
 		}
 
 		protected override bool IsSpecialType(Type instanceType)
