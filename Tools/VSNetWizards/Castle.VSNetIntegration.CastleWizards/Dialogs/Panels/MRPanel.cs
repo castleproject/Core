@@ -86,25 +86,25 @@ namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 			// 
 			this.groupBox5.Controls.Add(this.label7);
 			this.groupBox5.Controls.Add(this.enableWindsorIntegration);
-			this.groupBox5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.groupBox5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox5.Location = new System.Drawing.Point(-8, 128);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(480, 80);
+			this.groupBox5.Size = new System.Drawing.Size(480, 89);
 			this.groupBox5.TabIndex = 45;
 			this.groupBox5.TabStop = false;
 			// 
 			// label7
 			// 
-			this.label7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label7.Location = new System.Drawing.Point(40, 16);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(392, 16);
 			this.label7.TabIndex = 16;
-			this.label7.Text = "Enable Windsor (inversion of control) integration?";
+			this.label7.Text = "Enable Windsor (inversion of control container) integration?";
 			// 
 			// enableWindsorIntegration
 			// 
-			this.enableWindsorIntegration.Location = new System.Drawing.Point(64, 41);
+			this.enableWindsorIntegration.Location = new System.Drawing.Point(64, 43);
 			this.enableWindsorIntegration.Name = "enableWindsorIntegration";
 			this.enableWindsorIntegration.Size = new System.Drawing.Size(232, 24);
 			this.enableWindsorIntegration.TabIndex = 6;
@@ -125,7 +125,7 @@ namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 			// 
 			// label8
 			// 
-			this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label8.Location = new System.Drawing.Point(40, 16);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(349, 23);
@@ -134,6 +134,7 @@ namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 			// 
 			// veWebForms
 			// 
+			this.veWebForms.Enabled = false;
 			this.veWebForms.Location = new System.Drawing.Point(64, 88);
 			this.veWebForms.Name = "veWebForms";
 			this.veWebForms.Size = new System.Drawing.Size(240, 24);
@@ -162,16 +163,16 @@ namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 			// 
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.enableRouting);
-			this.groupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.groupBox1.Location = new System.Drawing.Point(-8, 208);
+			this.groupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox1.Location = new System.Drawing.Point(-8, 217);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(480, 104);
+			this.groupBox1.Size = new System.Drawing.Size(480, 98);
 			this.groupBox1.TabIndex = 46;
 			this.groupBox1.TabStop = false;
 			// 
 			// label1
 			// 
-			this.label1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.Location = new System.Drawing.Point(40, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(392, 16);
@@ -180,11 +181,11 @@ namespace Castle.VSNetIntegration.CastleWizards.Dialogs.Panels
 			// 
 			// enableRouting
 			// 
-			this.enableRouting.Location = new System.Drawing.Point(64, 48);
+			this.enableRouting.Location = new System.Drawing.Point(64, 44);
 			this.enableRouting.Name = "enableRouting";
 			this.enableRouting.Size = new System.Drawing.Size(232, 24);
 			this.enableRouting.TabIndex = 6;
-			this.enableRouting.Text = "Enable &routing";
+			this.enableRouting.Text = "Enable URL &routing module";
 			// 
 			// MRPanel
 			// 

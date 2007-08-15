@@ -68,8 +68,9 @@ namespace Castle.VSNetIntegration.CastleWizards
 			Project project = 
 				context.DteInstance.Solution.AddFromTemplate(projectFile, LocalProjectPath, ProjectName + ".csproj", Exclusive);
 
-		    project.Properties.Item("DefaultNamespace").Value = NameSpace;
+			project.Properties.Item("DefaultNamespace").Value = NameSpace;
 
+			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Controllers\\BaseController.cs");
 			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Controllers\\HomeController.cs");
 			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Controllers\\LoginController.cs");
 			Utils.PerformReplacesOn(project, NameSpace, LocalProjectPath, "Controllers\\ContactController.cs");

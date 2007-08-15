@@ -2,8 +2,7 @@ namespace !NAMESPACE!.Controllers
 {
 	using Castle.MonoRail.Framework;
 
-	[Layout("default"), Rescue("generalerror")]
-	public class LoginController : SmartDispatcherController
+	public class LoginController : BaseController
 	{
 		public void Index()
 		{

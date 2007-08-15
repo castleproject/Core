@@ -1,28 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<title>Sample application - ${?title}</title>
-	<link rel="stylesheet" href="${siteroot}/Content/css/style.css" type="text/css" media="screen" />
-${?head}
-		
-${Ajax.InstallScripts()}
-${Behaviour.InstallScripts()}
-${Scriptaculous.InstallScripts()}
-${Form.InstallScripts()}
+<h2>Unexpected error happenend</h3>
 
-<script type="text/javascript">
-${?scripts}
-</script>
+<p> This is the rescue page. See the exception details below </p>
 
-</head>
-
-<body>
-
-${ChildOutput}
-
-<hr/>
-${Url.Link('Main page', {@controller: 'Home', @action: 'Index'})}
-</body>
-
-</html>
+${context.LastException.Message}

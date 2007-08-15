@@ -4,8 +4,7 @@ namespace !NAMESPACE!.Controllers
 	using Castle.MonoRail.Framework;
 	using !NAMESPACE!.Models;
 
-	[Layout("default"), Rescue("generalerror")]
-	public class ContactController : SmartDispatcherController
+	public class ContactController : BaseController
 	{
 		public void Index()
 		{
