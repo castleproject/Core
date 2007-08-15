@@ -35,13 +35,11 @@ namespace Castle.MicroKernel.Handlers
 		{
 			IHandler handler;
 
-#if DOTNET2
 			if (model.RequiresGenericArguments)
 			{
 				handler = new DefaultGenericHandler(model);
 			}
 			else
-#endif
 			{
 				handler = new DefaultHandler(model);
 			}

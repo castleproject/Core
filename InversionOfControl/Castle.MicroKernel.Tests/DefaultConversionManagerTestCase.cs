@@ -144,8 +144,6 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(400, values[0]);
 		}
 
-#if DOTNET2
-
 		[Test]
 		public void GenericPerformConversionList()
 		{
@@ -208,8 +206,6 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual(2, dict["key2"]);
 			Assert.AreEqual(3, dict["key3"]);
 		}
-
-#endif
 
 		[Test]
 		public void Array()

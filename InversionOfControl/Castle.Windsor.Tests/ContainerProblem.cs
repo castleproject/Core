@@ -17,8 +17,6 @@ namespace Castle.Windsor.Tests
 	using System.Collections.Generic;
 	using Castle.MicroKernel;
 	using NUnit.Framework;
-#if DOTNET2
-#endif
 
 	[TestFixture]
 	public class ContainerProblem
@@ -39,11 +37,7 @@ namespace Castle.Windsor.Tests
 		}
 	}
 
-#if DOTNET2
 	public interface IParent : IList<IChild>
-#else
-    public interface IParent : IList
-#endif
 	{
 	}
 
@@ -58,11 +52,7 @@ namespace Castle.Windsor.Tests
 		}
 	}
 
-#if DOTNET2
 	public class Parent : List<IChild>
-#else
-    public class Parent : ArrayList
-#endif
 	{
 		public Parent(IKernel kernel)
 		{

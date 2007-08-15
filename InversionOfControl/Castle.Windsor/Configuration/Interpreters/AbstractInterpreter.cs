@@ -178,11 +178,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 			if (id == null || id.Length == 0)
 			{
 				string message = "Component or Facility was declared without a proper 'id' attribute";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 

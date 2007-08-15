@@ -644,12 +644,11 @@ namespace Castle.MicroKernel
 			{
 				return true;
 			}
-#if DOTNET2
+
 			if (serviceType.IsGenericType && NamingSubSystem.Contains(serviceType.GetGenericTypeDefinition()))
 			{
 				return true;
 			}
-#endif
 
 			if (Parent != null)
 			{
@@ -768,8 +767,6 @@ namespace Castle.MicroKernel
 			}
 		}
 
-#if DOTNET2
-
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -826,7 +823,6 @@ namespace Castle.MicroKernel
 
 			return ResolveComponent(handler, service, arguments);
 		}
-#endif
 
 		public virtual void ReleaseComponent(object instance)
 		{
@@ -886,12 +882,11 @@ namespace Castle.MicroKernel
 
 			IHandler handler = NamingSubSystem.GetHandler(service);
 
-#if DOTNET2
 			if (handler == null && service.IsGenericType)
 			{
 				handler = NamingSubSystem.GetHandler(service.GetGenericTypeDefinition());
 			}
-#endif
+
 			if (handler == null && Parent != null)
 			{
 				handler = WrapParentHandler(Parent.GetHandler(service));
@@ -910,7 +905,6 @@ namespace Castle.MicroKernel
 		{
 			IHandler[] result = NamingSubSystem.GetHandlers(service);
 
-#if DOTNET2
 			// a complete generic type, Foo<Bar>, need to check if Foo<T> is registered
 			if (service.IsGenericType && !service.IsGenericTypeDefinition)
 			{
@@ -928,7 +922,6 @@ namespace Castle.MicroKernel
 					result = mergedResult;
 				}
 			}
-#endif
 
 			// If a parent kernel exists, we merge both results
 			if (Parent != null)
@@ -1265,11 +1258,7 @@ namespace Castle.MicroKernel
 		protected CreationContext CreateCreationContext(IHandler handler, Type typeToExtractGenericArguments,
 		                                                IDictionary additionalArguments)
 		{
-#if DOTNET2
 			return new CreationContext(handler, typeToExtractGenericArguments, additionalArguments);
-#else
-			return new CreationContext(handler, additionalArguments);
-#endif
 		}
 
 		#endregion

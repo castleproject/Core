@@ -33,7 +33,6 @@ namespace Castle.MicroKernel.Util
 		}
 	}
 
-#if DOTNET2
 	[Serializable]
 	public class ReferenceEqualityComparer : IEqualityComparer
 	{
@@ -51,5 +50,4 @@ namespace Castle.MicroKernel.Util
 			return obj.GetHashCode();
 		}
 	}
-#endif
 }

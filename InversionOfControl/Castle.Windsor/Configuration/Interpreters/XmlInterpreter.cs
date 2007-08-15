@@ -102,11 +102,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 			catch(XmlProcessorException)
 			{
 				string message = "Unable to process xml resource ";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 
@@ -119,11 +116,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 				if (IsTextNode(node))
 				{
 					string message = String.Format("{0} cannot contain text nodes", node.Name);
-#if DOTNET2
+
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 				else if (node.NodeType == XmlNodeType.Element)
 				{
@@ -153,11 +147,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 			else
 			{
 				string message = String.Format("DeserializeElement cannot process element {0}", node.Name);
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 
@@ -317,11 +308,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 				String message = String.Format("{0} elements expects required non blank attribute {1}",
 				                               node.Name, attName);
 
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			return value;
@@ -346,11 +333,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 				String message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'",
 				                               expectedName, expectedName, node.Name);
 
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 	}

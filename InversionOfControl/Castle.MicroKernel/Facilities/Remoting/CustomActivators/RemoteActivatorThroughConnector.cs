@@ -44,13 +44,12 @@ namespace Castle.Facilities.Remoting
 				Model.ExtendedProperties["remoting.remoteregistry"];
 
 
-#if DOTNET2
 			if (Model.Service.IsGenericType)
 			{
 				registry.Publish(Model.Service);
 				return RemotingServices.Connect(Model.Service, uri);
 			}
-#endif
+
 			registry.Publish(Model.Name);
 				
 			return RemotingServices.Connect(Model.Service, uri); 

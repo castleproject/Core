@@ -25,9 +25,7 @@ namespace Castle.Facilities.Remoting
 		private readonly IKernel kernel;
 		private readonly IDictionary entries = Hashtable.Synchronized(new Hashtable());
 
-#if DOTNET2
 		private readonly IDictionary genericEntries = Hashtable.Synchronized(new Hashtable());
-#endif
 
 		public RemotingRegistry(IKernel kernel)
 		{
@@ -41,13 +39,12 @@ namespace Castle.Facilities.Remoting
 
 		public void AddComponentEntry(ComponentModel model)
 		{
-#if DOTNET2
 			if (model.Service.IsGenericType)
 			{
 				genericEntries[model.Service] = model;
 				return;
 			}
-#endif
+
 			entries[model.Name] = model;
 		}
 
@@ -80,7 +77,6 @@ namespace Castle.Facilities.Remoting
 			RemoteMarshallerActivator.Marshal(mbr, model);
 		}
 
-#if DOTNET2
 		/// <summary>
 		/// Used in case of generics:
 		/// </summary>
@@ -113,16 +109,14 @@ namespace Castle.Facilities.Remoting
 
 			RemoteMarshallerActivator.Marshal(mbr, model);
 		}
-#endif
 
 		#region IDisposable Members
 
 		public void Dispose()
 		{
 			entries.Clear();
-#if DOTNET2
+
 			genericEntries.Clear();
-#endif
 		}
 
 		#endregion

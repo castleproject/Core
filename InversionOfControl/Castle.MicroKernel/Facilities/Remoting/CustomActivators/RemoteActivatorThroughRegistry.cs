@@ -41,12 +41,11 @@ namespace Castle.Facilities.Remoting
 			RemotingRegistry registry = (RemotingRegistry) 
 				Model.ExtendedProperties["remoting.remoteregistry"];
 			
-#if DOTNET2
 			if (Model.Service.IsGenericType)
 			{
 				return registry.CreateRemoteInstance(Model.Service);
 			}
-#endif
+
 			return registry.CreateRemoteInstance(Model.Name);
 		}
 	}

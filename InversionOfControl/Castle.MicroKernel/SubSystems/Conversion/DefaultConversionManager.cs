@@ -46,10 +46,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			Add(new EnumConverter());
 			Add(new ListConverter());
 			Add(new DictionaryConverter());
-#if DOTNET2
 			Add(new GenericDictionaryConverter());
 			Add(new GenericListConverter());
-#endif
 			Add(new ArrayConverter());
 			Add(new ComponentConverter());
 			Add(new AttributeAwareConverter());

@@ -77,11 +77,8 @@ namespace Castle.Facilities.TypedFactory
 					catch(Exception)
 					{
 						string message = "Invalid factory entry in configuration";
-#if DOTNET2
+
 						throw new ConfigurationErrorsException(message);
-#else
-						throw new ConfigurationException(message);
-#endif
 					}
 				}
 			}

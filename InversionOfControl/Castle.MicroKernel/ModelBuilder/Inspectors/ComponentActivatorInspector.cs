@@ -79,11 +79,8 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 					string message =
 						String.Format("The Type '{0}' specified  in the componentActivatorType attribute could not be loaded.",
 						              componentActivatorType);
-#if DOTNET2
+
 					throw new ConfigurationErrorsException(message, ex);
-#else
-					throw new ConfigurationException(message, ex);
-#endif  
 				}
 			}
 

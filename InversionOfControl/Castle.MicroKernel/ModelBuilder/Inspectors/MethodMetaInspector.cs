@@ -91,11 +91,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 						String message = String.Format( "The class {0} has tried to expose configuration for " + 
 							"a method named {1} which could not be found.", model.Implementation.FullName, name );
 
-#if DOTNET2
 						throw new ConfigurationErrorsException(message);
-#else
-						throw new ConfigurationException(message);
-#endif
 					}
 
 					ProcessMeta(model, methods, metaModel);
@@ -150,11 +146,8 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				String message = String.Format("The configuration nodes within 'methods' " + 
 					"for the component '{0}' does not have a name. You can either name " + 
 					"the node as the method name or provide an attribute 'name'", model.Name);
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 
@@ -212,11 +205,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 						"that could not be converted to System.Type. Check the inner exception for " + 
 						"details", signature, param);
 
-#if DOTNET2
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 			}
 

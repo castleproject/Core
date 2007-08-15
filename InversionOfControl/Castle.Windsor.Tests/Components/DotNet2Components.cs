@@ -13,8 +13,6 @@
 // limitations under the License.
 
 
-#if DOTNET2
-
 namespace Castle.Windsor.Tests
 {
 	using System;
@@ -149,5 +147,3 @@ namespace Castle.Windsor.Tests
 		}
 	}
 }
-
-#endif

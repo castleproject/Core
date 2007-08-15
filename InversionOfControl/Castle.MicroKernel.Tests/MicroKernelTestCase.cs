@@ -150,8 +150,6 @@ namespace Castle.MicroKernel.Tests
 			Assert.IsNotNull(resolved);
 		}
 
-#if DOTNET2
-
 		[Test]
 		public void ResolveServices()
 		{
@@ -168,7 +166,5 @@ namespace Castle.MicroKernel.Tests
 			ICommon[] services = kernel.ResolveServices<ICommon>();
 			Assert.AreEqual(0, services.Length);
 		}
-
-#endif
 	}
 }

@@ -59,11 +59,7 @@ namespace Castle.MicroKernel
 		/// </summary>
 		private readonly DependencyModelCollection dependencies;
 
-#if DOTNET2
-
 		private readonly Type[] genericArguments;
-
-#endif
 
 		public CreationContext(IHandler handler, IDictionary additionalArguments)
 		{
@@ -85,8 +81,6 @@ namespace Castle.MicroKernel
             this.handlersChain.AddRange(handlersChain);
 		}
 
-#if DOTNET2
-
 		public CreationContext(IHandler handler, Type typeToExtractGenericArguments, IDictionary additionalArguments)
 			: this(handler, additionalArguments)
 		{
@@ -100,8 +94,6 @@ namespace Castle.MicroKernel
 			additionalArguments = parentContext.additionalArguments;
 			genericArguments = ExtractGenericArguments(typeToExtractGenericArguments);
 		}
-
-#endif
 
 		#region ISubDependencyResolver
 
@@ -153,8 +145,6 @@ namespace Castle.MicroKernel
 
 		#endregion
 
-#if DOTNET2
-
 		public Type[] GenericArguments
 		{
 			get { return genericArguments; }
@@ -164,8 +154,6 @@ namespace Castle.MicroKernel
 		{
 			return typeToExtractGenericArguments.GetGenericArguments();
 		}
-
-#endif
 
 		/// <summary>
 		/// Check if we are now in the middle of resolving this handler, 

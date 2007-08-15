@@ -107,9 +107,7 @@ namespace Castle.MicroKernel.ModelBuilder
 		/// </summary>
 		protected virtual void InitializeContributors()
 		{
-#if DOTNET2
 			AddContributor(new GenericInspector());
-#endif
 			AddContributor(new ConfigurationModelInspector());
 			AddContributor(new LifestyleModelInspector());
 			AddContributor(new ConstructorDependenciesModelInspector());

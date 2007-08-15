@@ -142,8 +142,6 @@ namespace Castle.MicroKernel
 		/// </exception>
 		void AddComponent(string key, Type serviceType, Type classType, LifestyleType lifestyle, bool overwriteLifestyle);
 
-#if DOTNET2
-
 		/// <summary>
 		/// Adds a concrete class as a component
 		/// </summary>
@@ -245,9 +243,6 @@ namespace Castle.MicroKernel
 		/// <param name="instance"></param>
 		void AddComponentInstance<T>(Type serviceType, object instance);
 
-
-#endif
-
 		/// <summary>
 		/// Adds a concrete class as a component and specify the extended properties.
 		/// Used by facilities, mostly.
@@ -347,8 +342,6 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		object Resolve(String key, IDictionary arguments);
 
-#if DOTNET2
-
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -386,8 +379,6 @@ namespace Castle.MicroKernel
 		/// <param name="arguments"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service, IDictionary arguments);
-
-#endif
 
 		/// <summary>
 		/// Associates objects with a component handler,

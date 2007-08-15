@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
-
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
@@ -98,5 +96,3 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		}
 	}
 }
-
-#endif

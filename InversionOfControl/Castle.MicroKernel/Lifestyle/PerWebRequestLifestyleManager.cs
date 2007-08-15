@@ -46,11 +46,8 @@ namespace Castle.MicroKernel.Lifestyle
 					                 typeof(PerWebRequestLifestyleModule).FullName +
 					                 "\r\nAdd '<add name=\"PerRequestLifestyle\" type=\"Castle.MicroKernel.Lifestyle.PerWebRequestLifestyleModule, Castle.MicroKernel\" />' " +
 					                 "to the <httpModules> section on your web.config";
-#if DOTNET2
+
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 
 				object instance = base.Resolve(context);

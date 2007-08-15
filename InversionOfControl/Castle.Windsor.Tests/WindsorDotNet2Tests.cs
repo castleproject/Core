@@ -14,7 +14,7 @@
 
 
 
-#if DOTNET2 && !MONO
+#if !MONO
 
 namespace Castle.Windsor.Tests
 {

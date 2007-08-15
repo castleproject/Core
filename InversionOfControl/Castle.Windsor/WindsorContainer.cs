@@ -514,8 +514,6 @@ namespace Castle.Windsor
 			get { return Resolve(service); }
 		}
 
-#if DOTNET2
-
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -580,7 +578,6 @@ namespace Castle.Windsor
 		{
 			return (T)Resolve(key, typeof(T));
 		}
-#endif
 
 		/// <summary>
 		/// Releases a component instance

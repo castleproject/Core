@@ -360,9 +360,9 @@ namespace Castle.MicroKernel.Resolvers
 			}
 
 			if (handler == null) return null;
-#if DOTNET2
+
 			context = RebuildContextForParameter(context, dependency.TargetType);
-#endif
+
 			return handler.Resolve(context);
 		}
 
@@ -459,8 +459,6 @@ namespace Castle.MicroKernel.Resolvers
 			return false;
 		}
 
-#if DOTNET2
-
 		/// <summary>
 		/// This method rebuild the context for the parameter type.
 		/// Naive implementation.
@@ -476,7 +474,5 @@ namespace Castle.MicroKernel.Resolvers
 				return new CreationContext(current.Handler, parameterType, current);
 			}
 		}
-
-#endif
 	}
 }

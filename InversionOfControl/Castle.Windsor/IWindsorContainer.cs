@@ -93,8 +93,6 @@ namespace Castle.Windsor
 		/// <param name="extendedProperties"></param>
 		void AddComponentWithProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
 
-		#if DOTNET2
-
 		/// <summary>
 		/// Adds a component to be managed by the container.
 		/// The key to obtain the component will be the FullName of the type.
@@ -199,8 +197,6 @@ namespace Castle.Windsor
 		/// <param name="extendedProperties"></param>
 		void AddComponentWithLifestyle<I, T>(String key, IDictionary extendedProperties) where T : I;
 
-		#endif
-
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -216,8 +212,6 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		object Resolve(String key, IDictionary arguments);
 		
-		#if DOTNET2
-
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
@@ -225,8 +219,6 @@ namespace Castle.Windsor
 		/// <param name="service"></param>
 		/// <returns></returns>
 		object Resolve(String key, Type service);
-
-		#endif
 
 		/// <summary>
 		/// Returns a component instance by the service
@@ -279,8 +271,6 @@ namespace Castle.Windsor
 		/// <returns>The child container instance or null</returns>
 		IWindsorContainer GetChildContainer(string name);
 
-		#if DOTNET2
-
 		/// <summary>
 		/// Returns a component instance by the service
 		/// </summary>
@@ -323,8 +313,6 @@ namespace Castle.Windsor
 		/// <returns></returns>
 		object Resolve(String key, Type service, IDictionary arguments);
 		
-		#endif
-
 		/// <summary>
 		/// Returns the inner instance of the MicroKernel
 		/// </summary>
