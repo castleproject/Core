@@ -276,11 +276,8 @@ namespace Castle.Facilities.Logging
 						String message = "If you specify loggingApi='custom' " +
 										 "then you must use the attribute customLoggerFactory to inform the " +
 										 "type name of the custom logger factory";
-#if DOTNET2
+
 						throw new ConfigurationErrorsException(message);
-#else
-						throw new ConfigurationException(message);
-#endif
 					}
 
 					loggerFactoryType = (Type)
@@ -319,11 +316,8 @@ namespace Castle.Facilities.Logging
 				default:
 					{
 						String message = "An invalid loggingApi was specified: " + logApi;
-#if DOTNET2
+
 						throw new ConfigurationErrorsException(message);
-#else
-						throw new ConfigurationException(message);
-#endif
 					}
 			}
 			return loggerFactoryType;

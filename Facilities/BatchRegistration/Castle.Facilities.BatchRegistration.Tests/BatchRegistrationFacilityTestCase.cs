@@ -118,11 +118,7 @@ namespace Castle.Facilities.BatchRegistration.Tests
 		}
 
 		[Test]
-#if DOTNET2
 		[ExpectedException( typeof(ConfigurationErrorsException) )]
-#else
-		[ExpectedException( typeof(ConfigurationException) )]
-#endif
 		public void InvalidAssemblyName()
 		{
 			String xml = 

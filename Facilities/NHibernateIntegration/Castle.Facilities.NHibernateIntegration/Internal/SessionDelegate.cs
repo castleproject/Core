@@ -144,7 +144,6 @@ namespace Castle.Facilities.NHibernateIntegration
 			return inner.Load(theType, id);
 		}
 
-#if DOTNET2
 		public T Load<T>(object id, LockMode lockMode)
 		{
 			return inner.Load<T>(id, lockMode);
@@ -154,7 +153,6 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			return inner.Load<T>(id);
 		}
-#endif
 
 		public void Load(object obj, object id)
 		{
@@ -176,7 +174,6 @@ namespace Castle.Facilities.NHibernateIntegration
 			return inner.GetSessionImplementation();
 		}
 		
-#if DOTNET2
 		public T Get<T>(object id)
 		{
 			return inner.Get<T>(id);
@@ -186,7 +183,6 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			return inner.Get<T>(id, lockMode);
 		}
-#endif
 
 		public IFilter EnableFilter(string filterName)
 		{

@@ -190,11 +190,8 @@ namespace Castle.Facilities.Cache
 				string message = String.Format("The configuration nodes 'method' within 'cache' node " + 
 					"for the component '{0}' does not have a name. You can either provide the method name " + 
 					" as the 'method' node or provide an attribute 'name'", model.Name);
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 

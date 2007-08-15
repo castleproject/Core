@@ -58,11 +58,8 @@ namespace Castle.Facilities.Db4oIntegration
 			if (container == null)
 			{
 				String message = "The ObjectContainer is null. Check the permissions of your YAP file.";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 	
 			return container;

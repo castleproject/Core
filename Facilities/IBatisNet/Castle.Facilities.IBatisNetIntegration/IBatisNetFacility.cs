@@ -54,11 +54,8 @@ namespace Castle.Facilities.IBatisNetIntegration
 			if (FacilityConfig == null)
 			{
 				String message = "The IBatisNetFacility requires an external configuration";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			Kernel.ComponentModelBuilder.AddContributor(new AutomaticSessionInspector());
@@ -79,11 +76,8 @@ namespace Castle.Facilities.IBatisNetIntegration
 			if (factories == 0)
 			{
 				String message = "You need to configure at least one sqlMap for IBatisNetFacility";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 
@@ -95,11 +89,8 @@ namespace Castle.Facilities.IBatisNetIntegration
 			if (id == string.Empty)
 			{
 				String message = "The IBatisNetFacility requires each SqlMapper to have an ID.";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 			else
 			{

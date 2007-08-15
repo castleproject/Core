@@ -85,7 +85,6 @@ namespace Castle.Facilities.Synchronize
 		/// </returns>
 		private bool InvokeInSynchronizationContext(IInvocation invocation)
 		{
-#if DOTNET2
 			if (metaInfo != null)
 			{
 				IHandler handler = null;
@@ -157,7 +156,7 @@ namespace Castle.Facilities.Synchronize
 
 				return true;
 			}
-#endif
+
 			return false;
 		}
 

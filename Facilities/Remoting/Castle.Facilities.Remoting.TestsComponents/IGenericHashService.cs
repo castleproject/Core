@@ -14,10 +14,8 @@
 
 namespace Castle.Facilities.Remoting.TestComponents
 {
-#if DOTNET2
 	public interface IGenericToStringService<T> where T : class
 	{
 		string ToString(params T[] instances);
 	}
-#endif
 }

@@ -144,7 +144,6 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			return innerSession.Load(theType, id);
 		}
 
-#if DOTNET2
 		public T Load<T>(object id, LockMode lockMode)
 		{
 			return innerSession.Load<T>(id, lockMode);
@@ -154,7 +153,6 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			return innerSession.Load<T>(id);
 		}
-#endif
 
 		public void Load(object obj, object id)
 		{
@@ -171,7 +169,6 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			return innerSession.Get(clazz, id, lockMode);
 		}
 
-#if DOTNET2
 		public T Get<T>(object id)
 		{
 			return innerSession.Get<T>(id);
@@ -181,7 +178,6 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			return innerSession.Get<T>(id, lockMode);
 		}
-#endif
 
 		public IFilter EnableFilter(string filterName)
 		{

@@ -89,7 +89,6 @@ namespace Castle.Facilities.Synchronize
 
 		private static void RegisterWindowsFormsSynchronizationContext(IKernel kernel)
 		{
-#if DOTNET2
 			WindowsFormsSynchronizationContext winFormsSyncCtx =
 				WindowsFormsSynchronizationContext.Current as WindowsFormsSynchronizationContext;
 
@@ -97,7 +96,6 @@ namespace Castle.Facilities.Synchronize
 			{
 				kernel.AddComponentInstance(Constants.WinFormsSyncContext, winFormsSyncCtx);
 			}
-#endif
 		}
 
 		private static IProxyHook ObtainProxyHook(IKernel kernel, IConfiguration config)
@@ -120,11 +118,8 @@ namespace Castle.Facilities.Synchronize
 						String message = String.Format("The specified controlProxyHook does " +
 						                               "not implement the interface IProxyHook. Type {0}",
 						                               hookType.FullName);
-#if DOTNET2
+
 						throw new ConfigurationErrorsException(message);
-#else
-						throw new ConfigurationException(message);
-#endif
 					}
 
 					hook = (IProxyHook) Activator.CreateInstance(hookType);

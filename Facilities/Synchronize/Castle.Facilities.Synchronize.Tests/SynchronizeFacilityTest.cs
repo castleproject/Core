@@ -205,11 +205,7 @@ namespace Castle.Facilities.Synchronize.Tests
 			Assert.IsTrue(options.Hook is DummyProxyHook, "Proxy hook should be a DummyProxyHook");
 		}
 
-#if DOTNET2
 		[Test, ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-		[Test, ExpectedException(typeof(ConfigurationException))]
-#endif
 		public void RegisterFacility_WithBadControlProxyHook_ThrowsConfigurationException()
 		{
 			WindsorContainer container2 = new WindsorContainer();
@@ -239,8 +235,11 @@ namespace Castle.Facilities.Synchronize.Tests
 			                                         	});
 
 			Form form = new Form();
-			IntPtr formHandle = form.Handle;
-			form.BeginInvoke((MethodInvoker) delegate { thread.Start(); });
+			if (form.Handle == IntPtr.Zero)
+			{
+				throw new InvalidOperationException("Control handle could not be obtained");
+			}
+			form.BeginInvoke((MethodInvoker)delegate { thread.Start(); });
 
 			Application.Run();
 		}

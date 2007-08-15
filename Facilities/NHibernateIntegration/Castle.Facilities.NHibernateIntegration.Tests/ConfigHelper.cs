@@ -21,11 +21,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	{
 		public static string ResolvePath(string configFilePath)
 		{
-#if DOTNET2
 			return Path.Combine(ConfigurationManager.AppSettings["tests.src"], configFilePath);
-#else
-			return Path.Combine(ConfigurationSettings.AppSettings["tests.src"], configFilePath);
-#endif
 		}
 	}
 }

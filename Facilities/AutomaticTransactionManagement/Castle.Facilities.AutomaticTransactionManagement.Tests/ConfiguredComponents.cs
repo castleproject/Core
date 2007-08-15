@@ -55,11 +55,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(3, meta.Methods.Length);
 		}
 
-#if DOTNET2
 		[Test, ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-		[Test, ExpectedException(typeof(ConfigurationException))]
-#endif
 		public void HasInvalidMethod()
 		{
 			new WindsorContainer( ConfigHelper.ResolvePath("../HasInvalidMethod.xml") );

@@ -127,11 +127,8 @@ namespace Castle.Facilities.NHibernateIntegration
 				{
 					String message = "The specified customStore does " + 
 						"not implement the interface ISessionStore. Type " + customStore;
-#if DOTNET2
+
 						throw new ConfigurationErrorsException(message);
-#else
-						throw new ConfigurationException(message);
-#endif
 				}
 			}
 
@@ -183,11 +180,8 @@ namespace Castle.Facilities.NHibernateIntegration
 				if (!"factory".Equals(factoryConfig.Name))
 				{
 					String message = "Unexpected node " + factoryConfig.Name;
-#if DOTNET2
+
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new ConfigurationException(message);
-#endif
 				}
 
 				ConfigureFactories(factoryConfig, sessionFactoryResolver, firstFactory);
@@ -235,11 +229,8 @@ namespace Castle.Facilities.NHibernateIntegration
 				String message = "You must provide a " + 
 					"valid 'id' attribute for the 'factory' node. This id is used as key for " + 
 					"the ISessionFactory component registered on the container";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			String alias = config.Attributes["alias"];
@@ -249,11 +240,8 @@ namespace Castle.Facilities.NHibernateIntegration
 				String message = "You must provide a " + 
 					"valid 'alias' attribute for the 'factory' node. This id is used to obtain " + 
 					"the ISession implementation from the SessionManager";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 			else if (alias == null || alias.Length == 0)
 			{
@@ -384,11 +372,8 @@ namespace Castle.Facilities.NHibernateIntegration
 			catch(Exception ex)
 			{
 				String message = String.Format("The assembly {0} could not be loaded.", assembly);
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message, ex);
-#else
-				throw new ConfigurationException(message, ex);
-#endif
 			}
 		}
 
@@ -399,11 +384,8 @@ namespace Castle.Facilities.NHibernateIntegration
 			if (factoriesConfig == null)
 			{
 				String message = "You need to configure at least one factory to use the NHibernateFacility";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 
@@ -412,11 +394,8 @@ namespace Castle.Facilities.NHibernateIntegration
 			if (FacilityConfig == null)
 			{
 				String message = "The NHibernateFacility requires an external configuration";
-#if DOTNET2
+
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 		}
 

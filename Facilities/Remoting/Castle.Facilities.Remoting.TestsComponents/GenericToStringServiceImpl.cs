@@ -17,7 +17,6 @@ namespace Castle.Facilities.Remoting.TestComponents
 	using System;
 	using System.Text;
 
-#if DOTNET2
 	public class GenericToStringServiceImpl<T> : MarshalByRefObject, IGenericToStringService<T> where T : class
 	{
 		public string ToString(params T[] instances)
@@ -30,5 +29,4 @@ namespace Castle.Facilities.Remoting.TestComponents
 			return result.ToString();
 		}
 	}
-#endif
 }

@@ -36,14 +36,11 @@ namespace Castle.Facilities.Remoting.Tests
 		[Test]
         public void ClientContainerConsumingRemoteGenericComponent()
 		{
-#if DOTNET2
             clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerConsumingRemoteGenericComponentCallback));
-#endif
 		}
 
 		public void ClientContainerConsumingRemoteGenericComponentCallback()
 		{
-#if DOTNET2
             IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_kernelgenericcomponent.xml"));
 
             IGenericToStringService<String> service = clientContainer.Resolve<IGenericToStringService<String>>();
@@ -52,39 +49,31 @@ namespace Castle.Facilities.Remoting.Tests
 			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service) );
 
 			Assert.AreEqual("onetwo", service.ToString("one", "two"));
-#endif
 		}
 
         [Test]
         [ExpectedException(typeof(Castle.MicroKernel.ComponentNotFoundException))]
         public void ClientContainerConsumingRemoteGenericComponentWhichDoesNotExistOnServer()
         {
-#if DOTNET2
             clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerConsumingRemoteGenericComponentWhichDoesNotExistOnServerCallback));
-#endif
         }
 
         public void ClientContainerConsumingRemoteGenericComponentWhichDoesNotExistOnServerCallback()
         {
-#if DOTNET2
             IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_kernelgenericcomponent.xml"));
 
             GenericToStringServiceImpl<String> service = clientContainer.Resolve<GenericToStringServiceImpl<String>>();        
-#endif
         }
 
 
         [Test]
         public void ClientContainerConsumingRemoteCustomComponentUsingGenericInterface()
         {
-#if DOTNET2            
             clientDomain.DoCallBack(new CrossAppDomainDelegate(ClientContainerConsumingRemoteCustomComponentUsingGenericInterfaceCallback));
-#endif
         }
 
         public void ClientContainerConsumingRemoteCustomComponentUsingGenericInterfaceCallback()
         {
-#if DOTNET2            
             IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, BuildConfigPath("client_kernelgenericcomponent.xml"));
 
             
@@ -94,7 +83,6 @@ namespace Castle.Facilities.Remoting.Tests
             Assert.IsTrue(RemotingServices.IsObjectOutOfAppDomain(service));
 
             Assert.AreEqual("33", service.ToString(new StringBuilder("one"), new StringBuilder("two")));
-#endif
         }
 	}
 }

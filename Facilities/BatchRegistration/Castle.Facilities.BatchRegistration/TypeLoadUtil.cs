@@ -30,11 +30,7 @@ namespace Castle.Facilities.BatchRegistration
 				String message = 
 					String.Format("Could not load type {0} from {1}", typeName, assembly.FullName);
 				
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			return type;			
@@ -49,11 +45,7 @@ namespace Castle.Facilities.BatchRegistration
 				String message = 
 					String.Format("Could not load type {0}", typeName);
 				
-#if DOTNET2
 				throw new ConfigurationErrorsException(message);
-#else
-				throw new ConfigurationException(message);
-#endif
 			}
 
 			return type;			
