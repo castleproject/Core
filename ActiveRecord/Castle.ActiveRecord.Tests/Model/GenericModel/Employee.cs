@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
 namespace Castle.ActiveRecord.Tests.Model.GenericModel
 {
 	using System;
@@ -95,4 +94,3 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 
 	}
 } 
-#endif

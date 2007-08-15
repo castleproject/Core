@@ -351,7 +351,6 @@ namespace Castle.ActiveRecord.Tests.Validation
 		}
 		
 
-#if DOTNET2
 		[Test]
 		[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
 		public void IsUniqueWithNullKey()
@@ -374,7 +373,6 @@ namespace Castle.ActiveRecord.Tests.Validation
 
 			blog.Create();
 		}
-#endif
 
 		[Test]
 		public void IsUniqueWithSessionScope()

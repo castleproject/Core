@@ -149,8 +149,6 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 		}
 	}
 
-#if DOTNET2
-
 	[ActiveRecord("Blogs4")]
 	public class Blog4 : ActiveRecordValidationBase
 	{
@@ -194,8 +192,6 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 			return (Blog4)FindByPrimaryKey(typeof(Blog4), id);
 		}
 	}
-
-#endif
 
 	[ActiveRecord("Blogs2")]
 	public class Blog5 : ActiveRecordBase

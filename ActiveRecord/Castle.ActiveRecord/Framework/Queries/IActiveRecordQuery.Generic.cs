@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
-
 namespace Castle.ActiveRecord
 {
 	using NHibernate;
@@ -32,5 +30,3 @@ namespace Castle.ActiveRecord
 		new T Execute(ISession session);
 	}
 }
-
-#endif

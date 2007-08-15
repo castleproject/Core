@@ -15,8 +15,6 @@
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	
-#if DOTNET2
-
 	[ActiveRecord("disctable"), JoinedBase]
 	public abstract class GenBaseJoinedClass<T> : ActiveRecordValidationBase<T> where T : class
 	{
@@ -58,6 +56,4 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { age = value; }
 		}
 	}
-	
-#endif
 }

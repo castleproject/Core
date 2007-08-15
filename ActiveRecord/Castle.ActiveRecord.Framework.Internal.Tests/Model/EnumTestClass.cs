@@ -14,7 +14,6 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-#if DOTNET2
 	using NHibernate.Type;
 
 	[ActiveRecord(Lazy=false)]
@@ -59,5 +58,4 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
         {
         }
     }
-#endif
 }

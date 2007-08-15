@@ -14,8 +14,6 @@
 
 
 
-#if DOTNET2
-
 namespace Castle.ActiveRecord.Tests
 {
 	using System.Collections.Generic;
@@ -481,5 +479,3 @@ namespace Castle.ActiveRecord.Tests
 		}
 	}
 }
-
-#endif

@@ -14,7 +14,6 @@
 
 namespace Castle.ActiveRecord.Tests.Validation
 {
-#if DOTNET2
 	using System;
 	using System.Collections;
 	using System.Globalization;
@@ -230,5 +229,4 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.IsFalse(timeDate.IsValid());
 		} 
 	}
-#endif
 }

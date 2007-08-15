@@ -14,7 +14,6 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
-#if DOTNET2
 	using System;
 	using System.Collections.Generic;
 
@@ -38,7 +37,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { snippet = value; }
 		}
 	}
-#endif
 }
 
 

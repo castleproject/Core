@@ -16,9 +16,7 @@ namespace Castle.ActiveRecord.Queries
 {
 	using System;
 	using System.Collections;
-#if DOTNET2
 	using System.Collections.Generic;
-#endif
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
@@ -37,11 +35,7 @@ namespace Castle.ActiveRecord.Queries
 	public class ActiveRecordMultiQuery : IActiveRecordQuery
 	{
 		Type _rootType;
-#if DOTNET2
 		List<ActiveRecordBaseQuery> _queryList = new List<ActiveRecordBaseQuery>();
-#else
-		ArrayList _queryList = new ArrayList();
-#endif
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordMultiQuery"/> class.

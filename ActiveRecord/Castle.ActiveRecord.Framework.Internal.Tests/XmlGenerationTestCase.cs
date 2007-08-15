@@ -552,8 +552,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			Assert.AreEqual(expected, xml);
 		}
 
-#if DOTNET2
-
 		[Test]
 		public void JoinedSubClassUseWithGenericType()
 		{
@@ -652,8 +650,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			Assert.AreEqual(expected, xml);
 		}
-
-#endif
 
 		[Test]
 		public void JoinedSubClassUse()
@@ -1111,7 +1107,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			Assert.AreEqual(expected, xml);
 		}
 
-#if DOTNET2
 		[Test]
 		public void EnumWithColumnType()
 		{
@@ -1140,7 +1135,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			Assert.AreEqual(expected, xml);
 		}
-#endif
 
 		private string Process(ActiveRecordModelBuilder builder, ActiveRecordModel model)
 		{
@@ -1156,7 +1150,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 			return xmlVisitor.Xml;
 		}
 
-#if DOTNET2
 		[Test]
 		public void HasManyWithDictionary()
 		{
@@ -1184,7 +1177,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 
 			Assert.AreEqual(expected, xml);
 		}
-#endif
 
 		[Test]
 		public void SimpleListOfComponents()

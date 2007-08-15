@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
 using Castle.Components.Validator;
 namespace Castle.ActiveRecord.Tests.Validation.Model.GenericModel
 {
@@ -60,4 +59,3 @@ namespace Castle.ActiveRecord.Tests.Validation.Model.GenericModel
     }
 
 }
-#endif

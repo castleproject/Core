@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET2
-
 namespace Castle.ActiveRecord.Tests
 {
 	using NUnit.Framework;
@@ -68,5 +66,3 @@ namespace Castle.ActiveRecord.Tests
 		}
 	}
 }
-
-#endif

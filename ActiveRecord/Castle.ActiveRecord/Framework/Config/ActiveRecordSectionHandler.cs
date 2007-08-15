@@ -47,24 +47,17 @@ namespace Castle.ActiveRecord.Framework.Config
 			get
 			{
 				IConfigurationSource source;
-#if DOTNET2
+
 				source =
 					ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
-#else
-				source =
-					System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
-#endif
 
 				if (source == null)
 				{
 					String message = "Could not obtain configuration from the AppDomain config file." +
 					                 " Sorry, but you have to fill the configuration or provide a " +
 					                 "IConfigurationSource instance yourself.";
-#if DOTNET2
+
 					throw new ConfigurationErrorsException(message);
-#else
-					throw new System.Configuration.ConfigurationException(message);
-#endif
 				}
 
 				return source;

@@ -13,8 +13,6 @@
 // limitations under the License.
 
 
-#if DOTNET2
-
 namespace Castle.ActiveRecord.Tests.Model.GenericModel
 {
 	[ActiveRecord(DiscriminatorValue = "AbstractClass", DiscriminatorType = "String", DiscriminatorColumn = "type")]
@@ -35,5 +33,3 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 	{
 	}
 }
-
-#endif

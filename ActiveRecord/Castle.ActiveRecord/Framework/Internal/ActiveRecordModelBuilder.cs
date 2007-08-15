@@ -447,14 +447,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			                  type.BaseType != typeof(ActiveRecordValidationBase);
 			// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
 
-#if DOTNET2
 			// generic check
 			if (type.BaseType.IsGenericType)
 			{
 				isRootType = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
 				             type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
 			}
-#endif
 
 			return isRootType;
 		}

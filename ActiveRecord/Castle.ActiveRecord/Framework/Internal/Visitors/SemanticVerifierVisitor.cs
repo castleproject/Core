@@ -285,7 +285,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.PropertyAtt.ColumnType = NHibernateNullablesSupport.GetITypeTypeNameForNHibernateNullable(propertyType);
 			}
 
-#if DOTNET2
 			if (propertyType.IsGenericType &&
 			    propertyType.GetGenericTypeDefinition() == typeof(Nullable<>) &&
 			    String.IsNullOrEmpty(model.PropertyAtt.ColumnType))
@@ -293,7 +292,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.PropertyAtt.NotNull = false;
 				model.PropertyAtt.ColumnType = ObtainNullableTypeNameForCLRNullable(propertyType);
 			}
-#endif
 
 			if (ActiveRecordModel.GetModel(propertyType) != null)
 			{
@@ -329,14 +327,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.FieldAtt.ColumnType = NHibernateNullablesSupport.GetITypeTypeNameForNHibernateNullable(fieldType);
 			}
 
-#if DOTNET2
 			if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>) &&
 			    String.IsNullOrEmpty(model.FieldAtt.ColumnType))
 			{
 				model.FieldAtt.NotNull = false;
 				model.FieldAtt.ColumnType = ObtainNullableTypeNameForCLRNullable(fieldType);
 			}
-#endif
 		}
 
 		/// <summary>
@@ -485,7 +481,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
 
-#if DOTNET2
 			// Guess the details about a map relation if needed
 			if (model.HasManyAtt.RelationType == RelationType.Map)
 			{
@@ -502,7 +497,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 					model.HasManyAtt.MapType = GetMapTypeFromDictionary(model.Property.PropertyType);
 				}
 			}
-#endif
 
 			if (model.HasManyAtt.RelationType == RelationType.IdBag)
 			{
@@ -762,7 +756,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				return RelationType.Map;
 			}
-#if DOTNET2
 			else if (propertyType.IsGenericType)
 			{
 				Type genericTypeDefinition = propertyType.GetGenericTypeDefinition();
@@ -780,7 +773,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 					return RelationType.Map;
 				}
 			}
-#endif
 
 			throw new ActiveRecordException(String.Format(
 			                                	"Could not guess relation type for property {0}.{1}  ",
@@ -817,15 +809,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-#if DOTNET2
 		private static String ObtainNullableTypeNameForCLRNullable(Type type)
 		{
 			Type underlyingType = Nullable.GetUnderlyingType(type);
 			return underlyingType.AssemblyQualifiedName;
 		}
-#endif
 
-#if DOTNET2
 		/// <summary>
 		/// Gets the index type of a mapped dictionary.
 		/// </summary>
@@ -849,9 +838,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Type[] arguments = propertyType.GetGenericArguments();
 			return arguments[0];
 		}
-#endif
 
-#if DOTNET2
 		/// <summary>
 		/// Gets the index type of a mapped dictionary.
 		/// </summary>
@@ -875,6 +862,5 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Type[] arguments = propertyType.GetGenericArguments();
 			return arguments[1];
 		}
-#endif
 	}
 }

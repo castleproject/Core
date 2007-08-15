@@ -185,8 +185,6 @@ namespace Castle.ActiveRecord.Framework
 
 		#endregion
 
-#if DOTNET2
-
 		#region BuildObjectArray
 
 		/// <summary>
@@ -246,6 +244,5 @@ namespace Castle.ActiveRecord.Framework
 
 		#endregion
 
-#endif
 	}
 }
