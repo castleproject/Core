@@ -27,11 +27,8 @@ namespace Castle.Core.Tests.Resources
 	public class FileResourceFactoryTestCase
 	{
 		private FileResourceFactory resFactory = new FileResourceFactory();
-#if DOTNET2
 		private String basePath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Resources");
-#else
-		private String basePath = Path.Combine(ConfigurationSettings.AppSettings["tests.src"], "Resources");
-#endif
+
 		[TestFixtureSetUp]
 		public void Init()
 		{
