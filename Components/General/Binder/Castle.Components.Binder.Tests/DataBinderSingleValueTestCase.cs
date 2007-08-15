@@ -269,8 +269,6 @@ namespace Castle.Components.Binder.Tests
 			Assert.AreEqual(expected.Value.Day, actual.Value.Day);
 		}
 
-#if DOTNET2
-		
 		[Test]
 		public void DateTimeAlternativeSourceBindingWithNullableDateTime2()
 		{
@@ -293,8 +291,6 @@ namespace Castle.Components.Binder.Tests
 							binder.BindParameter(typeof(DateTime?), "name", node));
 		}
 		
-#endif
-
 		/// <summary>
 		/// Common Enum convertion
 		/// </summary>

@@ -17,24 +17,16 @@ namespace Castle.Components.Common.EmailSender.Smtp
 	using System;
 	using System.Collections;
 	using System.Net;
-#if DOTNET2
 	using System.Net.Mail;
-#else
-	using System.Web.Mail;
-	using MailMessage=System.Web.Mail.MailMessage;
-	using MailPriority=System.Web.Mail.MailPriority;
-#endif
 
 	/// <summary>
 	/// Uses Smtp to send emails.
 	/// </summary>
 	public class SmtpSender : IEmailSender
 	{
-#if DOTNET2
 		private SmtpClient smtpClient;
 		private bool asyncSend = false;
 		private bool configured;
-#endif
 		private string hostname;
 		private int port = 25;
 		private NetworkCredential credentials = new NetworkCredential();
@@ -48,9 +40,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		{
 			this.hostname = hostname;
 
-#if DOTNET2
 			smtpClient = new SmtpClient(hostname);
-#endif
 		}
 
 		/// <summary>
@@ -72,7 +62,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			get { return hostname; }
 		}
 
-#if DOTNET2
 		/// <summary>
 		/// Gets or sets a value which is used to 
 		/// configure if emails are going to be sent asyncrhonously or not.
@@ -92,7 +81,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			get { return smtpClient.Timeout; }
 			set { smtpClient.Timeout = value; }
 		}
-#endif
 
 		/// <summary>
 		/// Sends a message. 
@@ -123,7 +111,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		
 			ConfigureSender(message);
 
-#if DOTNET2
 			if (asyncSend)
 			{
 				smtpClient.SendAsync(CreateMailMessage(message), new object());
@@ -132,9 +119,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			{
 				smtpClient.Send(CreateMailMessage(message));
 			}
-#else
-			SmtpMail.Send(CreateMailMessage(message));
-#endif
 		}
 
 		public void Send(Message[] messages)
@@ -145,7 +129,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			}
 		}
 
-#if DOTNET2
 		/// <summary>
 		/// Converts a message from Castle.Components.Common.EmailSender.Message  type
 		/// to System.Web.Mail.MailMessage
@@ -195,43 +178,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 
 			return mailMessage;
 		}
-#else
-		private MailMessage CreateMailMessage(Message message)
-		{
-			MailMessage mailMessage = new MailMessage();
-
-			mailMessage.From = message.From;
-			mailMessage.To = message.To;
-			mailMessage.Cc = message.Cc;
-			mailMessage.Bcc = message.Bcc;
-			mailMessage.Subject = message.Subject;
-			mailMessage.Body = message.Body;
-			mailMessage.BodyEncoding = message.Encoding;
-			mailMessage.BodyFormat = (MailFormat) Enum.Parse(typeof(MailFormat), message.Format.ToString());
-			mailMessage.Priority = (MailPriority) Enum.Parse(typeof(MailPriority), message.Priority.ToString());
-
-			foreach(DictionaryEntry entry in message.Headers)
-			{
-				mailMessage.Headers.Add(entry.Key, entry.Value);
-			}
-
-			foreach(DictionaryEntry entry in message.Fields)
-			{
-				mailMessage.Fields.Add(entry.Key, entry.Value);
-			}
-
-			foreach(MessageAttachment attachment in message.Attachments)
-			{
-				MailEncoding enc = (MailEncoding) Enum.Parse(typeof(MailEncoding), attachment.Encoding.ToString());
-
-				MailAttachment mailAttach = new MailAttachment(attachment.FileName, enc);
-
-				mailMessage.Attachments.Add(mailAttach);
-			}
-
-			return mailMessage;
-		}
-#endif
 
 		/// <summary>
 		/// Gets or sets the domain.
@@ -271,7 +217,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// <param name="message">Message instance</param>
 		private void ConfigureSender(Message message)
 		{
-#if DOTNET2
 			if (!configured)
 			{
 				if (HasCredentials)
@@ -283,17 +228,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 
 				configured = true;
 			}
-#else
-			message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver", hostname);
-			message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport", port);
-			
-			if (HasCredentials)
-			{
-				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1");
-				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", UserName);
-				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", Password);
-			}
-#endif
 		}
 
 		/// <summary>

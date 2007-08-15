@@ -15,17 +15,13 @@
 namespace Castle.Components.Common.EmailSender
 {
 	using System;
-#if DOTNET2
 	using System.IO;
-#endif
 	
-#if !DOTNET2
 	public enum AttachmentEncoding
 	{
 		Base64,
 		UUEncode
 	}
-#endif
 	
 	/// <summary>
 	/// Represents a file attachment
@@ -33,14 +29,9 @@ namespace Castle.Components.Common.EmailSender
 	public class MessageAttachment
 	{
 		private readonly String fileName;
-#if DOTNET2
 		private readonly String mediaType;
 		private readonly Stream stream;
-#else
-		private AttachmentEncoding encoding;
-#endif
 
-#if DOTNET2
 		/// <summary>
 		/// Creates a new attachment
 		/// </summary>
@@ -75,21 +66,6 @@ namespace Castle.Components.Common.EmailSender
 
 			this.stream = stream;
 		}
-
-#else
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MessageAttachment"/> class.
-		/// </summary>
-		/// <param name="fileName">The file name.</param>
-		/// <param name="encoding">The encoding.</param>
-		public MessageAttachment(string fileName, AttachmentEncoding encoding)
-		{
-			this.fileName = fileName;
-			this.encoding = encoding;
-		}
-		
-#endif
 		
 		/// <summary>
 		/// Gets the name of the file.
@@ -100,7 +76,6 @@ namespace Castle.Components.Common.EmailSender
 			get { return fileName; }
 		}
 		
-#if DOTNET2
 
 		/// <summary>
 		/// Gets the type of the media.
@@ -119,16 +94,5 @@ namespace Castle.Components.Common.EmailSender
 		{
 			get { return stream; }
 		}
-#else
-
-		/// <summary>
-		/// Gets the encoding.
-		/// </summary>
-		/// <value>The encoding.</value>
-		public AttachmentEncoding Encoding
-		{
-			get { return this.encoding; }
-		}
-#endif
 	}
 }
