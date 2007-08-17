@@ -14,8 +14,6 @@
 
 namespace Castle.ActiveRecord.Framework.Internal
 {
-	using System;
-
 	/// <summary>
 	/// For implementign the visitor pattern.
 	/// </summary>

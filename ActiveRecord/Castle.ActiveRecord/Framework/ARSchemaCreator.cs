@@ -18,7 +18,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Data;
-	using System.Diagnostics;
 	using System.IO;
 
 	using NHibernate.Cfg;
@@ -40,8 +39,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="config">The config.</param>
 		public ARSchemaCreator(Configuration config)
 		{
-			this.connectionProperties = config.Properties;
-			this.dialect = Dialect.GetDialect(connectionProperties);
+			connectionProperties = config.Properties;
+			dialect = Dialect.GetDialect(connectionProperties);
 		}
 
 		/// <summary>

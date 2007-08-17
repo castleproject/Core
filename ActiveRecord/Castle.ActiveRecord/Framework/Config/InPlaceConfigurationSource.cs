@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Framework.Config
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Configuration;
 	using System.Text.RegularExpressions;
 	using Castle.ActiveRecord.Framework.Scopes;
@@ -38,7 +39,7 @@ namespace Castle.ActiveRecord.Framework.Config
 	/// </summary>
 	public class InPlaceConfigurationSource : IConfigurationSource
 	{
-		private readonly IDictionary _type2Config = new Hashtable();
+		private readonly IDictionary<Type, IConfiguration> _type2Config = new Dictionary<Type, IConfiguration>();
 		private Type threadScopeInfoImplementation;
 		private Type sessionFactoryHolderImplementation;
 		private Type namingStrategyImplementation;
@@ -96,7 +97,9 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// <returns></returns>
 		public IConfiguration GetConfiguration(Type type)
 		{
-			return _type2Config[type] as IConfiguration;
+			IConfiguration configuration;
+			_type2Config.TryGetValue(type, out configuration);
+			return configuration;
 		}
 
 		/// <summary>
@@ -351,7 +354,7 @@ namespace Castle.ActiveRecord.Framework.Config
 			pluralizeTableNames = pluralize;
 		}
 
-		private IConfiguration ConvertToConfiguration(IDictionary properties)
+		private static IConfiguration ConvertToConfiguration(IDictionary properties)
 		{
 			MutableConfiguration conf = new MutableConfiguration("Config");
 
@@ -367,7 +370,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		/// Processes the configuration applying any substitutions.
 		/// </summary>
 		/// <param name="config">The configuration</param>
-		private void ProcessConfiguration(IConfiguration config)
+		private static void ProcessConfiguration(IConfiguration config)
 		{
 			const string ConnectionStringKey = "hibernate.connection.connection_string";
 

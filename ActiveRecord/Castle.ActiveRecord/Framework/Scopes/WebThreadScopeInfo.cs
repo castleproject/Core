@@ -47,7 +47,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 					throw new ScopeMachineryException(message);
 				}
 
-			    Stack stack = (Stack) current.Items[ActiveRecordCurrentStack];
+				Stack stack = (Stack)current.Items[ActiveRecordCurrentStack];
 
 				if (stack == null)
 				{

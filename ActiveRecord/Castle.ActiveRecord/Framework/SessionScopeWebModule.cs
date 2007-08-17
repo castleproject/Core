@@ -61,8 +61,8 @@ namespace Castle.ActiveRecord.Framework
 				return;
 			}
 
-			app.BeginRequest += new EventHandler(OnBeginRequest);
-			app.EndRequest += new EventHandler(OnEndRequest);
+			app.BeginRequest += OnBeginRequest;
+			app.EndRequest += OnEndRequest;
 			
 			isWebConfigured = (ActiveRecordBase.holder.ThreadScopeInfo is WebThreadScopeInfo);
 		}
@@ -79,7 +79,7 @@ namespace Castle.ActiveRecord.Framework
 		/// </summary>
 		/// <param name="sender">The sender.</param>
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void OnBeginRequest(object sender, EventArgs e)
+		private static void OnBeginRequest(object sender, EventArgs e)
 		{
 			if (isWebConfigured) 
 			{
@@ -96,7 +96,7 @@ namespace Castle.ActiveRecord.Framework
 		/// </summary>
 		/// <param name="sender">The sender.</param>
 		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		private void OnEndRequest(object sender, EventArgs e)
+		private static void OnEndRequest(object sender, EventArgs e)
 		{
 			SessionScope session = (SessionScope) HttpContext.Current.Items[SessionKey];
 

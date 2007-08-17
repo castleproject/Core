@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.ActiveRecord.Queries;
@@ -1026,7 +1027,7 @@ namespace Castle.ActiveRecord
 			}
 		}
 
-		private static void AddOrdersToCriteria(ICriteria criteria, Order[] orders)
+		private static void AddOrdersToCriteria(ICriteria criteria, IEnumerable<Order> orders)
 		{
 			if (orders != null)
 			{

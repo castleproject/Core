@@ -15,8 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Scopes
 {
 	using System;
-	using System.Collections;
-	
+	using System.Collections.Generic;
 	using Castle.ActiveRecord;
 	
 	using NHibernate;
@@ -33,7 +32,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// <summary>
 		/// Map between a key to its session
 		/// </summary>
-		protected Hashtable key2Session = new Hashtable();
+		protected IDictionary<object, ISession> key2Session = new Dictionary<object, ISession>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractScope"/> class.
@@ -92,7 +91,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// </returns>
 		public virtual bool IsKeyKnown(object key)
 		{
-			return key2Session.Contains(key);
+			return key2Session.ContainsKey(key);
 		}
 
 		/// <summary>
@@ -122,7 +121,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// </returns>
 		public virtual ISession GetSession(object key)
 		{
-			return key2Session[key] as ISession;
+			return key2Session[key];
 		}
 
 		/// <summary>
@@ -175,7 +174,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// Performs the disposal.
 		/// </summary>
 		/// <param name="sessions">The sessions.</param>
-		protected virtual void PerformDisposal(ICollection sessions)
+		protected virtual void PerformDisposal(ICollection<ISession> sessions)
 		{
 		}
 
@@ -185,7 +184,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// <param name="sessions">The sessions.</param>
 		/// <param name="flush">if set to <c>true</c> [flush].</param>
 		/// <param name="close">if set to <c>true</c> [close].</param>
-		protected internal void PerformDisposal(ICollection sessions, bool flush, bool close)
+		protected internal void PerformDisposal(ICollection<ISession> sessions, bool flush, bool close)
 		{
 			foreach(ISession session in sessions)
 			{
@@ -198,7 +197,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// Discards the sessions.
 		/// </summary>
 		/// <param name="sessions">The sessions.</param>
-		protected internal virtual void DiscardSessions(ICollection sessions)
+		protected internal virtual void DiscardSessions(ICollection<ISession> sessions)
 		{
 			foreach(ISession session in sessions)
 			{
@@ -232,7 +231,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// Gets the sessions.
 		/// </summary>
 		/// <returns></returns>
-		internal ICollection GetSessions()
+		internal ICollection<ISession> GetSessions()
 		{
 			return key2Session.Values;
 		}
@@ -243,9 +242,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// <param name="session">The session.</param>
 		private void RemoveSession(ISession session)
 		{
-			foreach(DictionaryEntry entry in key2Session)
+			foreach(KeyValuePair<object, ISession> entry in key2Session)
 			{
-				if (Object.ReferenceEquals(entry.Value, session))
+				if (ReferenceEquals(entry.Value, session))
 				{
 					session.Close();
 					key2Session.Remove(entry.Key);

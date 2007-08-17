@@ -15,7 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Data;
 	using System.IO;
 	using System.Reflection;
@@ -53,7 +53,7 @@ namespace Castle.ActiveRecord
 
 		private static bool isInitialized = false;
 
-		private static IDictionary registeredTypes;
+		private static IDictionary<Type, string> registeredTypes;
 
 		/// <summary>
 		/// This is saved so one can invoke <c>RegisterTypes</c> later
@@ -99,7 +99,7 @@ namespace Castle.ActiveRecord
 					throw new ArgumentNullException("types");
 				}
 
-				registeredTypes = new Hashtable();
+				registeredTypes = new Dictionary<Type, string>();
 
 				configSource = source;
 
@@ -131,11 +131,11 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize(Assembly assembly, IConfigurationSource source)
 		{
-			ArrayList list = new ArrayList();
+			List<Type> list = new List<Type>();
 
 			CollectValidActiveRecordTypesFromAssembly(assembly, list, source);
 
-			Initialize(source, (Type[]) list.ToArray(typeof(Type)));
+			Initialize(source, list.ToArray());
 		}
 
 		/// <summary>
@@ -144,14 +144,14 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void Initialize(Assembly[] assemblies, IConfigurationSource source)
 		{
-			ArrayList list = new ArrayList();
+			List<Type> list = new List<Type>();
 
 			foreach(Assembly assembly in assemblies)
 			{
 				CollectValidActiveRecordTypesFromAssembly(assembly, list, source);
 			}
 
-			Initialize(source, (Type[]) list.ToArray(typeof(Type)));
+			Initialize(source, list.ToArray());
 		}
 
 		/// <summary>
@@ -410,7 +410,7 @@ namespace Castle.ActiveRecord
 
 		private static ActiveRecordModelCollection BuildModels(ISessionFactoryHolder holder,
 															   IConfigurationSource source,
-															   Type[] types, bool ignoreProblematicTypes)
+															   IEnumerable<Type> types, bool ignoreProblematicTypes)
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
 
@@ -470,13 +470,13 @@ namespace Castle.ActiveRecord
 
 		private static bool ShouldIgnoreType(Type type)
 		{
-			return (registeredTypes.Contains(type) ||
+			return (registeredTypes.ContainsKey(type) ||
 					type == typeof(ActiveRecordBase) ||
 					type == typeof(ActiveRecordValidationBase) ||
 					type == typeof(ActiveRecordHooksBase));
 		}
 
-		private static bool IsTypeHierarchyBase(Type type)
+		private static bool IsTypeHierarchyBase(ICustomAttributeProvider type)
 		{
 			if (type.IsDefined(typeof(JoinedBaseAttribute), false))
 			{
@@ -575,7 +575,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Return true if the type has a [ActiveRecord] attribute
 		/// </summary>
-		private static bool IsActiveRecordType(Type type)
+		private static bool IsActiveRecordType(ICustomAttributeProvider type)
 		{
 			return type.IsDefined(typeof(ActiveRecordAttribute), false);
 		}
@@ -664,7 +664,7 @@ namespace Castle.ActiveRecord
 			}
 		}
 
-		private static void RegisterTypes(ISessionFactoryHolder holder, IConfigurationSource source, Type[] types,
+		private static void RegisterTypes(ISessionFactoryHolder holder, IConfigurationSource source, IEnumerable<Type> types,
 										  bool ignoreProblematicTypes)
 		{
 			lock(lockConfig)
@@ -739,7 +739,7 @@ namespace Castle.ActiveRecord
 		/// <param name="assembly">Assembly to retrieve types from</param>
 		/// <param name="list">Array to store retrieved types in</param>
 		/// <param name="source">IConfigurationSource to inspect AR base declarations from</param>
-		private static void CollectValidActiveRecordTypesFromAssembly(Assembly assembly, ArrayList list,
+		private static void CollectValidActiveRecordTypesFromAssembly(Assembly assembly, ICollection<Type> list,
 																	  IConfigurationSource source)
 		{
 			Type[] types = GetExportedTypesFromAssembly(assembly);

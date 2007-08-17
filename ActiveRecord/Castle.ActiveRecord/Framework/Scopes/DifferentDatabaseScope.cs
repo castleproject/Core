@@ -15,7 +15,7 @@
 namespace Castle.ActiveRecord.Framework.Scopes
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Data;
 
 	using NHibernate;
@@ -61,7 +61,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 				{
 					parentTransactionScope = (TransactionScope) parentScope;
 
-					parentTransactionScope.OnTransactionCompleted += new EventHandler(OnTransactionCompleted);
+					parentTransactionScope.OnTransactionCompleted += OnTransactionCompleted;
 				}
 				else
 				{
@@ -155,7 +155,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 				session = parentSimpleScope.GetSession(new KeyHolder(key, connection.ConnectionString));
 			}
 
-			session = session != null ? session : base.GetSession(key);
+			session = session ?? base.GetSession(key);
 
 			return session;
 		}
@@ -164,7 +164,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		/// Performs the disposal.
 		/// </summary>
 		/// <param name="sessions">The sessions.</param>
-		protected override void PerformDisposal(ICollection sessions)
+		protected override void PerformDisposal(ICollection<ISession> sessions)
 		{
 			if (parentTransactionScope == null && parentSimpleScope == null)
 			{
@@ -225,7 +225,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 			if (other != null)
 			{
-				return Object.ReferenceEquals(inner, other.inner) && 
+				return ReferenceEquals(inner, other.inner) && 
 				       connectionString == other.connectionString;
 			}
 

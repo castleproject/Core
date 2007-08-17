@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord
 		/// <c>true</c> and the row is not found</exception>
 		public static T FindByPrimaryKey(object id, bool throwOnNotFound)
 		{
-			return (T) ActiveRecordMediator.FindByPrimaryKey(typeof(T), id, throwOnNotFound);
+			return (T) FindByPrimaryKey(typeof(T), id, throwOnNotFound);
 		}
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace Castle.ActiveRecord
 		/// <param name="id">ID value</param>
 		public static T FindByPrimaryKey(object id)
 		{
-			return (T) ActiveRecordMediator.FindByPrimaryKey(typeof(T), id, true);
+			return (T) FindByPrimaryKey(typeof(T), id, true);
 		}
 
 		/// <summary>
@@ -65,7 +65,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
 		public static T FindFirst(Order[] orders, params ICriterion[] criterias)
 		{
-			return (T) ActiveRecordMediator.FindFirst(typeof(T), orders, criterias);
+			return (T) FindFirst(typeof(T), orders, criterias);
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
 		public static T FindFirst(params ICriterion[] criterias)
 		{
-			return (T) ActiveRecordMediator.FindFirst(typeof(T), criterias);
+			return (T) FindFirst(typeof(T), criterias);
 		}
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null.</c></returns>
 		public static T FindFirst(DetachedCriteria detachedCriteria, params Order[] orders)
 		{
-			return (T) ActiveRecordMediator.FindFirst(typeof(T), detachedCriteria, orders);
+			return (T) FindFirst(typeof(T), detachedCriteria, orders);
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
 		public static T FindFirst(DetachedCriteria criteria)
 		{
-			return (T)ActiveRecordMediator.FindFirst(typeof(T),criteria);
+			return (T)FindFirst(typeof(T),criteria);
 		}
 
 		/// <summary>
@@ -106,7 +106,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A instance the targetType or <c>null</c></returns>
 		public static T FindOne(params ICriterion[] criterias)
 		{
-			return (T) ActiveRecordMediator.FindOne(typeof(T), criterias);
+			return (T) FindOne(typeof(T), criterias);
 		}
 
 		/// <summary>
@@ -117,7 +117,7 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
 		public static T FindOne(DetachedCriteria criteria)
 		{
-			return (T)ActiveRecordMediator.FindOne(typeof(T), criteria);
+			return (T)FindOne(typeof(T), criteria);
 		}
 
 		/// <summary>
@@ -126,7 +126,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll()
 		{
-			return (T[]) ActiveRecordMediator.FindAll(typeof(T));
+			return (T[]) FindAll(typeof(T));
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll(Order[] orders, params ICriterion[] criterias)
 		{
-			return (T[])ActiveRecordMediator.FindAll(typeof(T), orders, criterias);
+			return (T[])FindAll(typeof(T), orders, criterias);
 		}
 
 		/// <summary>
@@ -149,7 +149,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		public static T[] FindAll(params ICriterion[] criterias)
 		{
-			return (T[])ActiveRecordMediator.FindAll(typeof(T), criterias);
+			return (T[])FindAll(typeof(T), criterias);
 		}
 
 		/// <summary>
@@ -157,7 +157,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static T[] FindAll(DetachedCriteria detachedCriteria, params Order[] orders)
 		{
-			return (T[])ActiveRecordMediator.FindAll(typeof(T), detachedCriteria, orders);
+			return (T[])FindAll(typeof(T), detachedCriteria, orders);
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static T[] SlicedFindAll(int firstResult, int maxResults, Order[] orders, params ICriterion[] criterias)
 		{
-			return (T[]) ActiveRecordMediator.SlicedFindAll(typeof(T), firstResult, maxResults, orders, criterias);
+			return (T[]) SlicedFindAll(typeof(T), firstResult, maxResults, orders, criterias);
 		}
 
 		/// <summary>
@@ -173,7 +173,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static T[] SlicedFindAll(int firstResult, int maxResults, params ICriterion[] criterias)
 		{
-			return (T[]) ActiveRecordMediator.SlicedFindAll(typeof(T), firstResult, maxResults, null, criterias);
+			return (T[]) SlicedFindAll(typeof(T), firstResult, maxResults, null, criterias);
 		}
 
 		/// <summary>
@@ -182,7 +182,7 @@ namespace Castle.ActiveRecord
 		public static T[] SlicedFindAll(int firstResult, int maxResults,
 													  DetachedCriteria criteria)
 		{
-			return (T[])ActiveRecordMediator.SlicedFindAll(typeof(T), firstResult, maxResults, criteria);
+			return (T[])SlicedFindAll(typeof(T), firstResult, maxResults, criteria);
 		}
 
 		/// <summary>
@@ -190,7 +190,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void DeleteAll()
 		{
-			ActiveRecordMediator.DeleteAll(typeof(T));
+			DeleteAll(typeof(T));
 		}
 
 		/// <summary>
@@ -198,7 +198,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void DeleteAll(string where)
 		{
-			ActiveRecordMediator.DeleteAll(typeof(T), where);
+			DeleteAll(typeof(T), where);
 		}
 
 		/// <summary>

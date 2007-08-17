@@ -60,24 +60,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private TimestampModel timestamp;
 		private VersionModel version;
 
-		private IList imports = new ArrayList();
-		private IList hasManyToAny = new ArrayList();
-		private IList anys = new ArrayList();
-		private IList properties = new ArrayList();
-		private IList fields = new ArrayList();
-		private IList componentParent = new ArrayList();
-		private IList classes = new ArrayList();
-		private IList joinedclasses = new ArrayList();
-		private IList components = new ArrayList();
-		private IList belongsTo = new ArrayList();
-		private IList hasMany = new ArrayList();
-		private IList hasAndBelongsToMany = new ArrayList();
-		private IList oneToOne = new ArrayList();
-		private IList collectionIds = new ArrayList();
-		private IList hilos = new ArrayList();
-		private IList notMappedProperties = new ArrayList();
-		private IList validators = new ArrayList();
-		private IList compositeUserType = new ArrayList();
+		private readonly IList imports = new ArrayList();
+		private readonly IList hasManyToAny = new ArrayList();
+		private readonly IList anys = new ArrayList();
+		private readonly IList properties = new ArrayList();
+		private readonly IList fields = new ArrayList();
+		private readonly IList componentParent = new ArrayList();
+		private readonly IList classes = new ArrayList();
+		private readonly IList joinedclasses = new ArrayList();
+		private readonly IList components = new ArrayList();
+		private readonly IList belongsTo = new ArrayList();
+		private readonly IList hasMany = new ArrayList();
+		private readonly IList hasAndBelongsToMany = new ArrayList();
+		private readonly IList oneToOne = new ArrayList();
+		private readonly IList collectionIds = new ArrayList();
+		private readonly IList hilos = new ArrayList();
+		private readonly IList notMappedProperties = new ArrayList();
+		private readonly IList validators = new ArrayList();
+		private readonly IList compositeUserType = new ArrayList();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordModel"/> class.

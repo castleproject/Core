@@ -30,7 +30,7 @@ namespace Castle.ActiveRecord.Framework
 		/// <summary>
 		/// Create the 
 		/// </summary>
-		public static CreateInterceptor Create = new CreateInterceptor(DefaultCreateInterceptor);
+		public static CreateInterceptor Create = DefaultCreateInterceptor;
 
 		private static IInterceptor DefaultCreateInterceptor()
 		{

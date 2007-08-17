@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class SimpleQuery : HqlBasedQuery
 	{
-		private Type returnType;
+		private readonly Type returnType;
 
 		#region Constructors
 		

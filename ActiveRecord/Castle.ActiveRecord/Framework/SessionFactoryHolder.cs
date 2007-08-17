@@ -31,9 +31,9 @@ namespace Castle.ActiveRecord.Framework
 	/// </remarks>
 	public class SessionFactoryHolder : MarshalByRefObject, ISessionFactoryHolder
 	{
-		private Hashtable type2Conf = Hashtable.Synchronized(new Hashtable());
-		private Hashtable type2SessFactory = Hashtable.Synchronized(new Hashtable());
-		private ReaderWriterLock readerWriterLock = new ReaderWriterLock();
+		private readonly Hashtable type2Conf = Hashtable.Synchronized(new Hashtable());
+		private readonly Hashtable type2SessFactory = Hashtable.Synchronized(new Hashtable());
+		private readonly ReaderWriterLock readerWriterLock = new ReaderWriterLock();
 		private IThreadScopeInfo threadScopeInfo;
 
 		/// <summary>
@@ -216,11 +216,7 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="session"></param>
 		public void ReleaseSession(ISession session)
 		{
-			if (threadScopeInfo.HasInitializedScope)
-			{
-				ReleaseScopedSession(session);
-			}
-			else
+			if (!threadScopeInfo.HasInitializedScope)
 			{
 				session.Flush();
 				session.Dispose();
@@ -289,10 +285,6 @@ namespace Castle.ActiveRecord.Framework
 
 				return session;
 			}
-		}
-
-		private void ReleaseScopedSession(ISession session)
-		{
 		}
 	}
 }

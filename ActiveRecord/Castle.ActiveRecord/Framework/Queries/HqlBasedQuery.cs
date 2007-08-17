@@ -44,7 +44,7 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class HqlBasedQuery : ActiveRecordBaseQuery
 	{
-		private QueryLanguage queryLanguage;
+		private readonly QueryLanguage queryLanguage;
 		private String query;
 
 		/// <summary>

@@ -14,9 +14,9 @@
 
 namespace Castle.ActiveRecord
 {
-	using System.Collections;
-
+	using System.Collections.Generic;
 	using Castle.ActiveRecord.Framework.Scopes;
+	using NHibernate;
 
 	/// <summary>
 	/// Implementation of <see cref="ISessionScope"/> to 
@@ -72,7 +72,7 @@ namespace Castle.ActiveRecord
 		/// Performs the disposal.
 		/// </summary>
 		/// <param name="sessions">The sessions.</param>
-		protected override void PerformDisposal(ICollection sessions)
+		protected override void PerformDisposal(ICollection<ISession> sessions)
 		{
 			if (hasSessionError || FlushAction == FlushAction.Never)
 			{
@@ -88,7 +88,7 @@ namespace Castle.ActiveRecord
 		/// This is called when an action on a session fails
 		/// </summary>
 		/// <param name="session">The session</param>
-		public override void FailSession(NHibernate.ISession session)
+		public override void FailSession(ISession session)
 		{
 			hasSessionError = true;
 		}

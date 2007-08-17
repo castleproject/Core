@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private const String NullableIType = "Nullables.NHibernate.{0}Type, Nullables.NHibernate";
 
-		private static Type tINullableType;
+		private static readonly Type tINullableType;
 
 		static NHibernateNullablesSupport()
 		{

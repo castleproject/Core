@@ -60,7 +60,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 					}
 				}
 
-				Stack contextstack = (Stack) current.Items[ActiveRecordCurrentStack];
+				Stack contextstack = (Stack)current.Items[ActiveRecordCurrentStack];
 
 				if (contextstack == null)
 				{

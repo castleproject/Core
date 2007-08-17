@@ -32,7 +32,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
-		private static IValidatorRegistry validatorRegistry = new CachedValidationRegistry();
+		private static readonly IValidatorRegistry validatorRegistry = new CachedValidationRegistry();
 
 		/// <summary>
 		/// Creates a <see cref="ActiveRecordModel"/> from the specified type.
@@ -78,7 +78,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <param name="type">The type.</param>
-		private void PopulateModel(ActiveRecordModel model, Type type)
+		private static void PopulateModel(ActiveRecordModel model, Type type)
 		{
 			ProcessActiveRecordAttribute(type, model);
 
@@ -91,7 +91,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			ProcessFields(type, model);
 		}
 
-		private void ProcessImports(Type type, ActiveRecordModel model)
+		private static void ProcessImports(Type type, ActiveRecordModel model)
 		{
 			object[] attrs = type.GetCustomAttributes(typeof(ImportAttribute), false);
 
@@ -102,12 +102,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private void ProcessJoinedBaseAttribute(Type type, ActiveRecordModel model)
+		private static void ProcessJoinedBaseAttribute(Type type, ActiveRecordModel model)
 		{
 			model.IsJoinedSubClassBase = type.IsDefined(typeof(JoinedBaseAttribute), false);
 		}
 
-		private void PopulateActiveRecordAttribute(ActiveRecordAttribute attribute, ActiveRecordModel model)
+		private static void PopulateActiveRecordAttribute(ActiveRecordAttribute attribute, ActiveRecordModel model)
 		{
 			model.ActiveRecordAtt = attribute;
 
@@ -150,7 +150,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return name.Substring(0, index);
 		}
 
-		private void ProcessFields(Type type, ActiveRecordModel model)
+		private static void ProcessFields(Type type, ActiveRecordModel model)
 		{
 			//Check persistent fields of the base class as well
 			if (ShouldCheckBase(type))
@@ -171,7 +171,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private void ProcessProperties(Type type, ActiveRecordModel model)
+		private static void ProcessProperties(Type type, ActiveRecordModel model)
 		{
 			// Check persistent properties of the base class as well
 			if (ShouldCheckBase(type))
@@ -184,8 +184,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			foreach(PropertyInfo prop in props)
 			{
 				bool isArProperty = false;
-				AnyModel anyModel = null;
-				HasManyToAnyModel hasManyToAnyModel = null;
+				AnyModel anyModel;
+				HasManyToAnyModel hasManyToAnyModel;
 
 				object[] valAtts = prop.GetCustomAttributes(typeof(AbstractValidationAttribute), true);
 
@@ -390,7 +390,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-		private void CollectMetaValues(IList metaStore, PropertyInfo prop)
+		private static void CollectMetaValues(IList metaStore, PropertyInfo prop)
 		{
 			if (metaStore == null)
 				throw new ArgumentNullException("metaStore");
@@ -457,7 +457,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return isRootType;
 		}
 
-		private void ProcessActiveRecordAttribute(Type type, ActiveRecordModel model)
+		private static void ProcessActiveRecordAttribute(Type type, ActiveRecordModel model)
 		{
 			object[] attrs = type.GetCustomAttributes(typeof(ActiveRecordAttribute), false);
 

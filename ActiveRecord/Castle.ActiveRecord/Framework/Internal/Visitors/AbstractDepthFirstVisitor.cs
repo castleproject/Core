@@ -16,14 +16,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Base class for visitors that needs to traverse the entire Active Record Model
 	/// </summary>
 	public abstract class AbstractDepthFirstVisitor : IVisitor
 	{
-		private IDictionary visited = new HybridDictionary(100);
+		private readonly IDictionary<ActiveRecordModel, String> visited = new Dictionary<ActiveRecordModel, String>(100);
 
 		/// <summary>
 		/// Visits the node.
@@ -54,7 +54,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model">The model.</param>
 		public virtual void VisitModel(ActiveRecordModel model)
 		{
-			if (!visited.Contains(model))
+			if (!visited.ContainsKey(model))
 			{
 				visited.Add(model, String.Empty);
 			}

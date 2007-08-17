@@ -14,8 +14,6 @@
 
 namespace Castle.ActiveRecord.Framework.Scopes
 {
-	using System;
-
 	internal class ScopeUtil
 	{
 		internal static ISessionScope FindPreviousScope(ISessionScope thisScope, 
@@ -41,7 +39,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 				if (!preferenceForTransactional) break;
 
-				if (preferenceForTransactional && scope.ScopeType == SessionScopeType.Transactional)
+				if (scope.ScopeType == SessionScopeType.Transactional)
 				{
 					return scope;
 				}

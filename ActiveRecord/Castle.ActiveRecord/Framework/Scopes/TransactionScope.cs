@@ -15,8 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Data;
 	using NHibernate;
@@ -68,10 +67,10 @@ namespace Castle.ActiveRecord
 		private readonly TransactionMode mode;
 		private readonly IsolationLevel isolationLevel;
 		private readonly OnDispose onDisposeBehavior;
-		private IDictionary transactions = new HybridDictionary();
-		private TransactionScope parentTransactionScope;
-		private AbstractScope parentSimpleScope;
-		private EventHandlerList events = new EventHandlerList();
+		private readonly IDictionary<ISession, ITransaction> transactions = new Dictionary<ISession, ITransaction>();
+		private readonly TransactionScope parentTransactionScope;
+		private readonly AbstractScope parentSimpleScope;
+		private readonly EventHandlerList events = new EventHandlerList();
 		private bool rollbackOnly, setForCommit;
 
 		/// <summary>
@@ -274,7 +273,7 @@ namespace Castle.ActiveRecord
 				session = parentSimpleScope.GetSession(key);
 			}
 
-			session = session != null ? session : base.GetSession(key);
+			session = session ?? base.GetSession(key);
 
 			EnsureHasTransaction(session);
 
@@ -287,7 +286,7 @@ namespace Castle.ActiveRecord
 		/// <param name="session">The session.</param>
 		protected internal void EnsureHasTransaction(ISession session)
 		{
-			if (!transactions.Contains(session))
+			if (!transactions.ContainsKey(session))
 			{
 				session.FlushMode = FlushMode.Commit;
 
@@ -325,7 +324,7 @@ namespace Castle.ActiveRecord
 		/// Dispose of this scope
 		/// </summary>
 		/// <param name="sessions">The sessions.</param>
-		protected override void PerformDisposal(ICollection sessions)
+		protected override void PerformDisposal(ICollection<ISession> sessions)
 		{
 			if (!setForCommit && !rollbackOnly) // Neither VoteCommit or VoteRollback were called
 			{
@@ -405,7 +404,7 @@ namespace Castle.ActiveRecord
 		/// Discards the sessions.
 		/// </summary>
 		/// <param name="sessions">The sessions.</param>
-		protected internal override void DiscardSessions(ICollection sessions)
+		protected internal override void DiscardSessions(ICollection<ISession> sessions)
 		{
 			if (parentSimpleScope != null)
 			{

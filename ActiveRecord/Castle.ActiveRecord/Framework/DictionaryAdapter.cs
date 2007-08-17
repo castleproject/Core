@@ -23,10 +23,10 @@ namespace Castle.ActiveRecord.Framework
 	/// </summary>
 	public class DictionaryAdapter : IDictionary
 	{
-		private int _tablesize;
-		private Entry[] _table;
-		private object[] _values;
-		private string[] _keys;
+		private readonly int _tablesize;
+		private readonly Entry[] _table;
+		private readonly object[] _values;
+		private readonly string[] _keys;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DictionaryAdapter"/> class.
@@ -72,8 +72,8 @@ namespace Castle.ActiveRecord.Framework
 		/// </summary>
 		public class Entry
 		{
-			int index;
-			String key; 
+			readonly int index;
+			readonly String key; 
 			Entry nextEntry;
 
 			/// <summary>

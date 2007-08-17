@@ -43,9 +43,9 @@ namespace Castle.ActiveRecord.Queries
 	/// </example>
 	public class ProjectionQuery<ARType, TResultItem> : IActiveRecordQuery
 	{
-		private ProjectionList projections;
-		private DetachedCriteria detachedCriteria;
-		private Order[] orders;
+		private readonly ProjectionList projections;
+		private readonly DetachedCriteria detachedCriteria;
+		private readonly Order[] orders;
 		private int? first, max;
 
 		/// <summary>
@@ -56,8 +56,8 @@ namespace Castle.ActiveRecord.Queries
 		public ProjectionQuery(ProjectionList projections)
 		{
 			this.projections = projections;
-			this.orders = new Order[0];
-			this.detachedCriteria = DetachedCriteria.For(RootType);
+			orders = new Order[0];
+			detachedCriteria = DetachedCriteria.For(RootType);
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			this.projections = projections;
 			this.detachedCriteria = detachedCriteria;
-			this.orders = new Order[] { order };
+			orders = new Order[] { order };
 		}
 
 		/// <summary>
@@ -102,8 +102,8 @@ namespace Castle.ActiveRecord.Queries
 		public ProjectionQuery(Order order, ProjectionList projections)
 		{
 			this.projections = projections;
-			this.detachedCriteria = DetachedCriteria.For(RootType);
-			this.orders = new Order[] { order };
+			detachedCriteria = DetachedCriteria.For(RootType);
+			orders = new Order[] { order };
 		}
 
 		/// <summary>
@@ -117,7 +117,7 @@ namespace Castle.ActiveRecord.Queries
 		{
 			this.projections = projections;
 			this.detachedCriteria = detachedCriteria;
-			this.orders = new Order[0];
+			orders = new Order[0];
 		}
 
 		/// <summary>

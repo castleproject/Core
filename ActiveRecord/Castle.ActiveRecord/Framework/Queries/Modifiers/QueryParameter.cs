@@ -42,7 +42,7 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 			if (name == null)
 				throw new ArgumentNullException("name");
 
-			this.flags = ParameterFlags.Named;
+			flags = ParameterFlags.Named;
 			this.name = name;
 			this.value = value;
 		}
@@ -71,7 +71,7 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 			if (position < 0)
 				throw new ArgumentException("Position must be equal or greater than 0", "position");
 
-			this.flags = ParameterFlags.Positional;
+			flags = ParameterFlags.Positional;
 			this.position = position;
 			this.value = value;
 		}
@@ -99,7 +99,7 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		public QueryParameter(String name, ICollection value, IType type)
 			: this(name, (object) value, type)
 		{
-			this.flags |= ParameterFlags.List;
+			flags |= ParameterFlags.List;
 		}
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace Castle.ActiveRecord.Queries.Modifiers
 		public QueryParameter(String name, ICollection value)
 			: this(name, (object) value)
 		{
-			this.flags |= ParameterFlags.List;
+			flags |= ParameterFlags.List;
 		}
 		#endregion
 

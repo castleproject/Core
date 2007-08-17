@@ -101,7 +101,7 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		public T[] Execute()
 		{
-			return ActiveRecordBase<T>.ExecuteQuery2<T[]>(this);
+			return ActiveRecordBase<T>.ExecuteQuery2(this);
 		}
 
 		/// <summary>

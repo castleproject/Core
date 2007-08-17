@@ -15,16 +15,12 @@
 namespace Castle.ActiveRecord.Queries
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Framework.Config;
 
 	using NHibernate;
-	using NHibernate.Cfg;
-	using NHibernate.Expression;
 
 	//TODO: Test CountQuery and CriteriaQuery
 	//I (the author) suspect that this implementation will fail for CriteriaBased queries like CountQuery and CriteriaQuery
@@ -34,8 +30,8 @@ namespace Castle.ActiveRecord.Queries
 	/// </summary>
 	public class ActiveRecordMultiQuery : IActiveRecordQuery
 	{
-		Type _rootType;
-		List<ActiveRecordBaseQuery> _queryList = new List<ActiveRecordBaseQuery>();
+		readonly Type _rootType;
+		readonly List<ActiveRecordBaseQuery> _queryList = new List<ActiveRecordBaseQuery>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActiveRecordMultiQuery"/> class.
@@ -81,7 +77,7 @@ namespace Castle.ActiveRecord.Queries
 		/// </summary>
 		/// <param name="session">The session to execute the query in.</param>
 		/// <returns>an array of results, one for each query added</returns>
-		public object Execute(NHibernate.ISession session)
+		public object Execute(ISession session)
 		{
 			// create a multi-query
 			IMultiQuery multiQuery = session.CreateMultiQuery();
@@ -107,7 +103,7 @@ namespace Castle.ActiveRecord.Queries
 		/// Enumerates over the result of the query.
 		/// Note: Only use if you expect most of your values to already exist in the second level cache!
 		/// </summary>
-		public System.Collections.IEnumerable Enumerate(NHibernate.ISession session)
+		public System.Collections.IEnumerable Enumerate(ISession session)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}
