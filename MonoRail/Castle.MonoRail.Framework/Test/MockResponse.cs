@@ -33,12 +33,14 @@ namespace Castle.MonoRail.Framework.Test
 		private bool isClientConnected = false;
 		private TextWriter output = new StringWriter();
 		private Stream outputStream = new MemoryStream();
+		private TextWriter outputStreamWriter;
 		private HttpCachePolicy cachePolicy = null;
 		private NameValueCollection headers = new NameValueCollection();
 
 		public MockResponse(IDictionary cookies)
 		{
 			this.cookies = cookies;
+		    outputStreamWriter = new StreamWriter (outputStream);
 		}
 
 		public virtual string RedirectedTo
@@ -60,42 +62,46 @@ namespace Castle.MonoRail.Framework.Test
 
 		public virtual void BinaryWrite(byte[] buffer)
 		{
-			throw new NotImplementedException();
+			outputStream.Write (buffer, 0, buffer.Length);
 		}
 
 		public virtual void BinaryWrite(Stream stream)
 		{
-			throw new NotImplementedException();
+			byte[] buffer = new byte[stream.Length];
+
+			stream.Read (buffer, 0, buffer.Length);
+
+			BinaryWrite (buffer);
 		}
 
 		public virtual void Clear()
 		{
-			throw new NotImplementedException();
+			outputStream.SetLength (0);
 		}
 
 		public virtual void ClearContent()
 		{
-			throw new NotImplementedException();
+			outputStreamWriter.Flush ();
 		}
 
 		public virtual void Write(string s)
 		{
-			throw new NotImplementedException();
+			outputStreamWriter.Write (s);
 		}
 
 		public virtual void Write(object obj)
 		{
-			throw new NotImplementedException();
-		}
+			outputStreamWriter.Write (obj);
+		}       	
 
 		public virtual void Write(char ch)
 		{
-			throw new NotImplementedException();
+			outputStreamWriter.Write (ch);
 		}
 
 		public virtual void Write(char[] buffer, int index, int count)
 		{
-			throw new NotImplementedException();
+			outputStreamWriter.Write (buffer, index, count);
 		}
 
 		public virtual void WriteFile(string fileName)
@@ -105,12 +111,12 @@ namespace Castle.MonoRail.Framework.Test
 
 		public virtual void Redirect(string controller, string action)
 		{
-			throw new NotImplementedException();
+			Redirect(BuildMockUrl(null, controller, action));
 		}
 
 		public virtual void Redirect(string area, string controller, string action)
 		{
-			throw new NotImplementedException();
+			Redirect(BuildMockUrl(area, controller, action));
 		}
 
 		public virtual void Redirect(string url)
@@ -121,7 +127,7 @@ namespace Castle.MonoRail.Framework.Test
 
 		public virtual void Redirect(string url, bool endProcess)
 		{
-			throw new NotImplementedException();
+			Redirect(url);
 		}
 
 		public virtual void CreateCookie(string name, string value)
@@ -194,5 +200,19 @@ namespace Castle.MonoRail.Framework.Test
 		}
 
 		#endregion
+
+		private string BuildMockUrl(string area, string controller, string action)
+		{
+			string mockUrl = "/";
+
+			if (area != null)
+			{
+				mockUrl += area + "/";
+			}
+
+			mockUrl += controller + "/" + action + ".rails";
+
+			return mockUrl;
+		}
 	}
 }

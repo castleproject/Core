@@ -4,6 +4,9 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied patch by Oleg Snurnikov fixing MR-319
+  "MockResponse - basic implementation of Redirect, Write, BinaryWrite and Clear overloads"
+
 - Applied patch by Chirs Ortman fixing MR-296
   "Dont get validation summary when binding with AR attribute but controller inherits smart dispatcher controller"
 
