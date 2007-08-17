@@ -1,6 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+// Copyright 2004-2007 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace Castle.ActiveRecord.Framework.Internal
 {
@@ -11,8 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
     ///</summary>
     public class DependentObjectModel : IVisitable
     {
-        private readonly PropertyInfo propInfo;
-        private readonly HasManyAttribute hasManyAtt;
+    	private readonly HasManyAttribute hasManyAtt;
         private readonly ActiveRecordModel dependentObjectModel;
 
 
@@ -24,8 +33,7 @@ namespace Castle.ActiveRecord.Framework.Internal
         /// <param name="dependentObjectModel">The nested model.</param>
         public DependentObjectModel(PropertyInfo propInfo, HasManyAttribute hasManyAtt, ActiveRecordModel dependentObjectModel)
         {
-            this.propInfo = propInfo;
-            this.dependentObjectModel = dependentObjectModel;
+        	this.dependentObjectModel = dependentObjectModel;
             this.hasManyAtt = hasManyAtt;
         }
 
