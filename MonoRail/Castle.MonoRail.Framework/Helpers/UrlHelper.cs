@@ -28,27 +28,40 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string For(IDictionary parameters)
 		{
+			SetEncodeDefault(parameters);
 			return Controller.UrlBuilder.BuildUrl(Controller.Context.UrlInfo, parameters);
 		}
 
 		public string Link(string innerContent, IDictionary parameters)
 		{
+			SetEncodeDefault(parameters);
 			return "<a href=\"" + For(parameters) + "\">" + innerContent + "</a>";
 		}
 
 		public string Link(string innerContent, IDictionary parameters, IDictionary anchorAttributes)
 		{
+			SetEncodeDefault(parameters);
 			return "<a " + GetAttributes(anchorAttributes) + " href=\"" + For(parameters) + "\">" + innerContent + "</a>";
 		}
 
 		public string ButtonLink(string innerContent, IDictionary parameters)
 		{
+			SetEncodeDefault(parameters);
 			return "<button type=\"button\" onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
 		}
 
 		public string ButtonLink(string innerContent, IDictionary parameters, IDictionary anchorAttributes)
 		{
+			SetEncodeDefault(parameters);
 			return "<button type=\"button\"" + GetAttributes(anchorAttributes) + " onclick=\"javascript:window.location.href = '" + For(parameters) + "'\">" + innerContent + "</button>";
+		}
+
+		private static void SetEncodeDefault(IDictionary parameters)
+		{
+			if (!parameters.Contains("encode"))
+			{
+				parameters["encode"] = "true";
+			}
 		}
 	}
 }

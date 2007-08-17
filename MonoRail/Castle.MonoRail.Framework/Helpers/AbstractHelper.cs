@@ -296,6 +296,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
 		public string JavaScriptEscape(string content)
 		{
+			if (string.IsNullOrEmpty(content)) return content;
+
 			return controller.Context.Server.JavaScriptEscape(content);
 		}
 

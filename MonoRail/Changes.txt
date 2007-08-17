@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Now if the param encode wasn't set, UrlHelper sets it to true.
+
 - Applied patch by Oleg Snurnikov fixing MR-319
   "MockResponse - basic implementation of Redirect, Write, BinaryWrite and Clear overloads"
 
