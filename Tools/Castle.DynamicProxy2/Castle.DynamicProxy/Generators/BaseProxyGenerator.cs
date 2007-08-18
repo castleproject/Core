@@ -1360,7 +1360,10 @@ namespace Castle.DynamicProxy.Generators
 					continue;
 				}
 
-				if (method.IsSpecialName)
+				if (method.IsSpecialName
+					// This is here so we can proxy COM Types built in VB6, where properties
+					// are let_Foo and set_Foo.
+					&& method.Name.StartsWith("let_") == false)
 				{
 					continue;
 				}
