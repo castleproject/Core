@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
-
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Reflection;
+	using System.Collections;
 	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.BugsReported;
@@ -71,16 +70,20 @@ namespace Castle.DynamicProxy.Tests
 				typeof(ServiceClass), new StandardInterceptor());
 		}
 
+#if !MONO
+
 		[Test, ExpectedException(typeof(GeneratorException), "Type is not public, so a proxy " +
 		                                                     "cannot be generated. Type: System.AppDomainInitializerInfo")]
 		public void ProxyForNonPublicClass()
 		{
-			//have to use a type that is not from this assembly, because it is marked as internals visible to 
-			//DynamicProxy2
+			// have to use a type that is not from this assembly, because it is marked as internals visible to 
+			// DynamicProxy2
 
 			object proxy = generator.CreateClassProxy(
 				Type.GetType("System.AppDomainInitializerInfo, mscorlib"), new StandardInterceptor());
 		}
+		
+#endif
 
 		[Test]
 		public void ProxyForClassWithIndexer()
@@ -100,6 +103,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("set_Item get_Item ", logger.LogContents);
 		}
 
+#if !MONO
+
 		[Test]
 		public void ClassWithDifferentAccessLevelOnProperties()
 		{
@@ -116,6 +121,8 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual("10 11 12 13 name", type.ToString());
 		}
+		
+#endif
 
 		[Test]
 		public void ClassWithInheritance()

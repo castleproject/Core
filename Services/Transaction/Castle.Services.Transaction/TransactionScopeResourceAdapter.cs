@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !MONO
+
 namespace Castle.Services.Transaction
 {
 	using System.Transactions;
@@ -85,3 +87,5 @@ namespace Castle.Services.Transaction
 		}
 	}
 }
+
+#endif

@@ -112,6 +112,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("set_Item get_Item ", logger.LogContents);
 		}
 
+#if !MONO
+
 		[Test]
 		public void ProxyWithGenericArgumentsAndMethodGenericArguments()
 		{
@@ -318,5 +320,7 @@ namespace Castle.DynamicProxy.Tests
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
 			object o = generator.CreateClassProxy(typeof(GenClassWithGenReturn<,>), interceptor);
 		}
+
+#endif
 	}
 }

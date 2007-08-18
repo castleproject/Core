@@ -54,6 +54,8 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual(original, serializedProxy.Current);
 		}
 
+#if !MONO
+
 		[Test]
 		public void ProxySerializationWhileOverridingExplicitInterface()
 		{
@@ -64,7 +66,7 @@ namespace Castle.DynamicProxy.Test
 			MyExplicitISerializable2 serializedProxy = (MyExplicitISerializable2) SerializableClassTestCase.SerializeAndDeserialize(proxy);
 			Assert.AreEqual(proxy.Info, serializedProxy.Info);
 		}
-
+		
 		[Test]
 		public void ExplicitISerializeDoes_NOT_CallToBaseImplementation()
 		{
@@ -75,6 +77,8 @@ namespace Castle.DynamicProxy.Test
 			MyExplicitISerializable3 serializedProxy = (MyExplicitISerializable3) SerializableClassTestCase.SerializeAndDeserialize(proxy);
 			Assert.IsFalse( (proxy.Info+"_Serialized").Equals( serializedProxy.Info ) );
 		}
+
+#endif
 	}
 
 	[Serializable]

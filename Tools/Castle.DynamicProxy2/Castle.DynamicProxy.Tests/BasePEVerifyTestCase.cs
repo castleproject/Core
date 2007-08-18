@@ -74,6 +74,14 @@ namespace Castle.DynamicProxy.Tests
 				Assert.Fail("PeVerify reported error(s): " + Environment.NewLine + processOutput, result);
 			}
 		}
+
+#else
+
+		[TearDown]
+		public virtual void TearDown ()
+		{
+		}
+
 #endif
 	}
 }

@@ -129,7 +129,7 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
-		void AddComponent<I, T>() where T : I;
+		void AddComponent<I, T>() where T : class;
 
 		/// <summary>
 		/// Adds a component to be managed by the container
@@ -137,7 +137,7 @@ namespace Castle.Windsor
 		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
 		/// <param name="key">The key by which the component gets indexed.</param>
-		void AddComponent<I, T>(String key) where T : I;
+		void AddComponent<I, T>(String key) where T : class;
 
 		/// <summary>
 		/// Adds a component to be managed by the container
@@ -146,7 +146,7 @@ namespace Castle.Windsor
 		/// <typeparam name="I">The service <see cref="Type"/> that the component implements.</typeparam>
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		void AddComponentWithLifestyle<I, T>(LifestyleType lifestyle) where T : I;
+		void AddComponentWithLifestyle<I, T>(LifestyleType lifestyle) where T : class;
 
 		/// <summary>
 		/// Adds a component to be managed by the container
@@ -155,7 +155,7 @@ namespace Castle.Windsor
 		/// <typeparam name="T">The <see cref="Type"/> to manage.</typeparam>
 		/// <param name="key">The key by which the component gets indexed.</param>
 		/// <param name="lifestyle">The <see cref="LifestyleType"/> with which to manage the component.</param>
-		void AddComponentWithLifestyle<I, T>(String key, LifestyleType lifestyle) where T : I;
+		void AddComponentWithLifestyle<I, T>(String key, LifestyleType lifestyle) where T : class;
 
 		/// <summary>
 		/// Adds a concrete class as a component and specify the extended properties.
@@ -184,7 +184,7 @@ namespace Castle.Windsor
 		/// <typeparam name="I"></typeparam>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="extendedProperties"></param>
-		void AddComponentWithLifestyle<I, T>(IDictionary extendedProperties) where T : I;
+		void AddComponentWithLifestyle<I, T>(IDictionary extendedProperties) where T : class;
 
 		/// <summary>
 		/// Adds a concrete class and an interface 
@@ -195,7 +195,7 @@ namespace Castle.Windsor
 		/// <typeparam name="T"></typeparam>
 		/// <param name="key"></param>
 		/// <param name="extendedProperties"></param>
-		void AddComponentWithLifestyle<I, T>(String key, IDictionary extendedProperties) where T : I;
+		void AddComponentWithLifestyle<I, T>(String key, IDictionary extendedProperties) where T : class;
 
 		/// <summary>
 		/// Returns a component instance by the key

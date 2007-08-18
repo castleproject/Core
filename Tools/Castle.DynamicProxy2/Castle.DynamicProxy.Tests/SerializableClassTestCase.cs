@@ -29,6 +29,8 @@ namespace Castle.DynamicProxy.Test
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
+	
+#if !MONO
 
 	[TestFixture]
 	public class SerializableClassTestCase : BasePEVerifyTestCase
@@ -598,4 +600,6 @@ namespace Castle.DynamicProxy.Test
 			Assert.IsNotNull (options2.Selector);
 		}
 	}
+	
+#endif
 }

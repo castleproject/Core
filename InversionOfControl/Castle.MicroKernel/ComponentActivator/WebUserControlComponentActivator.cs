@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !MONO
+
 namespace Castle.MicroKernel.ComponentActivator
 {
 	using System;
@@ -129,3 +131,5 @@ namespace Castle.MicroKernel.ComponentActivator
 		}
 	}
 }
+
+#endif

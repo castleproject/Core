@@ -61,6 +61,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame (two, four);
 		}
 
+#if !MONO
+
 		[Test]
 		public void ImplicitModulePaths ()
 		{
@@ -75,7 +77,7 @@ namespace Castle.DynamicProxy.Tests
 					scope.ObtainDynamicModuleWithWeakName ().FullyQualifiedName);
 			Assert.IsNull (scope.WeakNamedModuleDirectory);
 		}
-
+		
 		[Test]
 		public void ExplicitModulePaths ()
 		{
@@ -97,6 +99,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual (@"d:\Bar\WeakModule.dll", scope.ObtainDynamicModuleWithWeakName ().FullyQualifiedName);
 			Assert.AreEqual (@"d:\Bar", scope.WeakNamedModuleDirectory);
 		}
+
+#endif
 
 		private static void CheckSignedSavedAssembly (string path)
 		{

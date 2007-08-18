@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests
 		public void AutomaticDefaultConstructorGeneration ()
 		{
 			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
-			Type t = emitter.BuildType ();
+			Type t = emitter.BuildType();
 			Activator.CreateInstance (t);
 		}
 

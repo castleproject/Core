@@ -136,7 +136,11 @@ namespace Castle.Services.Transaction
 
 				if (distributedTransaction)
 				{
+#if MONO
+					throw new TransactionException("Distributed transactions are not supported on Mono");
+#else
 					transaction.Enlist(new TransactionScopeResourceAdapter(transactionMode, isolationMode));
+#endif
 				}
 
 				RaiseTransactionCreated(transaction, transactionMode, isolationMode, distributedTransaction);

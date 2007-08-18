@@ -69,6 +69,8 @@ namespace Castle.DynamicProxy.Tests
 			{
 			}
 		}
+		
+#if !MONO
 
 		[Test]
 		public void InternalConstructorIsReplicatedWhenInternalsVisibleTo()
@@ -76,5 +78,7 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy(typeof(InternalClass), new StandardInterceptor());
 			Assert.IsNotNull(proxy.GetType().GetConstructor(new Type[] {typeof(IInterceptor[])}));
 		}
+		
+#endif
 	}
 }
