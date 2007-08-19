@@ -23,7 +23,7 @@ namespace Castle.Facilities.WcfIntegration.Demo
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			WindsorContainer container = new WindsorContainer("windsor.xml");
-			WindsorServiceHostFactory.RegisterContainer(container);
+			WindsorServiceHostFactory.RegisterContainer(container.Kernel);
 		}
 
 		protected void Application_End(object sender, EventArgs e)

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MicroKernel;
+
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
@@ -21,15 +23,14 @@ namespace Castle.Facilities.WcfIntegration
 	using System.ServiceModel.Channels;
 	using System.ServiceModel.Description;
 	using System.ServiceModel.Dispatcher;
-	using Windsor;
 
 	public class WindsorDependencyInjectionServiceBehavior : IServiceBehavior
 	{
-		private readonly IWindsorContainer container;
+		private readonly IKernel kernel;
 
-		public WindsorDependencyInjectionServiceBehavior(IWindsorContainer container)
+		public WindsorDependencyInjectionServiceBehavior(IKernel kernel)
 		{
-			this.container = container;
+			this.kernel = kernel;
 		}
 
 		#region IServiceBehavior Members
@@ -73,7 +74,7 @@ namespace Castle.Facilities.WcfIntegration
 						if (contractNameToContractType.ContainsKey(ed.ContractName))
 						{
 							ed.DispatchRuntime.InstanceProvider =
-								new WindsorInstanceProvider(container,
+								new WindsorInstanceProvider(kernel,
 								                            contractNameToContractType[ed.ContractName]
 									);
 						}

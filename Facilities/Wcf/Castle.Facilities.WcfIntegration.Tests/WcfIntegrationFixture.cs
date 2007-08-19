@@ -44,7 +44,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 			handler.ComponentModel.Parameters.Add("number", "42");
 
 			Uri uri = new Uri("net.tcp://localhost/WCF.Facility");
-			host = new WindsorServiceHost(windsorContainer, typeof (Operations),
+			host = new WindsorServiceHost(windsorContainer.Kernel, typeof (Operations),
 			                              uri);
 			EndpointAddress endpointAddress = new EndpointAddress(uri);
 			host.Description.Endpoints.Add(

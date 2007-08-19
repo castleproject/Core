@@ -22,23 +22,23 @@ namespace Castle.Facilities.WcfIntegration
 
 	public class WindsorServiceHost : ServiceHost
 	{
-		private readonly IWindsorContainer container;
+		private readonly IKernel kernel;
 
-		public WindsorServiceHost(IWindsorContainer container, Type serviceType, params Uri[] baseAddresses)
+		public WindsorServiceHost(IKernel kernel, Type serviceType, params Uri[] baseAddresses)
 			: base(serviceType, baseAddresses)
 		{
-			this.container = container;
+			this.kernel = kernel;
 		}
 
 		protected override void OnOpening()
 		{
-			Description.Behaviors.Add(new WindsorDependencyInjectionServiceBehavior(container));
-			IHandler[] serviceBehaviorHandlers = container.Kernel.GetHandlers(typeof (IServiceBehavior));
+			Description.Behaviors.Add(new WindsorDependencyInjectionServiceBehavior(kernel));
+			IHandler[] serviceBehaviorHandlers = kernel.GetHandlers(typeof (IServiceBehavior));
 			foreach (IHandler handler in serviceBehaviorHandlers)
 			{
 				Description.Behaviors.Add((IServiceBehavior) handler.Resolve(CreationContext.Empty));
 			}
-			IHandler[] endPointBehaviors = container.Kernel.GetHandlers(typeof (IEndpointBehavior));
+			IHandler[] endPointBehaviors = kernel.GetHandlers(typeof (IEndpointBehavior));
 			foreach (IHandler handler in endPointBehaviors)
 			{
 				foreach (ServiceEndpoint endpoint in Description.Endpoints)

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MicroKernel;
+
 namespace Castle.Facilities.WcfIntegration
 {
 	using System;
@@ -25,15 +27,15 @@ namespace Castle.Facilities.WcfIntegration
 	/// </summary>
 	public class WindsorInstanceProvider : IInstanceProvider
 	{
-		private readonly IWindsorContainer container;
+		private readonly IKernel kernel;
 		private readonly Type type;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WindsorInstanceProvider"/> class.
 		/// </summary>
-		public WindsorInstanceProvider(IWindsorContainer container, Type type)
+		public WindsorInstanceProvider(IKernel kernel, Type type)
 		{
-			this.container = container;
+			this.kernel = kernel;
 			this.type = type;
 		}
 
@@ -65,7 +67,7 @@ namespace Castle.Facilities.WcfIntegration
 		///<param name="instanceContext">The current <see cref="T:System.ServiceModel.InstanceContext"></see> object.</param>
 		public object GetInstance(InstanceContext instanceContext, Message message)
 		{
-			return container.Resolve(type);
+			return kernel.Resolve(type);
 		}
 
 		///<summary>
@@ -76,7 +78,7 @@ namespace Castle.Facilities.WcfIntegration
 		///<param name="instance">The service object to be recycled.</param>
 		public void ReleaseInstance(InstanceContext instanceContext, object instance)
 		{
-			container.Release(instance);
+			kernel.ReleaseComponent(instance);
 		}
 
 		#endregion

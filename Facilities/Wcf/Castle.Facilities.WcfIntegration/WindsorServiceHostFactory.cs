@@ -22,32 +22,32 @@ namespace Castle.Facilities.WcfIntegration
 
 	public class WindsorServiceHostFactory : ServiceHostFactory
 	{
-		private static IWindsorContainer globalContainer;
-		private readonly IWindsorContainer container;
+		private static IKernel globalKernel;
+		private readonly IKernel kernel;
 
 		public WindsorServiceHostFactory()
-			: this(globalContainer)
+			: this(globalKernel)
 		{
 		}
 
-		public WindsorServiceHostFactory(IWindsorContainer container)
+		public WindsorServiceHostFactory(IKernel kernel)
 		{
-			if (container == null)
+			if (kernel == null)
 			{
-				throw new ArgumentNullException("container",
-				                                "Container was null, did you forgot to call WindsorServiceHostFactory.RegisterContainer() ?");
+				throw new ArgumentNullException("kernel",
+				                                "Kernel was null, did you forgot to call WindsorServiceHostFactory.RegisterContainer() ?");
 			}
-			this.container = container;
+			this.kernel = kernel;
 		}
 
-		private IWindsorContainer Container
+		private IKernel Kernel
 		{
-			get { return container; }
+			get { return kernel; }
 		}
 
-		public static void RegisterContainer(IWindsorContainer container)
+		public static void RegisterContainer(IKernel kernel)
 		{
-			globalContainer = container;
+			globalKernel = kernel;
 		}
 
 		public override ServiceHostBase CreateServiceHost(string constructorString, Uri[] baseAddresses)
@@ -57,12 +57,12 @@ namespace Castle.Facilities.WcfIntegration
 			IHandler handler;
 			if (maybeType != null)
 			{
-				handler = Container.Kernel.GetHandler(maybeType);
+				handler = Kernel.GetHandler(maybeType);
 				constructorStringType = "type";
 			}
 			else
 			{
-				handler = Container.Kernel.GetHandler(constructorString);
+				handler = Kernel.GetHandler(constructorString);
 				constructorStringType = "name";
 			}
 			if (handler == null)
@@ -74,7 +74,7 @@ namespace Castle.Facilities.WcfIntegration
 
 		protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
 		{
-			return new WindsorServiceHost(container, serviceType, baseAddresses);
+			return new WindsorServiceHost(kernel, serviceType, baseAddresses);
 		}
 	}
 }

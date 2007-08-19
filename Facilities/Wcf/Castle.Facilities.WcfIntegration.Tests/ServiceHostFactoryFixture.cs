@@ -27,7 +27,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		{
 			WindsorContainer windsorContainer = new WindsorContainer();
 			windsorContainer.AddComponent("operations", typeof (IOperations), typeof (Operations));
-			WindsorServiceHostFactory factory = new WindsorServiceHostFactory(windsorContainer);
+			WindsorServiceHostFactory factory = new WindsorServiceHostFactory(windsorContainer.Kernel);
 			ServiceHostBase serviceHost = factory.CreateServiceHost("operations", new Uri[] {new Uri("http://localhost/Foo.svc")});
 			Assert.IsInstanceOfType(typeof (WindsorServiceHost), serviceHost);
 		}
@@ -35,7 +35,7 @@ namespace Castle.Facilities.WcfIntegration.Tests
 		[Test]
 		public void CanCreateWindsorHostFactory()
 		{
-			WindsorServiceHostFactory factory = new WindsorServiceHostFactory(new WindsorContainer());
+			WindsorServiceHostFactory factory = new WindsorServiceHostFactory(new WindsorContainer().Kernel);
 			Assert.IsNotNull(factory);
 		}
 	}
