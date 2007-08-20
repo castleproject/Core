@@ -19,28 +19,38 @@ namespace MoreComplexSample
 	using NHibernate.Expression;
 
 	[ActiveRecord("LineItem")]
-	public class LineItem : ActiveRecordBase
+	public class LineItem : ActiveRecordBase<LineItem>
 	{
-		private int id;
+		private Guid id;
 		private Order order;
 		private Product product;
-		private int quantity;
+		private int? quantity;
 
-		[PrimaryKey]
-		public int Id
+		public LineItem()
+		{
+		}
+
+		public LineItem(Order order, Product product)
+		{
+			this.order = order;
+			this.product = product;
+		}
+
+		[PrimaryKey(PrimaryKeyType.Guid)]
+		public Guid Id
 		{
 			get { return id; }
 			set { id = value; }
 		}
 
-		[BelongsTo("OrderId")]
+		[BelongsTo("OrderId", NotNull = true, UniqueKey = "ConstraintName")]
 		public Order Order
 		{
 			get { return order; }
 			set { order = value; }
 		}
 
-		[BelongsTo("ProductId")]
+		[BelongsTo("ProductId", NotNull = true, UniqueKey = "ConstraintName")]
 		public Product Product
 		{
 			get { return product; }
@@ -48,7 +58,7 @@ namespace MoreComplexSample
 		}
 
 		[Property]
-		public int Quantity
+		public int? Quantity
 		{
 			get { return quantity; }
 			set { quantity = value; }
@@ -56,8 +66,7 @@ namespace MoreComplexSample
 
 		public static LineItem Find(Order order, Product product)
 		{
-			return (LineItem) FindOne(typeof(LineItem),
-			                          Expression.Eq("Order", order), Expression.Eq("Product", product));
+			return FindOne(Expression.Eq("Order", order), Expression.Eq("Product", product));
 		}
 	}
 }

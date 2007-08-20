@@ -16,16 +16,16 @@ namespace MoreComplexSample
 {
 	using System;
 	using Castle.ActiveRecord;
-	using Iesi.Collections;
+	using Iesi.Collections.Generic;
 
 	[ActiveRecord]
-	public class Category : ActiveRecordBase
+	public class Category : ActiveRecordBase<Category>
 	{
 		private int id;
 		private String name;
 		private Category parent;
-		private ISet children = new HashedSet();
-		private ISet products = new HashedSet();
+		private ISet<Category> children = new HashedSet<Category>();
+		private ISet<Product> products = new HashedSet<Product>();
 
 		public Category()
 		{
@@ -57,17 +57,17 @@ namespace MoreComplexSample
 			set { parent = value; }
 		}
 
-		[HasMany(typeof(Category), Lazy=true, Inverse=true)]
-		public ISet Children
+		[HasMany(Lazy=true, Inverse=true)]
+		public ISet<Category> Children
 		{
 			get { return children; }
 			set { children = value; }
 		}
 		
-		[HasAndBelongsToMany(typeof(Product), 
+		[HasAndBelongsToMany(
 			Table="ProductCategory", ColumnKey="CategoryId", ColumnRef="ProductId", 
 			Inverse=true, Lazy=true)]
-		public ISet Products
+		public ISet<Product> Products
 		{
 			get { return products; }
 			set { products = value; }

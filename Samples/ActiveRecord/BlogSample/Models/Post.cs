@@ -15,12 +15,10 @@
 namespace BlogSample
 {
 	using System;
-
 	using Castle.ActiveRecord;
 
-
 	[ActiveRecord]
-	public class Post : ActiveRecordBase
+	public class Post : ActiveRecordBase<Post>
 	{
 		private int id;
 		private String title;
@@ -90,16 +88,6 @@ namespace BlogSample
 		{
 			get { return published; }
 			set { published = value; }
-		}
-
-		public static void DeleteAll()
-		{
-			ActiveRecordBase.DeleteAll( typeof(Post) );
-		}
-
-		public static Post[] FindAll()
-		{
-			return (Post[]) ActiveRecordBase.FindAll( typeof(Post) );
 		}
 	}
 }

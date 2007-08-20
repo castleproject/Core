@@ -16,16 +16,16 @@ namespace BlogSample
 {
 	using System;
 	using System.Collections;
-
+	using System.Collections.Generic;
 	using Castle.ActiveRecord;
 
 	[ActiveRecord]
-	public class Blog : ActiveRecordBase
+	public class Blog : ActiveRecordBase<Blog>
 	{
 		private int id;
 		private String name;
 		private String author;
-		private IList posts = new ArrayList();
+		private IList<Post> posts = new List<Post>();
 
 		public Blog()
 		{
@@ -57,28 +57,13 @@ namespace BlogSample
 			set { author = value; }
 		}
 
-		[HasMany(typeof(Post), 
+		[HasMany(
 			Table="Posts", ColumnKey="blogid", 
 			Inverse=true, Cascade=ManyRelationCascadeEnum.AllDeleteOrphan)]
-		public IList Posts
+		public IList<Post> Posts
 		{
 			get { return posts; }
 			set { posts = value; }
-		}
-
-		public static void DeleteAll()
-		{
-			ActiveRecordBase.DeleteAll(typeof(Blog));
-		}
-
-		public static Blog[] FindAll()
-		{
-			return (Blog[]) ActiveRecordBase.FindAll(typeof(Blog));
-		}
-
-		public static Blog Find(int id)
-		{
-			return (Blog) ActiveRecordBase.FindByPrimaryKey(typeof(Blog), id);
 		}
 	}
 }

@@ -15,17 +15,15 @@
 namespace TableHierarchySample
 {
 	using System;
-	using System.Collections;
-
+	using System.Collections.Generic;
 	using Castle.ActiveRecord;
 
-
 	[ActiveRecord("Companies", DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="company")]
-	public class Company : ActiveRecordBase
+	public class Company : ActiveRecordBase<Company>
 	{
 		private int id;
 		private String name;
-		private IList _people;
+		private IList<Person> _people;
 
 		public Company()
 		{
@@ -50,26 +48,11 @@ namespace TableHierarchySample
 			set { name = value; }
 		}
 
-		[HasAndBelongsToMany( typeof(Person), Table="PeopleCompanies", ColumnRef="person_id", ColumnKey="company_id" )]
-		public IList People
+		[HasAndBelongsToMany(Table="PeopleCompanies", ColumnRef="person_id", ColumnKey="company_id" )]
+		public IList<Person> People
 		{
 			get { return _people; }
 			set { _people = value; }
-		}
-
-		public static void DeleteAll()
-		{
-			ActiveRecordBase.DeleteAll( typeof(Company) );
-		}
-
-		public static Company[] FindAll()
-		{
-			return (Company[]) ActiveRecordBase.FindAll( typeof(Company) );
-		}
-
-		public static Company Find(int id)
-		{
-			return (Company) ActiveRecordBase.FindByPrimaryKey( typeof(Company), id );
 		}
 	}
 }

@@ -14,11 +14,9 @@
 
 namespace TableHierarchySample
 {
-	using System;
-
+	using System.Diagnostics;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Config;
-
 
 	public class App
 	{
@@ -38,18 +36,35 @@ namespace TableHierarchySample
 			Firm.DeleteAll();
 			Company.DeleteAll();
 
-			Company company = new Company("Keldor");
-			company.Save();
+			using(new SessionScope())
+			{
+				Company company = new Company("Stronghold");
+				company.Create();
 
-			Firm firm = new Firm("Johnson & Norman");
-			firm.Save();
+				Firm firm = new Firm("Johnson & Norman");
+				firm.Create();
 
-			Client client = new Client("hammett", firm);
-			client.Save();
+				Client client = new Client("hammett", firm);
+				client.Create();
+			}
 
-			// Dropping the schema 
+			// Now let's load
 
-			ActiveRecordStarter.DropSchema();
+			using(new SessionScope())
+			{
+				Company[] companies = Company.FindAll();
+				Debug.Assert(companies.Length == 3);
+
+				Firm[] firms = Firm.FindAll();
+				Debug.Assert(firms.Length == 1);
+
+				Client[] clients = Client.FindAll();
+				Debug.Assert(clients.Length == 1);
+
+			}
+
+			// Drop the schema if you want
+			// ActiveRecordStarter.DropSchema();
 		}
 	}
 }

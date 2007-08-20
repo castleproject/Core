@@ -16,15 +16,16 @@ namespace MoreComplexSample
 {
 	using System;
 	using Castle.ActiveRecord;
-	using Iesi.Collections;
+	using Castle.Components.Validator;
+	using Iesi.Collections.Generic;
 
 	[ActiveRecord("Tb_Customers")]
-	public class Customer : ActiveRecordValidationBase
+	public class Customer : ActiveRecordValidationBase<Customer>
 	{
 		private int id;
 		private String name;
 		private String email;
-		private ISet orders = new HashedSet();
+		private ISet<Order> orders = new HashedSet<Order>();
 
 		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id
@@ -33,36 +34,30 @@ namespace MoreComplexSample
 			set { id = value; }
 		}
 
-		[Property("cust_Name"), ValidateNotEmpty, ValidateLength(10, 35)]
+		[Property("cust_Name"), ValidateNonEmpty, ValidateLength(10, 35)]
 		public string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
-		[Property, ValidateNotEmpty, ValidateEmail]
+		[Property, ValidateNonEmpty, ValidateEmail]
 		public string Email
 		{
 			get { return email; }
 			set { email = value; }
 		}
 
-		[HasMany(typeof(Order), Lazy=true)]
-		public ISet Orders
+		[HasMany(Lazy=true)]
+		public ISet<Order> Orders
 		{
 			get { return orders; }
 			set { orders = value; }
 		}
 
-		public static Customer Find(int id)
-		{
-			return (Customer) FindByPrimaryKey(typeof(Customer), id);
-		}
-
 		public static Customer FindByEmail(String email)
 		{
-			return (Customer) FindOne(typeof(Customer),
-				                        NHibernate.Expression.Expression.Eq("Email", email));
+			return FindOne(NHibernate.Expression.Expression.Eq("Email", email));
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace MoreComplexSample
 {
 	using System;
 	using Castle.ActiveRecord;
-	using Iesi.Collections;
+	using Iesi.Collections.Generic;
 
 	[ActiveRecord]
 	public class Product : ActiveRecordBase
@@ -24,7 +24,7 @@ namespace MoreComplexSample
 		private int id;
 		private String name;
 		private float price;
-		private ISet categories = new HashedSet();
+		private ISet<Category> categories = new HashedSet<Category>();
 
 		[PrimaryKey]
 		public int Id
@@ -47,9 +47,9 @@ namespace MoreComplexSample
 			set { price = value; }
 		}
 		
-		[HasAndBelongsToMany(typeof(Category), 
+		[HasAndBelongsToMany(
 			Table="ProductCategory", ColumnKey="ProductId", ColumnRef="CategoryId", Lazy=true)]
-		public ISet Categories
+		public ISet<Category> Categories
 		{
 			get { return categories; }
 			set { categories = value; }

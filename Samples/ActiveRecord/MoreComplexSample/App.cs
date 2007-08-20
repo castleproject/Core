@@ -15,7 +15,6 @@
 namespace MoreComplexSample
 {
 	using System;
-	using System.Collections;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Config;
 
@@ -23,23 +22,32 @@ namespace MoreComplexSample
 	{
 		public static void Main()
 		{
-			Hashtable properties = new Hashtable();
+			// Old way
+//			Hashtable properties = new Hashtable();
+//
+//			properties.Add("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver");
+//			properties.Add("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect");
+//			properties.Add("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider");
+//			properties.Add("hibernate.connection.connection_string",
+//			               "Data Source=.;Initial Catalog=bookdb;Integrated Security=SSPI");
+//
+//			InPlaceConfigurationSource source = new InPlaceConfigurationSource();
+//			source.Add(typeof(ActiveRecordBase), properties);
 
-			properties.Add("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver");
-			properties.Add("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect");
-			properties.Add("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider");
-			properties.Add("hibernate.connection.connection_string",
-			               "Data Source=.;Initial Catalog=bookdb;Integrated Security=SSPI");
+			// New way
+			InPlaceConfigurationSource config = InPlaceConfigurationSource.BuildForMSSqlServer(".", "test");
 
-			InPlaceConfigurationSource source = new InPlaceConfigurationSource();
-			source.Add(typeof(ActiveRecordBase), properties);
+			ActiveRecordStarter.Initialize(config,
+										   typeof(LineItem), typeof(Order),
+										   typeof(Category), typeof(Product),
+										   typeof(Customer));
 
-			ActiveRecordStarter.Initialize(source,
-			                               typeof(Customer), typeof(Order),
-			                               typeof(Category), typeof(Product),
-			                               typeof(LineItem));
+			// Framework started, let's create the schema
 
-			
+			ActiveRecordStarter.CreateSchema();
+
+			// Now let's play
+
 			Customer invalid = new Customer();
 			invalid.Name = "john"; // Less than the minimum
 			invalid.Email = "someinvalidemail.com";
@@ -52,39 +60,55 @@ namespace MoreComplexSample
 				}
 			}
 			
-			invalid.Create();
-			
-			return;
-			
-			Category root = new Category("Petshot");
-			root.Create();
+			try
+			{
+				// This will fail
+				invalid.Create();
+			}
+			catch(Exception ex)
+			{
+			}
 
-			Category c1 = new Category("Dogs");
-			c1.Parent = root;
-			c1.Create();
+			Order order;
+			Product product;
 
-			Product product = new Product();
-			product.Name = "It";
-			product.Price = 10f;
-			product.Categories.Add(c1);
-			product.Create();
+			using(new SessionScope())
+			{
+				Category root = new Category("Petshot");
+				root.Create();
 
-			Customer customer = new Customer();
-			customer.Name = "another customer";
-			customer.Email = "foo@bar.com";
-			customer.Create();
+				Category c1 = new Category("Dogs");
+				c1.Parent = root;
+				c1.Create();
 
-			Order order = new Order();
-			order.Customer = customer;
-			order.Total = 100f;
-			order.Products.Add(product);
-			order.Create();
+				product = new Product();
+				product.Name = "It";
+				product.Price = 10f;
+				product.Categories.Add(c1);
+				product.Create();
 
-			// Now we can access the LineItem
+				Customer customer = new Customer();
+				customer.Name = "another customer";
+				customer.Email = "foo@bar.com";
+				customer.Create();
 
-			LineItem line = LineItem.Find(order, product);
-			line.Quantity = 10;
-			line.Save();
+				order = new Order();
+				order.Customer = customer;
+				order.Total = 100f;
+				order.Create();
+
+				// Associate order and product (the hard way)
+				LineItem item = new LineItem(order, product);
+				item.Quantity = 10;
+				item.Create();
+			}
+
+			using(new SessionScope())
+			{
+				// Change just the association
+				LineItem item = LineItem.Find(order, product);
+				item.Quantity = 12;
+			}
 		}
 	}
 }

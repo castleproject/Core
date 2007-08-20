@@ -14,9 +14,7 @@
 
 namespace TableHierarchySample
 {
-	using System;
 	using System.Collections;
-
 	using Castle.ActiveRecord;
 
 	[ActiveRecord(DiscriminatorValue="firm")]
