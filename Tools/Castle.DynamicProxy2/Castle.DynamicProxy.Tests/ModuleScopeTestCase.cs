@@ -275,5 +275,31 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual ("Strong", strong.Assembly.GetName ().Name);
 			Assert.AreEqual ("Weak", weak.Assembly.GetName ().Name);
 		}
+
+    [Test]
+    public void ModuleScopeDoesntTryToDeleteFromCurrentDirectory ()
+    {
+      string moduleDirectory = Path.Combine (Environment.CurrentDirectory, "GeneratedDlls");
+      if (Directory.Exists (moduleDirectory))
+        Directory.Delete (moduleDirectory, true);
+
+      string strongModulePath = Path.Combine (moduleDirectory, "Strong.dll");
+      string weakModulePath = Path.Combine (moduleDirectory, "Weak.dll");
+      
+      Directory.CreateDirectory(moduleDirectory);
+      ModuleScope scope = new ModuleScope (true, "Strong", strongModulePath, "Weak", weakModulePath);
+
+      using (File.Create (Path.Combine (Environment.CurrentDirectory, "Strong.dll")))
+      {
+        scope.ObtainDynamicModuleWithStrongName ();
+        scope.SaveAssembly (true); // this will throw if SaveAssembly tries to delete from the current directory
+      }
+
+      using (File.Create (Path.Combine (Environment.CurrentDirectory, "Weak.dll")))
+      {
+        scope.ObtainDynamicModuleWithWeakName ();
+        scope.SaveAssembly (false);  // this will throw if SaveAssembly tries to delete from the current directory
+      }
+    }
 	}
 }

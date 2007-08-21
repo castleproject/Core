@@ -380,6 +380,7 @@ namespace Castle.DynamicProxy
 
 			AssemblyBuilder assemblyBuilder;
 			string assemblyFileName;
+      string assemblyFilePath;
 
 			if (strongNamed)
 			{
@@ -389,6 +390,7 @@ namespace Castle.DynamicProxy
 				{
 					assemblyBuilder = (AssemblyBuilder) StrongNamedModule.Assembly;
 					assemblyFileName = StrongNamedModuleName;
+          assemblyFilePath = StrongNamedModule.FullyQualifiedName;
 				}
 			}
 			else
@@ -399,12 +401,13 @@ namespace Castle.DynamicProxy
 				{
 					assemblyBuilder = (AssemblyBuilder) WeakNamedModule.Assembly;
 					assemblyFileName = WeakNamedModuleName;
+          assemblyFilePath = WeakNamedModule.FullyQualifiedName;
 				}
 			}
 
-			if (File.Exists (assemblyFileName))
+			if (File.Exists (assemblyFilePath))
 			{
-				File.Delete (assemblyFileName);
+        File.Delete (assemblyFilePath);
 			}
 
 			assemblyBuilder.Save (assemblyFileName);

@@ -1,5 +1,7 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Fixed a bug in ModuleScope: SaveAssembly tried to delete from the current directory if a file with a matching name existed, not from the target
+  directory
 
 - Applied Pawel Pabich's suggestion fixing DYNPROXY-65 
   "OpCodeUtil.GetUnderlyingTypeOfEnum doesn't handle unsigned integers"
