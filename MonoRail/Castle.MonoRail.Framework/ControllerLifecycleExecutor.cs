@@ -181,7 +181,6 @@ namespace Castle.MonoRail.Framework
 			try
 			{
 				// Look for the target method
-
 				actionMethod = controller.SelectMethod(actionName, metaDescriptor.Actions, context.Request, actionArgs);
 
 				// If we couldn't find a method for this action, look for a dynamic action
@@ -198,8 +197,7 @@ namespace Castle.MonoRail.Framework
 						if (actionMethod == null)
 						{
 							throw new ControllerException(
-								String.Format("Unable to locate action [{0}] on controller [{1}].",
-								              actionName, controllerName));
+								String.Format("Unable to locate action [{0}] on controller [{1}].", actionName, controllerName));
 						}
 					}
 				}
@@ -884,16 +882,18 @@ namespace Castle.MonoRail.Framework
 		{
 			context.LastException = (ex is TargetInvocationException) ? ex.InnerException : ex;
 
-			// Dynamic action 
-			if (method == null) return false;
-
 			Type exceptionType = context.LastException.GetType();
 
-			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
+			RescueDescriptor att = null;
 
-			if (actionMeta.SkipRescue != null) return false;
+			if (method != null)
+			{
+				ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
 
-			RescueDescriptor att = GetRescueFor(actionMeta.Rescues, exceptionType);
+				if (actionMeta.SkipRescue != null) return false;
+
+				att = GetRescueFor(actionMeta.Rescues, exceptionType);
+			}
 
 			if (att == null)
 			{

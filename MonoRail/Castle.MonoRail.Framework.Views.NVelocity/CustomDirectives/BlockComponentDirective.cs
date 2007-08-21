@@ -13,9 +13,6 @@
 // limitations under the License.
 
 using NVelocity.Runtime.Directive;
-using IInternalContextAdapter = NVelocity.Context.IInternalContextAdapter;
-using INode = NVelocity.Runtime.Parser.Node.INode;
-using IRuntimeServices = NVelocity.Runtime.IRuntimeServices;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {

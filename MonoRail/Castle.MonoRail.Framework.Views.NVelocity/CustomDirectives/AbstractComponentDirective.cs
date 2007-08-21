@@ -112,13 +112,24 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 			IRailsEngineContext railsContext = MonoRailHttpHandler.CurrentContext;
 
-			component.Init(railsContext, contextAdapter);
+			const string ViewComponentContextKey = "viewcomponent";
 
-			component.Render();
-
-			if (contextAdapter.ViewToRender != null)
+			try
 			{
-				return RenderComponentView(context, contextAdapter.ViewToRender, writer, contextAdapter);
+				contextAdapter.ContextVars[ViewComponentContextKey] = component;
+
+				component.Init(railsContext, contextAdapter);
+
+				component.Render();
+
+				if (contextAdapter.ViewToRender != null)
+				{
+					return RenderComponentView(context, contextAdapter.ViewToRender, writer, contextAdapter);
+				}
+			}
+			finally
+			{
+				contextAdapter.ContextVars.Remove(ViewComponentContextKey);
 			}
 
 			return true;

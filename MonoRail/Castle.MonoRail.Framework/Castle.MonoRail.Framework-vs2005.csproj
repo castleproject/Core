@@ -166,6 +166,8 @@
     <Compile Include="Filters\PersistFlashFilter.cs" />
     <Compile Include="Helpers\ValidationStrategy\ZebdaWebValidator.cs" />
     <Compile Include="Helpers\ZebdaHelper.cs" />
+    <Compile Include="IGenericServiceContainer.cs" />
+    <Compile Include="IGenericServiceProvider.cs" />
     <Compile Include="ServiceContainerAccessor.cs" />
     <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs" />
     <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs" />

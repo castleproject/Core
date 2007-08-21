@@ -4,7 +4,11 @@ Change history
 Release Candidate 3
 ===================
 
-- Now if the param encode wasn't set, UrlHelper sets it to true.
+- If the controller cannot be found, MR searches for a special rescue "rescues/404" before throwing throwing an exception.
+
+- If an action could not be found, we go through normal path an use a general rescue if it can be found for the controller. 
+
+- UrlHelper change: Now if the param encode wasn't set, UrlHelper assumes it's true.
 
 - Applied patch by Oleg Snurnikov fixing MR-319
   "MockResponse - basic implementation of Redirect, Write, BinaryWrite and Clear overloads"

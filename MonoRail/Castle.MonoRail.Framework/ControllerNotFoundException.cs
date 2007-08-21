@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework
 	[Serializable]
 	public class ControllerNotFoundException : ApplicationException
 	{
-		private String area, controller;
+		private readonly String area, controller;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ControllerNotFoundException"/> class.

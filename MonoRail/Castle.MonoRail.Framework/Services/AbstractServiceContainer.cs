@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.Services
 	using System.Collections.Specialized;
 	using System.ComponentModel.Design;
 
-	public abstract class AbstractServiceContainer : MarshalByRefObject, IServiceContainer
+	public abstract class AbstractServiceContainer : MarshalByRefObject, IGenericServiceContainer
 	{
 		private IServiceContainer parent;
 		private IDictionary type2Service;
@@ -31,8 +31,6 @@ namespace Castle.MonoRail.Framework.Services
 		{
 		}
 
-		#region IServiceContainer
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AbstractServiceContainer"/> class.
 		/// </summary>
@@ -41,6 +39,17 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			this.parent = parent;
 		}
+
+		#region IGenericServiceContainer
+
+		public T GetService<T>()
+		{
+			return (T) GetService(typeof(T));
+		}
+
+		#endregion
+
+		#region IServiceContainer
 
 		/// <summary>
 		/// Adds the specified service to the service container.

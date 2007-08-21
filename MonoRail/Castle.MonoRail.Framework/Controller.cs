@@ -107,7 +107,7 @@ namespace Castle.MonoRail.Framework
 
 		internal ControllerMetaDescriptor metaDescriptor;
 
-		internal IServiceProvider serviceProvider;
+		internal IGenericServiceProvider serviceProvider;
 
 		internal ValidatorRunner validator;
 
@@ -1118,5 +1118,13 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#endregion
+
+		internal class EmptyController : Controller
+		{
+			public EmptyController(IRailsEngineContext context)
+			{
+				InitializeFieldsFromServiceProvider(context);
+			}
+		}
 	}
 }

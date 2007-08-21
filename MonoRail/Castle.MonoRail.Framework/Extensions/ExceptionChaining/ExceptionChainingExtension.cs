@@ -45,6 +45,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	/// and invoke the handlers to process an exception
 	/// </para>
 	/// <code>
+	/// <![CDATA[
 	/// public void BuyMercedes()
 	/// {
 	///		try
@@ -53,12 +54,13 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	///		}
 	///		catch(Exception ex)
 	///		{
-	///			IExceptionProcessor exProcessor = (IExceptionProcessor) ServiceProvider.GetService(typeof(IExceptionProcessor));
+	///			IExceptionProcessor exProcessor = ServiceProvider.GetService<IExceptionProcessor>();
 	///			exProcessor.ProcessException(ex);
 	/// 
 	///			RenderView("CouldNotBuyMercedes");
 	///		}
 	/// }
+	/// ]]>
 	/// </code>
 	/// </remarks>
 	public class ExceptionChainingExtension : IMonoRailExtension, IExceptionProcessor

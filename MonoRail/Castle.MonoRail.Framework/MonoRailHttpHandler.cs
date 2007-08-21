@@ -19,7 +19,6 @@ namespace Castle.MonoRail.Framework
 	using System.Web.SessionState;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Adapters;
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Implements <see cref="IHttpHandler"/> to dispatch the web

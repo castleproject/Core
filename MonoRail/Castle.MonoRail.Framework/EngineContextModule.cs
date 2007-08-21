@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 	using Castle.Core.Logging;
 	using Castle.MonoRail.Framework.Adapters;
+	using Castle.MonoRail.Framework.Extensions.ExceptionChaining;
 
 	/// <summary>
 	/// Provides the services used and shared by the framework. Also 
@@ -140,7 +141,36 @@ namespace Castle.MonoRail.Framework
 
 			IRailsEngineContext context = ObtainRailsEngineContext(app.Context);
 
-			Controller controller = CreateController(context);
+			Controller controller;
+
+			try
+			{
+				controller = CreateController(context);
+			}
+			catch(Exception ex)
+			{
+				IViewEngineManager viewEngineManager = context.GetService<IViewEngineManager>();
+
+				if (viewEngineManager.HasTemplate("rescues/404"))
+				{
+					viewEngineManager.Process(context, new Controller.EmptyController(context), "rescues/404");
+
+					IExceptionProcessor exProcessor = context.GetService<IExceptionProcessor>();
+				
+					if (exProcessor != null)
+					{
+						exProcessor.ProcessException(ex);
+					}
+
+					app.Context.Response.End();
+				}
+				else
+				{
+					throw;
+				}
+
+				return;
+			}
 
 			IControllerLifecycleExecutor executor = CreateControllerExecutor(controller, context);
 
@@ -227,17 +257,17 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context">The application instance</param>
 		private void SubscribeToApplicationHooks(HttpApplication context)
 		{
-			context.BeginRequest += new EventHandler(OnBeginRequest);
-			context.EndRequest += new EventHandler(OnEndRequest);
-			context.AcquireRequestState += new EventHandler(OnAcquireRequestState);
-			context.ReleaseRequestState += new EventHandler(OnReleaseRequestState);
-			context.PreRequestHandlerExecute += new EventHandler(OnPreRequestHandlerExecute);
-			context.PostRequestHandlerExecute += new EventHandler(OnPostRequestHandlerExecute);
-			context.AuthenticateRequest += new EventHandler(OnAuthenticateRequest);
-			context.AuthorizeRequest += new EventHandler(OnAuthorizeRequest);
-			context.Error += new EventHandler(OnError);
-			context.ResolveRequestCache += new EventHandler(OnResolveRequestCache);
-			context.UpdateRequestCache += new EventHandler(OnUpdateRequestCache);
+			context.BeginRequest += OnBeginRequest;
+			context.EndRequest += OnEndRequest;
+			context.AcquireRequestState += OnAcquireRequestState;
+			context.ReleaseRequestState += OnReleaseRequestState;
+			context.PreRequestHandlerExecute += OnPreRequestHandlerExecute;
+			context.PostRequestHandlerExecute += OnPostRequestHandlerExecute;
+			context.AuthenticateRequest += OnAuthenticateRequest;
+			context.AuthorizeRequest += OnAuthorizeRequest;
+			context.Error += OnError;
+			context.ResolveRequestCache += OnResolveRequestCache;
+			context.UpdateRequestCache += OnUpdateRequestCache;
 		}
 
 		#region Hooks dispatched to extensions
