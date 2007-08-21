@@ -176,13 +176,13 @@ namespace Castle.MicroKernel.Handlers
 		#region ISubDependencyResolver Members
 
 		public virtual object Resolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
-		                              DependencyModel dependency)
+									  DependencyModel dependency)
 		{
 			return customParameters[dependency.DependencyKey];
 		}
 
 		public virtual bool CanResolve(CreationContext context, ISubDependencyResolver parentResolver, ComponentModel model,
-		                               DependencyModel dependency)
+									   DependencyModel dependency)
 		{
 			if (dependency.DependencyKey == null)
 			{
@@ -232,7 +232,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				sb.Append("\r\nServices: \r\n");
 
-				foreach(Type type in DependenciesByService.Keys)
+				foreach (Type type in DependenciesByService.Keys)
 				{
 					IHandler handler = Kernel.GetHandler(type);
 
@@ -243,13 +243,13 @@ namespace Castle.MicroKernel.Handlers
 					else if (handler == this)
 					{
 						sb.AppendFormat("- {0}. \r\n  A dependency cannot be satisfied by itself, " +
-						                "did you forget to add a parameter name to differentiate between the " +
-						                "two dependencies? \r\n", type.FullName);
+										"did you forget to add a parameter name to differentiate between the " +
+										"two dependencies? \r\n", type.FullName);
 					}
 					else
 					{
 						sb.AppendFormat("- {0} which was registered but is also waiting for " +
-						                "dependencies. \r\n", type.FullName);
+										"dependencies. \r\n", type.FullName);
 
 						IExposeDependencyInfo info = handler as IExposeDependencyInfo;
 
@@ -265,7 +265,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				sb.Append("\r\nKeys (components with specific keys)\r\n");
 
-				foreach(DictionaryEntry entry in DependenciesByKey)
+				foreach (DictionaryEntry entry in DependenciesByKey)
 				{
 					String key = entry.Key.ToString();
 
@@ -278,7 +278,7 @@ namespace Castle.MicroKernel.Handlers
 					else
 					{
 						sb.AppendFormat("- {0} which was registered but is also " +
-						                "waiting for dependencies. \r\n", key);
+										"waiting for dependencies. \r\n", key);
 
 						IExposeDependencyInfo info = handler as IExposeDependencyInfo;
 
@@ -327,7 +327,7 @@ namespace Castle.MicroKernel.Handlers
 			else if (type == LifestyleType.Custom)
 			{
 				manager = (ILifestyleManager)
-				          Activator.CreateInstance(ComponentModel.CustomLifestyle);
+						  Activator.CreateInstance(ComponentModel.CustomLifestyle);
 			}
 			else if (type == LifestyleType.Pooled)
 			{
@@ -336,11 +336,11 @@ namespace Castle.MicroKernel.Handlers
 
 				if (ComponentModel.ExtendedProperties.Contains(ExtendedPropertiesConstants.Pool_InitialPoolSize))
 				{
-					initial = (int) ComponentModel.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize];
+					initial = (int)ComponentModel.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize];
 				}
 				if (ComponentModel.ExtendedProperties.Contains(ExtendedPropertiesConstants.Pool_MaxPoolSize))
 				{
-					maxSize = (int) ComponentModel.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize];
+					maxSize = (int)ComponentModel.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize];
 				}
 
 				manager = new PoolableLifestyleManager(initial, maxSize);
@@ -367,28 +367,28 @@ namespace Castle.MicroKernel.Handlers
 				return;
 			}
 
-            // Property dependencies may not be optional
+			// Property dependencies may not be optional
 
-            foreach (PropertySet property in ComponentModel.Properties)
-            {
-                DependencyModel dependency = property.Dependency;
+			foreach (PropertySet property in ComponentModel.Properties)
+			{
+				DependencyModel dependency = property.Dependency;
 
-                if (!dependency.IsOptional &&
-                    (dependency.DependencyType == DependencyType.Service ||
-                     dependency.DependencyType == DependencyType.ServiceOverride))
-                {
-                    AddDependency(dependency);
-                }
-            }
+				if (!dependency.IsOptional &&
+					(dependency.DependencyType == DependencyType.Service ||
+					 dependency.DependencyType == DependencyType.ServiceOverride))
+				{
+					AddDependency(dependency);
+				}
+			}
 
 			// The following dependencies were added by - for example - 
 			// facilities, for some reason, and we need to satisfy the non-optional
 
-			foreach(DependencyModel dependency in ComponentModel.Dependencies)
+			foreach (DependencyModel dependency in ComponentModel.Dependencies)
 			{
 				if (!dependency.IsOptional &&
-				    (dependency.DependencyType == DependencyType.Service ||
-				     dependency.DependencyType == DependencyType.ServiceOverride))
+					(dependency.DependencyType == DependencyType.Service ||
+					 dependency.DependencyType == DependencyType.ServiceOverride))
 				{
 					AddDependency(dependency);
 				}
@@ -399,10 +399,10 @@ namespace Castle.MicroKernel.Handlers
 
 			ConstructorCandidate candidate = ComponentModel.Constructors.FewerArgumentsCandidate;
 
-			foreach(DependencyModel dependency in candidate.Dependencies)
+			foreach (DependencyModel dependency in candidate.Dependencies)
 			{
 				if (dependency.DependencyType == DependencyType.Service ||
-				    dependency.DependencyType == DependencyType.ServiceOverride)
+					dependency.DependencyType == DependencyType.ServiceOverride)
 				{
 					AddDependency(dependency);
 				}
@@ -500,7 +500,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				DependencyModel[] dependencies = Union(DependenciesByService.Values, DependenciesByKey.Values);
 
-				foreach(DependencyModel dependency in dependencies)
+				foreach (DependencyModel dependency in dependencies)
 				{
 					if (!HasCustomParameter(dependency.DependencyKey))
 					{
@@ -523,7 +523,7 @@ namespace Castle.MicroKernel.Handlers
 			Type[] services = new Type[DependenciesByService.Count];
 			DependenciesByService.Keys.CopyTo(services, 0);
 
-			foreach(Type service in services)
+			foreach (Type service in services)
 			{
 				if (HasValidComponent(service))
 				{
@@ -535,7 +535,7 @@ namespace Castle.MicroKernel.Handlers
 			String[] keys = new String[DependenciesByKey.Keys.Count];
 			DependenciesByKey.Keys.CopyTo(keys, 0);
 
-			foreach(String compKey in keys)
+			foreach (String compKey in keys)
 			{
 				if (HasValidComponent(compKey) || HasCustomParameter(compKey))
 				{
@@ -580,7 +580,7 @@ namespace Castle.MicroKernel.Handlers
 
 			DependenciesByService.Keys.CopyTo(services, 0);
 
-			foreach(Type service in services)
+			foreach (Type service in services)
 			{
 				if (Kernel.Parent.HasComponent(service))
 				{
@@ -593,7 +593,7 @@ namespace Castle.MicroKernel.Handlers
 
 			DependenciesByKey.Keys.CopyTo(services, 0);
 
-			foreach(String key in keys)
+			foreach (String key in keys)
 			{
 				if (Kernel.Parent.HasComponent(key))
 				{
@@ -639,7 +639,7 @@ namespace Castle.MicroKernel.Handlers
 
 		private bool HasValidComponent(Type service)
 		{
-			foreach(IHandler handler in kernel.GetHandlers(service))
+			foreach (IHandler handler in kernel.GetHandlers(service))
 			{
 				if (IsValidHandlerState(handler))
 				{
@@ -686,8 +686,7 @@ namespace Castle.MicroKernel.Handlers
 		/// <param name="args"></param>
 		private void HandlerStateChanged(object source, EventArgs args)
 		{
-			bool stateChanged = false;
-			DependencySatisfied(null, ref stateChanged);
+			Kernel.RaiseHandlerRegistered(this);
 		}
 
 		private void RaiseHandlerStateChanged()
@@ -702,6 +701,7 @@ namespace Castle.MicroKernel.Handlers
 		{
 			Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
 			Kernel.AddedAsChildKernel -= new EventHandler(OnAddedAsChildKernel);
+			this.OnHandlerStateChanged -= new HandlerStateDelegate(HandlerStateChanged);
 		}
 	}
 }

@@ -23,6 +23,26 @@ namespace Castle.MicroKernel.Tests.RuntimeParameters
 		}
 	}
 
+	public class HasCustomDependency
+	{
+		private CompA name;
+
+		public HasCustomDependency(CompA name)
+		{
+			this.name = name;
+		}
+	}
+
+	public class NeedClassWithCustomerDependency
+	{
+		private HasCustomDependency dependency;
+
+		public NeedClassWithCustomerDependency(HasCustomDependency dependency)
+		{
+			this.dependency = dependency;
+		}
+	}
+
 	[Transient]
 	public class CompB
 	{

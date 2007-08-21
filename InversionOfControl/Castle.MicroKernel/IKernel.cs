@@ -528,5 +528,13 @@ namespace Castle.MicroKernel
 		/// Graph of components and iteractions.
 		/// </summary>
 		GraphNode[] GraphNodes { get; }
+
+		/// <summary>
+		/// Raise the hanlder registered event, required so
+		/// dependant handlers will be notified about their dependant moving
+		/// to valid state.
+		/// </summary>
+		/// <param name="handler"></param>
+		void RaiseHandlerRegistered(IHandler handler);
 	}
 }

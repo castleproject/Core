@@ -103,6 +103,23 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual("ayende", instance_with_args.MyArgument);
 		}
 
+		[Test]
+		public void AddingDependencyToServiceWithCustomDependency()
+		{
+			DefaultKernel k = new DefaultKernel();
+			k.AddComponent("NeedClassWithCustomerDependency",typeof(NeedClassWithCustomerDependency));
+			k.AddComponent("HasCustomDependency", typeof(HasCustomDependency));
+
+			Assert.AreEqual(HandlerState.WaitingDependency, k.GetHandler("HasCustomDependency").CurrentState);
+
+			Hashtable hash = new Hashtable();
+			hash["name"] = new CompA();
+			k.RegisterCustomDependencies("HasCustomDependency", hash);
+			Assert.AreEqual(HandlerState.Valid, k.GetHandler("HasCustomDependency").CurrentState);
+
+			Assert.IsNotNull(k.Resolve(typeof(NeedClassWithCustomerDependency)));
+		}
+
 		private void AssertDependencies(CompB compb)
 		{
 			Assert.IsNotNull(compb, "Component B should have been resolved");
