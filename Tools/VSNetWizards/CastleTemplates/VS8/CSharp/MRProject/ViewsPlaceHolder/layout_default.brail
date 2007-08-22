@@ -54,7 +54,7 @@
 
 			<div style="clear: both;">&nbsp;</div>
 			
-			${Url.Link('Main page', {@controller='Home', @action='Index'})}
+			${Url.Link('Main page', {@controller: 'Home', @action: 'Index'})}
 
 		</div>
 	</div>
