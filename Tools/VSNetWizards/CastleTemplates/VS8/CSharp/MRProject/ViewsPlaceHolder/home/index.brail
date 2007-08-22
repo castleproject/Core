@@ -10,7 +10,7 @@ function sayHello()
 }
 <% end %>
 
-<%  component captureFor, {@Id: "head"}: %>
+<%  component CaptureFor, {@Id: "head"}: %>
 <!-- Here you can include some content to appear on the layout, inside head. For example, stylesheets -->
 <% end %>
 
