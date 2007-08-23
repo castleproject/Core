@@ -31,7 +31,7 @@ namespace Castle.MicroKernel
 	/// <seealso cref="IFacility"/>
 	/// <seealso cref="ISubSystem"/>
 	/// </remarks>
-	public interface IKernel : IKernelEvents, IDisposable
+	public interface IKernel : IServiceProviderEx, IKernelEvents, IDisposable
 	{
 		/// <summary>
 		/// Adds a concrete class as a component
@@ -356,13 +356,13 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="arguments"></param>
 		/// <returns></returns>
-		T Resolve<T>(IDictionary arguments) where T : class;
+		T Resolve<T>(IDictionary arguments);
 
 		/// <summary>
 		/// Returns the component instance by the component key
 		/// </summary>
 		/// <returns></returns>
-		T Resolve<T>() where T : class;
+		T Resolve<T>();
 
 		/// <summary>
 		/// Returns component instances that implement TService

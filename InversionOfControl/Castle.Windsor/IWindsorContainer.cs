@@ -23,7 +23,7 @@ namespace Castle.Windsor
 	/// The <c>IWindsorContainer</c> interface exposes all the 
 	/// functionality the Windsor implements.
 	/// </summary>
-	public interface IWindsorContainer : IDisposable
+	public interface IWindsorContainer : IServiceProviderEx, IDisposable
 	{
 		/// <summary>
 		/// Gets the container's name

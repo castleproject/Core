@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Applied Ron Grabowski's patch fixing IOC-89
+  "Make DefaultKernel implement IServiceProvider"
+
 - Check for required Properties before determining the Handlers initial state
 
 - Fixed IoC-87

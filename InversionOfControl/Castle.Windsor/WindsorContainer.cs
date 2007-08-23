@@ -646,6 +646,34 @@ namespace Castle.Windsor
 
 		#endregion
 
+		#region IServiceProviderEx Members
+
+		/// <summary>
+		/// Gets the service object of the specified type.
+		/// </summary>
+		/// <returns>
+		/// A service object of type serviceType.
+		/// </returns>
+		/// <param name="serviceType">An object that specifies the type of service object to get. </param>
+		public object GetService(Type serviceType)
+		{
+			return kernel.Resolve(serviceType);
+		}
+
+		/// <summary>
+		/// Gets the service object of the specified type.
+		/// </summary>
+		/// <returns>
+		/// A service object of type serviceType.
+		/// </returns>
+		public T GetService<T>()
+		{
+			Type serviceType = typeof(T);
+			return (T) kernel.Resolve(serviceType);
+		}
+
+		#endregion
+
 		#region IDisposable Members
 
 		/// <summary>

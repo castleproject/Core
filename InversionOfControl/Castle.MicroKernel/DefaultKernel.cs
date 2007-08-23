@@ -547,17 +547,17 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="arguments"></param>
 		/// <returns></returns>
-		public T Resolve<T>(IDictionary arguments) where T : class
+		public T Resolve<T>(IDictionary arguments)
 		{
 			Type serviceType = typeof(T);
-			return Resolve(serviceType, arguments) as T;
+			return (T) Resolve(serviceType, arguments);
 		}
 
 		/// <summary>
 		/// Returns the component instance by the component key
 		/// </summary>
 		/// <returns></returns>
-		public T Resolve<T>() where T : class
+		public T Resolve<T>()
 		{
 			Type serviceType = typeof(T);
 			return (T) Resolve(serviceType);
@@ -793,10 +793,13 @@ namespace Castle.MicroKernel
 		{
 			List<TService> services = new List<TService>();
 			IHandler[] handlers = GetHandlers(typeof(TService));
+
 			foreach(IHandler handler in handlers)
 			{
 				if (handler.CurrentState == HandlerState.Valid)
+				{
 					services.Add((TService) ResolveComponent(handler));
+				}
 			}
 
 			return services.ToArray();
@@ -1107,6 +1110,37 @@ namespace Castle.MicroKernel
 
 		#endregion
 
+		#region IServiceProviderEx Members
+
+		/// <summary>
+		/// Gets the service object of the specified type.
+		/// </summary>
+		///
+		/// <returns>
+		/// A service object of type serviceType.
+		/// </returns>
+		///
+		/// <param name="serviceType">An object that specifies the type of service object to get. </param>
+		public object GetService(Type serviceType)
+		{
+			return Resolve(serviceType);
+		}
+
+		/// <summary>
+		/// Gets the service object of the specified type.
+		/// </summary>
+		///
+		/// <returns>
+		/// A service object of type serviceType.
+		/// </returns>
+		public T GetService<T>()
+		{
+			Type serviceType = typeof(T);
+			return (T) Resolve(serviceType);
+		}
+
+		#endregion
+
 		#region IDisposable Members
 
 		/// <summary>
@@ -1281,6 +1315,5 @@ namespace Castle.MicroKernel
 		}
 
 		#endregion
-
 	}
 }
