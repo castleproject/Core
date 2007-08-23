@@ -14,7 +14,6 @@
 
 namespace Castle.VSNetIntegration.CastleWizards.Shared
 {
-	using System;
 	using System.Runtime.InteropServices;
 
 	[ComVisible(true)]

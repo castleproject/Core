@@ -15,7 +15,6 @@
 namespace Castle.VSNetIntegration.CastleWizards.Shared
 {
 	using System.Runtime.InteropServices;
-	
 	using Castle.VSNetIntegration.CastleWizards.Shared.Dialogs;
 	
 	public delegate void WizardEventHandler(object sender, ExtensionContext context);

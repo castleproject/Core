@@ -175,8 +175,12 @@ namespace Castle.VSNetIntegration.CastleWizards.Shared
 			StringBuilder validIdentifier = new StringBuilder();
 			foreach(char c in name)
 			{
-				if (c == '.') continue;
-				
+				if (c == '.')
+				{
+					validIdentifier.Append(c);
+					continue;
+				}
+
 				// Only allow valid identifier elements
 				//  letter-character
 				//  decimal-digit-character
