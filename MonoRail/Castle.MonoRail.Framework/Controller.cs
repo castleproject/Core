@@ -405,6 +405,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
+		/// <param name="name">view template name (the file extension is optional)</param>
 		public void RenderView(string name)
 		{
 			string basePath = _controllerName;
@@ -420,6 +421,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
+		/// <param name="name">view template name (the file extension is optional)</param>
+		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
 		public void RenderView(string name, bool skipLayout)
 		{
 			if (skipLayout) CancelLayout();
@@ -430,6 +433,22 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
+		/// <param name="name">view template name (the file extension is optional)</param>
+		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
+		/// <param name="mimeType">The mime type to use on the reply</param>
+		public void RenderView(string name, bool skipLayout, string mimeType)
+		{
+			if (skipLayout) CancelLayout();
+			Response.ContentType = mimeType;
+
+			RenderView(name);
+		}
+
+		/// <summary>
+		/// Specifies the view to be processed after the action has finished its processing. 
+		/// </summary>
+		/// <param name="controller">Controller name get view from (if you intend to user another controller's view</param>
+		/// <param name="name">view template name (the file extension is optional)</param>
 		public void RenderView(string controller, string name)
 		{
 			_selectedViewName = Path.Combine(controller, name);
@@ -438,9 +457,40 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
+		/// <param name="controller">Controller name get view from (if you intend to user another controller's view</param>
+		/// <param name="name">view template name (the file extension is optional)</param>
+		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
 		public void RenderView(string controller, string name, bool skipLayout)
 		{
 			if (skipLayout) CancelLayout();
+
+			RenderView(controller, name);
+		}
+
+		/// <summary>
+		/// Specifies the view to be processed after the action has finished its processing. 
+		/// </summary>
+		/// <param name="controller">Controller name get view from (if you intend to user another controller's view</param>
+		/// <param name="name">view template name (the file extension is optional)</param>
+		/// <param name="skipLayout">If set to <c>true</c>, no layout will be used when rendering the view</param>
+		/// <param name="mimeType">The mime type to use on the reply</param>
+		public void RenderView(string controller, string name, bool skipLayout, string mimeType)
+		{
+			if (skipLayout) CancelLayout();
+			Response.ContentType = mimeType;
+
+			RenderView(controller, name);
+		}
+
+		/// <summary>
+		/// Specifies the view to be processed after the action has finished its processing. 
+		/// </summary>
+		/// <param name="controller">Controller name get view from (if you intend to user another controller's view</param>
+		/// <param name="name">view template name (the file extension is optional)</param>
+		/// <param name="mimeType">The mime type to use on the reply</param>
+		public void RenderView(string controller, string name, string mimeType)
+		{
+			Response.ContentType = mimeType;
 
 			RenderView(controller, name);
 		}
