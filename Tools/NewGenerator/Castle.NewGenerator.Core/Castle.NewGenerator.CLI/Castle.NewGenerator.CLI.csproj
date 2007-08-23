@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E645B52A-F520-41B6-ABA4-1A51488B8AB5}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4AF15BA8-1752-491E-81DA-FE60CA1B8819}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Castle.NewGenerator.Core</RootNamespace>
-    <AssemblyName>Castle.NewGenerator.Core</AssemblyName>
+    <RootNamespace>Castle.NewGenerator.CLI</RootNamespace>
+    <AssemblyName>CastleGen</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,37 +28,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\GeneratorAttribute.cs" />
-    <Compile Include="Attributes\GeneratorOptionsAttribute.cs" />
-    <Compile Include="Attributes\GeneratorPanelAttribute.cs" />
-    <Compile Include="Attributes\ParamAttribute.cs" />
-    <Compile Include="BaseGenerator.cs" />
-    <Compile Include="GeneratorConfigurer.cs" />
-    <Compile Include="GeneratorContext.cs" />
-    <Compile Include="IGenerator.cs" />
-    <Compile Include="IGeneratorService.cs" />
-    <Compile Include="MR\NewController.cs" />
-    <Compile Include="MR\NewControllerDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MR\NewControllerDialog.Designer.cs">
-      <DependentUpon>NewControllerDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MR\NewProject.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\getoptions\Mono.GetOptions.csproj">
       <Project>{88BF59CF-3127-46E8-A61D-613E333FFAC7}</Project>
       <Name>Mono.GetOptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.NewGenerator.Core\Castle.NewGenerator.Core.csproj">
+      <Project>{E645B52A-F520-41B6-ABA4-1A51488B8AB5}</Project>
+      <Name>Castle.NewGenerator.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -13,6 +13,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.NewGenerator.VSNetIn
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.NewGenerator.CLI", "Castle.NewGenerator.CLI\Castle.NewGenerator.CLI.csproj", "{4AF15BA8-1752-491E-81DA-FE60CA1B8819}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.GetOptions", "..\..\..\..\..\getoptions\Mono.GetOptions.csproj", "{88BF59CF-3127-46E8-A61D-613E333FFAC7}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +39,14 @@ Global
 		{35A9EA7C-4B5D-466A-8BAA-34DA67AC36DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35A9EA7C-4B5D-466A-8BAA-34DA67AC36DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35A9EA7C-4B5D-466A-8BAA-34DA67AC36DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AF15BA8-1752-491E-81DA-FE60CA1B8819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AF15BA8-1752-491E-81DA-FE60CA1B8819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AF15BA8-1752-491E-81DA-FE60CA1B8819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AF15BA8-1752-491E-81DA-FE60CA1B8819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

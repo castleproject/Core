@@ -2,6 +2,8 @@ namespace Castle.NewGenerator.Core
 {
 	public interface IGenerator
 	{
-		void Generate(IGeneratorService generator);
+		string TargetPath { get; set; }
+
+		void Generate(GeneratorContext context, IGeneratorService generator);
 	}
 }

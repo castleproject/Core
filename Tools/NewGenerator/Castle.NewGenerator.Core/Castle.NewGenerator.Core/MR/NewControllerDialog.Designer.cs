@@ -1,4 +1,4 @@
-namespace Castle.NewGenerator.Core
+namespace Castle.NewGenerator.Core.MR
 {
 	partial class NewControllerDialog
 	{

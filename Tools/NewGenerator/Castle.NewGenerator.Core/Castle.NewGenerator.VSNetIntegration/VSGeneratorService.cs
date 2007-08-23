@@ -1,11 +1,8 @@
 namespace Castle.NewGenerator.VSNetIntegration
 {
 	using System.Runtime.InteropServices;
-	using System.Windows.Forms;
-s	using Castle.NewGenerator.Core;
+	using Castle.NewGenerator.Core;
 	using EnvDTE;
-	using NVelocity;
-	using NVelocity.App;
 
 	[Guid("9FF77D9F-E4FC-47EE-8E8B-0079FC2F247D")]
 	[ProgId("Castle.TestWizard")]
