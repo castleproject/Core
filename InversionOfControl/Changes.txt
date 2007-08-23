@@ -1,6 +1,8 @@
 RC 4
 ====
 
+- Fixed build from IContainerAccessor change
+
 - Applied Ron Grabowski's patch fixing IOC-89
   "Make DefaultKernel implement IServiceProvider"
 

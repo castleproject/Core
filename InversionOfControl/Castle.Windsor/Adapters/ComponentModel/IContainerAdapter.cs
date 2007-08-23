@@ -14,7 +14,6 @@
 
 namespace Castle.Windsor.Adapters.ComponentModel
 {
-	using System;
 	using System.ComponentModel;
 	using System.ComponentModel.Design;
 
@@ -26,7 +25,8 @@ namespace Castle.Windsor.Adapters.ComponentModel
 	/// <seealso cref="IContainer"/>
 	/// <seealso cref="IServiceContainer"/>
 	public interface IContainerAdapter :
-		IComponent, IContainer, IServiceContainer, IContainerAccessor
+		IComponent, IContainer, IServiceContainer
 	{
+		IWindsorContainer Container { get; }
 	}
 }
