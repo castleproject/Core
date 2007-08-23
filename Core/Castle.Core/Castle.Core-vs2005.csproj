@@ -62,6 +62,7 @@
     <Compile Include="Internal\LinkedList.cs" />
     <Compile Include="Internal\TopologicalSortAlgo.cs" />
     <Compile Include="IServiceEnabledComponent.cs" />
+    <Compile Include="IServiceProviderEx.cs" />
     <Compile Include="Lifecycle\IInitializable.cs" />
     <Compile Include="Lifecycle\IRecyclable.cs" />
     <Compile Include="Lifecycle\IStartable.cs" />
