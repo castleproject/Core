@@ -35,6 +35,7 @@ namespace Castle.Components.Validator
 		public const string RangeTooLowMessage = "range_toolow";
 		public const string RangeTooHighOrLowMessage = "range_toohighorlow";
 		public const string NotSameAsMessage = "not_same_as_invalid";
+		public const string NotSameValueMessage = "not_same_value_invalid";
 		public const string GroupNotEmpty = "group_not_empty_invalid";
 		public const string GroupNotEmptySeperator = "group_not_empty_seperator";
 		public const string CollectionNotEmpty = "collection_not_empty";

@@ -1,7 +1,10 @@
 Beta 1
 ======
 
+- Applied Ken Egozi's patch adding NotSameAsValidator (COMP-41)
+
 - Added a decimal range validator
+
 - Made the range validator web enabled
 
 - Applied Brian DeMarzo's patch fixing COMP-30

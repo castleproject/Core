@@ -166,6 +166,14 @@ namespace Castle.Components.Validator
 		void SetAsSameAs(string target, string comparisonFieldName, string violationMessage);
 
 		/// <summary>
+		/// Set as not same as.
+		/// </summary>
+		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>
+		/// <param name="comparisonFieldName">The name of the field to compare with.</param>
+		/// <param name="violationMessage">The violation message.</param>
+		void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage);
+
+		/// <summary>
 		/// Set date.
 		/// </summary>
 		/// <param name="target">The target name (ie, a hint about the controller being validated)</param>

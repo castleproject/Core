@@ -162,9 +162,6 @@
   <data name="range_invalid" xml:space="preserve">
     <value>Veld moet een waarde tussen {0} en {1} bevatten</value>
   </data>
-  <data name="not_same_as_invalid" xml:space="preserve">
-    <value>Veld mag niet gelijk zijn aan '{0}'</value>
-  </data>
   <data name="range_toohigh" xml:space="preserve">
     <value>Veld moet kleiner of gelijk zijn aan {0}</value>
   </data>
@@ -182,5 +179,8 @@
   </data>
   <data name="time_invalid" xml:space="preserve">
     <value>Vul s.v.p. een geldig tijdstip in. Bijvoorbeeld 14:05</value>
+  </data>
+  <data name="not_same_value_invalid" xml:space="preserve">
+    <value>Veld mag niet gelijk zijn aan '{0}'</value>
   </data>
 </root>

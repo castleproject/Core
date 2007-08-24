@@ -73,6 +73,7 @@
     <Compile Include="ValidatorTests\NonEmptyValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\RegularExpressionValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\SameAsValidatorTestCase.cs" />
+    <Compile Include="ValidatorTests\NotSameAsValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\SetValidatorTestCase.cs" />
     <Compile Include="ValidatorTests\SingleValidatorTestCase.cs" />
   </ItemGroup>

@@ -60,7 +60,7 @@ namespace Castle.Components.Validator
 		/// <value></value>
 		protected override string MessageKey
 		{
-			get { return MessageConstants.NotSameAsMessage; }
+			get { return MessageConstants.NotSameValueMessage; }
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace Castle.Components.Validator
 		/// <returns></returns>
 		protected override string BuildErrorMessage()
 		{
-			return string.Format(GetString(MessageConstants.NotSameAsMessage), value);
+			return string.Format(GetString(MessageConstants.NotSameValueMessage), value);
 		}
 	}
 }

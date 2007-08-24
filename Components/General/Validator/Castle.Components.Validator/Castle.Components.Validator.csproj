@@ -53,6 +53,7 @@
     <Compile Include="Attributes\ValidateNotSameValueAttribute.cs" />
     <Compile Include="Attributes\ValidateRegExpAttribute.cs" />
     <Compile Include="Attributes\ValidateSameAsAttribute.cs" />
+    <Compile Include="Attributes\ValidateNotSameAsAttribute.cs" />
     <Compile Include="Attributes\ValidateSetAttribute.cs" />
     <Compile Include="Attributes\ValidateSingleAttribute.cs" />
     <Compile Include="Messages.fr.Designer.cs">
@@ -103,6 +104,7 @@
     <Compile Include="Validators\AbstractValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
     <Compile Include="Validators\CollectionNotEmptyValidator.cs" />
+    <Compile Include="Validators\NotSameAsValidator.cs" />
     <Compile Include="Validators\CreditCardValidator.cs" />
     <Compile Include="Validators\GroupNotEmptyValidator.cs" />
     <Compile Include="Validators\DateTimeValidator.cs" />

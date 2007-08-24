@@ -163,7 +163,7 @@
     <value>Field must be between {0} and {1}</value>
   </data>
   <data name="not_same_as_invalid" xml:space="preserve">
-    <value>Field must not equals '{0}'</value>
+    <value>Fields should not match</value>
   </data>
   <data name="range_toohigh" xml:space="preserve">
     <value>Field must be less than or equal to {0}</value>
@@ -188,5 +188,8 @@
   </data>
   <data name="credit_card_invalid" xml:space="preserve">
     <value>Field value does not appear to be a valid credit card number, or is of an unsupported type.</value>
+  </data>
+  <data name="not_same_value_invalid" xml:space="preserve">
+    <value>Field must not equals '{0}'</value>
   </data>
 </root>
