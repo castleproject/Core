@@ -160,14 +160,13 @@
     <Compile Include="Attributes\ViewComponentParamAttribute.cs" />
     <Compile Include="Configuration\DefaultUrl.cs" />
     <Compile Include="Configuration\DefaultUrlCollection.cs" />
+    <Compile Include="ServiceProviderLocator.cs" />
     <Compile Include="Extensions\ExceptionChaining\FilteredExceptionHandler.cs" />
     <Compile Include="Extensions\ExceptionChaining\LoggingExceptionHandler.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Filters\PersistFlashFilter.cs" />
     <Compile Include="Helpers\ValidationStrategy\ZebdaWebValidator.cs" />
     <Compile Include="Helpers\ZebdaHelper.cs" />
-    <Compile Include="IGenericServiceContainer.cs" />
-    <Compile Include="IGenericServiceProvider.cs" />
     <Compile Include="ServiceContainerAccessor.cs" />
     <Compile Include="Services\AjaxProxyGenerator\IAjaxProxyGenerator.cs" />
     <Compile Include="Services\AjaxProxyGenerator\PrototypeAjaxProxyGenerator.cs" />

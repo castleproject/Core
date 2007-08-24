@@ -16,7 +16,7 @@ namespace TestSite.Controllers
 {
 	using Castle.MonoRail.Framework;
 
-	[Filter( ExecuteEnum.Always, typeof(MyFilter) )]
+	[Filter(ExecuteEnum.Always, typeof(MyFilter))]
 	public class FilteredController : Controller
 	{
 		public FilteredController()
@@ -37,10 +37,10 @@ namespace TestSite.Controllers
 		{
 		}
 
-        [SkipFilter( typeof(MyFilter))]
-        public void SelectiveSkip()
-        {
-        }
+		[SkipFilter(typeof(MyFilter))]
+		public void SelectiveSkip()
+		{
+		}
 	}
 
 	public class MyFilter : IFilter

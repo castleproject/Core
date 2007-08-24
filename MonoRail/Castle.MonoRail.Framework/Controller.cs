@@ -27,6 +27,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
+	using Castle.Core;
 
 	/// <summary>
 	/// Implements the core functionality and exposes the
@@ -107,7 +108,7 @@ namespace Castle.MonoRail.Framework
 
 		internal ControllerMetaDescriptor metaDescriptor;
 
-		internal IGenericServiceProvider serviceProvider;
+		internal IServiceProvider serviceProvider;
 
 		internal ValidatorRunner validator;
 

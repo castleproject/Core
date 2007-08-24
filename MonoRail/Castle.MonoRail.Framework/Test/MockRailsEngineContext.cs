@@ -40,6 +40,7 @@ namespace Castle.MonoRail.Framework.Test
 		private readonly List<RenderedEmailTemplate> renderedEmailTemplates = new List<RenderedEmailTemplate>();
 		private readonly List<Message> messagesSent = new List<Message>();
 		private string urlReferrer;
+		private IServiceProvider container;
 		private IPrincipal currentUser = new GenericPrincipal(new GenericIdentity("user", "test"), new string[0]);
 		private Exception lastException;
 		private Controller currentController;
@@ -176,7 +177,17 @@ namespace Castle.MonoRail.Framework.Test
 			set { currentController = value; }
 		}
 
+		public IServiceProvider Container
+		{
+			get { return container; }
+		}
+
 		#endregion
+
+		public void SetContainer(IServiceProvider serviceProvider)
+		{
+			container = serviceProvider;
+		}
 
 		public virtual List<RenderedEmailTemplate> RenderedEmailTemplates
 		{

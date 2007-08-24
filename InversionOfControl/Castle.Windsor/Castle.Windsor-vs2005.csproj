@@ -190,9 +190,6 @@
     <Compile Include="Configuration\Interpreters\XmlProcessor\XmlProcessorException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IContainerAccessor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IEnvironmentInfo.cs" />
     <Compile Include="InitializationException.cs">
       <SubType>Code</SubType>
@@ -206,6 +203,7 @@
     <Compile Include="IWindsorContainer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IContainerAccessor.cs" />
     <Compile Include="Proxy\AbstractProxyFactory.cs">
       <SubType>Code</SubType>
     </Compile>

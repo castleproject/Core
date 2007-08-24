@@ -30,7 +30,7 @@ namespace Castle.MonoRail.WindsorExtension
 	{
 		public override IFilter Create(Type filterType)
 		{
-			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
 
 			if (container.Kernel.HasComponent(filterType))
 			{
@@ -44,7 +44,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 		public override void Release(IFilter filter)
 		{
-			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
 
 			container.Release(filter);
 

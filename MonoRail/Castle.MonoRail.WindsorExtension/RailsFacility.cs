@@ -18,7 +18,6 @@ namespace Castle.MonoRail.WindsorExtension
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Controllers;
 	using Castle.MonoRail.Framework.Services;
@@ -39,6 +38,8 @@ namespace Castle.MonoRail.WindsorExtension
 
 		protected override void Init()
 		{
+			RegisterWindsorLocationWithinMonoRail();
+
 			Kernel.AddComponent("rails.controllertree", typeof(IControllerTree), typeof(DefaultControllerTree));
 			Kernel.AddComponent("rails.wizardpagefactory", typeof(IWizardPageFactory), typeof(DefaultWizardPageFactory));
 			Kernel.AddComponent("rails.viewcomponentregistry", typeof(IViewComponentRegistry), typeof(DefaultViewComponentRegistry));
@@ -46,12 +47,14 @@ namespace Castle.MonoRail.WindsorExtension
 			controllerTree = (IControllerTree) Kernel["rails.controllertree"];
 			componentRegistry = (IViewComponentRegistry) Kernel["rails.viewcomponentregistry"];
 
-			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
-
-//			MonoRailConfiguration.GetConfig().ServiceEntries.RegisterService(
-//				ServiceIdentification.ControllerTree, typeof(ControllerTreeAccessor));
+			Kernel.ComponentModelCreated += OnComponentModelCreated;
 
 			AddBuiltInControllers();
+		}
+
+		private void RegisterWindsorLocationWithinMonoRail()
+		{
+			ServiceProviderLocator.Instance.AddLocatorStrategy(new WindsorAccessorStrategy());
 		}
 
 		protected virtual void AddBuiltInControllers()
@@ -83,6 +86,14 @@ namespace Castle.MonoRail.WindsorExtension
 			if (isViewComponent)
 			{
 				componentRegistry.AddViewComponent(model.Name, model.Implementation);
+			}
+		}
+
+		public class WindsorAccessorStrategy : ServiceProviderLocator.IAccessorStrategy
+		{
+			public IServiceProviderEx LocateProvider()
+			{
+				return WindsorContainerAccessorUtil.ObtainContainer();
 			}
 		}
 	}

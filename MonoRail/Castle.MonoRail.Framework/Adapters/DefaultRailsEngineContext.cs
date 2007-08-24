@@ -23,6 +23,7 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Collections.Specialized;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Services;
+	using Castle.Core;
 
 	/// <summary>
 	/// Adapter to expose a valid <see cref="IRailsEngineContext"/> 
@@ -40,9 +41,10 @@ namespace Castle.MonoRail.Framework.Adapters
 		private Flash _flash;
 		private UrlInfo _urlInfo;
 		private String _url;
-		private bool customSessionSet;
 		private ICacheProvider _cache;
 		private Controller currentController;
+		private IServiceProvider container;
+		private bool customSessionSet;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultRailsEngineContext"/> class.
@@ -50,7 +52,10 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <param name="parent">The parent.</param>
 		/// <param name="urlInfo">Url information</param>
 		/// <param name="context">The context.</param>
-		public DefaultRailsEngineContext(IServiceContainer parent, UrlInfo urlInfo, HttpContext context) : base(parent)
+		/// <param name="container">External container instance</param>
+		public DefaultRailsEngineContext(IServiceContainer parent, UrlInfo urlInfo,
+										 HttpContext context, IServiceProvider container)
+			: base(parent)
 		{
 			_urlInfo = urlInfo;
 			_context = context;
@@ -60,6 +65,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			_response = new ResponseAdapter(context.Response, this, ApplicationPath);
 			_url = _context.Request.RawUrl;
 			_cache = parent.GetService(typeof(ICacheProvider)) as ICacheProvider;
+			this.container = container;
 		}
 
 		/// <summary>
@@ -137,10 +143,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <value></value>
 		public IDictionary Session
 		{
-			get
-			{
-				return _session;
-			}
+			get { return _session; }
 			set
 			{
 				customSessionSet = true;
@@ -338,6 +341,15 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get { return currentController; }
 			set { currentController = value; }
+		}
+
+		/// <summary>
+		/// If a container is available for the app, this 
+		/// property exposes its instance.
+		/// </summary>
+		public IServiceProvider Container
+		{
+			get { return container; }
 		}
 	}
 }

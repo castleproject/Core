@@ -31,7 +31,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 		public override ViewComponent Create(String name)
 		{
-			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
 			Type type = ResolveType(name);
 			if (container.Kernel.HasComponent(type))
 			{
@@ -42,7 +42,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 		protected override IViewComponentRegistry GetViewComponentRegistry()
 		{
-			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
 			return (IViewComponentRegistry) container["rails.viewcomponentregistry"];
 		}
 	}

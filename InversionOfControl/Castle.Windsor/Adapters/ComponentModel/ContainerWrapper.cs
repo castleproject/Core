@@ -19,9 +19,8 @@ namespace Castle.Windsor.Adapters.ComponentModel
 	using System.ComponentModel;
 	using System.ComponentModel.Design;
 	using System.Threading;
-
-	using Castle.MicroKernel;
 	using Castle.Core;
+	using Castle.MicroKernel;
 
 	/// <summary>
 	/// Implementation of <see cref="IContainerAdapter"/> that does not assume ownership of the

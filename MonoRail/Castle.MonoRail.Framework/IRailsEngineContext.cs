@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.ComponentModel.Design;
 	using System.Web;
 	using System.Security.Principal;
 	using System.Collections;
@@ -24,7 +25,7 @@ namespace Castle.MonoRail.Framework
 	/// Represents an abstraction between the MonoRail API
 	/// and the ASP.Net API. 
 	/// </summary>
-	public interface IRailsEngineContext : IGenericServiceContainer, IGenericServiceProvider
+	public interface IRailsEngineContext : IServiceContainer
 	{
 		/// <summary>
 		/// Gets the request type (GET, POST, etc)
@@ -130,5 +131,18 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <value>The current controller.</value>
 		Controller CurrentController { get; set; }
+
+		/// <summary>
+		/// If a container is available for the app, this 
+		/// property exposes its instance.
+		/// </summary>
+		IServiceProvider Container { get; }
+
+		/// <summary>
+		/// Request a service from the engine context.
+		/// </summary>
+		/// <typeparam name="T">Service type</typeparam>
+		/// <returns>Service instance</returns>
+		T GetService<T>();
 	}
 }

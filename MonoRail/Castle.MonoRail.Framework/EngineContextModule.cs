@@ -392,7 +392,9 @@ namespace Castle.MonoRail.Framework
 
 				UrlInfo urlInfo = urlTokenizer.TokenizeUrl(req.FilePath, req.Url, req.IsLocal, req.ApplicationPath);
 
-				DefaultRailsEngineContext newContext = new DefaultRailsEngineContext(container, urlInfo, context);
+				IServiceProvider userServiceProvider = ServiceProviderLocator.Instance.LocateProvider();
+
+				DefaultRailsEngineContext newContext = new DefaultRailsEngineContext(container, urlInfo, context, userServiceProvider);
 
 				context.Items[RailsContextKey] = newContext;
 

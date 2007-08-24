@@ -108,15 +108,13 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ContainerAccessorUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ControllerTreeAccessor.cs" />
     <Compile Include="DefaultWizardPageFactory.cs" />
     <Compile Include="IWizardPageFactory.cs" />
     <Compile Include="RailsFacility.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WindsorContainerAccessorUtil.cs" />
     <Compile Include="WindsorControllerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -132,6 +130,7 @@
     <None Include="..\..\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <None Include="Castle.MonoRail.WindsorExtension.build" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

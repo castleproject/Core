@@ -18,14 +18,14 @@ namespace Castle.Core
 	/// This interface should be implemented by classes
 	/// that are available in a bigger context, exposing
 	/// the container to different areas in the same application.
-	/// <p>
+	/// <para>
 	/// For example, in Web application, the (global) HttpApplication
 	/// subclasses should implement this interface to expose 
 	/// the configured container
-	/// </p>
+	/// </para>
 	/// </summary>
-	public interface IContainerAccessor
+	public interface IServiceProviderExAccessor
 	{
-		IServiceProviderEx Container { get; }
+		IServiceProviderEx ServiceProvider { get; }
 	}
 }

@@ -30,7 +30,7 @@ namespace Castle.MonoRail.WindsorExtension
 	{
 		public Controller CreateController(UrlInfo urlInfo)
 		{
-			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+			IWindsorContainer container = WindsorContainerAccessorUtil.ObtainContainer();
 
 			IControllerTree tree;
 			
@@ -55,7 +55,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 		public void Release(Controller controller)
 		{
-			ContainerAccessorUtil.ObtainContainer().Release(controller);
+			WindsorContainerAccessorUtil.ObtainContainer().Release(controller);
 		}
 	}
 }

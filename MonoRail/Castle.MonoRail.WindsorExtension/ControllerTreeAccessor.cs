@@ -30,7 +30,7 @@ namespace Castle.MonoRail.WindsorExtension
 		/// </summary>
 		public ControllerTreeAccessor()
 		{
-			tree = ContainerAccessorUtil.ObtainContainer().Resolve(typeof(IControllerTree)) as IControllerTree;
+			tree = WindsorContainerAccessorUtil.ObtainContainer().Resolve(typeof(IControllerTree)) as IControllerTree;
 		}
 
 		#region IControllerTree Members

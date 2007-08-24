@@ -14,9 +14,7 @@
 
 namespace TestSiteWindsor
 {
-	using System;
 	using System.Web;
-
 	using Castle.Core.Resource;
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.Interpreters;
