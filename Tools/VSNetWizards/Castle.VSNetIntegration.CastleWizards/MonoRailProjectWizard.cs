@@ -223,7 +223,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			rule1.AppendChild(rule1replace);
 
 			rule1pattern.AppendChild( webConfigDoc.CreateTextNode(@"(/blog/posts/)(\d+)/(\d+)/(.)*$") );
-			rule1replace.AppendChild( webConfigDoc.CreateCDataSection(" /blog/view.rails?year=$2&month=$3 ") );
+			rule1replace.AppendChild( webConfigDoc.CreateCDataSection(" /blog/view.castle?year=$2&month=$3 ") );
 
 			mrNode.AppendChild(webConfigDoc.CreateComment("For more information on routing see http://www.castleproject.org/monorail/documentation/trunk/advanced/routing.html"));
 			mrNode.AppendChild(routingElem);
@@ -237,7 +237,7 @@ namespace Castle.VSNetIntegration.CastleWizards
 			addRoutingElem.SetAttribute("name", "routing");
 			addRoutingElem.SetAttribute("type", "Castle.MonoRail.Framework.RoutingModule, Castle.MonoRail.Framework");
 			
-			httpModules.AppendChild(addRoutingElem);
+			httpModules.InsertBefore(httpModules.FirstChild, addRoutingElem);
 		}
 
 		private void AddViewEngineConfiguration(XmlDocument webConfigDoc, XmlElement mrNode)
