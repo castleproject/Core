@@ -325,7 +325,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns>The element tag</returns>
 		public string Button(string value)
 		{
-			return Submit(value, null);
+			return Button(value, null);
 		}
 
 		/// <summary>
