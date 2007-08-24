@@ -60,7 +60,7 @@ namespace Castle.Components.Validator
 			{
 				fieldValue = null;
 			}
-			if (fieldValue is string && string.IsNullOrEmpty((string) referenceValue))
+			if (referenceValue is string && string.IsNullOrEmpty((string)referenceValue))
 			{
 				referenceValue = null;
 			}
