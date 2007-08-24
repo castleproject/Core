@@ -1,6 +1,9 @@
 Beta 1
 ======
 
+- Fixed COMP-36
+  "Misleading validation error messages in english language"
+
 - Applied Ken Egozi's patch fixing COMP-40
   "A possible typo in SameAsValidator causing possible invalid cast exception"
 

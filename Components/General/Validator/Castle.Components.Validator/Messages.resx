@@ -157,7 +157,7 @@
     <value>Field must be less than {0} characters long</value>
   </data>
   <data name="length_tooshort" xml:space="preserve">
-    <value>Field must be more than {0} characters long</value>
+    <value>Field must be at least {0} characters long</value>
   </data>
   <data name="range_invalid" xml:space="preserve">
     <value>Field must be between {0} and {1}</value>
