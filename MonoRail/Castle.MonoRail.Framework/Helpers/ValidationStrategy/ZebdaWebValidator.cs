@@ -346,6 +346,10 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 			AddTitle(violationMessage);
 		}
 
+		public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
+		{
+			throw new NotImplementedException();
+		}
 		/// <summary>
 		/// Set date.
 		/// </summary>

@@ -222,6 +222,11 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				throw new NotImplementedException();
 			}
 
+			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
+			{
+				throw new NotImplementedException();
+			}
+			
 			public void SetDate(string target, string violationMessage)
 			{
 				throw new NotImplementedException();

@@ -323,6 +323,14 @@ namespace Castle.MonoRail.Framework.Helpers.ValidationStrategy
 				AddTitle(violationMessage);
 			}
 
+			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
+			{
+				string rule = "validate-not-same-as-" + comparisonFieldName.ToLowerInvariant();
+				AddClass(rule);
+				config.AddCustomRule(rule, violationMessage, "notEqualToField : '" + GetPrefixedFieldld(target, comparisonFieldName.ToLowerInvariant()) + "'");
+				AddTitle(violationMessage);
+			}
+
 			public void SetDate(string target, string violationMessage)
 			{
 				AddClass("validate-date");
