@@ -4,6 +4,8 @@ Change history
 Release Candidate 3
 ===================
 
+- Applied Lee Henson's patch adding generic overloads to ReflectionHelper
+
 - Added a few more RenderView overloads that take a mimeType to configure the Response.ContentType
 
 - If the controller cannot be found, MR searches for a special rescue "rescues/404" before throwing throwing an exception.

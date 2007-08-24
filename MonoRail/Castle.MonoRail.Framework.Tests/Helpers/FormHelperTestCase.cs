@@ -73,6 +73,13 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			helper.SetController(controller);
 		}
+
+		[Test]
+		public void FormTagDoesNotMixUrlParametersWithFormElementParameters()
+		{
+			// No solution here. Id is ambiguous
+			// helper.FormTag(DictHelper.Create("noaction=true"));
+		}
 		
 		[Test]
 		public void OverridingElementId()
