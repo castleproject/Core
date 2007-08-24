@@ -29,7 +29,5 @@ namespace NVelocity.Test
 			Assert.IsNotNull(mi, "Expected to find ExtendedProperties.GetString(String, String)");
 			Assert.IsTrue(mi.ToString().Equals("System.String GetString(System.String, System.String)"), "method not found");
 		}
-
-
 	}
 }

@@ -23,9 +23,8 @@ namespace NVelocity.Util.Introspection
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
 		/// name and actual arguments used to find it.
 		/// </summary>
-		private readonly Dictionary<string, MethodInfo> methodCache = new Dictionary<string, MethodInfo>();
-
-		private readonly Dictionary<string, MemberInfo> propertyCache = new Dictionary<string, MemberInfo>();
+		private readonly Dictionary<string, MethodInfo> methodCache = new Dictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, MemberInfo> propertyCache = new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
 		private readonly MethodMap methodMap = new MethodMap();
 
 		/// <summary> Standard constructor
