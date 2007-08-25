@@ -166,6 +166,23 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Registers new assemblies in ActiveRecord
+		/// Usefull for dynamic assembly-adding after initialization
+		/// </summary>
+		/// <param name="assemblies"></param>
+		public static void RegisterAssemblies(params Assembly[] assemblies)
+		{
+			List<Type> types = new List<Type>();
+
+			foreach (Assembly assembly in assemblies)
+			{
+				CollectValidActiveRecordTypesFromAssembly(assembly, types, configSource);
+			}
+
+			RegisterTypes(types.ToArray());
+		}
+
+		/// <summary>
 		/// Registers new types in ActiveRecord
 		/// Usefull for dynamic type-adding after initialization
 		/// </summary>
