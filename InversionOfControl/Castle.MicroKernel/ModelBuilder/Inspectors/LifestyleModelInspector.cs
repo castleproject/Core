@@ -36,8 +36,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		/// Seaches for the lifestyle in the configuration and, if unsuccessful
 		/// look for the lifestyle attribute in the implementation type.
 		/// </summary>
-		/// <param name="kernel"></param>
-		/// <param name="model"></param>
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (!ReadLifestyleFromConfiguration(model))
@@ -48,14 +46,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 		/// <summary>
 		/// Reads the attribute "lifestyle" associated with the 
-		/// component configuration and tries to convert to <see cref="LifestyleType"/> 
+		/// component configuration and tries to convert to <see cref="LifestyleType"/>  
 		/// enum type. 
 		/// </summary>
-		/// <exception cref="System.Configuration.ConfigurationException">
-		/// If the conversion fails
-		/// </exception>
-		/// <param name="model"></param>
-		/// <returns></returns>
 		protected virtual bool ReadLifestyleFromConfiguration(ComponentModel model)
 		{
 			if (model.Configuration != null)
@@ -143,7 +136,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		/// Check if the type expose one of the lifestyle attributes
 		/// defined in Castle.Model namespace.
 		/// </summary>
-		/// <param name="model"></param>
 		protected virtual void ReadLifestyleFromType(ComponentModel model)
 		{
 			object[] attributes = model.Implementation.GetCustomAttributes( 

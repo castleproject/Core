@@ -24,7 +24,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 	using Castle.MicroKernel.SubSystems.Conversion;
 
-
 	/// <summary>
 	/// Base for inspectors that want configuration associated with methods.
 	/// For each child a <see cref="MethodMetaModel"/> is created
@@ -34,11 +33,11 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// Implementors should override the <see cref="ObtainNodeName"/> return
 	/// the name of the node to be inspected. For example:
 	/// <code>
-	/// <pre>
+	/// <![CDATA[
 	///   <transactions>
 	///     <method name="Save" transaction="requires" />
 	///   </transactions>
-	/// </pre>
+	/// ]]>
 	/// </code>
 	/// </remarks>
 	public abstract class MethodMetaInspector : IContributeComponentModelConstruction
@@ -119,25 +118,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		}
 
 		protected abstract String ObtainNodeName();
-
-//		private void RegisterMethodsForFastAccess(MethodInfo[] methods, 
-//			String signature, MethodMetaModel metaModel, ComponentModel model)
-//		{
-//			foreach(MethodInfo method in methods)
-//			{
-//				if (signature != null && signature.Length != 0)
-//				{
-//					model.MethodMetaModels.MethodInfo2Model[method] = metaModel;
-//				}
-//				else
-//				{
-//					if (!model.MethodMetaModels.MethodInfo2Model.Contains(method))
-//					{
-//						model.MethodMetaModels.MethodInfo2Model[method] = metaModel;
-//					}
-//				}
-//			}
-//		}
 
 		private void AssertNameIsNotNull(string name, ComponentModel model)
 		{
