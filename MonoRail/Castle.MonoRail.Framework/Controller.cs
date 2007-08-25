@@ -128,6 +128,24 @@ namespace Castle.MonoRail.Framework
 		#region Useful Properties
 
 		/// <summary>
+		/// Gets the view folder -- (areaname + 
+		/// controllername) or just controller name -- that this controller 
+		/// will use by default.
+		/// </summary>
+		public string ViewFolder
+		{
+			get
+			{
+				if (_areaName != null && _areaName.Length > 0)
+				{
+					return Path.Combine(_areaName, _controllerName);
+				}
+
+				return _controllerName;
+			}
+		}
+
+		/// <summary>
 		/// This is intended to be used by MonoRail infrastructure.
 		/// </summary>
 		public ControllerMetaDescriptor MetaDescriptor
@@ -409,14 +427,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">view template name (the file extension is optional)</param>
 		public void RenderView(string name)
 		{
-			string basePath = _controllerName;
-
-			if (_areaName != null && _areaName.Length > 0)
-			{
-				basePath = Path.Combine(_areaName, _controllerName);
-			}
-
-			_selectedViewName = Path.Combine(basePath, name);
+			_selectedViewName = Path.Combine(ViewFolder, name);
 		}
 
 		/// <summary>
@@ -503,14 +514,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="name">The name of the view to process.</param>
 		public void InPlaceRenderView(TextWriter output, string name)
 		{
-			string basePath = _controllerName;
-
-			if (_areaName != null && _areaName.Length > 0)
-			{
-				basePath = Path.Combine(_areaName, _controllerName);
-			}
-
-			viewEngineManager.Process(output, Context, this, Path.Combine(basePath, name));			
+			viewEngineManager.Process(output, Context, this, Path.Combine(ViewFolder, name));
 		}
 
 		/// <summary>
