@@ -1,5 +1,6 @@
 namespace Castle.NewGenerator.VSNetIntegration
 {
+	using System.Collections;
 	using System.Runtime.InteropServices;
 	using Castle.NewGenerator.Core;
 	using EnvDTE;
@@ -22,6 +23,27 @@ namespace Castle.NewGenerator.VSNetIntegration
 
 			// MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory);
 			// MessageBox.Show(writer.GetStringBuilder().ToString());
+		}
+
+
+		public string CreateFolderOn(string baseFolder, string folderName)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public string CreateFolderOn(string baseFolder, string folderName, string description)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void AddFromTemplate(string folder, string template, string targetFileName, IDictionary parameters)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void AddStaticFile(string folder, string file)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

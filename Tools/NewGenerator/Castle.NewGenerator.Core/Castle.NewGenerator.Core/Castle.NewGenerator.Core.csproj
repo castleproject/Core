@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Components.Common.TemplateEngine, Version=0.0.2.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Castle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -41,6 +42,7 @@
     <Compile Include="Attributes\GeneratorPanelAttribute.cs" />
     <Compile Include="Attributes\ParamAttribute.cs" />
     <Compile Include="BaseGenerator.cs" />
+    <Compile Include="DefaultGeneratorService.cs" />
     <Compile Include="GeneratorConfigurer.cs" />
     <Compile Include="GeneratorContext.cs" />
     <Compile Include="IGenerator.cs" />
@@ -54,6 +56,8 @@
     </Compile>
     <Compile Include="MR\NewProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VSProject.cs" />
+    <Compile Include="VSSolution.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\getoptions\Mono.GetOptions.csproj">

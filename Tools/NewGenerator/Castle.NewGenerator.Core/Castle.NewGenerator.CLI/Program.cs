@@ -1,7 +1,10 @@
 namespace Castle.NewGenerator.CLI
 {
 	using System;
+	using System.ComponentModel;
 	using System.Reflection;
+	using Castle.Components.Common.TemplateEngine;
+	using Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine;
 	using Castle.NewGenerator.Core.MR;
 	using Core;
 	using Mono.GetOptions;
@@ -37,6 +40,20 @@ namespace Castle.NewGenerator.CLI
 			}
 
 			Configure(generator, args);
+
+			string workingDir = AppDomain.CurrentDomain.BaseDirectory;
+			string templateDir = @"C:\dev\castle\svn\trunk\Tools\NewGenerator\Castle.NewGenerator.Core\GeneratorTemplates";
+
+			GeneratorContext context = new GeneratorContext(workingDir, templateDir);
+
+			ITemplateEngine engine = new NVelocityTemplateEngine(templateDir);
+
+			if (engine is ISupportInitialize)
+			{
+				((ISupportInitialize)engine).BeginInit();
+			}
+
+			generator.Generate(context, new DefaultGeneratorService(context, engine));
 		}
 
 		private static void ShowUsage()
