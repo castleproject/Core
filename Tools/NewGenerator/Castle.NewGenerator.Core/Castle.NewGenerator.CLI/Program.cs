@@ -13,6 +13,8 @@ namespace Castle.NewGenerator.CLI
 	{
 		static void Main(string[] args)
 		{
+			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+
 			MainOptions opts = new MainOptions();
 			opts.ProcessArgs(args);
 
@@ -54,6 +56,12 @@ namespace Castle.NewGenerator.CLI
 			}
 
 			generator.Generate(context, new DefaultGeneratorService(context, engine));
+		}
+
+		static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+		{
+			// C:\dev\castle\svn\trunk\build\net-2.0\debug
+			return Assembly.LoadFile(@"C:\dev\castle\svn\trunk\build\net-2.0\debug\" + args.Name);
 		}
 
 		private static void ShowUsage()

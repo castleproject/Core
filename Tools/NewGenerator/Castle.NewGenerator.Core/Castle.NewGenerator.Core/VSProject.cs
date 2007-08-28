@@ -3,6 +3,7 @@ namespace Castle.NewGenerator.Core
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Reflection;
 	using System.Xml;
 
 	public enum ProjectType
@@ -20,6 +21,7 @@ namespace Castle.NewGenerator.Core
 		private readonly string targetFileName;
 		private readonly XmlDocument document;
 		private XmlElement referencesGroup, contentGroup, compileGroup, projectReferencesGroup, foldersGroup;
+		private List<Assembly> assemblyList = new List<Assembly>();
 
 		public enum FileType
 		{
@@ -53,9 +55,37 @@ namespace Castle.NewGenerator.Core
 			get { return id; }
 		}
 
-		public void AddAssemblyReference(string fileName)
+		public IList<Assembly> AssemblyReferences
 		{
+			get { return assemblyList; }
+		}
 
+		public void AddAssemblyReference(string fileName, string hintPath)
+		{
+			Assembly assm = Assembly.Load(fileName);
+
+			assemblyList.Add(assm);
+
+			XmlElement refElem = (XmlElement) referencesGroup.AppendChild(document.CreateElement("Reference", ns));
+			refElem.SetAttribute("Include", assm.FullName);
+
+			refElem.AppendChild(document.CreateElement("SpecificVersion", ns)).AppendChild(document.CreateTextNode("False"));
+			refElem.AppendChild(document.CreateElement("HintPath", ns)).AppendChild(document.CreateTextNode(hintPath));
+		}
+
+		public void AddAssemblyReferenceShared(string assemblyName)
+		{
+			XmlElement refElem = (XmlElement)referencesGroup.AppendChild(document.CreateElement("Reference", ns));
+			refElem.SetAttribute("Include", assemblyName);
+		}
+
+		public void AddProjectReference(VSProject project)
+		{
+			XmlElement refElem = (XmlElement) projectReferencesGroup.AppendChild(document.CreateElement("ProjectReference", ns));
+			refElem.SetAttribute("Include", project.FileName);
+
+			refElem.AppendChild(document.CreateElement("Project", ns)).AppendChild(document.CreateTextNode(project.Id.ToString("P")));
+			refElem.AppendChild(document.CreateElement("Name", ns)).AppendChild(document.CreateTextNode(project.Name));
 		}
 
 		public void Save()
@@ -186,18 +216,9 @@ namespace Castle.NewGenerator.Core
 						continue;
 				}
 
-				// if (fileType == FileType.Folder)
-				{
-					XmlElement item = templateFile.CreateElement(nodeName, ns);
-					item.SetAttribute("Include", relativeFilePath);
-					targetNode.AppendChild(item);
-				}
-//				else
-//				{
-//					XmlElement item = templateFile.CreateElement(nodeName, ns);
-//					item.AppendChild(templateFile.CreateTextNode(relativeFilePath));
-//					targetNode.AppendChild(item);
-//				}
+				XmlElement item = templateFile.CreateElement(nodeName, ns);
+				item.SetAttribute("Include", relativeFilePath);
+				targetNode.AppendChild(item);
 			}
 		}
 
