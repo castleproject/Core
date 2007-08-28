@@ -117,12 +117,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", 
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2005", "..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{9264F1C2-88DA-497B-AD12-99AC46B0292B}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -130,12 +124,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder.Tests-vs2005", "..\Components\General\Binder\Castle.Components.Binder.Tests\Castle.Components.Binder.Tests-vs2005.csproj", "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordScaffold-vs2005", "Castle.MonoRail.ActiveRecordScaffold\Castle.MonoRail.ActiveRecordScaffold-vs2005.csproj", "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
@@ -189,12 +177,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewEngines", "ViewEngines"
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Validator", "..\Components\General\Validator\Castle.Components.Validator\Castle.Components.Validator.csproj", "{4C945D49-02E9-43F2-9202-E7A6E7C56E77}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.TransformFilters-vs2005", "Castle.MonoRail.TransformFilters\Castle.MonoRail.TransformFilters-vs2005.csproj", "{BB60A834-F753-4091-9709-676B6A9F0188}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -214,6 +196,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Monorail.JSONSupport
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport.Tests", "Castle.MonoRail.ActiveRecordSupport.Tests\Castle.MonoRail.ActiveRecordSupport.Tests.csproj", "{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder-vs2005", "..\Components\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Validator", "..\Components\Validator\Castle.Components.Validator\Castle.Components.Validator.csproj", "{4C945D49-02E9-43F2-9202-E7A6E7C56E77}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder.Tests-vs2005", "..\Components\Binder\Castle.Components.Binder.Tests\Castle.Components.Binder.Tests-vs2005.csproj", "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -269,14 +269,6 @@ Global
 		{2409063E-BE05-4596-A677-758096D1C759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2409063E-BE05-4596-A677-758096D1C759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2409063E-BE05-4596-A677-758096D1C759}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -297,10 +289,6 @@ Global
 		{B39CC8B7-1391-40AF-9DA3-BF294CB16383}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B39CC8B7-1391-40AF-9DA3-BF294CB16383}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B39CC8B7-1391-40AF-9DA3-BF294CB16383}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB60A834-F753-4091-9709-676B6A9F0188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BB60A834-F753-4091-9709-676B6A9F0188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB60A834-F753-4091-9709-676B6A9F0188}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -317,6 +305,18 @@ Global
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C945D49-02E9-43F2-9202-E7A6E7C56E77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,10 +327,10 @@ Global
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{844F5EC4-9224-42A9-986D-CE645AC970F2} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
-		{57ED99CE-404E-4029-A98A-2159E2E70E22} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{3FBEADBB-692E-44CF-A06F-B4E7F2DE27D0} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{CE8B7A9D-2BA7-4E95-97BC-5829D61468C5} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{86CAA470-BFAC-4D14-B4C2-C5BEFE3AD003} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
+		{57ED99CE-404E-4029-A98A-2159E2E70E22} = {FE6CCE8D-3C80-4299-A8F1-FF2B4FC812C7}
 		{824EC872-2992-4518-8C41-4F87640D752A} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
 		{22432F75-FD21-474A-AB8F-43100DE79FDB} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53} = {A287E189-50B7-4EA3-A683-135F9F54ACF9}
