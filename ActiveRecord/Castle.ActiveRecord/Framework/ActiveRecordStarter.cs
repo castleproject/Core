@@ -162,7 +162,7 @@ namespace Castle.ActiveRecord
 		{
 			IConfigurationSource source = ActiveRecordSectionHandler.Instance;
 
-			Initialize(Assembly.GetExecutingAssembly(), source);
+			Initialize(Assembly.GetCallingAssembly(), source);
 		}
 
 		/// <summary>
