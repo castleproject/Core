@@ -52,13 +52,6 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
-		public void ImplicitQueryStringEntries()
-		{
-			Assert.AreEqual("/product/list.rails?id=1&name=hammett&", urlBuilder.BuildUrl(noAreaUrl, 
-				DictHelper.Create("controller=product", "action=list", "id=1", "name=hammett")));
-		}
-
-		[Test]
 		public void OperationsWithArea()
 		{
 			Assert.AreEqual("/product/list.rails", urlBuilder.BuildUrl(areaUrl, null, "product", "list"));
