@@ -355,6 +355,7 @@
     <Compile Include="Framework\Internal\Model\NestedParentReferenceModel.cs" />
     <Compile Include="Framework\Internal\NHibernateNullablesSupport.cs" />
     <Compile Include="Framework\Internal\AssemblyXmlGenerator.cs" />
+    <Compile Include="Framework\IWebThreadScopeInfo.cs" />
     <Compile Include="Framework\Queries\ActiveRecordCriteriaQuery.cs" />
     <Compile Include="Framework\Queries\ActiveRecordMultiQuery.cs" />
     <Compile Include="Framework\Queries\CountQuery.cs" />

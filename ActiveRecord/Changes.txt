@@ -1,6 +1,9 @@
 Release Candidate 2
 ===================
 
+- Applied Oleg Snurnikov's patch fixing AR-178
+  "SessionScopeWebModule fails with HybridWebThreadScopeInfo"
+
 - Applied Artur Grzegorzewicz's patch fixing AR-177
   "Parameterless overload of ActiveRecordStarter.Initialize"
 

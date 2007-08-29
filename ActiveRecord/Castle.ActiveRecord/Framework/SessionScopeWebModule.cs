@@ -64,7 +64,7 @@ namespace Castle.ActiveRecord.Framework
 			app.BeginRequest += OnBeginRequest;
 			app.EndRequest += OnEndRequest;
 			
-			isWebConfigured = (ActiveRecordBase.holder.ThreadScopeInfo is WebThreadScopeInfo);
+			isWebConfigured = (ActiveRecordBase.holder.ThreadScopeInfo is IWebThreadScopeInfo);
 		}
 
 		/// <summary>

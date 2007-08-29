@@ -28,7 +28,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	/// This is used for scenarios where most of the you need per request scope, but you also does some work outside a 
 	/// request (in a thread pool thread, for instnace).
 	/// </remarks>
-	public class HybridWebThreadScopeInfo : AbstractThreadScopeInfo
+	public class HybridWebThreadScopeInfo : AbstractThreadScopeInfo, IWebThreadScopeInfo
 	{
 		const string ActiveRecordCurrentStack = "activerecord.currentstack";
 
