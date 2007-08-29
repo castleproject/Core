@@ -69,5 +69,21 @@ namespace Castle.DynamicProxy.Tests
 			object instance = Activator.CreateInstance (t);
 			Assert.AreEqual ("six", t.GetMethod ("InstanceMethod").Invoke (instance, new object[] { "six" }));
 		}
+
+		[Test]
+		public void ForceUnsignedFalseWithSignedTypes ()
+		{
+			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes, TypeAttributes.Public, false);
+			Type t = emitter.BuildType ();
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t.Assembly));
+		}
+
+		[Test]
+		public void ForceUnsignedTrueWithSignedTypes ()
+		{
+			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes, TypeAttributes.Public, true);
+			Type t = emitter.BuildType ();
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t.Assembly));
+		}
 	}
 }

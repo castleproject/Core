@@ -259,9 +259,9 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForBaseTypeFromSignedAssembly ()
 		{
 			Type t = typeof (Hashtable);
-			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t.Assembly));
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t.Assembly));
 			object proxy = generator.CreateClassProxy (t, new StandardInterceptor ());
-			Assert.IsTrue (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
 		}
 
 		[Test]
@@ -269,10 +269,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Type t1 = typeof (Hashtable);
 			Type t2 = typeof (IServiceProvider);
-			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t1.Assembly));
-			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t1.Assembly));
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t2.Assembly));
 			object proxy = generator.CreateClassProxy (t1, new Type[] {t2}, new StandardInterceptor ());
-			Assert.IsTrue (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
 		}
 
 		[Test]
@@ -280,9 +280,9 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForBaseTypeFromUnsignedAssembly ()
 		{
 			Type t = typeof (MyClass);
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t.Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t.Assembly));
 			object proxy = generator.CreateClassProxy (t, new StandardInterceptor ());
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
 		}
 
 		[Test]
@@ -291,10 +291,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Type t1 = typeof (MyClass);
 			Type t2 = typeof (IService);
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t1.Assembly));
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t1.Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t2.Assembly));
 			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
 		}
 
 		[Test]
@@ -303,10 +303,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Type t1 = typeof (MyClass);
 			Type t2 = typeof (IServiceProvider);
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t1.Assembly));
-			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t1.Assembly));
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t2.Assembly));
 			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
 		}
 
 		[Test]
@@ -315,10 +315,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Type t1 = typeof (Hashtable);
 			Type t2 = typeof (IService);
-			Assert.IsTrue (ClassEmitter.ContainsPublicKey (t1.Assembly));
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (t2.Assembly));
+			Assert.IsTrue (StrongNameUtil.IsAssemblySigned (t1.Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (t2.Assembly));
 			object proxy = generator.CreateClassProxy (t1, new Type[] { t2 }, new StandardInterceptor ());
-			Assert.IsFalse (ClassEmitter.ContainsPublicKey (proxy.GetType ().Assembly));
+			Assert.IsFalse (StrongNameUtil.IsAssemblySigned (proxy.GetType ().Assembly));
 		}
 	}
 }

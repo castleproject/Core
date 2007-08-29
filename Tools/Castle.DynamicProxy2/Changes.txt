@@ -1,5 +1,8 @@
 Beta 1 Version 1.0.0.0
 ======================
+- Added StrongNameUtil, which provides methods for checking whether an assembly is signed/a type comes from a signed assembly
+- Added an additional constructor overload to ClassEmitter, allowing to force it to use an unsigned assembly
+
 - Fixed a bug in ModuleScope: SaveAssembly tried to delete from the current directory if a file with a matching name existed, not from the target
   directory
 

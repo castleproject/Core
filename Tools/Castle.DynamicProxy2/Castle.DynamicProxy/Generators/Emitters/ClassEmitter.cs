@@ -21,15 +21,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public class ClassEmitter : AbstractTypeEmitter
 	{
-		private static IDictionary signedAssemblyCache = new Hashtable();
-
 		public ClassEmitter (ModuleScope modulescope, String name, Type baseType, Type[] interfaces)
 			: this (modulescope, name, baseType, interfaces, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable)
 		{
 		}
 
-		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags)
-			: base (CreateTypeBuilder (modulescope, name, baseType, interfaces, flags))
+		public ClassEmitter (ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags)
+			: this (modulescope, name, baseType, interfaces, flags, false)
+		{
+		}
+
+		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, Type[] interfaces, TypeAttributes flags, bool forceUnsigned)
+			: base (CreateTypeBuilder (modulescope, name, baseType, interfaces, flags, forceUnsigned))
 		{
 			InitializeGenericArgumentsFromBases(ref baseType, ref interfaces);
 
@@ -44,14 +47,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			TypeBuilder.SetParent(baseType);
 		}
 
-		private static TypeBuilder CreateTypeBuilder (ModuleScope modulescope, string name, Type baseType, Type[] interfaces, TypeAttributes flags)
+		private static TypeBuilder CreateTypeBuilder (ModuleScope modulescope, string name, Type baseType, Type[] interfaces,
+				TypeAttributes flags, bool forceUnsigned)
 		{
-			bool isAssemblySigned = IsAssemblySigned (baseType);
-			foreach (Type type in interfaces)
-			{
-				isAssemblySigned &= IsAssemblySigned (type);
-			}
-
+			bool isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly (baseType, interfaces);
 			return modulescope.ObtainDynamicModule (isAssemblySigned).DefineType (name, flags);
 		}
 
@@ -76,25 +75,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					throw new NotSupportedException("ClassEmitter does not support open generic interfaces. Type: " + inter.FullName);
 				}
 			}
-		}
-
-		private static bool IsAssemblySigned(Type baseType)
-		{
-			lock(signedAssemblyCache)
-			{
-				if (signedAssemblyCache.Contains(baseType.Assembly) == false)
-				{
-					bool isSigned = ContainsPublicKey(baseType.Assembly);
-					signedAssemblyCache.Add(baseType.Assembly, isSigned);
-				}
-				return (bool) signedAssemblyCache[baseType.Assembly];
-			}
-		}
-
-		public static bool ContainsPublicKey (Assembly assembly)
-		{
-			byte[] key = assembly.GetName ().GetPublicKey ();
-			return key != null && key.Length != 0;
 		}
 	}
 }

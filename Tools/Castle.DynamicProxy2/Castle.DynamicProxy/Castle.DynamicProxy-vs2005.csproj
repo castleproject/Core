@@ -239,6 +239,7 @@
     <Compile Include="Generators\Emitters\StindOpCodesDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generators\Emitters\StrongNameUtil.cs" />
     <Compile Include="Generators\Emitters\TypeConstructorEmitter.cs" />
     <Compile Include="Generators\Emitters\TypeUtil.cs" />
     <Compile Include="Generators\EventToGenerate.cs" />
