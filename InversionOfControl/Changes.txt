@@ -1,6 +1,9 @@
 RC 4
 ====
 
+- Fixed IOC-91
+  "ContextBoundObject's context is not bound when object is created by MicroKernel"
+
 - Fixed build from IContainerAccessor change
 
 - Applied Ron Grabowski's patch fixing IOC-89

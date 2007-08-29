@@ -97,14 +97,9 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					ConstructorInfo cinfo = implType.GetConstructor(
-						BindingFlags.Public | BindingFlags.Instance, null, signature, null);
-
-					instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
-
-					cinfo.Invoke(instance, arguments);
+					instance = Activator.CreateInstance(implType, arguments);
 				}
-				catch (Exception ex)
+				catch(Exception ex)
 				{
 					throw new ComponentActivatorException(
 						"ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex);
@@ -117,7 +112,7 @@ namespace Castle.MicroKernel.ComponentActivator
 				{
 					instance = Kernel.ProxyFactory.Create(Kernel, instance, Model, arguments);
 				}
-				catch (Exception ex)
+				catch(Exception ex)
 				{
 					throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex);
 				}
