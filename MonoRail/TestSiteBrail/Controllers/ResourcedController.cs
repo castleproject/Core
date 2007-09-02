@@ -17,12 +17,17 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
     using Castle.MonoRail.Framework;
     using System;
 
-    [Serializable, Resource("resx", "ResourceFile")]
+    [Serializable, Resource("resx", "TestSiteBrail.Controllers.ResourceFile")]
     public class ResourcedController : SmartDispatcherController
     {
         public void GetResources()
         {
         }
+
+		public void Iterating()
+        {
+        }
+
 
     	public void IndexingResources()
     	{

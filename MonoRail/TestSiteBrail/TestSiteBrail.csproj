@@ -212,6 +212,7 @@
     <None Include="Views\dsl\testXml.brail" />
     <None Include="Views\dsl\testSubViewWithComponents.brail" />
     <None Include="Views\home\NullPropagation.brail" />
+    <None Include="Views\resourced\iterating.brail" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

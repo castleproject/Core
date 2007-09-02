@@ -17,6 +17,7 @@ using System.Text;
 
 namespace Castle.MonoRail.Views.Brail
 {
+	using System.Collections;
 	using Boo.Lang;
 	using Castle.MonoRail.Framework;
 
@@ -24,7 +25,7 @@ namespace Castle.MonoRail.Views.Brail
 	//	text.Hello
 	// Instead of:
 	// 	text["Hello"]
-	public class ResourceToDuck : IQuackFu
+	public class ResourceToDuck : IQuackFu, IEnumerable
 	{
 		IResource resource;
 
@@ -61,6 +62,11 @@ namespace Castle.MonoRail.Views.Brail
 		public object QuackInvoke(string name, params object[] args)
 		{
 			throw new RailsException("You cannnot invoke resource "+name);
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return resource.GetEnumerator();
 		}
 	}
 }

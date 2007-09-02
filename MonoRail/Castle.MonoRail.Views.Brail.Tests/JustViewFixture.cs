@@ -15,15 +15,48 @@
 namespace Castle.MonoRail.Views.Brail.Tests
 {
 	using System;
+	using System.Collections;
 	using System.Configuration;
 	using System.IO;
-	using Framework;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.TestSupport;
 	using NUnit.Framework;
-	using TestSupport;
 
 	[TestFixture]
 	public class JustViewFixture : BaseControllerTest
 	{
+		protected string ProcessView(string templatePath)
+		{
+			return ProcessView(new Hashtable(), templatePath);
+		}
+
+		protected string ProcessView(IDictionary dictionary, string templatePath)
+		{
+			BooViewEngine bve = new BooViewEngine();
+			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
+			bve.Service(new ViewSourceLoaderServiceProvider(viewPath));
+			bve.Initialize();
+			StringWriter sw = new StringWriter();
+			DummyController controller = new DummyController();
+
+			controller.PropertyBag = dictionary;
+			PrepareController(controller, "", "home", "index");
+			bve.Process(sw, Context, controller, templatePath);
+			return sw.ToString();
+		}
+
+		[Test]
+		public void UsingExtentionMethods()
+		{
+			IDictionary dictionary = new Hashtable();
+			dictionary["items"] = new int[] {};
+			string templatePath = "home/extensionMethods";
+
+			string actual = ProcessView(dictionary, templatePath);
+			Assert.AreEqual("No Data", actual);
+
+		}
+
 		[Test]
 		public void CanRenderViewWithoutUsingFullMonoRailPipeline()
 		{
@@ -41,52 +74,23 @@ namespace Castle.MonoRail.Views.Brail.Tests
 		[Test]
 		public void WithParameters()
 		{
-			BooViewEngine bve = new BooViewEngine();
-			string viewPath = Path.Combine(ConfigurationManager.AppSettings["tests.src"], "Views");
-			bve.Service(new ViewSourceLoaderServiceProvider(viewPath));
-			bve.Initialize();
-			StringWriter sw = new StringWriter();
-			DummyController controller = new DummyController();
-			controller.PropertyBag["list"] = new int[] {2, 5, 7, 8};
-			controller.PropertyBag["name"] = "test";
-			PrepareController(controller, "", "home", "index");
-			bve.Process(sw, Context, controller, "home/bag");
+			IDictionary dictionary = new Hashtable();
+			dictionary["list"] = new int[] { 2, 5, 7, 8 };
+			dictionary["name"] = "test";
+			string templatePath = "home/bag";
+
+			string actual = ProcessView(dictionary, templatePath);
 			string expected = @"test is the name
  2
  5
  7
  8
 ";
-			Assert.AreEqual(expected, sw.ToString());
+			Assert.AreEqual(expected, actual);
 		}
 
 		private class DummyController : Controller
 		{
 		}
-	}
-
-	internal class ViewSourceLoaderServiceProvider : IServiceProvider
-	{
-		private string viewRootDir;
-
-		public ViewSourceLoaderServiceProvider(string viewRootDir)
-		{
-			this.viewRootDir = viewRootDir;
-		}
-
-		#region IServiceProvider Members
-
-		public object GetService(Type serviceType)
-		{
-			if (typeof(IViewSourceLoader) == serviceType)
-			{
-				FileAssemblyViewSourceLoader loader = new FileAssemblyViewSourceLoader();
-				loader.ViewRootDir = viewRootDir;
-				return loader;
-			}
-			return null;
-		}
-
-		#endregion
 	}
 }

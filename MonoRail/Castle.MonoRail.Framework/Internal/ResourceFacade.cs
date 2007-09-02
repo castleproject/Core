@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
+	using System.Collections;
 	using System.Globalization;
 	using System.Resources;
 
@@ -50,6 +51,13 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public void Dispose()
 		{
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return resourceManager
+				.GetResourceSet(cultureInfo, true, true)
+				.GetEnumerator();
 		}
 	}
 }

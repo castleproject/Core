@@ -67,6 +67,7 @@
     <Compile Include="LanguageFeatures.cs" />
     <Compile Include="OutputMethodTestCase.cs" />
     <Compile Include="ResourceTestCase.cs" />
+    <Compile Include="ViewSourceLoaderServiceProvider.cs" />
     <Compile Include="XmlTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,7 @@
     <EmbeddedResource Include="Resources\Language.resources" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Views\CommonScripts\extentions.brail" />
     <None Include="Views\components\SimpleInlineViewComponent2\mycompview1.brail" />
     <None Include="Views\components\SimpleInlineViewComponent3\default.brail" />
     <None Include="Views\dsl\attributeOutput.brail" />
@@ -81,6 +83,7 @@
     <None Include="Views\dsl\registerHtml.brail" />
     <None Include="Views\home\bag.brail" />
     <None Include="Views\home\display.brail" />
+    <None Include="Views\home\extensionMethods.brail" />
     <None Include="Views\home\index.brail" />
     <None Include="Views\home\resource.brail" />
     <None Include="Views\layouts\general.brail" />

@@ -40,5 +40,15 @@ namespace Castle.MonoRail.Views.Brail.Tests
 			DoGet("resourced/indexingResources.rails");
 			AssertReplyEqualTo(expected);
 		}
+
+		[Test]
+		public void IterateOnResources()
+		{
+			Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+			Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+			string expected = "testKey: testValue";
+			DoGet("resourced/iterating.rails");
+			AssertReplyEqualTo(expected);
+		}
 	}
 }

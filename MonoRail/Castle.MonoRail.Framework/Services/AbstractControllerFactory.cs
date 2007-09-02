@@ -84,7 +84,7 @@ namespace Castle.MonoRail.Framework.Services
 		{
 			String area = urlInfo.Area == null ? String.Empty : urlInfo.Area;
 			String name = urlInfo.Controller;
-
+			
 			return CreateControllerInstance(area, name);
 		}
 

@@ -1,0 +1,5 @@
+<%
+for item in resx:
+	output item.Key + ": " + item.Value
+end
+ %>

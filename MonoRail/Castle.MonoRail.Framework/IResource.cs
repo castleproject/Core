@@ -15,12 +15,13 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Dictates the contract for resources that are publishable
 	/// through the PropertyBag context.
 	/// </summary>
-	public interface IResource : IDisposable
+	public interface IResource : IDisposable, IEnumerable
 	{
 		/// <summary>
 		/// Returns the object linked to the specific key.
