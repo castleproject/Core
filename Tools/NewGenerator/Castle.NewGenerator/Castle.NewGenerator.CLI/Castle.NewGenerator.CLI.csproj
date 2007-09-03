@@ -41,10 +41,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\getoptions\Mono.GetOptions.csproj">
-      <Project>{88BF59CF-3127-46E8-A61D-613E333FFAC7}</Project>
-      <Name>Mono.GetOptions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Castle.NewGenerator.Core\Castle.NewGenerator.Core.csproj">
       <Project>{E645B52A-F520-41B6-ABA4-1A51488B8AB5}</Project>
       <Name>Castle.NewGenerator.Core</Name>

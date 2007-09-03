@@ -19,10 +19,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.NewGenerator.CLI", "
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.GetOptions", "..\..\..\..\..\getoptions\Mono.GetOptions.csproj", "{88BF59CF-3127-46E8-A61D-613E333FFAC7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C718D803-75EE-4D48-AEEB-3608C3491D6B}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		..\default.build = ..\default.build
 	EndProjectSection
 EndProject
 Global
@@ -43,10 +46,6 @@ Global
 		{4AF15BA8-1752-491E-81DA-FE60CA1B8819}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AF15BA8-1752-491E-81DA-FE60CA1B8819}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AF15BA8-1752-491E-81DA-FE60CA1B8819}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88BF59CF-3127-46E8-A61D-613E333FFAC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

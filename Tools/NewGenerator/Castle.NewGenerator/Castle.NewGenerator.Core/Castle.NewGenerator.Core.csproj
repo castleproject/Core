@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attributes\GeneratorAttribute.cs" />
     <Compile Include="Attributes\GeneratorOptionsAttribute.cs" />
     <Compile Include="Attributes\GeneratorPanelAttribute.cs" />
@@ -45,6 +46,19 @@
     <Compile Include="DefaultGeneratorService.cs" />
     <Compile Include="GeneratorConfigurer.cs" />
     <Compile Include="GeneratorContext.cs" />
+    <Compile Include="GetOptions\Attributes\AboutAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\AdditionalInfoAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\ArgumentProcessorAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\AuthorAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\IsPartOfPackageAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\KillOptionAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\OptionAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\ReportBugsToAttribute.cs" />
+    <Compile Include="GetOptions\Attributes\UsageComplementAttribute.cs" />
+    <Compile Include="GetOptions\OptionDetails.cs" />
+    <Compile Include="GetOptions\OptionList.cs" />
+    <Compile Include="GetOptions\Options.cs" />
+    <Compile Include="GetOptions\OptionsParsingMode.cs" />
     <Compile Include="IGenerator.cs" />
     <Compile Include="IGeneratorService.cs" />
     <Compile Include="MR\NewController.cs" />
@@ -55,15 +69,11 @@
       <DependentUpon>NewControllerDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MR\NewProject.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VSProject.cs" />
     <Compile Include="VSSolution.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\getoptions\Mono.GetOptions.csproj">
-      <Project>{88BF59CF-3127-46E8-A61D-613E333FFAC7}</Project>
-      <Name>Mono.GetOptions</Name>
-    </ProjectReference>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
