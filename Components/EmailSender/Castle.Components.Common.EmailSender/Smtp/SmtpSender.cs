@@ -141,11 +141,6 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			}
 		}
 
-		void smtpClient_SendCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-		{
-			throw new Exception("The method or operation is not implemented.");
-		}
-
 		public void Send(Message[] messages)
 		{
 			foreach (Message message in messages)
