@@ -16,6 +16,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 {
 	using System;
 	using System.Collections;
+	using System.ComponentModel;
 	using System.Net;
 	using System.Net.Mail;
 
@@ -71,7 +72,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 			get { return asyncSend; }
 			set { asyncSend = value; }
 		}
-		
+
 		/// <summary>
 		/// Gets or sets a value that specifies 
 		/// the amount of time after which a synchronous Send call times out.
@@ -108,22 +109,46 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		public void Send(Message message)
 		{
 			if (message == null) throw new ArgumentNullException("message");
-		
+
 			ConfigureSender(message);
 
 			if (asyncSend)
 			{
-				smtpClient.SendAsync(CreateMailMessage(message), new object());
+				// The MailMessage must be diposed after sending the email.
+				// The code creates a delegate for deleting the mail and adds
+				// it to the smtpClient.
+				// After the mail is sent, the message is disposed and the
+				// eventHandler removed from the smtpClient.
+				MailMessage msg = CreateMailMessage(message);
+				Guid msgGuid = new Guid();
+				SendCompletedEventHandler sceh = null;
+				sceh = delegate(object sender, AsyncCompletedEventArgs e)
+					{
+						if (msgGuid == (Guid)e.UserState)
+							msg.Dispose();
+						// The handler itself, cannot be null, test omitted
+						smtpClient.SendCompleted -= sceh;
+					};
+				smtpClient.SendCompleted += sceh;
+				smtpClient.SendAsync(msg, msgGuid);
 			}
 			else
 			{
-				smtpClient.Send(CreateMailMessage(message));
+				using (MailMessage msg = CreateMailMessage(message))
+				{
+					smtpClient.Send(msg);
+				}
 			}
+		}
+
+		void smtpClient_SendCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+		{
+			throw new Exception("The method or operation is not implemented.");
 		}
 
 		public void Send(Message[] messages)
 		{
-			foreach(Message message in messages)
+			foreach (Message message in messages)
 			{
 				Send(message);
 			}
@@ -137,33 +162,33 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		/// <returns>The converted message .</returns>
 		private MailMessage CreateMailMessage(Message message)
 		{
-			MailMessage mailMessage = new MailMessage(message.From, message.To);
+			MailMessage mailMessage = new MailMessage(message.From, message.To.Replace(';', ','));
 
 			if (!String.IsNullOrEmpty(message.Cc))
 			{
 				mailMessage.CC.Add(message.Cc);
 			}
-			
+
 			if (!String.IsNullOrEmpty(message.Bcc))
 			{
 				mailMessage.Bcc.Add(message.Bcc);
 			}
-			
+
 			mailMessage.Subject = message.Subject;
 			mailMessage.Body = message.Body;
 			mailMessage.BodyEncoding = message.Encoding;
 			mailMessage.IsBodyHtml = (message.Format == Format.Html);
-			mailMessage.Priority = (MailPriority) Enum.Parse( typeof(MailPriority), message.Priority.ToString() );
+			mailMessage.Priority = (MailPriority)Enum.Parse(typeof(MailPriority), message.Priority.ToString());
 
-			foreach(DictionaryEntry entry in message.Headers)
+			foreach (DictionaryEntry entry in message.Headers)
 			{
 				mailMessage.Headers.Add((string)entry.Key, (string)entry.Value);
 			}
 
-			foreach(MessageAttachment attachment in message.Attachments)
+			foreach (MessageAttachment attachment in message.Attachments)
 			{
 				Attachment mailAttach;
-				
+
 				if (attachment.Stream != null)
 				{
 					mailAttach = new Attachment(attachment.Stream, attachment.MediaType);
@@ -172,7 +197,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 				{
 					mailAttach = new Attachment(attachment.FileName, attachment.MediaType);
 				}
-				
+
 				mailMessage.Attachments.Add(mailAttach);
 			}
 
@@ -186,7 +211,7 @@ namespace Castle.Components.Common.EmailSender.Smtp
 		public String Domain
 		{
 			get { return credentials.Domain; }
-			set { credentials.Domain = value;  }
+			set { credentials.Domain = value; }
 		}
 
 		/// <summary>
