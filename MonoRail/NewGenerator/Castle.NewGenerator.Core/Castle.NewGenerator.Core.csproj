@@ -73,6 +73,9 @@
     <Compile Include="VSSolution.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Castle.NewGenerator.Core.build" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
