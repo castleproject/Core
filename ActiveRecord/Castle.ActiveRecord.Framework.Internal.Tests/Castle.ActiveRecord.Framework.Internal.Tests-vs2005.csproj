@@ -184,6 +184,7 @@
     <Compile Include="Model\ComponentWithNested.cs" />
     <Compile Include="Model\ComponentWithNested2LevelsDeep.cs" />
     <Compile Include="Model\HasManyDependentObjectsWithNested2LevelsDeep.cs" />
+    <Compile Include="Model\JoinedSubClassWithPrimaryKey.cs" />
     <Compile Include="Model\SimpleNestedComponentWithFieldAccess.cs" />
     <Compile Include="Model\HasManyDependentObjectsWithNested.cs" />
     <Compile Include="Model\DictionaryModel.cs" />
