@@ -5,6 +5,8 @@
 <html>
 <head>
 <title>Simple Wizard</title>
+$Ajax.InstallScripts()
+$Form.InstallScripts()
 </head>
 
 <body>
