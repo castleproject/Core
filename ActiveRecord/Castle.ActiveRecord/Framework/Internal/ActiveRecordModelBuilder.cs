@@ -25,10 +25,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 	public class ActiveRecordModelBuilder
 	{
 		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
-		                                                           BindingFlags.Instance | BindingFlags.NonPublic;
+																   BindingFlags.Instance | BindingFlags.NonPublic;
 
 		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public |
-		                                                                BindingFlags.NonPublic | BindingFlags.Instance;
+																		BindingFlags.NonPublic | BindingFlags.Instance;
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
@@ -95,7 +95,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			object[] attrs = type.GetCustomAttributes(typeof(ImportAttribute), false);
 
-			foreach(ImportAttribute att in attrs)
+			foreach (ImportAttribute att in attrs)
 			{
 				ImportModel im = new ImportModel(att);
 				model.Imports.Add(im);
@@ -131,8 +131,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				string safename = GetSafeName(model.Type.Name);
 				model.ActiveRecordAtt.Table = ActiveRecordModel.pluralizeTableNames
-				                              	? Inflector.Pluralize(safename)
-				                              	: safename;
+												? Inflector.Pluralize(safename)
+												: safename;
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			FieldInfo[] fields = type.GetFields(FieldDefaultBindingFlags);
 
-			foreach(FieldInfo field in fields)
+			foreach (FieldInfo field in fields)
 			{
 				if (field.IsDefined(typeof(FieldAttribute), false))
 				{
@@ -181,7 +181,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			PropertyInfo[] props = type.GetProperties(DefaultBindingFlags);
 
-			foreach(PropertyInfo prop in props)
+			foreach (PropertyInfo prop in props)
 			{
 				bool isArProperty = false;
 				AnyModel anyModel;
@@ -203,6 +203,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 					{
 						PrimaryKeyAttribute propAtt = attribute as PrimaryKeyAttribute;
 						isArProperty = true;
+
+						// Joined Subclasses must not have PrimaryKey
+						if (type.IsDefined(typeof(JoinedBaseAttribute), true) && // JoinedBase in a superclass
+							!type.IsDefined(typeof(JoinedBaseAttribute), false)) // but not here
+						{
+							throw new ActiveRecordException("You can't specify a PrimaryKeyAttribute in a joined subclass. " +
+															"Check type " + model.Type.FullName);
+						}
 
 						if (prop.PropertyType.IsDefined(typeof(CompositeKeyAttribute), true))
 						{
@@ -271,7 +279,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Key != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one JoinedKeyAttribute. " +
-							                                "Check type " + model.Type.FullName);
+															"Check type " + model.Type.FullName);
 						}
 
 						model.Key = new KeyModel(prop, propAtt);
@@ -284,7 +292,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Version != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one VersionAttribute. " +
-							                                "Check type " + model.Type.FullName);
+															"Check type " + model.Type.FullName);
 						}
 
 						model.Version = new VersionModel(prop, propAtt);
@@ -297,12 +305,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 						if (model.Timestamp != null)
 						{
 							throw new ActiveRecordException("You can't specify more than one TimestampAttribute. " +
-							                                "Check type " + model.Type.FullName);
+															"Check type " + model.Type.FullName);
 						}
 
 						model.Timestamp = new TimestampModel(prop, propAtt);
 					}
-						// Relations
+					// Relations
 					else if (attribute is OneToOneAttribute)
 					{
 						OneToOneAttribute propAtt = attribute as OneToOneAttribute;
@@ -317,7 +325,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						model.BelongsTo.Add(new BelongsToModel(prop, propAtt));
 					}
-						// The ordering is important here, HasManyToAny must comes before HasMany!
+					// The ordering is important here, HasManyToAny must comes before HasMany!
 					else if (attribute is HasManyToAnyAttribute)
 					{
 						HasManyToAnyAttribute propAtt = attribute as HasManyToAnyAttribute;
@@ -355,7 +363,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					else if (attribute is Any.MetaValueAttribute)
 					{
 						if (prop.GetCustomAttributes(typeof(HasManyToAnyAttribute), false).Length == 0 &&
-						    prop.GetCustomAttributes(typeof(AnyAttribute), false).Length == 0
+							prop.GetCustomAttributes(typeof(AnyAttribute), false).Length == 0
 							)
 							throw new ActiveRecordException(
 								"You can't specify an Any.MetaValue without specifying the Any or HasManyToAny attribute. " +
@@ -401,7 +409,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			if (metaValues == null || metaValues.Length == 0)
 				return;
 
-			foreach(Any.MetaValueAttribute attribute in metaValues)
+			foreach (Any.MetaValueAttribute attribute in metaValues)
 			{
 				metaStore.Add(attribute);
 			}
@@ -416,7 +424,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				Type basetype = type.BaseType;
 
-				while(basetype != typeof(object))
+				while (basetype != typeof(object))
 				{
 					if (basetype.IsDefined(typeof(JoinedBaseAttribute), false)) return false;
 
@@ -443,15 +451,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private static bool IsRootType(Type type)
 		{
 			bool isRootType = type.BaseType != typeof(object) &&
-			                  type.BaseType != typeof(ActiveRecordBase) &&
-			                  type.BaseType != typeof(ActiveRecordValidationBase);
+							  type.BaseType != typeof(ActiveRecordBase) &&
+							  type.BaseType != typeof(ActiveRecordValidationBase);
 			// && !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
 
 			// generic check
 			if (type.BaseType.IsGenericType)
 			{
 				isRootType = type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordBase<>) &&
-				             type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
+							 type.BaseType.GetGenericTypeDefinition() != typeof(ActiveRecordValidationBase<>);
 			}
 
 			return isRootType;

@@ -77,5 +77,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(ClassWithBadCompositeKey));
 		}
+
+		[Test]
+		[ExpectedException(typeof(ActiveRecordException), "You can't specify a PrimaryKeyAttribute in a joined subclass. Check type Castle.ActiveRecord.Framework.Internal.Tests.Model.JoinedSubClassWithPrimaryKey")]
+		public void JoinedClassWithPrimaryKey()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(BaseJoinedClass), typeof(JoinedSubClassWithPrimaryKey));
+		}
+	
 	}
 }
