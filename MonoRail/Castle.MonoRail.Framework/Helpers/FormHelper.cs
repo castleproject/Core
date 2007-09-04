@@ -1352,8 +1352,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return GenerateSelect(target, selectedValue, dataSource, attributes);
 		}
 
-		protected virtual string GenerateSelect(string target, object selectedValue, IEnumerable dataSource,
-		                                        IDictionary attributes)
+		protected virtual string GenerateSelect(string target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
 		{
 			string id = CreateHtmlId(target);
 
@@ -1398,9 +1397,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (firstOption != null)
 			{
 				writer.WriteBeginTag("option");
-				writer.WriteAttribute("value", (firstOptionValue == null) ? "0" : firstOptionValue);
+				writer.WriteAttribute("value", (firstOptionValue == null) ? "0" : SafeHtmlEncode(firstOptionValue));
 				writer.Write(HtmlTextWriter.TagRightChar);
-				writer.Write(firstOption);
+				writer.Write(SafeHtmlEncode(firstOption));
 				writer.WriteEndTag("option");
 				writer.WriteLine();
 			}
@@ -1414,9 +1413,9 @@ namespace Castle.MonoRail.Framework.Helpers
 					writer.Write(" selected=\"selected\"");
 				}
 
-				writer.WriteAttribute("value", item.Value);
+				writer.WriteAttribute("value", SafeHtmlEncode(item.Value));
 				writer.Write(HtmlTextWriter.TagRightChar);
-				writer.Write(item.Text);
+				writer.Write(SafeHtmlEncode(item.Text));
 				writer.WriteEndTag("option");
 				writer.WriteLine();
 			}
@@ -1612,10 +1611,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			value = FormatIfNecessary(value, attributes);
 
-			if (Controller.Context != null) // We have a context
-			{
-				value = HtmlEncode(value);
-			}
+			value = SafeHtmlEncode(value);
 
 			if (attributes != null && attributes.Contains("mask"))
 			{
@@ -2098,6 +2094,16 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			return left.ToString().Equals(right.ToString());
+		}
+
+		private string SafeHtmlEncode(string content)
+		{
+			if (Controller.Context != null)
+			{
+				return HtmlEncode(content);
+			}
+
+			return content;
 		}
 
 		/// <summary>
