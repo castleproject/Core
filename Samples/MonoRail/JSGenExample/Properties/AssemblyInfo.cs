@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("MonoRail Web Project")]
 
 // Change me!
-[assembly: AssemblyCopyright("Copyright ©  2006")]
+[assembly: AssemblyCopyright("Copyright © 2007")]
 
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

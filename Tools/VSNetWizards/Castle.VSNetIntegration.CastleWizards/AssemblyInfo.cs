@@ -20,7 +20,7 @@ using System.Security;
 [assembly: AssemblyDescriptionAttribute("Castle Project Visual Studio Wizards")]
 [assembly: AssemblyCompanyAttribute("Castle Project")]
 [assembly: AssemblyProductAttribute("Castle.VSNetIntegration.CastleWizards")]
-[assembly: AssemblyCopyrightAttribute("Copyright (c) 2004,2005,2006 Castle Project - http://www.castleproject.org")]
+[assembly: AssemblyCopyrightAttribute("Copyright (c) 2004,2005,2006,2007 Castle Project - http://www.castleproject.org")]
 [assembly: AssemblyVersionAttribute("1.0.3.0")]
 [assembly: AssemblyInformationalVersionAttribute("1.0.3.0")]
 [assembly: AssemblyFileVersionAttribute("1.0.3.0")]
