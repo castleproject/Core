@@ -1,6 +1,8 @@
 Release Candidate 2
 ===================
 
+- Added ActiveRecordBase.Asc/Desc(params string[] propertyNames) methods to allow convenient specification of sort order.
+
 - Applied Oleg Snurnikov's patch fixing AR-178
   "SessionScopeWebModule fails with HybridWebThreadScopeInfo"
 

@@ -1575,5 +1575,48 @@ namespace Castle.ActiveRecord
 		}
 
 		#endregion
+
+		#region Sort Order
+
+		internal static Order[] PropertyNamesToOrderArray(bool asc, params string[] propertyNames) 
+		{
+			Order[] orders = new Order[propertyNames.Length];
+
+			for (int i = 0; i < propertyNames.Length; i++) 
+			{
+				orders[i] = new Order(propertyNames[i], asc);
+			}
+			return orders;
+		}
+
+		/// <summary>
+		/// Ascending Order
+		/// </summary>
+		/// <remarks>
+		/// Returns an array of Ascending <see cref="Order"/> instances specifing which properties to use to 
+		/// order a result.
+		/// </remarks>
+		/// <param name="propertyNames">List of property names to order by ascending</param>
+		/// <returns>Array of <see cref="Order"/> objects suitable for passing to FindAll and variants</returns>
+		public static Order[] Asc(params string[] propertyNames) 
+		{
+			return PropertyNamesToOrderArray(true, propertyNames);
+		}
+
+		/// <summary>
+		/// Descending Order
+		/// </summary>
+		/// <remarks>
+		/// Returns an array of Descending <see cref="Order"/> instances specifing which properties to use to 
+		/// order a result.
+		/// </remarks>
+		/// <param name="propertyNames">List of property names to order by descending</param>
+		/// <returns>Array of <see cref="Order"/> objects suitable for passing to FindAll and variants</returns>
+		public static Order[] Desc(params string[] propertyNames) 
+		{
+			return PropertyNamesToOrderArray(false, propertyNames);
+		}
+
+		#endregion
 	}
 }
