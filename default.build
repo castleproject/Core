@@ -58,33 +58,33 @@
 		</delete>
 	</target>
 		
-    <target name="clean-vs" description="Delete Visual Studio artifacts" depends="common.init">
-        <!-- NB - this target will fail if you have a solution open in Visual Studio -->
+	<target name="clean-vs" description="Delete Visual Studio artifacts" depends="common.init">
+		<!-- NB - this target will fail if you have a solution open in Visual Studio -->
 		<echo message="Gathering files for removal..." />
-        <foreach item="File" property="filename">
-            <in>
-                <items basedir=".">
-                    <include name="**/*.suo" />
-                    <include name="*/*.csproj.user" />
-                </items>
-            </in>
-            <do>
-                <delete file="${filename}" />
-            </do>
-        </foreach>
+		<foreach item="File" property="filename">
+			<in>
+				<items basedir=".">
+					<include name="**/*.suo" />
+					<include name="*/*.csproj.user" />
+				</items>
+			</in>
+			<do>
+				<delete file="${filename}" />
+			</do>
+		</foreach>
 		<echo message="Gathering folders for removal..." />
-        <foreach item="Folder" property="foldername">
-            <in>
-                <items basedir=".">
-                    <include name="**/obj" />
-                    <include name="**/_ReSharper*" />
-                </items>
-            </in>
-            <do>
-                <delete dir="${foldername}" failonerror="false" />
-            </do>
-        </foreach>
-    </target>
+		<foreach item="Folder" property="foldername">
+			<in>
+				<items basedir=".">
+					<include name="**/obj" />
+					<include name="**/_ReSharper*" />
+				</items>
+			</in>
+			<do>
+				<delete dir="${foldername}" failonerror="false" />
+			</do>
+		</foreach>
+	</target>
 
 	<target name="cleanall" description="Deletes all build artifacts" depends="common.init">
 		<echo message="Deleting all builds from all configurations" />
@@ -1061,7 +1061,7 @@
 				<include name="SharedLibs/Nlog"/>
 				<include name="SharedLibs/log4net"/>
 				<include name="SharedLibs/Nvelocity"/>
-			    <include name="SharedLibs/stringtemplate/net-1.1"/> 
+				<include name="SharedLibs/stringtemplate/net-1.1"/> 
 			</referencepaths>
 			<documenters>
 				<documenter name="MSDN">
