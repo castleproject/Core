@@ -37,9 +37,31 @@ namespace Castle.ActiveRecord.Tests
 			Citizen loaded = Citizen.Find(c.Id);
 
 			Assert.IsNotNull(loaded);
-			Assert.AreEqual("Jonh", c.Name[0]);
-			Assert.AreEqual("Doe", c.Name[1]);
-			Assert.AreEqual("Acme", c.ManufacturerName[0]);
+			Assert.AreEqual("Jonh", loaded.Name[0]);
+			Assert.AreEqual("Doe", loaded.Name[1]);
+			Assert.AreEqual("Acme", loaded.ManufacturerName[0]);
+		}
+
+		[Test]
+		public void CompositeUserTypeNested()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Citizen), typeof(NestedCitizen));
+
+			Recreate();
+
+			NestedCitizen c = new NestedCitizen();
+
+			c.Names.Name = new string[] { "Jonh", "Doe" };
+			c.Names.ManufacturerName = new string[] { "Acme", "Inc" };
+
+			c.Create();
+
+			NestedCitizen loaded = NestedCitizen.Find(c.Id);
+
+			Assert.IsNotNull(loaded);
+			Assert.AreEqual("Jonh", loaded.Names.Name[0]);
+			Assert.AreEqual("Doe", loaded.Names.Name[1]);
+			Assert.AreEqual("Acme", loaded.Names.ManufacturerName[0]);
 		}
 	}
 }

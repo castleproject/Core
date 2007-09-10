@@ -58,6 +58,50 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeUserType
 	{
 	}
 
+	[ActiveRecord]
+	public class NestedCitizen : ActiveRecordBase<NestedCitizen>
+	{
+		private int id;
+		private CitizenNames names = new CitizenNames();
+
+		[PrimaryKey()]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		[Nested]
+		public CitizenNames Names
+		{
+			get { return names; }
+			set { names = value; }
+		}
+	}
+
+	public class CitizenNames
+	{
+		private string[] name;
+		private string[] manufacturerName;
+
+		[CompositeUserType(typeof(DoubleStringType), new string[] { "Product_FirstName", "Product_LastName" })]
+		public string[] Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		[CompositeUserType(
+			typeof(DoubleStringType),
+			new string[] { "Manufacturer_FirstName", "Manufacturer_LastName" },
+			Length = new int[] { 4, 5 })]
+		public string[] ManufacturerName
+		{
+			get { return manufacturerName; }
+			set { manufacturerName = value; }
+		}
+	}
+
 	/// <summary>
 	/// Extracted from the NHibernate.Model
 	/// </summary>

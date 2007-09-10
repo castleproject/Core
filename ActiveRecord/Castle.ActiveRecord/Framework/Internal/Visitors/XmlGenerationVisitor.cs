@@ -146,6 +146,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes(model.HasAndBelongsToMany);
 				VisitNodes(model.Components);
 				VisitNodes(model.OneToOnes);
+				VisitNodes(model.CompositeUserType);
 				Dedent();
 			}
 			else
