@@ -731,6 +731,27 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		/// <summary>
+		/// Visits the custom composite user type.
+		/// </summary>
+		/// <remarks>
+		/// Apply any column prefixes specified
+		/// </remarks>
+		/// <param name="model">The model.</param>
+		public override void VisitCompositeUserType(CompositeUserTypeModel model)
+		{
+			if (model.Attribute.ColumnNames != null)
+			{
+				for (int index = 0; index < model.Attribute.ColumnNames.Length; ++index)
+				{
+					// Add column prefix
+					model.Attribute.ColumnNames[index] = columnPrefix + model.Attribute.ColumnNames[index];
+				}
+			}
+
+			base.VisitCompositeUserType(model);
+		}
+
 		private static RelationType GuessRelation(PropertyInfo property, RelationType type)
 		{
 			if (type != RelationType.Guess)

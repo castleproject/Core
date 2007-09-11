@@ -62,7 +62,8 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeUserType
 	public class NestedCitizen : ActiveRecordBase<NestedCitizen>
 	{
 		private int id;
-		private CitizenNames names = new CitizenNames();
+		private Names name = new Names();
+		private Names manufacturerName = new Names();
 
 		[PrimaryKey()]
 		public int Id
@@ -72,33 +73,29 @@ namespace Castle.ActiveRecord.Tests.Model.CompositeUserType
 		}
 
 		[Nested]
-		public CitizenNames Names
-		{
-			get { return names; }
-			set { names = value; }
-		}
-	}
-
-	public class CitizenNames
-	{
-		private string[] name;
-		private string[] manufacturerName;
-
-		[CompositeUserType(typeof(DoubleStringType), new string[] { "Product_FirstName", "Product_LastName" })]
-		public string[] Name
+		public Names Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
-		[CompositeUserType(
-			typeof(DoubleStringType),
-			new string[] { "Manufacturer_FirstName", "Manufacturer_LastName" },
-			Length = new int[] { 4, 5 })]
-		public string[] ManufacturerName
+		[Nested(ColumnPrefix = "Manufacturer_")]
+		public Names ManufacturerName
 		{
 			get { return manufacturerName; }
 			set { manufacturerName = value; }
+		}
+	}
+
+	public class Names
+	{
+		private string[] name;
+
+		[CompositeUserType(typeof(DoubleStringType), new string[] { "FirstName", "LastName" })]
+		public string[] Name
+		{
+			get { return name; }
+			set { name = value; }
 		}
 	}
 
