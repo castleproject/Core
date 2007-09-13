@@ -97,7 +97,19 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					instance = Activator.CreateInstance(implType, arguments);
+					if (implType.IsContextful)
+					{
+						instance = Activator.CreateInstance(implType, arguments);
+					}
+					else
+					{
+						ConstructorInfo cinfo = implType.GetConstructor(
+							BindingFlags.Public | BindingFlags.Instance, null, signature, null);
+
+						instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(implType);
+
+						cinfo.Invoke(instance, arguments);
+					}
 				}
 				catch(Exception ex)
 				{
