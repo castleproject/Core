@@ -9,7 +9,7 @@ namespace Castle.NewGenerator.Core.MR
 	[GeneratorOptions(typeof(NewProject.CLIOptions))]
 	public class NewProject : BaseGenerator
 	{
-		private string name, solutionName, viewEngine, fileExtension;
+		private string name, solutionName, viewEngine, fileExtension, solutionFolder;
 		private bool enableWindsor;
 
 		public NewProject()
@@ -52,6 +52,19 @@ namespace Castle.NewGenerator.Core.MR
 			set { viewEngine = value.ToLower(); }
 		}
 
+		[Param]
+		public string SolutionFolder
+		{
+			get { return solutionFolder; }
+			set { solutionFolder = value; }
+		}
+
+		//TODO: Expose the created solution and remove this property
+		public string SolutionFilePath
+		{
+			get { return Path.Combine(solutionFolder, solutionName + ".sln"); }
+		}
+
 		/// <summary>
 		/// Creates the following structure:
 		/// 
@@ -79,7 +92,6 @@ namespace Castle.NewGenerator.Core.MR
 		public override void Generate(GeneratorContext context, IGeneratorService generator)
 		{
 			string basePath = TargetPath;
-			string solutionFolder;
 			string testProjectName = Name + ".Tests";
 
 			if (string.IsNullOrEmpty(fileExtension))
@@ -87,7 +99,7 @@ namespace Castle.NewGenerator.Core.MR
 				fileExtension = "castle";
 			}
 
-			if (solutionName == null)
+			if (string.IsNullOrEmpty(solutionName))
 			{
 				solutionName = Name;
 				Name = Name + ".Web";
@@ -95,7 +107,11 @@ namespace Castle.NewGenerator.Core.MR
 
 			// Create folders
 
-			solutionFolder = generator.CreateFolderOn(basePath, solutionName, "Creating solution folder");
+			if (string.IsNullOrEmpty(solutionFolder))
+			{
+				solutionFolder = generator.CreateFolderOn(basePath, solutionName, "Creating solution folder");
+			}
+
 			string libFolder = generator.CreateFolderOn(solutionFolder, "lib");
 			string hintPath = @"..\lib\";
 

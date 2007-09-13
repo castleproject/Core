@@ -8,8 +8,8 @@ namespace Castle.NewGenerator.Core
 
 	public class DefaultGeneratorService : IGeneratorService
 	{
-		private readonly GeneratorContext context;
-		private readonly ITemplateEngine templateEngine;
+		protected GeneratorContext context;
+		protected ITemplateEngine templateEngine;
 
 		public DefaultGeneratorService(GeneratorContext context, ITemplateEngine templateEngine)
 		{

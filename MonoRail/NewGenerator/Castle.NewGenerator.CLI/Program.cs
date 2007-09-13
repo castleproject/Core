@@ -44,7 +44,7 @@ namespace Castle.NewGenerator.CLI
 			Configure(generator, args);
 
 			string workingDir = AppDomain.CurrentDomain.BaseDirectory;
-			string templateDir = @"C:\dev\castle\svn\trunk\Tools\NewGenerator\Castle.NewGenerator.Core\GeneratorTemplates";
+			string templateDir = @"C:\dev\DotNet\castle\svn\trunk\MonoRail\NewGenerator\GeneratorTemplates\";
 
 			GeneratorContext context = new GeneratorContext(workingDir, templateDir);
 
@@ -61,12 +61,12 @@ namespace Castle.NewGenerator.CLI
 		static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
 		{
 			// C:\dev\castle\svn\trunk\build\net-2.0\debug
-			return Assembly.LoadFile(@"C:\dev\castle\svn\trunk\build\net-2.0\debug\" + args.Name);
+			return Assembly.LoadFile(@"C:\dev\DotNet\castle\svn\trunk\build\net-2.0\debug\" + args.Name);
 		}
 
 		private static void ShowUsage()
 		{
-			
+			Console.WriteLine("CastleGen project|controller -property name=value");
 		}
 
 		private static void Configure(IGenerator generator, string[] args)
